@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 # Queues the workflow execution completion job
-class WorkflowExecutionCompletionJob < WorkflowExecutionJob
+class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Metrics/ClassLength
   include ActiveJob::Continuable
+  include BlobHelper
+  include MetadataHelper
 
   queue_as :default
   queue_with_priority 10
@@ -15,11 +17,15 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
     end
 
     # Steps
-    step :run_service
+    step :run_service # TODO: remove this once all other steps are implemented
 
-    step :merge_metadata_onto_samples
-    step :put_output_attachments_onto_samples
-    step :create_activities
+    # step :process_global_file_paths
+    # step :process_sample_file_paths
+    step :process_samples_metadata, start: 0
+    # step :attach_blobs_to_attachables
+    step :merge_metadata_onto_samples, start: 0
+    step :put_output_attachments_onto_samples, start: 0
+    step :create_activities, start: 0
 
     step :update_state_step
     step :queue_next_job
@@ -33,49 +39,97 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
     WorkflowExecutions::CompletionService.new(@workflow_execution).execute
   end
 
-  def merge_metadata_onto_samples
-    return if @workflow_execution.state.to_sym == :error
-    return unless @workflow_execution.update_samples?
+  def run_output_base_path
+    @run_output_base_path ||= "#{@workflow_execution.blob_run_directory}/output/"
+  end
 
-    @workflow_execution.samples_workflow_executions&.each do |swe|
-      # TODO: Cursor
-      next if swe.sample.nil? || swe.metadata.nil?
-
-      params = {
-        'metadata' => swe.metadata,
-        'analysis_id' => @workflow_execution.id,
-        include_activity: false,
-        'force_update' => true
-      }
-      Samples::Metadata::UpdateService.new(
-        swe.sample.project, swe.sample, @workflow_execution.submitter, params
-      ).execute
+  def run_output_data
+    @run_output_data ||= begin
+      output_json_path = "#{run_output_base_path}iridanext.output.json.gz"
+      download_decompress_parse_gziped_json(output_json_path)
     end
   end
 
-  def put_output_attachments_onto_samples # rubocop:disable Metrics/CyclomaticComplexity
+  def process_samples_metadata(step) # rubocop:disable Metrics/AbcSize
+    return if @workflow_execution.state.to_sym == :error
+    return unless run_output_data['metadata']['samples']
+
+    items = []
+    run_output_data['metadata']['samples']&.each do |sample_puid, sample_metadata|
+      items.append({ sample_puid:, sample_metadata: })
+    end
+
+    items[step.cursor..].each do |i|
+      # This assumes the sample puid matches, i.e. happy path
+      samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(puid: i[:sample_puid])
+      samples_workflow_execution.metadata = flatten(i[:sample_metadata])
+      samples_workflow_execution.save!
+
+      step.advance!
+    end
+  end
+
+  def get_samples_workflow_executions_by_sample_puid(puid:)
+    @workflow_execution.samples_workflow_executions.find_by(
+      Arel::Nodes::InfixOperation.new(
+        '->>', SamplesWorkflowExecution.arel_table[:samplesheet_params], Arel::Nodes::Quoted.new('sample')
+      ).eq(puid)
+    )
+  end
+
+  def samples_workflow_executions_map
+    @workflow_execution.samples_workflow_executions.map do |swe|
+      swe
+    end
+  end
+
+  def merge_metadata_onto_samples(step) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     return if @workflow_execution.state.to_sym == :error
     return unless @workflow_execution.update_samples?
 
-    @workflow_execution.samples_workflow_executions&.each do |swe|
-      # TODO: Cursor
+    samples_workflow_executions_map[step.cursor..].each do |swe|
+      unless swe.sample.nil? || swe.metadata.nil?
+        params = {
+          'metadata' => swe.metadata,
+          'analysis_id' => @workflow_execution.id,
+          include_activity: false,
+          'force_update' => true
+        }
+        Samples::Metadata::UpdateService.new(
+          swe.sample.project, swe.sample, @workflow_execution.submitter, params
+        ).execute
+      end
+
+      step.advance!
+    end
+  end
+
+  def put_output_attachments_onto_samples(step) # rubocop:disable Metrics/AbcSize
+    return if @workflow_execution.state.to_sym == :error
+    return unless @workflow_execution.update_samples?
+
+    samples_workflow_executions_map[step.cursor..].each do |swe|
       next if swe.sample.nil? || swe.outputs.empty?
 
       files = swe.outputs.map { |output| output.file.signed_id }
       params = { files:, include_activity: false }
+      # Since this attaches multiple attachments to the same sample, each on it's own step within the CreateService,
+      # there is an edge case where the same attachment could be attached twice if the job is interrupted after the
+      # first attachment is created but before the step is advanced.
       Attachments::CreateService.new(
         @workflow_execution.submitter, swe.sample, params
       ).execute
+
+      step.advance!
     end
   end
 
-  def create_activities # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+  def create_activities(step) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
     return if @workflow_execution.state.to_sym == :error
     return unless @workflow_execution.update_samples?
     return unless @workflow_execution.submitter.automation_bot?
 
-    @workflow_execution.samples_workflow_executions&.each do |swe|
-      # TODO: Cursor
+    samples_workflow_executions_map[step.cursor..].each do |swe|
       next if swe.sample.nil? || (swe.metadata.nil? && swe.outputs.empty?)
 
       parameters = { workflow_id: @workflow_execution.id, sample_id: swe.sample.id, sample_puid: swe.sample.puid }
@@ -84,20 +138,17 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob
         @workflow_execution.namespace.create_activity(
           key: 'workflow_execution.automated_workflow_completion.outputs_and_metadata_written', parameters:
         )
-        next
-      end
-
-      unless swe.metadata.nil?
+      elsif swe.metadata.nil?
+        @workflow_execution.namespace.create_activity(
+          key: 'workflow_execution.automated_workflow_completion.outputs_written', parameters:
+        )
+      else
         @workflow_execution.namespace.create_activity(
           key: 'workflow_execution.automated_workflow_completion.metadata_written', parameters:
         )
       end
 
-      next if swe.outputs.empty?
-
-      @workflow_execution.namespace.create_activity(
-        key: 'workflow_execution.automated_workflow_completion.outputs_written', parameters:
-      )
+      step.advance!
     end
   end
 
