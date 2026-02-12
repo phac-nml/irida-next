@@ -26,9 +26,6 @@ module WorkflowExecutions
       output_samples_file_paths = get_output_samples_file_paths(run_output_data:)
       process_sample_file_paths(output_samples_file_paths:)
 
-      # per sample metadata
-      process_samples_metadata(run_output_data:)
-
       # attach blob lists to attachables
       attach_blobs_to_attachables
     end
@@ -100,17 +97,6 @@ module WorkflowExecutions
         Attachments::CreateService.new( # TODO: cursor point
           current_user, tuple[:attachable], { files: tuple[:blob_id_list] }
         ).execute
-      end
-    end
-
-    def process_samples_metadata(run_output_data:)
-      return nil unless run_output_data['metadata']['samples']
-
-      run_output_data['metadata']['samples']&.each do |sample_puid, sample_metadata|
-        # This assumes the sample puid matches, i.e. happy path
-        samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(puid: sample_puid)
-        samples_workflow_execution.metadata = flatten(sample_metadata)
-        samples_workflow_execution.save! # TODO: cursor point
       end
     end
   end
