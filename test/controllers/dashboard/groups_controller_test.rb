@@ -69,6 +69,16 @@ module Dashboard
       assert_includes first_treegrid_row_text, groups(:group_z).name
     end
 
+    test 'should sort groups by created_at ascending' do
+      sign_in @user
+
+      get dashboard_groups_path, params: { q: { s: 'created_at asc' } }
+
+      assert_response :success
+      assert_active_sort('q', 'created_at asc')
+      assert_includes first_treegrid_row_text, groups(:group_z).name
+    end
+
     test 'accessing groups index on invalid page causes pagy overflow redirect' do
       sign_in users(:john_doe)
 

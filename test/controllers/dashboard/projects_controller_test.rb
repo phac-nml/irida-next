@@ -137,6 +137,33 @@ module Dashboard
       assert_includes first_treegrid_row_text, projects(:projectHotel).human_name
     end
 
+    test 'should sort projects by updated_at ascending' do
+      sign_in @user
+
+      get dashboard_projects_path, params: { all_projects_q: { s: 'updated_at asc' } }
+
+      assert_response :success
+      assert_active_sort('all_projects_q', 'updated_at asc')
+    end
+
+    test 'should sort projects by created_at descending' do
+      sign_in @user
+
+      get dashboard_projects_path, params: { all_projects_q: { s: 'created_at desc' } }
+
+      assert_response :success
+      assert_active_sort('all_projects_q', 'created_at desc')
+    end
+
+    test 'should sort projects by created_at ascending' do
+      sign_in @user
+
+      get dashboard_projects_path, params: { all_projects_q: { s: 'created_at asc' } }
+
+      assert_response :success
+      assert_active_sort('all_projects_q', 'created_at asc')
+    end
+
     test 'should apply sort with filters for all projects query' do
       sign_in @user
 
