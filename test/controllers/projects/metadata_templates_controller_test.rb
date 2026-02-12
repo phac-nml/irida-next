@@ -10,6 +10,9 @@ module Projects
       @project29 = projects(:project29)
       @namespace = @project.namespace
       @metadata_template = metadata_templates(:valid_metadata_template)
+      @sorted_project = projects(:john_doe_project2)
+      @template1 = metadata_templates(:project2_metadata_template1)
+      @template2 = metadata_templates(:project2_metadata_template2)
     end
 
     test 'create metadata template' do
@@ -105,6 +108,31 @@ module Projects
       get namespace_project_metadata_templates_path(@namespace.parent, @namespace.project)
 
       assert_response :success
+    end
+
+    test 'should apply default sort and support project metadata template sorting' do
+      get namespace_project_metadata_templates_path(@sorted_project.namespace.parent, @sorted_project)
+      assert_response :success
+      assert_sort_state(1, 'ascending')
+      assert_first_rows_include(@template1.name, @template2.name)
+
+      get namespace_project_metadata_templates_path(@sorted_project.namespace.parent, @sorted_project,
+                                                    params: { q: { s: 'name desc' } })
+      assert_response :success
+      assert_sort_state(1, 'descending')
+      assert_first_rows_include(@template2.name, @template1.name)
+
+      get namespace_project_metadata_templates_path(@sorted_project.namespace.parent, @sorted_project,
+                                                    params: { q: { s: 'created_by_email asc' } })
+      assert_response :success
+      assert_sort_state(3, 'ascending')
+      assert_first_rows_include(@template2.name, @template1.name)
+
+      get namespace_project_metadata_templates_path(@sorted_project.namespace.parent, @sorted_project,
+                                                    params: { q: { s: 'created_by_email desc' } })
+      assert_response :success
+      assert_sort_state(3, 'descending')
+      assert_first_rows_include(@template1.name, @template2.name)
     end
 
     test 'view metadata template' do
