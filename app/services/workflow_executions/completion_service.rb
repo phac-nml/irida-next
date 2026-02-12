@@ -18,10 +18,6 @@ module WorkflowExecutions
     def execute
       run_output_data = download_decompress_parse_gziped_json("#{@output_base_path}iridanext.output.json.gz")
 
-      # global run output files
-      output_global_file_paths = get_output_global_file_paths(run_output_data:)
-      process_global_file_paths(output_global_file_paths:)
-
       # per sample output files
       output_samples_file_paths = get_output_samples_file_paths(run_output_data:)
       process_sample_file_paths(output_samples_file_paths:)
@@ -31,12 +27,6 @@ module WorkflowExecutions
     end
 
     private
-
-    def get_output_global_file_paths(run_output_data:)
-      return nil unless run_output_data['files']['global']
-
-      get_path_mapping(run_output_data['files']['global'])
-    end
 
     def get_output_samples_file_paths(run_output_data:)
       return nil unless run_output_data['files']['samples']
@@ -52,16 +42,6 @@ module WorkflowExecutions
 
     def get_path_mapping(data_paths)
       data_paths.map { |entry| @output_base_path + entry['path'] }
-    end
-
-    def process_global_file_paths(output_global_file_paths:)
-      # Handle output files for workflow execution
-      global_file_blob_list = []
-      output_global_file_paths&.each do |blob_file_path|
-        global_file_blob_list.append(download_and_make_new_blob(blob_file_path:))
-      end
-      @attachable_blobs_tuple_list.append({ attachable: @workflow_execution,
-                                            blob_id_list: global_file_blob_list })
     end
 
     def process_sample_file_paths(output_samples_file_paths:)

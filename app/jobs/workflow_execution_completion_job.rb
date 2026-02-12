@@ -19,7 +19,7 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
     # Steps
     step :run_service # TODO: remove this once all other steps are implemented
 
-    # step :process_global_file_paths
+    step :process_global_file_paths
     # step :process_sample_file_paths
     step :process_samples_metadata, start: 0
     # step :attach_blobs_to_attachables
@@ -37,6 +37,33 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
     return if @workflow_execution.state.to_sym == :error
 
     WorkflowExecutions::CompletionService.new(@workflow_execution).execute
+  end
+
+  def process_global_file_paths
+    return if @workflow_execution.state.to_sym == :error
+
+    # Handle output files for workflow execution
+    blob_id_list = run_output_global_file_paths&.map do |blob_file_path|
+      download_and_make_new_blob(blob_file_path:)
+    end
+
+    create_attachment(@workflow_execution, blob_id_list) unless blob_id_list.nil?
+  end
+
+  def run_output_global_file_paths
+    return nil unless run_output_data['files']['global']
+
+    get_path_mapping(run_output_data['files']['global'])
+  end
+
+  def get_path_mapping(data_paths)
+    data_paths.map { |entry| run_output_base_path + entry['path'] }
+  end
+
+  def create_attachment(attachable, blob_id_list)
+    Attachments::CreateService.new(
+      @workflow_execution.submitter, attachable, { files: blob_id_list }
+    ).execute
   end
 
   def run_output_base_path
