@@ -1166,9 +1166,9 @@ en:
       revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Are you sure you want to revoke this personal access token?
   profiles:
-    show:
-      title: Main Settings
     accounts:
+      show:
+        title: Delete account
       delete:
         button: Delete account
         confirm: Are you sure you want to delete your account?
@@ -1217,6 +1217,7 @@ en:
         error: Language could not be updated
         success: Language updated successfully
     show:
+      title: Main Settings
       email:
         submit: Update profile settings
       email_address: Email Address

@@ -1170,9 +1170,9 @@ fr:
       revoke_aria_label: 'Révoquer le jeton d’accès personnel : %{name}'
       revoke_confirmation: Êtes-vous sûr de vouloir révoquer ce jeton d’accès personnel?
   profiles:
-    show:
-      title: Paramètres principaux
     accounts:
+      show:
+        title: Supprimer le compte
       delete:
         button: Supprimer un compte
         confirm: Êtes-vous sûr de vouloir supprimer votre compte?
@@ -1221,6 +1221,7 @@ fr:
         error: Le langage n’a pas pu être mis à jour.
         success: Langue mise à jour avec succès
     show:
+      title: Paramètres principaux
       email:
         submit: Mettre à jour les paramètres du profil
       email_address: Adresse courriel
