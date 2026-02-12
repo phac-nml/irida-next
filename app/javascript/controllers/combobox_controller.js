@@ -324,8 +324,10 @@ export default class ComboboxController extends MenuController {
 
       case "Tab":
         this.debouncedFilterAndUpdate.flush();
-        this.#setValue(this.#option);
-        super.hide();
+        if (super.isVisible()) {
+          this.#setValue(this.#option);
+          super.hide();
+        }
         break;
 
       case "Home":
