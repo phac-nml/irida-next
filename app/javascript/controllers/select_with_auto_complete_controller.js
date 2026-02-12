@@ -130,7 +130,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   #announceNumberOfResults() {
     if (this.hasAriaLiveUpdateTarget) {
       const numItems = this.#filteredOptions.length;
-      let message = "";
+      let message;
       if (numItems === 0) {
         message = this.noResultsTextValue;
       } else if (numItems === 1) {
@@ -202,9 +202,9 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #populateCurrentFirstLastOptions() {
-    let option = null;
     const currentOption = this.#option;
     const numItems = this.#filteredOptions.length;
+    let option;
 
     if (numItems > 0) {
       this.#firstOption = this.#filteredOptions[0];

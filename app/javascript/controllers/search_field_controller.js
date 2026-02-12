@@ -10,17 +10,14 @@ export default class extends Controller {
    * Sets up any initial state or event listeners
    */
   connect() {
-    console.debug("🔗 SearchFieldController: Connected", {
-      hasInputTarget: this.hasInputTarget,
-      hasSearchContent: this.hasSearchContent,
-    });
+    // Controller connected
   }
 
   /**
    * 🚪 Cleanup when controller disconnects
    */
   disconnect() {
-    console.debug("🔌 SearchFieldController: Disconnected");
+    // Controller disconnected
   }
 
   /**
@@ -58,9 +55,6 @@ export default class extends Controller {
 
       // 🚀 Trigger form submission to refresh results (so user sees cleared state)
       form.requestSubmit();
-
-      // ✅ Log success for debugging
-      console.debug("✅ SearchFieldController: Search cleared successfully");
     } catch (error) {
       // 🚨 Comprehensive error handling
       console.error("💥 SearchFieldController: Error clearing search", {

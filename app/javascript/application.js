@@ -127,7 +127,7 @@ Turbo.config.forms.confirm = (message, element) => {
   dialog.showModal();
   focusTrap.activate();
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     dialog.addEventListener(
       "close",
       () => {

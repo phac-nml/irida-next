@@ -94,7 +94,7 @@ export default class extends Controller {
     }
   }
 
-  #handleBackspace(event) {
+  #handleBackspace() {
     const tags = this.tagsTarget.querySelectorAll("span.search-tag");
     if (tags.length === 0) return;
     const last = tags[tags.length - 1];

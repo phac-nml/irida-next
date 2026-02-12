@@ -151,24 +151,26 @@ export default class extends Controller {
         event.preventDefault();
         this.triggerTarget.focus();
         break;
-      case "ArrowUp":
+      case "ArrowUp": {
         event.preventDefault();
-        var prevIndex = menuItems.length - 1;
+        let prevIndex = menuItems.length - 1;
         if (currentIndex > 0) {
-          var prevIndex = Math.max(0, currentIndex - 1);
+          prevIndex = Math.max(0, currentIndex - 1);
         }
         menuItems[currentIndex].tabIndex = "-1";
         this.#focusMenuItem(menuItems.at(prevIndex));
         break;
-      case "ArrowDown":
+      }
+      case "ArrowDown": {
         event.preventDefault();
-        var nextIndex = 0;
+        let nextIndex = 0;
         if (currentIndex < menuItems.length - 1) {
-          var nextIndex = Math.min(menuItems.length - 1, currentIndex + 1);
+          nextIndex = Math.min(menuItems.length - 1, currentIndex + 1);
         }
         menuItems[currentIndex].tabIndex = "-1";
         this.#focusMenuItem(menuItems.at(nextIndex));
         break;
+      }
       case "Home":
         event.preventDefault();
         menuItems[currentIndex].tabIndex = "-1";

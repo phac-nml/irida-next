@@ -125,12 +125,7 @@ export function normalizeParams(params, name, v, depth) {
       !Array.isArray(params[k][params[k].length - 1]) &&
       !Reflect.has(params[k][params[k].length - 1], child_key)
     ) {
-      normalize_params(
-        params[k][params[k].length - 1],
-        child_key,
-        v,
-        depth + 1,
-      );
+      normalizeParams(params[k][params[k].length - 1], child_key, v, depth + 1);
       params[k].push(normalizeParams(new Object(), child_key, v, depth + 1));
     }
   } else {
