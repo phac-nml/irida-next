@@ -6,13 +6,9 @@
       dark:border-slate-700 sm:p-6 dark:bg-slate-800
     "
   >
-    <h2
-      class="
-        text-xl font-semibold leading-tight break-words text-slate-900 dark:text-white
-      "
-    >
+    <%= pathogen_heading(level: 2) do %>
       <%= t(".label") %>
-    </h2>
+    <% end %>
     <%= render TokenComponent.new(
       value: token,
       aria_label: t(".aria_label"),
