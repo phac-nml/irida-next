@@ -1,5 +1,5 @@
 import MenuController from "controllers/menu_controller";
-import { FOCUSABLE_ELEMENTS } from "pathogen-controllers/pathogen/datepicker/constants";
+import { FOCUSABLE_ELEMENTS } from "pathogen_view_components/datepicker/constants";
 
 export default class extends MenuController {
   static outlets = ["pathogen--datepicker--beta-calendar"];
