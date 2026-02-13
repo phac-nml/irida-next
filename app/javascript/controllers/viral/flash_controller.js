@@ -7,6 +7,13 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = { timeout: Number, type: String };
 
+  initialize() {
+    this.boundPause = this.pause.bind(this);
+    this.boundRun = this.run.bind(this);
+    this.animationFrameId = null;
+    this.dismissTimeout = null;
+  }
+
   connect() {
     // Trigger entrance animation
     this.animateIn();
@@ -14,14 +21,18 @@ export default class extends Controller {
     // Always force errors to not have a timeout
     if (this.typeValue !== "error" && this.timeoutValue > 0) {
       this.run();
-      this.element.addEventListener("mouseenter", this.pause.bind(this));
-      this.element.addEventListener("mouseleave", this.run.bind(this));
+      this.element.addEventListener("mouseenter", this.boundPause);
+      this.element.addEventListener("mouseleave", this.boundRun);
     }
+  }
+
+  disconnect() {
+    this.#cleanup();
   }
 
   animateIn() {
     // Use requestAnimationFrame to ensure the initial state is applied first
-    requestAnimationFrame(() => {
+    this.animationFrameId = requestAnimationFrame(() => {
       // Animate to final state
       this.element.style.opacity = "1";
       this.element.style.transform = "translateY(0) scale(1)";
@@ -45,8 +56,7 @@ export default class extends Controller {
   }
 
   dismiss() {
-    this.element.removeEventListener("mouseenter", this.pause);
-    this.element.removeEventListener("mouseleave", this.run);
+    this.#cleanup();
 
     // Add slide-out animation
     this.element.style.transform = "translateX(100%)";
@@ -54,8 +64,16 @@ export default class extends Controller {
     this.element.style.transition = "all 0.3s ease-out";
 
     // Remove element after animation completes
-    setTimeout(() => {
+    this.dismissTimeout = setTimeout(() => {
       this.element.remove();
     }, 300);
+  }
+
+  #cleanup() {
+    clearTimeout(this.timeout);
+    clearTimeout(this.dismissTimeout);
+    cancelAnimationFrame(this.animationFrameId);
+    this.element.removeEventListener("mouseenter", this.boundPause);
+    this.element.removeEventListener("mouseleave", this.boundRun);
   }
 }
