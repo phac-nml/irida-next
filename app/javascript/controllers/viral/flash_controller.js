@@ -24,6 +24,10 @@ export default class extends Controller {
     }
   }
 
+  disconnect() {
+    this.#cleanup();
+  }
+
   animateIn() {
     // Use requestAnimationFrame to ensure the initial state is applied first
     requestAnimationFrame(() => {
@@ -50,8 +54,7 @@ export default class extends Controller {
   }
 
   dismiss() {
-    this.element.removeEventListener("mouseenter", this.boundPause);
-    this.element.removeEventListener("mouseleave", this.boundRun);
+    this.#cleanup();
 
     // Add slide-out animation
     this.element.style.transform = "translateX(100%)";
@@ -62,5 +65,11 @@ export default class extends Controller {
     setTimeout(() => {
       this.element.remove();
     }, 300);
+  }
+
+  #cleanup() {
+    clearTimeout(this.timeout);
+    this.element.removeEventListener("mouseenter", this.boundPause);
+    this.element.removeEventListener("mouseleave", this.boundRun);
   }
 }
