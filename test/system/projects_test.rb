@@ -194,6 +194,7 @@ class ProjectsTest < ApplicationSystemTestCase
     visit namespace_project_edit_path(projects(:project1).namespace.parent, projects(:project1))
 
     assert_text I18n.t(:'projects.edit.general.title')
+    assert_selector 'h2', text: I18n.t(:'projects.edit.advanced.title')
   end
 
   test 'cannot access edit project' do

@@ -1490,14 +1490,14 @@ module WorkflowExecutions
 
       click_button I18n.t('workflow_executions.submissions.create.submit')
 
-      assert_selector 'h1#page-title', text: I18n.t('shared.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t('shared.workflow_executions.index.title')
       current_workflow = WorkflowExecution.last
       assert_equal 'a_new_workflow', current_workflow.name
       assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
       assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
       click_link current_workflow.id
 
-      assert_selector 'h1#page-title', text: current_workflow.name
+      assert_selector 'h1', text: current_workflow.name
       click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
       assert_selector 'table'
       if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
@@ -1561,14 +1561,14 @@ module WorkflowExecutions
       assert_link "#{@sample_b.id}_fastq_2", text: @attachment_rev2.file.filename.to_s
       click_button I18n.t('workflow_executions.submissions.create.submit')
 
-      assert_selector 'h1#page-title', text: I18n.t('shared.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t('shared.workflow_executions.index.title')
       current_workflow = WorkflowExecution.last
       assert_equal 'a_new_workflow', current_workflow.name
       assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
       assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
       click_link current_workflow.id
 
-      assert_selector 'h1#page-title', text: current_workflow.name
+      assert_selector 'h1', text: current_workflow.name
       click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
       if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
         assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s
@@ -1632,14 +1632,14 @@ module WorkflowExecutions
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       click_button I18n.t('workflow_executions.submissions.create.submit')
 
-      assert_selector 'h1#page-title', text: I18n.t('shared.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t('shared.workflow_executions.index.title')
       current_workflow = WorkflowExecution.last
       assert_equal 'a_new_workflow', current_workflow.name
       assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
       assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
       click_link current_workflow.id
 
-      assert_selector 'h1#page-title', text: current_workflow.name
+      assert_selector 'h1', text: current_workflow.name
       click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
       if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
         assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s

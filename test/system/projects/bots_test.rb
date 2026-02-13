@@ -23,7 +23,7 @@ module Projects
 
       # header and description
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
 
       # table
       assert_selector 'tr', count: 20 + header_row_count
@@ -49,7 +49,7 @@ module Projects
       visit namespace_project_bots_path(@namespace, @project2)
 
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
 
       assert_selector 'tr', count: 0
 
@@ -67,7 +67,7 @@ module Projects
       visit namespace_project_bots_path(@namespace, @project2)
 
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
 
       assert_selector 'button', text: I18n.t(:'projects.bots.index.add_new_bot'), count: 1
 
@@ -117,7 +117,7 @@ module Projects
       visit namespace_project_bots_path(@namespace, @project2)
 
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
 
       assert_selector 'button', text: I18n.t(:'projects.bots.index.add_new_bot'), count: 1
 
@@ -162,7 +162,7 @@ module Projects
       ### SETUP START ###
       visit namespace_project_bots_path(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       ### SETUP END ###
@@ -196,7 +196,7 @@ module Projects
       visit namespace_project_bots_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       ### SETUP END ###
@@ -239,7 +239,7 @@ module Projects
       visit namespace_project_bots_path(@namespace, @project)
       # verify page and table loaded
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       ### SETUP END ###
@@ -285,7 +285,7 @@ module Projects
       visit namespace_project_bots_path(@namespace, @project)
       # verify page rendered
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       ### SETUP END ###

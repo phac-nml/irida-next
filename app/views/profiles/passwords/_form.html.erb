@@ -1,12 +1,8 @@
 <div class="w-full">
-  <div class="pb-4">
-    <h2 class="text-xl font-semibold leading-tight text-slate-900 dark:text-white">
-      <%= t :"profiles.passwords.update.title" %>
-    </h2>
-    <p class="text-slate-500 dark:text-slate-400">
-      <%= t :"profiles.passwords.update.subtitle" %>
-    </p>
-  </div>
+  <%= render Viral::PageHeaderComponent.new(
+    title: t(:"profiles.passwords.update.title"),
+    subtitle: t(:"profiles.passwords.update.subtitle"),
+  ) %>
 
   <div class="mb-4">
     <%= render partial: "shared/form/required_field_legend" %>

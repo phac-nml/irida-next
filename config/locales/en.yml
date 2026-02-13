@@ -789,8 +789,8 @@ en:
       details:
         submit: Save changes
         subtitle: Group name and description
-        title: General
-      title: Settings
+        title: General Settings
+      title: General Settings
     group_links:
       index:
         actions:
@@ -1174,6 +1174,8 @@ en:
         effects:
         - All projects and groups you own will be deleted
         - All projects and groups you are a member of will be left intact
+      show:
+        title: Delete account
     passwords:
       update:
         forgot: Forgot your password?
@@ -1221,6 +1223,7 @@ en:
       first_name: First Name
       last_name: Last Name
       missing: This field has not been provided by the Authentication Provider.
+      title: Main Settings
     sidebar:
       access_tokens: Access Tokens
       account: Account
@@ -1367,8 +1370,8 @@ en:
       general:
         heading: Project name and description
         submit: Update project
-        title: General
-      title: Settings
+        title: General Settings
+      title: General Settings
     group_links:
       index:
         access_level:

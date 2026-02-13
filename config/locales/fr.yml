@@ -791,8 +791,8 @@ fr:
       details:
         submit: Sauvegarder les modifications
         subtitle: Nom et description du groupe
-        title: Général
-      title: Paramètres
+        title: Paramètres généraux
+      title: Paramètres généraux
     group_links:
       index:
         actions:
@@ -1178,6 +1178,8 @@ fr:
         effects:
         - Tous les projets et groupes dont vous êtes propriétaire seront supprimés
         - Tous les projets et groupes dont vous êtes membre seront laissés intacts
+      show:
+        title: Supprimer le compte
     passwords:
       update:
         forgot: Vous avez oublié votre mot de passe?
@@ -1225,6 +1227,7 @@ fr:
       first_name: Prénom
       last_name: Nom
       missing: Ce champ n’a pas été fourni par le fournisseur d’authentification.
+      title: Paramètres principaux
     sidebar:
       access_tokens: Jetons d’accès
       account: Compte
@@ -1371,8 +1374,8 @@ fr:
       general:
         heading: Nom et description du projet
         submit: Mettre à jour le projet
-        title: Général
-      title: Paramètres
+        title: Paramètres généraux
+      title: Paramètres généraux
     group_links:
       index:
         access_level:

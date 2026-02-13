@@ -348,7 +348,8 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t('common.labels.settings')
     click_link I18n.t('common.labels.general')
 
-    assert_selector 'h2', text: I18n.t('common.labels.general')
+    assert_selector 'h1', text: I18n.t('common.labels.general')
+    assert_selector 'h2', text: I18n.t('groups.edit.advanced.title')
     click_on I18n.t('groups.edit.advanced.delete.submit')
 
     within('#turbo-confirm') do

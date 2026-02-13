@@ -16,7 +16,7 @@ module Projects
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
-      assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
+      assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
 
       assert_selector 'table thead tr th', count: 6
       assert_selector 'table tbody tr', count: project.namespace.metadata_templates.count
@@ -33,7 +33,7 @@ module Projects
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
-      assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
+      assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
 
       assert_no_selector 'table'
 
@@ -121,7 +121,7 @@ module Projects
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
-      assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
+      assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
 
@@ -165,7 +165,7 @@ module Projects
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
-      assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
+      assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
 
@@ -191,7 +191,7 @@ module Projects
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
-      assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
+      assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
 
@@ -230,7 +230,7 @@ module Projects
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
-      assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
+      assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
 
@@ -273,7 +273,7 @@ module Projects
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
-      assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
+      assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
 
       assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), count: 1
 
@@ -314,7 +314,7 @@ module Projects
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
-      assert_selector 'span', text: I18n.t('projects.metadata_templates.index.subtitle')
+      assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
 
       assert_no_selector 'a', text: I18n.t('projects.metadata_templates.index.new_button')
     end

@@ -54,6 +54,7 @@ module Pathogen
         @system_arguments[:class] = class_names(
           system_arguments[:class],
           size_classes,
+          font_weight_class,
           color_classes_for_variant(@variant),
           Constants::LINE_HEIGHTS[:heading],
           letter_spacing_class,
@@ -82,6 +83,15 @@ module Pathogen
           "#{mobile_class} sm:#{desktop_class}"
         else
           Constants::RESPONSIVE_SIZES[@level][:mobile]
+        end
+      end
+
+      def font_weight_class
+        case @level
+        when 1, 2
+          'font-extrabold'
+        else
+          'font-bold'
         end
       end
 

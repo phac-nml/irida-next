@@ -1,4 +1,5 @@
-<%= viral_card(title: "Main Settings") do %>
+<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+<%= viral_card do %>
   <%= render "form", user: @user if @user.provider == nil %>
   <%= render "domain_user", user: @user if @user.provider != nil %>
 <% end %>

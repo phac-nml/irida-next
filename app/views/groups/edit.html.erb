@@ -1,10 +1,6 @@
 <div class="md:mx-auto">
-  <!--Edit general details form -->
   <div class="grid gap-4">
-
-    <h2 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white">
-      <%= t(:"groups.edit.details.title") %>
-    </h2>
+    <%= render Viral::PageHeaderComponent.new(title: t(".details.title")) %>
 
     <%= viral_card do |card| %>
       <% card.with_header(title: t(:"groups.edit.details.subtitle")) %>
@@ -19,9 +15,9 @@
       <% end %>
     <% end %>
 
-    <h2 class="text-2xl font-medium leading-tight text-slate-900 dark:text-white">
-      <%= t(:"groups.edit.advanced.title") %>
-    </h2>
+    <%= pathogen_heading(level: 2) do %>
+      <%= t(".advanced.title") %>
+    <% end %>
 
     <%= turbo_frame_tag("group_path_form") do %>
       <%= render "edit_advanced_path", group: @group %>

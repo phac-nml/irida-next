@@ -1,4 +1,6 @@
-<%= viral_card(title: t(:'.preferences')) do |card| %>
+<%= render Viral::PageHeaderComponent.new(title: t(".preferences")) %>
+
+<%= viral_card do |card| %>
   <% card.with_section(border_bottom: true, border_top: true) do %>
     <%= tag.div(
       role: "radiogroup",
