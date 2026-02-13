@@ -199,7 +199,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       # Select all workflow executions within the table
       click_button I18n.t('common.controls.select_all')
@@ -370,7 +370,7 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
-      assert_selector 'span', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       # Select all workflow executions within the table
       click_button I18n.t('common.controls.select_all')
