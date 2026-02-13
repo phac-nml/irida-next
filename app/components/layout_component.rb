@@ -2,7 +2,7 @@
 
 # Overall layout component
 class LayoutComponent < Component
-  attr_reader :layout, :user
+  attr_reader :layout, :site_banners, :user
 
   renders_one :sidebar, Layout::SidebarComponent
   renders_one :body
@@ -12,6 +12,7 @@ class LayoutComponent < Component
   def initialize(user:, fixed: true, **system_arguments)
     @user = user
     @layout = fixed ? 'container mx-auto' : ''
+    @site_banners = Irida::SiteBanner.messages
     @system_arguments = system_arguments
   end
 end
