@@ -1,1 +1,28 @@
+# Site-wide persistent banner messages rendered on all non-Devise pages.
+#
+# Format:
+# messages:
+#   - enabled: true|false         # Optional; defaults to true.
+#     type: warning               # Optional; defaults to warning.
+#                                 # Supported: info, warning, danger, success
+#                                 # Aliases: notice -> info, alert -> danger
+#     message: "Plain text"       # Required. Can be plain text (single language)
+#                                 # or a locale hash (internationalized).
+#
+# Example: regular (non-localized) message
+# messages:
+#   - type: danger
+#     message: "There is currently a server outage and no pipelines can be run at this time."
+#
+# Example: internationalized message
+# messages:
+#   - type: warning
+#     message:
+#       en: "Scheduled maintenance starts at 02:00 UTC."
+#       fr: "La maintenance planifiee commence a 02:00 UTC."
+#
+# Locale behavior:
+# - The app first tries the current locale (for example, fr).
+# - If missing, it falls back to en.
+# - If neither exists for that message, that message is skipped.
 messages: []
