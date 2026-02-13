@@ -1,68 +1,71 @@
 <%= render Viral::PageHeaderComponent.new(title: t(".preferences")) %>
 
-<div class="space-y-6">
-  <%= tag.div(
-    role: "radiogroup",
-    aria: { labelledby: "theme-legend" },
-    class: "grid grid-cols-1 gap-4",
-    data: {
-      controller: "colour-mode",
-      changed_text: t("theme.announcements.changed"),
-      error_text: t("theme.announcements.error"),
-      system_text: t("theme.modes.system"),
-      light_text: t("theme.modes.light"),
-      dark_text: t("theme.modes.dark")
-    }
-  ) do %>
-    <div
-      id="theme-legend"
-      class="
-        mb-2 text-sm font-semibold text-slate-800 dark:text-white uppercase
-      "
-    >
-      <%= t(".theme_title") %>
-    </div>
-
-    <%= pathogen_radio_button(
-      attribute: :color_theme,
-      value: "system",
-      input_name: "color-theme",
-      label: t(".system_theme"),
-      checked: params[:color_theme] == "system",
-      help_text: t(".system_desc"),
-      required: true,
+<%= viral_card do |card| %>
+  <% card.with_section(border_bottom: true, border_top: true) do %>
+    <%= tag.div(
+      role: "radiogroup",
+      aria: { labelledby: "theme-legend" },
+      class: "grid grid-cols-1 gap-4",
       data: {
-        action: "change->colour-mode#toggleTheme",
-        "colour-mode-target": "system",
-      },
-    ) %>
+        controller: "colour-mode",
+        changed_text: t("theme.announcements.changed"),
+        error_text: t("theme.announcements.error"),
+        system_text: t("theme.modes.system"),
+        light_text: t("theme.modes.light"),
+        dark_text: t("theme.modes.dark")
+      }
+    ) do %>
+      <div
+        id="theme-legend"
+        class="
+          mb-2 text-sm font-semibold text-slate-800 dark:text-white uppercase
+        "
+      >
+        <%= t(".theme_title") %>
+      </div>
 
-    <%= pathogen_radio_button(
-      attribute: :color_theme,
-      value: "dark",
-      input_name: "color-theme",
-      label: t(".dark_theme"),
-      checked: params[:color_theme] == "dark",
-      required: true,
-      data: {
-        action: "change->colour-mode#toggleTheme",
-        "colour-mode-target": "dark",
-      },
-    ) %>
+      <%= pathogen_radio_button(
+        attribute: :color_theme,
+        value: "system",
+        input_name: "color-theme",
+        label: t(".system_theme"),
+        checked: params[:color_theme] == "system",
+        help_text: t(".system_desc"),
+        required: true,
+        data: {
+          action: "change->colour-mode#toggleTheme",
+          "colour-mode-target": "system",
+        },
+      ) %>
 
-    <%= pathogen_radio_button(
-      attribute: :color_theme,
-      value: "light",
-      input_name: "color-theme",
-      label: t(".light_theme"),
-      checked: params[:color_theme] == "light",
-      required: true,
-      data: {
-        action: "change->colour-mode#toggleTheme",
-        "colour-mode-target": "light",
-      },
-    ) %>
+      <%= pathogen_radio_button(
+        attribute: :color_theme,
+        value: "dark",
+        input_name: "color-theme",
+        label: t(".dark_theme"),
+        checked: params[:color_theme] == "dark",
+        required: true,
+        data: {
+          action: "change->colour-mode#toggleTheme",
+          "colour-mode-target": "dark",
+        },
+      ) %>
+
+      <%= pathogen_radio_button(
+        attribute: :color_theme,
+        value: "light",
+        input_name: "color-theme",
+        label: t(".light_theme"),
+        checked: params[:color_theme] == "light",
+        required: true,
+        data: {
+          action: "change->colour-mode#toggleTheme",
+          "colour-mode-target": "light",
+        },
+      ) %>
+    <% end %>
   <% end %>
-
-  <%= render "locale_form", user: @user %>
-</div>
+  <% card.with_section do %>
+    <%= render "locale_form", user: @user %>
+  <% end %>
+<% end %>

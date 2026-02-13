@@ -4,42 +4,22 @@
   subtitle: t("profiles.personal_access_tokens.index.subtitle"),
 ) %>
 
-<div class="space-y-6">
+<div class="grid gap-4 grid-cols-1">
   <%= turbo_frame_tag "access-token-section" %>
 
-  <section aria-labelledby="create-token-heading">
-    <h2
-      id="create-token-heading"
-      class="text-lg font-semibold text-slate-900 dark:text-white"
-    >
-      <%= t(:"profiles.personal_access_tokens.create.title") %>
-    </h2>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-      <%= t(:"profiles.personal_access_tokens.create.subtitle") %>
-    </p>
-    <div class="mt-4">
-      <%= render partial: "form",
-      locals: {
-        personal_access_token: @personal_access_token,
-      } %>
-    </div>
-  </section>
+  <%= viral_card(title: t(:"profiles.personal_access_tokens.create.title"), subtitle: t(:"profiles.personal_access_tokens.create.subtitle")) do %>
+    <%= render partial: "form",
+    locals: {
+      personal_access_token: @personal_access_token,
+    } %>
+  <% end %>
 
-  <hr class="border-slate-200 dark:border-slate-700">
+  <%= viral_card(title: t(
+    :"profiles.personal_access_tokens.index.active_personal_access_tokens",
+    count: @active_access_tokens.count
+  ), title_id: "personal-access-tokens-header") do %>
+    <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 
-  <section aria-labelledby="personal-access-tokens-header">
-    <h2
-      id="personal-access-tokens-header"
-      class="text-lg font-semibold text-slate-900 dark:text-white"
-    >
-      <%= t(
-        :"profiles.personal_access_tokens.index.active_personal_access_tokens",
-        count: @active_access_tokens.count,
-      ) %>
-    </h2>
-    <div class="mt-4">
-      <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
-      <%= render partial: "table" %>
-    </div>
-  </section>
+    <%= render partial: "table" %>
+  <% end %>
 </div>
