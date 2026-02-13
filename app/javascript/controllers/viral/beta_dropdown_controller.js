@@ -9,6 +9,8 @@ export default class extends MenuController {
     this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
     this.boundFocusOut = this.focusOut.bind(this);
     this.boundOnMorph = this.onMorph.bind(this);
+
+    super.initialize();
   }
 
   connect() {
