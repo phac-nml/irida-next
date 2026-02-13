@@ -37,8 +37,7 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
 
   def query_and_update_state
     if validate_initial_state(@workflow_execution, [:prepared], validate_run_id: false)
-      wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
-      run_id = WorkflowExecutions::SubmissionService.new(@workflow_execution, wes_connection).execute
+      run_id = WorkflowExecutions::SubmissionService.new(@workflow_execution).execute
 
       update_state(:submitted, run_id: run_id)
     else
