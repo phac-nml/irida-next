@@ -108,8 +108,6 @@ export default class BetaSelect2Controller extends MenuController {
         console.warn(
           "BetaSelect2Controller: Could not determine selected item.",
         );
-        // Optionally, reset the input if no selection is confirmed
-        // this.#resetInput();
       }
     } catch (error) {
       this.#handleError(error, "select");

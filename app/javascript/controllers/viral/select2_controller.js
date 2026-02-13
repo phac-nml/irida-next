@@ -109,8 +109,6 @@ export default class Select2Controller extends Controller {
         // If no valid item was determined (edge case or unexpected state),
         // potentially reset or log, but avoid throwing an error unless critical.
         console.warn("Select2Controller: Could not determine selected item.");
-        // Optionally, reset the input if no selection is confirmed
-        // this.#resetInput();
       }
     } catch (error) {
       this.#handleError(error, "select");
