@@ -26,7 +26,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      result = WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      result = WorkflowExecutions::SubmissionService.new(@workflow_execution, @user, {}, conn).execute
 
       assert_equal test_run_id, result
     end
@@ -47,7 +47,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      result = WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      result = WorkflowExecutions::SubmissionService.new(@workflow_execution, @user, {}, conn).execute
 
       assert_not result
     end

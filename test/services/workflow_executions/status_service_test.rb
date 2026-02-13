@@ -24,7 +24,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, @user, {}, conn).execute
 
       assert_equal run_id, @workflow_execution.run_id
 
@@ -63,7 +63,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, @user, {}, conn).execute
 
       assert_equal run_id, @workflow_execution.run_id
 
@@ -102,7 +102,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, @user, {}, conn).execute
 
       assert_equal run_id, @workflow_execution.run_id
 
@@ -244,7 +244,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, @user, {}, conn).execute
 
       assert_equal run_id, @workflow_execution.run_id
 
@@ -283,7 +283,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, @user, {}, conn).execute
 
       assert_equal run_id, @workflow_execution.run_id
 
@@ -324,7 +324,7 @@ module WorkflowExecutions
 
       @automation_bot = users(:projectA_automation_bot)
       @workflow_execution.submitter = @automation_bot
-      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, @user, {}, conn).execute
 
       assert_equal run_id, @workflow_execution.run_id
 
