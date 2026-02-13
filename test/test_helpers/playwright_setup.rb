@@ -31,6 +31,7 @@ Capybara.register_driver(:irida_next_playwright) do |app|
     headless: !ENV['HEADLESS'].in?(%w[n 0 no false]),
     viewport: { width: 1280, height: 1024 },
     playwright_cli_executable_path: 'pnpm exec playwright',
+    permissions: %w[clipboard-read clipboard-write],
     timeout: 45
   )
 end

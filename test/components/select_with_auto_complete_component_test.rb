@@ -77,7 +77,7 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
     visit('/rails/view_components/select_with_auto_complete_component/default')
     within "div[data-controller='select-with-auto-complete']" do
       combobox = find("input[role='combobox']")
-      combobox.send_keys(:left, :left, :right)
+      combobox.click.send_keys(:left, :left, :right)
       cursor_position = page.evaluate_script("document.getElementById('field').selectionStart")
       assert_equal 2, cursor_position
     end
@@ -87,7 +87,7 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
     visit('/rails/view_components/select_with_auto_complete_component/default')
     within "div[data-controller='select-with-auto-complete']" do
       combobox = find("input[role='combobox']")
-      combobox.send_keys(:home)
+      combobox.click.send_keys(:home)
       cursor_position = page.evaluate_script("document.getElementById('field').selectionStart")
       assert_equal 0, cursor_position
       combobox.send_keys(:end)
