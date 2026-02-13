@@ -378,9 +378,13 @@ module Projects
         fill_in 'sample_value_2', with: 'value5'
         fill_in 'sample_key_3', with: 'metadatafield6'
         fill_in 'sample_value_3', with: 'value6'
+        assert_selector 'input.keyInput', count: 4
+        assert_selector 'input.valueInput', count: 4
 
         click_button 'delete_1'
         click_button 'delete_2'
+        assert_selector 'input.keyInput', count: 2
+        assert_selector 'input.valueInput', count: 2
 
         click_on I18n.t('projects.samples.metadata.form.submit_button')
 
