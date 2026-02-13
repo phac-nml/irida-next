@@ -19,7 +19,6 @@
               text-xl md:text-3xl lg:text-4xl font-bold leading-tight tracking-tight
               text-neutral-900 dark:text-white break-words
             "
-            id="<%= title_id %>"
           >
             <%= title %>
           </h1>
@@ -28,14 +27,13 @@
       <!-- Subtitle -->
       <% if subtitle.present? %>
         <div class="<%= icon? ? 'pl-12' : '' %>">
-          <span
+          <p
             class="
               text-lg text-neutral-600 dark:text-neutral-300 leading-relaxed break-words
             "
-            id="<%= subtitle_id %>"
           >
             <%= subtitle %>
-          </span>
+          </p>
         </div>
       <% end %>
       <!-- PUID (Mobile: Last element, Desktop: After subtitle) -->
