@@ -7,6 +7,7 @@ require 'test_helpers/capybara_setup'
 require 'test_helpers/cuprite_helpers'
 require 'test_helpers/cuprite_setup'
 require 'test_helpers/html5_helpers'
+require 'test_helpers/system_test_ui_helper'
 require 'action_dispatch/system_test_case'
 require 'minitest/retry'
 
@@ -17,6 +18,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include BetterRailsSystemTests
   include CupriteHelpers
   include HTML5Helpers
+  include SystemTestUiHelper
   include Warden::Test::Helpers
 
   Warden.test_mode!

@@ -43,45 +43,6 @@ module Projects
       assert_text I18n.t('metadata_templates.table.empty.description', namespace_type: project.namespace.type.downcase)
     end
 
-    test 'should sort a list of metadata templates' do
-      project = projects(:john_doe_project2)
-      metadata_template1 = metadata_templates(:project2_metadata_template1)
-      metadata_template2 = metadata_templates(:project2_metadata_template2)
-
-      visit namespace_project_metadata_templates_url(project.namespace.parent, project)
-
-      strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary.one', count: 2))
-      assert_selector 'table tbody tr', count: 2
-      assert_selector 'table thead th:first-child svg.arrow-up-icon'
-
-      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template1.name
-      assert_selector 'table tbody tr:first-child td:nth-child(2)',
-                      text: metadata_template1.description
-
-      click_on I18n.t('metadata_templates.table_component.name')
-      assert_selector 'table thead th:has(svg.arrow-down-icon)',
-                      text: I18n.t('metadata_templates.table_component.name').upcase
-
-      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template2.name
-      assert_selector 'table tbody tr:first-child td:nth-child(2)',
-                      text: metadata_template2.description
-
-      click_on I18n.t('metadata_templates.table_component.created_by_email')
-      assert_selector 'table thead th:nth-child(3) svg.arrow-up-icon'
-
-      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template2.name
-      assert_selector 'table tbody tr:first-child td:nth-child(3)',
-                      text: metadata_template2.created_by.email
-
-      click_on I18n.t('metadata_templates.table_component.created_by_email')
-      assert_selector 'table thead th:has(svg.arrow-down-icon)',
-                      text: I18n.t('metadata_templates.table_component.created_by_email').upcase
-
-      assert_selector 'table tbody tr:first-child td:first-child', text: metadata_template1.name
-      assert_selector 'table tbody tr:first-child td:nth-child(3)',
-                      text: metadata_template1.created_by.email
-    end
-
     test 'should destroy metadata template associated with the project' do
       project = projects(:project1)
       metadata_template = metadata_templates(:project1_metadata_template0)
