@@ -117,4 +117,25 @@ class LayoutComponentTest < ViewComponent::TestCase
     assert_selector 'a[href="/item1"]', text: 'Item 1'
     assert_selector 'a[href="/item2"]', text: 'Item 2'
   end
+
+  test 'renders global site banners when configured' do
+    user = users(:john_doe)
+
+    Irida::SiteBanner.stubs(:messages).returns([
+                                                 { type: :danger, message: 'System outage' },
+                                                 { type: :warning, message: 'Maintenance notice' }
+                                               ])
+
+    render_inline LayoutComponent.new(user: user) do |layout|
+      layout.with_sidebar do |sidebar|
+        sidebar.with_header(label: 'Header')
+      end
+      layout.with_body { 'Content' }
+    end
+
+    assert_selector '[role="status"][aria-live="polite"]'
+    assert_selector '.alert-component', count: 2
+    assert_text 'System outage'
+    assert_text 'Maintenance notice'
+  end
 end
