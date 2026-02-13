@@ -56,6 +56,20 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: "pnpm"
+
+      - name: Install JavaScript dependencies
+        run: pnpm install
+
       - name: Prepare RuboCop cache
         uses: actions/cache@v5
         env:
@@ -68,6 +82,22 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
+
+      - name: Get changed ERB files
+        id: changed-erb-files
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            **/*.erb
+            **/*.html.erb
+
+      - name: Lint ERB templates (Herb)
+        if: steps.changed-erb-files.outputs.all_modified_files != ''
+        run: pnpm run herb:lint ${{ steps.changed-erb-files.outputs.all_modified_files }}
+
+      - name: Check ERB formatting (Herb)
+        if: steps.changed-erb-files.outputs.all_modified_files != ''
+        run: pnpm run herb:format:check ${{ steps.changed-erb-files.outputs.all_modified_files }}
 
   test:
     timeout-minutes: 15
