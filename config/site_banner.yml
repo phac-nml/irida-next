@@ -25,4 +25,9 @@
 # - The app first tries the current locale (for example, fr).
 # - If missing, it falls back to en.
 # - If neither exists for that message, that message is skipped.
-messages: []
+messages:
+  - enabled: false
+    type: warning
+    message:
+      en: "There is currently a server outage and no pipelines can be run at this time."
+      fr: "Il y a actuellement une panne serveur et aucun pipeline ne peut etre execute."
