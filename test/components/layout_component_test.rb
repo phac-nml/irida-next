@@ -138,4 +138,58 @@ class LayoutComponentTest < ViewComponent::TestCase
     assert_text 'System outage'
     assert_text 'Maintenance notice'
   end
+
+  test 'caches site banners to avoid repeated YAML parsing' do
+    user = users(:john_doe)
+
+    # Temporarily use memory store instead of null store for this test
+    original_cache = Rails.cache
+    Rails.cache = ActiveSupport::Cache::MemoryStore.new
+    Rails.cache.clear
+
+    # Expect SiteBanner.messages to be called exactly once
+    Irida::SiteBanner.expects(:messages).once.returns([{ type: :info, message: 'Test' }])
+
+    # First component initialization should call SiteBanner.messages
+    component1 = LayoutComponent.new(user:)
+    assert_equal 1, component1.site_banners.length
+
+    # Second component initialization should use cached result
+    component2 = LayoutComponent.new(user:)
+    assert_equal 1, component2.site_banners.length
+
+    # Mocha will verify the expectation (called exactly once) at test teardown
+  ensure
+    Rails.cache = original_cache
+  end
+
+  test 'site banner cache key includes locale for i18n support' do
+    user = users(:john_doe)
+    Rails.cache.clear
+
+    # Stub to return different messages per locale
+    Irida::SiteBanner.stubs(:messages).returns([{ type: :info, message: 'English' }])
+
+    # Create component in English and verify cache key
+    en_cache_key = nil
+    I18n.with_locale(:en) do
+      component = LayoutComponent.new(user:)
+      en_cache_key = component.send(:site_banner_cache_key)
+    end
+
+    # Update stub for French
+    Irida::SiteBanner.stubs(:messages).returns([{ type: :info, message: 'Français' }])
+
+    # Create component in French and verify different cache key
+    fr_cache_key = nil
+    I18n.with_locale(:fr) do
+      component = LayoutComponent.new(user:)
+      fr_cache_key = component.send(:site_banner_cache_key)
+    end
+
+    # Verify cache keys differ by locale
+    assert_equal :en, en_cache_key[1], 'English cache key should include :en locale'
+    assert_equal :fr, fr_cache_key[1], 'French cache key should include :fr locale'
+    assert_not_equal en_cache_key, fr_cache_key, 'Cache keys should differ by locale'
+  end
 end
