@@ -32,19 +32,15 @@ module Pathogen
         wait_for_tabs('simple-tabs')
 
         within_tabs('simple-tabs') do
-          overview = find('[role="tab"]', text: 'Overview')
-          features = find('[role="tab"]', text: 'Features')
-          usage = find('[role="tab"]', text: 'Usage')
+          assert_equal '0', find('[role="tab"]', text: 'Overview')['tabindex']
+          assert_equal '-1', find('[role="tab"]', text: 'Features')['tabindex']
+          assert_equal '-1', find('[role="tab"]', text: 'Usage')['tabindex']
 
-          assert_equal '0', overview['tabindex']
-          assert_equal '-1', features['tabindex']
-          assert_equal '-1', usage['tabindex']
+          find('[role="tab"]', text: 'Features').click
 
-          features.click
-
-          assert_equal '-1', overview['tabindex']
-          assert_equal '0', features['tabindex']
-          assert_equal '-1', usage['tabindex']
+          assert_equal '-1', find('[role="tab"]', text: 'Overview')['tabindex']
+          assert_equal '0', find('[role="tab"]', text: 'Features')['tabindex']
+          assert_equal '-1', find('[role="tab"]', text: 'Usage')['tabindex']
         end
       end
 
