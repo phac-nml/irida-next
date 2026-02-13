@@ -54,8 +54,6 @@ export default class extends Controller {
   }
 
   dismiss() {
-    this.#cleanup();
-
     // Add slide-out animation
     this.element.style.transform = "translateX(100%)";
     this.element.style.opacity = "0";
