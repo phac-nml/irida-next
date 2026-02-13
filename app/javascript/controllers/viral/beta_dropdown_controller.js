@@ -4,13 +4,13 @@ export default class extends MenuController {
   static targets = ["trigger", "menu"];
 
   initialize() {
+    super.initialize();
+
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
     this.boundOnButtonClick = this.onButtonClick.bind(this);
     this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
     this.boundFocusOut = this.focusOut.bind(this);
     this.boundOnMorph = this.onMorph.bind(this);
-
-    super.initialize();
   }
 
   connect() {
