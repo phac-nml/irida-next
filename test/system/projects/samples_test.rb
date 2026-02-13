@@ -1482,9 +1482,7 @@ module Projects
       assert_selector 'div[data-metadata--file-import-target="metadataColumns"]'
 
       # remove file and verify metadataColumns is hidden and aria-hidden="true" is re-added
-      page.driver.with_playwright_page do |playwright_page|
-        playwright_page.locator('input[type="file"][name="file_import[file]"]').set_input_files([])
-      end
+      attach_file 'file_import[file]', nil
       assert_equal 'true', metadata_columns_element['aria-hidden']
       assert_no_selector 'div[data-metadata--file-import-target="metadataColumns"]'
     end
@@ -2258,9 +2256,7 @@ module Projects
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
 
-      page.driver.with_playwright_page do |playwright_page|
-        playwright_page.locator('input[type="file"][name="spreadsheet_import[file]"]').set_input_files([])
-      end
+      attach_file 'spreadsheet_import[file]', nil
       # verify select inputs are re-disabled after file is unselected
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
