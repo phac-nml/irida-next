@@ -11,7 +11,9 @@
       <% end %>
     <% end %>
 
-    <%= render Viral::PageHeaderComponent.new(title: t(".advanced.title")) %>
+    <%= pathogen_heading(level: 2) do %>
+      <%= t(".advanced.title") %>
+    <% end %>
 
     <%= turbo_frame_tag("project_path_form") do %>
       <%= render "change_path", project: @project %>
