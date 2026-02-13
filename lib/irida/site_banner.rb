@@ -21,10 +21,9 @@ module Irida
       new(path:, locale:).messages
     end
 
-    def initialize(path: DEFAULT_PATH, locale: I18n.locale, logger: Rails.logger)
+    def initialize(path: DEFAULT_PATH, locale: I18n.locale)
       @path = path
       @locale = locale
-      @logger = logger
     end
 
     def messages
@@ -35,9 +34,6 @@ module Irida
       return [] unless entries.is_a?(Array)
 
       entries.filter_map { |entry| normalize_entry(entry) }
-    rescue StandardError => e
-      log_error("Failed reading banner config #{@path}: #{e.message}")
-      []
     end
 
     private
@@ -47,7 +43,10 @@ module Irida
 
       YAML.safe_load_file(@path, aliases: true) || {}
     rescue Psych::SyntaxError => e
-      log_error("Invalid YAML in #{@path}: #{e.message}")
+      log_error("Invalid YAML in #{@path}: #{e.class}: #{e.message}")
+      nil
+    rescue Errno::ENOENT, Errno::EACCES => e
+      log_error("Unable to read banner config #{@path}: #{e.class}: #{e.message}")
       nil
     end
 
@@ -85,7 +84,7 @@ module Irida
     end
 
     def log_error(message)
-      @logger.error("[SiteBanner] #{message}")
+      Rails.logger.error(message)
     end
   end
 end
