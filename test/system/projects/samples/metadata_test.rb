@@ -387,10 +387,10 @@ module Projects
         assert_selector 'input.valueInput', count: 2
 
         click_on I18n.t('projects.samples.metadata.form.submit_button')
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
         assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
                            keys: %w[metadatafield3 metadatafield6].join(', '))
-        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
         assert_no_text 'metadatafield4'
         assert_no_text 'value4'
