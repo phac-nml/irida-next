@@ -10,6 +10,8 @@ export default class extends Controller {
   initialize() {
     this.boundPause = this.pause.bind(this);
     this.boundRun = this.run.bind(this);
+    this.animationFrameId = null;
+    this.dismissTimeout = null;
   }
 
   connect() {
@@ -30,7 +32,7 @@ export default class extends Controller {
 
   animateIn() {
     // Use requestAnimationFrame to ensure the initial state is applied first
-    requestAnimationFrame(() => {
+    this.animationFrameId = requestAnimationFrame(() => {
       // Animate to final state
       this.element.style.opacity = "1";
       this.element.style.transform = "translateY(0) scale(1)";
@@ -54,19 +56,23 @@ export default class extends Controller {
   }
 
   dismiss() {
+    this.#cleanup();
+
     // Add slide-out animation
     this.element.style.transform = "translateX(100%)";
     this.element.style.opacity = "0";
     this.element.style.transition = "all 0.3s ease-out";
 
     // Remove element after animation completes
-    setTimeout(() => {
+    this.dismissTimeout = setTimeout(() => {
       this.element.remove();
     }, 300);
   }
 
   #cleanup() {
     clearTimeout(this.timeout);
+    clearTimeout(this.dismissTimeout);
+    cancelAnimationFrame(this.animationFrameId);
     this.element.removeEventListener("mouseenter", this.boundPause);
     this.element.removeEventListener("mouseleave", this.boundRun);
   }
