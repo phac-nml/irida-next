@@ -20,9 +20,25 @@ module Pathogen
 
       assert_selector '.pathogen-data-grid__table[aria-labelledby]'
       assert_selector '.pathogen-data-grid__caption', text: 'Sample grid'
+      assert_no_selector '.pathogen-data-grid--multi-sticky'
       assert_selector 'th.pathogen-data-grid__cell--header'
       assert_selector 'th.pathogen-data-grid__cell--sticky[style*="--pathogen-data-grid-sticky-left: 0px"]'
       assert_selector 'td.pathogen-data-grid__cell--body', text: 'Sample one'
+    end
+
+    test 'adds multi sticky class when more than one sticky column is active' do
+      render_inline(Pathogen::DataGridComponent.new(
+                      sticky_columns: 2,
+                      rows: [
+                        { id: 'S-050', name: 'Sample fifty', status: 'Active' }
+                      ]
+                    )) do |grid|
+        grid.with_column('ID', key: :id, width: 120)
+        grid.with_column('Name', key: :name, width: 220)
+        grid.with_column('Status', key: :status)
+      end
+
+      assert_selector '.pathogen-data-grid.pathogen-data-grid--multi-sticky'
     end
 
     test 'does not render caption or aria-labelledby without caption' do

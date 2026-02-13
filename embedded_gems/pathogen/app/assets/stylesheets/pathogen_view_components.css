@@ -158,6 +158,7 @@
   color: var(--pathogen-data-grid-text-color);
   font-family: var(--pathogen-font-sans);
   isolation: isolate;
+  container-type: inline-size;
 }
 
 .pathogen-data-grid__scroll {
@@ -251,6 +252,24 @@
 
 .pathogen-data-grid__link--template:hover {
   text-decoration-line: none;
+}
+
+@container (max-width: 64rem) {
+  .pathogen-data-grid--multi-sticky
+    .pathogen-data-grid__body
+    .pathogen-data-grid__cell--sticky {
+    position: static;
+    left: auto;
+    z-index: auto;
+    box-shadow: none;
+  }
+
+  .pathogen-data-grid--multi-sticky
+    .pathogen-data-grid__cell--header.pathogen-data-grid__cell--sticky {
+    left: auto;
+    z-index: var(--pathogen-data-grid-header-z);
+    box-shadow: none;
+  }
 }
 
 @media (max-width: 640px) {
