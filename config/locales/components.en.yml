@@ -116,6 +116,7 @@ en:
       confirm_close_text: Are you sure that you want to discard your filter modifications and close the advanced search dialog?
       description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
       group: Group %{index}
+      minimum_condition_error: Add at least one complete condition before applying filters.
       operation:
         contains: contains
         does_not_contain: does not contain

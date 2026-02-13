@@ -9,12 +9,14 @@ export default class extends Controller {
     "listValueTemplate",
     "searchGroupsContainer",
     "searchGroupsTemplate",
+    "submitError",
     "valueTemplate",
   ];
   static outlets = ["list-filter"];
   static values = {
     confirmCloseText: String,
     open: Boolean,
+    status: Boolean,
   };
   #hidden_classes = ["invisible", "@max-xl:hidden"];
 
@@ -28,13 +30,32 @@ export default class extends Controller {
   renderSearch() {
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
+    this.clearSubmitError();
   }
 
   clear() {
     this.searchGroupsContainerTarget.innerHTML = "";
+    this.clearSubmitError();
+  }
+
+  submit(event) {
+    if (this.#hasAtLeastOneCompleteCondition()) {
+      this.clearSubmitError();
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    this.#showSubmitError();
+    this.#focusFirstConditionField();
   }
 
   close(event) {
+    if (!this.statusValue) {
+      this.renderSearch();
+      return;
+    }
+
     if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -55,6 +76,7 @@ export default class extends Controller {
       "fieldset[data-advanced-search-target='groupsContainer']",
     );
     this.#addConditionToGroup(group);
+    this.clearSubmitError();
   }
 
   removeCondition(event) {
@@ -92,6 +114,7 @@ export default class extends Controller {
         .querySelector("input:not([type='hidden'])")
         ?.focus();
     }
+    this.clearSubmitError();
   }
 
   addGroup() {
@@ -120,6 +143,7 @@ export default class extends Controller {
           .classList.remove("hidden");
       });
     }
+    this.clearSubmitError();
   }
 
   removeGroup(event) {
@@ -158,11 +182,13 @@ export default class extends Controller {
           .classList.add("hidden");
       }
     }
+    this.clearSubmitError();
   }
 
   clearForm() {
     this.clear();
     this.addGroup();
+    this.clearSubmitError();
   }
 
   handleOperatorChange(event) {
@@ -196,6 +222,15 @@ export default class extends Controller {
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
     }
+    this.clearSubmitError();
+  }
+
+  clearSubmitError() {
+    if (!this.hasSubmitErrorTarget) {
+      return;
+    }
+
+    this.submitErrorTarget.classList.add("hidden");
   }
 
   #addConditionToGroup(group) {
@@ -212,6 +247,58 @@ export default class extends Controller {
     group.children[condition_index + 1]
       .querySelector("input:not([type='hidden'])")
       ?.focus();
+  }
+
+  #hasAtLeastOneCompleteCondition() {
+    return this.conditionsContainerTargets.some((condition) =>
+      this.#isConditionComplete(condition),
+    );
+  }
+
+  #isConditionComplete(condition) {
+    const field = condition.querySelector("[name$='[field]']")?.value?.trim();
+    const operator = condition
+      .querySelector("[name$='[operator]']")
+      ?.value?.trim();
+
+    if (!field || !operator) {
+      return false;
+    }
+
+    if (["exists", "not_exists"].includes(operator)) {
+      return true;
+    }
+
+    if (["in", "not_in"].includes(operator)) {
+      const values = condition.querySelectorAll("[name$='[value][]']");
+
+      return Array.from(values).some((input) => input.value.trim() !== "");
+    }
+
+    const value = condition.querySelector("[name$='[value]']")?.value?.trim();
+
+    return Boolean(value);
+  }
+
+  #showSubmitError() {
+    if (!this.hasSubmitErrorTarget) {
+      return;
+    }
+
+    this.submitErrorTarget.classList.remove("hidden");
+  }
+
+  #focusFirstConditionField() {
+    const firstCondition = this.conditionsContainerTargets[0];
+
+    if (!firstCondition) {
+      return;
+    }
+
+    const fieldInput = firstCondition.querySelector(
+      "input[role='combobox'], select[name$='[field]'], [name$='[field]']",
+    );
+    fieldInput?.focus();
   }
 
   #dirty() {

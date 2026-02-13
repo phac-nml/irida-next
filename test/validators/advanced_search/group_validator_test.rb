@@ -64,6 +64,20 @@ module AdvancedSearch
       assert record.valid?
     end
 
+    test 'rejects structurally empty search with no groups' do
+      record = DummyRecord.new(groups: [])
+
+      assert_not record.valid?
+      assert record.errors.added?(:groups, :invalid)
+    end
+
+    test 'rejects structurally empty search with groups but no conditions' do
+      record = DummyRecord.new(groups: [DummyGroup.new(conditions: [])])
+
+      assert_not record.valid?
+      assert record.errors.added?(:groups, :invalid)
+    end
+
     test 'rejects invalid field names and bubbles up group/record errors' do
       record = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'bad_field', operator: '=', value: 'x')])]

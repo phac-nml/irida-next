@@ -3156,6 +3156,37 @@ module Projects
       ### actions and VERIFY END ###
     end
 
+    test 'advanced search apply requires at least one complete condition' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'components.advanced_search_component.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      assert_selector "div[data-advanced-search-target='submitError']",
+                      text: I18n.t(:'components.advanced_search_component.minimum_condition_error')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
+      end
+      ### VERIFY END ###
+    end
+
     test 'filter samples with advanced search and autocomplete disabled' do
       Flipper.disable(:advanced_search_with_auto_complete)
 

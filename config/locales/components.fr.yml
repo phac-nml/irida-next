@@ -116,6 +116,7 @@ fr:
       confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
       description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
       group: Groupe %{index}
+      minimum_condition_error: Ajoutez au moins une condition complète avant d’appliquer les filtres.
       operation:
         contains: contient
         does_not_contain: ne contient pas

@@ -13,6 +13,11 @@ module AdvancedSearch
     EXISTS_OPERATORS = %w[exists not_exists].freeze
 
     def validate(record)
+      if structurally_empty_search?(record)
+        record.errors.add :groups, :invalid
+        return
+      end
+
       return if empty_search?(record)
 
       record.groups.each do |group|
@@ -38,6 +43,14 @@ module AdvancedSearch
       return true if record.groups.length == 1 && record.groups[0].empty?
 
       false
+    end
+
+    def structurally_empty_search?(record)
+      groups = record.groups
+      return false unless groups.respond_to?(:all?)
+      return true if groups.empty?
+
+      groups.all? { |group| Array(group.conditions).empty? }
     end
 
     def validate_fields(group)
