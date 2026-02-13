@@ -21,7 +21,7 @@ module Groups
 
       # header and description
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 
       # table
       assert_selector 'tr', count: 20 + header_row_count
@@ -47,7 +47,7 @@ module Groups
       visit group_bots_path(groups(:group_two))
 
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 
       assert_selector 'tr', count: 0
 
@@ -66,7 +66,7 @@ module Groups
       visit group_bots_path(namespace)
 
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 
       assert_selector 'a', text: I18n.t(:'groups.bots.index.add_new_bot'), count: 1
 
@@ -117,7 +117,7 @@ module Groups
       visit group_bots_path(groups(:group_two))
 
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 
       assert_selector 'a', text: I18n.t(:'groups.bots.index.add_new_bot'), count: 1
 
@@ -162,7 +162,7 @@ module Groups
       ### SETUP START ###
       visit group_bots_path(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       ### SETUP END ###
@@ -195,7 +195,7 @@ module Groups
       token = @group_bot_active_tokens.first
       visit group_bots_path(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       ### SETUP END ###
@@ -239,7 +239,7 @@ module Groups
       visit group_bots_path(@namespace)
       # verify page and table loaded
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       ### SETUP END ###
@@ -283,7 +283,7 @@ module Groups
       visit group_bots_path(@namespace)
       # verify page rendered
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
-      assert_selector 'span', text: I18n.t(:'groups.bots.index.subtitle')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
                                                                                       locale: @user.locale))
       ### SETUP END ###
