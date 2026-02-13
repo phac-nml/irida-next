@@ -7,6 +7,11 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = { timeout: Number, type: String };
 
+  initialize() {
+    this.boundPause = this.pause.bind(this);
+    this.boundRun = this.run.bind(this);
+  }
+
   connect() {
     // Trigger entrance animation
     this.animateIn();
@@ -14,8 +19,8 @@ export default class extends Controller {
     // Always force errors to not have a timeout
     if (this.typeValue !== "error" && this.timeoutValue > 0) {
       this.run();
-      this.element.addEventListener("mouseenter", this.pause.bind(this));
-      this.element.addEventListener("mouseleave", this.run.bind(this));
+      this.element.addEventListener("mouseenter", this.boundPause);
+      this.element.addEventListener("mouseleave", this.boundRun);
     }
   }
 
@@ -45,8 +50,8 @@ export default class extends Controller {
   }
 
   dismiss() {
-    this.element.removeEventListener("mouseenter", this.pause);
-    this.element.removeEventListener("mouseleave", this.run);
+    this.element.removeEventListener("mouseenter", this.boundPause);
+    this.element.removeEventListener("mouseleave", this.boundRun);
 
     // Add slide-out animation
     this.element.style.transform = "translateX(100%)";
