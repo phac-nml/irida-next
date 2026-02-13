@@ -124,7 +124,7 @@ module Irida
         Rails.logger = original_logger
       end
 
-      assert(logged_messages.any? { |message| message.include?('[SiteBanner] Invalid YAML') })
+      assert(logged_messages.any? { |message| message.include?('Invalid YAML in') })
     end
 
     private
