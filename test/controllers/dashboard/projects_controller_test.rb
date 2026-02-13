@@ -5,6 +5,7 @@ require 'test_helper'
 module Dashboard
   class ProjectsControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
+    include DashboardSortingHelper
 
     setup do
       @user = users(:john_doe)
@@ -121,17 +122,71 @@ module Dashboard
       get dashboard_projects_path
 
       assert_response :success
-      # Default sort should be applied (updated_at desc)
-      # We can verify this by checking the sort dropdown has the default selected
+      assert_active_sort('all_projects_q', 'updated_at desc')
+      assert_includes first_treegrid_row_text, @group_project.human_name
     end
 
     test 'should respect custom sort parameters' do
       sign_in @user
 
       get dashboard_projects_path,
-          params: { all_projects_q: { s: 'namespace_name asc' } }
+          params: { all_projects_q: { s: 'namespace_name desc' } }
 
       assert_response :success
+      assert_active_sort('all_projects_q', 'namespace_name desc')
+      assert_includes first_treegrid_row_text, projects(:projectHotel).human_name
+    end
+
+    test 'should sort projects by updated_at ascending' do
+      sign_in @user
+
+      get dashboard_projects_path, params: { all_projects_q: { s: 'updated_at asc' } }
+
+      assert_response :success
+      assert_active_sort('all_projects_q', 'updated_at asc')
+    end
+
+    test 'should sort projects by created_at descending' do
+      sign_in @user
+
+      get dashboard_projects_path, params: { all_projects_q: { s: 'created_at desc' } }
+
+      assert_response :success
+      assert_active_sort('all_projects_q', 'created_at desc')
+    end
+
+    test 'should sort projects by created_at ascending' do
+      sign_in @user
+
+      get dashboard_projects_path, params: { all_projects_q: { s: 'created_at asc' } }
+
+      assert_response :success
+      assert_active_sort('all_projects_q', 'created_at asc')
+    end
+
+    test 'should apply sort with filters for all projects query' do
+      sign_in @user
+
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.name,
+                                      s: 'namespace_name desc' } }
+
+      assert_response :success
+      assert_active_sort('all_projects_q', 'namespace_name desc')
+      assert_includes first_treegrid_row_text, projects(:project19).human_name
+    end
+
+    test 'should apply sort with filters for personal projects query' do
+      sign_in @user
+
+      get dashboard_projects_path,
+          params: { personal: 'true',
+                    personal_projects_q: { namespace_name_or_namespace_puid_cont: @personal_project.name,
+                                           s: 'namespace_name asc' } }
+
+      assert_response :success
+      assert_active_sort('personal_projects_q', 'namespace_name asc')
+      assert_includes first_treegrid_row_text, @personal_project.human_name
     end
 
     test 'should paginate results' do
