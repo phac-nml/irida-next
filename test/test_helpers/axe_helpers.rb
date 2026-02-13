@@ -76,6 +76,10 @@ module AxeHelpers
   def visit(path, **attributes)
     super
 
+    page.driver.with_playwright_page do |playwright_page|
+      playwright_page.wait_for_load_state(state: 'networkidle')
+    end
+
     assert_accessible
     w3c_validate content: html
   end
