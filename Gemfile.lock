@@ -1,14 +1,4 @@
 GIT
-  remote: https://github.com/ViewComponent/view_component.git
-  revision: 5ded0192cfa24ea2879ce9ebfa40b399a5c59e94
-  branch: main
-  specs:
-    view_component (4.3.0)
-      actionview (>= 7.1.0)
-      activesupport (>= 7.1.0)
-      concurrent-ruby (~> 1)
-
-GIT
   remote: https://github.com/phac-nml/azure-blob.git
   revision: e4254b16f3852be8808986d48658ea6dae81c69c
   branch: put-blob-from-url_single_and_multiple
@@ -708,6 +698,10 @@ GEM
     uri (1.1.1)
     useragent (0.16.11)
     version_gem (1.1.9)
+    view_component (4.4.0)
+      actionview (>= 7.1.0)
+      activesupport (>= 7.1.0)
+      concurrent-ruby (~> 1)
     w3c_validators (1.3.7)
       json (>= 1.8)
       nokogiri (~> 1.6)
@@ -827,7 +821,7 @@ DEPENDENCIES
   timecop
   turbo-rails
   tzinfo-data
-  view_component!
+  view_component (~> 4.4.0)
   w3c_validators
   web-console
   webmock
