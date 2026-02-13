@@ -12,7 +12,21 @@ class LayoutComponent < Component
   def initialize(user:, fixed: true, **system_arguments)
     @user = user
     @layout = fixed ? 'container mx-auto' : ''
-    @site_banners = Irida::SiteBanner.messages
+    @site_banners = fetch_site_banners
     @system_arguments = system_arguments
+  end
+
+  private
+
+  def fetch_site_banners
+    Rails.cache.fetch(site_banner_cache_key, expires_in: 1.hour) do
+      Irida::SiteBanner.messages
+    end
+  end
+
+  def site_banner_cache_key
+    path = Irida::SiteBanner::DEFAULT_PATH
+    mtime = File.exist?(path) ? File.mtime(path).to_i : 0
+    ['site_banners', I18n.locale, mtime]
   end
 end
