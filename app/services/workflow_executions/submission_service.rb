@@ -14,12 +14,7 @@ module WorkflowExecutions
 
       run = @wes_client.run_workflow(**@workflow_execution.as_wes_params)
 
-      @workflow_execution.run_id = run[:run_id]
-
-      # mark workflow execution as submitted
-      @workflow_execution.state = :submitted
-
-      @workflow_execution.save
+      run[:run_id]
     end
   end
 end
