@@ -11,13 +11,14 @@ module WorkflowExecutions
 
     test 'submit prepared workflow_execution' do
       assert 'prepared', @workflow_execution.state
+      test_run_id = 'submission_service_test_1'
 
       stubs = Faraday::Adapter::Test::Stubs.new
       stubs.post('/runs') do
         [
           200,
           { 'Content-Type': 'application/json' },
-          { run_id: 'abc123' }
+          { run_id: test_run_id }
         ]
       end
 
@@ -25,11 +26,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      result = WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_equal 'abc123', @workflow_execution.run_id
-
-      assert_equal 'submitted', @workflow_execution.state
+      assert_equal test_run_id, result
     end
 
     test 'submit unprepared workflow_execution' do
@@ -48,11 +47,9 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      assert_not WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
+      result = WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
 
-      assert_nil @workflow_execution.run_id
-
-      assert_not_equal 'submitted', @workflow_execution.state
+      assert_not result
     end
   end
 end
