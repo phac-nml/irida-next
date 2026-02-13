@@ -71,6 +71,7 @@ module Pathogen
 
     def before_render
       apply_column_defaults!
+      apply_responsive_sticky_class!
     end
 
     private
@@ -98,6 +99,12 @@ module Pathogen
       return column.sticky unless column.sticky.nil?
 
       index < @sticky_columns
+    end
+
+    def apply_responsive_sticky_class!
+      return unless columns.many?(&:sticky)
+
+      @system_arguments[:class] = class_names(@system_arguments[:class], 'pathogen-data-grid--multi-sticky')
     end
   end
 end
