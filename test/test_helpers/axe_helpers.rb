@@ -3,36 +3,61 @@
 module AxeHelpers
   # Ruby class to wrap the JSON results payload
   class AxeResults
-    Violation = Data.define(:id, :impact, :tags, :description, :help, :helpUrl) # rubocop:disable Naming/MethodName
+    Violation = Data.define(:id, :impact, :tags, :description, :help, :help_url)
+    ExclusionRule = Data.define(:id, :selector)
+
+    AXE_COMMAND = <<~COMMAND
+      axe.run({ runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] }, elementRef: true })
+    COMMAND
 
     AXE_JS = <<~JS.freeze
       #{Rails.root.join('node_modules/axe-core/axe.js').read}
 
-      axe.run().then(results => console.log(JSON.stringify(results)));
+      #{AXE_COMMAND}.then(results => console.log(JSON.stringify({ testRunner: results.testRunner, violations: results.violations })));
     JS
 
-    def initialize(page)
+    def initialize(page, exclusions: [])
       unless page.driver.is_a?(Capybara::Playwright::Driver)
         raise ArgumentError,
               'make sure to use the playwright driver with this matcher'
       end
 
       @page = page
+      @exclusions = exclusions
     end
 
     def violations
       @violations ||=
-        axe_results
-        .fetch('violations')
-        .map do |json|
-          # omitting nodes because it clutters up the output
-          Violation.new(**json.except('nodes'))
+        remove_exclusions(axe_results.fetch('violations')).map do |json|
+          Violation.new(
+            id: json['id'],
+            impact: json['impact'],
+            tags: json['tags'],
+            description: json['description'],
+            help: json['help'],
+            help_url: json['helpUrl']
+          )
         end
     end
 
     private
 
     attr_reader :page
+
+    # Remove any exclusions from the results
+    def remove_exclusions(json)
+      json.reject do |item|
+        @exclusions.any? do |exclusion|
+          exclusion.id == item['id'] && item['nodes'].any? do |node|
+            html_matches_selector?(node['html'], exclusion.selector)
+          end
+        end
+      end
+    end
+
+    def html_matches_selector?(html, selector)
+      Nokogiri::HTML.parse(html).css(selector).any?
+    end
 
     # inject the axe JS into the page, wait for the results to be logged, parse the results, and return them
     def axe_results
@@ -57,7 +82,12 @@ module AxeHelpers
   end
 
   def assert_accessible
-    actual = AxeResults.new(page)
+    exclusions = if page.current_url.match?(%r{/rails/lookbook})
+                   ['page-has-heading-one']
+                 else
+                   []
+                 end
+    actual = AxeResults.new(page, exclusions: exclusions)
 
     assert actual.violations.empty?, <<~MSG
       Expected no axe violations, found #{actual.violations.count}
