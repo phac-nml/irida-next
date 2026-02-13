@@ -12,13 +12,13 @@
     <header class="bg-slate-200/80 dark:bg-slate-700/80">
       <div
         class="
-          flex flex-wrap content-stretch items-center @min-[279px]/sidebar:justify-between
-          justify-center min-h-16 px-2
+          whitespace-nowrap flex flex-wrap content-stretch items-center
+          @min-[279px]/sidebar:justify-between justify-center min-h-16 px-2
         "
       >
         <a
           href="<%= root_path %>"
-          class="whitespace-nowrap py-2.5 inline-flex items-center"
+          class="py-2.5 inline-flex items-center"
           data-layout-target="logo"
         >
           <%= pathogen_icon(
@@ -121,10 +121,14 @@
 
       <div
         class="p-2 pt shrink-0"
+        <% if Flipper.enabled?(:beta_dropdown) %>
+        data-controller="viral--beta-dropdown"
+        <% else %>
         data-controller="viral--dropdown"
         data-viral--dropdown-skidding-value="0"
         data-viral--dropdown-distance-value="5"
         data-viral--dropdown-position-value="bottom-start"
+        <% end %>
       >
         <button
           class="
@@ -137,7 +141,11 @@
             dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-800
             disabled:dark:text-slate-400 w-full
           "
-          data-viral--dropdown-target="trigger"
+          <% if Flipper.enabled?(:beta_dropdown) %>
+          data-viral--beta-dropdown-target='trigger'
+          <% else %>
+          data-viral--dropdown-target='trigger'
+          <% end %>
           aria-haspopup="true"
           aria-controls="sidebar-dd-menu"
           aria-expanded="false"
@@ -147,14 +155,18 @@
 
         <ul
           id="sidebar-dd-menu"
+          <% if Flipper.enabled?(:beta_dropdown) %>
+          data-viral--beta-dropdown-target="menu"
+          <% else %>
           data-viral--dropdown-target="menu"
+          <% end %>
           class="
-            hidden z-20 mx-3 w-56 bg-white rounded-lg divide-y shadow-sm divide-slate-100
+            z-20 w-56 bg-white rounded-lg divide-y shadow-sm divide-slate-100
             dark:bg-slate-700
           "
           tabindex="-1"
-          hidden
           role="menu"
+          hidden=""
         >
           <li role="none">
             <div
