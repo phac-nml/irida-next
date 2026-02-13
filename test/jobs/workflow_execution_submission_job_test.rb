@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'test_helper'
 require 'test_helpers/faraday_test_helpers'
 
 class WorkflowExecutionSubmissionJobTest < ActiveJob::TestCase
   include FaradayTestHelpers
+  include ActiveJob::Continuation::TestHelper
 
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_prepared)
@@ -37,6 +39,40 @@ class WorkflowExecutionSubmissionJobTest < ActiveJob::TestCase
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
     assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
+    assert @workflow_execution.submitted?
+    assert_equal test_run_id, @workflow_execution.run_id
+  end
+
+  test 'successful job execution with interrupt' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+    test_run_id = '123'
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.post('/runs') do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          { run_id: test_run_id }
+        ]
+      end
+
+      WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
+      interrupt_job_after_step(WorkflowExecutionSubmissionJob, :query_and_update_state) do
+        perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob)
+      end
+      @workflow_execution.reload
+    end
+
+    assert_enqueued_jobs(0, only: WorkflowExecutionStatusJob)
+    assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
+    assert @workflow_execution.submitted?
+    assert_equal test_run_id, @workflow_execution.run_id
+
+    perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob)
+    @workflow_execution.reload
+
+    assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
+    assert_performed_jobs(2, only: WorkflowExecutionSubmissionJob)
     assert @workflow_execution.submitted?
     assert_equal test_run_id, @workflow_execution.run_id
   end
