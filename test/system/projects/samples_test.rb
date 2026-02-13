@@ -252,7 +252,7 @@ module Projects
       assert_text I18n.t('projects.samples.create.success')
       # verify redirect to sample show page after successful sample creation
       assert_selector 'h1', text: 'New Name'
-      assert_selector 'span', text: 'A sample description'
+      assert_selector 'p', text: 'A sample description'
 
       # verify sample exists in samples table
       click_link 'Samples', match: :first
