@@ -1,22 +1,44 @@
-/* Pathogen baseline tokens */
+/* Pathogen DataGrid CSS architecture (single-file migration phase)
+ * Order: tokens -> shared primitives -> DataGrid component.
+ */
+
+/* Foundation tokens (Pathogen-owned defaults with host override points) */
 :root {
-  --pathogen-color-text: var(--color-slate-900, #0f172a);
-  --pathogen-color-text-muted: var(--color-slate-600, #475569);
-  --pathogen-color-border: var(--color-slate-200, #e2e8f0);
-  --pathogen-color-surface: var(--color-white, #ffffff);
-  --pathogen-color-surface-subtle: var(--color-slate-50, #f8fafc);
-  --pathogen-color-surface-sticky: #f4f7fb;
-  --pathogen-color-accent: var(--color-primary-500, #22c55e);
+  --pathogen-color-neutral-950: #1d2638;
+  --pathogen-color-neutral-900: #28344d;
+  --pathogen-color-neutral-700: #4e5f7b;
+  --pathogen-color-neutral-500: #7f8da3;
+  --pathogen-color-neutral-300: #bcc6d6;
+  --pathogen-color-neutral-200: #d8e0eb;
+  --pathogen-color-neutral-100: #eaf0f6;
+  --pathogen-color-neutral-50: #f6f9fc;
+
+  --pathogen-color-brand-500: #22c55e;
+  --pathogen-color-brand-600: #16a34a;
+  --pathogen-color-brand-700: #15803d;
+  --pathogen-color-success-500: #16a34a;
+  --pathogen-color-warning-500: #ca8a04;
+  --pathogen-color-danger-500: #dc2626;
+
+  --pathogen-color-text-default: var(--pathogen-color-neutral-900);
+  --pathogen-color-text-muted: var(--pathogen-color-neutral-700);
+  --pathogen-color-border-default: var(--pathogen-color-neutral-200);
+  --pathogen-color-border-strong: var(--pathogen-color-neutral-300);
+  --pathogen-color-surface-default: #ffffff;
+  --pathogen-color-surface-subtle: var(--pathogen-color-neutral-50);
+  --pathogen-color-surface-sticky: #edf3fa;
+  --pathogen-color-focus-ring: var(--pathogen-color-neutral-700);
   --pathogen-color-link: color-mix(
     in oklab,
-    var(--pathogen-color-text) 78%,
-    var(--pathogen-color-accent) 22%
+    var(--pathogen-color-text-default) 76%,
+    var(--pathogen-color-brand-600) 24%
   );
   --pathogen-color-highlight: color-mix(
     in oklab,
-    var(--pathogen-color-accent) 36%,
+    var(--pathogen-color-brand-500) 34%,
     transparent
   );
+
   --pathogen-font-sans:
     "Inter", "Avenir Next", "Segoe UI", -apple-system, BlinkMacSystemFont,
     sans-serif;
@@ -25,60 +47,69 @@
     "Courier New", monospace;
   --pathogen-text-sm: 0.875rem;
   --pathogen-leading-normal: 1.45;
-  --pathogen-radius-sm: 0.25rem;
+  --pathogen-radius-control: 0.375rem;
+  --pathogen-radius-surface: 0.5rem;
   --pathogen-space-cell-x: 0.875rem;
   --pathogen-space-cell-y: 0.75rem;
-  --pathogen-shadow-sticky: rgba(15, 23, 42, 0.1);
+  --pathogen-shadow-border: rgba(40, 52, 77, 0.14);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --pathogen-color-text: var(--color-slate-200, #e2e8f0);
-    --pathogen-color-text-muted: var(--color-slate-400, #94a3b8);
-    --pathogen-color-border: var(--color-slate-700, #334155);
-    --pathogen-color-surface: #0b1120;
-    --pathogen-color-surface-subtle: #0f172a;
-    --pathogen-color-surface-sticky: #111c30;
+    --pathogen-color-text-default: #dde5f0;
+    --pathogen-color-text-muted: #bbc7d9;
+    --pathogen-color-border-default: #34415b;
+    --pathogen-color-border-strong: #445776;
+    --pathogen-color-surface-default: #0d1526;
+    --pathogen-color-surface-subtle: #14213a;
+    --pathogen-color-surface-sticky: #172744;
+    --pathogen-color-focus-ring: #bbc7d9;
     --pathogen-color-link: color-mix(
       in oklab,
-      var(--pathogen-color-text) 84%,
-      var(--pathogen-color-accent) 16%
+      var(--pathogen-color-text-default) 82%,
+      var(--pathogen-color-brand-500) 18%
     );
     --pathogen-color-highlight: color-mix(
       in oklab,
-      var(--pathogen-color-accent) 62%,
+      var(--pathogen-color-brand-500) 56%,
       transparent
     );
-    --pathogen-shadow-sticky: rgba(148, 163, 184, 0.24);
+    --pathogen-shadow-border: rgba(187, 199, 217, 0.24);
   }
 }
 
 .dark {
-  --pathogen-color-text: var(--color-slate-200, #e2e8f0);
-  --pathogen-color-text-muted: var(--color-slate-400, #94a3b8);
-  --pathogen-color-border: var(--color-slate-700, #334155);
-  --pathogen-color-surface: #0b1120;
-  --pathogen-color-surface-subtle: #0f172a;
-  --pathogen-color-surface-sticky: #111c30;
+  --pathogen-color-text-default: #dde5f0;
+  --pathogen-color-text-muted: #bbc7d9;
+  --pathogen-color-border-default: #34415b;
+  --pathogen-color-border-strong: #445776;
+  --pathogen-color-surface-default: #0d1526;
+  --pathogen-color-surface-subtle: #14213a;
+  --pathogen-color-surface-sticky: #172744;
+  --pathogen-color-focus-ring: #bbc7d9;
   --pathogen-color-link: color-mix(
     in oklab,
-    var(--pathogen-color-text) 84%,
-    var(--pathogen-color-accent) 16%
+    var(--pathogen-color-text-default) 82%,
+    var(--pathogen-color-brand-500) 18%
   );
   --pathogen-color-highlight: color-mix(
     in oklab,
-    var(--pathogen-color-accent) 62%,
+    var(--pathogen-color-brand-500) 56%,
     transparent
   );
-  --pathogen-shadow-sticky: rgba(148, 163, 184, 0.24);
+  --pathogen-shadow-border: rgba(187, 199, 217, 0.24);
 }
 
-/* Shared utility primitives */
-.pathogen-u-text-default {
-  color: var(--pathogen-color-text);
+/* Shared Pathogen primitives.
+ * `pathogen-u-*` selectors are retained as temporary compatibility aliases.
+ */
+.pathogen-u-text-default,
+.pathogen-data-grid__text--default {
+  color: var(--pathogen-color-text-default);
 }
 
-.pathogen-u-text-muted {
+.pathogen-u-text-muted,
+.pathogen-data-grid__text--muted {
   color: var(--pathogen-color-text-muted);
 }
 
@@ -89,7 +120,9 @@
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.12em;
-  transition: text-decoration-thickness 140ms ease;
+  transition:
+    color 140ms ease,
+    text-decoration-thickness 140ms ease;
 }
 
 .pathogen-u-link:hover,
@@ -97,16 +130,33 @@
   text-decoration-thickness: 2px;
 }
 
+.pathogen-u-link:focus-visible,
+.pathogen-data-grid__link:focus-visible {
+  outline: 2px solid var(--pathogen-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--pathogen-radius-control);
+}
+
 .pathogen-u-link--subtle,
+.pathogen-data-grid__link--subtle,
 .pathogen-data-grid__link--sample,
 .pathogen-data-grid__link--project {
-  color: color-mix(in oklab, var(--pathogen-color-text) 86%, transparent);
+  color: color-mix(
+    in oklab,
+    var(--pathogen-color-text-default) 84%,
+    transparent
+  );
 }
 
 .pathogen-u-link--subtle:hover,
+.pathogen-data-grid__link--subtle:hover,
 .pathogen-data-grid__link--sample:hover,
 .pathogen-data-grid__link--project:hover {
   color: var(--pathogen-color-link);
+}
+
+.pathogen-data-grid__value {
+  color: var(--pathogen-color-text-default);
 }
 
 .pathogen-u-font-mono,
@@ -118,7 +168,7 @@
 .pathogen-u-highlight,
 .pathogen-data-grid__highlight {
   background: var(--pathogen-color-highlight);
-  border-radius: var(--pathogen-radius-sm);
+  border-radius: var(--pathogen-radius-control);
   padding-inline: 0.06em;
 }
 
@@ -128,7 +178,7 @@
 }
 
 .pathogen-u-surface {
-  background: var(--pathogen-color-surface);
+  background: var(--pathogen-color-surface-default);
 }
 
 .pathogen-u-surface-subtle {
@@ -136,17 +186,30 @@
 }
 
 .pathogen-u-border-default {
-  border-color: var(--pathogen-color-border);
+  border-color: var(--pathogen-color-border-default);
 }
 
-/* DataGrid component styles */
+/* DataGrid component */
 .pathogen-data-grid {
-  --pathogen-data-grid-border-color: var(--pathogen-color-border);
-  --pathogen-data-grid-text-color: var(--pathogen-color-text);
+  --pathogen-data-grid-border-color: var(--pathogen-color-border-default);
+  --pathogen-data-grid-border-strong-color: var(--pathogen-color-border-strong);
+  --pathogen-data-grid-text-color: var(--pathogen-color-text-default);
+  --pathogen-data-grid-text-muted-color: var(--pathogen-color-text-muted);
   --pathogen-data-grid-header-bg: var(--pathogen-color-surface-subtle);
-  --pathogen-data-grid-body-bg: var(--pathogen-color-surface);
+  --pathogen-data-grid-body-bg: var(--pathogen-color-surface-default);
   --pathogen-data-grid-sticky-bg: var(--pathogen-color-surface-sticky);
-  --pathogen-data-grid-sticky-shadow: var(--pathogen-shadow-sticky);
+  --pathogen-data-grid-sticky-shadow: var(--pathogen-shadow-border);
+  --pathogen-data-grid-row-stripe-bg: color-mix(
+    in oklab,
+    var(--pathogen-data-grid-body-bg) 90%,
+    var(--pathogen-data-grid-header-bg) 10%
+  );
+  --pathogen-data-grid-row-hover-bg: color-mix(
+    in oklab,
+    var(--pathogen-data-grid-body-bg) 91%,
+    var(--pathogen-color-brand-500) 9%
+  );
+  --pathogen-data-grid-focus-ring: var(--pathogen-color-focus-ring);
   --pathogen-data-grid-cell-padding: var(--pathogen-space-cell-y)
     var(--pathogen-space-cell-x);
   --pathogen-data-grid-font-size: var(--pathogen-text-sm);
@@ -155,6 +218,9 @@
   --pathogen-data-grid-header-z: 3;
 
   max-width: 100%;
+  border: 1px solid var(--pathogen-data-grid-border-color);
+  border-radius: var(--pathogen-radius-surface);
+  background: var(--pathogen-data-grid-body-bg);
   color: var(--pathogen-data-grid-text-color);
   font-family: var(--pathogen-font-sans);
   isolation: isolate;
@@ -164,6 +230,7 @@
 .pathogen-data-grid__scroll {
   max-width: 100%;
   overflow: auto;
+  border-radius: inherit;
 }
 
 .pathogen-data-grid__table {
@@ -180,7 +247,7 @@
 .pathogen-data-grid__caption {
   color: var(--pathogen-data-grid-text-color);
   font-weight: 600;
-  padding: 0.5rem 0;
+  padding: 0.625rem 0.875rem;
   text-align: left;
 }
 
@@ -197,6 +264,7 @@
   min-width: var(--pathogen-data-grid-col-width, auto);
   min-height: 2.5rem;
   box-sizing: border-box;
+  border-right: 1px solid var(--pathogen-data-grid-border-color);
   border-bottom: 1px solid var(--pathogen-data-grid-border-color);
   background: inherit;
   background-clip: padding-box;
@@ -204,10 +272,15 @@
   vertical-align: top;
 }
 
+.pathogen-data-grid__row > .pathogen-data-grid__cell:last-child {
+  border-right: 0;
+}
+
 .pathogen-data-grid__cell--header {
   position: sticky;
   top: 0;
   z-index: var(--pathogen-data-grid-header-z);
+  border-bottom-color: var(--pathogen-data-grid-border-strong-color);
   background: var(--pathogen-data-grid-header-bg);
   font-weight: 600;
   text-align: left;
@@ -233,20 +306,58 @@
   text-align: right;
 }
 
-.pathogen-data-grid__body .pathogen-data-grid__cell {
-  background: var(--pathogen-data-grid-body-bg);
+.pathogen-data-grid__body
+  .pathogen-data-grid__row:nth-child(even)
+  .pathogen-data-grid__cell {
+  background: var(--pathogen-data-grid-row-stripe-bg);
 }
 
-.pathogen-data-grid__body .pathogen-data-grid__cell--sticky {
+.pathogen-data-grid__body
+  .pathogen-data-grid__row:hover
+  .pathogen-data-grid__cell,
+.pathogen-data-grid__body
+  .pathogen-data-grid__row:focus-within
+  .pathogen-data-grid__cell {
+  background: var(--pathogen-data-grid-row-hover-bg);
+}
+
+.pathogen-data-grid__body .pathogen-data-grid__cell--sticky,
+.pathogen-data-grid__body
+  .pathogen-data-grid__row:nth-child(even)
+  .pathogen-data-grid__cell--sticky,
+.pathogen-data-grid__body
+  .pathogen-data-grid__row:hover
+  .pathogen-data-grid__cell--sticky,
+.pathogen-data-grid__body
+  .pathogen-data-grid__row:focus-within
+  .pathogen-data-grid__cell--sticky {
   background: var(--pathogen-data-grid-sticky-bg);
 }
 
+.pathogen-data-grid__cell:focus-within {
+  outline: 2px solid var(--pathogen-data-grid-focus-ring);
+  outline-offset: -2px;
+}
+
 .pathogen-data-grid__metadata-warning {
-  margin-block-end: 1rem;
+  margin: 0 0 1rem;
+  border: 1px solid
+    color-mix(
+      in oklab,
+      var(--pathogen-color-warning-500) 45%,
+      var(--pathogen-data-grid-border-color)
+    );
+  border-radius: var(--pathogen-radius-control);
+  background: color-mix(
+    in oklab,
+    var(--pathogen-color-warning-500) 12%,
+    transparent
+  );
+  padding: 0.625rem 0.875rem;
 }
 
 .pathogen-data-grid__metadata-warning-text {
-  color: var(--pathogen-color-text);
+  color: var(--pathogen-data-grid-text-color);
   display: inline;
 }
 
