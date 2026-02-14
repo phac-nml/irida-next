@@ -883,6 +883,7 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t('samples.transfers.dialog.title')
       # fill destination input
+      find('input.select2-input').click
       find('input.select2-input').fill_in with: 'invalid project name or puid'
       ### ACTIONS END ###
 
@@ -2255,7 +2256,7 @@ module Projects
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
 
-      attach_file('spreadsheet_import[file]', Rails.root.join)
+      attach_file 'spreadsheet_import[file]', nil
       # verify select inputs are re-disabled after file is unselected
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
       assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
@@ -2778,6 +2779,7 @@ module Projects
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
       assert_selector 'dialog h1', text: I18n.t('samples.clones.dialog.title')
+      find('input.select2-input').click
       find('input.select2-input').fill_in with: 'invalid project name or puid'
       ### ACTIONS END ###
 
@@ -3662,7 +3664,7 @@ module Projects
       assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
       find('table tbody tr:first-child td:nth-child(7)').click
 
-      find('table tbody tr:first-child td:nth-child(7)').send_keys('New Value')
+      find('table tbody tr:first-child td:nth-child(7)').set('New Value')
       find('body').click
 
       assert_selector 'dialog[open]'
@@ -3707,7 +3709,7 @@ module Projects
       assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
       find('table tbody tr:first-child td:nth-child(7)').click
 
-      find('table tbody tr:first-child td:nth-child(7)').send_keys('New Value')
+      find('table tbody tr:first-child td:nth-child(7)').set('New Value')
       find('body').click
 
       assert_selector 'dialog[open]'
@@ -3748,34 +3750,34 @@ module Projects
       ## SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
-      metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
-      metadata_cell.click
+      metadata_cell_selector = 'table tbody tr:first-child td:nth-child(7)'
+      assert_selector "#{metadata_cell_selector}[contenteditable='true']"
+      find(metadata_cell_selector).click
 
-      metadata_cell.send_keys('value 2')
-      metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      find(metadata_cell_selector).send_keys('value 2')
+      find(metadata_cell_selector).send_keys(:return)
+      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'value 2'
       assert_text I18n.t('samples.editable_cell.update_success')
       ### ACTIONS AND VERIFY END ###
 
-      metadata_cell.send_keys('value2     ')
-      metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      find(metadata_cell_selector).send_keys('value2     ')
+      find(metadata_cell_selector).send_keys(:return)
+      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'value 2'
       assert_no_text I18n.t('samples.editable_cell.update_success')
 
-      metadata_cell.send_keys('     value2')
-      metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      find(metadata_cell_selector).send_keys('     value2')
+      find(metadata_cell_selector).send_keys(:return)
+      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'value 2'
       assert_no_text I18n.t('samples.editable_cell.update_success')
 
-      metadata_cell.send_keys('     value2     ')
-      metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'value 2'
+      find(metadata_cell_selector).send_keys('     value2     ')
+      find(metadata_cell_selector).send_keys(:return)
+      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'value 2'
       assert_no_text I18n.t('samples.editable_cell.update_success')
 
-      metadata_cell.send_keys('val      ue2')
-      metadata_cell.send_keys(:return)
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]', text: 'val ue2'
+      find(metadata_cell_selector).send_keys('val      ue2')
+      find(metadata_cell_selector).send_keys(:return)
+      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'val ue2'
       assert_no_text I18n.t('samples.editable_cell.update_success')
     end
 
@@ -3805,10 +3807,10 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
-      metadata_cell = find('table tbody tr:first-child td:nth-child(7)')
-      assert_selector 'table tbody tr:first-child td:nth-child(7)[contenteditable="true"]'
-      metadata_cell.click
-      metadata_cell.send_keys('New Value')
+      metadata_cell_selector = 'table tbody tr:first-child td:nth-child(7)'
+      assert_selector "#{metadata_cell_selector}[contenteditable='true']"
+      find(metadata_cell_selector).click
+      find(metadata_cell_selector).send_keys('New Value')
       find('body').click
 
       assert_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
@@ -3820,26 +3822,26 @@ module Projects
       assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
       assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
 
-      metadata_cell.click
-      metadata_cell.send_keys([:control, 'a'], :backspace, 'New Value         ')
+      find(metadata_cell_selector).click
+      find(metadata_cell_selector).send_keys([:control, 'a'], :backspace, 'New Value         ')
       find('body').click
       assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
       assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
 
-      metadata_cell.click
-      metadata_cell.send_keys([:control, 'a'], :backspace, '            New Value')
+      find(metadata_cell_selector).click
+      find(metadata_cell_selector).send_keys([:control, 'a'], :backspace, '            New Value')
       find('body').click
       assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
       assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
 
-      metadata_cell.click
-      metadata_cell.send_keys([:control, 'a'], :backspace, '     New Value      ')
+      find(metadata_cell_selector).click
+      find(metadata_cell_selector).send_keys([:control, 'a'], :backspace, '     New Value      ')
       find('body').click
       assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
       assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
 
-      metadata_cell.click
-      metadata_cell.send_keys([:control, 'a'], :backspace, 'New     Value')
+      find(metadata_cell_selector).click
+      find(metadata_cell_selector).send_keys([:control, 'a'], :backspace, 'New     Value')
       find('body').click
       assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
       assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'

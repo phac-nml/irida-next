@@ -11,7 +11,7 @@ if ENV.key?('BROWSERLESS_HOST')
 end
 
 # Don't wait too long in `have_xyz` matchers
-Capybara.default_max_wait_time = 20.seconds
+Capybara.default_max_wait_time = 15
 
 # Normalizes whitespaces when using `has_text?` and similar matchers
 Capybara.default_normalize_ws = true
