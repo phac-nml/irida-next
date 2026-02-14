@@ -108,9 +108,9 @@ module Samples
             helpers.highlight(
               sample.puid,
               highlight_term,
-              highlighter: '<mark class="pathogen-data-grid__highlight pathogen-u-highlight">\\1</mark>'
+              highlighter: '<mark class="pathogen-data-grid__highlight">\\1</mark>'
             ),
-            class: 'pathogen-data-grid__value pathogen-data-grid__value--mono pathogen-u-font-mono'
+            class: 'pathogen-data-grid__value pathogen-data-grid__value--mono'
           )
         end
 
@@ -118,14 +118,13 @@ module Samples
           helpers.link_to(
             helpers.sample_path(sample),
             data: { turbo: false },
-            class: 'pathogen-data-grid__link pathogen-data-grid__link--sample pathogen-u-link pathogen-u-link--subtle'
+            class: 'pathogen-data-grid__link pathogen-data-grid__link--sample'
           ) do
             helpers.highlight(
               sample.name,
               highlight_term,
               highlighter: [
-                '<mark class="pathogen-data-grid__highlight pathogen-data-grid__highlight--strong ',
-                'pathogen-u-highlight pathogen-u-highlight--strong">\\1</mark>'
+                '<mark class="pathogen-data-grid__highlight pathogen-data-grid__highlight--strong">\\1</mark>'
               ].join
             )
           end
@@ -136,7 +135,7 @@ module Samples
             sample.project.puid,
             helpers.namespace_project_samples_path(sample.project.namespace.parent, sample.project),
             data: { turbo: false },
-            class: 'pathogen-data-grid__link pathogen-data-grid__link--project pathogen-u-link pathogen-u-link--subtle'
+            class: 'pathogen-data-grid__link pathogen-data-grid__link--project'
           )
         end
 
