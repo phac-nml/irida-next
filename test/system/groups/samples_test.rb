@@ -68,6 +68,8 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
       assert_selector '.pathogen-data-grid__table'
+      assert_selector '#samples-table.samples-data-grid--fill'
+      assert_selector '#samples-table .pathogen-data-grid__scroll'
       assert_selector 'th.pathogen-data-grid__cell--sticky', text: I18n.t('samples.table_component.puid')
       assert_selector 'th.pathogen-data-grid__cell--sticky', text: I18n.t('samples.table_component.name')
     ensure
