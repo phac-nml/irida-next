@@ -3,7 +3,24 @@
 module Samples
   module Table
     module V2
-      # Data-grid samples table implementation.
+      # Data-grid samples table implementation (V2).
+      #
+      # IMPORTANT: This is a baseline implementation behind the :data_grid_samples_table
+      # feature flag. The following features are intentionally deferred to later phases:
+      #
+      # - Pagination (Phase 2.7)
+      # - Selection with checkboxes (Phase 2.6)
+      # - Sorting on column headers (Phase 2)
+      # - Editable cells for metadata (Phase 1.5)
+      # - Virtualization for performance with large metadata field counts (Phase 2)
+      # - Live region announcements for dynamic updates (Phase 2.6)
+      #
+      # Do NOT enable :data_grid_samples_table in production until virtualization
+      # (Phase 2) is complete. V2 lacks the metadata field limiting safeguards
+      # present in V1 (TARGET_MAX_CELLS = 2000). Virtualization will handle
+      # performance for large datasets.
+      #
+      # See .codex/plans/data-grid/PR_1356_plan.md for the complete migration roadmap.
       class Component < ::Component # rubocop:disable Metrics/ClassLength
         # rubocop:disable Metrics/ParameterLists
         def initialize(
