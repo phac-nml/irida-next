@@ -48,6 +48,17 @@ Pathogen includes a lightweight, accessible DataGrid component for rendering tab
 
 Sticky columns require a width (numeric values become `px`) or an explicit `sticky_left:` offset.
 
+### Fill Constrained Containers
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows, fill_container: true) do |grid| %>
+  <% grid.with_column("ID", key: :id, width: 120) %>
+  <% grid.with_column("Name", key: :name) %>
+<% end %>
+```
+
+Use `fill_container: true` when the grid is inside a flex layout with bounded height and should scroll internally.
+
 ### Extension Slots
 
 DataGrid provides several slots for extending functionality:
