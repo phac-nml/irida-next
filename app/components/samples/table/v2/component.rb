@@ -38,17 +38,18 @@ module Samples
         def data_grid_arguments
           base_args = @system_arguments.dup
           base_args[:id] = 'samples-table'
-          base_args[:class] = class_names(base_args[:class], 'samples-data-grid', 'samples-data-grid--fill')
+          base_args[:class] = class_names(
+            base_args[:class],
+            'samples-data-grid',
+            'table-container',
+            '@2xl:flex',
+            '@2xl:flex-col',
+            '@3xl:shrink',
+            '@3xl:min-h-0'
+          )
           base_args[:data] ||= {}
           base_args[:data][:'samples-table-version'] = 'v2'
           base_args
-        end
-
-        def wrapper_arguments
-          {
-            tag: 'div',
-            classes: class_names('table-container @2xl:flex @2xl:flex-col @3xl:shrink @3xl:min-h-0')
-          }
         end
 
         def data_grid_label(column)

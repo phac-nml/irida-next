@@ -10,6 +10,8 @@ module Pathogen
   #   When present, the table uses `aria-labelledby` to associate the caption.
   # @param sticky_columns [Integer] Number of leading columns to treat as sticky
   #   by default. Individual columns can override with `sticky: true/false`.
+  # @param fill_container [Boolean] When true, enables flex/min-height behavior
+  #   so the grid can fill and scroll within a constrained parent container.
   # @param system_arguments [Hash] Additional HTML attributes for the outer wrapper.
   #
   # @example Basic usage
@@ -50,11 +52,12 @@ module Pathogen
     }
     attr_reader :rows
 
-    def initialize(rows:, caption: nil, sticky_columns: 0, **system_arguments)
+    def initialize(rows:, caption: nil, sticky_columns: 0, fill_container: false, **system_arguments)
       @rows = rows
       @caption = caption
       @caption_id = @caption.present? ? self.class.generate_id(base_name: 'data-grid-caption') : nil
       @sticky_columns = sticky_columns
+      @fill_container = fill_container
       @system_arguments = system_arguments
       @system_arguments[:class] = class_names(@system_arguments[:class], 'pathogen-data-grid')
     end
@@ -70,6 +73,7 @@ module Pathogen
     end
 
     def before_render
+      apply_fill_container_class!
       apply_column_defaults!
       apply_responsive_sticky_class!
     end
@@ -93,6 +97,12 @@ module Pathogen
         column.sticky_left ||= sticky_offset
         sticky_offset += column.width_px if column.width_px
       end
+    end
+
+    def apply_fill_container_class!
+      return unless @fill_container
+
+      @system_arguments[:class] = class_names(@system_arguments[:class], 'pathogen-data-grid--fill')
     end
 
     def sticky_column?(column, index)

@@ -227,6 +227,19 @@
   container-type: inline-size;
 }
 
+.pathogen-data-grid--fill {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.pathogen-data-grid--fill > .pathogen-data-grid__scroll {
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
 .pathogen-data-grid__scroll {
   max-width: 100%;
   overflow: auto;
