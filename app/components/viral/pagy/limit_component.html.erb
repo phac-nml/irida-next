@@ -11,7 +11,7 @@
     class="@max-md:space-y-4"
   >
     <% current_url_query_params_without_limit.each do |param| %>
-      <input type="hidden" name="<%= param[0] %>" value="<%= param[1] %>"/>
+      <input type="hidden" name="<%= param[0] %>" value="<%= param[1] %>">
     <% end %>
     <div
       class="
@@ -43,13 +43,16 @@
           onchange="this.form.requestSubmit()"
         >
           <% Pagy::DEFAULT[:limits].each do |limit| %>
-            <option
-              value="<%= limit %>"
-              <%= 'selected' if limit == @pagy.limit %>
-              aria-label="<%= t('components.viral.pagy.limit_component.item_aria_label', items: limit) %>"
-            >
-              <%= limit %>
-            </option>
+            <%= tag.option limit,
+                       value: limit,
+                       selected: limit == @pagy.limit,
+                       aria: {
+                         label:
+                           t(
+                             "components.viral.pagy.limit_component.item_aria_label",
+                             items: limit,
+                           ),
+                       } %>
           <% end %>
         </select>
       </div>
