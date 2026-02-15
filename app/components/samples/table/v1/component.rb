@@ -103,7 +103,7 @@ module Samples
 
         def columns
           columns = %i[puid name]
-          columns << 'namespaces.puid' if @namespace.type == 'Group'
+          columns << 'namespaces.puid' if @namespace.is_a?(Group)
           columns += %i[created_at updated_at attachments_updated_at]
           columns
         end
