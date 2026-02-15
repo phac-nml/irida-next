@@ -7,23 +7,24 @@
     ) %>
   </div>
 <% else %>
-  <%= render Pathogen::DataGridComponent.new(rows: @samples, **data_grid_arguments) do |grid| %>
-    <% @columns.each do |column| %>
-      <% grid.with_column(
-        data_grid_label(column),
-        width: data_grid_width(column),
-        sticky: data_grid_sticky?(column),
-        sticky_left: data_grid_sticky_left(column)
-      ) do |sample| %>
-        <%= render_column_value(column, sample) %>
+  <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
+    <%= render Pathogen::DataGridComponent.new(rows: @samples, **data_grid_arguments) do |grid| %>
+      <% @columns.each do |column| %>
+        <% grid.with_column(
+          data_grid_label(column),
+          width: data_grid_width(column),
+          sticky: data_grid_sticky?(column),
+          sticky_left: data_grid_sticky_left(column)
+        ) do |sample| %>
+          <%= render_column_value(column, sample) %>
+        <% end %>
+      <% end %>
+
+      <% @metadata_fields.each do |field| %>
+        <% grid.with_column(field) do |sample| %>
+          <%= metadata_value(sample, field) %>
+        <% end %>
       <% end %>
     <% end %>
-
-    <% @metadata_fields.each do |field| %>
-      <% grid.with_column(field) do |sample| %>
-        <%= metadata_value(sample, field) %>
-      <% end %>
-    <% end %>
-
   <% end %>
 <% end %>
