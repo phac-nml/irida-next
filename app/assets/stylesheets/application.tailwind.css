@@ -645,14 +645,6 @@ div.field_with_errors :is(input, select, textarea):focus-visible {
   display: none;
 }
 
-.samples-data-grid--fill {
-  @apply relative flex min-h-0 flex-1 flex-col;
-}
-
-.samples-data-grid--fill > .pathogen-data-grid__scroll {
-  @apply min-h-0 flex-1;
-}
-
 input[type="checkbox"] {
   @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 mr-2 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800;
 }
