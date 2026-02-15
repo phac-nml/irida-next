@@ -139,10 +139,10 @@ module Samples
           link_markup = create_template_link
 
           I18n.t(
-            'components.samples.table_component.metadata_fields_size_warning_with_link',
+            'components.samples.table_component.metadata_fields_size_warning_with_link_html',
             **params,
             create_template_link: link_markup
-          ).html_safe
+          )
         end
 
         def create_template_link
