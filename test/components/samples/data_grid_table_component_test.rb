@@ -17,8 +17,8 @@ module Samples
                       empty: { title: 'No Samples', description: 'Nothing here' }
                     ))
 
-      assert_selector '.table-container'
-      assert_selector '#samples-table.samples-data-grid.samples-data-grid--fill'
+      assert_selector '#samples-table.table-container'
+      assert_selector '#samples-table.samples-data-grid.pathogen-data-grid--fill'
       assert_selector '#samples-table .pathogen-data-grid__scroll'
       assert_selector '.pathogen-data-grid__table'
       assert_selector 'th', text: 'Sample PUID'

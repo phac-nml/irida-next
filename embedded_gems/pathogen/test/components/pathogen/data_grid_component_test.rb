@@ -41,6 +41,21 @@ module Pathogen
       assert_selector '.pathogen-data-grid.pathogen-data-grid--multi-sticky'
     end
 
+    test 'adds fill class when fill_container is enabled' do
+      render_inline(Pathogen::DataGridComponent.new(
+                      fill_container: true,
+                      rows: [
+                        { id: 'S-061', name: 'Sample sixty-one' }
+                      ]
+                    )) do |grid|
+        grid.with_column('ID', key: :id, width: 120)
+        grid.with_column('Name', key: :name)
+      end
+
+      assert_selector '.pathogen-data-grid.pathogen-data-grid--fill'
+      assert_selector '.pathogen-data-grid--fill > .pathogen-data-grid__scroll'
+    end
+
     test 'does not render caption or aria-labelledby without caption' do
       render_inline(Pathogen::DataGridComponent.new(
                       sticky_columns: 0,
