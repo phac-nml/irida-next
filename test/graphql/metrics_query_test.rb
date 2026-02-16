@@ -33,7 +33,6 @@ class MetricsQueryTest < ActiveSupport::TestCase
               diskUsage
             }
           }
-          totalCount
         }
       }
     }
