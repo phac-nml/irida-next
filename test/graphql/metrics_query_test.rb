@@ -5,7 +5,6 @@ require 'test_helper'
 class MetricsQueryTest < ActiveSupport::TestCase
   include ActionView::Helpers::NumberHelper
 
-  # Test groups metrics
   GROUP_METRICS_QUERY = <<~GRAPHQL
     query($groupPath: ID!) {
       group(fullPath: $groupPath) {
@@ -21,23 +20,6 @@ class MetricsQueryTest < ActiveSupport::TestCase
   GRAPHQL
 
   NAMESPACE_PROJECTS_METRICS_QUERY = <<~GRAPHQL
-    query($namespace_id: ID!, $include_sub_groups: Boolean) {
-      projects(groupId: $namespace_id, includeSubGroups: $include_sub_groups) {
-        nodes {
-          name
-          metrics {
-            projectCount
-            samplesCount
-            membersCount
-            diskUsage
-          }
-        }
-        totalCount
-      }
-    }
-  GRAPHQL
-
-  NAMESPACE_QUERY = <<~GRAPHQL
     query($namespacePath: ID!, $include_sub_groups: Boolean) {
       namespace(fullPath: $namespacePath) {
         name
@@ -57,7 +39,6 @@ class MetricsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
-  # Test project metrics
   PROJECT_METRICS_QUERY = <<~GRAPHQL
     query($projectPath: ID!) {
       project(fullPath: $projectPath) {
@@ -73,7 +54,6 @@ class MetricsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
-  # Test groups query with metrics nested
   GROUPS_QUERY_WITH_METRICS = <<~GRAPHQL
     query($first: Int, $last: Int) {
       groups(first: $first, last: $last) {
@@ -91,7 +71,6 @@ class MetricsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
-  # Test projects query with metrics nested
   PROJECTS_QUERY_WITH_METRICS = <<~GRAPHQL
     query($last: Int) {
       projects(last: $last) {
@@ -109,7 +88,6 @@ class MetricsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
-  # Test groups with nested projects and metrics
   GROUPS_WITH_NESTED_PROJECTS_METRICS = <<~GRAPHQL
     query($last: Int) {
       groups(last: $last) {
@@ -529,11 +507,11 @@ class MetricsQueryTest < ActiveSupport::TestCase
   end
 
   test 'system user can access all projects under a group and subgroups through iteration' do
-    result = IridaSchema.execute(NAMESPACE_QUERY, context: { current_user: @user_b },
-                                                  variables: {
-                                                    namespacePath: @group_a.full_path,
-                                                    include_sub_groups: true
-                                                  })
+    result = IridaSchema.execute(NAMESPACE_PROJECTS_METRICS_QUERY, context: { current_user: @user_b },
+                                                                   variables: {
+                                                                     namespacePath: @group_a.full_path,
+                                                                     include_sub_groups: true
+                                                                   })
 
     assert_nil result['errors'], 'should work and have no errors.'
 

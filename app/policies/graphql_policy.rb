@@ -18,10 +18,4 @@ class GraphqlPolicy < ApplicationPolicy
 
     false
   end
-
-  def metrics?
-    return true if user.system?
-
-    false
-  end
 end
