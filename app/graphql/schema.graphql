@@ -1353,7 +1353,7 @@ type Metric {
   createdAt: ISO8601DateTime!
 
   """
-  Disk usage of the group projects or project.
+  Disk usage (bytes) of the group projects or project.
   """
   diskUsage: String!
 

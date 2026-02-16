@@ -15,6 +15,8 @@ module Resolvers
     type Types::NamespaceType, null: true
 
     def resolve(args)
+      context.scoped_set!(:system_user, true) if context[:current_user]&.system?
+
       if args[:full_path]
         # Resolve Group or Namespaces::UserNamespace by full path
         Namespace.joins(:route).find_by(route: { path: args[:full_path] },

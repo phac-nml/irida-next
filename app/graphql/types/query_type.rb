@@ -14,16 +14,16 @@ module Types
 
     field :current_user, Types::UserType, null: true, description: 'Get information about current user.'
 
-    field :group, Types::GroupType, null: true, authorize: { to: :read? }, resolver: Resolvers::GroupResolver,
+    field :group, Types::GroupType, null: true, resolver: Resolvers::GroupResolver,
                                     description: 'Find a group.'
     field :groups, Types::GroupType.connection_type, null: false, resolver: Resolvers::GroupsResolver,
                                                      description: 'Find groups.'
 
-    field :namespace, Types::NamespaceType, null: true, authorize: { to: :read? },
+    field :namespace, Types::NamespaceType, null: true,
                                             resolver: Resolvers::NamespaceResolver,
                                             description: 'Find a namespace.'
 
-    field :project, Types::ProjectType, null: true, authorize: { to: :read? }, resolver: Resolvers::ProjectResolver,
+    field :project, Types::ProjectType, null: true, resolver: Resolvers::ProjectResolver,
                                         description: 'Find a project.'
 
     field :projects, Types::ProjectType.connection_type, null: true, resolver: Resolvers::ProjectsResolver,
@@ -54,6 +54,21 @@ module Types
 
     def current_user
       context[:current_user]
+    end
+
+    def group_authorized?
+      # System user can view group without explicit permission
+      context[:current_user].system? || authorize!(object, to: :read?, context: { user: context[:current_user] })
+    end
+
+    def project_authorized?
+      # System user can view project without explicit permission
+      context[:current_user].system? || authorize!(object, to: :read?, context: { user: context[:current_user] })
+    end
+
+    def namespace_authorized?
+      # System user can view namespace and its projects without explicit permission
+      context[:current_user].system? || authorize!(object, to: :read?, context: { user: context[:current_user] })
     end
   end
 end

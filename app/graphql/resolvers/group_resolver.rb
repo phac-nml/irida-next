@@ -14,6 +14,8 @@ module Resolvers
     type Types::GroupType, null: true
 
     def resolve(args)
+      context.scoped_set!(:system_user, true) if context[:current_user]&.system?
+
       if args[:full_path]
         Group.find_by_full_path(args[:full_path]) # rubocop:disable Rails/DynamicFindBy
       else
