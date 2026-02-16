@@ -2,6 +2,8 @@
 
 # Perform actions required to cancel a workflow execution
 class WorkflowExecutionCancelationJob < WorkflowExecutionJob
+  include ActiveJob::Continuable
+
   queue_as :default
   queue_with_priority 5
 
@@ -32,23 +34,48 @@ class WorkflowExecutionCancelationJob < WorkflowExecutionJob
     workflow_execution.save
 
     WorkflowExecutionCleanupJob.perform_later(workflow_execution)
-
-    workflow_execution
   end
 
   def perform(workflow_execution, user)
+    @workflow_execution = workflow_execution
+    @user = user
+
+    step :submit_cancelation
+    step :update_state_step
+    step :queue_next_job
+  end
+
+  def submit_cancelation
     # validate workflow_execution object is fit to run jobs on
-    unless validate_initial_state(workflow_execution, [:canceling], validate_run_id: true)
-      return handle_error_state_and_clean(workflow_execution)
+    unless validate_initial_state(@workflow_execution, [:canceling], validate_run_id: true)
+      update_state(:error, force: true)
+      return
     end
 
-    wes_connection = Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
-    result = WorkflowExecutions::CancelationService.new(workflow_execution, wes_connection, user).execute
+    WorkflowExecutions::CancelationService.new(@workflow_execution, @user).execute
+  end
 
-    if result
-      WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+  def update_state_step
+    return if @workflow_execution.state.to_sym == :error
+
+    update_state(:canceled)
+  end
+
+  def update_state(state, force: false)
+    return if @workflow_execution.state.to_sym == state
+
+    if force
+      # validation must be skipped in the case where model is already invalid (e.g. no namespace)
+      @workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
     else
-      handle_unable_to_process_job(workflow_execution, self.class.name) unless result
+      @workflow_execution.state = state
+      @workflow_execution.save
     end
+  end
+
+  def queue_next_job
+    return if @workflow_execution.state.to_sym == :error
+
+    WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
   end
 end
