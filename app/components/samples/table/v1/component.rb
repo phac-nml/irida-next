@@ -138,6 +138,7 @@ module Samples
         def warning_message_with_link(params)
           link_markup = create_template_link
 
+          # i18n-tasks-use t('components.samples.table_component.metadata_fields_size_warning_with_link_html')
           helpers.t(
             'components.samples.table_component.metadata_fields_size_warning_with_link_html',
             **params,
