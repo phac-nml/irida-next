@@ -30,7 +30,7 @@ module Types
           Member.joins(:user).where(
             user: { user_type: User.user_types[:human] },
             namespace_id: [object.namespace.id] + object.namespace.parent.self_and_ancestors_of_type([Group.sti_name])
-            .select(:id)
+                                                  .select(:id)
           ).select(:user_id).distinct.count
 
         else
