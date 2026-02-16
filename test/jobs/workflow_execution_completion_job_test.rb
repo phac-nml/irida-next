@@ -63,21 +63,35 @@ class WorkflowExecutionCompletionJobTest < ActiveJob::TestCase
 
     WorkflowExecutionCompletionJob.perform_later(workflow_execution)
 
+    assert_equal 'completing', workflow_execution.state
     assert_equal 0, workflow_execution.outputs.count
     interrupt_job_after_step(WorkflowExecutionCompletionJob, :process_global_file_paths) do
       perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
     end
+    workflow_execution.reload
 
+    assert_equal :completing, workflow_execution.state.to_sym
     assert_performed_jobs(1, only: WorkflowExecutionCompletionJob)
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
     assert_enqueued_jobs(0, only: WorkflowExecutionCleanupJob)
 
     assert_equal 1, workflow_execution.outputs.count
 
-    perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+    interrupt_job_after_step(WorkflowExecutionCompletionJob, :update_state_step) do
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+    end
+    workflow_execution.reload
 
-    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert_equal :completed, workflow_execution.state.to_sym
     assert_performed_jobs(2, only: WorkflowExecutionCompletionJob)
-    workflow_execution.reload.state.to_sym == :completed
+    assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionCleanupJob)
+
+    perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+    workflow_execution.reload
+
+    assert_equal :completed, workflow_execution.state.to_sym
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert_performed_jobs(3, only: WorkflowExecutionCompletionJob)
   end
 end

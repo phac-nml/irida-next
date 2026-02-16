@@ -12,10 +12,7 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
   def perform(workflow_execution)
     @workflow_execution = workflow_execution
 
-    unless validate_initial_state(@workflow_execution, [:completing], validate_run_id: false)
-      update_state(:error, force: true)
-    end
-
+    step :initial_validation
     step :process_global_file_paths
     step :process_sample_file_paths, start: 0
     step :process_samples_metadata, start: 0
@@ -28,6 +25,12 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
   end
 
   private
+
+  def initial_validation
+    return if validate_initial_state(@workflow_execution, [:completing], validate_run_id: false)
+
+    update_state(:error, force: true)
+  end
 
   def process_global_file_paths
     return if @workflow_execution.state.to_sym == :error
