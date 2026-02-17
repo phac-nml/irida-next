@@ -349,6 +349,26 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert_not results.include?(we_gasclustering)
   end
 
+  test 'equals operator with workflow_version enum metadata normalizes case' do
+    we_prepared = workflow_executions(:irida_next_example_prepared)
+    we_valid = workflow_executions(:workflow_execution_valid)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_prepared.namespace_id, we_valid.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.workflow_version',
+          operator: '=',
+          value: '1.0DEV'
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert results.include?(we_prepared)
+    assert_not results.include?(we_valid)
+  end
+
   test 'not_equals operator with enum metadata field normalizes case' do
     we_valid = workflow_executions(:workflow_execution_valid)
     we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
@@ -367,6 +387,26 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     results = query.send(:ransack_results)
     assert results.include?(we_valid)
     assert_not results.include?(we_gasclustering)
+  end
+
+  test 'not_equals operator with workflow_version enum metadata includes null values' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    we_null_workflow_version = workflow_executions(:workflow_execution_with_null_metadata)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id, we_null_workflow_version.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.workflow_version',
+          operator: '!=',
+          value: '1.0.3'
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert_not results.include?(we_valid)
+    assert results.include?(we_null_workflow_version)
   end
 
   # Tests for not_in operator with non-enum fields

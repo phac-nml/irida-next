@@ -93,6 +93,7 @@ module AdvancedSearch
         sql = result.to_sql
         assert_includes sql, 'LOWER'
         assert_includes sql, '!='
+        assert_includes sql, 'IS NULL'
         assert_not_includes sql, 'NOT ILIKE'
       end
 
@@ -102,6 +103,7 @@ module AdvancedSearch
         sql = result.to_sql
         assert_includes sql, 'LOWER'
         assert_includes sql, '!='
+        assert_includes sql, 'IS NULL'
         assert_not_includes sql, 'NOT ILIKE'
       end
     end
