@@ -16,7 +16,8 @@ module AdvancedSearch
           scope.where(node.matches(value))
         elsif metadata_field && enum_metadata_field?(field_name)
           # Case-insensitive exact match for enum metadata fields
-          scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).eq(value.downcase))
+          normalized_value = normalize_case_insensitive_value(value)
+          scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).eq(normalized_value))
         else
           # Exact match for regular fields
           scope.where(node.eq(value))
@@ -32,11 +33,19 @@ module AdvancedSearch
           scope.where(node.eq(nil).or(node.does_not_match(value)))
         elsif metadata_field && enum_metadata_field?(field_name)
           # Case-insensitive not-equals for enum metadata fields
-          scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).not_eq(value.downcase))
+          normalized_value = normalize_case_insensitive_value(value)
+          lower_function = Arel::Nodes::NamedFunction.new('LOWER', [node])
+
+          # Include NULL metadata values for consistency with other negative operators.
+          scope.where(node.eq(nil).or(lower_function.not_eq(normalized_value)))
         else
           # Exact matching for regular fields
           scope.where(node.not_eq(value))
         end
+      end
+
+      def normalize_case_insensitive_value(value)
+        value.to_s.downcase
       end
     end
   end
