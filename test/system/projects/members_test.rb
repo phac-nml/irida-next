@@ -227,9 +227,7 @@ module Projects
       project_description = 'New Project Description'
       user_to_add = users(:jane_doe)
 
-      visit dashboard_projects_url
-
-      click_on I18n.t(:'dashboard.projects.index.create_project_button')
+      visit new_project_url
 
       assert_selector 'h1', text: I18n.t(:'projects.new.title')
 
@@ -247,8 +245,12 @@ module Projects
       new_project = @user.namespace.project_namespaces.find_by(name: project_name).project
       assert_current_path(namespace_project_path(new_project.parent, new_project))
 
-      click_link 'Members'
+      click_link I18n.t(:'projects.members.index.tabs.members')
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+
+      # Members tab should be selected by default
+      assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
+      assert_selector '[role="tabpanel"]#members-panel:not(.hidden)'
 
       assert_button I18n.t(:'projects.members.index.add'), disabled: false
 
