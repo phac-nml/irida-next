@@ -28,27 +28,31 @@ module Samples
 
       protected
 
-      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength
+      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        bulk_metadata_payload = {}
         response = {}
         headers = retrieve_headers
         parse_settings = headers.zip(headers).to_h
         # minus 1 to exclude header
-        total_sample_count = @spreadsheet.count - 1
+        percentage_denominator = (@spreadsheet.count - 1) * 1.05
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
-          update_progress_bar(index, total_sample_count, broadcast_target)
+          update_progress_bar(index, percentage_denominator, broadcast_target)
 
           sample_id = metadata[@sample_id_column].to_s
           metadata.delete(@sample_id_column)
           metadata.compact! if @ignore_empty_values
 
-          metadata_changes = process_sample_metadata_row(sample_id, metadata)
-          response[sample_id] = metadata_changes if metadata_changes
+          bulk_metadata_payload[sample_id] = metadata
+          # metadata_changes = process_sample_metadata_row(sample_id, metadata)
+          # response[sample_id] = metadata_changes if metadata_changes
         rescue ActiveRecord::RecordNotFound
           @namespace.errors.add(:sample, error_message(sample_id))
         end
 
+        BulkUpdateService.new(@namespace, bulk_metadata_payload, current_user, { include_activity: true }).execute
+        update_progress_bar(percentage_denominator, percentage_denominator, broadcast_target)
         response
       end
 
