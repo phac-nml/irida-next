@@ -12,9 +12,9 @@ class MemberPolicy < ApplicationPolicy
                     end
 
     relation.joins(:user).where(id: Member.joins(namespace: [:route])
-                             .where(namespace_id: namespace_ids)
-                             .order(user_id: :asc, 'routes.path': :desc)
-                             .select('DISTINCT ON (user_id) members.id'))
+                                    .where(namespace_id: namespace_ids)
+                                    .order(user_id: :asc, 'routes.path': :desc)
+                                    .select('DISTINCT ON (user_id) members.id'))
             .where(users: { user_type: User.without_automation_bots.select(:user_type) })
   end
 end

@@ -90,7 +90,7 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
 
     error_message = result['errors'][0]['message']
 
-    assert_equal I18n.t('action_policy.policy.project.read?', name: project.name), error_message
+    assert_equal I18n.t('action_policy.policy.read?'), error_message
   end
 
   test 'project with sample query should work with filter' do

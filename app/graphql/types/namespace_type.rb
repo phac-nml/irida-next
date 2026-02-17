@@ -22,12 +22,12 @@ module Types
           resolver: Resolvers::NamespaceProjectsResolver
 
     def self.authorized?(object, context)
-      (super &&
+      super && (context[:current_user].system? ||
         allowed_to?(
           :read?,
           object,
           context: { user: context[:current_user], token: context[:token] }
-        )) || context[:system_user]
+        ))
     end
   end
 end

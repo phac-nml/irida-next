@@ -93,7 +93,7 @@ class NamespaceQueryTest < ActiveSupport::TestCase
 
     error_message = result['errors'][0]['message']
 
-    assert_equal I18n.t('action_policy.policy.group.read?', name: namespace.name), error_message
+    assert_equal I18n.t('action_policy.policy.read?'), error_message
   end
 
   test 'namespace query should not return a result when unauthorized due to expired token for uploader access level' do
@@ -110,6 +110,6 @@ class NamespaceQueryTest < ActiveSupport::TestCase
 
     error_message = result['errors'][0]['message']
 
-    assert_equal I18n.t('action_policy.policy.group.read?', name: namespace.name), error_message
+    assert_equal I18n.t('action_policy.policy.read?'), error_message
   end
 end
