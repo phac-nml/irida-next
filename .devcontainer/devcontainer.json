@@ -33,7 +33,7 @@
     "vscode": {
       "extensions": [
         "shopify.ruby-lsp",
-        "elia.erb-formatter",
+        "marcoroth.herb-lsp",
         "esbenp.prettier-vscode",
         "streetsidesoftware.code-spell-checker",
         "streetsidesoftware.code-spell-checker-canadian-english"

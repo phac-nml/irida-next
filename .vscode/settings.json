@@ -3,7 +3,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[erb]": {
-    "editor.defaultFormatter": "elia.erb-formatter"
+    "editor.defaultFormatter": "marcoroth.herb-lsp",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -20,6 +22,8 @@
     "editor.semanticHighlighting.enabled": true
   },
   "editor.formatOnSave": true,
+  "languageServerHerb.linter.enabled": true,
+  "languageServerHerb.formatter.enabled": true,
   "rubyLsp.featureFlags": {
     "fullTestDiscovery": true
   },

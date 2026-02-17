@@ -11,7 +11,9 @@ module MarkupValidationHelpers
   end
 
   def assert_valid_markup(markup)
-    result = Nokogiri::XML(markup)
+    # Use HTML5 fragment parsing with parse errors enabled.
+    # This keeps support for modern tags while still failing malformed markup.
+    result = Nokogiri::HTML5.fragment(markup, max_errors: 100)
 
     assert result.errors.empty?, format_nokogiri_errors(result.errors)
   end

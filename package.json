@@ -4,6 +4,8 @@
   "type": "module",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@herb-tools/formatter": "^0.8.10",
+    "@herb-tools/linter": "^0.8.10",
     "axe-core": "^4.11.1",
     "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
@@ -12,8 +14,11 @@
     "prettier-plugin-tailwindcss": "^0.7.2"
   },
   "scripts": {
-    "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,json,md,yml,yaml}'",
-    "format:check": "prettier --check '**/*.{js,jsx,ts,tsx,css,json,md,yml,yaml}'",
+    "herb:format": "herb-format",
+    "herb:format:check": "herb-format --check",
+    "herb:lint": "herb-lint",
+    "format": "pnpm run herb:format && prettier --write '**/*.{js,jsx,ts,tsx,css,json,md,yml,yaml}'",
+    "format:check": "pnpm run herb:format:check && prettier --check '**/*.{js,jsx,ts,tsx,css,json,md,yml,yaml}'",
     "format:changed": "prettier --write",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
