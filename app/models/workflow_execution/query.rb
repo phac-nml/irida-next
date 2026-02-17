@@ -26,6 +26,12 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   private
 
+  def normalize_condition_field(condition)
+    return 'metadata.pipeline_id' if condition.field == 'metadata.workflow_name'
+
+    condition.field
+  end
+
   def normalize_condition_value(condition)
     return normalize_state_value(condition) if condition.field == 'state'
 

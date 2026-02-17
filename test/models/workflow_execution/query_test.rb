@@ -364,6 +364,26 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert_not results.include?(we_gasclustering)
   end
 
+  test 'equals operator maps metadata.workflow_name to metadata.pipeline_id' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id, we_gasclustering.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.workflow_name',
+          operator: '=',
+          value: 'PHAC-NML/IRIDANEXTEXAMPLE'
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert results.include?(we_valid)
+    assert_not results.include?(we_gasclustering)
+  end
+
   test 'equals operator with workflow_version enum metadata normalizes case' do
     we_prepared = workflow_executions(:irida_next_example_prepared)
     we_valid = workflow_executions(:workflow_execution_valid)

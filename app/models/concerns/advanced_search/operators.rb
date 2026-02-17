@@ -24,14 +24,15 @@ module AdvancedSearch
       self.class.enum_metadata_fields.include?(field_name)
     end
 
-    def build_arel_node(condition, model_class)
-      metadata_field = condition.field.starts_with?('metadata.')
+    def build_arel_node(field_name, model_class)
+      field_name = field_name.to_s
+      metadata_field = field_name.starts_with?('metadata.')
 
       if metadata_field
-        metadata_key = condition.field.delete_prefix('metadata.')
+        metadata_key = field_name.delete_prefix('metadata.')
         Arel::Nodes::InfixOperation.new('->>', model_class.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_key))
       else
-        model_class.arel_table[condition.field]
+        model_class.arel_table[field_name]
       end
     end
   end

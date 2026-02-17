@@ -17,27 +17,28 @@ module AdvancedSearch
     private
 
     def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
-      node = build_arel_node(condition, model_class)
+      field_name = normalize_condition_field(condition)
+      node = build_arel_node(field_name, model_class)
       value = normalize_condition_value(condition)
-      metadata_field = condition.field.starts_with?('metadata.')
+      metadata_field = field_name.starts_with?('metadata.')
 
       case condition.operator
       when '='
-        apply_equals_operator(scope, node, value, metadata_field:, field_name: condition.field)
+        apply_equals_operator(scope, node, value, metadata_field:, field_name:)
       when 'in'
-        apply_in_operator(scope, node, value, metadata_field:, field_name: condition.field)
+        apply_in_operator(scope, node, value, metadata_field:, field_name:)
       when '!='
-        apply_not_equals_operator(scope, node, value, metadata_field:, field_name: condition.field)
+        apply_not_equals_operator(scope, node, value, metadata_field:, field_name:)
       when 'not_in'
-        apply_not_in_operator(scope, node, value, metadata_field:, field_name: condition.field)
+        apply_not_in_operator(scope, node, value, metadata_field:, field_name:)
       when '<='
-        apply_less_than_or_equal(scope, node, value, field: condition.field, metadata_field:)
+        apply_less_than_or_equal(scope, node, value, field: field_name, metadata_field:)
       when '>='
-        apply_greater_than_or_equal(scope, node, value, field: condition.field, metadata_field:)
+        apply_greater_than_or_equal(scope, node, value, field: field_name, metadata_field:)
       when 'contains'
-        condition_contains(scope, node, value, model_class:, field_name: condition.field)
+        condition_contains(scope, node, value, model_class:, field_name:)
       when 'not_contains'
-        condition_not_contains(scope, node, value, model_class:, field_name: condition.field)
+        condition_not_contains(scope, node, value, model_class:, field_name:)
       when 'exists'
         condition_exists(scope, node)
       when 'not_exists'
@@ -45,6 +46,10 @@ module AdvancedSearch
       else
         scope
       end
+    end
+
+    def normalize_condition_field(condition)
+      condition.field
     end
 
     def normalize_condition_value(condition)
