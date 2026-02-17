@@ -17,7 +17,8 @@ class Select2ComponentTest < ApplicationSystemTestCase
     assert_no_selector 'input[type="submit"][disabled]'
     assert_selector 'input[type="submit"]', count: 1
 
-    find('input.select2-input[type="text"]').set '22'
+    find('input.select2-input[type="text"]').click
+    find('input.select2-input[type="text"]').send_keys [:ctrl, 'a'], '22'
     find('li[data-label="User 22"]').click
     assert_selector 'input[type="hidden"][name="user"][value="22"]', visible: :hidden, count: 1
     assert_no_selector 'input[type="submit"][disabled]'
