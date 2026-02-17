@@ -52,7 +52,7 @@ module Projects
       end
 
       def deletion_params
-        params.expect(sample: [metadata: {}])
+        params.expect(sample: [{ metadata: {} }])
       end
     end
   end

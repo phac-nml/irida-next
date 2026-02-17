@@ -37,7 +37,7 @@ module Projects
         end
 
         def deletion_params
-          params.expect(sample: [metadata: {}])
+          params.expect(sample: [{ metadata: {} }])
         end
 
         def get_destroy_status(deleted_keys)

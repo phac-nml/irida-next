@@ -53,7 +53,7 @@ module Projects
         end
 
         def deletion_params
-          params.expect(deletion: [attachment_ids: {}])
+          params.expect(deletion: [{ attachment_ids: {} }])
         end
 
         def get_attachments(attachment_ids)
