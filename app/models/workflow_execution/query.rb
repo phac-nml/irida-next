@@ -27,7 +27,6 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
   private
 
   def normalize_condition_value(condition)
-    return normalize_enum_metadata_value(condition.value) if enum_metadata_field?(condition.field)
     return normalize_state_value(condition) if condition.field == 'state'
 
     condition.value
@@ -39,18 +38,6 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
     else
       WorkflowExecution.states[condition.value] || condition.value
     end
-  end
-
-  def normalize_enum_metadata_value(value)
-    return value.map { |v| normalize_enum_metadata_scalar(v) } if value.is_a?(Array)
-
-    normalize_enum_metadata_scalar(value)
-  end
-
-  def normalize_enum_metadata_scalar(value)
-    return value unless value.is_a?(String)
-
-    value.downcase
   end
 
   def ransack_params
