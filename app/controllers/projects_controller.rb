@@ -133,7 +133,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def project_params_attributes
     [
-      namespace_attributes:
+      { namespace_attributes: }
     ]
   end
 

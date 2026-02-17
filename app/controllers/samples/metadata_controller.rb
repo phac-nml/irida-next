@@ -74,11 +74,11 @@ module Samples
     end
 
     def create_field_params
-      params.expect(sample: [create_fields: {}])
+      params.expect(sample: [{ create_fields: {} }])
     end
 
     def update_field_params
-      params.expect(sample: [update_field: { key: {}, value: {} }])
+      params.expect(sample: [{ update_field: { key: {}, value: {} } }])
     end
 
     def get_create_status(added_keys, existing_keys)

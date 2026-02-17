@@ -237,10 +237,10 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
     assert_not_empty data['errors']
 
-    expected_error = [
+    expected_error = [{
       'path' => ['sample'],
       'message' => 'not found by provided ID or PUID'
-    ]
+    }]
     assert_equal expected_error, data['errors']
   end
 
@@ -257,10 +257,10 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_not_empty data
     assert_not_empty data['errors']
 
-    expected_error = [
+    expected_error = [{
       'path' => ['metadata'],
       'message' => "JSON data is not formatted correctly. unexpected character: 'bad' at line 1 column 1"
-    ]
+    }]
     assert_equal expected_error, data['errors']
   end
 
@@ -277,10 +277,10 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_not_empty data
     assert_not_empty data['errors']
 
-    expected_error = [
+    expected_error = [{
       'path' => ['metadata'],
       'message' => 'is not JSON data'
-    ]
+    }]
     assert_equal expected_error, data['errors']
   end
 
@@ -297,10 +297,10 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_not_empty data
     assert_not_empty data['errors']
 
-    expected_error = [
+    expected_error = [{
       'path' => %w[sample base],
       'message' => I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name, key: 'key1')
-    ]
+    }]
     assert_equal expected_error, data['errors']
   end
 
