@@ -40,7 +40,7 @@ module AdvancedSearch
       end
 
       # Escapes SQL LIKE wildcard characters (%, _) to treat them as literal characters.
-      # Backslashes must be escaped first to avoid double-escaping.
+      # Escapes backslashes alongside %, _ in a single pass to avoid double-escaping.
       # @param value [String] the value to escape
       # @return [String] the escaped value
       def escape_like_wildcards(value)

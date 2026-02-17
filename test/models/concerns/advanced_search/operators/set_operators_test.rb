@@ -38,6 +38,11 @@ module AdvancedSearch
         assert_equal %w[123 symbol], result
       end
 
+      test 'downcase_values handles scalar values' do
+        result = @test_instance.send(:downcase_values, 'TeSt')
+        assert_equal ['test'], result
+      end
+
       # condition_in tests
       test 'condition_in uses exact match IN for regular fields' do
         result = @test_instance.send(:condition_in,
@@ -82,6 +87,14 @@ module AdvancedSearch
         sql = result.to_sql
         assert_includes sql, 'IN'
         assert_includes sql, 'LOWER'
+      end
+
+      test 'condition_in handles scalar value for regular fields' do
+        result = @test_instance.send(:condition_in,
+                                     @scope, @state_node, 'completed',
+                                     metadata_field: false, field_name: 'state')
+        sql = result.to_sql
+        assert_includes sql, '"workflow_executions"."state" IN'
       end
 
       # condition_not_in tests
@@ -129,6 +142,14 @@ module AdvancedSearch
         sql = result.to_sql
         assert_includes sql, 'NOT IN'
         assert_includes sql, 'LOWER'
+      end
+
+      test 'condition_not_in handles scalar value for regular fields' do
+        result = @test_instance.send(:condition_not_in,
+                                     @scope, @state_node, 'completed',
+                                     metadata_field: false, field_name: 'state')
+        sql = result.to_sql
+        assert_includes sql, '"workflow_executions"."state" NOT IN'
       end
     end
   end

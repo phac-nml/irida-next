@@ -19,7 +19,6 @@ module AdvancedSearch
     def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
       node = build_arel_node(condition, model_class)
       value = normalize_condition_value(condition)
-      value = normalize_case_insensitive_enum_metadata_value(condition, value)
       metadata_field = condition.field.starts_with?('metadata.')
 
       case condition.operator
@@ -50,19 +49,6 @@ module AdvancedSearch
 
     def normalize_condition_value(condition)
       condition.value
-    end
-
-    def normalize_case_insensitive_enum_metadata_value(condition, value)
-      return value unless enum_metadata_field?(condition.field)
-
-      case condition.operator
-      when 'in', 'not_in'
-        Array(value).compact.map { |entry| entry.is_a?(String) ? entry.downcase : entry }
-      when '=', '!='
-        value.is_a?(String) ? value.downcase : value
-      else
-        value
-      end
     end
 
     def apply_less_than_or_equal(scope, node, value, field:, metadata_field:)

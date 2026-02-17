@@ -87,6 +87,21 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert_not_nil results
   end
 
+  test 'state enum search with in operator and single state string' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution2.namespace_id, @workflow_execution3.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state', operator: 'in', value: 'completed'
+        )]
+      )]
+    )
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert results.include?(@workflow_execution2)
+    assert_not results.include?(@workflow_execution3)
+  end
+
   test 'metadata field search with dot notation' do
     query = WorkflowExecution::Query.new(
       namespace_ids: [@workflow_execution1.namespace_id],
@@ -1063,6 +1078,21 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     results = query.results
     assert_not_nil results
     assert_not results.include?(@workflow_execution3) # error state should be excluded
+  end
+
+  test 'state enum search with not_in operator and single state string' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution2.namespace_id, @workflow_execution3.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state', operator: 'not_in', value: 'completed'
+        )]
+      )]
+    )
+    assert query.valid?
+    results = query.results
+    assert_not results.include?(@workflow_execution2)
+    assert results.include?(@workflow_execution3)
   end
 
   test 'metadata field search with special characters in field names' do

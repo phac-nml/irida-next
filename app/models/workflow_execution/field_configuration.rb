@@ -61,7 +61,11 @@ class WorkflowExecution
 
     # Fetches available pipelines from the Irida::Pipelines singleton.
     #
+    # Dependency: This class depends on Irida::Pipelines.instance being available.
+    # In tests, pass an explicit pipelines array via the constructor to avoid this dependency.
+    #
     # @return [Array<Pipeline>] list of available pipelines
+    # @raise [NoMethodError] if Irida::Pipelines.instance is unavailable
     def fetch_available_pipelines
       Irida::Pipelines.instance.pipelines('available').values
     end
