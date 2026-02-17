@@ -9,9 +9,17 @@ module Integrations
           CANCELED CANCELING PREEMPTED
         ].freeze
 
+        SUBMITTED_STATES = %w[
+          QUEUED INITIALIZING PAUSED
+        ].freeze
+
         ERROR_STATES = %w[
           EXECUTOR_ERROR SYSTEM_ERROR
         ].freeze
+
+        VALID_STATES = (
+          CANCELATION_STATES + SUBMITTED_STATES + ERROR_STATES + %w[RUNNING COMPLETE UNKNOWN]
+        ).freeze
       end
     end
   end
