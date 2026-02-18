@@ -13,17 +13,10 @@ module WorkflowExecutions
       @workflow_execution = workflow_execution
       @pipeline = workflow_execution.workflow
       @samplesheet_rows = []
-      @storage_service = ActiveStorage::Blob.service
     end
 
     def execute # rubocop:disable Metrics/MethodLength
       @samplesheet_headers = @pipeline.samplesheet_headers
-
-      # confirm params/permissions
-      # build workflow execution run directory
-      @workflow_execution.blob_run_directory = generate_run_directory
-
-      # process each sample
       process_samples_workflow_executions
 
       # persist samplesheet in run dir
@@ -92,23 +85,6 @@ module WorkflowExecutions
       attachable.inputs.attach(blob.signed_id)
 
       blob_key_to_service_path(blob.key)
-    end
-
-    def blob_key_to_service_path(blob_key, directory: false)
-      path = case @storage_service.class.to_s
-             when 'ActiveStorage::Service::AzureBlobService'
-               format('az://%<container>s/%<key>s', container: @storage_service.container, key: blob_key)
-             when 'ActiveStorage::Service::S3Service'
-               format('s3://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
-             when 'ActiveStorage::Service::GCSService'
-               format('gcs://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
-             else
-               ActiveStorage::Blob.service.path_for(blob_key)
-             end
-
-      path = "#{path}/" if directory
-
-      path
     end
 
     def samplesheet_file
