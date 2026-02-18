@@ -82,12 +82,7 @@ module AxeHelpers
   end
 
   def assert_accessible
-    exclusions = if page.current_url.match?(%r{/rails/lookbook})
-                   ['page-has-heading-one']
-                 else
-                   []
-                 end
-    actual = AxeResults.new(page, exclusions: exclusions)
+    actual = AxeResults.new(page)
 
     assert actual.violations.empty?, <<~MSG
       Expected no axe violations, found #{actual.violations.count}
