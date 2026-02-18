@@ -70,6 +70,7 @@ module Projects
         state = upload_state(301)
         input_state = upload_input_state
 
+        # Progress stays at 55% — uploadEnd short-circuits when status is 'error', so it never advances to 100%
         assert_equal '55%', state.fetch('text')
         assert_equal '55', state.fetch('ariaValueNow')
         assert_includes state.fetch('rowClass'), 'direct-upload--error'
