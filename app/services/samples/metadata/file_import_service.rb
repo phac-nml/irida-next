@@ -45,10 +45,6 @@ module Samples
           metadata.compact! if @ignore_empty_values
 
           bulk_metadata_payload[sample_id] = metadata
-          # metadata_changes = process_sample_metadata_row(sample_id, metadata)
-          # response[sample_id] = metadata_changes if metadata_changes
-        rescue ActiveRecord::RecordNotFound
-          @namespace.errors.add(:sample, error_message(sample_id))
         end
 
         BulkUpdateService.new(@namespace, bulk_metadata_payload, current_user, { include_activity: true }).execute
@@ -58,46 +54,9 @@ module Samples
 
       private
 
-      def error_message(sample_id)
-        if @namespace.type == 'Group'
-          I18n.t('services.samples.metadata.import_file.sample_not_found_within_group', sample_puid: sample_id)
-        else
-          I18n.t('services.samples.metadata.import_file.sample_not_found_within_project', sample_puid: sample_id)
-        end
-      end
-
       def retrieve_headers
         headers = @selected_headers << @sample_id_column
         strip_headers(headers)
-      end
-
-      def process_sample_metadata_row(sample_id, metadata)
-        sample = find_sample(sample_id)
-        metadata_changes = UpdateService.new(sample.project, sample, current_user, { 'metadata' => metadata }).execute
-        not_updated_metadata_changes = metadata_changes[:not_updated]
-        return metadata_changes if not_updated_metadata_changes.empty?
-
-        @namespace.errors.add(:sample,
-                              I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
-                                     sample_name: sample_id,
-                                     metadata_fields: not_updated_metadata_changes.join(', ')))
-        nil
-      end
-
-      def find_sample(sample_id)
-        if @namespace.type == 'Group'
-          authorized_scope(Sample, type: :relation, as: :namespace_samples,
-                                   scope_options: { namespace: @namespace,
-                                                    minimum_access_level: Member::AccessLevel::MAINTAINER })
-            .find_by!(puid: sample_id)
-        else
-          project = @namespace.project
-          if Irida::PersistentUniqueId.valid_puid?(sample_id, Sample)
-            Sample.find_by!(puid: sample_id, project_id: project.id)
-          else
-            Sample.find_by!(name: sample_id, project_id: project.id)
-          end
-        end
       end
     end
   end
