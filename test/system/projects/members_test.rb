@@ -358,21 +358,16 @@ module Projects
       visit namespace_project_members_path(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-
-      within 'div.overflow-x-auto' do |div|
-        # Scroll to keep action controls in view for focus assertions
-        div.execute_script('this.scrollLeft = this.scrollWidth')
-        find("#member-#{project_member.id}-expiration-input").click
-        find("#member-#{project_member.id}-expiration-input").set(expiry_date)
-        find("#member-#{project_member.id}-expiration-input").send_keys(:return)
-      end
+      find("#member-#{project_member.id}-expiration-input").click
+      find("#member-#{project_member.id}-expiration-input").set(expiry_date)
+      find("#member-#{project_member.id}-expiration-input").send_keys(:return)
 
       within %(turbo-frame[id="member-update-alert"]) do
         assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
       end
 
       within "#member_#{project_member.id}" do
-        assert_selector 'button', text: I18n.t('common.actions.remove'), focused: true, visible: :all
+        assert_selector 'button', text: I18n.t('common.actions.remove'), focused: true
       end
     end
 
