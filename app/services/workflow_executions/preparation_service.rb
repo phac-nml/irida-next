@@ -17,9 +17,6 @@ module WorkflowExecutions
     end
 
     def execute # rubocop:disable Metrics/MethodLength
-      # confirm pipeline found
-      return false unless validate_pipeline
-
       @samplesheet_headers = @pipeline.samplesheet_headers
 
       # confirm params/permissions
@@ -49,22 +46,10 @@ module WorkflowExecutions
         }
       )
 
-      # mark workflow execution as prepared
-      @workflow_execution.state = :prepared
-
       @workflow_execution.save
     end
 
     private
-
-    def validate_pipeline # rubocop:disable Naming/PredicateMethod
-      return true if @pipeline.executable?
-
-      @workflow_execution.state = :error
-      @workflow_execution.cleaned = true
-      @workflow_execution.save
-      false
-    end
 
     def parse_attachments_from_samplesheet(samplesheet)
       attachments = {}
@@ -86,6 +71,7 @@ module WorkflowExecutions
 
         attachments.each do |key, attachment|
           samplesheet_params[key] = copy_attachment_to_run_dir(attachment, sample_workflow_execution)
+          # TODO: cursor
         end
 
         @samplesheet_rows << @samplesheet_headers.map { |header| samplesheet_params[header] }
