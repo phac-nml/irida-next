@@ -77,6 +77,38 @@ module Projects
         assert_equal 'true', input_state.fetch('ariaInvalid')
       end
 
+      test 'failed batch rows are not marked complete after a later successful batch' do
+        open_upload_dialog
+
+        dispatch_form_upload_event('start')
+        dispatch_upload_event('initialize', { id: 401, file: { name: 'error.fastq.gz' } })
+        dispatch_upload_event('initialize', { id: 402, file: { name: 'never-started.fastq.gz' } })
+        dispatch_upload_event('start', { id: 401, file: { name: 'error.fastq.gz' } })
+        dispatch_upload_event('progress', { id: 401, file: { name: 'error.fastq.gz' }, progress: 44 })
+        dispatch_upload_event('error', { id: 401, file: { name: 'error.fastq.gz' }, error: 'forced upload failure' })
+        dispatch_upload_event('end', { id: 401, file: { name: 'error.fastq.gz' } })
+        dispatch_form_upload_event('end')
+
+        dispatch_form_upload_event('start')
+        dispatch_upload_event('initialize', { id: 501, file: { name: 'retry.fastq.gz' } })
+        dispatch_upload_event('start', { id: 501, file: { name: 'retry.fastq.gz' } })
+        dispatch_upload_event('progress', { id: 501, file: { name: 'retry.fastq.gz' }, progress: 87 })
+        dispatch_upload_event('end', { id: 501, file: { name: 'retry.fastq.gz' } })
+        dispatch_form_upload_event('end')
+
+        retry_state = upload_state(501)
+        previous_error_state = upload_state(401)
+        previous_pending_state = upload_state(402)
+
+        assert_equal '100%', retry_state.fetch('text')
+        assert_equal '100', retry_state.fetch('ariaValueNow')
+        assert_includes retry_state.fetch('rowClass'), 'direct-upload--complete'
+
+        assert_not_includes previous_error_state.fetch('rowClass'), 'direct-upload--complete'
+        assert_not_includes previous_pending_state.fetch('rowClass'), 'direct-upload--complete'
+        assert_equal '0%', previous_pending_state.fetch('text')
+      end
+
       private
 
       def open_upload_dialog
