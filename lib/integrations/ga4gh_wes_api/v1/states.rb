@@ -10,7 +10,11 @@ module Integrations
         ].freeze
 
         SUBMITTED_STATES = %w[
-          QUEUED INITIALIZING PAUSED
+          QUEUED INITIALIZING
+        ].freeze
+
+        RUNNING_STATES = %w[
+          RUNNING PAUSED
         ].freeze
 
         ERROR_STATES = %w[

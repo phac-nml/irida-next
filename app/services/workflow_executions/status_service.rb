@@ -17,7 +17,7 @@ module WorkflowExecutions
       run_status = @wes_client.get_run_status(@workflow_execution.run_id)
       state = run_status[:state]
 
-      if state == 'RUNNING'
+      if Integrations::Ga4ghWesApi::V1::States::RUNNING_STATES.include?(state)
         # Send cancellation request to WES if pipeline has exceeded maximum runtime, if set
         if max_run_time_exceeded_cancel?(@workflow_execution.workflow)
           :canceling
