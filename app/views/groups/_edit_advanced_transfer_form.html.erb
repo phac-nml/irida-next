@@ -1,5 +1,11 @@
 <%= form_with(url: group_transfer_path, method: :put, class: "grid gap-4", id: "edit_advanced_transfer_form",
-data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
+data:
+if Flipper.enabled?(:beta_dropdown)
+  { turbo_confirm: "", controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
+else
+  { turbo_confirm: "", controller: "viral--select2" }
+end
+) do |form| %>
   <%= render partial: "shared/form/required_field_legend" %>
   <div class="form-field">
     <% form_id = "transfer_namespace_id_input" %>
@@ -22,7 +28,15 @@ data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
         "
       >
     <% else %>
-      <%= viral_select2(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
+      <% select2_component =
+        (
+          if Flipper.enabled?(:beta_dropdown)
+            "viral_beta_select2"
+          else
+            "viral_select2"
+          end
+        ) %>
+      <%= send(select2_component, form:, name: :new_namespace_id, id: form_id, placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
@@ -54,10 +68,19 @@ data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
     <%= form.submit t("groups.edit.advanced.transfer.submit"),
                 class: "button button-destructive inline-block",
                 disabled: true,
-                data: {
-                  "viral--select2-target": "submitButton",
-                  turbo_content: ".confirm-transfer",
-                  confirm_value: confirm_value,
-                } %>
+                data:
+                  if Flipper.enabled?(:beta_dropdown)
+                    {
+                      "viral--beta-select2-target": "submitButton",
+                      turbo_content: ".confirm-transfer",
+                      confirm_value: confirm_value,
+                    }
+                  else
+                    {
+                      "viral--select2-target": "submitButton",
+                      turbo_content: ".confirm-transfer",
+                      confirm_value: confirm_value,
+                    }
+                  end %>
   </div>
 <% end %>

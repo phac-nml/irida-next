@@ -38,7 +38,7 @@
                                  autofocus: invalid_field,
                                } %>
       <% else %>
-        <%= render SelectWithAutoCompleteComponent.new(
+        <%= render ComboboxComponent.new(
           form: conditions_form,
           field: :field,
           options: options,

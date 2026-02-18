@@ -6,7 +6,13 @@
     <%= turbo_frame_tag "import_spreadsheet_dialog_alert" %>
 
     <div
-      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload <% if @namespace.group_namespace? %> viral--select2 <% end %>"
+      <% if @namespace.group_namespace? && Flipper.enabled?(:beta_dropdown)%>
+      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload viral--beta-select2"
+      <% elsif @namespace.group_namespace? %>
+      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload viral--select2"
+      <% else %>
+      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload"
+      <% end %>
       data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
       data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
@@ -14,8 +20,12 @@
       data-spreadsheet-import-select-description-value='<%= t("shared.samples.spreadsheet_imports.dialog.select_sample_description_column") %>'
       data-spreadsheet-import-select-project-value='<%= t("shared.samples.spreadsheet_imports.dialog.select_project_puid_column") %>'
       data-attachment-upload-uploading-text-value='<%=t("shared.samples.spreadsheet_imports.dialog.uploading") %>'
+      <% if @namespace.group_namespace? && Flipper.enabled?(:beta_dropdown) %>
+      data-viral--beta-select2-trigger-type-value="click"
+      data-viral--beta-select2-enable-controller-coordination-value="<%= true %>"
+      data-viral--beta-select2-spreadsheet-import-outlet='#spreadsheet-import-dialog-content'
+      <% elsif @namespace.group_namespace? %>
       data-viral--select2-enable-controller-coordination-value="<%= true %>"
-      <% if @namespace.group_namespace? %>
       data-viral--select2-spreadsheet-import-outlet='#spreadsheet-import-dialog-content'
       <% end %>
       data-spreadsheet-import-refresh-outlet="[data-controller='refresh']"
@@ -160,7 +170,15 @@
                 ><%= t("shared.samples.spreadsheet_imports.dialog.static_project") %></label>
                 <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300"><%= t("shared.samples.spreadsheet_imports.dialog.static_project_description") %></p>
 
-                <%= viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select| %>
+                <% select2_component =
+                  (
+                    if Flipper.enabled?(:beta_dropdown)
+                      "viral_beta_select2"
+                    else
+                      "viral_select2"
+                    end
+                  ) %>
+                <%= send(select2_component, form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select| %>
                   <% @group_projects.each do |project| %>
                     <% select.with_option(
                         value: project.id,
