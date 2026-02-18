@@ -141,7 +141,7 @@ export default class extends Controller {
     this.#setUploadProgress(id, 100, { force: true });
   }
 
-  uploadsStart(event) {
+  #uploadsStart(event) {
     if (!this.#isThisFormEvent(event)) return;
 
     this.#batchInProgress = true;
@@ -158,7 +158,7 @@ export default class extends Controller {
     this.#setSubmitButtonUploadingState();
   }
 
-  uploadsEnd(event) {
+  #uploadsEnd(event) {
     if (!this.#isThisFormEvent(event)) return;
     if (this.#activeUploadKeys.size === 0) {
       this.#batchInProgress = false;
@@ -183,8 +183,8 @@ export default class extends Controller {
     this._onProgress = this.uploadProgress.bind(this);
     this._onError = this.uploadError.bind(this);
     this._onEnd = this.uploadEnd.bind(this);
-    this._onAllStart = this.uploadsStart.bind(this);
-    this._onAllEnd = this.uploadsEnd.bind(this);
+    this._onAllStart = this.#uploadsStart.bind(this);
+    this._onAllEnd = this.#uploadsEnd.bind(this);
   }
 
   #isAttachmentUploadEvent(event) {
