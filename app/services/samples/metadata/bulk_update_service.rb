@@ -11,7 +11,6 @@ module Samples
         @namespace = namespace
         @metadata_payload = metadata_payload
         @include_activity = params['include_activity']
-        @errors = {}
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
@@ -48,7 +47,9 @@ module Samples
           end
         end
 
-        return unless @include_activity
+        # if @include_activity && @namespace.group_namespace?
+
+        # end
 
         successful_updates
         # if @include_activity
@@ -77,36 +78,13 @@ module Samples
 
       private
 
-      def find_sample(sample_id) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+      def find_sample(sample_id)
         id_type = determine_sample_id_type(sample_id)
-        if @namespace.type == 'Group'
-          scope = authorized_scope(Sample, type: :relation, as: :namespace_samples,
-                                           scope_options: { namespace: @namespace,
-                                                            minimum_access_level: Member::AccessLevel::MAINTAINER })
-          if id_type == 'puid'
-            scope.find_by(puid: sample_id)
-          elsif id_type == 'id'
-            scope.find_by(id: sample_id)
-          else
-            sample = scope.where(name: sample_id)
-            return sample.first unless sample.count != 1
-
-            add_sample_query_error(sample.count.none? ? 'sample_does_not_exist' : 'duplicate_identifier', sample_id)
-          end
+        if @namespace.group_namespace?
+          query_group_samples(id_type, sample_id)
         else
-          project = @namespace.project
-          if id_type == 'puid'
-            Sample.find_by(puid: sample_id, project_id: project.id)
-          elsif id_type == 'id'
-            Sample.find_by(id: sample_id, project_id: project.id)
-          else
-            sample = Sample.where(name: sample_id, project_id: project.id)
-            return sample.first unless sample.count != 1
-
-            add_sample_query_error(sample.count.none? ? 'sample_does_not_exist' : 'duplicate_identifier', sample_id)
-          end
+          query_project_samples(id_type, sample_id)
         end
-        nil
       end
 
       def determine_sample_id_type(sample_id)
@@ -119,6 +97,38 @@ module Samples
         end
       end
 
+      def query_group_samples(id_type, sample_id)
+        scope = authorized_scope(Sample, type: :relation, as: :namespace_samples,
+                                         scope_options: { namespace: @namespace,
+                                                          minimum_access_level: Member::AccessLevel::MAINTAINER })
+        if id_type == 'puid'
+          scope.find_by(puid: sample_id)
+        elsif id_type == 'id'
+          scope.find_by(id: sample_id)
+        else
+          sample = scope.where(name: sample_id)
+          return sample.first unless sample.count != 1
+
+          add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_id)
+          nil
+        end
+      end
+
+      def query_project_samples(id_type, sample_id)
+        project = @namespace.project
+        if id_type == 'puid'
+          Sample.find_by(puid: sample_id, project_id: project.id)
+        elsif id_type == 'id'
+          Sample.find_by(id: sample_id, project_id: project.id)
+        else
+          sample = Sample.where(name: sample_id, project_id: project.id)
+          return sample.first unless sample.count != 1
+
+          add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_id)
+          nil
+        end
+      end
+
       def add_sample_query_error(error_key, sample_id)
         @namespace.errors.add(
           :sample,
@@ -128,29 +138,6 @@ module Samples
           )
         )
       end
-
-      def validate_sample_in_project
-        return unless @project.id != @sample.project.id
-
-        raise SampleMetadataUpdateValidationError,
-              I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample.name,
-                                                                                    project_name: @project.name)
-      end
-
-      def validate_metadata_param
-        return unless @metadata.nil? || @metadata == {}
-
-        raise SampleMetadataUpdateValidationError,
-              I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
-      end
-
-      def validate_metadata_value(key, value)
-        return unless value.is_a?(Hash)
-
-        raise SampleMetadataUpdateValidationError,
-              I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name, key:)
-      end
-
       # def perform_metadata_update
       #   @metadata.each do |key, value|
       #     validate_metadata_value(key, value)
