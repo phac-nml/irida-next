@@ -8,10 +8,13 @@ export default class extends Controller {
     uploadingText: String,
   };
   #uploads = new Map();
+  #pendingUploadKeys = new Set();
+  #activeUploadKeys = new Set();
   #formElement;
   #rowsElement;
   #submitButtonState;
   #hasUploadError = false;
+  #batchInProgress = false;
 
   connect() {
     this.#bindHandlers();
@@ -57,16 +60,34 @@ export default class extends Controller {
         this._onAllEnd,
       );
     }
+
+    this.#uploads.clear();
+    this.#pendingUploadKeys.clear();
+    this.#activeUploadKeys.clear();
+    this.#batchInProgress = false;
   }
 
   uploadInitialize(event) {
     if (!this.#isAttachmentUploadEvent(event)) return;
 
     const { id, file } = event.detail;
+    const uploadKey = this.#uploadKey(id);
+    const existingUpload = this.#uploads.get(uploadKey);
+    if (existingUpload) {
+      existingUpload.rowElement.remove();
+      this.#activeUploadKeys.delete(uploadKey);
+      this.#pendingUploadKeys.delete(uploadKey);
+    }
+
     const upload = this.#buildUploadRow(id, file.name);
 
     this.#ensureRowsElement().append(upload.rowElement);
-    this.#uploads.set(this.#uploadKey(id), upload);
+    this.#uploads.set(uploadKey, upload);
+    if (this.#batchInProgress) {
+      this.#activeUploadKeys.add(uploadKey);
+    } else {
+      this.#pendingUploadKeys.add(uploadKey);
+    }
     this.#setUploadProgress(id, 0, { force: true });
   }
 
@@ -121,24 +142,39 @@ export default class extends Controller {
   }
 
   uploadsStart(event) {
-    if (!this.#isThisFormEvent(event) || this.#uploads.size === 0) return;
+    if (!this.#isThisFormEvent(event)) return;
 
+    this.#batchInProgress = true;
     this.#hasUploadError = false;
+    for (const uploadKey of this.#pendingUploadKeys) {
+      this.#activeUploadKeys.add(uploadKey);
+    }
+    this.#pendingUploadKeys.clear();
+
+    if (this.#activeUploadKeys.size === 0) return;
+
     this.#hideAttachmentsInput();
     this.#rememberSubmitButtonState();
     this.#setSubmitButtonUploadingState();
   }
 
   uploadsEnd(event) {
-    if (!this.#isThisFormEvent(event) || this.#uploads.size === 0) return;
+    if (!this.#isThisFormEvent(event)) return;
+    if (this.#activeUploadKeys.size === 0) {
+      this.#batchInProgress = false;
+      return;
+    }
 
     if (!this.#hasUploadError) {
-      this.#markNonErrorUploadsComplete();
+      this.#markNonErrorUploadsComplete(this.#activeUploadKeys);
       this.attachmentsInputTarget.setAttribute("aria-invalid", "false");
     }
 
     this.#showAttachmentsInput();
     this.#restoreSubmitButtonState();
+    this.#clearBatchUploads(this.#activeUploadKeys);
+    this.#activeUploadKeys.clear();
+    this.#batchInProgress = false;
   }
 
   #bindHandlers() {
@@ -262,14 +298,23 @@ export default class extends Controller {
     upload.progressTextElement.textContent = `${roundedProgress}%`;
   }
 
-  #markNonErrorUploadsComplete() {
-    for (const upload of this.#uploads.values()) {
+  #markNonErrorUploadsComplete(uploadKeys) {
+    for (const uploadKey of uploadKeys) {
+      const upload = this.#uploads.get(uploadKey);
+      if (!upload) continue;
       if (upload.status === "error") continue;
 
       upload.status = "complete";
       upload.rowElement.classList.remove("direct-upload--pending");
       upload.rowElement.classList.add("direct-upload--complete");
       this.#setUploadProgress(upload.id, 100, { force: true });
+    }
+  }
+
+  #clearBatchUploads(uploadKeys) {
+    for (const uploadKey of uploadKeys) {
+      this.#uploads.delete(uploadKey);
+      this.#pendingUploadKeys.delete(uploadKey);
     }
   }
 
