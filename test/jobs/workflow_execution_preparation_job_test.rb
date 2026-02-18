@@ -108,6 +108,4 @@ class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
     assert_equal 'error', @workflow_execution.state
     assert @workflow_execution.cleaned
   end
-
-
 end
