@@ -237,7 +237,7 @@
 
 .pathogen-data-grid--fill > .pathogen-data-grid__scroll {
   min-height: 0;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
 }
 
 .pathogen-data-grid__scroll {
@@ -350,6 +350,12 @@
 .pathogen-data-grid__cell:focus-within {
   outline: 2px solid var(--pathogen-data-grid-focus-ring);
   outline-offset: -2px;
+}
+
+/* In table cells, keep a single focus ring on the cell container. */
+.pathogen-data-grid__cell .pathogen-u-link:focus-visible,
+.pathogen-data-grid__cell .pathogen-data-grid__link:focus-visible {
+  outline: none;
 }
 
 .pathogen-data-grid__metadata-warning {
