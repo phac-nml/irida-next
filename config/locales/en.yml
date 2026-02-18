@@ -1770,6 +1770,9 @@ en:
         samples_not_found: 'Samples with the following sample ids could not be copied as they were not found in the source project: %{sample_ids}'
         unauthorized: 'You do not have permission to copy the following samples with sample ids: %{sample_ids}'
       metadata:
+        bulk_update:
+          duplicate_identifier: 'Sample %{sample_identifier}: Multiple samples with identifier "%{sample_identifier}"'
+          sample_does_not_exist: 'Sample %{sample_identifier}: Sample with identifier "%{sample_identifier}" does not exist'
         empty_metadata: No metadata was received to update sample '%{sample_name}'
         fields:
           multi_all_keys_exist: Metadata keys '%{keys}' already exist.
