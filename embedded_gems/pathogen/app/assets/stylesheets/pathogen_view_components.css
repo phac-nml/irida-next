@@ -55,7 +55,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --pathogen-color-text-default: #dde5f0;
     --pathogen-color-text-muted: #bbc7d9;
     --pathogen-color-border-default: #34415b;
