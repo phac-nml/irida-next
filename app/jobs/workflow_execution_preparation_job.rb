@@ -2,24 +2,71 @@
 
 # Queues the workflow execution submission job
 class WorkflowExecutionPreparationJob < WorkflowExecutionJob
+  include ActiveJob::Continuable
+
   queue_as :default
   queue_with_priority 20
 
   def perform(workflow_execution)
+    @workflow_execution = workflow_execution
     # User signaled to cancel
-    return if workflow_execution.canceling? || workflow_execution.canceled?
+    return if @workflow_execution.canceling? || @workflow_execution.canceled?
 
-    # validate workflow_execution object is fit to run jobs on
-    unless validate_initial_state(workflow_execution, [:initial], validate_run_id: false)
-      return handle_error_state_and_clean(workflow_execution)
-    end
+    step :initial_validation
+    step :pipeline_validation
 
-    result = WorkflowExecutions::PreparationService.new(workflow_execution).execute
+    step :do_work # TODO: refactor the individual steps out
 
-    if result
-      WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
+    step :update_state_step
+    step :queue_next_job
+  end
+
+  def initial_validation
+    return if validate_initial_state(@workflow_execution, [:initial], validate_run_id: false)
+
+    update_state(:error, force: true)
+  end
+
+  def pipeline_validation
+    return if @workflow_execution.state.to_sym == :error
+
+    # confirm pipeline found
+    return true if @workflow_execution.workflow&.executable?
+
+    update_state(:error, force: false, cleaned_value: true)
+    false
+  end
+
+  def do_work
+    return if @workflow_execution.state.to_sym == :error
+
+    WorkflowExecutions::PreparationService.new(@workflow_execution).execute
+  end
+
+  def queue_next_job
+    if @workflow_execution.state.to_sym == :error
+      WorkflowExecutionCleanupJob.perform_later(@workflow_execution.reload)
     else
-      handle_unable_to_process_job(workflow_execution, self.class.name)
+      WorkflowExecutionSubmissionJob.perform_later(@workflow_execution.reload)
+    end
+  end
+
+  def update_state_step
+    return if @workflow_execution.state.to_sym == :error
+
+    update_state(:prepared)
+  end
+
+  def update_state(state, force: false, cleaned_value: nil)
+    return if @workflow_execution.state.to_sym == state
+
+    if force
+      # validation must be skipped in the case where model is already invalid (e.g. no namespace)
+      @workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
+    else
+      @workflow_execution.state = state
+      @workflow_execution.cleaned = cleaned_value unless cleaned_value.nil?
+      @workflow_execution.save
     end
   end
 end
