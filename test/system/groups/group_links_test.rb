@@ -16,7 +16,9 @@ module Groups
     end
 
     test 'can create a group to group link' do
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
+
       assert_selector 'tr', count: @group_links_count + header_row_count
 
       assert_selector 'button', text: I18n.t(:'groups.members.index.invite_group'), count: 1
@@ -43,7 +45,8 @@ module Groups
 
     test 'cannot add a group to group link' do
       login_as users(:ryan_doe)
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
 
       assert_selector 'a', text: I18n.t(:'groups.members.index.invite_group'), count: 0
     end
@@ -51,7 +54,9 @@ module Groups
     test 'can remove a group to group link' do
       namespace_group_link = namespace_group_links(:namespace_group_link5)
 
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
+
       assert_selector 'tr', count: @group_links_count + header_row_count
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
@@ -73,7 +78,8 @@ module Groups
     test 'cannot remove a group to group link which may have been unlinked in another tab' do
       namespace_group_link = namespace_group_links(:namespace_group_link5)
 
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
@@ -92,7 +98,8 @@ module Groups
 
     test 'cannot remove a group to group link' do
       login_as users(:ryan_doe)
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
 
       within('table') do
         assert_selector 'button.viral-dropdown--icon', count: 0
@@ -102,7 +109,9 @@ module Groups
     test 'cannot remove a group to group link if logged in user has role changed to a level which can\'t modify' do
       namespace_group_link = namespace_group_links(:namespace_group_link5)
 
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
+
       assert_selector 'tr', count: @group_links_count + header_row_count
 
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
@@ -131,7 +140,9 @@ module Groups
       namespace_group_link = namespace_group_links(:namespace_group_link5)
 
       Timecop.travel(Time.zone.now + 5) do
-        visit group_members_path(@namespace, anchor: 'groups-tab')
+        visit group_members_path(@namespace)
+        click_button I18n.t(:'groups.members.index.tabs.groups')
+
         assert_selector 'tr', count: @group_links_count + header_row_count
 
         find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
@@ -147,7 +158,9 @@ module Groups
     test 'cannot update namespace group links group access level' do
       login_as users(:ryan_doe)
 
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
+
       assert_selector 'tr', count: @group_links_count + header_row_count
 
       within('table') do
@@ -160,7 +173,9 @@ module Groups
       expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
 
       Timecop.travel(Time.zone.now + 5) do
-        visit group_members_path(@namespace, anchor: 'groups-tab')
+        visit group_members_path(@namespace)
+        click_button I18n.t(:'groups.members.index.tabs.groups')
+
         assert_selector 'tr', count: @group_links_count + header_row_count
 
         find("#invited-group-#{namespace_group_link.group.id}-expiration-input").click.set(expiry_date)
@@ -176,7 +191,9 @@ module Groups
     test 'cannot update namespace group links expiration' do
       login_as users(:ryan_doe)
 
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
+
       assert_selector 'tr', count: @group_links_count + header_row_count
 
       within('table') do
@@ -188,7 +205,9 @@ module Groups
       namespace_group_link = namespace_group_links(:namespace_group_link5)
       expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
 
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
+
       assert_selector 'tr', count: @group_links_count + header_row_count
 
       namespace_group_link.destroy
@@ -275,7 +294,8 @@ module Groups
 
     test 'can search group links by group name' do
       group_name_col = 1
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
 
       assert_text 'Displaying 2 items'
       assert_selector 'table tbody tr', count: 2
@@ -290,7 +310,8 @@ module Groups
     end
 
     test 'can sort by column' do
-      visit group_members_path(@namespace, anchor: 'groups-tab')
+      visit group_members_path(@namespace)
+      click_button I18n.t(:'groups.members.index.tabs.groups')
 
       assert_text 'Displaying 2 items'
       assert_selector 'table tbody tr', count: 2
@@ -307,7 +328,6 @@ module Groups
       within('thead') do
         click_on 'Group'
       end
-      wait_for_network_idle
       assert_selector 'table thead th:first-child svg.arrow-down-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
@@ -321,7 +341,6 @@ module Groups
       within('thead') do
         click_on 'Access Level'
       end
-      wait_for_network_idle
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -335,7 +354,6 @@ module Groups
       within('thead') do
         click_on 'Expiration'
       end
-      wait_for_network_idle
       assert_selector 'table thead th:nth-child(5) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name

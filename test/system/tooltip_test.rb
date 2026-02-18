@@ -68,8 +68,8 @@ class TooltipTest < ApplicationSystemTestCase
   test 'tooltip respects viewport boundaries and flips when needed' do
     visit '/-/groups/group-1'
 
-    # Resize window to small size to test boundary detection (Cuprite syntax)
-    page.driver.resize(400, 300)
+    # Resize window to small size to test boundary detection
+    page.current_window.resize_to(400, 300)
 
     # Find a link with tooltip near edge
     tooltip_trigger = page.find('a[aria-describedby]', match: :first)

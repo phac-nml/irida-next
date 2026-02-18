@@ -378,15 +378,19 @@ module Projects
         fill_in 'sample_value_2', with: 'value5'
         fill_in 'sample_key_3', with: 'metadatafield6'
         fill_in 'sample_value_3', with: 'value6'
+        assert_selector 'input.keyInput', count: 4
+        assert_selector 'input.valueInput', count: 4
 
         click_button 'delete_1'
         click_button 'delete_2'
+        assert_selector 'input.keyInput', count: 2
+        assert_selector 'input.valueInput', count: 2
 
         click_on I18n.t('projects.samples.metadata.form.submit_button')
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
         assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
                            keys: %w[metadatafield3 metadatafield6].join(', '))
-        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
         assert_no_text 'metadatafield4'
         assert_no_text 'value4'

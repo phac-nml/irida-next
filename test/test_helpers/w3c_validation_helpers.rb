@@ -85,6 +85,7 @@ module W3cValidationHelpers
     setup_w3c_validator!(use_local: use_local, validator_uri: validator_uri) if !instance_variable_defined?(:@validator)
     arerr = @validator.validate_text(content).errors
     arerr = _may_ignore_autocomplete_errors_for_hidden(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
+    arerr = _ignore_stray_start_tag_errors_for_turbo_stream(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_aria_errors_for_div_with_role_row(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_importmap_integrity_error(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     arerr = _ignore_aria_label_on_div_without_role(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
@@ -167,6 +168,46 @@ module W3cValidationHelpers
       # Example of an Error:
       #   ERROR; line 165: An “input” element with a “type” attribute whose value is “hidden” must not have an “autocomplete” attribute whose value is “on” or “off”
       if /\AERROR\b.+\binput\b[^a-z]+\belement.+\btype\b.+\bhidden\b.+\bautocomplete\b[^a-z]+\battribute\b/i =~ es.to_s
+        removeds << es
+        nil
+      else
+        es
+      end
+    }.compact
+
+  ensure
+    # Records it in Logger
+    if !removeds.empty? && !prefix.blank?
+      Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect)
+    end
+  end
+
+  # Botch fix of W3C validation errors for turbo-stream elements present outside of the body element
+  #
+  # Turbo Stream elements (e.g., <turbo-stream>) are placed outside of the body element,
+  # which is valid according to the HTML specification, but may trigger "Stray start tag"
+  # errors in the W3C Nu HTML Checker.
+  #
+  # This routine takes a W3C-validation error object (Array) and
+  # return the same Array where the specific errors are deleted
+  # so that one could still test the other potential errors with the W3C validation.
+  # The said errors are recorded with +logger.warn+ (if +prefix+ is given).
+  #
+  # == References
+  #
+  # * ARIA Spec: https://www.w3.org/TR/wai-aria-1.2/
+  # * W3C Validator: https://github.com/validator/validator
+  #
+  # @param errs [Array<W3CValidators::Message>] Output of +@validator.validate_text(response.body).errors+
+  # @param prefix [String] Prefix of the warning message recorded with Logger.
+  #    If empty, no message is recorded in Logger.
+  # @return [Array<String, W3CValidators::Message>]
+  def _ignore_stray_start_tag_errors_for_turbo_stream(errs, prefix="")
+    removeds = []
+    errs.map{ |es|
+      # Example of an Error:
+      #   ERROR; line 1: Stray start tag “turbo-stream”.
+      if /\AERROR\b.+\bStray\b.*\bstart\b.*\btag\b.*\bturbo-stream\b/i =~ es.to_s
         removeds << es
         nil
       else

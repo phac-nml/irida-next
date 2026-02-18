@@ -33,3 +33,6 @@ config/locales/*
 
 # Fixture files
 test/fixtures/*
+
+# PNPM
+pnpm-lock.yaml

@@ -22,8 +22,7 @@ module Projects
     test 'can see the list of project members' do
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:project26)
-      visit namespace_project_members_path(namespace, project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -59,8 +58,7 @@ module Projects
       parent_namespace = groups(:group_one)
       members_count = members.select { |member| member.namespace == parent_namespace }.count
 
-      visit namespace_project_members_path(parent_namespace, project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(parent_namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -76,8 +74,7 @@ module Projects
       project = projects(:project24)
       parent_namespace = groups(:group_one)
 
-      visit namespace_project_members_path(parent_namespace, project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(parent_namespace, project)
 
       group_member = members(:group_one_member_ryan_doe)
 
@@ -101,15 +98,14 @@ module Projects
     test 'cannot access project members' do
       login_as users(:david_doe)
 
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(@namespace, @project)
 
       assert_text I18n.t(:'action_policy.policy.namespaces/project_namespace.member_listing?', name: @project.name)
     end
 
     test 'can add a member to the project' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(@namespace, @project)
+
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       user_to_add = users(:jane_doe)
 
@@ -138,8 +134,8 @@ module Projects
     end
 
     test 'can remove a member from the project' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(@namespace, @project)
+
       project_member = members(:project_two_member_ryan_doe)
 
       table_row = find(:table_row, { 'Username' => project_member.user.email })
@@ -160,8 +156,8 @@ module Projects
     test 'can remove a member from the project that is under a user namespace' do
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:john_doe_project4)
-      visit namespace_project_members_path(namespace, project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(namespace, project)
+
       project_member = members(:project_four_member_joan_doe)
 
       table_row = find(:table_row, { 'Username' => project_member.user.email })
@@ -185,8 +181,8 @@ module Projects
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:project26)
 
-      visit namespace_project_members_path(namespace, project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(namespace, project)
+
       project_member = members(:project_twenty_six_group_member25)
 
       assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
@@ -210,8 +206,8 @@ module Projects
     end
 
     test 'can remove themselves as a member from the project' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(@namespace, @project)
+
       table_row = find(:table_row, { 'Username' => @user.email })
 
       within table_row do
@@ -231,9 +227,7 @@ module Projects
       project_description = 'New Project Description'
       user_to_add = users(:jane_doe)
 
-      visit dashboard_projects_url
-
-      click_on I18n.t(:'dashboard.projects.index.create_project_button')
+      visit new_project_url
 
       assert_selector 'h1', text: I18n.t(:'projects.new.title')
 
@@ -248,17 +242,23 @@ module Projects
       end
 
       assert_selector 'h1', text: project_name
-
       new_project = @user.namespace.project_namespaces.find_by(name: project_name).project
       assert_current_path(namespace_project_path(new_project.parent, new_project))
 
-      click_link 'Members'
+      click_link I18n.t(:'projects.members.index.tabs.members')
+      assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
+
+      # Members tab should be selected by default
+      assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
+      assert_selector '[role="tabpanel"]#members-panel:not(.hidden)'
+
+      assert_button I18n.t(:'projects.members.index.add'), disabled: false
 
       click_button I18n.t(:'projects.members.index.add')
 
       assert_selector 'dialog[open]', visible: true
 
-      within('dialog') do
+      within('dialog[open]') do
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
@@ -277,8 +277,8 @@ module Projects
 
     test 'can not add a member to the project' do
       login_as users(:ryan_doe)
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(@namespace, @project)
+
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
       assert_selector 'a', text: I18n.t(:'projects.members.index.add'), count: 0
@@ -290,8 +290,7 @@ module Projects
       project_member = members(:project_twenty_two_member_michelle_doe)
 
       Timecop.travel(Time.zone.now + 5) do
-        visit namespace_project_members_path(namespace, project, anchor: 'members-tab')
-        wait_for_network_idle
+        visit namespace_project_members_path(namespace, project)
 
         assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -309,8 +308,7 @@ module Projects
       namespace = groups(:group_five)
       project_member = members(:project_twenty_two_member_james_doe)
 
-      visit namespace_project_members_path(namespace, project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -328,8 +326,7 @@ module Projects
       namespace_group_link = namespace_group_links(:namespace_group_link3)
 
       visit namespace_project_members_path(namespace_group_link.namespace.parent,
-                                           namespace_group_link.namespace.project, anchor: 'members-tab')
-      wait_for_network_idle
+                                           namespace_group_link.namespace.project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
@@ -358,8 +355,7 @@ module Projects
       project_member = members(:project_twenty_two_member_michelle_doe)
       expiry_date = (Time.zone.today + 1).strftime('%Y-%m-%d')
 
-      visit namespace_project_members_path(namespace, project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       find("#member-#{project_member.id}-expiration-input").click
@@ -378,8 +374,8 @@ module Projects
     test 'cannot update member expiration' do
       login_as users(:ryan_doe)
 
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(@namespace, @project)
+
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
       within('table') do
@@ -395,8 +391,7 @@ module Projects
       project = projects(:user29_project1)
       members_count = members.select { |member| member.namespace == project.namespace }.count
 
-      visit namespace_project_members_path(namespace, project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       user_to_add = namespace_bot.user
@@ -430,8 +425,7 @@ module Projects
       namespace = namespaces_user_namespaces(:user29_namespace)
       project = projects(:user29_project1)
 
-      visit namespace_project_members_path(namespace, project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       user_to_add = namespace_bot.user
@@ -449,8 +443,7 @@ module Projects
 
     test 'can search members by username' do
       username_col = 1
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(@namespace, @project)
 
       assert_text 'Displaying 5 items'
       assert_selector 'table tbody tr', count: 5
@@ -474,8 +467,7 @@ module Projects
     end
 
     test 'can sort members by column' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(@namespace, @project)
 
       assert_text 'Displaying 5 items'
       assert_selector 'table tbody tr', count: 5
@@ -557,8 +549,7 @@ module Projects
 
     # Pathogen Tabs Component Tests
     test 'can switch between members and groups tabs with click' do
-      visit namespace_project_members_path(@namespace, @project, anchor: 'members-tab')
-      wait_for_network_idle
+      visit namespace_project_members_path(@namespace, @project)
 
       # Members tab should be selected by default
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
@@ -570,7 +561,6 @@ module Projects
 
       # Click groups tab
       find('[role="tab"]#groups-tab').click
-      wait_for_network_idle
 
       # Groups tab should now be selected
       assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
@@ -582,7 +572,6 @@ module Projects
 
       # Click members tab again
       find('[role="tab"]#members-tab').click
-      wait_for_network_idle
 
       # Members tab should be selected again
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'

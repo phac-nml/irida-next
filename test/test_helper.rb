@@ -34,6 +34,9 @@ require 'mocha/minitest'
 require 'test_helpers/array_helpers'
 require 'test_helpers/w3c_validation_helpers'
 require 'turbo/broadcastable/test_helper'
+require 'minitest/retry'
+
+Minitest::Retry.use!
 
 module ActiveSupport
   class TestCase

@@ -28,8 +28,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         # verify the field list & option group elements are localized
         within first("div[data-controller='select-with-auto-complete']") do
           combobox = find("input[role='combobox']")
-          combobox.fill_in with: ''
           combobox.click
+          combobox.send_keys([:ctrl, 'a'], :delete)
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.name'), count: 1
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.puid'), count: 1
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.created_at'), count: 1

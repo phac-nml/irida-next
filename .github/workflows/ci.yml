@@ -155,7 +155,7 @@ jobs:
         run: bin/rails db:test:prepare test
 
   system-test:
-    timeout-minutes: 25
+    timeout-minutes: 30
     runs-on: ubuntu-latest
 
     services:
@@ -202,6 +202,21 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Cache Playwright Chromium browser
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright Chromium browser (with deps)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Install Playwright Chromium browser deps
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
 
       - name: Install icons
         run: |
