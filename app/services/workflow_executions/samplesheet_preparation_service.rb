@@ -5,18 +5,17 @@ require 'tempfile'
 
 module WorkflowExecutions
   # Service used to Prepare a WorkflowExecution
-  class PreparationService < BaseService
+  class SamplesheetPreparationService < BaseService
     include BlobHelper
 
-    def initialize(workflow_execution, user = nil, params = {})
-      super(user, params)
+    def initialize(workflow_execution)
+      super(workflow_execution.submitter, {})
       @workflow_execution = workflow_execution
-      @pipeline = workflow_execution.workflow
+      @samplesheet_headers = @workflow_execution.workflow.samplesheet_headers
       @samplesheet_rows = []
     end
 
     def execute # rubocop:disable Metrics/MethodLength
-      @samplesheet_headers = @pipeline.samplesheet_headers
       process_samples_workflow_executions
 
       # persist samplesheet in run dir
@@ -58,13 +57,17 @@ module WorkflowExecutions
     end
 
     def process_samples_workflow_executions
+      # This function could theoretically generate a lot of garbage blobs if it fails midway through.
+      # We could use a 2D cursor array, but after each step a database write is needed to update the samplesheet_rows.
+      # Even if the job fails so a restart occurs and extra blobs are generated, they will be cleaned up by the cleanup
+      # job and as such are temporary bloat that is unlikely to create more blobs than an single extra workflow
+      # execution being run simultaneously.
       @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
         attachments = parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params)
         samplesheet_params = sample_workflow_execution.samplesheet_params
 
         attachments.each do |key, attachment|
           samplesheet_params[key] = copy_attachment_to_run_dir(attachment, sample_workflow_execution)
-          # TODO: cursor
         end
 
         @samplesheet_rows << @samplesheet_headers.map { |header| samplesheet_params[header] }

@@ -18,11 +18,8 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
 
     step :initial_validation
     step :pipeline_validation
-
     step :build_run_directory
-
-    step :do_work # TODO: refactor the individual steps out
-
+    step :build_samplesheet
     step :update_state_step
     step :queue_next_job
   end
@@ -52,10 +49,10 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
     @workflow_execution.save
   end
 
-  def do_work
+  def build_samplesheet
     return if @workflow_execution.state.to_sym == :error
 
-    WorkflowExecutions::PreparationService.new(@workflow_execution).execute
+    WorkflowExecutions::SamplesheetPreparationService.new(@workflow_execution).execute
   end
 
   def queue_next_job
