@@ -113,6 +113,16 @@ module Activities
             I18n.t(:'components.activity.dialog.sample_destroy.sample'),
             I18n.t(:'components.activity.dialog.sample_destroy.project')
           ]
+        when 'group_import_metadata'
+          @title = I18n.t(:'components.activity.dialog.import_metadata.title')
+          @description = I18n.t(:'components.activity.dialog.import_metadata.description',
+                                count: @activity.parameters[:imported_metadata_samples_count],
+                                user: @activity_owner)
+          @data = @extended_details.details['samples_imported_metadata_data'].to_json
+          @column_headers = [
+            I18n.t(:'components.activity.dialog.import_metadata.sample'),
+            I18n.t(:'components.activity.dialog.import_metadata.project')
+          ]
         end
       end
 
