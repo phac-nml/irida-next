@@ -304,7 +304,6 @@
   left: var(--pathogen-data-grid-sticky-left, 0px);
   z-index: var(--pathogen-data-grid-sticky-z);
   background: var(--pathogen-data-grid-sticky-bg);
-  box-shadow: 1px 0 0 var(--pathogen-data-grid-sticky-shadow);
 }
 
 .pathogen-data-grid__cell--header.pathogen-data-grid__cell--sticky {
