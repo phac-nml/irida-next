@@ -20,7 +20,7 @@ module Samples
         unsuccessful_updates = {}
         @metadata_payload.each do |sample_id, metadata|
           sample = find_sample(sample_id)
-          next unless sample
+          next if sample.nil?
 
           # authorize user can update at the sample level
           sample.with_lock do
@@ -91,8 +91,7 @@ module Samples
             sample = scope.where(name: sample_id)
             return sample.first unless sample.count != 1
 
-            add_sample_query_error(sample, sample_id)
-            nil
+            add_sample_query_error(sample.count.none? ? 'sample_does_not_exist' : 'duplicate_identifier', sample_id)
           end
         else
           project = @namespace.project
@@ -104,10 +103,10 @@ module Samples
             sample = Sample.where(name: sample_id, project_id: project.id)
             return sample.first unless sample.count != 1
 
-            add_sample_query_error(sample, sample_id)
-            nil
+            add_sample_query_error(sample.count.none? ? 'sample_does_not_exist' : 'duplicate_identifier', sample_id)
           end
         end
+        nil
       end
 
       def determine_sample_id_type(sample_id)
@@ -120,16 +119,14 @@ module Samples
         end
       end
 
-      def add_sample_query_error(sample, sample_id)
-        @errors[sample_id] = if sample.many?
-                               @namespace.errors.add(:sample,
-                                                     'Not a unique identifier')
-                               'Not a unique identifier'
-                             else
-                               @namespace.errors.add(:sample,
-                                                     "Doesn't exist")
-
-                             end
+      def add_sample_query_error(error_key, sample_id)
+        @namespace.errors.add(
+          :sample,
+          I18n.t(
+            "services.samples.metadata.bulk_update.#{error_key}",
+            sample_identifier: sample_id
+          )
+        )
       end
 
       def validate_sample_in_project
