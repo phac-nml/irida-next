@@ -320,7 +320,6 @@ module Projects
       within('thead') do
         click_on 'Group'
       end
-      # wait_for_network_idle
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
@@ -339,7 +338,6 @@ module Projects
       within('thead') do
         click_on 'Access Level'
       end
-      # wait_for_network_idle
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -359,7 +357,6 @@ module Projects
       within('thead') do
         click_on 'Expiration'
       end
-      # wait_for_network_idle
       assert_selector 'table thead th:nth-child(5) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link2.group.name

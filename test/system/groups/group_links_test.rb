@@ -328,7 +328,6 @@ module Groups
       within('thead') do
         click_on 'Group'
       end
-      # wait_for_network_idle
       assert_selector 'table thead th:first-child svg.arrow-down-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
@@ -342,7 +341,6 @@ module Groups
       within('thead') do
         click_on 'Access Level'
       end
-      # wait_for_network_idle
       assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
@@ -356,7 +354,6 @@ module Groups
       within('thead') do
         click_on 'Expiration'
       end
-      # wait_for_network_idle
       assert_selector 'table thead th:nth-child(5) svg.arrow-up-icon'
       within('tbody') do
         assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
