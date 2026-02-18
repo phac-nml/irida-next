@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require 'csv'
+require 'tempfile'
+
 # Queues the workflow execution submission job
 class WorkflowExecutionPreparationJob < WorkflowExecutionJob
   include ActiveJob::Continuable
+  include BlobHelper
 
   queue_as :default
   queue_with_priority 20
@@ -15,11 +19,15 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
     step :initial_validation
     step :pipeline_validation
 
+    step :build_run_directory
+
     step :do_work # TODO: refactor the individual steps out
 
     step :update_state_step
     step :queue_next_job
   end
+
+  private
 
   def initial_validation
     return if validate_initial_state(@workflow_execution, [:initial], validate_run_id: false)
@@ -35,6 +43,13 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
 
     update_state(:error, force: false, cleaned_value: true)
     false
+  end
+
+  def build_run_directory
+    return if @workflow_execution.state.to_sym == :error
+
+    @workflow_execution.blob_run_directory = generate_run_directory
+    @workflow_execution.save
   end
 
   def do_work
