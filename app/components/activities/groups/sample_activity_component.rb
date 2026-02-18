@@ -12,6 +12,10 @@ module Activities
         @activity[:action] == 'group_samples_destroy'
       end
 
+      def import_metadata_action?
+        @activity[:action] == 'group_import_metadata'
+      end
+
       def activity_message
         case @activity[:action]
 
@@ -19,6 +23,9 @@ module Activities
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:imported_samples_count]))
         when 'group_samples_destroy'
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]))
+        when 'group_import_metadata'
+          t(@activity[:key], user: @activity[:user],
+                             href: highlighted_text(@activity[:imported_metadata_samples_count]))
         else
           ''
         end
@@ -31,22 +38,19 @@ module Activities
           t('components.activity.samples.import.more_details.button_descriptive_text')
         when 'group_samples_destroy'
           t('components.activity.samples.destroy.more_details.button_descriptive_text')
+        when 'group_import_metadata'
+          t('components.activity.samples.import_metadata.more_details.button_descriptive_text')
         else
           ''
         end
       end
 
       def dialog_type
-        case @activity[:action]
-        when 'group_import_samples'
-          'group_import_samples'
-        when 'group_samples_destroy'
-          'group_samples_destroy'
-        end
+        @activity[:action]
       end
 
       def show_more_details_button?
-        import_samples_action? || sample_destroy_action?
+        import_samples_action? || sample_destroy_action? || import_metadata_action?
       end
     end
   end

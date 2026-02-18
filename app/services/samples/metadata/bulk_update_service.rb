@@ -10,7 +10,7 @@ module Samples
         super(user, params)
         @namespace = namespace
         @metadata_payload = metadata_payload
-        @include_activity = params['include_activity']
+        @include_activity = params.key?(:include_activity) ? params[:include_activity] : true
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
@@ -28,14 +28,14 @@ module Samples
           end
           if !@metadata_change[:not_updated].empty?
             unsuccessful_updates[sample_id] = @metadata_change[:not_updated]
-          elsif @namespace.group_namespace?
-            if successful_updates.key?(sample.project.puid)
-              successful_updates[sample.project.puid].merge({ sample.puid => @metadata_change })
-            else
-              successful_updates.merge({ sample.puid => @metadata_change })
-            end
+          elsif successful_updates.key?(sample.project.puid)
+            successful_updates[sample.project.puid] << { sample_puid: sample.puid, sample_name: sample.name,
+                                                         project_name: sample.project.name,
+                                                         project_puid: sample.project.puid }
           else
-            successful_updates.merge({ sample.puid => @metadata_change })
+            successful_updates[sample.project.puid] = [{ sample_puid: sample.puid, sample_name: sample.name,
+                                                         project_name: sample.project.name,
+                                                         project_puid: sample.project.puid }]
           end
         end
         unless unsuccessful_updates.empty?
@@ -46,10 +46,13 @@ module Samples
                                          metadata_fields: changes.join(', ')))
           end
         end
-
-        # if @include_activity && @namespace.group_namespace?
-
-        # end
+        if @include_activity
+          if @namespace.group_namespace?
+            create_group_activity(successful_updates)
+          else
+            create_project_activity(@namespace.puid, successful_updates[@namespace.puid])
+          end
+        end
 
         successful_updates
         # if @include_activity
@@ -138,6 +141,51 @@ module Samples
           )
         )
       end
+
+      def create_group_activity(successful_updates) # rubocop:disable Metrics/MethodLength
+        group_sample_count = 0
+        group_data = []
+        successful_updates.each do |project_puid, sample_data|
+          create_project_activity(project_puid, sample_data)
+          group_sample_count += sample_data.count
+          group_data << sample_data
+        end
+        ext_details = ExtendedDetail.create!(details: {
+                                               imported_metadata_samples_count:
+                                               group_sample_count,
+                                               samples_imported_metadata_data: group_data.flatten
+                                             })
+
+        activity = @namespace.create_activity key: 'group.samples.import_metadata',
+                                              owner: current_user,
+                                              parameters:
+                                              {
+                                                imported_metadata_samples_count: group_sample_count,
+                                                action: 'group_import_metadata'
+                                              }
+        activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
+                                                 activity_type: 'group_import_metadata')
+      end
+
+      def create_project_activity(project_puid, sample_data)
+        project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
+
+        ext_details = ExtendedDetail.create!(details: {
+                                               imported_metadata_samples_count: sample_data.count,
+                                               samples_imported_metadata_data: sample_data
+                                             })
+
+        activity = project_namespace.create_activity key: 'namespaces_project_namespace.samples.import_metadata',
+                                                     owner: current_user,
+                                                     parameters:
+                                                     {
+                                                       imported_metadata_samples_count: sample_data.count,
+                                                       action: 'project_import_metadata'
+                                                     }
+        activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
+                                                 activity_type: 'project_import_metadata')
+      end
+
       # def perform_metadata_update
       #   @metadata.each do |key, value|
       #     validate_metadata_value(key, value)

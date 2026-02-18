@@ -13,8 +13,6 @@ class BaseSampleMetadataUpdateService < BaseService
   def perform_metadata_update(sample, metadata)
     metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
     metadata.each do |key, value|
-      validate_metadata_value(key, value)
-
       key = strip_whitespaces(key.to_s.downcase)
       value = strip_whitespaces(value.to_s) # remove data types
       status = get_metadata_change_status(sample, key, value)
