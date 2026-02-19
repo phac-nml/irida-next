@@ -3,7 +3,7 @@
 module Samples
   module Metadata
     # Service used to Update Samples::Metadata
-    class UpdateService < BaseService # rubocop:disable Metrics/ClassLength
+    class UpdateService < BaseSampleMetadataUpdateService
       class SampleMetadataUpdateError < StandardError
       end
 
@@ -20,7 +20,6 @@ module Samples
         @sample = sample
         @metadata = params['metadata']
         @analysis_id = params['analysis_id']
-        @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
         @include_activity = params.key?(:include_activity) ? params[:include_activity] : true
         @force_update = params.key?('force_update') ? params['force_update'] : false
       end
@@ -33,7 +32,7 @@ module Samples
         validate_metadata_param
 
         @sample.with_lock do
-          perform_metadata_update
+          @metadata_changes = perform_metadata_update(@sample, @metadata, @force_update)
           @sample.save
         end
 
@@ -48,7 +47,8 @@ module Samples
                                               }
         end
 
-        update_metadata_summary
+        update_namespace_metadata_summary(@project.namespace, @metadata_changes[:added], @metadata_changes[:deleted],
+                                          true)
 
         handle_not_updated_fields
 
@@ -78,57 +78,11 @@ module Samples
               I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
       end
 
-      def validate_metadata_value(key, value)
+      def validate_metadata_value(key, value, sample_name)
         return unless value.is_a?(Hash)
 
         raise SampleMetadataUpdateValidationError,
-              I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name, key:)
-      end
-
-      def perform_metadata_update
-        @metadata.each do |key, value|
-          validate_metadata_value(key, value)
-
-          key = strip_whitespaces(key.to_s.downcase)
-          value = strip_whitespaces(value.to_s) # remove data types
-          status = get_metadata_change_status(key, value)
-          next unless status
-
-          @metadata_changes[status] << key
-          if %i[updated added].include?(status)
-            add_metadata_to_sample(key, value)
-          elsif status == :deleted
-            remove_metadata_from_sample(key)
-          end
-        end
-      end
-
-      def remove_metadata_from_sample(key)
-        @sample.metadata.delete(key)
-        @sample.metadata_provenance.delete(key)
-      end
-
-      def add_metadata_to_sample(key, value)
-        @sample.metadata_provenance[key] =
-          if @analysis_id.nil?
-            { source: 'user', id: current_user.id, updated_at: Time.current }
-          else
-            { source: 'analysis', id: @analysis_id, updated_at: Time.current }
-          end
-        @sample.metadata[key] = value
-      end
-
-      def get_metadata_change_status(key, value) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-        if value.blank?
-          :deleted if @sample.field?(key)
-        elsif @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
-              @sample.metadata_provenance[key]['source'] == 'analysis'
-          :not_updated
-        elsif @sample.field?(key) && @sample.metadata[key] == value
-          @force_update ? :updated : :unchanged
-        else
-          @sample.field?(key) ? :updated : :added
-        end
+              I18n.t('services.samples.metadata.nested_metadata', sample_name:, key:)
       end
 
       # Metadata fields that were not updated due to a user trying to overwrite metadata previously added by an
