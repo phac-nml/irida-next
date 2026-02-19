@@ -94,6 +94,34 @@ module Groups
                    session["samples_#{@group.id}_search_params"].stringify_keys
     end
 
+    test 'should sort samples by project puid ascending' do
+      get group_samples_path(@group, params: { q: { sort: 'namespaces.puid asc' }, limit: 50 })
+
+      assert_response :success
+
+      project_puids = rendered_project_puids
+      assert_operator project_puids.size, :>, 1
+      assert_operator project_puids.uniq.size, :>, 1
+
+      project_puids.each_cons(2) do |left, right|
+        assert_operator left, :<=, right
+      end
+    end
+
+    test 'should sort samples by project puid descending' do
+      get group_samples_path(@group, params: { q: { sort: 'namespaces.puid desc' }, limit: 50 })
+
+      assert_response :success
+
+      project_puids = rendered_project_puids
+      assert_operator project_puids.size, :>, 1
+      assert_operator project_puids.uniq.size, :>, 1
+
+      project_puids.each_cons(2) do |left, right|
+        assert_operator left, :>=, right
+      end
+    end
+
     test 'accessing samples index on invalid page causes pagy overflow redirect at group level' do
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::OverflowError
       # The rescue_from handler should redirect to first page with page=1 and limit=20
@@ -108,6 +136,13 @@ module Groups
       # Follow the redirect and verify it's successful
       follow_redirect!
       assert_response :success
+    end
+
+    private
+
+    def rendered_project_puids
+      doc = Nokogiri::HTML(response.body)
+      doc.css('#samples-table table tbody tr td:nth-child(3)').map { |node| node.text.strip }
     end
   end
 end
