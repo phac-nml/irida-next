@@ -3,9 +3,11 @@
 module WorkflowExecutions
   # Service used to Prepare a WorkflowExecution
   class SubmissionService < BaseService
-    def initialize(workflow_execution, wes_connection, user = nil, params = {})
+    def initialize(workflow_execution, user = nil, params = {}, conn_override = nil)
       super(user, params)
+
       @workflow_execution = workflow_execution
+      wes_connection = conn_override || Integrations::Ga4ghWesApi::V1::ApiConnection.new.conn
       @wes_client = Integrations::Ga4ghWesApi::V1::Client.new(conn: wes_connection)
     end
 
@@ -14,12 +16,7 @@ module WorkflowExecutions
 
       run = @wes_client.run_workflow(**@workflow_execution.as_wes_params)
 
-      @workflow_execution.run_id = run[:run_id]
-
-      # mark workflow execution as submitted
-      @workflow_execution.state = :submitted
-
-      @workflow_execution.save
+      run[:run_id]
     end
   end
 end
