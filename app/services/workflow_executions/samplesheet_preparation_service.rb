@@ -5,28 +5,17 @@ require 'tempfile'
 
 module WorkflowExecutions
   # Service used to Prepare a WorkflowExecution
-  class PreparationService < BaseService
+  class SamplesheetPreparationService < BaseService
     include BlobHelper
 
-    def initialize(workflow_execution, user = nil, params = {})
-      super(user, params)
+    def initialize(workflow_execution)
+      super(workflow_execution.submitter, {})
       @workflow_execution = workflow_execution
-      @pipeline = workflow_execution.workflow
+      @samplesheet_headers = @workflow_execution.workflow.samplesheet_headers
       @samplesheet_rows = []
-      @storage_service = ActiveStorage::Blob.service
     end
 
     def execute # rubocop:disable Metrics/MethodLength
-      # confirm pipeline found
-      return false unless validate_pipeline
-
-      @samplesheet_headers = @pipeline.samplesheet_headers
-
-      # confirm params/permissions
-      # build workflow execution run directory
-      @workflow_execution.blob_run_directory = generate_run_directory
-
-      # process each sample
       process_samples_workflow_executions
 
       # persist samplesheet in run dir
@@ -49,22 +38,10 @@ module WorkflowExecutions
         }
       )
 
-      # mark workflow execution as prepared
-      @workflow_execution.state = :prepared
-
       @workflow_execution.save
     end
 
     private
-
-    def validate_pipeline # rubocop:disable Naming/PredicateMethod
-      return true if @pipeline.executable?
-
-      @workflow_execution.state = :error
-      @workflow_execution.cleaned = true
-      @workflow_execution.save
-      false
-    end
 
     def parse_attachments_from_samplesheet(samplesheet)
       attachments = {}
@@ -80,6 +57,11 @@ module WorkflowExecutions
     end
 
     def process_samples_workflow_executions
+      # This function could theoretically generate a lot of garbage blobs if it fails midway through.
+      # We could use a 2D cursor array, but after each step a database write is needed to update the samplesheet_rows.
+      # Even if the job fails so a restart occurs and extra blobs are generated, they will be cleaned up by the cleanup
+      # job and as such are temporary bloat that is unlikely to create more blobs than an single extra workflow
+      # execution being run simultaneously.
       @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
         attachments = parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params)
         samplesheet_params = sample_workflow_execution.samplesheet_params
@@ -106,23 +88,6 @@ module WorkflowExecutions
       attachable.inputs.attach(blob.signed_id)
 
       blob_key_to_service_path(blob.key)
-    end
-
-    def blob_key_to_service_path(blob_key, directory: false)
-      path = case @storage_service.class.to_s
-             when 'ActiveStorage::Service::AzureBlobService'
-               format('az://%<container>s/%<key>s', container: @storage_service.container, key: blob_key)
-             when 'ActiveStorage::Service::S3Service'
-               format('s3://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
-             when 'ActiveStorage::Service::GCSService'
-               format('gcs://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
-             else
-               ActiveStorage::Blob.service.path_for(blob_key)
-             end
-
-      path = "#{path}/" if directory
-
-      path
     end
 
     def samplesheet_file
