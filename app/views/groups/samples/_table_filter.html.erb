@@ -19,8 +19,8 @@
       },
     ) %>
 
-    <input type="hidden" name="format" value="turbo_stream">
-    <input type="hidden" name="limit" value="<%= @pagy&.limit %>">
+    <%= hidden_field_tag :format, "turbo_stream" %>
+    <%= hidden_field_tag :limit, @pagy&.limit %>
   </div>
 
   <div class="max-sm:grow">
