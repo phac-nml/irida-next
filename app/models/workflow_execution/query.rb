@@ -9,6 +9,8 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   allowed_sort_columns :id, :name, :run_id, :state, :created_at, :updated_at
 
+  self.enum_metadata_fields = WorkflowExecution::FieldConfiguration::ENUM_METADATA_FIELDS
+
   attribute :name_or_id_cont, :string
   attribute :name_or_id_in, default: -> { [] }
   attribute :namespace_ids, default: -> { [] }
@@ -24,11 +26,21 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   private
 
-  def normalize_condition_value(condition)
-    return condition.value unless condition.field == 'state'
+  def normalize_condition_field(condition)
+    return 'metadata.pipeline_id' if condition.field == 'metadata.workflow_name'
 
+    condition.field
+  end
+
+  def normalize_condition_value(condition)
+    return normalize_state_value(condition) if condition.field == 'state'
+
+    condition.value
+  end
+
+  def normalize_state_value(condition)
     if %w[in not_in].include?(condition.operator)
-      condition.value.map { |v| WorkflowExecution.states[v] || v }
+      Array(condition.value).map { |v| WorkflowExecution.states[v] || v }
     else
       WorkflowExecution.states[condition.value] || condition.value
     end

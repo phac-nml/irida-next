@@ -87,6 +87,21 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert_not_nil results
   end
 
+  test 'state enum search with in operator and single state string' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution2.namespace_id, @workflow_execution3.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state', operator: 'in', value: 'completed'
+        )]
+      )]
+    )
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert results.include?(@workflow_execution2)
+    assert_not results.include?(@workflow_execution3)
+  end
+
   test 'metadata field search with dot notation' do
     query = WorkflowExecution::Query.new(
       namespace_ids: [@workflow_execution1.namespace_id],
@@ -289,7 +304,27 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert results.include?(we_gasclustering)
   end
 
-  test 'in operator with metadata field case insensitive' do
+  test 'in operator with enum metadata field uses exact matching' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
+
+    # Enum metadata fields (pipeline_id, workflow_version) use exact matching
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id, we_gasclustering.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.pipeline_id',
+          operator: 'in',
+          value: ['phac-nml/iridanextexample', 'phac-nml/gasclustering']
+        )]
+      )]
+    )
+    results = query.send(:ransack_results)
+    assert results.include?(we_valid)
+    assert results.include?(we_gasclustering)
+  end
+
+  test 'in operator with enum metadata field normalizes case' do
     we_valid = workflow_executions(:workflow_execution_valid)
     we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
 
@@ -299,13 +334,114 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
         conditions: [WorkflowExecution::SearchCondition.new(
           field: 'metadata.pipeline_id',
           operator: 'in',
-          value: ['PHAC-NML/IRIDANEXTEXAMPLE', 'PHAC-NML/GASCLUSTERING']
+          value: ['PHAC-NML/IRIDANEXTEXAMPLE']
         )]
       )]
     )
+
     results = query.send(:ransack_results)
     assert results.include?(we_valid)
-    assert results.include?(we_gasclustering)
+    assert_not results.include?(we_gasclustering)
+  end
+
+  test 'equals operator with enum metadata field normalizes case' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id, we_gasclustering.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.pipeline_id',
+          operator: '=',
+          value: 'PHAC-NML/IRIDANEXTEXAMPLE'
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert results.include?(we_valid)
+    assert_not results.include?(we_gasclustering)
+  end
+
+  test 'equals operator maps metadata.workflow_name to metadata.pipeline_id' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id, we_gasclustering.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.workflow_name',
+          operator: '=',
+          value: 'PHAC-NML/IRIDANEXTEXAMPLE'
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert results.include?(we_valid)
+    assert_not results.include?(we_gasclustering)
+  end
+
+  test 'equals operator with workflow_version enum metadata normalizes case' do
+    we_prepared = workflow_executions(:irida_next_example_prepared)
+    we_valid = workflow_executions(:workflow_execution_valid)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_prepared.namespace_id, we_valid.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.workflow_version',
+          operator: '=',
+          value: '1.0DEV'
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert results.include?(we_prepared)
+    assert_not results.include?(we_valid)
+  end
+
+  test 'not_equals operator with enum metadata field normalizes case' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id, we_gasclustering.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.pipeline_id',
+          operator: '!=',
+          value: 'PHAC-NML/GASCLUSTERING'
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert results.include?(we_valid)
+    assert_not results.include?(we_gasclustering)
+  end
+
+  test 'not_equals operator with workflow_version enum metadata includes null values' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    we_null_workflow_version = workflow_executions(:workflow_execution_with_null_metadata)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id, we_null_workflow_version.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.workflow_version',
+          operator: '!=',
+          value: '1.0.3'
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert_not results.include?(we_valid)
+    assert results.include?(we_null_workflow_version)
   end
 
   # Tests for not_in operator with non-enum fields
@@ -365,6 +501,43 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert results.include?(we_with_dates_two)
   end
 
+  test 'not_contains operator casts uuid field to text for search' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
+    uuid_fragment = we_valid.id.split('-').first
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id, we_gasclustering.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'id', operator: 'not_contains', value: uuid_fragment
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert_not results.include?(we_valid)
+    assert results.include?(we_gasclustering)
+  end
+
+  test 'not_in operator with enum metadata field normalizes case' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    we_gasclustering = workflow_executions(:workflow_execution_gasclustering)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id, we_gasclustering.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'metadata.pipeline_id', operator: 'not_in', value: ['PHAC-NML/IRIDANEXTEXAMPLE']
+        )]
+      )]
+    )
+
+    results = query.send(:ransack_results)
+    assert_not results.include?(we_valid)
+    assert results.include?(we_gasclustering)
+  end
+
   # Tests for contains operator with regular fields
   test 'contains operator with name field' do
     we_valid = workflow_executions(:workflow_execution_valid)
@@ -392,6 +565,23 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
         )]
       )]
     )
+    results = query.send(:ransack_results)
+    assert results.include?(we_valid)
+  end
+
+  test 'contains operator casts uuid field to text for search' do
+    we_valid = workflow_executions(:workflow_execution_valid)
+    uuid_fragment = we_valid.id.split('-').first
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [we_valid.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'id', operator: 'contains', value: uuid_fragment
+        )]
+      )]
+    )
+
     results = query.send(:ransack_results)
     assert results.include?(we_valid)
   end
@@ -908,6 +1098,21 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     results = query.results
     assert_not_nil results
     assert_not results.include?(@workflow_execution3) # error state should be excluded
+  end
+
+  test 'state enum search with not_in operator and single state string' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution2.namespace_id, @workflow_execution3.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state', operator: 'not_in', value: 'completed'
+        )]
+      )]
+    )
+    assert query.valid?
+    results = query.results
+    assert_not results.include?(@workflow_execution2)
+    assert results.include?(@workflow_execution3)
   end
 
   test 'metadata field search with special characters in field names' do

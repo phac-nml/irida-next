@@ -5,7 +5,7 @@ class WorkflowExecution::AdvancedSearchGroupValidator < AdvancedSearch::GroupVal
   private
 
   def allowed_fields
-    %w[id name run_id state created_at updated_at]
+    WorkflowExecution::FieldConfiguration::SEARCHABLE_FIELDS.reject { |field| field.start_with?('metadata.') }
   end
 
   def date_fields
