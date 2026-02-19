@@ -171,4 +171,35 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       end
     end
   end
+
+  test 'dynamic condition changes preserve groups_attributes payload naming' do
+    visit('rails/view_components/advanced_search_component/default')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        click_button I18n.t(:'components.advanced_search_component.add_group_button')
+
+        within all("fieldset[data-advanced-search-target='groupsContainer']").last do
+          click_button I18n.t(:'components.advanced_search_component.add_condition_button')
+          assert_selector :xpath,
+                          "//*[@name='q[groups_attributes][2][conditions_attributes][0][field]']",
+                          visible: :all
+          assert_selector :xpath,
+                          "//*[@name='q[groups_attributes][2][conditions_attributes][1][field]']",
+                          visible: :all
+
+          within all("fieldset[data-advanced-search-target='conditionsContainer']").first do
+            find('button').click
+          end
+
+          assert_selector :xpath,
+                          "//*[@name='q[groups_attributes][2][conditions_attributes][0][field]']",
+                          visible: :all
+          assert_no_selector :xpath,
+                             "//*[@name='q[groups_attributes][2][conditions_attributes][1][field]']",
+                             visible: :all
+        end
+      end
+    end
+  end
 end
