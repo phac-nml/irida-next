@@ -8,6 +8,12 @@ en:
         field: Field
         operator: Operator
         value: Value
+      workflow_execution/search_condition:
+        field: Field
+        operator: Operator
+        value: Value
+      workflow_execution/search_group:
+        condition: Condition
       sample/search_group:
         condition: Condition
     errors:
