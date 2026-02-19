@@ -27,7 +27,7 @@ module Irida
     end
 
     def messages
-      payload = indifferent_hash(load_payload)
+      payload = symbolize_hash(load_payload)
       return [] unless payload
 
       entries = payload[:messages]
@@ -51,7 +51,7 @@ module Irida
     end
 
     def normalize_entry(entry)
-      entry = indifferent_hash(entry)
+      entry = symbolize_hash(entry)
       return unless entry
       return if entry.fetch(:enabled, true) == false
 
@@ -69,14 +69,14 @@ module Irida
       when String
         raw_message
       when Hash
-        localized_message(indifferent_hash(raw_message))
+        localized_message(symbolize_hash(raw_message))
       end
     end
 
     def localized_message(messages)
       return unless messages
 
-      locale_key = @locale.to_s
+      locale_key = @locale.to_s.to_sym
 
       messages[locale_key] || messages[:en]
     end
@@ -85,10 +85,10 @@ module Irida
       TYPE_MAPPINGS[raw_type.to_s.to_sym] || DEFAULT_TYPE
     end
 
-    def indifferent_hash(value)
+    def symbolize_hash(value)
       return unless value.is_a?(Hash)
 
-      value.with_indifferent_access
+      value.deep_transform_keys(&:to_sym)
     end
 
     def log_error(message)
