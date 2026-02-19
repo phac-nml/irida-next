@@ -23,7 +23,7 @@
 #
 # Locale behavior:
 # - The app first tries the current locale (for example, fr).
-# - If missing, it falls back to en.
+# - If missing, it falls back to the configured default locale.
 # - If neither exists for that message, that message is skipped.
 messages:
   - enabled: false
