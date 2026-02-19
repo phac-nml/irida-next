@@ -6,6 +6,7 @@ require 'test_helpers/better_rails_system_tests'
 require 'test_helpers/capybara_setup'
 require 'test_helpers/playwright_setup'
 require 'test_helpers/html5_helpers'
+require 'test_helpers/system_test_ui_helper'
 require 'action_dispatch/system_test_case'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
@@ -14,6 +15,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include AxeHelpers
   include BetterRailsSystemTests
   include HTML5Helpers
+  include SystemTestUiHelper
   include Warden::Test::Helpers
 
   Warden.test_mode!

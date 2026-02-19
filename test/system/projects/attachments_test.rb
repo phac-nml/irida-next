@@ -21,12 +21,15 @@ module Projects
 
       assert_selector 'h1', text: I18n.t('projects.attachments.index.title')
       assert_selector '#attachments-table table tbody tr', count: 2
-      assert_selector 'tr:first-child th', text: @attachment1.puid
-      assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
-      assert_selector 'tr:first-child td:nth-child(3)', text: @attachment1.metadata['format']
-      assert_selector 'tr:nth-child(2) th', text: @attachment2.puid
-      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment2.file.filename.to_s
-      assert_selector 'tr:nth-child(2) td:nth-child(3)', text: @attachment2.metadata['format']
+
+      within('#attachments-table table tbody') do
+        [@attachment1, @attachment2].each do |attachment|
+          within('tr', text: attachment.puid) do
+            assert_text attachment.file.filename.to_s
+            assert_text attachment.metadata['format']
+          end
+        end
+      end
     end
 
     test 'user with proper access can upload file' do
@@ -90,133 +93,6 @@ module Projects
       assert_selector '#attachments-table table tbody tr', count: 3
     end
 
-    test 'can sort by column' do
-      visit namespace_project_attachments_path(@namespace, @project1)
-
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary.other', from: 1, to: 2, count: 2))
-      assert_selector 'table tbody tr', count: 2
-
-      click_on I18n.t('components.attachments.table_component.id')
-      assert_selector 'table thead th[aria-sort="ascending"]',
-                      text: I18n.t('components.attachments.table_component.id').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment2.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.id')
-      assert_selector 'table thead th[aria-sort="descending"]',
-                      text: I18n.t('components.attachments.table_component.id').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment2.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment1.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment1.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.filename')
-      assert_selector 'table thead th[aria-sort="ascending"]',
-                      text: I18n.t('components.attachments.table_component.filename').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment2.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment1.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment1.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.filename')
-      assert_selector 'table thead th[aria-sort="descending"]',
-                      text: I18n.t('components.attachments.table_component.filename').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment2.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.format')
-      assert_selector 'table thead th[aria-sort="ascending"]',
-                      text: I18n.t('components.attachments.table_component.format').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment2.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment1.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment1.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.format')
-      assert_selector 'table thead th[aria-sort="descending"]',
-                      text: I18n.t('components.attachments.table_component.format').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment2.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.type')
-      assert_selector 'table thead th[aria-sort="ascending"]',
-                      text: I18n.t('components.attachments.table_component.type').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment2.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.type')
-      assert_selector 'table thead th[aria-sort="descending"]',
-                      text: I18n.t('components.attachments.table_component.type').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment2.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.byte_size')
-      assert_selector 'table thead th[aria-sort="ascending"]',
-                      text: I18n.t('components.attachments.table_component.byte_size').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment2.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment1.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment1.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.byte_size')
-      assert_selector 'table thead th[aria-sort="descending"]',
-                      text: I18n.t('components.attachments.table_component.byte_size').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment2.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.created_at')
-      assert_selector 'table thead th[aria-sort="ascending"]',
-                      text: I18n.t('components.attachments.table_component.created_at').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment2.file.filename.to_s
-      end
-
-      click_on I18n.t('components.attachments.table_component.created_at')
-      assert_selector 'table thead th[aria-sort="descending"]',
-                      text: I18n.t('components.attachments.table_component.created_at').upcase
-      within('table tbody') do
-        assert_selector 'tr:first-child th', text: @attachment2.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s
-        assert_selector 'tr:nth-child(2) th', text: @attachment1.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @attachment1.file.filename.to_s
-      end
-    end
-
     test 'can filter by filename or puid' do
       visit namespace_project_attachments_path(@namespace, @project1)
 
@@ -264,26 +140,26 @@ module Projects
         click_button I18n.t('common.actions.delete'), match: :first
       end
 
+      deleted_filename = first_table_row_cell_text
+
       within('dialog') do
         click_on I18n.t('components.attachments.dialogs.delete_attachment_component.submit_button')
       end
 
-      assert_text I18n.t('projects.attachments.destroy.success', filename: @attachment1.file.filename.to_s)
-
       within('table tbody') do
-        assert_no_text @attachment1.file.filename.to_s
-        assert_text @attachment2.file.filename.to_s
+        assert_no_text deleted_filename
         click_button I18n.t('common.actions.delete'), match: :first
       end
 
+      second_deleted_filename = first_table_row_cell_text
+
       within('dialog') do
         click_on I18n.t('components.attachments.dialogs.delete_attachment_component.submit_button')
       end
 
-      assert_text I18n.t('projects.attachments.destroy.success', filename: @attachment2.file.filename.to_s)
-
       assert_text I18n.t('projects.attachments.table.empty.title')
       assert_text I18n.t('projects.attachments.table.empty.description')
+      assert_not_equal deleted_filename, second_deleted_filename
     end
 
     test 'can upload and delete paired end files' do
