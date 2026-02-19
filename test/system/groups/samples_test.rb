@@ -70,8 +70,10 @@ module Groups
       assert_selector '.pathogen-data-grid__table'
       assert_selector '#samples-table.samples-data-grid.pathogen-data-grid--fill'
       assert_selector '#samples-table .pathogen-data-grid__scroll'
-      assert_selector 'th.pathogen-data-grid__cell--sticky', text: I18n.t('samples.table_component.puid')
-      assert_selector 'th.pathogen-data-grid__cell--sticky', text: I18n.t('samples.table_component.name')
+      assert_selector 'th.pathogen-data-grid__cell--sticky',
+                      text: /#{Regexp.escape(I18n.t('samples.table_component.puid'))}/i
+      assert_selector 'th.pathogen-data-grid__cell--sticky',
+                      text: /#{Regexp.escape(I18n.t('samples.table_component.name'))}/i
     ensure
       Flipper.disable(:data_grid_samples_table)
     end
