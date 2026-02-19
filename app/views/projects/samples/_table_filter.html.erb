@@ -19,16 +19,15 @@
       },
     ) %>
 
-    <input type="hidden" name="format" value="turbo_stream" />
-    <input type="hidden" name="limit" value="<%= @pagy&.limit %>" />
+    <input type="hidden" name="format" value="turbo_stream">
+    <input type="hidden" name="limit" value="<%= @pagy&.limit %>">
   </div>
 
   <div class="max-sm:grow">
     <%= render AdvancedSearchComponent.new(
       form: f,
       search: @query,
-      sample_fields: @sample_fields,
-      metadata_fields: @metadata_fields,
+      fields: @advanced_search_fields,
       open: @query.errors.any?,
       status: @query.advanced_query?,
     ) %>

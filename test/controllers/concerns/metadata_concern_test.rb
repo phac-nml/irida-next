@@ -66,25 +66,37 @@ class MetadataConcernTest < ActionDispatch::IntegrationTest
   test 'advanced_search_fields returns combined sample and metadata fields for group' do
     expected_sample_fields = %w[name puid created_at updated_at attachments_updated_at]
     expected_metadata_fields = @group.metadata_fields
+    expected_advanced_search_fields = AdvancedSearch::Fields.for_samples(
+      sample_fields: expected_sample_fields,
+      metadata_fields: expected_metadata_fields
+    )
 
     @controller.advanced_search_fields(@group)
     actual_sample_fields = @controller.instance_variable_get(:@sample_fields)
     actual_metadata_fields = @controller.instance_variable_get(:@metadata_fields)
+    actual_advanced_search_fields = @controller.instance_variable_get(:@advanced_search_fields)
 
     assert_equal expected_sample_fields.sort, actual_sample_fields.sort
     assert_equal expected_metadata_fields.sort, actual_metadata_fields.sort
+    assert_equal expected_advanced_search_fields, actual_advanced_search_fields
   end
 
   test 'advanced_search_fields returns combined sample and metadata fields for project' do
     expected_sample_fields = %w[name puid created_at updated_at attachments_updated_at]
     expected_metadata_fields = @project.namespace.metadata_fields
+    expected_advanced_search_fields = AdvancedSearch::Fields.for_samples(
+      sample_fields: expected_sample_fields,
+      metadata_fields: expected_metadata_fields
+    )
 
     @controller.advanced_search_fields(@project.namespace)
     actual_sample_fields = @controller.instance_variable_get(:@sample_fields)
     actual_metadata_fields = @controller.instance_variable_get(:@metadata_fields)
+    actual_advanced_search_fields = @controller.instance_variable_get(:@advanced_search_fields)
 
     assert_equal expected_sample_fields.sort, actual_sample_fields.sort
     assert_equal expected_metadata_fields.sort, actual_metadata_fields.sort
+    assert_equal expected_advanced_search_fields, actual_advanced_search_fields
   end
 
   test 'metadata_templates_for_namespace returns formatted template options for group' do
