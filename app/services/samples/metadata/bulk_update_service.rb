@@ -4,6 +4,8 @@ module Samples
   module Metadata
     # Service used to Update Samples::Metadata
     class BulkUpdateService < BaseSampleMetadataUpdateService # rubocop:disable Metrics/ClassLength
+      class NamespaceMetadataUpdateError < StandardError
+      end
       attr_accessor :namespace, :metadata_payload
 
       def initialize(namespace, metadata_payload, metadata_fields, user = nil, params = {})
@@ -41,13 +43,9 @@ module Samples
 
         handle_not_updated_fields(unsuccessful_updates)
 
-        if @namespace.group_namespace?
-          create_group_activity(activity_data)
-        else
-          create_project_activity_and_update_metadata_summary(@namespace.puid, activity_data[@namespace.puid])
-        end
-
-        activity_data
+        create_activities_and_update_metadata_summary(activity_data)
+      rescue Samples::Metadata::BulkUpdateService::NamespaceMetadataUpdateError => e
+        @namespace.reload.errors.add(:sample, e.message)
       end
 
       private
@@ -55,10 +53,8 @@ module Samples
       def validate_metadata_value(key, value, sample_name)
         return unless value.is_a?(Hash)
 
-        @namespace.errors.add(:sample,
-                              I18n.t('services.samples.metadata.nested_metadata',
-                                     sample_name:,
-                                     key:))
+        raise NamespaceMetadataUpdateError,
+              I18n.t('services.samples.metadata.nested_metadata', sample_name:, key:)
       end
 
       def find_sample(sample_identifier)
@@ -113,13 +109,16 @@ module Samples
       end
 
       def add_sample_query_error(error_key, sample_identifier)
-        @namespace.errors.add(
-          :sample,
-          I18n.t(
-            "services.samples.metadata.bulk_update.#{error_key}",
-            sample_identifier:
-          )
-        )
+        raise NamespaceMetadataUpdateError,
+              I18n.t("services.samples.metadata.bulk_update.#{error_key}", sample_identifier:)
+      end
+
+      def create_activities_and_update_metadata_summary(activity_data)
+        if @namespace.group_namespace?
+          create_group_activity(activity_data)
+        else
+          create_project_activity_and_update_metadata_summary(@namespace.puid, activity_data[@namespace.puid])
+        end
       end
 
       def create_group_activity(activity_data) # rubocop:disable Metrics/MethodLength

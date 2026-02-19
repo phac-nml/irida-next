@@ -31,10 +31,7 @@ module Samples
 
         validate_metadata_param
 
-        @sample.with_lock do
-          @metadata_changes = perform_metadata_update(@sample, @metadata, @force_update)
-          @sample.save
-        end
+        @metadata_changes = perform_metadata_update(@sample, @metadata, @force_update)
 
         if @include_activity
           @project.namespace.create_activity key: 'namespaces_project_namespace.samples.metadata.update',
