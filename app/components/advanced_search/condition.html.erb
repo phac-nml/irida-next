@@ -1,37 +1,31 @@
 <fieldset
   data-advanced-search-target="conditionsContainer"
+  data-advanced-search-group-index="<%= @group_index %>"
+  data-advanced-search-condition-index="<%= @condition_index %>"
+  data-advanced-search-legend-template="<%= t("components.advanced_search_component.condition", index: "__INDEX__") %>"
   class="
-    flex @max-xl:flex-col @max-xl:space-y-2 space-x-2 p-4 items-end rounded-lg
-    border border-slate-300 dark:border-slate-600 text-sm text-slate-500
-    dark:text-slate-400
+    flex items-end space-x-2 rounded-lg border border-slate-300 p-4 text-sm text-slate-500 @max-xl:flex-col
+    @max-xl:space-y-2 dark:border-slate-600 dark:text-slate-400
   "
 >
   <legend><%= t("components.advanced_search_component.condition", index: @condition_number) %></legend>
+
   <%= @groups_form.fields_for :conditions, @condition, child_index: @condition_index do |conditions_form| %>
     <% invalid_field = @condition.errors.include?(:field) %>
-    <div
-      class="
-        form-field flex-1 min-w-[200px] @max-xl:w-full
-        <%= 'invalid' if invalid_field %>
-      "
-    >
-      <% options =
-        options_for_select(@sample_fields, selected_key = @condition.field).concat(
-          grouped_options_for_select(
-            @metadata_fields,
-            selected_key = @condition.field,
-          ),
-        ) %>
+
+    <div class="form-field min-w-[200px] flex-1 @max-xl:w-full <%= 'invalid' if invalid_field %>">
+      <% options = options_for_select(field_options, @condition.field).concat(
+        grouped_options_for_select(grouped_field_options, @condition.field),
+      ) %>
+
       <%= conditions_form.label :field, data: { required: true } %>
+
       <% unless Flipper.enabled?(:advanced_search_with_auto_complete) %>
         <%= conditions_form.select :field,
                                options,
                                { include_blank: true },
                                {
-                                 "aria-label":
-                                   t(
-                                     "activemodel.attributes.sample/search_condition.field",
-                                   ),
+                                 "aria-label": field_label,
                                  "aria-invalid": invalid_field,
                                  "aria-describedby":
                                    conditions_form.field_id(:field, "error"),
@@ -43,25 +37,24 @@
           field: :field,
           options: options,
           aria: {
-            label: t("activemodel.attributes.sample/search_condition.field"),
+            label: field_label,
             invalid: invalid_field,
             describedby: conditions_form.field_id(:field, "error"),
           },
           autofocus: invalid_field,
         ) %>
       <% end %>
+
       <%= render "shared/form/field_errors",
       errors: @condition.errors.full_messages_for(:field),
       id: conditions_form.field_id(:field, "error") %>
     </div>
+
     <% invalid_operator = @condition.errors.include?(:operator) %>
-    <div
-      class="
-        form-field flex-1 min-w-[180px] @max-xl:w-full
-        <%= 'invalid' if invalid_operator %>
-      "
-    >
+
+    <div class="form-field min-w-[180px] flex-1 @max-xl:w-full <%= 'invalid' if invalid_operator %>">
       <%= conditions_form.label :operator, data: { required: true } %>
+
       <%= conditions_form.select :operator,
                              options_for_select(
                                @operations,
@@ -70,19 +63,18 @@
                              { include_blank: true },
                              {
                                "data-action": "advanced-search#handleOperatorChange",
-                               "aria-label":
-                                 t(
-                                   "activemodel.attributes.sample/search_condition.operator",
-                                 ),
+                               "aria-label": operator_label,
                                "aria-invalid": invalid_operator,
                                "aria-describedby":
                                  conditions_form.field_id(:operator, "error"),
                                autofocus: invalid_operator,
                              } %>
+
       <%= render "shared/form/field_errors",
       errors: @condition.errors.full_messages_for(:operator),
       id: conditions_form.field_id(:operator, "error") %>
     </div>
+
     <%= render AdvancedSearch::Value.new(
       conditions_form: conditions_form,
       group_index: @group_index,
@@ -90,14 +82,15 @@
       condition_index: @condition_index,
     ) %>
   <% end %>
+
   <button
     type="button"
     class="
-      flex-shrink-0 text-slate-400 rounded-lg p-1.5 hover:bg-slate-100 inline-flex
-      items-center justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white
-      dark:bg-slate-800 dark:hover:bg-slate-700 cursor-pointer mb-1
+      mb-1 inline-flex h-8 w-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg p-1.5
+      text-slate-400 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-500 dark:hover:bg-slate-700
+      dark:hover:text-white
     "
-    title="<%=t("components.advanced_search_component.remove_condition_aria_label")%>"
+    title="<%= t("components.advanced_search_component.remove_condition_aria_label") %>"
     data-action="advanced-search#removeCondition"
   >
     <%= pathogen_icon(:x, size: :sm) %>

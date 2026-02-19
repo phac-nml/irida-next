@@ -2,31 +2,45 @@
 
 # View component for advanced search component
 class AdvancedSearchComponent < Component
-  def initialize(form:, search:, sample_fields: [], metadata_fields: [], open: false, status: true) # rubocop: disable Metrics/ParameterLists
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(form:, search:, fields: nil, sample_fields: [], metadata_fields: [], open: false, status: true,
+                 search_group_class: nil, search_condition_class: nil)
     @form = form
     @search = search
-    @sample_fields = sample_field_options(sample_fields)
-    @metadata_fields = metadata_field_options(metadata_fields)
+    @fields = normalized_fields(fields:, sample_fields:, metadata_fields:)
     @operations = operation_options
     @open = open
     @status = status
+    @search_group_class = search_group_class || infer_search_group_class
+    @search_condition_class = search_condition_class || infer_search_condition_class
   end
+  # rubocop:enable Metrics/ParameterLists
 
   private
 
-  def sample_field_options(sample_fields)
-    sample_fields.map do |sample_field|
-      [I18n.t("samples.table_component.#{sample_field}"), sample_field]
-    end
+  def normalized_fields(fields:, sample_fields:, metadata_fields:)
+    return fields.deep_symbolize_keys if fields.present?
+
+    AdvancedSearch::Fields.for_samples(sample_fields:, metadata_fields:)
   end
 
-  def metadata_field_options(metadata_fields)
-    metadata_field_options = metadata_fields.map do |metadata_field|
-      [metadata_field, "metadata.#{metadata_field}"]
-    end
-    {
-      I18n.t('components.advanced_search_component.operation.metadata_fields') => metadata_field_options
-    }
+  def infer_search_group_class
+    @search.groups.first&.class || raise(
+      ArgumentError,
+      'search_group_class is required when search has no groups'
+    )
+  end
+
+  def infer_search_condition_class
+    return @search_group_class.condition_class if @search_group_class.respond_to?(:condition_class)
+
+    first_group = @search.groups.first
+    first_condition = first_group&.conditions&.first
+
+    first_condition&.class || raise(
+      ArgumentError,
+      'search_condition_class is required when group class does not define .condition_class'
+    )
   end
 
   def operation_options
