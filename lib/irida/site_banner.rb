@@ -27,10 +27,10 @@ module Irida
     end
 
     def messages
-      payload = load_payload
-      return [] unless payload.is_a?(Hash)
+      payload = indifferent_hash(load_payload)
+      return [] unless payload
 
-      entries = payload['messages'] || payload[:messages]
+      entries = payload[:messages]
       return [] unless entries.is_a?(Array)
 
       entries.filter_map { |entry| normalize_entry(entry) }
@@ -51,14 +51,15 @@ module Irida
     end
 
     def normalize_entry(entry)
-      return unless entry.is_a?(Hash)
-      return if entry.fetch('enabled', entry.fetch(:enabled, true)) == false
+      entry = indifferent_hash(entry)
+      return unless entry
+      return if entry.fetch(:enabled, true) == false
 
-      message = resolve_message(entry['message'] || entry[:message])
+      message = resolve_message(entry[:message])
       return if message.blank?
 
       {
-        type: normalize_type(entry['type'] || entry[:type]),
+        type: normalize_type(entry[:type]),
         message:
       }
     end
@@ -68,19 +69,26 @@ module Irida
       when String
         raw_message
       when Hash
-        localized_message(raw_message)
+        localized_message(indifferent_hash(raw_message))
       end
     end
 
     def localized_message(messages)
+      return unless messages
+
       locale_key = @locale.to_s
 
-      messages[locale_key] || messages[locale_key.to_sym] ||
-        messages['en'] || messages[:en]
+      messages[locale_key] || messages[:en]
     end
 
     def normalize_type(raw_type)
       TYPE_MAPPINGS[raw_type.to_s.to_sym] || DEFAULT_TYPE
+    end
+
+    def indifferent_hash(value)
+      return unless value.is_a?(Hash)
+
+      value.with_indifferent_access
     end
 
     def log_error(message)
