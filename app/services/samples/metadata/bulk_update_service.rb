@@ -2,11 +2,9 @@
 
 module Samples
   module Metadata
-    # Service used to Update Samples::Metadata
+    # Service used to Update multiple metadata fields at a time. Currently used by metadata file import.
     class BulkUpdateService < BaseSampleMetadataUpdateService # rubocop:disable Metrics/ClassLength
-      class NamespaceMetadataUpdateError < StandardError
-      end
-      attr_accessor :namespace, :metadata_payload
+      attr_accessor :namespace, :metadata_payload, :metadata_fields, :metadata_summary_data
 
       def initialize(namespace, metadata_payload, metadata_fields, user = nil, params = {})
         super(user, params)
@@ -17,6 +15,7 @@ module Samples
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        authorize! @namespace, to: :update_sample_metadata?
         activity_data = {}
         unsuccessful_updates = {}
         @metadata_payload.each do |sample_identifier, metadata|
@@ -44,8 +43,6 @@ module Samples
         handle_not_updated_fields(unsuccessful_updates)
 
         create_activities_and_update_metadata_summary(activity_data)
-      rescue Samples::Metadata::BulkUpdateService::NamespaceMetadataUpdateError => e
-        @namespace.reload.errors.add(:sample, e.message)
       end
 
       private
@@ -53,8 +50,7 @@ module Samples
       def validate_metadata_value(key, value, sample_name)
         return unless value.is_a?(Hash)
 
-        raise NamespaceMetadataUpdateError,
-              I18n.t('services.samples.metadata.nested_metadata', sample_name:, key:)
+        @namespace.errors.add(:sample, I18n.t('services.samples.metadata.nested_metadata', sample_name:, key:))
       end
 
       def find_sample(sample_identifier)
@@ -109,8 +105,7 @@ module Samples
       end
 
       def add_sample_query_error(error_key, sample_identifier)
-        raise NamespaceMetadataUpdateError,
-              I18n.t("services.samples.metadata.bulk_update.#{error_key}", sample_identifier:)
+        @namespace.errors.add(:sample, I18n.t("services.samples.metadata.bulk_update.#{error_key}", sample_identifier:))
       end
 
       def create_activities_and_update_metadata_summary(activity_data)
@@ -209,14 +204,6 @@ module Samples
         metadata_changes[:deleted].each do |deleted_metadata|
           @metadata_summary_data[project_puid][:deleted][deleted_metadata] += 1
         end
-      end
-
-      def update_namespace_metadata_summary(project_namespace)
-        namespace_puid = project_namespace.puid
-
-        project_namespace.update_metadata_summary_by_update_service(@metadata_summary_data[namespace_puid][:deleted],
-                                                                    @metadata_summary_data[namespace_puid][:added],
-                                                                    false)
       end
     end
   end
