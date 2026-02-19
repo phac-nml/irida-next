@@ -11,6 +11,7 @@ Flipper.enable(:samples_refresh_notice)
 Flipper.enable(:integration_access_token_generation)
 Flipper.enable(:cancel_multiple_workflows)
 Flipper.enable(:advanced_search_with_auto_complete)
+Flipper.enable(:workflow_execution_advanced_search)
 Flipper.enable(:wes_extended_metadata)
 Flipper.enable(:deferred_samplesheet)
 
