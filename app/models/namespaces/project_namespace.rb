@@ -46,13 +46,13 @@ module Namespaces
       'Project'
     end
 
-    def update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
+    def update_metadata_summary_by_update_service(deleted_metadata, added_metadata, by_one)
       namespaces_to_update = self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
       unless deleted_metadata.empty?
         Namespace.subtract_from_metadata_summary_count(namespaces_to_update, deleted_metadata,
-                                                       true)
+                                                       by_one)
       end
-      Namespace.add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
+      Namespace.add_to_metadata_summary_count(namespaces_to_update, added_metadata, by_one) unless added_metadata.empty?
     end
 
     def update_metadata_summary_by_sample_deletion(sample)

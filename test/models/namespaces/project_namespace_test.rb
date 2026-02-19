@@ -162,7 +162,7 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_equal 633, @project_namespace.parent['metadata_summary']['metadatafield1']
     assert_equal 106, @project_namespace.parent['metadata_summary']['metadatafield2']
 
-    @project_namespace.update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
+    @project_namespace.update_metadata_summary_by_update_service(deleted_metadata, added_metadata, true)
 
     assert_equal 9, @project_namespace.reload['metadata_summary']['metadatafield1']
     assert_equal 36, @project_namespace.reload['metadata_summary']['metadatafield2']
@@ -177,7 +177,7 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
 
     assert_no_changes -> { @project_namespace.reload.metadata_summary } do
       assert_no_changes -> { @project_namespace.parent.reload.metadata_summary } do
-        @project_namespace.update_metadata_summary_by_update_service(deleted_metadata, added_metadata)
+        @project_namespace.update_metadata_summary_by_update_service(deleted_metadata, added_metadata, true)
       end
     end
   end
