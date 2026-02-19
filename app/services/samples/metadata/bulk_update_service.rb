@@ -6,147 +6,124 @@ module Samples
     class BulkUpdateService < BaseSampleMetadataUpdateService # rubocop:disable Metrics/ClassLength
       attr_accessor :namespace, :metadata_payload
 
-      def initialize(namespace, metadata_payload, user = nil, params = {})
+      def initialize(namespace, metadata_payload, metadata_fields, user = nil, params = {})
         super(user, params)
         @namespace = namespace
         @metadata_payload = metadata_payload
-        @include_activity = params.key?(:include_activity) ? params[:include_activity] : true
+        @metadata_fields = metadata_fields
+        @metadata_summary_data = {}
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-        # authorize user can update at the namespace level
-        successful_updates = {}
+        activity_data = {}
         unsuccessful_updates = {}
-        @metadata_payload.each do |sample_id, metadata|
-          sample = find_sample(sample_id)
+        @metadata_payload.each do |sample_identifier, metadata|
+          sample = find_sample(sample_identifier)
           next if sample.nil?
 
-          # authorize user can update at the sample level
-          sample.with_lock do
-            @metadata_change = perform_metadata_update(sample, metadata)
-            sample.save
-          end
-          if !@metadata_change[:not_updated].empty?
-            unsuccessful_updates[sample_id] = @metadata_change[:not_updated]
-          elsif successful_updates.key?(sample.project.puid)
-            successful_updates[sample.project.puid] << { sample_puid: sample.puid, sample_name: sample.name,
-                                                         project_name: sample.project.name,
-                                                         project_puid: sample.project.puid }
+          project_puid = sample.project.puid
+          metadata_changes = perform_metadata_update(sample, metadata)
+
+          if !metadata_changes[:not_updated].empty?
+            unsuccessful_updates[sample_identifier] = metadata_changes[:not_updated]
+          elsif activity_data.key?(project_puid)
+            activity_data[project_puid] << { sample_puid: sample.puid, sample_name: sample.name,
+                                             project_name: sample.project.name,
+                                             project_puid: }
           else
-            successful_updates[sample.project.puid] = [{ sample_puid: sample.puid, sample_name: sample.name,
-                                                         project_name: sample.project.name,
-                                                         project_puid: sample.project.puid }]
+            activity_data[project_puid] = [{ sample_puid: sample.puid, sample_name: sample.name,
+                                             project_name: sample.project.name,
+                                             project_puid: }]
           end
+
+          add_changes_to_metadata_summary(project_puid, metadata_changes)
         end
         unless unsuccessful_updates.empty?
-          unsuccessful_updates.each do |sample_id, changes|
+          unsuccessful_updates.each do |sample_identifier, changes|
             @namespace.errors.add(:sample,
                                   I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
-                                         sample_name: sample_id,
+                                         sample_name: sample_identifier,
                                          metadata_fields: changes.join(', ')))
           end
         end
-        if @include_activity
-          if @namespace.group_namespace?
-            create_group_activity(successful_updates)
-          else
-            create_project_activity(@namespace.puid, successful_updates[@namespace.puid])
-          end
+
+        if @namespace.group_namespace?
+          create_group_activity(activity_data)
+        else
+          create_project_activity_and_update_metadata_summary(@namespace.puid, activity_data[@namespace.puid])
         end
 
-        successful_updates
-        # if @include_activity
-        #   @project.namespace.create_activity key: 'namespaces_project_namespace.samples.metadata.update',
-        #                                      owner: current_user,
-        #                                      parameters:
-        #                                       {
-        #                                         sample_id: @sample.id,
-        #                                         sample_puid: @sample.puid,
-        #                                         action: 'metadata_update'
-        #                                       }
-        # end
-
-        #   update_metadata_summary
-
-        #   handle_not_updated_fields
-
-        #   @metadata_changes
-        # rescue Samples::Metadata::UpdateService::SampleMetadataUpdateValidationError => e
-        #   @sample.reload.errors.add(:base, e.message)
-        #   { added: [], updated: [], deleted: [], not_updated: @metadata.nil? ? [] : @metadata.keys, unchanged: [] }
-        # rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
-        #   @sample.reload.errors.add(:base, e.message)
-        #   @metadata_changes
+        activity_data
       end
 
       private
 
-      def find_sample(sample_id)
-        id_type = determine_sample_id_type(sample_id)
+      def find_sample(sample_identifier)
+        id_type = determine_sample_identifier_type(sample_identifier)
         if @namespace.group_namespace?
-          query_group_samples(id_type, sample_id)
+          query_group_samples(id_type, sample_identifier)
         else
-          query_project_samples(id_type, sample_id)
+          query_project_samples(id_type, sample_identifier)
         end
       end
 
-      def determine_sample_id_type(sample_id)
-        if Irida::PersistentUniqueId.valid_puid?(sample_id, Sample)
+      def determine_sample_identifier_type(sample_identifier)
+        if Irida::PersistentUniqueId.valid_puid?(sample_identifier, Sample)
           'puid'
-        elsif sample_id.match?(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+        elsif sample_identifier.match?(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
           'id'
         else
           'name'
         end
       end
 
-      def query_group_samples(id_type, sample_id)
+      def query_group_samples(id_type, sample_identifier)
         scope = authorized_scope(Sample, type: :relation, as: :namespace_samples,
                                          scope_options: { namespace: @namespace,
                                                           minimum_access_level: Member::AccessLevel::MAINTAINER })
         if id_type == 'puid'
-          scope.find_by(puid: sample_id)
+          scope.find_by(puid: sample_identifier)
         elsif id_type == 'id'
-          scope.find_by(id: sample_id)
+          scope.find_by(id: sample_identifier)
         else
-          sample = scope.where(name: sample_id)
+          sample = scope.where(name: sample_identifier)
           return sample.first unless sample.count != 1
 
-          add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_id)
+          add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_identifier)
           nil
         end
       end
 
-      def query_project_samples(id_type, sample_id)
+      def query_project_samples(id_type, sample_identifier)
         project = @namespace.project
         if id_type == 'puid'
-          Sample.find_by(puid: sample_id, project_id: project.id)
+          Sample.find_by(puid: sample_identifier, project_id: project.id)
         elsif id_type == 'id'
-          Sample.find_by(id: sample_id, project_id: project.id)
+          Sample.find_by(id: sample_identifier, project_id: project.id)
         else
-          sample = Sample.where(name: sample_id, project_id: project.id)
+          sample = Sample.where(name: sample_identifier, project_id: project.id)
           return sample.first unless sample.count != 1
 
-          add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_id)
+          add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_identifier)
           nil
         end
       end
 
-      def add_sample_query_error(error_key, sample_id)
+      def add_sample_query_error(error_key, sample_identifier)
         @namespace.errors.add(
           :sample,
           I18n.t(
             "services.samples.metadata.bulk_update.#{error_key}",
-            sample_identifier: sample_id
+            sample_identifier:
           )
         )
       end
 
-      def create_group_activity(successful_updates) # rubocop:disable Metrics/MethodLength
+      def create_group_activity(activity_data) # rubocop:disable Metrics/MethodLength
         group_sample_count = 0
         group_data = []
-        successful_updates.each do |project_puid, sample_data|
-          create_project_activity(project_puid, sample_data)
+        activity_data.each do |project_puid, sample_data|
+          create_project_activity_and_update_metadata_summary(project_puid, sample_data)
           group_sample_count += sample_data.count
           group_data << sample_data
         end
@@ -167,8 +144,12 @@ module Samples
                                                  activity_type: 'group_import_metadata')
       end
 
-      def create_project_activity(project_puid, sample_data)
-        project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
+      def create_project_activity_and_update_metadata_summary(project_puid, sample_data) # rubocop:disable Metrics/MethodLength
+        project_namespace = if @namespace.group_namespace?
+                              Namespaces::ProjectNamespace.find_by(puid: project_puid)
+                            else
+                              @namespace
+                            end
 
         ext_details = ExtendedDetail.create!(details: {
                                                imported_metadata_samples_count: sample_data.count,
@@ -184,53 +165,9 @@ module Samples
                                                      }
         activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
                                                  activity_type: 'project_import_metadata')
+
+        update_metadata_summary(project_namespace)
       end
-
-      # def perform_metadata_update
-      #   @metadata.each do |key, value|
-      #     validate_metadata_value(key, value)
-
-      #     key = strip_whitespaces(key.to_s.downcase)
-      #     value = strip_whitespaces(value.to_s) # remove data types
-      #     status = get_metadata_change_status(key, value)
-      #     next unless status
-
-      #     @metadata_changes[status] << key
-      #     if %i[updated added].include?(status)
-      #       add_metadata_to_sample(key, value)
-      #     elsif status == :deleted
-      #       remove_metadata_from_sample(key)
-      #     end
-      #   end
-      # end
-
-      # def remove_metadata_from_sample(key)
-      #   @sample.metadata.delete(key)
-      #   @sample.metadata_provenance.delete(key)
-      # end
-
-      # def add_metadata_to_sample(key, value)
-      #   @sample.metadata_provenance[key] =
-      #     if @analysis_id.nil?
-      #       { source: 'user', id: current_user.id, updated_at: Time.current }
-      #     else
-      #       { source: 'analysis', id: @analysis_id, updated_at: Time.current }
-      #     end
-      #   @sample.metadata[key] = value
-      # end
-
-      # def get_metadata_change_status(key, value)
-      #   if value.blank?
-      #     :deleted if @sample.field?(key)
-      #   elsif @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
-      #         @sample.metadata_provenance[key]['source'] == 'analysis'
-      #     :not_updated
-      #   elsif @sample.field?(key) && @sample.metadata[key] == value
-      #     @force_update ? :updated : :unchanged
-      #   else
-      #     @sample.field?(key) ? :updated : :added
-      #   end
-      # end
 
       # Metadata fields that were not updated due to a user trying to overwrite metadata previously added by an
       # analysis in assign_metadata_to_sample are handled here, where they are assigned to the @sample.error
@@ -244,11 +181,39 @@ module Samples
                      sample_name: @sample.name, metadata_fields: metadata_fields_not_updated.join(', '))
       end
 
-      def update_metadata_summary
-        return unless @metadata_changes[:added].any? || @metadata_changes[:deleted].any?
+      def add_changes_to_metadata_summary(project_puid, metadata_changes)
+        initialize_metadata_summary_data(project_puid) unless @metadata_summary_data.key?(project_puid)
+        execute_metadata_changes(project_puid, metadata_changes)
+      end
 
-        @project.namespace.update_metadata_summary_by_update_service(@metadata_changes[:deleted],
-                                                                     @metadata_changes[:added])
+      def initialize_metadata_summary_data(project_puid)
+        @metadata_summary_data[project_puid] = { added: {}, deleted: {} }
+        @metadata_fields.each do |metadata_field|
+          @metadata_summary_data[project_puid][:added][metadata_field] = 0
+          @metadata_summary_data[project_puid][:deleted][metadata_field] = 0
+        end
+      end
+
+      def execute_metadata_changes(project_puid, metadata_changes)
+        unless metadata_changes[:added].empty?
+          metadata_changes[:added].each do |added_metadata|
+            @metadata_summary_data[project_puid][:added][added_metadata] += 1
+          end
+        end
+
+        return if metadata_changes[:deleted].empty?
+
+        metadata_changes[:deleted].each do |deleted_metadata|
+          @metadata_summary_data[project_puid][:deleted][deleted_metadata] += 1
+        end
+      end
+
+      def update_metadata_summary(project_namespace)
+        namespace_puid = project_namespace.puid
+
+        project_namespace.update_metadata_summary_by_update_service(@metadata_summary_data[namespace_puid][:deleted],
+                                                                    @metadata_summary_data[namespace_puid][:added],
+                                                                    false)
       end
     end
   end

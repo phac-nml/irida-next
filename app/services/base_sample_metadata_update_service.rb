@@ -1,29 +1,30 @@
 # frozen_string_literal: true
 
-# Service used to Delete Samples
+# Base service for metadata update service shared logic
 class BaseSampleMetadataUpdateService < BaseService
-  attr_accessor :sample, :sample_ids, :namespace
-
   def initialize(user = nil, params = {})
     super
   end
 
   private
 
-  def perform_metadata_update(sample, metadata)
+  def perform_metadata_update(sample, metadata) # rubocop:disable Metrics/MethodLength
     metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
-    metadata.each do |key, value|
-      key = strip_whitespaces(key.to_s.downcase)
-      value = strip_whitespaces(value.to_s) # remove data types
-      status = get_metadata_change_status(sample, key, value)
-      next unless status
+    sample.with_lock do
+      metadata.each do |key, value|
+        key = strip_whitespaces(key.to_s.downcase)
+        value = strip_whitespaces(value.to_s) # remove data types
+        status = get_metadata_change_status(sample, key, value)
+        next unless status
 
-      metadata_changes[status] << key
-      if %i[updated added].include?(status)
-        add_metadata_to_sample(sample, key, value)
-      elsif status == :deleted
-        remove_metadata_from_sample(sample, key)
+        metadata_changes[status] << key
+        if %i[updated added].include?(status)
+          add_metadata_to_sample(sample, key, value)
+        elsif status == :deleted
+          remove_metadata_from_sample(sample, key)
+        end
       end
+      sample.save
     end
     metadata_changes
   end
@@ -55,4 +56,11 @@ class BaseSampleMetadataUpdateService < BaseService
       sample.field?(key) ? :updated : :added
     end
   end
+
+  # def update_metadata_summary(project_namespace, metadata_changes)
+  #   return unless metadata_changes[:added].any? || metadata_changes[:deleted].any?
+
+  #   project_namespace.update_metadata_summary_by_update_service(metadata_changes[:deleted],
+  #                                                               metadata_changes[:added])
+  # end
 end

@@ -147,7 +147,7 @@ module Samples
         return unless @metadata_changes[:added].any? || @metadata_changes[:deleted].any?
 
         @project.namespace.update_metadata_summary_by_update_service(@metadata_changes[:deleted],
-                                                                     @metadata_changes[:added])
+                                                                     @metadata_changes[:added], true)
       end
     end
   end

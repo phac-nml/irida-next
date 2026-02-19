@@ -47,7 +47,7 @@ module Samples
           bulk_metadata_payload[sample_id] = metadata
         end
 
-        BulkUpdateService.new(@namespace, bulk_metadata_payload, current_user, { include_activity: true }).execute
+        BulkUpdateService.new(@namespace, bulk_metadata_payload, @selected_headers, current_user).execute
         update_progress_bar(percentage_denominator, percentage_denominator, broadcast_target)
         response
       end
@@ -55,7 +55,7 @@ module Samples
       private
 
       def retrieve_headers
-        headers = @selected_headers << @sample_id_column
+        headers = [*@selected_headers, *@sample_id_column]
         strip_headers(headers)
       end
     end
