@@ -44,7 +44,7 @@ module Samples
                                               }
         end
 
-        update_namespace_metadata_summary(@project.namespace, @metadata_changes[:added], @metadata_changes[:deleted],
+        update_namespace_metadata_summary(@project.namespace, @metadata_changes[:deleted], @metadata_changes[:added],
                                           true)
 
         handle_not_updated_fields

@@ -40,7 +40,7 @@ class BaseSampleMetadataUpdateService < BaseService
       if @analysis_id.nil?
         { source: 'user', id: current_user.id, updated_at: Time.current }
       else
-        { source: 'analysis', id: '1', updated_at: Time.current }
+        { source: 'analysis', id: @analysis_id, updated_at: Time.current }
       end
     sample.metadata[key] = value
   end
@@ -58,7 +58,7 @@ class BaseSampleMetadataUpdateService < BaseService
     end
   end
 
-  def update_namespace_metadata_summary(project_namespace, added_metadata, deleted_metadata, by_one)
+  def update_namespace_metadata_summary(project_namespace, deleted_metadata, added_metadata, by_one)
     project_namespace.update_metadata_summary_by_update_service(deleted_metadata,
                                                                 added_metadata,
                                                                 by_one)
