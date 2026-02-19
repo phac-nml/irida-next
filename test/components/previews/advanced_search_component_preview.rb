@@ -25,7 +25,7 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
 
     render_with_template(locals: {
                            search: search,
-                           fields: fields
+                           advanced_search_fields: fields
                          })
   end
 
@@ -38,14 +38,14 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
 
     render_with_template(template: 'advanced_search_component_preview/default', locals: {
                            search: search,
-                           fields: fields
+                           advanced_search_fields: fields
                          })
   end
 
   def workflow
     render_with_template(template: 'advanced_search_component_preview/default', locals: {
                            search: workflow_search,
-                           fields: workflow_fields
+                           advanced_search_fields: workflow_fields
                          })
   end
 
