@@ -52,12 +52,15 @@ module Pathogen
     }
     attr_reader :rows
 
-    def initialize(rows:, caption: nil, sticky_columns: 0, fill_container: false, **system_arguments)
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(rows:, caption: nil, sticky_columns: 0, fill_container: false, dense: false, **system_arguments)
+      # rubocop:enable Metrics/ParameterLists
       @rows = rows
       @caption = caption
       @caption_id = @caption.present? ? self.class.generate_id(base_name: 'data-grid-caption') : nil
       @sticky_columns = sticky_columns
       @fill_container = fill_container
+      @dense = dense
       @system_arguments = system_arguments
       @system_arguments[:class] = class_names(@system_arguments[:class], 'pathogen-data-grid')
     end
@@ -74,11 +77,18 @@ module Pathogen
 
     def before_render
       apply_fill_container_class!
+      apply_dense_class!
       apply_column_defaults!
       apply_responsive_sticky_class!
     end
 
     private
+
+    def apply_dense_class!
+      return unless @dense
+
+      @system_arguments[:class] = class_names(@system_arguments[:class], 'pathogen-data-grid--dense')
+    end
 
     def apply_column_defaults!
       sticky_offset = 0
