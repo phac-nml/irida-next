@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'yaml'
-
 module Irida
   # Reads persistent site banner messages from YAML.
   class SiteBanner
@@ -27,7 +25,7 @@ module Irida
     end
 
     def messages
-      payload = symbolize_hash(load_payload)
+      payload = load_payload&.deep_symbolize_keys
       return [] unless payload
 
       entries = payload[:messages]
@@ -39,21 +37,21 @@ module Irida
     private
 
     def load_payload
-      return unless File.exist?(@path)
-
-      YAML.safe_load_file(@path, aliases: true) || {}
-    rescue Psych::SyntaxError => e
+      result = YAML.safe_load_file(@path)
+      result.is_a?(Hash) ? result : nil
+    rescue Errno::ENOENT
+      nil
+    rescue Psych::Exception => e
       log_error("Invalid YAML in #{@path}: #{e.class}: #{e.message}")
       nil
-    rescue Errno::ENOENT, Errno::EACCES => e
+    rescue Errno::EACCES => e
       log_error("Unable to read banner config #{@path}: #{e.class}: #{e.message}")
       nil
     end
 
     def normalize_entry(entry)
-      entry = symbolize_hash(entry)
-      return unless entry
-      return if entry.fetch(:enabled, true) == false
+      return unless entry.is_a?(Hash)
+      return unless enabled?(entry)
 
       message = resolve_message(entry[:message])
       return if message.blank?
@@ -69,26 +67,21 @@ module Irida
       when String
         raw_message
       when Hash
-        localized_message(symbolize_hash(raw_message))
+        localized_message(raw_message)
       end
     end
 
     def localized_message(messages)
-      return unless messages
+      messages[@locale.to_sym] || messages[I18n.default_locale.to_sym]
+    end
 
-      locale_key = @locale.to_s.to_sym
-
-      messages[locale_key] || messages[:en]
+    def enabled?(entry)
+      enabled = entry.fetch(:enabled, true)
+      ActiveModel::Type::Boolean.new.cast(enabled) != false
     end
 
     def normalize_type(raw_type)
       TYPE_MAPPINGS[raw_type.to_s.to_sym] || DEFAULT_TYPE
-    end
-
-    def symbolize_hash(value)
-      return unless value.is_a?(Hash)
-
-      value.deep_transform_keys(&:to_sym)
     end
 
     def log_error(message)

@@ -49,6 +49,25 @@ module Irida
       assert_equal 'Render me', messages.first[:message]
     end
 
+    test 'filters out disabled entries when enabled uses yaml falsey strings' do
+      write_banner <<~YAML
+        messages:
+          - enabled: "false"
+            message: "Do not render"
+          - enabled: "0"
+            message: "Do not render either"
+          - enabled: "off"
+            message: "Skip this one too"
+          - enabled: "true"
+            message: "Render me"
+      YAML
+
+      messages = SiteBanner.messages(path: @banner_path)
+
+      assert_equal 1, messages.length
+      assert_equal 'Render me', messages.first[:message]
+    end
+
     test 'defaults type to warning when type is missing' do
       write_banner <<~YAML
         messages:
@@ -76,7 +95,7 @@ module Irida
       assert_equal 'English text', en_message
     end
 
-    test 'falls back to english when locale key is missing' do
+    test 'falls back to default locale when locale key is missing' do
       write_banner <<~YAML
         messages:
           - message:
@@ -86,6 +105,20 @@ module Irida
       message = I18n.with_locale(:fr) { SiteBanner.messages(path: @banner_path).first[:message] }
 
       assert_equal 'English fallback', message
+    end
+
+    test 'falls back to configured default locale when locale key is missing' do
+      write_banner <<~YAML
+        messages:
+          - message:
+              fr: "Texte par defaut"
+      YAML
+
+      I18n.stubs(:default_locale).returns(:fr)
+
+      message = I18n.with_locale(:en) { SiteBanner.messages(path: @banner_path).first[:message] }
+
+      assert_equal 'Texte par defaut', message
     end
 
     test 'skips localized message without current locale or english fallback' do
@@ -116,6 +149,27 @@ module Irida
         mock_logger = Object.new
         mock_logger.define_singleton_method(:error) { |message| logged_messages << message }
         Rails.logger = mock_logger
+
+        messages = SiteBanner.messages(path: @banner_path)
+
+        assert_equal [], messages
+      ensure
+        Rails.logger = original_logger
+      end
+
+      assert(logged_messages.any? { |message| message.include?('Invalid YAML in') })
+    end
+
+    test 'logs error and returns empty array when yaml parser raises psych exception' do
+      original_logger = Rails.logger
+      logged_messages = []
+
+      begin
+        mock_logger = Object.new
+        mock_logger.define_singleton_method(:error) { |message| logged_messages << message }
+        Rails.logger = mock_logger
+
+        YAML.expects(:safe_load_file).with(@banner_path).raises(Psych::Exception.new('boom'))
 
         messages = SiteBanner.messages(path: @banner_path)
 
