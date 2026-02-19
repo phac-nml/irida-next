@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'test_helper'
 require 'test_helpers/faraday_test_helpers'
 
 class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
   include FaradayTestHelpers
+  include ActiveJob::Continuation::TestHelper
 
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_new)
@@ -91,6 +93,63 @@ class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
     @workflow_execution.create_logidze_snapshot!
     assert_equal 2, @workflow_execution.log_data.version
     assert_equal 2, @workflow_execution.log_data.size
+  end
+
+  test 'prepare workflow_execution with valid params with interrupts' do
+    @workflow_execution = workflow_executions(:irida_next_example)
+
+    assert @workflow_execution.initial?
+
+    WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
+    assert_difference -> { ActiveStorage::Attachment.count } => 0 do
+      interrupt_job_after_step(WorkflowExecutionPreparationJob, :pipeline_validation) do
+        perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+      end
+    end
+    @workflow_execution.reload
+
+    assert @workflow_execution.initial?
+    assert_equal 0, @workflow_execution.inputs.size
+    assert_equal 0, @workflow_execution.samples_workflow_executions.first.inputs.size
+    assert_performed_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
+
+    assert_difference -> { ActiveStorage::Attachment.count } => 2 do
+      interrupt_job_after_step(WorkflowExecutionPreparationJob, :build_samplesheet) do
+        perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+      end
+    end
+    @workflow_execution.reload
+
+    assert @workflow_execution.initial?
+    assert_equal 1, @workflow_execution.inputs.size
+    assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
+    assert_performed_jobs(2, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
+
+    interrupt_job_after_step(WorkflowExecutionPreparationJob, :update_state_step) do
+      perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+    end
+    @workflow_execution.reload
+
+    assert_equal 'prepared', @workflow_execution.state
+    assert_equal 1, @workflow_execution.inputs.size
+    assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
+    assert_performed_jobs(3, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
+
+    perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+    @workflow_execution.reload
+
+    assert_equal 'prepared', @workflow_execution.state
+    assert_equal 1, @workflow_execution.inputs.size
+    assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
+    assert_performed_jobs(4, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionSubmissionJob)
   end
 
   test 'should return false since chosen pipeline is not executable' do
