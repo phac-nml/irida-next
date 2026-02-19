@@ -18,10 +18,13 @@ export default class extends Controller {
     open: Boolean,
     status: Boolean,
   };
-  #hidden_classes = ["invisible", "@max-xl:hidden"];
+
+  #hiddenClasses = ["invisible", "@max-xl:hidden"];
+  #groupSelector = "fieldset[data-advanced-search-target='groupsContainer']";
+  #conditionSelector =
+    "fieldset[data-advanced-search-target='conditionsContainer']";
 
   connect() {
-    // Render the search if openValue is true on connect
     if (this.openValue) {
       this.renderSearch();
     }
@@ -61,127 +64,87 @@ export default class extends Controller {
       event.stopImmediatePropagation();
     } else if (!this.#dirty()) {
       this.clear();
+    } else if (window.confirm(this.confirmCloseTextValue)) {
+      this.clear();
     } else {
-      if (window.confirm(this.confirmCloseTextValue)) {
-        this.clear();
-      } else {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-      }
+      event.stopImmediatePropagation();
+      event.preventDefault();
     }
   }
 
   addCondition(event) {
-    const group = event.currentTarget.parentElement.closest(
-      "fieldset[data-advanced-search-target='groupsContainer']",
-    );
+    const group = event.currentTarget.closest(this.#groupSelector);
     this.#addConditionToGroup(group);
     this.clearSubmitError();
   }
 
   removeCondition(event) {
-    const condition = event.currentTarget.parentElement;
-    const group = condition.closest(
-      "fieldset[data-advanced-search-target='groupsContainer']",
-    );
+    const condition = event.currentTarget.closest(this.#conditionSelector);
+    const group = condition?.closest(this.#groupSelector);
 
+    if (!condition || !group) {
+      return;
+    }
+
+    const conditions = this.#conditionElements(group);
+    const removedIndex = conditions.indexOf(condition);
     condition.remove();
-    const conditions = group.querySelectorAll(
-      "fieldset[data-advanced-search-target='conditionsContainer']",
-    );
-    //re-index the fieldset legend & all the form fields within the group
-    conditions.forEach((condition, index) => {
-      const legend = condition.querySelector("legend");
-      const updatedLegend = legend.innerHTML.replace(
-        /(Condition\s)\d+/,
-        "$1" + (index + 1),
-      );
-      legend.innerHTML = updatedLegend;
-      const inputFields = condition.querySelectorAll("[name]");
-      inputFields.forEach((inputField) => {
-        const updatedInputFieldName = inputField.name.replace(
-          /(\[conditions_attributes\]\[)\d+?(\])/,
-          "$1" + index + "$2",
-        );
-        inputField.name = updatedInputFieldName;
-      });
-    });
-    if (conditions.length === 0) {
+
+    const remainingConditions = this.#conditionElements(group);
+
+    if (remainingConditions.length === 0) {
       this.#addConditionToGroup(group);
     } else {
-      group.children[conditions.length].querySelector("select")?.focus();
-      group.children[conditions.length]
-        .querySelector("input:not([type='hidden'])")
-        ?.focus();
+      this.#reindexGroup(group, this.#groupElements().indexOf(group));
+      const focusIndex = Math.min(removedIndex, remainingConditions.length - 1);
+      this.#focusConditionInput(remainingConditions[focusIndex]);
     }
+
     this.clearSubmitError();
   }
 
   addGroup() {
-    const group_index = this.groupsContainerTargets.length;
+    const groupIndex = this.#groupElements().length;
+
     this.searchGroupsContainerTarget.insertAdjacentHTML(
       "beforeend",
       this.groupTemplateTarget.innerHTML
-        .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-        .replace(/GROUP_LEGEND_INDEX_PLACEHOLDER/g, group_index + 1),
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+        .replace(/GROUP_LEGEND_INDEX_PLACEHOLDER/g, groupIndex + 1),
     );
-    const newCondition = this.conditionTemplateTarget.innerHTML
-      .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-      .replace(/CONDITION_INDEX_PLACEHOLDER/g, 0)
-      .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, 1);
-    const group = this.groupsContainerTargets[group_index];
-    group.insertAdjacentHTML("afterbegin", newCondition);
-    group.querySelector("select")?.focus();
-    group.querySelector("input:not([type='hidden'])")?.focus();
-    //show 'Remove group' buttons if there's more than one group
-    if (this.groupsContainerTargets.length > 1) {
-      this.groupsContainerTargets.forEach((group) => {
-        group
-          .querySelector(
-            "div > button[data-action='advanced-search#removeGroup']",
-          )
-          .classList.remove("hidden");
-      });
-    }
+
+    const group = this.#groupElements().at(-1);
+    this.#addConditionToGroup(group);
+    this.#toggleRemoveGroupButtons();
     this.clearSubmitError();
   }
 
   removeGroup(event) {
-    if (this.groupsContainerTargets.length > 1) {
-      event.currentTarget.parentElement.parentElement.remove();
-      //re-index the fieldset legend & all the form fields within all the groups
-      this.groupsContainerTargets.forEach((group, index) => {
-        const legend = Array.from(group.children).filter((child) =>
-          child.matches("legend"),
-        )[0];
-        const updatedLegend = legend.innerHTML.replace(
-          /(Group\s)\d+/,
-          "$1" + (index + 1),
-        );
-        legend.innerHTML = updatedLegend;
-        const inputFields = group.querySelectorAll("[name]");
-        inputFields.forEach((inputField) => {
-          const updatedInputFieldName = inputField.name.replace(
-            /(\[groups_attributes\]\[)\d+?(\])/,
-            "$1" + index + "$2",
-          );
-          inputField.name = updatedInputFieldName;
-        });
-      });
-      this.groupsContainerTargets.at(-1).querySelector("select")?.focus();
-      this.groupsContainerTargets
-        .at(-1)
-        .querySelector("input:not([type='hidden'])")
-        ?.focus();
-      //hide 'Remove group' button if there's one group left
-      if (this.groupsContainerTargets.length === 1) {
-        this.groupsContainerTarget
-          .querySelector(
-            "div > button[data-action='advanced-search#removeGroup']",
-          )
-          .classList.add("hidden");
-      }
+    if (this.#groupElements().length <= 1) {
+      this.clearSubmitError();
+      return;
     }
+
+    const group = event.currentTarget.closest(this.#groupSelector);
+
+    if (!group) {
+      this.clearSubmitError();
+      return;
+    }
+
+    const groups = this.#groupElements();
+    const removedIndex = groups.indexOf(group);
+    group.remove();
+
+    this.#reindexAllGroups();
+    this.#toggleRemoveGroupButtons();
+
+    const remainingGroups = this.#groupElements();
+    const focusGroup =
+      remainingGroups[Math.min(removedIndex, remainingGroups.length - 1)];
+    const focusCondition = this.#conditionElements(focusGroup)[0];
+    this.#focusConditionInput(focusCondition);
+
     this.clearSubmitError();
   }
 
@@ -193,35 +156,40 @@ export default class extends Controller {
 
   handleOperatorChange(event) {
     const operator = event.target.value;
-    const condition = event.target.parentElement.closest(
-      "fieldset[data-advanced-search-target='conditionsContainer']",
-    );
+    const condition = event.target.closest(this.#conditionSelector);
+    const group = condition?.closest(this.#groupSelector);
+
+    if (!condition || !group) {
+      this.clearSubmitError();
+      return;
+    }
+
     const value = condition.querySelector(".value");
-    const group = condition.parentElement;
-    const group_index = this.groupsContainerTargets.indexOf(group);
-    const condition_index = [
-      ...group.querySelectorAll(
-        "fieldset[data-advanced-search-target='conditionsContainer']",
-      ),
-    ].indexOf(condition);
+    const groupIndex = this.#groupElements().indexOf(group);
+    const conditionIndex = this.#conditionElements(group).indexOf(condition);
+
+    if (!value || groupIndex < 0 || conditionIndex < 0) {
+      this.clearSubmitError();
+      return;
+    }
 
     if (["", "exists", "not_exists"].includes(operator)) {
-      value.classList.add(...this.#hidden_classes);
-      const inputs = value.querySelectorAll("input");
-      inputs.forEach((input) => {
+      value.classList.add(...this.#hiddenClasses);
+      value.querySelectorAll("input").forEach((input) => {
         input.value = "";
       });
     } else if (["in", "not_in"].includes(operator)) {
-      value.classList.remove(...this.#hidden_classes);
+      value.classList.remove(...this.#hiddenClasses);
       value.outerHTML = this.listValueTemplateTarget.innerHTML
-        .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-        .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
     } else {
-      value.classList.remove(...this.#hidden_classes);
+      value.classList.remove(...this.#hiddenClasses);
       value.outerHTML = this.valueTemplateTarget.innerHTML
-        .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-        .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
     }
+
     this.clearSubmitError();
   }
 
@@ -234,19 +202,145 @@ export default class extends Controller {
   }
 
   #addConditionToGroup(group) {
-    const group_index = this.groupsContainerTargets.indexOf(group);
-    const condition_index = group.querySelectorAll(
-      "fieldset[data-advanced-search-target='conditionsContainer']",
-    ).length;
+    if (!group) {
+      return;
+    }
+
+    const groupIndex = this.#groupElements().indexOf(group);
+    const conditionIndex = this.#conditionElements(group).length;
     const newCondition = this.conditionTemplateTarget.innerHTML
-      .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-      .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index)
-      .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, condition_index + 1);
-    group.lastElementChild.insertAdjacentHTML("beforebegin", newCondition);
-    group.children[condition_index + 1].querySelector("select")?.focus();
-    group.children[condition_index + 1]
-      .querySelector("input:not([type='hidden'])")
-      ?.focus();
+      .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex)
+      .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, conditionIndex + 1);
+
+    const actionsContainer = this.#groupActionsContainer(group);
+
+    if (actionsContainer) {
+      actionsContainer.insertAdjacentHTML("beforebegin", newCondition);
+    } else {
+      group.insertAdjacentHTML("beforeend", newCondition);
+    }
+
+    this.#reindexGroup(group, groupIndex);
+    this.#focusConditionInput(this.#conditionElements(group).at(-1));
+  }
+
+  #groupActionsContainer(group) {
+    return group
+      .querySelector("button[data-action='advanced-search#addCondition']")
+      ?.closest("div");
+  }
+
+  #groupElements() {
+    return Array.from(
+      this.searchGroupsContainerTarget.querySelectorAll(this.#groupSelector),
+    );
+  }
+
+  #conditionElements(group) {
+    return Array.from(group.querySelectorAll(this.#conditionSelector));
+  }
+
+  #reindexAllGroups() {
+    this.#groupElements().forEach((group, groupIndex) => {
+      this.#reindexGroup(group, groupIndex);
+    });
+  }
+
+  #reindexGroup(group, groupIndex) {
+    if (!group || groupIndex < 0) {
+      return;
+    }
+
+    group.dataset.advancedSearchGroupIndex = String(groupIndex);
+    this.#updateLegend(group, groupIndex + 1);
+
+    this.#conditionElements(group).forEach((condition, conditionIndex) => {
+      this.#reindexCondition(condition, groupIndex, conditionIndex);
+    });
+  }
+
+  #reindexCondition(condition, groupIndex, conditionIndex) {
+    condition.dataset.advancedSearchGroupIndex = String(groupIndex);
+    condition.dataset.advancedSearchConditionIndex = String(conditionIndex);
+    this.#updateLegend(condition, conditionIndex + 1);
+
+    ["name", "id", "for", "aria-describedby"].forEach((attribute) => {
+      condition.querySelectorAll(`[${attribute}]`).forEach((element) => {
+        const currentValue = element.getAttribute(attribute);
+
+        if (!currentValue) {
+          return;
+        }
+
+        const updatedValue = this.#replaceConditionIndex(
+          this.#replaceGroupIndex(currentValue, groupIndex),
+          conditionIndex,
+        );
+
+        if (updatedValue !== currentValue) {
+          element.setAttribute(attribute, updatedValue);
+        }
+      });
+    });
+  }
+
+  #replaceGroupIndex(value, groupIndex) {
+    return value
+      .replace(/(\[groups_attributes\]\[)\d+(\])/g, `$1${groupIndex}$2`)
+      .replace(/(_groups_attributes_)\d+(_)/g, `$1${groupIndex}$2`);
+  }
+
+  #replaceConditionIndex(value, conditionIndex) {
+    return value
+      .replace(/(\[conditions_attributes\]\[)\d+(\])/g, `$1${conditionIndex}$2`)
+      .replace(/(_conditions_attributes_)\d+(_)/g, `$1${conditionIndex}$2`);
+  }
+
+  #updateLegend(container, index) {
+    const legend = Array.from(container.children).find(
+      (child) => child.tagName === "LEGEND",
+    );
+    const legendTemplate = container.dataset.advancedSearchLegendTemplate;
+
+    if (!legend || !legendTemplate) {
+      return;
+    }
+
+    legend.textContent = legendTemplate.replace("__INDEX__", index);
+  }
+
+  #toggleRemoveGroupButtons() {
+    const showRemoveButton = this.#groupElements().length > 1;
+
+    this.#groupElements().forEach((group) => {
+      const removeButton = group.querySelector(
+        "button[data-action='advanced-search#removeGroup']",
+      );
+
+      if (!removeButton) {
+        return;
+      }
+
+      removeButton.classList.toggle("hidden", !showRemoveButton);
+    });
+  }
+
+  #focusConditionInput(condition) {
+    if (!condition) {
+      return;
+    }
+
+    const fieldInput = condition.querySelector(
+      "input[role='combobox'], select[name$='[field]'], [name$='[field]']",
+    );
+
+    if (fieldInput) {
+      fieldInput.focus();
+      return;
+    }
+
+    condition.querySelector("input:not([type='hidden'])")?.focus();
   }
 
   #hasAtLeastOneCompleteCondition() {
@@ -289,38 +383,42 @@ export default class extends Controller {
   }
 
   #focusFirstConditionField() {
-    const firstCondition = this.conditionsContainerTargets[0];
-
-    if (!firstCondition) {
-      return;
-    }
-
-    const fieldInput = firstCondition.querySelector(
-      "input[role='combobox'], select[name$='[field]'], [name$='[field]']",
-    );
-    fieldInput?.focus();
+    this.#focusConditionInput(this.conditionsContainerTargets[0]);
   }
 
   #dirty() {
-    let dirty = true;
-    if (
-      this.searchGroupsContainerTarget.innerHTML.trim() ===
-      this.searchGroupsTemplateTarget.innerHTML.trim()
-    ) {
-      dirty = false;
-      const currentInputs = this.searchGroupsContainerTarget.querySelectorAll(
-        "[id^='q_groups_attributes_']",
+    const currentState = this.#serializeFormState(
+      this.searchGroupsContainerTarget,
+    );
+
+    const originalContainer = document.createElement("div");
+    originalContainer.innerHTML = this.searchGroupsTemplateTarget.innerHTML;
+    const originalState = this.#serializeFormState(originalContainer);
+
+    return currentState !== originalState;
+  }
+
+  #serializeFormState(rootElement) {
+    const groups = Array.from(
+      rootElement.querySelectorAll(this.#groupSelector),
+    ).map((group) => {
+      return Array.from(group.querySelectorAll(this.#conditionSelector)).map(
+        (condition) => {
+          const listValues = Array.from(
+            condition.querySelectorAll("[name$='[value][]']"),
+          ).map((input) => input.value);
+          const singleValue =
+            condition.querySelector("[name$='[value]']")?.value;
+
+          return {
+            field: condition.querySelector("[name$='[field]']")?.value,
+            operator: condition.querySelector("[name$='[operator]']")?.value,
+            values: listValues.length > 0 ? listValues : [singleValue],
+          };
+        },
       );
-      const originalInputs =
-        this.searchGroupsTemplateTarget.content.querySelectorAll(
-          "[id^='q_groups_attributes_']",
-        );
-      originalInputs.forEach((item, index) => {
-        if (item.value !== currentInputs[index].value) {
-          dirty = true;
-        }
-      });
-    }
-    return dirty;
+    });
+
+    return JSON.stringify(groups);
   }
 }
