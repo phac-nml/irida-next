@@ -79,7 +79,7 @@ module Groups
     test 'group data grid uses internal vertical scroll when constrained' do
       Flipper.enable(:data_grid_samples_table)
 
-      page.driver.resize(1400, 700)
+      page.current_window.resize_to(1400, 700)
       visit group_samples_url(@group)
 
       assert_selector '#samples-table .pathogen-data-grid__scroll'
@@ -111,7 +111,7 @@ module Groups
       assert_operator metrics['stickyHeaderDelta'], :<, 2
     ensure
       Flipper.disable(:data_grid_samples_table)
-      page.driver.resize(1400, 1400)
+      page.current_window.resize_to(1400, 1400)
     end
 
     test 'visiting the index of a group which has other groups/projects linked to it' do
