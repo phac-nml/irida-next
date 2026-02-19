@@ -33,6 +33,10 @@ module Metadata
   def advanced_search_fields(namespace)
     @sample_fields = %w[name puid created_at updated_at attachments_updated_at]
     @metadata_fields = namespace.metadata_fields
+    @advanced_search_fields = AdvancedSearch::Fields.for_samples(
+      sample_fields: @sample_fields,
+      metadata_fields: @metadata_fields
+    )
   end
 
   # Sets default metadata template if none selected
