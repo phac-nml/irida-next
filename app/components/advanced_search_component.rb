@@ -2,6 +2,8 @@
 
 # View component for advanced search component
 class AdvancedSearchComponent < Component
+  # @param sample_fields [Array] @deprecated Use fields: instead
+  # @param metadata_fields [Array] @deprecated Use fields: instead
   # rubocop:disable Metrics/ParameterLists
   def initialize(form:, search:, fields: nil, sample_fields: [], metadata_fields: [], open: false, status: true,
                  search_group_class: nil, search_condition_class: nil)
@@ -19,7 +21,7 @@ class AdvancedSearchComponent < Component
   private
 
   def normalized_fields(fields:, sample_fields:, metadata_fields:)
-    return fields.deep_symbolize_keys if fields.present?
+    return fields.symbolize_keys if fields.present?
 
     AdvancedSearch::Fields.for_samples(sample_fields:, metadata_fields:)
   end

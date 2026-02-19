@@ -8,6 +8,12 @@ fr:
         field: Champ
         operator: Opérateur
         value: Valeur
+      workflow_execution/search_condition:
+        field: Champ
+        operator: Opérateur
+        value: Valeur
+      workflow_execution/search_group:
+        condition: Condition
       sample/search_group:
         condition: Condition
     errors:
