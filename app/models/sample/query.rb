@@ -5,7 +5,7 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
   class ResultTypeError < StandardError
   end
 
-  allowed_sort_columns :name, :puid, :created_at, :updated_at, :attachments_updated_at
+  allowed_sort_columns :name, :puid, :created_at, :updated_at, :attachments_updated_at, 'namespaces.puid'
 
   attribute :name_or_puid_cont, :string
   attribute :name_or_puid_in, default: -> { [] }
