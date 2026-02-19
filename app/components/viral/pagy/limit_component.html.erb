@@ -1,69 +1,64 @@
-<div
-  id="limit-component"
-  class="
-    @max-md:flex @max-md:flex-col text-slate-500 dark:text-slate-400 w-full
-  "
->
-  <form
-    id="limit-component-form"
-    method="get"
-    action="<%= current_url_without_params %>"
-    class="@max-md:space-y-4"
-  >
-    <% current_url_query_params_without_limit.each do |param| %>
-      <input type="hidden" name="<%= param[0] %>" value="<%= param[1] %>"/>
-    <% end %>
+<div id="limit-component" class="w-full text-slate-500 @max-md:flex @max-md:flex-col dark:text-slate-400">
+  <%= form_with(
+    url: url_for(request.query_parameters.except("limit")),
+    method: :get,
+    html: {
+      id: "limit-component-form",
+      class: "@max-md:space-y-4",
+    },
+  ) do %>
     <div
       class="
-        @max-md:flex @max-md:flex-col @max-md:space-y-4 @md:@max-xl:space-y-2 @2xl:flex
-        @2xl:items-center @2xl:space-x-2
+        @max-md:flex @max-md:flex-col @max-md:space-y-4 @md:@max-xl:space-y-2 @2xl:flex @2xl:items-center
+        @2xl:space-x-2
       "
     >
-      <div
-        class="
-          @md:@max-xl:flex @md:@max-xl:items-center @md:@max-xl:space-x-2 @2xl:flex
-          @2xl:items-center @2xl:space-x-2
-        "
-      >
-        <label for="pagy-limit-select" class="text-sm font-medium flex-shrink-0">
-          <%= t("components.viral.pagy.limit_component.items", items: @item) %>
-        </label>
+      <div class="@md:@max-xl:flex @md:@max-xl:items-center @md:@max-xl:space-x-2 @2xl:flex @2xl:items-center @2xl:space-x-2">
+        <%= label_tag(
+          "pagy-limit-select",
+          t("components.viral.pagy.limit_component.items", items: @item),
+          class: "text-sm font-medium flex-shrink-0",
+        ) %>
 
-        <select
-          id="pagy-limit-select"
-          name="limit"
-          aria-label="<%= t('components.viral.pagy.limit_component.select_items_action') %>"
-          aria-describedby="pagy-limit-description"
-          autocomplete="off"
-          class="
+        <%= select_tag(
+          "limit",
+          options_for_select(
+            Pagy::DEFAULT[:limits].map do |limit|
+              [
+                limit,
+                limit,
+                { "aria-label" => t("components.viral.pagy.limit_component.item_aria_label", items: limit) },
+              ]
+            end,
+            @pagy.limit,
+          ),
+          id: "pagy-limit-select",
+          aria: {
+            label: t("components.viral.pagy.limit_component.select_items_action"),
+            describedby: "pagy-limit-description",
+          },
+          autocomplete: "off",
+          class: "
             bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
             @md:w-20 @max-md:w-full p-2.5 dark:bg-slate-700 dark:border-slate-600
             dark:placeholder-slate-400 dark:text-white pr-8
-          "
-          onchange="this.form.requestSubmit()"
-        >
-          <% Pagy::DEFAULT[:limits].each do |limit| %>
-            <option
-              value="<%= limit %>"
-              <%= 'selected' if limit == @pagy.limit %>
-              aria-label="<%= t('components.viral.pagy.limit_component.item_aria_label', items: limit) %>"
-            >
-              <%= limit %>
-            </option>
-          <% end %>
-        </select>
+          ",
+          onchange: "this.form.requestSubmit()",
+        ) %>
       </div>
 
-      <span class="@2xl:flex-1 text-sm"><%== t(
+      <span class="text-sm @2xl:flex-1">
+        <%== t(
           "components.viral.pagy.limit_component.summary",
           to: @pagy.to,
           from: @pagy.from,
           count: @pagy.count,
-        ) %></span>
+        ) %>
+      </span>
     </div>
 
     <div id="pagy-limit-description" class="sr-only">
       <%= t("components.viral.pagy.limit_component.select_items_action") %>
     </div>
-  </form>
+  <% end %>
 </div>

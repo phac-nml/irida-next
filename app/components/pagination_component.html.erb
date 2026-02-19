@@ -1,10 +1,12 @@
-<nav
-  class="mt-4 flex items-center justify-center space-x-2"
-  role="navigation"
-  aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>"
-  aria-describedby="<%= info_id %>"
-  aria-live="polite"
->
+<%= tag.nav(
+  class: "mt-4 flex items-center justify-center space-x-2",
+  role: "navigation",
+  aria: {
+    label: t("components.viral.pagy.pagination_component.aria_label"),
+    describedby: info_id,
+    live: "polite",
+  },
+) do %>
   <% if prev_url %>
     <%= link_to prev_url,
           id: "prev-page-link",
@@ -36,11 +38,11 @@
       <%= pathogen_icon(:caret_right, size: :sm, class: "ml-2") %>
     <% end %>
   <% end %>
-</nav>
+<% end %>
 
-<div
-  id="<%= info_id %>"
-  class="m-4 text-center text-slate-700 dark:text-slate-200"
->
+<%= tag.div(
+  id: info_id,
+  class: "m-4 text-center text-slate-700 dark:text-slate-200",
+) do %>
   <%== info %>
-</div>
+<% end %>
