@@ -142,4 +142,33 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       end
     end
   end
+
+  test 'workflow preview renders model-specific fields without sample coupling' do
+    visit('rails/view_components/advanced_search_component/workflow')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        assert_accessible
+
+        within first("div[data-controller='select-with-auto-complete']") do
+          combobox = find("input[role='combobox']")
+          combobox.click
+          combobox.send_keys([:ctrl, 'a'], :delete)
+
+          assert_selector "div[role='option']",
+                          text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.id'))}\z/,
+                          count: 1
+          assert_selector "div[role='option']",
+                          text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.run_id'))}\z/,
+                          count: 1
+          assert_selector "div[role='option']",
+                          text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.state'))}\z/,
+                          count: 1
+          assert_selector "div[role='option']",
+                          text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.workflow_name'))}\z/,
+                          count: 1
+        end
+      end
+    end
+  end
 end

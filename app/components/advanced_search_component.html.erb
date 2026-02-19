@@ -11,7 +11,7 @@
 ) do %>
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
     <% dialog.with_trigger do %>
-      <div class="flex flex-row rounded-lg w-full grow" role="group">
+      <div class="flex w-full grow flex-row rounded-lg" role="group">
         <button
           type="button"
           class="<%= class_names("button button-default w-full focus-visible:z-10", { "rounded-e-none border-e-0": @status }) %>"
@@ -21,10 +21,11 @@
         >
           <%= t("components.advanced_search_component.title") %>
         </button>
+
         <% if @status %>
           <button
             type="button"
-            class="button button-default rounded-s-none"
+            class="button rounded-s-none button-default"
             data-action="advanced-search#clearForm filters#submit"
             aria-label="<%= t("components.advanced_search_component.clear_aria_label") %>"
           >
@@ -33,18 +34,19 @@
         <% end %>
       </div>
     <% end %>
+
     <% dialog.with_header(title: t("components.advanced_search_component.title")) %>
+
     <div class="space-y-4">
       <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
         <%= t("components.advanced_search_component.description") %>
       </p>
+
       <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
         <%= t("components.advanced_search_component.rules") %>
       </p>
 
-      <div class="mb-4">
-        <%= render partial: "shared/form/required_field_legend" %>
-      </div>
+      <div class="mb-4"><%= render partial: "shared/form/required_field_legend" %></div>
 
       <div class="hidden" data-advanced-search-target="submitError">
         <%= render Viral::AlertComponent.new(
@@ -54,13 +56,14 @@
         ) %>
       </div>
 
-      <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
-      </div>
+      <div class="space-y-4" data-advanced-search-target="searchGroupsContainer"></div>
+
       <div class="flex justify-end space-x-2">
         <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
           <%= t("components.advanced_search_component.add_group_button") %>
         <% end %>
       </div>
+
       <template data-advanced-search-target="searchGroupsTemplate">
         <% @search.groups.each_with_index do |group, group_index| %>
           <%= render AdvancedSearch::Group.new(
@@ -69,25 +72,28 @@
             group_index: group_index,
             group_number: group_index + 1,
             show_remove_group_button: @search.groups.count > 1,
-            sample_fields: @sample_fields,
-            metadata_fields: @metadata_fields,
+            fields: @fields,
             operations: @operations,
           ) %>
         <% end %>
       </template>
     </div>
+
     <% dialog.with_primary_action(
       "data-action": "advanced-search#submit filters#submit",
     ) { t("components.advanced_search_component.apply_filter_button") } %>
+
     <% dialog.with_secondary_action do %>
       <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
         <%= t("components.advanced_search_component.clear_filter_button") %>
       <% end %>
     <% end %>
   <% end %>
+
   <template data-advanced-search-target="listValueTemplate">
-    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-      <% condition = Sample::SearchCondition.new(operator: "in") %>
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = @search_condition_class.new(operator: "in") %>
+
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
           conditions_form: conditions_form,
@@ -98,9 +104,11 @@
       <% end %>
     <% end %>
   </template>
+
   <template data-advanced-search-target="valueTemplate">
-    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-      <% condition = Sample::SearchCondition.new(operator: "=") %>
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = @search_condition_class.new(operator: "=") %>
+
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
           conditions_form: conditions_form,
@@ -111,29 +119,29 @@
       <% end %>
     <% end %>
   </template>
+
   <template data-advanced-search-target="conditionTemplate">
-    <%= @form.fields_for :groups, Sample::SearchGroup.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
       <%= render AdvancedSearch::Condition.new(
         groups_form: group_form,
         group_index: "GROUP_INDEX_PLACEHOLDER",
-        condition: Sample::SearchCondition.new,
+        condition: @search_condition_class.new,
         condition_index: "CONDITION_INDEX_PLACEHOLDER",
         condition_number: "CONDITION_LEGEND_INDEX_PLACEHOLDER",
-        sample_fields: @sample_fields,
-        metadata_fields: @metadata_fields,
+        fields: @fields,
         operations: @operations,
       ) %>
     <% end %>
   </template>
+
   <template data-advanced-search-target="groupTemplate">
     <%= render AdvancedSearch::Group.new(
       form: @form,
-      group: Sample::SearchGroup.new,
+      group: @search_group_class.new,
       group_index: "GROUP_INDEX_PLACEHOLDER",
       group_number: "GROUP_LEGEND_INDEX_PLACEHOLDER",
       show_remove_group_button: true,
-      sample_fields: @sample_fields,
-      metadata_fields: @metadata_fields,
+      fields: @fields,
       operations: @operations,
     ) %>
   </template>

@@ -9,5 +9,11 @@ module AdvancedSearch
       @condition = condition
       @condition_index = condition_index
     end
+
+    private
+
+    def value_label
+      @condition.class.human_attribute_name(:value)
+    end
   end
 end

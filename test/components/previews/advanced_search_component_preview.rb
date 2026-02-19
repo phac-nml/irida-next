@@ -18,25 +18,54 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
         )
       ]
     )
-    sample_fields = %w[name puid created_at updated_at attachments_updated_at]
-    metadata_fields = %w[age country collection_date food subject_type outbreak_code].sort
+    fields = AdvancedSearch::Fields.for_samples(
+      sample_fields: %w[name puid created_at updated_at attachments_updated_at],
+      metadata_fields: %w[age country collection_date food subject_type outbreak_code].sort
+    )
 
     render_with_template(locals: {
                            search: search,
-                           sample_fields: sample_fields,
-                           metadata_fields: metadata_fields
+                           fields: fields
                          })
   end
 
   def empty
     search = Sample::Query.new
-    sample_fields = %w[name puid created_at updated_at attachments_updated_at]
-    metadata_fields = %w[age country collection_date food subject_type outbreak_code].sort
+    fields = AdvancedSearch::Fields.for_samples(
+      sample_fields: %w[name puid created_at updated_at attachments_updated_at],
+      metadata_fields: %w[age country collection_date food subject_type outbreak_code].sort
+    )
 
     render_with_template(template: 'advanced_search_component_preview/default', locals: {
                            search: search,
-                           sample_fields: sample_fields,
-                           metadata_fields: metadata_fields
+                           fields: fields
                          })
+  end
+
+  def workflow
+    render_with_template(template: 'advanced_search_component_preview/default', locals: {
+                           search: workflow_search,
+                           fields: workflow_fields
+                         })
+  end
+
+  private
+
+  def workflow_search
+    WorkflowExecution::Query.new(
+      groups: [
+        WorkflowExecution::SearchGroup.new(
+          conditions: [
+            WorkflowExecution::SearchCondition.new(field: 'state', operator: '=', value: 'completed'),
+            WorkflowExecution::SearchCondition.new(field: 'metadata.pipeline_id', operator: '=', value: 'assembly')
+          ]
+        )
+      ]
+    )
+  end
+
+  def workflow_fields
+    field_configuration = Struct.new(:fields).new(WorkflowExecution::FieldConfiguration::SEARCHABLE_FIELDS)
+    AdvancedSearch::Fields.for_workflow_executions(field_configuration:)
   end
 end
