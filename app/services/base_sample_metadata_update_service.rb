@@ -8,13 +8,14 @@ class BaseSampleMetadataUpdateService < BaseService
 
   private
 
-  def perform_metadata_update(sample, metadata) # rubocop:disable Metrics/MethodLength
+  def perform_metadata_update(sample, metadata, force_update) # rubocop:disable Metrics/MethodLength
     metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
     sample.with_lock do
       metadata.each do |key, value|
+        validate_metadata_value(key, value, sample.name)
         key = strip_whitespaces(key.to_s.downcase)
         value = strip_whitespaces(value.to_s) # remove data types
-        status = get_metadata_change_status(sample, key, value)
+        status = get_metadata_change_status(sample, key, value, force_update)
         next unless status
 
         metadata_changes[status] << key
@@ -44,23 +45,22 @@ class BaseSampleMetadataUpdateService < BaseService
     sample.metadata[key] = value
   end
 
-  def get_metadata_change_status(sample, key, value) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def get_metadata_change_status(sample, key, value, force_update) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if value.blank?
       :deleted if sample.field?(key)
     elsif sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
           sample.metadata_provenance[key]['source'] == 'analysis'
       :not_updated
     elsif sample.field?(key) && sample.metadata[key] == value
-      @force_update ? :updated : :unchanged
+      force_update ? :updated : :unchanged
     else
       sample.field?(key) ? :updated : :added
     end
   end
 
-  # def update_metadata_summary(project_namespace, metadata_changes)
-  #   return unless metadata_changes[:added].any? || metadata_changes[:deleted].any?
-
-  #   project_namespace.update_metadata_summary_by_update_service(metadata_changes[:deleted],
-  #                                                               metadata_changes[:added])
-  # end
+  def update_namespace_metadata_summary(project_namespace, added_metadata, deleted_metadata, by_one)
+    project_namespace.update_metadata_summary_by_update_service(deleted_metadata,
+                                                                added_metadata,
+                                                                by_one)
+  end
 end
