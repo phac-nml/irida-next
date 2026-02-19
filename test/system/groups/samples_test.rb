@@ -61,6 +61,61 @@ module Groups
       assert_selector 'table tbody tr', count: 20
     end
 
+    test 'group samples index uses data grid when flag enabled' do
+      Flipper.enable(:data_grid_samples_table)
+
+      visit group_samples_url(@group)
+
+      assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
+      assert_selector '.pathogen-data-grid__table'
+      assert_selector '#samples-table.samples-data-grid.pathogen-data-grid--fill'
+      assert_selector '#samples-table .pathogen-data-grid__scroll'
+      assert_selector 'th.pathogen-data-grid__cell--sticky',
+                      text: /#{Regexp.escape(I18n.t('samples.table_component.puid'))}/i
+      assert_selector 'th.pathogen-data-grid__cell--sticky',
+                      text: /#{Regexp.escape(I18n.t('samples.table_component.name'))}/i
+    ensure
+      Flipper.disable(:data_grid_samples_table)
+    end
+
+    test 'group data grid uses internal vertical scroll when constrained' do
+      Flipper.enable(:data_grid_samples_table)
+
+      page.current_window.resize_to(1400, 700)
+      visit group_samples_url(@group)
+
+      assert_selector '#samples-table .pathogen-data-grid__scroll'
+
+      metrics = page.evaluate_script(<<~JS)
+        (() => {
+          const scrollElement = document.querySelector('#samples-table .pathogen-data-grid__scroll');
+          const firstHeaderCell = scrollElement?.querySelector('thead th');
+          if (!scrollElement || !firstHeaderCell) return null;
+
+          const beforeTop = firstHeaderCell.getBoundingClientRect().top;
+          const beforeScrollTop = scrollElement.scrollTop;
+          scrollElement.scrollTop = 240;
+          const afterScrollTop = scrollElement.scrollTop;
+          const afterTop = firstHeaderCell.getBoundingClientRect().top;
+
+          return {
+            scrollHeight: scrollElement.scrollHeight,
+            clientHeight: scrollElement.clientHeight,
+            scrollDelta: afterScrollTop - beforeScrollTop,
+            stickyHeaderDelta: Math.abs(afterTop - beforeTop)
+          };
+        })();
+      JS
+
+      assert_not_nil metrics
+      assert_operator metrics['scrollHeight'], :>, metrics['clientHeight']
+      assert_operator metrics['scrollDelta'], :>, 0
+      assert_operator metrics['stickyHeaderDelta'], :<, 2
+    ensure
+      Flipper.disable(:data_grid_samples_table)
+      page.current_window.resize_to(1400, 1400)
+    end
+
     test 'visiting the index of a group which has other groups/projects linked to it' do
       login_as users(:david_doe)
       # group_one shared with group
