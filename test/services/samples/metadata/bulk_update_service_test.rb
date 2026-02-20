@@ -437,6 +437,71 @@ module Samples
                                                                         key: 'metadatafield1')}"
         )
       end
+
+      test 'cannot update metadata of shared sample with access lower than maintainer' do
+        # Group group_sample_actions has access to sample71 via
+        # analyst shared role in Group shared_group_sample_actions_analyst
+        group = groups(:group_sample_actions)
+        user = users(:sample_actions_doe)
+        sample = samples(:sample71)
+
+        payload = { sample.puid => { 'metadatafield3' => 'value3', 'metadatafield4' => 'value4' } }
+        metadata_fields = %w[metadatafield3 metadatafield4]
+
+        assert_no_changes -> { group.reload.metadata_summary } do
+          assert_no_changes -> { sample.reload.metadata_provenance } do
+            assert_no_changes -> { sample.reload.metadata } do
+              Samples::Metadata::BulkUpdateService.new(group, payload, metadata_fields, user).execute
+            end
+          end
+        end
+
+        assert group.errors.full_messages_for(:sample).include?(
+          "Sample #{I18n.t('services.samples.metadata.bulk_update.sample_not_found', sample_identifier: sample.puid)}"
+        )
+      end
+
+      test 'update metadata of shared sample with maintainer access' do
+        freeze_time
+        subgroup = groups(:subgroup_sample_actions)
+        group = groups(:group_sample_actions)
+        shared_group = groups(:shared_group_sample_actions_maintainer)
+        project_namespace = projects(:projectSharedGroupSampleActionsMaintainer).namespace
+        user = users(:subgroup_sample_actions_doe)
+        sample = samples(:sample70)
+
+        payload = { sample.puid => { 'metadatafield3' => 'value3', 'metadatafield4' => 'value4' } }
+        metadata_fields = %w[metadatafield3 metadatafield4]
+
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample.metadata)
+
+        # sample and project_namespace are shared to subgroup, and therefore subgroup and its parent group's
+        # metadata_summary are not increased, but project_namespaces and its parent shared_group are changed
+        assert_no_changes -> { group.reload.metadata_summary } do
+          assert_no_changes -> { subgroup.reload.metadata_summary } do
+            Samples::Metadata::BulkUpdateService.new(project_namespace, payload, metadata_fields, user).execute
+          end
+        end
+        assert_equal(
+          { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3',
+            'metadatafield4' => 'value4' }, sample.reload.metadata
+        )
+
+        assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
+                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                       'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
+                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                       'metadatafield3' => { 'id' => user.id, 'source' => 'user',
+                                             'updated_at' => Time.current },
+                       'metadatafield4' => { 'id' => user.id, 'source' => 'user', 'updated_at' => Time.current } },
+                     sample.reload.metadata_provenance)
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1, 'metadatafield4' => 1 },
+                     project_namespace.reload.metadata_summary)
+
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1, 'metadatafield4' => 1 },
+                     shared_group.reload.metadata_summary)
+      end
     end
   end
 end
