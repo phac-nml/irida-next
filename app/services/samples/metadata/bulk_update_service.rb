@@ -10,7 +10,7 @@ module Samples
         super(user, params)
         @namespace = namespace
         @metadata_payload = metadata_payload
-        @metadata_fields = metadata_fields
+        @metadata_fields = sanitize_metadata_fields(metadata_fields)
         @metadata_summary_data = {}
       end
 
@@ -27,9 +27,11 @@ module Samples
           project_puid = sample.project.puid
           metadata_changes = perform_metadata_update(sample, metadata, false)
 
-          if !metadata_changes[:not_updated].empty?
+          unless metadata_changes[:not_updated].empty?
             unsuccessful_updates[sample_identifier] = metadata_changes[:not_updated]
-          elsif activity_data.key?(project_puid)
+          end
+
+          if activity_data.key?(project_puid)
             activity_data[project_puid] << { sample_puid: sample.puid, sample_name: sample.name,
                                              project_name: sample.project.name,
                                              project_puid: }
@@ -38,7 +40,6 @@ module Samples
                                              project_name: sample.project.name,
                                              project_puid: }]
           end
-
           add_changes_to_metadata_summary(project_puid, metadata_changes)
         end
 
@@ -48,6 +49,13 @@ module Samples
       end
 
       private
+
+      # occurs in this service as file import service requires unsanitized version for proper spreadsheet reading
+      def sanitize_metadata_fields(metadata_fields)
+        metadata_fields.map do |metadata_field|
+          strip_whitespaces(metadata_field)
+        end
+      end
 
       def validate_metadata_param(metadata, sample_name) # rubocop:disable Naming/PredicateMethod
         return true unless metadata.nil? || metadata == {}
