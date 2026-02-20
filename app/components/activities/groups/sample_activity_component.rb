@@ -12,8 +12,8 @@ module Activities
         @activity[:action] == 'group_samples_destroy'
       end
 
-      def import_metadata_action?
-        @activity[:action] == 'group_import_metadata'
+      def bulk_metadata_update_action?
+        @activity[:action] == 'group_bulk_metadata_update'
       end
 
       def activity_message
@@ -23,7 +23,7 @@ module Activities
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:imported_samples_count]))
         when 'group_samples_destroy'
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]))
-        when 'group_import_metadata'
+        when 'group_bulk_metadata_update'
           t(@activity[:key], user: @activity[:user],
                              href: highlighted_text(@activity[:imported_metadata_samples_count]))
         else
@@ -38,8 +38,8 @@ module Activities
           t('components.activity.samples.import.more_details.button_descriptive_text')
         when 'group_samples_destroy'
           t('components.activity.samples.destroy.more_details.button_descriptive_text')
-        when 'group_import_metadata'
-          t('components.activity.samples.import_metadata.more_details.button_descriptive_text')
+        when 'group_bulk_metadata_update'
+          t('components.activity.samples.bulk_metadata_update.more_details.button_descriptive_text')
         else
           ''
         end
@@ -50,7 +50,7 @@ module Activities
       end
 
       def show_more_details_button?
-        import_samples_action? || sample_destroy_action? || import_metadata_action?
+        import_samples_action? || sample_destroy_action? || bulk_metadata_update_action?
       end
     end
   end

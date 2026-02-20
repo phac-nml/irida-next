@@ -139,15 +139,15 @@ module Samples
                                                samples_imported_metadata_data: group_data.flatten
                                              })
 
-        activity = @namespace.create_activity key: 'group.samples.import_metadata',
+        activity = @namespace.create_activity key: 'group.samples.bulk_metadata_update',
                                               owner: current_user,
                                               parameters:
                                               {
                                                 imported_metadata_samples_count: group_sample_count,
-                                                action: 'group_import_metadata'
+                                                action: 'group_bulk_metadata_update'
                                               }
         activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
-                                                 activity_type: 'group_import_metadata')
+                                                 activity_type: 'group_bulk_metadata_update')
       end
 
       def create_project_activity_and_update_metadata_summary(project_puid, sample_data) # rubocop:disable Metrics/MethodLength
@@ -162,15 +162,15 @@ module Samples
                                                samples_imported_metadata_data: sample_data
                                              })
 
-        activity = project_namespace.create_activity key: 'namespaces_project_namespace.samples.import_metadata',
+        activity = project_namespace.create_activity key: 'namespaces_project_namespace.samples.bulk_metadata_update',
                                                      owner: current_user,
                                                      parameters:
                                                      {
                                                        imported_metadata_samples_count: sample_data.count,
-                                                       action: 'project_import_metadata'
+                                                       action: 'project_bulk_metadata_update'
                                                      }
         activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
-                                                 activity_type: 'project_import_metadata')
+                                                 activity_type: 'project_bulk_metadata_update')
         update_namespace_metadata_summary(project_namespace,
                                           @metadata_summary_data[project_puid][:deleted],
                                           @metadata_summary_data[project_puid][:added],

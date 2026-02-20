@@ -23,8 +23,8 @@ module Activities
         @activity[:action] == 'project_import_samples'
       end
 
-      def import_metadata_action?
-        @activity[:action] == 'project_import_metadata'
+      def bulk_metadata_update_action?
+        @activity[:action] == 'project_bulk_metadata_update'
       end
 
       def activity_message # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -34,7 +34,7 @@ module Activities
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:imported_samples_count]))
         when 'sample_destroy_multiple'
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]))
-        when 'project_import_metadata'
+        when 'project_bulk_metadata_update'
           t(@activity[:key], user: @activity[:user],
                              href: highlighted_text(@activity[:imported_metadata_samples_count]))
         else
@@ -79,7 +79,7 @@ module Activities
       end
 
       def show_more_details_button?
-        import_samples_action? || sample_destroy_multiple_action? || import_metadata_action?
+        import_samples_action? || sample_destroy_multiple_action? || bulk_metadata_update_action?
       end
     end
   end

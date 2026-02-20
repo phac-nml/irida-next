@@ -11,7 +11,7 @@ en:
           title: Transferred Samples
           transferred_from: Transferred From
           transferred_to: Transferred To
-        import_metadata:
+        bulk_metadata_update:
           description:
             one: "%{user} updated metadata for %{count} sample"
             other: "%{user} updated metadata for %{count} samples"
@@ -98,9 +98,9 @@ en:
         import:
           more_details:
             button_descriptive_text: View more details about imported samples
-        import_metadata:
+        bulk_metadata_update:
           more_details:
-            button_descriptive_text: View more details about imported metadata
+            button_descriptive_text: View more details about updated metadata
         link_descriptive_text: View sample details for sample with persistent unique identifier %{sample_puid}
         transfer:
           link_descriptive_text: View samples page for project with persistent unique identifier %{project_puid}

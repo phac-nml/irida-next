@@ -276,10 +276,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def add_bulk_sample_params(params, activity)
-    return params unless %w[sample_destroy_multiple group_samples_destroy project_import_metadata
-                            group_import_metadata].include?(activity.parameters[:action])
+    return params unless %w[sample_destroy_multiple group_samples_destroy project_bulk_metadata_update
+                            group_bulk_metadata_update].include?(activity.parameters[:action])
 
-    if %w[project_import_metadata group_import_metadata].include?(activity.parameters[:action])
+    if %w[project_bulk_metadata_update group_bulk_metadata_update].include?(activity.parameters[:action])
       params.merge(
         imported_metadata_samples_count: activity.parameters[:imported_metadata_samples_count]
       )

@@ -160,11 +160,11 @@ module Activities
         activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 
         assert_equal(1, activities.count do |activity|
-          activity[:key].include?('project_namespace.samples.import_metadata')
+          activity[:key].include?('project_namespace.samples.bulk_metadata_update')
         end)
 
         activity_to_render = activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.import_metadata_html'
+          a[:key] == 'activity.namespaces_project_namespace.samples.bulk_metadata_update_html'
         end
 
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
@@ -173,11 +173,11 @@ module Activities
           click_button(I18n.t('components.activity.more_details'))
         end
 
-        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.import_metadata.title')
+        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
 
         within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
           assert_selector 'p',
-                          text: I18n.t(:'components.activity.dialog.import_metadata.description',
+                          text: I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
                                        user: @user.email, count: 2)
 
           assert_selector 'li', count: 2
@@ -206,11 +206,11 @@ module Activities
         activities = project30_namespace.human_readable_activity(project30_namespace.retrieve_project_activity).reverse
 
         assert_equal(1, activities.count do |activity|
-          activity[:key].include?('project_namespace.samples.import_metadata')
+          activity[:key].include?('project_namespace.samples.bulk_metadata_update')
         end)
 
         activity_to_render = activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.import_metadata_html'
+          a[:key] == 'activity.namespaces_project_namespace.samples.bulk_metadata_update_html'
         end
 
         visit namespace_project_activity_path(project30_namespace.parent, project30_namespace.project)
@@ -219,11 +219,11 @@ module Activities
           click_button(I18n.t('components.activity.more_details'))
         end
 
-        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.import_metadata.title')
+        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
 
         within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
           assert_selector 'p',
-                          text: I18n.t(:'components.activity.dialog.import_metadata.description',
+                          text: I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
                                        user: @user.email, count: 1)
 
           assert_selector 'li', count: 1
@@ -235,11 +235,11 @@ module Activities
         activities = project31_namespace.human_readable_activity(project31_namespace.retrieve_project_activity).reverse
 
         assert_equal(1, activities.count do |activity|
-          activity[:key].include?('project_namespace.samples.import_metadata')
+          activity[:key].include?('project_namespace.samples.bulk_metadata_update')
         end)
 
         activity_to_render = activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.import_metadata_html'
+          a[:key] == 'activity.namespaces_project_namespace.samples.bulk_metadata_update_html'
         end
 
         visit namespace_project_activity_path(project31_namespace.parent, project31_namespace.project)
@@ -248,11 +248,11 @@ module Activities
           click_button(I18n.t('components.activity.more_details'))
         end
 
-        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.import_metadata.title')
+        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
 
         within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
           assert_selector 'p',
-                          text: I18n.t(:'components.activity.dialog.import_metadata.description',
+                          text: I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
                                        user: @user.email, count: 2)
 
           assert_selector 'li', count: 2

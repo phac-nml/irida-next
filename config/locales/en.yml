@@ -225,7 +225,7 @@ en:
       samples:
         clone_html: "%{user} copied %{cloned_samples_count} samples to other projects"
         destroy_html: "%{user} removed %{href} samples from group"
-        import_metadata_html: "%{user} updated metadata for %{href} samples"
+        bulk_metadata_update_html: "%{user} updated metadata for %{href} samples"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
       subgroups:
         create_html: "%{user} created subgroup %{href}"
@@ -264,7 +264,7 @@ en:
         create_html: "%{user} created sample %{href}"
         destroy_html: "%{user} removed sample %{href}"
         destroy_multiple_html: "%{user} removed %{href} samples from project"
-        import_metadata_html: "%{user} updated metadata for %{href} samples"
+        bulk_metadata_update_html: "%{user} updated metadata for %{href} samples"
         metadata:
           update_html: "%{user} updated sample %{href} metadata"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples to project %{href}"

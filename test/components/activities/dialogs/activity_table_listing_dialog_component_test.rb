@@ -327,11 +327,11 @@ module Activities
         activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity).reverse
 
         assert_equal(1, activities.count do |activity|
-          activity[:key].include?('group.samples.import_metadata')
+          activity[:key].include?('group.samples.bulk_metadata_update')
         end)
 
         activity_to_render = activities.find do |a|
-          a[:key] == 'activity.group.samples.import_metadata_html'
+          a[:key] == 'activity.group.samples.bulk_metadata_update_html'
         end
 
         visit group_activity_path(group_namespace)
@@ -340,16 +340,16 @@ module Activities
           click_button(I18n.t('components.activity.more_details'))
         end
 
-        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.import_metadata.title')
+        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
 
         assert_selector 'p',
-                        text: I18n.t(:'components.activity.dialog.import_metadata.description',
+                        text: I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
                                      user: @user.email, count: 2)
         assert_selector 'table', count: 1
         assert_selector 'th', count: 2
         assert_selector 'tr', count: 3
-        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.import_metadata.sample').upcase
-        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.import_metadata.project').upcase
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.sample').upcase
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.project').upcase
         assert_selector 'tr > td', text: sample33.name
         assert_selector 'tr > td', text: sample33.puid
         assert_selector 'tr > td', text: sample35.name
