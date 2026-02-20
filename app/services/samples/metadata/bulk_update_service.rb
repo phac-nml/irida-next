@@ -19,6 +19,8 @@ module Samples
         activity_data = {}
         unsuccessful_updates = {}
         @metadata_payload.each do |sample_identifier, metadata|
+          next unless validate_metadata_param(metadata, sample_identifier)
+
           sample = find_sample(sample_identifier)
           next if sample.nil?
 
@@ -46,6 +48,13 @@ module Samples
       end
 
       private
+
+      def validate_metadata_param(metadata, sample_name) # rubocop:disable Naming/PredicateMethod
+        return true unless metadata.nil? || metadata == {}
+
+        @namespace.errors.add(:sample, I18n.t('services.samples.metadata.empty_metadata', sample_name:))
+        false
+      end
 
       def validate_metadata_value(key, value, sample_name)
         return unless value.is_a?(Hash)
