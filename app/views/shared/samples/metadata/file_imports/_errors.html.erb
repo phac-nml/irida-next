@@ -3,15 +3,12 @@
   data-projects--samples--metadata--complete-filters-outlet=".filters"
 >
   <p class="mb-4 dark:text-white"><%= t(".description") %></p>
-  <ul class="space-y-3 max-h-60 md:max-h-80 overflow-y-auto p-2">
+
+  <ul class="max-h-60 space-y-3 overflow-y-auto p-2 md:max-h-80">
     <% errors.each do |error| %>
       <% error_parts = error.split(":") %>
-      <li
-        class="
-          flex items-start gap-3 bg-red-100 border-l-4 border-red-500 rounded-md px-3 py-2
-          shadow-sm
-        "
-      >
+
+      <li class="flex items-start gap-3 rounded-md border-l-4 border-red-500 bg-red-100 px-3 py-2 shadow-sm">
         <span class="mt-0.5 text-red-600" aria-hidden="true">
           <%= pathogen_icon(
             :x_circle,
@@ -20,24 +17,22 @@
             class: "inline align-middle",
           ) %>
         </span>
-        <div class="flex-1 min-w-0">
+
+        <div class="min-w-0 flex-1">
           <% if error_parts.length > 1 %>
-            <div class="font-semibold text-red-800">
-              <%= error_parts[0] %>
-            </div>
-            <ul class="ml-4 mt-1.5 list-disc list-inside text-sm text-red-700">
+            <div class="font-semibold text-red-800"><%= error_parts[0] %></div>
+            <ul class="mt-1.5 ml-4 list-inside list-disc text-sm text-red-700">
               <li><%= error_parts[1] %></li>
             </ul>
           <% else %>
-            <div class="text-red-800">
-              <%= error %>
-            </div>
+            <div class="text-red-800"><%= error %></div>
           <% end %>
         </div>
       </li>
     <% end %>
   </ul>
-  <div class="flex mt-4">
+
+  <div class="mt-4 flex">
     <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
       <%= t(".ok_button") %>
     <% end %>
