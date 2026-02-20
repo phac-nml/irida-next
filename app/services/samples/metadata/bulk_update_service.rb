@@ -85,17 +85,17 @@ module Samples
         scope = authorized_scope(Sample, type: :relation, as: :namespace_samples,
                                          scope_options: { namespace: @namespace,
                                                           minimum_access_level: Member::AccessLevel::MAINTAINER })
-        if id_type == 'puid'
-          scope.find_by(puid: sample_identifier)
-        elsif id_type == 'id'
-          scope.find_by(id: sample_identifier)
-        else
-          sample = scope.where(name: sample_identifier)
-          return sample.first unless sample.count != 1
+        sample = if id_type == 'puid'
+                   scope.where(puid: sample_identifier)
+                 elsif id_type == 'id'
+                   scope.where(id: sample_identifier)
+                 else
+                   scope.where(name: sample_identifier)
+                 end
+        return sample.first unless sample.count != 1
 
-          add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_identifier)
-          nil
-        end
+        add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_identifier)
+        nil
       end
 
       def query_project_samples(id_type, sample_identifier)
