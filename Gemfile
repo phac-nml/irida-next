@@ -45,7 +45,7 @@ gem 'bootsnap', require: false
 gem 'thruster', require: false
 
 # Use devise for auth
-gem 'devise', '~> 5.0.1'
+gem 'devise', '~> 5.0.2'
 
 # Use CORS for specifying safe urls for integrations that request access tokens
 gem 'rack-cors'
