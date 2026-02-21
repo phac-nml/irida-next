@@ -1,10 +1,13 @@
 <!DOCTYPE html>
+
 <html class="light" lang="<%= locale %>">
   <%= render "layouts/partials/head" %>
+
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: false) do |layout| %>
       <% layout.with_sidebar(pipelines_enabled: @pipelines_enabled) do |navigation| %>
         <%= navigation.with_header(label: t(:"general.default_sidebar.title")) %>
+
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             icon: Project.icon,
@@ -12,12 +15,14 @@
             url: dashboard_projects_path,
             selected: @current_page == t(:"general.default_sidebar.projects"),
           ) %>
+
           <%= render section.with_item(
             icon: Group.icon,
             label: t(:"general.default_sidebar.groups"),
             url: dashboard_groups_path,
             selected: @current_page == t(:"general.default_sidebar.groups"),
           ) %>
+
           <% if @pipelines_enabled %>
             <%= render section.with_item(
               icon: WorkflowExecution.icon,
@@ -26,6 +31,7 @@
               selected: @current_page == t(:"general.default_sidebar.workflows"),
             ) %>
           <% end %>
+
           <%= render section.with_item(
             icon: DataExport.icon,
             label: t(:"general.default_sidebar.data_exports"),
@@ -33,8 +39,10 @@
             selected: @current_page == t(:"general.default_sidebar.data_exports"),
           ) %>
         <% end %>
+
         <% layout.with_breadcrumb(links: @context_crumbs || []) %>
         <% layout.with_language_selection %>
+
         <% layout.with_body do %>
           <%= yield %>
         <% end %>
