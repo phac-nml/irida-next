@@ -1,0 +1,44 @@
+# frozen_string_literal: true
+
+# Global search endpoints for mixed cross-resource search.
+class GlobalSearchController < ApplicationController
+  def index
+    @search = GlobalSearch::Query.new(current_user, query_params.merge(suggest: false)).execute
+    @workflow_states = WorkflowExecution.states.keys
+
+    respond_to do |format|
+      format.html
+      format.json { render json: payload(@search) }
+    end
+  end
+
+  def suggest
+    search = GlobalSearch::Query.new(current_user, query_params.merge(suggest: true)).execute
+
+    render json: payload(search)
+  end
+
+  private
+
+  def payload(search)
+    {
+      query: search.query,
+      meta: search.meta,
+      results: search.results.map(&:to_h)
+    }
+  end
+
+  def query_params
+    params.permit(
+      :q,
+      :sort,
+      :workflow_state,
+      :created_from,
+      :created_to,
+      :limit,
+      :per_type_limit,
+      types: [],
+      match_sources: []
+    ).to_h.symbolize_keys
+  end
+end
