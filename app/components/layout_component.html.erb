@@ -83,6 +83,104 @@
       <div class="<%= @layout %>"><%= body %></div>
     </main>
 
+    <dialog
+      class="
+        w-[min(52rem,calc(100%-1.5rem))] rounded-2xl border border-slate-200 bg-white p-0 shadow-2xl
+        backdrop:bg-slate-900/45 dark:border-slate-700 dark:bg-slate-900 dark:backdrop:bg-black/60
+      "
+      data-global-search-shortcut-target="dialog"
+      data-action="cancel->global-search-shortcut#handleCancel click->global-search-shortcut#handleBackdropClick"
+    >
+      <%= form_with url: global_search_path, method: :get, local: true, class: "space-y-4 p-4 sm:p-5", data: { global_search_shortcut_target: "form", action: "submit->global-search-shortcut#handleSubmit" } do %>
+        <div class="flex flex-wrap items-center gap-2">
+          <%= text_field_tag :q, nil, id: "global-search-shortcut-query", placeholder: "Search by name, ID, or metadata...", autocomplete: "off", data: { global_search_shortcut_target: "queryInput" }, class: "h-11 min-w-[18rem] flex-1 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" %>
+          <%= submit_tag "Search", class: "button button-primary h-11 min-w-[6.5rem] px-4" %>
+
+          <button
+            type="button"
+            class="button h-11 button-default px-3"
+            aria-label="Close global search dialog"
+            data-action="global-search-shortcut#close"
+          >
+            Close
+          </button>
+        </div>
+
+        <details class="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/50">
+          <summary class="cursor-pointer text-base font-medium text-slate-700 select-none dark:text-slate-200">
+            Filters
+          </summary>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <fieldset class="space-y-2">
+              <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Types</legend>
+
+              <% { "projects" => "Project", "groups" => "Group", "workflow_executions" => "Workflow", "samples" => "Sample", "data_exports" => "Data Export" }.each do |type, label| %>
+                <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+                  <%= check_box_tag "types[]", type, true, id: "global-search-shortcut-type-#{type}", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
+                  <span><%= label %></span>
+                </label>
+              <% end %>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Match Sources</legend>
+
+              <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+                <%= check_box_tag "match_sources[]", "identifier", true, id: "global-search-shortcut-source-identifier", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
+                <span>Identifier</span>
+              </label>
+
+              <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+                <%= check_box_tag "match_sources[]", "name", true, id: "global-search-shortcut-source-name", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
+                <span>Name</span>
+              </label>
+
+              <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+                <%= check_box_tag "match_sources[]", "metadata", false, id: "global-search-shortcut-source-metadata", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
+                <span>Metadata (samples)</span>
+              </label>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Sort</legend>
+
+              <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+                <%= radio_button_tag :sort, "best_match", true, id: "global-search-shortcut-sort-best-match", class: "h-4 w-4 border-slate-300 text-primary-600 focus:ring-primary-500" %>
+                <span>Best Match</span>
+              </label>
+
+              <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+                <%= radio_button_tag :sort, "most_recent", false, id: "global-search-shortcut-sort-most-recent", class: "h-4 w-4 border-slate-300 text-primary-600 focus:ring-primary-500" %>
+                <span>Most Recent</span>
+              </label>
+            </fieldset>
+
+            <div>
+              <%= label_tag "global-search-shortcut-workflow-state", "Workflow State", class: "mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500" %>
+              <%= select_tag :workflow_state, options_for_select(WorkflowExecution.states.keys.map { |state| [state.humanize, state] }), include_blank: "Any", id: "global-search-shortcut-workflow-state", class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" %>
+            </div>
+
+            <fieldset class="grid gap-2 sm:grid-cols-2 md:col-span-2">
+              <legend class="col-span-full text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                Date Range
+              </legend>
+
+              <div>
+                <%= label_tag "global-search-shortcut-created-from", "Created From", class: "mb-1 block text-xs text-slate-600 dark:text-slate-300" %>
+                <%= date_field_tag :created_from, nil, id: "global-search-shortcut-created-from", class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" %>
+              </div>
+
+              <div>
+                <%= label_tag "global-search-shortcut-created-to", "Created To", class: "mb-1 block text-xs text-slate-600 dark:text-slate-300" %>
+                <%= date_field_tag :created_to, nil, id: "global-search-shortcut-created-to", class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" %>
+              </div>
+            </fieldset>
+          </div>
+        </details>
+      <% end %>
+    </dialog>
+
     <%= render ConfirmationComponent.new %>
 
     <div id="flashes" class="fixed top-5 right-6 z-50 flex flex-col">

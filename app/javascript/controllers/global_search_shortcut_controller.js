@@ -2,14 +2,11 @@ import { Controller } from "@hotwired/stimulus";
 import { Turbo } from "@hotwired/turbo-rails";
 
 export default class extends Controller {
+  static targets = ["dialog", "form", "queryInput"];
   static values = { path: String };
 
   handle(event) {
-    if (
-      event.defaultPrevented ||
-      this.#hasBlockingModal() ||
-      this.#isEditableTarget(event.target)
-    ) {
+    if (event.defaultPrevented || this.#isEditableTarget(event.target)) {
       return;
     }
 
@@ -17,14 +14,49 @@ export default class extends Controller {
       return;
     }
 
-    event.preventDefault();
-
-    if (this.#onSearchPage()) {
-      this.#focusSearchInput();
+    if (this.#hasBlockingModal()) {
       return;
     }
 
-    Turbo.visit(this.pathValue);
+    event.preventDefault();
+    this.openDialog();
+  }
+
+  openDialog() {
+    if (!this.hasDialogTarget) {
+      Turbo.visit(this.pathValue);
+      return;
+    }
+
+    if (!this.dialogTarget.open) {
+      this.dialogTarget.showModal();
+    }
+
+    this.#focusSearchInput();
+  }
+
+  close(event) {
+    event.preventDefault();
+    this.#closeAndClear();
+  }
+
+  handleCancel(event) {
+    event.preventDefault();
+    this.#closeAndClear();
+  }
+
+  handleBackdropClick(event) {
+    if (event.target !== this.dialogTarget) {
+      return;
+    }
+
+    this.#closeAndClear();
+  }
+
+  handleSubmit() {
+    if (this.dialogTarget.open) {
+      this.dialogTarget.close();
+    }
   }
 
   #isOpenShortcut(event) {
@@ -46,22 +78,42 @@ export default class extends Controller {
     );
   }
 
-  #onSearchPage() {
-    const currentPath = window.location.pathname.replace(/\/+$/, "");
-    const targetPath = this.pathValue.replace(/\/+$/, "");
-    return currentPath === targetPath;
+  #closeAndClear() {
+    this.#resetForm();
+
+    if (this.dialogTarget.open) {
+      this.dialogTarget.close();
+    }
+  }
+
+  #resetForm() {
+    if (!this.hasFormTarget) {
+      return;
+    }
+
+    this.formTarget.reset();
+
+    this.formTarget.querySelectorAll("details").forEach((detailsElement) => {
+      detailsElement.open = false;
+    });
   }
 
   #focusSearchInput() {
-    const input = document.getElementById("global-search-query");
-    if (!input) return;
+    if (!this.hasQueryInputTarget) {
+      return;
+    }
 
-    input.focus();
-    input.select();
+    this.queryInputTarget.focus();
+    this.queryInputTarget.select();
   }
 
   #hasBlockingModal() {
-    return document.querySelector("dialog[open]") !== null;
+    const blockingDialog = document.querySelector("dialog[open]");
+    if (!blockingDialog) {
+      return false;
+    }
+
+    return !this.hasDialogTarget || blockingDialog !== this.dialogTarget;
   }
 
   #isEditableTarget(target) {

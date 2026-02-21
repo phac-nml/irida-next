@@ -36,7 +36,7 @@
 
           <% type_labels.each do |type, label| %>
             <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-              <%= check_box_tag "types[]", type, selected_types.include?(type), class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
+              <%= check_box_tag "types[]", type, selected_types.include?(type), id: "global-search-page-type-#{type}", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
               <span><%= label %></span>
             </label>
           <% end %>
@@ -47,7 +47,7 @@
 
           <% { "identifier" => "Identifier", "name" => "Name", "metadata" => "Metadata (samples)" }.each do |source, label| %>
             <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-              <%= check_box_tag "match_sources[]", source, selected_match_sources.include?(source), class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
+              <%= check_box_tag "match_sources[]", source, selected_match_sources.include?(source), id: "global-search-page-source-#{source}", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
               <span><%= label %></span>
             </label>
           <% end %>
