@@ -39,8 +39,8 @@ module GlobalSearch
 
       def readable_sample_project_ids
         @readable_sample_project_ids ||= authorized_scope(Project, type: :relation)
-                                         .select { |project| allowed_to?(:read_sample?, project) }
-                                         .map(&:id)
+                                         .select(:id, :namespace_id)
+                                         .filter_map { |project| project.id if allowed_to?(:read_sample?, project) }
       end
 
       def sample_scope(query:, match_options:, filters:, readable_project_ids:, limit:)
