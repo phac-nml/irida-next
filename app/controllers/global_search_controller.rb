@@ -17,7 +17,9 @@ class GlobalSearchController < ApplicationController
   def suggest
     search = GlobalSearch::Query.new(current_user, query_params.merge(suggest: true)).execute
 
-    render json: payload(search)
+    respond_to do |format|
+      format.json { render json: payload(search) }
+    end
   end
 
   private

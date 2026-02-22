@@ -28,6 +28,12 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test 'suggest rejects non-JSON requests' do
+    get global_search_suggest_path, params: { q: 'Project 1' }
+
+    assert_response :not_acceptable
+  end
+
   test 'suggest should respect selected types' do
     get global_search_suggest_path(format: :json), params: {
       q: 'Project 1',
