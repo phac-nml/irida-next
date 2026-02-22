@@ -4,7 +4,12 @@ require 'application_system_test_case'
 
 class GlobalSearchShortcutTest < ApplicationSystemTestCase
   setup do
+    Flipper.enable(:global_search)
     login_as users(:john_doe)
+  end
+
+  teardown do
+    Flipper.disable(:global_search)
   end
 
   test 'ctrl+k opens dialog on nested pages and escape clears and closes it' do
@@ -45,6 +50,15 @@ class GlobalSearchShortcutTest < ApplicationSystemTestCase
     assert_current_path(%r{\A/-/search\?})
     assert_selector '[data-global-search-version="g1"]'
     assert_field 'q', with: 'Project 1'
+  end
+
+  test 'dialog shortcut is unavailable when global search feature flag is disabled' do
+    Flipper.disable(:global_search)
+    visit '/-/groups/group-1'
+
+    trigger_global_search_shortcut
+
+    assert_no_selector "dialog[data-global-search-shortcut-target='dialog'][open]", visible: :all
   end
 
   private

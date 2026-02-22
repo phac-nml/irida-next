@@ -2,6 +2,8 @@
 
 # Global search endpoints for mixed cross-resource search.
 class GlobalSearchController < ApplicationController
+  before_action :ensure_enabled
+
   def index
     @search = GlobalSearch::Query.new(current_user, query_params.merge(suggest: false)).execute
     @workflow_states = WorkflowExecution.states.keys
@@ -19,6 +21,10 @@ class GlobalSearchController < ApplicationController
   end
 
   private
+
+  def ensure_enabled
+    not_found unless Flipper.enabled?(:global_search)
+  end
 
   def payload(search)
     {
