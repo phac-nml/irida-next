@@ -4,8 +4,13 @@ require 'test_helper'
 
 class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
   setup do
+    Flipper.enable(:global_search)
     @user = users(:john_doe)
     sign_in @user
+  end
+
+  teardown do
+    Flipper.disable(:global_search)
   end
 
   test 'should get global search index' do
@@ -13,6 +18,14 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select '[data-global-search-version="g1"]'
+  end
+
+  test 'should return not found when global search feature flag is disabled' do
+    Flipper.disable(:global_search)
+
+    get global_search_path, params: { q: 'Project 1' }
+
+    assert_response :not_found
   end
 
   test 'suggest should respect selected types' do
