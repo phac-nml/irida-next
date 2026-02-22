@@ -12,6 +12,21 @@ class GlobalSearchShortcutTest < ApplicationSystemTestCase
     Flipper.disable(:global_search)
   end
 
+  test 'dialog has accessible label and heading' do
+    visit '/-/groups/group-1'
+
+    trigger_global_search_shortcut
+
+    dialog = find("dialog[data-global-search-shortcut-target='dialog'][open]", visible: :all)
+
+    assert_equal 'global-search-dialog-title', dialog['aria-labelledby']
+
+    within(dialog) do
+      heading = find('#global-search-dialog-title', visible: :all)
+      assert heading.matches_css?('.sr-only', wait: 0)
+    end
+  end
+
   test 'ctrl+k opens dialog on nested pages and escape clears and closes it' do
     visit '/-/groups/group-1'
 

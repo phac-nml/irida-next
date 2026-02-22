@@ -1,9 +1,14 @@
 import { Controller } from "@hotwired/stimulus";
 import { Turbo } from "@hotwired/turbo-rails";
+import { announce } from "utilities/live_region";
 
 export default class extends Controller {
   static targets = ["dialog", "form", "queryInput"];
-  static values = { path: String };
+  static values = {
+    path: String,
+    openedAnnouncement: String,
+    closedAnnouncement: String,
+  };
 
   handle(event) {
     if (event.defaultPrevented || this.#isEditableTarget(event.target)) {
@@ -30,6 +35,7 @@ export default class extends Controller {
 
     if (!this.dialogTarget.open) {
       this.dialogTarget.showModal();
+      this.#announceOpened();
     }
 
     this.#focusSearchInput();
@@ -83,6 +89,19 @@ export default class extends Controller {
 
     if (this.dialogTarget.open) {
       this.dialogTarget.close();
+      this.#announceClosed();
+    }
+  }
+
+  #announceOpened() {
+    if (this.hasOpenedAnnouncementValue) {
+      announce(this.openedAnnouncementValue);
+    }
+  }
+
+  #announceClosed() {
+    if (this.hasClosedAnnouncementValue) {
+      announce(this.closedAnnouncementValue);
     }
   }
 
