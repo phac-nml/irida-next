@@ -199,6 +199,33 @@ fr:
       keys_deleted: 'Clés supprimées :'
       previous_version: Précédent (Version %{version})
     layout:
+      global_search_dialog:
+        close_aria_label: Fermer la boîte de recherche globale
+        close_button: Fermer
+        created_from: Créé à partir de
+        created_to: Créé jusqu'à
+        date_range_legend: Plage de dates
+        filters: Filtres
+        match_sources:
+          identifier: Identifiant
+          metadata: Métadonnées (échantillons)
+          name: Nom
+        match_sources_legend: Sources de correspondance
+        search_button: Rechercher
+        search_placeholder: Rechercher par nom, identifiant ou métadonnées...
+        sort_legend: Tri
+        sorts:
+          best_match: Meilleure correspondance
+          most_recent: Plus récent
+        types:
+          data_exports: Exportation de données
+          groups: Groupe
+          projects: Projet
+          samples: Échantillon
+          workflow_executions: Flux de travail
+        types_legend: Types
+        workflow_state: État du flux de travail
+        workflow_state_any: Tous
       language_selection:
         title: Sélection de langue
       main_content_link: Passer au contenu
