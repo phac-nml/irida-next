@@ -200,11 +200,14 @@ fr:
       previous_version: Précédent (Version %{version})
     layout:
       global_search_dialog:
+        aria_label: Recherche globale
         close_aria_label: Fermer la boîte de recherche globale
         close_button: Fermer
         created_from: Créé à partir de
         created_to: Créé jusqu'à
         date_range_legend: Plage de dates
+        dialog_closed_announcement: Boîte de recherche globale fermée
+        dialog_opened_announcement: Boîte de recherche globale ouverte
         filters: Filtres
         match_sources:
           identifier: Identifiant
