@@ -199,6 +199,33 @@ en:
       keys_deleted: 'Keys deleted:'
       previous_version: Previous (Version %{version})
     layout:
+      global_search_dialog:
+        close_aria_label: Close global search dialog
+        close_button: Close
+        created_from: Created From
+        created_to: Created To
+        date_range_legend: Date Range
+        filters: Filters
+        match_sources:
+          identifier: Identifier
+          metadata: Metadata (samples)
+          name: Name
+        match_sources_legend: Match Sources
+        search_button: Search
+        search_placeholder: Search by name, ID, or metadata...
+        sort_legend: Sort
+        sorts:
+          best_match: Best Match
+          most_recent: Most Recent
+        types:
+          data_exports: Data Export
+          groups: Group
+          projects: Project
+          samples: Sample
+          workflow_executions: Workflow
+        types_legend: Types
+        workflow_state: Workflow State
+        workflow_state_any: Any
       language_selection:
         title: Language Selection
       main_content_link: Skip to content

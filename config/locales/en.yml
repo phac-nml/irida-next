@@ -691,6 +691,38 @@ en:
     screen_reader:
       alert_dismissed: Alert dismissed
       close: Close
+  global_search:
+    index:
+      created_from: Created From
+      created_to: Created To
+      date_range_legend: Date Range
+      description: Search projects, groups, workflow executions, samples, and data exports.
+      filters: Filters
+      match_sources:
+        identifier: Identifier
+        metadata: Metadata (samples)
+        name: Name
+      match_sources_legend: Match Sources
+      no_results: No results found for this query and filter set.
+      per_type_limit: Per-Type Limit
+      search_button: Search
+      search_placeholder: Search by name, ID, or metadata...
+      sort_legend: Sort
+      sorts:
+        best_match: Best Match
+        most_recent: Most Recent
+      title: Global Search
+      total_limit: Total Limit
+      types:
+        data_exports: Data Export
+        groups: Group
+        projects: Project
+        samples: Sample
+        workflow_executions: Workflow
+      types_legend: Types
+      updated_at: Updated %{time}
+      workflow_state: Workflow State
+      workflow_state_any: Any
   graphql:
     value_scalar:
       error: "%{value} must be a string or an array of strings"

@@ -693,6 +693,38 @@ fr:
     screen_reader:
       alert_dismissed: Alerte fermée.
       close: Fermer
+  global_search:
+    index:
+      created_from: Créé à partir de
+      created_to: Créé jusqu'à
+      date_range_legend: Plage de dates
+      description: Rechercher des projets, groupes, flux de travail, échantillons et exportations de données.
+      filters: Filtres
+      match_sources:
+        identifier: Identifiant
+        metadata: Métadonnées (échantillons)
+        name: Nom
+      match_sources_legend: Sources de correspondance
+      no_results: Aucun résultat trouvé pour cette requête et cet ensemble de filtres.
+      per_type_limit: Limite par type
+      search_button: Rechercher
+      search_placeholder: Rechercher par nom, identifiant ou métadonnées...
+      sort_legend: Tri
+      sorts:
+        best_match: Meilleure correspondance
+        most_recent: Plus récent
+      title: Recherche globale
+      total_limit: Limite totale
+      types:
+        data_exports: Exportation de données
+        groups: Groupe
+        projects: Projet
+        samples: Échantillon
+        workflow_executions: Flux de travail
+      types_legend: Types
+      updated_at: Mis à jour %{time}
+      workflow_state: État du flux de travail
+      workflow_state_any: Tous
   graphql:
     value_scalar:
       error: "%{value} doit être une chaîne ou un tableau de chaînes"
