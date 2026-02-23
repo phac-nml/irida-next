@@ -121,10 +121,12 @@ class LayoutComponentTest < ViewComponent::TestCase
   test 'renders global site banners when configured' do
     user = users(:john_doe)
 
-    Irida::SiteBanner.stubs(:messages).returns([
-                                                 { type: :danger, message: 'System outage' },
-                                                 { type: :warning, message: 'Maintenance notice' }
-                                               ])
+    GlobalNotification.instance!.update!(
+      enabled: true,
+      style: :danger,
+      message_en: 'System outage',
+      message_fr: 'Panne du systeme'
+    )
 
     render_inline LayoutComponent.new(user: user) do |layout|
       layout.with_sidebar do |sidebar|
@@ -134,62 +136,23 @@ class LayoutComponentTest < ViewComponent::TestCase
     end
 
     assert_selector '[role="status"][aria-live="polite"]'
-    assert_selector '.alert-component', count: 2
+    assert_selector '.alert-component', count: 1
     assert_text 'System outage'
-    assert_text 'Maintenance notice'
   end
 
-  test 'caches site banners to avoid repeated YAML parsing' do
+  test 'site banners reflect locale for i18n support' do
     user = users(:john_doe)
+    GlobalNotification.instance!.update!(
+      enabled: true,
+      style: :info,
+      message_en: 'English',
+      message_fr: 'Français'
+    )
 
-    # Temporarily use memory store instead of null store for this test
-    original_cache = Rails.cache
-    Rails.cache = ActiveSupport::Cache::MemoryStore.new
-    Rails.cache.clear
+    en_banners = I18n.with_locale(:en) { LayoutComponent.new(user:).site_banners }
+    fr_banners = I18n.with_locale(:fr) { LayoutComponent.new(user:).site_banners }
 
-    # Expect SiteBanner.messages to be called exactly once
-    Irida::SiteBanner.expects(:messages).once.returns([{ type: :info, message: 'Test' }])
-
-    # First component initialization should call SiteBanner.messages
-    component1 = LayoutComponent.new(user:)
-    assert_equal 1, component1.site_banners.length
-
-    # Second component initialization should use cached result
-    component2 = LayoutComponent.new(user:)
-    assert_equal 1, component2.site_banners.length
-
-    # Mocha will verify the expectation (called exactly once) at test teardown
-  ensure
-    Rails.cache = original_cache
-  end
-
-  test 'site banner cache key includes locale for i18n support' do
-    user = users(:john_doe)
-    Rails.cache.clear
-
-    # Stub to return different messages per locale
-    Irida::SiteBanner.stubs(:messages).returns([{ type: :info, message: 'English' }])
-
-    # Create component in English and verify cache key
-    en_cache_key = nil
-    I18n.with_locale(:en) do
-      component = LayoutComponent.new(user:)
-      en_cache_key = component.send(:site_banner_cache_key)
-    end
-
-    # Update stub for French
-    Irida::SiteBanner.stubs(:messages).returns([{ type: :info, message: 'Français' }])
-
-    # Create component in French and verify different cache key
-    fr_cache_key = nil
-    I18n.with_locale(:fr) do
-      component = LayoutComponent.new(user:)
-      fr_cache_key = component.send(:site_banner_cache_key)
-    end
-
-    # Verify cache keys differ by locale
-    assert_equal :en, en_cache_key[1], 'English cache key should include :en locale'
-    assert_equal :fr, fr_cache_key[1], 'French cache key should include :fr locale'
-    assert_not_equal en_cache_key, fr_cache_key, 'Cache keys should differ by locale'
+    assert_equal 'English', en_banners.first[:message]
+    assert_equal 'Français', fr_banners.first[:message]
   end
 end
