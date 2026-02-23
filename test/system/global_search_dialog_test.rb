@@ -28,6 +28,27 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
     end
   end
 
+  test 'filters disclosure removes controls from tab order when collapsed' do
+    visit '/-/groups/group-1'
+
+    trigger_global_search_shortcut
+
+    assert_selector "[data-global-search-dialog-target='filtersContent'][hidden][inert]", visible: :all
+
+    within("dialog[data-global-search-dialog-target='dialog'][open]") do
+      find('summary', text: 'Filters').click
+    end
+
+    assert_selector "[data-global-search-dialog-target='filtersContent']:not([hidden])", visible: :all
+    assert_no_selector "[data-global-search-dialog-target='filtersContent'][inert]", visible: :all
+
+    within("dialog[data-global-search-dialog-target='dialog'][open]") do
+      find('summary', text: 'Filters').click
+    end
+
+    assert_selector "[data-global-search-dialog-target='filtersContent'][hidden][inert]", visible: :all
+  end
+
   test 'slash opens dialog on nested pages' do
     visit '/-/groups/group-1'
 
@@ -93,6 +114,31 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
     trigger_global_search_shortcut
 
     assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+  end
+
+  test 'closing dialog restores focus to the previously focused element' do
+    visit '/-/groups/group-1'
+
+    page.execute_script(<<~JS)
+      const trigger = document.createElement("button");
+      trigger.type = "button";
+      trigger.id = "global-search-focus-origin";
+      trigger.textContent = "Focus origin";
+      trigger.style.position = "fixed";
+      trigger.style.top = "1rem";
+      trigger.style.left = "1rem";
+      document.body.append(trigger);
+      trigger.focus();
+    JS
+
+    assert_equal 'global-search-focus-origin', page.evaluate_script('document.activeElement.id')
+
+    trigger_global_search_shortcut
+    assert_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+
+    find('body').send_keys(:escape)
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_equal 'global-search-focus-origin', page.evaluate_script('document.activeElement.id')
   end
 
   private

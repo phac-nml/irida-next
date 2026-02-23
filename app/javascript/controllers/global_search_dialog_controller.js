@@ -18,12 +18,40 @@ const EDITABLE_SELECTOR =
  *   - `submit->global-search-dialog#handleSubmit`
  */
 export default class extends Controller {
-  static targets = ["dialog", "form", "queryInput"];
+  static targets = [
+    "dialog",
+    "form",
+    "queryInput",
+    "filtersDetails",
+    "filtersContent",
+  ];
   static values = {
     path: String,
     openedAnnouncement: String,
     closedAnnouncement: String,
   };
+
+  connect() {
+    this.previouslyFocusedElement = null;
+    this.syncFilters();
+  }
+
+  disconnect() {
+    this.previouslyFocusedElement = null;
+  }
+
+  syncFilters() {
+    if (!this.hasFiltersDetailsTarget || !this.hasFiltersContentTarget) {
+      return;
+    }
+
+    const isExpanded = this.filtersDetailsTarget.open;
+    this.filtersContentTarget.hidden = !isExpanded;
+
+    if ("inert" in this.filtersContentTarget) {
+      this.filtersContentTarget.inert = !isExpanded;
+    }
+  }
 
   handle(event) {
     if (
@@ -54,6 +82,8 @@ export default class extends Controller {
     }
 
     if (!this.dialogTarget.open) {
+      this.#rememberFocusedElement();
+
       if (!this.#showDialog()) {
         this.#visitSearchPage();
         return;
@@ -107,6 +137,7 @@ export default class extends Controller {
     if (this.hasDialogTarget && this.dialogTarget.open) {
       this.dialogTarget.close();
       this.#announceClosed();
+      this.#restoreFocus();
     }
   }
 
@@ -157,6 +188,8 @@ export default class extends Controller {
     this.formTarget.querySelectorAll("details").forEach((detailsElement) => {
       detailsElement.open = false;
     });
+
+    this.syncFilters();
   }
 
   #focusSearchInput() {
@@ -187,5 +220,38 @@ export default class extends Controller {
     }
 
     return target.closest(EDITABLE_SELECTOR) !== null;
+  }
+
+  #rememberFocusedElement() {
+    const activeElement = document.activeElement;
+
+    if (
+      activeElement instanceof HTMLElement &&
+      activeElement !== document.body
+    ) {
+      this.previouslyFocusedElement = activeElement;
+      return;
+    }
+
+    this.previouslyFocusedElement = null;
+  }
+
+  #restoreFocus() {
+    if (!(this.previouslyFocusedElement instanceof HTMLElement)) {
+      return;
+    }
+
+    if (!this.previouslyFocusedElement.isConnected) {
+      this.previouslyFocusedElement = null;
+      return;
+    }
+
+    try {
+      this.previouslyFocusedElement.focus({ preventScroll: true });
+    } catch {
+      // Ignore focus restoration failures for detached/disabled elements.
+    } finally {
+      this.previouslyFocusedElement = null;
+    }
   }
 }
