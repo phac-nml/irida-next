@@ -3,10 +3,6 @@
 # Singleton global notification shown in application layouts.
 class GlobalNotification < ApplicationRecord
   SINGLETON_GUARD = 'global'
-  MESSAGE_ATTRIBUTES = {
-    en: :message_en,
-    fr: :message_fr
-  }.freeze
 
   enum :style, {
     info: 'info',
@@ -16,7 +12,7 @@ class GlobalNotification < ApplicationRecord
   }, validate: true
 
   validates :singleton_guard, inclusion: { in: [SINGLETON_GUARD] }, uniqueness: true
-  validate :at_least_one_message_present, if: :enabled?
+  validate :all_locale_messages_present, if: :enabled?
 
   before_validation :set_singleton_guard
 
@@ -33,22 +29,16 @@ class GlobalNotification < ApplicationRecord
   end
 
   def message(locale: I18n.locale)
-    locale_message(locale) || locale_message(I18n.default_locale)
+    messages[locale.to_s].presence || messages[I18n.default_locale.to_s].presence
   end
 
   private
 
-  def at_least_one_message_present
-    return if MESSAGE_ATTRIBUTES.values.any? { |attr| public_send(attr).present? }
+  def all_locale_messages_present
+    missing = I18n.available_locales.select { |locale| messages[locale.to_s].blank? }
+    return if missing.empty?
 
-    errors.add(:message, :blank)
-  end
-
-  def locale_message(locale)
-    attribute = MESSAGE_ATTRIBUTES[locale.to_sym]
-    return if attribute.nil?
-
-    public_send(attribute).presence
+    missing.each { |locale| errors.add(:messages, "must include a message for #{locale}") }
   end
 
   def set_singleton_guard

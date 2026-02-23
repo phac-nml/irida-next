@@ -11,28 +11,37 @@ class GlobalNotificationTest < ActiveSupport::TestCase
   end
 
   test 'enforces singleton at model validation level' do
-    GlobalNotification.instance!.update!(enabled: true, style: :info, message_en: 'Hello')
+    GlobalNotification.instance!.update!(enabled: true, style: :info, messages: { en: 'Hello', fr: 'Bonjour' })
 
     duplicate = GlobalNotification.new(
       singleton_guard: GlobalNotification::SINGLETON_GUARD,
       enabled: true,
       style: :warning,
-      message_en: 'Second message'
+      messages: { en: 'Second', fr: 'Deuxième' }
     )
 
     assert_not duplicate.valid?
     assert_includes duplicate.errors[:singleton_guard], 'has already been taken'
   end
 
-  test 'requires at least one localized message' do
-    notification = GlobalNotification.new(enabled: true, style: :warning)
+  test 'requires messages for all available locales when enabled' do
+    notification = GlobalNotification.new(enabled: true, style: :warning, messages: {})
 
     assert_not notification.valid?
-    assert_includes notification.errors[:message], "can't be blank"
+    I18n.available_locales.each do |locale|
+      assert(notification.errors[:messages].any? { |msg| msg.include?(locale.to_s) })
+    end
+  end
+
+  test 'rejects partial locale coverage' do
+    notification = GlobalNotification.new(enabled: true, style: :info, messages: { en: 'English only' })
+
+    assert_not notification.valid?
+    assert(notification.errors[:messages].any? { |msg| msg.include?('fr') })
   end
 
   test 'only accepts canonical styles' do
-    notification = GlobalNotification.new(enabled: true, style: :notice, message_en: 'Hello')
+    notification = GlobalNotification.new(enabled: true, style: :notice, messages: { en: 'Hello', fr: 'Bonjour' })
 
     assert_not notification.valid?
     assert_includes notification.errors[:style], 'is not included in the list'
@@ -42,8 +51,7 @@ class GlobalNotificationTest < ActiveSupport::TestCase
     notification = GlobalNotification.new(
       enabled: true,
       style: :danger,
-      message_en: 'English text',
-      message_fr: 'Texte francais'
+      messages: { 'en' => 'English text', 'fr' => 'Texte francais' }
     )
 
     fr_message = I18n.with_locale(:fr) { notification.message }
@@ -54,7 +62,7 @@ class GlobalNotificationTest < ActiveSupport::TestCase
   end
 
   test 'message falls back to default locale when current locale is unavailable' do
-    notification = GlobalNotification.new(enabled: true, style: :info, message_en: 'English fallback')
+    notification = GlobalNotification.new(enabled: true, style: :info, messages: { 'en' => 'English fallback' })
 
     message = I18n.with_locale(:fr) { notification.message }
 
@@ -62,10 +70,16 @@ class GlobalNotificationTest < ActiveSupport::TestCase
   end
 
   test 'active? requires enabled notification with message' do
-    notification = GlobalNotification.new(enabled: false, style: :info, message_en: 'Hello')
+    notification = GlobalNotification.new(enabled: false, style: :info, messages: { en: 'Hello', fr: 'Bonjour' })
     assert_not notification.active?
 
     notification.enabled = true
     assert notification.active?
+  end
+
+  test 'skips locale validation when disabled' do
+    notification = GlobalNotification.new(enabled: false, style: :info, messages: {})
+
+    assert notification.valid?
   end
 end
