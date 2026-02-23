@@ -19,15 +19,9 @@ class LayoutComponent < Component
   private
 
   def fetch_site_banners
-    Rails.cache.fetch(site_banner_cache_key, expires_in: 1.hour) do
-      Irida::SiteBanner.messages
-    end
-  end
+    notification = GlobalNotification.instance
+    return [] unless notification.persisted? && notification.active?
 
-  def site_banner_cache_key
-    path = Irida::SiteBanner::DEFAULT_PATH
-    mtime = File.exist?(path) ? File.mtime(path) : nil
-    mtime_version = mtime ? "#{mtime.to_i}-#{mtime.nsec}" : '0-0'
-    ['site_banners', I18n.locale, mtime_version]
+    [{ type: notification.style.to_sym, message: notification.message }]
   end
 end
