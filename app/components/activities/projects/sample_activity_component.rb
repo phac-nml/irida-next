@@ -75,7 +75,14 @@ module Activities
       end
 
       def dialog_type
-        @activity[:action]
+        case @activity[:action] # rubocop:disable Style/HashLikeCase
+        when 'sample_destroy_multiple'
+          'samples_destroy'
+        when 'project_import_samples'
+          'project_import_samples'
+        when 'project_bulk_metadata_update'
+          'project_bulk_metadata_update'
+        end
       end
 
       def show_more_details_button?
