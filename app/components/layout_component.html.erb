@@ -17,14 +17,10 @@
     xl:grid-rows-1 dark:bg-slate-800
   ",
   data: {
-    controller: class_names("layout", { "global-search-shortcut": global_search_enabled? }),
-    action: (global_search_enabled? ? "keydown@window->global-search-shortcut#handle" : nil),
+    controller: "layout",
     layout_target: "layoutContainer",
     layout_collapsed_announcement_value: t(:"components.layout.sidebar.collapsed_announcement"),
     layout_expanded_announcement_value: t(:"components.layout.sidebar.expanded_announcement"),
-    global_search_shortcut_path_value: (global_search_enabled? ? global_search_path : nil),
-    global_search_shortcut_opened_announcement_value: (global_search_enabled? ? t(:"components.layout.global_search_dialog.dialog_opened_announcement") : nil),
-    global_search_shortcut_closed_announcement_value: (global_search_enabled? ? t(:"components.layout.global_search_dialog.dialog_closed_announcement") : nil),
     turbo_prefetch: "false"
   }
 ) do %>
@@ -88,114 +84,7 @@
     </main>
 
     <% if global_search_enabled? %>
-      <dialog
-        class="
-          w-[min(52rem,calc(100%-1.5rem))] rounded-2xl border border-slate-200 bg-white p-0 shadow-2xl
-          backdrop:bg-slate-900/45 dark:border-slate-700 dark:bg-slate-900 dark:backdrop:bg-black/60
-        "
-        aria-labelledby="global-search-dialog-title"
-        data-global-search-shortcut-target="dialog"
-        data-action="cancel->global-search-shortcut#handleCancel click->global-search-shortcut#handleBackdropClick"
-      >
-        <%= form_with url: global_search_path, method: :get, local: true, class: "space-y-4 p-4 sm:p-5", data: { global_search_shortcut_target: "form", action: "submit->global-search-shortcut#handleSubmit" } do %>
-          <h2 id="global-search-dialog-title" class="sr-only">
-            <%= t(:"components.layout.global_search_dialog.aria_label") %>
-          </h2>
-
-          <div class="flex flex-wrap items-center gap-2">
-            <%= text_field_tag :q, nil, id: "global-search-shortcut-query", placeholder: t(:"components.layout.global_search_dialog.search_placeholder"), autocomplete: "off", data: { global_search_shortcut_target: "queryInput" }, class: "h-11 min-w-[18rem] flex-1 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" %>
-            <%= submit_tag t(:"components.layout.global_search_dialog.search_button"), class: "button button-primary h-11 min-w-[6.5rem] px-4" %>
-
-            <button
-              type="button"
-              class="button h-11 button-default px-3"
-              aria-label="<%= t(:"components.layout.global_search_dialog.close_aria_label") %>"
-              data-action="global-search-shortcut#close"
-            >
-              <%= t(:"components.layout.global_search_dialog.close_button") %>
-            </button>
-          </div>
-
-          <details class="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/50">
-            <summary class="cursor-pointer text-base font-medium text-slate-700 select-none dark:text-slate-200">
-              <%= t(:"components.layout.global_search_dialog.filters") %>
-            </summary>
-
-            <div class="mt-4 grid gap-4 md:grid-cols-2">
-              <fieldset class="space-y-2">
-                <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">
-                  <%= t(:"components.layout.global_search_dialog.types_legend") %>
-                </legend>
-
-                <% { "projects" => t(:"components.layout.global_search_dialog.types.projects"), "groups" => t(:"components.layout.global_search_dialog.types.groups"), "workflow_executions" => t(:"components.layout.global_search_dialog.types.workflow_executions"), "samples" => t(:"components.layout.global_search_dialog.types.samples"), "data_exports" => t(:"components.layout.global_search_dialog.types.data_exports") }.each do |type, label| %>
-                  <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-                    <%= check_box_tag "types[]", type, true, id: "global-search-shortcut-type-#{type}", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
-                    <span><%= label %></span>
-                  </label>
-                <% end %>
-              </fieldset>
-
-              <fieldset class="space-y-2">
-                <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">
-                  <%= t(:"components.layout.global_search_dialog.match_sources_legend") %>
-                </legend>
-
-                <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-                  <%= check_box_tag "match_sources[]", "identifier", true, id: "global-search-shortcut-source-identifier", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
-                  <span><%= t(:"components.layout.global_search_dialog.match_sources.identifier") %></span>
-                </label>
-
-                <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-                  <%= check_box_tag "match_sources[]", "name", true, id: "global-search-shortcut-source-name", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
-                  <span><%= t(:"components.layout.global_search_dialog.match_sources.name") %></span>
-                </label>
-
-                <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-                  <%= check_box_tag "match_sources[]", "metadata", false, id: "global-search-shortcut-source-metadata", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
-                  <span><%= t(:"components.layout.global_search_dialog.match_sources.metadata") %></span>
-                </label>
-              </fieldset>
-
-              <fieldset class="space-y-2">
-                <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">
-                  <%= t(:"components.layout.global_search_dialog.sort_legend") %>
-                </legend>
-
-                <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-                  <%= radio_button_tag :sort, "best_match", true, id: "global-search-shortcut-sort-best-match", class: "h-4 w-4 border-slate-300 text-primary-600 focus:ring-primary-500" %>
-                  <span><%= t(:"components.layout.global_search_dialog.sorts.best_match") %></span>
-                </label>
-
-                <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-                  <%= radio_button_tag :sort, "most_recent", false, id: "global-search-shortcut-sort-most-recent", class: "h-4 w-4 border-slate-300 text-primary-600 focus:ring-primary-500" %>
-                  <span><%= t(:"components.layout.global_search_dialog.sorts.most_recent") %></span>
-                </label>
-              </fieldset>
-
-              <div>
-                <%= label_tag "global-search-shortcut-workflow-state", t(:"components.layout.global_search_dialog.workflow_state"), class: "mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500" %>
-                <%= select_tag :workflow_state, options_for_select(WorkflowExecution.states.keys.map { |state| [state.humanize, state] }), include_blank: t(:"components.layout.global_search_dialog.workflow_state_any"), id: "global-search-shortcut-workflow-state", class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" %>
-              </div>
-
-              <fieldset class="grid gap-2 sm:grid-cols-2 md:col-span-2">
-                <legend class="col-span-full text-xs font-semibold tracking-wide text-slate-500 uppercase">
-                  <%= t(:"components.layout.global_search_dialog.date_range_legend") %>
-                </legend>
-
-                <div>
-                  <%= label_tag "global-search-shortcut-created-from", t(:"components.layout.global_search_dialog.created_from"), class: "mb-1 block text-xs text-slate-600 dark:text-slate-300" %>
-                  <%= date_field_tag :created_from, nil, id: "global-search-shortcut-created-from", class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" %>
-                </div>
-
-                <div>
-                  <%= label_tag "global-search-shortcut-created-to", t(:"components.layout.global_search_dialog.created_to"), class: "mb-1 block text-xs text-slate-600 dark:text-slate-300" %>
-                  <%= date_field_tag :created_to, nil, id: "global-search-shortcut-created-to", class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" %>
-                </div>
-              </fieldset>
-            </div>
-          </details>
-        <% end %>
-      </dialog>
+      <%= render GlobalSearch::DialogComponent.new %>
     <% end %>
 
     <%= render ConfirmationComponent.new %>

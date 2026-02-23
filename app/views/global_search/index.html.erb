@@ -2,22 +2,6 @@
 <% selected_match_sources = Array(@search.meta[:match_sources]) %>
 <% selected_sort = @search.meta[:sort].presence || 'best_match' %>
 
-<% type_labels = {
-  'projects' => t(:"global_search.index.types.projects"),
-  'groups' => t(:"global_search.index.types.groups"),
-  'workflow_executions' => t(:"global_search.index.types.workflow_executions"),
-  'samples' => t(:"global_search.index.types.samples"),
-  'data_exports' => t(:"global_search.index.types.data_exports")
-} %>
-
-<% type_pill_classes = {
-  'projects' => "border border-blue-200 bg-blue-50/50 text-blue-700 dark:border-blue-800/50 dark:bg-blue-900/20 dark:text-blue-300",
-  'groups' => "border border-cyan-200 bg-cyan-50/50 text-cyan-700 dark:border-cyan-800/50 dark:bg-cyan-900/20 dark:text-cyan-300",
-  'workflow_executions' => "border border-amber-200 bg-amber-50/50 text-amber-700 dark:border-amber-800/50 dark:bg-amber-900/20 dark:text-amber-300",
-  'samples' => "border border-emerald-200 bg-emerald-50/50 text-emerald-700 dark:border-emerald-800/50 dark:bg-emerald-900/20 dark:text-emerald-300",
-  'data_exports' => "border border-rose-200 bg-rose-50/50 text-rose-700 dark:border-rose-800/50 dark:bg-rose-900/20 dark:text-rose-300"
-} %>
-
 <div data-global-search-version="g1" class="mx-auto max-w-5xl space-y-6">
   <header class="space-y-2">
     <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100"><%= t(:"global_search.index.title") %></h1>
@@ -49,10 +33,10 @@
             <%= t(:"global_search.index.types_legend") %>
           </legend>
 
-          <% type_labels.each do |type, label| %>
+          <% GlobalSearch::ResultComponent::TYPE_LABELS.each do |type, label_key| %>
             <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
               <%= check_box_tag "types[]", type, selected_types.include?(type), id: "global-search-page-type-#{type}", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-offset-slate-900" %>
-              <span><%= label %></span>
+              <span><%= t(label_key) %></span>
             </label>
           <% end %>
         </fieldset>
@@ -132,42 +116,7 @@
         <%= t(:"global_search.index.no_results") %>
       </div>
     <% else %>
-      <ul class="space-y-2">
-        <% @search.results.each do |result| %>
-          <li class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
-            <div class="flex items-start justify-between gap-3">
-              <div class="min-w-0 space-y-1">
-                <%= link_to result.title, result.url, class: "block truncate text-base font-medium text-primary-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 rounded-sm dark:focus-visible:ring-offset-slate-900" %>
-
-                <p class="truncate text-sm text-slate-600 dark:text-slate-300"><%= result.subtitle %></p>
-              </div>
-
-              <span
-                class="
-                  <%= class_names(
-                  'shrink-0 rounded-full px-2.5 py-1 text-xs font-medium',
-                  type_pill_classes[result.type] || 'border border-slate-200 bg-slate-50/50 text-slate-700 dark:border-slate-700/50 dark:bg-slate-800/20 dark:text-slate-300'
-                  ) %>
-                "
-              >
-                <%= type_labels[result.type] || result.type.humanize %>
-              </span>
-            </div>
-
-            <div class="mt-3 flex flex-wrap items-center gap-2">
-              <% if result.type == "samples" && result.context_label.present? && result.context_url.present? %>
-                <%= link_to result.context_label, result.context_url, class: "rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-offset-slate-900" %>
-              <% end %>
-
-              <% if result.updated_at.present? %>
-                <span class="text-xs text-slate-500 dark:text-slate-400">
-                  <%= t(:"global_search.index.updated_at", time: result.updated_at.to_fs(:long)) %>
-                </span>
-              <% end %>
-            </div>
-          </li>
-        <% end %>
-      </ul>
+      <ul class="space-y-2"><%= render GlobalSearch::ResultComponent.with_collection(@search.results) %></ul>
     <% end %>
   </section>
 </div>
