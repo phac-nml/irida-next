@@ -27,10 +27,43 @@ module Viral
     # @param type [Symbol, String] The type of the flash message.
     # @param data [String] The message content.
     # @param timeout [Integer] The auto-dismiss timeout in milliseconds.
-    def initialize(type:, data:, timeout: DEFAULT_TIMEOUT)
+    def initialize(type:, data:, timeout: DEFAULT_TIMEOUT, **system_arguments)
       @type = normalize_type(type.to_sym)
       @data = data
       @timeout = @type == :error ? 0 : timeout
+      @system_arguments = system_arguments
+    end
+
+    # Build and return the HTML/system arguments hash for the component wrapper.
+    #
+    # Populates and normalizes `@system_arguments` with sensible defaults used
+    # by the flash component (generated `id`, `data` attributes for the
+    # Stimulus controller, timeout and type values, CSS classes, ARIA
+    # attributes, Turbo permanence, inline style for initial animation, etc.).
+    # This method mutates `@system_arguments` in-place and returns the updated
+    # hash for rendering (e.g. `tag.div(**system_arguments)`).
+    #
+    # @return [Hash] attributes suitable for passing to a view helper or tag
+    #   when rendering the component wrapper.
+    def system_arguments # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+      @system_arguments[:id] = @system_arguments[:id] || component_id
+      @system_arguments[:data] ||= {}
+      @system_arguments[:data][:controller] = 'viral--flash'
+      @system_arguments[:data]['viral--flash-timeout-value'] = timeout
+      @system_arguments[:data]['viral--flash-type-value'] = type
+      @system_arguments[:classes] = class_names(
+        'flex items-start w-full max-w-md p-4 mb-4 text-slate-700 bg-white rounded-xl shadow-lg border border-slate-200
+        dark:text-slate-300 dark:bg-slate-800 dark:border-slate-700 transition-all duration-300 ease-out transform',
+        @system_arguments[:classes]
+      )
+      @system_arguments[:role] = 'alert'
+      @system_arguments[:aria] ||= {}
+      @system_arguments[:aria][:live] = 'assertive'
+      @system_arguments[:aria][:atomic] = 'true'
+      @system_arguments[:aria][:describedby] = "#{@system_arguments[:id]}-message"
+      @system_arguments[:data][:turbo_permanent] = 'true'
+      @system_arguments[:style] = 'opacity: 0; transform: translateY(-20px) scale(0.95);'
+      @system_arguments
     end
 
     # Generates a unique ID for the flash component.

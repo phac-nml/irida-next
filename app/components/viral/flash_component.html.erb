@@ -1,20 +1,4 @@
-<div
-  data-controller="viral--flash"
-  data-viral--flash-timeout-value="<%= timeout %>"
-  data-viral--flash-type-value="<%= type %>"
-  id="<%= component_id %>"
-  class="
-    flex items-start w-full max-w-md p-4 mb-4 text-slate-700 bg-white rounded-xl
-    shadow-lg border border-slate-200 dark:text-slate-300 dark:bg-slate-800
-    dark:border-slate-700 transition-all duration-300 ease-out transform
-  "
-  role="alert"
-  aria-live="assertive"
-  aria-atomic="true"
-  aria-describedby="<%= component_id %>-message"
-  data-turbo-permanent="true"
-  style="opacity: 0; transform: translateY(-20px) scale(0.95);"
->
+<%= render Viral::BaseComponent.new(tag: :div, **system_arguments) do %>
   <!-- Icon container - hidden from screen readers but visible -->
   <div
     class="
@@ -27,7 +11,7 @@
   </div>
   <!-- Message content -->
   <div
-    id="<%= component_id %>-message"
+    id="<%= @system_arguments[:id] %>-message"
     class="
       flex-1 min-w-0 text-sm leading-relaxed text-slate-800 dark:text-slate-200
     "
@@ -50,4 +34,4 @@
   >
     <%= pathogen_icon(:x, size: :sm, color: :subdued) %>
   </button>
-</div>
+<% end %>
