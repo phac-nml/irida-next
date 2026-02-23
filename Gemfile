@@ -65,7 +65,7 @@ gem 'openssl', '~> 4.0'
 
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'pathogen_view_components', path: './embedded_gems/pathogen'
-gem 'reactionview', '~> 0.2.0'
+gem 'reactionview', '~> 0.2.1'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
 # ActiveRecord Cursor Paginate
