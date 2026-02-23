@@ -110,19 +110,6 @@ module Samples
                      @sample2.reload.metadata)
       end
 
-      test 'import sample metadata via csv file using sample names for group' do
-        assert_equal({}, @sample1.metadata)
-        assert_equal({}, @sample2.metadata)
-        params = { sample_id_column: 'sample_name' }
-        assert_empty Samples::Metadata::FileImportService.new(@group, @john_doe, @blob.id,
-                                                              params).execute
-        assert_equal(@group.errors.messages_for(:sample).first,
-                     I18n.t(
-                       'services.samples.metadata.import_file.sample_not_found_within_group',
-                       sample_puid: @sample1.name
-                     ))
-      end
-
       test 'import sample metadata via csv file using sample puids for group' do
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)
@@ -381,7 +368,7 @@ module Samples
         Samples::Metadata::FileImportService.new(project31.namespace, @john_doe, blob.id, params).execute
 
         assert project31.namespace.errors.full_messages_for(:sample).include?(
-          "Sample #{I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
+          "Sample #{I18n.t('services.samples.metadata.bulk_update.sample_metadata_fields_not_updated',
                            sample_name: sample34.name,
                            metadata_fields: 'metadatafield1')}"
         )

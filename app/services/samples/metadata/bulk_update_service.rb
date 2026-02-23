@@ -190,7 +190,7 @@ module Samples
 
         unsuccessful_updates.each do |sample_identifier, changes|
           @namespace.errors.add(:sample,
-                                I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
+                                I18n.t('services.samples.metadata.bulk_update.sample_metadata_fields_not_updated',
                                        sample_name: sample_identifier,
                                        metadata_fields: changes.join(', ')))
         end

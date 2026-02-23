@@ -3,6 +3,13 @@ en:
   components:
     activity:
       dialog:
+        bulk_metadata_update:
+          description:
+            one: "%{user} updated metadata for %{count} sample"
+            other: "%{user} updated metadata for %{count} samples"
+          project: Project
+          sample: Sample
+          title: Uploaded Metadata
         group_sample_transfer:
           description:
             one: "%{user} transferred 1 sample between projects"
@@ -11,13 +18,6 @@ en:
           title: Transferred Samples
           transferred_from: Transferred From
           transferred_to: Transferred To
-        bulk_metadata_update:
-          description:
-            one: "%{user} updated metadata for %{count} sample"
-            other: "%{user} updated metadata for %{count} samples"
-          project: Project
-          sample: Sample
-          title: Uploaded Metadata
         import_samples:
           description:
             group: "%{user} imported %{count} samples to group"
@@ -88,6 +88,9 @@ en:
           link_descriptive_text: View metadata templates for project
       more_details: More details
       samples:
+        bulk_metadata_update:
+          more_details:
+            button_descriptive_text: View more details about updated sample metadata
         clone:
           link_descriptive_text: View samples page for project with persistent unique identifier %{project_puid}
           more_details:
@@ -98,9 +101,6 @@ en:
         import:
           more_details:
             button_descriptive_text: View more details about imported samples
-        bulk_metadata_update:
-          more_details:
-            button_descriptive_text: View more details about updated metadata
         link_descriptive_text: View sample details for sample with persistent unique identifier %{sample_puid}
         transfer:
           link_descriptive_text: View samples page for project with persistent unique identifier %{project_puid}

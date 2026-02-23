@@ -223,9 +223,9 @@ en:
         transfer_in_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
       samples:
+        bulk_metadata_update_html: "%{user} updated metadata for %{href} samples"
         clone_html: "%{user} copied %{cloned_samples_count} samples to other projects"
         destroy_html: "%{user} removed %{href} samples from group"
-        bulk_metadata_update_html: "%{user} updated metadata for %{href} samples"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
       subgroups:
         create_html: "%{user} created subgroup %{href}"
@@ -259,12 +259,12 @@ en:
         attachment:
           create_html: "%{user} attached files to sample %{href}"
           destroy_html: "%{user} removed files from sample %{href}"
+        bulk_metadata_update_html: "%{user} updated metadata for %{href} samples"
         clone_html: "%{user} copied %{cloned_samples_count} samples to project %{href}"
         cloned_from_html: "%{user} copied %{cloned_samples_count} samples from project %{href}"
         create_html: "%{user} created sample %{href}"
         destroy_html: "%{user} removed sample %{href}"
         destroy_multiple_html: "%{user} removed %{href} samples from project"
-        bulk_metadata_update_html: "%{user} updated metadata for %{href} samples"
         metadata:
           update_html: "%{user} updated sample %{href} metadata"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples to project %{href}"
@@ -1774,16 +1774,13 @@ en:
       metadata:
         bulk_update:
           duplicate_identifier: 'Sample %{sample_identifier}: Multiple samples with identifier "%{sample_identifier}"'
+          sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated.
           sample_not_found: 'Sample %{sample_identifier}: Sample "%{sample_identifier}" either does not exist or you are not authorized to update the sample'
         empty_metadata: No metadata was received to update sample '%{sample_name}'
         fields:
           multi_all_keys_exist: Metadata keys '%{keys}' already exist.
           sample_does_not_belong_to_project: Sample '%{sample_name}'' does not belong to project '%{project_name}'
           single_all_keys_exist: Metadata key '%{key}' already exist.
-        import_file:
-          sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated.
-          sample_not_found_within_group: Could not find sample with puid '%{sample_puid}' in this group.
-          sample_not_found_within_project: Could not find sample with puid or name '%{sample_puid}' in this project.
         nested_metadata: Sample '%{sample_name}' with metadata key '%{key}' cannot contain nested JSON.
         sample_does_not_belong_to_project: Sample '%{sample_name}' does not belong to project '%{project_name}'
         update_fields:

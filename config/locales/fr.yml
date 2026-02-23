@@ -223,6 +223,7 @@ fr:
         transfer_in_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
         transfer_out_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
       samples:
+        bulk_metadata_update_html: "%{user} a mis à jour les métadonnées pour %{href} échantillons"
         clone_html: "%{user} a copié les échantillons %{cloned_samples_count} dans d’autres projets"
         destroy_html: "%{user} a retiré les échantillons %{href} du groupe"
         transfer_html: "%{user} a transféré les échantillons %{transferred_samples_count} entre les projets"
@@ -258,6 +259,7 @@ fr:
         attachment:
           create_html: "%{user} a joint des fichiers à l’échantillon %{href}"
           destroy_html: "%{user} a supprimé des fichiers de l’échantillon %{href}"
+        bulk_metadata_update_html: "%{user} a mis à jour les métadonnées pour %{href} échantillons"
         clone_html: "%{user} a copié les échantillons %{cloned_samples_count} dans le projet %{href}"
         cloned_from_html: "%{user} a copié les échantillons %{cloned_samples_count} du projet %{href}"
         create_html: "%{user} a créé l’échantillon %{href}"
@@ -1774,15 +1776,15 @@ fr:
         samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans le projet source: %{sample_ids}'
         unauthorized: 'Vous n’avez pas la permission de copier les échantillons suivants avec les identifiants d’échantillon : %{sample_ids}'
       metadata:
+        bulk_update:
+          duplicate_identifier: 'Échantillon %{sample_identifier}: Plusieurs échantillons avec identifiant "%{sample_identifier}"'
+          sample_metadata_fields_not_updated: L’échantillon '%{sample_name}' avec les champs '%{metadata_fields}' ne peut pas être mis à jour.
+          sample_not_found: 'Échantillon %{sample_identifier}: Échantillon "%{sample_identifier}" n’existe pas ou vous n’êtes pas autorisé à le mettre à jour.'
         empty_metadata: Aucune métadonnée n’a été reçue pour mettre à jour l’échantillon '%{sample_name}'
         fields:
           multi_all_keys_exist: Les clés de métadonnées '%{keys}' existent déjà.
           sample_does_not_belong_to_project: L’exemple '%{sample_name}' n’appartient pas au projet '%{project_name}'
           single_all_keys_exist: La clé de métadonnées '%{key}' existe déjà.
-        import_file:
-          sample_metadata_fields_not_updated: L’échantillon '%{sample_name}' avec les champs '%{metadata_fields}' ne peut pas être mis à jour.
-          sample_not_found_within_group: Impossible de trouver l’échantillon avec le puid '%{sample_puid}' dans ce groupe.
-          sample_not_found_within_project: Impossible de trouver l’échantillon avec le puid ou le nom '%{sample_puid}' dans ce projet.
         nested_metadata: L’échantillon '%{sample_name}' avec la clé de métadonnées '%{key}' ne peut pas contenir de JSON imbriqué.
         sample_does_not_belong_to_project: L’exemple '%{sample_name}' n’appartient pas au projet '%{project_name}'
         update_fields:
