@@ -2,7 +2,7 @@
 
 module Samples
   module Metadata
-    # Service used to Update multiple metadata fields at a time. Currently used by metadata file import.
+    # Service used to Update multiple samples' metadata at a time. Currently used by metadata file import.
     class BulkUpdateService < BaseSampleMetadataUpdateService # rubocop:disable Metrics/ClassLength
       attr_accessor :namespace, :metadata_payload, :metadata_fields, :metadata_summary_data
 

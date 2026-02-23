@@ -28,9 +28,8 @@ module Samples
 
       protected
 
-      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def perform_file_import(broadcast_target)
         bulk_metadata_payload = {}
-        response = {}
         headers = retrieve_headers
         parse_settings = headers.zip(headers).to_h
         # minus 1 to exclude header
@@ -49,7 +48,6 @@ module Samples
 
         BulkUpdateService.new(@namespace, bulk_metadata_payload, @selected_headers, current_user).execute
         update_progress_bar(percentage_denominator, percentage_denominator, broadcast_target)
-        response
       end
 
       private
