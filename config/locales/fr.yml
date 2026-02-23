@@ -1078,9 +1078,19 @@ fr:
       title: Modifier le modèle de métadonnées
     form:
       available: Disponible
-      description: Sélectionnez les champs de métadonnées du modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée et vice versa. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
-      metadata: Métadonnées
+      available_description: Champs qui ne sont pas encore inclus dans ce modèle. Déplacez les champs vers la liste sélectionnée pour les rendre disponibles dans ce modèle.
+      available_list_title: Non inclus dans le modèle
+      description_hint: Facultatif. Décrivez quand ce modèle devrait être utilisé.
+      details_heading: Détails du modèle
+      details_help: Ajoutez un nom clair et une description facultative afin que les utilisateurs puissent identifier rapidement ce modèle.
+      fields_instructions: Sélectionnez un ou plusieurs champs, puis utilisez le glisser-déposer ou les boutons d’action pour déplacer les champs entre les listes.
+      fields_instructions_title: Fonctionnement des listes
+      keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
+      metadata: Champs de métadonnées
+      name_hint: Requis. Choisissez un nom de modèle descriptif.
       selected: Sélectionné
+      selected_description: Champs inclus dans ce modèle. Réorganisez cette liste pour contrôler l’ordre d’affichage. Au moins un champ est requis.
+      selected_list_title: Inclus dans le modèle
     new_template_dialog:
       submit_button: Envoyer
       title: Nouveau modèle de métadonnées

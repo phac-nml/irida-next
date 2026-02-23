@@ -8,76 +8,168 @@
   <%= form_for(@metadata_template, url: template_path, method:, html: { novalidate: true }) do |form| %>
     <%= render partial: "shared/form/required_field_legend" %>
     <% invalid_name = @metadata_template.errors&.include?(:name) %>
-    <div class="grid gap-4">
-      <div class="mt-2 form-field <%= 'invalid' if invalid_name %>">
-        <%= form.label :name, data: { required: true } %>
-        <%= form.text_field :name,
-                        required: true,
-                        class: "form-control",
-                        aria: {
-                          describedby:
-                            (
-                              if invalid_name
-                                form.field_id(:name, "error")
-                              else
-                                nil
-                              end
-                            ),
-                          invalid: invalid_name,
+    <% name_hint_id = form.field_id(:name, "hint") %>
+    <% name_error_id = invalid_name ? form.field_id(:name, "error") : nil %>
+    <% name_describedby = [name_hint_id, name_error_id].compact.join(" ") %>
+    <% invalid_description = @metadata_template.errors&.include?(:description) %>
+    <% description_hint_id = form.field_id(:description, "hint") %>
+    <% description_error_id = invalid_description ? form.field_id(:description, "error") : nil %>
+    <% description_describedby = [description_hint_id, description_error_id].compact.join(" ") %>
+
+    <div class="grid gap-5">
+      <section aria-labelledby="metadata-template-details-heading" class="grid gap-4">
+        <div class="mt-2 space-y-1">
+          <h2 id="metadata-template-details-heading" class="text-base font-semibold text-slate-900 dark:text-slate-100">
+            <%= t("metadata_templates.form.details_heading") %>
+          </h2>
+
+          <p class="text-sm text-slate-600 dark:text-slate-300"><%= t("metadata_templates.form.details_help") %></p>
+        </div>
+
+        <div class="form-field <%= 'invalid' if invalid_name %>">
+          <%= form.label :name, data: { required: true } %>
+
+          <%= form.text_field :name,
                           required: true,
-                        },
-                        autofocus: invalid_name %>
-        <% if invalid_name %>
-          <%= render "shared/form/field_errors",
-          id: form.field_id(:name, "error"),
-          errors: @metadata_template.errors.full_messages_for(:name) %>
+                          class: "form-control",
+                          aria: {
+                            describedby: name_describedby,
+                            invalid: invalid_name,
+                            required: true,
+                          },
+                          autofocus: invalid_name %>
+
+          <p id="<%= name_hint_id %>" class="mt-2 text-xs font-medium text-slate-600 dark:text-slate-300">
+            <%= t("metadata_templates.form.name_hint") %>
+          </p>
+
+          <% if invalid_name %>
+            <%= render "shared/form/field_errors",
+            id: name_error_id,
+            errors: @metadata_template.errors.full_messages_for(:name) %>
+          <% end %>
+        </div>
+
+        <div class="form-field <%= 'invalid' if invalid_description %>">
+          <%= form.label :description %>
+
+          <%= form.text_area :description,
+                         rows: 3,
+                         class: "form-control",
+                         aria: {
+                           describedby: description_describedby,
+                           invalid: invalid_description,
+                         },
+                         autofocus: invalid_description %>
+
+          <p id="<%= description_hint_id %>" class="mt-2 text-xs font-medium text-slate-600 dark:text-slate-300">
+            <%= t("metadata_templates.form.description_hint") %>
+          </p>
+
+          <% if invalid_description %>
+            <%= render "shared/form/field_errors",
+            id: description_error_id,
+            errors: @metadata_template.errors.full_messages_for(:description) %>
+          <% end %>
+        </div>
+      </section>
+
+      <section aria-labelledby="metadata-fields-heading" class="grid gap-4">
+        <h2 id="metadata-fields-heading" class="text-base font-semibold text-slate-900 dark:text-slate-100">
+          <%= t("metadata_templates.form.metadata") %>
+        </h2>
+
+        <div
+          class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
+          role="note"
+          aria-describedby="metadata-fields-instructions metadata-fields-keyboard-help"
+        >
+          <h3 id="metadata-list-instructions-title" class="text-sm font-semibold text-slate-800 dark:text-slate-100">
+            <%= t("metadata_templates.form.fields_instructions_title") %>
+          </h3>
+
+          <p id="metadata-fields-instructions" class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+            <%= t("metadata_templates.form.fields_instructions") %>
+          </p>
+
+          <ul class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <li
+              class="
+                flex gap-2.5 rounded-md bg-white p-3 ring-1 ring-slate-200 ring-inset dark:bg-slate-900/40
+                dark:ring-slate-700
+              "
+            >
+              <span
+                class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded bg-slate-100 dark:bg-slate-700/70"
+                aria-hidden="true"
+              >
+                <%= pathogen_icon(:test_tube, size: :sm, color: :subdued, "aria-hidden": true) %>
+              </span>
+
+              <div>
+                <p class="text-xs font-semibold tracking-wide text-slate-700 uppercase dark:text-slate-100">
+                  <%= t("metadata_templates.form.available_list_title") %>
+                </p>
+
+                <p class="mt-1 text-xs text-slate-600 dark:text-slate-300">
+                  <%= t("metadata_templates.form.available_description") %>
+                </p>
+              </div>
+            </li>
+
+            <li
+              class="
+                flex gap-2.5 rounded-md bg-white p-3 ring-1 ring-slate-200 ring-inset dark:bg-slate-900/40
+                dark:ring-slate-700
+              "
+            >
+              <span
+                class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded bg-green-100 dark:bg-green-900/40"
+                aria-hidden="true"
+              >
+                <%= pathogen_icon(:check, size: :sm, color: :success, "aria-hidden": true) %>
+              </span>
+
+              <div>
+                <p class="text-xs font-semibold tracking-wide text-slate-700 uppercase dark:text-slate-100">
+                  <%= t("metadata_templates.form.selected_list_title") %>
+                </p>
+
+                <p class="mt-1 text-xs text-slate-600 dark:text-slate-300">
+                  <%= t("metadata_templates.form.selected_description") %>
+                </p>
+              </div>
+            </li>
+          </ul>
+
+          <p id="metadata-fields-keyboard-help" class="mt-3 text-xs font-medium text-slate-700 dark:text-slate-200">
+            <%= t("metadata_templates.form.keyboard_help") %>
+          </p>
+        </div>
+
+        <%= viral_sortable_lists(
+                    title: nil,
+                    description: nil,
+                    ) do |sortable_lists| %>
+          <%= sortable_lists.with_list(
+            id: "available-list",
+            title: t("metadata_templates.form.available"),
+            list_items: @available_metadata_fields,
+            group: "metadata_selection",
+          ) %>
+
+          <%= sortable_lists.with_list(
+            id: "selected-list",
+            title: t("metadata_templates.form.selected"),
+            list_items: @current_template_fields,
+            group: "metadata_selection",
+            required: true,
+          ) %>
         <% end %>
-      </div>
-      <% invalid_description = @metadata_template.errors&.include?(:description) %>
-      <div class="mt-2 form-field <%= 'invalid' if invalid_description %>">
-        <%= form.label :description %>
-        <%= form.text_area :description,
-                       class: "form-control",
-                       aria: {
-                         describedby:
-                           (
-                             if invalid_description
-                               form.field_id(:description, "error")
-                             else
-                               nil
-                             end
-                           ),
-                         invalid: invalid_description,
-                       },
-                       autofocus: invalid_description %>
-        <% if invalid_description %>
-          <%= render "shared/form/field_errors",
-          id: form.field_id(:description, "error"),
-          errors: @metadata_template.errors.full_messages_for(:description) %>
-        <% end %>
-      </div>
-      <div
-        class="hidden"
-        data-viral--sortable-lists--two-lists-selection-target="field"
-      ></div>
-      <%= viral_sortable_lists(
-                  title: t("metadata_templates.form.metadata"),
-                  description: t("metadata_templates.form.description"),
-                  ) do |sortable_lists| %>
-        <%= sortable_lists.with_list(
-          id: "available-list",
-          title: t("metadata_templates.form.available"),
-          list_items: @available_metadata_fields,
-          group: "metadata_selection",
-        ) %>
-        <%= sortable_lists.with_list(
-          id: "selected-list",
-          title: t("metadata_templates.form.selected"),
-          list_items: @current_template_fields,
-          group: "metadata_selection",
-          required: true,
-        ) %>
-      <% end %>
+      </section>
+
+      <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
+
       <div class="mt-4">
         <%= form.submit submit_button_text,
                     data: {

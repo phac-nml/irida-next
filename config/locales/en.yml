@@ -1074,9 +1074,19 @@ en:
       title: Edit Metadata Template
     form:
       available: Available
-      description: Select the metadata fields for the template by moving the metadata fields from the available list to the selected list and vice versa. The template's fields ordering will be determined by the ordering of the selected list.
-      metadata: Metadata
+      available_description: Fields not currently included in this template. Move fields to the selected list to make them available in this template.
+      available_list_title: Not currently in template
+      description_hint: Optional. Describe when this template should be used.
+      details_heading: Template details
+      details_help: Add a clear name and an optional description so users can quickly identify this template.
+      fields_instructions: Select one or more fields, then drag and drop or use the action buttons to move fields between lists.
+      fields_instructions_title: How the lists work
+      keyboard_help: Keyboard shortcuts are available on the list action buttons.
+      metadata: Metadata fields
+      name_hint: Required. Choose a descriptive template name.
       selected: Selected
+      selected_description: Fields included in this template. Reorder this list to control display order. At least one field is required.
+      selected_list_title: Currently in template
     new_template_dialog:
       submit_button: Submit
       title: New Metadata Template
