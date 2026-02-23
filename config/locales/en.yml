@@ -1079,7 +1079,7 @@ en:
       description_hint: Optional. Describe when this template should be used.
       details_heading: Template details
       details_help: Add a clear name and an optional description so users can quickly identify this template.
-      fields_instructions: Select one or more fields, then drag and drop or use the action buttons to move fields between lists.
+      fields_instructions: Select one or more fields, then use the action buttons to move fields between lists.
       fields_instructions_title: How the lists work
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       metadata: Metadata fields

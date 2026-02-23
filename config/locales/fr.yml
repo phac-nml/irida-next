@@ -1083,7 +1083,7 @@ fr:
       description_hint: Facultatif. Décrivez quand ce modèle devrait être utilisé.
       details_heading: Détails du modèle
       details_help: Ajoutez un nom clair et une description facultative afin que les utilisateurs puissent identifier rapidement ce modèle.
-      fields_instructions: Sélectionnez un ou plusieurs champs, puis utilisez le glisser-déposer ou les boutons d’action pour déplacer les champs entre les listes.
+      fields_instructions: Sélectionnez un ou plusieurs champs, puis utilisez les boutons d’action pour déplacer les champs entre les listes.
       fields_instructions_title: Fonctionnement des listes
       keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       metadata: Champs de métadonnées
