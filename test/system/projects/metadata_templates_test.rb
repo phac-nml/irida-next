@@ -89,7 +89,7 @@ module Projects
       click_on I18n.t('projects.metadata_templates.index.new_button')
 
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-      assert_text I18n.t('metadata_templates.form.description')
+      assert_text I18n.t('metadata_templates.form.metadata')
 
       available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
       selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
@@ -133,7 +133,7 @@ module Projects
       click_on I18n.t('projects.metadata_templates.index.new_button')
 
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-      assert_text I18n.t('metadata_templates.form.description')
+      assert_text I18n.t('metadata_templates.form.metadata')
 
       available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
       selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
@@ -159,7 +159,7 @@ module Projects
       click_on I18n.t('projects.metadata_templates.index.new_button')
 
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-      assert_text I18n.t('metadata_templates.form.description')
+      assert_text I18n.t('metadata_templates.form.metadata')
 
       available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
       selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
@@ -200,7 +200,7 @@ module Projects
       assert_selector '#dialog'
 
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-      assert_text I18n.t('metadata_templates.form.description')
+      assert_text I18n.t('metadata_templates.form.metadata')
 
       available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
       selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
@@ -241,7 +241,7 @@ module Projects
       click_on I18n.t('projects.metadata_templates.index.new_button')
 
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-      assert_text I18n.t('metadata_templates.form.description')
+      assert_text I18n.t('metadata_templates.form.metadata')
 
       available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
       selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
