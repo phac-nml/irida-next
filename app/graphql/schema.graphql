@@ -1312,6 +1312,142 @@ input GroupFilter {
 }
 
 """
+A group
+"""
+type GroupMetricsType implements Node {
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
+  Groups within this namespace
+  """
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): GroupMetricsTypeConnection
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Metrics for the group
+  """
+  metrics: Metric
+
+  """
+  Name of the namespace.
+  """
+  name: String!
+
+  """
+  Projects within this namespace
+  """
+  projects(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Include projects from subgroups.
+    """
+    includeSubGroups: Boolean = false
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): ProjectMetricsTypeConnection
+
+  """
+  Persistent Unique Identifier of the namespace. For example for a group,
+                                    `INXT_GRP_AAAAAAAAAA`.
+  """
+  puid: ID!
+
+  """
+  Type of the namespace
+  """
+  type: String!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
+}
+
+"""
+The connection type for GroupMetricsType.
+"""
+type GroupMetricsTypeConnection {
+  """
+  A list of edges.
+  """
+  edges: [GroupMetricsTypeEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [GroupMetricsType]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type GroupMetricsTypeEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: GroupMetricsType
+}
+
+"""
 Specify a sort for the groups
 """
 input GroupOrder {
@@ -1371,379 +1507,6 @@ type Metric {
   Datetime of last update.
   """
   updatedAt: ISO8601DateTime!
-}
-
-"""
-A group
-"""
-type MetricGroup implements Node {
-  """
-  Datetime of creation.
-  """
-  createdAt: ISO8601DateTime!
-
-  """
-  Groups within this namespace
-  """
-  groups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: String
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: String
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-  ): MetricGroupConnection
-
-  """
-  ID of the object.
-  """
-  id: ID!
-
-  """
-  Metrics for the group
-  """
-  metrics: Metric
-
-  """
-  Name of the namespace.
-  """
-  name: String!
-
-  """
-  Projects within this namespace
-  """
-  projects(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: String
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: String
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-  ): MetricProjectConnection
-
-  """
-  Persistent Unique Identifier of the namespace. For example for a group,
-                                    `INXT_GRP_AAAAAAAAAA`.
-  """
-  puid: ID!
-
-  """
-  Datetime of last update.
-  """
-  updatedAt: ISO8601DateTime!
-}
-
-"""
-The connection type for MetricGroup.
-"""
-type MetricGroupConnection {
-  """
-  A list of edges.
-  """
-  edges: [MetricGroupEdge]
-
-  """
-  A list of nodes.
-  """
-  nodes: [MetricGroup]
-
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-
-"""
-An edge in a connection.
-"""
-type MetricGroupEdge {
-  """
-  A cursor for use in pagination.
-  """
-  cursor: String!
-
-  """
-  The item at the end of the edge.
-  """
-  node: MetricGroup
-}
-
-"""
-A namespace
-"""
-type MetricNamespace implements Node {
-  """
-  Datetime of creation.
-  """
-  createdAt: ISO8601DateTime!
-
-  """
-  Groups within this namespace
-  """
-  groups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: String
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: String
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-  ): MetricGroupConnection
-
-  """
-  ID of the object.
-  """
-  id: ID!
-
-  """
-  Name of the namespace.
-  """
-  name: String!
-
-  """
-  Projects within this namespace
-  """
-  projects(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: String
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: String
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-  ): MetricProjectConnection
-
-  """
-  Persistent Unique Identifier of the namespace. For example for a group,
-                                    `INXT_GRP_AAAAAAAAAA`.
-  """
-  puid: ID!
-
-  """
-  Datetime of last update.
-  """
-  updatedAt: ISO8601DateTime!
-}
-
-"""
-The connection type for MetricNamespace.
-"""
-type MetricNamespaceConnection {
-  """
-  A list of edges.
-  """
-  edges: [MetricNamespaceEdge]
-
-  """
-  A list of nodes.
-  """
-  nodes: [MetricNamespace]
-
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-
-"""
-An edge in a connection.
-"""
-type MetricNamespaceEdge {
-  """
-  A cursor for use in pagination.
-  """
-  cursor: String!
-
-  """
-  The item at the end of the edge.
-  """
-  node: MetricNamespace
-}
-
-"""
-A project
-"""
-type MetricProject implements Node {
-  """
-  Datetime of creation.
-  """
-  createdAt: ISO8601DateTime!
-
-  """
-  Groups within this namespace
-  """
-  groups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: String
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: String
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-  ): MetricGroupConnection
-
-  """
-  ID of the object.
-  """
-  id: ID!
-
-  """
-  Metrics for the project
-  """
-  metrics: Metric
-
-  """
-  Name of the namespace.
-  """
-  name: String!
-
-  """
-  Projects within this namespace
-  """
-  projects(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: String
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: String
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-  ): MetricProjectConnection
-
-  """
-  Persistent Unique Identifier of the namespace. For example for a group,
-                                    `INXT_GRP_AAAAAAAAAA`.
-  """
-  puid: ID!
-
-  """
-  Datetime of last update.
-  """
-  updatedAt: ISO8601DateTime!
-}
-
-"""
-The connection type for MetricProject.
-"""
-type MetricProjectConnection {
-  """
-  A list of edges.
-  """
-  edges: [MetricProjectEdge]
-
-  """
-  A list of nodes.
-  """
-  nodes: [MetricProject]
-
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-
-"""
-An edge in a connection.
-"""
-type MetricProjectEdge {
-  """
-  A cursor for use in pagination.
-  """
-  cursor: String!
-
-  """
-  The item at the end of the edge.
-  """
-  node: MetricProject
 }
 
 """
@@ -1940,6 +1703,142 @@ type Namespace implements Node {
   Datetime of last update.
   """
   updatedAt: ISO8601DateTime!
+}
+
+"""
+A namespace
+"""
+type NamespaceMetricsType implements Node {
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
+  Groups within this namespace
+  """
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): GroupMetricsTypeConnection
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Metrics for all projects under namespace
+  """
+  metrics: Metric
+
+  """
+  Name of the namespace.
+  """
+  name: String!
+
+  """
+  Projects within this namespace
+  """
+  projects(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Include projects from subgroups.
+    """
+    includeSubGroups: Boolean = false
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): ProjectMetricsTypeConnection
+
+  """
+  Persistent Unique Identifier of the namespace. For example for a group,
+                                    `INXT_GRP_AAAAAAAAAA`.
+  """
+  puid: ID!
+
+  """
+  Type of the namespace
+  """
+  type: String!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
+}
+
+"""
+The connection type for NamespaceMetricsType.
+"""
+type NamespaceMetricsTypeConnection {
+  """
+  A list of edges.
+  """
+  edges: [NamespaceMetricsTypeEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [NamespaceMetricsType]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type NamespaceMetricsTypeEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: NamespaceMetricsType
 }
 
 """
@@ -2452,6 +2351,142 @@ input ProjectFilter {
 }
 
 """
+A project
+"""
+type ProjectMetricsType implements Node {
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
+  Groups within this namespace
+  """
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): GroupMetricsTypeConnection
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Metrics for the project
+  """
+  metrics: Metric
+
+  """
+  Name of the namespace.
+  """
+  name: String!
+
+  """
+  Projects within this namespace
+  """
+  projects(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Include projects from subgroups.
+    """
+    includeSubGroups: Boolean = false
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): ProjectMetricsTypeConnection
+
+  """
+  Persistent Unique Identifier of the namespace. For example for a group,
+                                    `INXT_GRP_AAAAAAAAAA`.
+  """
+  puid: ID!
+
+  """
+  Type of the namespace
+  """
+  type: String!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
+}
+
+"""
+The connection type for ProjectMetricsType.
+"""
+type ProjectMetricsTypeConnection {
+  """
+  A list of edges.
+  """
+  edges: [ProjectMetricsTypeEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [ProjectMetricsType]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type ProjectMetricsTypeEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: ProjectMetricsType
+}
+
+"""
 Specify a sort for the projects
 """
 input ProjectOrder {
@@ -2538,9 +2573,25 @@ type Query {
   ): Boolean!
 
   """
-  Find metrics namespaces.
+  Find a namespace.
   """
-  metricsNamespaces(
+  namespace(
+    """
+    Full path of the namespace. For example, `pathogen/surveillance`.
+    """
+    fullPath: ID
+
+    """
+    Persistent Unique Identifer of the namespace.
+                               For example a group namespace, `INXT_GRP_GGGGGGGGGG.`
+    """
+    puid: ID
+  ): Namespace
+
+  """
+  Find namespaces for metrics.
+  """
+  namespaceMetrics(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -2560,23 +2611,12 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
-  ): MetricNamespaceConnection!
-
-  """
-  Find a namespace.
-  """
-  namespace(
-    """
-    Full path of the namespace. For example, `pathogen/surveillance`.
-    """
-    fullPath: ID
 
     """
-    Persistent Unique Identifer of the namespace.
-                               For example a group namespace, `INXT_GRP_GGGGGGGGGG.`
+    Type of namespaces to get metrics for
     """
-    puid: ID
-  ): Namespace
+    namespaceType: [String!] = ["Group", "User"]
+  ): NamespaceMetricsTypeConnection!
 
   """
   Fetches an object given its ID.
