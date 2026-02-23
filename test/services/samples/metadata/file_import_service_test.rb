@@ -26,7 +26,8 @@ module Samples
         assert_authorized_to(:update_sample_metadata?, @project.namespace,
                              with: Namespaces::ProjectNamespacePolicy,
                              context: { user: @john_doe }) do
-          params = { sample_id_column: 'sample_name' }
+          params = { sample_id_column: 'sample_name',
+                     metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3] }
           Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, @blob.id, params).execute
         end
       end
@@ -35,7 +36,8 @@ module Samples
         assert_authorized_to(:update_sample_metadata?, @group,
                              with: GroupPolicy,
                              context: { user: @john_doe }) do
-          params = { sample_id_column: 'sample_puid' }
+          params = { sample_id_column: 'sample_puid',
+                     metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3] }
           Samples::Metadata::FileImportService.new(@group, @john_doe, @blob.id, params).execute
         end
       end
