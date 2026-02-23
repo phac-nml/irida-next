@@ -7,8 +7,7 @@ class CreateGlobalNotifications < ActiveRecord::Migration[8.0]
       t.string :singleton_guard, null: false, default: 'global'
       t.boolean :enabled, null: false, default: false
       t.string :style, null: false, default: 'info'
-      t.text :message_en
-      t.text :message_fr
+      t.jsonb :messages, null: false, default: {}
 
       t.timestamps
     end

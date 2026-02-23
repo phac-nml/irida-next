@@ -124,8 +124,7 @@ class LayoutComponentTest < ViewComponent::TestCase
     GlobalNotification.instance!.update!(
       enabled: true,
       style: :danger,
-      message_en: 'System outage',
-      message_fr: 'Panne du systeme'
+      messages: { en: 'System outage', fr: 'Panne du systeme' }
     )
 
     render_inline LayoutComponent.new(user: user) do |layout|
@@ -145,8 +144,7 @@ class LayoutComponentTest < ViewComponent::TestCase
     GlobalNotification.instance!.update!(
       enabled: true,
       style: :info,
-      message_en: 'English',
-      message_fr: 'Français'
+      messages: { en: 'English', fr: 'Français' }
     )
 
     en_banners = I18n.with_locale(:en) { LayoutComponent.new(user:).site_banners }
