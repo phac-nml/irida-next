@@ -47,10 +47,10 @@ module Activities
 
       def dialog_type
         case @activity[:action] # rubocop:disable Style/HashLikeCase
-        when 'sample_destroy_multiple'
-          'samples_destroy'
-        when 'project_import_samples'
-          'project_import_samples'
+        when 'group_import_samples'
+          'group_import_samples'
+        when 'group_samples_destroy'
+          'group_samples_destroy'
         when 'group_bulk_metadata_update'
           'group_bulk_metadata_update'
         end

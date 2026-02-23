@@ -1864,11 +1864,7 @@ fr:
               label: Ignorer les valeurs vides
             metadata_columns: Colonnes de métadonnées
             namespace:
-              description: 'La feuille de calcul doit comporter une colonne contenant un exemple d’identificateur. '
-              group:
-                description_html: L’identificateur est sensible à la casse et doit contenir l’<b>PUID de l’échantillon</b>.
-              project:
-                description_html: L’identificateur est sensible à la casse et peut contenir le <b>nom ou l’PUID de l’échantillon</b>.
+              description_html: 'La feuille de calcul doit comporter une colonne contenant un exemple d’identificateur. L’identificateur est sensible à la casse et peut contenir le <b>nom ou l’PUID de l’échantillon</b>'
             no_valid_metadata: Le chiffrier téléchargé ne contient aucune métadonnée viable.
             sample_id_column: Colonne identificateur de l’échantillon
             select_sample_id_column: Sélectionner une colonne identificateur de l’échantillon
