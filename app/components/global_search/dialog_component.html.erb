@@ -12,7 +12,7 @@
     "
     aria-labelledby="global-search-dialog-title"
     data-global-search-dialog-target="dialog"
-    data-action="cancel->global-search-dialog#handleCancel click->global-search-dialog#handleBackdropClick"
+    data-action="cancel->global-search-dialog#handleCancel:prevent click->global-search-dialog#handleBackdropClick:self"
   >
     <%= form_with url: global_search_path, method: :get, local: true, class: "space-y-4 p-4 sm:p-5", data: { global_search_dialog_target: "form", action: "submit->global-search-dialog#handleSubmit" } do %>
       <h2 id="global-search-dialog-title" class="sr-only">
@@ -20,6 +20,7 @@
       </h2>
 
       <div class="flex flex-wrap items-center gap-2">
+        <%= label_tag "global-search-dialog-query", t(:"components.layout.global_search_dialog.search_placeholder"), class: "sr-only" %>
         <%= text_field_tag :q, nil, id: "global-search-dialog-query", placeholder: t(:"components.layout.global_search_dialog.search_placeholder"), autocomplete: "off", data: { global_search_dialog_target: "queryInput" }, class: "h-11 min-w-[18rem] flex-1 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" %>
         <%= submit_tag t(:"components.layout.global_search_dialog.search_button"), class: "button button-primary h-11 min-w-[6.5rem] px-4" %>
 

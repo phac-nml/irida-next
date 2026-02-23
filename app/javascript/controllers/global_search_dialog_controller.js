@@ -2,6 +2,21 @@ import { Controller } from "@hotwired/stimulus";
 import { Turbo } from "@hotwired/turbo-rails";
 import { announce } from "utilities/live_region";
 
+const EDITABLE_SELECTOR =
+  "input, textarea, select, [contenteditable]:not([contenteditable='false'])";
+
+/**
+ * Global search command-palette controller.
+ *
+ * Contract:
+ * - Targets: `dialog`, `form`, `queryInput`
+ * - Values: `path`, `openedAnnouncement`, `closedAnnouncement`
+ * - Actions:
+ *   - `keydown@window->global-search-dialog#handle`
+ *   - `cancel->global-search-dialog#handleCancel:prevent`
+ *   - `click->global-search-dialog#handleBackdropClick:self`
+ *   - `submit->global-search-dialog#handleSubmit`
+ */
 export default class extends Controller {
   static targets = ["dialog", "form", "queryInput"];
   static values = {
@@ -11,7 +26,12 @@ export default class extends Controller {
   };
 
   handle(event) {
-    if (event.defaultPrevented || this.#isEditableTarget(event.target)) {
+    if (
+      event.defaultPrevented ||
+      event.isComposing ||
+      event.repeat ||
+      this.#isEditableTarget(event.target)
+    ) {
       return;
     }
 
@@ -29,38 +49,36 @@ export default class extends Controller {
 
   openDialog() {
     if (!this.hasDialogTarget) {
-      Turbo.visit(this.pathValue);
+      this.#visitSearchPage();
       return;
     }
 
     if (!this.dialogTarget.open) {
-      this.dialogTarget.showModal();
+      if (!this.#showDialog()) {
+        this.#visitSearchPage();
+        return;
+      }
+
       this.#announceOpened();
     }
 
     this.#focusSearchInput();
   }
 
-  close(event) {
-    event.preventDefault();
+  close() {
     this.#closeAndClear();
   }
 
-  handleCancel(event) {
-    event.preventDefault();
+  handleCancel() {
     this.#closeAndClear();
   }
 
-  handleBackdropClick(event) {
-    if (event.target !== this.dialogTarget) {
-      return;
-    }
-
+  handleBackdropClick() {
     this.#closeAndClear();
   }
 
   handleSubmit() {
-    if (this.dialogTarget.open) {
+    if (this.hasDialogTarget && this.dialogTarget.open) {
       this.dialogTarget.close();
     }
   }
@@ -79,17 +97,41 @@ export default class extends Controller {
       !event.metaKey &&
       !event.ctrlKey &&
       !event.altKey &&
-      !event.shiftKey &&
-      event.key === "/"
+      (event.key === "/" || event.code === "NumpadDivide")
     );
   }
 
   #closeAndClear() {
     this.#resetForm();
 
-    if (this.dialogTarget.open) {
+    if (this.hasDialogTarget && this.dialogTarget.open) {
       this.dialogTarget.close();
       this.#announceClosed();
+    }
+  }
+
+  #showDialog() {
+    try {
+      this.dialogTarget.showModal();
+      return true;
+    } catch (error) {
+      console.error("Failed to open global search dialog.", error);
+      return false;
+    }
+  }
+
+  #visitSearchPage() {
+    if (!this.hasPathValue || !this.pathValue) {
+      console.error(
+        "Global search dialog fallback navigation is not configured: missing `pathValue`.",
+      );
+      return;
+    }
+
+    try {
+      Turbo.visit(this.pathValue);
+    } catch (error) {
+      console.error("Failed to navigate to global search page.", error);
     }
   }
 
@@ -144,9 +186,6 @@ export default class extends Controller {
       return true;
     }
 
-    return (
-      target.closest("input, textarea, select, [contenteditable='true']") !==
-      null
-    );
+    return target.closest(EDITABLE_SELECTOR) !== null;
   }
 }
