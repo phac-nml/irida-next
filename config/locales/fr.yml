@@ -127,6 +127,8 @@ fr:
               unique_items: doit contenir des valeurs uniques
         namespace:
           attributes:
+            parent_id:
+              nesting_level_too_deep: niveau d'imbrication trop profond
             path:
               invalid_format: Ne peut contenir que des lettres, des chiffres, '_', '-’ et '.'. Ne peut pas commencer par '-' ni finir par '.'.
               reserved_value: "%{value} est une valeur réservée."

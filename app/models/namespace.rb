@@ -553,7 +553,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def validate_nesting_level
     return unless has_parent? && (parent.ancestors.count + 1) > MAX_ANCESTORS - 1
 
-    errors.add(:parent_id, 'nesting level too deep')
+    errors.add(:parent_id, :nesting_level_too_deep)
   end
 
   # self = namespace receiving transferred_namespace
