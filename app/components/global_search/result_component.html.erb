@@ -1,0 +1,32 @@
+<li class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+  <div class="flex items-start justify-between gap-3">
+    <div class="min-w-0 space-y-1">
+      <%= link_to @result.title, @result.url, class: "block truncate text-base font-medium text-primary-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 rounded-sm dark:focus-visible:ring-offset-slate-900" %>
+
+      <p class="truncate text-sm text-slate-600 dark:text-slate-300"><%= @result.subtitle %></p>
+    </div>
+
+    <span
+      class="
+        <%= class_names(
+        'shrink-0 rounded-full px-2.5 py-1 text-xs font-medium',
+        type_pill_class
+        ) %>
+      "
+    >
+      <%= type_label %>
+    </span>
+  </div>
+
+  <div class="mt-3 flex flex-wrap items-center gap-2">
+    <% if @result.type == "samples" && @result.context_label.present? && @result.context_url.present? %>
+      <%= link_to @result.context_label, @result.context_url, class: "rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-offset-slate-900" %>
+    <% end %>
+
+    <% if @result.updated_at.present? %>
+      <span class="text-xs text-slate-500 dark:text-slate-400">
+        <%= t(:"global_search.index.updated_at", time: @result.updated_at.to_fs(:long)) %>
+      </span>
+    <% end %>
+  </div>
+</li>

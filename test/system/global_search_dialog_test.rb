@@ -2,7 +2,7 @@
 
 require 'application_system_test_case'
 
-class GlobalSearchShortcutTest < ApplicationSystemTestCase
+class GlobalSearchDialogTest < ApplicationSystemTestCase
   setup do
     Flipper.enable(:global_search)
     login_as users(:john_doe)
@@ -17,7 +17,7 @@ class GlobalSearchShortcutTest < ApplicationSystemTestCase
 
     trigger_global_search_shortcut
 
-    dialog = find("dialog[data-global-search-shortcut-target='dialog'][open]", visible: :all)
+    dialog = find("dialog[data-global-search-dialog-target='dialog'][open]", visible: :all)
 
     assert_equal 'global-search-dialog-title', dialog['aria-labelledby']
 
@@ -32,7 +32,7 @@ class GlobalSearchShortcutTest < ApplicationSystemTestCase
 
     trigger_global_search_shortcut
 
-    dialog = find("dialog[data-global-search-shortcut-target='dialog'][open]", visible: :all)
+    dialog = find("dialog[data-global-search-dialog-target='dialog'][open]", visible: :all)
 
     within(dialog) do
       find('summary', text: 'Filters').click
@@ -41,10 +41,10 @@ class GlobalSearchShortcutTest < ApplicationSystemTestCase
     end
 
     find('body').send_keys(:escape)
-    assert_no_selector "dialog[data-global-search-shortcut-target='dialog'][open]", visible: :all
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
 
     trigger_global_search_shortcut
-    dialog = find("dialog[data-global-search-shortcut-target='dialog'][open]", visible: :all)
+    dialog = find("dialog[data-global-search-dialog-target='dialog'][open]", visible: :all)
 
     within(dialog) do
       assert_equal '', find("input[name='q']").value
@@ -57,7 +57,7 @@ class GlobalSearchShortcutTest < ApplicationSystemTestCase
 
     trigger_global_search_shortcut
 
-    within("dialog[data-global-search-shortcut-target='dialog'][open]") do
+    within("dialog[data-global-search-dialog-target='dialog'][open]") do
       find("input[name='q']").set('Project 1')
       find("input[name='q']").send_keys(:enter)
     end
@@ -73,7 +73,7 @@ class GlobalSearchShortcutTest < ApplicationSystemTestCase
 
     trigger_global_search_shortcut
 
-    assert_no_selector "dialog[data-global-search-shortcut-target='dialog'][open]", visible: :all
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
   end
 
   private
