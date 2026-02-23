@@ -5,6 +5,8 @@ import { notifyRefreshControllers } from "utilities/refresh";
 
 export default class extends Controller {
   static outlets = [
+    "viral--dialog",
+    "viral--flash",
     "viral--progress-bar",
     "viral--sortable-lists--two-lists-selection",
     "refresh",
@@ -50,6 +52,7 @@ export default class extends Controller {
   ];
 
   #columns = [];
+  #hasErrors = false;
   #headers = [];
   #worksheet = null;
   #worker = null;
@@ -62,17 +65,25 @@ export default class extends Controller {
         { type: "module" },
       );
 
-      this.#worker.onerror = function (error) {
+      this.#worker.onerror = (error) => {
         console.error("Worker failed to load:", error.message);
       };
 
       // Listen for messages from the worker
-      this.#worker.onmessage = function (e) {
+      this.#worker.onmessage = (e) => {
         console.log("Main thread received:", e.data);
+        if (!e.success) {
+          this.#hasErrors = true;
+          this.#addErrorMessage(e.data.error);
+        }
       };
     } else {
       console.error("Web Workers are not supported in this browser.");
     }
+  }
+
+  disconnect() {
+    this.#worker.terminate(); //TODO: Give the user the ability to navigate to other pages
   }
 
   changeSampleIDInput(event) {
@@ -108,6 +119,33 @@ export default class extends Controller {
       //   this.#rows = XLSX.utils.sheet_to_json(this.#worksheet);
       this.#addSampleIDInputOptions();
     };
+  }
+
+  handleSubmit() {
+    this.#processRows();
+    notifyRefreshControllers(this);
+  }
+
+  show() {
+    if (this.hasViralProgressBarOutlet) {
+      this.viralProgressBarOutlet.show();
+    }
+  }
+
+  complete() {
+    if (this.hasViralProgressBarOutlet) {
+      this.viralProgressBarOutlet.hide();
+    }
+
+    if (this.#hasErrors) {
+      if (this.hasViralDialogOutlet) {
+        this.viralDialogOutlet.open();
+      }
+    } else {
+      if (this.hasViralFlashOutlet) {
+        this.viralFlashOutletElement.classList.remove("hidden");
+      }
+    }
   }
 
   #removeSampleIDInputOptions() {
@@ -249,26 +287,13 @@ export default class extends Controller {
     });
   }
 
-  handleSubmit() {
-    this.#processRows();
-    notifyRefreshControllers(this);
-  }
-
-  disconnect() {
-    this.#worker.terminate(); //TODO: Give the user the ability to navigate to other pages
-  }
-
-  show() {
-    if (this.hasViralProgressBarOutlet) {
-      this.viralProgressBarOutlet.show();
+  #addErrorMessage(error) {
+    if (this.hasViralDialogOutlet) {
+      const template = this.viralDialogOutletElement.querySelector(
+        "#file-import-dialog-template",
+      );
+      const errorMessage = template.innerHTML.replace(/PLACEHOLDER/g, error);
+      template.insertAdjacentHTML("afterend", errorMessage);
     }
-  }
-
-  complete() {
-    if (this.hasViralProgressBarOutlet) {
-      this.viralProgressBarOutlet.hide();
-    }
-
-    //TODO: Summarize results
   }
 }

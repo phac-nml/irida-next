@@ -90,6 +90,13 @@
       <% flash.each do |key, value| %>
         <%= viral_flash(type: key, data: value) %>
       <% end %>
+      <%= viral_flash(
+        type: :success,
+        data: t("shared.samples.metadata.file_imports.success.description"),
+        id: "file-import-flash",
+        timeout: false,
+        classes: class_names("hidden"),
+      ) %>
     </div>
     <span
       class="sr-only"
@@ -100,4 +107,35 @@
     ></span>
   </div>
   <div tabindex="0" data-action="focus->layout#handleContentFocus"></div>
+  <%= viral_dialog(
+    id: "file-import",
+    size: :large,
+    open: false,
+    closable: false,
+  ) do |dialog| %>
+    <% dialog.with_header(
+      title: t("shared.samples.metadata.file_imports.dialog.title"),
+    ) %>
+    <div>
+      <p class="mb-4 dark:text-white"><%= t("shared.samples.metadata.file_imports.errors.description") %></p>
+      <template id="file-import-dialog-template">
+        <%= viral_alert(
+          type: :danger,
+          message: "PLACEHOLDER",
+          classes: class_names("mb-4"),
+          dismissible: false,
+        ) %>
+      </template>
+      <div>
+        <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
+          <%= t("shared.samples.metadata.file_imports.errors.ok_button") %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <%= viral_progress_bar(
+    text: t("shared.samples.importing_metadata"),
+    open: false,
+    id: "file-import-progress-bar",
+  ) %>
 </div>

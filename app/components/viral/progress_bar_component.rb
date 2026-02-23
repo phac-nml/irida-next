@@ -15,7 +15,6 @@ module Viral
       @percentage = percentage
       @open = open
       @system_arguments = system_arguments
-      @system_arguments[:id] = 'test-me'
       @system_arguments[:classes] = class_names(
         'fixed bottom-4 right-4 z-50 w-64 p-4 bg-white rounded-lg shadow-md border border-gray-200',
         @system_arguments[:classes]

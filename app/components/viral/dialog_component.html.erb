@@ -1,4 +1,4 @@
-<%= render Viral::BaseComponent.new(tag: :div, data: {
+<%= render Viral::BaseComponent.new(tag: :div, id: "#{id}-dialog", data: {
   controller: "viral--dialog",
   "viral--dialog-open-value": open
 }, classes: ["dialog"]) do %>

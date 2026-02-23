@@ -12,7 +12,9 @@
       data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
       <% if Flipper.enabled?(:metadata_file_import_worker) %>
       data-metadata--file-import-worker-group-id-value="<%=  IridaSchema.id_from_object(@group)%>"
-      data-metadata--file-import-worker-viral--progress-bar-outlet="#test-me"
+      data-metadata--file-import-worker-viral--dialog-outlet="#file-import-dialog"
+      data-metadata--file-import-worker-viral--flash-outlet="#file-import-flash"
+      data-metadata--file-import-worker-viral--progress-bar-outlet="#file-import-progress-bar"
       data-metadata--file-import-worker-viral--sortable-lists--two-lists-selection-outlet="#import-metadata-dialog-content"
       data-action="
         metadata--file-import-worker:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
