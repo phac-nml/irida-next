@@ -1,61 +1,53 @@
-<div data-action="keydown->viral--select2#keydown" class="select2">
-  <input
-    type="text"
-    id="<%= id %>"
-    name="<%= id %>"
-    data-viral--select2-target="input"
-    data-action="input->viral--select2#input"
-    placeholder="<%= placeholder %>"
-    <%= "required" if required %>
-    autocomplete="off"
-    class="
-      select2-input border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full
-      p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400
-      dark:text-slate-50
-    "
-    <% if selected_value.present? %>
-    value="<%= selected_value %>"
-    <% end %>
-    <% if aria_describedby.present? %>
-    aria-describedby="<%= aria_describedby %>"
-    <% end %>
-    aria-invalid="<%= aria_invalid %>"
-    aria-required="<%= aria_required %>"
-  >
+<%= tag.div(data: { action: "keydown->viral--select2#keydown" }, class: "select2") do %>
+  <%= tag.input(
+    type: "text",
+    id: id,
+    name: id,
+    data: {
+      "viral--select2-target" => "input",
+      action: "input->viral--select2#input",
+    },
+    placeholder: placeholder,
+    required: required,
+    autocomplete: "off",
+    class:
+      "select2-input border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50",
+    value: selected_value.presence,
+    aria: {
+      describedby: aria_describedby.presence,
+      invalid: aria_invalid,
+      required: aria_required,
+    },
+  ) %>
+
   <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
 
-  <div
-    data-viral--select2-target="dropdown"
-    class="
-      z-10 hidden w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100
-      dark:bg-slate-700
-    "
-  >
-    <ul
-      data-viral--select2-target="scroller"
-      role="listbox"
-      class="
-        max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
-        dark:divide-slate-800
-      "
-    >
+  <%= tag.div(
+    data: { "viral--select2-target": "dropdown" },
+    class: "z-10 hidden w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100 dark:bg-slate-700",
+  ) do %>
+    <%= tag.ul(
+      data: { "viral--select2-target": "scroller" },
+      role: "listbox",
+      class: "max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800",
+    ) do %>
       <% options.each do |option| %>
         <%= option %>
       <% end %>
+
       <% if empty_state? %>
-        <li
-          role="option"
-          aria-disabled="true"
-          aria-selected="false"
-          class="
-            hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
-            dark:text-blue-400 dark:border-blue-800 pointer-events-none
-          "
-          data-viral--select2-target="empty"
-        >
-          <%= empty_state %>
-        </li>
+        <%= tag.li(
+          empty_state,
+          role: "option",
+          aria: {
+            disabled: "true",
+            selected: "false",
+          },
+          class:
+            "hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:border-blue-800 pointer-events-none",
+          data: { "viral--select2-target": "empty" },
+        ) %>
       <% end %>
-    </ul>
-  </div>
-</div>
+    <% end %>
+  <% end %>
+<% end %>
