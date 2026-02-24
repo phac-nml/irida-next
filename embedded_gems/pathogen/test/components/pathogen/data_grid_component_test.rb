@@ -22,6 +22,7 @@ module Pathogen
       assert_selector '.pathogen-data-grid__caption', text: 'Sample grid'
       assert_no_selector '.pathogen-data-grid--multi-sticky'
       assert_selector 'th.pathogen-data-grid__cell--header'
+      assert_selector 'th.pathogen-data-grid__cell--header > span.pathogen-data-grid__header-label', count: 2
       assert_selector 'th.pathogen-data-grid__cell--sticky[style*="--pathogen-data-grid-sticky-left: 0px"]'
       assert_selector 'td.pathogen-data-grid__cell--body', text: 'Sample one'
     end
@@ -157,6 +158,8 @@ module Pathogen
 
       assert_selector 'th', text: 'Custom ID'
       assert_selector 'th', text: 'Name'
+      assert_no_selector 'th span.pathogen-data-grid__header-label', text: 'Custom ID'
+      assert_selector 'th span.pathogen-data-grid__header-label', text: 'Name'
     end
 
     test 'renders empty state when rows are blank' do

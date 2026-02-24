@@ -61,6 +61,10 @@ module Pathogen
         @label
       end
 
+      def default_header_label?
+        @header_content.blank?
+      end
+
       def normalize_width!
         return if @width.blank?
         return @width = "#{@width}px" if @width.is_a?(Numeric)

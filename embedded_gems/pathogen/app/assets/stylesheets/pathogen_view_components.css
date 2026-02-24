@@ -306,6 +306,14 @@
     min-width: var(--pathogen-data-grid-col-width, auto);
     min-height: 2.5rem;
     box-sizing: border-box;
+    color: var(--pathogen-data-grid-text-color);
+    /*
+     * Keep all table cells on a shared text baseline so `ch`-based sticky
+     * offsets/widths resolve consistently across header and body cells.
+     */
+    font-size: var(--pathogen-data-grid-font-size);
+    font-weight: 400;
+    line-height: var(--pathogen-data-grid-line-height);
     /* Default: No vertical borders */
     border-bottom: 1px solid var(--pathogen-data-grid-row-border);
     background: inherit;
@@ -326,18 +334,17 @@
     z-index: var(--pathogen-data-grid-header-z);
     border-bottom: 1px solid var(--pathogen-data-grid-border-color);
     background: var(--pathogen-data-grid-header-bg);
+    text-align: left;
+    vertical-align: bottom;
+  }
+
+  .pathogen-data-grid__header-label {
+    display: inline-block;
     color: var(--pathogen-data-grid-text-muted-color);
-    /*
-     * Keep header font-size aligned with body cells so `ch`-based width/offset
-     * expressions resolve to the same pixel values in sticky columns.
-     */
-    font-size: var(--pathogen-data-grid-font-size);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    text-align: left;
     white-space: nowrap;
-    vertical-align: bottom;
   }
 
   .pathogen-data-grid__cell--sticky {
