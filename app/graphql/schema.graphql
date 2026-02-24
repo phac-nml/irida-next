@@ -1496,7 +1496,7 @@ type Metric {
   """
   Total number of projects under the group and it's subgroups.
   """
-  projectCount: Int
+  projectsCount: Int
 
   """
   Total number of samples in group projects or project.

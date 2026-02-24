@@ -6,7 +6,7 @@ module Types
     class NamespaceType < Types::BaseType
       implements GraphQL::Types::Relay::Node
       graphql_name 'NamespaceMetricsType'
-      description 'A namespace'
+      description 'Namespace for which to get project and/or groups for'
 
       field :name, String, null: false, description: 'Name of the namespace.'
       field :puid, ID, null: false,
