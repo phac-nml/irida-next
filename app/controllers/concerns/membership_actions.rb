@@ -19,7 +19,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     @q = load_members.ransack(params[:members_q], search_key: :members_q)
     @has_members = load_members.size.positive?
     set_default_sort
-    @pagy, @members = pagy(@q.result)
+    @pagy, @members = pagy(@q.result, raise_range_error: true)
     respond_to do |format|
       format.html
       format.turbo_stream

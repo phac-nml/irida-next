@@ -28,7 +28,7 @@ class AdvancedSearchQueryForm
   attribute :sort, :string, default: 'updated_at desc'
   attribute :scope, default: -> {}
   attribute :advanced_query, :boolean, default: false
-  attribute :request, default: -> { {} }
+  attribute :request, default: -> { { params: {} } }
 
   class_attribute :filter_column_attribute, instance_accessor: false, default: nil
   class_attribute :filter_ids_attribute, instance_accessor: false, default: nil
@@ -58,6 +58,7 @@ class AdvancedSearchQueryForm
 
   def initialize(...)
     super
+
     self.scope = scope
     self.sort = sort
     self.advanced_query = advanced_query?
