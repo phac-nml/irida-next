@@ -8,7 +8,15 @@
       }
     ),
     aria: { current: ("page" if selected) } do %>
-    <div class="mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg transition-colors duration-200 <%= selected ? 'bg-primary-300 text-primary-800 dark:bg-slate-700/80' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/item:bg-slate-200/70 dark:group-hover/item:bg-slate-700/50' %>">
+    <%= tag.div(
+      class: class_names(
+        "mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg transition-colors duration-200",
+        {
+          "bg-primary-300 text-primary-800 dark:bg-slate-700/80": selected,
+          "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/item:bg-slate-200/70 dark:group-hover/item:bg-slate-700/50": !selected
+        }
+      )
+    ) do %>
       <% if avatar %>
         <span class="rounded-lg bg-white">
           <%= viral_avatar(name: label, colour_string: "#{label}-#{url}", size: :xs) %>
@@ -16,7 +24,7 @@
       <% else %>
         <%= create_icon %>
       <% end %>
-    </div>
+    <% end %>
 
     <span class="line-clamp-2 text-sm font-medium transition-opacity duration-200 ease-in-out" title="<%= label %>">
       <% if avatar %>
