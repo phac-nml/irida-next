@@ -62,16 +62,19 @@ See [docs](https://phac-nml.github.io/irida-next/).
 
 ## Pre-commit Hooks & Formatting
 
-This project uses [devenv.sh git-hooks](https://devenv.sh/git-hooks/) to automatically format and lint code before each commit. The following tools are run on staged files:
+This project uses [Lefthook](https://github.com/evilmartians/lefthook) (via Bundler) to automatically format and lint code before each commit. The following tools run on staged files:
 
 - **RuboCop**: Ruby files (`.rb`) are auto-corrected and linted
-- **Prettier**: JavaScript, TypeScript, CSS, Markdown, YAML, and config files are formatted
+- **Prettier**: JavaScript, TypeScript, CSS, JSON, and Markdown files are formatted
+- **ESLint**: JavaScript files are auto-fixed
 - **Herb**: HTML+ERB templates (`.erb`) are formatted and linted
+- **i18n-tasks**: Locale files are normalized (`i18n-tasks normalize`) when locale YAML changes are staged
 
 ### How it works
 
-- Hooks are configured in `devenv.nix` and activated automatically when you run `direnv reload` or enter the devenv shell
-- On commit, only staged files matching the patterns are checked and auto-fixed
+- Hooks are configured in `lefthook.yml`
+- Install hooks with `bundle exec lefthook install --reset-hooks-path` (also run automatically by `bin/setup`)
+- On commit, staged files matching configured patterns are checked and auto-fixed
 - You can bypass hooks with `git commit --no-verify` (not recommended)
 
 ### Manual formatting
