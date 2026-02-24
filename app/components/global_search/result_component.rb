@@ -5,6 +5,11 @@ module GlobalSearch
   class ResultComponent < Component
     with_collection_parameter :result
 
+    # i18n-tasks-use t('global_search.index.types.projects')
+    # i18n-tasks-use t('global_search.index.types.groups')
+    # i18n-tasks-use t('global_search.index.types.workflow_executions')
+    # i18n-tasks-use t('global_search.index.types.samples')
+    # i18n-tasks-use t('global_search.index.types.data_exports')
     TYPE_LABELS = {
       'projects' => :'global_search.index.types.projects',
       'groups' => :'global_search.index.types.groups',
