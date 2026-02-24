@@ -80,13 +80,14 @@
   <%= tag.div(class: "@lg:hidden @max-lg:inline-flex items-stretch h-11 mb-10") do %>
     <%# Previous page link for small screens %>
     <% if @pagy.prev %>
-      <%== a.(
-        @pagy.prev,
+      <%= tag.a(
         t("components.viral.pagy.pagination_component.previous"),
-        classes:
+        href: helpers.pagy_url_for(@pagy, @pagy.prev),
+        class:
           "flex items-center justify-center relative focus-visible:z-10 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 border border-slate-300 dark:border-slate-600 rounded-l-lg",
-        aria_label:
-          t("components.viral.pagy.pagination_component.previous_aria_label"),
+        aria: {
+          label: t("components.viral.pagy.pagination_component.previous_aria_label"),
+        },
       ) %>
     <% else %>
       <%= tag.span(
