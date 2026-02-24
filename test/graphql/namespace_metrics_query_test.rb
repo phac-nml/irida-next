@@ -66,17 +66,25 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
     valid_params = { name: 'Metrics Subgroup', path: 'metrics-subgroup', parent_id: @group.id }
     @subgroup = Groups::CreateService.new(@non_sys_user, valid_params).execute
 
+    valid_params = { name: 'Metrics Group 2', path: 'metrics-group-2', parent_id: nil }
+    @group2 = Groups::CreateService.new(@non_sys_user, valid_params).execute
+
     valid_params = { namespace_attributes: { name: 'Proj1', path: 'proj-1', parent: @group } }
     @project = Projects::CreateService.new(@non_sys_user, valid_params).execute
 
     valid_params = { namespace_attributes: { name: 'Proj2', path: 'proj-2', parent: @subgroup } }
     @project2 = Projects::CreateService.new(@non_sys_user, valid_params).execute
 
+    valid_params = { namespace_attributes: { name: 'Proj3', path: 'proj-3', parent: @group2 } }
+    @project3 = Projects::CreateService.new(@non_sys_user, valid_params).execute
+
     # create a few samples via the service so that project and group
     # counters are incremented automatically
     @sample1 = Samples::CreateService.new(@non_sys_user, @project, name: 'Sample A').execute
     @sample2 = Samples::CreateService.new(@non_sys_user, @project, name: 'Sample B').execute
     @sample3 = Samples::CreateService.new(@non_sys_user, @project2, name: 'Sample C').execute
+
+    @sample4 = Samples::CreateService.new(@non_sys_user, @project3, name: 'Sample D').execute
 
     # attach some files to the samples; use existing blob fixtures so we
     # know the byte sizes ahead of time
@@ -88,6 +96,9 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
                                      active_storage_blobs(:testsample_illumina_pe_forward_blob),
                                      active_storage_blobs(:testsample_illumina_pe_reverse_blob)
                                    ]).execute
+
+    Attachments::CreateService.new(@non_sys_user, @sample4,
+                                   files: [active_storage_blobs(:test_file_fastq_blob)]).execute
 
     # add a couple of namespace attachments as well so disk usage covers
     # all three resolver branches (namespace, sample, workflow).
@@ -104,6 +115,12 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
 
     valid_params = { user: @non_sys_user, access_level: Member::AccessLevel::MAINTAINER }
     Members::CreateService.new(@non_sys_user, @project.namespace, valid_params).execute
+
+    valid_params = { user: @non_sys_user2, access_level: Member::AccessLevel::MAINTAINER }
+    Members::CreateService.new(@non_sys_user, @project3.namespace, valid_params).execute
+
+    params = { group_id: @group.id, group_access_level: Member::AccessLevel::MAINTAINER }
+    GroupLinks::GroupLinkService.new(@non_sys_user, @group2, params).execute
   end
 
   test 'system user can iterate through namespace metrics and view project/group metrics' do
@@ -126,16 +143,22 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
     metrics = metrics_group_node['metrics']
     assert metrics.present?, 'metrics should be returned for the namespace'
 
+    # also validate types just for sanity
+    assert metrics['samplesCount'].is_a?(Integer)
+    assert metrics['membersCount'].is_a?(Integer)
+    assert metrics['diskUsage'].is_a?(String)
+
     # concrete values based on our setup
     expected_projects = @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).count
     assert metrics['projectsCount'].is_a?(Integer), 'projectsCount should be an integer'
-    # value should not exceed what we know is in the database
-    assert_operator metrics['projectsCount'], :<=, expected_projects
+    assert_equal expected_projects, metrics['projectsCount'],
+                 'group projectsCount should return count of projects from itself and its subgroups'
 
     # reload before inspecting counters - the in-memory object may be stale
     @group.reload
     # samplesCount should exactly match the resolver's value; we rely on the
-    # service in setup to keep counters in sync so this is deterministic
+    # service in setup to keep counters in sync so this is deterministic. Group
+    # samplesCount includes samples from shared groups
     expected_samples = @group.aggregated_samples_count
     assert_equal expected_samples, metrics['samplesCount'], 'samplesCount should equal aggregated counter'
 
@@ -146,11 +169,6 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
     # control of the database objects rather than instantiating GraphQL
     expected_disk = disk_usage_for(@group)
     assert_equal expected_disk, metrics['diskUsage'], 'diskUsage should sum attachment byte sizes'
-
-    # also validate types just for sanity
-    assert metrics['samplesCount'].is_a?(Integer)
-    assert metrics['membersCount'].is_a?(Integer)
-    assert metrics['diskUsage'].is_a?(String)
 
     # confirm projects are visible and each project carries its own metrics
     project_nodes = metrics_group_node.dig('projects', 'nodes') || []
