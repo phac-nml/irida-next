@@ -57,6 +57,46 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
     assert_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
   end
 
+  test 'ctrl+k on global search page ignores query input key events' do
+    visit '/-/search?q=Project'
+
+    assert_selector '#global-search-query'
+
+    trigger_keydown(
+      key: 'k',
+      ctrl_key: true,
+      target_selector: '#global-search-query'
+    )
+
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+  end
+
+  test 'ctrl+k opens dialog on global search page when focus leaves editable fields' do
+    visit '/-/search?q=Project'
+
+    page.execute_script(<<~JS)
+      const origin = document.createElement("button");
+      origin.type = "button";
+      origin.id = "global-search-shortcut-origin";
+      origin.textContent = "Shortcut origin";
+      origin.style.position = "fixed";
+      origin.style.top = "1rem";
+      origin.style.right = "1rem";
+      document.body.append(origin);
+      origin.focus();
+    JS
+
+    assert_equal 'global-search-shortcut-origin', page.evaluate_script('document.activeElement.id')
+
+    trigger_keydown(
+      key: 'k',
+      ctrl_key: true,
+      target_selector: '#global-search-shortcut-origin'
+    )
+
+    assert_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+  end
+
   test 'global search shortcuts ignore repeated and composing key events' do
     visit '/-/groups/group-1'
 
@@ -175,6 +215,15 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
         } catch (_error) {
           // Ignore unsupported property override in browser driver.
         }
+      }
+
+      const dispatchTarget = options.target_selector
+        ? document.querySelector(options.target_selector)
+        : window;
+
+      if (dispatchTarget && typeof dispatchTarget.dispatchEvent === "function") {
+        dispatchTarget.dispatchEvent(event);
+        return;
       }
 
       window.dispatchEvent(event);
