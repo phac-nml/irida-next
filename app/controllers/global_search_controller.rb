@@ -5,20 +5,12 @@ class GlobalSearchController < ApplicationController
   before_action :ensure_enabled
 
   def index
-    @search = GlobalSearch::Query.new(current_user, query_params.merge(suggest: false)).execute
+    @search = GlobalSearch::Query.new(current_user, query_params).execute
     @workflow_states = WorkflowExecution.states.keys
 
     respond_to do |format|
       format.html
       format.json { render json: payload(@search) }
-    end
-  end
-
-  def suggest
-    search = GlobalSearch::Query.new(current_user, query_params.merge(suggest: true)).execute
-
-    respond_to do |format|
-      format.json { render json: payload(search) }
     end
   end
 
