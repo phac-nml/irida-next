@@ -4,6 +4,7 @@ require 'test_helper'
 
 class NamespaceMetricsQueryTest < ActiveSupport::TestCase
   include ActionDispatch::TestProcess
+  include ActionView::Helpers::NumberHelper
 
   # We only need to traverse one level of groups and projects to verify
   # that a system user can walk the namespaceMetrics connection and see
@@ -167,7 +168,7 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
     # diskUsage should reflect the attachments we created above; compute the
     # expected string by mirroring the resolver's SQL logic so we stay in
     # control of the database objects rather than instantiating GraphQL
-    expected_disk = disk_usage_for(@group)
+    expected_disk = calculate_disk_usage(@group)
     assert_equal expected_disk, metrics['diskUsage'], 'diskUsage should sum attachment byte sizes'
 
     # confirm projects are visible and each project carries its own metrics
@@ -185,7 +186,7 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
       assert_equal expected_proj_samples, p['metrics']['samplesCount'], 'project sample count should match database'
 
       # disk usage for the project should also be predictable via resolver
-      expected_proj_disk = disk_usage_for(project_record)
+      expected_proj_disk = calculate_disk_usage(project_record)
       assert_equal expected_proj_disk, p['metrics']['diskUsage'], 'project diskUsage should agree with our helper'
 
       assert p['metrics']['membersCount'].is_a?(Integer)
@@ -269,7 +270,7 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
     assert user_metrics['membersCount'].is_a?(Integer)
     assert_equal 1, user_metrics['membersCount'], 'only the owner should be counted as a member for the project'
 
-    expected_user_disk = disk_usage_for(user_ns)
+    expected_user_disk = calculate_disk_usage(user_ns)
     assert_equal expected_user_disk, user_metrics['diskUsage']
 
     proj_nodes = user_node.dig('projects', 'nodes') || []
@@ -283,7 +284,7 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
         assert p['metrics']['diskUsage'].is_a?(String)
         assert p['metrics']['membersCount'].is_a?(Integer)
         assert_equal project_record.samples_count.to_i, p['metrics']['samplesCount']
-        expected_proj_disk = disk_usage_for(project_record)
+        expected_proj_disk = calculate_disk_usage(project_record)
         assert_equal expected_proj_disk, p['metrics']['diskUsage']
         assert_equal 1, p['metrics']['membersCount']
       else
@@ -298,51 +299,48 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
 
   private
 
-  # replicate the SQL logic used by the DiskUsageResolver so we can verify
-  # the GraphQL query without having to construct a full resolver context
-  def disk_usage_for(namespace_or_project) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  # Calculate the disk usage for unique attachment blobs under a namespace (namespace attachments, sample attachments,
+  # sample workflow execution attachments)
+  def calculate_disk_usage(namespace_or_project) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     namespace = namespace_or_project.is_a?(Project) ? namespace_or_project.namespace : namespace_or_project
 
-    total_bytes = Attachment.with(
-      namespace_attachments: Attachment.where(
-        attachable_type: 'Namespace',
-        attachable_id: namespace.self_and_descendants_of_type(
-          [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
-        ).select(:id)
-      ).select(:id),
-      sample_attachments: Attachment.where(
-        attachable_type: 'Sample',
-        attachable_id: Sample.where(
-          project_id: Project.where(namespace_id: namespace.self_and_descendants_of_type(
-            [Namespaces::ProjectNamespace.sti_name]
-          ).select(:id))
-        )
-      ).select(:id),
-      sample_workflow_execution_attachments:
-        Attachment.where(attachable_type: 'SamplesWorkflowExecution',
-                         attachable: SamplesWorkflowExecution.joins(:workflow_execution).where(
-                           workflow_execution: {
-                             namespace_id: namespace.self_and_descendants_of_type(
-                               [Group.sti_name,
-                                Namespaces::ProjectNamespace.sti_name]
-                             ).select(:id)
-                           }
-                         ))
-    ).where(
-      Arel.sql(
-        'attachments.id in (select id from namespace_attachments)
-          OR attachments.id in (select id from sample_attachments)
-          OR attachments.id in (select id from sample_workflow_execution_attachments)'
-      )
-    ).joins(file_attachment: :blob)
-                            .select('DISTINCT active_storage_blobs.byte_size')
-                            .sum('CAST(active_storage_blobs.byte_size AS BIGINT)')
+    samples = []
+    namespace.self_and_descendants.each do |ns|
+      if namespace.group_namespace? || namespace.user_namespace?
+        ns.project_namespaces.each do |pn|
+          samples.concat(pn.project.samples) if pn.project.samples_count.positive?
+        end
+      elsif !ns.project.samples_count.nil? && ns.project.samples_count.positive?
+        samples.concat(ns.project.samples)
+      end
+    end
 
-    ActionController::Base.helpers.number_to_human_size(
-      total_bytes,
-      precision: 2,
-      significant: false,
-      strip_insignificant_zeros: false
+    sample_ids = samples.map(&:id)
+    namespace_ids = namespace.self_and_descendants_of_type(
+      [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
+    ).map(&:id)
+    sample_workflow_execution_ids = SamplesWorkflowExecution.joins(:workflow_execution).where(
+      workflow_execution: {
+        namespace_id: namespace.self_and_descendants_of_type(
+          [Group.sti_name,
+           Namespaces::ProjectNamespace.sti_name]
+        ).select(:id)
+      }
+    ).pluck(:id)
+
+    attachable_ids = sample_ids + namespace_ids + sample_workflow_execution_ids
+
+    attachments = Attachment.where(attachable_id: attachable_ids)
+
+    total_attachments_size = 0
+    blob_ids = []
+    attachments.each do |att|
+      total_attachments_size += att.file.blob.byte_size if att.file&.blob && blob_ids.exclude?(att.file.blob_id)
+      blob_ids << att.file.blob_id if att.file&.blob_id
+    end
+
+    number_to_human_size(
+      total_attachments_size, precision: 2, significant: false, strip_insignificant_zeros: false
     )
   end
 end
