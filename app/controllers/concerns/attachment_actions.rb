@@ -123,7 +123,7 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
   end
 
   def set_default_sort
-    @q.sorts = 'created_at desc' if @q.sorts.empty?
+    @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
 
   def attachment_params
