@@ -6,7 +6,7 @@ module Types
     class ProjectType < NamespaceType
       implements GraphQL::Types::Relay::Node
       graphql_name 'ProjectMetricsType'
-      description 'A project'
+      description 'Project to get metrics for'
 
       field :metrics, Types::Metrics::MetricType,
             null: true,

@@ -6,7 +6,7 @@ module Types
     class GroupType < NamespaceType
       implements GraphQL::Types::Relay::Node
       graphql_name 'GroupMetricsType'
-      description 'A group'
+      description 'Group to get metrics for'
 
       field :metrics, Types::Metrics::MetricType,
             null: true,
