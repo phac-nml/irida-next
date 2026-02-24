@@ -3,32 +3,30 @@
   data-controller="nextflow--deferred-samplesheet"
   data-nextflow--deferred-samplesheet-data-missing-error-value="<%= t("components.nextflow_component.data_missing_error") %>"
   data-nextflow--deferred-samplesheet-url-value="<%= url %>"
-  data-nextflow--deferred-samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
-  data-nextflow--deferred-samplesheet-no-selected-file-value="<%= t("components.nextflow.samplesheet.file_cell_component.no_selected_file")%>"
+  data-nextflow--deferred-samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json %>"
+  data-nextflow--deferred-samplesheet-no-selected-file-value="<%= t("components.nextflow.samplesheet.file_cell_component.no_selected_file") %>"
   data-nextflow--deferred-samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
   data-nextflow--deferred-samplesheet-automated-workflow-value="<%= @automated_workflow %>"
   data-nextflow--deferred-samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
-  data-nextflow--deferred-samplesheet-allowed-to-update-samples-string-value="<%= t("components.nextflow.update_samples")%>"
-  data-nextflow--deferred-samplesheet-not-allowed-to-update-samples-string-value="<%= t("components.nextflow.unauthorized_to_update_samples")%>"
-  data-nextflow--deferred-samplesheet-processing-error-value="<%= t("components.nextflow_component.samplesheet_processing_error")%>"
-  data-nextflow--deferred-samplesheet-loading-complete-announcement-value="<%= t("components.nextflow_component.loading_complete.announcement")%>"
+  data-nextflow--deferred-samplesheet-allowed-to-update-samples-string-value="<%= t("components.nextflow.update_samples") %>"
+  data-nextflow--deferred-samplesheet-not-allowed-to-update-samples-string-value="<%= t("components.nextflow.unauthorized_to_update_samples") %>"
+  data-nextflow--deferred-samplesheet-processing-error-value="<%= t("components.nextflow_component.samplesheet_processing_error") %>"
+  data-nextflow--deferred-samplesheet-loading-complete-announcement-value="<%= t("components.nextflow_component.loading_complete.announcement") %>"
   <% unless @automated_workflow %>
-  data-nextflow--deferred-samplesheet-selection-outlet="#samples-table"
+    data-nextflow--deferred-samplesheet-selection-outlet="#samples-table"
+    data-nextflow--deferred-samplesheet-nextflow--samplesheet--header-outlet="#samplesheet-table"
   <% end %>
 >
   <h1
     class="
-      mb-4 text-2xl font-extrabold leading-none tracking-tight text-slate-900
-      md:text-5xl lg:text-4xl dark:text-white
-    "
-  ><%= @workflow.name %></h1>
-  <p
-    class="
-      mb-4 text-lg font-normal text-slate-500 lg:text-xl dark:text-slate-400
+      mb-4 text-2xl leading-none font-extrabold tracking-tight text-slate-900 md:text-5xl lg:text-4xl
+      dark:text-white
     "
   >
-    <%= @workflow.description %>
-  </p>
+    <%= @workflow.name %>
+  </h1>
+
+  <p class="mb-4 text-lg font-normal text-slate-500 lg:text-xl dark:text-slate-400"><%= @workflow.description %></p>
   <%= helpers.turbo_frame_tag "workflow_execution_errors" %>
 
   <div
@@ -37,20 +35,15 @@
     aria-atomic="true"
     data-nextflow--deferred-samplesheet-target="formFieldError"
     class="
-      hidden alert-component bg-red-50 border-red-300 dark:bg-red-900/20
-      dark:border-red-800/50 dark:text-red-400 text-red-800 mb-2
+      alert-component mb-2 hidden border-red-300 bg-red-50 text-red-800 dark:border-red-800/50 dark:bg-red-900/20
+      dark:text-red-400
     "
   >
-    <div class="flex items-start w-full">
-      <div class="flex-shrink-0 mr-3">
-        <%= pathogen_icon :x_circle, color: :danger %>
-      </div>
-      <div class="flex-1 min-w-0 mt-0.5">
-        <div
-          class="text-sm font-medium leading-5"
-          data-nextflow--deferred-samplesheet-target="formFieldErrorMessage"
-        >
-        </div>
+    <div class="flex w-full items-start">
+      <div class="mr-3 flex-shrink-0"><%= pathogen_icon :x_circle, color: :danger %></div>
+
+      <div class="mt-0.5 min-w-0 flex-1">
+        <div class="text-sm leading-5 font-medium" data-nextflow--deferred-samplesheet-target="formFieldErrorMessage"></div>
       </div>
     </div>
   </div>
@@ -75,13 +68,12 @@
                               },
                               class:
                                 "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
+
           <div id="workflow_execution_name_error" class="mt-2 text-sm">
             <%= viral_help_text(state: :error, classes: "hidden") %>
           </div>
-          <p
-            id="<%= form.field_id("workflow_execution_name", "hint") %>"
-            class="field-hint"
-          >
+
+          <p id="<%= form.field_id("workflow_execution_name", "hint") %>" class="field-hint">
             <%= t("components.nextflow_component.name.helper") %>
           </p>
         </div>
@@ -96,13 +88,10 @@
 
       <%= workflow.fields_for "workflow_params" do |fields| %>
         <% @workflow.workflow_params.each do |item, definition| %>
-          <h2 class="text-lg font-extrabold dark:text-white">
-            <%= definition[:title] %>
-          </h2>
-          <p class="mb-2 font-normal text-slate-500 dark:text-slate-400">
-            <%= definition[:description] %>
-          </p>
-          <div class="grid grid-cols-1 gap-4 mb-8">
+          <h2 class="text-lg font-extrabold dark:text-white"><%= definition[:title] %></h2>
+          <p class="mb-2 font-normal text-slate-500 dark:text-slate-400"><%= definition[:description] %></p>
+
+          <div class="mb-8 grid grid-cols-1 gap-4">
             <% definition[:properties].each do |name, property| %>
               <% if item == :input_output_options && property[:format] == "file-path" %>
                 <% unless @automated_workflow %>
@@ -123,7 +112,6 @@
                       dismissible: true,
                     ) %>
                   </div>
-
                   <%= render Nextflow::DeferredSamplesheetComponent.new(
                     schema: property[:schema],
                     namespace_id:,
@@ -140,13 +128,16 @@
                   >
                     <div
                       class="
-                        flex items-center w-full max-w-xs p-4 space-x-2 text-gray-500 bg-white
-                        rounded-lg rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400
-                        dark:divide-gray-700 dark:bg-gray-800
+                        flex w-full max-w-xs items-center space-x-2 rounded-lg bg-white p-4 text-gray-500
+                        rtl:space-x-reverse rtl:divide-x-reverse dark:divide-gray-700 dark:bg-gray-800
+                        dark:text-gray-400
                       "
                     >
                       <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
-                      <span class="text-sm font-normal"><%= t("components.nextflow_component.processing_samplesheet") %></span>
+
+                      <span class="text-sm font-normal">
+                        <%= t("components.nextflow_component.processing_samplesheet") %>
+                      </span>
                     </div>
                   </div>
                 <% end %>
@@ -155,6 +146,7 @@
                   <% if property[:type] != 'boolean' %>
                     <%= fields.label name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
                       <%= property[:description] %>
+
                       <% if property[:required] %>
                         <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
                       <% end %>
@@ -173,14 +165,17 @@
                       <%= input.with_prefix do %>
                         <%= format_name_as_arg(name) %>
                       <% end %>
+
                       <%= input.with_legend(classes: 'block mb-2 text-sm font-medium text-slate-900 dark:text-white') do %>
                         <%= property[:description] %>
+
                         <% if property[:required] %>
                           <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
                         <% end %>
                       <% end %>
                     <% end %>
                   <% end %>
+
                   <% if property[:help_text].present? %>
                     <%= viral_help_text do %>
                       <%= property[:help_text] %>
@@ -194,34 +189,35 @@
       <% end %>
 
       <% if @automated_workflow %>
-        <div class="flex items-center h-5 mb-4">
+        <div class="mb-4 flex h-5 items-center">
           <%= workflow.check_box :update_samples,
                              { checked: instance.present? && instance["update_samples"] } %>
+
           <%= workflow.label :update_samples,
                          t(:"components.nextflow.update_samples"),
                          class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
         </div>
       <% else %>
         <div
-          class="flex mb-4"
+          class="mb-4 flex"
           id="update-samples-spinner"
           data-nextflow--deferred-samplesheet-target="updateSamplesSpinner"
         >
           <div
             class="
-              flex items-center w-full pr-4 space-x-2 text-gray-500 bg-white rounded-lg
-              rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400 dark:divide-gray-700
-              dark:bg-gray-800
+              flex w-full items-center space-x-2 rounded-lg bg-white pr-4 text-gray-500 rtl:space-x-reverse
+              rtl:divide-x-reverse dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-400
             "
             role="alert"
           >
             <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+
             <span class="text-sm font-medium text-slate-900 dark:text-white">
               <%= t("components.nextflow.verifying_update_samples") %>
             </span>
           </div>
         </div>
-        <div class="hidden flex items-center h-5 mb-4" aria-hidden="true">
+        <div class="mb-4 flex hidden h-5 items-center" aria-hidden="true">
           <%= workflow.check_box :update_samples,
                              {
                                checked: instance.present? && instance["update_samples"],
@@ -230,35 +226,36 @@
                                    "updateSamplesCheckbox",
                                },
                              } %>
+
           <label
-            class="
-              block mb-2 text-sm font-medium text-slate-900 dark:text-white mr-2 text-sm
-              font-medium text-slate-900 dark:text-white
-            "
+            class="mr-2 mb-2 block text-sm font-medium text-slate-900 dark:text-white"
             for="workflow_execution_update_samples"
             data-nextflow--deferred-samplesheet-target="updateSamplesLabel"
-          >
-          </label>
+          ></label>
         </div>
       <% end %>
-      <div class="flex items-center h-5 mb-4">
+
+      <div class="mb-4 flex h-5 items-center">
         <%= workflow.check_box :email_notification,
                            {
                              checked:
                                instance.present? && instance["email_notification"],
                            } %>
+
         <%= workflow.label :email_notification,
                        t(:"components.nextflow.email_notification"),
                        class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
+
       <%# do not render checkbox for an automated workflow execution %>
       <% if @namespace_type && !@automated_workflow %>
-        <div class="flex items-center h-5 mb-4">
+        <div class="mb-4 flex h-5 items-center">
           <%= workflow.check_box :shared_with_namespace,
                              {
                                checked:
                                  instance.present? && instance["shared_with_namespace"],
                              } %>
+
           <%= workflow.label :shared_with_namespace,
                          t(
                            :"components.nextflow.shared_with.#{@namespace_type.downcase}",
@@ -272,11 +269,11 @@
       class="button button-primary"
       data-nextflow--deferred-samplesheet-target="submit"
       <% if @automated_workflow %>
-      type="submit"
+        type="submit"
       <% else %>
-      type="button"
-      disabled="disabled"
-      data-action="click->nextflow--deferred-samplesheet#submitSamplesheet"
+        type="button"
+        disabled="disabled"
+        data-action="click->nextflow--deferred-samplesheet#submitSamplesheet"
       <% end %>
     >
       <% if instance.nil? %>
@@ -287,10 +284,7 @@
     </button>
   <% end %>
 
-  <div
-    class="flex items-center p-4 space-x-4 hidden"
-    data-nextflow--deferred-samplesheet-target="submissionSpinner"
-  >
+  <div class="flex hidden items-center space-x-4 p-4" data-nextflow--deferred-samplesheet-target="submissionSpinner">
     <%= render SpinnerComponent.new(
       message: t("components.nextflow_component.processing_request"),
       id: "nextflow-processing-request-spinner",
@@ -308,11 +302,7 @@
     <% end %>
   <% end %>
 
-  <div
-    class="sr-only"
-    aria-live="assertive"
-    data-nextflow--deferred-samplesheet-target="ariaLive"
-  ></div>
+  <div class="sr-only" aria-live="assertive" data-nextflow--deferred-samplesheet-target="ariaLive"></div>
 
   <template data-nextflow--deferred-samplesheet-target="samplesheetReadyTemplate">
     <%= viral_alert(
