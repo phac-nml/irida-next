@@ -121,8 +121,7 @@ class LayoutComponentTest < ViewComponent::TestCase
   test 'renders global site banners when configured' do
     user = users(:john_doe)
 
-    GlobalNotification.instance!.update!(
-      enabled: true,
+    GlobalNotification.create!(
       style: :danger,
       messages: { en: 'System outage', fr: 'Panne du systeme' }
     )
@@ -141,8 +140,7 @@ class LayoutComponentTest < ViewComponent::TestCase
 
   test 'site banners reflect locale for i18n support' do
     user = users(:john_doe)
-    GlobalNotification.instance!.update!(
-      enabled: true,
+    GlobalNotification.create!(
       style: :info,
       messages: { en: 'English', fr: 'Français' }
     )

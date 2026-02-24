@@ -675,7 +675,7 @@ ALTER SEQUENCE public.flipper_gates_id_seq OWNED BY public.flipper_gates.id;
 CREATE TABLE public.global_notifications (
     id bigint NOT NULL,
     singleton_guard character varying DEFAULT 'global'::character varying NOT NULL,
-    enabled boolean DEFAULT false NOT NULL,
+    enabled boolean DEFAULT true NOT NULL,
     style character varying DEFAULT 'info'::character varying NOT NULL,
     messages jsonb DEFAULT '{}'::jsonb NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
@@ -1420,10 +1420,10 @@ CREATE UNIQUE INDEX index_flipper_gates_on_feature_key_and_key_and_value ON publ
 
 
 --
--- Name: index_global_notifications_on_singleton_guard; Type: INDEX; Schema: public; Owner: -
+-- Name: index_global_notifications_on_enabled_when_enabled; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_global_notifications_on_singleton_guard ON public.global_notifications USING btree (singleton_guard);
+CREATE UNIQUE INDEX index_global_notifications_on_enabled_when_enabled ON public.global_notifications USING btree (enabled) WHERE (enabled = true);
 
 
 --

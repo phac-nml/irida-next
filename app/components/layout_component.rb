@@ -19,8 +19,8 @@ class LayoutComponent < Component
   private
 
   def fetch_site_banners
-    notification = GlobalNotification.instance
-    return [] unless notification.persisted? && notification.active?
+    notification = GlobalNotification.current
+    return [] unless notification&.active?
 
     [{ type: notification.style.to_sym, message: notification.message }]
   end
