@@ -28,20 +28,19 @@ module Samples
     private
 
     def render_component(version:)
-      namespace = projects(:project1).namespace
+      project = projects(:project1)
+      namespace = project.namespace
       sample = samples(:sample1)
       pagy = Pagy.new(count: 1, page: 1, limit: 20)
 
-      render_inline(
-        Samples::TableComponent.new(
-          [sample],
-          namespace,
-          pagy,
-          version: version,
-          has_samples: true,
-          empty: { title: 'No Samples', description: 'Nothing here' }
+      with_request_url "/namespaces/#{project.namespace.parent.id}/projects/#{project.id}/samples" do
+        render_inline(
+          Samples::TableComponent.new([sample], namespace, pagy,
+                                      version: version,
+                                      has_samples: true,
+                                      empty: { title: 'No Samples', description: 'Nothing here' })
         )
-      )
+      end
     end
   end
 end
