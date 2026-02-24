@@ -88,14 +88,17 @@
     </div>
   </div>
 
-  <div class="mb-2 @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink">
+  <div
+    id="samplesheet-container"
+    class="mb-2 @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink"
+    data-controller="nextflow--samplesheet--header"
+    data-nextflow--samplesheet--header-nextflow--deferred-samplesheet-outlet="#nextflow-container"
+  >
     <div class="relative overflow-x-auto">
       <table
-        id="samplesheet-table"
         data-test-selector="samplesheet-table"
         class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
-        data-controller="table nextflow--samplesheet--header"
-        data-nextflow--samplesheet--header-nextflow--deferred-samplesheet-outlet="#nextflow-container"
+        data-controller="table"
         data-action="focusin->table#handleCellFocus"
       >
         <thead class="z-10 text-xs uppercase @2xl:sticky @2xl:top-0">
@@ -115,14 +118,14 @@
         </thead>
 
         <tbody data-nextflow--deferred-samplesheet-target="tableBody"></tbody>
-
-        <template data-nextflow--samplesheet--header-target="metadataHeaderForm">
-          <%= form_with(url: fields_workflow_executions_metadata_path) do |f| %>
-            <%= f.hidden_field :namespace_id, value: namespace_id %>
-          <% end %>
-        </template>
       </table>
     </div>
+
+    <template data-nextflow--samplesheet--header-target="metadataHeaderForm">
+      <%= form_with(url: fields_workflow_executions_metadata_path) do |f| %>
+        <%= f.hidden_field :namespace_id, value: namespace_id %>
+      <% end %>
+    </template>
   </div>
 
   <div data-nextflow--deferred-samplesheet-target="emptyState" class="hidden">
