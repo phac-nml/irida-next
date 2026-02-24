@@ -345,23 +345,17 @@
     left: var(--pathogen-data-grid-sticky-left, 0px);
     z-index: var(--pathogen-data-grid-sticky-z);
     background: inherit; /* Should match row bg (even on hover) */
-    /* Floating effect via shadow instead of border */
-    box-shadow: 4px 0 12px -4px
-      color-mix(in oklab, var(--pathogen-color-neutral-950) 5%, transparent);
-    border-right: 1px solid transparent; /* Keeps layout stable */
-    clip-path: inset(0 -20px 0 0); /* Allows shadow overflow to right only */
-    background-clip: border-box;
+    /*
+     * Keep sticky rendering simple: Windows Chrome can rasterize sticky table
+     * cells with clip-path/composited shadows at slightly different widths.
+     * A stable separator avoids visual width drift while scrolling.
+     */
+    box-shadow: 1px 0 0 var(--pathogen-data-grid-border-color);
   }
 
-  /*
-   * Sticky header cells should share the same paint behavior as body sticky cells.
-   * Diverging clip/compositing rules can cause width jitter during horizontal scroll.
-   */
   .pathogen-data-grid__cell--header.pathogen-data-grid__cell--sticky {
     z-index: calc(var(--pathogen-data-grid-header-z) + 1);
     background: var(--pathogen-data-grid-header-bg);
-    background-clip: border-box;
-    clip-path: inset(0 -20px 0 0);
   }
 
   .pathogen-data-grid__cell--align-center {
