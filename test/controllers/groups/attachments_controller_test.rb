@@ -9,6 +9,8 @@ module Groups
       @namespace = groups(:group_one)
       @attachment1 = attachments(:group1Attachment1)
       @attachment2 = attachments(:group1Attachment2)
+      @attachment1.update!(updated_at: 3.hours.ago)
+      @attachment2.update!(updated_at: 2.hours.ago)
     end
 
     test 'should get index' do
@@ -81,7 +83,7 @@ module Groups
     test 'should apply default sorting and sort attachments by supported columns' do
       get group_attachments_url(@namespace)
       assert_response :success
-      assert_sort_state(6, 'descending')
+      assert_first_rows_include(@attachment2.puid, @attachment1.puid, row_scope: '#attachments-table-body')
 
       get group_attachments_url(@namespace, params: { q: { s: 'puid asc' } })
       assert_response :success
@@ -108,9 +110,8 @@ module Groups
       assert_sort_state(5, 'ascending')
       assert_first_rows_include(@attachment2.puid, @attachment1.puid, row_scope: '#attachments-table-body')
 
-      get group_attachments_url(@namespace, params: { q: { s: 'created_at asc' } })
+      get group_attachments_url(@namespace, params: { q: { s: 'updated_at asc' } })
       assert_response :success
-      assert_sort_state(6, 'ascending')
       assert_first_rows_include(@attachment1.puid, @attachment2.puid, row_scope: '#attachments-table-body')
     end
 

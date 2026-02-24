@@ -10,6 +10,8 @@ module Projects
       @namespace = groups(:group_one)
       @attachment1 = attachments(:project1Attachment1)
       @attachment2 = attachments(:project1Attachment2)
+      @attachment1.update!(updated_at: 3.hours.ago)
+      @attachment2.update!(updated_at: 2.hours.ago)
     end
 
     test 'should get index' do
@@ -82,7 +84,7 @@ module Projects
     test 'should apply default sorting and sort project attachments by supported columns' do
       get namespace_project_attachments_url(@namespace, @project1)
       assert_response :success
-      assert_sort_state(6, 'descending')
+      assert_first_rows_include(@attachment2.puid, @attachment1.puid, row_scope: '#attachments-table-body')
 
       get namespace_project_attachments_url(@namespace, @project1, params: { q: { s: 'puid asc' } })
       assert_response :success
@@ -109,9 +111,8 @@ module Projects
       assert_sort_state(5, 'ascending')
       assert_first_rows_include(@attachment2.puid, @attachment1.puid, row_scope: '#attachments-table-body')
 
-      get namespace_project_attachments_url(@namespace, @project1, params: { q: { s: 'created_at asc' } })
+      get namespace_project_attachments_url(@namespace, @project1, params: { q: { s: 'updated_at asc' } })
       assert_response :success
-      assert_sort_state(6, 'ascending')
       assert_first_rows_include(@attachment1.puid, @attachment2.puid, row_scope: '#attachments-table-body')
     end
 
