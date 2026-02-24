@@ -28,14 +28,8 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test 'suggest rejects non-JSON requests' do
-    get global_search_suggest_path, params: { q: 'Project 1' }
-
-    assert_response :not_acceptable
-  end
-
-  test 'suggest should respect selected types' do
-    get global_search_suggest_path(format: :json), params: {
+  test 'index JSON should respect selected types' do
+    get global_search_path(format: :json), params: {
       q: 'Project 1',
       types: ['projects']
     }
@@ -48,7 +42,7 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'metadata search is off by default and available when explicitly enabled' do
-    get global_search_suggest_path(format: :json), params: {
+    get global_search_path(format: :json), params: {
       q: 'value1',
       types: ['samples']
     }
@@ -57,7 +51,7 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
     default_payload = response.parsed_body
     assert_equal [], default_payload['results']
 
-    get global_search_suggest_path(format: :json), params: {
+    get global_search_path(format: :json), params: {
       q: 'value1',
       types: ['samples'],
       match_sources: ['metadata']
@@ -75,8 +69,8 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'suggest includes accessible automation-bot workflow executions' do
-    get global_search_suggest_path(format: :json), params: {
+  test 'index JSON includes accessible automation-bot workflow executions' do
+    get global_search_path(format: :json), params: {
       q: 'automated_workflow_execution',
       types: ['workflow_executions']
     }
@@ -88,8 +82,8 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
     assert_includes titles, 'automated_workflow_execution'
   end
 
-  test 'suggest only includes current user data exports' do
-    get global_search_suggest_path(format: :json), params: {
+  test 'index JSON only includes current user data exports' do
+    get global_search_path(format: :json), params: {
       q: 'Data Export',
       types: ['data_exports']
     }
@@ -119,7 +113,7 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
 
     sign_in uploader
 
-    get global_search_suggest_path(format: :json), params: {
+    get global_search_path(format: :json), params: {
       q: 'Project 1 Sample 1',
       types: ['samples'],
       match_sources: ['name']
@@ -132,7 +126,7 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'most recent sort applies soft diversity for mixed types' do
-    get global_search_suggest_path(format: :json), params: {
+    get global_search_path(format: :json), params: {
       q: 'Project',
       types: %w[projects samples],
       match_sources: ['name'],

@@ -8,10 +8,8 @@ module GlobalSearch
     ALLOWED_MATCH_SOURCES = %w[identifier name metadata].freeze
     ALLOWED_SORTS = %w[best_match most_recent].freeze
 
-    DEFAULT_SUGGEST_PER_TYPE_LIMIT = 5
-    DEFAULT_SUGGEST_LIMIT = 20
-    DEFAULT_INDEX_PER_TYPE_LIMIT = 20
-    DEFAULT_INDEX_LIMIT = 100
+    DEFAULT_PER_TYPE_LIMIT = 20
+    DEFAULT_LIMIT = 100
 
     MAX_PER_TYPE_LIMIT = 50
     MAX_LIMIT = 200
@@ -49,19 +47,13 @@ module GlobalSearch
     end
 
     def per_type_limit
-      default = suggest? ? DEFAULT_SUGGEST_PER_TYPE_LIMIT : DEFAULT_INDEX_PER_TYPE_LIMIT
-      value = @params[:per_type_limit].presence || default
+      value = @params[:per_type_limit].presence || DEFAULT_PER_TYPE_LIMIT
       value.to_i.clamp(1, MAX_PER_TYPE_LIMIT)
     end
 
     def limit
-      default = suggest? ? DEFAULT_SUGGEST_LIMIT : DEFAULT_INDEX_LIMIT
-      value = @params[:limit].presence || default
+      value = @params[:limit].presence || DEFAULT_LIMIT
       value.to_i.clamp(1, MAX_LIMIT)
-    end
-
-    def suggest?
-      ActiveModel::Type::Boolean.new.cast(@params[:suggest])
     end
 
     def filters

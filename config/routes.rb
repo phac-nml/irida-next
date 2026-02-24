@@ -26,7 +26,6 @@ Rails.application.routes.draw do
   # Use this scope for all new global routes.
   scope path: '-' do
     get :search, to: 'global_search#index', as: :global_search
-    get 'search/suggest', to: 'global_search#suggest', as: :global_search_suggest
 
     resources :groups, only: %i[index new create]
     resources :projects, only: %i[index new create]

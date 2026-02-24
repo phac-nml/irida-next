@@ -63,8 +63,7 @@ module GlobalSearch
         created_from: filters[:created_from]&.iso8601,
         created_to: filters[:created_to]&.iso8601,
         per_type_limit: search_params.per_type_limit,
-        limit: search_params.limit,
-        suggest: search_params.suggest?
+        limit: search_params.limit
       }
     end
   end

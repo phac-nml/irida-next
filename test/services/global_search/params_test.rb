@@ -54,19 +54,19 @@ module GlobalSearch
       assert_equal 'best_match', params.sort
     end
 
-    test 'per_type_limit uses suggest defaults when suggest is true' do
-      params = GlobalSearch::Params.new(suggest: true)
-      assert_equal 5, params.per_type_limit
-    end
-
-    test 'per_type_limit uses index defaults when suggest is false' do
-      params = GlobalSearch::Params.new(suggest: false)
+    test 'per_type_limit uses default when not provided' do
+      params = GlobalSearch::Params.new({})
       assert_equal 20, params.per_type_limit
     end
 
     test 'per_type_limit clamps to maximum' do
       params = GlobalSearch::Params.new(per_type_limit: 999)
       assert_equal 50, params.per_type_limit
+    end
+
+    test 'limit uses default when not provided' do
+      params = GlobalSearch::Params.new({})
+      assert_equal 100, params.limit
     end
 
     test 'limit clamps to maximum' do
