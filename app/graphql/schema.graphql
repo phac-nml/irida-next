@@ -1312,7 +1312,7 @@ input GroupFilter {
 }
 
 """
-A group
+Group to get metrics for
 """
 type GroupMetricsType implements Node {
   """
@@ -1475,7 +1475,7 @@ Represents untyped JSON
 scalar JSON
 
 """
-Metrics for a group or project
+Metrics for a group or user namespace
 """
 type Metric {
   """
@@ -1484,22 +1484,22 @@ type Metric {
   createdAt: ISO8601DateTime!
 
   """
-  Disk usage (bytes) of the group projects or project.
+  Disk usage (bytes) of the group projects or user projects.
   """
   diskUsage: String!
 
   """
-  Total number of members in the group or project.
+  Total number of members in the group, subgroups, and/or projects.
   """
   membersCount: Int!
 
   """
-  Total number of projects under the group and it's subgroups.
+  Total number of projects under the namespace.
   """
   projectsCount: Int
 
   """
-  Total number of samples in group projects or project.
+  Total number of samples in group projects or user project.
   """
   samplesCount: Int!
 
@@ -1706,7 +1706,7 @@ type Namespace implements Node {
 }
 
 """
-A namespace
+Namespace for which to get project and/or groups for
 """
 type NamespaceMetricsType implements Node {
   """
@@ -2351,7 +2351,7 @@ input ProjectFilter {
 }
 
 """
-A project
+Project to get metrics for
 """
 type ProjectMetricsType implements Node {
   """
