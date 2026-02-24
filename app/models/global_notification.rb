@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Singleton global notification shown in application layouts.
+# Global notifications shown in application layouts.
 class GlobalNotification < ApplicationRecord
   SINGLETON_GUARD = 'global'
 
@@ -11,17 +11,17 @@ class GlobalNotification < ApplicationRecord
     success: 'success'
   }, validate: true
 
-  validates :singleton_guard, inclusion: { in: [SINGLETON_GUARD] }, uniqueness: true
+  scope :enabled, -> { where(enabled: true) }
+  attribute :enabled, :boolean, default: true
+
+  validates :singleton_guard, inclusion: { in: [SINGLETON_GUARD] }
   validate :all_locale_messages_present, if: :enabled?
 
   before_validation :set_singleton_guard
+  before_save :disable_other_enabled_notifications, if: :enabled?
 
-  def self.instance
-    find_or_initialize_by(singleton_guard: SINGLETON_GUARD)
-  end
-
-  def self.instance!
-    find_or_create_by!(singleton_guard: SINGLETON_GUARD)
+  def self.current
+    enabled.order(updated_at: :desc, id: :desc).first
   end
 
   def active?
@@ -43,5 +43,9 @@ class GlobalNotification < ApplicationRecord
 
   def set_singleton_guard
     self.singleton_guard = SINGLETON_GUARD
+  end
+
+  def disable_other_enabled_notifications
+    self.class.enabled.where.not(id: id).update_all(enabled: false, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
   end
 end

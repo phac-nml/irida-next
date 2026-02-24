@@ -3,25 +3,34 @@
 require 'test_helper'
 
 class GlobalNotificationTest < ActiveSupport::TestCase
-  test '.instance! creates the singleton row' do
-    notification = GlobalNotification.instance!
+  test 'assigns singleton guard value to each record' do
+    notification = GlobalNotification.create!(enabled: false, style: :info, messages: {})
 
     assert notification.persisted?
     assert_equal GlobalNotification::SINGLETON_GUARD, notification.singleton_guard
   end
 
-  test 'enforces singleton at model validation level' do
-    GlobalNotification.instance!.update!(enabled: true, style: :info, messages: { en: 'Hello', fr: 'Bonjour' })
+  test 'new notifications are enabled by default' do
+    notification = GlobalNotification.new(style: :info, messages: localized_messages('Default enabled'))
 
-    duplicate = GlobalNotification.new(
-      singleton_guard: GlobalNotification::SINGLETON_GUARD,
-      enabled: true,
-      style: :warning,
-      messages: { en: 'Second', fr: 'Deuxième' }
-    )
+    assert notification.enabled?
+  end
 
-    assert_not duplicate.valid?
-    assert_includes duplicate.errors[:singleton_guard], 'has already been taken'
+  test 'enabling a new notification disables the previous enabled notification' do
+    previous = GlobalNotification.create!(style: :info, messages: localized_messages('Previous'))
+    current = GlobalNotification.create!(style: :warning, messages: localized_messages('Current'))
+
+    assert_equal 2, GlobalNotification.count
+    assert_equal 1, GlobalNotification.where(enabled: true).count
+    assert_not previous.reload.enabled?
+    assert current.reload.enabled?
+    assert_equal current, GlobalNotification.current
+  end
+
+  test 'current returns nil when no enabled notification exists' do
+    GlobalNotification.create!(enabled: false, style: :info, messages: {})
+
+    assert_nil GlobalNotification.current
   end
 
   test 'requires messages for all available locales when enabled' do
@@ -81,5 +90,11 @@ class GlobalNotificationTest < ActiveSupport::TestCase
     notification = GlobalNotification.new(enabled: false, style: :info, messages: {})
 
     assert notification.valid?
+  end
+
+  private
+
+  def localized_messages(message)
+    I18n.available_locales.index_with { |_locale| message }
   end
 end
