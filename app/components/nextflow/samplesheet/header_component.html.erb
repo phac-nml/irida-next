@@ -1,11 +1,12 @@
 <% if property["cell_type"] == "metadata_cell" %>
   <th
     class="
-      z-10 border dark:border-slate-600 border-slate-100 dark:bg-slate-700 bg-slate-50
-      text-slate-900 dark:text-slate-300
+      z-10 border border-slate-100 bg-slate-50 text-slate-900 dark:border-slate-600 dark:bg-slate-700
+      dark:text-slate-300
     "
   >
     <label class="sr-only" for="field-<%= header %>"><%= header %></label>
+
     <%= select_tag :field,
     options_for_select(metadata_field_options, selected),
     include_blank: !@required_properties.include?(header),
@@ -16,7 +17,7 @@
       action:
         (
           if Flipper.enabled?(:deferred_samplesheet)
-            "change->nextflow--deferred-samplesheet#handleMetadataSelection"
+            "change->nextflow--samplesheet--header#handleMetadataSelection"
           else
             "change->nextflow--samplesheet#handleMetadataSelection"
           end
@@ -27,14 +28,17 @@
 <% else %>
   <th
     class="
-      p-2.5 tracking-wider dark:border-slate-600 border border-slate-100
-      dark:bg-slate-700 bg-slate-50 z-10 text-slate-900 dark:text-slate-300
+      z-10 border border-slate-100 bg-slate-50 p-2.5 tracking-wider text-slate-900 dark:border-slate-600
+      dark:bg-slate-700 dark:text-slate-300
     "
   >
     <div class="flex items-center space-x-2 uppercase">
       <%= header %>
+
       <% if @required_properties.include?(header) %>
-        <span class="ml-1 text-red-600 dark:text-red-300">(<%= t("components.nextflow.samplesheet.header_component.required") %>)</span>
+        <span class="ml-1 text-red-600 dark:text-red-300">
+          (<%= t("components.nextflow.samplesheet.header_component.required") %>)
+        </span>
       <% end %>
     </div>
   </th>
