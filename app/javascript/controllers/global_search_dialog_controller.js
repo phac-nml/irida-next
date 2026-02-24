@@ -53,6 +53,14 @@ export default class extends Controller {
     }
   }
 
+  filtersDetailsTargetConnected() {
+    this.syncFilters();
+  }
+
+  filtersContentTargetConnected() {
+    this.syncFilters();
+  }
+
   handle(event) {
     if (
       event.defaultPrevented ||
