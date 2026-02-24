@@ -79,6 +79,10 @@ module Pathogen
         setup_tab_attributes
       end
 
+      def button_attributes
+        @system_arguments.merge(id: @id, aria: @system_arguments[:aria].compact)
+      end
+
       private
 
       # Sets up HTML and ARIA attributes for the tab button
