@@ -27,7 +27,7 @@
     "dev:css": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify --watch"
   },
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.18",
+    "@tailwindcss/cli": "^4.2.1",
     "flowbite": "^3.1.2",
     "tailwindcss": "^4.1.18"
   }
