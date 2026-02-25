@@ -324,7 +324,9 @@
   }
 
   /* Last row needs no border bottom */
-  .pathogen-data-grid__row:last-child > .pathogen-data-grid__cell {
+  .pathogen-data-grid__body
+    .pathogen-data-grid__row:last-child
+    > .pathogen-data-grid__cell {
     border-bottom: 0;
   }
 
