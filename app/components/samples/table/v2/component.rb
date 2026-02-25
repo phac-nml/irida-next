@@ -84,9 +84,7 @@ module Samples
         end
 
         def empty_state?
-          return false if @has_samples && @pagy&.count.to_i.positive?
-
-          true
+          !@has_samples
         end
 
         def metadata_value(sample, field)
