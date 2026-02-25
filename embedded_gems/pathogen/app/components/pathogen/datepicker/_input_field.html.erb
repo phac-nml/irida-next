@@ -1,17 +1,14 @@
 <% if label %>
-  <label
-    for="<%= input_id %>"
-    class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
-  ><%= label %></label>
+  <label for="<%= input_id %>" class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
+    <%= label %>
+  </label>
 <% end %>
+
 <div class="relative max-w-sm" aria-live="polite">
-  <div
-    class="
-      absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none
-    "
-  >
+  <div class="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center ps-3.5">
     <%= pathogen_icon(:calendar_dots) %>
   </div>
+
   <input
     placeholder="<%= t("pathogen.datepicker.placeholder") %>"
     autocomplete="off"
@@ -25,17 +22,17 @@
     name="<%= input_name %>"
     id="<%= input_id %>"
     class="
-      ps-10 p-2.5 rounded-lg border-slate-300 text-slate-900 text-sm
-      dark:border-slate-600 dark:bg-slate-800 dark:text-white
-      dark:placeholder-slate-400
+      rounded-lg border-slate-300 p-2.5 ps-10 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800
+      dark:text-white dark:placeholder-slate-400
     "
     <% if input_aria_label %>
-    aria-label="<%= input_aria_label %>"
+      aria-label="<%= input_aria_label %>"
     <% end %>
   >
 </div>
+
 <div
   data-pathogen--datepicker--input-target="inputError"
-  class="text-sm hidden text-red-700 dark:text-red-500 mt-1"
+  class="mt-1 hidden text-sm text-red-700 dark:text-red-500"
   aria-hidden="true"
 ></div>
