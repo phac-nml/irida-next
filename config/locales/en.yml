@@ -127,6 +127,8 @@ en:
               unique_items: must contain unique values
         namespace:
           attributes:
+            parent_id:
+              nesting_level_too_deep: nesting level too deep
             path:
               invalid_format: can contain only letters, digits, '_', '-', and '.'. Cannot start with '-' or end in '.'.
               reserved_value: "%{value} is a reserved value."
