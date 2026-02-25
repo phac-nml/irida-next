@@ -3,9 +3,16 @@ import { Controller } from "@hotwired/stimulus";
 const UPLOAD_ROWS_ROLE = "upload-rows";
 
 export default class extends Controller {
-  static targets = ["submitButton", "attachmentsInput"];
+  static targets = [
+    "submitButton",
+    "attachmentsInput",
+    "uploadErrorAlert",
+    "formErrorAlert",
+  ];
   static values = {
     uploadingText: String,
+    successText: String,
+    errorFallbackText: String,
   };
   #uploads = new Map();
   #pendingUploadKeys = new Set();
@@ -33,11 +40,17 @@ export default class extends Controller {
         this._onAllStart,
       );
       this.#formElement.addEventListener("direct-uploads:end", this._onAllEnd);
+      this.#formElement.addEventListener("ajax:error", this._onFormError);
+      this.#formElement.addEventListener(
+        "turbo:submit-end",
+        this._onTurboSubmitEnd,
+      );
     }
 
     this.attachmentsInputTarget.setAttribute("aria-required", "true");
     this.attachmentsInputTarget.setAttribute("aria-invalid", "false");
     this.submitButtonTarget.disabled = true;
+    this.#hideErrorAlerts();
   }
 
   disconnect() {
@@ -58,6 +71,11 @@ export default class extends Controller {
       this.#formElement.removeEventListener(
         "direct-uploads:end",
         this._onAllEnd,
+      );
+      this.#formElement.removeEventListener("ajax:error", this._onFormError);
+      this.#formElement.removeEventListener(
+        "turbo:submit-end",
+        this._onTurboSubmitEnd,
       );
     }
 
@@ -101,7 +119,7 @@ export default class extends Controller {
     upload.status = "uploading";
     upload.rowElement.classList.remove("direct-upload--pending");
 
-    this.#hideAttachmentsInput();
+    this.#disableAttachmentsInput();
     this.#rememberSubmitButtonState();
     this.#setSubmitButtonUploadingState();
   }
@@ -123,7 +141,9 @@ export default class extends Controller {
 
     this.#hasUploadError = true;
     upload.status = "error";
-    upload.rowElement.classList.add("direct-upload--error", "border-rose-600");
+    const errorMessage = this.#errorFallbackText();
+    this.#setUploadStatusMessage(upload, "error", errorMessage);
+    upload.rowElement.classList.add("direct-upload--error");
     upload.rowElement.setAttribute("title", error);
     this.attachmentsInputTarget.setAttribute("aria-invalid", "true");
   }
@@ -138,7 +158,7 @@ export default class extends Controller {
     upload.status = "complete";
     upload.rowElement.classList.remove("direct-upload--pending");
     upload.rowElement.classList.add("direct-upload--complete");
-    this.#setUploadProgress(id, 100, { force: true });
+    this.#setUploadStatusMessage(upload, "complete", this.#successText());
   }
 
   #uploadsStart(event) {
@@ -146,6 +166,7 @@ export default class extends Controller {
 
     this.#batchInProgress = true;
     this.#hasUploadError = false;
+    this.#hideErrorAlerts();
     for (const uploadKey of this.#pendingUploadKeys) {
       this.#activeUploadKeys.add(uploadKey);
     }
@@ -153,7 +174,7 @@ export default class extends Controller {
 
     if (this.#activeUploadKeys.size === 0) return;
 
-    this.#hideAttachmentsInput();
+    this.#disableAttachmentsInput();
     this.#rememberSubmitButtonState();
     this.#setSubmitButtonUploadingState();
   }
@@ -168,9 +189,29 @@ export default class extends Controller {
     if (!this.#hasUploadError) {
       this.#markNonErrorUploadsComplete(this.#activeUploadKeys);
       this.attachmentsInputTarget.setAttribute("aria-invalid", "false");
+      this.#clearSelectedFiles();
+    } else {
+      for (const uploadKey of this.#activeUploadKeys) {
+        const upload = this.#uploads.get(uploadKey);
+        if (upload && upload.status === "pending") {
+          upload.status = "error";
+          this.#setUploadStatusMessage(
+            upload,
+            "error",
+            this.#errorFallbackText(),
+          );
+          upload.rowElement.classList.add("direct-upload--error");
+          upload.rowElement.setAttribute(
+            "title",
+            "Upload cancelled due to previous error",
+          );
+        }
+      }
+      this.#clearDirectUploadHiddenInputs();
+      this.#showUploadErrorAlert();
     }
 
-    this.#showAttachmentsInput();
+    this.#enableAttachmentsInput();
     this.#restoreSubmitButtonState();
     this.#clearBatchUploads(this.#activeUploadKeys);
     this.#activeUploadKeys.clear();
@@ -185,6 +226,23 @@ export default class extends Controller {
     this._onEnd = this.uploadEnd.bind(this);
     this._onAllStart = this.#uploadsStart.bind(this);
     this._onAllEnd = this.#uploadsEnd.bind(this);
+    this._onFormError = this.formError.bind(this);
+    this._onTurboSubmitEnd = this.#handleTurboSubmitEnd.bind(this);
+  }
+
+  formError(event) {
+    if (!this.#isThisFormEvent(event)) return;
+    this.#hideUploadErrorAlert();
+    this.#showFormErrorAlert();
+  }
+
+  #handleTurboSubmitEnd(event) {
+    if (!this.#isThisFormEvent(event)) return;
+    if (event.detail?.success === false) {
+      this.formError(event);
+      return;
+    }
+    this.#hideErrorAlerts();
   }
 
   #isAttachmentUploadEvent(event) {
@@ -226,30 +284,34 @@ export default class extends Controller {
     const rowElement = document.createElement("div");
     rowElement.id = `direct-upload-${id}`;
     rowElement.className =
-      "direct-upload direct-upload--pending flex-1 relative mb-1";
+      "direct-upload direct-upload--pending flex-1 relative mb-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 shadow-sm";
 
     const filenameRow = document.createElement("div");
-    filenameRow.className = "flex justify-between mb-1 direct-upload__filename";
+    filenameRow.className =
+      "flex justify-between items-center mb-2 direct-upload__filename";
 
     const fileNameElement = document.createElement("span");
     fileNameElement.id = `direct-upload-filename-${id}`;
-    fileNameElement.className = "text-sm text-gray-500 dark:text-gray-400";
+    fileNameElement.className =
+      "text-sm font-medium text-slate-700 dark:text-slate-200 truncate pr-4";
     fileNameElement.textContent = fileName;
 
     const progressTextElement = document.createElement("span");
     progressTextElement.id = `upload-progress-${id}`;
-    progressTextElement.className = "text-sm text-gray-500 dark:text-gray-400";
+    progressTextElement.className =
+      "text-sm font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap flex items-center gap-1.5";
     progressTextElement.textContent = "0%";
 
     filenameRow.append(fileNameElement, progressTextElement);
 
     const progressTrackElement = document.createElement("div");
     progressTrackElement.className =
-      "w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700";
+      "w-full bg-slate-100 rounded-full h-1.5 dark:bg-slate-700 overflow-hidden";
 
     const progressBarElement = document.createElement("div");
     progressBarElement.id = `direct-upload-progress-${id}`;
-    progressBarElement.className = "bg-primary-600 h-2.5 rounded-full";
+    progressBarElement.className =
+      "bg-primary-600 h-full rounded-full transition-all duration-300 ease-out";
     progressBarElement.style.width = "0%";
     progressBarElement.setAttribute("role", "progressbar");
     progressBarElement.setAttribute("aria-valuemin", "0");
@@ -268,11 +330,63 @@ export default class extends Controller {
     return {
       id,
       rowElement,
+      progressTrackElement,
       progressBarElement,
       progressTextElement,
       status: "pending",
       lastProgress: 0,
     };
+  }
+
+  #setUploadStatusMessage(upload, status, message) {
+    const isComplete = status === "complete";
+    const isError = status === "error";
+
+    upload.progressTrackElement.classList.add("hidden");
+    upload.progressBarElement.removeAttribute("aria-valuenow");
+    upload.progressBarElement.removeAttribute("aria-valuetext");
+    upload.progressBarElement.removeAttribute("role");
+
+    upload.progressTextElement.className =
+      "text-sm font-medium whitespace-nowrap flex items-center gap-1.5";
+
+    if (isComplete) {
+      upload.progressTextElement.classList.add(
+        "text-green-600",
+        "dark:text-green-400",
+      );
+      upload.progressTextElement.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>${message}</span>`;
+      upload.rowElement.classList.replace(
+        "border-slate-200",
+        "border-green-200",
+      );
+      upload.rowElement.classList.replace(
+        "dark:border-slate-700",
+        "dark:border-green-900/50",
+      );
+      upload.rowElement.classList.add("bg-green-50/50", "dark:bg-green-900/10");
+    } else if (isError) {
+      upload.progressTextElement.classList.add(
+        "text-rose-600",
+        "dark:text-rose-400",
+      );
+      upload.progressTextElement.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg><span>${message}</span>`;
+      upload.rowElement.classList.replace(
+        "border-slate-200",
+        "border-rose-200",
+      );
+      upload.rowElement.classList.replace(
+        "dark:border-slate-700",
+        "dark:border-rose-900/50",
+      );
+      upload.rowElement.classList.add("bg-rose-50/50", "dark:bg-rose-900/10");
+    } else {
+      upload.progressTextElement.classList.add(
+        "text-slate-500",
+        "dark:text-slate-400",
+      );
+      upload.progressTextElement.textContent = message;
+    }
   }
 
   #setUploadProgress(id, progress, { force = false } = {}) {
@@ -295,7 +409,11 @@ export default class extends Controller {
       "aria-valuetext",
       `${roundedProgress}%`,
     );
-    upload.progressTextElement.textContent = `${roundedProgress}%`;
+    if (roundedProgress === 100) {
+      upload.progressTextElement.textContent = this.#successText();
+    } else {
+      upload.progressTextElement.textContent = `${roundedProgress}%`;
+    }
   }
 
   #markNonErrorUploadsComplete(uploadKeys) {
@@ -307,7 +425,7 @@ export default class extends Controller {
       upload.status = "complete";
       upload.rowElement.classList.remove("direct-upload--pending");
       upload.rowElement.classList.add("direct-upload--complete");
-      this.#setUploadProgress(upload.id, 100, { force: true });
+      this.#setUploadStatusMessage(upload, "complete", this.#successText());
     }
   }
 
@@ -359,13 +477,67 @@ export default class extends Controller {
     return this.hasUploadingTextValue ? this.uploadingTextValue : "Uploading";
   }
 
-  #hideAttachmentsInput() {
-    this.attachmentsInputTarget.classList.add("hidden");
-    this.attachmentsInputTarget.setAttribute("aria-hidden", "true");
+  #successText() {
+    return this.hasSuccessTextValue
+      ? this.successTextValue
+      : "Uploaded successfully";
   }
 
-  #showAttachmentsInput() {
-    this.attachmentsInputTarget.classList.remove("hidden");
-    this.attachmentsInputTarget.removeAttribute("aria-hidden");
+  #errorFallbackText() {
+    return this.hasErrorFallbackTextValue
+      ? this.errorFallbackTextValue
+      : "Upload failed";
+  }
+
+  #disableAttachmentsInput() {
+    this.attachmentsInputTarget.disabled = true;
+  }
+
+  #enableAttachmentsInput() {
+    this.attachmentsInputTarget.disabled = false;
+  }
+
+  #clearSelectedFiles() {
+    this.attachmentsInputTarget.value = "";
+  }
+
+  #clearDirectUploadHiddenInputs() {
+    if (!this.#formElement) return;
+
+    const fieldName = this.attachmentsInputTarget.name;
+    const hiddenInputs = this.#formElement.querySelectorAll(
+      "input[type='hidden']",
+    );
+
+    for (const hiddenInput of hiddenInputs) {
+      if (hiddenInput.name === fieldName) {
+        hiddenInput.remove();
+      }
+    }
+  }
+
+  #showUploadErrorAlert() {
+    if (!this.hasUploadErrorAlertTarget) return;
+    this.uploadErrorAlertTarget.classList.remove("hidden");
+  }
+
+  #hideUploadErrorAlert() {
+    if (!this.hasUploadErrorAlertTarget) return;
+    this.uploadErrorAlertTarget.classList.add("hidden");
+  }
+
+  #showFormErrorAlert() {
+    if (!this.hasFormErrorAlertTarget) return;
+    this.formErrorAlertTarget.classList.remove("hidden");
+  }
+
+  #hideFormErrorAlert() {
+    if (!this.hasFormErrorAlertTarget) return;
+    this.formErrorAlertTarget.classList.add("hidden");
+  }
+
+  #hideErrorAlerts() {
+    this.#hideUploadErrorAlert();
+    this.#hideFormErrorAlert();
   }
 }

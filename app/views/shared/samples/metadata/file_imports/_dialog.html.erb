@@ -1,8 +1,8 @@
 <%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
   <%= turbo_stream_from @broadcast_target %>
-  <%= turbo_frame_tag "import_metadata_dialog_content" do %>
 
+  <%= turbo_frame_tag "import_metadata_dialog_content" do %>
     <%= turbo_frame_tag "import_metadata_dialog_alert" %>
 
     <div
@@ -15,28 +15,32 @@
         metadata--file-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
       "
       data-metadata--file-import-refresh-outlet="[data-controller='refresh']"
-      data-attachment-upload-uploading-text-value='<%=t(".uploading") %>'
+      data-attachment-upload-uploading-text-value="<%= t('.uploading') %>"
+      data-attachment-upload-success-text-value="<%= t('common.upload.uploaded_successfully') %>"
+      data-attachment-upload-error-fallback-text-value="<%= t('common.upload.failed') %>"
       id="import-metadata-dialog-content"
     >
       <%= form_for(:file_import, url: url, method: :post) do |form| %>
-        <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
+        <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>">
+
         <div class="grid gap-4">
-          <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-            <%= t(".description") %>
-          </p>
+          <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400"><%= t(".description") %></p>
+
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
             <%= t(".namespace.description") %>
+
             <% if @namespace.type == 'Group' %>
               <%= t(".namespace.group.description_html") %>
             <% else %>
               <%= t(".namespace.project.description_html") %>
             <% end %>
           </p>
+
           <div
             role="alert"
             class="
-              flex items-center hidden p-4 mb-2 text-red-800 border-l-4 border-red-300
-              bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800
+              mb-2 flex hidden items-center border-l-4 border-red-300 bg-red-50 p-4 text-red-800 dark:border-red-800
+              dark:bg-slate-800 dark:text-red-400
             "
             aria-hidden="true"
             data-metadata--file-import-target="error"
@@ -44,6 +48,7 @@
             <span class="inline shrink-0">
               <%= pathogen_icon(:warning_circle, size: :sm, class: "mr-3 stroke-2") %>
             </span>
+
             <div>
               <div class="font-medium whitespace-break-spaces"><%= t(".no_valid_metadata") %></div>
             </div>
@@ -59,6 +64,7 @@
                        data: {
                          required: true,
                        } %>
+
             <%= form.file_field :file,
                             required: true,
                             direct_upload: true,
@@ -73,9 +79,11 @@
                               required: true,
                             },
                             class:
-                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" %>
+
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400"><%= t(".file_help") %></p>
           </div>
+
           <div class="form-field">
             <%= form.label :sample_id_column,
                        t(".sample_id_column"),
@@ -84,6 +92,7 @@
                        data: {
                          required: true,
                        } %>
+
             <%= form.select :sample_id_column,
                         {},
                         { prompt: t(".select_sample_id_column") },
@@ -100,14 +109,12 @@
                           disabled: true,
                         } %>
           </div>
+
           <template data-viral--sortable-lists--two-lists-selection-target="itemTemplate">
             <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
           </template>
-          <div
-            data-metadata--file-import-target="metadataColumns"
-            aria-hidden="true"
-            class="grid gap-4 hidden"
-          >
+
+          <div data-metadata--file-import-target="metadataColumns" aria-hidden="true" class="grid hidden gap-4">
             <%= viral_sortable_lists(
                 title: t(".metadata_columns"),
             ) do |sortable_lists| %>
@@ -116,6 +123,7 @@
                 title: t(".available"),
                 group: "metadata_selection",
               ) %>
+
               <%= sortable_lists.with_list(
                 id: "selected-list",
                 title: t(".selected"),
@@ -124,10 +132,9 @@
               ) %>
             <% end %>
           </div>
-          <div
-            class="hidden"
-            data-viral--sortable-lists--two-lists-selection-target="field"
-          ></div>
+
+          <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
+
           <div class="flex items-center" data-controller="pathogen--tooltip">
             <%= form.check_box :ignore_empty_values,
                            {
@@ -141,14 +148,17 @@
                            },
                            true,
                            false %>
+
             <%= form.label :ignore_empty_values,
                        t(".ignore_empty_values.label"),
                        class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
+
             <%= render Pathogen::Tooltip.new(
               id: "ignore-empty-values-tooltip",
               text: t(:".ignore_empty_values.description"),
             ) %>
           </div>
+
           <div>
             <%= form.submit t(".submit_button"),
                         class: "button button-primary",

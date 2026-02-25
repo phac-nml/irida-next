@@ -25,8 +25,8 @@ module Projects
         dispatch_form_upload_event('end')
 
         state = upload_state(101)
-        assert_equal '100%', state.fetch('text')
-        assert_equal '100', state.fetch('ariaValueNow')
+        assert_equal success_text, state.fetch('text')
+        assert_empty state.fetch('ariaValueNow')
         assert_includes state.fetch('rowClass'), 'direct-upload--complete'
       end
 
@@ -48,10 +48,10 @@ module Projects
         state_a = upload_state(201)
         state_b = upload_state(202)
 
-        assert_equal '100%', state_a.fetch('text')
-        assert_equal '100%', state_b.fetch('text')
-        assert_equal '100', state_a.fetch('ariaValueNow')
-        assert_equal '100', state_b.fetch('ariaValueNow')
+        assert_equal success_text, state_a.fetch('text')
+        assert_equal success_text, state_b.fetch('text')
+        assert_empty state_a.fetch('ariaValueNow')
+        assert_empty state_b.fetch('ariaValueNow')
         assert_includes state_a.fetch('rowClass'), 'direct-upload--complete'
         assert_includes state_b.fetch('rowClass'), 'direct-upload--complete'
       end
@@ -63,19 +63,49 @@ module Projects
         dispatch_upload_event('initialize', { id: 301, file: { name: 'bad.fastq.gz' } })
         dispatch_upload_event('start', { id: 301, file: { name: 'bad.fastq.gz' } })
         dispatch_upload_event('progress', { id: 301, file: { name: 'bad.fastq.gz' }, progress: 55 })
+        inject_direct_upload_hidden_input('signed-id-before-error')
+        assert_equal 1, hidden_direct_upload_input_count
         dispatch_upload_event('error', { id: 301, file: { name: 'bad.fastq.gz' }, error: 'forced upload failure' })
         dispatch_upload_event('end', { id: 301, file: { name: 'bad.fastq.gz' } })
         dispatch_form_upload_event('end')
 
         state = upload_state(301)
         input_state = upload_input_state
+        upload_alert_state = upload_error_alert_state
 
-        # Progress stays at 55% — uploadEnd short-circuits when status is 'error', so it never advances to 100%
-        assert_equal '55%', state.fetch('text')
-        assert_equal '55', state.fetch('ariaValueNow')
+        # Error shows descriptive message, progress bar hidden
+        assert_equal error_text, state.fetch('text')
+        assert_empty state.fetch('ariaValueNow')
         assert_includes state.fetch('rowClass'), 'direct-upload--error'
         assert_not_includes state.fetch('rowClass'), 'direct-upload--complete'
         assert_equal 'true', input_state.fetch('ariaInvalid')
+        assert_equal false, upload_alert_state.fetch('hidden')
+        assert_includes upload_alert_state.fetch('text'), retry_upload_text
+        assert_equal 0, hidden_direct_upload_input_count
+      end
+
+      test 'server submit error keeps completed uploads and does not require re-upload' do
+        open_upload_dialog
+
+        assign_upload_input_files(['single.fastq.gz'])
+        dispatch_form_upload_event('start')
+        dispatch_upload_event('initialize', { id: 601, file: { name: 'single.fastq.gz' } })
+        dispatch_upload_event('start', { id: 601, file: { name: 'single.fastq.gz' } })
+        dispatch_upload_event('progress', { id: 601, file: { name: 'single.fastq.gz' }, progress: 90 })
+        inject_direct_upload_hidden_input('signed-id-success')
+        dispatch_upload_event('end', { id: 601, file: { name: 'single.fastq.gz' } })
+        dispatch_form_upload_event('end')
+
+        assert_equal 1, hidden_direct_upload_input_count
+        assert_equal 0, upload_input_file_count
+
+        dispatch_turbo_submit_end(false)
+        form_alert_state = form_error_alert_state
+
+        assert_equal false, form_alert_state.fetch('hidden')
+        assert_includes form_alert_state.fetch('text'), form_submit_failed_text
+        assert_equal 1, hidden_direct_upload_input_count
+        assert_equal 0, upload_input_file_count
       end
 
       test 'failed batch rows are not marked complete after a later successful batch' do
@@ -101,13 +131,15 @@ module Projects
         previous_error_state = upload_state(401)
         previous_pending_state = upload_state(402)
 
-        assert_equal '100%', retry_state.fetch('text')
-        assert_equal '100', retry_state.fetch('ariaValueNow')
+        assert_equal success_text, retry_state.fetch('text')
+        assert_empty retry_state.fetch('ariaValueNow')
         assert_includes retry_state.fetch('rowClass'), 'direct-upload--complete'
 
         assert_not_includes previous_error_state.fetch('rowClass'), 'direct-upload--complete'
+        assert_equal error_text, previous_error_state.fetch('text')
         assert_not_includes previous_pending_state.fetch('rowClass'), 'direct-upload--complete'
-        assert_equal '0%', previous_pending_state.fetch('text')
+        assert_includes previous_pending_state.fetch('rowClass'), 'direct-upload--error'
+        assert_equal error_text, previous_pending_state.fetch('text')
       end
 
       private
@@ -151,8 +183,8 @@ module Projects
             const text = document.getElementById("upload-progress-#{id}");
             return {
               rowClass: row?.className,
-              ariaValueNow: bar?.getAttribute("aria-valuenow"),
-              text: text?.textContent,
+              ariaValueNow: bar?.getAttribute("aria-valuenow") || "",
+              text: text?.textContent?.trim() || null,
             };
           })();
         JS
@@ -169,6 +201,120 @@ module Projects
             };
           })();
         JS
+      end
+
+      def inject_direct_upload_hidden_input(value)
+        page.execute_script(<<~JS)
+          (() => {
+            const input = document.querySelector(
+              "dialog[open] input[data-attachment-upload-target='attachmentsInput']",
+            );
+            const hidden = document.createElement("input");
+            hidden.type = "hidden";
+            hidden.name = input.name;
+            hidden.value = #{value.to_json};
+            input.insertAdjacentElement("beforebegin", hidden);
+          })();
+        JS
+      end
+
+      def hidden_direct_upload_input_count
+        page.evaluate_script(<<~JS)
+          (() => {
+            const form = document.querySelector("dialog[open] form");
+            const input = document.querySelector(
+              "dialog[open] input[data-attachment-upload-target='attachmentsInput']",
+            );
+            const hiddenInputs = form?.querySelectorAll("input[type='hidden']") || [];
+            return Array.from(hiddenInputs).filter((hiddenInput) => {
+              return hiddenInput.name === input?.name && hiddenInput.value !== "";
+            }).length;
+          })();
+        JS
+      end
+
+      def upload_input_file_count
+        page.evaluate_script(<<~JS)
+          (() => {
+            const input = document.querySelector(
+              "dialog[open] input[data-attachment-upload-target='attachmentsInput']",
+            );
+            return input?.files?.length || 0;
+          })();
+        JS
+      end
+
+      def upload_error_alert_state
+        page.evaluate_script(<<~JS)
+          (() => {
+            const alert = document.querySelector(
+              "dialog[open] [data-attachment-upload-target='uploadErrorAlert']",
+            );
+            return {
+              hidden: alert?.classList.contains("hidden"),
+              text: alert?.textContent?.trim() || null,
+            };
+          })();
+        JS
+      end
+
+      def form_error_alert_state
+        page.evaluate_script(<<~JS)
+          (() => {
+            const alert = document.querySelector(
+              "dialog[open] [data-attachment-upload-target='formErrorAlert']",
+            );
+            return {
+              hidden: alert?.classList.contains("hidden"),
+              text: alert?.textContent?.trim() || null,
+            };
+          })();
+        JS
+      end
+
+      def assign_upload_input_files(filenames)
+        page.execute_script(<<~JS)
+          (() => {
+            const input = document.querySelector(
+              "dialog[open] input[data-attachment-upload-target='attachmentsInput']",
+            );
+            const dataTransfer = new DataTransfer();
+            #{filenames.to_json}.forEach((filename) => {
+              dataTransfer.items.add(new File(["test"], filename, { type: "application/octet-stream" }));
+            });
+            input.files = dataTransfer.files;
+          })();
+        JS
+      end
+
+      def dispatch_turbo_submit_end(success)
+        page.execute_script(<<~JS)
+          (() => {
+            const form = document.querySelector("dialog[open] form");
+            form.dispatchEvent(
+              new CustomEvent("turbo:submit-end", {
+                bubbles: true,
+                detail: { success: #{success} },
+              }),
+            );
+          })();
+        JS
+      end
+
+      def success_text
+        I18n.t('common.upload.uploaded_successfully')
+      end
+
+      def error_text
+        I18n.t('common.upload.failed')
+      end
+
+      def retry_upload_text
+        I18n.t('common.upload.upload_failed_retry')
+      end
+
+      def form_submit_failed_text
+        I18n.t('common.upload.form_submit_failed')
       end
     end
   end

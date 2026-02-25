@@ -1,8 +1,8 @@
 <%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t("shared.samples.spreadsheet_imports.dialog.title")) %>
   <%= turbo_stream_from @broadcast_target %>
-  <%= turbo_frame_tag "import_spreadsheet_dialog_content" do %>
 
+  <%= turbo_frame_tag "import_spreadsheet_dialog_content" do %>
     <%= turbo_frame_tag "import_spreadsheet_dialog_alert" %>
 
     <div
@@ -10,13 +10,15 @@
       data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
       data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
       data-viral--sortable-lists--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
-      data-spreadsheet-import-select-sample-value='<%= t("shared.samples.spreadsheet_imports.dialog.select_sample_name_column") %>'
-      data-spreadsheet-import-select-description-value='<%= t("shared.samples.spreadsheet_imports.dialog.select_sample_description_column") %>'
-      data-spreadsheet-import-select-project-value='<%= t("shared.samples.spreadsheet_imports.dialog.select_project_puid_column") %>'
-      data-attachment-upload-uploading-text-value='<%=t("shared.samples.spreadsheet_imports.dialog.uploading") %>'
+      data-spreadsheet-import-select-sample-value="<%= t("shared.samples.spreadsheet_imports.dialog.select_sample_name_column") %>"
+      data-spreadsheet-import-select-description-value="<%= t("shared.samples.spreadsheet_imports.dialog.select_sample_description_column") %>"
+      data-spreadsheet-import-select-project-value="<%= t("shared.samples.spreadsheet_imports.dialog.select_project_puid_column") %>"
+      data-attachment-upload-uploading-text-value="<%= t('shared.samples.spreadsheet_imports.dialog.uploading') %>"
+      data-attachment-upload-success-text-value="<%= t('common.upload.uploaded_successfully') %>"
+      data-attachment-upload-error-fallback-text-value="<%= t('common.upload.failed') %>"
       data-viral--select2-enable-controller-coordination-value="<%= true %>"
       <% if @namespace.group_namespace? %>
-      data-viral--select2-spreadsheet-import-outlet='#spreadsheet-import-dialog-content'
+        data-viral--select2-spreadsheet-import-outlet="#spreadsheet-import-dialog-content"
       <% end %>
       data-spreadsheet-import-refresh-outlet="[data-controller='refresh']"
       data-action="
@@ -24,13 +26,14 @@
       "
       id="spreadsheet-import-dialog-content"
     >
-
       <%= form_for(:spreadsheet_import, url: url, method: :post) do |form| %>
-        <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
+        <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>">
+
         <div class="grid gap-4">
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-300">
             <%= t("shared.samples.spreadsheet_imports.dialog.description") %>
           </p>
+
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-300">
             <% if @namespace.group_namespace? %>
               <%= t("shared.samples.spreadsheet_imports.dialog.namespace.group.description_html") %>
@@ -51,6 +54,7 @@
                        data: {
                          required: true,
                        } %>
+
             <%= form.file_field :file,
                             required: true,
                             direct_upload: true,
@@ -65,9 +69,13 @@
                               required: true,
                             },
                             class:
-                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:placeholder-slate-400" %>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-300"><%= t("shared.samples.spreadsheet_imports.dialog.file_help") %></p>
+                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:placeholder-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" %>
+
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
+              <%= t("shared.samples.spreadsheet_imports.dialog.file_help") %>
+            </p>
           </div>
+
           <div class="form-field">
             <%= form.label :sample_name_column,
                        t("shared.samples.spreadsheet_imports.dialog.sample_name_column"),
@@ -76,6 +84,7 @@
                        data: {
                          required: true,
                        } %>
+
             <%= form.select :sample_name_column,
                         {},
                         {
@@ -96,6 +105,7 @@
                         class:
                           "disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
           </div>
+
           <div class="form-field">
             <%= form.label :sample_description_column,
                        t(
@@ -103,6 +113,7 @@
                        ),
                        class:
                          "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+
             <%= form.select :sample_description_column,
                         {},
                         {
@@ -120,21 +131,29 @@
                         class:
                           "disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
           </div>
+
           <% if @namespace.group_namespace? %>
             <div class="form-field">
               <fieldset>
-                <legend
-                  data-required="true"
-                  class="font-sm font-medium text-slate-900 dark:text-white"
-                ><%= t("shared.samples.spreadsheet_imports.dialog.project_selection") %></legend>
+                <legend data-required="true" class="font-sm font-medium text-slate-900 dark:text-white">
+                  <%= t("shared.samples.spreadsheet_imports.dialog.project_selection") %>
+                </legend>
+
                 <div class="mb-2">
-                  <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300 "><%= t("shared.samples.spreadsheet_imports.dialog.project_selection_description") %></p>
+                  <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300">
+                    <%= t("shared.samples.spreadsheet_imports.dialog.project_selection_description") %>
+                  </p>
                 </div>
+
                 <%= form.label :project_puid_column,
                            t("shared.samples.spreadsheet_imports.dialog.project_puid_column"),
                            class:
                              "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300 "><%= t("shared.samples.spreadsheet_imports.dialog.project_puid_column_description") %></p>
+
+                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300">
+                  <%= t("shared.samples.spreadsheet_imports.dialog.project_puid_column_description") %>
+                </p>
+
                 <%= form.select :project_puid_column,
                             {},
                             {
@@ -151,14 +170,16 @@
                             disabled: true,
                             class:
                               "mb-2 disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
+
                 <% form_id = "static-project-select" %>
-                <label
-                  for="<%= form_id %>"
-                  class="
-                    block mb-2 text-sm font-medium text-slate-900 dark:text-white
-                  "
-                ><%= t("shared.samples.spreadsheet_imports.dialog.static_project") %></label>
-                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300"><%= t("shared.samples.spreadsheet_imports.dialog.static_project_description") %></p>
+
+                <label for="<%= form_id %>" class="mb-2 block text-sm font-medium text-slate-900 dark:text-white">
+                  <%= t("shared.samples.spreadsheet_imports.dialog.static_project") %>
+                </label>
+
+                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300">
+                  <%= t("shared.samples.spreadsheet_imports.dialog.static_project_description") %>
+                </p>
 
                 <%= viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select| %>
                   <% @group_projects.each do |project| %>
@@ -166,19 +187,17 @@
                         value: project.id,
                         label: project.namespace.full_path,
                       ) do %>
-                      <span
-                        class="
-                          text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
-                        "
-                      >
+                      <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
                         <%= project.namespace.name %>
                         <%= render PuidComponent.new(puid: project.namespace.puid, show_clipboard: false) %>
                       </span>
-                      <span class="text-slate-600 dark:text-white block pointer-events-none">
+
+                      <span class="pointer-events-none block text-slate-600 dark:text-white">
                         <%= project.namespace.full_path %>
                       </span>
                     <% end %>
                   <% end %>
+
                   <%= select.with_empty_state do %>
                     <%= t("shared.samples.spreadsheet_imports.dialog.static_project_empty_state") %>
                   <% end %>
@@ -186,13 +205,15 @@
               </fieldset>
             </div>
           <% end %>
+
           <template
             id="sortable-list-item-template"
             data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
           >
             <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
           </template>
-          <div class="grid gap-4 hidden" data-spreadsheet-import-target="metadata">
+
+          <div class="grid hidden gap-4" data-spreadsheet-import-target="metadata">
             <%= viral_sortable_lists(
             title: t("shared.samples.spreadsheet_imports.dialog.metadata"),
             ) do |sortable_lists| %>
@@ -201,6 +222,7 @@
                 title: t("shared.samples.spreadsheet_imports.dialog.available"),
                 group: "metadata_selection",
               ) %>
+
               <%= sortable_lists.with_list(
                 id: "selected-list",
                 title: t("shared.samples.spreadsheet_imports.dialog.selected"),
@@ -208,10 +230,9 @@
               ) %>
             <% end %>
           </div>
-          <div
-            class="hidden"
-            data-viral--sortable-lists--two-lists-selection-target="field"
-          ></div>
+
+          <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
+
           <div>
             <%= form.submit t("shared.samples.spreadsheet_imports.dialog.submit_button"),
                         class: "button button-primary",
