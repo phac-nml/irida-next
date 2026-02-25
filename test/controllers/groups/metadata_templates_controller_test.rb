@@ -8,6 +8,9 @@ module Groups
       sign_in users(:john_doe)
       @group = groups(:group_one)
       @metadata_template = metadata_templates(:valid_group_metadata_template)
+      @sorted_group = groups(:group_two)
+      @metadata_template1 = metadata_templates(:group_two_metadata_template1)
+      @metadata_template2 = metadata_templates(:group_two_metadata_template2)
     end
 
     test 'create metadata template' do
@@ -97,6 +100,28 @@ module Groups
       assert_response :success
 
       w3c_validate 'Group Metadata Templates Page'
+    end
+
+    test 'should apply default sort and support metadata template sorting' do
+      get group_metadata_templates_path(@sorted_group)
+      assert_response :success
+      assert_sort_state(1, 'ascending')
+      assert_first_rows_include(@metadata_template1.name, @metadata_template2.name)
+
+      get group_metadata_templates_path(@sorted_group, params: { q: { s: 'name desc' } })
+      assert_response :success
+      assert_sort_state(1, 'descending')
+      assert_first_rows_include(@metadata_template2.name, @metadata_template1.name)
+
+      get group_metadata_templates_path(@sorted_group, params: { q: { s: 'created_by_email asc' } })
+      assert_response :success
+      assert_sort_state(3, 'ascending')
+      assert_first_rows_include(@metadata_template1.name, @metadata_template2.name)
+
+      get group_metadata_templates_path(@sorted_group, params: { q: { s: 'created_by_email desc' } })
+      assert_response :success
+      assert_sort_state(3, 'descending')
+      assert_first_rows_include(@metadata_template2.name, @metadata_template1.name)
     end
 
     test 'view metadata template' do

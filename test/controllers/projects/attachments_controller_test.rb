@@ -9,6 +9,9 @@ module Projects
       @project1 = projects(:project1)
       @namespace = groups(:group_one)
       @attachment1 = attachments(:project1Attachment1)
+      @attachment2 = attachments(:project1Attachment2)
+      @attachment1.update!(updated_at: 3.hours.ago)
+      @attachment2.update!(updated_at: 2.hours.ago)
     end
 
     test 'should get index' do
@@ -76,6 +79,41 @@ module Projects
       delete namespace_project_attachment_url(@namespace, @project1, @attachment1),
              as: :turbo_stream
       assert_response :unauthorized
+    end
+
+    test 'should apply default sorting and sort project attachments by supported columns' do
+      get namespace_project_attachments_url(@namespace, @project1)
+      assert_response :success
+      assert_first_rows_include(@attachment2.puid, @attachment1.puid, row_scope: '#attachments-table-body')
+
+      get namespace_project_attachments_url(@namespace, @project1, params: { q: { s: 'puid asc' } })
+      assert_response :success
+      assert_sort_state(1, 'ascending')
+      assert_first_rows_include(@attachment1.puid, @attachment2.puid, row_scope: '#attachments-table-body')
+
+      get namespace_project_attachments_url(@namespace, @project1, params: { q: { s: 'puid desc' } })
+      assert_response :success
+      assert_sort_state(1, 'descending')
+      assert_first_rows_include(@attachment2.puid, @attachment1.puid, row_scope: '#attachments-table-body')
+
+      get namespace_project_attachments_url(@namespace, @project1, params: { q: { s: 'file_blob_filename asc' } })
+      assert_response :success
+      assert_sort_state(2, 'ascending')
+      assert_first_rows_include(@attachment2.puid, @attachment1.puid, row_scope: '#attachments-table-body')
+
+      get namespace_project_attachments_url(@namespace, @project1, params: { q: { s: 'metadata_format asc' } })
+      assert_response :success
+      assert_sort_state(3, 'ascending')
+      assert_first_rows_include(@attachment2.puid, @attachment1.puid, row_scope: '#attachments-table-body')
+
+      get namespace_project_attachments_url(@namespace, @project1, params: { q: { s: 'file_blob_byte_size asc' } })
+      assert_response :success
+      assert_sort_state(5, 'ascending')
+      assert_first_rows_include(@attachment2.puid, @attachment1.puid, row_scope: '#attachments-table-body')
+
+      get namespace_project_attachments_url(@namespace, @project1, params: { q: { s: 'updated_at asc' } })
+      assert_response :success
+      assert_first_rows_include(@attachment1.puid, @attachment2.puid, row_scope: '#attachments-table-body')
     end
 
     test 'accessing attachments index on invalid page causes pagy overflow redirect at project level' do

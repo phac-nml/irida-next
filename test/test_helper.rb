@@ -33,6 +33,7 @@ require 'action_policy/test_helper'
 require 'mocha/minitest'
 require 'test_helpers/array_helpers'
 require 'test_helpers/dashboard_sorting_helper'
+require 'test_helpers/sorting_test_helper'
 require 'test_helpers/w3c_validation_helpers'
 require 'turbo/broadcastable/test_helper'
 require 'minitest/retry'
@@ -70,6 +71,7 @@ module ActiveSupport
     include ActionMailer::TestHelper
     include Turbo::Broadcastable::TestHelper
     include W3cValidationHelpers
+    include SortingTestHelper
 
     PublicActivity.enabled = true
   end

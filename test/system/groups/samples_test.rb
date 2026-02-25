@@ -2096,8 +2096,7 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
-      find('input.select2-input').click
-      find("li[data-value='#{project4.id}']").click
+      select_select2_option(option_value: project4.id, query: project4.name)
       click_on I18n.t('samples.transfers.dialog.submit_button')
       ### ACTIONS END ###
 
@@ -2302,8 +2301,7 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
       assert_selector 'h1.dialog--title', text: I18n.t('samples.clones.dialog.title')
-      find('input.select2-input').click
-      find("li[data-value='#{@project2.id}']").click
+      select_select2_option(option_value: @project2.id, query: @project2.name)
       click_on I18n.t('samples.clones.dialog.submit_button')
       ### ACTIONS END ###
 
