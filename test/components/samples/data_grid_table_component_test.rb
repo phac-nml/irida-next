@@ -6,7 +6,7 @@ module Samples
   class DataGridTableComponentTest < ViewComponentTestCase
     test 'renders data grid with sample rows' do
       samples = [samples(:sample1), samples(:sample2)]
-      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
+      pagy = Pagy::Offset.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::Table::V2::Component.new(
@@ -26,7 +26,7 @@ module Samples
     end
 
     test 'renders empty state when samples are absent' do
-      pagy = Pagy.new(count: 0, page: 1, limit: 20)
+      pagy = Pagy::Offset.new(count: 0, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::Table::V2::Component.new(
@@ -43,7 +43,7 @@ module Samples
 
     test 'renders project column for group namespace' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
+      pagy = Pagy::Offset.new(count: samples.size, page: 1, limit: 20)
       namespace = groups(:group_one)
 
       render_inline(Samples::Table::V2::Component.new(
@@ -60,7 +60,7 @@ module Samples
 
     test 'does not render project column for project namespace' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
+      pagy = Pagy::Offset.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::Table::V2::Component.new(
@@ -77,7 +77,7 @@ module Samples
 
     test 'does not limit metadata fields for data grid' do
       samples = [samples(:sample1), samples(:sample2)]
-      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
+      pagy = Pagy::Offset.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       many_fields = (1..250).map { |i| "field_#{i}" }
@@ -98,7 +98,7 @@ module Samples
 
     test 'renders sticky columns for PUID and Name' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
+      pagy = Pagy::Offset.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::Table::V2::Component.new(
@@ -115,7 +115,7 @@ module Samples
 
     test 'highlights search term in sample names and PUIDs' do
       samples = [samples(:sample1)]
-      pagy = Pagy.new(count: samples.size, page: 1, limit: 20)
+      pagy = Pagy::Offset.new(count: samples.size, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::Table::V2::Component.new(
@@ -135,7 +135,7 @@ module Samples
       sample.metadata = { 'test_field' => 'test_value' }
       sample.save!
 
-      pagy = Pagy.new(count: 1, page: 1, limit: 20)
+      pagy = Pagy::Offset.new(count: 1, page: 1, limit: 20)
       namespace = projects(:project1).namespace
 
       render_inline(Samples::Table::V2::Component.new(

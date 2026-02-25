@@ -108,7 +108,7 @@ module Samples
     end
 
     def pagy_instance(count)
-      Pagy.new(count: count, page: 1, limit: 20)
+      Pagy::Offset.new(count: count, page: 1, limit: 20)
     end
   end
 end

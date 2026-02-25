@@ -31,7 +31,7 @@ module Samples
       project = projects(:project1)
       namespace = project.namespace
       sample = samples(:sample1)
-      pagy = Pagy.new(count: 1, page: 1, limit: 20)
+      pagy = Pagy::Offset.new(count: 1, page: 1, limit: 20)
 
       with_request_url "/namespaces/#{project.namespace.parent.id}/projects/#{project.id}/samples" do
         render_inline(
