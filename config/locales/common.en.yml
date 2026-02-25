@@ -36,6 +36,6 @@ en:
       success: Success
     upload:
       failed: Upload failed
+      form_submit_failed: There was a problem saving your uploaded files. Please try again.
       upload_failed_retry: One or more files failed to upload. Please try uploading again.
       uploaded_successfully: Upload completed
-      form_submit_failed: There was a problem saving your uploaded files. Please try again.

@@ -36,6 +36,6 @@ fr:
       success: Réussite
     upload:
       failed: Échec du téléchargement
+      form_submit_failed: Un problème est survenu lors de l'enregistrement de vos fichiers téléchargés. Veuillez réessayer.
       upload_failed_retry: Un ou plusieurs fichiers n’ont pas pu être téléversés. Veuillez réessayer le téléversement.
       uploaded_successfully: Téléchargement terminé
-      form_submit_failed: Un problème est survenu lors de l'enregistrement de vos fichiers téléchargés. Veuillez réessayer.
