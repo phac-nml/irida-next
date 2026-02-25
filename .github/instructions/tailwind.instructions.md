@@ -1,14 +1,23 @@
 ---
 applyTo: "**/*.css,**/*.scss,**/*.erb,**/*.html.erb"
 ---
-# Tailwind CSS Guidelines
+# Tailwind CSS v4 Guidelines
 
-## Configuration
-- Use `tailwind.config.js` for theme customization and extensions
-- Extend default Tailwind configuration rather than overriding it
-- Configure content paths to include all relevant template files
-- Set up proper Tailwind plugins for additional functionality
-- Define consistent color palette and typography within theme
+## Configuration (CSS-Based)
+- This project uses **Tailwind CSS v4** with CSS-based configuration — there is no `tailwind.config.js`
+- All theme customization is done via `@theme` blocks in `app/assets/stylesheets/application.tailwind.css`
+- Use `@theme` to define custom colors, spacing, breakpoints, and other design tokens as CSS variables
+- Use `@plugin` to load plugins (e.g., `@plugin "flowbite/plugin"`)
+- Use `@source` to register additional content paths for class detection (e.g., `@source "../../../node_modules/flowbite/**/*.js"`)
+- Use `@custom-variant` for custom variant definitions (e.g., dark mode)
+- CSS is built with `@tailwindcss/cli` — see `package.json` scripts
+
+## Custom Utilities
+- Use `@utility` directive to define custom utility classes (replaces v3 `@layer utilities`)
+- Custom utilities defined with `@utility` work with all variants (hover, dark, responsive, etc.)
+- Use `@apply` inside `@utility` blocks to compose from existing utilities
+- Use `@layer base` for base/reset styles and `@layer components` for component-level styles
+- Avoid `@layer utilities` for new utilities — use `@utility` instead
 
 ## Layout Patterns
 - Use Flexbox and Grid for modern layouts
@@ -31,19 +40,17 @@ applyTo: "**/*.css,**/*.scss,**/*.erb,**/*.html.erb"
 - Style buttons consistently across the application
 - Implement accessible form designs with proper labels and focus states
 
-## Custom Components
-- Create custom components by composing Tailwind utility classes
-- Extract repeating patterns to reusable components
-- Use @apply sparingly and only for highly reused patterns
-- Document custom component patterns in comments
-- Follow consistent naming conventions for custom components
+## Deprecated Utilities (v4.2+)
+- Use `inset-s-*` / `inset-e-*` instead of `start-*` / `end-*` for inset-inline positioning
+- Use `outline-hidden` instead of `outline-none` (when hiding outlines while keeping the outline property)
+- Use `shadow-xs` instead of `shadow-sm` for the smallest shadow scale (v3 `shadow-sm` → v4 `shadow-xs`)
+- Use `ring-3` instead of `ring` if you need a 3px ring width (v4 default ring is 1px)
+- Place the `!` important modifier at the end of the class name (e.g., `flex!` not `!flex`)
 
-## Performance Optimization
-- Use Tailwind's JIT mode for optimal CSS bundle size
-- Purge unused styles in production builds
-- Consider extracting critical CSS for improved page load performance
-- Optimize responsive images with proper sizing and formats
-- Use preload for critical assets
+## Performance
+- Tailwind v4 automatically tree-shakes unused styles — no manual purge configuration needed
+- CSS is compiled and minified via `@tailwindcss/cli` (`pnpm run build:css`)
+- Use `@source not` to exclude directories from scanning if build performance is a concern
 
 ## Integration with Hotwire
 - Add appropriate Tailwind transitions to Turbo Frame updates

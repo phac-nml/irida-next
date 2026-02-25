@@ -1,22 +1,19 @@
-<ol
-  data-test-selector="history-component"
-  class="relative border-s border-slate-200 dark:border-slate-700"
->
+<ol data-test-selector="history-component" class="relative border-s border-slate-200 dark:border-slate-700">
   <% @data.each_with_index do |changes, index| %>
-    <li class="mb-6 ms-4">
+    <li class="ms-4 mb-6">
       <div
         class="
-          absolute w-3 h-3 bg-slate-500 rounded-full mt-1.5 -start-1.5 border border-white
-          dark:border-slate-500 dark:bg-slate-500
+          absolute -inset-s-1.5 mt-1.5 h-3 w-3 rounded-full border border-white bg-slate-500 dark:border-slate-500
+          dark:bg-slate-500
         "
       ></div>
-      <span
-        class="
-          mb-1 text-sm font-normal leading-none text-slate-500 dark:text-slate-400
-        "
-      ><%= helpers.local_time(changes[:updated_at]) %></span>
+
+      <span class="mb-1 text-sm leading-none font-normal text-slate-500 dark:text-slate-400">
+        <%= helpers.local_time(changes[:updated_at]) %>
+      </span>
+
       <% unless @url.nil? %>
-        <div class="flex justify-start items-center">
+        <div class="flex items-center justify-start">
           <%= button_to @url,
             params: {
               version: changes[:version],
@@ -30,6 +27,7 @@
               <%= t(:"components.history.link_text", version: changes[:version]) %>
             </span>
           <% end %>
+
           <% if index == 0 %>
             <%= viral_pill(
               text: t(:"components.history.latest"),
@@ -39,7 +37,9 @@
           <% end %>
         </div>
       <% else %>
-        <div class="text-xl font-extrabold dark:text-white"><%= t(:"components.history.link_text", version: changes[:version]) %></div>
+        <div class="text-xl font-extrabold dark:text-white">
+          <%= t(:"components.history.link_text", version: changes[:version]) %>
+        </div>
       <% end %>
 
       <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
