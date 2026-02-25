@@ -324,4 +324,56 @@ class QueryTest < ActiveSupport::TestCase
     # Should exclude sample with % in name
     assert_not_includes results, sample
   end
+
+  test 'cursor_results returns page contract with cursor metadata and total_count' do
+    query = Sample::Query.new(sort: 'updated_at desc', project_ids: [projects(:project2).id])
+
+    page = query.cursor_results(limit: 5)
+
+    assert_instance_of Pagination::ActiveRecordCursorPage, page
+    assert_equal 5, page.records.count
+    assert page.has_next_page
+    assert_not_nil page.next_cursor
+    assert_equal 20, page.total_count
+  end
+
+  test 'results uses cursor mode when after is passed' do
+    query = Sample::Query.new(sort: 'updated_at desc', project_ids: [projects(:project2).id])
+
+    first_page = query.results(limit: 5, after: nil)
+    second_page = query.results(limit: 5, after: first_page.next_cursor)
+
+    assert_instance_of Pagination::ActiveRecordCursorPage, first_page
+    assert_instance_of Pagination::ActiveRecordCursorPage, second_page
+    assert_empty first_page.records.map(&:id) & second_page.records.map(&:id)
+  end
+
+  test 'cursor mode tie-breaker id keeps batches stable when primary sort values collide' do
+    query = Sample::Query.new(sort: 'updated_at desc', project_ids: [projects(:project35).id])
+
+    first_page = query.cursor_results(limit: 2)
+    second_page = query.cursor_results(limit: 2, after: first_page.next_cursor)
+    combined_ids = (first_page.records + second_page.records).map(&:id)
+
+    assert_equal combined_ids.uniq, combined_ids
+    assert_equal query.results.map(&:id), combined_ids
+  end
+
+  test 'cursor mode supports metadata sort path' do
+    query = Sample::Query.new(sort: 'metadata.metadatafield1 asc', project_ids: [projects(:project1).id])
+
+    first_page = query.cursor_results(limit: 2)
+    second_page = query.cursor_results(limit: 2, after: first_page.next_cursor)
+    combined_ids = (first_page.records + second_page.records).map(&:id)
+
+    assert_equal query.results.map(&:id), combined_ids
+  end
+
+  test 'cursor_results raises invalid cursor error for invalid cursor' do
+    query = Sample::Query.new(sort: 'updated_at desc', project_ids: [projects(:project2).id])
+
+    assert_raises ActiveRecordCursorPaginate::InvalidCursorError do
+      query.cursor_results(limit: 5, after: 'invalid_cursor')
+    end
+  end
 end
