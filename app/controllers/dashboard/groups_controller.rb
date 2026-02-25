@@ -12,7 +12,7 @@ module Dashboard
       @has_groups = all_groups.any?
       @q = all_groups.ransack(params[:q])
       set_default_sort
-      @pagy, @groups = pagy(@q.result.include_route)
+      @pagy, @groups = pagy(@q.result.include_route, raise_range_error: true)
 
       respond_to do |format|
         if expanding_group?

@@ -31,7 +31,7 @@ module AdvancedSearch
     private
 
     def pagy_results(limit, page)
-      pagy(ransack_results, limit:, page:)
+      pagy(ransack_results, limit:, page:, raise_range_error: true)
     end
 
     def non_pagy_results

@@ -230,7 +230,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   private
 
   def workflow_execution_query
-    WorkflowExecution::Query.new(search_params.merge({ namespace_ids: }), scope: load_workflows)
+    WorkflowExecution::Query.new(search_params.merge({ namespace_ids:, request:, scope: load_workflows }))
   end
 
   def namespace_ids

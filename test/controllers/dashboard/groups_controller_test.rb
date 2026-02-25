@@ -82,7 +82,7 @@ module Dashboard
     test 'accessing groups index on invalid page causes pagy overflow redirect' do
       sign_in users(:john_doe)
 
-      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::OverflowError
+      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
       # The rescue_from handler should redirect to first page with page=1 and limit=20
       get dashboard_groups_path(page: 50)
 

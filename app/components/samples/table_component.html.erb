@@ -1,4 +1,4 @@
-<% if @has_samples && @pagy.vars[:size].positive? %>
+<% if @has_samples %>
   <% if @show_metadata_fields_size_warning %>
     <div class="mb-4" role="status" aria-live="polite">
       <%= viral_alert do %>
@@ -11,19 +11,16 @@
       <%= render LiveRegionComponent.new(controller: "selection") %>
 
       <table
-        class="
-          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-          whitespace-nowrap
-        "
+        class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
         style="--puid-width: <%= helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
       >
-        <thead class="@2xl:sticky @2xl:top-0 z-10 uppercase">
+        <thead class="z-10 uppercase @2xl:sticky @2xl:top-0">
           <tr
             class="
-              border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
-              text-slate-900 bg-slate-100 dark:bg-slate-900
+              border-b border-slate-200 bg-slate-100 text-slate-900 dark:border-slate-900 dark:bg-slate-900
+              dark:text-slate-400
             "
           >
             <% @columns.each_with_index do |column, index| %>
@@ -33,9 +30,7 @@
               **helpers.aria_sort(column, @sort_key, @sort_direction),
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 w-(--puid-width) z-10 font-mono': index.zero?, '@4xl:sticky left-(--puid-width) z-10 font-mono': index == 1)
                 ) do %>
-                <div
-                  class="<%= class_names('flex items-center gap-3 text-xs', 'font-sans': index.zero? || index == 1) %>"
-                >
+                <div class="<%= class_names('flex items-center gap-3 text-xs', 'font-sans': index.zero? || index == 1) %>">
                   <% if index.zero? && @abilities[:select_samples] %>
                     <%= check_box_tag "select-page",
                     "1",
@@ -93,10 +88,7 @@
 
         <tbody
           id="samples-table-body"
-          class="
-            overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
-            dark:border-slate-700
-          "
+          class="overflow-y-auto border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800"
         >
           <% @samples.each do |sample| %>
             <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
@@ -181,28 +173,17 @@
         </tbody>
 
         <% if @abilities[:select_samples] && @has_samples %>
-          <tfoot class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
+          <tfoot class="bottom-0 z-10 bg-slate-100 @2xl:sticky dark:bg-slate-900">
             <tr>
-              <td
-                class="
-                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
-                "
-                colspan="2"
-              >
-                <span>
-                  <%= t(".counts.samples") %>:
-                  <strong><%= @pagy.count %></strong>
-                </span>
+              <td class="sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300" colspan="2">
+                <span><%= t(".counts.samples") %>: <strong><%= @pagy.count %></strong></span>
 
-                <span>
-                  <%= t(".counts.selected") %>:
-                  <strong data-selection-target="selected">0</strong>
-                </span>
+                <span><%= t(".counts.selected") %>: <strong data-selection-target="selected">0</strong></span>
               </td>
 
               <td
                 colspan="<%= @columns.count + @metadata_fields.count - 2 %>"
-                class="p-3 bg-slate-100 dark:bg-slate-900"
+                class="bg-slate-100 p-3 dark:bg-slate-900"
               ></td>
             </tr>
           </tfoot>
@@ -224,18 +205,14 @@
           <%= form.hidden_field :cell_id, value: "CELL_ID_PLACEHOLDER" %>
         <% end %>
       </template>
-      <div
-        id="editable-cell-form-container"
-        class="invisible"
-        data-editable-cell-target="formContainer"
-      ></div>
+      <div id="editable-cell-form-container" class="invisible" data-editable-cell-target="formContainer"></div>
       <template data-editable-cell-target="confirmDialogTemplate">
         <%= viral_dialog(open: false) do |dialog| %>
           <% dialog.with_header(
             title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
           ) %>
 
-          <p class="text-base leading-8 text-slate-900 dark:text-white text-wrap">
+          <p class="text-base leading-8 text-wrap text-slate-900 dark:text-white">
             <span data-message-type="wov" class="hidden">
               <%= raw t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",

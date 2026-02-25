@@ -7,23 +7,21 @@
     class: "inline-flex items-center justify-center button button-primary" %>
   <% end %>
 <% end %>
+
 <div class="flex flex-col">
-  <div
-    class="border-b border-slate-200 dark:text-slate-400 dark:border-slate-700"
-  >
-    <div class="flex flex-wrap gap-2 mb-2 justify-end">
+  <div class="border-b border-slate-200 dark:border-slate-700 dark:text-slate-400">
+    <div class="mb-2 flex flex-wrap justify-end gap-2">
       <% if @has_groups %>
         <%= render SearchComponent.new(
           query: @q,
           url: dashboard_groups_url,
           search_attribute: :name_or_puid_cont,
-        label: t('common.controls.search'),
+          label: t("common.controls.search"),
           placeholder: t(:".search.placeholder"),
           total_count: @pagy.count,
           class: "max-sm:grow",
           value: @q.name_or_puid_cont,
         ) %>
-
         <%= render Ransack::SortDropdownComponent.new(
           @q,
           "groups",
@@ -39,6 +37,7 @@
       <% end %>
     </div>
   </div>
+
   <% if @has_groups %>
     <div class="flex flex-col gap-2" id="groups_tree">
       <%= render TreegridComponent.new do |component| %>
@@ -52,10 +51,9 @@
           <% end %>
         <% end %>
       <% end %>
-      <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
-        <div class="flex flex-row-reverse">
-          <%= render Viral::Pagy::PaginationComponent.new(@pagy) %>
-        </div>
+
+      <% if @pagy.count.positive? %>
+        <div class="flex flex-row-reverse"><%= render Viral::Pagy::PaginationComponent.new(@pagy) %></div>
       <% else %>
         <%= viral_empty(
           icon_name: :magnifying_glass,

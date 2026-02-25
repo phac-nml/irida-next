@@ -13,7 +13,8 @@ class ActivityComponentTest < ViewComponentTestCase
     ).reverse
 
     # Limit set to 10 per page
-    @pagy = Pagy.new(count: 13, page: 1, limit: 10)
+    @pagy = Pagy::Offset.new(count: 13, page: 1, limit: 10,
+                             request: Pagy::Request.new(request: { base_url: 'localhost:3000', path: '/', params: {} }))
 
     assert_equal 14, @activities.length
     assert_equal 3, @project2_activities.length
@@ -51,7 +52,7 @@ class ActivityComponentTest < ViewComponentTestCase
     assert_button text: 'Load more', count: 1
 
     # Limit set to 10 per page
-    @pagy = Pagy.new(count: 2, page: 1, limit: 10)
+    @pagy = Pagy::Offset.new(count: 2, page: 1, limit: 10)
 
     render_inline ActivityComponent.new(activities: @project2_activities, pagy: @pagy)
 
@@ -66,7 +67,7 @@ class ActivityComponentTest < ViewComponentTestCase
     @activities = group.human_readable_activity(group.retrieve_group_activity).reverse
 
     # Limit set to 10 per page
-    @pagy = Pagy.new(count: 10, page: 1, limit: 10)
+    @pagy = Pagy::Offset.new(count: 10, page: 1, limit: 10)
 
     assert_equal 10, @activities.length
 

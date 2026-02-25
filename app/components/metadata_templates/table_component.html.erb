@@ -1,17 +1,14 @@
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
   <% unless @metadata_templates.empty? %>
     <table
-      class="
-        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-        whitespace-nowrap
-      "
+      class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
       data-controller="table"
       data-action="focusin->table#handleCellFocus"
     >
       <thead
         class="
-          text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700
-          dark:text-slate-400 border-b border-slate-200 dark:border-slate-700
+          border-b border-slate-200 bg-slate-100 text-xs text-slate-700 uppercase dark:border-slate-700
+          dark:bg-slate-700 dark:text-slate-400
         "
       >
         <tr>
@@ -30,6 +27,7 @@
               ) %>
             <% end %>
           <% end %>
+
           <% if @renders_row_actions %>
             <%= render_cell(
               tag: 'th',
@@ -41,11 +39,8 @@
           <% end %>
         </tr>
       </thead>
-      <tbody
-        class="
-          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-        "
-      >
+
+      <tbody class="divide-y divide-slate-200 bg-white dark:divide-slate-700 dark:bg-slate-800">
         <% @metadata_templates.each do |metadata_template| %>
           <%= render MetadataTemplates::RowComponent.new(
             metadata_template,
@@ -73,13 +68,14 @@
     </div>
   <% end %>
 <% end %>
+
 <% unless @metadata_templates.empty? %>
   <%= render PaginationComponent.new(
-    info: helpers.pagy_info(@pagy),
+    info: @pagy.info_tag,
     prev_url:
       (
-        if @pagy.prev
-          helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
+        if @pagy.previous
+          @pagy.page_url(:previous).gsub(
             "metadata_templates.turbo_stream",
             "metadata_templates",
           )
@@ -90,7 +86,7 @@
     next_url:
       (
         if @pagy.next
-          helpers.pagy_url_for(@pagy, @pagy.next).gsub(
+          @pagy.page_url(:next).gsub(
             "metadata_templates.turbo_stream",
             "metadata_templates",
           )

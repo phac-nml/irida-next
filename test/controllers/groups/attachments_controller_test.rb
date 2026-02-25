@@ -116,7 +116,7 @@ module Groups
     end
 
     test 'accessing attachments index on invalid page causes pagy overflow redirect at group level' do
-      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::OverflowError
+      # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
       # The rescue_from handler should redirect to first page with page=1 and limit=20
       get group_attachments_path(@namespace, page: 50)
 

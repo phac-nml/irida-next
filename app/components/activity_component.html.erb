@@ -1,16 +1,14 @@
 <div>
-  <ol
-    id="activities"
-    class="relative border-s border-slate-200 dark:border-slate-700"
-  >
+  <ol id="activities" class="relative border-s border-slate-200 dark:border-slate-700">
     <% activities.each do |activity| %>
       <%= render Activities::ListItemComponent.new(activity: activity) %>
     <% end %>
   </ol>
+
   <div id="next_link">
     <% if @pagy.next.present? %>
       <%= button_to t(:"components.activity.load_more"),
-      helpers.pagy_url_for(@pagy, @pagy.next),
+      @pagy.page_url(:next),
       class: "button button-default" %>
     <% end %>
   </div>

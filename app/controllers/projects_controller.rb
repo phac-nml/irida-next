@@ -73,7 +73,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
     project_activities = @project.namespace.retrieve_project_activity.order(created_at: :desc)
 
-    @pagy, raw_activities = pagy(project_activities, limit: 10)
+    @pagy, raw_activities = pagy(project_activities, limit: 10, raise_range_error: true)
 
     @activities = @project.namespace.human_readable_activity(raw_activities)
 

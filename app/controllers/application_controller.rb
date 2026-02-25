@@ -4,7 +4,7 @@
 class ApplicationController < ActionController::Base
   include PublicActivity::StoreController
   include Irida::Auth
-  include Pagy::Backend
+  include Pagy::Method
   include RouteHelper
 
   add_flash_types :success, :info, :warning, :danger
@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :error_message
 
-  rescue_from Pagy::OverflowError, with: :redirect_to_first_page
+  rescue_from Pagy::RangeError, with: :redirect_to_first_page
 
   def set_current_user
     Current.user = current_user
@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
     new_user_session_path(params)
   end
 
-  # Rescues from Pagy::OverflowError by redirecting to the first page
+  # Rescues from Pagy::RangeError by redirecting to the first page
   def redirect_to_first_page
     redirect_to url_for(page: 1, limit: params[:limit] || 20)
   end

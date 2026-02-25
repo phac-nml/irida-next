@@ -2,21 +2,19 @@
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <%= render LiveRegionComponent.new(controller: "selection") %>
+
       <table
-        class='
-          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-          whitespace-nowrap
-        '
+        class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
         style="--uuid-width: <%= helpers.uuid_width(has_checkbox: @abilities[:select_workflow_executions]) %>;"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
       >
-        <thead class='sticky top-0 z-10 text-xs uppercase '>
+        <thead class="sticky top-0 z-10 text-xs uppercase">
           <tr
-            class='
-              border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
-              text-slate-900 bg-slate-100 dark:bg-slate-900
-            '
+            class="
+              border-b border-slate-200 bg-slate-100 text-slate-900 dark:border-slate-900 dark:bg-slate-900
+              dark:text-slate-400
+            "
           >
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
@@ -43,7 +41,9 @@
                       },
                     } %>
                   <% end %>
+
                   <% label_text = column == :name ? t("common.labels.name") : t(".#{column}") %>
+
                   <% if column == :workflow_name %>
                     <%= render Ransack::SortComponent.new(
                       ransack_obj: @q,
@@ -86,6 +86,7 @@
                 </div>
               <% end %>
             <% end %>
+
             <% if @renders_row_actions %>
               <%= render_cell(
               tag: 'th',
@@ -97,11 +98,8 @@
             <% end %>
           </tr>
         </thead>
-        <tbody
-          class='
-            bg-white border-y border-slate-200 dark:bg-slate-800 dark:border-slate-700
-          '
-        >
+
+        <tbody class="border-y border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
           <% @workflow_executions.each do |workflow_execution| %>
             <%= render Viral::BaseComponent.new(**row_arguments(workflow_execution)) do %>
               <% @columns.each_with_index do |column, index| %>
@@ -127,6 +125,7 @@
                         },
                       } %>
                     <% end %>
+
                     <% if column == :id %>
                       <%= link_to(
                     individual_path(workflow_execution),
@@ -173,12 +172,13 @@
                   </div>
                 <% end %>
               <% end %>
+
               <% if @renders_row_actions %>
                 <%= render_cell(
                 tag: 'td',
                 classes: class_names('@2xl:sticky right-0')
               ) do %>
-                  <div class="bg-white w-full dark:bg-slate-800 text-right px-3 py-2.5 space-x-2">
+                  <div class="w-full space-x-2 bg-white px-3 py-2.5 text-right dark:bg-slate-800">
                     <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
                       <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
                         <%= button_to t("common.actions.cancel"),
@@ -222,41 +222,35 @@
             <% end %>
           <% end %>
         </tbody>
+
         <% if @abilities[:select_workflow_executions] && !@workflow_executions.empty? %>
           <tfoot class="sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
             <tr>
               <td
-                class="
-                  @2xl:sticky left-0 z-10 w-(--uuid-width) px-6 py-3 text-slate-700
-                  dark:text-slate-300
-                "
+                class="left-0 z-10 w-(--uuid-width) px-6 py-3 text-slate-700 @2xl:sticky dark:text-slate-300"
                 colspan="3"
               >
-                <span>
-                  <%= t(".counts.workflow_executions") %>:
-                  <strong><%= @pagy.count %></strong>
-                </span>
-                <span>
-                  <%= t(".counts.selected") %>:
-                  <strong data-selection-target="selected">0</strong>
-                </span>
+                <span><%= t(".counts.workflow_executions") %>: <strong><%= @pagy.count %></strong></span>
+                <span><%= t(".counts.selected") %>: <strong data-selection-target="selected">0</strong></span>
               </td>
+
               <td
                 colspan="<%= @columns.count - 3 + (@renders_row_actions ? 1 : 0) %>"
-                class="px-3 py-3 bg-slate-100 dark:bg-slate-900"
+                class="bg-slate-100 px-3 py-3 dark:bg-slate-900"
               ></td>
             </tr>
           </tfoot>
         <% end %>
       </table>
     <% end %>
+
     <% if @pagy.count.positive? %>
       <%= render PaginationComponent.new(
-        info: helpers.pagy_info(@pagy),
+        info: @pagy.info_tag,
         prev_url:
           (
-            if @pagy.prev
-              helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
+            if @pagy.previous
+              @pagy.page_url(:previous).gsub(
                 "workflow_executions.turbo_stream",
                 "workflow_executions",
               )
@@ -267,7 +261,7 @@
         next_url:
           (
             if @pagy.next
-              helpers.pagy_url_for(@pagy, @pagy.next).gsub(
+              @pagy.page_url(:next).gsub(
                 "workflow_executions.turbo_stream",
                 "workflow_executions",
               )

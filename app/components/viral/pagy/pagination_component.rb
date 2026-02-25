@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'pagy/toolbox/helpers/support/a_lambda'
+
 module Viral
   module Pagy
     # Pagy pagination component
@@ -9,7 +11,7 @@ module Viral
       end
 
       def render?
-        @pagy.next || @pagy.prev
+        @pagy.next || @pagy.previous
       end
     end
   end
