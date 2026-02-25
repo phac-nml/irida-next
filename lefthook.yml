@@ -1,0 +1,45 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: rubocop
+      glob:
+        - "*.rb"
+        - "**/*.rb"
+      run: bin/rubocop -a --force-exclusion {staged_files}
+      stage_fixed: true
+
+    - name: prettier
+      glob:
+        - "*.{js,jsx,ts,tsx,css,json,md}"
+        - "**/*.{js,jsx,ts,tsx,css,json,md}"
+      run: pnpm exec prettier --write {staged_files}
+      stage_fixed: true
+
+    - name: eslint
+      glob:
+        - "*.js"
+        - "**/*.js"
+      run: pnpm exec eslint --fix {staged_files}
+      stage_fixed: true
+
+    - name: herb_format
+      glob:
+        - "*.erb"
+        - "**/*.erb"
+      run: pnpm exec herb-format {staged_files}
+      stage_fixed: true
+
+    - name: herb_lint
+      glob:
+        - "*.erb"
+        - "**/*.erb"
+      run: pnpm exec herb-lint --format=simple {staged_files}
+
+    - name: i18n_normalize
+      glob:
+        - "config/locales/*.yml"
+        - "config/locales/**/*.yml"
+        - "config/locales/*.yaml"
+        - "config/locales/**/*.yaml"
+      run: bundle exec i18n-tasks normalize
+      stage_fixed: true

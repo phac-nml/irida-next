@@ -114,60 +114,6 @@ lib.mkMerge [
       git --version | grep --color=auto "${pkgs.git.version}"
     '';
 
-    # https://devenv.sh/git-hooks/
-    git-hooks.hooks = {
-      # RuboCop for Ruby files
-      rubocop = {
-        enable = true;
-        name = "RuboCop";
-        description = "Run RuboCop on changed Ruby files";
-        entry = "bin/rubocop -a --force-exclusion";
-        files = "\\.rb$";
-        excludes = [ "\\.graphql$" ];
-        pass_filenames = true;
-      };
-
-      # Prettier for JS, CSS, config files
-      prettier = {
-        enable = true;
-        name = "Prettier";
-        description = "Format JS, CSS, and config files";
-        entry = "pnpm exec prettier --write";
-        files = "\\.(js|jsx|ts|tsx|css|json|md)$";
-        pass_filenames = true;
-      };
-
-      # ESLint for JavaScript files
-      eslint = {
-        enable = true;
-        name = "ESLint";
-        description = "Lint and auto-fix JavaScript files";
-        entry = "pnpm exec eslint --fix";
-        files = "\\.js$";
-        pass_filenames = true;
-      };
-
-      # Herb formatter for HTML+ERB templates
-      herb_format = {
-        enable = true;
-        name = "Herb Format";
-        description = "Format HTML+ERB templates";
-        entry = "pnpm exec herb-format";
-        files = "\\.erb$";
-        pass_filenames = true;
-      };
-
-      # Herb linter for HTML+ERB templates
-      herb_lint = {
-        enable = true;
-        name = "Herb Lint";
-        description = "Lint HTML+ERB templates";
-        entry = "pnpm exec herb-lint --format=simple";
-        files = "\\.erb$";
-        pass_filenames = true;
-      };
-    };
-
     # See full reference at https://devenv.sh/reference/options/
   }
   (lib.mkIf pkgs.stdenv.isLinux {
