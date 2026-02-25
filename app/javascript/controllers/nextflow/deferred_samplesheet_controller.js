@@ -31,12 +31,7 @@ export default class extends Controller {
     "fileTemplate",
     "metadataTemplate",
     "textInputTemplate",
-    "previousBtn",
-    "nextBtn",
-    "pageNum",
     "dataPayload",
-    "paginationTemplate",
-    "paginationContainer",
     "emptyState",
     "updateSamplesCheckbox",
     "updateSamplesLabel",
@@ -59,14 +54,14 @@ export default class extends Controller {
     loadingCompleteAnnouncement: { type: String },
   };
 
-  static outlets = ["selection", "nextflow--samplesheet--header"];
+  static outlets = [
+    "selection",
+    "nextflow--samplesheet--header",
+    "nextflow--samplesheet--pagination",
+  ];
 
   #columnNames;
   #requiredColumns = [];
-
-  // pagination page params
-  #currentPage;
-  #lastPage;
 
   // sample data within the samplesheet is centered around which index they're at.
   // Main use case for having an array of sample indexes is for filtering,
@@ -133,7 +128,6 @@ export default class extends Controller {
   }
 
   #processSamplesheet() {
-    console.log(this.hasNextflowSamplesheetHeaderOutlet);
     this.#setSamplesheetParametersAndData();
     this.#disableProcessingState();
     if (this.hasNextflowSamplesheetHeaderOutlet) {
@@ -177,9 +171,7 @@ export default class extends Controller {
     this.#setFilterableColumns();
 
     // setup pagination
-    this.#setPagination();
-    // render samplesheet table
-    this.#loadTableData();
+    this.#promptPaginationAndLoadTable();
   }
 
   submitSamplesheet(event) {
@@ -359,7 +351,6 @@ export default class extends Controller {
   }
 
   #updateMetadata(metadata, headers) {
-    console.log("updatemetadata");
     this.#samplesheetAttributes = merge(this.#samplesheetAttributes, metadata);
     for (let i = this.#startingIndex; i < this.#lastIndex; i++) {
       headers.forEach((header) => {
@@ -373,13 +364,15 @@ export default class extends Controller {
     }
   }
 
-  #loadTableData() {
+  loadTableData(currentPage, lastPage) {
+    // delete the table data and reload with new indexes
+    this.tableBodyTarget.innerHTML = "";
     if (this.#currentSampleIndexes.length > 0) {
       this.emptyStateTarget.classList.add("hidden");
-      this.#startingIndex = (this.#currentPage - 1) * 5;
+      this.#startingIndex = (currentPage - 1) * 5;
       this.#lastIndex = this.#startingIndex + 5;
       if (
-        this.#currentPage == this.#lastPage &&
+        currentPage == lastPage &&
         this.#currentSampleIndexes.length % 5 != 0
       ) {
         this.#lastIndex =
@@ -484,7 +477,6 @@ export default class extends Controller {
   #insertFileContent(cell, columnName, sampleId) {
     const fileContent = this.fileTemplateTarget.content.cloneNode(true);
     const fileLink = fileContent.querySelector("a");
-    console.log(fileLink.getAttribute("data-namespace-id"));
     // Build URL parameters
     const params = new URLSearchParams({
       "file_selector[attachable_id]": sampleId,
@@ -565,71 +557,6 @@ export default class extends Controller {
       "data-nextflow--deferred-samplesheet-column-name-param",
       columnName,
     );
-  }
-
-  #setPagination() {
-    this.#currentPage = 1;
-    this.paginationContainerTarget.innerHTML = "";
-    // set last page based on number of samples
-    this.#lastPage = Math.ceil(this.#currentSampleIndexes.length / 5);
-    // create the page dropdown options if there's more than one page
-    if (this.#lastPage > 1) {
-      this.paginationContainerTarget.insertAdjacentHTML(
-        "beforeend",
-        this.paginationTemplateTarget.innerHTML,
-      );
-      this.#generatePageNumberDropdown();
-      this.#verifyPaginationButtonStates();
-    }
-  }
-
-  previousPage() {
-    this.#currentPage -= 1;
-    this.pageNumTarget.value = this.#currentPage;
-    this.#updatePageData();
-  }
-
-  nextPage() {
-    this.#currentPage += 1;
-    this.pageNumTarget.value = this.#currentPage;
-    this.#updatePageData();
-  }
-
-  pageSelected() {
-    this.#currentPage = parseInt(this.pageNumTarget.value);
-    this.#updatePageData();
-  }
-
-  #updatePageData() {
-    if (this.#lastPage > 1) {
-      this.#verifyPaginationButtonStates();
-    }
-    // delete the table data and reload with new indexes
-    this.tableBodyTarget.innerHTML = "";
-    this.#loadTableData();
-  }
-
-  #verifyPaginationButtonStates() {
-    if (this.#currentPage == 1) {
-      this.previousBtnTarget.disabled = true;
-      this.nextBtnTarget.disabled = false;
-    } else if (this.#currentPage == this.#lastPage) {
-      this.previousBtnTarget.disabled = false;
-      this.nextBtnTarget.disabled = true;
-    } else {
-      this.previousBtnTarget.disabled = false;
-      this.nextBtnTarget.disabled = false;
-    }
-  }
-
-  #generatePageNumberDropdown() {
-    // page 1 is already added by default
-    for (let i = 2; i < this.#lastPage + 1; i++) {
-      const option = document.createElement("option");
-      option.value = i;
-      option.innerHTML = i;
-      this.pageNumTarget.appendChild(option);
-    }
   }
 
   #updateCell(columnName, sampleId, cellType, focusCell) {
@@ -825,8 +752,13 @@ export default class extends Controller {
       // reset table to include all samples if filter is empty
       this.#setCurrentSampleIndexesToAll();
     }
-    this.#setPagination();
-    this.#updatePageData();
+    this.#promptPaginationAndLoadTable();
+  }
+
+  #promptPaginationAndLoadTable() {
+    this.nextflowSamplesheetPaginationOutlet.setPagination(
+      this.#currentSampleIndexes.length,
+    );
   }
 
   retrieveSampleIds() {

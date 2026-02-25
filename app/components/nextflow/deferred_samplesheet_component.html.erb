@@ -136,7 +136,79 @@
     ) %>
   </div>
 
-  <div data-nextflow--deferred-samplesheet-target="paginationContainer" class="flex items-center justify-end"></div>
+  <div
+    id="samplesheet-pagination"
+    data-controller="nextflow--samplesheet--pagination"
+    data-nextflow--samplesheet--pagination-nextflow--deferred-samplesheet-outlet="#nextflow-container"
+  >
+    <div data-nextflow--samplesheet--pagination-target="paginationContainer" class="flex items-center justify-end"></div>
+
+    <template data-nextflow--samplesheet--pagination-target="paginationTemplate">
+      <nav aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>">
+        <ul class="inline-flex h-10 text-base">
+          <li>
+            <button
+              type="button"
+              class="
+                cursor ms-0 flex h-10 cursor-pointer items-center justify-center rounded-s-lg border border-e-0
+                border-slate-300 bg-white px-4 leading-tight text-slate-900 select-none hover:bg-slate-100
+                hover:text-slate-700 focus-visible:relative disabled:pointer-events-none disabled:cursor-default
+                disabled:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+                dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-700
+                disabled:dark:text-slate-300
+              "
+              data-action="click->nextflow--samplesheet--pagination#previousPage"
+              data-nextflow--samplesheet--pagination-target="previousBtn"
+              disabled
+            >
+              <%= t("components.nextflow.samplesheet_component.previous") %>
+            </button>
+          </li>
+
+          <li>
+            <label class="sr-only" for="pagination-page-selector">
+              <%= t("components.nextflow.samplesheet_component.page_selection.aria_label") %>
+            </label>
+
+            <select
+              style="width: 80px;"
+              class="
+                ms-0 flex h-10 cursor-pointer items-center justify-center border border-slate-300 bg-white px-4
+                leading-tight text-slate-900 hover:bg-slate-100 hover:text-slate-700 focus-visible:relative
+                dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+                dark:hover:text-white
+              "
+              data-nextflow--samplesheet--pagination-target="pageNum"
+              data-action="change->nextflow--samplesheet--pagination#pageSelected"
+              id="pagination-page-selector"
+            >
+              <option value="1" selected>1</option>
+            </select>
+          </li>
+
+          <li>
+            <button
+              class="
+                cursor ms-0 flex h-10 cursor-pointer items-center justify-center rounded-e-lg border border-l-0
+                border-slate-300 bg-white px-4 leading-tight text-slate-900 select-none hover:bg-slate-100
+                hover:text-slate-700 focus-visible:relative disabled:pointer-events-none disabled:cursor-default
+                disabled:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+                dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-700
+                disabled:dark:text-slate-300
+              "
+              type="button"
+              data-nextflow--samplesheet--pagination-target="nextBtn"
+              data-action="click->nextflow--samplesheet--pagination#nextPage"
+              disabled
+            >
+              <%= t("components.nextflow.samplesheet_component.next") %>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </template>
+  </div>
+
   <%= helpers.turbo_frame_tag "samplesheet-payload-container" %>
 </div>
 
@@ -200,67 +272,4 @@
     type="text"
     autocomplete="off"
   >
-</template>
-
-<template data-nextflow--deferred-samplesheet-target="paginationTemplate">
-  <nav aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>">
-    <ul class="inline-flex h-10 text-base">
-      <li>
-        <button
-          type="button"
-          class="
-            cursor ms-0 flex h-10 cursor-pointer items-center justify-center rounded-s-lg border border-e-0
-            border-slate-300 bg-white px-4 leading-tight text-slate-900 hover:bg-slate-100 hover:text-slate-700
-            focus-visible:relative disabled:pointer-events-none disabled:cursor-default disabled:bg-slate-50
-            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white
-            disabled:dark:border-slate-700 disabled:dark:bg-slate-700 disabled:dark:text-slate-300
-          "
-          data-action="click->nextflow--deferred-samplesheet#previousPage"
-          data-nextflow--deferred-samplesheet-target="previousBtn"
-          disabled
-        >
-          <%= t("components.nextflow.samplesheet_component.previous") %>
-        </button>
-      </li>
-
-      <li>
-        <label class="sr-only" for="pagination-page-selector">
-          <%= t("components.nextflow.samplesheet_component.page_selection.aria_label") %>
-        </label>
-
-        <select
-          style="width: 80px;"
-          class="
-            ms-0 flex h-10 cursor-pointer items-center justify-center border border-slate-300 bg-white px-4
-            leading-tight text-slate-900 hover:bg-slate-100 hover:text-slate-700 focus-visible:relative
-            dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
-            dark:hover:text-white
-          "
-          data-nextflow--deferred-samplesheet-target="pageNum"
-          data-action="change->nextflow--deferred-samplesheet#pageSelected"
-          id="pagination-page-selector"
-        >
-          <option value="1" selected>1</option>
-        </select>
-      </li>
-
-      <li>
-        <button
-          class="
-            cursor ms-0 flex h-10 cursor-pointer items-center justify-center rounded-e-lg border border-l-0
-            border-slate-300 bg-white px-4 leading-tight text-slate-900 hover:bg-slate-100 hover:text-slate-700
-            focus-visible:relative disabled:pointer-events-none disabled:cursor-default disabled:bg-slate-50
-            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white
-            disabled:dark:border-slate-700 disabled:dark:bg-slate-700 disabled:dark:text-slate-300
-          "
-          type="button"
-          data-nextflow--deferred-samplesheet-target="nextBtn"
-          data-action="click->nextflow--deferred-samplesheet#nextPage"
-          disabled
-        >
-          <%= t("components.nextflow.samplesheet_component.next") %>
-        </button>
-      </li>
-    </ul>
-  </nav>
 </template>
