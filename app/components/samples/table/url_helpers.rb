@@ -1,25 +1,9 @@
 # frozen_string_literal: true
 
 module Samples
-  class TableComponent < Component
-    # URL generation helpers for the samples table component
+  module Table
+    # URL generation helpers for samples table components.
     module UrlHelpers
-      # Generates the URL for selecting samples based on namespace type.
-      #
-      # @param options [Hash] URL options to pass through
-      # @return [String] the select samples URL
-      def select_samples_url(**)
-        if @namespace.type == 'Group'
-          select_group_samples_url(@namespace, **)
-        else
-          select_namespace_project_samples_url(@namespace.parent, @namespace.project, **)
-        end
-      end
-
-      # Generates the URL for sorting a field with toggle between asc/desc.
-      #
-      # @param field [String, Symbol] the field to sort by
-      # @return [String] the sort URL with updated sort parameter
       def sort_url(field)
         sort_string = if field.to_s == @sort_key && @sort_direction == 'asc'
                         "#{field} desc"
@@ -35,9 +19,6 @@ module Samples
         end
       end
 
-      # Generates the URL for creating a new metadata template.
-      #
-      # @return [String] the new metadata template URL
       def metadata_template_url
         if @namespace.type == 'Group'
           helpers.group_metadata_templates_path(@namespace)

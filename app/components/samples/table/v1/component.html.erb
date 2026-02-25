@@ -38,7 +38,7 @@
                     {
                       id: "select-page",
                       aria: {
-                        label: t(".select_all.aria_label"),
+                        label: t("samples.table_component.select_all.aria_label"),
                       },
                       data: {
                         table: true,
@@ -51,7 +51,7 @@
 
                   <%= render SortComponent.new(
                     sort: @search_params["sort"],
-                    label: t(".#{column}"),
+                    label: t("samples.table_component.#{column}"),
                     url: sort_url(column),
                     field: column,
                     data: {
@@ -106,7 +106,7 @@
                       {
                         id: dom_id(sample, :checkbox),
                         aria: {
-                          label: t(".row.aria_label", name: sample.name),
+                          label: t("samples.table_component.row.aria_label", name: sample.name),
                         },
                         data: {
                           table: true,
@@ -176,9 +176,12 @@
           <tfoot class="bottom-0 z-10 bg-slate-100 @2xl:sticky dark:bg-slate-900">
             <tr>
               <td class="sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300" colspan="2">
-                <span><%= t(".counts.samples") %>: <strong><%= @pagy.count %></strong></span>
+                <span><%= t("samples.table_component.counts.samples") %>: <strong><%= @pagy.count %></strong></span>
 
-                <span><%= t(".counts.selected") %>: <strong data-selection-target="selected">0</strong></span>
+                <span>
+                  <%= t("samples.table_component.counts.selected") %>:
+                  <strong data-selection-target="selected">0</strong>
+                </span>
               </td>
 
               <td
@@ -191,7 +194,10 @@
       </table>
     <% end %>
 
-    <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
+    <%= render Viral::Pagy::FullComponent.new(
+      @pagy,
+      item: t("samples.table_component.limit.item"),
+    ) %>
 
     <% if @abilities[:edit_sample_metadata] %>
       <template data-editable-cell-target="formTemplate">

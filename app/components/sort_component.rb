@@ -7,7 +7,7 @@ class SortComponent < Component
   def initialize(sort:, label:, url:, field:, **system_arguments)
     # use rpartition to split on the first space encountered from the right side
     # this allows us to sort by metadata fields which contain spaces
-    @sort_key, _space, @sort_direction = sort.rpartition(' ')
+    @sort_key, _space, @sort_direction = sort.to_s.rpartition(' ')
     @label = label
     @url = url
     @field = field

@@ -16,6 +16,107 @@ And then execute:
 bundle install
 ```
 
+## DataGrid Component
+
+Pathogen includes a lightweight, accessible DataGrid component for rendering tabular data with optional sticky columns.
+
+### Basic Usage
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows, caption: "Samples") do |grid| %>
+  <% grid.with_column("ID", key: :id, width: 120) %>
+  <% grid.with_column("Name", key: :name, width: 240) %>
+<% end %>
+```
+
+### Custom Cell Rendering
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows) do |grid| %>
+  <% grid.with_column("Name") { |row| tag.strong(row[:name]) } %>
+<% end %>
+```
+
+### Sticky Columns
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows, sticky_columns: 1) do |grid| %>
+  <% grid.with_column("ID", key: :id, width: 120) %>
+  <% grid.with_column("Name", key: :name, width: 240) %>
+<% end %>
+```
+
+Sticky columns require a width (numeric values become `px`) or an explicit `sticky_left:` offset.
+
+### Fill Constrained Containers
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows, fill_container: true) do |grid| %>
+  <% grid.with_column("ID", key: :id, width: 120) %>
+  <% grid.with_column("Name", key: :name) %>
+<% end %>
+```
+
+Use `fill_container: true` when the grid is inside a flex layout with bounded height and should scroll internally.
+
+### Extension Slots
+
+DataGrid provides several slots for extending functionality:
+
+#### Empty State
+
+Display custom content when no rows are present:
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: []) do |grid| %>
+  <% grid.with_empty_state do %>
+    <p>No data available</p>
+  <% end %>
+  <% grid.with_column("ID", key: :id) %>
+<% end %>
+```
+
+#### Metadata Warning
+
+Show warnings or notices above the table:
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows) do |grid| %>
+  <% grid.with_metadata_warning do %>
+    <div role="status" aria-live="polite">
+      <%= viral_alert { "Some columns have been hidden" } %>
+    </div>
+  <% end %>
+  <% grid.with_column("ID", key: :id) %>
+<% end %>
+```
+
+#### Live Region
+
+Add screen reader announcements for dynamic updates:
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows) do |grid| %>
+  <% grid.with_live_region do %>
+    <div role="status" aria-live="polite" aria-atomic="true"></div>
+  <% end %>
+  <% grid.with_column("ID", key: :id) %>
+<% end %>
+```
+
+#### Footer
+
+Add custom content below the table:
+
+```erb
+<%= render Pathogen::DataGridComponent.new(rows: @rows) do |grid| %>
+  <% grid.with_column("ID", key: :id) %>
+  <% grid.with_footer do %>
+    <%= render Viral::Pagy::FullComponent.new(pagy: @pagy) %>
+  <% end %>
+<% end %>
+```
+
 ## JavaScript Integration
 
 Pathogen ViewComponents includes Stimulus controllers that provide interactive behavior for components like tabs, tooltips, and datepickers.
