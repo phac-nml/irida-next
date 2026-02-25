@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'active_storage_test_case'
 
-class NamespaceMetricsQueryTest < ActiveSupport::TestCase
+class NamespaceMetricsQueryTest < ActiveStorageTestCase
   include ActionDispatch::TestProcess
   include ActionView::Helpers::NumberHelper
 
@@ -297,6 +298,109 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
     end
   end
 
+  test 'ensure duplicate attachments pointing to same blob are not double counted for diskUsage' do
+    workflow_execution = workflow_executions(:irida_next_example_completing_g)
+
+    blob_run_directory_a = ActiveStorage::Blob.generate_unique_secure_token
+    workflow_execution.blob_run_directory = blob_run_directory_a
+
+    # create file blobs
+    @normal_output_json_file_blob = make_and_upload_blob(
+      filepath: 'test/fixtures/files/blob_outputs/normal5/iridanext.output.json',
+      blob_run_directory: blob_run_directory_a,
+      gzip: true
+    )
+
+    @normal_output_summary_file_blob = make_and_upload_blob(
+      filepath: 'test/fixtures/files/blob_outputs/normal5/summary.txt',
+      blob_run_directory: blob_run_directory_a
+    )
+
+    @analysis1_file_blob = make_and_upload_blob(
+      filepath: 'test/fixtures/files/blob_outputs/normal5/analysis1.txt',
+      blob_run_directory: blob_run_directory_a,
+      gzip: false
+    )
+
+    @analysis2_file_blob = make_and_upload_blob(
+      filepath: 'test/fixtures/files/blob_outputs/normal5/analysis2.txt',
+      blob_run_directory: blob_run_directory_a,
+      gzip: false
+    )
+
+    analysis_output_filenames = [@analysis1_file_blob.filename, @analysis2_file_blob.filename]
+
+    analysis_output_blobs_total_size = @analysis1_file_blob.byte_size + @analysis2_file_blob.byte_size
+
+    existing_attachments_size = 0
+
+    namespace_samples = workflow_execution.namespace.project.samples
+    namespace_samples.each do |sample|
+      sample.attachments.each do |att|
+        existing_attachments_size += att.file.byte_size
+      end
+    end
+
+    sample = samples(:sampleA)
+    assert_equal 3, sample.attachments.count
+
+    assert 'completing', workflow_execution.state
+
+    assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+    assert_equal 'my_run_id_g', workflow_execution.run_id
+
+    assert_equal 3, workflow_execution.outputs.count
+
+    global_analysis_outputs = workflow_execution.outputs.reject { |o| o.file.filename == 'summary.txt' }
+
+    global_output_size = 0
+
+    global_analysis_outputs.each do |global_analysis_output|
+      global_output_size += global_analysis_output.file.byte_size
+    end
+
+    size_with_duplicates = existing_attachments_size + global_output_size + analysis_output_blobs_total_size
+    size_without_duplicates = existing_attachments_size + analysis_output_blobs_total_size
+
+    assert size_without_duplicates < size_with_duplicates
+
+    # Workflow execution ran with 2 samples
+    assert_equal 2, workflow_execution.samples_workflow_executions.count
+
+    swe = workflow_execution.samples_workflow_executions.find { |swe| swe.sample_id == sample.id }
+    assert_equal 2, swe.outputs.count
+
+    output_summary_file = workflow_execution.outputs.find { |o| o.file.filename == 'summary.txt' }
+    assert_not_equal @normal_output_summary_file_blob.id, output_summary_file.id
+    assert_equal @normal_output_summary_file_blob.filename, output_summary_file.filename
+    assert_equal @normal_output_summary_file_blob.checksum, output_summary_file.file.checksum
+
+    output_analysis1_file = workflow_execution.outputs.find { |o| o.file.filename == 'analysis1.txt' }
+    assert_equal @analysis1_file_blob.filename, output_analysis1_file.filename
+    assert_equal @analysis1_file_blob.checksum, output_analysis1_file.file.checksum
+
+    output_analysis2_file = workflow_execution.outputs.find { |o| o.file.filename == 'analysis2.txt' }
+    assert_equal @analysis2_file_blob.filename, output_analysis2_file.filename
+    assert_equal @analysis2_file_blob.checksum, output_analysis2_file.file.checksum
+
+    swe_output_filenames = swe.outputs.map(&:filename)
+
+    assert_equal swe_output_filenames.sort, analysis_output_filenames.sort
+
+    assert_equal 5, sample.attachments.count
+
+    assert_equal 'completed', workflow_execution.state
+
+    namespace_calculated_disk_usage = calculate_disk_usage(workflow_execution.namespace)
+
+    expected_disk_usage = number_to_human_size(
+      size_without_duplicates, precision: 2, significant: false, strip_insignificant_zeros: false
+    )
+
+    assert_equal expected_disk_usage, namespace_calculated_disk_usage
+  end
+
   private
 
   # Calculate the disk usage for unique attachment blobs under a namespace (namespace attachments, sample attachments,
@@ -320,6 +424,7 @@ class NamespaceMetricsQueryTest < ActiveSupport::TestCase
       [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
     ).map(&:id)
     sample_workflow_execution_ids = SamplesWorkflowExecution.joins(:workflow_execution).where(
+      sample_id: sample_ids,
       workflow_execution: {
         namespace_id: namespace.self_and_descendants_of_type(
           [Group.sti_name,
