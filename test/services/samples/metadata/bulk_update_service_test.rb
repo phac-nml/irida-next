@@ -117,13 +117,11 @@ module Samples
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-        Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, metadata_fields, @user).execute
-        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample34.reload.metadata)
-        assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
-                       'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) } },
-                     @sample34.reload.metadata_provenance)
+        assert_no_changes -> { @sample34.reload.metadata } do
+          assert_no_changes -> { @sample34.reload.metadata_provenance } do
+            Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, metadata_fields, @user).execute
+          end
+        end
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.reload.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
@@ -328,16 +326,16 @@ module Samples
                     @sample35.name => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
         metadata_fields = %w[metadatafield1 metadatafield2]
 
-        sample34_unchanged_metadata = @sample34.metadata
-        sample34_unchanged_metadata_provenance = @sample34.metadata_provenance
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-        Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, metadata_fields, @user).execute
-        assert_equal(sample34_unchanged_metadata, @sample34.reload.metadata)
-        assert_equal(sample34_unchanged_metadata_provenance, @sample34.reload.metadata_provenance)
+        assert_no_changes -> { @sample34.reload.metadata } do
+          assert_no_changes -> { @sample34.reload.metadata_provenance } do
+            Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, metadata_fields, @user).execute
+          end
+        end
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.reload.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
@@ -363,16 +361,16 @@ module Samples
                     @sample35.name => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
         metadata_fields = %w[metadatafield1 metadatafield2]
 
-        sample34_unchanged_metadata = @sample34.metadata
-        sample34_unchanged_metadata_provenance = @sample34.metadata_provenance
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-        Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, metadata_fields, @user).execute
-        assert_equal(sample34_unchanged_metadata, @sample34.reload.metadata)
-        assert_equal(sample34_unchanged_metadata_provenance, @sample34.reload.metadata_provenance)
+        assert_no_changes -> { @sample34.reload.metadata } do
+          assert_no_changes -> { @sample34.reload.metadata_provenance } do
+            Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, metadata_fields, @user).execute
+          end
+        end
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.reload.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
@@ -400,20 +398,20 @@ module Samples
                     @sample35.puid => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
         metadata_fields = %w[metadatafield1 metadatafield2]
 
-        sample33_unchanged_metadata = @sample33.metadata
-        sample33_unchanged_metadata_provenance = @sample33.metadata_provenance
-        sample34_unchanged_metadata = @sample34.metadata
-        sample34_unchanged_metadata_provenance = @sample34.metadata_provenance
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-        Samples::Metadata::BulkUpdateService.new(@group12, payload, metadata_fields, @user).execute
-        assert_equal(sample33_unchanged_metadata, @sample33.reload.metadata)
-        assert_equal(sample33_unchanged_metadata_provenance, @sample33.reload.metadata_provenance)
-        assert_equal(sample34_unchanged_metadata, @sample34.reload.metadata)
-        assert_equal(sample34_unchanged_metadata_provenance, @sample34.reload.metadata_provenance)
+        assert_no_changes -> { @sample33.reload.metadata } do
+          assert_no_changes -> { @sample33.reload.metadata_provenance } do
+            assert_no_changes -> { @sample34.reload.metadata } do
+              assert_no_changes -> { @sample34.reload.metadata_provenance } do
+                Samples::Metadata::BulkUpdateService.new(@group12, payload, metadata_fields, @user).execute
+              end
+            end
+          end
+        end
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample35.reload.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },

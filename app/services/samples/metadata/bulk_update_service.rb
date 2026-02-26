@@ -43,7 +43,7 @@ module Samples
           add_changes_to_metadata_summary(project_puid, metadata_changes)
         end
 
-        handle_not_updated_fields(unsuccessful_updates)
+        handle_not_updated_fields(unsuccessful_updates) if unsuccessful_updates.empty?
 
         create_activities_and_update_metadata_summary(activity_data)
       end
@@ -58,7 +58,7 @@ module Samples
       end
 
       def validate_metadata_param(metadata, sample_name) # rubocop:disable Naming/PredicateMethod
-        return true unless metadata.nil? || metadata == {}
+        return true unless !metadata.instance_of?(Hash) || metadata.empty?
 
         @namespace.errors.add(:sample, I18n.t('services.samples.metadata.empty_metadata', sample_name:))
         false
@@ -90,19 +90,21 @@ module Samples
       end
 
       def query_group_samples(id_type, sample_identifier)
-        scope = authorized_scope(Sample, type: :relation, as: :namespace_samples,
-                                         scope_options: { namespace: @namespace,
-                                                          minimum_access_level: Member::AccessLevel::MAINTAINER })
-        sample = if id_type == 'puid'
-                   scope.where(puid: sample_identifier)
-                 elsif id_type == 'id'
-                   scope.where(id: sample_identifier)
-                 else
-                   scope.where(name: sample_identifier)
-                 end
+        scope_args = if id_type == 'puid'
+                       { puid: sample_identifier }
+                     elsif id_type == 'id'
+                       { id: sample_identifier }
+                     else
+                       { name: sample_identifier }
+                     end
+        sample = authorized_scope(Sample, type: :relation, as: :namespace_samples,
+                                          scope_options: { namespace: @namespace,
+                                                           minimum_access_level: Member::AccessLevel::MAINTAINER })
+                 .where(scope_args)
+
         return sample.first unless sample.count != 1
 
-        add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_identifier)
+        add_sample_query_error(sample, sample_identifier)
         nil
       end
 
@@ -116,12 +118,13 @@ module Samples
           sample = Sample.where(name: sample_identifier, project_id: project.id)
           return sample.first unless sample.count != 1
 
-          add_sample_query_error(sample.none? ? 'sample_not_found' : 'duplicate_identifier', sample_identifier)
+          add_sample_query_error(sample, sample_identifier)
           nil
         end
       end
 
-      def add_sample_query_error(error_key, sample_identifier)
+      def add_sample_query_error(sample, sample_identifier)
+        error_key = sample.none? ? 'sample_not_found' : 'duplicate_identifier'
         @namespace.errors.add(:sample, I18n.t("services.samples.metadata.bulk_update.#{error_key}", sample_identifier:))
       end
 
@@ -186,8 +189,6 @@ module Samples
       end
 
       def handle_not_updated_fields(unsuccessful_updates)
-        return if unsuccessful_updates.empty?
-
         unsuccessful_updates.each do |sample_identifier, changes|
           @namespace.errors.add(:sample,
                                 I18n.t('services.samples.metadata.bulk_update.sample_metadata_fields_not_updated',

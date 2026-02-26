@@ -171,6 +171,23 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_equal 107, @project_namespace.parent.reload['metadata_summary']['metadatafield2']
   end
 
+  test 'update metadata summary by bulk update service with valid metadata' do
+    deleted_metadata = { 'metadatafield1' => 5 }
+    added_metadata = { 'metadatafield2' => 100 }
+    assert_equal 10, @project_namespace['metadata_summary']['metadatafield1']
+    assert_equal 35, @project_namespace['metadata_summary']['metadatafield2']
+    assert_equal 633, @project_namespace.parent['metadata_summary']['metadatafield1']
+    assert_equal 106, @project_namespace.parent['metadata_summary']['metadatafield2']
+
+    @project_namespace.update_metadata_summary_by_update_service(deleted_metadata, added_metadata, false)
+
+    assert_equal 5, @project_namespace.reload['metadata_summary']['metadatafield1']
+    assert_equal 135, @project_namespace.reload['metadata_summary']['metadatafield2']
+
+    assert_equal 628, @project_namespace.parent.reload['metadata_summary']['metadatafield1']
+    assert_equal 206, @project_namespace.parent.reload['metadata_summary']['metadatafield2']
+  end
+
   test 'update metadata summary by update service with empty metadata' do
     deleted_metadata = {}
     added_metadata = {}

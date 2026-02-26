@@ -47,7 +47,7 @@ module Samples
         update_namespace_metadata_summary(@project.namespace, @metadata_changes[:deleted], @metadata_changes[:added],
                                           true)
 
-        handle_not_updated_fields
+        handle_not_updated_fields if @metadata_changes[:not_updated].any?
 
         @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateValidationError => e
@@ -69,7 +69,7 @@ module Samples
       end
 
       def validate_metadata_param
-        return unless @metadata.nil? || @metadata == {}
+        return unless !@metadata.instance_of?(Hash) || @metadata.empty?
 
         raise SampleMetadataUpdateValidationError,
               I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
@@ -87,7 +87,6 @@ module Samples
       # and will be used for a :error flash message in the UI.
       def handle_not_updated_fields
         metadata_fields_not_updated = @metadata_changes[:not_updated]
-        return unless metadata_fields_not_updated.any?
 
         raise SampleMetadataUpdateError,
               I18n.t('services.samples.metadata.user_cannot_update_metadata',
