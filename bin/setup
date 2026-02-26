@@ -16,7 +16,7 @@ FileUtils.chdir APP_ROOT do
   system("bundle check") || system!("bundle install")
   system("pnpm install --frozen-lockfile")
   puts "\n== Installing git hooks =="
-  system!("bundle exec lefthook install --reset-hooks-path")
+  system!("bundle exec lefthook install --force --reset-hooks-path")
 
   puts '== Installing Playwright driver =='
   PLAYWRIGHT_CLI_VERSION=`bundle exec ruby -e 'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION.strip'`
