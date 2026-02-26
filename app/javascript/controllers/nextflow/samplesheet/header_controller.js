@@ -2,7 +2,6 @@ import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams } from "utilities/form";
 
 export default class extends Controller {
-  static targets = ["metadataHeaderForm"];
   static outlets = ["nextflow--deferred-samplesheet"];
 
   #metadataParameterUpdatedState = [
