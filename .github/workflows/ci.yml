@@ -50,6 +50,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Enforce Pathogen Tailwind guardrail
+        run: scripts/check-pathogen-tailwind-coupling.sh
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -69,6 +74,9 @@ jobs:
 
       - name: Install JavaScript dependencies
         run: pnpm install
+
+      - name: Verify Pathogen bundled stylesheet
+        run: pnpm --dir embedded_gems/pathogen run build:css:check
 
       - name: Prepare RuboCop cache
         uses: actions/cache@v5
