@@ -11,8 +11,8 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
   end
 
   def with_caret
-    render Viral::DropdownComponent.new(label: 'Organism', aria: { label: 'Organism dropdown list' },
-                                        caret: true) do |dropdown|
+    render Viral::Dropdown::V1::Component.new(label: 'Organism', aria: { label: 'Organism dropdown list' },
+                                              caret: true) do |dropdown|
       dropdown.with_item(label: 'Aspergillus awamori', url: '#')
       dropdown.with_item(label: 'Bacillus cereus', url: '#')
       dropdown.with_item(label: 'Pseudomonas aeruginosa', url: '#')
@@ -20,8 +20,8 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
   end
 
   def with_icon
-    render Viral::DropdownComponent.new(icon: :plus_circle,
-                                        aria: { label: 'Organism dropdown list' }) do |dropdown|
+    render Viral::Dropdown::V1::Component.new(icon: :plus_circle,
+                                              aria: { label: 'Organism dropdown list' }) do |dropdown|
       dropdown.with_item(label: 'Aspergillus awamori', url: '#')
       dropdown.with_item(label: 'Bacillus cereus', url: '#')
       dropdown.with_item(label: 'Pseudomonas aeruginosa', url: '#')
@@ -29,8 +29,8 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
   end
 
   def with_item_icon
-    render Viral::DropdownComponent.new(icon: :list,
-                                        aria: { label: 'Organism Dropdown Menu' }) do |dropdown|
+    render Viral::Dropdown::V1::Component.new(icon: :list,
+                                              aria: { label: 'Organism Dropdown Menu' }) do |dropdown|
       dropdown.with_item(label: 'Checkmark', url: '#', icon_name: :check)
       dropdown.with_item(label: 'Inbox', url: '#', icon_name: :inbox_stack)
     end
@@ -38,7 +38,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
 
   # Preview for custom button_styles
   def with_custom_button_styles
-    render(Viral::DropdownComponent.new(
+    render(Viral::Dropdown::V1::Component.new(
              label: 'Custom Button',
              styles: { button: 'bg-emerald-800 text-white px-4 py-2 flex gap-2 rounded-full cursor-pointer' },
              caret: true
@@ -51,7 +51,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
 
   # Preview for dropdown with tooltip
   def with_tooltip
-    render(Viral::DropdownComponent.new(
+    render(Viral::Dropdown::V1::Component.new(
              label: 'Tooltip Button',
              tooltip: 'This is a tooltip!',
              tooltip_placement: :bottom,
@@ -62,7 +62,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
   end
 
   def with_icon_and_tooltip
-    render Viral::DropdownComponent.new(
+    render Viral::Dropdown::V1::Component.new(
       icon: :list,
       tooltip: 'This is a tooltip!',
       tooltip_placement: :bottom,
@@ -74,7 +74,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
 
   # Preview for dropdown items with data attributes
   def with_data_attributes
-    render Viral::DropdownComponent.new(
+    render Viral::Dropdown::V1::Component.new(
       label: 'Data Attributes Test',
       caret: true
     ) do |dropdown|

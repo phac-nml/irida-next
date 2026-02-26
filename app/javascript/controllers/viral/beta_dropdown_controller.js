@@ -1,0 +1,230 @@
+import MenuController from "controllers/menu_controller";
+
+export default class extends MenuController {
+  static targets = ["trigger", "menu"];
+
+  initialize() {
+    super.initialize();
+
+    this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
+    this.boundOnButtonClick = this.onButtonClick.bind(this);
+    this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
+    this.boundFocusOut = this.focusOut.bind(this);
+    this.boundOnMorph = this.onMorph.bind(this);
+  }
+
+  connect() {
+    this.element.setAttribute("data-controller-connected", "true");
+    document.addEventListener("turbo:morph", this.boundOnMorph);
+    this.#initializeDropdown();
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:morph", this.boundOnMorph);
+    super.disconnect();
+  }
+
+  onMorph() {
+    this.menuTargetConnected(this.menuTarget);
+    this.triggerTargetConnected(this.triggerTarget);
+  }
+
+  menuTargetConnected(element) {
+    element.setAttribute("aria-hidden", "true");
+    element.addEventListener("keydown", this.boundOnMenuItemKeyDown);
+    element.addEventListener("focusout", this.boundFocusOut);
+    this.#menuItems(element).forEach((menuitem) => {
+      menuitem.setAttribute("tabindex", "-1");
+    });
+  }
+
+  menuTargetDisconnected(element) {
+    element.removeEventListener("keydown", this.boundOnMenuItemKeyDown);
+    element.removeEventListener("focusout", this.boundFocusOut);
+  }
+
+  triggerTargetConnected(element) {
+    element.addEventListener("keydown", this.boundOnButtonKeyDown);
+    element.addEventListener("click", this.boundOnButtonClick, {
+      capture: true,
+    });
+    super.triggerTargetConnected();
+  }
+
+  triggerTargetDisconnected(element) {
+    element.removeEventListener("keydown", this.boundOnButtonKeyDown);
+    element.removeEventListener("click", this.boundOnButtonClick, {
+      capture: true,
+    });
+    super.triggerTargetDisconnected();
+  }
+
+  #initializeDropdown() {
+    super.share({
+      onShow: () => this.#onShow(),
+      onHide: () => this.#onHide(),
+    });
+  }
+
+  #onShow() {
+    this.triggerTarget.setAttribute("aria-expanded", "true");
+    this.menuTarget.setAttribute("aria-hidden", "false");
+    this.menuTarget.removeAttribute("hidden");
+  }
+
+  #onHide() {
+    this.triggerTarget.setAttribute("aria-expanded", "false");
+    this.menuTarget.setAttribute("aria-hidden", "true");
+    this.menuTarget.setAttribute("hidden", "");
+    this.#menuItems(this.menuTarget).forEach((menuitem) => {
+      menuitem.setAttribute("tabindex", "-1");
+    });
+    this.triggerTarget.focus();
+  }
+
+  focusOut(event) {
+    if (!this.element.contains(event.relatedTarget)) {
+      super.hide();
+    }
+  }
+
+  onButtonClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (super.isVisible()) {
+      super.hide();
+    } else {
+      this.#openMenuAndFocusMenuItem(0);
+    }
+  }
+
+  onButtonKeyDown(event) {
+    switch (event.key) {
+      case "Enter":
+      case " ":
+      case "ArrowDown":
+        event.preventDefault();
+        this.#openMenuAndFocusMenuItem(0);
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        this.#openMenuAndFocusMenuItem(-1);
+        break;
+    }
+  }
+
+  #openMenuAndFocusMenuItem(index) {
+    const menuItems = this.#menuItems(this.menuTarget);
+
+    if (menuItems.length === 0) {
+      // lazy loaded menu
+      document.addEventListener(
+        "turbo:frame-load",
+        () => {
+          const menuItems = this.#menuItems(this.menuTarget);
+          // initialize tab index to -1 on lazy load
+          menuItems.forEach((menuItem) => {
+            menuItem.setAttribute("tabindex", "-1");
+          });
+          this.#focusMenuItem(menuItems.at(index));
+        },
+        { once: true },
+      );
+      super.show();
+      this.#focusMenuItem(this.menuTarget);
+    } else {
+      super.show();
+      this.#focusMenuItem(menuItems.at(index));
+    }
+  }
+
+  onMenuItemKeyDown(event) {
+    const menuItems = this.#menuItems(this.menuTarget);
+    const currentIndex = menuItems.indexOf(document.activeElement);
+    this.#focusByKey(event, menuItems, currentIndex);
+  }
+
+  #focusByKey(event, menuItems, currentIndex) {
+    switch (event.key) {
+      case "Enter":
+      case " ":
+        event.preventDefault();
+        if (menuItems[currentIndex].nodeName === "LI") {
+          // find first clickable target
+          const clickableTarget = menuItems[currentIndex].querySelector(
+            'a, button, input[type="submit"]',
+          );
+          // fire click or close dropdown
+          if (clickableTarget) {
+            clickableTarget.click();
+          } else {
+            super.hide();
+          }
+        } else {
+          menuItems[currentIndex].click();
+        }
+        return document.addEventListener(
+          "turbo:morph",
+          () => {
+            this.triggerTarget.focus();
+          },
+          { once: true },
+        );
+      case "Escape":
+        event.preventDefault();
+        super.hide();
+        break;
+      case "ArrowUp": {
+        event.preventDefault();
+        let prevIndex = menuItems.length - 1;
+        if (currentIndex > 0) {
+          prevIndex = Math.max(0, currentIndex - 1);
+        }
+        menuItems[currentIndex].tabIndex = "-1";
+        this.#focusMenuItem(menuItems.at(prevIndex));
+        break;
+      }
+      case "ArrowDown": {
+        event.preventDefault();
+        let nextIndex = 0;
+        if (currentIndex < menuItems.length - 1) {
+          nextIndex = Math.min(menuItems.length - 1, currentIndex + 1);
+        }
+        menuItems[currentIndex].tabIndex = "-1";
+        this.#focusMenuItem(menuItems.at(nextIndex));
+        break;
+      }
+      case "Home":
+        event.preventDefault();
+        menuItems[currentIndex].tabIndex = "-1";
+        this.#focusMenuItem(menuItems.at(0));
+        break;
+      case "End":
+        event.preventDefault();
+        menuItems[currentIndex].tabIndex = "-1";
+        this.#focusMenuItem(menuItems.at(-1));
+        break;
+      case "Tab":
+        if (event.shiftKey) {
+          event.preventDefault();
+          this.triggerTarget.focus();
+          super.hide();
+        }
+        break;
+    }
+  }
+
+  #focusMenuItem(menuItem) {
+    menuItem.tabIndex = "0";
+    menuItem.focus();
+  }
+
+  #menuItems(menu) {
+    return [
+      ...menu.querySelectorAll(
+        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])',
+      ),
+    ];
+  }
+}
