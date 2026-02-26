@@ -108,6 +108,43 @@ module Projects
         assert_equal 0, upload_input_file_count
       end
 
+      test 'partial batch preserves hidden input for successful upload when another fails' do
+        open_upload_dialog
+
+        assign_upload_input_files(['good.fastq.gz', 'bad.fastq.gz'])
+        dispatch_form_upload_event('start')
+        dispatch_upload_event('initialize', { id: 701, file: { name: 'good.fastq.gz' } })
+        dispatch_upload_event('initialize', { id: 702, file: { name: 'bad.fastq.gz' } })
+        dispatch_upload_event('start', { id: 701, file: { name: 'good.fastq.gz' } })
+        dispatch_upload_event('progress', { id: 701, file: { name: 'good.fastq.gz' }, progress: 90 })
+        inject_direct_upload_hidden_input('signed-id-good')
+        dispatch_upload_event('end', { id: 701, file: { name: 'good.fastq.gz' } })
+        dispatch_upload_event('start', { id: 702, file: { name: 'bad.fastq.gz' } })
+        dispatch_upload_event('error', { id: 702, file: { name: 'bad.fastq.gz' }, error: 'forced failure' })
+        dispatch_upload_event('end', { id: 702, file: { name: 'bad.fastq.gz' } })
+        dispatch_form_upload_event('end')
+
+        good_state = upload_state(701)
+        bad_state = upload_state(702)
+        alert_state = upload_error_alert_state
+
+        # Successful upload row stays complete
+        assert_equal success_text, good_state.fetch('text')
+        assert_includes good_state.fetch('rowClass'), 'direct-upload--complete'
+
+        # Failed upload row shows error
+        assert_equal error_text, bad_state.fetch('text')
+        assert_includes bad_state.fetch('rowClass'), 'direct-upload--error'
+
+        # Hidden input for the successful upload is preserved for form re-submit
+        assert_equal 1, hidden_direct_upload_input_count
+        assert_equal 1, upload_input_file_count
+
+        # Error alert is shown
+        assert_equal false, alert_state.fetch('hidden')
+        assert_includes alert_state.fetch('text'), retry_upload_text
+      end
+
       test 'failed batch rows are not marked complete after a later successful batch' do
         open_upload_dialog
 

@@ -22,6 +22,8 @@ export default class extends Controller {
   #submitButtonState;
   #hasUploadError = false;
   #batchInProgress = false;
+  #preBatchHiddenInputs = new Set();
+  #claimedByUpload = new Set();
 
   connect() {
     this.#bindHandlers();
@@ -82,6 +84,8 @@ export default class extends Controller {
     this.#uploads.clear();
     this.#pendingUploadKeys.clear();
     this.#activeUploadKeys.clear();
+    this.#preBatchHiddenInputs.clear();
+    this.#claimedByUpload.clear();
     this.#batchInProgress = false;
   }
 
@@ -98,6 +102,7 @@ export default class extends Controller {
     }
 
     const upload = this.#buildUploadRow(id, file.name);
+    upload.fileDescriptor = this.#buildFileDescriptor(file);
 
     this.#ensureRowsElement().append(upload.rowElement);
     this.#uploads.set(uploadKey, upload);
@@ -155,6 +160,19 @@ export default class extends Controller {
     const upload = this.#uploads.get(this.#uploadKey(id));
     if (!upload || upload.status === "error") return;
 
+    // Claim the hidden input that direct_upload just added for this file so
+    // that #clearDirectUploadHiddenInputs can preserve it on a batch error.
+    for (const el of this.#hiddenInputsForField()) {
+      if (
+        !this.#preBatchHiddenInputs.has(el) &&
+        !this.#claimedByUpload.has(el)
+      ) {
+        upload.hiddenInput = el;
+        this.#claimedByUpload.add(el);
+        break;
+      }
+    }
+
     upload.status = "complete";
     upload.rowElement.classList.remove("direct-upload--pending");
     upload.rowElement.classList.add("direct-upload--complete");
@@ -167,6 +185,12 @@ export default class extends Controller {
     this.#batchInProgress = true;
     this.#hasUploadError = false;
     this.#hideErrorAlerts();
+
+    // Snapshot hidden inputs that exist before this batch so they are never
+    // removed on error — they belong to prior successful uploads.
+    this.#preBatchHiddenInputs = new Set(this.#hiddenInputsForField());
+    this.#claimedByUpload.clear();
+
     for (const uploadKey of this.#pendingUploadKeys) {
       this.#activeUploadKeys.add(uploadKey);
     }
@@ -208,6 +232,7 @@ export default class extends Controller {
         }
       }
       this.#clearDirectUploadHiddenInputs();
+      this.#removeCompletedFilesFromInput(this.#activeUploadKeys);
       this.#showUploadErrorAlert();
     }
 
@@ -504,16 +529,87 @@ export default class extends Controller {
   #clearDirectUploadHiddenInputs() {
     if (!this.#formElement) return;
 
-    const fieldName = this.attachmentsInputTarget.name;
-    const hiddenInputs = this.#formElement.querySelectorAll(
-      "input[type='hidden']",
-    );
-
-    for (const hiddenInput of hiddenInputs) {
-      if (hiddenInput.name === fieldName) {
-        hiddenInput.remove();
+    // Build the set of inputs to keep:
+    //   - anything that existed before this batch (prior successful uploads)
+    //   - hidden inputs claimed by uploads that completed successfully
+    const keepInputs = new Set(this.#preBatchHiddenInputs);
+    for (const uploadKey of this.#activeUploadKeys) {
+      const upload = this.#uploads.get(uploadKey);
+      if (upload?.status === "complete" && upload?.hiddenInput) {
+        keepInputs.add(upload.hiddenInput);
       }
     }
+
+    for (const el of this.#hiddenInputsForField()) {
+      if (!keepInputs.has(el)) {
+        el.remove();
+      }
+    }
+  }
+
+  #hiddenInputsForField() {
+    if (!this.#formElement) return [];
+    const fieldName = this.attachmentsInputTarget.name;
+    return Array.from(
+      this.#formElement.querySelectorAll("input[type='hidden']"),
+    ).filter((el) => el.name === fieldName);
+  }
+
+  #removeCompletedFilesFromInput(uploadKeys) {
+    if (typeof DataTransfer === "undefined") return;
+
+    const selectedFiles = Array.from(this.attachmentsInputTarget.files || []);
+    if (selectedFiles.length === 0) return;
+
+    const completedFileDescriptors = [];
+    for (const uploadKey of uploadKeys) {
+      const upload = this.#uploads.get(uploadKey);
+      if (upload?.status !== "complete") continue;
+      if (!upload.fileDescriptor?.name) continue;
+      completedFileDescriptors.push(upload.fileDescriptor);
+    }
+    if (completedFileDescriptors.length === 0) return;
+
+    const retryFiles = new DataTransfer();
+    for (const selectedFile of selectedFiles) {
+      const completedIndex = completedFileDescriptors.findIndex((descriptor) =>
+        this.#fileMatchesDescriptor(selectedFile, descriptor),
+      );
+      if (completedIndex >= 0) {
+        completedFileDescriptors.splice(completedIndex, 1);
+        continue;
+      }
+      retryFiles.items.add(selectedFile);
+    }
+    this.attachmentsInputTarget.files = retryFiles.files;
+  }
+
+  #buildFileDescriptor(file) {
+    if (!file) return null;
+    return {
+      name: file.name || "",
+      size: Number.isFinite(file.size) ? file.size : null,
+      lastModified: Number.isFinite(file.lastModified)
+        ? file.lastModified
+        : null,
+      type: file.type || null,
+    };
+  }
+
+  #fileMatchesDescriptor(file, descriptor) {
+    if (!file || !descriptor) return false;
+    if ((file.name || "") !== descriptor.name) return false;
+    if (descriptor.size !== null && file.size !== descriptor.size) return false;
+    if (
+      descriptor.lastModified !== null &&
+      file.lastModified !== descriptor.lastModified
+    ) {
+      return false;
+    }
+    if (descriptor.type !== null && (file.type || null) !== descriptor.type) {
+      return false;
+    }
+    return true;
   }
 
   #showUploadErrorAlert() {
