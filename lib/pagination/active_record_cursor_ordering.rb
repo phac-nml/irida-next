@@ -21,11 +21,16 @@ module Pagination
       if order.expr.is_a?(Arel::Attributes::Attribute) && order.expr.relation == scope_table
         order.expr.name
       elsif order.expr.is_a?(Arel::Attributes::Attribute) && order.expr.relation != scope_table
-        Arel.sql("#{order.expr.relation.name}.#{order.expr.name}")
+        qualified_column_name(order.expr)
       else
         order.expr
       end
     end
     private_class_method :resolve_order_expression
+
+    def qualified_column_name(attribute)
+      "#{attribute.relation.name}.#{attribute.name}"
+    end
+    private_class_method :qualified_column_name
   end
 end
