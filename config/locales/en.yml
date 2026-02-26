@@ -1774,7 +1774,7 @@ en:
       metadata:
         bulk_update:
           duplicate_identifier: 'Sample %{sample_identifier}: Multiple samples with identifier "%{sample_identifier}"'
-          sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated.
+          sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated as users cannot overwrite metadata added by an analysis.
           sample_not_found: 'Sample %{sample_identifier}: Sample "%{sample_identifier}" either does not exist or you are not authorized to update the sample'
         empty_metadata: No metadata was received to update sample '%{sample_name}'
         fields:

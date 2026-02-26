@@ -1778,7 +1778,7 @@ fr:
       metadata:
         bulk_update:
           duplicate_identifier: 'Échantillon %{sample_identifier}: Plusieurs échantillons avec identifiant "%{sample_identifier}"'
-          sample_metadata_fields_not_updated: L’échantillon '%{sample_name}' avec les champs '%{metadata_fields}' ne peut pas être mis à jour.
+          sample_metadata_fields_not_updated: L’échantillon '%{sample_name}' avec les champs '%{metadata_fields}' ne peut pas être mis à jour car les utilisateurs ne peuvent pas écraser les métadonnées ajoutées par une analyse.
           sample_not_found: 'Échantillon %{sample_identifier}: Échantillon "%{sample_identifier}" n’existe pas ou vous n’êtes pas autorisé à le mettre à jour.'
         empty_metadata: Aucune métadonnée n’a été reçue pour mettre à jour l’échantillon '%{sample_name}'
         fields:

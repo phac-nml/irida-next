@@ -14,7 +14,7 @@ module Samples
         @metadata_summary_data = {}
       end
 
-      def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         authorize! @namespace, to: :update_sample_metadata?
         activity_data = {}
         unsuccessful_updates = {}
