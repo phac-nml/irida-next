@@ -2,14 +2,15 @@
   <div class="flex flex-row @max-md:flex-col">
     <div
       class="
-        text-ellipsis overflow-hidden px-4 py-2 text-sm font-medium text-slate-700
-        bg-slate-100 border @md:border-r-0 border-slate-300 rounded-l-lg rounded-r-lg
-        @md:!rounded-r-none dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600
+        overflow-hidden rounded-l-lg rounded-r-lg border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-medium
+        text-ellipsis text-slate-700 @md:!rounded-r-none @md:border-r-0 dark:border-slate-600 dark:bg-slate-700
+        dark:text-slate-300
       "
       title="<%= root_url %>"
     >
       <%= root_url %>
     </div>
+
     <div class="grow">
       <div data-action="keydown->viral--select2#keydown" class="select2">
         <input
@@ -23,52 +24,54 @@
           <%= "required" if required %>
           autocomplete="off"
           class="
-            select2-input border-slate-300 text-slate-800 sm:text-sm rounded-r-lg
-            rounded-l-lg @min-md:rounded-l-none! block w-full p-2 dark:bg-slate-800
-            dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50
-            text-ellipsis overflow-hidden
+            select2-input block w-full overflow-hidden rounded-l-lg rounded-r-lg border-slate-300 p-2 text-ellipsis
+            text-slate-800 sm:text-sm @min-md:rounded-l-none! dark:border-slate-600 dark:bg-slate-800
+            dark:text-slate-50 dark:placeholder-slate-400
           "
           value="<%= selected_value %>"
           aria-controls="select2-listbox"
           aria-autocomplete="list"
           aria-expanded="false"
           <% if aria.present? %>
-          <% aria.each do |key, value| %>
-          <%= "aria-#{key}=#{value}" %>
-          <% end %>
+            <% aria.each do |key, value| %>
+              <%= "aria-#{key}=#{value}" %>
+            <% end %>
           <% end %>
         >
+
         <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
+
         <div
           data-viral--select2-target="dropdown"
           class="
-            absolute z-10 bg-white border border-slate-300 rounded-lg shadow-lg
-            dark:bg-slate-800 dark:border-slate-700
+            absolute z-10 rounded-lg border border-slate-300 bg-white shadow-lg dark:border-slate-700
+            dark:bg-slate-800
           "
-          hidden=""
+          hidden
         >
           <ul
             id="select2-listbox"
             data-viral--select2-target="scroller"
             class="
-              max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
-              dark:divide-slate-800 wrap-anywhere
+              max-h-[300px] w-full divide-y divide-slate-200 overflow-y-auto py-2 wrap-anywhere
+              dark:divide-slate-800
             "
             role="listbox"
           >
             <% options.each do |option| %>
               <%= option %>
             <% end %>
+
             <% if empty_state? %>
               <li
                 role="option"
                 aria-disabled="true"
                 aria-selected="false"
                 class="
-                  p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
-                  dark:text-blue-400 dark:border-blue-800 pointer-events-none
+                  pointer-events-none border border-blue-300 bg-blue-50 p-4 text-blue-800 dark:border-blue-800
+                  dark:bg-slate-800 dark:text-blue-400
                 "
-                hidden=""
+                hidden
                 data-viral--select2-target="empty"
               >
                 <%= empty_state %>
@@ -78,8 +81,9 @@
         </div>
       </div>
     </div>
+
     <% if path_separator %>
-      <div class="w-1 @min-md:mt-2 @min-md:ml-4 @max-md:hidden dark:text-slate-300">/</div>
+      <div class="w-1 @max-md:hidden @min-md:mt-2 @min-md:ml-4 dark:text-slate-300">/</div>
     <% end %>
   </div>
 </div>

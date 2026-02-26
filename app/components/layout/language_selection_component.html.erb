@@ -1,21 +1,21 @@
 <div
   class="inline-flex items-center"
   <% if Flipper.enabled?(:beta_dropdown) %>
-  data-controller="viral--beta-dropdown"
+    data-controller="viral--beta-dropdown"
   <% else %>
-  data-controller="viral--dropdown"
-  data-viral--dropdown-skidding-value="0"
-  data-viral--dropdown-distance-value="5"
-  data-viral--dropdown-position-value="bottom-start"
+    data-controller="viral--dropdown"
+    data-viral--dropdown-skidding-value="0"
+    data-viral--dropdown-distance-value="5"
+    data-viral--dropdown-position-value="bottom-start"
   <% end %>
   role="region"
   aria-labelledby="language-selection-dd-menu"
 >
   <button
     <% if Flipper.enabled?(:beta_dropdown) %>
-    data-viral--beta-dropdown-target="trigger"
+      data-viral--beta-dropdown-target="trigger"
     <% else %>
-    data-viral--dropdown-target="trigger"
+      data-viral--dropdown-target="trigger"
     <% end %>
     id="language-selection-dd-trigger"
     class="button button-default px-3"
@@ -26,33 +26,30 @@
     aria-labelledby="language-selection-dd-menu"
   >
     <%= pathogen_icon(:translate, size: :sm, class: "mr-2") %>
-    <abbr
-      class="text-sm sm:hidden"
-      title="<%= I18n.t(:"locales.#{locale}", locale: locale) %>"
-    >
+
+    <abbr class="text-sm sm:hidden" title="<%= I18n.t(:"locales.#{locale}", locale: locale) %>">
       <%= locale.upcase %>
     </abbr>
+
     <span class="text-sm max-sm:hidden" id="language-selection-dd-label">
       <%= I18n.t(:"locales.#{locale}", locale: locale) %>
     </span>
   </button>
+
   <!-- Dropdown menu -->
   <ul
     id="language-selection-dd-menu"
     <% if Flipper.enabled?(:beta_dropdown) %>
-    data-viral--beta-dropdown-target="menu"
+      data-viral--beta-dropdown-target="menu"
     <% else %>
-    data-viral--dropdown-target="menu"
+      data-viral--dropdown-target="menu"
     <% end %>
     role="menu"
-    class="
-      w-32 py-2 text-sm text-slate-700 dark:text-slate-200 bg-white rounded-lg
-      shadow-sm dark:bg-slate-700 z-30
-    "
+    class="z-30 w-32 rounded-lg bg-white py-2 text-sm text-slate-700 shadow-sm dark:bg-slate-700 dark:text-slate-200"
     aria-label="<%= t(:'components.layout.language_selection.title') %>"
     aria-hidden="true"
     tabindex="-1"
-    hidden=""
+    hidden
   >
     <% @locale_options.each do |locale_name, locale_value| %>
       <% if locale == locale_value %>
@@ -61,11 +58,13 @@
           aria-checked="true"
           aria-label="<%= locale_name %>"
           class="
-            flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
-            dark:hover:text-white bg-slate-100 text-slate-600 dark:bg-slate-600
-            dark:text-slate-300 border-slate-100 dark:border-slate-600
+            flex w-full items-center border-slate-100 bg-slate-100 px-4 py-2 text-slate-600 hover:bg-slate-100
+            dark:border-slate-600 dark:bg-slate-600 dark:text-slate-300 dark:hover:bg-slate-600
+            dark:hover:text-white
           "
-        ><%= locale_name %></li>
+        >
+          <%= locale_name %>
+        </li>
       <% else %>
         <li
           role="menuitemradio"
@@ -73,14 +72,15 @@
           aria-label="<%= locale_name %>"
           lang="<%= locale_value %>"
           class="
-            flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
-            dark:hover:text-white cursor-pointer
+            flex w-full cursor-pointer items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
+            dark:hover:text-white
           "
         >
           <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
             <%= form.hidden_field :locale,
                               value: locale_value,
                               id: "language_selection_#{locale_value}" %>
+
             <%= form.submit locale_name,
                         class: "cursor-pointer",
                         "aria-hidden": "true",

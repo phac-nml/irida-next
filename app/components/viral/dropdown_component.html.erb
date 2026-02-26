@@ -1,9 +1,9 @@
 <div
   class="flex max-sm:grow"
   <% if Flipper.enabled?(:beta_dropdown) %>
-  data-controller="viral--beta-dropdown<%= tooltip? ? ' pathogen--tooltip' : '' %>"
+    data-controller="viral--beta-dropdown<%= tooltip? ? ' pathogen--tooltip' : '' %>"
   <% else %>
-  data-controller="viral--dropdown<%= tooltip? ? ' pathogen--tooltip' : '' %>"
+    data-controller="viral--dropdown<%= tooltip? ? ' pathogen--tooltip' : '' %>"
   <% end %>
   data-viral--dropdown-skidding-value="<%= skidding %>"
   data-viral--dropdown-distance-value="<%= distance %>"
@@ -16,36 +16,36 @@
         class: class_names("size-5", { "mr-2": label.present? }),
       ) %>
     <% end %>
+
     <% if prefix.present? %>
       <span class="sr-only"><%= prefix %>&nbsp;</span>
     <% end %>
+
     <% if label.present? %>
-      <span class="text-center md:text-left truncate grow"><%= label %></span>
+      <span class="grow truncate text-center md:text-left"><%= label %></span>
     <% end %>
+
     <% if caret %>
       <%= pathogen_icon(:caret_down, size: :sm, class: "ml-2 flex-none") %>
     <% end %>
   <% end %>
 
   <%= render tooltip_component if tooltip? %>
+
   <!-- Dropdown menu -->
   <ul
     id="<%= @dd_id %>"
     <% if Flipper.enabled?(:beta_dropdown) %>
-    data-viral--beta-dropdown-target="menu"
+      data-viral--beta-dropdown-target="menu"
     <% else %>
-    data-viral--dropdown-target="menu"
+      data-viral--dropdown-target="menu"
     <% end %>
     role="menu"
-    class="
-      z-20 py-2 text-sm text-slate-700 dark:text-slate-200 bg-white rounded-lg shadow
-      dark:bg-slate-700 border border-slate-200 dark:border-slate-800
-      <%= styles[:dropdown] %>
-    "
+    class="z-20 rounded-lg border border-slate-200 bg-white py-2 text-sm text-slate-700 shadow dark:border-slate-800 dark:bg-slate-700 dark:text-slate-200 <%= styles[:dropdown] %>"
     aria-labelledby="<%= system_arguments[:id] %>"
     aria-hidden="true"
     tabindex="-1"
-    hidden=""
+    hidden
   >
     <% items.each do |item| %>
       <%= item %>

@@ -7,8 +7,10 @@ else
 end
 ) do |form| %>
   <%= render partial: "shared/form/required_field_legend" %>
+
   <div class="form-field">
     <% form_id = "transfer_namespace_id_input" %>
+
     <%= form.label :new_namespace_id,
                t("groups.edit.advanced.transfer.new_namespace_id"),
                class:
@@ -17,14 +19,16 @@ end
                  required: true,
                },
                for: form_id %>
+
     <% if @authorized_namespaces.empty? %>
       <input
+        autocomplete="off"
         disabled
         placeholder="<%= t(:"groups.edit.advanced.transfer.no_available_namespaces") %>"
         type="text"
         class="
-          border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full p-2.5
-          dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50
+          block w-full rounded-lg border-slate-300 p-2.5 text-slate-800 sm:text-sm dark:border-slate-600
+          dark:bg-slate-800 dark:text-slate-50
         "
       >
     <% else %>
@@ -42,28 +46,26 @@ end
                       value: namespace.id,
                       label: namespace.name,
                     ) do %>
-            <span
-              class="
-                text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
-              "
-            >
+            <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
               <%= namespace.name %>
               <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
             </span>
-            <span class="text-slate-600 dark:text-white block pointer-events-none">
-              <%= namespace.full_path %>
-            </span>
+
+            <span class="pointer-events-none block text-slate-600 dark:text-white"><%= namespace.full_path %></span>
           <% end %>
         <% end %>
+
         <%= select.with_empty_state do %>
           <%= t(:"groups.edit.advanced.transfer.empty_state") %>
         <% end %>
       <% end %>
     <% end %>
+
     <% if error.present? %>
       <p class="text-sm text-red-500 dark:text-red-400"><%= error %></p>
     <% end %>
   </div>
+
   <div>
     <%= form.submit t("groups.edit.advanced.transfer.submit"),
                 class: "button button-destructive inline-block",
