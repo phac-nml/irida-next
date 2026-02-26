@@ -5,7 +5,6 @@ module Pathogen
   module ViewHelper
     PATHOGEN_COMPONENT_HELPERS = {
       button: 'Pathogen::Button',
-      datepicker: 'Pathogen::Datepicker',
       icon: 'Pathogen::Icon',
       link: 'Pathogen::Link',
       radio_button: 'Pathogen::Form::RadioButton',

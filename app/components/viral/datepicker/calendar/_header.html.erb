@@ -1,57 +1,53 @@
 <div>
-  <div
-    class="
-      bg-white dark:bg-slate-700 dark:text-white px-2 py-3 text-center font-semibold
-    "
-    style="display: none;"
-  ></div>
-  <div class="flex justify-between mb-2">
+  <div class="bg-white px-2 py-3 text-center font-semibold dark:bg-slate-700 dark:text-white" style="display: none;"></div>
+
+  <div class="mb-2 flex justify-between">
     <button
       type="button"
       class="
-        bg-white dark:bg-slate-700 rounded-lg enabled:text-slate-800
-        enabled:dark:text-white enabled:hover:bg-slate-100
-        enabled:dark:hover:bg-slate-600 enabled:hover:text-slate-900
-        enabled:dark:hover:text-white text-lg p-2.5 prev-btn mr-2 enabled:cursor-pointer
-        disabled:cursor-not-allowed
+        prev-btn mr-2 rounded-lg bg-white p-2.5 text-lg enabled:cursor-pointer enabled:text-slate-800
+        enabled:hover:bg-slate-100 enabled:hover:text-slate-900 disabled:cursor-not-allowed dark:bg-slate-700
+        enabled:dark:text-white enabled:dark:hover:bg-slate-600 enabled:dark:hover:text-white
       "
       data-action="
         click->pathogen--datepicker--calendar#previousMonth
         keydown->pathogen--datepicker--calendar#tabBackToInput
       "
       data-pathogen--datepicker--calendar-target="backButton"
-      aria-label="<%= t("pathogen.datepicker.aria_label.previous_month_button")%>"
+      aria-label="<%= t("pathogen.datepicker.aria_label.previous_month_button") %>"
     >
       <%= pathogen_icon(:arrow_left, size: :sm) %>
     </button>
+
     <div
       data-pathogen--datepicker--calendar-target="monthSelectContainer"
       data-action="keydown->pathogen--datepicker--calendar#tabBackToInput"
-    >
-    </div>
+    ></div>
+
     <div>
       <input
         data-pathogen--datepicker--calendar-target="year"
         data-action="change->pathogen--datepicker--calendar#changeYear"
         type="number"
+        autocomplete="off"
         max="9999"
         min="<%= min_year %>"
         class="
-          w-22 rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
-          dark:bg-slate-800 dark:text-white ml-1
+          ml-1 w-22 rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800
+          dark:text-white
         "
         aria-label="<%= t('pathogen.datepicker.aria_label.select_year') %>"
       >
     </div>
+
     <button
       type="button"
       class="
-        bg-white dark:bg-slate-700 rounded-lg text-slate-800 dark:text-white
-        hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
-        dark:hover:text-white text-lg p-2.5 next-btn ml-2 cursor-pointer
+        next-btn ml-2 cursor-pointer rounded-lg bg-white p-2.5 text-lg text-slate-800 hover:bg-slate-100
+        hover:text-slate-900 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600 dark:hover:text-white
       "
       data-action="click->pathogen--datepicker--calendar#nextMonth"
-      aria-label="<%= t("pathogen.datepicker.aria_label.next_month_button")%>"
+      aria-label="<%= t("pathogen.datepicker.aria_label.next_month_button") %>"
     >
       <%= pathogen_icon(:arrow_right, size: :sm) %>
     </button>
@@ -62,10 +58,7 @@
   <select
     data-pathogen--datepicker--calendar-target="monthSelect"
     data-action="change->pathogen--datepicker--calendar#changeMonth"
-    class="
-      rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600
-      dark:bg-slate-800 dark:text-white
-    "
+    class="rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white"
     aria-label="<%= t('pathogen.datepicker.aria_label.select_month') %>"
   >
     <% months.each do |month| %>

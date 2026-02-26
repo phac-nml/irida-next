@@ -2,10 +2,10 @@
 
 require 'test_helper'
 
-module Pathogen
-  class DatepickerTest < ViewComponent::TestCase
+module Viral
+  class DatepickerComponentTest < ViewComponent::TestCase
     test 'basic datepicker' do
-      datepicker = Pathogen::Datepicker.new(id: 'test_id', input_name: 'test_input_name')
+      datepicker = Viral::DatepickerComponent.new(id: 'test_id', input_name: 'test_input_name')
 
       render_inline(datepicker)
       assert_no_selector 'label'
@@ -14,7 +14,11 @@ module Pathogen
     end
 
     test 'datepicker with label' do
-      datepicker = Pathogen::Datepicker.new(id: 'test_id', input_name: 'test_input_name', label: 'this is a label')
+      datepicker = Viral::DatepickerComponent.new(
+        id: 'test_id',
+        input_name: 'test_input_name',
+        label: 'this is a label'
+      )
       render_inline(datepicker)
       assert_selector 'label', text: 'this is a label'
       assert_selector 'input[type="text"]', count: 1

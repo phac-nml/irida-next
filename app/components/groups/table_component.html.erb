@@ -1,25 +1,12 @@
 <% if @has_group_links %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <table
-      class="
-        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-        whitespace-nowrap
-      "
+      class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
       data-controller="table"
       data-action="focusin->table#handleCellFocus"
     >
-      <thead
-        class="
-          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-          whitespace-nowrap
-        "
-      >
-        <tr
-          class="
-            border-y dark:border-slate-700 border-slate-200 dark:text-slate-400
-            text-slate-900 uppercase
-          "
-        >
+      <thead class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400">
+        <tr class="border-y border-slate-200 text-slate-900 uppercase dark:border-slate-700 dark:text-slate-400">
           <% @columns.each_with_index do |column, index| %>
             <%= render_cell(
             tag: 'th',
@@ -46,11 +33,7 @@
         </tr>
       </thead>
 
-      <tbody
-        class="
-          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-        "
-      >
+      <tbody class="divide-y divide-slate-200 bg-white dark:divide-slate-700 dark:bg-slate-800">
         <% @namespace_group_links.each do | namespace_group_link | %>
           <%= render Viral::BaseComponent.new(**row_arguments(namespace_group_link)) do %>
             <% namespace_group_link_source =
@@ -74,9 +57,7 @@
             </td>
 
             <td class="px-6 py-4">
-              <div>
-                <%= helpers.local_time_ago(namespace_group_link.created_at) %>
-              </div>
+              <div><%= helpers.local_time_ago(namespace_group_link.created_at) %></div>
             </td>
 
             <td class="px-6 py-4">
@@ -108,7 +89,7 @@
             <td class="px-6 py-4">
               <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
                 <%= form_with( model: namespace_group_link, url: select_group_link_path(namespace_group_link), method: :patch) do |form| %>
-                  <%= pathogen_datepicker(
+                  <%= viral_datepicker(
                     id: "invited-group-#{namespace_group_link.group.id}-expiration",
                     input_name: "namespace_group_link[expires_at]",
                     selected_date: namespace_group_link.expires_at,
@@ -121,7 +102,7 @@
               <% end %>
             </td>
 
-            <td class="px-6 py-4 space-x-2">
+            <td class="space-x-2 px-6 py-4">
               <% if @abilities[:unlink_group] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
                 <%= button_to t(
                   :"#{namespace_group_link.namespace.type.pluralize.downcase}.group_links.index.unlink",

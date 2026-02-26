@@ -1,23 +1,24 @@
 <div>
   <% unless min_date.nil? %>
     <div
-      class="text-sm text-center text-slate-900 dark:text-white"
+      class="text-center text-sm text-slate-900 dark:text-white"
       data-pathogen--datepicker--calendar-target="minDateMessage"
-    >
-    </div>
+    ></div>
   <% end %>
-  <div class="flex space-x-2 rtl:space-x-reverse mt-2">
+
+  <div class="mt-2 flex space-x-2 rtl:space-x-reverse">
     <button
       type="button"
-      class="button button-default w-1/2"
+      class="button w-1/2 button-default"
       data-action="click->pathogen--datepicker--calendar#showToday"
       aria-label="<%= t('pathogen.datepicker.aria_label.show_today') %>"
     >
       <%= t("pathogen.datepicker.show_today") %>
     </button>
+
     <button
       type="button"
-      class="button button-default w-1/2"
+      class="button w-1/2 button-default"
       data-action="click->pathogen--datepicker--calendar#clearSelection"
       data-pathogen--datepicker--calendar-target="clearButton"
       aria-label="<%= t('pathogen.datepicker.aria_label.clear_selection') %>"

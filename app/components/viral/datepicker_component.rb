@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module Pathogen
+module Viral
   # Datepicker Component
   # Renders the date input along with datepicker calendar
-  class Datepicker < Pathogen::Component
+  class DatepickerComponent < Viral::Component
     # Default HTML tag for components main elements.
     TAG_DEFAULT = :div
 
