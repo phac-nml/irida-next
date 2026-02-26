@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
-import { FOCUSABLE_ELEMENTS } from "pathogen_view_components/datepicker/constants";
+import { FOCUSABLE_ELEMENTS } from "controllers/viral/datepicker/constants";
 
 export default class extends Controller {
-  static outlets = ["pathogen--datepicker--calendar"];
+  static outlets = ["viral--datepicker--calendar"];
   static targets = [
     "datepickerInput",
     "calendarTemplate",
@@ -161,7 +161,7 @@ export default class extends Controller {
       this.#selectedYear = this.#todaysYear;
       this.#selectedMonthIndex = this.#todaysMonthIndex;
     }
-    if (this.hasPathogenDatepickerCalendarOutlet) {
+    if (this.hasViralDatepickerCalendarOutlet) {
       this.#shareParamsWithCalendar();
     }
   }
@@ -189,7 +189,7 @@ export default class extends Controller {
   }
 
   // once the calendar controller connects, share values used by both controllers
-  pathogenDatepickerCalendarOutletConnected() {
+  viralDatepickerCalendarOutletConnected() {
     this.#shareParamsWithCalendar();
   }
 
@@ -234,7 +234,7 @@ export default class extends Controller {
     if (
       event.key === "Tab" &&
       event.target ===
-        this.pathogenDatepickerCalendarOutlet.getLastFocusableElement() &&
+        this.viralDatepickerCalendarOutlet.getLastFocusableElement() &&
       !event.shiftKey
     ) {
       event.preventDefault();
@@ -250,9 +250,7 @@ export default class extends Controller {
         this.hideCalendar();
       } else if (!event.shiftKey) {
         event.preventDefault();
-        this.pathogenDatepickerCalendarOutlet
-          .getFirstFocusableElement()
-          .focus();
+        this.viralDatepickerCalendarOutlet.getFirstFocusableElement().focus();
       }
     }
   }
@@ -354,7 +352,7 @@ export default class extends Controller {
       minDateMessage: this.invalidMinDateValue,
       autosubmit: this.autosubmitValue,
     };
-    this.pathogenDatepickerCalendarOutlet.shareParamsWithCalendarByInput(
+    this.viralDatepickerCalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,
     );
   }
@@ -362,12 +360,12 @@ export default class extends Controller {
   #handleError(error, source) {
     // In production, consider reporting errors to a logging service
     console.error(
-      `Pathogen--Datepicker--InputController error in ${source}:`,
+      `Viral--Datepicker--InputController error in ${source}:`,
       error,
     );
   }
 
-  // used by pathogen/datepicker/calendar.js
+  // used by viral/datepicker/calendar.js
   focusDatepickerInput() {
     this.datepickerInputTarget.focus();
   }

@@ -14,6 +14,8 @@ module Viral
       assert_selector 'svg.calendar-dots-icon', count: 1
       assert_match(/id="test_id-calendar"/, rendered_content)
       assert_match(/class="[^"]*\bhidden\b[^"]*"/, rendered_content)
+      assert_match(/data-controller="viral--datepicker--input"/, rendered_content)
+      assert_match(/data-controller="viral--datepicker--calendar"/, rendered_content)
     end
 
     test 'datepicker with label' do

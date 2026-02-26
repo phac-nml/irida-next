@@ -6,17 +6,17 @@
 
 <div class="relative max-w-sm" aria-live="polite">
   <div class="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center ps-3.5">
-    <%= pathogen_icon(:calendar_dots) %>
+    <%= pathogen_icon(:calendar_dots, color: nil, size: nil, class: "size-6 text-slate-500 dark:text-slate-400") %>
   </div>
 
   <input
-    placeholder="<%= t("pathogen.datepicker.placeholder") %>"
+    placeholder="<%= t("components.viral.datepicker.placeholder") %>"
     autocomplete="off"
     value="<%= selected_date %>"
-    data-pathogen--datepicker--input-target="datepickerInput"
+    data-viral--datepicker--input-target="datepickerInput"
     data-action="
-      change->pathogen--datepicker--input#directInput
-      keydown->pathogen--datepicker--input#handleEnterDirectInput
+      change->viral--datepicker--input#directInput
+      keydown->viral--datepicker--input#handleEnterDirectInput
     "
     type="text"
     name="<%= input_name %>"
@@ -32,7 +32,7 @@
 </div>
 
 <div
-  data-pathogen--datepicker--input-target="inputError"
+  data-viral--datepicker--input-target="inputError"
   class="mt-1 hidden text-sm text-red-700 dark:text-red-500"
   aria-hidden="true"
 ></div>

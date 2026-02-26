@@ -2,7 +2,7 @@
   <% unless min_date.nil? %>
     <div
       class="text-center text-sm text-slate-900 dark:text-white"
-      data-pathogen--datepicker--calendar-target="minDateMessage"
+      data-viral--datepicker--calendar-target="minDateMessage"
     ></div>
   <% end %>
 
@@ -10,20 +10,20 @@
     <button
       type="button"
       class="button w-1/2 button-default"
-      data-action="click->pathogen--datepicker--calendar#showToday"
-      aria-label="<%= t('pathogen.datepicker.aria_label.show_today') %>"
+      data-action="click->viral--datepicker--calendar#showToday"
+      aria-label="<%= t('components.viral.datepicker.aria_label.show_today') %>"
     >
-      <%= t("pathogen.datepicker.show_today") %>
+      <%= t("components.viral.datepicker.show_today") %>
     </button>
 
     <button
       type="button"
       class="button w-1/2 button-default"
-      data-action="click->pathogen--datepicker--calendar#clearSelection"
-      data-pathogen--datepicker--calendar-target="clearButton"
-      aria-label="<%= t('pathogen.datepicker.aria_label.clear_selection') %>"
+      data-action="click->viral--datepicker--calendar#clearSelection"
+      data-viral--datepicker--calendar-target="clearButton"
+      aria-label="<%= t('components.viral.datepicker.aria_label.clear_selection') %>"
     >
-      <%= t("pathogen.datepicker.clear_selection") %>
+      <%= t("components.viral.datepicker.clear_selection") %>
     </button>
   </div>
 </div>

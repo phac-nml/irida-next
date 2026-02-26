@@ -53,28 +53,28 @@ module Viral
     private
 
     def load_months
-      [I18n.t('pathogen.datepicker.months.january'),
-       I18n.t('pathogen.datepicker.months.february'),
-       I18n.t('pathogen.datepicker.months.march'),
-       I18n.t('pathogen.datepicker.months.april'),
-       I18n.t('pathogen.datepicker.months.may'),
-       I18n.t('pathogen.datepicker.months.june'),
-       I18n.t('pathogen.datepicker.months.july'),
-       I18n.t('pathogen.datepicker.months.august'),
-       I18n.t('pathogen.datepicker.months.september'),
-       I18n.t('pathogen.datepicker.months.october'),
-       I18n.t('pathogen.datepicker.months.november'),
-       I18n.t('pathogen.datepicker.months.december')]
+      [I18n.t('components.viral.datepicker.months.january'),
+       I18n.t('components.viral.datepicker.months.february'),
+       I18n.t('components.viral.datepicker.months.march'),
+       I18n.t('components.viral.datepicker.months.april'),
+       I18n.t('components.viral.datepicker.months.may'),
+       I18n.t('components.viral.datepicker.months.june'),
+       I18n.t('components.viral.datepicker.months.july'),
+       I18n.t('components.viral.datepicker.months.august'),
+       I18n.t('components.viral.datepicker.months.september'),
+       I18n.t('components.viral.datepicker.months.october'),
+       I18n.t('components.viral.datepicker.months.november'),
+       I18n.t('components.viral.datepicker.months.december')]
     end
 
     def load_days_of_week
-      [I18n.t('pathogen.datepicker.days_of_week.sunday'),
-       I18n.t('pathogen.datepicker.days_of_week.monday'),
-       I18n.t('pathogen.datepicker.days_of_week.tuesday'),
-       I18n.t('pathogen.datepicker.days_of_week.wednesday'),
-       I18n.t('pathogen.datepicker.days_of_week.thursday'),
-       I18n.t('pathogen.datepicker.days_of_week.friday'),
-       I18n.t('pathogen.datepicker.days_of_week.saturday')]
+      [I18n.t('components.viral.datepicker.days_of_week.sunday'),
+       I18n.t('components.viral.datepicker.days_of_week.monday'),
+       I18n.t('components.viral.datepicker.days_of_week.tuesday'),
+       I18n.t('components.viral.datepicker.days_of_week.wednesday'),
+       I18n.t('components.viral.datepicker.days_of_week.thursday'),
+       I18n.t('components.viral.datepicker.days_of_week.friday'),
+       I18n.t('components.viral.datepicker.days_of_week.saturday')]
     end
 
     def calculate_min_year
@@ -98,16 +98,16 @@ module Viral
         @system_arguments.delete(:classes)
       )
       @system_arguments[:data] ||= {}
-      @system_arguments[:data][:controller] = 'pathogen--datepicker--input'
-      @system_arguments[:data]['pathogen--datepicker--input-pathogen--datepicker--calendar-outlet'] = "##{@calendar_id}"
-      @system_arguments[:data]['pathogen--datepicker--input-autosubmit-value'] = @autosubmit
-      @system_arguments[:data]['pathogen--datepicker--input-invalid-date-value'] =
-        I18n.t('pathogen.datepicker.errors.invalid_date')
-      @system_arguments[:data]['pathogen--datepicker--input-invalid-min-date-value'] =
-        I18n.t('pathogen.datepicker.errors.min_date_error')
-      @system_arguments[:data]['pathogen--datepicker--input-calendar-id-value'] = @calendar_id
-      @system_arguments[:data]['pathogen--datepicker--input-date-format-regex-value'] =
-        I18n.t('pathogen.datepicker.date_format_regex')
+      @system_arguments[:data][:controller] = 'viral--datepicker--input'
+      @system_arguments[:data]['viral--datepicker--input-viral--datepicker--calendar-outlet'] = "##{@calendar_id}"
+      @system_arguments[:data]['viral--datepicker--input-autosubmit-value'] = @autosubmit
+      @system_arguments[:data]['viral--datepicker--input-invalid-date-value'] =
+        I18n.t('components.viral.datepicker.errors.invalid_date')
+      @system_arguments[:data]['viral--datepicker--input-invalid-min-date-value'] =
+        I18n.t('components.viral.datepicker.errors.min_date_error')
+      @system_arguments[:data]['viral--datepicker--input-calendar-id-value'] = @calendar_id
+      @system_arguments[:data]['viral--datepicker--input-date-format-regex-value'] =
+        I18n.t('components.viral.datepicker.date_format_regex')
     end
 
     # Configures HTML attributes for the <div> datepicker calendar.
@@ -121,10 +121,10 @@ module Viral
       )
 
       @calendar_arguments[:data] ||= {}
-      @calendar_arguments[:data][:controller] = 'pathogen--datepicker--calendar'
-      @calendar_arguments[:data]['pathogen--datepicker--calendar-pathogen--datepicker--input-outlet'] =
+      @calendar_arguments[:data][:controller] = 'viral--datepicker--calendar'
+      @calendar_arguments[:data]['viral--datepicker--calendar-viral--datepicker--input-outlet'] =
         "##{@container_id}"
-      @calendar_arguments[:data]['pathogen--datepicker--calendar-months-value'] = @months
+      @calendar_arguments[:data]['viral--datepicker--calendar-months-value'] = @months
     end
   end
 end
