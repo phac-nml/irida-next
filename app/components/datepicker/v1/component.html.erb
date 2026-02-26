@@ -1,12 +1,12 @@
 <fieldset>
-  <legend class="sr-only"><%= t("components.viral.datepicker.date_selection") %></legend>
+  <legend class="sr-only"><%= t("components.datepicker.date_selection") %></legend>
 
   <%= render Viral::BaseComponent.new(**@system_arguments) do %>
     <% unless @min_date.nil? %>
-      <%= render partial: "viral/datepicker/min_date", locals: { min_date: @min_date } %>
+      <%= render partial: "datepicker/v1/min_date", locals: { min_date: @min_date } %>
     <% end %>
 
-    <%= render partial: "viral/datepicker/input_field",
+    <%= render partial: "datepicker/v1/input_field",
     locals: {
       label: @label,
       input_id: @input_id,
@@ -15,7 +15,7 @@
       input_aria_label: @input_aria_label,
     } %>
 
-    <%= render partial: "viral/datepicker/calendar",
+    <%= render partial: "datepicker/v1/calendar",
     locals: {
       calendar_arguments: @calendar_arguments,
       days_of_the_week: @days_of_the_week,

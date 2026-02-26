@@ -1,9 +1,5 @@
 <div class="justify-center p-1">
-  <table
-    class="min-w-full table-fixed"
-    role="grid"
-    aria-label="<%= t('components.viral.datepicker.aria_label.calendar') %>"
-  >
+  <table class="min-w-full table-fixed" role="grid" aria-label="<%= t('components.datepicker.aria_label.calendar') %>">
     <thead class="mb-1">
       <tr>
         <% days_of_the_week.each do |day| %>
@@ -14,11 +10,11 @@
       </tr>
     </thead>
 
-    <tbody data-viral--datepicker--calendar-target="calendar"></tbody>
+    <tbody data-datepicker--calendar-target="calendar"></tbody>
   </table>
 </div>
 
-<template data-viral--datepicker--calendar-target="inMonthDateTemplate">
+<template data-datepicker--calendar-target="inMonthDateTemplate">
   <td
     class="
       w-8 cursor-pointer rounded-lg border-0 text-center text-sm leading-9 font-semibold text-slate-900
@@ -26,13 +22,13 @@
     "
     data-date-within-month-position="inMonth"
     data-action="
-      keydown->viral--datepicker--calendar#navigateCalendar
-      click->viral--datepicker--calendar#selectDate
+      keydown->datepicker--calendar#navigateCalendar
+      click->datepicker--calendar#selectDate
     "
   ></td>
 </template>
 
-<template data-viral--datepicker--calendar-target="outOfMonthDateTemplate">
+<template data-datepicker--calendar-target="outOfMonthDateTemplate">
   <td
     class="
       w-8 cursor-pointer rounded-lg border-0 text-center text-sm leading-9 font-semibold text-slate-500
@@ -40,8 +36,8 @@
     "
     data-date-within-month-position="outOfMonth"
     data-action="
-      keydown->viral--datepicker--calendar#navigateCalendar
-      click->viral--datepicker--calendar#selectDate
+      keydown->datepicker--calendar#navigateCalendar
+      click->datepicker--calendar#selectDate
     "
   ></td>
 </template>

@@ -10,13 +10,13 @@
   </div>
 
   <input
-    placeholder="<%= t("components.viral.datepicker.placeholder") %>"
+    placeholder="<%= t("components.datepicker.placeholder") %>"
     autocomplete="off"
     value="<%= selected_date %>"
-    data-viral--datepicker--input-target="datepickerInput"
+    data-datepicker--input-target="datepickerInput"
     data-action="
-      change->viral--datepicker--input#directInput
-      keydown->viral--datepicker--input#handleEnterDirectInput
+      change->datepicker--input#directInput
+      keydown->datepicker--input#handleEnterDirectInput
     "
     type="text"
     name="<%= input_name %>"
@@ -32,7 +32,7 @@
 </div>
 
 <div
-  data-viral--datepicker--input-target="inputError"
+  data-datepicker--input-target="inputError"
   class="mt-1 hidden text-sm text-red-700 dark:text-red-500"
   aria-hidden="true"
 ></div>

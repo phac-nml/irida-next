@@ -332,48 +332,48 @@ fr:
           aria_label: "%{name}, puid : %{puid}, rôle : %{role}, sous-groupes : %{subgroups_count}, projets : %{group_projects_count}, échantillons : %{samples_count}"
         project:
           aria_label: "%{name}, puid : %{puid}, rôle : %{role}, échantillons : %{samples_count}"
+    datepicker:
+      aria_label:
+        calendar: Calendrier
+        clear_selection: Effacer la sélection de date
+        next_month_button: Naviguer au prochain mois
+        previous_month_button: Naviguer au mois précédent
+        select_month: Sélectionner le mois
+        select_year: Sélectionner l’année
+        show_today: Montrer aujourd’hui
+      clear_selection: Effacer la sélection
+      date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
+      date_selection: Sélection de la date
+      days_of_week:
+        friday: ven
+        monday: lun
+        saturday: sam
+        sunday: dim
+        thursday: jeu
+        tuesday: mar
+        wednesday: mer
+      errors:
+        invalid_date: Date non valide
+        min_date_error: 'Date la plus ancienne autorisée : '
+      months:
+        april: avril
+        august: août
+        december: décembre
+        february: février
+        january: janvier
+        july: juillet
+        june: juin
+        march: mars
+        may: mai
+        november: novembre
+        october: octobre
+        september: septembre
+      placeholder: AAAA-MM-JJ
+      show_today: Montrer aujourd’hui
     viral:
       data_table_component:
         header:
           action: Mesure
-      datepicker:
-        aria_label:
-          calendar: Calendrier
-          clear_selection: Effacer la sélection de date
-          next_month_button: Naviguer au prochain mois
-          previous_month_button: Naviguer au mois précédent
-          select_month: Sélectionner le mois
-          select_year: Sélectionner l’année
-          show_today: Montrer aujourd’hui
-        clear_selection: Effacer la sélection
-        date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
-        date_selection: Sélection de la date
-        days_of_week:
-          friday: ven
-          monday: lun
-          saturday: sam
-          sunday: dim
-          thursday: jeu
-          tuesday: mar
-          wednesday: mer
-        errors:
-          invalid_date: Date non valide
-          min_date_error: 'Date la plus ancienne autorisée : '
-        months:
-          april: avril
-          august: août
-          december: décembre
-          february: février
-          january: janvier
-          july: juillet
-          june: juin
-          march: mars
-          may: mai
-          november: novembre
-          october: octobre
-          september: septembre
-        placeholder: AAAA-MM-JJ
-        show_today: Montrer aujourd’hui
       form:
         prefixed:
           boolean_component:

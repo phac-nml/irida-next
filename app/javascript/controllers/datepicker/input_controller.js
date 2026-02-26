@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
-import { FOCUSABLE_ELEMENTS } from "controllers/viral/datepicker/constants";
+import { FOCUSABLE_ELEMENTS } from "controllers/datepicker/constants";
 
 export default class extends Controller {
-  static outlets = ["viral--datepicker--calendar"];
+  static outlets = ["datepicker--calendar"];
   static targets = [
     "datepickerInput",
     "calendarTemplate",
@@ -161,7 +161,7 @@ export default class extends Controller {
       this.#selectedYear = this.#todaysYear;
       this.#selectedMonthIndex = this.#todaysMonthIndex;
     }
-    if (this.hasViralDatepickerCalendarOutlet) {
+    if (this.hasDatepickerCalendarOutlet) {
       this.#shareParamsWithCalendar();
     }
   }
@@ -189,7 +189,7 @@ export default class extends Controller {
   }
 
   // once the calendar controller connects, share values used by both controllers
-  viralDatepickerCalendarOutletConnected() {
+  datepickerCalendarOutletConnected() {
     this.#shareParamsWithCalendar();
   }
 
@@ -234,7 +234,7 @@ export default class extends Controller {
     if (
       event.key === "Tab" &&
       event.target ===
-        this.viralDatepickerCalendarOutlet.getLastFocusableElement() &&
+        this.datepickerCalendarOutlet.getLastFocusableElement() &&
       !event.shiftKey
     ) {
       event.preventDefault();
@@ -250,7 +250,7 @@ export default class extends Controller {
         this.hideCalendar();
       } else if (!event.shiftKey) {
         event.preventDefault();
-        this.viralDatepickerCalendarOutlet.getFirstFocusableElement().focus();
+        this.datepickerCalendarOutlet.getFirstFocusableElement().focus();
       }
     }
   }
@@ -352,20 +352,17 @@ export default class extends Controller {
       minDateMessage: this.invalidMinDateValue,
       autosubmit: this.autosubmitValue,
     };
-    this.viralDatepickerCalendarOutlet.shareParamsWithCalendarByInput(
+    this.datepickerCalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,
     );
   }
 
   #handleError(error, source) {
     // In production, consider reporting errors to a logging service
-    console.error(
-      `Viral--Datepicker--InputController error in ${source}:`,
-      error,
-    );
+    console.error(`Datepicker--InputController error in ${source}:`, error);
   }
 
-  // used by viral/datepicker/calendar.js
+  // used by datepicker/calendar.js
   focusDatepickerInput() {
     this.datepickerInputTarget.focus();
   }

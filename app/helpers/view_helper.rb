@@ -10,7 +10,6 @@ module ViewHelper
     dialog: 'Viral::DialogComponent',
     empty: 'Viral::EmptyStateComponent',
     data_table: 'Viral::DataTableComponent',
-    datepicker: 'Viral::DatepickerComponent',
     dropdown: 'Viral::DropdownComponent',
     file_input: 'Viral::Form::FileInputComponent',
     flash: 'Viral::FlashComponent',
@@ -34,6 +33,10 @@ module ViewHelper
     define_method "viral_#{name}" do |*args, **kwargs, &block|
       render component.constantize.new(*args, **kwargs), &block
     end
+  end
+
+  def datepicker(*, **, &)
+    render(DatepickerComponent.new(*, **), &)
   end
 
   def viral_icon_source(name)

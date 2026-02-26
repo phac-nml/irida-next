@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import {
   DAYS_IN_MONTH,
   CALENDAR_CLASSES,
-} from "controllers/viral/datepicker/constants";
+} from "controllers/datepicker/constants";
 
 import {
   getDayOfWeek,
@@ -10,10 +10,10 @@ import {
   getDateNode,
   getFirstOfMonthNode,
   focusDate,
-} from "controllers/viral/datepicker/utils";
+} from "controllers/datepicker/utils";
 
 export default class extends Controller {
-  static outlets = ["viral--datepicker--input"];
+  static outlets = ["datepicker--input"];
   static targets = [
     "backButton",
     "monthsArray",
@@ -80,7 +80,7 @@ export default class extends Controller {
     this.monthSelectContainerTarget.appendChild(monthSelect);
   }
 
-  // receive shared params from viral/datepicker/input_controller.js upon connection of this controller
+  // receive shared params from datepicker/input_controller.js upon connection of this controller
   shareParamsWithCalendarByInput(params) {
     this.#todaysYear = params["todaysYear"];
     this.#todaysMonthIndex = params["todaysMonthIndex"];
@@ -499,8 +499,8 @@ export default class extends Controller {
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
-      this.viralDatepickerInputOutlet.focusDatepickerInput();
-      this.viralDatepickerInputOutlet.hideCalendar();
+      this.datepickerInputOutlet.focusDatepickerInput();
+      this.datepickerInputOutlet.hideCalendar();
     }
   }
 
@@ -535,29 +535,29 @@ export default class extends Controller {
     // return if disabled date is selected (failsafe as they already shouldn't be selectable)
     if (selectedDate.getAttribute("aria-disabled")) return;
     // fill date input value to the selected date
-    this.viralDatepickerInputOutlet.setInputValue(
+    this.datepickerInputOutlet.setInputValue(
       selectedDate.getAttribute("data-date"),
     );
 
     // submit upon click/keyboard interaction if autosubmit is true (ie: on member/group tables)
     if (this.#autosubmit) {
-      this.viralDatepickerInputOutlet.submitDate();
+      this.datepickerInputOutlet.submitDate();
     }
 
-    this.viralDatepickerInputOutlet.hideCalendar();
-    this.viralDatepickerInputOutlet.focusNextFocusableElement();
+    this.datepickerInputOutlet.hideCalendar();
+    this.datepickerInputOutlet.focusNextFocusableElement();
   }
 
   // clear selection by clicking clear button
   clearSelection() {
-    this.viralDatepickerInputOutlet.setInputValue("");
+    this.datepickerInputOutlet.setInputValue("");
 
     if (this.#autosubmit) {
-      this.viralDatepickerInputOutlet.submitDate();
+      this.datepickerInputOutlet.submitDate();
     }
 
-    this.viralDatepickerInputOutlet.hideCalendar();
-    this.viralDatepickerInputOutlet.focusNextFocusableElement();
+    this.datepickerInputOutlet.hideCalendar();
+    this.datepickerInputOutlet.focusNextFocusableElement();
   }
 
   // handles ArrowLeft/Right keyboard navigation
@@ -701,7 +701,7 @@ export default class extends Controller {
     return false;
   }
 
-  // getFirst/LastFocusableElement is used by viral/datepicker/input_controller.js for Tab logic
+  // getFirst/LastFocusableElement is used by datepicker/input_controller.js for Tab logic
   getFirstFocusableElement() {
     return this.backButtonTarget.disabled
       ? this.monthSelectTarget

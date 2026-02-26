@@ -10,24 +10,24 @@
         enabled:dark:text-white enabled:dark:hover:bg-slate-600 enabled:dark:hover:text-white
       "
       data-action="
-        click->viral--datepicker--calendar#previousMonth
-        keydown->viral--datepicker--calendar#tabBackToInput
+        click->datepicker--calendar#previousMonth
+        keydown->datepicker--calendar#tabBackToInput
       "
-      data-viral--datepicker--calendar-target="backButton"
-      aria-label="<%= t("components.viral.datepicker.aria_label.previous_month_button") %>"
+      data-datepicker--calendar-target="backButton"
+      aria-label="<%= t("components.datepicker.aria_label.previous_month_button") %>"
     >
       <%= pathogen_icon(:arrow_left, color: nil, size: nil, class: "size-6") %>
     </button>
 
     <div
-      data-viral--datepicker--calendar-target="monthSelectContainer"
-      data-action="keydown->viral--datepicker--calendar#tabBackToInput"
+      data-datepicker--calendar-target="monthSelectContainer"
+      data-action="keydown->datepicker--calendar#tabBackToInput"
     ></div>
 
     <div>
       <input
-        data-viral--datepicker--calendar-target="year"
-        data-action="change->viral--datepicker--calendar#changeYear"
+        data-datepicker--calendar-target="year"
+        data-action="change->datepicker--calendar#changeYear"
         type="number"
         autocomplete="off"
         max="9999"
@@ -36,7 +36,7 @@
           ml-1 w-22 rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800
           dark:text-white
         "
-        aria-label="<%= t('components.viral.datepicker.aria_label.select_year') %>"
+        aria-label="<%= t('components.datepicker.aria_label.select_year') %>"
       >
     </div>
 
@@ -46,20 +46,20 @@
         next-btn ml-2 cursor-pointer rounded-lg bg-white p-2.5 text-lg text-slate-800 hover:bg-slate-100
         hover:text-slate-900 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600 dark:hover:text-white
       "
-      data-action="click->viral--datepicker--calendar#nextMonth"
-      aria-label="<%= t("components.viral.datepicker.aria_label.next_month_button") %>"
+      data-action="click->datepicker--calendar#nextMonth"
+      aria-label="<%= t("components.datepicker.aria_label.next_month_button") %>"
     >
       <%= pathogen_icon(:arrow_right, color: nil, size: nil, class: "size-6") %>
     </button>
   </div>
 </div>
 
-<template data-viral--datepicker--calendar-target="monthSelectTemplate">
+<template data-datepicker--calendar-target="monthSelectTemplate">
   <select
-    data-viral--datepicker--calendar-target="monthSelect"
-    data-action="change->viral--datepicker--calendar#changeMonth"
+    data-datepicker--calendar-target="monthSelect"
+    data-action="change->datepicker--calendar#changeMonth"
     class="rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white"
-    aria-label="<%= t('components.viral.datepicker.aria_label.select_month') %>"
+    aria-label="<%= t('components.datepicker.aria_label.select_month') %>"
   >
     <% months.each do |month| %>
       <option value="<%= month %>"><%= month %></option>
