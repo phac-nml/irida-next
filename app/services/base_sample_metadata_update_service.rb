@@ -48,7 +48,7 @@ class BaseSampleMetadataUpdateService < BaseService
   def get_metadata_change_status(sample, key, value, force_update) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if value.blank?
       :deleted if sample.field?(key)
-    elsif sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
+    elsif sample.metadata_provenance.key?(key) &&
           sample.metadata_provenance[key]['source'] == 'analysis'
       :not_updated
     elsif sample.field?(key) && sample.metadata[key] == value

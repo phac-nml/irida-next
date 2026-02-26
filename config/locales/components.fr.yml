@@ -7,8 +7,8 @@ fr:
           description:
             one: "%{user} a mis à jour les métadonnées pour %{count} échantillon"
             other: "%{user} a mis à jour les métadonnées pour %{count} échantillons"
-          project: Project
-          sample: Sample
+          project: Projet
+          sample: Échantillon
           title: Uploaded Metadata
         group_sample_transfer:
           description:
