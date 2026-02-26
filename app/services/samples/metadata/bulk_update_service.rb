@@ -43,7 +43,7 @@ module Samples
           add_changes_to_metadata_summary(project_puid, metadata_changes)
         end
 
-        handle_not_updated_fields(unsuccessful_updates) if unsuccessful_updates.empty?
+        handle_not_updated_fields(unsuccessful_updates) unless unsuccessful_updates.empty?
 
         create_activities_and_update_metadata_summary(activity_data)
       end
@@ -58,7 +58,7 @@ module Samples
       end
 
       def validate_metadata_param(metadata, sample_name) # rubocop:disable Naming/PredicateMethod
-        return true unless !metadata.instance_of?(Hash) || (metadata.instance_of?(Hash) && metadata.empty?)
+        return true if metadata.present?
 
         @namespace.errors.add(:sample, I18n.t('services.samples.metadata.empty_metadata', sample_name:))
         false

@@ -69,7 +69,7 @@ module Samples
       end
 
       def validate_metadata_param
-        return unless !@metadata.instance_of?(Hash) || (@metadata.instance_of?(Hash) && @metadata.empty?)
+        return if @metadata.present?
 
         raise SampleMetadataUpdateValidationError,
               I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
