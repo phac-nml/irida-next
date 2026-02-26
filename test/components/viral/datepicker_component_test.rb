@@ -8,9 +8,12 @@ module Viral
       datepicker = Viral::DatepickerComponent.new(id: 'test_id', input_name: 'test_input_name')
 
       render_inline(datepicker)
+      assert_selector 'div#test_id-datepicker.relative'
       assert_no_selector 'label'
       assert_selector 'input[type="text"]', count: 1
       assert_selector 'svg.calendar-dots-icon', count: 1
+      assert_match(/id="test_id-calendar"/, rendered_content)
+      assert_match(/class="[^"]*\bhidden\b[^"]*"/, rendered_content)
     end
 
     test 'datepicker with label' do

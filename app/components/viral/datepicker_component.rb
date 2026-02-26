@@ -92,9 +92,10 @@ module Viral
       @system_arguments[:id] = @container_id
       @system_arguments[:tag] = TAG_DEFAULT
 
-      @system_arguments[:class] = class_names(
+      @system_arguments[:classes] = class_names(
         SYSTEM_DEFAULT_CLASSES,
-        @system_arguments[:class]
+        @system_arguments.delete(:class),
+        @system_arguments.delete(:classes)
       )
       @system_arguments[:data] ||= {}
       @system_arguments[:data][:controller] = 'pathogen--datepicker--input'
@@ -113,9 +114,10 @@ module Viral
     def setup_calendar_attributes
       @calendar_arguments[:id] = @calendar_id
       @calendar_arguments[:tag] = TAG_DEFAULT
-      @calendar_arguments[:class] = class_names(
+      @calendar_arguments[:classes] = class_names(
         CALENDAR_DEFAULT_CLASSES,
-        @calendar_arguments[:class]
+        @calendar_arguments.delete(:class),
+        @calendar_arguments.delete(:classes)
       )
 
       @calendar_arguments[:data] ||= {}
