@@ -304,20 +304,4 @@
   <% end %>
 
   <div class="sr-only" aria-live="assertive" data-nextflow--deferred-samplesheet-target="ariaLive"></div>
-
-  <template data-nextflow--deferred-samplesheet-target="samplesheetReadyTemplate">
-    <%= viral_alert(
-      type: "success",
-      message:
-        t(
-          "components.nextflow_component.loading_complete.alert_message_html",
-          count: @sample_count,
-        ),
-      classes: "mb-2",
-      dismissible: true,
-      auto_dismiss: true,
-      auto_dismiss_duration: 10_000,
-      announce_alert: false,
-    ) %>
-  </template>
 </div>

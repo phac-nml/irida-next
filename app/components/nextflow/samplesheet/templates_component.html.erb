@@ -1,0 +1,150 @@
+<div id="nextflow-templates" data-controller="nextflow--samplesheet--templates">
+  <template data-nextflow--samplesheet--templates-target="trTemplate">
+    <tr class="border-b border-slate-200 bg-white text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"></tr>
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="thTemplate">
+    <th class="table-td border border-slate-100 font-medium dark:border-slate-600"></th>
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="tdTemplate">
+    <td class="table-td border border-slate-100 dark:border-slate-600"></td>
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="sampleIdentifierTemplate">
+    <div class="p-2.5"></div>
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="dropdownTemplate">
+    <select
+      class="
+        w-full cursor-pointer border-none bg-slate-50 p-2.5 text-sm text-inherit dark:border-none dark:bg-slate-700
+        dark:placeholder-slate-400
+      "
+      data-action="
+      change->nextflow--deferred-samplesheet#updateEditableSamplesheetData
+    "
+    >
+      <option value="" label=" "></option>
+    </select>
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="fileTemplate">
+    <a
+      href="#"
+      data-turbo-stream="true"
+      data-namespace-id="<%= @namespace_id %>"
+      class="
+        block cursor-pointer border-2 border-transparent bg-inherit p-2 text-sm text-inherit
+        focus-visible:-outline-offset-2!
+      "
+    ></a>
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="metadataTemplate">
+    <div class="p-2.5 text-nowrap"><span class="inline-block h-3.5"></span></div>
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="textInputTemplate">
+    <label class="sr-only"></label>
+
+    <input
+      class="
+        block w-full border-2 border-transparent bg-inherit p-2 text-sm text-inherit focus-visible:relative
+        focus-visible:z-15 focus-visible:-outline-offset-2!
+      "
+      data-action="
+      change->nextflow--deferred-samplesheet#updateEditableSamplesheetData
+    "
+      type="text"
+      autocomplete="off"
+    >
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="metadataHeaderForm">
+    <%= form_with(url: fields_workflow_executions_metadata_path) do |f| %>
+      <%= f.hidden_field :namespace_id, value: namespace_id %>
+    <% end %>
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="paginationTemplate">
+    <nav aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>">
+      <ul class="inline-flex h-10 text-base">
+        <li>
+          <button
+            type="button"
+            class="
+              cursor ms-0 flex h-10 cursor-pointer items-center justify-center rounded-s-lg border border-e-0
+              border-slate-300 bg-white px-4 leading-tight text-slate-900 select-none hover:bg-slate-100
+              hover:text-slate-700 focus-visible:relative disabled:pointer-events-none disabled:cursor-default
+              disabled:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+              dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-700
+              disabled:dark:text-slate-300
+            "
+            data-action="click->nextflow--samplesheet--pagination#previousPage"
+            data-nextflow--samplesheet--pagination-target="previousBtn"
+            disabled
+          >
+            <%= t("components.nextflow.samplesheet_component.previous") %>
+          </button>
+        </li>
+
+        <li>
+          <label class="sr-only" for="pagination-page-selector">
+            <%= t("components.nextflow.samplesheet_component.page_selection.aria_label") %>
+          </label>
+
+          <select
+            style="width: 80px;"
+            class="
+              ms-0 flex h-10 cursor-pointer items-center justify-center border border-slate-300 bg-white px-4
+              leading-tight text-slate-900 hover:bg-slate-100 hover:text-slate-700 focus-visible:relative
+              dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+              dark:hover:text-white
+            "
+            data-nextflow--samplesheet--pagination-target="pageNum"
+            data-action="change->nextflow--samplesheet--pagination#pageSelected"
+            id="pagination-page-selector"
+          >
+            <option value="1" selected>1</option>
+          </select>
+        </li>
+
+        <li>
+          <button
+            class="
+              cursor ms-0 flex h-10 cursor-pointer items-center justify-center rounded-e-lg border border-l-0
+              border-slate-300 bg-white px-4 leading-tight text-slate-900 select-none hover:bg-slate-100
+              hover:text-slate-700 focus-visible:relative disabled:pointer-events-none disabled:cursor-default
+              disabled:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+              dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-700
+              disabled:dark:text-slate-300
+            "
+            type="button"
+            data-nextflow--samplesheet--pagination-target="nextBtn"
+            data-action="click->nextflow--samplesheet--pagination#nextPage"
+            disabled
+          >
+            <%= t("components.nextflow.samplesheet_component.next") %>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </template>
+
+  <template data-nextflow--samplesheet--templates-target="samplesheetReadyTemplate">
+    <%= viral_alert(
+      type: "success",
+      message:
+        t(
+          "components.nextflow_component.loading_complete.alert_message_html",
+          count: @sample_count,
+        ),
+      classes: "mb-2",
+      dismissible: true,
+      auto_dismiss: true,
+      auto_dismiss_duration: 10_000,
+      announce_alert: false,
+    ) %>
+  </template>
+</div>
