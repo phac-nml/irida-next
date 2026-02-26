@@ -58,7 +58,7 @@ module Samples
       end
 
       def validate_metadata_param(metadata, sample_name) # rubocop:disable Naming/PredicateMethod
-        return true unless !metadata.instance_of?(Hash) || metadata.empty?
+        return true unless !metadata.instance_of?(Hash) || (metadata.instance_of?(Hash) && metadata.empty?)
 
         @namespace.errors.add(:sample, I18n.t('services.samples.metadata.empty_metadata', sample_name:))
         false
