@@ -1,0 +1,14 @@
+/* Pathogen View Components
+ * Architecture: @layer tokens -> utilities -> components
+ * Color space: oklch (perceptually uniform)
+ * Dark mode: dual support (.dark class + prefers-color-scheme)
+ *
+ * Layers establish cascade order so host-app Tailwind utilities
+ * can override component internals when needed.
+ */
+@layer pathogen.tokens, pathogen.utilities, pathogen.components;
+
+@import "./fonts.css";
+@import "./tokens.css" layer(pathogen.tokens);
+@import "./utilities.css" layer(pathogen.utilities);
+@import "./components/data_grid.css" layer(pathogen.components);

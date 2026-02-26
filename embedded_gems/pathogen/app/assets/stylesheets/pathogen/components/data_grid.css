@@ -1,0 +1,241 @@
+/* DataGrid component */
+.pathogen-data-grid {
+  --pathogen-data-grid-border-color: var(--pathogen-color-border-default);
+  --pathogen-data-grid-row-border: var(--pathogen-color-border-subtle);
+  --pathogen-data-grid-text-color: var(--pathogen-color-text-default);
+  --pathogen-data-grid-text-muted-color: var(--pathogen-color-text-muted);
+  --pathogen-data-grid-header-bg: var(--pathogen-color-surface-default);
+  --pathogen-data-grid-body-bg: var(--pathogen-color-surface-default);
+  --pathogen-data-grid-sticky-bg: var(--pathogen-color-surface-default);
+  --pathogen-data-grid-sticky-shadow: 4px 0 12px -2px
+    color-mix(in oklab, var(--pathogen-color-neutral-950) 8%, transparent);
+  --pathogen-data-grid-row-hover-bg: var(--pathogen-color-surface-subtle);
+  --pathogen-data-grid-focus-ring: var(--pathogen-color-focus-ring);
+  --pathogen-data-grid-cell-padding-y: 1rem;
+  --pathogen-data-grid-cell-padding-x: 1rem;
+  --pathogen-data-grid-font-size: var(--pathogen-text-sm);
+  --pathogen-data-grid-line-height: var(--pathogen-leading-normal);
+  --pathogen-data-grid-sticky-z: 2;
+  --pathogen-data-grid-header-z: 3;
+
+  max-width: 100%;
+  /* Remove outer border for cleaner look, or make very subtle */
+  border: 1px solid var(--pathogen-data-grid-border-color);
+  border-radius: var(--pathogen-radius-surface);
+  background: var(--pathogen-data-grid-body-bg);
+  color: var(--pathogen-data-grid-text-color);
+  font-family: var(--pathogen-font-sans);
+  isolation: isolate;
+  container-type: inline-size;
+}
+
+.pathogen-data-grid--fill {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  flex: 0 1 auto;
+  flex-direction: column;
+}
+
+.pathogen-data-grid--fill > .pathogen-data-grid__scroll {
+  min-height: 0;
+  flex: 0 1 auto;
+}
+
+.pathogen-data-grid__scroll {
+  max-width: 100%;
+  overflow: auto;
+  border-radius: inherit;
+}
+
+.pathogen-data-grid__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--pathogen-data-grid-body-bg);
+  color: var(--pathogen-data-grid-text-color);
+  font-size: var(--pathogen-data-grid-font-size);
+  line-height: var(--pathogen-data-grid-line-height);
+  white-space: nowrap;
+}
+
+.pathogen-data-grid__caption {
+  color: var(--pathogen-data-grid-text-color);
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+}
+
+.pathogen-data-grid__row {
+  background: var(--pathogen-data-grid-body-bg);
+  transition: background-color 150ms ease;
+}
+
+.pathogen-data-grid__row--header {
+  background: var(--pathogen-data-grid-header-bg);
+}
+
+/* Dense modifier for tighter tables (opt-in) */
+.pathogen-data-grid--dense {
+  --pathogen-data-grid-cell-padding-y: 0.5rem;
+  --pathogen-data-grid-cell-padding-x: 0.75rem;
+  --pathogen-data-grid-font-size: 0.8125rem;
+}
+
+.pathogen-data-grid--dense .pathogen-data-grid__cell {
+  border-right: 1px solid var(--pathogen-data-grid-border-color);
+}
+
+.pathogen-data-grid--dense
+  .pathogen-data-grid__row
+  > .pathogen-data-grid__cell:last-child {
+  border-right: 0;
+}
+
+.pathogen-data-grid__cell {
+  width: var(--pathogen-data-grid-col-width, auto);
+  min-width: var(--pathogen-data-grid-col-width, auto);
+  min-height: 2.5rem;
+  box-sizing: border-box;
+  color: var(--pathogen-data-grid-text-color);
+  /*
+   * Keep all table cells on a shared text baseline so `ch`-based sticky
+   * offsets/widths resolve consistently across header and body cells.
+   */
+  font-size: var(--pathogen-data-grid-font-size);
+  font-weight: 400;
+  line-height: var(--pathogen-data-grid-line-height);
+  /* Default: No vertical borders */
+  border-bottom: 1px solid var(--pathogen-data-grid-row-border);
+  background: inherit;
+  background-clip: padding-box;
+  padding: var(--pathogen-data-grid-cell-padding-y)
+    var(--pathogen-data-grid-cell-padding-x);
+  vertical-align: middle;
+}
+
+/* Last row needs no border bottom */
+.pathogen-data-grid__body
+  .pathogen-data-grid__row:last-child
+  > .pathogen-data-grid__cell {
+  border-bottom: 0;
+}
+
+.pathogen-data-grid__cell--header {
+  position: sticky;
+  top: 0;
+  z-index: var(--pathogen-data-grid-header-z);
+  border-bottom: 1px solid var(--pathogen-data-grid-border-color);
+  background: var(--pathogen-data-grid-header-bg);
+  text-align: left;
+  vertical-align: bottom;
+}
+
+.pathogen-data-grid__header-label {
+  display: inline-block;
+  color: var(--pathogen-data-grid-text-muted-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.pathogen-data-grid__cell--sticky {
+  position: sticky;
+  left: var(--pathogen-data-grid-sticky-left, 0px);
+  z-index: var(--pathogen-data-grid-sticky-z);
+  background: inherit; /* Should match row bg (even on hover) */
+  /*
+   * Keep sticky rendering simple: Windows Chrome can rasterize sticky table
+   * cells with clip-path/composited shadows at slightly different widths.
+   * A stable separator avoids visual width drift while scrolling.
+   */
+  box-shadow: 1px 0 0 var(--pathogen-data-grid-border-color);
+}
+
+.pathogen-data-grid__cell--header.pathogen-data-grid__cell--sticky {
+  z-index: calc(var(--pathogen-data-grid-header-z) + 1);
+  background: var(--pathogen-data-grid-header-bg);
+}
+
+.pathogen-data-grid__cell--align-center {
+  text-align: center;
+}
+
+.pathogen-data-grid__cell--align-right {
+  text-align: right;
+}
+
+/* No default zebra striping in modern look */
+.pathogen-data-grid__body .pathogen-data-grid__row:hover,
+.pathogen-data-grid__body .pathogen-data-grid__row:focus-within {
+  background: var(--pathogen-data-grid-row-hover-bg);
+}
+
+.pathogen-data-grid__cell:focus-within {
+  outline: 2px solid var(--pathogen-data-grid-focus-ring);
+  outline-offset: -2px;
+}
+
+/* In table cells, keep a single focus ring on the cell container. */
+.pathogen-data-grid__cell .pathogen-u-link:focus-visible,
+.pathogen-data-grid__cell .pathogen-data-grid__link:focus-visible {
+  outline: none;
+}
+
+.pathogen-data-grid__metadata-warning {
+  margin: 0 0 1rem;
+  border: 1px solid
+    color-mix(
+      in oklab,
+      var(--pathogen-color-warning-500) 45%,
+      var(--pathogen-data-grid-border-color)
+    );
+  border-radius: var(--pathogen-radius-control);
+  background: color-mix(
+    in oklab,
+    var(--pathogen-color-warning-500) 12%,
+    transparent
+  );
+  padding: 0.625rem 0.875rem;
+}
+
+.pathogen-data-grid__metadata-warning-text {
+  color: var(--pathogen-data-grid-text-color);
+  display: inline;
+}
+
+.pathogen-data-grid__link--template:hover {
+  text-decoration-line: none;
+}
+
+@container (max-width: 64rem) {
+  .pathogen-data-grid--multi-sticky
+    .pathogen-data-grid__body
+    .pathogen-data-grid__cell--sticky {
+    position: static;
+    left: auto;
+    z-index: auto;
+    box-shadow: none;
+  }
+
+  .pathogen-data-grid--multi-sticky
+    .pathogen-data-grid__cell--header.pathogen-data-grid__cell--sticky {
+    left: auto;
+    z-index: var(--pathogen-data-grid-header-z);
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .pathogen-data-grid__cell--sticky {
+    position: static;
+    left: auto;
+    z-index: auto;
+    box-shadow: none;
+  }
+
+  .pathogen-data-grid__cell--header.pathogen-data-grid__cell--sticky {
+    z-index: var(--pathogen-data-grid-header-z);
+  }
+}

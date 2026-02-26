@@ -9,6 +9,7 @@ log/
 storage/
 public/assets/
 app/assets/builds/
+embedded_gems/pathogen/app/assets/stylesheets/pathogen_view_components.css
 
 # Generated files
 db/schema.rb

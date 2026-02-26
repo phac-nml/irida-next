@@ -1,0 +1,22 @@
+/* Pathogen font declarations.
+ * Intentionally imported without a @layer annotation so @font-face rules
+ * sit at the cascade root. Browsers load fonts independently of layer
+ * resolution order; hoisting them outside any layer avoids the edge case
+ * where a font defined inside a layer is unavailable to rules in earlier
+ * layers during the first rendering pass.
+ */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("pathogen/fonts/inter-variable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("pathogen/fonts/inter-variable-italic.woff2") format("woff2");
+}

@@ -117,6 +117,34 @@ Add custom content below the table:
 <% end %>
 ```
 
+## CSS Architecture
+
+Pathogen's stylesheet source is split into:
+
+- `app/assets/stylesheets/pathogen/tokens.css`
+- `app/assets/stylesheets/pathogen/utilities.css`
+- `app/assets/stylesheets/pathogen/components/*.css`
+
+The published artifact remains:
+
+- `app/assets/stylesheets/pathogen_view_components.css`
+
+Regenerate the bundled artifact after CSS source changes:
+
+```bash
+pnpm --dir embedded_gems/pathogen run build:css
+```
+
+Root-level convenience wrapper (equivalent):
+
+```bash
+pnpm run build:pathogen-css
+```
+
+The shared migration contract for component anatomy/state/variant rules lives at:
+
+- `embedded_gems/pathogen/docs/component-contract.md`
+
 ## JavaScript Integration
 
 Pathogen ViewComponents includes Stimulus controllers that provide interactive behavior for components like tabs, tooltips, and datepickers.
