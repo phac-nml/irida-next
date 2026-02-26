@@ -18,6 +18,13 @@ module Viral
   # 💡 All configuration is via keyword arguments. See initialize for details.
   # rubocop:disable Metrics/ClassLength
   class DropdownComponent < Viral::Component
+    include Versioning::VersionedComponent
+
+    IMPLEMENTATIONS = {
+      v1: Viral::Dropdown::V1::Component,
+      v2: Viral::Dropdown::V2::Component
+    }.freeze
+
     renders_many :items, Dropdown::ItemComponent
 
     # Public: Expose key dropdown configuration
@@ -44,11 +51,36 @@ module Viral
     # @param system_arguments [Hash] Additional HTML/system args
     def initialize(**params)
       @params = params
+
       set_basic_attributes
       set_system_arguments
     end
 
+    def call
+      render resolved_component
+    end
+
     private
+
+    def resolved_component
+      implementation_class.new(**@params) do |dropdown|
+        dropdown.items = items # TODO
+      end
+    end
+
+    def implementation_class
+      IMPLEMENTATIONS.fetch(resolved_version)
+    end
+
+    def resolved_version
+      resolve_version(
+        version: @version,
+        valid_versions: IMPLEMENTATIONS.keys,
+        default_version: :v1
+      ) do
+        Flipper.enabled?(:beta_dropdown) ? :v2 : :v1
+      end
+    end
 
     # 🏷️ Set basic attributes from params
     def set_basic_attributes
