@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "Stimulus controllers for Pathogen ViewComponents library",
   "main": "app/assets/javascripts/pathogen_view_components.js",
+  "scripts": {
+    "build:css": "pnpm --dir ../.. run build:pathogen-css",
+    "build:css:check": "pnpm --dir ../.. run build:pathogen-css:check"
+  },
   "dependencies": {
     "@floating-ui/dom": "^1.7.5",
     "@hotwired/stimulus": "^3.0.0",

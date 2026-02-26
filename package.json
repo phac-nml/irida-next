@@ -7,9 +7,11 @@
     "@herb-tools/formatter": "^0.8.10",
     "@herb-tools/linter": "^0.8.10",
     "axe-core": "^4.11.1",
+    "chokidar-cli": "^3.0.0",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.3.0",
+    "lightningcss-cli": "^1.31.1",
     "playwright": "1.58.2",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2"
@@ -24,7 +26,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build:css": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
-    "dev:css": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify --watch"
+    "dev:css": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify --watch",
+    "build:pathogen-css": "lightningcss --bundle --minify ./embedded_gems/pathogen/app/assets/stylesheets/pathogen/index.css -o ./embedded_gems/pathogen/app/assets/stylesheets/pathogen_view_components.css",
+    "build:pathogen-css:check": "pnpm run build:pathogen-css && git diff --exit-code embedded_gems/pathogen/app/assets/stylesheets/pathogen_view_components.css",
+    "dev:pathogen-css": "chokidar \"./embedded_gems/pathogen/app/assets/stylesheets/pathogen/**/*.css\" -c \"pnpm run build:pathogen-css\" --initial"
   },
   "dependencies": {
     "@tailwindcss/cli": "4.2.1",
