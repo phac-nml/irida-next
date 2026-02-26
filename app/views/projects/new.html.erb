@@ -19,11 +19,9 @@ end, html: { novalidate: true }) do |form| %>
             builder: builder,
             authorized_namespaces: @authorized_namespaces,
           } %>
-
         <% end %>
-        <div>
-          <%= form.submit t("projects.new.submit"), class: "button button-primary" %>
-        </div>
+
+        <div><%= form.submit t("projects.new.submit"), class: "button button-primary" %></div>
       </div>
     <% end %>
   <% end %>

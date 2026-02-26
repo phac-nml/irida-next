@@ -1,39 +1,40 @@
 <div
   class="flex max-sm:grow"
   <% if Flipper.enabled?(:beta_dropdown) %>
-  data-controller="viral--beta-dropdown"
+    data-controller="viral--beta-dropdown"
   <% else %>
-  data-controller="viral--dropdown"
-  data-viral--dropdown-skidding-value="0"
-  data-viral--dropdown-distance-value="10"
+    data-controller="viral--dropdown"
+    data-viral--dropdown-skidding-value="0"
+    data-viral--dropdown-distance-value="10"
   <% end %>
 >
   <button
     <% if Flipper.enabled?(:beta_dropdown) %>
-    data-viral--beta-dropdown-target="trigger"
+      data-viral--beta-dropdown-target="trigger"
     <% else %>
-    data-viral--dropdown-target="trigger"
+      data-viral--dropdown-target="trigger"
     <% end %>
     title="<%= t("shared.samples.metadata_templates.tooltip") %>"
     id="metadata-template-dd-trigger"
-    class="button button-default w-full"
+    class="button w-full button-default"
     type="button"
     aria-haspopup="true"
     aria-expanded="false"
     aria-controls="metadata-template-dd-menu"
   >
-    <span id="metadata-template-dd-label">
-      <%= t("shared.samples.metadata_templates.label") %>
-    </span>
+    <span id="metadata-template-dd-label"><%= t("shared.samples.metadata_templates.label") %></span>
     <%= pathogen_icon(:sliders_horizontal, size: :sm, class: "ml-2 flex-none") %>
   </button>
+
   <!-- Dropdown menu -->
   <% options = { hidden: "" } %>
+
   <% if Flipper.enabled?(:beta_dropdown) %>
     <% options["data-viral--beta-dropdown-target"] = "menu" %>
   <% else %>
     <% options["data-viral--dropdown-target"] = "menu" %>
   <% end %>
+
   <%= turbo_frame_tag "metadata-template-dd-menu", class: "
        w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
       dark:bg-slate-700 dark:divide-slate-600 z-30

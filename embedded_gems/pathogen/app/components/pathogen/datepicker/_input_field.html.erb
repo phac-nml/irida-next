@@ -1,19 +1,11 @@
 <% if label %>
-  <label
-    for="<%= input_id %>"
-    class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
-  >
+  <label for="<%= input_id %>" class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
     <%= label %>
   </label>
 <% end %>
 
 <div class="relative max-w-sm" aria-live="polite">
-  <div
-    class="
-      pointer-events-none absolute inset-y-0 inset-s-0 flex items-center
-      ps-3.5
-    "
-  >
+  <div class="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center ps-3.5">
     <%= pathogen_icon(:calendar_dots) %>
   </div>
 
