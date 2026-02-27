@@ -33,7 +33,7 @@ module Samples
 
         @metadata_changes = perform_metadata_update(@sample, @metadata, @force_update)
 
-        if @include_activity && @metadata_changes[:deleted].any? && @metadata_changes[:added].any?
+        if @include_activity && (@metadata_changes[:deleted].any? || @metadata_changes[:added].any?)
           @project.namespace.create_activity key: 'namespaces_project_namespace.samples.metadata.update',
                                              owner: current_user,
                                              parameters:
