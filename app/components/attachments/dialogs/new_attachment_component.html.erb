@@ -3,6 +3,7 @@
     title:
       t("components.attachments.dialogs.new_attachment_component.upload_files"),
   ) %>
+
   <%= form_with(model: @attachment, url: upload_path) do |form| %>
     <%= form.hidden_field :attachable_id %>
     <%= form.hidden_field :attachable_type %>
@@ -10,9 +11,28 @@
     <div
       class="grid gap-4"
       data-controller="attachment-upload"
-      data-attachment-upload-uploading-text-value='<%=t("components.attachments.dialogs.new_attachment_component.uploading") %>'
+      data-attachment-upload-uploading-text-value="<%= t('components.attachments.dialogs.new_attachment_component.uploading') %>"
+      data-attachment-upload-success-text-value="<%= t('common.upload.uploaded_successfully') %>"
+      data-attachment-upload-error-fallback-text-value="<%= t('common.upload.failed') %>"
     >
+      <%= viral_alert(
+        message: t("common.upload.upload_failed_retry"),
+        type: :danger,
+        data: { "attachment-upload-target": "uploadErrorAlert" },
+        classes: "hidden mb-2",
+        aria: { live: "assertive", role: "alert" }
+      ) %>
+
+      <%= viral_alert(
+        message: t("common.upload.form_submit_failed"),
+        type: :danger,
+        data: { "attachment-upload-target": "formErrorAlert" },
+        classes: "hidden mb-2",
+        aria: { live: "assertive", role: "alert" }
+      ) %>
+
       <%= render partial: "shared/form/required_field_legend" %>
+
       <div
         class="form-field"
         data-controller="file-upload"
@@ -26,6 +46,7 @@
                    data: {
                      required: true,
                    } %>
+
         <%= form.file_field :files,
                         multiple: true,
                         direct_upload: true,
@@ -35,15 +56,12 @@
                           action: "change->file-upload#handleFileChange",
                         },
                         class:
-                          "block w-full mb-5 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+                          "block w-full mb-5 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" %>
 
         <%= viral_alert(message: t('components.attachments.dialogs.new_attachment_component.files_ignored'), type: :alert, data: { "file-upload-target": "alert" }, classes: "hidden", aria: {
             live: "assertive",
           }) do %>
-          <ul
-            class="max-w-md mt-4 space-y-1 list-disc list-inside"
-            data-file-upload-target="error"
-          ></ul>
+          <ul class="mt-4 max-w-md list-inside list-disc space-y-1" data-file-upload-target="error"></ul>
         <% end %>
       </div>
 

@@ -14,9 +14,11 @@ export default class extends Controller {
   }
 
   handleFileChange(event) {
-    const submitButton = document.querySelectorAll(
-      "input[type='submit'][data-attachment-upload-target]",
-    )[0];
+    const submitButton = event.target.form?.querySelector(
+      "[data-attachment-upload-target='submitButton']",
+    );
+    if (!submitButton) return;
+
     const files = Array.from(event.target.files);
     const dt = new DataTransfer();
     const ignoreFiles = [];
@@ -46,7 +48,9 @@ export default class extends Controller {
     } else {
       submitButton.disabled = false;
       event.target.setAttribute("aria-invalid", false);
-      this.alertTarget.classList.add("hidden");
+      if (this.hasAlertTarget) {
+        this.alertTarget.classList.add("hidden");
+      }
     }
   }
 
