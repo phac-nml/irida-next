@@ -9,7 +9,7 @@ module Samples
     }.freeze
 
     VERSION_RESOLVER = lambda {
-      :v2 if Flipper.enabled?(:beta_samples_table)
+      :v2 if Flipper.enabled?(:data_grid_samples_table)
     }
   end
 end
