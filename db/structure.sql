@@ -669,6 +669,42 @@ ALTER SEQUENCE public.flipper_gates_id_seq OWNED BY public.flipper_gates.id;
 
 
 --
+-- Name: global_notifications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.global_notifications (
+    id bigint NOT NULL,
+    singleton_guard character varying DEFAULT 'global'::character varying NOT NULL,
+    enabled boolean DEFAULT true NOT NULL,
+    style character varying DEFAULT 'info'::character varying NOT NULL,
+    messages jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    CONSTRAINT global_notifications_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
+    CONSTRAINT global_notifications_style_check CHECK (((style)::text = ANY ((ARRAY['info'::character varying, 'warning'::character varying, 'danger'::character varying, 'success'::character varying])::text[])))
+);
+
+
+--
+-- Name: global_notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.global_notifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: global_notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.global_notifications_id_seq OWNED BY public.global_notifications.id;
+
+
+--
 -- Name: members; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -965,6 +1001,13 @@ ALTER TABLE ONLY public.flipper_gates ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: global_notifications id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.global_notifications ALTER COLUMN id SET DEFAULT nextval('public.global_notifications_id_seq'::regclass);
+
+
+--
 -- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1065,6 +1108,14 @@ ALTER TABLE ONLY public.flipper_features
 
 ALTER TABLE ONLY public.flipper_gates
     ADD CONSTRAINT flipper_gates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: global_notifications global_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.global_notifications
+    ADD CONSTRAINT global_notifications_pkey PRIMARY KEY (id);
 
 
 --
@@ -1366,6 +1417,13 @@ CREATE UNIQUE INDEX index_flipper_features_on_key ON public.flipper_features USI
 --
 
 CREATE UNIQUE INDEX index_flipper_gates_on_feature_key_and_key_and_value ON public.flipper_gates USING btree (feature_key, key, value);
+
+
+--
+-- Name: index_global_notifications_on_enabled_when_enabled; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_global_notifications_on_enabled_when_enabled ON public.global_notifications USING btree (enabled) WHERE (enabled = true);
 
 
 --
@@ -2048,6 +2106,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260223130000'),
 ('20251201162848'),
 ('20251029175823'),
 ('20251022175801'),
