@@ -11,7 +11,11 @@ class WorkflowExecutionCleanupJob < WorkflowExecutionJob
     @workflow_execution = workflow_execution
 
     # Only run service on runs that can be cleaned
-    return unless validate_initial_state(@workflow_execution, %i[completed error canceled], validate_run_id: false)
+    unless validate_initial_state(
+      @workflow_execution, %i[completed error canceled], validate_run_id: false, validate_namespace: false
+    )
+      return
+    end
     # Don't run service if already cleaned
     return if @workflow_execution.nil? || @workflow_execution.cleaned?
 

@@ -2,12 +2,12 @@
 
 # Parent class for Workflow Execution jobs
 class WorkflowExecutionJob < ApplicationJob
-  def validate_initial_state(workflow_execution, expected_states = nil, validate_run_id: false) # rubocop:disable Naming/PredicateMethod
+  def validate_initial_state(workflow_execution, expected_states = nil, validate_run_id: false, validate_namespace: true) # rubocop:disable Naming/PredicateMethod,Metrics/CyclomaticComplexity,Layout/LineLength,Metrics/PerceivedComplexity
     # check that workflow_execution exists
     return false unless workflow_execution
 
     # check that workflow_execution has namespace
-    return false unless workflow_execution.namespace
+    return false if validate_namespace && (!workflow_execution.namespace || workflow_execution.namespace.deleted?)
 
     # check that the state is in expected states
     return false if expected_states&.exclude?(workflow_execution.state.to_sym)
