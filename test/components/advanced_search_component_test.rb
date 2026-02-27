@@ -142,4 +142,64 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       end
     end
   end
+
+  test 'workflow preview renders model-specific fields without sample coupling' do
+    visit('rails/view_components/advanced_search_component/workflow')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        assert_accessible
+
+        within first("div[data-controller='select-with-auto-complete']") do
+          combobox = find("input[role='combobox']")
+          combobox.click
+          combobox.send_keys([:ctrl, 'a'], :delete)
+
+          assert_selector "div[role='option']",
+                          text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.id'))}\z/,
+                          count: 1
+          assert_selector "div[role='option']",
+                          text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.run_id'))}\z/,
+                          count: 1
+          assert_selector "div[role='option']",
+                          text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.state'))}\z/,
+                          count: 1
+          assert_selector "div[role='option']",
+                          text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.workflow_name'))}\z/,
+                          count: 1
+        end
+      end
+    end
+  end
+
+  test 'dynamic condition changes preserve groups_attributes payload naming' do
+    visit('rails/view_components/advanced_search_component/default')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        click_button I18n.t(:'components.advanced_search_component.add_group_button')
+
+        within all("fieldset[data-advanced-search-target='groupsContainer']").last do
+          click_button I18n.t(:'components.advanced_search_component.add_condition_button')
+          assert_selector :xpath,
+                          "//*[@name='q[groups_attributes][2][conditions_attributes][0][field]']",
+                          visible: :all
+          assert_selector :xpath,
+                          "//*[@name='q[groups_attributes][2][conditions_attributes][1][field]']",
+                          visible: :all
+
+          within all("fieldset[data-advanced-search-target='conditionsContainer']").first do
+            find('button').click
+          end
+
+          assert_selector :xpath,
+                          "//*[@name='q[groups_attributes][2][conditions_attributes][0][field]']",
+                          visible: :all
+          assert_no_selector :xpath,
+                             "//*[@name='q[groups_attributes][2][conditions_attributes][1][field]']",
+                             visible: :all
+        end
+      end
+    end
+  end
 end
