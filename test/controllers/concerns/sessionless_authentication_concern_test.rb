@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/OneClassPerFile
+
 require 'test_helper'
 
 class SessionlessAuthController < ApplicationController
@@ -76,3 +78,4 @@ class SessionlessAuthenticationConcernTest < ActionDispatch::IntegrationTest
     assert_nil response_hash['current_user']['email']
   end
 end
+# rubocop:enable Style/OneClassPerFile
