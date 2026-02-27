@@ -500,6 +500,106 @@ module Samples
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1, 'metadatafield3' => 1, 'metadatafield4' => 1 },
                      shared_group.reload.metadata_summary)
       end
+
+      test 'activities write to project' do
+        freeze_time
+        payload = { @sample34.puid => { 'metadatafield3' => 'value3', 'metadatafield4' => 'value4' },
+                    @sample35.name => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
+        metadata_fields = %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4]
+
+        assert_difference -> { PublicActivity::Activity.count } => 1 do
+          Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, metadata_fields, @user).execute
+        end
+
+        activity = PublicActivity::Activity
+                   .where(trackable_id: @project31.namespace.id,
+                          key: 'namespaces_project_namespace.samples.bulk_metadata_update')
+                   .first
+        assert_equal 2, activity.parameters[:imported_metadata_samples_count]
+      end
+
+      test 'activities write to both group and projects when bulk update is completed at group level' do
+        freeze_time
+        payload = { @sample33.puid => { 'metadatafield3' => 'value3', 'metadatafield4' => 'value4' },
+                    @sample35.name => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
+        metadata_fields = %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4]
+
+        assert_difference -> { PublicActivity::Activity.count } => 3 do
+          Samples::Metadata::BulkUpdateService.new(@group12, payload, metadata_fields, @user).execute
+        end
+        sample_33_activity = PublicActivity::Activity
+                             .where(trackable_id: @project30.namespace.id,
+                                    key: 'namespaces_project_namespace.samples.bulk_metadata_update')
+                             .first
+        assert_equal 1, sample_33_activity.parameters[:imported_metadata_samples_count]
+
+        sample_35_activity = PublicActivity::Activity
+                             .where(trackable_id: @project31.namespace.id,
+                                    key: 'namespaces_project_namespace.samples.bulk_metadata_update')
+                             .first
+        assert_equal 1, sample_35_activity.parameters[:imported_metadata_samples_count]
+
+        group_activity = PublicActivity::Activity
+                         .where(trackable_id: @group12.id,
+                                key: 'group.samples.bulk_metadata_update')
+                         .first
+
+        assert_equal 2, group_activity.parameters[:imported_metadata_samples_count]
+      end
+
+      test 'activity does not write when metadata is unchanged' do
+        freeze_time
+        payload = { @sample34.name => { 'metadatafield1' => 'newvalue1', 'metadatafield2' => 'newvalue1' } }
+        metadata_fields = %w[metadatafield1 metadatafield2]
+
+        assert_no_difference -> { PublicActivity::Activity.count } do
+          Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, metadata_fields, @user).execute
+        end
+      end
+
+      test 'activity partially writes with partial metadata changes at project level' do
+        freeze_time
+        payload = { @sample34.name => { 'metadatafield1' => 'newvalue1', 'metadatafield2' => 'newvalue1' },
+                    @sample35.id => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
+        metadata_fields = %w[metadatafield1 metadatafield2]
+
+        assert_difference -> { PublicActivity::Activity.count } => 1 do
+          Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, metadata_fields, @user).execute
+        end
+
+        activity = PublicActivity::Activity.where(trackable_id: @project31.namespace.id,
+                                                  key: 'namespaces_project_namespace.samples.bulk_metadata_update')
+                                           .first
+        assert_equal 1, activity.parameters[:imported_metadata_samples_count]
+      end
+
+      test 'activity partially writes with partial metadata changes at group level' do
+        freeze_time
+        payload = { @sample34.name => { 'metadatafield1' => 'newvalue1', 'metadatafield2' => 'newvalue1' },
+                    @sample33.id => { 'metadatafield3' => 'value3', 'metadatafield4' => 'value4' } }
+        metadata_fields = %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4]
+
+        assert_difference -> { PublicActivity::Activity.count } => 2 do
+          Samples::Metadata::BulkUpdateService.new(@group12, payload, metadata_fields, @user).execute
+        end
+
+        assert_not PublicActivity::Activity.where(trackable_id: @project31.namespace.id,
+                                                  key: 'namespaces_project_namespace.samples.bulk_metadata_update')
+                                           .first
+
+        sample_33_activity = PublicActivity::Activity
+                             .where(trackable_id: @project30.namespace.id,
+                                    key: 'namespaces_project_namespace.samples.bulk_metadata_update')
+                             .first
+        assert_equal 1, sample_33_activity.parameters[:imported_metadata_samples_count]
+
+        group_activity = PublicActivity::Activity
+                         .where(trackable_id: @group12.id,
+                                key: 'group.samples.bulk_metadata_update')
+                         .first
+
+        assert_equal 1, group_activity.parameters[:imported_metadata_samples_count]
+      end
     end
   end
 end

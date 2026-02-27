@@ -31,7 +31,7 @@ module Samples
             unsuccessful_updates[sample_identifier] = metadata_changes[:not_updated]
           end
 
-          if metadata_changes[:added].empty? && metadata_changes[:deleted].empty && metadata_changes[:updated].empty?
+          if metadata_changes[:added].empty? && metadata_changes[:deleted].empty? && metadata_changes[:updated].empty?
             next
           end
 
@@ -49,7 +49,7 @@ module Samples
 
         handle_not_updated_fields(unsuccessful_updates) unless unsuccessful_updates.empty?
 
-        create_activities_and_update_metadata_summary(activity_data)
+        create_activities_and_update_metadata_summary(activity_data) unless activity_data.empty?
       end
 
       private
