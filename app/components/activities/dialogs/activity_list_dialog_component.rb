@@ -56,6 +56,13 @@ module Activities
                                 user: @activity_owner,
                                 count: @activity.parameters[:imported_samples_count])
           @data = @extended_details.details['imported_samples_data'].to_json
+        when 'project_bulk_metadata_update'
+          @title = I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
+          @description =
+            I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
+                   user: @activity_owner,
+                   count: @activity.parameters[:imported_metadata_samples_count])
+          @data = @extended_details.details['samples_imported_metadata_data'].to_json
         end
       end
 

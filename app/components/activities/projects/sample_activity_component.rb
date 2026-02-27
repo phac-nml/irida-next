@@ -23,6 +23,10 @@ module Activities
         @activity[:action] == 'project_import_samples'
       end
 
+      def bulk_metadata_update_action?
+        @activity[:action] == 'project_bulk_metadata_update'
+      end
+
       def activity_message # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         case @activity[:action]
 
@@ -30,6 +34,9 @@ module Activities
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:imported_samples_count]))
         when 'sample_destroy_multiple'
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]))
+        when 'project_bulk_metadata_update'
+          t(@activity[:key], user: @activity[:user],
+                             href: highlighted_text(@activity[:imported_metadata_samples_count]))
         else
           if sample_exists?(@activity[:sample])
             url = namespace_project_sample_path(
@@ -68,16 +75,18 @@ module Activities
       end
 
       def dialog_type
-        case @activity[:action]
+        case @activity[:action] # rubocop:disable Style/HashLikeCase
         when 'sample_destroy_multiple'
           'samples_destroy'
         when 'project_import_samples'
           'project_import_samples'
+        when 'project_bulk_metadata_update'
+          'project_bulk_metadata_update'
         end
       end
 
       def show_more_details_button?
-        import_samples_action? || sample_destroy_multiple_action?
+        import_samples_action? || sample_destroy_multiple_action? || bulk_metadata_update_action?
       end
     end
   end

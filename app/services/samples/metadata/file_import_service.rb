@@ -28,72 +28,33 @@ module Samples
 
       protected
 
-      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength
-        response = {}
+      def perform_file_import(broadcast_target)
+        bulk_metadata_payload = {}
         headers = retrieve_headers
         parse_settings = headers.zip(headers).to_h
         # minus 1 to exclude header
-        total_sample_count = @spreadsheet.count - 1
+        percentage_denominator = (@spreadsheet.count - 1) * 1.05
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
-          update_progress_bar(index, total_sample_count, broadcast_target)
+          update_progress_bar(index, percentage_denominator, broadcast_target)
 
           sample_id = metadata[@sample_id_column].to_s
           metadata.delete(@sample_id_column)
           metadata.compact! if @ignore_empty_values
 
-          metadata_changes = process_sample_metadata_row(sample_id, metadata)
-          response[sample_id] = metadata_changes if metadata_changes
-        rescue ActiveRecord::RecordNotFound
-          @namespace.errors.add(:sample, error_message(sample_id))
+          bulk_metadata_payload[sample_id] = metadata
         end
 
-        response
+        BulkUpdateService.new(@namespace, bulk_metadata_payload, @selected_headers, current_user).execute
+        update_progress_bar(percentage_denominator, percentage_denominator, broadcast_target)
       end
 
       private
 
-      def error_message(sample_id)
-        if @namespace.type == 'Group'
-          I18n.t('services.samples.metadata.import_file.sample_not_found_within_group', sample_puid: sample_id)
-        else
-          I18n.t('services.samples.metadata.import_file.sample_not_found_within_project', sample_puid: sample_id)
-        end
-      end
-
       def retrieve_headers
-        headers = @selected_headers << @sample_id_column
+        headers = [*@selected_headers, *@sample_id_column]
         strip_headers(headers)
-      end
-
-      def process_sample_metadata_row(sample_id, metadata)
-        sample = find_sample(sample_id)
-        metadata_changes = UpdateService.new(sample.project, sample, current_user, { 'metadata' => metadata }).execute
-        not_updated_metadata_changes = metadata_changes[:not_updated]
-        return metadata_changes if not_updated_metadata_changes.empty?
-
-        @namespace.errors.add(:sample,
-                              I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
-                                     sample_name: sample_id,
-                                     metadata_fields: not_updated_metadata_changes.join(', ')))
-        nil
-      end
-
-      def find_sample(sample_id)
-        if @namespace.type == 'Group'
-          authorized_scope(Sample, type: :relation, as: :namespace_samples,
-                                   scope_options: { namespace: @namespace,
-                                                    minimum_access_level: Member::AccessLevel::MAINTAINER })
-            .find_by!(puid: sample_id)
-        else
-          project = @namespace.project
-          if Irida::PersistentUniqueId.valid_puid?(sample_id, Sample)
-            Sample.find_by!(puid: sample_id, project_id: project.id)
-          else
-            Sample.find_by!(name: sample_id, project_id: project.id)
-          end
-        end
       end
     end
   end

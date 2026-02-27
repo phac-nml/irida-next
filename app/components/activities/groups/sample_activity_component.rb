@@ -12,6 +12,10 @@ module Activities
         @activity[:action] == 'group_samples_destroy'
       end
 
+      def bulk_metadata_update_action?
+        @activity[:action] == 'group_bulk_metadata_update'
+      end
+
       def activity_message
         case @activity[:action]
 
@@ -19,6 +23,9 @@ module Activities
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:imported_samples_count]))
         when 'group_samples_destroy'
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]))
+        when 'group_bulk_metadata_update'
+          t(@activity[:key], user: @activity[:user],
+                             href: highlighted_text(@activity[:imported_metadata_samples_count]))
         else
           ''
         end
@@ -31,22 +38,26 @@ module Activities
           t('components.activity.samples.import.more_details.button_descriptive_text')
         when 'group_samples_destroy'
           t('components.activity.samples.destroy.more_details.button_descriptive_text')
+        when 'group_bulk_metadata_update'
+          t('components.activity.samples.bulk_metadata_update.more_details.button_descriptive_text')
         else
           ''
         end
       end
 
       def dialog_type
-        case @activity[:action]
+        case @activity[:action] # rubocop:disable Style/HashLikeCase
         when 'group_import_samples'
           'group_import_samples'
         when 'group_samples_destroy'
           'group_samples_destroy'
+        when 'group_bulk_metadata_update'
+          'group_bulk_metadata_update'
         end
       end
 
       def show_more_details_button?
-        import_samples_action? || sample_destroy_action?
+        import_samples_action? || sample_destroy_action? || bulk_metadata_update_action?
       end
     end
   end

@@ -45,9 +45,9 @@ class ActivitiesController < ApplicationController
     type = params[:dialog_type]
 
     case type
-    when 'samples_clone', 'workflow_executions_destroy', 'group_import_samples', 'group_sample_transfer', 'group_samples_destroy', 'group_sample_clone' # rubocop:disable Layout/LineLength
+    when 'samples_clone', 'workflow_executions_destroy', 'group_import_samples', 'group_sample_transfer', 'group_samples_destroy', 'group_sample_clone', 'group_bulk_metadata_update' # rubocop:disable Layout/LineLength
       Activities::Dialogs::ActivityTableListingDialogComponent
-    when 'samples_transfer', 'samples_destroy', 'project_import_samples'
+    when 'samples_transfer', 'samples_destroy', 'project_import_samples', 'project_bulk_metadata_update'
       Activities::Dialogs::ActivityListDialogComponent
     end
   end

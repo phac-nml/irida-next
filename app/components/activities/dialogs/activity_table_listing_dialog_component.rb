@@ -113,6 +113,16 @@ module Activities
             I18n.t(:'components.activity.dialog.sample_destroy.sample'),
             I18n.t(:'components.activity.dialog.sample_destroy.project')
           ]
+        when 'group_bulk_metadata_update'
+          @title = I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
+          @description = I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
+                                count: @activity.parameters[:imported_metadata_samples_count],
+                                user: @activity_owner)
+          @data = @extended_details.details['samples_imported_metadata_data'].to_json
+          @column_headers = [
+            I18n.t(:'components.activity.dialog.bulk_metadata_update.sample'),
+            I18n.t(:'components.activity.dialog.bulk_metadata_update.project')
+          ]
         end
       end
 

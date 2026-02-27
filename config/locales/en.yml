@@ -223,6 +223,7 @@ en:
         transfer_in_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
       samples:
+        bulk_metadata_update_html: "%{user} updated metadata for %{href} samples"
         clone_html: "%{user} copied %{cloned_samples_count} samples to other projects"
         destroy_html: "%{user} removed %{href} samples from group"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
@@ -258,6 +259,7 @@ en:
         attachment:
           create_html: "%{user} attached files to sample %{href}"
           destroy_html: "%{user} removed files from sample %{href}"
+        bulk_metadata_update_html: "%{user} updated metadata for %{href} samples"
         clone_html: "%{user} copied %{cloned_samples_count} samples to project %{href}"
         cloned_from_html: "%{user} copied %{cloned_samples_count} samples from project %{href}"
         create_html: "%{user} created sample %{href}"
@@ -1770,15 +1772,15 @@ en:
         samples_not_found: 'Samples with the following sample ids could not be copied as they were not found in the source project: %{sample_ids}'
         unauthorized: 'You do not have permission to copy the following samples with sample ids: %{sample_ids}'
       metadata:
+        bulk_update:
+          duplicate_identifier: 'Sample %{sample_identifier}: Multiple samples with identifier "%{sample_identifier}"'
+          sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated as users cannot overwrite metadata added by an analysis.
+          sample_not_found: 'Sample %{sample_identifier}: Sample "%{sample_identifier}" either does not exist or you are not authorized to update the sample'
         empty_metadata: No metadata was received to update sample '%{sample_name}'
         fields:
           multi_all_keys_exist: Metadata keys '%{keys}' already exist.
           sample_does_not_belong_to_project: Sample '%{sample_name}'' does not belong to project '%{project_name}'
           single_all_keys_exist: Metadata key '%{key}' already exist.
-        import_file:
-          sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated.
-          sample_not_found_within_group: Could not find sample with puid '%{sample_puid}' in this group.
-          sample_not_found_within_project: Could not find sample with puid or name '%{sample_puid}' in this project.
         nested_metadata: Sample '%{sample_name}' with metadata key '%{key}' cannot contain nested JSON.
         sample_does_not_belong_to_project: Sample '%{sample_name}' does not belong to project '%{project_name}'
         update_fields:
@@ -1858,11 +1860,7 @@ en:
               label: Ignore empty values
             metadata_columns: Metadata Columns
             namespace:
-              description: The spreadsheet is required to have a column that contains a sample identifier.
-              group:
-                description_html: The identifier is case-sensitive and must contain the <b>sample PUID</b>.
-              project:
-                description_html: The identifier is case-sensitive and can contain either the <b>sample name or PUID</b>.
+              description_html: The spreadsheet is required to have a column that contains a sample identifier. The identifier is case-sensitive and can contain either the <b>sample name or PUID</b>.
             no_valid_metadata: The uploaded spreadsheet contains no viable metadata
             sample_id_column: Sample Identifier Column
             select_sample_id_column: Select a Sample Identifier Column
