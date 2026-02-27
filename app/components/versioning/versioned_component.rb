@@ -2,15 +2,25 @@
 
 module Versioning
   # Shared helper for components that dispatch to versioned implementations.
-  module VersionedComponent
-    private
+  class VersionedComponent
+    VERSION_RESOLVER = -> { raise NotImplementedError, "VERSION_RESOLVER must be defined in #{name}" }
 
-    def resolve_version(version:, valid_versions:, default_version:, &default_resolver)
+    DEFAULT_VERSION = :v1
+
+    def self.new(*, version: nil, **)
+      implementation_class(version: version).new(*, **)
+    end
+
+    def self.implementation_class(version: nil)
+      self::IMPLEMENTATIONS.fetch(resolve_version(version: version))
+    end
+
+    def self.resolve_version(version: nil)
       VersionResolver.resolve(
         version: version,
-        valid_versions: valid_versions,
-        default_version: default_version,
-        &default_resolver
+        valid_versions: self::IMPLEMENTATIONS.keys,
+        default_version: self::DEFAULT_VERSION,
+        &self::VERSION_RESOLVER
       )
     end
   end
