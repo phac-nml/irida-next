@@ -14,4 +14,8 @@ class LayoutComponent < Component
     @layout = fixed ? 'container mx-auto' : ''
     @system_arguments = system_arguments
   end
+
+  def global_search_enabled?
+    Flipper.enabled?(:global_search)
+  end
 end

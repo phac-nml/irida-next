@@ -1,0 +1,232 @@
+# frozen_string_literal: true
+
+require 'application_system_test_case'
+
+class GlobalSearchDialogTest < ApplicationSystemTestCase
+  setup do
+    Flipper.enable(:global_search)
+    login_as users(:john_doe)
+  end
+
+  teardown do
+    Flipper.disable(:global_search)
+  end
+
+  test 'dialog has accessible label and heading' do
+    visit '/-/groups/group-1'
+
+    trigger_global_search_shortcut
+
+    dialog = find("dialog[data-global-search-dialog-target='dialog'][open]", visible: :all)
+
+    assert_equal 'global-search-dialog-title', dialog['aria-labelledby']
+
+    within(dialog) do
+      heading = find('#global-search-dialog-title', visible: :all)
+      assert heading.matches_css?('.sr-only', wait: 0)
+      assert_selector "label[for='global-search-dialog-query'].sr-only", visible: :all
+    end
+  end
+
+  test 'filters disclosure removes controls from tab order when collapsed' do
+    visit '/-/groups/group-1'
+
+    trigger_global_search_shortcut
+
+    assert_selector "[data-global-search-dialog-target='filtersContent'][hidden][inert]", visible: :all
+
+    within("dialog[data-global-search-dialog-target='dialog'][open]") do
+      find('summary', text: 'Filters').click
+    end
+
+    assert_selector "[data-global-search-dialog-target='filtersContent']:not([hidden])", visible: :all
+    assert_no_selector "[data-global-search-dialog-target='filtersContent'][inert]", visible: :all
+
+    within("dialog[data-global-search-dialog-target='dialog'][open]") do
+      find('summary', text: 'Filters').click
+    end
+
+    assert_selector "[data-global-search-dialog-target='filtersContent'][hidden][inert]", visible: :all
+  end
+
+  test 'slash opens dialog on nested pages' do
+    visit '/-/groups/group-1'
+
+    trigger_slash_shortcut
+
+    assert_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+  end
+
+  test 'ctrl+k on global search page ignores query input key events' do
+    visit '/-/search?q=Project'
+
+    assert_selector '#global-search-query'
+
+    trigger_keydown(
+      key: 'k',
+      ctrl_key: true,
+      target_selector: '#global-search-query'
+    )
+
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+  end
+
+  test 'ctrl+k opens dialog on global search page when focus leaves editable fields' do
+    visit '/-/search?q=Project'
+
+    page.execute_script(<<~JS)
+      const origin = document.createElement("button");
+      origin.type = "button";
+      origin.id = "global-search-shortcut-origin";
+      origin.textContent = "Shortcut origin";
+      origin.style.position = "fixed";
+      origin.style.top = "1rem";
+      origin.style.right = "1rem";
+      document.body.append(origin);
+      origin.focus();
+    JS
+
+    assert_equal 'global-search-shortcut-origin', page.evaluate_script('document.activeElement.id')
+
+    trigger_keydown(
+      key: 'k',
+      ctrl_key: true,
+      target_selector: '#global-search-shortcut-origin'
+    )
+
+    assert_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+  end
+
+  test 'global search shortcuts ignore repeated and composing key events' do
+    visit '/-/groups/group-1'
+
+    trigger_keydown(key: 'k', ctrl_key: true, repeat: true)
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+
+    trigger_keydown(key: 'k', ctrl_key: true, composing: true)
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+  end
+
+  test 'ctrl+k opens dialog on nested pages and escape clears and closes it' do
+    visit '/-/groups/group-1'
+
+    trigger_global_search_shortcut
+
+    dialog = find("dialog[data-global-search-dialog-target='dialog'][open]", visible: :all)
+
+    within(dialog) do
+      find('summary', text: 'Filters').click
+      find("input[name='q']").set('Shigella')
+      uncheck('Group')
+    end
+
+    find('body').send_keys(:escape)
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+
+    trigger_global_search_shortcut
+    dialog = find("dialog[data-global-search-dialog-target='dialog'][open]", visible: :all)
+
+    within(dialog) do
+      assert_equal '', find("input[name='q']").value
+      assert find("input[name='types[]'][value='groups']", visible: :all).checked?
+    end
+  end
+
+  test 'enter submits dialog form to global search route' do
+    visit '/-/projects/project-1'
+
+    trigger_global_search_shortcut
+
+    within("dialog[data-global-search-dialog-target='dialog'][open]") do
+      find("input[name='q']").set('Project 1')
+      find("input[name='q']").send_keys(:enter)
+    end
+
+    assert_current_path(%r{\A/-/search\?})
+    assert_selector '[data-global-search-version="g1"]'
+    assert_field 'q', with: 'Project 1'
+  end
+
+  test 'dialog shortcut is unavailable when global search feature flag is disabled' do
+    Flipper.disable(:global_search)
+    visit '/-/groups/group-1'
+
+    trigger_global_search_shortcut
+
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+  end
+
+  test 'closing dialog restores focus to the previously focused element' do
+    visit '/-/groups/group-1'
+
+    page.execute_script(<<~JS)
+      const trigger = document.createElement("button");
+      trigger.type = "button";
+      trigger.id = "global-search-focus-origin";
+      trigger.textContent = "Focus origin";
+      trigger.style.position = "fixed";
+      trigger.style.top = "1rem";
+      trigger.style.left = "1rem";
+      document.body.append(trigger);
+      trigger.focus();
+    JS
+
+    assert_equal 'global-search-focus-origin', page.evaluate_script('document.activeElement.id')
+
+    trigger_global_search_shortcut
+    assert_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+
+    find('body').send_keys(:escape)
+    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_equal 'global-search-focus-origin', page.evaluate_script('document.activeElement.id')
+  end
+
+  private
+
+  def trigger_global_search_shortcut
+    trigger_keydown(key: 'k', ctrl_key: true)
+  end
+
+  def trigger_slash_shortcut
+    trigger_keydown(key: '/')
+  end
+
+  def trigger_keydown(options)
+    page.execute_script(keydown_dispatch_script, options)
+  end
+
+  def keydown_dispatch_script
+    <<~JS
+      const options = arguments[0];
+      const event = new KeyboardEvent("keydown", {
+        key: options.key,
+        code: options.code,
+        ctrlKey: Boolean(options.ctrl_key),
+        metaKey: Boolean(options.meta_key),
+        altKey: Boolean(options.alt_key),
+        shiftKey: Boolean(options.shift_key),
+        repeat: Boolean(options.repeat),
+        bubbles: true
+      });
+
+      if (options.composing) {
+        try {
+          Object.defineProperty(event, "isComposing", { value: true });
+        } catch (_error) {
+          // Ignore unsupported property override in browser driver.
+        }
+      }
+
+      const dispatchTarget = options.target_selector
+        ? document.querySelector(options.target_selector)
+        : window;
+
+      if (dispatchTarget && typeof dispatchTarget.dispatchEvent === "function") {
+        dispatchTarget.dispatchEvent(event);
+        return;
+      }
+
+      window.dispatchEvent(event);
+    JS
+  end
+end
