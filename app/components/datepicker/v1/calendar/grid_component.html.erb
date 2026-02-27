@@ -2,7 +2,7 @@
   <table class="min-w-full table-fixed" role="grid" aria-label="<%= t('components.datepicker.aria_label.calendar') %>">
     <thead class="mb-1">
       <tr>
-        <% days_of_the_week.each do |day| %>
+        <% @days_of_the_week.each do |day| %>
           <th scope="col" class="dow h-6 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
             <%= day %>
           </th>

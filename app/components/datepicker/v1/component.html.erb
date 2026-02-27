@@ -3,25 +3,23 @@
 
   <%= render Viral::BaseComponent.new(**@system_arguments) do %>
     <% unless @min_date.nil? %>
-      <%= render partial: "datepicker/v1/min_date", locals: { min_date: @min_date } %>
+      <%= render Datepicker::V1::MinDateComponent.new(min_date: @min_date) %>
     <% end %>
 
-    <%= render partial: "datepicker/v1/input_field",
-    locals: {
+    <%= render Datepicker::V1::InputFieldComponent.new(
       label: @label,
       input_id: @input_id,
       selected_date: @selected_date,
       input_name: @input_name,
       input_aria_label: @input_aria_label,
-    } %>
+    ) %>
 
-    <%= render partial: "datepicker/v1/calendar",
-    locals: {
+    <%= render Datepicker::V1::CalendarComponent.new(
       calendar_arguments: @calendar_arguments,
       days_of_the_week: @days_of_the_week,
       months: @months,
       min_year: @min_year,
       min_date: @min_date,
-    } %>
+    ) %>
   <% end %>
 </fieldset>

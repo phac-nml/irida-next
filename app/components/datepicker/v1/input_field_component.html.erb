@@ -1,6 +1,6 @@
-<% if label %>
-  <label for="<%= input_id %>" class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
-    <%= label %>
+<% if @label %>
+  <label for="<%= @input_id %>" class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
+    <%= @label %>
   </label>
 <% end %>
 
@@ -12,21 +12,21 @@
   <input
     placeholder="<%= t("components.datepicker.placeholder") %>"
     autocomplete="off"
-    value="<%= selected_date %>"
+    value="<%= @selected_date %>"
     data-datepicker--input-target="datepickerInput"
     data-action="
       change->datepicker--input#directInput
       keydown->datepicker--input#handleEnterDirectInput
     "
     type="text"
-    name="<%= input_name %>"
-    id="<%= input_id %>"
+    name="<%= @input_name %>"
+    id="<%= @input_id %>"
     class="
       rounded-lg border-slate-300 p-2.5 ps-10 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800
       dark:text-white dark:placeholder-slate-400
     "
-    <% if input_aria_label %>
-      aria-label="<%= input_aria_label %>"
+    <% if @input_aria_label %>
+      aria-label="<%= @input_aria_label %>"
     <% end %>
   >
 </div>
