@@ -589,7 +589,7 @@ export default class extends Controller {
     // try to retrieve the target date node, and if the dateNode doesn't exist or is not inMonth (eg: we're on the 1st
     // and navigating back/Arrowleft), change the month based on direction and re-assign dateNode
     let targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
-    if (!verifyDateIsInMonth(targetDateNode)) {
+    if (!targetDateNode || !verifyDateIsInMonth(targetDateNode)) {
       direction === "left" ? this.previousMonth() : this.nextMonth();
       targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
