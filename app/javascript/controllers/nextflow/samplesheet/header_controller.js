@@ -2,7 +2,10 @@ import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams } from "utilities/form";
 
 export default class extends Controller {
-  static outlets = ["nextflow--deferred-samplesheet"];
+  static outlets = [
+    "nextflow--deferred-samplesheet",
+    "nextflow--samplesheet--templates",
+  ];
 
   #metadataParameterUpdatedState = [
     "ring-2",
@@ -74,7 +77,9 @@ export default class extends Controller {
 
   #submitMetadataChange(metadataParams) {
     const metadataFormContent =
-      this.metadataHeaderFormTarget.content.cloneNode(true);
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+        "metadataHeaderForm",
+      );
 
     const filledMetadataForm = this.#appendInputsToMetadataForm(
       metadataFormContent,

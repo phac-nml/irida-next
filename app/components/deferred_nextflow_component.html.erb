@@ -16,6 +16,7 @@
     data-nextflow--deferred-samplesheet-selection-outlet="#samples-table"
     data-nextflow--deferred-samplesheet-nextflow--samplesheet--header-outlet="#samplesheet-container"
     data-nextflow--deferred-samplesheet-nextflow--samplesheet--pagination-outlet="#samplesheet-pagination"
+    data-nextflow--deferred-samplesheet-nextflow--samplesheet--templates-outlet="#nextflow-templates"
   <% end %>
 >
   <h1
@@ -302,6 +303,8 @@
     ) do |f| %>
     <% end %>
   <% end %>
+
+  <%= render Nextflow::Samplesheet::TemplatesComponent.new(namespace_id:) %>
 
   <div class="sr-only" aria-live="assertive" data-nextflow--deferred-samplesheet-target="ariaLive"></div>
 </div>

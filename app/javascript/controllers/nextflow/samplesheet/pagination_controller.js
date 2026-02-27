@@ -1,14 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = [
-    // "paginationContainer",
-    "previousBtn",
-    "nextBtn",
-    "pageNum",
-  ];
+  static targets = ["paginationContainer", "previousBtn", "nextBtn", "pageNum"];
 
-  static outlets = ["nextflow--deferred-samplesheet"];
+  static outlets = [
+    "nextflow--deferred-samplesheet",
+    "nextflow--samplesheet--templates",
+  ];
 
   #currentPage;
   #lastPage;
@@ -20,10 +18,11 @@ export default class extends Controller {
     this.#lastPage = Math.ceil(totalSampleNum / 5);
     // create the page dropdown options if there's more than one page
     if (this.#lastPage > 1) {
-      this.paginationContainerTarget.insertAdjacentHTML(
-        "beforeend",
-        this.paginationTemplateTarget.innerHTML,
-      );
+      const template =
+        this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+          "paginationTemplate",
+        );
+      this.paginationContainerTarget.appendChild(template);
       this.#generatePageNumberDropdown();
       this.#verifyPaginationButtonStates();
     }

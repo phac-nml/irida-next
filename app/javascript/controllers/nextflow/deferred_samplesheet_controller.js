@@ -49,6 +49,7 @@ export default class extends Controller {
     "selection",
     "nextflow--samplesheet--header",
     "nextflow--samplesheet--pagination",
+    "nextflow--samplesheet--templates",
   ];
 
   #columnNames;
@@ -131,7 +132,9 @@ export default class extends Controller {
     this.samplesheetMessagesContainerTarget.innerHTML = "";
 
     const samplesheetReadyMessage =
-      this.samplesheetReadyTemplateTarget.content.cloneNode(true);
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+        "samplesheetReadyTemplate",
+      );
     this.samplesheetMessagesContainerTarget.appendChild(
       samplesheetReadyMessage,
     );
@@ -415,23 +418,25 @@ export default class extends Controller {
   }
 
   #generateTableRow() {
-    const template = this.trTemplateTarget.content.cloneNode(true);
+    const template =
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("trTemplate");
     const tableRow = template.firstElementChild;
     return tableRow;
   }
 
   #generateTableCell(columnName, sampleId, headerCell) {
     const template = headerCell
-      ? this.thTemplateTarget.content.cloneNode(true)
-      : this.tdTemplateTarget.content.cloneNode(true);
+      ? this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("thTemplate")
+      : this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("tdTemplate");
     const cell = template.firstElementChild;
     cell.id = `${sampleId}_${columnName}`;
     return cell;
   }
 
   #insertSampleContent(cell, columnName, sampleId) {
-    const sampleContent =
-      this.sampleIdentifierTemplateTarget.content.cloneNode(true);
+    const sampleContent = this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+      "sampleIdentifierTemplate",
+    );
 
     sampleContent.querySelector("div").textContent = this.#retrieveSampleData(
       sampleId,
@@ -445,7 +450,8 @@ export default class extends Controller {
     const name = `${sampleId}_${columnName}`;
     const id = `${sampleId}_${columnName}_dropdown`;
 
-    const dropdownContent = this.dropdownTemplateTarget.content.cloneNode(true);
+    const dropdownContent =
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("dropdownTemplate");
     const selectNode = dropdownContent.querySelector("select");
     selectNode.setAttribute("aria-label", columnName);
     this.#setDataAttributes(selectNode, name, id, sampleId, columnName);
@@ -466,7 +472,8 @@ export default class extends Controller {
   }
 
   #insertFileContent(cell, columnName, sampleId) {
-    const fileContent = this.fileTemplateTarget.content.cloneNode(true);
+    const fileContent =
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("fileTemplate");
     const fileLink = fileContent.querySelector("a");
     // Build URL parameters
     const params = new URLSearchParams({
@@ -508,7 +515,9 @@ export default class extends Controller {
     const metadataValue = this.#retrieveSampleData(sampleId, columnName);
     if (metadataValue) {
       const metadataContent =
-        this.metadataTemplateTarget.content.cloneNode(true);
+        this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+          "metadataTemplate",
+        );
       metadataContent.querySelector("span").textContent = metadataValue;
       cell.appendChild(metadataContent);
     } else {
@@ -518,7 +527,9 @@ export default class extends Controller {
 
   #insertTextInputContent(cell, columnName, sampleId) {
     const textInputContent =
-      this.textInputTemplateTarget.content.cloneNode(true);
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+        "textInputTemplate",
+      );
     const name = `${sampleId}_${columnName}`;
     const id = `${sampleId}_${columnName}_input`;
     const input = textInputContent.querySelector("input");
