@@ -21,11 +21,19 @@ module AdvancedSearch
     extend ActiveSupport::Concern
 
     def results(**results_arguments)
+      if results_arguments.key?(:after)
+        return cursor_results(limit: results_arguments[:limit], after: results_arguments[:after])
+      end
+
       if results_arguments[:limit] || results_arguments[:page]
         pagy_results(results_arguments[:limit], results_arguments[:page])
       else
         non_pagy_results
       end
+    end
+
+    def cursor_results(limit:, after: nil)
+      Pagination::ActiveRecordCursorAdapter.new(ransack_results).fetch(limit:, after:)
     end
 
     private
