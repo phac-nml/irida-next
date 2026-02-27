@@ -31,7 +31,9 @@ module Samples
             unsuccessful_updates[sample_identifier] = metadata_changes[:not_updated]
           end
 
-          next unless metadata_changes[:added].any? || metadata_changes[:deleted].any?
+          if metadata_changes[:added].empty? && metadata_changes[:deleted].empty && metadata_changes[:updated].empty?
+            next
+          end
 
           if activity_data.key?(project_puid)
             activity_data[project_puid] << { sample_puid: sample.puid, sample_name: sample.name,
