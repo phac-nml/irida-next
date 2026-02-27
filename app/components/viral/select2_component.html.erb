@@ -1,10 +1,16 @@
-<%= tag.div(data: { action: "keydown->viral--select2#keydown" }, class: "select2") do %>
+<%= tag.div(
+  data: {
+    action: "keydown->viral--select2#keydown",
+  },
+  class: "select2"
+  ) do %>
   <%= tag.input(
     type: "text",
     id: id,
     name: id,
+    role: "combobox",
     data: {
-      "viral--select2-target" => "input",
+      "viral--select2-target": "input",
       action: "input->viral--select2#input",
     },
     placeholder: placeholder,
@@ -14,6 +20,9 @@
       "select2-input border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50",
     value: selected_value.presence,
     aria: {
+      controls: "select2-listbox",
+      autocomplete: "list",
+      expanded: "false",
       describedby: aria_describedby.presence,
       invalid: aria_invalid,
       required: aria_required,
@@ -24,12 +33,14 @@
 
   <%= tag.div(
     data: { "viral--select2-target": "dropdown" },
-    class: "z-10 hidden w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100 dark:bg-slate-700",
+    class: "z-10 w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100 dark:bg-slate-700",
+    hidden: ""
   ) do %>
     <%= tag.ul(
+      id: "select2-listbox",
       data: { "viral--select2-target": "scroller" },
-      role: "listbox",
       class: "max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800",
+      role: "listbox",
     ) do %>
       <% options.each do |option| %>
         <%= option %>
@@ -44,8 +55,9 @@
             selected: "false",
           },
           class:
-            "hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:border-blue-800 pointer-events-none",
+            "p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:border-blue-800 pointer-events-none",
           data: { "viral--select2-target": "empty" },
+          hidden: ""
         ) %>
       <% end %>
     <% end %>

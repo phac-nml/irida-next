@@ -2,10 +2,10 @@
 
 require 'application_system_test_case'
 
-class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
+class ComboboxComponentTest < ApplicationSystemTestCase
   def test_default # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    visit('/rails/view_components/select_with_auto_complete_component/default')
-    within "div[data-controller='select-with-auto-complete']" do
+    visit('/rails/view_components/combobox_component/default')
+    within "div[data-controller='combobox']" do
       combobox = find("input[role='combobox']")
       assert_equal 'age', combobox.value
       assert_equal 'false', combobox['aria-expanded']
@@ -28,17 +28,17 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
   end
 
   def test_no_results_found
-    visit('/rails/view_components/select_with_auto_complete_component/default')
-    within "div[data-controller='select-with-auto-complete']" do
+    visit('/rails/view_components/combobox_component/default')
+    within "div[data-controller='combobox']" do
       combobox = find("input[role='combobox']")
       combobox.send_keys('this does not exist')
-      assert_selector "div[role='option']", text: I18n.t('select_with_auto_complete_component.no_results_text')
+      assert_selector "div[role='option']", text: I18n.t('combobox_component.no_results_text')
     end
   end
 
   def test_enter_key
-    visit('/rails/view_components/select_with_auto_complete_component/default')
-    within "div[data-controller='select-with-auto-complete']" do
+    visit('/rails/view_components/combobox_component/default')
+    within "div[data-controller='combobox']" do
       combobox = find("input[role='combobox']")
       combobox.send_keys(:down, :down, :enter)
       assert_selector "div[role='listbox']", visible: false
@@ -49,8 +49,8 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
   end
 
   def test_alt_and_down_combination_keys
-    visit('/rails/view_components/select_with_auto_complete_component/default')
-    within "div[data-controller='select-with-auto-complete']" do
+    visit('/rails/view_components/combobox_component/default')
+    within "div[data-controller='combobox']" do
       combobox = find("input[role='combobox']")
       combobox.send_keys(%i[alt down])
       assert_selector "div[role='listbox']", visible: true
@@ -60,8 +60,8 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
   end
 
   def test_down_and_up_keys
-    visit('/rails/view_components/select_with_auto_complete_component/default')
-    within "div[data-controller='select-with-auto-complete']" do
+    visit('/rails/view_components/combobox_component/default')
+    within "div[data-controller='combobox']" do
       combobox = find("input[role='combobox']")
       combobox.send_keys(:down, :down, :down)
       options = all("div[role='option']")
@@ -74,8 +74,8 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
   end
 
   def test_right_and_left_keys
-    visit('/rails/view_components/select_with_auto_complete_component/default')
-    within "div[data-controller='select-with-auto-complete']" do
+    visit('/rails/view_components/combobox_component/default')
+    within "div[data-controller='combobox']" do
       combobox = find("input[role='combobox']")
       combobox.click.send_keys(:left, :left, :right)
       cursor_position = page.evaluate_script("document.getElementById('field').selectionStart")
@@ -84,8 +84,8 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
   end
 
   def test_home_and_end_keys
-    visit('/rails/view_components/select_with_auto_complete_component/default')
-    within "div[data-controller='select-with-auto-complete']" do
+    visit('/rails/view_components/combobox_component/default')
+    within "div[data-controller='combobox']" do
       combobox = find("input[role='combobox']")
       combobox.click.send_keys(:home)
       cursor_position = page.evaluate_script("document.getElementById('field').selectionStart")
@@ -97,8 +97,8 @@ class SelectWithAutoCompleteComponentTest < ApplicationSystemTestCase
   end
 
   def test_escape_key
-    visit('/rails/view_components/select_with_auto_complete_component/default')
-    within "div[data-controller='select-with-auto-complete']" do
+    visit('/rails/view_components/combobox_component/default')
+    within "div[data-controller='combobox']" do
       combobox = find("input[role='combobox']")
       combobox.click
       listbox = find("div[role='listbox']")

@@ -4,9 +4,14 @@
 ) %>
 
 <div data-controller="slugify" class="@xl:container">
-  <%= form_with(model: @new_group, url: groups_path, method: :post, data: { controller: "viral--select2" }, html: { novalidate: true }) do |form| %>
+  <%= form_with(model: @new_group, url: groups_path, method: :post, data:
+  if Flipper.enabled?(:beta_dropdown)
+  { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
+else
+  { controller: "viral--select2" }
+end,
+   html: { novalidate: true }) do |form| %>
     <div class="grid gap-4">
-
       <%= if @new_group.errors.any?
         viral_alert(
           type: "alert",
@@ -27,7 +32,8 @@
       <div class="flex">
         <%= form.submit t(:"groups.new_subgroup.submit"),
                     class: "button button-primary mr-2" %>
-        <%= link_to t('common.actions.cancel'),
+
+        <%= link_to t("common.actions.cancel"),
         group_path(@group),
         class: "button button-default" %>
       </div>

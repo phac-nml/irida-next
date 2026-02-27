@@ -1,0 +1,64 @@
+<div data-action="keydown->viral--beta-select2#keydown" class="select2">
+  <input
+    type="text"
+    id="<%= id %>"
+    name="<%= id %>"
+    role="combobox"
+    data-viral--beta-select2-target="trigger"
+    data-action="input->viral--beta-select2#input"
+    placeholder="<%= placeholder %>"
+    <%= "required" if required %>
+    autocomplete="off"
+    class="
+      select2-input block w-full rounded-lg border-slate-300 p-2.5 text-slate-800 sm:text-sm dark:border-slate-600
+      dark:bg-slate-800 dark:text-slate-50 dark:placeholder-slate-400
+    "
+    <% if selected_value.present? %>
+      value="<%= selected_value %>"
+    <% end %>
+    aria-controls="select2-listbox"
+    aria-autocomplete="list"
+    aria-expanded="false"
+    <% if aria_describedby.present? %>
+      aria-describedby="<%= aria_describedby %>"
+    <% end %>
+    aria-invalid="<%= aria_invalid %>"
+    aria-required="<%= aria_required %>"
+  >
+
+  <%= form.hidden_field name, data: { "viral--beta-select2-target": "hidden" } %>
+
+  <div
+    data-viral--beta-select2-target="menu"
+    class="z-10 w-full divide-y divide-slate-100 rounded-lg bg-white shadow-sm dark:bg-slate-700"
+    hidden
+  >
+    <ul
+      id="select2-listbox"
+      data-viral--beta-select2-target="scroller"
+      class="w-full divide-y divide-slate-200 overflow-y-auto py-2 dark:divide-slate-800"
+      style="max-height: inherit;"
+      role="listbox"
+    >
+      <% options.each do |option| %>
+        <%= option %>
+      <% end %>
+
+      <% if empty_state? %>
+        <li
+          role="option"
+          aria-disabled="true"
+          aria-selected="false"
+          class="
+            pointer-events-none border border-blue-300 bg-blue-50 p-4 text-blue-800 dark:border-blue-800
+            dark:bg-slate-800 dark:text-blue-400
+          "
+          hidden
+          data-viral--beta-select2-target="empty"
+        >
+          <%= empty_state %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

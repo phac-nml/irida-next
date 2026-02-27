@@ -1,7 +1,7 @@
-import { Controller } from "@hotwired/stimulus";
+import MenuController from "controllers/menu_controller";
 
 /**
- * Select2Controller
+ * BetaSelect2Controller
  *
  * Accessible, searchable dropdown with keyboard navigation.
  * - Keyboard navigation (Arrow keys, Enter, Escape, Home, End)
@@ -10,11 +10,11 @@ import { Controller } from "@hotwired/stimulus";
  * - Dropdown positioning and focus management
  * - Submit button enable/disable logic
  */
-export default class Select2Controller extends Controller {
+export default class BetaSelect2Controller extends MenuController {
   static targets = [
-    "input",
+    "trigger",
     "hidden",
-    "dropdown",
+    "menu",
     "scroller",
     "item",
     "empty",
@@ -26,7 +26,6 @@ export default class Select2Controller extends Controller {
   #itemSelected = false;
   #cachedInputValue = "";
   #currentItemIndex = -1;
-  #dropdown = null;
   #boundHandlers = {};
 
   static #KEY_CODES = {
@@ -46,7 +45,7 @@ export default class Select2Controller extends Controller {
 
       this.#boundHandlers.dropdownFocusOut =
         this.#handleDropdownFocusOut.bind(this);
-      this.dropdownTarget.addEventListener(
+      this.menuTarget.addEventListener(
         "focusout",
         this.#boundHandlers.dropdownFocusOut,
       );
@@ -60,15 +59,13 @@ export default class Select2Controller extends Controller {
   disconnect() {
     try {
       if (this.#boundHandlers.dropdownFocusOut) {
-        this.dropdownTarget.removeEventListener(
+        this.menuTarget.removeEventListener(
           "focusout",
           this.#boundHandlers.dropdownFocusOut,
         );
       }
-      if (this.#dropdown) {
-        this.#dropdown.hide();
-        this.#dropdown = null;
-      }
+      super.hide();
+      super.disconnect();
     } catch (error) {
       this.#handleError(error, "disconnect");
     }
@@ -103,12 +100,14 @@ export default class Select2Controller extends Controller {
       if (selectedItemData) {
         const { value, label } = selectedItemData;
         this.#updateSelection(value, label);
-        if (this.#dropdown) this.#dropdown.hide();
-        this.inputTarget.focus();
+        super.hide();
+        this.triggerTarget.focus();
       } else {
         // If no valid item was determined (edge case or unexpected state),
         // potentially reset or log, but avoid throwing an error unless critical.
-        console.warn("Select2Controller: Could not determine selected item.");
+        console.warn(
+          "BetaSelect2Controller: Could not determine selected item.",
+        );
       }
     } catch (error) {
       this.#handleError(error, "select");
@@ -121,30 +120,30 @@ export default class Select2Controller extends Controller {
    */
   keydown(event) {
     try {
-      if (!Object.values(Select2Controller.#KEY_CODES).includes(event.key))
+      if (!Object.values(BetaSelect2Controller.#KEY_CODES).includes(event.key))
         return;
       event.preventDefault();
       event.stopPropagation();
 
       switch (event.key) {
-        case Select2Controller.#KEY_CODES.ARROW_DOWN:
+        case BetaSelect2Controller.#KEY_CODES.ARROW_DOWN:
           this.#navigateItems(1);
           break;
-        case Select2Controller.#KEY_CODES.ARROW_UP:
+        case BetaSelect2Controller.#KEY_CODES.ARROW_UP:
           this.#navigateItems(-1);
           break;
-        case Select2Controller.#KEY_CODES.HOME:
+        case BetaSelect2Controller.#KEY_CODES.HOME:
           this.#navigateToIndex(0);
           break;
-        case Select2Controller.#KEY_CODES.END:
+        case BetaSelect2Controller.#KEY_CODES.END:
           this.#navigateToIndex(this.#visibleItems().length - 1);
           break;
-        case Select2Controller.#KEY_CODES.ESCAPE:
+        case BetaSelect2Controller.#KEY_CODES.ESCAPE:
           this.#resetInput();
           break;
-        case Select2Controller.#KEY_CODES.ENTER:
+        case BetaSelect2Controller.#KEY_CODES.ENTER:
           if (this.#currentItemIndex < 0) {
-            if (this.#dropdown) this.#dropdown.show();
+            super.show();
           } else {
             this.select(event);
           }
@@ -157,8 +156,7 @@ export default class Select2Controller extends Controller {
 
   showDropdown() {
     try {
-      if (this.#dropdown) this.#dropdown.show();
-      this.inputTarget.setAttribute("aria-expanded", "true");
+      super.show();
     } catch (error) {
       this.#handleError(error, "showDropdown");
     }
@@ -166,8 +164,7 @@ export default class Select2Controller extends Controller {
 
   hideDropdown() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
-      this.inputTarget.setAttribute("aria-expanded", "false");
+      super.hide();
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
@@ -178,7 +175,7 @@ export default class Select2Controller extends Controller {
    */
   input() {
     try {
-      const query = this.inputTarget.value.toLowerCase().trim();
+      const query = this.triggerTarget.value.toLowerCase().trim();
       let visibleItemCount = 0;
 
       this.#setItemSelected(false);
@@ -186,10 +183,10 @@ export default class Select2Controller extends Controller {
       this.itemTargets.forEach((item) => {
         const text = item.textContent.toLowerCase() || "";
         if (text.includes(query)) {
-          item.removeAttribute("hidden");
+          item.classList.remove("hidden");
           visibleItemCount++;
         } else {
-          item.setAttribute("hidden", "");
+          item.classList.add("hidden");
         }
       });
 
@@ -197,8 +194,8 @@ export default class Select2Controller extends Controller {
       this.#updateAriaActiveDescendant();
 
       if (visibleItemCount > 0) {
-        if (this.#dropdown && !this.#dropdown.isVisible()) {
-          this.#dropdown.show();
+        if (!super.isVisible()) {
+          super.show();
         }
         this.emptyTarget.setAttribute("hidden", "");
         this.scrollerTarget.scrollTop = 0;
@@ -224,13 +221,13 @@ export default class Select2Controller extends Controller {
       // It's better to handle this potential issue gracefully or log it,
       // rather than throwing an error that might break user flow.
       console.error(
-        "Select2Controller: Attempted to update selection with invalid data.",
+        "BetaSelect2Controller: Attempted to update selection with invalid data.",
         { value, label },
       );
       return; // Prevent updating with invalid data
     }
-    this.inputTarget.value = label;
-    this.inputTarget.title = label;
+    this.triggerTarget.value = label;
+    this.triggerTarget.title = label;
     this.#cachedInputValue = value; // Cache the *value*, not the label
     this.hiddenTarget.value = value;
     this.#updateAriaSelected(label); // Update ARIA state based on the new selection
@@ -247,17 +244,17 @@ export default class Select2Controller extends Controller {
 
   #resetInput() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
+      super.hide();
       if (this.#cachedInputValue) {
         this.hiddenTarget.value = this.#cachedInputValue;
         this.#setInputTargetValueFromCache();
         this.#setItemSelected(true);
       } else {
-        this.inputTarget.value = "";
+        this.triggerTarget.value = "";
         this.hiddenTarget.value = "";
         this.#setItemSelected(false);
       }
-      this.inputTarget.focus();
+      this.triggerTarget.focus();
       this.#updateAriaActiveDescendant();
 
       if (this.hasSpreadsheetImportOutlet) {
@@ -319,58 +316,31 @@ export default class Select2Controller extends Controller {
       // Check if the item itself or its immediate parent container is hidden
       const parentElement = item.closest("li") || item.parentNode; // Adjust selector if needed
       return (
-        !item.hasAttribute("hidden") && !parentElement.hasAttribute("hidden")
+        !item.classList.contains("hidden") &&
+        !parentElement.classList.contains("hidden")
       );
     });
   }
 
   #ensureItemVisible(item) {
     if (!this.scrollerTarget || !item) return;
-    const container = this.scrollerTarget;
-    const containerRect = container.getBoundingClientRect();
-    const itemRect = item.getBoundingClientRect();
-    if (itemRect.bottom > containerRect.bottom) {
-      container.scrollTop += itemRect.bottom - containerRect.bottom;
-    } else if (itemRect.top < containerRect.top) {
-      container.scrollTop -= containerRect.top - itemRect.top;
-    }
+    item.scrollIntoView();
   }
 
   #initializeDropdown() {
-    try {
-      if (typeof Dropdown !== "function") {
-        throw new Error(
-          "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
-        );
-      }
-      this.#dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
-        placement: "bottom",
-        triggerType: "click",
-        offsetSkidding: 0,
-        offsetDistance: 10,
-        delay: 300,
-        onShow: () => {
-          this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
-          this.inputTarget.setAttribute("aria-expanded", "true");
-          this.dropdownTarget.setAttribute("aria-hidden", "false");
-          this.dropdownTarget.removeAttribute("hidden");
-        },
-        onHide: () => {
-          this.inputTarget.setAttribute("aria-expanded", "false");
-          this.dropdownTarget.setAttribute("aria-hidden", "true");
-          this.dropdownTarget.setAttribute("hidden", "hidden");
-          if (!this.#itemSelected) this.#setInputTargetValueFromCache();
-        },
-      });
-    } catch (error) {
-      this.#handleError(error, "initializeDropdown");
-    }
+    super.share({
+      onHide: () => this.#onHide(),
+    });
+  }
+
+  #onHide() {
+    if (!this.#itemSelected) this.#setInputTargetValueFromCache();
   }
 
   #setDefaultSelection() {
     try {
-      if (!this.inputTarget.value) return;
-      const query = this.inputTarget.value;
+      if (!this.triggerTarget.value) return;
+      const query = this.triggerTarget.value;
       let matched = false;
       for (const item of this.itemTargets) {
         const { value, label } = item.dataset;
@@ -381,9 +351,9 @@ export default class Select2Controller extends Controller {
           break;
         }
       }
-      if (!matched && this.inputTarget.value) {
+      if (!matched && this.triggerTarget.value) {
         throw new Error(
-          "No matching item found for the input value. Please check your data.",
+          "No matching item found for the trigger value. Please check your data.",
         );
       }
     } catch (error) {
@@ -393,8 +363,8 @@ export default class Select2Controller extends Controller {
 
   #handleDropdownFocusOut(event) {
     try {
-      if (!this.dropdownTarget.contains(event.relatedTarget)) {
-        if (this.#dropdown) this.#dropdown.hide();
+      if (!this.menuTarget.contains(event.relatedTarget)) {
+        super.hide();
       }
     } catch (error) {
       this.#handleError(error, "handleDropdownFocusOut");
@@ -403,9 +373,9 @@ export default class Select2Controller extends Controller {
 
   #validateTargets() {
     const missingTargets = [];
-    if (!this.hasInputTarget) missingTargets.push("input");
+    if (!this.hasTriggerTarget) missingTargets.push("trigger");
     if (!this.hasHiddenTarget) missingTargets.push("hidden");
-    if (!this.hasDropdownTarget) missingTargets.push("dropdown");
+    if (!this.hasMenuTarget) missingTargets.push("menu");
     if (!this.hasScrollerTarget) missingTargets.push("scroller");
     if (missingTargets.length > 0) {
       throw new Error(`Missing required targets: ${missingTargets.join(", ")}`);
@@ -414,11 +384,11 @@ export default class Select2Controller extends Controller {
 
   #handleError(error, source) {
     // In production, consider reporting errors to a logging service
-    console.error(`Select2Controller error in ${source}:`, error);
+    console.error(`BetaSelect2Controller error in ${source}:`, error);
   }
 
   #setInputTargetValueFromCache() {
-    const inputValue = this.inputTarget.value;
+    const inputValue = this.triggerTarget.value;
     if (inputValue === this.#cachedInputValue) return;
     const foundItem = this.itemTargets.find(
       (item) => item.dataset.value === this.#cachedInputValue,
@@ -432,8 +402,8 @@ export default class Select2Controller extends Controller {
       }
       return;
     }
-    this.inputTarget.value = foundItem ? foundItem.dataset.label : "";
-    this.#updateAriaSelected(this.inputTarget.value);
+    this.triggerTarget.value = foundItem ? foundItem.dataset.label : "";
+    this.#updateAriaSelected(this.triggerTarget.value);
   }
 
   #updateAriaSelected(selectedLabel) {
@@ -447,11 +417,12 @@ export default class Select2Controller extends Controller {
 
   #updateAriaActiveDescendant() {
     const visibleItems = this.#visibleItems();
-    if (this.#currentItemIndex >= 0 && visibleItems[this.#currentItemIndex]) {
-      const activeId = visibleItems[this.#currentItemIndex].id;
-      this.inputTarget.setAttribute("aria-activedescendant", activeId);
+    const visibleItem = visibleItems[this.#currentItemIndex];
+    if (this.#currentItemIndex >= 0 && visibleItem) {
+      const activeId = visibleItem.id;
+      this.triggerTarget.setAttribute("aria-activedescendant", activeId);
     } else {
-      this.inputTarget.removeAttribute("aria-activedescendant");
+      this.triggerTarget.removeAttribute("aria-activedescendant");
     }
   }
 }

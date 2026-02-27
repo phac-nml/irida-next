@@ -5,7 +5,12 @@
 
 <div class="@xl:container" data-controller="slugify">
   <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post,
-  data: { controller: "viral--select2" }, html: { novalidate: true }) do |form| %>
+  data:
+  if Flipper.enabled?(:beta_dropdown)
+  { controller: "viral--beta-select2", "viral--beta-select2-trigger-type-value": "click" }
+else
+  { controller: "viral--select2" }
+end, html: { novalidate: true }) do |form| %>
     <%= turbo_frame_tag "project_form" do %>
       <div class="grid gap-4">
         <%= form.fields_for :namespace do |builder| %>
@@ -14,11 +19,9 @@
             builder: builder,
             authorized_namespaces: @authorized_namespaces,
           } %>
-
         <% end %>
-        <div>
-          <%= form.submit t("projects.new.submit"), class: "button button-primary" %>
-        </div>
+
+        <div><%= form.submit t("projects.new.submit"), class: "button button-primary" %></div>
       </div>
     <% end %>
   <% end %>

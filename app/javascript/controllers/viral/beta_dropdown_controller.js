@@ -1,23 +1,32 @@
-import { Controller } from "@hotwired/stimulus";
+import MenuController from "controllers/menu_controller";
 
-export default class extends Controller {
+export default class extends MenuController {
   static targets = ["trigger", "menu"];
-  static values = {
-    position: String,
-    trigger: String,
-    skidding: Number,
-    distance: Number,
-  };
 
   initialize() {
+    super.initialize();
+
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
     this.boundOnButtonClick = this.onButtonClick.bind(this);
     this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
     this.boundFocusOut = this.focusOut.bind(this);
+    this.boundOnMorph = this.onMorph.bind(this);
   }
 
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
+    document.addEventListener("turbo:morph", this.boundOnMorph);
+    this.#initializeDropdown();
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:morph", this.boundOnMorph);
+    super.disconnect();
+  }
+
+  onMorph() {
+    this.menuTargetConnected(this.menuTarget);
+    this.triggerTargetConnected(this.triggerTarget);
   }
 
   menuTargetConnected(element) {
@@ -39,24 +48,7 @@ export default class extends Controller {
     element.addEventListener("click", this.boundOnButtonClick, {
       capture: true,
     });
-    this.dropdown = new Dropdown(this.menuTarget, element, {
-      triggerType: "none",
-      offsetSkidding: this.skiddingValue,
-      offsetDistance: this.distanceValue,
-      onShow: () => {
-        this.triggerTarget.setAttribute("aria-expanded", "true");
-        this.menuTarget.setAttribute("aria-hidden", "false");
-        this.menuTarget.removeAttribute("hidden");
-      },
-      onHide: () => {
-        this.triggerTarget.setAttribute("aria-expanded", "false");
-        this.menuTarget.setAttribute("aria-hidden", "true");
-        this.menuTarget.setAttribute("hidden", "hidden");
-        this.#menuItems(element).forEach((menuitem) => {
-          menuitem.setAttribute("tabindex", "-1");
-        });
-      },
-    });
+    super.triggerTargetConnected();
   }
 
   triggerTargetDisconnected(element) {
@@ -64,11 +56,35 @@ export default class extends Controller {
     element.removeEventListener("click", this.boundOnButtonClick, {
       capture: true,
     });
+    super.triggerTargetDisconnected();
+  }
+
+  #initializeDropdown() {
+    super.share({
+      onShow: () => this.#onShow(),
+      onHide: () => this.#onHide(),
+    });
+  }
+
+  #onShow() {
+    this.triggerTarget.setAttribute("aria-expanded", "true");
+    this.menuTarget.setAttribute("aria-hidden", "false");
+    this.menuTarget.removeAttribute("hidden");
+  }
+
+  #onHide() {
+    this.triggerTarget.setAttribute("aria-expanded", "false");
+    this.menuTarget.setAttribute("aria-hidden", "true");
+    this.menuTarget.setAttribute("hidden", "");
+    this.#menuItems(this.menuTarget).forEach((menuitem) => {
+      menuitem.setAttribute("tabindex", "-1");
+    });
+    this.triggerTarget.focus();
   }
 
   focusOut(event) {
     if (!this.element.contains(event.relatedTarget)) {
-      this.dropdown.hide();
+      super.hide();
     }
   }
 
@@ -76,8 +92,8 @@ export default class extends Controller {
     event.preventDefault();
     event.stopPropagation();
 
-    if (this.dropdown.isVisible()) {
-      this.dropdown.hide();
+    if (super.isVisible()) {
+      super.hide();
     } else {
       this.#openMenuAndFocusMenuItem(0);
     }
@@ -115,9 +131,10 @@ export default class extends Controller {
         },
         { once: true },
       );
-      this.dropdown.show();
+      super.show();
+      this.#focusMenuItem(this.menuTarget);
     } else {
-      this.dropdown.show();
+      super.show();
       this.#focusMenuItem(menuItems.at(index));
     }
   }
@@ -142,7 +159,7 @@ export default class extends Controller {
           if (clickableTarget) {
             clickableTarget.click();
           } else {
-            this.dropdown.hide();
+            super.hide();
           }
         } else {
           menuItems[currentIndex].click();
@@ -156,7 +173,7 @@ export default class extends Controller {
         );
       case "Escape":
         event.preventDefault();
-        this.triggerTarget.focus();
+        super.hide();
         break;
       case "ArrowUp": {
         event.preventDefault();
@@ -192,7 +209,7 @@ export default class extends Controller {
         if (event.shiftKey) {
           event.preventDefault();
           this.triggerTarget.focus();
-          this.dropdown.hide();
+          super.hide();
         }
         break;
     }

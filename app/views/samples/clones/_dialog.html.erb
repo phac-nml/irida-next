@@ -1,10 +1,16 @@
 <%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t("samples.clones.dialog.title")) %>
   <%= turbo_stream_from @broadcast_target %>
+
   <%= turbo_frame_tag "clone_samples_dialog_content" do %>
     <div
-      data-controller="infinite-scroll viral--select2"
-      data-infinite-scroll-selection-outlet='#samples-table'
+      <% if Flipper.enabled?(:beta_dropdown) %>
+        data-controller="infinite-scroll viral--beta-select2"
+        data-viral--beta-select2-trigger-type-value="click"
+      <% else %>
+        data-controller="infinite-scroll viral--select2"
+      <% end %>
+      data-infinite-scroll-selection-outlet="#samples-table"
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t("samples.clones.dialog.description.singular") %>"
       data-infinite-scroll-plural-description-value="<%= t("samples.clones.dialog.description.plural") %>"
@@ -17,20 +23,19 @@
       <% end %>
 
       <div class="grid gap-4">
-        <p
-          data-infinite-scroll-target="summary"
-          class="text-base leading-relaxed text-slate-500 dark:text-slate-400"
-        >
+        <p data-infinite-scroll-target="summary" class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
           <%= t("samples.clones.dialog.description.zero") %>
         </p>
+
         <div>
-          <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
+          <div class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
             <%= t("samples.clones.dialog.samples") %>
           </div>
+
           <div
             class="
-              overflow-y-auto max-h-[300px] border border-slate-300 rounded-lg block w-full
-              p-2.5 dark:bg-slate-800 dark:border-slate-600
+              block max-h-[300px] w-full overflow-y-auto rounded-lg border border-slate-300 p-2.5
+              dark:border-slate-600 dark:bg-slate-800
             "
             data-action="scroll->infinite-scroll#scroll"
             data-infinite-scroll-target="scrollable"
@@ -52,10 +57,12 @@
             "form--json-submission-target": "form",
           }
         ) do |form| %>
-          <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
+          <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>">
+
           <div class="grid gap-4">
             <div class="form-field">
               <% form_id = "clone-project-select" %>
+
               <%= form.label :new_project_id,
                          t("samples.clones.dialog.new_project_id"),
                          for: form_id,
@@ -64,51 +71,69 @@
                          data: {
                            required: true,
                          } %>
+
               <% if @projects.empty? %>
                 <input
+                  autocomplete="off"
                   disabled
-                  placeholder="<%= t("samples.clones.dialog.no_available_projects")%>"
+                  placeholder="<%= t("samples.clones.dialog.no_available_projects") %>"
                   type="text"
                   class="
-                    border-slate-300 text-slate-800 sm:text-sm rounded-lg block w-full p-2.5
-                    dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50
+                    block w-full rounded-lg border-slate-300 p-2.5 text-slate-800 sm:text-sm dark:border-slate-600
+                    dark:bg-slate-800 dark:text-slate-50
                   "
                 >
               <% else %>
-                <%= viral_select2(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.clones.dialog.select_project")) do |select| %>
+                <% select2_component =
+                  (
+                    if Flipper.enabled?(:beta_dropdown)
+                      "viral_beta_select2"
+                    else
+                      "viral_select2"
+                    end
+                  ) %>
+                <%= send(select2_component, form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.clones.dialog.select_project")) do |select| %>
                   <% @projects.each do |project| %>
                     <% select.with_option(
                       value: project.id,
                       label: project.name,
                     ) do %>
-                      <span
-                        class="
-                          text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
-                        "
-                      >
+                      <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
                         <%= project.name %>
                         <%= render PuidComponent.new(puid: project.puid, show_clipboard: false) %>
                       </span>
-                      <span class="text-slate-600 dark:text-white block pointer-events-none">
+
+                      <span class="pointer-events-none block text-slate-600 dark:text-white">
                         <%= project.full_path %>
                       </span>
                     <% end %>
                   <% end %>
+
                   <%= select.with_empty_state do %>
                     <%= t("samples.clones.dialog.empty_state") %>
                   <% end %>
                 <% end %>
               <% end %>
             </div>
+
             <div>
               <%= form.submit t("samples.clones.dialog.submit_button"),
                           class: "button button-primary",
                           disabled: true,
-                          data: {
-                            action: "viral--dialog#setClosable",
-                            "viral--dialog-closable-param": "false",
-                            "viral--select2-target": "submitButton",
-                          } %>
+                          data:
+                            if Flipper.enabled?(:beta_dropdown)
+                              {
+                                action: "viral--dialog#setClosable",
+                                "viral--dialog-closable-param": "false",
+                                "viral--beta-select2-target": "submitButton",
+                              }
+                            else
+                              {
+                                action: "viral--dialog#setClosable",
+                                "viral--dialog-closable-param": "false",
+                                "viral--select2-target": "submitButton",
+                              }
+                            end %>
             </div>
           </div>
         <% end %>

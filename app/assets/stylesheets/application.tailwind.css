@@ -688,10 +688,10 @@ a.pill-focus-reset:focus-visible {
   @apply border-transparent text-slate-700 hover:border-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:border-white dark:hover:text-white;
 }
 
-/* SelectWithAutoCompleteComponent */
+/* ComboboxComponent */
 
-[data-controller="select-with-auto-complete"] {
-  @apply relative text-slate-900 dark:text-white;
+[data-controller="combobox"] {
+  @apply text-slate-900 dark:text-white;
 
   input {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' aria-hidden='true' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
@@ -713,14 +713,6 @@ a.pill-focus-reset:focus-visible {
   input[aria-invalid="true"]:focus-visible {
     @apply outline-3 outline-offset-2 outline-red-700 outline-solid dark:outline-red-400;
     box-shadow: none !important;
-  }
-
-  [role="listbox"] {
-    top: anchor(bottom);
-    left: anchor(left);
-    width: anchor-size(width);
-    position-try-fallbacks: flip-block;
-    @apply fixed z-10 m-0 box-border hidden max-h-[250px] overflow-x-hidden overflow-y-auto border border-slate-500 bg-white p-0 dark:border-slate-600 dark:bg-slate-800;
   }
 
   [role="listbox"] > [role="group"] {

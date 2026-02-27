@@ -11,8 +11,10 @@ end %>
 <%= render partial: "shared/form/required_field_legend" %>
 
 <% invalid_name = @project.namespace.errors.include?(:name) %>
+
 <div class="form-field <%= 'invalid' if invalid_name %>">
   <%= builder.label :name, data: { required: true } %>
+
   <%= builder.text_field :name,
                      data: {
                        "slugify-target": "name",
@@ -35,15 +37,17 @@ end %>
     id: builder.field_id(:name, "error"),
     errors: @project.namespace.errors.full_messages_for(:name) %>
   <% end %>
-  <span id="<%= builder.field_id(:name, "hint") %>" class="field-hint">
-    <%== t(:"projects.create.name_help") %>
-  </span>
+
+  <span id="<%= builder.field_id(:name, "hint") %>" class="field-hint"><%== t(:"projects.create.name_help") %></span>
 </div>
-<fieldset class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4 border-0 p-0 m-0">
+
+<fieldset class="m-0 grid gap-4 border-0 p-0 @xs:grid-cols-1 @5xl:grid-cols-2">
   <legend class="sr-only"><%= t(:"projects.create.namespace_and_path") %></legend>
   <% invalid_namespace = @project.namespace.errors.include?(:namespace) %>
+
   <div class="form-field <%= 'invalid' if invalid_namespace %>">
     <% form_id = "namespace-select" %>
+
     <%= builder.label :parent_id,
                   t(
                     "activerecord.attributes.namespaces/project_namespace.parent_id",
@@ -54,34 +58,42 @@ end %>
                   },
                   class:
                     "mb-1 block text-sm font-medium text-slate-900 dark:text-white" %>
+
     <div>
       <% selected_value =
         params.has_key?(:group_id) ? params[:group_id] : current_user.namespace.id %>
-      <%= viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace"), required: true, aria: { invalid: invalid_namespace,
+
+      <% select2_component =
+        (
+          if Flipper.enabled?(:beta_dropdown)
+            "viral_prefixed_beta_select2"
+          else
+            "viral_prefixed_select2"
+          end
+        ) %>
+
+      <%= send(select2_component, form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace"), required: true, aria: { invalid: invalid_namespace,
       describedby: [invalid_namespace ? builder.field_id(:namespace, "error") : nil, builder.field_id(:namespace, "hint")].join(" ") } ) do |select| %>
         <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
                       label: namespace.full_path,
                     ) do %>
-            <span
-              class="
-                text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
-              "
-            >
+            <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
               <%= namespace.name %>
               <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
             </span>
-            <span class="text-slate-600 dark:text-white block pointer-events-none">
-              <%= namespace.full_path %>
-            </span>
+
+            <span class="pointer-events-none block text-slate-600 dark:text-white"><%= namespace.full_path %></span>
           <% end %>
         <% end %>
+
         <%= select.with_empty_state do %>
           <%= t(:"projects.new.empty_state") %>
         <% end %>
       <% end %>
     </div>
+
     <% if invalid_namespace %>
       <%= render "shared/form/field_errors",
       id: builder.field_id(:namespace, "error"),
@@ -94,8 +106,10 @@ end %>
   </div>
 
   <% invalid_path = @project.namespace.errors.include?(:path) %>
+
   <div class="form-field <%= 'invalid' if invalid_path %>">
     <%= builder.label :path, data: { required: true } %>
+
     <%= builder.text_field :path,
                        data: {
                          "slugify-target": "path",
@@ -118,15 +132,16 @@ end %>
       id: builder.field_id(:path, "error"),
       errors: @project.namespace.errors.full_messages_for(:path) %>
     <% end %>
-    <span id="<%= builder.field_id(:path, "hint") %>" class="field-hint">
-      <%= t(:"projects.create.path_help") %>
-    </span>
 
+    <span id="<%= builder.field_id(:path, "hint") %>" class="field-hint"><%= t(:"projects.create.path_help") %></span>
   </div>
 </fieldset>
+
 <% invalid_description = @project.namespace.errors.include?(:description) %>
+
 <div class="form-field <%= 'invalid' if invalid_description %>">
   <%= builder.label :description %>
+
   <%= builder.text_area :description,
                     {
                       :class => "form-control",
@@ -143,11 +158,13 @@ end %>
                       "aria-invalid" => invalid_description,
                       :autofocus => invalid_description,
                     } %>
+
   <% if invalid_description %>
     <%= render "shared/form/field_errors",
     id: builder.field_id(:description, "error"),
     errors: @project.namespace.errors.full_messages_for(:description) %>
   <% end %>
+
   <span id="<%= builder.field_id(:description, "hint") %>" class="field-hint">
     <%= t(:"projects.create.description_help") %>
   </span>
