@@ -35,6 +35,10 @@ module ViewHelper
     end
   end
 
+  def datepicker(*, **, &)
+    render(DatepickerComponent.new(*, **), &)
+  end
+
   def viral_icon_source(name)
     path = if Rails.configuration.auth_config[name]
              Rails.root.join(

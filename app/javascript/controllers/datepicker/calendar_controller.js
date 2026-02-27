@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import {
   DAYS_IN_MONTH,
   CALENDAR_CLASSES,
-} from "pathogen_view_components/datepicker/constants";
+} from "controllers/datepicker/constants";
 
 import {
   getDayOfWeek,
@@ -10,10 +10,10 @@ import {
   getDateNode,
   getFirstOfMonthNode,
   focusDate,
-} from "pathogen_view_components/datepicker/utils";
+} from "controllers/datepicker/utils";
 
 export default class extends Controller {
-  static outlets = ["pathogen--datepicker--input"];
+  static outlets = ["datepicker--input"];
   static targets = [
     "backButton",
     "monthsArray",
@@ -80,7 +80,7 @@ export default class extends Controller {
     this.monthSelectContainerTarget.appendChild(monthSelect);
   }
 
-  // receive shared params from pathogen/datepicker/input_controller.js upon connection of this controller
+  // receive shared params from datepicker/input_controller.js upon connection of this controller
   shareParamsWithCalendarByInput(params) {
     this.#todaysYear = params["todaysYear"];
     this.#todaysMonthIndex = params["todaysMonthIndex"];
@@ -338,15 +338,6 @@ export default class extends Controller {
     // minimum date where dates prior will be disabled
     const minDate = getDateNode(this.calendarTarget, this.#minDate);
 
-    if (selectedDate) {
-      this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
-    }
-
-    // don't need to add 'today' styling if today == selectedDate
-    if (today && selectedDate != today) {
-      this.#replaceDateStyling(today, CALENDAR_CLASSES["TODAYS_DATE"]);
-    }
-
     if (minDate) {
       // get all the date nodes within current calendar, and all dates prior the minDate index will be disabled
       const allDates = Array.from(
@@ -359,10 +350,20 @@ export default class extends Controller {
         );
         allDates[i].setAttribute("aria-disabled", true);
       }
-      // if minDate and today are on calendar and today is before the minDate, remove the hover classes
-      if (today && this.#minDate > this.#todaysFormattedFullDate) {
-        today.classList.remove(...CALENDAR_CLASSES["TODAYS_HOVER"]);
-      }
+    }
+
+    // Keep visual precedence clear: disabled dates should not also look selected/today.
+    if (selectedDate && selectedDate.getAttribute("aria-disabled") !== "true") {
+      this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
+    }
+
+    // don't need to add 'today' styling if today == selectedDate
+    if (
+      today &&
+      selectedDate != today &&
+      today.getAttribute("aria-disabled") !== "true"
+    ) {
+      this.#replaceDateStyling(today, CALENDAR_CLASSES["TODAYS_DATE"]);
     }
   }
 
@@ -498,8 +499,8 @@ export default class extends Controller {
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
-      this.pathogenDatepickerInputOutlet.focusDatepickerInput();
-      this.pathogenDatepickerInputOutlet.hideCalendar();
+      this.datepickerInputOutlet.focusDatepickerInput();
+      this.datepickerInputOutlet.hideCalendar();
     }
   }
 
@@ -534,29 +535,29 @@ export default class extends Controller {
     // return if disabled date is selected (failsafe as they already shouldn't be selectable)
     if (selectedDate.getAttribute("aria-disabled")) return;
     // fill date input value to the selected date
-    this.pathogenDatepickerInputOutlet.setInputValue(
+    this.datepickerInputOutlet.setInputValue(
       selectedDate.getAttribute("data-date"),
     );
 
     // submit upon click/keyboard interaction if autosubmit is true (ie: on member/group tables)
     if (this.#autosubmit) {
-      this.pathogenDatepickerInputOutlet.submitDate();
+      this.datepickerInputOutlet.submitDate();
     }
 
-    this.pathogenDatepickerInputOutlet.hideCalendar();
-    this.pathogenDatepickerInputOutlet.focusNextFocusableElement();
+    this.datepickerInputOutlet.hideCalendar();
+    this.datepickerInputOutlet.focusNextFocusableElement();
   }
 
   // clear selection by clicking clear button
   clearSelection() {
-    this.pathogenDatepickerInputOutlet.setInputValue("");
+    this.datepickerInputOutlet.setInputValue("");
 
     if (this.#autosubmit) {
-      this.pathogenDatepickerInputOutlet.submitDate();
+      this.datepickerInputOutlet.submitDate();
     }
 
-    this.pathogenDatepickerInputOutlet.hideCalendar();
-    this.pathogenDatepickerInputOutlet.focusNextFocusableElement();
+    this.datepickerInputOutlet.hideCalendar();
+    this.datepickerInputOutlet.focusNextFocusableElement();
   }
 
   // handles ArrowLeft/Right keyboard navigation
@@ -588,7 +589,7 @@ export default class extends Controller {
     // try to retrieve the target date node, and if the dateNode doesn't exist or is not inMonth (eg: we're on the 1st
     // and navigating back/Arrowleft), change the month based on direction and re-assign dateNode
     let targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
-    if (!verifyDateIsInMonth(targetDateNode)) {
+    if (!targetDateNode || !verifyDateIsInMonth(targetDateNode)) {
       direction === "left" ? this.previousMonth() : this.nextMonth();
       targetDateNode = getDateNode(this.calendarTarget, targetFullDate);
     }
@@ -700,7 +701,7 @@ export default class extends Controller {
     return false;
   }
 
-  // getFirst/LastFocusableElement is used by pathogen/datepicker/input_controller.js for Tab logic
+  // getFirst/LastFocusableElement is used by datepicker/input_controller.js for Tab logic
   getFirstFocusableElement() {
     return this.backButtonTarget.disabled
       ? this.monthSelectTarget

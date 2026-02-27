@@ -119,7 +119,7 @@ Add custom content below the table:
 
 ## JavaScript Integration
 
-Pathogen ViewComponents includes Stimulus controllers that provide interactive behavior for components like tabs, tooltips, and datepickers.
+Pathogen ViewComponents includes Stimulus controllers that provide interactive behavior for components like tabs and tooltips.
 
 ### Automatic Setup (Rails Engine)
 
@@ -152,12 +152,10 @@ That's it! All Pathogen Stimulus controllers are now registered and ready to use
 
 ### Available Controllers
 
-Pathogen provides four Stimulus controllers:
+Pathogen provides two Stimulus controllers:
 
 - **`pathogen--tabs`**: W3C ARIA-compliant tabs with keyboard navigation and URL hash syncing
 - **`pathogen--tooltip`**: Simple tooltips with Flowbite integration (temporary dependency)
-- **`pathogen--datepicker--input`**: Date input with calendar popup and validation
-- **`pathogen--datepicker--calendar`**: Interactive calendar widget with keyboard navigation
 
 ### Verifying Controller Registration
 
@@ -176,8 +174,6 @@ To verify that Pathogen controllers are registered correctly:
 3. **Refresh the Page**: You should see registration logs for:
    - `pathogen--tabs`
    - `pathogen--tooltip`
-   - `pathogen--datepicker--input`
-   - `pathogen--datepicker--calendar`
 
 4. **Inspect Registered Controllers**: In the browser console:
    ```javascript
@@ -277,7 +273,6 @@ Pathogen does not auto-register its importmap pins. Ensure the host application 
 3. Verify the component template uses the correct identifier:
    - Tabs: `pathogen--tabs`
    - Tooltip: `pathogen--tooltip`
-   - Datepicker: `pathogen--datepicker--input` and `pathogen--datepicker--calendar`
 
 ### Flowbite Errors
 

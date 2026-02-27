@@ -7,11 +7,16 @@ import { application } from "controllers/application";
 
 // eagerLoadControllersFrom("controllers", application);
 
-// Register Pathogen controllers before lazy loading (prevents auto-load conflicts)
-import { registerPathogenControllers } from "pathogen_view_components";
-registerPathogenControllers(application);
-
 // Lazy load controllers as they appear in the DOM (remember not to preload controllers in import map!)
 import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading";
 
-lazyLoadControllersFrom("controllers", application);
+// Register Pathogen controllers before lazy loading when available.
+// This keeps core controllers working in apps that do not include pathogen_view_components.
+import("pathogen_view_components")
+  .then(({ registerPathogenControllers }) => {
+    registerPathogenControllers(application);
+  })
+  .catch(() => {})
+  .finally(() => {
+    lazyLoadControllersFrom("controllers", application);
+  });

@@ -1,0 +1,9 @@
+<template data-datepicker--input-target="calendarTemplate">
+  <%= render Viral::BaseComponent.new(**@calendar_arguments) do %>
+    <div class="inline-block rounded-lg bg-white p-4 shadow-sm max-[384px]:p-1 dark:bg-slate-700">
+      <%= render Datepicker::V1::Calendar::HeaderComponent.new(min_year: @min_year, months: @months) %>
+      <%= render Datepicker::V1::Calendar::GridComponent.new(days_of_the_week: @days_of_the_week) %>
+      <%= render Datepicker::V1::Calendar::FooterComponent.new(min_date: @min_date) %>
+    </div>
+  <% end %>
+</template>

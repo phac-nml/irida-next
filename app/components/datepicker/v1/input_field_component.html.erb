@@ -1,0 +1,38 @@
+<% if @label %>
+  <label for="<%= @input_id %>" class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
+    <%= @label %>
+  </label>
+<% end %>
+
+<div class="relative max-w-sm" aria-live="polite">
+  <div class="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center ps-3.5">
+    <%= pathogen_icon(:calendar_dots, color: nil, size: nil, class: "size-6 text-slate-500 dark:text-slate-400") %>
+  </div>
+
+  <input
+    placeholder="<%= t("components.datepicker.placeholder") %>"
+    autocomplete="off"
+    value="<%= @selected_date %>"
+    data-datepicker--input-target="datepickerInput"
+    data-action="
+      change->datepicker--input#directInput
+      keydown->datepicker--input#handleEnterDirectInput
+    "
+    type="text"
+    name="<%= @input_name %>"
+    id="<%= @input_id %>"
+    class="
+      rounded-lg border-slate-300 p-2.5 ps-10 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800
+      dark:text-white dark:placeholder-slate-400
+    "
+    <% if @input_aria_label %>
+      aria-label="<%= @input_aria_label %>"
+    <% end %>
+  >
+</div>
+
+<div
+  data-datepicker--input-target="inputError"
+  class="mt-1 hidden text-sm text-red-700 dark:text-red-500"
+  aria-hidden="true"
+></div>

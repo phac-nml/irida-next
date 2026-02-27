@@ -1,0 +1,3 @@
+<%# add a hidden div so we can process min_date in local time with the local_time gem, this is then processed %>
+<%# by datepicker--input_controller and then removed %>
+<div class="hidden" data-datepicker--input-target="minDate"><%= helpers.local_date(@min_date, "%Y-%m-%d") %></div>

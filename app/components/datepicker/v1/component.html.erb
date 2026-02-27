@@ -1,24 +1,25 @@
 <fieldset>
-  <legend class="sr-only"><%= t(".date_selection") %></legend>
-  <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
+  <legend class="sr-only"><%= t("components.datepicker.date_selection") %></legend>
+
+  <%= render Viral::BaseComponent.new(**@system_arguments) do %>
     <% unless @min_date.nil? %>
-      <%= render partial: "pathogen/datepicker/min_date", locals: { min_date: @min_date } %>
+      <%= render Datepicker::V1::MinDateComponent.new(min_date: @min_date) %>
     <% end %>
-    <%= render partial: "pathogen/datepicker/input_field",
-    locals: {
+
+    <%= render Datepicker::V1::InputFieldComponent.new(
       label: @label,
       input_id: @input_id,
       selected_date: @selected_date,
       input_name: @input_name,
       input_aria_label: @input_aria_label,
-    } %>
-    <%= render partial: "pathogen/datepicker/calendar",
-    locals: {
+    ) %>
+
+    <%= render Datepicker::V1::CalendarComponent.new(
       calendar_arguments: @calendar_arguments,
       days_of_the_week: @days_of_the_week,
       months: @months,
       min_year: @min_year,
       min_date: @min_date,
-    } %>
+    ) %>
   <% end %>
 </fieldset>
