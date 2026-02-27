@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/OneClassPerFile
+
 module OmniauthDeveloperHelper
   RESPONSE = {
     provider: 'developer',
@@ -89,3 +91,4 @@ module OmniauthSamlHelper
     Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:saml]
   end
 end
+# rubocop:enable Style/OneClassPerFile
