@@ -1,26 +1,21 @@
 <nav
   id="sidebar"
   class="
-    flex flex-col text-sm border-r sidebar border-slate-200/50 bg-white/80
-    dark:border-slate-700/30 dark:bg-slate-900/80 backdrop-blur-sm max-xl:fixed
-    max-xl:top-0 max-xl:bottom-0 z-30 transition-all duration-300 ease-in-out
-    w-[280px] max-w-screen @container/sidebar
+    @container/sidebar z-30 flex w-[280px] max-w-screen sidebar flex-col border-r border-slate-200/50 bg-white/80
+    text-sm backdrop-blur-sm transition-all duration-300 ease-in-out max-xl:fixed max-xl:top-0 max-xl:bottom-0
+    dark:border-slate-700/30 dark:bg-slate-900/80
   "
   aria-label="<%= t(:'general.default_sidebar.aria_label') %>"
 >
-  <div class="flex flex-col h-full sm:overflow-y-hidden max-sm:overflow-y-auto">
+  <div class="flex h-full flex-col max-sm:overflow-y-auto sm:overflow-y-hidden">
     <header class="bg-slate-200/80 dark:bg-slate-700/80">
       <div
         class="
-          flex flex-wrap content-stretch items-center @min-[279px]/sidebar:justify-between
-          justify-center min-h-16 px-2
+          flex min-h-16 flex-wrap content-stretch items-center justify-center px-2
+          @min-[279px]/sidebar:justify-between
         "
       >
-        <a
-          href="<%= root_path %>"
-          class="whitespace-nowrap py-2.5 inline-flex items-center"
-          data-layout-target="logo"
-        >
+        <a href="<%= root_path %>" class="inline-flex items-center py-2.5 whitespace-nowrap" data-layout-target="logo">
           <%= pathogen_icon(
             :beaker,
             library: :heroicons,
@@ -29,9 +24,7 @@
             class: "rotate-12 text-primary-600 dark:text-primary-400",
           ) %>
 
-          <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
-            <%= t(:"general.name") %>
-          </span>
+          <span class="text-sm font-semibold text-slate-700 dark:text-slate-200"><%= t(:"general.name") %></span>
         </a>
 
         <div class="flex flex-row items-center gap-x-1">
@@ -63,6 +56,7 @@
               placement: :bottom,
             ) %>
           </div>
+
           <!-- Add new items -->
           <%= viral_dropdown(
             icon: :plus,
@@ -88,6 +82,7 @@
               url: new_group_path,
             ) %>
           <% end %>
+
           <!-- Profile menu -->
           <%= viral_dropdown(
             icon: User.icon,
@@ -120,24 +115,30 @@
       </div>
 
       <div
-        class="p-2 pt shrink-0"
-        data-controller="viral--dropdown"
-        data-viral--dropdown-skidding-value="0"
-        data-viral--dropdown-distance-value="5"
-        data-viral--dropdown-position-value="bottom-start"
+        class="pt shrink-0 p-2"
+        <% if Flipper.enabled?(:beta_dropdown) %>
+          data-controller="viral--beta-dropdown"
+        <% else %>
+          data-controller="viral--dropdown"
+          data-viral--dropdown-skidding-value="0"
+          data-viral--dropdown-distance-value="5"
+          data-viral--dropdown-position-value="bottom-start"
+        <% end %>
       >
         <button
           class="
-            rounded-lg inline-flex min-h-11 h-auto min-w-11 px-4 py-2.5 justify-center
-            items-center cursor-pointer border text-sm font-semibold transition duration-200
-            disabled:cursor-not-allowed disabled:opacity-80 border-slate-300 bg-slate-50
-            text-slate-900 hover:bg-slate-100 hover:text-slate-950 disabled:border-slate-200
-            disabled:bg-slate-100 disabled:text-slate-500 dark:border-slate-700
-            dark:bg-slate-900 dark:text-slate-50 dark:hover:bg-slate-800
-            dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-800
-            disabled:dark:text-slate-400 w-full
+            inline-flex h-auto min-h-11 w-full min-w-11 cursor-pointer items-center justify-center rounded-lg border
+            border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition duration-200
+            hover:bg-slate-100 hover:text-slate-950 disabled:cursor-not-allowed disabled:border-slate-200
+            disabled:bg-slate-100 disabled:text-slate-500 disabled:opacity-80 dark:border-slate-700
+            dark:bg-slate-900 dark:text-slate-50 dark:hover:bg-slate-800 dark:hover:text-white
+            disabled:dark:border-slate-700 disabled:dark:bg-slate-800 disabled:dark:text-slate-400
           "
-          data-viral--dropdown-target="trigger"
+          <% if Flipper.enabled?(:beta_dropdown) %>
+            data-viral--beta-dropdown-target="trigger"
+          <% else %>
+            data-viral--dropdown-target="trigger"
+          <% end %>
           aria-haspopup="true"
           aria-controls="sidebar-dd-menu"
           aria-expanded="false"
@@ -147,25 +148,23 @@
 
         <ul
           id="sidebar-dd-menu"
-          data-viral--dropdown-target="menu"
-          class="
-            hidden z-20 mx-3 w-56 bg-white rounded-lg divide-y shadow-sm divide-slate-100
-            dark:bg-slate-700
-          "
+          <% if Flipper.enabled?(:beta_dropdown) %>
+            data-viral--beta-dropdown-target="menu"
+          <% else %>
+            data-viral--dropdown-target="menu"
+          <% end %>
+          class="z-20 mx-3 w-56 divide-y divide-slate-100 rounded-lg bg-white shadow-sm dark:bg-slate-700"
           tabindex="-1"
           hidden
           role="menu"
         >
           <li role="none">
-            <div
-              id="sidebar-dd-your-work-group"
-              class="py-2 pl-4 font-semibold text-slate-900 dark:text-white"
-            >
+            <div id="sidebar-dd-your-work-group" class="py-2 pl-4 font-semibold text-slate-900 dark:text-white">
               <%= t(:"general.default_sidebar.title") %>
             </div>
 
             <ul
-              class="py-2 w-full text-sm text-slate-700 dark:text-slate-200"
+              class="w-full py-2 text-sm text-slate-700 dark:text-slate-200"
               aria-labelledby="sidebar-dd-your-work-group"
               tabindex="-1"
             >
@@ -206,14 +205,12 @@
       </div>
     </header>
 
-    <div class="flex-1 flex flex-col sm:overflow-hidden pt-4 grow">
+    <div class="flex flex-1 grow flex-col pt-4 sm:overflow-hidden">
       <%# Render the header slot if it's provided %>
-      <turbo-frame id="sidebar-header" class="shrink-0">
-        <%= header %>
-      </turbo-frame>
+      <turbo-frame id="sidebar-header" class="shrink-0"><%= header %></turbo-frame>
 
       <%# Main navigation area %>
-      <div class="pt-1 space-y-1 sm:overflow-y-auto flex-1">
+      <div class="flex-1 space-y-1 pt-1 sm:overflow-y-auto">
         <%# Iterate over sections and render them %>
         <% sections.each do |section| %>
           <%= section %>
@@ -230,15 +227,14 @@
       </div>
     </div>
 
-    <div class="p-2 border-t border-slate-200 dark:border-slate-800">
+    <div class="border-t border-slate-200 p-2 dark:border-slate-800">
       <a
         href="https://phac-nml.github.io/irida-next/docs/intro"
         target="_blank"
         rel="noopener noreferrer"
         class="
-          flex items-center justify-center w-full px-4 py-2 text-sm font-medium
-          text-slate-700 rounded-lg dark:text-slate-200 hover:bg-slate-100
-          dark:hover:bg-slate-700 min-h-[44px]
+          flex min-h-[44px] w-full items-center justify-center rounded-lg px-4 py-2 text-sm font-medium
+          text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700
         "
         aria-label="<%= t('general.help') %> - <%= t('general.opens_in_new_tab') %>"
       >
@@ -251,8 +247,8 @@
 
 <div
   class="
-    fixed xl:invisible xl:hidden sidebar-overlay h-screen w-screen backdrop-blur-xs
-    bg-slate-200/40 dark:bg-slate-600/40 z-25
+    sidebar-overlay fixed z-25 h-screen w-screen bg-slate-200/40 backdrop-blur-xs xl:invisible xl:hidden
+    dark:bg-slate-600/40
   "
   data-layout-target="sidebarOverlay"
   tabindex="0"
