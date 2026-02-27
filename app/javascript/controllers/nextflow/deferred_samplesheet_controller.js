@@ -5,7 +5,6 @@ import {
   normalizeParams,
 } from "utilities/form";
 import { FIELD_CLASSES } from "utilities/styles";
-import { focusWhenVisible } from "utilities/focus";
 import { announce } from "utilities/live_region";
 import merge from "deepmerge";
 
@@ -24,30 +23,12 @@ export default class extends Controller {
     "updateSamplesSpinner",
     "samplesheetProperties",
     "fileAttributes",
-    "trTemplate",
-    "thTemplate",
-    "tdTemplate",
-    "sampleIdentifierTemplate",
-    "dropdownTemplate",
-    "fileTemplate",
-    "metadataTemplate",
-    "textInputTemplate",
-    "previousBtn",
-    "nextBtn",
-    "pageNum",
     "dataPayload",
-    "filter",
-    "paginationTemplate",
-    "paginationContainer",
     "emptyState",
-    "metadataHeaderForm",
-    "filterClearButton",
-    "filterSearchButton",
     "updateSamplesCheckbox",
     "updateSamplesLabel",
     "sampleAttributes",
     "samplesheetParamsForm",
-    "samplesheetReadyTemplate",
     "ariaLive",
   ];
 
@@ -64,20 +45,15 @@ export default class extends Controller {
     loadingCompleteAnnouncement: { type: String },
   };
 
-  static outlets = ["selection"];
-
-  #metadata_parameter_updated_state = [
-    "ring-2",
-    "ring-primary-500",
-    "dark:ring-primary-600",
+  static outlets = [
+    "selection",
+    "nextflow--samplesheet--header",
+    "nextflow--samplesheet--pagination",
+    "nextflow--samplesheet--templates",
   ];
 
   #columnNames;
   #requiredColumns = [];
-
-  // pagination page params
-  #currentPage;
-  #lastPage;
 
   // sample data within the samplesheet is centered around which index they're at.
   // Main use case for having an array of sample indexes is for filtering,
@@ -101,12 +77,6 @@ export default class extends Controller {
   // the file_selector when users want to change the selected file, which will be contained in fileAttributes
   #fileAttributes;
 
-  // tracks filter state of search/clear buttons on filter
-  #filterEnabled = false;
-
-  #queuedMetadataChanges = {};
-
-  #samplesheetReady = false;
   #allowedToUpdateSamples;
 
   // current sample 'indexes' present on table, used by metadata and table loading
@@ -114,7 +84,6 @@ export default class extends Controller {
   #lastIndex;
 
   connect() {
-    this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
   }
 
@@ -153,15 +122,8 @@ export default class extends Controller {
   #processSamplesheet() {
     this.#setSamplesheetParametersAndData();
     this.#disableProcessingState();
-    this.#changeSamplesheetToReadyState();
-  }
-
-  #changeSamplesheetToReadyState() {
-    this.#samplesheetReady = true;
-    const metadataChanges = { ...this.#queuedMetadataChanges };
-    if (Object.keys(metadataChanges).length > 0) {
-      this.#submitMetadataChange(metadataChanges);
-      this.#queuedMetadataChanges = {};
+    if (this.hasNextflowSamplesheetHeaderOutlet) {
+      this.nextflowSamplesheetHeaderOutlet.samplesheetReady();
     }
     this.#addLoadingCompleteMessage();
   }
@@ -170,7 +132,9 @@ export default class extends Controller {
     this.samplesheetMessagesContainerTarget.innerHTML = "";
 
     const samplesheetReadyMessage =
-      this.samplesheetReadyTemplateTarget.content.cloneNode(true);
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+        "samplesheetReadyTemplate",
+      );
     this.samplesheetMessagesContainerTarget.appendChild(
       samplesheetReadyMessage,
     );
@@ -201,9 +165,7 @@ export default class extends Controller {
     this.#setFilterableColumns();
 
     // setup pagination
-    this.#setPagination();
-    // render samplesheet table
-    this.#loadTableData();
+    this.#promptPaginationAndLoadTable();
   }
 
   submitSamplesheet(event) {
@@ -396,13 +358,15 @@ export default class extends Controller {
     }
   }
 
-  #loadTableData() {
+  loadTableData(currentPage, lastPage) {
+    // delete the table data and reload with new indexes
+    this.tableBodyTarget.innerHTML = "";
     if (this.#currentSampleIndexes.length > 0) {
       this.emptyStateTarget.classList.add("hidden");
-      this.#startingIndex = (this.#currentPage - 1) * 5;
+      this.#startingIndex = (currentPage - 1) * 5;
       this.#lastIndex = this.#startingIndex + 5;
       if (
-        this.#currentPage == this.#lastPage &&
+        currentPage == lastPage &&
         this.#currentSampleIndexes.length % 5 != 0
       ) {
         this.#lastIndex =
@@ -454,23 +418,25 @@ export default class extends Controller {
   }
 
   #generateTableRow() {
-    const template = this.trTemplateTarget.content.cloneNode(true);
+    const template =
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("trTemplate");
     const tableRow = template.firstElementChild;
     return tableRow;
   }
 
   #generateTableCell(columnName, sampleId, headerCell) {
     const template = headerCell
-      ? this.thTemplateTarget.content.cloneNode(true)
-      : this.tdTemplateTarget.content.cloneNode(true);
+      ? this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("thTemplate")
+      : this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("tdTemplate");
     const cell = template.firstElementChild;
     cell.id = `${sampleId}_${columnName}`;
     return cell;
   }
 
   #insertSampleContent(cell, columnName, sampleId) {
-    const sampleContent =
-      this.sampleIdentifierTemplateTarget.content.cloneNode(true);
+    const sampleContent = this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+      "sampleIdentifierTemplate",
+    );
 
     sampleContent.querySelector("div").textContent = this.#retrieveSampleData(
       sampleId,
@@ -484,7 +450,8 @@ export default class extends Controller {
     const name = `${sampleId}_${columnName}`;
     const id = `${sampleId}_${columnName}_dropdown`;
 
-    const dropdownContent = this.dropdownTemplateTarget.content.cloneNode(true);
+    const dropdownContent =
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("dropdownTemplate");
     const selectNode = dropdownContent.querySelector("select");
     selectNode.setAttribute("aria-label", columnName);
     this.#setDataAttributes(selectNode, name, id, sampleId, columnName);
@@ -505,9 +472,9 @@ export default class extends Controller {
   }
 
   #insertFileContent(cell, columnName, sampleId) {
-    const fileContent = this.fileTemplateTarget.content.cloneNode(true);
+    const fileContent =
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate("fileTemplate");
     const fileLink = fileContent.querySelector("a");
-    console.log(fileLink.getAttribute("data-namespace-id"));
     // Build URL parameters
     const params = new URLSearchParams({
       "file_selector[attachable_id]": sampleId,
@@ -548,7 +515,9 @@ export default class extends Controller {
     const metadataValue = this.#retrieveSampleData(sampleId, columnName);
     if (metadataValue) {
       const metadataContent =
-        this.metadataTemplateTarget.content.cloneNode(true);
+        this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+          "metadataTemplate",
+        );
       metadataContent.querySelector("span").textContent = metadataValue;
       cell.appendChild(metadataContent);
     } else {
@@ -558,7 +527,9 @@ export default class extends Controller {
 
   #insertTextInputContent(cell, columnName, sampleId) {
     const textInputContent =
-      this.textInputTemplateTarget.content.cloneNode(true);
+      this.nextflowSamplesheetTemplatesOutlet.cloneTemplate(
+        "textInputTemplate",
+      );
     const name = `${sampleId}_${columnName}`;
     const id = `${sampleId}_${columnName}_input`;
     const input = textInputContent.querySelector("input");
@@ -590,71 +561,6 @@ export default class extends Controller {
     );
   }
 
-  #setPagination() {
-    this.#currentPage = 1;
-    this.paginationContainerTarget.innerHTML = "";
-    // set last page based on number of samples
-    this.#lastPage = Math.ceil(this.#currentSampleIndexes.length / 5);
-    // create the page dropdown options if there's more than one page
-    if (this.#lastPage > 1) {
-      this.paginationContainerTarget.insertAdjacentHTML(
-        "beforeend",
-        this.paginationTemplateTarget.innerHTML,
-      );
-      this.#generatePageNumberDropdown();
-      this.#verifyPaginationButtonStates();
-    }
-  }
-
-  previousPage() {
-    this.#currentPage -= 1;
-    this.pageNumTarget.value = this.#currentPage;
-    this.#updatePageData();
-  }
-
-  nextPage() {
-    this.#currentPage += 1;
-    this.pageNumTarget.value = this.#currentPage;
-    this.#updatePageData();
-  }
-
-  pageSelected() {
-    this.#currentPage = parseInt(this.pageNumTarget.value);
-    this.#updatePageData();
-  }
-
-  #updatePageData() {
-    if (this.#lastPage > 1) {
-      this.#verifyPaginationButtonStates();
-    }
-    // delete the table data and reload with new indexes
-    this.tableBodyTarget.innerHTML = "";
-    this.#loadTableData();
-  }
-
-  #verifyPaginationButtonStates() {
-    if (this.#currentPage == 1) {
-      this.previousBtnTarget.disabled = true;
-      this.nextBtnTarget.disabled = false;
-    } else if (this.#currentPage == this.#lastPage) {
-      this.previousBtnTarget.disabled = false;
-      this.nextBtnTarget.disabled = true;
-    } else {
-      this.previousBtnTarget.disabled = false;
-      this.nextBtnTarget.disabled = false;
-    }
-  }
-
-  #generatePageNumberDropdown() {
-    // page 1 is already added by default
-    for (let i = 2; i < this.#lastPage + 1; i++) {
-      const option = document.createElement("option");
-      option.value = i;
-      option.innerHTML = i;
-      this.pageNumTarget.appendChild(option);
-    }
-  }
-
   #updateCell(columnName, sampleId, cellType, focusCell) {
     const cell = document.getElementById(`${sampleId}_${columnName}`);
     if (cell) {
@@ -676,55 +582,6 @@ export default class extends Controller {
     ];
   }
 
-  // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array.
-  // we can then easily access each sample's data via its index and still paginate in pages of 5
-  filter() {
-    // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the filtering process
-    setTimeout(() => {
-      if (this.filterTarget.value) {
-        this.#filterEnabled = true;
-        this.#currentSampleIndexes = [];
-        for (let i = 0; i < this.#totalSamples; i++) {
-          for (let j = 0; j < this.#filterableColumns.length; j++) {
-            if (
-              this.#samplesheetAttributes[this.#allSampleIds[i]][
-                "samplesheet_params"
-              ][this.#filterableColumns[j]]
-                .toLowerCase()
-                .includes(this.filterTarget.value.toLowerCase())
-            ) {
-              this.#currentSampleIndexes.push(i);
-              break;
-            }
-          }
-        }
-      } else {
-        this.#filterEnabled = false;
-        // reset table to include all samples if filter is empty
-        this.#setCurrentSampleIndexesToAll();
-      }
-
-      this.#setPagination();
-      this.#updatePageData();
-      this.#updateFilterButtons();
-      focusWhenVisible(this.filterTarget);
-    }, 50);
-  }
-
-  clearFilter() {
-    this.filterTarget.value = "";
-    this.filter();
-  }
-
-  #updateFilterButtons() {
-    if (this.#filterEnabled) {
-      this.filterClearButtonTarget.classList.remove("hidden");
-      this.filterSearchButtonTarget.classList.add("hidden");
-    } else {
-      this.filterClearButtonTarget.classList.add("hidden");
-      this.filterSearchButtonTarget.classList.remove("hidden");
-    }
-  }
   // check samplesheet properties for sample and sample_name and add them as filterable if present
   #setFilterableColumns() {
     if (Object.hasOwn(this.#samplesheetProperties, "sample")) {
@@ -734,126 +591,6 @@ export default class extends Controller {
     if (Object.hasOwn(this.#samplesheetProperties, "sample_name")) {
       this.#filterableColumns.push("sample_name");
     }
-  }
-
-  handleMetadataSelection(event) {
-    const metadataSamplesheetColumn = event.target.getAttribute(
-      "data-metadata-header",
-    );
-    const metadataField = event.target.value;
-    const metadataParameter = document.querySelector(
-      `input[data-metadata-header-name="${metadataSamplesheetColumn}"]`,
-    );
-
-    // updates parameter below samplesheet if it exists
-    if (metadataParameter) {
-      metadataParameter.value = metadataField;
-      metadataParameter.classList.add(
-        ...this.#metadata_parameter_updated_state,
-      );
-
-      setTimeout(() => {
-        metadataParameter.classList.remove(
-          ...this.#metadata_parameter_updated_state,
-        );
-      }, 1000);
-    }
-
-    // for large sample batches, users will be able to select metadata headers prior to the samplesheet loading in
-    // we will add those changes to the #queuedMetadataChanges object, and that will be submitted once
-    // the samplesheet is ready
-    if (this.#samplesheetReady) {
-      this.#submitMetadataChange({
-        [metadataSamplesheetColumn]: metadataField,
-      });
-    } else {
-      this.#queuedMetadataChanges[metadataSamplesheetColumn] = metadataField;
-    }
-  }
-
-  #updateMetadataColumnHeaderNames() {
-    // Update the values for the fields under 'The column header names of the metadata columns'
-
-    const metadataSamplesheetColumns = this.element.querySelectorAll(
-      ".metadata_field-header",
-    );
-
-    metadataSamplesheetColumns.forEach((metadataSamplesheetColumn) => {
-      const columnName = metadataSamplesheetColumn.getAttribute(
-        "data-metadata-header",
-      );
-      const metadataField = metadataSamplesheetColumn.value;
-
-      const metadataParameter = this.element.querySelector(
-        `input[data-metadata-header-name="${columnName}"]`,
-      );
-
-      if (metadataParameter && metadataParameter.value !== metadataField) {
-        metadataParameter.value = metadataField;
-      }
-    });
-  }
-
-  #appendInputsToMetadataForm(metadataFormContent, metadataParams) {
-    // add turbo_stream, which metadata column and the selected metadata field inputs
-    const formInputValues = [
-      {
-        name: "format",
-        value: "turbo_stream",
-      },
-      {
-        name: "metadata_fields",
-        value: JSON.stringify(metadataParams),
-      },
-      {
-        name: "sample_ids",
-        value: this.#allSampleIds,
-      },
-    ];
-
-    const form = metadataFormContent.querySelector("form");
-    formInputValues.forEach((inputValue) => {
-      form.appendChild(this.#createMetadataFormInput(inputValue));
-    });
-
-    return metadataFormContent;
-  }
-
-  #submitMetadataChange(metadataParams) {
-    const metadataFormContent =
-      this.metadataHeaderFormTarget.content.cloneNode(true);
-
-    const filledMetadataForm = this.#appendInputsToMetadataForm(
-      metadataFormContent,
-      metadataParams,
-    );
-    this.element.appendChild(filledMetadataForm);
-
-    this.element.lastElementChild.addEventListener(
-      "turbo:before-fetch-request",
-      (event) => {
-        event.detail.fetchOptions.body = JSON.stringify(
-          formDataToJsonParams(new FormData(this.element.lastElementChild)),
-        );
-        event.detail.fetchOptions.headers["Content-Type"] = "application/json";
-
-        event.detail.resume();
-      },
-      {
-        once: true,
-      },
-    );
-
-    this.element.lastElementChild.requestSubmit();
-    this.element.lastElementChild.remove();
-  }
-
-  #createMetadataFormInput(inputValue) {
-    const input = document.createElement("input");
-    input.setAttribute("name", inputValue["name"]);
-    input.setAttribute("value", inputValue["value"]);
-    input.setAttribute("type", "hidden");
-    return input;
   }
 
   #compactFormData() {
@@ -992,5 +729,41 @@ export default class extends Controller {
     }
 
     this.dataPayloadTarget.remove();
+  }
+
+  // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array.
+  // we can then easily access each sample's data via its index and still paginate in pages of 5
+  applyFilter(filterValue) {
+    if (filterValue) {
+      this.#currentSampleIndexes = [];
+      for (let i = 0; i < this.#totalSamples; i++) {
+        for (let j = 0; j < this.#filterableColumns.length; j++) {
+          if (
+            this.#samplesheetAttributes[this.#allSampleIds[i]][
+              "samplesheet_params"
+            ][this.#filterableColumns[j]]
+              .toLowerCase()
+              .includes(filterValue.toLowerCase())
+          ) {
+            this.#currentSampleIndexes.push(i);
+            break;
+          }
+        }
+      }
+    } else {
+      // reset table to include all samples if filter is empty
+      this.#setCurrentSampleIndexesToAll();
+    }
+    this.#promptPaginationAndLoadTable();
+  }
+
+  #promptPaginationAndLoadTable() {
+    this.nextflowSamplesheetPaginationOutlet.setPagination(
+      this.#currentSampleIndexes.length,
+    );
+  }
+
+  retrieveSampleIds() {
+    return this.#allSampleIds;
   }
 }
