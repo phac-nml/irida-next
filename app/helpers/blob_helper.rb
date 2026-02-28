@@ -30,7 +30,7 @@ module BlobHelper
   def download_decompress_parse_gziped_json(blob_file_path)
     JSON.parse(
       ActiveSupport::Gzip.decompress(
-        ActiveStorage::Blob.service.download(blob_file_path)
+        storage_service.download(blob_file_path)
       )
     )
   end
@@ -39,7 +39,7 @@ module BlobHelper
     blob_id = nil
     Tempfile.create do |tempfile|
       # chunked download of blob file so mem doesn't get overwhelmed
-      ActiveStorage::Blob.service.download(blob_file_path) do |chunk|
+      storage_service.download(blob_file_path) do |chunk|
         tempfile.write(chunk.force_encoding('UTF-8'))
       end
       tempfile.rewind
@@ -53,7 +53,28 @@ module BlobHelper
     blob_id
   end
 
+  def blob_key_to_service_path(blob_key, directory: false)
+    path = case storage_service.class.to_s
+           when 'ActiveStorage::Service::AzureBlobService'
+             format('az://%<container>s/%<key>s', container: storage_service.container, key: blob_key)
+           when 'ActiveStorage::Service::S3Service'
+             format('s3://%<bucket>s/%<key>s', bucket: storage_service.bucket, key: blob_key)
+           when 'ActiveStorage::Service::GCSService'
+             format('gcs://%<bucket>s/%<key>s', bucket: storage_service.bucket, key: blob_key)
+           else
+             storage_service.path_for(blob_key)
+           end
+
+    path = "#{path}/" if directory
+
+    path
+  end
+
   private
+
+  def storage_service
+    @storage_service ||= ActiveStorage::Blob.service
+  end
 
   def compose_with_retry(dest_blob, src_blob, max_retries = 5)
     retries = 0

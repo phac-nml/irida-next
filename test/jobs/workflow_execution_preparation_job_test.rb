@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'test_helper'
 require 'test_helpers/faraday_test_helpers'
 
 class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
   include FaradayTestHelpers
+  include ActiveJob::Continuation::TestHelper
 
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_new)
@@ -45,5 +47,124 @@ class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_enqueued_jobs(2, only: Turbo::Streams::BroadcastStreamJob)
     @workflow_execution_completed.reload.state.to_sym == :error
+  end
+
+  test 'prepare workflow_execution with valid params' do
+    @workflow_execution = workflow_executions(:irida_next_example)
+
+    assert @workflow_execution.initial?
+
+    @workflow_execution.create_logidze_snapshot!
+    assert_equal 1, @workflow_execution.log_data.version
+    assert_equal 1, @workflow_execution.log_data.size
+
+    assert_difference -> { ActiveStorage::Attachment.count } => 2 do
+      perform_enqueued_jobs(only: WorkflowExecutionPreparationJob) do
+        WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
+      end
+      @workflow_execution.reload
+    end
+
+    assert_equal 1, @workflow_execution.inputs.size
+    assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
+
+    assert @workflow_execution.workflow_params.key? 'input'
+    assert @workflow_execution.workflow_params.key? 'outdir'
+    assert_match @workflow_execution.inputs.first.blob.key, @workflow_execution.workflow_params['input']
+    assert @workflow_execution.workflow_params['outdir'].ends_with?('/')
+    assert @workflow_execution.blob_run_directory
+
+    samplesheet_headers = %w[sample fastq_1 fastq_2]
+    sample1_row = [@workflow_execution.samples_workflow_executions.first.sample.puid,
+                   ActiveStorage::Blob.service.path_for(
+                     format('%<run_dir>s/input/Sample_%<sample_id>s/%<filename>s',
+                            run_dir: @workflow_execution.blob_run_directory,
+                            sample_id: @workflow_execution.samples_workflow_executions.first.sample.id,
+                            filename: attachments(:attachment1).filename)
+                   ),
+                   '']
+    # ensure samplesheet csv has the correct order
+    samplesheet_csv = CSV.parse(@workflow_execution.inputs.first.blob.download)
+    assert_equal samplesheet_headers, samplesheet_csv[0]
+    assert_equal sample1_row, samplesheet_csv[1]
+
+    assert_equal 'prepared', @workflow_execution.state
+
+    @workflow_execution.create_logidze_snapshot!
+    assert_equal 2, @workflow_execution.log_data.version
+    assert_equal 2, @workflow_execution.log_data.size
+  end
+
+  test 'prepare workflow_execution with valid params with interrupts' do
+    @workflow_execution = workflow_executions(:irida_next_example)
+
+    assert @workflow_execution.initial?
+
+    WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
+    assert_difference -> { ActiveStorage::Attachment.count } => 0 do
+      interrupt_job_after_step(WorkflowExecutionPreparationJob, :pipeline_validation) do
+        perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+      end
+    end
+    @workflow_execution.reload
+
+    assert @workflow_execution.initial?
+    assert_equal 0, @workflow_execution.inputs.size
+    assert_equal 0, @workflow_execution.samples_workflow_executions.first.inputs.size
+    assert_performed_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
+
+    assert_difference -> { ActiveStorage::Attachment.count } => 2 do
+      interrupt_job_after_step(WorkflowExecutionPreparationJob, :build_samplesheet) do
+        perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+      end
+    end
+    @workflow_execution.reload
+
+    assert @workflow_execution.initial?
+    assert_equal 1, @workflow_execution.inputs.size
+    assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
+    assert_performed_jobs(2, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
+
+    interrupt_job_after_step(WorkflowExecutionPreparationJob, :update_state_step) do
+      perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+    end
+    @workflow_execution.reload
+
+    assert_equal 'prepared', @workflow_execution.state
+    assert_equal 1, @workflow_execution.inputs.size
+    assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
+    assert_performed_jobs(3, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
+
+    perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+    @workflow_execution.reload
+
+    assert_equal 'prepared', @workflow_execution.state
+    assert_equal 1, @workflow_execution.inputs.size
+    assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
+    assert_performed_jobs(4, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionSubmissionJob)
+  end
+
+  test 'should return false since chosen pipeline is not executable' do
+    @workflow_execution = workflow_executions(:irida_next_example_non_executable)
+
+    assert @workflow_execution.initial?
+
+    assert_no_difference -> { ActiveStorage::Attachment.count } do
+      perform_enqueued_jobs(only: WorkflowExecutionPreparationJob) do
+        WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
+      end
+      @workflow_execution.reload
+    end
+
+    assert_equal 'error', @workflow_execution.state
+    assert @workflow_execution.cleaned
   end
 end
