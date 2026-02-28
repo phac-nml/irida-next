@@ -175,6 +175,12 @@ group :development, :test do
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem 'brakeman', require: false
+
+  # Profiling tools
+  gem 'memory_profiler', require: false
+  gem 'ruby-prof', require: false
+  gem 'stackprof', require: false
+  gem 'test-prof', require: false
 end
 
 group :development do
