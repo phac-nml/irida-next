@@ -48,11 +48,7 @@ module Projects
     end
 
     def page_title
-      @title = if @tab == 'invited_groups'
-                 [t(:'projects.members.index.invited_groups'), @project.full_name].join(' · ')
-               else
-                 [t(:'projects.sidebar.members'), @project.full_name].join(' · ')
-               end
+      @title = t(:'projects.sidebar.members')
     end
   end
 end

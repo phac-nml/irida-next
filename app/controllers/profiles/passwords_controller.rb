@@ -38,7 +38,7 @@ module Profiles
     end
 
     def page_title
-      @title = [t(:'profiles.sidebar.password'), current_user.email].join(' · ')
+      @title = t(:'profiles.sidebar.password')
     end
   end
 end

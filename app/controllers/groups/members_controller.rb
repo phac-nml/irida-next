@@ -49,11 +49,7 @@ module Groups
     end
 
     def page_title
-      @title = if @tab == 'invited_groups'
-                 [t(:'groups.members.index.invited_groups'), @namespace.full_name].join(' · ')
-               else
-                 [t(:'groups.sidebar.members'), @namespace.full_name].join(' · ')
-               end
+      @title = t(:'groups.sidebar.members')
     end
   end
 end

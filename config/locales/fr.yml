@@ -509,7 +509,6 @@ fr:
     preview:
       manifest_json: manifest.json
     show:
-      page_title: Exportation de données
       remove_button_confirmation: Êtes-vous sûr de vouloir supprimer l’exportation de données '%{name}'?
       tabs:
         preview: Aperçu
@@ -842,7 +841,6 @@ fr:
           description: Aucun members n'a reçu d'accès délégué à ce groupe
           title: Aucun membres
         invite_group: Inviter le groupe
-        invited_groups: Groupes invités
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce groupe?
         leave_group: Quitter le groupe
         remove_confirmation: Êtes-vous sûr de vouloir retirer ce membre du groupe?
@@ -1434,7 +1432,6 @@ fr:
           description: Aucun members n'a reçu d'accès délégué à ce projet
           title: Aucun membres
         invite_group: Inviter le groupe
-        invited_groups: Groupes invités
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce projet?
         leave_project: Quitter le projet
         remove_confirmation: Êtes-vous sûr de vouloir retirer ce membre du projet?
@@ -1979,7 +1976,6 @@ fr:
         name: 'Nom :'
         run_id: 'Exécuter l’identifiant :'
         workflow: 'Flux de travail :'
-      workflow_execution: Exécutions de flux de travail
   spreadsheet_helper:
     failed_parsing: 'Échec d’analyse du fichier tableur : %{error}'
     no_file: Aucun fichier fourni
