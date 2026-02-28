@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'test_helper'
 require 'test_helpers/faraday_test_helpers'
 
 class WorkflowExecutionCancelationJobTest < ActiveJob::TestCase
   include FaradayTestHelpers
+  include ActiveJob::Continuation::TestHelper
 
   def setup
     @workflow_execution = workflow_executions(:irida_next_example_canceling)
@@ -37,6 +39,75 @@ class WorkflowExecutionCancelationJobTest < ActiveJob::TestCase
     assert_performed_jobs(1, only: WorkflowExecutionCancelationJob)
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert @workflow_execution.reload.canceled?
+  end
+
+  test 'cancel non canceling workflow_execution' do
+    @workflow_execution = workflow_executions(:irida_next_example)
+
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.post("/runs/#{@workflow_execution.run_id}/cancel") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          { run_id: @workflow_execution.run_id }
+        ]
+      end
+
+      perform_enqueued_jobs(only: WorkflowExecutionCancelationJob) do
+        WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
+      end
+    end
+
+    @workflow_execution.reload
+
+    assert_performed_jobs(1, only: WorkflowExecutionCancelationJob)
+    # assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert_not_equal 'canceling', @workflow_execution.state
+    assert_not_equal 'canceled', @workflow_execution.state
+  end
+
+  test 'successful job execution with interrupts' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      @stubs.post("/runs/#{@workflow_execution.run_id}/cancel") do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          { run_id: @workflow_execution.run_id }
+        ]
+      end
+
+      WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
+
+      interrupt_job_after_step(WorkflowExecutionCancelationJob, :submit_cancelation) do
+        perform_enqueued_jobs(only: WorkflowExecutionCancelationJob)
+      end
+    end
+
+    @workflow_execution.reload
+
+    assert_performed_jobs(1, only: WorkflowExecutionCancelationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionCleanupJob)
+    assert_not @workflow_execution.reload.canceled?
+
+    interrupt_job_after_step(WorkflowExecutionCancelationJob, :update_state_step) do
+      perform_enqueued_jobs(only: WorkflowExecutionCancelationJob)
+    end
+    @workflow_execution.reload
+
+    assert_performed_jobs(2, only: WorkflowExecutionCancelationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionCleanupJob)
+    assert @workflow_execution.canceled?
+
+    perform_enqueued_jobs(only: WorkflowExecutionCancelationJob)
+    @workflow_execution.reload
+
+    assert_performed_jobs(3, only: WorkflowExecutionCancelationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+    assert @workflow_execution.canceled?
   end
 
   test 'repeated connection errors' do
