@@ -7,8 +7,10 @@ GIT
       cgi
       rexml
 
-PATH
-  remote: embedded_gems/pathogen
+GIT
+  remote: https://github.com/phac-nml/pathogen-view-components.git
+  revision: b48211836759f98bfdc2ef056bf2b6781853e0f1
+  branch: main
   specs:
     pathogen_view_components (0.0.1)
       actionview (>= 5.0.0)
