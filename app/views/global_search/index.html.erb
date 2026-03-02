@@ -90,7 +90,7 @@
 
         <div>
           <%= label_tag :workflow_state, t(:'global_search.index.workflow_state'), class: 'mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500' %>
-          <%= select_tag :workflow_state, options_for_select(@workflow_states.map { |state| [state.humanize, state] }, params[:workflow_state]), include_blank: t(:'global_search.index.workflow_state_any'), class: 'h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900' %>
+          <%= select_tag :workflow_state, options_for_select(@workflow_states.map { |state| [state.humanize, state] }, @search.meta[:workflow_state]), include_blank: t(:'global_search.index.workflow_state_any'), class: 'h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900' %>
         </div>
 
         <fieldset class="grid gap-2 sm:grid-cols-2">
