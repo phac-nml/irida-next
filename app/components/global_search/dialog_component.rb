@@ -5,9 +5,19 @@ module GlobalSearch
   class DialogComponent < Component
     attr_reader :user
 
-    def initialize(user:)
+    def initialize(user:, params: {})
       @user = user
+      @search_params = GlobalSearch::Params.new(params)
+      @raw_params = params
     end
+
+    def selected_types = @search_params.types
+    def selected_match_sources = @search_params.match_sources
+    def selected_sort = @search_params.sort
+    def selected_workflow_state = @search_params.filters[:workflow_state]
+    def selected_query = @search_params.query.presence
+    def selected_created_from = @raw_params[:created_from]
+    def selected_created_to = @raw_params[:created_to]
 
     def places
       [

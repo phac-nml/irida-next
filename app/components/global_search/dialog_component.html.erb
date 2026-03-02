@@ -1,23 +1,3 @@
-<% if current_page?(global_search_path) %>
-  <% raw_params = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h.symbolize_keys : params.to_h.symbolize_keys %>
-  <% search_params = GlobalSearch::Params.new(raw_params) %>
-  <% selected_types = search_params.types %>
-  <% selected_match_sources = search_params.match_sources %>
-  <% selected_sort = search_params.sort %>
-  <% selected_workflow_state = search_params.filters[:workflow_state] %>
-  <% selected_query = search_params.query.presence %>
-  <% selected_created_from = params[:created_from] %>
-  <% selected_created_to = params[:created_to] %>
-<% else %>
-  <% selected_types = GlobalSearch::Params::DEFAULT_TYPES %>
-  <% selected_match_sources = GlobalSearch::Params::DEFAULT_MATCH_SOURCES %>
-  <% selected_sort = 'best_match' %>
-  <% selected_workflow_state = nil %>
-  <% selected_query = nil %>
-  <% selected_created_from = nil %>
-  <% selected_created_to = nil %>
-<% end %>
-
 <div
   class="relative"
   data-controller="global-search-dialog"
@@ -72,15 +52,14 @@
     <span class="sr-only"><%= t('components.layout.global_search_dialog.trigger_placeholder') %></span>
   </button>
 
-  <button
-    type="button"
+  <div
     hidden
     aria-hidden="true"
-    tabindex="-1"
+    role="presentation"
     data-global-search-dialog-target="backdrop"
-    data-action="global-search-dialog#close"
+    data-action="click->global-search-dialog#close"
     class="fixed inset-0 z-30 bg-slate-900/45 dark:bg-black/65"
-  ></button>
+  ></div>
 
   <section
     id="global-search-panel"
@@ -209,10 +188,10 @@
               <%= t(:'components.layout.global_search_dialog.types_legend') %>
             </legend>
 
-            <% { 'projects' => t(:'components.layout.global_search_dialog.types.projects'), 'groups' => t(:'components.layout.global_search_dialog.types.groups'), 'workflow_executions' => t(:'components.layout.global_search_dialog.types.workflow_executions'), 'samples' => t(:'components.layout.global_search_dialog.types.samples'), 'data_exports' => t(:'components.layout.global_search_dialog.types.data_exports') }.each do |type, label| %>
+            <% GlobalSearch::Params::DEFAULT_TYPES.each do |type| %>
               <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
                 <%= check_box_tag 'types[]', type, selected_types.include?(type), id: "global-search-dialog-type-#{type}", class: 'h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500' %>
-                <span><%= label %></span>
+                <span><%= t(:"components.layout.global_search_dialog.types.#{type}") %></span>
               </label>
             <% end %>
           </fieldset>

@@ -70,7 +70,7 @@
       </div>
 
       <% if global_search_enabled? %>
-        <div class="flex h-full items-center"><%= render GlobalSearch::DialogComponent.new(user:) %></div>
+        <div class="flex h-full items-center"><%= render GlobalSearch::DialogComponent.new(user:, params:) %></div>
       <% end %>
 
       <%= language_selection %>
