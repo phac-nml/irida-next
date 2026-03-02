@@ -34,7 +34,10 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
     find("button[data-global-search-dialog-target='trigger']").click
 
     assert_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
-    assert_text I18n.t('components.layout.global_search_dialog.places_title')
+
+    within("[data-global-search-dialog-target='dialog']:not([hidden])") do
+      assert_text(/#{Regexp.escape(I18n.t('components.layout.global_search_dialog.places_title'))}/i)
+    end
   end
 
   test 'mobile viewport uses overlay panel and backdrop' do
