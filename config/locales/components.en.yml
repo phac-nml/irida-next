@@ -209,11 +209,15 @@ en:
         dialog_closed_announcement: Global search dialog closed
         dialog_opened_announcement: Global search dialog opened
         filters: Filters
+        frequent_empty: No recent items yet.
+        frequent_groups_title: Frequently visited groups
+        frequent_projects_title: Frequently visited projects
         match_sources:
           identifier: Identifier
           metadata: Metadata (samples)
           name: Name
         match_sources_legend: Match Sources
+        places_title: Places
         search_button: Search
         search_placeholder: Search by name, ID, or metadata...
         shortcut: Ctrl+K
@@ -221,10 +225,6 @@ en:
         sorts:
           best_match: Best Match
           most_recent: Most Recent
-        frequent_empty: No recent items yet.
-        frequent_groups_title: Frequently visited groups
-        frequent_projects_title: Frequently visited projects
-        places_title: Places
         trigger_placeholder: Search or go to...
         types:
           data_exports: Data Export
