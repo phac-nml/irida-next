@@ -26,8 +26,8 @@
     <% Array(@result.match_tags).each do |tag| %>
       <span
         class="
-          rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs text-slate-500 dark:border-slate-700
-          dark:bg-slate-800/50 dark:text-slate-400
+          rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs text-slate-600 dark:border-slate-700
+          dark:bg-slate-800/50 dark:text-slate-300
         "
       >
         <%= tag %>
@@ -35,7 +35,7 @@
     <% end %>
 
     <% if @result.updated_at.present? %>
-      <span class="text-xs text-slate-500 dark:text-slate-400">
+      <span class="text-xs text-slate-600 dark:text-slate-300">
         <%= t(:"global_search.index.updated_at", time: @result.updated_at.to_fs(:long)) %>
       </span>
     <% end %>

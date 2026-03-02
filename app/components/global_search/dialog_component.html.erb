@@ -21,12 +21,12 @@
     data-global-search-dialog-target="trigger"
     data-action="global-search-dialog#openFromTrigger"
   >
-    <%= pathogen_icon(:magnifying_glass, class: 'text-slate-500 dark:text-slate-400', "aria-hidden": true) %>
+    <%= pathogen_icon(:magnifying_glass, class: 'text-slate-600 dark:text-slate-300', "aria-hidden": true) %>
     <span class="min-w-0 truncate"><%= t('components.layout.global_search_dialog.trigger_placeholder') %></span>
 
     <span
       class="
-        ml-auto rounded border border-slate-300 bg-white px-2 py-0.5 text-xs text-slate-500 dark:border-slate-600
+        ml-auto rounded border border-slate-300 bg-white px-2 py-0.5 text-xs text-slate-600 dark:border-slate-600
         dark:bg-slate-800 dark:text-slate-300
       "
     >
@@ -99,8 +99,8 @@
         <div class="rounded-lg border border-slate-200 bg-slate-50/70 dark:border-slate-700 dark:bg-slate-800/60">
           <div
             class="
-              border-b border-slate-200 px-3 py-2 text-xs font-semibold tracking-wide text-slate-500 uppercase
-              dark:border-slate-700
+              border-b border-slate-200 px-3 py-2 text-xs font-semibold tracking-wide text-slate-600 uppercase
+              dark:border-slate-700 dark:text-slate-300
             "
           >
             <%= t('components.layout.global_search_dialog.places_title') %>
@@ -118,15 +118,15 @@
           <div class="rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/50">
             <div
               class="
-                border-b border-slate-200 px-3 py-2 text-xs font-semibold tracking-wide text-slate-500 uppercase
-                dark:border-slate-700
+                border-b border-slate-200 px-3 py-2 text-xs font-semibold tracking-wide text-slate-600 uppercase
+                dark:border-slate-700 dark:text-slate-300
               "
             >
               <%= t('components.layout.global_search_dialog.frequent_projects_title') %>
             </div>
 
             <% if frequent_projects.empty? %>
-              <p class="px-3 py-2 text-sm text-slate-500 dark:text-slate-400">
+              <p class="px-3 py-2 text-sm text-slate-600 dark:text-slate-300">
                 <%= t('components.layout.global_search_dialog.frequent_empty') %>
               </p>
             <% else %>
@@ -135,7 +135,7 @@
                   <li>
                     <%= link_to item[:url], class: 'block px-3 py-2 transition hover:bg-slate-100 dark:hover:bg-slate-700/70' do %>
                       <p class="truncate text-sm font-medium text-slate-800 dark:text-slate-100"><%= item[:title] %></p>
-                      <p class="truncate text-xs text-slate-500 dark:text-slate-400"><%= item[:subtitle] %></p>
+                      <p class="truncate text-xs text-slate-600 dark:text-slate-300"><%= item[:subtitle] %></p>
                     <% end %>
                   </li>
                 <% end %>
@@ -146,15 +146,15 @@
           <div class="rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/50">
             <div
               class="
-                border-b border-slate-200 px-3 py-2 text-xs font-semibold tracking-wide text-slate-500 uppercase
-                dark:border-slate-700
+                border-b border-slate-200 px-3 py-2 text-xs font-semibold tracking-wide text-slate-600 uppercase
+                dark:border-slate-700 dark:text-slate-300
               "
             >
               <%= t('components.layout.global_search_dialog.frequent_groups_title') %>
             </div>
 
             <% if frequent_groups.empty? %>
-              <p class="px-3 py-2 text-sm text-slate-500 dark:text-slate-400">
+              <p class="px-3 py-2 text-sm text-slate-600 dark:text-slate-300">
                 <%= t('components.layout.global_search_dialog.frequent_empty') %>
               </p>
             <% else %>
@@ -163,7 +163,7 @@
                   <li>
                     <%= link_to item[:url], class: 'block px-3 py-2 transition hover:bg-slate-100 dark:hover:bg-slate-700/70' do %>
                       <p class="truncate text-sm font-medium text-slate-800 dark:text-slate-100"><%= item[:title] %></p>
-                      <p class="truncate text-xs text-slate-500 dark:text-slate-400"><%= item[:subtitle] %></p>
+                      <p class="truncate text-xs text-slate-600 dark:text-slate-300"><%= item[:subtitle] %></p>
                     <% end %>
                   </li>
                 <% end %>
@@ -184,7 +184,7 @@
 
         <div class="mt-4 grid gap-4 md:grid-cols-2" data-global-search-dialog-target="filtersContent">
           <fieldset class="space-y-2">
-            <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+            <legend class="text-xs font-semibold tracking-wide text-slate-600 uppercase dark:text-slate-300">
               <%= t(:'components.layout.global_search_dialog.types_legend') %>
             </legend>
 
@@ -197,7 +197,7 @@
           </fieldset>
 
           <fieldset class="space-y-2">
-            <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+            <legend class="text-xs font-semibold tracking-wide text-slate-600 uppercase dark:text-slate-300">
               <%= t(:'components.layout.global_search_dialog.match_sources_legend') %>
             </legend>
 
@@ -218,7 +218,7 @@
           </fieldset>
 
           <fieldset class="space-y-2">
-            <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+            <legend class="text-xs font-semibold tracking-wide text-slate-600 uppercase dark:text-slate-300">
               <%= t(:'components.layout.global_search_dialog.sort_legend') %>
             </legend>
 
@@ -234,12 +234,12 @@
           </fieldset>
 
           <div>
-            <%= label_tag 'global-search-dialog-workflow-state', t(:'components.layout.global_search_dialog.workflow_state'), class: 'mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500' %>
+            <%= label_tag 'global-search-dialog-workflow-state', t(:'components.layout.global_search_dialog.workflow_state'), class: 'mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300' %>
             <%= select_tag :workflow_state, options_for_select(WorkflowExecution.states.keys.map { |state| [state.humanize, state] }, selected_workflow_state), include_blank: t(:'components.layout.global_search_dialog.workflow_state_any'), id: 'global-search-dialog-workflow-state', class: 'h-9 w-full rounded-md border border-slate-300 px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100' %>
           </div>
 
           <fieldset class="grid gap-2 sm:grid-cols-2 md:col-span-2">
-            <legend class="col-span-full text-xs font-semibold tracking-wide text-slate-500 uppercase">
+            <legend class="col-span-full text-xs font-semibold tracking-wide text-slate-600 uppercase dark:text-slate-300">
               <%= t(:'components.layout.global_search_dialog.date_range_legend') %>
             </legend>
 
