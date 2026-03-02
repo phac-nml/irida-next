@@ -4,6 +4,24 @@ require 'view_component_test_case'
 
 module Dropdown
   class ComponentVersioningTest < ViewComponentTestCase
+    test 'renders v1 when feature flag is disabled' do
+      Flipper.disable(:beta_dropdown)
+      render_component
+
+      assert_selector '[data-controller="viral--dropdown"]'
+      assert_selector '[data-viral--dropdown-target="trigger"]'
+      assert_selector '[data-viral--dropdown-target="menu"]', visible: :hidden
+    end
+
+    test 'renders v2 when feature flag is enabled' do
+      Flipper.enable(:beta_dropdown)
+      render_component
+
+      assert_selector '[data-controller="viral--beta-dropdown"]'
+      assert_selector '[data-viral--beta-dropdown-target="trigger"]'
+      assert_selector '[data-viral--beta-dropdown-target="menu"]', visible: :hidden
+    end
+
     test 'renders v1 when version override is v1' do
       render_component(version: :v1)
 
@@ -28,7 +46,7 @@ module Dropdown
 
     private
 
-    def render_component(version:)
+    def render_component(version: nil)
       render_inline Viral::DropdownComponent.new(version: version, label: 'Organism',
                                                  aria: { label: 'Organism dropdown list' },
                                                  title: 'Organisms that really shine') do |dropdown|
