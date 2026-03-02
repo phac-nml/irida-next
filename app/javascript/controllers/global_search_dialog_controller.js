@@ -5,6 +5,9 @@ import { announce } from "utilities/live_region";
 const EDITABLE_SELECTOR =
   "input, textarea, select, [contenteditable]:not([contenteditable='false'])";
 
+// Matches the Tailwind `md` breakpoint (768px). Update if tailwind.config changes.
+const MOBILE_BREAKPOINT_QUERY = "(max-width: 767px)";
+
 export default class extends Controller {
   static targets = [
     "dialog",
@@ -138,6 +141,7 @@ export default class extends Controller {
     this.backdropTarget.hidden = true;
     document.body.classList.remove("overflow-hidden");
     this.#syncTriggerState(false);
+    this.#restoreFocus();
   }
 
   #isOpenShortcut(event) {
@@ -282,7 +286,7 @@ export default class extends Controller {
   }
 
   #isMobileViewport() {
-    return window.matchMedia("(max-width: 767px)").matches;
+    return window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches;
   }
 
   #syncTriggerState(expanded) {
