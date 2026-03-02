@@ -119,6 +119,16 @@ module Viral
       assert_selector('a[href="/path2"]', text: 'Item 2', visible: :all)
     end
 
+    test 'renders custom dropdown items' do
+      render_inline(Viral::DropdownComponent.new(label: 'Menu')) do |dropdown|
+        dropdown.with_custom_item { 'Custom Item 1' }
+        dropdown.with_custom_item { 'Custom Item 2' }
+      end
+
+      assert_text 'Custom Item 1'
+      assert_text 'Custom Item 2'
+    end
+
     test 'renders with icon only and aria-label' do
       render_inline(
         Viral::DropdownComponent.new(

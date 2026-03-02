@@ -6,8 +6,13 @@ module Viral
     # Contains shared logic for handling dropdown configuration, system arguments, and tooltip wiring.
     # rubocop:disable Metrics/ClassLength
     class BaseComponent < Viral::Component
-      renders_many :items, Dropdown::ItemComponent
-
+      renders_many :items, types: {
+        default: { renders: Dropdown::ItemComponent, as: :item },
+        custom: {
+          renders: ->(&block) { block.call },
+          as: :custom_item
+        }
+      }
       # Public: Expose key dropdown configuration
       attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip_text, :styles, :prefix,
                   :trigger_id
