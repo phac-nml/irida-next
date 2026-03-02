@@ -89,9 +89,7 @@ module GlobalSearch
     end
 
     def counts_by_type(results)
-      tally = results.each_with_object({}) do |result, acc|
-        acc[result.type] = acc.fetch(result.type, 0) + 1
-      end
+      tally = results.group_by(&:type).to_h { |type, grouped| [type, grouped.size] }
 
       GROUP_ORDER.index_with { |type| tally.fetch(type, 0) }
     end
