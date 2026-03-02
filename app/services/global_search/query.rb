@@ -17,14 +17,8 @@ module GlobalSearch
       search_params = GlobalSearch::Params.new(params)
       return empty_response(search_params) if search_params.query.blank?
 
-      counts_types = counts_types_for(search_params)
-      count_results = search_providers(search_params, types: counts_types)
-      provider_results = if counts_types == search_params.types
-                           count_results
-                         else
-                           search_providers(search_params, types: search_params.types)
-                         end
-      results = sort_and_limit(provider_results, search_params)
+      count_results, display_results = results_for(search_params)
+      results = sort_and_limit(display_results, search_params)
 
       GlobalSearch::Response.new(
         query: search_params.query,
@@ -43,6 +37,21 @@ module GlobalSearch
           filters: search_params.filters,
           limit: search_params.per_type_limit
         )
+      end
+    end
+
+    # Returns [count_results, display_results].
+    # When active_type is set, all providers run once and results are filtered
+    # in Ruby, eliminating the previous double-query pattern.
+    # When active_type is absent, only the selected type providers run.
+    def results_for(search_params)
+      if search_params.active_type.present?
+        all = search_providers(search_params, types: GROUP_ORDER)
+        display = all.select { |r| r.type == search_params.active_type }
+        [all, display]
+      else
+        results = search_providers(search_params, types: search_params.types)
+        [results, results]
       end
     end
 
@@ -80,12 +89,6 @@ module GlobalSearch
         counts_by_type: counts_by_type(count_results),
         group_order: GROUP_ORDER
       }
-    end
-
-    def counts_types_for(search_params)
-      return GROUP_ORDER if search_params.active_type.present?
-
-      search_params.types
     end
 
     def counts_by_type(results)
