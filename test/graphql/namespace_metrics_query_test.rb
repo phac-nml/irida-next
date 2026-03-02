@@ -50,6 +50,48 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     }
   GRAPHQL
 
+  # used in the pagination test below; it exposes cursor information on the
+  # nested projects/groups connections so that we can walk the pages one at a
+  # time.
+  PAGINATED_NAMESPACE_METRICS_QUERY = <<~GRAPHQL
+    query(
+      $namespaceType: [String!],
+      $first: Int,
+      $projFirst: Int,
+      $projAfter: String,
+      $grpFirst: Int,
+      $grpAfter: String
+    ) {
+      namespaceMetrics(first: $first, namespaceType: $namespaceType) {
+        nodes {
+          name
+          projects(first: $projFirst, after: $projAfter) {
+            pageInfo { hasNextPage endCursor }
+            nodes {
+              name
+              metrics {
+                samplesCount
+                membersCount
+                diskUsage
+              }
+            }
+          }
+          groups(first: $grpFirst, after: $grpAfter) {
+            pageInfo { hasNextPage endCursor }
+            nodes {
+              name
+              metrics {
+                samplesCount
+                membersCount
+                diskUsage
+              }
+            }
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     # convert an existing fixture user to a system account for ease
     @sys_user = users(:john_doe)
@@ -200,6 +242,134 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     subgroup_nodes.each do |g|
       assert g['metrics'].present?, 'subgroup metrics should be present'
     end
+  end
+
+  test 'cursor pagination works for projects and groups within namespace metrics' do
+    # build additional items so pagination has multiple pages to return
+    extra_project = Projects::CreateService.new(
+      @non_sys_user,
+      namespace_attributes: { name: 'Proj Extra', path: 'proj-extra', parent: @group }
+    ).execute
+
+    sample1 = Samples::CreateService.new(@non_sys_user, extra_project, name: 'Sample A').execute
+    sample2 = Samples::CreateService.new(@non_sys_user, extra_project, name: 'Sample B').execute
+    sample3 = Samples::CreateService.new(@non_sys_user, extra_project, name: 'Sample C').execute
+
+    sample4 = Samples::CreateService.new(@non_sys_user, extra_project, name: 'Sample D').execute
+
+    # attach some files to the samples; use existing blob fixtures so we
+    # know the byte sizes ahead of time
+    Attachments::CreateService.new(@non_sys_user, sample1,
+                                   files: [active_storage_blobs(:test_file_fastq_blob)]).execute
+    Attachments::CreateService.new(@non_sys_user, sample2,
+                                   files: [active_storage_blobs(:test_file_A_fastq_blob)]).execute
+    Attachments::CreateService.new(@non_sys_user, sample3, files: [
+                                     active_storage_blobs(:testsample_illumina_pe_forward_blob),
+                                     active_storage_blobs(:testsample_illumina_pe_reverse_blob)
+                                   ]).execute
+
+    Attachments::CreateService.new(@non_sys_user, sample4,
+                                   files: [active_storage_blobs(:test_file_fastq_blob)]).execute
+
+    extra_group = Groups::CreateService.new(
+      @non_sys_user,
+      name: 'Extra Subgroup',
+      path: 'extra-subgroup',
+      parent_id: @group.id
+    ).execute
+
+    paginated_query = PAGINATED_NAMESPACE_METRICS_QUERY
+    variables = { namespaceType: ['Group'], first: 1_000 }
+
+    # iterate through project pages using cursor
+    project_names = []
+    proj_after = nil
+    loop do
+      variables.merge!(projFirst: 1, projAfter: proj_after,
+                       grpFirst: nil, grpAfter: nil)
+
+      result = IridaSchema.execute(
+        paginated_query,
+        context: { current_user: @sys_user },
+        variables: variables,
+        max_complexity: nil
+      )
+      assert_nil result['errors'], 'pagination query for projects should not error'
+
+      ns_node = result['data']['namespaceMetrics']['nodes'].find { |n| n['name'] == @group.name }
+      assert ns_node, 'expected our group to be present in the paginated result'
+
+      page = ns_node['projects']
+
+      project_names.concat(page['nodes'].pluck('name'))
+      break unless page['pageInfo']['hasNextPage']
+
+      page['nodes'].each do |p|
+        if p['name'] == extra_project.name
+          project_record = extra_project.reload
+          assert p['metrics']['samplesCount'].is_a?(Integer)
+          assert p['metrics']['diskUsage'].is_a?(String)
+          assert p['metrics']['membersCount'].is_a?(Integer)
+          assert_equal project_record.samples_count.to_i, p['metrics']['samplesCount']
+          expected_proj_disk = calculate_disk_usage(project_record)
+          assert_equal expected_proj_disk, p['metrics']['diskUsage']
+          assert_equal 1, p['metrics']['membersCount']
+        else
+          # other (fixture) projects may have unrelated data; just make sure
+          # types are sane
+          assert p['metrics']['samplesCount'].is_a?(Integer)
+          assert p['metrics']['diskUsage'].is_a?(String)
+          assert p['metrics']['membersCount'].is_a?(Integer)
+        end
+      end
+      proj_after = page['pageInfo']['endCursor']
+    end
+
+    assert_equal [@project.name, extra_project.name].sort, project_names.sort,
+                 'should retrieve all direct projects via successive pages'
+
+    # iterate through group pages using cursor
+    group_names = []
+    grp_after = nil
+    loop do
+      variables.merge!(projFirst: nil, projAfter: nil,
+                       grpFirst: 1, grpAfter: grp_after)
+
+      result = IridaSchema.execute(
+        paginated_query,
+        context: { current_user: @sys_user },
+        variables: variables,
+        max_complexity: nil
+      )
+      assert_nil result['errors'], 'pagination query for groups should not error'
+
+      ns_node = result['data']['namespaceMetrics']['nodes'].find { |n| n['name'] == @group.name }
+      page = ns_node['groups']
+      group_names.concat(page['nodes'].pluck('name'))
+      break unless page['pageInfo']['hasNextPage']
+
+      page['nodes'].each do |g|
+        if g['name'] == extra_group.name
+          group_record = extra_group.reload
+          assert g['metrics']['samplesCount'].is_a?(Integer)
+          assert g['metrics']['diskUsage'].is_a?(String)
+          assert g['metrics']['membersCount'].is_a?(Integer)
+          assert_equal 0, g['metrics']['samplesCount']
+          expected_group_disk = calculate_disk_usage(group_record)
+          assert_equal expected_group_disk, g['metrics']['diskUsage']
+          assert_equal 4, p['metrics']['membersCount']
+        else
+          assert g['metrics']['samplesCount'].is_a?(Integer)
+          assert g['metrics']['diskUsage'].is_a?(String)
+          assert g['metrics']['membersCount'].is_a?(Integer)
+        end
+      end
+
+      grp_after = page['pageInfo']['endCursor']
+    end
+
+    assert_equal [@subgroup.name, extra_group.name].sort, group_names.sort,
+                 'should retrieve all subgroups via successive pages'
   end
 
   test 'non-system user is not granted access to namespace metrics' do
