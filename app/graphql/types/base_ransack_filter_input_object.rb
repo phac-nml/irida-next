@@ -30,7 +30,7 @@ module Types
     description 'Sample Advanced Search Condition Value'
 
     def self.coerce_input(value, _context)
-      return value if value.is_a?(String) || (value.is_a?(Array) && value.all? { |i| i.is_a?(String) })
+      return value if value.is_a?(String) || (value.is_a?(Array) && value.all?(String))
 
       raise GraphQL::CoercionError, I18n.t('graphql.value_scalar.error', value: value.inspect)
     end

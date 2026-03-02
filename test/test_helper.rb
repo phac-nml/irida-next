@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/OneClassPerFile
+
 require 'simplecov'
 require 'public_activity/testing'
 
@@ -76,3 +78,4 @@ module ActiveSupport
     PublicActivity.enabled = true
   end
 end
+# rubocop:enable Style/OneClassPerFile

@@ -3,8 +3,8 @@
 module Samples
   # @label Samples Data Grid Table
   class DataGridTableComponentPreview < ViewComponent::Preview
-    StubNamespace = Struct.new(:path, :parent, :project, keyword_init: true)
-    StubProject = Struct.new(:puid, :namespace, keyword_init: true) do
+    StubNamespace = Struct.new(:path, :parent, :project)
+    StubProject = Struct.new(:puid, :namespace) do
       def to_param
         puid
       end
@@ -87,8 +87,10 @@ module Samples
       sample.define_singleton_method(:metadata) { metadata }
       sample.define_singleton_method(:attachments_updated_at) { 1.hour.ago }
 
-      project_stub = StubProject.new(puid: 'INXT_PRJ_AAAAAAAAAA',
-                                     namespace: StubNamespace.new(parent: group_namespace))
+      project_stub = StubProject.new(
+        'INXT_PRJ_AAAAAAAAAA',
+        StubNamespace.new(nil, group_namespace, nil)
+      )
       sample.define_singleton_method(:project) { project_stub }
 
       sample
@@ -97,8 +99,8 @@ module Samples
     def project_namespace
       @project_namespace ||= begin
         ns = Namespace.new(name: 'Preview Project', path: 'preview-project')
-        ns.define_singleton_method(:parent) { StubNamespace.new(path: 'preview-group') }
-        ns.define_singleton_method(:project) { StubProject.new(puid: 'INXT_PRJ_AAAAAAAAAA') }
+        ns.define_singleton_method(:parent) { StubNamespace.new('preview-group', nil, nil) }
+        ns.define_singleton_method(:project) { StubProject.new('INXT_PRJ_AAAAAAAAAA', nil) }
         ns
       end
     end

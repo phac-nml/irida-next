@@ -2,7 +2,7 @@
 
 module MarkupValidationHelpers
   def format_nokogiri_errors(errors)
-    results = errors.map(&:to_s).join("\n    ")
+    results = errors.join("\n    ")
 
     %(
     Found markup violations:

@@ -5,13 +5,13 @@ require 'test_helper'
 class WorkflowExecution
   class FieldConfigurationTest < ActiveSupport::TestCase
     # Mock pipeline for testing
-    MockPipeline = Struct.new(:pipeline_id, :name, :version, keyword_init: true)
+    MockPipeline = Struct.new(:pipeline_id, :name, :version)
 
     def setup
       @pipelines = [
-        MockPipeline.new(pipeline_id: 'phac-nml/iridanext-example', name: 'IRIDA Next Example', version: '1.0.0'),
-        MockPipeline.new(pipeline_id: 'phac-nml/gasclustering', name: 'GAS Clustering', version: '2.0.0'),
-        MockPipeline.new(pipeline_id: 'phac-nml/unnamed', name: nil, version: '1.5.0')
+        MockPipeline.new('phac-nml/iridanext-example', 'IRIDA Next Example', '1.0.0'),
+        MockPipeline.new('phac-nml/gasclustering', 'GAS Clustering', '2.0.0'),
+        MockPipeline.new('phac-nml/unnamed', nil, '1.5.0')
       ]
       @config = WorkflowExecution::FieldConfiguration.new(pipelines: @pipelines)
     end
@@ -86,9 +86,9 @@ class WorkflowExecution
 
     test 'pipeline_id config skips pipelines with blank pipeline_id' do
       pipelines_with_blank = [
-        MockPipeline.new(pipeline_id: '', name: 'Empty ID', version: '1.0.0'),
-        MockPipeline.new(pipeline_id: nil, name: 'Nil ID', version: '1.0.0'),
-        MockPipeline.new(pipeline_id: 'valid/id', name: 'Valid', version: '1.0.0')
+        MockPipeline.new('', 'Empty ID', '1.0.0'),
+        MockPipeline.new(nil, 'Nil ID', '1.0.0'),
+        MockPipeline.new('valid/id', 'Valid', '1.0.0')
       ]
       config = WorkflowExecution::FieldConfiguration.new(pipelines: pipelines_with_blank)
       pipeline_config = config.enum_fields['metadata.pipeline_id']
@@ -113,9 +113,9 @@ class WorkflowExecution
 
     test 'workflow_version config skips blank versions' do
       pipelines_with_blank_version = [
-        MockPipeline.new(pipeline_id: 'p1', name: 'P1', version: ''),
-        MockPipeline.new(pipeline_id: 'p2', name: 'P2', version: nil),
-        MockPipeline.new(pipeline_id: 'p3', name: 'P3', version: '3.0.0')
+        MockPipeline.new('p1', 'P1', ''),
+        MockPipeline.new('p2', 'P2', nil),
+        MockPipeline.new('p3', 'P3', '3.0.0')
       ]
       config = WorkflowExecution::FieldConfiguration.new(pipelines: pipelines_with_blank_version)
       version_config = config.enum_fields['metadata.workflow_version']
@@ -125,9 +125,9 @@ class WorkflowExecution
 
     test 'workflow_version config deduplicates versions' do
       pipelines_with_dups = [
-        MockPipeline.new(pipeline_id: 'p1', name: 'P1', version: '1.0.0'),
-        MockPipeline.new(pipeline_id: 'p2', name: 'P2', version: '1.0.0'),
-        MockPipeline.new(pipeline_id: 'p3', name: 'P3', version: '2.0.0')
+        MockPipeline.new('p1', 'P1', '1.0.0'),
+        MockPipeline.new('p2', 'P2', '1.0.0'),
+        MockPipeline.new('p3', 'P3', '2.0.0')
       ]
       config = WorkflowExecution::FieldConfiguration.new(pipelines: pipelines_with_dups)
       version_config = config.enum_fields['metadata.workflow_version']
