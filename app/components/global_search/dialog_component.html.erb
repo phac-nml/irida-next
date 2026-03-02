@@ -244,13 +244,23 @@
             </legend>
 
             <div>
-              <%= label_tag 'global-search-dialog-created-from', t(:'components.layout.global_search_dialog.created_from'), class: 'mb-1 block text-xs text-slate-600 dark:text-slate-300' %>
-              <%= date_field_tag :created_from, selected_created_from, id: 'global-search-dialog-created-from', class: 'h-9 w-full rounded-md border border-slate-300 px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100' %>
+              <%= datepicker(
+                id: 'global-search-dialog-created-from',
+                input_name: :created_from,
+                label: t(:'components.layout.global_search_dialog.created_from'),
+                selected_date: selected_created_from,
+                min_date: nil
+              ) %>
             </div>
 
             <div>
-              <%= label_tag 'global-search-dialog-created-to', t(:'components.layout.global_search_dialog.created_to'), class: 'mb-1 block text-xs text-slate-600 dark:text-slate-300' %>
-              <%= date_field_tag :created_to, selected_created_to, id: 'global-search-dialog-created-to', class: 'h-9 w-full rounded-md border border-slate-300 px-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100' %>
+              <%= datepicker(
+                id: 'global-search-dialog-created-to',
+                input_name: :created_to,
+                label: t(:'components.layout.global_search_dialog.created_to'),
+                selected_date: selected_created_to,
+                min_date: nil
+              ) %>
             </div>
           </fieldset>
         </div>

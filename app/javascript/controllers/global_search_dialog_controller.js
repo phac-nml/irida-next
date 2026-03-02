@@ -90,7 +90,11 @@ export default class extends Controller {
       return;
     }
 
-    if (this.element.contains(event.target)) {
+    // Use composedPath() instead of contains(event.target) because child components
+    // (e.g. the datepicker calendar) may remove the clicked element from the DOM
+    // mid-dispatch (via innerHTML re-render), causing contains() to return false
+    // for a click that originated inside the dialog.
+    if (event.composedPath().includes(this.element)) {
       return;
     }
 
