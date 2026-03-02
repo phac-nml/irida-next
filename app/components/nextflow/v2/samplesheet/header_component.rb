@@ -1,0 +1,46 @@
+# frozen_string_literal: true
+
+module Nextflow
+  module V2
+    module Samplesheet
+      # Renders a header in the sample sheet table
+      class HeaderComponent < Component
+        attr_reader :namespace_id, :header, :property, :samples, :metadata_fields, :required_properties,
+                    :workflow_params, :selected, :metadata_field_options
+
+        # rubocop:disable Metrics/ParameterLists
+        def initialize(namespace_id:, header:, property:, samples:, metadata_fields:, required_properties:,
+                       workflow_params:)
+          @namespace_id = namespace_id
+          @header = header
+          @property = property
+          @samples = samples
+          @metadata_fields = metadata_fields
+          @required_properties = required_properties
+          @workflow_params = workflow_params
+          @selected = default_header
+          @metadata_field_options = metadata_fields_for_field
+        end
+
+        # rubocop:enable Metrics/ParameterLists
+
+        private
+
+        def metadata_fields_for_field
+          field = default_header
+          options = @metadata_fields.include?(field) ? @metadata_fields : [field].concat(@metadata_fields)
+          default_label = I18n.t('components.nextflow.samplesheet.header_component.default', label: field)
+          options.map { |f| [f.eql?(field) ? default_label : f, f] }
+        end
+
+        def default_header
+          if @property.key?('meta') && @property['meta'] == [@header] && @property.key?('x-irida-next-selected')
+            @property['x-irida-next-selected']
+          else
+            @header
+          end
+        end
+      end
+    end
+  end
+end

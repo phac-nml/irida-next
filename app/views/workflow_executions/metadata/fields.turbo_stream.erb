@@ -4,16 +4,16 @@
       hidden
       data-metadata="<%= @metadata %>"
       data-headers="<%= @headers %>"
-      data-nextflow--deferred-samplesheet-target="dataPayload"
+      data-nextflow--v2--samplesheet-target="dataPayload"
       data-payload-type="metadata"
-    />
+    ></div>
   <% else %>
     <div
       hidden
-      data-controller="nextflow--metadata"
-      data-nextflow--metadata-metadata-value="<%= @metadata %>"
-      data-nextflow--metadata-property-value="<%= @header %>"
-      data-nextflow--samplesheet-target="dataPayload"
-    />
+      data-controller="nextflow--v1--metadata"
+      data-nextflow--v1--metadata-metadata-value="<%= @metadata %>"
+      data-nextflow--v1--metadata-property-value="<%= @header %>"
+      data-nextflow--v1--samplesheet-target="dataPayload"
+    ></div>
   <% end %>
 <% end %>

@@ -4,20 +4,21 @@
                       open: false,
                       file_selector_params:,
                     } %>
+
 <%= turbo_stream.append "samplesheet-payload-container" do %>
   <% if Flipper.enabled?(:deferred_samplesheet) %>
     <div
       hidden
       data-files="<%= @attachments_params.to_json %>"
-      data-nextflow--deferred-samplesheet-target="dataPayload"
+      data-nextflow--v2--samplesheet-target="dataPayload"
       data-payload-type="files"
-    />
+    ></div>
   <% else %>
     <div
       hidden
-      data-controller="nextflow--file"
-      data-nextflow--file-files-value="<%= @attachments_params.to_json %>"
-      data-nextflow--samplesheet-target="dataPayload"
-    />
+      data-controller="nextflow--v1--file"
+      data-nextflow--v1--file-files-value="<%= @attachments_params.to_json %>"
+      data-nextflow--v1--samplesheet-target="dataPayload"
+    ></div>
   <% end %>
 <% end %>

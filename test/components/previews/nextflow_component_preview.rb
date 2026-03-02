@@ -2,7 +2,7 @@
 
 class NextflowComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
-  def default(schema_file: 'nextflow_schema.json')
+  def default_v1(schema_file: 'nextflow_schema.json')
     sample1 = Sample.first
     sample2 = Sample.second
     entry = {
@@ -21,7 +21,7 @@ class NextflowComponentPreview < ViewComponent::Preview
                          })
   end
 
-  def with_overrides # rubocop:disable Metrics/MethodLength
+  def with_overrides_v1 # rubocop:disable Metrics/MethodLength
     entry = {
       url: 'https://github.com/phac-nml/mikrokondo',
       name: 'phac-nml/mikrokondo',
@@ -80,7 +80,103 @@ class NextflowComponentPreview < ViewComponent::Preview
   end
 
   # @param schema_file select :schema_file_options
-  def with_values(schema_file: 'mikrokondo/nextflow_schema.json')
+  def with_values_v1(schema_file: 'mikrokondo/nextflow_schema.json')
+    entry = {
+      url: 'https://github.com/phac-nml/mikrokondo',
+      name: 'phac-nml/mikrokondo',
+      description: 'Mikrokondo pipeline'
+    }
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, { name: '0.1.2' },
+                                   Rails.root.join('test/fixtures/files/nextflow/', schema_file),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+    render_with_template(
+      locals: {
+        workflow:,
+        instance: create_instance
+      }
+    )
+  end
+
+  def default_v2(schema_file: 'nextflow_schema.json')
+    Flipper.enable(:deferred_samplesheet)
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample'
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
+                                   Rails.root.join('test/fixtures/files/nextflow/', schema_file),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    render_with_template(locals: {
+                           sample_count: 2,
+                           workflow:
+                         })
+  end
+
+  def with_overrides_v2 # rubocop:disable Metrics/MethodLength
+    Flipper.enable(:deferred_samplesheet)
+    entry = {
+      url: 'https://github.com/phac-nml/mikrokondo',
+      name: 'phac-nml/mikrokondo',
+      description: {
+        en: 'Mikrokondo pipeline',
+        fr: 'Pipeline Mikrokondo'
+      },
+      overrides: {
+        definitions: {
+          databases_and_pre_computed_files: {
+            title: {
+              en: 'Databases and Pre-Computed Files',
+              fr: 'Bases de données et fichiers pré-calculés'
+            },
+            description: {
+              en: 'The location of databases used by mikrokondo',
+              fr: "L'emplacement des bases de données utilisées par mikrokondo"
+            },
+            properties: {
+              kraken2_db: {
+                type: 'string',
+                description: {
+                  en: 'Kraken2 database',
+                  fr: 'Base de données Kraken2'
+                },
+                enum: [
+                  %w[
+                    DBNAME
+                    PATH_TO_DB
+                  ],
+                  %w[
+                    ANOTHER_DB
+                    ANOTHER_PATH
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      },
+      versions: [
+        {
+          name: '0.2.0',
+          automatable: true
+        }
+      ]
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new('phac-nml/mikrokondo', entry, { name: '0.2.0' },
+                                   Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    render_with_template(locals: {
+                           workflow:
+                         })
+  end
+
+  # @param schema_file select :schema_file_options
+  def with_values_v2(schema_file: 'mikrokondo/nextflow_schema.json')
+    Flipper.enable(:deferred_samplesheet)
     entry = {
       url: 'https://github.com/phac-nml/mikrokondo',
       name: 'phac-nml/mikrokondo',

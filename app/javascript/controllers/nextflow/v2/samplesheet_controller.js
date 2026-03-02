@@ -507,7 +507,6 @@ export default class extends Controller {
   #insertFileContent(cell, columnName, sampleId) {
     const fileContent = this.fileTemplateTarget.content.cloneNode(true);
     const fileLink = fileContent.querySelector("a");
-    console.log(fileLink.getAttribute("data-namespace-id"));
     // Build URL parameters
     const params = new URLSearchParams({
       "file_selector[attachable_id]": sampleId,
@@ -581,11 +580,11 @@ export default class extends Controller {
     node.setAttribute("name", name);
     node.setAttribute("id", id);
     node.setAttribute(
-      "data-nextflow--deferred-samplesheet-sample-id-param",
+      "data-nextflow--v2--samplesheet-sample-id-param",
       sampleId,
     );
     node.setAttribute(
-      "data-nextflow--deferred-samplesheet-column-name-param",
+      "data-nextflow--v2--samplesheet-column-name-param",
       columnName,
     );
   }
