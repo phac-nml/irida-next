@@ -1,8 +1,0 @@
----
-en:
-  pathogen:
-    label:
-      required_indicator: "*"
-      title: required
-    link:
-      aria-label: "%{content} (opens in a new window)"
