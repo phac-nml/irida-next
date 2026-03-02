@@ -254,10 +254,16 @@ fr:
         match_sources_legend: Sources de correspondance
         search_button: Rechercher
         search_placeholder: Rechercher par nom, identifiant ou métadonnées...
+        shortcut: Ctrl+K
         sort_legend: Tri
         sorts:
           best_match: Meilleure correspondance
           most_recent: Plus récent
+        frequent_empty: Aucun élément récent pour le moment.
+        frequent_groups_title: Groupes visités fréquemment
+        frequent_projects_title: Projets visités fréquemment
+        places_title: Lieux
+        trigger_placeholder: Rechercher ou aller à...
         types:
           data_exports: Exportation de données
           groups: Groupe

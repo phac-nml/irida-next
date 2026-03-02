@@ -5,26 +5,18 @@ import { announce } from "utilities/live_region";
 const EDITABLE_SELECTOR =
   "input, textarea, select, [contenteditable]:not([contenteditable='false'])";
 
-/**
- * Global search command-palette controller.
- *
- * Contract:
- * - Targets: `dialog`, `form`, `queryInput`
- * - Values: `path`, `openedAnnouncement`, `closedAnnouncement`
- * - Actions:
- *   - `keydown@window->global-search-dialog#handle`
- *   - `cancel->global-search-dialog#handleCancel:prevent`
- *   - `click->global-search-dialog#handleBackdropClick:self`
- *   - `submit->global-search-dialog#handleSubmit`
- */
 export default class extends Controller {
   static targets = [
     "dialog",
+    "backdrop",
+    "trigger",
+    "mobileTrigger",
     "form",
     "queryInput",
     "filtersDetails",
     "filtersContent",
   ];
+
   static values = {
     path: String,
     openedAnnouncement: String,
@@ -34,10 +26,19 @@ export default class extends Controller {
   connect() {
     this.previouslyFocusedElement = null;
     this.syncFilters();
+    this.#syncTriggerState(false);
   }
 
   disconnect() {
     this.previouslyFocusedElement = null;
+  }
+
+  filtersDetailsTargetConnected() {
+    this.syncFilters();
+  }
+
+  filtersContentTargetConnected() {
+    this.syncFilters();
   }
 
   syncFilters() {
@@ -53,15 +54,13 @@ export default class extends Controller {
     }
   }
 
-  filtersDetailsTargetConnected() {
-    this.syncFilters();
-  }
-
-  filtersContentTargetConnected() {
-    this.syncFilters();
-  }
-
   handle(event) {
+    if (event.key === "Escape" && this.#isOpen()) {
+      event.preventDefault();
+      this.close();
+      return;
+    }
+
     if (
       event.defaultPrevented ||
       event.isComposing ||
@@ -80,26 +79,49 @@ export default class extends Controller {
     }
 
     event.preventDefault();
-    this.openDialog();
+    this.openPanel();
   }
 
-  openDialog() {
+  handleOutsideClick(event) {
+    if (!this.#isOpen() || this.#isMobileViewport()) {
+      return;
+    }
+
+    if (this.element.contains(event.target)) {
+      return;
+    }
+
+    this.close();
+  }
+
+  openFromTrigger(event) {
+    event.preventDefault();
+    this.openPanel();
+  }
+
+  openPanel() {
     if (!this.hasDialogTarget) {
       this.#visitSearchPage();
       return;
     }
 
-    if (!this.dialogTarget.open) {
-      this.#rememberFocusedElement();
-
-      if (!this.#showDialog()) {
-        this.#visitSearchPage();
-        return;
-      }
-
-      this.#announceOpened();
+    if (this.#isOpen()) {
+      this.#focusSearchInput();
+      return;
     }
 
+    this.#rememberFocusedElement();
+    this.dialogTarget.hidden = false;
+
+    if (this.#isMobileViewport()) {
+      this.backdropTarget.hidden = false;
+      document.body.classList.add("overflow-hidden");
+    } else {
+      this.backdropTarget.hidden = true;
+    }
+
+    this.#syncTriggerState(true);
+    this.#announceOpened();
     this.#focusSearchInput();
   }
 
@@ -107,18 +129,15 @@ export default class extends Controller {
     this.#closeAndClear();
   }
 
-  handleCancel() {
-    this.#closeAndClear();
-  }
-
-  handleBackdropClick() {
-    this.#closeAndClear();
-  }
-
   handleSubmit() {
-    if (this.hasDialogTarget && this.dialogTarget.open) {
-      this.dialogTarget.close();
+    if (!this.#isOpen()) {
+      return;
     }
+
+    this.dialogTarget.hidden = true;
+    this.backdropTarget.hidden = true;
+    document.body.classList.remove("overflow-hidden");
+    this.#syncTriggerState(false);
   }
 
   #isOpenShortcut(event) {
@@ -142,21 +161,20 @@ export default class extends Controller {
   #closeAndClear() {
     this.#resetForm();
 
-    if (this.hasDialogTarget && this.dialogTarget.open) {
-      this.dialogTarget.close();
-      this.#announceClosed();
-      this.#restoreFocus();
+    if (!this.#isOpen()) {
+      return;
     }
+
+    this.dialogTarget.hidden = true;
+    this.backdropTarget.hidden = true;
+    document.body.classList.remove("overflow-hidden");
+    this.#syncTriggerState(false);
+    this.#announceClosed();
+    this.#restoreFocus();
   }
 
-  #showDialog() {
-    try {
-      this.dialogTarget.showModal();
-      return true;
-    } catch (error) {
-      console.error("Failed to open global search dialog.", error);
-      return false;
-    }
+  #isOpen() {
+    return this.hasDialogTarget && !this.dialogTarget.hidden;
   }
 
   #visitSearchPage() {
@@ -215,7 +233,7 @@ export default class extends Controller {
       return false;
     }
 
-    return !this.hasDialogTarget || blockingDialog !== this.dialogTarget;
+    return !this.hasDialogTarget || !this.dialogTarget.contains(blockingDialog);
   }
 
   #isEditableTarget(target) {
@@ -260,6 +278,22 @@ export default class extends Controller {
       // Ignore focus restoration failures for detached/disabled elements.
     } finally {
       this.previouslyFocusedElement = null;
+    }
+  }
+
+  #isMobileViewport() {
+    return window.matchMedia("(max-width: 767px)").matches;
+  }
+
+  #syncTriggerState(expanded) {
+    const value = String(expanded);
+
+    if (this.hasTriggerTarget) {
+      this.triggerTarget.setAttribute("aria-expanded", value);
+    }
+
+    if (this.hasMobileTriggerTarget) {
+      this.mobileTriggerTarget.setAttribute("aria-expanded", value);
     }
   }
 }

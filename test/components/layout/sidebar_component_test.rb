@@ -162,7 +162,7 @@ module Layout
       assert_selector("[role='tooltip'][id='#{tooltip_id}']", text: new_label)
 
       # Should still have viral--dropdown functionality
-      assert_selector('button[data-viral--dropdown-target="trigger"]', count: 3) # goto, new, profile
+      assert_selector('button[data-viral--dropdown-target="trigger"]', count: 2) # new, profile
     end
 
     test 'profile dropdown has tooltip integration' do
@@ -184,7 +184,7 @@ module Layout
       assert_selector("[role='tooltip'][id='#{tooltip_id}']", text: profile_label)
 
       # Should still have viral--dropdown functionality
-      assert_selector('button[data-viral--dropdown-target="trigger"]', count: 3) # goto, new, profile
+      assert_selector('button[data-viral--dropdown-target="trigger"]', count: 2) # new, profile
     end
 
     test 'tooltip IDs are unique across navbar buttons' do

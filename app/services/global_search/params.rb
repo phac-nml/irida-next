@@ -23,9 +23,16 @@ module GlobalSearch
     end
 
     def types
+      return [active_type] if active_type.present?
+
       requested = Array(@params[:types]).map(&:to_s)
       valid = requested & DEFAULT_TYPES
       valid.presence || DEFAULT_TYPES
+    end
+
+    def active_type
+      value = @params[:active_type].to_s
+      DEFAULT_TYPES.include?(value) ? value : nil
     end
 
     def match_sources

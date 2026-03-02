@@ -1,54 +1,75 @@
 <% selected_types = Array(@search.meta[:types]) %>
+<% selected_active_type = @search.meta[:active_type].presence %>
 <% selected_match_sources = Array(@search.meta[:match_sources]) %>
 <% selected_sort = @search.meta[:sort].presence || 'best_match' %>
+<% counts_by_type = @search.meta[:counts_by_type].is_a?(Hash) ? @search.meta[:counts_by_type] : {} %>
+<% group_order = Array(@search.meta[:group_order]).presence || GlobalSearch::Params::DEFAULT_TYPES %>
+<% grouped_results = @search.results.group_by(&:type) %>
 
-<div data-global-search-version="g1" class="mx-auto max-w-5xl space-y-6">
+<% visible_types = if selected_active_type.present?
+                     [selected_active_type]
+                   else
+                     group_order.select { |type| grouped_results[type].present? }
+                   end %>
+
+<div data-global-search-version="g1" class="mx-auto max-w-7xl space-y-6">
   <header class="space-y-2">
-    <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100"><%= t(:"global_search.index.title") %></h1>
-
-    <p class="text-sm text-slate-600 dark:text-slate-300"><%= t(:"global_search.index.description") %></p>
+    <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100"><%= t(:'global_search.index.title') %></h1>
+    <p class="text-sm text-slate-600 dark:text-slate-300"><%= t(:'global_search.index.description') %></p>
   </header>
 
-  <%= form_with url: global_search_path, method: :get, local: true, class: "space-y-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900" do %>
+  <%= form_with url: global_search_path, method: :get, local: true, class: 'rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900' do %>
     <div class="flex flex-wrap items-center gap-2">
-      <%= label_tag "global-search-query", t(:"global_search.index.search_placeholder"), class: "sr-only" %>
-      <%= text_field_tag :q, @search.query, id: "global-search-query", autofocus: true, placeholder: t(:"global_search.index.search_placeholder"), class: "h-10 min-w-[18rem] flex-1 rounded-md border border-slate-300 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900" %>
-      <%= submit_tag t(:"global_search.index.search_button"), class: "h-10 min-w-[6.5rem] cursor-pointer rounded-md border border-primary-700 bg-primary-700 px-4 text-sm font-medium text-white shadow-sm transition-all duration-200 ease-in-out hover:border-primary-800 hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-800 disabled:cursor-not-allowed disabled:opacity-50 dark:border-primary-600 dark:bg-primary-700 dark:hover:border-primary-700 dark:hover:bg-primary-700 dark:focus-visible:outline-primary-400" %>
+      <%= label_tag 'global-search-query', t(:'global_search.index.search_placeholder'), class: 'sr-only' %>
+      <%= text_field_tag :q, @search.query, id: 'global-search-query', autofocus: true, placeholder: t(:'global_search.index.search_placeholder'), class: 'h-10 min-w-[18rem] flex-1 rounded-md border border-slate-300 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900' %>
+      <%= submit_tag t(:'global_search.index.search_button'), class: 'h-10 min-w-[6.5rem] cursor-pointer rounded-md border border-primary-700 bg-primary-700 px-4 text-sm font-medium text-white shadow-sm transition-all duration-200 ease-in-out hover:border-primary-800 hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-800 disabled:cursor-not-allowed disabled:opacity-50 dark:border-primary-600 dark:bg-primary-700 dark:hover:border-primary-700 dark:hover:bg-primary-700 dark:focus-visible:outline-primary-400' %>
     </div>
+  <% end %>
 
-    <details class="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/50">
-      <summary
-        class="
-          cursor-pointer rounded-sm text-sm font-medium text-slate-700 select-none focus-visible:ring-2
-          focus-visible:ring-primary-500 focus-visible:ring-offset-1 focus-visible:outline-none dark:text-slate-200
-          dark:focus-visible:ring-offset-slate-800
-        "
-      >
-        <%= t(:"global_search.index.filters") %>
-      </summary>
+  <div class="grid gap-6 lg:grid-cols-[18rem_1fr]">
+    <aside class="space-y-4" aria-label="<%= t(:'global_search.index.facets') %>">
+      <div class="rounded-lg border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <h2 class="mb-2 text-xs font-semibold tracking-wide text-slate-500 uppercase">
+          <%= t(:'global_search.index.facets') %>
+        </h2>
 
-      <div class="mt-4 grid gap-4 md:grid-cols-2">
-        <fieldset class="space-y-2">
-          <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">
-            <%= t(:"global_search.index.types_legend") %>
-          </legend>
+        <ul class="space-y-1">
+          <% all_params = request.query_parameters.except('active_type') %>
 
-          <% GlobalSearch::ResultComponent::TYPE_LABELS.each do |type, label_key| %>
-            <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-              <%= check_box_tag "types[]", type, selected_types.include?(type), id: "global-search-page-type-#{type}", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-offset-slate-900" %>
-              <span><%= t(label_key) %></span>
-            </label>
+          <li>
+            <%= link_to global_search_path(all_params), class: class_names('flex items-center justify-between rounded px-2 py-1.5 text-sm transition', 'bg-slate-100 font-semibold text-slate-900 dark:bg-slate-700/60 dark:text-slate-100': selected_active_type.blank?, 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700/50': selected_active_type.present?) do %>
+              <span><%= t(:'global_search.index.all_results') %></span>
+              <span class="text-xs text-slate-500 dark:text-slate-400"><%= counts_by_type.values.sum %></span>
+            <% end %>
+          </li>
+
+          <% group_order.each do |type| %>
+            <% label_key = GlobalSearch::ResultComponent::TYPE_LABELS[type] %>
+            <% facet_params = request.query_parameters.merge('active_type' => type) %>
+            <% count = counts_by_type[type].to_i %>
+
+            <li>
+              <%= link_to global_search_path(facet_params), class: class_names('flex items-center justify-between rounded px-2 py-1.5 text-sm transition', 'bg-slate-100 font-semibold text-slate-900 dark:bg-slate-700/60 dark:text-slate-100': selected_active_type == type, 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700/50': selected_active_type != type) do %>
+                <span><%= label_key ? t(label_key) : type.humanize %></span>
+                <span class="text-xs text-slate-500 dark:text-slate-400"><%= count %></span>
+              <% end %>
+            </li>
           <% end %>
-        </fieldset>
+        </ul>
+      </div>
+
+      <%= form_with url: global_search_path, method: :get, local: true, class: 'space-y-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-900' do %>
+        <%= hidden_field_tag :q, @search.query %>
+        <%= hidden_field_tag :active_type, selected_active_type if selected_active_type.present? %>
 
         <fieldset class="space-y-2">
           <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">
-            <%= t(:"global_search.index.match_sources_legend") %>
+            <%= t(:'global_search.index.match_sources_legend') %>
           </legend>
 
-          <% { "identifier" => t(:"global_search.index.match_sources.identifier"), "name" => t(:"global_search.index.match_sources.name"), "metadata" => t(:"global_search.index.match_sources.metadata") }.each do |source, label| %>
+          <% { 'identifier' => t(:'global_search.index.match_sources.identifier'), 'name' => t(:'global_search.index.match_sources.name'), 'metadata' => t(:'global_search.index.match_sources.metadata') }.each do |source, label| %>
             <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-              <%= check_box_tag "match_sources[]", source, selected_match_sources.include?(source), id: "global-search-page-source-#{source}", class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-offset-slate-900" %>
+              <%= check_box_tag 'match_sources[]', source, selected_match_sources.include?(source), id: "global-search-page-source-#{source}", class: 'h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-offset-slate-900' %>
               <span><%= label %></span>
             </label>
           <% end %>
@@ -56,67 +77,75 @@
 
         <fieldset class="space-y-2">
           <legend class="text-xs font-semibold tracking-wide text-slate-500 uppercase">
-            <%= t(:"global_search.index.sort_legend") %>
+            <%= t(:'global_search.index.sort_legend') %>
           </legend>
 
-          <% { "best_match" => t(:"global_search.index.sorts.best_match"), "most_recent" => t(:"global_search.index.sorts.most_recent") }.each do |sort_value, label| %>
+          <% { 'best_match' => t(:'global_search.index.sorts.best_match'), 'most_recent' => t(:'global_search.index.sorts.most_recent') }.each do |sort_value, label| %>
             <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-              <%= radio_button_tag :sort, sort_value, selected_sort == sort_value, class: "h-4 w-4 border-slate-300 text-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-offset-slate-900" %>
+              <%= radio_button_tag :sort, sort_value, selected_sort == sort_value, class: 'h-4 w-4 border-slate-300 text-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-offset-slate-900' %>
               <span><%= label %></span>
             </label>
           <% end %>
-        </fieldset>
-
-        <fieldset class="grid gap-2 sm:grid-cols-2">
-          <legend class="col-span-full text-xs font-semibold tracking-wide text-slate-500 uppercase">
-            <%= t(:"global_search.index.date_range_legend") %>
-          </legend>
-
-          <div>
-            <%= label_tag :created_from, t(:"global_search.index.created_from"), class: "mb-1 block text-xs text-slate-600 dark:text-slate-300" %>
-            <%= date_field_tag :created_from, params[:created_from], class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900" %>
-          </div>
-
-          <div>
-            <%= label_tag :created_to, t(:"global_search.index.created_to"), class: "mb-1 block text-xs text-slate-600 dark:text-slate-300" %>
-            <%= date_field_tag :created_to, params[:created_to], class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900" %>
-          </div>
         </fieldset>
 
         <div>
-          <%= label_tag :workflow_state, t(:"global_search.index.workflow_state"), class: "mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500" %>
-          <%= select_tag :workflow_state, options_for_select(@workflow_states.map { |state| [state.humanize, state] }, params[:workflow_state]), include_blank: t(:"global_search.index.workflow_state_any"), class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900" %>
+          <%= label_tag :workflow_state, t(:'global_search.index.workflow_state'), class: 'mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500' %>
+          <%= select_tag :workflow_state, options_for_select(@workflow_states.map { |state| [state.humanize, state] }, params[:workflow_state]), include_blank: t(:'global_search.index.workflow_state_any'), class: 'h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900' %>
         </div>
 
-        <div class="grid gap-2 sm:grid-cols-2">
+        <fieldset class="grid gap-2 sm:grid-cols-2">
+          <legend class="col-span-full text-xs font-semibold tracking-wide text-slate-500 uppercase">
+            <%= t(:'global_search.index.date_range_legend') %>
+          </legend>
+
           <div>
-            <%= label_tag :per_type_limit, t(:"global_search.index.per_type_limit"), class: "mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500" %>
-            <%= number_field_tag :per_type_limit, @search.meta[:per_type_limit], min: 1, max: 50, class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900" %>
+            <%= label_tag :created_from, t(:'global_search.index.created_from'), class: 'mb-1 block text-xs text-slate-600 dark:text-slate-300' %>
+            <%= date_field_tag :created_from, params[:created_from], class: 'h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900' %>
           </div>
 
           <div>
-            <%= label_tag :limit, t(:"global_search.index.total_limit"), class: "mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500" %>
-            <%= number_field_tag :limit, @search.meta[:limit], min: 1, max: 200, class: "h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900" %>
+            <%= label_tag :created_to, t(:'global_search.index.created_to'), class: 'mb-1 block text-xs text-slate-600 dark:text-slate-300' %>
+            <%= date_field_tag :created_to, params[:created_to], class: 'h-9 w-full rounded-md border border-slate-300 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-offset-slate-900' %>
           </div>
+        </fieldset>
+
+        <% selected_types.each do |type| %>
+          <%= hidden_field_tag 'types[]', type %>
+        <% end %>
+
+        <%= submit_tag t(:'global_search.index.apply_filters'), class: 'h-10 w-full cursor-pointer rounded-md border border-primary-700 bg-primary-700 px-4 text-sm font-medium text-white shadow-sm transition-all duration-200 ease-in-out hover:border-primary-800 hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-800 disabled:cursor-not-allowed disabled:opacity-50 dark:border-primary-600 dark:bg-primary-700 dark:hover:border-primary-700 dark:hover:bg-primary-700 dark:focus-visible:outline-primary-400' %>
+      <% end %>
+    </aside>
+
+    <section class="space-y-4" aria-label="<%= t(:'global_search.index.title') %>">
+      <% if @search.results.empty? %>
+        <div
+          class="
+            rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500 dark:border-slate-600
+            dark:text-slate-300
+          "
+        >
+          <%= t(:'global_search.index.no_results') %>
         </div>
-      </div>
-    </details>
-  <% end %>
+      <% else %>
+        <% visible_types.each do |type| %>
+          <% results_for_type = grouped_results[type] || [] %>
+          <% next if results_for_type.empty? %>
 
-  <section class="space-y-3" aria-label="<%= t(:"global_search.index.title") %>">
-    <p class="text-sm text-slate-600 dark:text-slate-300"><%= pluralize(@search.results.size, "result") %></p>
+          <div class="space-y-2">
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <% label_key = GlobalSearch::ResultComponent::TYPE_LABELS[type] %>
+              <%= label_key ? t(label_key) : type.humanize %>
 
-    <% if @search.results.empty? %>
-      <div
-        class="
-          rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500 dark:border-slate-600
-          dark:text-slate-300
-        "
-      >
-        <%= t(:"global_search.index.no_results") %>
-      </div>
-    <% else %>
-      <ul class="space-y-2"><%= render GlobalSearch::ResultComponent.with_collection(@search.results) %></ul>
-    <% end %>
-  </section>
+              <span class="ml-1 text-sm font-normal text-slate-500 dark:text-slate-400">
+                (<%= results_for_type.size %>)
+              </span>
+            </h2>
+
+            <ul class="space-y-2"><%= render GlobalSearch::ResultComponent.with_collection(results_for_type) %></ul>
+          </div>
+        <% end %>
+      <% end %>
+    </section>
+  </div>
 </div>

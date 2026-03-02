@@ -693,10 +693,13 @@ en:
       close: Close
   global_search:
     index:
+      all_results: All
+      apply_filters: Apply filters
       created_from: Created From
       created_to: Created To
       date_range_legend: Date Range
       description: Search projects, groups, workflow executions, samples, and data exports.
+      facets: Categories
       filters: Filters
       match_sources:
         identifier: Identifier

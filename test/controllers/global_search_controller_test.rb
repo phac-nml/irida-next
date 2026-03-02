@@ -38,6 +38,22 @@ class GlobalSearchControllerTest < ActionDispatch::IntegrationTest
 
     payload = response.parsed_body
     assert_equal ['projects'], payload['meta']['types']
+    assert_equal GlobalSearch::Params::DEFAULT_TYPES, payload['meta']['group_order']
+    assert_equal 0, payload['meta']['counts_by_type']['groups']
+    assert(payload['results'].all? { |result| result['type'] == 'projects' })
+  end
+
+  test 'index JSON accepts active_type and aligns types with selected facet' do
+    get global_search_path(format: :json), params: {
+      q: 'Project',
+      active_type: 'projects'
+    }
+
+    assert_response :success
+    payload = response.parsed_body
+
+    assert_equal 'projects', payload['meta']['active_type']
+    assert_equal ['projects'], payload['meta']['types']
     assert(payload['results'].all? { |result| result['type'] == 'projects' })
   end
 

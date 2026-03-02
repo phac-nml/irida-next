@@ -17,7 +17,7 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
 
     trigger_global_search_shortcut
 
-    dialog = find("dialog[data-global-search-dialog-target='dialog'][open]", visible: :all)
+    dialog = find("[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all)
 
     assert_equal 'global-search-dialog-title', dialog['aria-labelledby']
 
@@ -28,6 +28,25 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
     end
   end
 
+  test 'clicking top search trigger opens anchored panel with places section' do
+    visit '/-/groups/group-1'
+
+    find("button[data-global-search-dialog-target='trigger']").click
+
+    assert_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
+    assert_text I18n.t('components.layout.global_search_dialog.places_title')
+  end
+
+  test 'mobile viewport uses overlay panel and backdrop' do
+    page.current_window.resize_to(390, 844)
+    visit '/-/groups/group-1'
+
+    find("button[data-global-search-dialog-target='mobileTrigger']").click
+
+    assert_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
+    assert_selector "[data-global-search-dialog-target='backdrop']:not([hidden])", visible: :all
+  end
+
   test 'filters disclosure removes controls from tab order when collapsed' do
     visit '/-/groups/group-1'
 
@@ -35,14 +54,14 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
 
     assert_selector "[data-global-search-dialog-target='filtersContent'][hidden][inert]", visible: :all
 
-    within("dialog[data-global-search-dialog-target='dialog'][open]") do
+    within("[data-global-search-dialog-target='dialog']:not([hidden])") do
       find('summary', text: 'Filters').click
     end
 
     assert_selector "[data-global-search-dialog-target='filtersContent']:not([hidden])", visible: :all
     assert_no_selector "[data-global-search-dialog-target='filtersContent'][inert]", visible: :all
 
-    within("dialog[data-global-search-dialog-target='dialog'][open]") do
+    within("[data-global-search-dialog-target='dialog']:not([hidden])") do
       find('summary', text: 'Filters').click
     end
 
@@ -54,7 +73,7 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
 
     trigger_slash_shortcut
 
-    assert_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
   end
 
   test 'ctrl+k on global search page ignores query input key events' do
@@ -68,7 +87,7 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
       target_selector: '#global-search-query'
     )
 
-    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_no_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
   end
 
   test 'ctrl+k opens dialog on global search page when focus leaves editable fields' do
@@ -94,17 +113,17 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
       target_selector: '#global-search-shortcut-origin'
     )
 
-    assert_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
   end
 
   test 'global search shortcuts ignore repeated and composing key events' do
     visit '/-/groups/group-1'
 
     trigger_keydown(key: 'k', ctrl_key: true, repeat: true)
-    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_no_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
 
     trigger_keydown(key: 'k', ctrl_key: true, composing: true)
-    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_no_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
   end
 
   test 'ctrl+k opens dialog on nested pages and escape clears and closes it' do
@@ -112,7 +131,7 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
 
     trigger_global_search_shortcut
 
-    dialog = find("dialog[data-global-search-dialog-target='dialog'][open]", visible: :all)
+    dialog = find("[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all)
 
     within(dialog) do
       find('summary', text: 'Filters').click
@@ -121,10 +140,10 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
     end
 
     find('body').send_keys(:escape)
-    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_no_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
 
     trigger_global_search_shortcut
-    dialog = find("dialog[data-global-search-dialog-target='dialog'][open]", visible: :all)
+    dialog = find("[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all)
 
     within(dialog) do
       assert_equal '', find("input[name='q']").value
@@ -137,7 +156,7 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
 
     trigger_global_search_shortcut
 
-    within("dialog[data-global-search-dialog-target='dialog'][open]") do
+    within("[data-global-search-dialog-target='dialog']:not([hidden])") do
       find("input[name='q']").set('Project 1')
       find("input[name='q']").send_keys(:enter)
     end
@@ -153,7 +172,7 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
 
     trigger_global_search_shortcut
 
-    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_no_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
   end
 
   test 'closing dialog restores focus to the previously focused element' do
@@ -174,10 +193,10 @@ class GlobalSearchDialogTest < ApplicationSystemTestCase
     assert_equal 'global-search-focus-origin', page.evaluate_script('document.activeElement.id')
 
     trigger_global_search_shortcut
-    assert_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
 
     find('body').send_keys(:escape)
-    assert_no_selector "dialog[data-global-search-dialog-target='dialog'][open]", visible: :all
+    assert_no_selector "[data-global-search-dialog-target='dialog']:not([hidden])", visible: :all
     assert_equal 'global-search-focus-origin', page.evaluate_script('document.activeElement.id')
   end
 

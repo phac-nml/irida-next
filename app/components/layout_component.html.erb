@@ -69,6 +69,10 @@
         <turbo-frame id="breadcrumb" class="contents"><%= breadcrumb %></turbo-frame>
       </div>
 
+      <% if global_search_enabled? %>
+        <div class="flex h-full items-center"><%= render GlobalSearch::DialogComponent.new(user:) %></div>
+      <% end %>
+
       <%= language_selection %>
     </header>
 
@@ -82,10 +86,6 @@
     >
       <div class="<%= @layout %>"><%= body %></div>
     </main>
-
-    <% if global_search_enabled? %>
-      <%= render GlobalSearch::DialogComponent.new %>
-    <% end %>
 
     <%= render ConfirmationComponent.new %>
 

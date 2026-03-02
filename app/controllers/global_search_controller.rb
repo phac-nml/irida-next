@@ -31,6 +31,7 @@ class GlobalSearchController < ApplicationController
   def query_params
     params.permit(
       :q,
+      :active_type,
       :sort,
       :workflow_state,
       :created_from,

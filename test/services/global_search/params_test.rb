@@ -19,6 +19,13 @@ module GlobalSearch
       assert_equal %w[projects groups workflow_executions samples data_exports], params.types
     end
 
+    test 'active_type narrows returned types' do
+      params = GlobalSearch::Params.new(active_type: 'groups')
+
+      assert_equal 'groups', params.active_type
+      assert_equal ['groups'], params.types
+    end
+
     test 'types filters to valid values' do
       params = GlobalSearch::Params.new(types: %w[projects invalid_type samples])
       assert_equal %w[projects samples], params.types

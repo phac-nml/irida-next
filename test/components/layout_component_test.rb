@@ -3,6 +3,14 @@
 require 'test_helper'
 
 class LayoutComponentTest < ViewComponent::TestCase
+  setup do
+    Flipper.disable(:global_search)
+  end
+
+  teardown do
+    Flipper.disable(:global_search)
+  end
+
   test 'renders layout with sidebar and body' do
     user = users(:john_doe)
 
@@ -116,5 +124,20 @@ class LayoutComponentTest < ViewComponent::TestCase
     assert_selector 'h3', text: 'Section 2'
     assert_selector 'a[href="/item1"]', text: 'Item 1'
     assert_selector 'a[href="/item2"]', text: 'Item 2'
+  end
+
+  test 'renders global search trigger in header when feature is enabled' do
+    Flipper.enable(:global_search)
+    user = users(:john_doe)
+
+    render_inline LayoutComponent.new(user: user) do |layout|
+      layout.with_sidebar do |sidebar|
+        sidebar.with_header(label: 'Header')
+      end
+      layout.with_body { 'Content' }
+      layout.with_language_selection(user: user)
+    end
+
+    assert_selector "button[data-global-search-dialog-target='trigger']"
   end
 end
