@@ -3,6 +3,8 @@
 # Helper for namespace paths
 module NamespacePathHelper
   def namespace_path(namespace)
+    return if namespace.deleted?
+
     if namespace&.group_namespace?
       group_path(namespace)
     elsif namespace&.project_namespace?
