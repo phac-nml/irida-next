@@ -1,19 +1,11 @@
 <div
   class="flex max-sm:grow"
-  <% if Flipper.enabled?(:beta_dropdown) %>
-    data-controller="viral--beta-dropdown"
-  <% else %>
-    data-controller="viral--dropdown"
-    data-viral--dropdown-skidding-value="0"
-    data-viral--dropdown-distance-value="10"
-  <% end %>
+  data-controller="viral--dropdown"
+  data-viral--dropdown-skidding-value="0"
+  data-viral--dropdown-distance-value="10"
 >
   <button
-    <% if Flipper.enabled?(:beta_dropdown) %>
-      data-viral--beta-dropdown-target="trigger"
-    <% else %>
-      data-viral--dropdown-target="trigger"
-    <% end %>
+    data-viral--dropdown-target="trigger"
     title="<%= t("shared.samples.metadata_templates.tooltip") %>"
     id="metadata-template-dd-trigger"
     class="button w-full button-default"
@@ -27,17 +19,10 @@
   </button>
 
   <!-- Dropdown menu -->
-  <% options = { hidden: true } %>
-
-  <% if Flipper.enabled?(:beta_dropdown) %>
-    <% options["data-viral--beta-dropdown-target"] = "menu" %>
-  <% else %>
-    <% options["data-viral--dropdown-target"] = "menu" %>
-  <% end %>
-
-  <%= turbo_frame_tag "metadata-template-dd-menu", class: "w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
-      dark:bg-slate-700 dark:divide-slate-600 z-30", **options, src: url, refresh: "morph",
-      loading: :lazy do %>
+  <%= turbo_frame_tag "metadata-template-dd-menu", class: "
+      hidden w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
+      dark:bg-slate-700 dark:divide-slate-600 z-30
+    ", "data-viral--dropdown-target": "menu", src: url, refresh: "morph", loading: :lazy do %>
     <%= render SpinnerComponent.new(
       message: t("shared.samples.metadata_templates.loading"),
     ) %>
