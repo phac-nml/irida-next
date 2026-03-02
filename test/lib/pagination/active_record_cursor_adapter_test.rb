@@ -46,6 +46,32 @@ module Pagination
       end
     end
 
+    test 'normalizes blank and null cursor values to nil' do
+      relation = ordered_project2_samples
+      adapter = ActiveRecordCursorAdapter.new(relation)
+      first_page = adapter.fetch(limit: 5)
+      blank_cursor_page = adapter.fetch(limit: 5, after: '')
+      null_cursor_page = adapter.fetch(limit: 5, after: 'null')
+      whitespace_cursor_page = adapter.fetch(limit: 5, after: "  \n")
+
+      assert_equal first_page.records.map(&:id), blank_cursor_page.records.map(&:id)
+      assert_equal first_page.records.map(&:id), null_cursor_page.records.map(&:id)
+      assert_equal first_page.records.map(&:id), whitespace_cursor_page.records.map(&:id)
+    end
+
+    test 'clamps oversized and invalid limits to bounded server values' do
+      relation = Sample.order(updated_at: :desc, id: :desc)
+      adapter = ActiveRecordCursorAdapter.new(relation)
+
+      oversized_limit_page = adapter.fetch(limit: 9_999)
+      zero_limit_page = adapter.fetch(limit: 0)
+      negative_limit_page = adapter.fetch(limit: -5)
+
+      assert_equal ActiveRecordCursorAdapter::MAX_LIMIT, oversized_limit_page.records.count
+      assert_equal ActiveRecordCursorAdapter::DEFAULT_LIMIT, zero_limit_page.records.count
+      assert_equal ActiveRecordCursorAdapter::DEFAULT_LIMIT, negative_limit_page.records.count
+    end
+
     private
 
     def ordered_project2_samples

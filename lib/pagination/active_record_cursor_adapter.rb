@@ -3,7 +3,8 @@
 module Pagination
   # Wraps active_record_cursor_paginate and returns a stable page contract object.
   class ActiveRecordCursorAdapter
-    DEFAULT_LIMIT = 50
+    DEFAULT_LIMIT = 20
+    MAX_LIMIT = 100
 
     def initialize(relation)
       @relation = relation
@@ -17,7 +18,7 @@ module Pagination
         records: result.records,
         next_cursor: next_cursor_for(result),
         has_next_page: result.has_next?,
-        total_count: relation.reorder(nil).count
+        total_count: paginator.total_count
       )
     end
 
@@ -29,7 +30,7 @@ module Pagination
       paginator = relation.cursor_paginate
       paginator.order = ActiveRecordCursorOrdering.order(relation) { |direction| direction }
       paginator.nullable_columns = ActiveRecordCursorOrdering.nullable_columns(relation)
-      paginator.limit = limit || DEFAULT_LIMIT
+      paginator.limit = clamp_limit(limit)
 
       normalized_after = normalize_cursor(after)
       paginator.after = normalized_after if normalized_after.present?
@@ -38,9 +39,19 @@ module Pagination
     end
 
     def normalize_cursor(cursor)
-      return nil if ['', 'null'].include?(cursor)
+      return nil if cursor.nil?
 
-      cursor
+      normalized_cursor = cursor.is_a?(String) ? cursor.strip : cursor
+      return nil if ['', 'null'].include?(normalized_cursor)
+
+      normalized_cursor
+    end
+
+    def clamp_limit(limit)
+      normalized_limit = limit.to_i
+      normalized_limit = DEFAULT_LIMIT if normalized_limit <= 0
+
+      [normalized_limit, MAX_LIMIT].min
     end
 
     def next_cursor_for(result)

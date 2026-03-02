@@ -337,15 +337,13 @@ class QueryTest < ActiveSupport::TestCase
     assert_equal 20, page.total_count
   end
 
-  test 'results uses cursor mode when after is passed' do
+  test 'results keeps pagy tuple behavior for page-based callers' do
     query = Sample::Query.new(sort: 'updated_at desc', project_ids: [projects(:project2).id])
 
-    first_page = query.results(limit: 5, after: nil)
-    second_page = query.results(limit: 5, after: first_page.next_cursor)
+    pagy, records = query.results(limit: 5, page: 1)
 
-    assert_instance_of Pagination::ActiveRecordCursorPage, first_page
-    assert_instance_of Pagination::ActiveRecordCursorPage, second_page
-    assert_empty first_page.records.map(&:id) & second_page.records.map(&:id)
+    assert_instance_of Pagy::Offset, pagy
+    assert_equal 5, records.count
   end
 
   test 'cursor mode tie-breaker id keeps batches stable when primary sort values collide' do
