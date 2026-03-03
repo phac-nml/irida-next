@@ -70,32 +70,12 @@ module WorkflowExecutions
     end
 
     test 'get status of workflow execution which is initializing' do
-      run_id = 'status_test_1'
       stubs = Faraday::Adapter::Test::Stubs.new
-      stubs.post('/runs') do
+      stubs.get("/runs/#{@run_id}/status") do
         [
           200,
           { 'Content-Type': 'application/json' },
-          { run_id: }
-        ]
-      end
-
-      conn = Faraday.new do |builder|
-        builder.adapter :test, stubs
-      end
-
-      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
-
-      assert_equal run_id, @workflow_execution.run_id
-
-      assert_equal 'submitted', @workflow_execution.state
-
-      stubs = Faraday::Adapter::Test::Stubs.new
-      stubs.get("/runs/#{run_id}/status") do
-        [
-          200,
-          { 'Content-Type': 'application/json' },
-          { run_id:, state: 'INITIALIZING' }
+          { run_id: @run_id, state: 'INITIALIZING' }
         ]
       end
 
@@ -109,32 +89,12 @@ module WorkflowExecutions
     end
 
     test 'get status of workflow execution which is unknown starting as submitted' do
-      run_id = 'status_test_1'
       stubs = Faraday::Adapter::Test::Stubs.new
-      stubs.post('/runs') do
+      stubs.get("/runs/#{@run_id}/status") do
         [
           200,
           { 'Content-Type': 'application/json' },
-          { run_id: }
-        ]
-      end
-
-      conn = Faraday.new do |builder|
-        builder.adapter :test, stubs
-      end
-
-      assert WorkflowExecutions::SubmissionService.new(@workflow_execution, conn, @user, {}).execute
-
-      assert_equal run_id, @workflow_execution.run_id
-
-      assert_equal 'submitted', @workflow_execution.state
-
-      stubs = Faraday::Adapter::Test::Stubs.new
-      stubs.get("/runs/#{run_id}/status") do
-        [
-          200,
-          { 'Content-Type': 'application/json' },
-          { run_id:, state: 'UNKNOWN' }
+          { run_id: @run_id, state: 'UNKNOWN' }
         ]
       end
 
