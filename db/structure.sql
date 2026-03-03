@@ -669,10 +669,10 @@ ALTER SEQUENCE public.flipper_gates_id_seq OWNED BY public.flipper_gates.id;
 
 
 --
--- Name: global_notifications; Type: TABLE; Schema: public; Owner: -
+-- Name: site_banners; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.global_notifications (
+CREATE TABLE public.site_banners (
     id bigint NOT NULL,
     singleton_guard character varying DEFAULT 'global'::character varying NOT NULL,
     enabled boolean DEFAULT true NOT NULL,
@@ -680,16 +680,16 @@ CREATE TABLE public.global_notifications (
     messages jsonb DEFAULT '{}'::jsonb NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    CONSTRAINT global_notifications_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
-    CONSTRAINT global_notifications_style_check CHECK (((style)::text = ANY ((ARRAY['info'::character varying, 'warning'::character varying, 'danger'::character varying, 'success'::character varying])::text[])))
+    CONSTRAINT site_banners_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
+    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY ((ARRAY['info'::character varying, 'warning'::character varying, 'danger'::character varying, 'success'::character varying])::text[])))
 );
 
 
 --
--- Name: global_notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: site_banners_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.global_notifications_id_seq
+CREATE SEQUENCE public.site_banners_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -698,10 +698,10 @@ CREATE SEQUENCE public.global_notifications_id_seq
 
 
 --
--- Name: global_notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: site_banners_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.global_notifications_id_seq OWNED BY public.global_notifications.id;
+ALTER SEQUENCE public.site_banners_id_seq OWNED BY public.site_banners.id;
 
 
 --
@@ -1001,10 +1001,10 @@ ALTER TABLE ONLY public.flipper_gates ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- Name: global_notifications id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: site_banners id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.global_notifications ALTER COLUMN id SET DEFAULT nextval('public.global_notifications_id_seq'::regclass);
+ALTER TABLE ONLY public.site_banners ALTER COLUMN id SET DEFAULT nextval('public.site_banners_id_seq'::regclass);
 
 
 --
@@ -1111,11 +1111,11 @@ ALTER TABLE ONLY public.flipper_gates
 
 
 --
--- Name: global_notifications global_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: site_banners site_banners_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.global_notifications
-    ADD CONSTRAINT global_notifications_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.site_banners
+    ADD CONSTRAINT site_banners_pkey PRIMARY KEY (id);
 
 
 --
@@ -1420,10 +1420,10 @@ CREATE UNIQUE INDEX index_flipper_gates_on_feature_key_and_key_and_value ON publ
 
 
 --
--- Name: index_global_notifications_on_enabled_when_enabled; Type: INDEX; Schema: public; Owner: -
+-- Name: index_site_banners_on_enabled_when_enabled; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_global_notifications_on_enabled_when_enabled ON public.global_notifications USING btree (enabled) WHERE (enabled = true);
+CREATE UNIQUE INDEX index_site_banners_on_enabled_when_enabled ON public.site_banners USING btree (enabled) WHERE (enabled = true);
 
 
 --

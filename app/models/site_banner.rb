@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Global notifications shown in application layouts.
-class GlobalNotification < ApplicationRecord
+# Site banners shown in application layouts.
+class SiteBanner < ApplicationRecord
   SINGLETON_GUARD = 'global'
 
   enum :style, {

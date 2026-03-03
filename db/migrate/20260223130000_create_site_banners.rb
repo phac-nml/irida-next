@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-# Create global notifications table.
-class CreateGlobalNotifications < ActiveRecord::Migration[8.0]
-  ENABLED_INDEX = 'index_global_notifications_on_enabled_when_enabled'
+# Create site banners table.
+class CreateSiteBanners < ActiveRecord::Migration[8.0]
+  ENABLED_INDEX = 'index_site_banners_on_enabled_when_enabled'
   SINGLETON_GUARD_CHECK = "singleton_guard = 'global'"
   STYLE_CHECK = "style IN ('info', 'warning', 'danger', 'success')"
 
   def change
-    create_global_notifications_table
+    create_site_banners_table
     add_enabled_index
     add_constraints
   end
 
   private
 
-  def create_global_notifications_table
-    create_table :global_notifications do |t|
+  def create_site_banners_table
+    create_table :site_banners do |t|
       t.string :singleton_guard, null: false, default: 'global'
       t.boolean :enabled, null: false, default: true
       t.string :style, null: false, default: 'info'
@@ -26,7 +26,7 @@ class CreateGlobalNotifications < ActiveRecord::Migration[8.0]
   end
 
   def add_enabled_index
-    add_index :global_notifications,
+    add_index :site_banners,
               :enabled,
               unique: true,
               where: 'enabled = true',
@@ -34,11 +34,11 @@ class CreateGlobalNotifications < ActiveRecord::Migration[8.0]
   end
 
   def add_constraints
-    add_check_constraint :global_notifications,
+    add_check_constraint :site_banners,
                          SINGLETON_GUARD_CHECK,
-                         name: 'global_notifications_singleton_guard_check'
-    add_check_constraint :global_notifications,
+                         name: 'site_banners_singleton_guard_check'
+    add_check_constraint :site_banners,
                          STYLE_CHECK,
-                         name: 'global_notifications_style_check'
+                         name: 'site_banners_style_check'
   end
 end
