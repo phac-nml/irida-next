@@ -24,7 +24,7 @@ module Samples
         @force_update = params.key?('force_update') ? params['force_update'] : false
       end
 
-      def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
         authorize! sample.project, to: :update_sample?
 
         validate_sample_in_project
@@ -33,7 +33,8 @@ module Samples
 
         @metadata_changes = perform_metadata_update(@sample, @metadata, @force_update)
 
-        if @include_activity && (@metadata_changes[:deleted].any? || @metadata_changes[:added].any?)
+        if @include_activity &&
+           (@metadata_changes[:deleted].any? || @metadata_changes[:added].any? || @metadata_changes[:updated].any?)
           @project.namespace.create_activity key: 'namespaces_project_namespace.samples.metadata.update',
                                              owner: current_user,
                                              parameters:

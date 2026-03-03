@@ -119,7 +119,7 @@ module Samples
 
         return sample.first unless sample.count != 1
 
-        add_sample_query_error(sample, sample_identifier)
+        add_group_sample_query_error(sample, sample_identifier)
         nil
       end
 
@@ -130,15 +130,16 @@ module Samples
         elsif id_type == 'id'
           Sample.find_by(id: sample_identifier, project_id: project.id)
         else
-          sample = Sample.where(name: sample_identifier, project_id: project.id)
-          return sample.first unless sample.count != 1
+          sample = Sample.find_by(name: sample_identifier, project_id: project.id)
+          return sample unless sample.nil?
 
-          add_sample_query_error(sample, sample_identifier)
+          @namespace.errors.add(:sample,
+                                I18n.t('services.samples.metadata.bulk_update.sample_not_found', sample_identifier:))
           nil
         end
       end
 
-      def add_sample_query_error(sample, sample_identifier)
+      def add_group_sample_query_error(sample, sample_identifier)
         error_key = sample.none? ? 'sample_not_found' : 'duplicate_identifier'
         @namespace.errors.add(:sample, I18n.t("services.samples.metadata.bulk_update.#{error_key}", sample_identifier:))
       end
