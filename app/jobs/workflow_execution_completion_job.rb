@@ -29,7 +29,7 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
   def initial_validation
     return if validate_initial_state(@workflow_execution, [:completing], validate_run_id: false)
 
-    update_state(:error, force: true)
+    update_state(:error)
   end
 
   def process_global_file_paths
@@ -209,16 +209,11 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
     update_state(:completed)
   end
 
-  def update_state(state, force: false)
+  def update_state(state)
     return if @workflow_execution.state.to_sym == state
 
-    if force
-      # validation must be skipped in the case where model is already invalid (e.g. no namespace)
-      @workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
-    else
-      @workflow_execution.state = state
-      @workflow_execution.save
-    end
+    @workflow_execution.state = state
+    @workflow_execution.save
   end
 
   def queue_next_job
