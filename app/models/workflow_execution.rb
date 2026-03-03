@@ -16,8 +16,7 @@ class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLengt
   after_commit { broadcast_refresh_later_to [submitter, :workflow_executions] }
 
   belongs_to :submitter, class_name: 'User'
-  belongs_to :namespace
-  belongs_to :namespace_with_deleted, -> { with_deleted }, class_name: 'Namespace', foreign_key: :namespace_id # rubocop:disable Rails/InverseOf
+  belongs_to :namespace, -> { with_deleted }, optional: true # rubocop:disable Rails/InverseOf
 
   has_many :samples_workflow_executions, dependent: :destroy
   has_many :samples, through: :samples_workflow_executions
@@ -27,7 +26,7 @@ class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLengt
   accepts_nested_attributes_for :samples_workflow_executions
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
-  validate :validate_namespace
+  validate :validate_namespace, on: :create
   validate :validate_workflow_available, if: :initial?
   validates :name, presence: true, if: -> { !submitter.automation_bot? }
 

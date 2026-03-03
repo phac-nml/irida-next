@@ -349,8 +349,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
     assert_text workflow_execution.workflow.name
     assert_text workflow_execution.metadata['workflow_version']
-    assert_link workflow_execution.namespace_with_deleted.name
-    assert_text workflow_execution.namespace_with_deleted.puid
+    assert_link workflow_execution.namespace.name
+    assert_text workflow_execution.namespace.puid
     assert_no_text I18n.t('workflow_executions.summary.deleted')
 
     click_on I18n.t('workflow_executions.show.tabs.files')
@@ -383,9 +383,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
     assert_text workflow_execution.workflow.name
     assert_text workflow_execution.metadata['workflow_version']
-    assert_no_link workflow_execution.namespace_with_deleted.name
-    assert_text workflow_execution.namespace_with_deleted.name
-    assert_text workflow_execution.namespace_with_deleted.puid
+    assert_no_link workflow_execution.namespace.name
+    assert_text workflow_execution.namespace.name
+    assert_text workflow_execution.namespace.puid
     assert_text I18n.t('workflow_executions.summary.deleted')
 
     click_on I18n.t('workflow_executions.show.tabs.files')
@@ -418,9 +418,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
     assert_text workflow_execution.workflow.name
     assert_text workflow_execution.metadata['workflow_version']
-    assert_no_link workflow_execution.namespace_with_deleted.name
-    assert_text workflow_execution.namespace_with_deleted.name
-    assert_text workflow_execution.namespace_with_deleted.puid
+    assert_no_link workflow_execution.namespace.name
+    assert_text workflow_execution.namespace.name
+    assert_text workflow_execution.namespace.puid
     assert_text I18n.t('workflow_executions.summary.deleted')
 
     click_on I18n.t('workflow_executions.show.tabs.files')
@@ -639,8 +639,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
     assert_text workflow_execution.workflow.name
     assert_text workflow_execution.metadata['workflow_version']
-    assert_link workflow_execution.namespace_with_deleted.name
-    assert_text workflow_execution.namespace_with_deleted.puid
+    assert_link workflow_execution.namespace.name
+    assert_text workflow_execution.namespace.puid
     assert_no_text I18n.t('workflow_executions.summary.deleted')
 
     assert_selector 'button[disabled]', text: I18n.t(:'workflow_executions.show.create_export_button')

@@ -42,11 +42,11 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
           I18n.t('activerecord.errors.models.workflow_execution.invalid_job_state', job_name: self.class.name)
         )
       end
-
-      update_state(state)
     else
-      update_state(:error, force: true)
+      state = :error
     end
+
+    update_state(state)
   end
 
   def user_cancelled_run?
@@ -54,16 +54,11 @@ class WorkflowExecutionStatusJob < WorkflowExecutionJob
     @workflow_execution.canceling? || @workflow_execution.canceled?
   end
 
-  def update_state(state, force: false)
+  def update_state(state)
     return if @workflow_execution.state.to_sym == state
 
-    if force
-      # validation must be skipped in the case where model is already invalid (e.g. no namespace)
-      @workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
-    else
-      @workflow_execution.state = state
-      @workflow_execution.save
-    end
+    @workflow_execution.state = state
+    @workflow_execution.save!
   end
 
   def queue_next_job
