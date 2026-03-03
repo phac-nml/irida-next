@@ -32,12 +32,12 @@ module Samples
         bulk_metadata_payload = {}
         headers = retrieve_headers
         parse_settings = headers.zip(headers).to_h
-        # minus 1 to exclude header
-        percentage_denominator = (@spreadsheet.count - 1) * 1.05
+        # minus 1 to exclude header; doubled as 50% is handled here and 50% handled in BulkUpdateService
+        progress_bar_denominator = (@spreadsheet.count - 1) * 2
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
-          update_progress_bar(index, percentage_denominator, broadcast_target)
+          update_progress_bar(index, progress_bar_denominator, broadcast_target)
 
           sample_id = metadata[@sample_id_column].to_s
           metadata.delete(@sample_id_column)
@@ -45,9 +45,9 @@ module Samples
 
           bulk_metadata_payload[sample_id] = metadata
         end
-
-        BulkUpdateService.new(@namespace, bulk_metadata_payload, @selected_headers, current_user).execute
-        update_progress_bar(percentage_denominator, percentage_denominator, broadcast_target)
+        BulkUpdateService.new(@namespace, bulk_metadata_payload, @selected_headers, current_user, {
+                                broadcast_target:, progress_bar_denominator:
+                              }).execute
       end
 
       private

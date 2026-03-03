@@ -12,13 +12,24 @@ module Samples
         @metadata_payload = metadata_payload
         @metadata_fields = sanitize_metadata_fields(metadata_fields)
         @metadata_summary_data = {}
+        @broadcast_target = params.key?(:broadcast_target) ? params[:broadcast_target] : nil
+        @progress_bar_denominator = params.key?(:progress_bar_denominator) ? params[:progress_bar_denominator] : nil
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         authorize! @namespace, to: :update_sample_metadata?
         activity_data = {}
         unsuccessful_updates = {}
-        @metadata_payload.each do |sample_identifier, metadata|
+
+        starting_index = 0
+        should_update_progress_bar = false
+        unless @broadcast_target.nil? && @progress_bar_denominator.nil?
+          starting_index = (@progress_bar_denominator / 2) + 1
+          should_update_progress_bar = true
+        end
+
+        @metadata_payload.each.with_index(starting_index) do |(sample_identifier, metadata), index|
+          update_progress_bar(index, @progress_bar_denominator, @broadcast_target) if should_update_progress_bar
           next unless validate_metadata_param(metadata, sample_identifier)
 
           sample = find_sample(sample_identifier)
@@ -209,8 +220,9 @@ module Samples
       def initialize_metadata_summary_data_for_project(project_puid)
         @metadata_summary_data[project_puid] = { added: {}, deleted: {} }
         @metadata_fields.each do |metadata_field|
-          @metadata_summary_data[project_puid][:added][metadata_field] = 0
-          @metadata_summary_data[project_puid][:deleted][metadata_field] = 0
+          downcased_metadata_field = metadata_field.downcase
+          @metadata_summary_data[project_puid][:added][downcased_metadata_field] = 0
+          @metadata_summary_data[project_puid][:deleted][downcased_metadata_field] = 0
         end
       end
 
