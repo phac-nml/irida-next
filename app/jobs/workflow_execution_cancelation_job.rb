@@ -48,7 +48,7 @@ class WorkflowExecutionCancelationJob < WorkflowExecutionJob
   def submit_cancelation
     # validate workflow_execution object is fit to run jobs on
     unless validate_initial_state(@workflow_execution, [:canceling], validate_run_id: true)
-      update_state(:error, force: true)
+      update_state(:error)
       return
     end
 
@@ -61,16 +61,11 @@ class WorkflowExecutionCancelationJob < WorkflowExecutionJob
     update_state(:canceled)
   end
 
-  def update_state(state, force: false)
+  def update_state(state)
     return if @workflow_execution.state.to_sym == state
 
-    if force
-      # validation must be skipped in the case where model is already invalid (e.g. no namespace)
-      @workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
-    else
-      @workflow_execution.state = state
-      @workflow_execution.save
-    end
+    @workflow_execution.state = state
+    @workflow_execution.save
   end
 
   def queue_next_job
