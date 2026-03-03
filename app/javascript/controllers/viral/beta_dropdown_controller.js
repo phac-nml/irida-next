@@ -1,38 +1,46 @@
-import MenuController from "controllers/menu_controller";
+import { Controller } from "@hotwired/stimulus";
+import FloatingMenu from "controllers/viral/floating_menu";
 
-export default class extends MenuController {
+export default class extends Controller {
   static targets = ["trigger", "menu"];
 
-  initialize() {
-    super.initialize();
+  #floatingMenu = null;
 
+  initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
     this.boundOnButtonClick = this.onButtonClick.bind(this);
     this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
-    this.boundFocusOut = this.focusOut.bind(this);
     this.boundOnMorph = this.onMorph.bind(this);
   }
 
   connect() {
-    this.element.setAttribute("data-controller-connected", "true");
+    this.idempotentConnect();
+
     document.addEventListener("turbo:morph", this.boundOnMorph);
-    this.#initializeDropdown();
+  }
+
+  idempotentConnect() {
+    this.#floatingMenu = new FloatingMenu({
+      trigger: this.triggerTarget,
+      menu: this.menuTarget,
+      onHide: () => this.#onHide(),
+    });
   }
 
   disconnect() {
+    this.#floatingMenu?.destroy();
+    this.#floatingMenu = null;
+
     document.removeEventListener("turbo:morph", this.boundOnMorph);
-    super.disconnect();
   }
 
   onMorph() {
-    this.menuTargetConnected(this.menuTarget);
-    this.triggerTargetConnected(this.triggerTarget);
+    this.idempotentConnect();
   }
 
   menuTargetConnected(element) {
     element.setAttribute("aria-hidden", "true");
     element.addEventListener("keydown", this.boundOnMenuItemKeyDown);
-    element.addEventListener("focusout", this.boundFocusOut);
     this.#menuItems(element).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });
@@ -40,7 +48,6 @@ export default class extends MenuController {
 
   menuTargetDisconnected(element) {
     element.removeEventListener("keydown", this.boundOnMenuItemKeyDown);
-    element.removeEventListener("focusout", this.boundFocusOut);
   }
 
   triggerTargetConnected(element) {
@@ -48,7 +55,6 @@ export default class extends MenuController {
     element.addEventListener("click", this.boundOnButtonClick, {
       capture: true,
     });
-    super.triggerTargetConnected();
   }
 
   triggerTargetDisconnected(element) {
@@ -56,44 +62,21 @@ export default class extends MenuController {
     element.removeEventListener("click", this.boundOnButtonClick, {
       capture: true,
     });
-    super.triggerTargetDisconnected();
-  }
-
-  #initializeDropdown() {
-    super.share({
-      onShow: () => this.#onShow(),
-      onHide: () => this.#onHide(),
-    });
-  }
-
-  #onShow() {
-    this.triggerTarget.setAttribute("aria-expanded", "true");
-    this.menuTarget.setAttribute("aria-hidden", "false");
-    this.menuTarget.removeAttribute("hidden");
   }
 
   #onHide() {
-    this.triggerTarget.setAttribute("aria-expanded", "false");
-    this.menuTarget.setAttribute("aria-hidden", "true");
-    this.menuTarget.setAttribute("hidden", "");
     this.#menuItems(this.menuTarget).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });
     this.triggerTarget.focus();
   }
 
-  focusOut(event) {
-    if (!this.element.contains(event.relatedTarget)) {
-      super.hide();
-    }
-  }
-
   onButtonClick(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (super.isVisible()) {
-      super.hide();
+    if (this.#floatingMenu.isVisible()) {
+      this.#floatingMenu.hide();
     } else {
       this.#openMenuAndFocusMenuItem(0);
     }
@@ -131,10 +114,10 @@ export default class extends MenuController {
         },
         { once: true },
       );
-      super.show();
+      this.#floatingMenu.show();
       this.#focusMenuItem(this.menuTarget);
     } else {
-      super.show();
+      this.#floatingMenu.show();
       this.#focusMenuItem(menuItems.at(index));
     }
   }
@@ -159,7 +142,7 @@ export default class extends MenuController {
           if (clickableTarget) {
             clickableTarget.click();
           } else {
-            super.hide();
+            this.#floatingMenu.hide();
           }
         } else {
           menuItems[currentIndex].click();
@@ -173,7 +156,7 @@ export default class extends MenuController {
         );
       case "Escape":
         event.preventDefault();
-        super.hide();
+        this.#floatingMenu.hide();
         break;
       case "ArrowUp": {
         event.preventDefault();
@@ -209,7 +192,7 @@ export default class extends MenuController {
         if (event.shiftKey) {
           event.preventDefault();
           this.triggerTarget.focus();
-          super.hide();
+          this.#floatingMenu.hide();
         }
         break;
     }
