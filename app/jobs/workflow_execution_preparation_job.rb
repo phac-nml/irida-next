@@ -29,7 +29,7 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
   def initial_validation
     return if validate_initial_state(@workflow_execution, [:initial], validate_run_id: false)
 
-    update_state(:error, force: true)
+    update_state(:error)
   end
 
   def pipeline_validation
@@ -38,7 +38,7 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
     # confirm pipeline found
     return true if @workflow_execution.workflow&.executable?
 
-    update_state(:error, force: false, cleaned_value: true)
+    update_state(:error, cleaned_value: true)
     false
   end
 
@@ -69,16 +69,11 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
     update_state(:prepared)
   end
 
-  def update_state(state, force: false, cleaned_value: nil)
+  def update_state(state, cleaned_value: nil)
     return if @workflow_execution.state.to_sym == state
 
-    if force
-      # validation must be skipped in the case where model is already invalid (e.g. no namespace)
-      @workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
-    else
-      @workflow_execution.state = state
-      @workflow_execution.cleaned = cleaned_value unless cleaned_value.nil?
-      @workflow_execution.save
-    end
+    @workflow_execution.state = state
+    @workflow_execution.cleaned = cleaned_value unless cleaned_value.nil?
+    @workflow_execution.save
   end
 end
