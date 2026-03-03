@@ -35,7 +35,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
               }
             }
           }
-          groups {
+          descendantGroups {
             nodes {
               name
               metrics {
@@ -76,7 +76,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
               }
             }
           }
-          groups(first: $grpFirst, after: $grpAfter) {
+          descendantGroups(first: $grpFirst, after: $grpAfter) {
             pageInfo { hasNextPage endCursor }
             nodes {
               name
@@ -237,7 +237,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     end
 
     # and sub‑groups should also be iterable at the first level
-    subgroup_nodes = metrics_group_node.dig('groups', 'nodes') || []
+    subgroup_nodes = metrics_group_node.dig('descendantGroups', 'nodes') || []
     assert(subgroup_nodes.any? { |g| g['name'] == @subgroup.name })
     subgroup_nodes.each do |g|
       assert g['metrics'].present?, 'subgroup metrics should be present'
@@ -344,7 +344,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       assert_nil result['errors'], 'pagination query for groups should not error'
 
       ns_node = result['data']['namespaceMetrics']['nodes'].find { |n| n['name'] == @group.name }
-      page = ns_node['groups']
+      page = ns_node['descendantGroups']
       group_names.concat(page['nodes'].pluck('name'))
       break unless page['pageInfo']['hasNextPage']
 

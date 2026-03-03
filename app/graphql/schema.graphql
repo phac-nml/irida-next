@@ -1321,9 +1321,9 @@ type GroupMetricsType implements Node {
   createdAt: ISO8601DateTime!
 
   """
-  Groups within this namespace
+  Subgroups within this group namespace. This field is only applicable for group namespaces.
   """
-  groups(
+  descendantGroups(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -1353,7 +1353,14 @@ type GroupMetricsType implements Node {
   """
   Metrics for the group
   """
-  metrics: Metric
+  metrics(
+    """
+    Whether to return only direct records for the object.
+                               For example, if true, it will return only direct
+    records for a namespace, but not records for subgroups.
+    """
+    directRecordsOnly: Boolean = false
+  ): Metric
 
   """
   Name of the namespace.
@@ -1715,9 +1722,9 @@ type NamespaceMetricsType implements Node {
   createdAt: ISO8601DateTime!
 
   """
-  Groups within this namespace
+  Subgroups within this group namespace. This field is only applicable for group namespaces.
   """
-  groups(
+  descendantGroups(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -1747,7 +1754,14 @@ type NamespaceMetricsType implements Node {
   """
   Metrics for all projects under namespace
   """
-  metrics: Metric
+  metrics(
+    """
+    Whether to return only direct records for the object.
+                               For example, if true, it will return only direct
+    records for a namespace, but not records for subgroups.
+    """
+    directRecordsOnly: Boolean = false
+  ): Metric
 
   """
   Name of the namespace.
@@ -2360,9 +2374,9 @@ type ProjectMetricsType implements Node {
   createdAt: ISO8601DateTime!
 
   """
-  Groups within this namespace
+  Subgroups within this group namespace. This field is only applicable for group namespaces.
   """
-  groups(
+  descendantGroups(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -2392,7 +2406,14 @@ type ProjectMetricsType implements Node {
   """
   Metrics for the project
   """
-  metrics: Metric
+  metrics(
+    """
+    Whether to return only direct records for the object.
+                               For example, if true, it will return only direct
+    records for a namespace, but not records for subgroups.
+    """
+    directRecordsOnly: Boolean = false
+  ): Metric
 
   """
   Name of the namespace.
@@ -2608,6 +2629,11 @@ type Query {
     first: Int
 
     """
+    Full path of the namespace. For example, `pathogen/surveillance`.
+    """
+    fullPath: ID
+
+    """
     Returns the last _n_ elements from the list.
     """
     last: Int
@@ -2616,6 +2642,18 @@ type Query {
     Type of namespaces to get metrics for
     """
     namespaceType: [String!] = ["Group", "User"]
+
+    """
+    Persistent Unique Identifier of the namespace.
+                               For example a group namespace, `INXT_GRP_GGGGGGGGGG.`
+    """
+    puid: ID
+
+    """
+    Whether to return only top level ancestor namespaces. For example, if true,
+    it will return only top level groups and user namespaces, but not subgroups.
+    """
+    topLevelOnly: Boolean = false
   ): NamespaceMetricsTypeConnection!
 
   """

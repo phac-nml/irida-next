@@ -23,9 +23,9 @@ module Types
             complexity: 5,
             resolver: Resolvers::Metrics::ProjectsResolver
 
-      field :groups, Types::Metrics::GroupType.connection_type,
+      field :descendant_groups, Types::Metrics::GroupType.connection_type,
             null: true,
-            description: 'Groups within this namespace',
+            description: 'Subgroups within this group namespace. This field is only applicable for group namespaces.',
             complexity: 5,
             resolver: Resolvers::Metrics::SubgroupsResolver
 
