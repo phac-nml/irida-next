@@ -41,21 +41,16 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
 
       update_state(:submitted, run_id: run_id)
     else
-      update_state(:error, force: true)
+      update_state(:error)
     end
   end
 
-  def update_state(state, force: false, run_id: nil)
+  def update_state(state, run_id: nil)
     return if @workflow_execution.state.to_sym == state
 
-    if force
-      # validation must be skipped in the case where model is already invalid (e.g. no namespace)
-      @workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
-    else
-      @workflow_execution.run_id = run_id unless run_id.nil?
-      @workflow_execution.state = state
-      @workflow_execution.save
-    end
+    @workflow_execution.run_id = run_id unless run_id.nil?
+    @workflow_execution.state = state
+    @workflow_execution.save
   end
 
   def queue_next_job
