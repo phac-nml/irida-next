@@ -28,7 +28,7 @@
           text-sm text-slate-900 placeholder-shown:field-sizing-content dark:border-slate-600 dark:bg-slate-700
           dark:text-white dark:placeholder-slate-300
         "
-        autocomplete="on"
+        autocomplete="off"
       >
 
       <!--
@@ -99,7 +99,6 @@
                 namespace_id:,
                 header:,
                 property:,
-                samples: @samples,
                 metadata_fields:,
                 required_properties:,
                 workflow_params:,
@@ -158,6 +157,7 @@
 <template data-nextflow--v2--samplesheet-target="fileTemplate">
   <a
     href="#"
+    data-base-path="/-/workflow_executions/file_selector/new"
     data-turbo-stream="true"
     data-namespace-id="<%= @namespace_id %>"
     class="

@@ -97,7 +97,6 @@
                 namespace_id:,
                 header:,
                 property:,
-                samples: @samples,
                 metadata_fields:,
                 required_properties:,
                 workflow_params:,
@@ -154,6 +153,7 @@
 <template data-nextflow--v1--samplesheet-target="fileTemplate">
   <a
     data-turbo-stream="true"
+    data-base-path="/-/workflow_executions/file_selector/new"
     data-namespace-id="<%= @namespace_id %>"
     href="#"
     class="

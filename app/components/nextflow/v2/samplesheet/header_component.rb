@@ -5,16 +5,15 @@ module Nextflow
     module Samplesheet
       # Renders a header in the sample sheet table
       class HeaderComponent < Component
-        attr_reader :namespace_id, :header, :property, :samples, :metadata_fields, :required_properties,
+        attr_reader :namespace_id, :header, :property, :metadata_fields, :required_properties,
                     :workflow_params, :selected, :metadata_field_options
 
         # rubocop:disable Metrics/ParameterLists
-        def initialize(namespace_id:, header:, property:, samples:, metadata_fields:, required_properties:,
+        def initialize(namespace_id:, header:, property:, metadata_fields:, required_properties:,
                        workflow_params:)
           @namespace_id = namespace_id
           @header = header
           @property = property
-          @samples = samples
           @metadata_fields = metadata_fields
           @required_properties = required_properties
           @workflow_params = workflow_params

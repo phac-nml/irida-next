@@ -54,7 +54,7 @@ module WorkflowExecutions
       end
 
       # query is an array of hashes, and we'll merge them into an empty hash to create a nested hash that can be merged
-      # in v2_samplesheet_controller.js
+      # in nextflow/v2/samplesheet_controller.js
       {}.merge(*metadata)
     end
 

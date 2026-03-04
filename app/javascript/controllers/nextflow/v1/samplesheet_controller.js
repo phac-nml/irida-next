@@ -501,7 +501,7 @@ export default class extends Controller {
     });
 
     // Set link attributes
-    const href = `/-/workflow_executions/file_selector/new?${params.toString()}`;
+    const href = `${fileLink.getAttribute("data-base-path")}?${params.toString()}`;
     const linkId = `${this.#samplesheetAttributes[index].sample_id}_${columnName}`;
     const filename =
       this.#samplesheetAttributes[index].samplesheet_params[columnName]
