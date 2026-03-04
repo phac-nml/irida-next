@@ -3,9 +3,19 @@
 module DataExports
   module LinelistExportDialog
     module V2
-      # Placeholder for the client-side flow rollout. Keeps behavior identical to
-      # v1 until the implementation is intentionally diverged.
+      # Client-side linelist export dialog implementation.
       class Component < V1::Component
+        def initialize(open:, namespace_id:, templates:, **system_arguments)
+          @open = open
+          @namespace_id = namespace_id
+          @templates = templates
+          @system_arguments = system_arguments
+        end
+
+        def call
+          render(partial: 'data_exports/new_linelist_export_dialog_v2',
+                 locals: { open: @open, namespace_id: @namespace_id, templates: @templates })
+        end
       end
     end
   end
