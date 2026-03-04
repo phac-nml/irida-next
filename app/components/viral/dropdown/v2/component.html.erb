@@ -1,0 +1,43 @@
+<%= tag.div(class: "flex max-sm:grow",
+            data: {
+              controller: tooltip? ? "pathogen--tooltip viral--v2--dropdown" : "viral--v2--dropdown",
+              "viral--v2--dropdown-distance-value": distance,
+            }) do %>
+  <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
+    <% if icon_name.present? %>
+      <%= pathogen_icon(
+        icon_name,
+        size: nil,
+        class: class_names("size-5", { "mr-2": label.present? }),
+      ) %>
+    <% end %>
+
+    <% if prefix.present? %>
+      <span class="sr-only"><%= prefix %>&nbsp;</span>
+    <% end %>
+
+    <% if label.present? %>
+      <span class="grow truncate text-center md:text-left"><%= label %></span>
+    <% end %>
+
+    <% if caret %>
+      <%= pathogen_icon(:caret_down, size: :sm, class: "ml-2 flex-none") %>
+    <% end %>
+  <% end %>
+
+  <%= render tooltip_component if tooltip? %>
+
+  <!-- Dropdown menu -->
+  <%= tag.ul(id: @dd_id,
+             data: { "viral--v2--dropdown-target": "menu" },
+             role: "menu",
+             class: class_names("z-20 w-max rounded-lg border border-slate-200 bg-white py-2 text-sm text-slate-700 shadow dark:border-slate-800 dark:bg-slate-700 dark:text-slate-200", styles[:dropdown]),
+             aria: { labelledby: system_arguments[:id] },
+             aria_hidden: true,
+             tabindex: -1,
+             hidden: true) do %>
+    <% items.each do |item| %>
+      <%= item %>
+    <% end %>
+  <% end %>
+<% end %>

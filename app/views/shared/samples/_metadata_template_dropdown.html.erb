@@ -8,17 +8,16 @@
     data-viral--dropdown-target="trigger"
     title="<%= t("shared.samples.metadata_templates.tooltip") %>"
     id="metadata-template-dd-trigger"
-    class="button button-default w-full"
+    class="button w-full button-default"
     type="button"
     aria-haspopup="true"
     aria-expanded="false"
     aria-controls="metadata-template-dd-menu"
   >
-    <span id="metadata-template-dd-label">
-      <%= t("shared.samples.metadata_templates.label") %>
-    </span>
+    <span id="metadata-template-dd-label"><%= t("shared.samples.metadata_templates.label") %></span>
     <%= pathogen_icon(:sliders_horizontal, size: :sm, class: "ml-2 flex-none") %>
   </button>
+
   <!-- Dropdown menu -->
   <%= turbo_frame_tag "metadata-template-dd-menu", class: "
       hidden w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
