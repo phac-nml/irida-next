@@ -50,6 +50,60 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     }
   GRAPHQL
 
+  GROUP_TOP_LEVEL_METRICS_QUERY = <<~GRAPHQL
+    query($namespaceType: [String!], $topLevelOnly: Boolean) {
+      namespaceMetrics(namespaceType: $namespaceType, topLevelOnly: $topLevelOnly) {
+        nodes {
+          name
+          parent
+          type
+          metrics {
+            projectsCount
+            samplesCount
+            membersCount
+            diskUsage
+          }
+        }
+      }
+    }
+  GRAPHQL
+
+  GROUP_OR_USER_BY_PUID_METRICS_QUERY = <<~GRAPHQL
+    query($puid: ID!) {
+      namespaceMetrics(puid: $puid) {
+        nodes {
+          name
+          parent
+          type
+          metrics {
+            projectsCount
+            samplesCount
+            membersCount
+            diskUsage
+          }
+        }
+      }
+    }
+  GRAPHQL
+
+  GROUP_OR_USER_BY_FULL_PATH_METRICS_QUERY = <<~GRAPHQL
+    query($fullPath: ID!) {
+      namespaceMetrics(fullPath: $fullPath) {
+        nodes {
+          name
+          parent
+          type
+          metrics {
+            projectsCount
+            samplesCount
+            membersCount
+            diskUsage
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   # used in the pagination test below; it exposes cursor information on the
   # nested projects/groups connections so that we can walk the pages one at a
   # time.
@@ -122,6 +176,12 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     valid_params = { namespace_attributes: { name: 'Proj3', path: 'proj-3', parent: @group2 } }
     @project3 = Projects::CreateService.new(@non_sys_user, valid_params).execute
 
+    valid_params = { namespace_attributes: { name: 'Proj4', path: 'proj-4', parent: @non_sys_user.namespace } }
+    @project4 = Projects::CreateService.new(@non_sys_user, valid_params).execute
+
+    valid_params = { namespace_attributes: { name: 'Proj5', path: 'proj-5', parent: @non_sys_user.namespace } }
+    @project5 = Projects::CreateService.new(@non_sys_user, valid_params).execute
+
     # create a few samples via the service so that project and group
     # counters are incremented automatically
     @sample1 = Samples::CreateService.new(@non_sys_user, @project, name: 'Sample A').execute
@@ -129,6 +189,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     @sample3 = Samples::CreateService.new(@non_sys_user, @project2, name: 'Sample C').execute
 
     @sample4 = Samples::CreateService.new(@non_sys_user, @project3, name: 'Sample D').execute
+    @sample5 = Samples::CreateService.new(@non_sys_user, @project5, name: 'Sample E').execute
 
     # attach some files to the samples; use existing blob fixtures so we
     # know the byte sizes ahead of time
@@ -143,6 +204,9 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
     Attachments::CreateService.new(@non_sys_user, @sample4,
                                    files: [active_storage_blobs(:test_file_fastq_blob)]).execute
+
+    Attachments::CreateService.new(@non_sys_user, @sample5,
+                                   files: [active_storage_blobs(:test_file_A_fastq_blob)]).execute
 
     # add a couple of namespace attachments as well so disk usage covers
     # all three resolver branches (namespace, sample, workflow).
@@ -357,7 +421,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           assert_equal 0, g['metrics']['samplesCount']
           expected_group_disk = calculate_disk_usage(group_record)
           assert_equal expected_group_disk, g['metrics']['diskUsage']
-          assert_equal 4, p['metrics']['membersCount']
+          assert_equal 4, g['metrics']['membersCount']
         else
           assert g['metrics']['samplesCount'].is_a?(Integer)
           assert g['metrics']['diskUsage'].is_a?(String)
@@ -415,8 +479,8 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert user_node, 'expected the user namespace to appear'
 
     # user namespaces should not have any groups attached
-    grp_nodes = user_node.dig('groups', 'nodes') || nil
-    assert_nil grp_nodes, 'no groups should be returned for a user namespace'
+    grp_nodes = user_node.dig('descendantGroups', 'nodes') || nil
+    assert_nil grp_nodes, 'no subgroups should be returned for a user namespace'
 
     # metrics at the user namespace itself
     user_metrics = user_node['metrics']
@@ -571,6 +635,105 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert_equal expected_disk_usage, namespace_calculated_disk_usage
   end
 
+  test 'group namespace metrics query with topLevelOnly flag returns only top level groups' do
+    result = IridaSchema.execute(
+      GROUP_TOP_LEVEL_METRICS_QUERY,
+      context: { current_user: @sys_user },
+      variables: { namespaceType: ['Group'], topLevelOnly: true },
+      max_complexity: nil
+    )
+    assert_nil result['errors'], 'query should execute without errors'
+    namespaces = result['data']['namespaceMetrics']['nodes']
+    assert_not_empty namespaces, 'should return at least one namespace'
+    assert namespaces.all? { |n| n['parent'].nil? }, 'all returned namespaces should be top-level (no parent)'
+  end
+
+  test 'get group namespace metrics by PUID' do
+    result = IridaSchema.execute(
+      GROUP_OR_USER_BY_PUID_METRICS_QUERY,
+      context: { current_user: @sys_user },
+      variables: { puid: @group.puid },
+      max_complexity: nil
+    )
+    assert_nil result['errors'], 'query should execute without errors'
+    namespaces = result['data']['namespaceMetrics']['nodes']
+    assert namespaces.one?, 'should return one namespace'
+    group_node = namespaces.last
+    assert_equal @group.name, group_node['name'], 'should return the correct group based on PUID'
+    assert group_node['metrics']['samplesCount'].is_a?(Integer)
+    assert group_node['metrics']['diskUsage'].is_a?(String)
+    assert group_node['metrics']['membersCount'].is_a?(Integer)
+    assert_equal @group.reload.aggregated_samples_count, group_node['metrics']['samplesCount']
+    expected_group_disk = calculate_disk_usage(@group)
+    assert_equal expected_group_disk, group_node['metrics']['diskUsage']
+    assert_equal 1, group_node['metrics']['membersCount']
+  end
+
+  test 'get group namespace metrics by full path' do
+    result = IridaSchema.execute(
+      GROUP_OR_USER_BY_FULL_PATH_METRICS_QUERY,
+      context: { current_user: @sys_user },
+      variables: { fullPath: @group.full_path },
+      max_complexity: nil
+    )
+    assert_nil result['errors'], 'query should execute without errors'
+    namespaces = result['data']['namespaceMetrics']['nodes']
+    assert namespaces.one?, 'should return one namespace'
+    group_node = namespaces.last
+    assert_equal @group.name, group_node['name'], 'should return the correct group based on full path'
+    assert group_node['metrics']['samplesCount'].is_a?(Integer)
+    assert group_node['metrics']['diskUsage'].is_a?(String)
+    assert group_node['metrics']['membersCount'].is_a?(Integer)
+    assert_equal @group.reload.aggregated_samples_count, group_node['metrics']['samplesCount']
+    expected_group_disk = calculate_disk_usage(@group)
+    assert_equal expected_group_disk, group_node['metrics']['diskUsage']
+    assert_equal 1, group_node['metrics']['membersCount']
+  end
+
+  test 'get user namespace metrics by PUID' do
+    result = IridaSchema.execute(
+      GROUP_OR_USER_BY_PUID_METRICS_QUERY,
+      context: { current_user: @sys_user },
+      variables: { puid: @non_sys_user.namespace.puid },
+      max_complexity: nil
+    )
+    assert_nil result['errors'], 'query should execute without errors'
+    namespaces = result['data']['namespaceMetrics']['nodes']
+    assert namespaces.one?, 'should return one namespace'
+    user_node = namespaces.last
+    assert_equal @non_sys_user.email, user_node['name'], 'should return the correct user based on PUID'
+    assert user_node['metrics']['samplesCount'].is_a?(Integer)
+    assert user_node['metrics']['diskUsage'].is_a?(String)
+    assert user_node['metrics']['membersCount'].is_a?(Integer)
+    assert_equal 1, user_node['metrics']['samplesCount']
+    expected_user_disk = calculate_disk_usage(@non_sys_user.namespace)
+    assert_equal expected_user_disk, user_node['metrics']['diskUsage']
+    assert_equal 1, user_node['metrics']['membersCount']
+    assert_equal 2, user_node['metrics']['projectsCount']
+  end
+
+  test 'get user namespace metrics by full path' do
+    result = IridaSchema.execute(
+      GROUP_OR_USER_BY_FULL_PATH_METRICS_QUERY,
+      context: { current_user: @sys_user },
+      variables: { fullPath: @non_sys_user.namespace.full_path },
+      max_complexity: nil
+    )
+    assert_nil result['errors'], 'query should execute without errors'
+    namespaces = result['data']['namespaceMetrics']['nodes']
+    assert namespaces.one?, 'should return one namespace'
+    user_node = namespaces.last
+    assert_equal @non_sys_user.email, user_node['name'], 'should return the correct user based on PUID'
+    assert user_node['metrics']['samplesCount'].is_a?(Integer)
+    assert user_node['metrics']['diskUsage'].is_a?(String)
+    assert user_node['metrics']['membersCount'].is_a?(Integer)
+    assert_equal 1, user_node['metrics']['samplesCount']
+    expected_user_disk = calculate_disk_usage(@non_sys_user.namespace)
+    assert_equal expected_user_disk, user_node['metrics']['diskUsage']
+    assert_equal 1, user_node['metrics']['membersCount']
+    assert_equal 2, user_node['metrics']['projectsCount']
+  end
+
   private
 
   # Calculate the disk usage for unique attachment blobs under a namespace (namespace attachments, sample attachments,
@@ -582,9 +745,9 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     namespace.self_and_descendants.each do |ns|
       if namespace.group_namespace? || namespace.user_namespace?
         ns.project_namespaces.each do |pn|
-          samples.concat(pn.project.samples) if pn.project.samples_count.positive?
+          samples.concat(pn.project.samples) if pn.project.samples_count&.positive?
         end
-      elsif !ns.project.samples_count.nil? && ns.project.samples_count.positive?
+      elsif !ns.project.samples_count.nil? && ns.project.samples_count&.positive?
         samples.concat(ns.project.samples)
       end
     end

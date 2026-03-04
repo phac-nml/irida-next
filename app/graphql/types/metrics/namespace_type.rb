@@ -14,6 +14,8 @@ module Types
                                   `INXT_GRP_AAAAAAAAAA`.'
       field :type, String, null: false, description: 'Type of the namespace'
 
+      field :parent, String, null: true, description: 'Parent namespace of this namespace'
+
       field :metrics, Types::Metrics::MetricType, null: true, description: 'Metrics for all projects under namespace',
                                                   resolver: Resolvers::Metrics::ObjectResolver
 

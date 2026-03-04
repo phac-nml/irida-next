@@ -29,11 +29,18 @@ module Resolvers
                            For example a group namespace, `INXT_GRP_GGGGGGGGGG.`',
                default_value: nil
 
-      def resolve(namespace_type:, top_level_only:, full_path:, puid:)
+      def resolve(namespace_type:, top_level_only:, full_path:, puid:) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
         context.scoped_set!(:system_user, true) if context[:current_user]&.system?
 
+        # Top level Project namespaces are not currently supported for metrics
+        # so we remove from the list of namespace types
+        namespace_type.delete(Namespaces::ProjectNamespace.sti_name)
+
         if full_path
-          [Namespace.find_by_full_path(full_path)] # rubocop:disable Rails/DynamicFindBy
+          namespace = Namespace.find_by_full_path(full_path) # rubocop:disable Rails/DynamicFindBy
+          return [] unless namespace && namespace_type.include?(namespace.type)
+
+          [namespace]
         else
           params = { type: namespace_type }
           params.merge!(puid: puid) if puid

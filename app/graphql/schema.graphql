@@ -1368,6 +1368,11 @@ type GroupMetricsType implements Node {
   name: String!
 
   """
+  Parent namespace of this namespace
+  """
+  parent: String
+
+  """
   Projects within this namespace
   """
   projects(
@@ -1767,6 +1772,11 @@ type NamespaceMetricsType implements Node {
   Name of the namespace.
   """
   name: String!
+
+  """
+  Parent namespace of this namespace
+  """
+  parent: String
 
   """
   Projects within this namespace
@@ -2421,6 +2431,11 @@ type ProjectMetricsType implements Node {
   name: String!
 
   """
+  Parent namespace of this namespace
+  """
+  parent: String
+
+  """
   Projects within this namespace
   """
   projects(
@@ -2610,7 +2625,8 @@ type Query {
   ): Namespace
 
   """
-  Find namespaces for metrics.
+  Find namespaces for metrics. By default, it returns all group and user namespaces.
+                          You can filter by namespace type (Group or User), full path, or puid.
   """
   namespaceMetrics(
     """
