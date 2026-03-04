@@ -29,7 +29,6 @@ module Nextflow
       )
     end
 
-    # @param schema_file select :schema_file_options
     def with_values_v1(schema_file: 'mikrokondo/nextflow_schema.json')
       Flipper.disable(:v2_samplesheet)
 
@@ -67,7 +66,6 @@ module Nextflow
       )
     end
 
-    # @param schema_file select :schema_file_options
     def with_values_v2(schema_file: 'mikrokondo/nextflow_schema.json')
       Flipper.enable(:v2_samplesheet)
 
@@ -208,12 +206,6 @@ module Nextflow
                                        fp_unqualified_precent_limit: '40'
 
                                      })
-    end
-
-    def schema_file_options
-      Rails.root.join('test/fixtures/files/nextflow').entries.select do |f|
-        File.file?(File.join('test/fixtures/files/nextflow', f)) && f.to_s.starts_with?('nextflow_schema')
-      end
     end
   end
 end

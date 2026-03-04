@@ -3,7 +3,6 @@
 module Nextflow
   # @label Samplesheet Component
   class SamplesheetComponentPreview < ViewComponent::Preview
-    # @param schema_file select :schema_file_options
     def default_v1(schema_file: 'nextflow_schema.json',
                    sample_ids: [Sample.first.id, Sample.second.id])
       Flipper.disable(:v2_samplesheet)
@@ -59,7 +58,6 @@ module Nextflow
       )
     end
 
-    # @param schema_file select :schema_file_options
     def default_v2(schema_file: 'nextflow_schema.json')
       Flipper.enable(:v2_samplesheet)
 
@@ -109,12 +107,6 @@ module Nextflow
     end
 
     private
-
-    def schema_file_options
-      Rails.root.join('test/fixtures/files/nextflow').entries.select do |f|
-        File.file?(File.join('test/fixtures/files/nextflow', f)) && f.to_s.starts_with?('samplesheet_schema')
-      end
-    end
 
     def default_workflow(schema_file)
       entry = {
