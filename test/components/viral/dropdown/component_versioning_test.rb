@@ -17,9 +17,9 @@ module Dropdown
       Flipper.enable(:v2_dropdown)
       render_component
 
-      assert_selector '[data-controller="viral--beta-dropdown"]'
-      assert_selector '[data-viral--beta-dropdown-target="trigger"]'
-      assert_selector '[data-viral--beta-dropdown-target="menu"]', visible: :hidden
+      assert_selector '[data-controller="viral--v2--dropdown"]'
+      assert_selector '[data-viral--v2--dropdown-target="trigger"]'
+      assert_selector '[data-viral--v2--dropdown-target="menu"]', visible: :hidden
     end
 
     test 'renders v1 when version override is v1' do
@@ -33,9 +33,9 @@ module Dropdown
     test 'renders v2 when version override is v2' do
       render_component(version: :v2)
 
-      assert_selector '[data-controller="viral--beta-dropdown"]'
-      assert_selector '[data-viral--beta-dropdown-target="trigger"]'
-      assert_selector '[data-viral--beta-dropdown-target="menu"]', visible: :hidden
+      assert_selector '[data-controller="viral--v2--dropdown"]'
+      assert_selector '[data-viral--v2--dropdown-target="trigger"]'
+      assert_selector '[data-viral--v2--dropdown-target="menu"]', visible: :hidden
     end
 
     test 'raises when version override is invalid' do
