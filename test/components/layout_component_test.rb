@@ -145,10 +145,10 @@ class LayoutComponentTest < ViewComponent::TestCase
       messages: { en: 'English', fr: 'Français' }
     )
 
-    en_banners = I18n.with_locale(:en) { LayoutComponent.new(user:).site_banners }
-    fr_banners = I18n.with_locale(:fr) { LayoutComponent.new(user:).site_banners }
+    en_banner = I18n.with_locale(:en) { LayoutComponent.new(user:).site_banner }
+    fr_banner = I18n.with_locale(:fr) { LayoutComponent.new(user:).site_banner }
 
-    assert_equal 'English', en_banners.first[:message]
-    assert_equal 'Français', fr_banners.first[:message]
+    assert_equal 'English', en_banner[:message]
+    assert_equal 'Français', fr_banner[:message]
   end
 end
