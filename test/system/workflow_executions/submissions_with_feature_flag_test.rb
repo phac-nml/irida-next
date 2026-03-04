@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module WorkflowExecutions
-  ### TODO: Rename this file to submissions_test.rb once feature flag deferred_samplesheet is retired
+  ### TODO: Rename this file to submissions_test.rb once feature flag v2_samplesheet is retired
   class SubmissionsWithFeatureFlagTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
 
@@ -31,7 +31,7 @@ module WorkflowExecutions
       @attachment_fwd43 = attachments(:attachmentPEFWD43)
       @attachment_rev43 = attachments(:attachmentPEREV43)
 
-      Flipper.enable(:deferred_samplesheet)
+      Flipper.enable(:v2_samplesheet)
     end
 
     test 'should display a pipeline selection modal for project samples as owner' do

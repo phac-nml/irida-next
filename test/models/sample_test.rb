@@ -11,7 +11,7 @@ class SampleTest < ActiveSupport::TestCase
     # project1 is under group_one
     # project4 is under subgroup_one_group_three -> group_three (deeply nested)
     Flipper.enable(:samples_refresh_notice)
-    Flipper.enable(:deferred_samplesheet)
+    Flipper.enable(:v2_samplesheet)
   end
 
   def teardown
@@ -155,7 +155,7 @@ class SampleTest < ActiveSupport::TestCase
     assert @sample.has_attribute?(:attachments_updated_at)
   end
 
-  ### TODO: Remove this block of tests when feature flag deferred_samplesheet is retired ###
+  ### TODO: Remove this block of tests when feature flag v2_samplesheet is retired ###
   test 'sort_files for pe' do
     sample_b = samples(:sampleB)
     files = sample_b.sort_files
@@ -179,7 +179,7 @@ class SampleTest < ActiveSupport::TestCase
     assert files.empty?
   end
 
-  ### TODO END deferred_samplesheet ###
+  ### TODO END v2_samplesheet ###
 
   test 'file_selector_fastq_files for forward' do
     # includes both forward PE and single fastq files

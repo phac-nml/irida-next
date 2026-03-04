@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module WorkflowExecutions
-  ### TODO: Remove this file once feature flag deferred_samplesheet is retired
+  ### TODO: Remove this file once feature flag v2_samplesheet is retired
   class SubmissionsWithoutFeatureFlagTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
 

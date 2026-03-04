@@ -10,7 +10,7 @@
 
   <% dialog.with_header(title: t(".title", workflow_name:)) %>
 
-  <% if Flipper.enabled?(:deferred_samplesheet) %>
+  <% if Flipper.enabled?(:v2_samplesheet) %>
     <%= render NextflowComponent.new(
       workflow: @workflow,
       url:

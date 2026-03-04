@@ -6,7 +6,7 @@
                     } %>
 
 <%= turbo_stream.append "samplesheet-payload-container" do %>
-  <% if Flipper.enabled?(:deferred_samplesheet) %>
+  <% if Flipper.enabled?(:v2_samplesheet) %>
     <div
       hidden
       data-files="<%= @attachments_params.to_json %>"

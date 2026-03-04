@@ -8,6 +8,6 @@ class NextflowComponent < Versioning::VersionedComponent
   }.freeze
 
   VERSION_RESOLVER = lambda {
-    Flipper.enabled?(:deferred_samplesheet) ? :v2 : :v1
+    Flipper.enabled?(:v2_samplesheet) ? :v2 : :v1
   }
 end
