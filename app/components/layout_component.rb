@@ -2,7 +2,7 @@
 
 # Overall layout component
 class LayoutComponent < Component
-  attr_reader :layout, :user
+  attr_reader :layout, :site_banner, :user
 
   renders_one :sidebar, Layout::SidebarComponent
   renders_one :body
@@ -12,6 +12,21 @@ class LayoutComponent < Component
   def initialize(user:, fixed: true, **system_arguments)
     @user = user
     @layout = fixed ? 'container mx-auto' : ''
+    @site_banner = fetch_site_banner
     @system_arguments = system_arguments
+  end
+
+  # Compatibility accessor for callers still expecting an array.
+  def site_banners
+    site_banner.present? ? [site_banner] : []
+  end
+
+  private
+
+  def fetch_site_banner
+    notification = SiteBanner.current
+    return nil unless notification&.active?
+
+    { type: notification.style.to_sym, message: notification.message }
   end
 end

@@ -117,4 +117,38 @@ class LayoutComponentTest < ViewComponent::TestCase
     assert_selector 'a[href="/item1"]', text: 'Item 1'
     assert_selector 'a[href="/item2"]', text: 'Item 2'
   end
+
+  test 'renders global site banners when configured' do
+    user = users(:john_doe)
+
+    SiteBanner.create!(
+      style: :danger,
+      messages: { en: 'System outage', fr: 'Panne du systeme' }
+    )
+
+    render_inline LayoutComponent.new(user: user) do |layout|
+      layout.with_sidebar do |sidebar|
+        sidebar.with_header(label: 'Header')
+      end
+      layout.with_body { 'Content' }
+    end
+
+    assert_selector '[role="status"][aria-live="polite"]'
+    assert_selector '.alert-component', count: 1
+    assert_text 'System outage'
+  end
+
+  test 'site banners reflect locale for i18n support' do
+    user = users(:john_doe)
+    SiteBanner.create!(
+      style: :info,
+      messages: { en: 'English', fr: 'Français' }
+    )
+
+    en_banner = I18n.with_locale(:en) { LayoutComponent.new(user:).site_banner }
+    fr_banner = I18n.with_locale(:fr) { LayoutComponent.new(user:).site_banner }
+
+    assert_equal 'English', en_banner[:message]
+    assert_equal 'Français', fr_banner[:message]
+  end
 end
