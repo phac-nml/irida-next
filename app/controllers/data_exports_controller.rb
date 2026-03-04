@@ -32,16 +32,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def new
-    # Handles analysis exports created from show page
-    if params[:export_type] == 'analysis' && params[:single_workflow]
-      render turbo_stream: turbo_stream.update('export_dialog',
-                                               partial: 'new_single_analysis_export_dialog',
-                                               locals: new_locals), status: :ok
-    else
-      render turbo_stream: turbo_stream.update(params[:export_type] == 'analysis' ? 'export_dialog' : 'samples_dialog',
-                                               partial: "new_#{params[:export_type]}_export_dialog",
-                                               locals: new_locals), status: :ok
-    end
+    public_send(export_dialog_render_method)
   end
 
   def create
@@ -84,6 +75,47 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   private
+
+  def export_dialog_render_method
+    return :render_analysis_single_workflow_export_dialog if analysis_single_workflow_export_dialog?
+    return :render_linelist_export_dialog if params[:export_type] == 'linelist'
+
+    :render_sample_or_analysis_export_dialog
+  end
+
+  def analysis_single_workflow_export_dialog?
+    params[:export_type] == 'analysis' && params[:single_workflow]
+  end
+
+  def render_analysis_single_workflow_export_dialog
+    render(
+      turbo_stream: turbo_stream.update(
+        'export_dialog',
+        partial: 'new_single_analysis_export_dialog',
+        locals: new_locals
+      ),
+      status: :ok
+    )
+  end
+
+  def render_linelist_export_dialog
+    linelist_dialog = render_to_string(DataExports::LinelistExportDialogComponent.new(**new_locals))
+    render(
+      turbo_stream: turbo_stream.update('samples_dialog', linelist_dialog),
+      status: :ok
+    )
+  end
+
+  def render_sample_or_analysis_export_dialog
+    render(
+      turbo_stream: turbo_stream.update(
+        params[:export_type] == 'analysis' ? 'export_dialog' : 'samples_dialog',
+        partial: "new_#{params[:export_type]}_export_dialog",
+        locals: new_locals
+      ),
+      status: :ok
+    )
+  end
 
   def set_default_sort
     @q.sorts = 'created_at desc' if @q.sorts.empty?
