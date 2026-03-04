@@ -7,7 +7,7 @@ module Resolvers
       def resolve # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
         if object.is_a?(Project)
           if object.namespace.parent.group_namespace?
-            namespace_ids = if context[:direct_records_only]
+            namespace_ids = if context[:direct_only]
                               object.namespace.id
                             else
                               [object.namespace.id] +
@@ -25,7 +25,7 @@ module Resolvers
             ).count + 1 # +1 for owner
           end
         elsif object.group_namespace?
-          namespace_ids = if context[:direct_records_only]
+          namespace_ids = if context[:direct_only]
                             object.id
                           else
                             object.self_and_ancestors_of_type([Group.sti_name]).select(:id)

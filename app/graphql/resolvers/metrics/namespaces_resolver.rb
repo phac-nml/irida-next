@@ -30,7 +30,7 @@ module Resolvers
                default_value: nil
 
       def resolve(namespace_type:, top_level_only:, full_path:, puid:)
-        context.scoped_set!(:system_user, true) if context[:current_user].system?
+        context.scoped_set!(:system_user, true) if context[:current_user]&.system?
 
         if full_path
           [Namespace.find_by_full_path(full_path)] # rubocop:disable Rails/DynamicFindBy

@@ -17,7 +17,7 @@ module Resolvers
       private
 
       def calculate_disk_usage(namespace) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-        ns_ids = if context[:direct_records_only] && !namespace.project_namespace?
+        ns_ids = if context[:direct_only] && !namespace.project_namespace?
                    [namespace.id] + [namespace.project_namespaces.pluck(:id)]
                  else
                    namespace.self_and_descendants_of_type(

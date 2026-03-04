@@ -1356,10 +1356,10 @@ type GroupMetricsType implements Node {
   metrics(
     """
     Whether to return only direct records for the object.
-                               For example, if true, it will return only direct
-    records for a namespace, but not records for subgroups.
+                               For example, if true, it will return only direct records for a namespace,
+                               but not records for subgroups.
     """
-    directRecordsOnly: Boolean = false
+    directOnly: Boolean = false
   ): Metric
 
   """
@@ -1757,10 +1757,10 @@ type NamespaceMetricsType implements Node {
   metrics(
     """
     Whether to return only direct records for the object.
-                               For example, if true, it will return only direct
-    records for a namespace, but not records for subgroups.
+                               For example, if true, it will return only direct records for a namespace,
+                               but not records for subgroups.
     """
-    directRecordsOnly: Boolean = false
+    directOnly: Boolean = false
   ): Metric
 
   """
@@ -2409,10 +2409,10 @@ type ProjectMetricsType implements Node {
   metrics(
     """
     Whether to return only direct records for the object.
-                               For example, if true, it will return only direct
-    records for a namespace, but not records for subgroups.
+                               For example, if true, it will return only direct records for a namespace,
+                               but not records for subgroups.
     """
-    directRecordsOnly: Boolean = false
+    directOnly: Boolean = false
   ): Metric
 
   """
@@ -2631,7 +2631,7 @@ type Query {
     """
     Full path of the namespace. For example, `pathogen/surveillance`.
     """
-    fullPath: ID
+    fullPath: ID = null
 
     """
     Returns the last _n_ elements from the list.
@@ -2647,11 +2647,11 @@ type Query {
     Persistent Unique Identifier of the namespace.
                                For example a group namespace, `INXT_GRP_GGGGGGGGGG.`
     """
-    puid: ID
+    puid: ID = null
 
     """
     Whether to return only top level ancestor namespaces. For example, if true,
-    it will return only top level groups and user namespaces, but not subgroups.
+                                it will return only top level groups and user namespaces, but not subgroups.
     """
     topLevelOnly: Boolean = false
   ): NamespaceMetricsTypeConnection!

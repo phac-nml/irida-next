@@ -7,7 +7,8 @@ module Types
       description 'Metrics for a group or user namespace'
 
       field :projects_count, Integer, null: true,
-                                      description: 'Total number of projects under the namespace.'
+                                      description: 'Total number of projects under the namespace.',
+                                      resolver: Resolvers::Metrics::ProjectsCountResolver
 
       field :samples_count, Integer, null: false,
                                      description: 'Total number of samples in group projects or user project.',
@@ -20,20 +21,6 @@ module Types
       field :members_count, Integer, null: false,
                                      description: 'Total number of members in the group, subgroups, and/or projects.',
                                      resolver: Resolvers::Metrics::MembersCountResolver
-
-      def projects_count
-        return if object.is_a?(Project)
-
-        if object.group_namespace?
-          if context[:direct_records_only]
-            object.project_namespaces.count
-          else
-            object.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).count
-          end
-        elsif object.user_namespace?
-          object.project_namespaces.count
-        end
-      end
     end
   end
 end
