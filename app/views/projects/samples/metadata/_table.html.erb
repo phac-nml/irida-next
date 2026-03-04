@@ -1,10 +1,10 @@
-<%# locals: { sample_metadata: @sample.metadata_with_provenance, sample: @sample } %>
+<%# locals: (sample_metadata: @sample.metadata_with_provenance, sample: @sample) %>
 
 <div id="sample-metadata">
   <% if sample_metadata.present? %>
     <% if @allowed_to[:update_sample] %>
-      <div class="flex flex-col sm:flex-row-reverse mb-2">
-        <div class="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
+      <div class="mb-2 flex flex-col sm:flex-row-reverse">
+        <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
           <%= button_to t(".add_metadata"),
           new_namespace_project_sample_metadata_path(
             @project.namespace.parent,
@@ -17,6 +17,7 @@
             turbo_stream: true,
           },
           class: "button button-default w-full" %>
+
           <%= button_to t(".delete_metadata_button"),
           new_namespace_project_sample_metadata_deletion_path(
             @project.namespace.parent,
@@ -34,43 +35,38 @@
         </div>
       </div>
     <% end %>
-
-    <div class="relative overflow-x-auto table-wrapper">
+    <div class="table-wrapper relative overflow-x-auto">
       <table
-        class="
-          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-          whitespace-nowrap
-        "
+        class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
         data-controller="selection"
         data-selection-action-button-outlet=".action-button"
         data-selection-storage-key-value="metadata-<%= @sample.id %>"
       >
         <thead
           class="
-            text-xs uppercase border-b text-slate-700 bg-slate-100 dark:bg-slate-900
-            dark:text-slate-400 border-slate-200 dark:border-slate-700
+            border-b border-slate-200 bg-slate-100 text-xs text-slate-700 uppercase dark:border-slate-700
+            dark:bg-slate-900 dark:text-slate-400
           "
         >
           <tr>
             <% if @allowed_to[:update_sample] %>
               <th aria-hidden="true" style="width: 24px;" class="px-3 py-3"></th>
             <% end %>
+
             <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.key") %></th>
             <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.value") %></th>
             <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.source") %></th>
             <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.last_updated") %></th>
+
             <% if @allowed_to[:update_sample] %>
               <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
             <% end %>
           </tr>
         </thead>
+
         <tbody id="metadata-table-body" class="bg-white dark:bg-slate-800">
           <% sample_metadata.each_with_index do |metadata, index| %>
-            <tr
-              class="
-                bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
-              "
-            >
+            <tr class="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
               <% if @allowed_to[:update_sample] %>
                 <td style="width: 24px;" class="px-3 py-3">
                   <%= check_box_tag "metadata_keys[]",
@@ -89,12 +85,14 @@
                   } %>
                 </td>
               <% end %>
+
               <td class="px-6 py-4"><%= metadata[:key] %></td>
               <td class="px-6 py-4"><%= metadata[:value] %></td>
               <td class="px-6 py-4"><%= metadata[:source] %></td>
               <td class="px-6 py-4"><%= local_time_ago(metadata[:last_updated]) %></td>
+
               <% if @allowed_to[:update_sample] %>
-                <td class="flex justify-start px-6 py-4 space-x-2">
+                <td class="flex justify-start space-x-2 px-6 py-4">
                   <% unless metadata[:source_type] == 'analysis' %>
                     <%= button_to t("common.actions.update"),
                     edit_namespace_project_sample_metadata_path(
@@ -110,6 +108,7 @@
                     class:
                       "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                   <% end %>
+
                   <%= button_to t("common.actions.delete"),
                   namespace_project_sample_metadata_path(
                     @project.namespace.parent,
@@ -141,7 +140,6 @@
                   },
                   class:
                     "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
-
                 </td>
               <% end %>
             </tr>
