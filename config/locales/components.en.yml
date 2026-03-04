@@ -235,7 +235,7 @@ en:
         filter:
           clear: Clear search
           placeholder: Search by PUID or name
-        label: Samples
+        label: Samples (%{sample_count})
         next: Next
         page_selection:
           aria_label: Pagination page selector

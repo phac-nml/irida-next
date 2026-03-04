@@ -4,7 +4,7 @@ require 'application_system_test_case'
 
 module WorkflowExecutions
   ### TODO: Rename this file to submissions_test.rb once feature flag v2_samplesheet is retired
-  class SubmissionsWithFeatureFlagTest < ApplicationSystemTestCase
+  class SubmissionsV2Test < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
 
     setup do
@@ -1681,6 +1681,37 @@ module WorkflowExecutions
       assert_selector '#field-metadata_1', text: 'example_float'
       assert_selector "td[id='#{sample62.id}_metadata_1'] span", text: sample62.metadata['example_float']
       ### ACTIONS AND VERIFY END ###
+    end
+
+    test 'samples count within samplesheet label' do
+      ### SETUP START ###
+      user = users(:metadata_doe)
+      project = projects(:projectMetadata)
+      login_as user
+      visit namespace_project_samples_url(project.namespace.parent, project)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: user.locale))
+      # select samples
+
+      click_button I18n.t('common.controls.select_all')
+
+      assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      assert_selector 'strong[data-selection-target="selected"]', text: 3
+
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_button text: 'phac-nml/gasclustering'
+      click_button 'phac-nml/gasclustering'
+      ### SETUP END ###
+
+      ### VERIFY START ###
+      assert_selector 'h1', text: 'phac-nml/gasclustering'
+      assert_selector 'label', text: I18n.t('components.nextflow.samplesheet_component.label', sample_count: 3)
+      ### VERIFY END ###
     end
   end
 end

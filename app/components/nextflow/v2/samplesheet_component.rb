@@ -4,12 +4,13 @@ module Nextflow
   module V2
     # Render the contents of a Nextflow samplesheet to a table for feature flag :v2_samplesheet
     class SamplesheetComponent < Component
-      attr_reader :properties, :required_properties, :metadata_fields, :namespace_id, :workflow_params
+      attr_reader :properties, :required_properties, :metadata_fields, :namespace_id, :workflow_params, :sample_count
 
       FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
 
-      def initialize(schema:, fields:, namespace_id:, workflow_params:)
+      def initialize(schema:, fields:, sample_count:, namespace_id:, workflow_params:)
         @namespace_id = namespace_id
+        @sample_count = sample_count
         @metadata_fields = fields
         @required_properties = schema['items']['required'] || []
         @workflow_params = workflow_params
