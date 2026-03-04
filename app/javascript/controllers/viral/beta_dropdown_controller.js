@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import FloatingMenu from "controllers/viral/floating_menu";
+import FloatingDropdown from "utilities/floating_dropdown";
 
 export default class extends Controller {
   static targets = ["trigger", "menu"];
@@ -7,7 +7,7 @@ export default class extends Controller {
     distance: Number,
   };
 
-  #floatingMenu = null;
+  #floatingDropdown = null;
 
   initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
@@ -23,17 +23,17 @@ export default class extends Controller {
   }
 
   idempotentConnect() {
-    this.#floatingMenu = new FloatingMenu({
+    this.#floatingDropdown = new FloatingDropdown({
       trigger: this.triggerTarget,
-      menu: this.menuTarget,
+      dropdown: this.menuTarget,
       distance: this.distanceValue,
       onHide: () => this.#onHide(),
     });
   }
 
   disconnect() {
-    this.#floatingMenu?.destroy();
-    this.#floatingMenu = null;
+    this.#floatingDropdown?.destroy();
+    this.#floatingDropdown = null;
 
     document.removeEventListener("turbo:morph", this.boundOnMorph);
   }
@@ -79,8 +79,8 @@ export default class extends Controller {
     event.preventDefault();
     event.stopPropagation();
 
-    if (this.#floatingMenu.isVisible()) {
-      this.#floatingMenu.hide();
+    if (this.#floatingDropdown.isVisible()) {
+      this.#floatingDropdown.hide();
     } else {
       this.#openMenuAndFocusMenuItem(0);
     }
@@ -118,10 +118,10 @@ export default class extends Controller {
         },
         { once: true },
       );
-      this.#floatingMenu.show();
+      this.#floatingDropdown.show();
       this.#focusMenuItem(this.menuTarget);
     } else {
-      this.#floatingMenu.show();
+      this.#floatingDropdown.show();
       this.#focusMenuItem(menuItems.at(index));
     }
   }
@@ -146,7 +146,7 @@ export default class extends Controller {
           if (clickableTarget) {
             clickableTarget.click();
           } else {
-            this.#floatingMenu.hide();
+            this.#floatingDropdown.hide();
           }
         } else {
           menuItems[currentIndex].click();
@@ -160,7 +160,7 @@ export default class extends Controller {
         );
       case "Escape":
         event.preventDefault();
-        this.#floatingMenu.hide();
+        this.#floatingDropdown.hide();
         break;
       case "ArrowUp": {
         event.preventDefault();
@@ -196,7 +196,7 @@ export default class extends Controller {
         if (event.shiftKey) {
           event.preventDefault();
           this.triggerTarget.focus();
-          this.#floatingMenu.hide();
+          this.#floatingDropdown.hide();
         }
         break;
     }

@@ -7,26 +7,26 @@ import {
   size,
 } from "@floating-ui/dom";
 
-export default class FloatingMenu {
+export default class FloatingDropdown {
   // Private Fields
 
-  #trigger; // DOM element that triggers the menu
-  #menu; // DOM element of the floating menu
+  #trigger; // DOM element that triggers the dropdown
+  #dropdown; // DOM element of the floating dropdown
   #strategy; // Positioning strategy ('absolute' or 'fixed')
-  #distance; // Distance in pixels between trigger and menu
+  #distance; // Distance in pixels between trigger and dropdown
   #manageAria; // Whether to manage ARIA attributes
   #visible; // Current visibility state
   #cleanup; // Cleanup function for autoUpdate
-  #onShow; // Callback fired when menu shows
-  #onHide; // Callback fired when menu hides
+  #onShow; // Callback fired when dropdown shows
+  #onHide; // Callback fired when dropdown hides
   #boundHandleClickOutside; // Bound click outside handler
 
   // Public Methods
 
-  // Initialize floating menu with config options
+  // Initialize floating dropdown with config options
   constructor({
     trigger,
-    menu,
+    dropdown,
     strategy,
     distance,
     onShow,
@@ -34,7 +34,7 @@ export default class FloatingMenu {
     manageAria,
   }) {
     this.#trigger = trigger;
-    this.#menu = menu;
+    this.#dropdown = dropdown;
     this.#strategy = strategy || "absolute";
     this.#distance = distance || 0;
     this.#manageAria = manageAria || true;
@@ -44,12 +44,12 @@ export default class FloatingMenu {
     this.#boundHandleClickOutside = this.#handleClickOutside.bind(this);
   }
 
-  // Returns boolean indicating if menu is currently visible
+  // Returns boolean indicating if dropdown is currently visible
   isVisible() {
     return this.#visible;
   }
 
-  // Show menu if hidden, hide if visible
+  // Show dropdown if hidden, hide if visible
   toggle() {
     if (this.isVisible()) {
       this.hide();
@@ -58,7 +58,7 @@ export default class FloatingMenu {
     }
   }
 
-  // Display menu, setup click listener, start position tracking
+  // Display dropdown, setup click listener, start position tracking
   show() {
     this.#visible = true;
     this.#applyVisibleState();
@@ -70,12 +70,12 @@ export default class FloatingMenu {
 
     this.#cleanup = autoUpdate(
       this.#trigger,
-      this.#menu,
+      this.#dropdown,
       this.update.bind(this),
     );
   }
 
-  // Hide menu, remove click listener, stop position tracking
+  // Hide dropdown, remove click listener, stop position tracking
   hide() {
     this.#visible = false;
     this.#applyHiddenState();
@@ -88,13 +88,13 @@ export default class FloatingMenu {
     this.#cleanup?.();
   }
 
-  // Cleanup and hide menu
+  // Cleanup and hide dropdown
   destroy() {
     if (this.isVisible()) {
       this.hide();
     }
     this.#trigger = null;
-    this.#menu = null;
+    this.#dropdown = null;
     this.#strategy = null;
     this.#manageAria = null;
     this.#visible = false;
@@ -104,9 +104,9 @@ export default class FloatingMenu {
     this.#boundHandleClickOutside = null;
   }
 
-  // Recalculate and apply menu position using Floating UI
+  // Recalculate and apply dropdown position using Floating UI
   update() {
-    computePosition(this.#trigger, this.#menu, {
+    computePosition(this.#trigger, this.#dropdown, {
       placement: "bottom",
       middleware: [
         flip(),
@@ -123,7 +123,7 @@ export default class FloatingMenu {
       ],
     })
       .then(({ x, y }) => {
-        Object.assign(this.#menu.style, {
+        Object.assign(this.#dropdown.style, {
           position: this.#strategy,
           left: `${x}px`,
           top: `${y}px`,
@@ -132,7 +132,7 @@ export default class FloatingMenu {
       .catch(() => {
         // fallback for when Floating UI fails; we simply align below trigger
         const triggerRect = this.#trigger.getBoundingClientRect();
-        Object.assign(this.#menu.style, {
+        Object.assign(this.#dropdown.style, {
           position: this.#strategy,
           left: `${triggerRect.left}px`,
           top: `${triggerRect.bottom}px`,
@@ -160,12 +160,12 @@ export default class FloatingMenu {
     );
   }
 
-  // Hide menu if click occurs outside trigger or menu
+  // Hide dropdown if click occurs outside trigger or dropdown
   #handleClickOutside(event) {
     const clickedElement = event.target;
     if (
-      clickedElement !== this.#menu &&
-      !this.#menu.contains(clickedElement) &&
+      clickedElement !== this.#dropdown &&
+      !this.#dropdown.contains(clickedElement) &&
       !this.#trigger.contains(clickedElement) &&
       this.isVisible()
     ) {
@@ -177,8 +177,8 @@ export default class FloatingMenu {
   #applyVisibleState() {
     if (this.#manageAria) {
       this.#trigger.setAttribute("aria-expanded", "true");
-      this.#menu.removeAttribute("aria-hidden");
-      this.#menu.removeAttribute("hidden");
+      this.#dropdown.removeAttribute("aria-hidden");
+      this.#dropdown.removeAttribute("hidden");
     }
   }
 
@@ -186,8 +186,8 @@ export default class FloatingMenu {
   #applyHiddenState() {
     if (this.#manageAria) {
       this.#trigger.setAttribute("aria-expanded", "false");
-      this.#menu.setAttribute("aria-hidden", "true");
-      this.#menu.setAttribute("hidden", "");
+      this.#dropdown.setAttribute("aria-hidden", "true");
+      this.#dropdown.setAttribute("hidden", "");
     }
   }
 }
