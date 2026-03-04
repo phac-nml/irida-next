@@ -50,6 +50,24 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     }
   GRAPHQL
 
+  NAMESPACE_METRICS_DIRECT_QUERY = <<~GRAPHQL
+    query($namespaceType: [String!], $first: Int) {
+      namespaceMetrics(first: $first, namespaceType: $namespaceType) {
+        nodes {
+          id
+          name
+          type
+          metrics(directOnly: true) {
+            projectsCount
+            samplesCount
+            membersCount
+            diskUsage
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   GROUP_TOP_LEVEL_METRICS_QUERY = <<~GRAPHQL
     query($namespaceType: [String!], $topLevelOnly: Boolean) {
       namespaceMetrics(namespaceType: $namespaceType, topLevelOnly: $topLevelOnly) {
@@ -734,35 +752,76 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert_equal 2, user_node['metrics']['projectsCount']
   end
 
+  test 'namespace metrics query with directOnly flag returns metrics for direct projects and samples only' do
+    result = IridaSchema.execute(
+      NAMESPACE_METRICS_DIRECT_QUERY,
+      context: { current_user: @sys_user },
+      variables: { namespaceType: ['Group'], first: 1_000 },
+      max_complexity: nil
+    )
+    assert_nil result['errors'], 'query should execute without errors'
+    namespaces = result['data']['namespaceMetrics']['nodes']
+    assert_not_empty namespaces, 'should return at least one namespace'
+    metrics_group_node = namespaces.find { |n| n['name'] == @group.name }
+    assert metrics_group_node, 'expected our test group to appear in the results'
+    metrics = metrics_group_node['metrics']
+    assert metrics.present?, 'metrics should be returned for the namespace'
+    expected_projects = @group.project_namespaces.count
+    assert metrics['projectsCount'].is_a?(Integer), 'projectsCount should be an integer'
+    assert_equal expected_projects, metrics['projectsCount'],
+                 'group projectsCount with directOnly should return count of only direct projects'
+
+    expected_samples_count = 0
+    @group.project_namespaces.each do |pn|
+      expected_samples_count += pn.project.samples_count.to_i
+    end
+
+    assert_equal expected_samples_count, metrics['samplesCount'],
+                 'samplesCount with directOnly should equal the direct counter'
+    expected_disk_usage = calculate_disk_usage(@group, direct_only: true)
+    assert_equal expected_disk_usage, metrics['diskUsage'],
+                 'diskUsage with directOnly should sum attachment byte sizes for direct projects and samples only'
+    assert_equal 1, metrics['membersCount'], 'only jane_doe was added to the group'
+  end
+
   private
 
   # Calculate the disk usage for unique attachment blobs under a namespace (namespace attachments, sample attachments,
   # sample workflow execution attachments)
-  def calculate_disk_usage(namespace_or_project) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def calculate_disk_usage(namespace_or_project, direct_only: false) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     namespace = namespace_or_project.is_a?(Project) ? namespace_or_project.namespace : namespace_or_project
 
     samples = []
-    namespace.self_and_descendants.each do |ns|
-      if namespace.group_namespace? || namespace.user_namespace?
-        ns.project_namespaces.each do |pn|
-          samples.concat(pn.project.samples) if pn.project.samples_count&.positive?
+    if direct_only
+      namespace.project_namespaces.each do |pn|
+        samples.concat(pn.project.samples) if pn.project.samples_count&.positive?
+      end
+    else
+      namespace.self_and_descendants.each do |ns|
+        if namespace.group_namespace? || namespace.user_namespace?
+          ns.project_namespaces.each do |pn|
+            samples.concat(pn.project.samples) if pn.project.samples_count&.positive?
+          end
+        elsif !ns.project.samples_count.nil? && ns.project.samples_count&.positive?
+          samples.concat(ns.project.samples)
         end
-      elsif !ns.project.samples_count.nil? && ns.project.samples_count&.positive?
-        samples.concat(ns.project.samples)
       end
     end
 
     sample_ids = samples.map(&:id)
-    namespace_ids = namespace.self_and_descendants_of_type(
-      [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
-    ).map(&:id)
+
+    namespace_ids = if direct_only
+                      [namespace.id] + namespace.project_namespaces.pluck(:id)
+                    else
+                      namespace.self_and_descendants_of_type(
+                        [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
+                      ).map(&:id)
+                    end
+
     sample_workflow_execution_ids = SamplesWorkflowExecution.joins(:workflow_execution).where(
       sample_id: sample_ids,
       workflow_execution: {
-        namespace_id: namespace.self_and_descendants_of_type(
-          [Group.sti_name,
-           Namespaces::ProjectNamespace.sti_name]
-        ).select(:id)
+        namespace_id: namespace_ids
       }
     ).pluck(:id)
 
