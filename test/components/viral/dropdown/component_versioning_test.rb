@@ -5,7 +5,7 @@ require 'view_component_test_case'
 module Dropdown
   class ComponentVersioningTest < ViewComponentTestCase
     test 'renders v1 when feature flag is disabled' do
-      Flipper.disable(:beta_dropdown)
+      Flipper.disable(:v2_dropdown)
       render_component
 
       assert_selector '[data-controller="viral--dropdown"]'
@@ -14,7 +14,7 @@ module Dropdown
     end
 
     test 'renders v2 when feature flag is enabled' do
-      Flipper.enable(:beta_dropdown)
+      Flipper.enable(:v2_dropdown)
       render_component
 
       assert_selector '[data-controller="viral--beta-dropdown"]'
