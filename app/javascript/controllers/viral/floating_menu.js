@@ -2,6 +2,7 @@ import {
   autoUpdate,
   computePosition,
   flip,
+  offset,
   shift,
   size,
 } from "@floating-ui/dom";
@@ -12,6 +13,7 @@ export default class FloatingMenu {
   #trigger; // DOM element that triggers the menu
   #menu; // DOM element of the floating menu
   #strategy; // Positioning strategy ('absolute' or 'fixed')
+  #distance; // Distance in pixels between trigger and menu
   #manageAria; // Whether to manage ARIA attributes
   #visible; // Current visibility state
   #cleanup; // Cleanup function for autoUpdate
@@ -22,10 +24,19 @@ export default class FloatingMenu {
   // Public Methods
 
   // Initialize floating menu with config options
-  constructor({ trigger, menu, strategy, onShow, onHide, manageAria }) {
+  constructor({
+    trigger,
+    menu,
+    strategy,
+    distance,
+    onShow,
+    onHide,
+    manageAria,
+  }) {
     this.#trigger = trigger;
     this.#menu = menu;
     this.#strategy = strategy || "absolute";
+    this.#distance = distance || 0;
     this.#manageAria = manageAria || true;
     this.#visible = false;
     this.#onShow = onShow;
@@ -99,6 +110,7 @@ export default class FloatingMenu {
       placement: "bottom",
       middleware: [
         flip(),
+        offset(this.#distance),
         shift(),
         size({
           apply({ availableWidth, availableHeight, elements }) {

@@ -3,6 +3,9 @@ import FloatingMenu from "controllers/viral/floating_menu";
 
 export default class extends Controller {
   static targets = ["trigger", "menu"];
+  static values = {
+    distance: Number,
+  };
 
   #floatingMenu = null;
 
@@ -23,6 +26,7 @@ export default class extends Controller {
     this.#floatingMenu = new FloatingMenu({
       trigger: this.triggerTarget,
       menu: this.menuTarget,
+      distance: this.distanceValue,
       onHide: () => this.#onHide(),
     });
   }
