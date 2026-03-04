@@ -32,7 +32,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def new
-    public_send(export_dialog_render_method)
+    send(export_dialog_render_method)
   end
 
   def create
