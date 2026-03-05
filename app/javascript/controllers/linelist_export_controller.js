@@ -4,6 +4,10 @@ export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
   static values = {
     workerUrl: String,
+    noSelectionErrorMessage: {
+      type: String,
+      default: "Please select at least 1 sample before exporting.",
+    },
     selectedCountMessage: {
       type: String,
       default: "Selected samples: %{count}",
@@ -16,6 +20,10 @@ export default class extends Controller {
     startErrorMessage: {
       type: String,
       default: "Unable to start export: %{message}",
+    },
+    xlsxUnsupportedMessage: {
+      type: String,
+      default: "XLSX export is not supported in this client-side flow yet.",
     },
     unexpectedErrorMessage: {
       type: String,
@@ -53,10 +61,25 @@ export default class extends Controller {
     const sampleIds = this.selectedSampleIds();
     const metadataFields = this.selectedMetadataFields();
     const format = this.selectedFormat();
+    const namespaceId = this.selectedNamespaceId();
     const selectedCount = sampleIds.length;
+
+    if (!selectedCount) {
+      this.updateProgress(this.t(this.noSelectionErrorMessageValue), 100, true);
+      return;
+    }
+
+    if (format !== "csv") {
+      this.updateProgress(
+        this.t(this.xlsxUnsupportedMessageValue, { format }),
+        100,
+        true,
+      );
+      return;
+    }
+
     const filename = `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}.${format}`;
-    const totalCount =
-      (selectedCount > 0 ? selectedCount : 5) * this.massiveExportScale();
+    const totalCount = selectedCount;
     this.progressWindowDismissed = false;
 
     if (this.hasSampleStatusTarget) {
@@ -75,6 +98,7 @@ export default class extends Controller {
       this.worker.postMessage({
         sample_ids: sampleIds,
         metadata_fields: metadataFields,
+        namespace_id: namespaceId,
         format,
         filename,
         total_count: totalCount,
@@ -236,6 +260,13 @@ export default class extends Controller {
     return selected?.value || "csv";
   }
 
+  selectedNamespaceId() {
+    const namespaceInput = this.element.querySelector(
+      "input[name='data_export[export_parameters][namespace_id]']",
+    );
+    return namespaceInput?.value || "";
+  }
+
   selectedSampleIds() {
     const storageKey = this.selectionStorageKey();
     const value = sessionStorage.getItem(storageKey);
@@ -251,10 +282,6 @@ export default class extends Controller {
 
   selectionStorageKey() {
     return `${location.protocol}//${location.host}${location.pathname}`;
-  }
-
-  massiveExportScale() {
-    return 2500;
   }
 
   updateSelectedCount() {
