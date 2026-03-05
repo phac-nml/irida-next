@@ -2,13 +2,32 @@ self.onmessage = async (event) => {
   const {
     sample_ids: sampleIds,
     metadata_fields: metadataFields,
+    namespace_id: namespaceId,
     total_count: totalCount,
     filename,
+    format,
   } = event.data || {};
 
   const fields = Array.isArray(metadataFields) ? metadataFields : [];
   const ids = Array.isArray(sampleIds) ? sampleIds : [];
-  const rows = Math.max(ids.length, Number(totalCount) || 1);
+  const rows = Math.max(ids.length, Number(totalCount) || 0);
+
+  if (!rows) {
+    self.postMessage({
+      type: "error",
+      message: "No samples were selected for export.",
+    });
+    return;
+  }
+
+  if (format !== "csv" && format !== undefined && format !== null) {
+    self.postMessage({
+      type: "error",
+      message: "Unsupported linelist format for this flow.",
+    });
+    return;
+  }
+
   const header = [
     "SAMPLE PUID",
     "SAMPLE NAME",
@@ -30,13 +49,9 @@ self.onmessage = async (event) => {
   };
 
   for (let i = 0; i < rows; i += 1) {
-    const sampleId = ids[i] ? String(ids[i]) : `sample-${i + 1}`;
+    const sampleId = String(ids[i]);
 
-    const row = [
-      escape(`sample-${sampleId}`),
-      escape(`Sample ${sampleId}`),
-      escape(`project-${i + 1}`),
-    ];
+    const row = [escape(sampleId), "", escape(namespaceId)];
 
     fields.forEach((field) => {
       row.push(escape(`value-${field}-${sampleId}`));
