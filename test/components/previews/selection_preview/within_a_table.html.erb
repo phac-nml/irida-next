@@ -1,46 +1,39 @@
-<table
-  data-controller="selection"
-  class="w-full text-sm text-left text-slate-500 dark:text-slate-400"
->
-  <thead
-    class="
-      text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
-      dark:text-slate-400
-    "
-  >
+<table data-controller="selection" class="w-full text-left text-sm text-slate-500 dark:text-slate-400">
+  <thead class="bg-slate-50 text-xs text-slate-700 uppercase dark:bg-slate-700 dark:text-slate-400">
     <tr>
       <th scope="col" class="p-4">Selections</th>
+
       <th scope="col" class="px-6 py-3">
         Rows
       </th>
     </tr>
   </thead>
+
   <tbody>
     <% (0...3).each do |index| %>
-      <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+      <tr class="border-b bg-white dark:border-slate-700 dark:bg-slate-800">
         <td class="w-4 p-4">
           <div class="flex items-center">
             <input
               type="checkbox"
-              id="row<%=index%>"
-              name="row<%=index%>"
-              value="row<%=index%>"
-              data-action="input->selection#toggle"
+              id="row<%= index %>"
+              name="row<%= index %>"
+              value="row<%= index %>"
+              data-action="click->selection#toggle"
               data-selection-target="rowSelection"
               class="
-                w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded-lg dark:bg-slate-700
-                dark:border-slate-600
+                h-4 w-4 rounded-lg border-slate-300 bg-slate-100 text-blue-600 dark:border-slate-600
+                dark:bg-slate-700
               "
             >
-            <label for="row<%=index%>" class="sr-only">checkbox</label>
+
+            <label for="row<%= index %>" class="sr-only">checkbox</label>
           </div>
         </td>
-        <th
-          scope="row"
-          class="
-            px-6 py-4 font-medium text-slate-900 whitespace-nowrap dark:text-white
-          "
-        ><%= "Row #{index}" %></th>
+
+        <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-slate-900 dark:text-white">
+          <%= "Row #{index}" %>
+        </th>
       </tr>
     <% end %>
   </tbody>

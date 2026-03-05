@@ -1,9 +1,4 @@
-<tr
-  id="<%= dom_id(attachment) %>"
-  class="
-    bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
-  "
->
+<tr id="<%= dom_id(attachment) %>" class="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
   <% if @allowed_to[:update_sample] %>
     <td class="px-6 py-4">
       <%= check_box_tag "attachment_ids[]",
@@ -19,18 +14,19 @@
       "aria-label": attachment.file.filename,
       data: {
         selection_target: "rowSelection",
-        action: "input->selection#toggle",
+        action: "click->selection#toggle",
       } %>
     </td>
   <% end %>
-  <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">
-    <%= attachment.puid %>
-  </td>
+
+  <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100"><%= attachment.puid %></td>
+
   <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
     <td class="px-6 py-4">
       <div>
-        <div class="flex items-center mb-4">
+        <div class="mb-4 flex items-center">
           <%= pathogen_icon(:arrow_right, color: :subdued) %>
+
           <span>
             <%= link_to attachment.file.filename,
             rails_blob_path(attachment.file),
@@ -41,8 +37,10 @@
               "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" %>
           </span>
         </div>
+
         <div class="flex items-center">
           <%= pathogen_icon(:arrow_left, color: :subdued) %>
+
           <span>
             <%= link_to attachment.associated_attachment.file.filename,
             rails_blob_path(attachment.associated_attachment.file),
@@ -60,6 +58,7 @@
       <div>
         <div class="flex items-center">
           <%= pathogen_icon(Attachment.icon, color: :subdued) %>
+
           <span>
             <%= link_to attachment.file.filename,
             rails_blob_path(attachment.file),
@@ -74,35 +73,34 @@
     </td>
   <% end %>
 
-  <td class="px-6 py-4"><%= viral_pill(
+  <td class="px-6 py-4">
+    <%= viral_pill(
       text: attachment.metadata["format"],
       color: find_pill_color_for_attachment(attachment, "format"),
-    ) %></td>
-  <td class="px-6 py-4"><%= viral_pill(
+    ) %>
+  </td>
+
+  <td class="px-6 py-4">
+    <%= viral_pill(
       text: attachment.metadata["type"],
       color: find_pill_color_for_attachment(attachment, "type"),
-    ) %></td>
+    ) %>
+  </td>
 
   <% if attachment.associated_attachment %>
     <td class="px-6 py-4">
-      <div class="mb-4">
-        <%= number_to_human_size(attachment.file.blob.byte_size) %>
-      </div>
-      <div>
-        <%= number_to_human_size(attachment.associated_attachment.file.blob.byte_size) %>
-      </div>
+      <div class="mb-4"><%= number_to_human_size(attachment.file.blob.byte_size) %></div>
+      <div><%= number_to_human_size(attachment.associated_attachment.file.blob.byte_size) %></div>
     </td>
   <% else %>
     <td class="px-6 py-4"><%= number_to_human_size(attachment.file.blob.byte_size) %></td>
   <% end %>
 
-  <td class="px-6 py-4">
-    <%= local_time_ago(attachment.created_at) %>
-  </td>
+  <td class="px-6 py-4"><%= local_time_ago(attachment.created_at) %></td>
 
   <td class="px-6 py-4">
     <% if @allowed_to[:destroy_attachment] %>
-      <%= button_to t('common.actions.delete'),
+      <%= button_to t("common.actions.delete"),
       namespace_project_sample_attachment_new_destroy_path(
         sample_id: @sample.id,
         attachment_id: attachment.id,
