@@ -3,15 +3,20 @@
 module Types
   module Metrics
     # Project Type
-    class ProjectType < NamespaceType
+    class ProjectType < Types::BaseType
       implements GraphQL::Types::Relay::Node
+      implements Types::NamespaceMetricType
+
       graphql_name 'ProjectMetricsType'
       description 'Project to get metrics for'
 
-      field :metrics, Types::Metrics::MetricType,
-            null: true,
-            description: 'Metrics for the project',
-            resolver: Resolvers::Metrics::ObjectResolver
+      field :name, String, null: false, description: 'Name of the namespace.'
+      field :puid, ID, null: false,
+                       description: 'Persistent Unique Identifier of the namespace. For example for a group,
+                                  `INXT_GRP_AAAAAAAAAA`.'
+      field :type, String, null: false, description: 'Type of the namespace'
+
+      field :parent, String, null: true, description: 'Parent namespace of this namespace'
 
       def self.authorized?(object, context)
         super && context[:system_user]

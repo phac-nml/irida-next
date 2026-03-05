@@ -5,6 +5,8 @@ module Types
     # Namespace Type
     class NamespaceType < Types::BaseType
       implements GraphQL::Types::Relay::Node
+      implements Types::NamespaceMetricType
+
       graphql_name 'NamespaceMetricsType'
       description 'Namespace for which to get project and/or groups for'
 
@@ -16,23 +18,22 @@ module Types
 
       field :parent, String, null: true, description: 'Parent namespace of this namespace'
 
-      field :metrics, Types::Metrics::MetricType, null: true, description: 'Metrics for all projects under namespace',
-                                                  resolver: Resolvers::Metrics::ObjectResolver
-
       field :projects, Types::Metrics::ProjectType.connection_type,
             null: true,
             description: 'Projects within this namespace',
             complexity: 5,
             resolver: Resolvers::Metrics::ProjectsResolver
 
-      field :descendant_groups, Types::Metrics::GroupType.connection_type,
-            null: true,
-            description: 'Subgroups within this group namespace. This field is only applicable for group namespaces.',
-            complexity: 5,
-            resolver: Resolvers::Metrics::SubgroupsResolver
+      field :projects_count, Integer, null: true,
+                                      description: 'Total number of projects under the namespace.',
+                                      resolver: Resolvers::Metrics::ProjectsCountResolver
 
       def self.authorized?(object, context)
-        super && context[:system_user]
+        super && context[:current_user]&.system?
+      end
+
+      def self.visible?(context)
+        super && context[:current_user]&.system?
       end
     end
   end
