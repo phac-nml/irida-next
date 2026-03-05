@@ -3,9 +3,8 @@
 module Types
   module Metrics
     # Group Type
-    class GroupType < Types::Metrics::NamespaceType
-      implements GraphQL::Types::Relay::Node
-      implements Types::NamespaceMetricType
+    class GroupType < Types::BaseType
+      implements Types::Metrics::NamespaceWithMetricsType
 
       graphql_name 'GroupMetricsType'
       description 'Group to get metrics for'

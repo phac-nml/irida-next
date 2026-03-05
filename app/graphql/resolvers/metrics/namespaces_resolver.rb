@@ -5,7 +5,7 @@ module Resolvers
     # Namespace Resolver
     class NamespacesResolver < BaseResolver
       graphql_name 'MetricsNamespacesResolver'
-      type Types::Metrics::NamespaceType.connection_type, null: true
+      type Types::Metrics::NamespaceWithMetricsType.connection_type, null: true
 
       argument :namespace_type, [GraphQL::Types::String],
                required: false,
@@ -29,8 +29,17 @@ module Resolvers
                            For example a group namespace, `INXT_GRP_GGGGGGGGGG.`',
                default_value: nil
 
-      def resolve(namespace_type:, top_level_only:, full_path:, puid:) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      argument :direct_only, GraphQL::Types::Boolean,
+               required: false,
+               description: 'Whether to return only direct records for the object.
+                           For example, if true, it will return only direct records for a namespace,
+                           but not records for subgroups.',
+               default_value: false
+
+      def resolve(namespace_type:, top_level_only:, full_path:, puid:, direct_only:) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
         context.scoped_set!(:system_user, true) if context[:current_user]&.system?
+
+        context.scoped_set!(:direct_only, true) if direct_only
 
         # Top level Project namespaces are not currently supported for metrics
         # so we remove from the list of namespace types

@@ -2,7 +2,7 @@
 
 module Types
   # Module with fields common to all namespace types (groups and projects) for metrics
-  module NamespaceMetricType
+  module NamespaceMetricsType
     include Types::BaseInterface
 
     comment 'Interface for namespace metrics'

@@ -20,7 +20,7 @@ module Types
     field :groups, Types::GroupType.connection_type, null: false, resolver: Resolvers::GroupsResolver,
                                                      description: 'Find groups.'
 
-    field :namespace_metrics, Types::Metrics::NamespaceType.connection_type,
+    field :namespace_metrics, Types::Metrics::NamespaceWithMetricsType.connection_type,
           null: false,
           resolver: Resolvers::Metrics::NamespacesResolver,
           description: 'Find namespaces for metrics. By default, it returns all group and user namespaces.

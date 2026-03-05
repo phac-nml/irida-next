@@ -3,11 +3,13 @@
 module Types
   module Metrics
     # Namespace Type
-    class NamespaceType < Types::BaseType
-      implements GraphQL::Types::Relay::Node
-      implements Types::NamespaceMetricType
+    module NamespaceWithMetricsType
+      include ::Types::BaseInterface
 
-      graphql_name 'NamespaceMetricsType'
+      implements GraphQL::Types::Relay::Node
+      implements Types::NamespaceMetricsType
+
+      graphql_name 'NamespaceWithMetricsType'
       description 'Namespace for which to get project and/or groups for'
 
       field :name, String, null: false, description: 'Name of the namespace.'
@@ -34,6 +36,16 @@ module Types
 
       def self.visible?(context)
         super && context[:current_user]&.system?
+      end
+
+      definition_methods do
+        def resolve_type(object, _context)
+          return unless object.is_a?(Group) || object.is_a?(Namespaces::UserNamespace)
+
+          return Types::Metrics::GroupType if object.is_a?(Group)
+
+          Types::Metrics::UserNamespaceType if object.is_a?(Namespaces::UserNamespace)
+        end
       end
     end
   end

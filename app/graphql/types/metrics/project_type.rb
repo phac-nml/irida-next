@@ -5,7 +5,7 @@ module Types
     # Project Type
     class ProjectType < Types::BaseType
       implements GraphQL::Types::Relay::Node
-      implements Types::NamespaceMetricType
+      implements Types::NamespaceMetricsType
 
       graphql_name 'ProjectMetricsType'
       description 'Project to get metrics for'
