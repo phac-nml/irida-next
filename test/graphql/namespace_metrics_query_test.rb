@@ -7,9 +7,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
   include ActionDispatch::TestProcess
   include ActionView::Helpers::NumberHelper
 
-  # Queries now request metrics fields directly on the namespace node and
-  # use type-specific fragments for group/user extensions.  We keep a few
-  # optional pagination variables so tests can reuse this base query.
   NAMESPACE_METRICS_QUERY = <<~GRAPHQL
     query(
       $namespaceType: [String!],
