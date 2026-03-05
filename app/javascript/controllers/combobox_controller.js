@@ -6,10 +6,10 @@ import {
   getLowercaseContent,
   highlightOption,
   setActiveDescendant,
-} from "controllers/select_with_auto_complete/utils";
+} from "controllers/combobox/utils";
 
 /**
- * SelectWithAutoCompleteController
+ * ComboboxController
  *
  * Accessible, searchable dropdown with keyboard navigation.
  * - Keyboard navigation (Arrow keys, Enter, Escape, Home, End)
@@ -17,7 +17,7 @@ import {
  * - ARIA roles and attributes for accessibility
  * - Dropdown positioning and focus management
  */
-export default class SelectWithAutoCompleteController extends Controller {
+export default class ComboboxController extends Controller {
   static targets = ["combobox", "listbox", "hidden", "ariaLiveUpdate"];
   static values = {
     noResultsText: String,
