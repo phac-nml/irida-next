@@ -689,7 +689,7 @@ a.pill-focus-reset:focus-visible {
 
 /* ComboboxComponent */
 
-[data-controller="combobox"] {
+[data-controller~="v1--combobox"] {
   @apply relative text-slate-900 dark:text-white;
 
   input {
