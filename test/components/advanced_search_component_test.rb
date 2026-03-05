@@ -27,7 +27,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         # verify the field list & option group elements are localized
         within first("div[data-controller='v1--combobox']") do
-          combobox = find("input[role='v1--combobox']")
+          combobox = find("input[role='combobox']")
           combobox.click
           combobox.send_keys([:ctrl, 'a'], :delete)
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.name'), count: 1
@@ -150,7 +150,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       within 'dialog' do
         assert_accessible
 
-        within first("div[data-controller='select-with-auto-complete']") do
+        within first("div[data-controller='v1--combobox']") do
           combobox = find("input[role='combobox']")
           combobox.click
           combobox.send_keys([:ctrl, 'a'], :delete)
