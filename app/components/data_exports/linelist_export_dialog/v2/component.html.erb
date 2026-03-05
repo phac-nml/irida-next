@@ -1,7 +1,19 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
+<% linelist_data = {
+  controller: "linelist-export",
+  "linelist-export-worker-url-value": asset_path("workers/linelist_export_worker.js"),
+  "linelist-export-selected-count-message-value": t("data_exports.new_linelist_export_dialog.selected_count"),
+  "linelist-export-preparing-rows-message-value": t("data_exports.new_linelist_export_dialog.preparing_rows"),
+  "linelist-export-preparing-export-message-value": t("data_exports.new_linelist_export_dialog.preparing_export"),
+  "linelist-export-start-error-message-value": t("data_exports.new_linelist_export_dialog.start_error"),
+  "linelist-export-unexpected-error-message-value": t("data_exports.new_linelist_export_dialog.unexpected_error"),
+  "linelist-export-download-started-message-value": t("data_exports.new_linelist_export_dialog.download_started"),
+  "linelist-export-created-records-message-value": t("data_exports.new_linelist_export_dialog.created_records"),
+} %>
+
+<%= viral_dialog(open: @open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t("data_exports.new_linelist_export_dialog.title")) %>
 
-  <%= tag.div class: "font-normal text-slate-500 dark:text-slate-400", data: { controller: "linelist-export" } do %>
+  <%= tag.div class: "font-normal text-slate-500 dark:text-slate-400", data: linelist_data do %>
     <div class="grid gap-4">
       <div class="form-field mt-1">
         <p class="text-sm text-slate-900 dark:text-slate-400">
@@ -52,11 +64,45 @@
       </div>
 
       <%= form_with(url: "#", method: :post, data: { action: "submit->linelist-export#submit" }) do |form| %>
-        <%= form.hidden_field :namespace_id, value: namespace_id, name: "data_export[export_parameters][namespace_id]" %>
+        <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
         <%= form.submit t("data_exports.new.submit_button"), class: "button button-primary" %>
       <% end %>
 
       <p class="text-sm text-slate-600 dark:text-slate-300" data-linelist-export-target="sampleStatus"></p>
     </div>
+
+    <template data-linelist-export-target="progressTemplate">
+      <div class="rounded-lg border border-slate-200 bg-white p-4 shadow dark:border-slate-700 dark:bg-slate-800">
+        <div class="mb-2 flex items-center justify-between gap-2">
+          <p class="text-sm text-slate-900 dark:text-slate-100" data-linelist-export-progress-message></p>
+
+          <button
+            type="button"
+            data-linelist-export-dismiss="true"
+            class="
+              rounded border border-slate-300 px-2 py-0.5 text-xs text-slate-700 dark:border-slate-600
+              dark:text-slate-200
+            "
+            aria-label="<%= t('data_exports.new_linelist_export_dialog.close_progress') %>"
+          >
+            &times;
+          </button>
+        </div>
+
+        <div class="h-2 w-full overflow-hidden rounded bg-slate-200 dark:bg-slate-700">
+          <div
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+            class="h-2 rounded bg-primary-600"
+            style="width: 0%"
+            data-linelist-export-progress-bar
+          ></div>
+        </div>
+
+        <p class="mt-2 text-xs text-slate-700 dark:text-slate-300" data-linelist-export-progress-percent>0%</p>
+      </div>
+    </template>
   <% end %>
 <% end %>

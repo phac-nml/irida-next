@@ -498,12 +498,20 @@ fr:
       title: Analyser les exportations
     new_linelist_export_dialog:
       available: Disponible
+      close_progress: Fermer la progression de l’exportation
+      created_records: Créé %{current} sur %{total} enregistrements
       csv: ".csv"
+      download_started: 'Téléchargement démarré : %{filename}'
       format: Format
       metadata: Métadonnées
       metadata_description: Sélectionnez les champs de métadonnées à exporter en déplaçant les champs de métadonnées de la liste %{available} à la liste %{selected}. L’ordre des métadonnées de l’exportation sera déterminé par l’ordre de la liste %{selected}.
+      preparing_export: Préparation de l’exportation pour %{count} lignes...
+      preparing_rows: Préparation de %{count} lignes
       selected: Sélectionné
+      selected_count: 'Échantillons sélectionnés : %{count}'
+      start_error: 'Impossible de démarrer l’exportation : %{message}'
       title: Exportation de liste détaillée
+      unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
       xlsx: ".xslx"
     new_sample_export_dialog:
       available: Disponible

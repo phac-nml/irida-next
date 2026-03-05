@@ -186,7 +186,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       templates = metadata_templates_ancestral.map do |template|
         { id: template.id, name: template.name, fields: template.fields }
       end
-      { open: true, namespace_id: params[:namespace_id], templates: templates }
+      { open: true, namespace_id: params[:namespace_id], namespace: @namespace, templates: templates }
     end
   end
 
