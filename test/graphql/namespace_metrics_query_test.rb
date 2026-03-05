@@ -7,43 +7,55 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
   include ActionDispatch::TestProcess
   include ActionView::Helpers::NumberHelper
 
-  # We only need to traverse one level of groups and projects to verify
-  # that a system user can walk the namespaceMetrics connection and see
-  # metrics on the returned objects.  A simpler query avoids hitting the
-  # complexity limits built into GraphQL.
+  # Queries now request metrics fields directly on the namespace node and
+  # use type-specific fragments for group/user extensions.  We keep a few
+  # optional pagination variables so tests can reuse this base query.
   NAMESPACE_METRICS_QUERY = <<~GRAPHQL
-    query($namespaceType: [String!], $first: Int) {
-      namespaceMetrics(first: $first, namespaceType: $namespaceType) {
+    query(
+      $namespaceType: [String!],
+      $first: Int,
+      $projFirst: Int,
+      $projAfter: String,
+      $grpFirst: Int,
+      $grpAfter: String
+    ) {
+      namespaceMetrics(
+        namespaceType: $namespaceType,
+        first: $first,
+      ) {
         nodes {
           id
           name
+          puid
           type
-          metrics {
+          samplesCount
+          membersCount
+          diskUsage
+          projectsCount
+          projects(first: $projFirst, after: $projAfter) {
+            pageInfo { hasNextPage endCursor }
+            nodes {
+              name
+              samplesCount
+              membersCount
+              diskUsage
+            }
+          }
+          ... on GroupMetricsType {
             projectsCount
-            samplesCount
-            membersCount
-            diskUsage
-          }
-          projects {
-            nodes {
-              id
-              name
-              metrics {
+            descendantGroups(first: $grpFirst, after: $grpAfter) {
+              pageInfo { hasNextPage endCursor }
+              nodes {
+                name
                 samplesCount
                 membersCount
                 diskUsage
+                projectsCount
               }
             }
           }
-          descendantGroups {
-            nodes {
-              name
-              metrics {
-                samplesCount
-                membersCount
-                diskUsage
-              }
-            }
+          ... on UserNamespaceMetricsType {
+            projectsCount
           }
         }
       }
@@ -51,17 +63,21 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
   GRAPHQL
 
   NAMESPACE_METRICS_DIRECT_QUERY = <<~GRAPHQL
-    query($namespaceType: [String!], $first: Int) {
-      namespaceMetrics(first: $first, namespaceType: $namespaceType) {
+    query($namespaceType: [String!], $first: Int, $directOnly: Boolean) {
+      namespaceMetrics(first: $first, namespaceType: $namespaceType, directOnly: $directOnly) {
         nodes {
-          id
           name
+          puid
           type
-          metrics(directOnly: true) {
+          samplesCount
+          membersCount
+          diskUsage
+          projectsCount
+          ... on GroupMetricsType {
             projectsCount
-            samplesCount
-            membersCount
-            diskUsage
+          }
+          ... on UserNamespaceMetricsType {
+            projectsCount
           }
         }
       }
@@ -75,12 +91,10 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           name
           parent
           type
-          metrics {
-            projectsCount
-            samplesCount
-            membersCount
-            diskUsage
-          }
+          samplesCount
+          membersCount
+          diskUsage
+          projectsCount
         }
       }
     }
@@ -93,12 +107,10 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           name
           parent
           type
-          metrics {
-            projectsCount
-            samplesCount
-            membersCount
-            diskUsage
-          }
+          samplesCount
+          membersCount
+          diskUsage
+          projectsCount
         }
       }
     }
@@ -111,12 +123,10 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           name
           parent
           type
-          metrics {
-            projectsCount
-            samplesCount
-            membersCount
-            diskUsage
-          }
+          samplesCount
+          membersCount
+          diskUsage
+          projectsCount
         }
       }
     }
@@ -137,22 +147,23 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       namespaceMetrics(first: $first, namespaceType: $namespaceType) {
         nodes {
           name
+          samplesCount
+          membersCount
+          diskUsage
           projects(first: $projFirst, after: $projAfter) {
             pageInfo { hasNextPage endCursor }
             nodes {
               name
-              metrics {
-                samplesCount
-                membersCount
-                diskUsage
-              }
+              samplesCount
+              membersCount
+              diskUsage
             }
           }
-          descendantGroups(first: $grpFirst, after: $grpAfter) {
-            pageInfo { hasNextPage endCursor }
-            nodes {
-              name
-              metrics {
+          ... on GroupMetricsType {
+            descendantGroups(first: $grpFirst, after: $grpAfter) {
+              pageInfo { hasNextPage endCursor }
+              nodes {
+                name
                 samplesCount
                 membersCount
                 diskUsage
@@ -265,64 +276,48 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     metrics_group_node = namespaces.find { |n| n['name'] == @group.name }
     assert metrics_group_node, 'expected our test group to appear in the results'
 
-    # verify the top‑level group has a metrics object with the expected keys
-    metrics = metrics_group_node['metrics']
-    assert metrics.present?, 'metrics should be returned for the namespace'
+    assert metrics_group_node['samplesCount'].is_a?(Integer)
+    assert metrics_group_node['membersCount'].is_a?(Integer)
+    assert metrics_group_node['diskUsage'].is_a?(String)
 
-    # also validate types just for sanity
-    assert metrics['samplesCount'].is_a?(Integer)
-    assert metrics['membersCount'].is_a?(Integer)
-    assert metrics['diskUsage'].is_a?(String)
-
-    # concrete values based on our setup
     expected_projects = @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).count
-    assert metrics['projectsCount'].is_a?(Integer), 'projectsCount should be an integer'
-    assert_equal expected_projects, metrics['projectsCount'],
+    assert metrics_group_node['projectsCount'].is_a?(Integer), 'projectsCount should be an integer'
+    assert_equal expected_projects, metrics_group_node['projectsCount'],
                  'group projectsCount should return count of projects from itself and its subgroups'
 
-    # reload before inspecting counters - the in-memory object may be stale
     @group.reload
-    # samplesCount should exactly match the resolver's value; we rely on the
-    # service in setup to keep counters in sync so this is deterministic. Group
-    # samplesCount includes samples from shared groups
     expected_samples = @group.aggregated_samples_count
-    assert_equal expected_samples, metrics['samplesCount'], 'samplesCount should equal aggregated counter'
+    assert_equal expected_samples, metrics_group_node['samplesCount'], 'samplesCount should equal aggregated counter'
+    assert_equal 1, metrics_group_node['membersCount'], 'only jane_doe was added to the group'
 
-    assert_equal 1, metrics['membersCount'], 'only jane_doe was added to the group'
-
-    # diskUsage should reflect the attachments we created above; compute the
-    # expected string by mirroring the resolver's SQL logic so we stay in
-    # control of the database objects rather than instantiating GraphQL
     expected_disk = calculate_disk_usage(@group)
-    assert_equal expected_disk, metrics['diskUsage'], 'diskUsage should sum attachment byte sizes'
+    assert_equal expected_disk, metrics_group_node['diskUsage'], 'diskUsage should sum attachment byte sizes'
 
     # confirm projects are visible and each project carries its own metrics
     project_nodes = metrics_group_node.dig('projects', 'nodes') || []
     assert(project_nodes.any? { |p| p['name'] == @project.name })
     project_nodes.each do |p|
-      assert p['metrics'].present?, 'project metrics should be present'
+      # projects now also expose metric fields directly
+      assert p['samplesCount'].is_a?(Integer)
+      assert p['membersCount'].is_a?(Integer)
+      assert p['diskUsage'].is_a?(String)
 
-      # find the matching project record based on the name of its namespace
       project_record = Project.joins(:namespace).find_by(namespaces: { name: p['name'] })
-
-      # the resolver for samplesCount simply returns the counter on the
-      # project namespace; use that value for the expected assertion
       expected_proj_samples = project_record.samples_count.to_i
-      assert_equal expected_proj_samples, p['metrics']['samplesCount'], 'project sample count should match database'
+      assert_equal expected_proj_samples, p['samplesCount'], 'project sample count should match database'
 
-      # disk usage for the project should also be predictable via resolver
       expected_proj_disk = calculate_disk_usage(project_record)
-      assert_equal expected_proj_disk, p['metrics']['diskUsage'], 'project diskUsage should agree with our helper'
-
-      assert p['metrics']['membersCount'].is_a?(Integer)
-      assert_equal 2, p['metrics']['membersCount'], 'project membersCount should only have two members'
+      assert_equal expected_proj_disk, p['diskUsage'], 'project diskUsage should agree with our helper'
+      assert_equal 2, p['membersCount'], 'project membersCount should only have two members'
     end
 
     # and sub‑groups should also be iterable at the first level
     subgroup_nodes = metrics_group_node.dig('descendantGroups', 'nodes') || []
     assert(subgroup_nodes.any? { |g| g['name'] == @subgroup.name })
     subgroup_nodes.each do |g|
-      assert g['metrics'].present?, 'subgroup metrics should be present'
+      assert g['samplesCount'].is_a?(Integer)
+      assert g['membersCount'].is_a?(Integer)
+      assert g['diskUsage'].is_a?(String)
     end
   end
 
@@ -389,19 +384,19 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       page['nodes'].each do |p|
         if p['name'] == extra_project.name
           project_record = extra_project.reload
-          assert p['metrics']['samplesCount'].is_a?(Integer)
-          assert p['metrics']['diskUsage'].is_a?(String)
-          assert p['metrics']['membersCount'].is_a?(Integer)
-          assert_equal project_record.samples_count.to_i, p['metrics']['samplesCount']
+          assert p['samplesCount'].is_a?(Integer)
+          assert p['diskUsage'].is_a?(String)
+          assert p['membersCount'].is_a?(Integer)
+          assert_equal project_record.samples_count.to_i, p['samplesCount']
           expected_proj_disk = calculate_disk_usage(project_record)
-          assert_equal expected_proj_disk, p['metrics']['diskUsage']
-          assert_equal 1, p['metrics']['membersCount']
+          assert_equal expected_proj_disk, p['diskUsage']
+          assert_equal 1, p['membersCount']
         else
-          # other (fixture) projects may have unrelated data; just make sure
-          # types are sane
-          assert p['metrics']['samplesCount'].is_a?(Integer)
-          assert p['metrics']['diskUsage'].is_a?(String)
-          assert p['metrics']['membersCount'].is_a?(Integer)
+          # other projects may have unrelated data so we just make sure the
+          # types are as expected
+          assert p['samplesCount'].is_a?(Integer)
+          assert p['diskUsage'].is_a?(String)
+          assert p['membersCount'].is_a?(Integer)
         end
       end
       proj_after = page['pageInfo']['endCursor']
@@ -433,17 +428,17 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       page['nodes'].each do |g|
         if g['name'] == extra_group.name
           group_record = extra_group.reload
-          assert g['metrics']['samplesCount'].is_a?(Integer)
-          assert g['metrics']['diskUsage'].is_a?(String)
-          assert g['metrics']['membersCount'].is_a?(Integer)
-          assert_equal 0, g['metrics']['samplesCount']
+          assert g['samplesCount'].is_a?(Integer)
+          assert g['diskUsage'].is_a?(String)
+          assert g['membersCount'].is_a?(Integer)
+          assert_equal 0, g['samplesCount']
           expected_group_disk = calculate_disk_usage(group_record)
-          assert_equal expected_group_disk, g['metrics']['diskUsage']
-          assert_equal 4, g['metrics']['membersCount']
+          assert_equal expected_group_disk, g['diskUsage']
+          assert_equal 4, g['membersCount']
         else
-          assert g['metrics']['samplesCount'].is_a?(Integer)
-          assert g['metrics']['diskUsage'].is_a?(String)
-          assert g['metrics']['membersCount'].is_a?(Integer)
+          assert g['samplesCount'].is_a?(Integer)
+          assert g['diskUsage'].is_a?(String)
+          assert g['membersCount'].is_a?(Integer)
         end
       end
 
@@ -454,7 +449,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
                  'should retrieve all subgroups via successive pages'
   end
 
-  test 'non-system user is not granted access to namespace metrics' do
+  test 'non-system user cannot see namespace metrics endpoint' do
     result = IridaSchema.execute(
       NAMESPACE_METRICS_QUERY,
       context: { current_user: users(:jane_doe) },
@@ -462,9 +457,8 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       max_complexity: nil
     )
 
-    # unauthorized objects are reported as errors by the schema
     assert_not_nil result['errors'], 'expect permission errors when not system user'
-    assert_match(/hidden due to permissions/, result['errors'][0]['message'])
+    assert_match(/(doesn't exist)/, result['errors'][0]['message'])
   end
 
   test 'user namespace metrics query returns only projects and no groups' do
@@ -500,17 +494,13 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     grp_nodes = user_node.dig('descendantGroups', 'nodes') || nil
     assert_nil grp_nodes, 'no subgroups should be returned for a user namespace'
 
-    # metrics at the user namespace itself
-    user_metrics = user_node['metrics']
+    # metrics at the user namespace itself are now available directly on
+    # the node rather than under a nested object.
     user_ns.reload
-    assert user_metrics['projectsCount'].is_a?(Integer)
-    assert_equal user_ns.project_namespaces.count, user_metrics['projectsCount'],
+    assert user_node['projectsCount'].is_a?(Integer)
+    assert_equal user_ns.project_namespaces.count, user_node['projectsCount'],
                  'user metrics projectsCount should equal to the number of project_namespaces under the user namespace'
 
-    # the query might return a different namespace object than the one we
-    # manually referenced (for example it may be re-loaded or scoped). use
-    # the ID from the response to guarantee we're computing against exactly
-    # the same record.
     gql_id = user_node['id']
     namespace_record = IridaSchema.object_from_id(gql_id, context: { current_user: @sys_user })
     assert namespace_record.is_a?(Namespaces::UserNamespace)
@@ -518,35 +508,29 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     expected_user_samples = Sample.where(
       project_id: Project.where(namespace_id: namespace_record.project_namespaces.pluck(:id))
     ).count
-    assert_equal expected_user_samples, user_metrics['samplesCount']
+    assert_equal expected_user_samples, user_node['samplesCount']
 
-    assert user_metrics['membersCount'].is_a?(Integer)
-    assert_equal 1, user_metrics['membersCount'], 'only the owner should be counted as a member for the project'
+    assert user_node['membersCount'].is_a?(Integer)
+    assert_equal 1, user_node['membersCount'], 'only the owner should be counted as a member for the project'
 
     expected_user_disk = calculate_disk_usage(user_ns)
-    assert_equal expected_user_disk, user_metrics['diskUsage']
+    assert_equal expected_user_disk, user_node['diskUsage']
 
     proj_nodes = user_node.dig('projects', 'nodes') || []
     assert(proj_nodes.any? { |p| p['name'] == user_proj.name })
     proj_nodes.each do |p|
-      assert p['metrics'].present?
+      # projects expose metrics fields directly now
+      assert p['samplesCount'].is_a?(Integer)
+      assert p['diskUsage'].is_a?(String)
+      assert p['membersCount'].is_a?(Integer)
 
-      if p['name'] == user_proj.name
-        project_record = user_proj.reload
-        assert p['metrics']['samplesCount'].is_a?(Integer)
-        assert p['metrics']['diskUsage'].is_a?(String)
-        assert p['metrics']['membersCount'].is_a?(Integer)
-        assert_equal project_record.samples_count.to_i, p['metrics']['samplesCount']
-        expected_proj_disk = calculate_disk_usage(project_record)
-        assert_equal expected_proj_disk, p['metrics']['diskUsage']
-        assert_equal 1, p['metrics']['membersCount']
-      else
-        # other (fixture) projects may have unrelated data; just make sure
-        # types are sane
-        assert p['metrics']['samplesCount'].is_a?(Integer)
-        assert p['metrics']['diskUsage'].is_a?(String)
-        assert p['metrics']['membersCount'].is_a?(Integer)
-      end
+      next unless p['name'] == user_proj.name
+
+      project_record = user_proj.reload
+      assert_equal project_record.samples_count.to_i, p['samplesCount']
+      expected_proj_disk = calculate_disk_usage(project_record)
+      assert_equal expected_proj_disk, p['diskUsage']
+      assert_equal 1, p['membersCount']
     end
   end
 
@@ -678,13 +662,13 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert namespaces.one?, 'should return one namespace'
     group_node = namespaces.last
     assert_equal @group.name, group_node['name'], 'should return the correct group based on PUID'
-    assert group_node['metrics']['samplesCount'].is_a?(Integer)
-    assert group_node['metrics']['diskUsage'].is_a?(String)
-    assert group_node['metrics']['membersCount'].is_a?(Integer)
-    assert_equal @group.reload.aggregated_samples_count, group_node['metrics']['samplesCount']
+    assert group_node['samplesCount'].is_a?(Integer)
+    assert group_node['diskUsage'].is_a?(String)
+    assert group_node['membersCount'].is_a?(Integer)
+    assert_equal @group.reload.aggregated_samples_count, group_node['samplesCount']
     expected_group_disk = calculate_disk_usage(@group)
-    assert_equal expected_group_disk, group_node['metrics']['diskUsage']
-    assert_equal 1, group_node['metrics']['membersCount']
+    assert_equal expected_group_disk, group_node['diskUsage']
+    assert_equal 1, group_node['membersCount']
   end
 
   test 'get group namespace metrics by full path' do
@@ -699,13 +683,13 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert namespaces.one?, 'should return one namespace'
     group_node = namespaces.last
     assert_equal @group.name, group_node['name'], 'should return the correct group based on full path'
-    assert group_node['metrics']['samplesCount'].is_a?(Integer)
-    assert group_node['metrics']['diskUsage'].is_a?(String)
-    assert group_node['metrics']['membersCount'].is_a?(Integer)
-    assert_equal @group.reload.aggregated_samples_count, group_node['metrics']['samplesCount']
+    assert group_node['samplesCount'].is_a?(Integer)
+    assert group_node['diskUsage'].is_a?(String)
+    assert group_node['membersCount'].is_a?(Integer)
+    assert_equal @group.reload.aggregated_samples_count, group_node['samplesCount']
     expected_group_disk = calculate_disk_usage(@group)
-    assert_equal expected_group_disk, group_node['metrics']['diskUsage']
-    assert_equal 1, group_node['metrics']['membersCount']
+    assert_equal expected_group_disk, group_node['diskUsage']
+    assert_equal 1, group_node['membersCount']
   end
 
   test 'get user namespace metrics by PUID' do
@@ -720,14 +704,14 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert namespaces.one?, 'should return one namespace'
     user_node = namespaces.last
     assert_equal @non_sys_user.email, user_node['name'], 'should return the correct user based on PUID'
-    assert user_node['metrics']['samplesCount'].is_a?(Integer)
-    assert user_node['metrics']['diskUsage'].is_a?(String)
-    assert user_node['metrics']['membersCount'].is_a?(Integer)
-    assert_equal 1, user_node['metrics']['samplesCount']
+    assert user_node['samplesCount'].is_a?(Integer)
+    assert user_node['diskUsage'].is_a?(String)
+    assert user_node['membersCount'].is_a?(Integer)
+    assert_equal 1, user_node['samplesCount']
     expected_user_disk = calculate_disk_usage(@non_sys_user.namespace)
-    assert_equal expected_user_disk, user_node['metrics']['diskUsage']
-    assert_equal 1, user_node['metrics']['membersCount']
-    assert_equal 2, user_node['metrics']['projectsCount']
+    assert_equal expected_user_disk, user_node['diskUsage']
+    assert_equal 1, user_node['membersCount']
+    assert_equal 2, user_node['projectsCount']
   end
 
   test 'get user namespace metrics by full path' do
@@ -742,21 +726,21 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert namespaces.one?, 'should return one namespace'
     user_node = namespaces.last
     assert_equal @non_sys_user.email, user_node['name'], 'should return the correct user based on PUID'
-    assert user_node['metrics']['samplesCount'].is_a?(Integer)
-    assert user_node['metrics']['diskUsage'].is_a?(String)
-    assert user_node['metrics']['membersCount'].is_a?(Integer)
-    assert_equal 1, user_node['metrics']['samplesCount']
+    assert user_node['samplesCount'].is_a?(Integer)
+    assert user_node['diskUsage'].is_a?(String)
+    assert user_node['membersCount'].is_a?(Integer)
+    assert_equal 1, user_node['samplesCount']
     expected_user_disk = calculate_disk_usage(@non_sys_user.namespace)
-    assert_equal expected_user_disk, user_node['metrics']['diskUsage']
-    assert_equal 1, user_node['metrics']['membersCount']
-    assert_equal 2, user_node['metrics']['projectsCount']
+    assert_equal expected_user_disk, user_node['diskUsage']
+    assert_equal 1, user_node['membersCount']
+    assert_equal 2, user_node['projectsCount']
   end
 
   test 'namespace metrics query with directOnly flag returns metrics for direct projects and samples only' do
     result = IridaSchema.execute(
       NAMESPACE_METRICS_DIRECT_QUERY,
       context: { current_user: @sys_user },
-      variables: { namespaceType: ['Group'], first: 1_000 },
+      variables: { namespaceType: ['Group'], first: 1_000, directOnly: true },
       max_complexity: nil
     )
     assert_nil result['errors'], 'query should execute without errors'
@@ -764,11 +748,10 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert_not_empty namespaces, 'should return at least one namespace'
     metrics_group_node = namespaces.find { |n| n['name'] == @group.name }
     assert metrics_group_node, 'expected our test group to appear in the results'
-    metrics = metrics_group_node['metrics']
-    assert metrics.present?, 'metrics should be returned for the namespace'
+
     expected_projects = @group.project_namespaces.count
-    assert metrics['projectsCount'].is_a?(Integer), 'projectsCount should be an integer'
-    assert_equal expected_projects, metrics['projectsCount'],
+    assert metrics_group_node['projectsCount'].is_a?(Integer), 'projectsCount should be an integer'
+    assert_equal expected_projects, metrics_group_node['projectsCount'],
                  'group projectsCount with directOnly should return count of only direct projects'
 
     expected_samples_count = 0
@@ -776,12 +759,12 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       expected_samples_count += pn.project.samples_count.to_i
     end
 
-    assert_equal expected_samples_count, metrics['samplesCount'],
+    assert_equal expected_samples_count, metrics_group_node['samplesCount'],
                  'samplesCount with directOnly should equal the direct counter'
     expected_disk_usage = calculate_disk_usage(@group, direct_only: true)
-    assert_equal expected_disk_usage, metrics['diskUsage'],
+    assert_equal expected_disk_usage, metrics_group_node['diskUsage'],
                  'diskUsage with directOnly should sum attachment byte sizes for direct projects and samples only'
-    assert_equal 1, metrics['membersCount'], 'only jane_doe was added to the group'
+    assert_equal 1, metrics_group_node['membersCount'], 'only jane_doe was added to the group'
   end
 
   private
