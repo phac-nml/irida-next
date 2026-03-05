@@ -2,8 +2,7 @@
   <%= render AdvancedSearchComponent.new(
     search:,
     form:,
-    sample_fields:,
-    metadata_fields:,
+    fields: advanced_search_fields,
     status: search.advanced_query?,
   ) %>
 <% end %>

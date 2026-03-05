@@ -1,15 +1,17 @@
 <% invalid_value = @condition.errors.include?(:value) %>
+
 <% operator_exists =
   @condition.operator.blank? ||
     %w[exists not_exists].include?(@condition.operator) %>
 
 <div
   class="
-    form-field w-5/12 @max-xl:w-full value <%= 'invalid' if invalid_value %>
+    value form-field w-5/12 @max-xl:w-full <%= 'invalid' if invalid_value %>
     <%= 'invisible @max-xl:hidden' if operator_exists %>
   "
 >
   <%= @conditions_form.label :value, data: { required: true } %>
+
   <% if %w[in not_in].include?(@condition.operator) %>
     <div
       data-controller="list-filter"
@@ -25,15 +27,13 @@
     </div>
   <% else %>
     <%= @conditions_form.text_field :value,
-                                "aria-label":
-                                  t(
-                                    "activemodel.attributes.sample/search_condition.value",
-                                  ),
+                                "aria-label": value_label,
                                 "aria-invalid": invalid_value,
                                 "aria-describedby":
                                   @conditions_form.field_id(:value, "error"),
                                 autofocus: invalid_value %>
   <% end %>
+
   <%= render "shared/form/field_errors",
   errors: @condition.errors.full_messages_for(:value),
   id: @conditions_form.field_id(:value, "error") %>
