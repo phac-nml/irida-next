@@ -74,18 +74,8 @@ export default class extends Controller {
       // no longer exists in the current rowSelectionTargets (e.g. after a partial update).
       if (startIndex > -1 && endIndex > -1) {
         // Determine lower/higher bounds for the range
-        let low = Math.min(startIndex, endIndex);
-        let high = Math.max(startIndex, endIndex);
-
-        // If the clicked checkbox is being checked, exclude the clicked
-        // checkbox from the range by moving the boundary inward.
-        if (event.target.checked === false) {
-          if (endIndex > startIndex) {
-            high = high - 1;
-          } else {
-            low = low + 1;
-          }
-        }
+        const low = Math.min(startIndex, endIndex);
+        const high = Math.max(startIndex, endIndex);
 
         // Only build the list when the adjusted range is non-empty
         if (low <= high) {
@@ -94,6 +84,7 @@ export default class extends Controller {
           valuesToToggle = indices.map(
             (i) => this.rowSelectionTargets[i].value,
           );
+          this.#lastActiveCheckbox;
         } else {
           valuesToToggle = [];
         }
