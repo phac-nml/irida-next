@@ -503,6 +503,7 @@ fr:
       csv: ".csv"
       download_started: 'Téléchargement démarré : %{filename}'
       format: Format
+      no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       metadata: Métadonnées
       metadata_description: Sélectionnez les champs de métadonnées à exporter en déplaçant les champs de métadonnées de la liste %{available} à la liste %{selected}. L’ordre des métadonnées de l’exportation sera déterminé par l’ordre de la liste %{selected}.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
@@ -510,9 +511,10 @@ fr:
       selected: Sélectionné
       selected_count: 'Échantillons sélectionnés : %{count}'
       start_error: 'Impossible de démarrer l’exportation : %{message}'
+      xlsx_unsupported: L’exportation XLSX n’est pas encore prise en charge dans ce flux côté client.
       title: Exportation de liste détaillée
       unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
-      xlsx: ".xslx"
+      xlsx: ".xlsx"
     new_sample_export_dialog:
       available: Disponible
       format_description: Par défaut, tous les fichiers sont inclus dans les échantillons d’exportations. Si vous souhaitez filtrer les fichiers inclus en fonction du format, n’incluez que ces formats dans la liste %{selected}.
