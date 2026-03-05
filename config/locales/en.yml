@@ -490,12 +490,20 @@ en:
       title: Analysis Export
     new_linelist_export_dialog:
       available: Available
+      close_progress: Close export progress
+      created_records: Created %{current} of %{total} records
       csv: ".csv"
+      download_started: 'Download started: %{filename}'
       format: Format
       metadata: Metadata
       metadata_description: Select the metadata fields for export by moving the metadata fields from the %{available} list to the %{selected} list. The export's metadata ordering will be determined by the ordering of the %{selected} list.
+      preparing_export: Preparing linelist export for %{count} rows...
+      preparing_rows: Preparing %{count} rows
       selected: Selected
+      selected_count: 'Selected samples: %{count}'
+      start_error: 'Unable to start export: %{message}'
       title: Linelist Export
+      unexpected_error: 'Unexpected error while generating export: %{message}'
       xlsx: ".xslx"
     new_sample_export_dialog:
       available: Available
