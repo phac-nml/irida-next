@@ -4,13 +4,14 @@
 class RegistrationsController < Devise::RegistrationsController
   layout 'devise'
 
+  before_action :ensure_signup_enabled, only: %i[new create]
   before_action :page_title
   before_action :configure_sign_up_params, :configure_account_update_params
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    super
+  end
 
   # POST /resource
   def create
@@ -68,5 +69,11 @@ class RegistrationsController < Devise::RegistrationsController
 
   def page_title
     @title = t(:'devise.registrations.new.register')
+  end
+
+  def ensure_signup_enabled
+    return if Irida::CurrentSettings.signup_enabled?
+
+    redirect_to new_user_session_path, alert: t(:'devise.registrations.signup_disabled')
   end
 end
