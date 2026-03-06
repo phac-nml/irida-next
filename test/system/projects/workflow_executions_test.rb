@@ -468,7 +468,10 @@ module Projects
       Flipper.disable(:workflow_execution_advanced_search)
     end
 
-    test 'workflow advanced search filters project workflow results when workflow advanced-search feature flag is enabled' do
+    test(
+      'workflow advanced search filters project workflow results when workflow advanced-search feature flag is ' \
+      'enabled'
+    ) do
       Flipper.enable(:workflow_execution_advanced_search)
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
