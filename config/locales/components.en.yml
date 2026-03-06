@@ -223,6 +223,7 @@ en:
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
     namespace_row:
       contents_component:
+        created_at: Created %{date}
         projects:
           aria-label: Projects
           tooltip: "%{count} projects in %{namespace_name}"
@@ -232,7 +233,6 @@ en:
         subnamespaces:
           aria-label: Subgroups
           tooltip: "%{count} subgroups in %{namespace_name}"
-        created_at: "Created %{date}"
     nextflow:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
