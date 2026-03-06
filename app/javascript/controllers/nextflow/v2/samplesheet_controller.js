@@ -47,6 +47,7 @@ export default class extends Controller {
     "updateSamplesLabel",
     "sampleAttributes",
     "samplesheetParamsForm",
+    "samplesheetParamsFormTemplate",
     "samplesheetReadyTemplate",
     "ariaLive",
   ];
@@ -929,10 +930,6 @@ export default class extends Controller {
       this.samplesheetPropertiesTarget.dataset.properties;
     this.boundAmendForm = this.amendForm.bind(this);
 
-    this.samplesheetParamsFormTarget.addEventListener(
-      "turbo:before-fetch-request",
-      this.boundAmendForm,
-    );
     this.#submitSamplesheetParams();
   }
 
@@ -958,6 +955,8 @@ export default class extends Controller {
   }
 
   #submitSamplesheetParams() {
+    const form =
+      this.samplesheetParamsFormTemplateTarget.content.cloneNode(true);
     const fragment = document.createDocumentFragment();
 
     fragment.appendChild(
@@ -968,8 +967,15 @@ export default class extends Controller {
     // clear the now unnecessary DOM element
     this.samplesheetPropertiesTarget.remove();
 
-    this.samplesheetParamsFormTarget.appendChild(fragment);
-    this.samplesheetParamsFormTarget.requestSubmit();
+    this.element.appendChild(form);
+
+    this.element.lastElementChild.appendChild(fragment);
+
+    this.element.lastElementChild.addEventListener(
+      "turbo:before-fetch-request",
+      this.boundAmendForm,
+    );
+    this.element.lastElementChild.requestSubmit();
   }
 
   dataPayloadTargetConnected() {
