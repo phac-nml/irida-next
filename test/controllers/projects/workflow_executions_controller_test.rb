@@ -479,25 +479,5 @@ module Projects
       follow_redirect!
       assert_response :success
     end
-
-    private
-
-    def workflow_advanced_search_params(state:)
-      {
-        q: {
-          groups_attributes: {
-            '0' => {
-              conditions_attributes: {
-                '0' => {
-                  field: 'state',
-                  operator: '=',
-                  value: state
-                }
-              }
-            }
-          }
-        }
-      }
-    end
   end
 end

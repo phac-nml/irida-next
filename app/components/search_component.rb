@@ -47,7 +47,7 @@ class SearchComponent < Component
   end
 
   def render_extra_content(form)
-    return if @extra_content.blank?
+    return if @extra_content.nil?
 
     view_context.capture(form, &@extra_content)
   end
