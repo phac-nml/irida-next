@@ -101,6 +101,7 @@
       search: @query,
       url: workflow_executions_path,
       total_count: @pagy.count,
+      page_limit: @pagy.limit,
       search_field_arguments: {
         data: {
           "search-field-selection-outlet": "#workflow-executions-table",
