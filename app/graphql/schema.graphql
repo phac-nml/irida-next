@@ -1375,7 +1375,7 @@ type Member implements Node {
   """
   The access level of the member.
   """
-  accessLevel: Int!
+  accessLevel: String!
 
   """
   Datetime of creation.
@@ -1391,11 +1391,6 @@ type Member implements Node {
   ID of the object.
   """
   id: ID!
-
-  """
-  The namespace that the member belongs to.
-  """
-  namespace: Namespace!
 
   """
   Datetime of last update.
