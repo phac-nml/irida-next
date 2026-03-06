@@ -380,7 +380,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def normalized_workflow_advanced_search_groups
     groups_attributes = params.dig(:q, :groups_attributes)
-    return groups_attributes if groups_attributes.present?
+    if groups_attributes.present?
+      return groups_attributes.respond_to?(:to_unsafe_h) ? groups_attributes.to_unsafe_h : groups_attributes
+    end
 
     groups = params.dig(:q, :groups)
     return if groups.blank?
