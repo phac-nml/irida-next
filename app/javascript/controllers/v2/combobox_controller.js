@@ -45,6 +45,7 @@ export default class ComboboxController extends Controller {
     this.#floatingDropdown = new FloatingDropdown({
       trigger: this.comboboxTarget,
       dropdown: this.listboxTarget,
+      manageAria: false,
       onShow: () => this.#onShow(),
       onHide: () => this.#onHide(),
     });
