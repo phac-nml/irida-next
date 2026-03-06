@@ -85,7 +85,10 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     Flipper.disable(:workflow_execution_advanced_search)
   end
 
-  test 'should ignore advanced search groups payload from ransack form when workflow advanced-search feature flag is disabled' do
+  test(
+    'should ignore advanced search groups payload from ransack form when workflow advanced-search feature flag ' \
+    'is disabled'
+  ) do
     Flipper.disable(:workflow_execution_advanced_search)
 
     get workflow_executions_path,
@@ -98,7 +101,10 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     Flipper.disable(:workflow_execution_advanced_search)
   end
 
-  test 'should apply advanced search groups payload from ransack form when workflow advanced-search feature flag is enabled' do
+  test(
+    'should apply advanced search groups payload from ransack form when workflow advanced-search feature flag ' \
+    'is enabled'
+  ) do
     Flipper.enable(:workflow_execution_advanced_search)
 
     get workflow_executions_path,
