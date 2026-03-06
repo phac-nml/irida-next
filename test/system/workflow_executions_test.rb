@@ -610,6 +610,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     click_button I18n.t(:'components.advanced_search_component.title')
 
     within('dialog') do
+      assert_selector "[name='q[groups_attributes][0][conditions_attributes][0][field]']", visible: :all
+
       if has_selector?("input[role='combobox']", visible: :visible)
         find("input[role='combobox']", visible: :visible).send_keys(
           I18n.t('workflow_executions.table_component.state'),
@@ -625,6 +627,40 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
     assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+    assert_selector "div[role='status']", text: /advanced search/, visible: false
+    assert_text @workflow_execution1.id
+    assert_no_text @workflow_execution4.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow quick search preserves active advanced search when feature flag is enabled' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    within('dialog') do
+      if has_selector?("input[role='combobox']", visible: :visible)
+        find("input[role='combobox']", visible: :visible).send_keys(
+          I18n.t('workflow_executions.table_component.state'),
+          :enter
+        )
+      else
+        find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
+      end
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+      find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
+            with: 'irida_next_example'
+    find('input.t-search-component').send_keys(:return)
+
+    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+    assert_selector "div[role='status']", text: /advanced search/, visible: false
     assert_text @workflow_execution1.id
     assert_no_text @workflow_execution4.id
   ensure

@@ -18,20 +18,4 @@ module WorkflowExecutionAdvancedSearchHelper
       }
     }
   end
-
-  def workflow_advanced_search_ransack_groups_params(state:)
-    {
-      q: {
-        groups: {
-          conditions_attributes: {
-            '0' => {
-              field: 'state',
-              operator: '=',
-              value: state
-            }
-          }
-        }
-      }
-    }
-  end
 end
