@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Types
-  # Module with fields common to all namespace types (groups and projects) for metrics
+  # Interface for namespace metrics.
   module NamespaceMetricsType
     include Types::BaseInterface
 
     comment 'Interface for namespace metrics'
-    description 'Something that can be bought'
+    description 'Common fields for namespace metrics.'
 
     field :samples_count, Integer, null: false,
                                    description: 'Total number of samples in group projects or user project.',
