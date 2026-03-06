@@ -14,9 +14,9 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     login_as @user
   end
 
-  test 'default with feature flag' do
-    Flipper.enable(:deferred_samplesheet)
-    visit('rails/view_components/deferred_nextflow_samplesheet_component/default')
+  test 'default v2' do
+    Flipper.enable(:v2_samplesheet)
+    visit('/rails/view_components/nextflow/samplesheet_component/default_v2')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
       within('table') do
@@ -26,8 +26,8 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'default without feature flag' do
-    visit("/rails/view_components/nextflow_samplesheet_component/default?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
+  test 'default v1' do
+    visit("/rails/view_components/nextflow/samplesheet_component/default_v1?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
 
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 5
@@ -41,9 +41,9 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with reference files with feature flag' do
-    Flipper.enable(:deferred_samplesheet)
-    visit('rails/view_components/deferred_nextflow_samplesheet_component/with_reference_files')
+  test 'with reference files v2' do
+    Flipper.enable(:v2_samplesheet)
+    visit('/rails/view_components/nextflow/samplesheet_component/with_reference_files_v2')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
       within('table') do
@@ -53,8 +53,8 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with reference files without feature flag' do
-    visit("/rails/view_components/nextflow_samplesheet_component/with_reference_files?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
+  test 'with reference files v1' do
+    visit("/rails/view_components/nextflow/samplesheet_component/with_reference_files_v1?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
 
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
@@ -66,9 +66,9 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with metadata with feature flag' do
-    Flipper.enable(:deferred_samplesheet)
-    visit('rails/view_components/deferred_nextflow_samplesheet_component/with_metadata')
+  test 'with metadata v2' do
+    Flipper.enable(:v2_samplesheet)
+    visit('/rails/view_components/nextflow/samplesheet_component/with_metadata_v2')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 1)
       within('table') do
@@ -86,8 +86,8 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with metadata without feature flag' do
-    visit("/rails/view_components/nextflow_samplesheet_component/with_metadata?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
+  test 'with metadata v1' do
+    visit("/rails/view_components/nextflow/samplesheet_component/with_metadata_v1?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
     assert_selector 'table' do |table|
       table.assert_selector 'thead th', count: 4
       table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', count: 1
@@ -100,9 +100,9 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with samplesheet overrides with feature flag' do
-    Flipper.enable(:deferred_samplesheet)
-    visit('rails/view_components/deferred_nextflow_samplesheet_component/with_samplesheet_overrides')
+  test 'with samplesheet overrides v2' do
+    Flipper.enable(:v2_samplesheet)
+    visit('/rails/view_components/nextflow/samplesheet_component/with_samplesheet_overrides_v2')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
       within('table') do
@@ -120,8 +120,8 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with samplesheet overrides without feature flag' do
-    visit("/rails/view_components/nextflow_samplesheet_component/with_samplesheet_overrides?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
+  test 'with samplesheet overrides v1' do
+    visit("/rails/view_components/nextflow/samplesheet_component/with_samplesheet_overrides_v1?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
 
     within('div[data-controller-connected="true"]') do
       assert_selector 'table' do |table|
