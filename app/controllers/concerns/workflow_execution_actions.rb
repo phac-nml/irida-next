@@ -369,7 +369,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
     search_params[:name_or_id_in] = params.dig(:q, :name_or_id_in)
     search_params[:sort] = params.dig(:q, :s)
-    search_params[:groups_attributes] = params.dig(:q, :groups_attributes) if params.dig(:q, :groups_attributes)
+    if Flipper.enabled?(:workflow_execution_advanced_search) && params.dig(:q, :groups_attributes)
+      search_params[:groups_attributes] = params.dig(:q, :groups_attributes)
+    end
     search_params.compact
   end
 end

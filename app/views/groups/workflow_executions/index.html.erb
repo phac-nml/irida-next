@@ -55,19 +55,15 @@
 
     <div class="sm:grow max-sm:hidden" role="presentation"></div>
 
-    <%= render SearchComponent.new(
+    <%= render partial: "workflow_executions/table_filter", locals: {
       query: @q,
+      search: @query,
       url: group_workflow_executions_path(**request.query_parameters),
-      search_attribute: :name_or_id_cont,
-      label: t("common.controls.search"),
-      placeholder: t("shared.workflow_executions.index.search.placeholder"),
       total_count: @pagy.count,
-      class: "max-sm:grow",
-      value: @q.name_or_id_cont,
-      data: {
+      form_data: {
         "search-field-selection-outlet": "#workflow-executions-table",
       },
-    ) %>
+    } %>
   </div>
 <% end %>
 
