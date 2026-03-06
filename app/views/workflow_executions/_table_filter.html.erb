@@ -18,30 +18,48 @@
   ) %>
 <% end %>
 
-<%= render SearchComponent.new(
-  query: query,
-  url: url,
-  search_attribute: :name_or_id_cont,
-  label: t("common.controls.search"),
-  placeholder: t("shared.workflow_executions.index.search.placeholder"),
-  value: query.name_or_id_cont,
-  total_count: total_count,
-  class: search_form_class,
-  data: base_form_data,
-  search_field_arguments: search_field_arguments,
-  extra_content: lambda { |form|
-    if workflow_advanced_search_enabled
-      tag.div(class: "max-sm:mt-2 sm:shrink-0") do
-        render(
-          AdvancedSearchComponent.new(
-            form: form,
-            search: search,
-            fields: workflow_advanced_search_fields,
-            open: search.errors.any?,
-            status: search.advanced_query?,
-          )
-        )
-      end
-    end
-  },
-) %>
+<% if workflow_advanced_search_enabled %>
+  <div role="status" class="sr-only"><%= @results_message %></div>
+  <%= form_with model: search, html: { role: "search" }, scope: :q, url:, method: :get, data: base_form_data,
+                class: search_form_class do |form| %>
+    <% if query.present? && !query.sorts.empty? %>
+      <%= hidden_field_tag "q[s]", "#{query.sorts.first.name} #{query.sorts.first.dir}" %>
+    <% end %>
+
+    <% if local_assigns.fetch(:page_limit, nil).present? %>
+      <%= hidden_field_tag :limit, local_assigns[:page_limit] %>
+    <% end %>
+
+    <%= render SearchFieldComponent.new(
+      form: form,
+      field_name: :name_or_id_cont,
+      label: t("common.controls.search"),
+      placeholder: t("shared.workflow_executions.index.search.placeholder"),
+      value: search.name_or_id_cont,
+      **search_field_arguments,
+    ) %>
+
+    <div class="max-sm:mt-2 sm:shrink-0">
+      <%= render AdvancedSearchComponent.new(
+        form: form,
+        search: search,
+        fields: workflow_advanced_search_fields,
+        open: search.errors.any?,
+        status: search.advanced_query?,
+      ) %>
+    </div>
+  <% end %>
+<% else %>
+  <%= render SearchComponent.new(
+    query: query,
+    url: url,
+    search_attribute: :name_or_id_cont,
+    label: t("common.controls.search"),
+    placeholder: t("shared.workflow_executions.index.search.placeholder"),
+    value: query.name_or_id_cont,
+    total_count: total_count,
+    class: search_form_class,
+    data: base_form_data,
+    search_field_arguments: search_field_arguments,
+  ) %>
+<% end %>

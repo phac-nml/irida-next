@@ -55,7 +55,7 @@ export default class extends Controller {
 
   close(event) {
     if (!this.statusValue) {
-      this.renderSearch();
+      this.clear();
       return;
     }
 
@@ -63,9 +63,9 @@ export default class extends Controller {
       event.preventDefault();
       event.stopImmediatePropagation();
     } else if (!this.#dirty()) {
-      this.clear();
+      this.renderSearch();
     } else if (window.confirm(this.confirmCloseTextValue)) {
-      this.clear();
+      this.renderSearch();
     } else {
       event.stopImmediatePropagation();
       event.preventDefault();
@@ -150,7 +150,6 @@ export default class extends Controller {
 
   clearForm() {
     this.clear();
-    this.addGroup();
     this.clearSubmitError();
   }
 
