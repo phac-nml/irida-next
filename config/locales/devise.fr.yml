@@ -83,9 +83,9 @@ fr:
     sessions:
       already_signed_out: Fermeture de session réussie.
       new:
-        login: Se connecter
-      new_with_providers:
         local_button: Connectez-vous avec un compte local
+        login: Se connecter
+        no_configured_authentication_methods: Aucune méthode d'authentification n'est actuellement configurée. Veuillez contacter un administrateur d'IRIDA Next pour obtenir de l'aide.
         omniauth: Connectez-vous avec %{provider}
         return_button: Retour à la sélection de connexion
       signed_in: Ouverture de session réussie.

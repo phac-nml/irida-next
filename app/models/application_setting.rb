@@ -26,6 +26,10 @@ class ApplicationSetting < ApplicationRecord
     build_from_defaults.tap(&:save)
   end
 
+  def allow_signup?
+    signup_enabled? && password_authentication_enabled?
+  end
+
   private
 
   def only_one_instance

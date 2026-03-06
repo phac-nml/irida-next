@@ -83,9 +83,9 @@ en:
     sessions:
       already_signed_out: Signed out successfully.
       new:
-        login: Login
-      new_with_providers:
         local_button: Sign in with Local Account
+        login: Login
+        no_configured_authentication_methods: No authentication methods are currently configured. Please contact an IRIDA Next administrator for assistance.
         omniauth: Sign in with %{provider}
         return_button: Return to sign in selection
       signed_in: Signed in successfully.

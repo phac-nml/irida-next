@@ -6,17 +6,14 @@ class SessionsController < Devise::SessionsController
   before_action :page_title
 
   # before_action :configure_sign_in_params, only: [:create]
+  prepend_before_action :ensure_password_authentication_enabled!,
+                        if: -> { action_name == 'create' && password_based_login? }
 
   # GET /resource/sign_in
   def new
     super do
-      if resource_class.omniauth_providers.empty?
-        render :new_with_no_providers
-      else
-        @local_account = params[:local]
+      @local_account = params[:local] if Irida::CurrentSettings.password_authentication_enabled?
 
-        render :new_with_providers
-      end
       return
     end
   end
@@ -40,7 +37,26 @@ class SessionsController < Devise::SessionsController
   #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
   # end
 
+  private
+
   def page_title
     @title = t(:'devise.sessions.new.login')
+  end
+
+  def ensure_password_authentication_enabled!
+    return if Irida::CurrentSettings.password_authentication_enabled?
+
+    respond_to do |format|
+      format.html { render 'shared/error/not_authorized', status: :forbidden, locals: { authorization_message: '' } }
+      format.any { head :forbidden }
+    end
+  end
+
+  def password_based_login?
+    user_params[:email].present? && user_params[:password].present?
+  end
+
+  def user_params
+    params.expect(user: %i[email password remember_me])
   end
 end
