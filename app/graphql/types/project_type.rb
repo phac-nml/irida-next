@@ -34,6 +34,9 @@ module Types
 
     field :parent, NamespaceType, null: false, description: 'Parent namespace'
 
+    field :members, MemberType.connection_type, null: true, description: 'Members of the project.',
+                                                resolver: Resolvers::MembersResolver
+
     def self.authorized?(object, context)
       super && (context[:projects_preauthorized] ||
         allowed_to?(
