@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'active_storage_test_case'
 
 module WorkflowExecutions
-  class CompletionServiceTest < ActiveStorageTestCase
+  class CompletionJobTest < ActiveStorageTestCase
+    include ActiveJob::Continuation::TestHelper
+
     def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       # normal/
       # get a new secure token for each workflow execution
       @workflow_execution_completing = workflow_executions(:irida_next_example_completing_a)
       blob_run_directory_a = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_completing.blob_run_directory = blob_run_directory_a
+      @workflow_execution_completing.save
 
       # create file blobs
       @normal_output_json_file_blob = make_and_upload_blob(
@@ -27,6 +31,7 @@ module WorkflowExecutions
       @workflow_execution_no_files = workflow_executions(:irida_next_example_completing_b)
       blob_run_directory_b = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_no_files.blob_run_directory = blob_run_directory_b
+      @workflow_execution_no_files.save
 
       # create file blobs
       @no_files_output_json_file_blob = make_and_upload_blob(
@@ -40,6 +45,7 @@ module WorkflowExecutions
       @workflow_execution_with_samples = workflow_executions(:irida_next_example_completing_c)
       blob_run_directory_c = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_with_samples.blob_run_directory = blob_run_directory_c
+      @workflow_execution_with_samples.save
 
       # create file blobs
       @normal2_output_json_file_blob = make_and_upload_blob(
@@ -69,6 +75,7 @@ module WorkflowExecutions
       @workflow_execution_with_samples_without_update_samples = workflow_executions(:irida_next_example_completing_f)
       blob_run_directory_f = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_with_samples_without_update_samples.blob_run_directory = blob_run_directory_f
+      @workflow_execution_with_samples_without_update_samples.save
 
       # create file blobs
       @normal2_output_json_file_blob = make_and_upload_blob(
@@ -99,6 +106,7 @@ module WorkflowExecutions
         workflow_executions(:irida_next_example_completing_g)
       blob_run_directory_g = ActiveStorage::Blob.generate_unique_secure_token
       @automated_workflow_execution_with_samples_with_update_samples.blob_run_directory = blob_run_directory_g
+      @automated_workflow_execution_with_samples_with_update_samples.save
 
       # create file blobs
       @normal2_output_json_file_blob = make_and_upload_blob(
@@ -128,6 +136,7 @@ module WorkflowExecutions
       @workflow_execution_missing_entry = workflow_executions(:irida_next_example_completing_d)
       blob_run_directory_d = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_missing_entry.blob_run_directory = blob_run_directory_d
+      @workflow_execution_missing_entry.save
 
       # create file blobs
       @missing_entry_output_json_file_blob = make_and_upload_blob(
@@ -149,6 +158,7 @@ module WorkflowExecutions
       @workflow_execution_with_complex_metadata = workflow_executions(:irida_next_example_completing_e)
       blob_run_directory_e = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_with_complex_metadata.blob_run_directory = blob_run_directory_e
+      @workflow_execution_with_complex_metadata.save
 
       # create file blobs
       @normal3_output_json_file_blob = make_and_upload_blob(
@@ -178,6 +188,7 @@ module WorkflowExecutions
       @workflow_execution_with_deleted_samples = workflow_executions(:irida_next_example_completing_h)
       blob_run_directory_h = ActiveStorage::Blob.generate_unique_secure_token
       @workflow_execution_with_deleted_samples.blob_run_directory = blob_run_directory_h
+      @workflow_execution_with_deleted_samples.save
 
       # create file blobs
       # create file blobs
@@ -216,7 +227,10 @@ module WorkflowExecutions
 
       assert 'completing', workflow_execution.state
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       assert_equal 'my_run_id_a', workflow_execution.run_id
       assert_equal 1, workflow_execution.outputs.count
@@ -243,12 +257,14 @@ module WorkflowExecutions
 
       assert_not_equal 'completing', workflow_execution.state
 
-      assert_not WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
-      assert_not_equal 'completing', workflow_execution.state
-      assert_not_equal 'completed', workflow_execution.state
+      assert_equal 'error', workflow_execution.state
 
-      assert_no_enqueued_emails
+      assert_enqueued_email_with PipelineMailer, :error_user_email, args: [workflow_execution]
 
       public_activity = PublicActivity::Activity.find_by(
         trackable_id: workflow_execution.namespace.id,
@@ -263,7 +279,10 @@ module WorkflowExecutions
 
       assert 'completing', workflow_execution.state
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       assert_equal 'my_run_id_b', workflow_execution.run_id
       # no files should be added to the run
@@ -289,7 +308,10 @@ module WorkflowExecutions
       assert_equal 1, workflow_execution.log_data.version
       assert_equal 1, workflow_execution.log_data.size
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       assert_equal 'my_run_id_c', workflow_execution.run_id
 
@@ -348,13 +370,53 @@ module WorkflowExecutions
       )
     end
 
+    test 'sample outputs on samples_workflow_executions with interrupt' do
+      workflow_execution = @workflow_execution_with_samples
+
+      assert 'completing', workflow_execution.state
+
+      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+
+      interrupt_job_during_step(WorkflowExecutionCompletionJob, :process_sample_file_paths, cursor: 1) do
+        perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      end
+      workflow_execution.reload
+
+      assert 'completing', workflow_execution.state
+
+      # samples workflow executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
+        swe1 = workflow_execution.samples_workflow_executions[0]
+        swe2 = workflow_execution.samples_workflow_executions[1]
+      else
+        swe2 = workflow_execution.samples_workflow_executions[0]
+        swe1 = workflow_execution.samples_workflow_executions[1]
+      end
+
+      assert_equal 2, swe1.outputs.count
+      assert_equal 0, swe2.outputs.count
+
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      workflow_execution.reload
+      swe1.reload
+      swe2.reload
+
+      assert_equal 'completed', workflow_execution.state
+
+      assert_equal 2, swe1.outputs.count
+      assert_equal 1, swe2.outputs.count
+    end
+
     test 'sample metadata on samples_workflow_executions' do
       workflow_execution = @workflow_execution_with_samples
 
       # Test start
       assert 'completing', workflow_execution.state
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       assert_equal 'my_run_id_c', workflow_execution.run_id
 
@@ -374,6 +436,60 @@ module WorkflowExecutions
       end
 
       assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
+    end
+
+    test 'sample metadata on samples_workflow_executions with interrupt' do
+      workflow_execution = @workflow_execution_with_samples
+
+      # Test start
+      assert 'completing', workflow_execution.state
+
+      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+
+      interrupt_job_during_step(WorkflowExecutionCompletionJob, :process_samples_metadata, cursor: 1) do
+        perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      end
+      workflow_execution.reload
+
+      assert_equal 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_c', workflow_execution.run_id
+
+      metadata1 = { 'number' => 1,
+                    'organism' => 'an organism' }
+      metadata2 = { 'number' => 2,
+                    'organism' => 'a different organism' }
+      empty_metadata = {}
+
+      assert_equal 2, workflow_execution.samples_workflow_executions.count
+      # samples workflow executions can be in either order
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
+        assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
+        assert_equal empty_metadata, workflow_execution.samples_workflow_executions[1].metadata
+      else
+        assert_equal metadata1, workflow_execution.samples_workflow_executions[1].metadata
+        assert_equal empty_metadata, workflow_execution.samples_workflow_executions[0].metadata
+      end
+
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      workflow_execution.reload
+
+      assert_equal 'completed', workflow_execution.state
+
+      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
+        assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
+        assert_equal metadata2, workflow_execution.samples_workflow_executions[1].metadata
+      else
+        assert_equal metadata1, workflow_execution.samples_workflow_executions[1].metadata
+        assert_equal metadata2, workflow_execution.samples_workflow_executions[0].metadata
+      end
 
       assert_no_enqueued_emails
 
@@ -404,7 +520,10 @@ module WorkflowExecutions
       assert_equal old_metadata1, @sample41.metadata
       assert_equal old_metadata2, @sample42.metadata
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       @sample41.reload
       assert_equal new_metadata1, @sample41.metadata
@@ -425,6 +544,63 @@ module WorkflowExecutions
       assert_nil @sample42.reload.metadata_provenance['metadatafield2']
 
       assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
+    end
+
+    test 'metadata on samples_workflow_executions merged into underlying samples when update_sample with interrupt' do
+      workflow_execution = @workflow_execution_with_samples
+
+      old_metadata1 = { 'metadatafield1' => 'value1',
+                        'organism' => 'the organism' }
+      old_metadata2 = { 'metadatafield2' => 'value2',
+                        'organism' => 'some organism' }
+      new_metadata1 = { 'number' => '1',
+                        'metadatafield1' => 'value1',
+                        'organism' => 'an organism' }
+      new_metadata2 = { 'number' => '2',
+                        'metadatafield2' => 'value2',
+                        'organism' => 'a different organism' }
+      # Test start
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_c', workflow_execution.run_id
+
+      assert_equal old_metadata1, @sample41.metadata
+      assert_equal old_metadata2, @sample42.metadata
+
+      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+
+      interrupt_job_during_step(
+        WorkflowExecutionCompletionJob,
+        :merge_metadata_onto_samples,
+        cursor: 1
+      ) do
+        perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      end
+      workflow_execution.reload
+
+      assert_equal 'completing', workflow_execution.state
+
+      @sample41.reload
+      assert_equal new_metadata1, @sample41.metadata
+      @sample42.reload
+      assert_equal old_metadata2, @sample42.metadata
+
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      workflow_execution.reload
+
+      assert_equal 'completed', workflow_execution.state
+
+      @sample41.reload
+      assert_equal new_metadata1, @sample41.metadata
+      @sample42.reload
+      assert_equal new_metadata2, @sample42.metadata
 
       assert_no_enqueued_emails
 
@@ -455,7 +631,10 @@ module WorkflowExecutions
       assert_equal old_metadata1, @sample41.metadata
       assert_equal old_metadata2, @sample42.metadata
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       @sample41.reload
       assert_not_equal new_metadata1, @sample41.metadata
@@ -479,6 +658,7 @@ module WorkflowExecutions
     update_samples' do
       workflow_execution = @workflow_execution_with_samples_without_update_samples
       workflow_execution.submitter = users(:projectA_automation_bot)
+      workflow_execution.save
 
       old_metadata1 = { 'metadatafield1' => 'value1',
                         'organism' => 'the organism' }
@@ -498,7 +678,10 @@ module WorkflowExecutions
       assert_equal old_metadata1, @sample41.metadata
       assert_equal old_metadata2, @sample42.metadata
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       @sample41.reload
       assert_not_equal new_metadata1, @sample41.metadata
@@ -543,7 +726,10 @@ module WorkflowExecutions
       assert_equal({}, @sample_b.metadata)
       assert_equal({}, @sample_c.metadata)
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       @sample_a.reload
       assert_not_equal new_metadata1, @sample_a.metadata
@@ -572,6 +758,37 @@ module WorkflowExecutions
       ).key, 'workflow_execution.automated_workflow_completion.outputs_and_metadata_written'
     end
 
+    test 'metadata activity with interrupt' do
+      workflow_execution = @automated_workflow_execution_with_samples_with_update_samples
+
+      # Test start
+      assert 'completing', workflow_execution.state
+
+      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+
+      interrupt_job_during_step(
+        WorkflowExecutionCompletionJob,
+        :create_activities,
+        cursor: 1
+      ) do
+        perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      end
+      workflow_execution.reload
+
+      assert 'completing', workflow_execution.state
+      assert_equal 1, PublicActivity::Activity.where(
+        key: 'workflow_execution.automated_workflow_completion.outputs_and_metadata_written'
+      ).count
+
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      workflow_execution.reload
+
+      assert_equal 'completed', workflow_execution.state
+      assert_equal 2, PublicActivity::Activity.where(
+        key: 'workflow_execution.automated_workflow_completion.outputs_and_metadata_written'
+      ).count
+    end
+
     test 'outputs on samples_workflow_executions added to samples attachments when update_samples' do
       workflow_execution = @workflow_execution_with_samples
 
@@ -580,9 +797,12 @@ module WorkflowExecutions
       assert_equal 'my_run_id_c', workflow_execution.run_id
 
       assert @sample41.attachments.empty?
-      assert @sample41.attachments.empty?
+      assert @sample42.attachments.empty?
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       assert_equal 2, @sample41.attachments.count
       sample41_output_filenames = @sample41.attachments.map { |attachment| attachment.filename.to_s }
@@ -592,6 +812,46 @@ module WorkflowExecutions
       assert_equal 1, @sample42.attachments.count
       assert_equal 'analysis3.txt', @sample42.attachments[0].filename.to_s
 
+      assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
+    end
+
+    test 'outputs on samples_workflow_executions added to samples attachments when update_samples with interrupt' do
+      workflow_execution = @workflow_execution_with_samples
+
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_c', workflow_execution.run_id
+
+      assert @sample41.attachments.empty?
+      assert @sample42.attachments.empty?
+
+      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+
+      interrupt_job_during_step(
+        WorkflowExecutionCompletionJob,
+        :put_output_attachments_onto_samples,
+        cursor: 1
+      ) do
+        perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      end
+      workflow_execution.reload
+
+      assert 'completing', workflow_execution.state
+      assert_equal 2, @sample41.attachments.count
+      assert @sample42.attachments.empty?
+
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+      workflow_execution.reload
+
+      assert_equal 2, @sample41.attachments.count
+      assert_equal 1, @sample42.attachments.count
       assert_equal 'completed', workflow_execution.state
 
       assert_no_enqueued_emails
@@ -612,7 +872,10 @@ module WorkflowExecutions
       assert @sample41.attachments.empty?
       assert @sample42.attachments.empty?
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       assert_equal 0, @sample41.attachments.count
 
@@ -638,7 +901,10 @@ module WorkflowExecutions
       assert @sample41.attachments.empty?
       assert @sample41.attachments.empty?
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       assert_equal 0, @sample41.attachments.count
 
@@ -661,7 +927,10 @@ module WorkflowExecutions
 
       assert 'completing', workflow_execution.state
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       assert_equal 'my_run_id_e', workflow_execution.run_id
 
@@ -713,7 +982,10 @@ module WorkflowExecutions
       # Test start
       assert 'completing', workflow_execution.state
 
-      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+      perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+        WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+      end
+      workflow_execution.reload
 
       assert_equal 'my_run_id_d', workflow_execution.run_id
 
