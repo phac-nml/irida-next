@@ -73,6 +73,22 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert results.include?(@workflow_execution2)
   end
 
+  test 'state enum conversion from translated label to integer' do
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state', operator: '=', value: I18n.t('workflow_executions.state.completed')
+        )]
+      )]
+    )
+
+    assert query.valid?
+    results = query.send(:ransack_results)
+    assert_not_nil results
+    assert results.include?(@workflow_execution2)
+  end
+
   test 'state enum search with in operator and array of state strings' do
     query = WorkflowExecution::Query.new(
       namespace_ids: [@workflow_execution1.namespace_id, @workflow_execution2.namespace_id],

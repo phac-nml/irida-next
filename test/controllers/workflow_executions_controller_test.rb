@@ -85,6 +85,19 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     Flipper.disable(:workflow_execution_advanced_search)
   end
 
+  test 'should apply advanced search groups when workflow advanced-search uses translated state labels' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    get workflow_executions_path,
+        params: workflow_advanced_search_params(state: I18n.t('workflow_executions.state.completed')).merge(limit: 100)
+
+    assert_response :success
+    assert_includes response.body, @workflow_execution_completed.id
+    assert_not_includes response.body, @workflow_execution_running.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
   test 'should apply default sort and support sorting workflow executions' do
     workflow_execution = workflow_executions(:irida_next_example)
     workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
