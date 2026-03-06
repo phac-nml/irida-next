@@ -417,12 +417,21 @@ module Projects
       click_button I18n.t(:'components.advanced_search_component.title')
 
       within('dialog') do
-        find("input[id$='field']", visible: :visible).fill_in with: 'state'
+        if has_selector?("input[role='combobox']", visible: :visible)
+          find("input[role='combobox']", visible: :visible).send_keys(
+            I18n.t('workflow_executions.table_component.state'),
+            :enter
+          )
+        else
+          find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
+        end
         find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
         find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
         click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
       end
 
+      assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
       assert_text @workflow_execution1.id
       assert_no_text @workflow_execution3.id
     ensure
