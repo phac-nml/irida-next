@@ -260,6 +260,7 @@ fr:
         subnamespaces:
           aria-label: Sous-groupes
           tooltip: "%{count} sous-groupes dans %{namespace_name}"
+        created_at: "Créé le %{date}"
     nextflow:
       email_notification: Vous recevez un avis par courriel lorsque votre analyse est terminée?
       required: Obligatoire
