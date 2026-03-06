@@ -2,6 +2,7 @@
 
 <%= search_form_for @query, url: @url, html: { role: "search" }, **kwargs do |f| %>
   <%= render Ransack::HiddenSortFieldComponent.new(@query, f) %>
+
   <%= render SearchFieldComponent.new(
     form: f,
     field_name: @search_attribute,
@@ -10,6 +11,7 @@
     value: @value,
     **@search_field_arguments,
   ) %>
+
   <%= render_extra_content(f) %>
   <%= content %>
 <% end %>
