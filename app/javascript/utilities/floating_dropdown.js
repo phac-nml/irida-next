@@ -27,17 +27,17 @@ export default class FloatingDropdown {
   constructor({
     trigger,
     dropdown,
-    strategy,
-    distance,
+    strategy = "absolute",
+    distance = 0,
+    manageAria = true,
     onShow,
     onHide,
-    manageAria,
   }) {
     this.#trigger = trigger;
     this.#dropdown = dropdown;
-    this.#strategy = strategy || "absolute";
-    this.#distance = distance || 0;
-    this.#manageAria = manageAria || true;
+    this.#strategy = strategy;
+    this.#distance = distance;
+    this.#manageAria = manageAria;
     this.#visible = false;
     this.#onShow = onShow;
     this.#onHide = onHide;

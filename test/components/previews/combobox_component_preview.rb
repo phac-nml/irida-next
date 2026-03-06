@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SelectWithAutoCompleteComponentPreview < ViewComponent::Preview
+class ComboboxComponentPreview < ViewComponent::Preview
   include ActionView::Helpers::FormOptionsHelper
 
   def default # rubocop:disable Metrics/MethodLength
