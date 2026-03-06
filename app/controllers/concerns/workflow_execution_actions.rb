@@ -28,6 +28,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     @search_params = search_params
 
     @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+    @results_message = results_message
 
     setup_ransack_for_form
   end
@@ -371,26 +372,44 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     search_params[:sort] = params.dig(:q, :s)
 
     if Flipper.enabled?(:workflow_execution_advanced_search)
-      groups_attributes = normalized_workflow_advanced_search_groups
+      groups_attributes = workflow_advanced_search_groups_attributes
       search_params[:groups_attributes] = groups_attributes if groups_attributes.present?
     end
 
     search_params.compact
   end
 
-  def normalized_workflow_advanced_search_groups
+  def workflow_advanced_search_groups_attributes
     groups_attributes = params.dig(:q, :groups_attributes)
-    if groups_attributes.present?
-      return groups_attributes.respond_to?(:to_unsafe_h) ? groups_attributes.to_unsafe_h : groups_attributes
+    return if groups_attributes.blank?
+
+    groups_attributes.respond_to?(:to_unsafe_h) ? groups_attributes.to_unsafe_h : groups_attributes
+  end
+
+  def results_message
+    return advanced_search_results_message if @query.advanced_query?
+
+    quick_search_results_message if @query.name_or_id_cont.present?
+  end
+
+  def advanced_search_results_message
+    if @pagy&.count&.zero?
+      I18n.t(:'components.search.advanced.results_message.zero')
+    elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
+      I18n.t(:'components.search.advanced.results_message.singular')
+    else
+      I18n.t(:'components.search.advanced.results_message.plural', total_count: @pagy&.count)
     end
+  end
 
-    groups = params.dig(:q, :groups)
-    return if groups.blank?
-
-    groups_hash = groups.respond_to?(:to_unsafe_h) ? groups.to_unsafe_h : groups.to_h
-
-    return groups_hash if groups_hash.keys.all? { |key| key.to_s.match?(/\A\d+\z/) }
-
-    { '0' => groups_hash }
+  def quick_search_results_message
+    if @pagy&.count&.zero?
+      I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_id_cont)
+    elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
+      I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_id_cont)
+    else
+      I18n.t(:'components.search.results_message.plural', total_count: @pagy&.count,
+                                                          search_term: @query.name_or_id_cont)
+    end
   end
 end
