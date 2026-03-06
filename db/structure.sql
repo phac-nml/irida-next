@@ -524,6 +524,38 @@ CREATE TABLE public.activity_extended_details (
 
 
 --
+-- Name: application_settings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.application_settings (
+    id bigint NOT NULL,
+    signup_enabled boolean DEFAULT true NOT NULL,
+    password_authentication_enabled boolean DEFAULT true NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: application_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.application_settings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: application_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.application_settings_id_seq OWNED BY public.application_settings.id;
+
+
+--
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -987,6 +1019,13 @@ CREATE TABLE public.workflow_executions (
 
 
 --
+-- Name: application_settings id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.application_settings ALTER COLUMN id SET DEFAULT nextval('public.application_settings_id_seq'::regclass);
+
+
+--
 -- Name: flipper_features id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1052,6 +1091,14 @@ ALTER TABLE ONLY public.activities
 
 ALTER TABLE ONLY public.activity_extended_details
     ADD CONSTRAINT activity_extended_details_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: application_settings application_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.application_settings
+    ADD CONSTRAINT application_settings_pkey PRIMARY KEY (id);
 
 
 --
@@ -2106,6 +2153,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260306153207'),
 ('20260223130000'),
 ('20251201162848'),
 ('20251029175823'),
