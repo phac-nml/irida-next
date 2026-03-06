@@ -6,7 +6,7 @@ module Types
     implements GraphQL::Types::Relay::Node
     description 'A member'
 
-    field :access_level, Integer, null: false, description: 'The access level of the member.'
+    field :access_level, String, null: false, description: 'The access level of the member.'
     field :expires_at, GraphQL::Types::ISO8601DateTime, null: true,
                                                         description: 'The date and time when the membership expires.'
 
@@ -19,6 +19,10 @@ module Types
           object,
           context: { user: context[:current_user], token: context[:token] }
         ))
+    end
+
+    def access_level
+      I18n.t("members.access_levels.level_#{object.access_level}")
     end
   end
 end

@@ -10,15 +10,18 @@ module Resolvers
              description: 'Type of the user (e.g., bot, human, etc.)',
              default_value: nil
 
-    def resolve(user_type:)
+    def resolve(user_type:) # rubocop:disable Metrics/AbcSize
       return if object.is_a?(Namespaces::UserNamespace)
 
       context.scoped_set!(:member_authorized, true)
 
       members = if object.is_a?(Project)
-                  object.namespace.project_members
+                  if object.namespace.parent.is_a?(Group)
+                    Member.where(namespace: object.namespace.parent.self_and_ancestors) +
+                      object.namespace.project_members
+                  end
                 else
-                  object.group_members
+                  Member.where(namespace: object.self_and_ancestors)
                 end
 
       if user_type.present?
