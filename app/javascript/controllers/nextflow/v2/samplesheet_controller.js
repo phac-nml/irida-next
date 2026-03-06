@@ -117,26 +117,18 @@ export default class extends Controller {
   #selectedSamples;
   #chunkedSelectedSamples;
 
-  #processSamplesCounter = 0;
+  #receivedSampleDataCounter = 0;
 
   connect() {
     this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
   }
 
-  disconnect() {
-    if (this.hasSamplesheetParamsFormTarget && this.boundAmendForm) {
-      this.samplesheetParamsFormTarget.removeEventListener(
-        "turbo:before-fetch-request",
-        this.boundAmendForm,
-      );
-    }
-  }
-
   async sampleAttributesTargetConnected() {
-    this.#processSamplesCounter++;
-    console.log(this.#processSamplesCounter);
-    if (this.#processSamplesCounter >= this.#chunkedSelectedSamples.length) {
+    this.#receivedSampleDataCounter++;
+    if (
+      this.#receivedSampleDataCounter === this.#chunkedSelectedSamples.length
+    ) {
       await this.#processSamplesheetAttributes();
       await this.#processFileAttributes();
 
@@ -966,33 +958,19 @@ export default class extends Controller {
   samplesheetPropertiesTargetConnected() {
     this.#samplesheetProperties =
       this.samplesheetPropertiesTarget.dataset.properties;
-    this.boundAmendForm = this.amendForm.bind(this);
 
     this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
-
-    if (this.#selectedSamples.length > 1000) {
-      this.#chunkedSelectedSamples = this.chunkArray();
-    }
+    this.#chunkedSelectedSamples = this.chunkSamples();
     this.#submitSamplesheetParams();
   }
 
-  chunkArray() {
+  chunkSamples() {
+    const chunkSize = 1000;
     const chunkedArray = [];
-    for (let i = 0; i < this.#selectedSamples.length; i += 1000) {
-      chunkedArray.push(this.#selectedSamples.slice(i, i + 1000));
+    for (let i = 0; i < this.#selectedSamples.length; i += chunkSize) {
+      chunkedArray.push(this.#selectedSamples.slice(i, i + chunkSize));
     }
     return chunkedArray;
-  }
-
-  amendForm(event) {
-    const formData = new FormData(this.samplesheetParamsFormTarget);
-    const index = this.samplesheetParamsFormTarget.getAttribute("data-index");
-    event.detail.fetchOptions.body = JSON.stringify(
-      this.#toJson(formData, index),
-    );
-    event.detail.fetchOptions.headers["Content-Type"] = "application/json";
-
-    event.detail.resume();
   }
 
   #toJson(formData, index) {
@@ -1010,7 +988,7 @@ export default class extends Controller {
 
   #submitSamplesheetParams() {
     for (let i = 0; i < this.#chunkedSelectedSamples.length; i++) {
-      const form =
+      const formFragment =
         this.samplesheetParamsFormTemplateTarget.content.cloneNode(true);
       const fragment = document.createDocumentFragment();
 
@@ -1018,45 +996,32 @@ export default class extends Controller {
         createHiddenInput("properties", this.#samplesheetProperties),
       );
 
-      this.element.appendChild(form);
+      this.element.appendChild(formFragment);
 
-      this.element.lastElementChild.appendChild(fragment);
+      const form = this.element.lastElementChild;
+      form.appendChild(fragment);
 
-      this.element.lastElementChild.addEventListener(
-        "submit",
-        async (event) => {
-          event.preventDefault(); // Prevent default page reload
-
-          // Use FormData to grab form values
-
-          const formData = new FormData(this.samplesheetParamsFormTarget);
-          // 2. Perform async operation (e.g., fetch)
-          fetch(
-            "http://localhost:3000/-/workflow_executions/submissions/samplesheet",
-            {
-              credentials: "same-origin",
-              method: "POST",
-              body: JSON.stringify(this.#toJson(formData, i)),
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "text/vnd.turbo-stream.html",
-                // You can also include 'Accept': 'application/json' to specify you expect a JSON response
-              },
-            },
-          )
-            .then((r) => r.text())
-            .then((html) => Turbo.renderStreamMessage(html));
-          // const result = await response.json();
-          // console.log("Success:", result);
-        },
-      );
-      this.element.lastElementChild.requestSubmit();
+      form.addEventListener("submit", async () => {
+        const formData = new FormData(this.samplesheetParamsFormTarget);
+        fetch(this.samplesheetParamsFormTarget.getAttribute("data-fetch-url"), {
+          credentials: "same-origin",
+          method: "POST",
+          body: JSON.stringify(this.#toJson(formData, i)),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "text/vnd.turbo-stream.html",
+          },
+        })
+          .then((r) => r.text())
+          .then((html) => Turbo.renderStreamMessage(html));
+      });
+      form.requestSubmit();
+      form.remove();
     }
 
     this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
     // // clear the now unnecessary DOM element
     this.samplesheetPropertiesTarget.remove();
-    // this.element.lastElementChild.requestSubmit();
   }
 
   dataPayloadTargetConnected() {
