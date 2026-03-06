@@ -369,9 +369,26 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
     search_params[:name_or_id_in] = params.dig(:q, :name_or_id_in)
     search_params[:sort] = params.dig(:q, :s)
-    if Flipper.enabled?(:workflow_execution_advanced_search) && params.dig(:q, :groups_attributes)
-      search_params[:groups_attributes] = params.dig(:q, :groups_attributes)
+
+    if Flipper.enabled?(:workflow_execution_advanced_search)
+      groups_attributes = normalized_workflow_advanced_search_groups
+      search_params[:groups_attributes] = groups_attributes if groups_attributes.present?
     end
+
     search_params.compact
+  end
+
+  def normalized_workflow_advanced_search_groups
+    groups_attributes = params.dig(:q, :groups_attributes)
+    return groups_attributes if groups_attributes.present?
+
+    groups = params.dig(:q, :groups)
+    return if groups.blank?
+
+    groups_hash = groups.respond_to?(:to_unsafe_h) ? groups.to_unsafe_h : groups.to_h
+
+    return groups_hash if groups_hash.keys.all? { |key| key.to_s.match?(/\A\d+\z/) }
+
+    { '0' => groups_hash }
   end
 end
