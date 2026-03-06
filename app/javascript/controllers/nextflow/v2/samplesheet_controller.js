@@ -135,6 +135,7 @@ export default class extends Controller {
 
   async sampleAttributesTargetConnected() {
     this.#processSamplesCounter++;
+    console.log(this.#processSamplesCounter);
     if (this.#processSamplesCounter >= this.#chunkedSelectedSamples.length) {
       await this.#processSamplesheetAttributes();
       await this.#processFileAttributes();
@@ -168,6 +169,7 @@ export default class extends Controller {
         if (this.#allowedToUpdateSamples && !allowedToUpdateSamples) {
           this.#allowedToUpdateSamples = false;
         }
+        sampleAttributeTarget.remove();
       });
 
       resolve();
@@ -181,6 +183,7 @@ export default class extends Controller {
           this.#fileAttributes,
           JSON.parse(fileAttributeTarget.innerHTML),
         );
+        fileAttributeTarget.remove();
       });
       resolve();
     });
@@ -967,8 +970,7 @@ export default class extends Controller {
 
     this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
 
-    // TODO CHANGE TO 1000
-    if (this.#selectedSamples.length > 10) {
+    if (this.#selectedSamples.length > 1000) {
       this.#chunkedSelectedSamples = this.chunkArray();
     }
     this.#submitSamplesheetParams();
@@ -976,8 +978,8 @@ export default class extends Controller {
 
   chunkArray() {
     const chunkedArray = [];
-    for (let i = 0; i < this.#selectedSamples.length; i += 10) {
-      chunkedArray.push(this.#selectedSamples.slice(i, i + 10));
+    for (let i = 0; i < this.#selectedSamples.length; i += 1000) {
+      chunkedArray.push(this.#selectedSamples.slice(i, i + 1000));
     }
     return chunkedArray;
   }
