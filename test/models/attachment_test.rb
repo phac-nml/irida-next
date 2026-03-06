@@ -363,4 +363,26 @@ class AttachmentTest < ActiveSupport::TestCase
     spreadsheet_attachment.save
     assert_not spreadsheet_attachment.copyable?
   end
+
+  test 'delete attachment even when checksum validation fails' do
+    assert_equal 2, @sample.attachments.count
+
+    # Create an invalid attachment
+    new_attachment = @sample.attachments.build(
+      file: { io: Rails.root.join('test/fixtures/files/test_file_A.fastq').open,
+              filename: 'test_file_A.fastq' }
+    )
+    assert_not new_attachment.valid?
+    assert new_attachment.errors.added?(:file, :checksum_uniqueness)
+
+    # force save the attachment to put database in invalid state so we can test deletion
+    new_attachment.errors.clear
+    new_attachment.save(validate: false)
+    assert_equal 3, @sample.reload.attachments.count
+
+    # should be able to destroy attachment
+    response = @sample.attachments[2].destroy
+    assert response
+    assert_equal 2, @sample.reload.attachments.count
+  end
 end
