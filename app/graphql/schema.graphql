@@ -964,6 +964,36 @@ type Group implements Node {
   id: ID!
 
   """
+  Members of the group.
+  """
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Type of the user (e.g., bot, human, etc.)
+    """
+    userType: [String!] = null
+  ): MemberConnection
+
+  """
   Name of the namespace.
   """
   name: String!
@@ -1339,6 +1369,86 @@ Represents untyped JSON
 scalar JSON
 
 """
+A member
+"""
+type Member implements Node {
+  """
+  The access level of the member.
+  """
+  accessLevel: Int!
+
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
+  The date and time when the membership expires.
+  """
+  expiresAt: ISO8601DateTime
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  The namespace that the member belongs to.
+  """
+  namespace: Namespace!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
+
+  """
+  The user that is a member of the group.
+  """
+  user: User!
+}
+
+"""
+The connection type for Member.
+"""
+type MemberConnection {
+  """
+  A list of edges.
+  """
+  edges: [MemberEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Member]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type MemberEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Member
+}
+
+"""
 The mutation root of this schema
 """
 type Mutation {
@@ -1680,6 +1790,36 @@ type Project implements Node {
   ID of the object.
   """
   id: ID!
+
+  """
+  Members of the project.
+  """
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Type of the user (e.g., bot, human, etc.)
+    """
+    userType: [String!] = null
+  ): MemberConnection
 
   """
   Metadata summary for the project
@@ -2776,6 +2916,11 @@ type User implements Node {
   Datetime of last update.
   """
   updatedAt: ISO8601DateTime!
+
+  """
+  Type of the user (e.g., bot, human, etc.)
+  """
+  userType: String!
 }
 
 """
