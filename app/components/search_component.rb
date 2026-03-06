@@ -8,7 +8,7 @@ class SearchComponent < Component
 
   # rubocop:disable Metrics/ParameterLists
   def initialize(query:, url:, search_attribute:, label:, placeholder:, total_count:, value: nil,
-                 search_field_arguments: {}, data: { turbo_action: 'replace' }, **kwargs)
+                 search_field_arguments: {}, data: { turbo_action: 'replace' }, extra_content: nil, **kwargs)
     @query = query
     @url = url
     @search_attribute = search_attribute
@@ -19,6 +19,7 @@ class SearchComponent < Component
     @data = data
     @kwargs = kwargs
     @search_field_arguments = search_field_arguments
+    @extra_content = extra_content
     @search_key = @kwargs.fetch(:as, :q)
   end
   # rubocop:enable Metrics/ParameterLists
@@ -43,5 +44,11 @@ class SearchComponent < Component
 
   def search_term?
     defined?(params[@search_key][@search_attribute]) && params[@search_key][@search_attribute].present?
+  end
+
+  def render_extra_content(form)
+    return if @extra_content.blank?
+
+    view_context.capture(form, &@extra_content)
   end
 end

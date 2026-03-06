@@ -582,6 +582,46 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
   end
 
+  test 'workflow advanced search is hidden when workflow advanced-search feature flag is disabled' do
+    Flipper.disable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    assert_no_button I18n.t(:'components.advanced_search_component.title')
+
+    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
+            with: @workflow_execution1.id
+    find('input.t-search-component').send_keys(:return)
+
+    assert_text 'Displaying 1 item'
+    assert_selector 'table tbody tr', count: 1
+    assert_text @workflow_execution1.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow advanced search filters results when workflow advanced-search feature flag is enabled' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    assert_button I18n.t(:'components.advanced_search_component.title')
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    within('dialog') do
+      find("input[id$='field']", visible: :visible).fill_in with: 'state'
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+      find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_text @workflow_execution1.id
+    assert_no_text @workflow_execution4.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
   test 'submitter can edit workflow execution post launch from workflow execution page' do
     ### SETUP START ###
     workflow_execution = workflow_executions(:irida_next_example_new)

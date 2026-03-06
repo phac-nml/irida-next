@@ -9,6 +9,7 @@ module Projects
       @sample1 = samples(:sample1)
       @attachment1 = attachments(:attachment1)
       @workflow_execution = workflow_executions(:automated_example_completed)
+      @workflow_execution_running = workflow_executions(:automated_example_running)
       @namespace = groups(:group_one)
       @project = projects(:project1)
     end
@@ -35,6 +36,32 @@ module Projects
       get namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_response :unauthorized
+    end
+
+    test 'should ignore advanced search groups when workflow advanced-search feature flag is disabled' do
+      Flipper.disable(:workflow_execution_advanced_search)
+
+      get namespace_project_workflow_executions_path(@namespace, @project),
+          params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
+
+      assert_response :success
+      assert_includes response.body, @workflow_execution.id
+      assert_includes response.body, @workflow_execution_running.id
+    ensure
+      Flipper.disable(:workflow_execution_advanced_search)
+    end
+
+    test 'should apply advanced search groups when workflow advanced-search feature flag is enabled' do
+      Flipper.enable(:workflow_execution_advanced_search)
+
+      get namespace_project_workflow_executions_path(@namespace, @project),
+          params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
+
+      assert_response :success
+      assert_includes response.body, @workflow_execution.id
+      assert_not_includes response.body, @workflow_execution_running.id
+    ensure
+      Flipper.disable(:workflow_execution_advanced_search)
     end
 
     test 'should show workflow execution' do
@@ -451,6 +478,26 @@ module Projects
       # Follow the redirect and verify it's successful
       follow_redirect!
       assert_response :success
+    end
+
+    private
+
+    def workflow_advanced_search_params(state:)
+      {
+        q: {
+          groups_attributes: {
+            '0' => {
+              conditions_attributes: {
+                '0' => {
+                  field: 'state',
+                  operator: '=',
+                  value: state
+                }
+              }
+            }
+          }
+        }
+      }
     end
   end
 end
