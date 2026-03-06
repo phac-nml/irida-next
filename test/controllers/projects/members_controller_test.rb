@@ -33,7 +33,8 @@ module Projects
       project_member_jean = members(:project_two_member_jean_doe)
       project_member_joan = members(:project_two_member_joan_doe)
       project_member_ryan = members(:project_two_member_ryan_doe)
-      owner_emails = [members(:project_two_member_james_doe).user.email, members(:project_two_member_john_doe).user.email]
+      owner_emails = [members(:project_two_member_james_doe).user.email,
+                      members(:project_two_member_john_doe).user.email]
 
       get namespace_project_members_path(namespace, project, format: :turbo_stream)
       assert_response :success
@@ -47,20 +48,22 @@ module Projects
       assert_first_rows_include(project_member_ryan.user.email, members(:project_two_member_john_doe).user.email,
                                 row_scope: '#members-table-body')
 
-      get namespace_project_members_path(namespace, project, format: :turbo_stream, members_q: { s: 'access_level asc' })
+      get namespace_project_members_path(namespace, project, format: :turbo_stream,
+                                                             members_q: { s: 'access_level asc' })
       assert_response :success
       assert_sort_state(2, 'ascending')
       member_emails = Nokogiri::HTML(response.body).css('#members-table-body tr td:first-child').filter_map do |node|
-        node.text[/[A-Za-z0-9_.+\-]+@[A-Za-z0-9\-.]+/]
+        node.text[/[A-Za-z0-9_.+-]+@[A-Za-z0-9\-.]+/]
       end
       assert_equal project_member_ryan.user.email, member_emails.first
       assert_includes owner_emails, member_emails.last
 
-      get namespace_project_members_path(namespace, project, format: :turbo_stream, members_q: { s: 'access_level desc' })
+      get namespace_project_members_path(namespace, project, format: :turbo_stream,
+                                                             members_q: { s: 'access_level desc' })
       assert_response :success
       assert_sort_state(2, 'descending')
       member_emails = Nokogiri::HTML(response.body).css('#members-table-body tr td:first-child').filter_map do |node|
-        node.text[/[A-Za-z0-9_.+\-]+@[A-Za-z0-9\-.]+/]
+        node.text[/[A-Za-z0-9_.+-]+@[A-Za-z0-9\-.]+/]
       end
       assert_includes owner_emails, member_emails.first
       assert_equal project_member_ryan.user.email, member_emails.last
