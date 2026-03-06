@@ -1312,6 +1312,106 @@ input GroupFilter {
 }
 
 """
+Group to get metrics for
+"""
+type GroupMetricsType implements NamespaceMetrics & Node {
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
+  Subgroups within this group namespace. This field is only applicable for group namespaces.
+  """
+  descendantGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): GroupMetricsTypeConnection
+
+  """
+  Disk usage (bytes) of the group projects or user projects.
+  """
+  diskUsage: String!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Total number of members in the group, subgroups, and/or projects.
+  """
+  membersCount: Int!
+
+  """
+  Total number of samples in group projects or user project.
+  """
+  samplesCount: Int!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
+}
+
+"""
+The connection type for GroupMetricsType.
+"""
+type GroupMetricsTypeConnection {
+  """
+  A list of edges.
+  """
+  edges: [GroupMetricsTypeEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [GroupMetricsType]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type GroupMetricsTypeEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: GroupMetricsType
+}
+
+"""
 Specify a sort for the groups
 """
 input GroupOrder {
@@ -1532,6 +1632,27 @@ type Namespace implements Node {
   Datetime of last update.
   """
   updatedAt: ISO8601DateTime!
+}
+
+"""
+Common fields for namespace metrics.
+"""
+# Interface for namespace metrics
+interface NamespaceMetrics {
+  """
+  Disk usage (bytes) of the group projects or user projects.
+  """
+  diskUsage: String!
+
+  """
+  Total number of members in the group, subgroups, and/or projects.
+  """
+  membersCount: Int!
+
+  """
+  Total number of samples in group projects or user project.
+  """
+  samplesCount: Int!
 }
 
 """
@@ -2041,6 +2162,102 @@ input ProjectFilter {
   updated_at_start_all: [String!]
   updated_at_start_any: [String!]
   updated_at_true: String
+}
+
+"""
+Project to get metrics for
+"""
+type ProjectMetricsType implements NamespaceMetrics & Node {
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
+  Disk usage (bytes) of the group projects or user projects.
+  """
+  diskUsage: String!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Total number of members in the group, subgroups, and/or projects.
+  """
+  membersCount: Int!
+
+  """
+  Name of the namespace.
+  """
+  name: String!
+
+  """
+  Parent namespace of this namespace
+  """
+  parent: String
+
+  """
+  Persistent Unique Identifier of the namespace. For example for a group,
+                                    `INXT_GRP_AAAAAAAAAA`.
+  """
+  puid: ID!
+
+  """
+  Total number of samples in group projects or user project.
+  """
+  samplesCount: Int!
+
+  """
+  Type of the namespace
+  """
+  type: String!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
+}
+
+"""
+The connection type for ProjectMetricsType.
+"""
+type ProjectMetricsTypeConnection {
+  """
+  A list of edges.
+  """
+  edges: [ProjectMetricsTypeEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [ProjectMetricsType]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type ProjectMetricsTypeEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: ProjectMetricsType
 }
 
 """
@@ -2791,6 +3008,41 @@ type UserError {
   Which input value this error came from
   """
   path: [String!]
+}
+
+"""
+User namespace to get metrics for
+"""
+type UserNamespaceMetricsType implements NamespaceMetrics & Node {
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
+  Disk usage (bytes) of the group projects or user projects.
+  """
+  diskUsage: String!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  Total number of members in the group, subgroups, and/or projects.
+  """
+  membersCount: Int!
+
+  """
+  Total number of samples in group projects or user project.
+  """
+  samplesCount: Int!
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
 }
 
 """
