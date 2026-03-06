@@ -575,7 +575,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
         find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
       end
       find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
-      find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+      find("input[name$='[value]']", visible: :visible).fill_in with: I18n.t('workflow_executions.state.completed')
       click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
     end
 
