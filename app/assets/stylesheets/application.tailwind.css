@@ -467,15 +467,14 @@ input[type="search"] {
   --treegrid-padding: 30px;
 
   & > .treegrid-row {
-    padding-left: calc((var(--treegrid-level) - 1) * var(--treegrid-padding));
+    padding-left: calc(
+      0.5rem + ((var(--treegrid-level) - 1) * var(--treegrid-padding))
+    );
     &[aria-expanded="true"]
       > div[role="gridcell"]
       > button.treegrid-row-toggle
       svg {
       transform: rotate(90deg);
-    }
-    &:not([aria-expanded]) > div[role="gridcell"] > button.treegrid-row-toggle {
-      visibility: hidden;
     }
   }
 }
