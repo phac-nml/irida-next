@@ -42,7 +42,7 @@ class Attachment < ApplicationRecord
 
   validates :file, attached: true
 
-  validates_with AttachmentChecksumValidator
+  validates_with AttachmentChecksumValidator, on: :create
 
   after_initialize :assign_metadata
 
