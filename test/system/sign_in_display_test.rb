@@ -47,4 +47,24 @@ class SignInDisplayTest < ApplicationSystemTestCase
       assert_selector 'svg', class: "icon-#{custom_provider}_icon"
     end
   end
+
+  test 'should display no authentication methods message when no providers and password authentication disabled' do
+    old_omniauth_providers = User.omniauth_providers
+    User.omniauth_providers = []
+    Irida::CurrentSettings.current_application_settings.update(password_authentication_enabled: false,
+                                                               signup_enabled: false)
+
+    visit new_user_session_path
+
+    assert_text I18n.t(:'devise.sessions.new.no_configured_authentication_methods')
+    User.omniauth_providers = old_omniauth_providers
+  end
+
+  test 'should not display local account option when password authentication disabled' do
+    Irida::CurrentSettings.current_application_settings.update(password_authentication_enabled: false)
+
+    visit new_user_session_path
+
+    assert_no_text I18n.t(:'devise.sessions.new.local_button')
+  end
 end
