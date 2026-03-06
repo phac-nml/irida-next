@@ -1635,7 +1635,7 @@ type Namespace implements Node {
 }
 
 """
-Something that can be bought
+Common fields for namespace metrics.
 """
 # Interface for namespace metrics
 interface NamespaceMetrics {
