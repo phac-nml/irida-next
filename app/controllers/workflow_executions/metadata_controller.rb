@@ -8,7 +8,7 @@ module WorkflowExecutions
 
     def fields # rubocop:disable Metrics/AbcSize
       authorize! @namespace, to: :update_samplesheet_data?
-      if Flipper.enabled?(:deferred_samplesheet)
+      if Flipper.enabled?(:v2_samplesheet)
         @sample_ids = params[:sample_ids].split(',')
         @metadata_fields = JSON.parse(params[:metadata_fields])
         @headers = @metadata_fields.keys.to_json
@@ -27,10 +27,10 @@ module WorkflowExecutions
       @namespace = Namespace.find(params[:namespace_id])
     end
 
-    # TODO: when feature flag :deferred_samplesheet is retired, move fetch_metadata_with_feature_flag logic
+    # TODO: when feature flag :v2_samplesheet is retired, move fetch_metadata_with_feature_flag logic
     # into generate_metadata_for_samplesheet
     def generate_metadata_for_samplesheet
-      Flipper.enabled?(:deferred_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
+      Flipper.enabled?(:v2_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
     end
 
     # generate metadata is now updated to handle multiple metadata fields at once. This is to handle metadata changes
@@ -54,7 +54,7 @@ module WorkflowExecutions
       end
 
       # query is an array of hashes, and we'll merge them into an empty hash to create a nested hash that can be merged
-      # in deferred_samplesheet_controller.js
+      # in nextflow/v2/samplesheet_controller.js
       {}.merge(*metadata)
     end
 

@@ -6,7 +6,7 @@ module WorkflowExecutions
   class FileSelectorControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
 
-    # TODO: refactor this file when feature flag deferred_samplesheet is retired
+    # TODO: refactor this file when feature flag v2_samplesheet is retired
     setup do
       sign_in users(:john_doe)
       @expected_fastq_params = {
@@ -31,7 +31,7 @@ module WorkflowExecutions
       }
     end
     test 'new file selection with fastq params with feature flag' do
-      Flipper.enable(:deferred_samplesheet)
+      Flipper.enable(:v2_samplesheet)
       get new_workflow_executions_file_selector_path(file_selector: @expected_fastq_params, format: :turbo_stream)
 
       assert_response :ok
@@ -45,7 +45,7 @@ module WorkflowExecutions
     end
 
     test 'create file selection with fastq params with feature flag' do
-      Flipper.enable(:deferred_samplesheet)
+      Flipper.enable(:v2_samplesheet)
       attachment = attachments(:attachmentPEFWD43)
 
       post workflow_executions_file_selector_index_path(
@@ -71,7 +71,7 @@ module WorkflowExecutions
     end
 
     test 'new file selection with other params with feature flag' do
-      Flipper.enable(:deferred_samplesheet)
+      Flipper.enable(:v2_samplesheet)
       get new_workflow_executions_file_selector_path(file_selector: @expected_other_params, format: :turbo_stream)
 
       assert_response :ok
@@ -85,7 +85,7 @@ module WorkflowExecutions
     end
 
     test 'create file selection with other params with feature flag' do
-      Flipper.enable(:deferred_samplesheet)
+      Flipper.enable(:v2_samplesheet)
       attachment = attachments(:attachment1)
 
       post workflow_executions_file_selector_index_path(
@@ -111,7 +111,7 @@ module WorkflowExecutions
     end
 
     test 'unauthorized new file selection with feature flag' do
-      Flipper.enable(:deferred_samplesheet)
+      Flipper.enable(:v2_samplesheet)
       sign_in users(:ryan_doe)
       get new_workflow_executions_file_selector_path(file_selector: @expected_fastq_params, format: :turbo_stream)
 
@@ -127,7 +127,7 @@ module WorkflowExecutions
     end
 
     test 'unauthorized create file selection with feature flag' do
-      Flipper.enable(:deferred_samplesheet)
+      Flipper.enable(:v2_samplesheet)
       sign_in users(:ryan_doe)
       attachment = attachments(:attachmentPEFWD43)
       post workflow_executions_file_selector_index_path(
