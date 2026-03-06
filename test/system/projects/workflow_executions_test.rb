@@ -496,8 +496,43 @@ module Projects
 
       assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
       assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+      assert_selector "div[role='status']", text: /advanced search/, visible: false
       assert_text @workflow_execution1.id
       assert_no_text @workflow_execution3.id
+    ensure
+      Flipper.disable(:workflow_execution_advanced_search)
+    end
+
+    test 'workflow advanced search clear removes project filter state when feature flag is enabled' do
+      Flipper.enable(:workflow_execution_advanced_search)
+
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+
+      click_button I18n.t(:'components.advanced_search_component.title')
+
+      within('dialog') do
+        if has_selector?("input[role='combobox']", visible: :visible)
+          find("input[role='combobox']", visible: :visible).send_keys(
+            I18n.t('workflow_executions.table_component.state'),
+            :enter
+          )
+        else
+          find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
+        end
+        find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.title')
+
+      within('dialog') do
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+      end
+
+      assert_no_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+      assert_text @workflow_execution1.id
+      assert_text @workflow_execution3.id
     ensure
       Flipper.disable(:workflow_execution_advanced_search)
     end
