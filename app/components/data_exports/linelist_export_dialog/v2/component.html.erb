@@ -1,0 +1,155 @@
+<% linelist_data = {
+  controller: "linelist-export",
+  "linelist-export-worker-url-value": asset_path("workers/linelist_export_worker.js"),
+  "linelist-export-no-selection-error-message-value": t("data_exports.new_linelist_export_dialog.no_selection"),
+  "linelist-export-selected-count-message-value": t("data_exports.new_linelist_export_dialog.selected_count"),
+  "linelist-export-preparing-rows-message-value": t("data_exports.new_linelist_export_dialog.preparing_rows"),
+  "linelist-export-preparing-export-message-value": t("data_exports.new_linelist_export_dialog.preparing_export"),
+  "linelist-export-start-error-message-value": t("data_exports.new_linelist_export_dialog.start_error"),
+  "linelist-export-xlsx-unsupported-message-value": t("data_exports.new_linelist_export_dialog.xlsx_unsupported"),
+  "linelist-export-unexpected-error-message-value": t("data_exports.new_linelist_export_dialog.unexpected_error"),
+  "linelist-export-download-started-message-value": t("data_exports.new_linelist_export_dialog.download_started"),
+  "linelist-export-created-records-message-value": t("data_exports.new_linelist_export_dialog.created_records"),
+} %>
+
+<%= viral_dialog(open: @open, size: :large) do |dialog| %>
+  <% dialog.with_header(title: t("data_exports.new_linelist_export_dialog.title")) %>
+
+  <%= tag.div class: "font-normal text-slate-500 dark:text-slate-400", data: linelist_data do %>
+    <div class="grid gap-4">
+      <div class="form-field mt-1">
+        <fieldset>
+          <legend class="mb-2 text-sm text-slate-900 dark:text-slate-400">
+            <%= t("data_exports.new_linelist_export_dialog.format") %>
+          </legend>
+
+          <div class="flex gap-4">
+            <label class="inline-flex items-center gap-1">
+              <%= radio_button_tag :linelist_format,
+                                   "csv",
+                                   true,
+                                   id: "linelist-format-csv",
+                                   name: "data_export[export_parameters][linelist_format]" %>
+
+              <span><%= t("data_exports.new_linelist_export_dialog.csv") %></span>
+            </label>
+
+            <label class="inline-flex items-center gap-1">
+              <%= radio_button_tag :linelist_format,
+                                   "xlsx",
+                                   false,
+                                   id: "linelist-format-xlsx",
+                                   disabled: true,
+                                   name: "data_export[export_parameters][linelist_format]" %>
+
+              <span><%= t("data_exports.new_linelist_export_dialog.xlsx") %></span>
+            </label>
+          </div>
+        </fieldset>
+
+        <p class="mt-2 text-xs text-slate-600 dark:text-slate-400">
+          <%= t("data_exports.new_linelist_export_dialog.xlsx_unsupported") %>
+        </p>
+      </div>
+
+      <div class="form-field">
+        <fieldset>
+          <legend class="mb-1 text-sm text-slate-900 dark:text-slate-400">
+            <%= t("data_exports.new_linelist_export_dialog.metadata") %>
+          </legend>
+
+          <div class="grid max-h-48 gap-1 overflow-y-auto rounded-lg border border-slate-200 p-2 dark:border-slate-700">
+            <% metadata_fields = @namespace&.metadata_fields || [] %>
+
+            <% if metadata_fields.any? %>
+              <% metadata_fields.each_with_index do |field, index| %>
+                <% field_id = "metadata-field-#{index}-#{field.to_s.parameterize}" %>
+
+                <div class="flex items-center gap-2">
+                  <%= check_box_tag(
+                        "metadata_fields[]",
+                        field,
+                        false,
+                        id: field_id,
+                        name: "data_export[export_parameters][metadata_fields][]",
+                        class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                      ) %>
+
+                  <%= label_tag field_id, field, class: "text-slate-700 dark:text-slate-300" %>
+                </div>
+              <% end %>
+            <% else %>
+              <p class="text-sm text-slate-500 dark:text-slate-400">
+                <%= t("data_exports.new_linelist_export_dialog.selected") %>
+              </p>
+            <% end %>
+          </div>
+        </fieldset>
+      </div>
+
+      <%= form_with(url: "#", method: :post, data: { action: "submit->linelist-export#submit" }) do |form| %>
+        <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
+        <%= form.submit t("data_exports.new.submit_button"), class: "button button-primary" %>
+      <% end %>
+
+      <p
+        class="text-sm text-slate-600 dark:text-slate-300"
+        data-linelist-export-target="sampleStatus"
+        role="status"
+        aria-live="polite"
+      ></p>
+    </div>
+
+    <template data-linelist-export-target="progressTemplate">
+      <div class="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4 shadow-xs dark:border-slate-700 dark:bg-slate-800/50">
+        <div class="mb-3 flex items-center justify-between gap-4">
+          <div>
+            <h4 class="text-sm font-semibold text-slate-900 dark:text-slate-100"><%= t(".exporting_linelist") %></h4>
+
+            <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400" data-linelist-export-progress-message></p>
+          </div>
+
+          <button
+            type="button"
+            data-linelist-export-dismiss="true"
+            class="
+              inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-300 bg-white
+              text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700 focus:ring-2
+              focus:ring-slate-300 focus:ring-offset-2 focus:outline-hidden dark:border-slate-600 dark:bg-slate-800
+              dark:text-slate-400 hover:dark:bg-slate-700 hover:dark:text-slate-200 focus:dark:ring-slate-600
+              focus:dark:ring-offset-slate-900
+            "
+            aria-label="<%= t('data_exports.new_linelist_export_dialog.close_progress') %>"
+          >
+            <%= pathogen_icon(:x, class: "size-4") %>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="relative h-2.5 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+            <div
+              role="progressbar"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+              aria-label="<%= t('data_exports.new_linelist_export_dialog.created_records', current: 0, total: 0) %>"
+              class="
+                absolute inset-y-0 left-0 rounded-full bg-primary-600 transition-all duration-300 ease-out
+                dark:bg-primary-500
+              "
+              style="width: 0%"
+              data-linelist-export-progress-bar
+            ></div>
+          </div>
+
+          <span
+            class="w-10 text-right text-xs font-medium text-slate-700 dark:text-slate-300"
+            data-linelist-export-progress-percent
+          >
+            0%
+          </span>
+        </div>
+      </div>
+    </template>
+  <% end %>
+<% end %>
