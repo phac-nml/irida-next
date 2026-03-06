@@ -1,0 +1,57 @@
+<% params = I18n.locale != I18n.default_locale ? { locale: I18n.locale } : {} %>
+
+<% if !password_authentication_enabled? && !button_based_providers_enabled? %>
+  <div
+    class="
+      flex items-center border-l-4 border-red-300 bg-red-50 p-4 text-red-800 dark:border-red-800 dark:bg-slate-800
+      dark:text-red-400
+    "
+    role="alert"
+  >
+    <div><span class="font-semibold"><%= t("devise.sessions.new.no_configured_authentication_methods") %></span></div>
+  </div>
+<% else %>
+  <% if password_authentication_enabled? && !button_based_providers_enabled? || @local_account %>
+    <%= render "devise/shared/form" %>
+  <% end %>
+  <div class="grid gap-2">
+    <% if button_based_providers_enabled? %>
+      <% if @local_account %>
+        <%= render "devise/shared/links" %>
+        <%= link_to t(".return_button"),
+    new_user_session_path(**params),
+    class: "button button-default w-full" %>
+      <% else %>
+        <%- enabled_button_based_providers.each do |provider| %>
+          <%= button_to omniauth_authorize_path(resource_name, provider),
+                    data: {
+                      turbo: false
+                    },
+                    params: params,
+                    class: "button button-default w-full" do %>
+            <span class="inline-flex items-center text-center">
+              <% if Rails.configuration.auth_config["#{provider}_icon"] %>
+                <%= viral_icon(name: "#{provider}_icon", classes: "w-4 h-4 mr-2 -ml-1") %>
+              <% else %>
+                <%= viral_icon(name: provider, classes: "w-4 h-4 mr-2 -ml-1") %>
+              <% end %>
+
+              <% if Rails.configuration.auth_config["#{provider}_text"] %>
+                <%= t(".omniauth", provider: Rails.configuration.auth_config["#{provider}_text"]) %>
+              <% else %>
+                <%= t(".omniauth", provider: OmniAuth::Utils.camelize(provider)) %>
+              <% end %>
+            </span>
+          <% end %>
+        <% end %>
+        <% if password_authentication_enabled? %>
+          <%= link_to t(".local_button"),
+      new_user_session_path(local: true, **params),
+      class: "button button-default w-full" %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= render "devise/shared/links" %>
+    <% end %>
+  </div>
+<% end %>

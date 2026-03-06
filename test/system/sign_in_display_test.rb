@@ -19,9 +19,9 @@ class SignInDisplayTest < ApplicationSystemTestCase
 
     within %(div[class="grid gap-2"]) do
       assert_selector 'svg', count: 3 # Local Account does not use an icon
-      assert_text I18n.t(:'devise.sessions.new_with_providers.local_button')
+      assert_text I18n.t(:'devise.sessions.new.local_button')
       %w[developer saml entra_id].each do |provider|
-        assert_text I18n.t(:'devise.sessions.new_with_providers.omniauth').to_s.sub!(
+        assert_text I18n.t(:'devise.sessions.new.omniauth').to_s.sub!(
           '%{provider}', # rubocop:disable Style/FormatStringToken
           OmniAuth::Utils.camelize(provider)
         )
@@ -39,12 +39,32 @@ class SignInDisplayTest < ApplicationSystemTestCase
     visit new_user_session_path
 
     within %(div[class="grid gap-2"]) do
-      assert_text I18n.t(:'devise.sessions.new_with_providers.local_button')
-      assert_text I18n.t(:'devise.sessions.new_with_providers.omniauth').to_s.sub!(
+      assert_text I18n.t(:'devise.sessions.new.local_button')
+      assert_text I18n.t(:'devise.sessions.new.omniauth').to_s.sub!(
         '%{provider}', # rubocop:disable Style/FormatStringToken
         custom_text
       )
       assert_selector 'svg', class: "icon-#{custom_provider}_icon"
     end
+  end
+
+  test 'should display no authentication methods message when no providers and password authentication disabled' do
+    old_omniauth_providers = User.omniauth_providers
+    User.omniauth_providers = []
+    Irida::CurrentSettings.current_application_settings.update(password_authentication_enabled: false,
+                                                               signup_enabled: false)
+
+    visit new_user_session_path
+
+    assert_text I18n.t(:'devise.sessions.new.no_configured_authentication_methods')
+    User.omniauth_providers = old_omniauth_providers
+  end
+
+  test 'should not display local account option when password authentication disabled' do
+    Irida::CurrentSettings.current_application_settings.update(password_authentication_enabled: false)
+
+    visit new_user_session_path
+
+    assert_no_text I18n.t(:'devise.sessions.new.local_button')
   end
 end
