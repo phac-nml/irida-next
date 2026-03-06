@@ -1,7 +1,13 @@
 <% workflow_advanced_search_enabled = Flipper.enabled?(:workflow_execution_advanced_search) %>
 <% workflow_advanced_search_fields = workflow_advanced_search_enabled ? AdvancedSearch::Fields.for_workflow_executions : nil %>
 <% base_form_data = { turbo_action: "replace" }.merge(local_assigns.fetch(:form_data, {})) %>
-<% search_field_arguments = local_assigns.fetch(:search_field_arguments, {}) %>
+<% search_field_arguments = (
+  workflow_advanced_search_enabled ? { classes: "sm:min-w-[20rem]" } : {}
+).deep_merge(local_assigns.fetch(:search_field_arguments, {})) %>
+<% search_form_class = class_names(
+  "max-sm:grow",
+  { "sm:flex sm:items-start sm:gap-2" => workflow_advanced_search_enabled },
+) %>
 
 <% if workflow_advanced_search_enabled %>
   <% base_form_data = base_form_data.merge(
@@ -18,20 +24,22 @@
   placeholder: t("shared.workflow_executions.index.search.placeholder"),
   value: query.name_or_id_cont,
   total_count: total_count,
-  class: "max-sm:grow",
+  class: search_form_class,
   data: base_form_data,
   search_field_arguments: search_field_arguments,
   extra_content: lambda { |form|
     if workflow_advanced_search_enabled
-      render(
-        AdvancedSearchComponent.new(
-          form: form,
-          search: search,
-          fields: workflow_advanced_search_fields,
-          open: search.errors.any?,
-          status: search.advanced_query?,
+      tag.div(class: "max-sm:mt-2 sm:shrink-0") do
+        render(
+          AdvancedSearchComponent.new(
+            form: form,
+            search: search,
+            fields: workflow_advanced_search_fields,
+            open: search.errors.any?,
+            status: search.advanced_query?,
+          )
         )
-      )
+      end
     end
   },
 ) %>
