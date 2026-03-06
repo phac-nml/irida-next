@@ -19,9 +19,9 @@ class SignInDisplayTest < ApplicationSystemTestCase
 
     within %(div[class="grid gap-2"]) do
       assert_selector 'svg', count: 3 # Local Account does not use an icon
-      assert_text I18n.t(:'devise.sessions.new_with_providers.local_button')
+      assert_text I18n.t(:'devise.sessions.new.local_button')
       %w[developer saml entra_id].each do |provider|
-        assert_text I18n.t(:'devise.sessions.new_with_providers.omniauth').to_s.sub!(
+        assert_text I18n.t(:'devise.sessions.new.omniauth').to_s.sub!(
           '%{provider}', # rubocop:disable Style/FormatStringToken
           OmniAuth::Utils.camelize(provider)
         )
@@ -39,8 +39,8 @@ class SignInDisplayTest < ApplicationSystemTestCase
     visit new_user_session_path
 
     within %(div[class="grid gap-2"]) do
-      assert_text I18n.t(:'devise.sessions.new_with_providers.local_button')
-      assert_text I18n.t(:'devise.sessions.new_with_providers.omniauth').to_s.sub!(
+      assert_text I18n.t(:'devise.sessions.new.local_button')
+      assert_text I18n.t(:'devise.sessions.new.omniauth').to_s.sub!(
         '%{provider}', # rubocop:disable Style/FormatStringToken
         custom_text
       )
