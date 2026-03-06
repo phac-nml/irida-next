@@ -61,6 +61,30 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, created_workflow_execution.shared_with_namespace
   end
 
+  test 'should ignore advanced search groups when workflow advanced-search feature flag is disabled' do
+    Flipper.disable(:workflow_execution_advanced_search)
+
+    get workflow_executions_path, params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
+
+    assert_response :success
+    assert_includes response.body, @workflow_execution_completed.id
+    assert_includes response.body, @workflow_execution_running.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'should apply advanced search groups when workflow advanced-search feature flag is enabled' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    get workflow_executions_path, params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
+
+    assert_response :success
+    assert_includes response.body, @workflow_execution_completed.id
+    assert_not_includes response.body, @workflow_execution_running.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
   test 'should apply default sort and support sorting workflow executions' do
     workflow_execution = workflow_executions(:irida_next_example)
     workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
@@ -358,5 +382,25 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     # Follow the redirect and verify it's successful
     follow_redirect!
     assert_response :success
+  end
+
+  private
+
+  def workflow_advanced_search_params(state:)
+    {
+      q: {
+        groups_attributes: {
+          '0' => {
+            conditions_attributes: {
+              '0' => {
+                field: 'state',
+                operator: '=',
+                value: state
+              }
+            }
+          }
+        }
+      }
+    }
   end
 end
