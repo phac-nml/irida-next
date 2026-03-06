@@ -1886,8 +1886,8 @@ module Projects
       assert_no_text I18n.t('shared.progress_bar.in_progress')
 
       # sample 3 does not exist in current project
-      assert_text I18n.t('services.samples.metadata.import_file.sample_not_found_within_project',
-                         sample_puid: 'Project 2 Sample 3')
+      assert_text I18n.t('services.samples.metadata.bulk_update.sample_not_found',
+                         sample_identifier: 'Project 2 Sample 3').gsub(':', '')
       click_button I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
 
       assert_no_selector 'dialog[open]'
@@ -1949,7 +1949,7 @@ module Projects
       assert_performed_jobs 1
       assert_no_text I18n.t('shared.progress_bar.in_progress')
 
-      assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
+      assert_text I18n.t('services.samples.metadata.bulk_update.sample_metadata_fields_not_updated',
                          sample_name: samples(:sample34).name, metadata_fields: 'metadatafield1')
       click_button I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
 

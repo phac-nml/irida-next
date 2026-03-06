@@ -4,11 +4,35 @@
 >
   <p class="mb-4 dark:text-white"><%= t(".description") %></p>
 
-  <% errors.each do |error| %>
-    <%= viral_alert(type:, message: error, classes: "mb-4", dismissible: false) %>
-  <% end %>
+  <ul class="max-h-60 space-y-3 overflow-y-auto p-2 md:max-h-80">
+    <% errors.each do |error| %>
+      <% error_parts = error.split(":") %>
 
-  <div>
+      <li class="flex items-start gap-3 rounded-md border-l-4 border-red-500 bg-red-100 px-3 py-2 shadow-sm">
+        <span class="mt-0.5 text-red-600" aria-hidden="true">
+          <%= pathogen_icon(
+            :x_circle,
+            color: :danger,
+            size: :lg,
+            class: "inline align-middle",
+          ) %>
+        </span>
+
+        <div class="min-w-0 flex-1">
+          <% if error_parts.length > 1 %>
+            <div class="font-semibold text-red-800"><%= error_parts[0] %></div>
+            <ul class="mt-1.5 ml-4 list-inside list-disc text-sm text-red-700">
+              <li><%= error_parts[1] %></li>
+            </ul>
+          <% else %>
+            <div class="text-red-800"><%= error %></div>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="mt-4 flex">
     <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
       <%= t(".ok_button") %>
     <% end %>

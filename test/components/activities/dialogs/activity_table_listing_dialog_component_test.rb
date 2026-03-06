@@ -312,6 +312,53 @@ module Activities
         assert_selector 'tr > td', text: sample2.name, count: 2
         assert_selector 'tr > td', text: sample2.puid
       end
+
+      test 'group bulk update service activity dialog' do
+        group_namespace = groups(:group_twelve)
+        sample33 = samples(:sample33)
+        sample35 = samples(:sample35)
+        project30 = projects(:project30)
+        project31 = projects(:project31)
+        payload = { sample33.puid => { 'metadatafield3' => 'value3', 'metadatafield4' => 'value4' },
+                    sample35.name => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
+        metadata_fields = %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4]
+
+        Samples::Metadata::BulkUpdateService.new(group_namespace, payload, metadata_fields, @user).execute
+        activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity).reverse
+
+        assert_equal(1, activities.count do |activity|
+          activity[:key].include?('group.samples.bulk_metadata_update')
+        end)
+
+        activity_to_render = activities.find do |a|
+          a[:key] == 'activity.group.samples.bulk_metadata_update_html'
+        end
+
+        visit group_activity_path(group_namespace)
+
+        within("form[action='#{activity_path(activity_to_render[:id])}']") do
+          click_button(I18n.t('components.activity.more_details'))
+        end
+
+        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
+
+        assert_selector 'p',
+                        text: I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
+                                     user: @user.email, count: 2)
+        assert_selector 'table', count: 1
+        assert_selector 'th', count: 2
+        assert_selector 'tr', count: 3
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.sample').upcase
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.project').upcase
+        assert_selector 'tr > td', text: sample33.name
+        assert_selector 'tr > td', text: sample33.puid
+        assert_selector 'tr > td', text: sample35.name
+        assert_selector 'tr > td', text: sample35.puid
+        assert_selector 'tr > td', text: project30.name
+        assert_selector 'tr > td', text: project30.puid
+        assert_selector 'tr > td', text: project31.name
+        assert_selector 'tr > td', text: project31.puid
+      end
     end
   end
 end

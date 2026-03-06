@@ -10,7 +10,7 @@ module Groups
       @user = users(:john_doe)
     end
 
-    test 'batch sample import actvity' do
+    test 'batch sample import activity' do
       group = groups(:group_one)
       activities = group.human_readable_activity(group.retrieve_group_activity).reverse
 

@@ -503,6 +503,55 @@ module Samples
             'metadata field2' => 1 }, @group12.reload.metadata_summary
         )
       end
+
+      test 'analysis can overwrite metadata previously written by analysis' do
+        freeze_time
+        params = { 'metadata' => { 'metadatafield1' => 'newvalue1', 'metadatafield2' => 'newvalue2' },
+                   'analysis_id' => 2 }
+
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample34.metadata)
+        assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                       'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' } },
+                     @sample34.metadata_provenance)
+
+        assert_no_changes -> { @project31.reload.metadata_summary } do
+          assert_no_changes -> { @subgroup12aa.reload.metadata_summary } do
+            assert_no_changes -> { @subgroup12a.reload.metadata_summary } do
+              assert_no_changes -> { @group12.reload.metadata_summary } do
+                Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params).execute
+              end
+            end
+          end
+        end
+        assert_equal({ 'metadatafield1' => 'newvalue1', 'metadatafield2' => 'newvalue2' },
+                     @sample34.reload.metadata)
+        assert_equal({ 'metadatafield1' => { 'id' => 2, 'source' => 'analysis',
+                                             'updated_at' => Time.current },
+                       'metadatafield2' => { 'id' => 2, 'source' => 'analysis',
+                                             'updated_at' => Time.current } },
+                     @sample34.reload.metadata_provenance)
+      end
+
+      test 'activity writes with successful update' do
+        freeze_time
+        params = { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
+
+        assert_difference -> { PublicActivity::Activity.count } => 1 do
+          Samples::Metadata::UpdateService.new(@project31, @sample35, @user, params).execute
+        end
+      end
+
+      test 'activity does not write with unsuccessful update' do
+        freeze_time
+
+        params = { 'metadata' => { 'metadatafield1' => 'newvalue1', 'metadatafield2' => 'newvalue2' } }
+
+        assert_no_difference -> { PublicActivity::Activity.count } do
+          Samples::Metadata::UpdateService.new(@project31, @sample34, @user, params).execute
+        end
+      end
     end
   end
 end
