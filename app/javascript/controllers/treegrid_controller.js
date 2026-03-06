@@ -232,6 +232,7 @@ export default class extends Controller {
     const toggleButton = row.querySelector(".treegrid-row-toggle");
     if (toggleButton.hasAttribute("data-toggle-url")) {
       const toggleUrl = new URL(toggleButton.getAttribute("data-toggle-url"));
+      console.log(toggleUrl.href);
       toggleUrl.searchParams.append("tabindex", row.tabIndex);
       fetch(toggleUrl.href, {
         credentials: "same-origin",

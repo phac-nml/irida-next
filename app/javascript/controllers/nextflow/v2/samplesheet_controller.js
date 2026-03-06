@@ -92,7 +92,7 @@ export default class extends Controller {
   #samplesheetProperties;
 
   // samplesheetAttributes contains the specific sample values for table rendering and form submission
-  #samplesheetAttributes;
+  #samplesheetAttributes = {};
 
   // sample data is contained within a nested object, so we'll extract the sample_ids from the object and utilize
   // allSampleIds array for indexes on the samplesheet table
@@ -100,7 +100,7 @@ export default class extends Controller {
 
   // samplesheetAttributes will contain the file global IDs, however we still require the file IDs and filenames for
   // the file_selector when users want to change the selected file, which will be contained in fileAttributes
-  #fileAttributes;
+  #fileAttributes = {};
 
   // tracks filter state of search/clear buttons on filter
   #filterEnabled = false;
@@ -108,11 +108,16 @@ export default class extends Controller {
   #queuedMetadataChanges = {};
 
   #samplesheetReady = false;
-  #allowedToUpdateSamples;
+  #allowedToUpdateSamples = true;
 
   // current sample 'indexes' present on table, used by metadata and table loading
   #startingIndex;
   #lastIndex;
+
+  #selectedSamples;
+  #chunkedSelectedSamples;
+
+  #processSamplesCounter = 0;
 
   connect() {
     this.#updateMetadataColumnHeaderNames();
@@ -128,27 +133,57 @@ export default class extends Controller {
     }
   }
 
-  sampleAttributesTargetConnected() {
-    const dataAttributes = this.sampleAttributesTarget.dataset;
-    this.#samplesheetAttributes = JSON.parse(
-      dataAttributes.sampleAttributes || "{}",
-    );
-    this.#allowedToUpdateSamples = JSON.parse(
-      dataAttributes.allowedToUpdateSamples || "false",
-    );
-    this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
+  async sampleAttributesTargetConnected() {
+    this.#processSamplesCounter++;
+    if (this.#processSamplesCounter >= this.#chunkedSelectedSamples.length) {
+      await this.#processSamplesheetAttributes();
+      await this.#processFileAttributes();
 
-    this.#fileAttributes = JSON.parse(this.fileAttributesTarget.innerHTML);
-    this.fileAttributesTarget.remove();
+      this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
 
-    if (Object.keys(this.#samplesheetAttributes).length === 0) {
-      this.samplesheetSpinnerTarget.remove();
-      this.#enableErrorState(this.processingErrorValue);
-    } else {
-      // remove node after retrieving data
-      this.sampleAttributesTarget.remove();
-      this.#processSamplesheet();
+      if (this.#allSampleIds.length !== this.#selectedSamples.length) {
+        this.samplesheetSpinnerTarget.remove();
+        this.#enableErrorState(this.processingErrorValue);
+      } else {
+        // remove node after retrieving data
+        // this.sampleAttributesTarget.remove();
+        this.#processSamplesheet();
+      }
     }
+  }
+
+  #processSamplesheetAttributes() {
+    return new Promise((resolve) => {
+      this.sampleAttributesTargets.forEach((sampleAttributeTarget) => {
+        const dataAttributes = sampleAttributeTarget.dataset;
+        const sampleAttributes = JSON.parse(
+          dataAttributes.sampleAttributes || "{}",
+        );
+        Object.assign(this.#samplesheetAttributes, sampleAttributes);
+
+        const allowedToUpdateSamples = JSON.parse(
+          dataAttributes.allowedToUpdateSamples || "false",
+        );
+
+        if (this.#allowedToUpdateSamples && !allowedToUpdateSamples) {
+          this.#allowedToUpdateSamples = false;
+        }
+      });
+
+      resolve();
+    });
+  }
+
+  #processFileAttributes() {
+    return new Promise((resolve) => {
+      this.fileAttributesTargets.forEach((fileAttributeTarget) => {
+        Object.assign(
+          this.#fileAttributes,
+          JSON.parse(fileAttributeTarget.innerHTML),
+        );
+      });
+      resolve();
+    });
   }
 
   #processSamplesheet() {
@@ -930,24 +965,41 @@ export default class extends Controller {
       this.samplesheetPropertiesTarget.dataset.properties;
     this.boundAmendForm = this.amendForm.bind(this);
 
+    this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
+
+    // TODO CHANGE TO 1000
+    if (this.#selectedSamples.length > 10) {
+      this.#chunkedSelectedSamples = this.chunkArray();
+    }
     this.#submitSamplesheetParams();
+  }
+
+  chunkArray() {
+    const chunkedArray = [];
+    for (let i = 0; i < this.#selectedSamples.length; i += 10) {
+      chunkedArray.push(this.#selectedSamples.slice(i, i + 10));
+    }
+    return chunkedArray;
   }
 
   amendForm(event) {
     const formData = new FormData(this.samplesheetParamsFormTarget);
-    event.detail.fetchOptions.body = JSON.stringify(this.#toJson(formData));
+    const index = this.samplesheetParamsFormTarget.getAttribute("data-index");
+    event.detail.fetchOptions.body = JSON.stringify(
+      this.#toJson(formData, index),
+    );
     event.detail.fetchOptions.headers["Content-Type"] = "application/json";
 
     event.detail.resume();
   }
 
-  #toJson(formData) {
+  #toJson(formData, index) {
     const params = formDataToJsonParams(formData);
     if (this.hasSelectionOutlet) {
       normalizeParams(
         params,
         "sample_ids[]",
-        this.selectionOutlet.getOrCreateStoredItems(),
+        this.#chunkedSelectedSamples[index],
         0,
       );
     }
@@ -955,27 +1007,54 @@ export default class extends Controller {
   }
 
   #submitSamplesheetParams() {
-    const form =
-      this.samplesheetParamsFormTemplateTarget.content.cloneNode(true);
-    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < this.#chunkedSelectedSamples.length; i++) {
+      const form =
+        this.samplesheetParamsFormTemplateTarget.content.cloneNode(true);
+      const fragment = document.createDocumentFragment();
 
-    fragment.appendChild(
-      createHiddenInput("properties", this.#samplesheetProperties),
-    );
+      fragment.appendChild(
+        createHiddenInput("properties", this.#samplesheetProperties),
+      );
+
+      this.element.appendChild(form);
+
+      this.element.lastElementChild.appendChild(fragment);
+
+      this.element.lastElementChild.addEventListener(
+        "submit",
+        async (event) => {
+          event.preventDefault(); // Prevent default page reload
+
+          // Use FormData to grab form values
+
+          const formData = new FormData(this.samplesheetParamsFormTarget);
+          // 2. Perform async operation (e.g., fetch)
+          fetch(
+            "http://localhost:3000/-/workflow_executions/submissions/samplesheet",
+            {
+              credentials: "same-origin",
+              method: "POST",
+              body: JSON.stringify(this.#toJson(formData, i)),
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "text/vnd.turbo-stream.html",
+                // You can also include 'Accept': 'application/json' to specify you expect a JSON response
+              },
+            },
+          )
+            .then((r) => r.text())
+            .then((html) => Turbo.renderStreamMessage(html));
+          // const result = await response.json();
+          // console.log("Success:", result);
+        },
+      );
+      this.element.lastElementChild.requestSubmit();
+    }
 
     this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
-    // clear the now unnecessary DOM element
+    // // clear the now unnecessary DOM element
     this.samplesheetPropertiesTarget.remove();
-
-    this.element.appendChild(form);
-
-    this.element.lastElementChild.appendChild(fragment);
-
-    this.element.lastElementChild.addEventListener(
-      "turbo:before-fetch-request",
-      this.boundAmendForm,
-    );
-    this.element.lastElementChild.requestSubmit();
+    // this.element.lastElementChild.requestSubmit();
   }
 
   dataPayloadTargetConnected() {
