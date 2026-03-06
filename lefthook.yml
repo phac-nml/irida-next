@@ -1,12 +1,8 @@
 pre-commit:
   parallel: true
   jobs:
-    - name: rubocop
-      glob:
-        - "*.rb"
-        - "**/*.rb"
-      run: bin/rubocop -a --force-exclusion {staged_files}
-      stage_fixed: true
+    - name: rubocop_ci
+      run: bin/rubocop -f github
 
     - name: prettier
       glob:
@@ -22,18 +18,11 @@ pre-commit:
       run: pnpm exec eslint --fix {staged_files}
       stage_fixed: true
 
-    - name: herb_format
-      glob:
-        - "*.erb"
-        - "**/*.erb"
-      run: pnpm exec herb-format {staged_files}
-      stage_fixed: true
+    - name: herb_ci_lint
+      run: scripts/hooks/run_ci_herb_check.sh herb:lint
 
-    - name: herb_lint
-      glob:
-        - "*.erb"
-        - "**/*.erb"
-      run: pnpm exec herb-lint --format=simple {staged_files}
+    - name: herb_ci_format_check
+      run: scripts/hooks/run_ci_herb_check.sh herb:format:check
 
     - name: i18n_normalize
       glob:

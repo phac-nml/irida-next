@@ -62,12 +62,12 @@ See [docs](https://phac-nml.github.io/irida-next/).
 
 ## Pre-commit Hooks & Formatting
 
-This project uses [Lefthook](https://github.com/evilmartians/lefthook) (via Bundler) to automatically format and lint code before each commit. The following tools run on staged files:
+This project uses [Lefthook](https://github.com/evilmartians/lefthook) (via Bundler) to automatically format and lint code before each commit. CI-parity checks run on every commit, and formatters run on staged files:
 
-- **RuboCop**: Ruby files (`.rb`) are auto-corrected and linted
+- **RuboCop (CI parity)**: full repository lint (`bin/rubocop -f github`)
 - **Prettier**: JavaScript, TypeScript, CSS, JSON, and Markdown files are formatted
 - **ESLint**: JavaScript files are auto-fixed
-- **Herb**: HTML+ERB templates (`.erb`) are formatted and linted
+- **Herb (CI parity)**: lint + format check for ERB files changed vs `origin/main` plus staged ERB changes
 - **i18n-tasks**: Locale files are normalized (`i18n-tasks normalize`) when locale YAML changes are staged
 
 ### How it works
