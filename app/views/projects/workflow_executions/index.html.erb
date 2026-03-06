@@ -103,16 +103,12 @@
 
     <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
-    <%= render SearchComponent.new(
+    <%= render partial: "workflow_executions/table_filter", locals: {
       query: @q,
+      search: @query,
       url: namespace_project_workflow_executions_path(**request.query_parameters),
-      search_attribute: :name_or_id_cont,
-      label: t("common.controls.search"),
-      placeholder: t("shared.workflow_executions.index.search.placeholder"),
       total_count: @pagy.count,
-      value: @q.name_or_id_cont,
-      class: "max-sm:grow",
-    ) %>
+    } %>
   </div>
 <% end %>
 

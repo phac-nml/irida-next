@@ -1,0 +1,37 @@
+<% workflow_advanced_search_enabled = Flipper.enabled?(:workflow_execution_advanced_search) %>
+<% workflow_advanced_search_fields = workflow_advanced_search_enabled ? AdvancedSearch::Fields.for_workflow_executions : nil %>
+<% base_form_data = { turbo_action: "replace" }.merge(local_assigns.fetch(:form_data, {})) %>
+<% search_field_arguments = local_assigns.fetch(:search_field_arguments, {}) %>
+
+<% if workflow_advanced_search_enabled %>
+  <% base_form_data = base_form_data.merge(
+    controller: "filters",
+    "filters-selection-outlet": "#workflow-executions-table",
+  ) %>
+<% end %>
+
+<%= render SearchComponent.new(
+  query: query,
+  url: url,
+  search_attribute: :name_or_id_cont,
+  label: t("common.controls.search"),
+  placeholder: t("shared.workflow_executions.index.search.placeholder"),
+  value: query.name_or_id_cont,
+  total_count: total_count,
+  class: "max-sm:grow",
+  data: base_form_data,
+  search_field_arguments: search_field_arguments,
+  extra_content: lambda { |form|
+    if workflow_advanced_search_enabled
+      render(
+        AdvancedSearchComponent.new(
+          form: form,
+          search: search,
+          fields: workflow_advanced_search_fields,
+          open: search.errors.any?,
+          status: search.advanced_query?,
+        )
+      )
+    end
+  },
+) %>
