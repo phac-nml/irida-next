@@ -251,6 +251,7 @@ fr:
       description: Coller une liste de noms d’échantillons ou d’identificateurs <kbd>,</kbd> séparés
     namespace_row:
       contents_component:
+        created_at: Créé le %{date}
         projects:
           aria-label: Projets
           tooltip: "%{count} projets dans %{namespace_name}"

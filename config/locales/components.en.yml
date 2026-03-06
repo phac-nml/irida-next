@@ -213,6 +213,7 @@ en:
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
     namespace_row:
       contents_component:
+        created_at: Created %{date}
         projects:
           aria-label: Projects
           tooltip: "%{count} projects in %{namespace_name}"
