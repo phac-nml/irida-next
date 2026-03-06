@@ -28,6 +28,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     @search_params = search_params
 
     @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+    @results_message = results_message
 
     setup_ransack_for_form
   end
@@ -369,7 +370,46 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
     search_params[:name_or_id_in] = params.dig(:q, :name_or_id_in)
     search_params[:sort] = params.dig(:q, :s)
-    search_params[:groups_attributes] = params.dig(:q, :groups_attributes) if params.dig(:q, :groups_attributes)
+
+    if Flipper.enabled?(:workflow_execution_advanced_search)
+      groups_attributes = workflow_advanced_search_groups_attributes
+      search_params[:groups_attributes] = groups_attributes if groups_attributes.present?
+    end
+
     search_params.compact
+  end
+
+  def workflow_advanced_search_groups_attributes
+    groups_attributes = params.dig(:q, :groups_attributes)
+    return if groups_attributes.blank?
+
+    groups_attributes.respond_to?(:to_unsafe_h) ? groups_attributes.to_unsafe_h : groups_attributes
+  end
+
+  def results_message
+    return advanced_search_results_message if @query.advanced_query?
+
+    quick_search_results_message if @query.name_or_id_cont.present?
+  end
+
+  def advanced_search_results_message
+    if @pagy&.count&.zero?
+      I18n.t(:'components.search.advanced.results_message.zero')
+    elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
+      I18n.t(:'components.search.advanced.results_message.singular')
+    else
+      I18n.t(:'components.search.advanced.results_message.plural', total_count: @pagy&.count)
+    end
+  end
+
+  def quick_search_results_message
+    if @pagy&.count&.zero?
+      I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_id_cont)
+    elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
+      I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_id_cont)
+    else
+      I18n.t(:'components.search.results_message.plural', total_count: @pagy&.count,
+                                                          search_term: @query.name_or_id_cont)
+    end
   end
 end

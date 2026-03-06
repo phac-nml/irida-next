@@ -67,7 +67,7 @@
 <% end %>
 
 <% if @has_workflow_executions %>
-  <div class="flex flex-wrap gap-2 mb-4">
+  <div class="mb-4 flex flex-wrap gap-2">
     <%= form_with(
               url: select_workflow_executions_url,
               method: :get,
@@ -75,7 +75,7 @@
               class: "max-sm:grow",
               data: { turbo_frame: "selected" },
                   ) do |f| %>
-      <input type="hidden" name="select" value="on"/>
+      <input type="hidden" name="select" value="on">
 
       <%= f.submit t("common.controls.select_all"),
                id: "select-all-button",
@@ -94,23 +94,20 @@
                class: "button button-default w-full" %>
     <% end %>
 
-    <div class="sm:grow max-sm:hidden" role="presentation"></div>
+    <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
-    <%= render SearchComponent.new(
+    <%= render partial: "workflow_executions/table_filter", locals: {
       query: @q,
+      search: @query,
       url: workflow_executions_path,
-      search_attribute: :name_or_id_cont,
-      label: t("common.controls.search"),
-      placeholder: t("shared.workflow_executions.index.search.placeholder"),
-      value: @q.name_or_id_cont,
       total_count: @pagy.count,
-      class: "max-sm:grow",
+      page_limit: @pagy.limit,
       search_field_arguments: {
         data: {
           "search-field-selection-outlet": "#workflow-executions-table",
         },
       },
-    ) %>
+    } %>
   </div>
 <% end %>
 

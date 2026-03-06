@@ -28,15 +28,15 @@
 <% end %>
 
 <% if @has_workflow_executions %>
-  <div class="flex flex-wrap gap-2 mb-4">
+  <div class="mb-4 flex flex-wrap gap-2">
     <%= form_with(
                   url: select_group_workflow_executions_url,
                   method: :get,
                   id: "select-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream" />
-      <input type="hidden" name="select" value="on" />
+      <input type="hidden" name="format" value="turbo_stream">
+      <input type="hidden" name="select" value="on">
 
       <%= f.submit t("common.controls.select_all"), class: "button button-default w-full" %>
     <% end %>
@@ -47,27 +47,24 @@
                   id: "deselect-all-form",
                   class: "max-sm:grow",
                 ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream" />
+      <input type="hidden" name="format" value="turbo_stream">
 
       <%= f.submit t("common.controls.deselect_all"),
                class: "button button-default w-full" %>
     <% end %>
 
-    <div class="sm:grow max-sm:hidden" role="presentation"></div>
+    <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
-    <%= render SearchComponent.new(
+    <%= render partial: "workflow_executions/table_filter", locals: {
       query: @q,
-      url: group_workflow_executions_path(**request.query_parameters),
-      search_attribute: :name_or_id_cont,
-      label: t("common.controls.search"),
-      placeholder: t("shared.workflow_executions.index.search.placeholder"),
+      search: @query,
+      url: group_workflow_executions_path,
       total_count: @pagy.count,
-      class: "max-sm:grow",
-      value: @q.name_or_id_cont,
-      data: {
+      page_limit: @pagy.limit,
+      form_data: {
         "search-field-selection-outlet": "#workflow-executions-table",
       },
-    ) %>
+    } %>
   </div>
 <% end %>
 

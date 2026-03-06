@@ -34,6 +34,7 @@ require 'rails/test_help'
 require 'action_policy/test_helper'
 require 'mocha/minitest'
 require 'test_helpers/array_helpers'
+require 'test_helpers/workflow_execution_advanced_search_helper'
 require 'test_helpers/dashboard_sorting_helper'
 require 'test_helpers/sorting_test_helper'
 require 'test_helpers/w3c_validation_helpers'
@@ -69,6 +70,7 @@ module ActiveSupport
     include Devise::Test::IntegrationHelpers
     include ActionPolicy::TestHelper
     include ArrayHelpers
+    include WorkflowExecutionAdvancedSearchHelper
     include ActiveJob::TestHelper
     include ActionMailer::TestHelper
     include Turbo::Broadcastable::TestHelper

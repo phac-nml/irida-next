@@ -56,7 +56,21 @@
         ) %>
       </div>
 
-      <div class="space-y-4" data-advanced-search-target="searchGroupsContainer"></div>
+      <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
+        <% if @status || @open %>
+          <% @search.groups.each_with_index do |group, group_index| %>
+            <%= render AdvancedSearch::Group.new(
+              form: @form,
+              group: group,
+              group_index: group_index,
+              group_number: group_index + 1,
+              show_remove_group_button: @search.groups.count > 1,
+              fields: @fields,
+              operations: @operations,
+            ) %>
+          <% end %>
+        <% end %>
+      </div>
 
       <div class="flex justify-end space-x-2">
         <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
@@ -80,7 +94,7 @@
     </div>
 
     <% dialog.with_primary_action(
-      "data-action": "advanced-search#submit filters#submit",
+      "data-action": "advanced-search#submit viral--dialog#close filters#submit",
     ) { t("components.advanced_search_component.apply_filter_button") } %>
 
     <% dialog.with_secondary_action do %>

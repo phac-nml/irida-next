@@ -8,6 +8,8 @@ module Groups
       sign_in users(:joan_doe)
       @group = groups(:group_one)
       @workflow_execution = workflow_executions(:workflow_execution_group_shared1)
+      @workflow_execution_completed = workflow_executions(:workflow_execution_group_shared_completed)
+      @workflow_execution_running = workflow_executions(:workflow_execution_group_shared_running)
     end
 
     test 'should show a listing of workflow executions for the group' do
@@ -32,6 +34,32 @@ module Groups
       get group_workflow_executions_path(@group)
 
       assert_response :unauthorized
+    end
+
+    test 'should ignore advanced search groups when workflow advanced-search feature flag is disabled' do
+      Flipper.disable(:workflow_execution_advanced_search)
+
+      get group_workflow_executions_path(@group),
+          params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
+
+      assert_response :success
+      assert_includes response.body, @workflow_execution_completed.id
+      assert_includes response.body, @workflow_execution_running.id
+    ensure
+      Flipper.disable(:workflow_execution_advanced_search)
+    end
+
+    test 'should apply advanced search groups when workflow advanced-search feature flag is enabled' do
+      Flipper.enable(:workflow_execution_advanced_search)
+
+      get group_workflow_executions_path(@group),
+          params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
+
+      assert_response :success
+      assert_includes response.body, @workflow_execution_completed.id
+      assert_not_includes response.body, @workflow_execution_running.id
+    ensure
+      Flipper.disable(:workflow_execution_advanced_search)
     end
 
     test 'should show workflow execution that was shared to group by the user' do

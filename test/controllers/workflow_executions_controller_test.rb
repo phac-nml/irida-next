@@ -61,6 +61,43 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, created_workflow_execution.shared_with_namespace
   end
 
+  test 'should ignore advanced search groups when workflow advanced-search feature flag is disabled' do
+    Flipper.disable(:workflow_execution_advanced_search)
+
+    get workflow_executions_path, params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
+
+    assert_response :success
+    assert_includes response.body, @workflow_execution_completed.id
+    assert_includes response.body, @workflow_execution_running.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'should apply advanced search groups when workflow advanced-search feature flag is enabled' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    get workflow_executions_path, params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
+
+    assert_response :success
+    assert_includes response.body, @workflow_execution_completed.id
+    assert_not_includes response.body, @workflow_execution_running.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'should apply advanced search groups when workflow advanced-search uses translated state labels' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    get workflow_executions_path,
+        params: workflow_advanced_search_params(state: I18n.t('workflow_executions.state.completed')).merge(limit: 100)
+
+    assert_response :success
+    assert_includes response.body, @workflow_execution_completed.id
+    assert_not_includes response.body, @workflow_execution_running.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
   test 'should cancel a new workflow with valid params' do
     put cancel_workflow_execution_path(@workflow_execution_new, format: :turbo_stream)
     assert_response :success
