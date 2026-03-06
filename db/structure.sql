@@ -669,42 +669,6 @@ ALTER SEQUENCE public.flipper_gates_id_seq OWNED BY public.flipper_gates.id;
 
 
 --
--- Name: site_banners; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.site_banners (
-    id bigint NOT NULL,
-    singleton_guard character varying DEFAULT 'global'::character varying NOT NULL,
-    enabled boolean DEFAULT true NOT NULL,
-    style character varying DEFAULT 'info'::character varying NOT NULL,
-    messages jsonb DEFAULT '{}'::jsonb NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    CONSTRAINT site_banners_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
-    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY ((ARRAY['info'::character varying, 'warning'::character varying, 'danger'::character varying, 'success'::character varying])::text[])))
-);
-
-
---
--- Name: site_banners_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.site_banners_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: site_banners_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.site_banners_id_seq OWNED BY public.site_banners.id;
-
-
---
 -- Name: members; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -928,6 +892,42 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 
 --
+-- Name: site_banners; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.site_banners (
+    id bigint NOT NULL,
+    singleton_guard character varying DEFAULT 'global'::character varying NOT NULL,
+    enabled boolean DEFAULT true NOT NULL,
+    style character varying DEFAULT 'info'::character varying NOT NULL,
+    messages jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    CONSTRAINT site_banners_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
+    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY (ARRAY[('info'::character varying)::text, ('warning'::character varying)::text, ('danger'::character varying)::text, ('success'::character varying)::text])))
+);
+
+
+--
+-- Name: site_banners_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.site_banners_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: site_banners_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.site_banners_id_seq OWNED BY public.site_banners.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1001,17 +1001,17 @@ ALTER TABLE ONLY public.flipper_gates ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- Name: site_banners id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.site_banners ALTER COLUMN id SET DEFAULT nextval('public.site_banners_id_seq'::regclass);
-
-
---
 -- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.sessions_id_seq'::regclass);
+
+
+--
+-- Name: site_banners id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.site_banners ALTER COLUMN id SET DEFAULT nextval('public.site_banners_id_seq'::regclass);
 
 
 --
@@ -1111,14 +1111,6 @@ ALTER TABLE ONLY public.flipper_gates
 
 
 --
--- Name: site_banners site_banners_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.site_banners
-    ADD CONSTRAINT site_banners_pkey PRIMARY KEY (id);
-
-
---
 -- Name: members members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1212,6 +1204,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 ALTER TABLE ONLY public.sessions
     ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: site_banners site_banners_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.site_banners
+    ADD CONSTRAINT site_banners_pkey PRIMARY KEY (id);
 
 
 --
@@ -1417,13 +1417,6 @@ CREATE UNIQUE INDEX index_flipper_features_on_key ON public.flipper_features USI
 --
 
 CREATE UNIQUE INDEX index_flipper_gates_on_feature_key_and_key_and_value ON public.flipper_gates USING btree (feature_key, key, value);
-
-
---
--- Name: index_site_banners_on_enabled_when_enabled; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_site_banners_on_enabled_when_enabled ON public.site_banners USING btree (enabled) WHERE (enabled = true);
 
 
 --
@@ -1767,6 +1760,13 @@ CREATE UNIQUE INDEX index_sessions_on_session_id ON public.sessions USING btree 
 --
 
 CREATE INDEX index_sessions_on_updated_at ON public.sessions USING btree (updated_at);
+
+
+--
+-- Name: index_site_banners_on_enabled_when_enabled; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_site_banners_on_enabled_when_enabled ON public.site_banners USING btree (enabled) WHERE (enabled = true);
 
 
 --
