@@ -103,7 +103,10 @@ module Groups
       Flipper.disable(:workflow_execution_advanced_search)
     end
 
-    test 'workflow advanced search filters group workflow results when workflow advanced-search feature flag is enabled' do
+    test(
+      'workflow advanced search filters group workflow results when workflow advanced-search feature flag is ' \
+      'enabled'
+    ) do
       Flipper.enable(:workflow_execution_advanced_search)
       workflow_execution_group_shared_completed = workflow_executions(:workflow_execution_group_shared_completed)
       workflow_execution_group_shared_running = workflow_executions(:workflow_execution_group_shared_running)
