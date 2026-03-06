@@ -15,13 +15,13 @@
     <%= render "devise/shared/form" %>
   <% end %>
   <div class="grid gap-2">
-    <% if @local_account %>
-      <%= render "devise/shared/links" %>
-      <%= link_to t(".return_button"),
+    <% if button_based_providers_enabled? %>
+      <% if @local_account %>
+        <%= render "devise/shared/links" %>
+        <%= link_to t(".return_button"),
     new_user_session_path(**params),
     class: "button button-default w-full" %>
-    <% else %>
-      <% if button_based_providers_enabled? %>
+      <% else %>
         <%- enabled_button_based_providers.each do |provider| %>
           <%= button_to omniauth_authorize_path(resource_name, provider),
                     data: {
@@ -44,12 +44,14 @@
             </span>
           <% end %>
         <% end %>
-      <% end %>
-      <% if password_authentication_enabled? %>
-        <%= link_to t(".local_button"),
+        <% if password_authentication_enabled? %>
+          <%= link_to t(".local_button"),
       new_user_session_path(local: true, **params),
       class: "button button-default w-full" %>
+        <% end %>
       <% end %>
+    <% else %>
+      <%= render "devise/shared/links" %>
     <% end %>
   </div>
 <% end %>
