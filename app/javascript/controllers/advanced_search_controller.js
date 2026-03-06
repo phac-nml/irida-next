@@ -150,6 +150,7 @@ export default class extends Controller {
 
   clearForm() {
     this.clear();
+    this.addGroup();
     this.clearSubmitError();
   }
 
