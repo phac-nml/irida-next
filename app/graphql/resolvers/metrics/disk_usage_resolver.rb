@@ -12,7 +12,7 @@ module Resolvers
                description: 'Whether to only include disk usage for the projects, samples,
                and workflow executions that directly belong to this namespace. Only need to provide this argument
                if you only want to include direct projects for a group namespace,as user namespaces only have
-                direct projects.',
+               direct projects.',
                default_value: false
 
       def resolve(direct_only:)
@@ -50,12 +50,17 @@ module Resolvers
                              workflow_execution: {
                                namespace_id: ns_ids
                              }
-                           )).select(:id)
+                           )).select(:id),
+          workflow_execution_attachments: Attachment.where(
+            attachable_type: 'WorkflowExecution',
+            attachable: WorkflowExecution.where(namespace_id: ns_ids)
+          ).select(:id)
         ).where(
           Arel.sql(
             'attachments.id in (select id from namespace_attachments)
           OR attachments.id in (select id from sample_attachments)
-          OR attachments.id in (select id from sample_workflow_execution_attachments)'
+          OR attachments.id in (select id from sample_workflow_execution_attachments)
+          OR attachments.id in (select id from workflow_execution_attachments)'
           )
         ).joins(file_attachment: :blob).distinct.pluck('active_storage_blobs.id')
 

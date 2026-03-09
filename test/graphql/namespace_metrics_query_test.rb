@@ -564,7 +564,12 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
     assert_equal 3, workflow_execution.outputs.count
 
-    global_analysis_outputs = workflow_execution.outputs.reject { |o| o.file.filename == 'summary.txt' }
+    workflow_executions_for_namespace = WorkflowExecution.where(namespace_id: workflow_execution.namespace_id)
+
+    global_analysis_outputs = Attachment.where(
+      attachable_type: 'WorkflowExecution',
+      attachable_id: workflow_executions_for_namespace.pluck(:id)
+    )
 
     global_output_size = 0
 
@@ -572,10 +577,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       global_output_size += global_analysis_output.file.byte_size
     end
 
-    size_with_duplicates = existing_attachments_size + global_output_size + analysis_output_blobs_total_size
-    size_without_duplicates = existing_attachments_size + analysis_output_blobs_total_size
-
-    assert size_without_duplicates < size_with_duplicates
+    size_without_duplicates = existing_attachments_size + analysis_output_blobs_total_size + global_output_size
 
     # Workflow execution ran with 2 samples
     assert_equal 2, workflow_execution.samples_workflow_executions.count
@@ -742,13 +744,13 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     namespace = namespace_or_project.is_a?(Project) ? namespace_or_project.namespace : namespace_or_project
 
     samples = []
-    if direct_only
+    if direct_only && !namespace.project_namespace?
       namespace.project_namespaces.each do |pn|
         samples.concat(pn.project.samples) if pn.project.samples_count&.positive?
       end
     else
       namespace.self_and_descendants.each do |ns|
-        if namespace.group_namespace? || namespace.user_namespace?
+        if ns.group_namespace? || ns.user_namespace?
           ns.project_namespaces.each do |pn|
             samples.concat(pn.project.samples) if pn.project.samples_count&.positive?
           end
@@ -760,7 +762,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
     sample_ids = samples.map(&:id)
 
-    namespace_ids = if direct_only
+    namespace_ids = if direct_only && !namespace.project_namespace?
                       [namespace.id] + namespace.project_namespaces.pluck(:id)
                     else
                       namespace.self_and_descendants_of_type(
@@ -775,7 +777,9 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       }
     ).pluck(:id)
 
-    attachable_ids = sample_ids + namespace_ids + sample_workflow_execution_ids
+    workflow_execution_ids = WorkflowExecution.where(namespace_id: namespace_ids).pluck(:id)
+
+    attachable_ids = sample_ids + namespace_ids + sample_workflow_execution_ids + workflow_execution_ids
 
     attachments = Attachment.where(attachable_id: attachable_ids)
 
