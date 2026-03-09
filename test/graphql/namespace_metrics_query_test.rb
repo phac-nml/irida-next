@@ -26,7 +26,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           puid
           type
           samplesCount
-          membersCount
           diskUsage
           projectsCount
           projects(first: $projFirst, after: $projAfter) {
@@ -34,7 +33,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
             nodes {
               name
               samplesCount
-              membersCount
               diskUsage
             }
           }
@@ -45,7 +43,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
               nodes {
                 name
                 samplesCount
-                membersCount
                 diskUsage
                 projectsCount
               }
@@ -67,7 +64,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           puid
           type
           samplesCount
-          membersCount
           diskUsage
           projectsCount
           ... on GroupMetricsType {
@@ -89,7 +85,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           parent
           type
           samplesCount
-          membersCount
           diskUsage
           projectsCount
         }
@@ -105,7 +100,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           parent
           type
           samplesCount
-          membersCount
           diskUsage
           projectsCount
         }
@@ -121,7 +115,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           parent
           type
           samplesCount
-          membersCount
           diskUsage
           projectsCount
         }
@@ -145,14 +138,12 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
         nodes {
           name
           samplesCount
-          membersCount
           diskUsage
           projects(first: $projFirst, after: $projAfter) {
             pageInfo { hasNextPage endCursor }
             nodes {
               name
               samplesCount
-              membersCount
               diskUsage
             }
           }
@@ -162,7 +153,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
               nodes {
                 name
                 samplesCount
-                membersCount
                 diskUsage
               }
             }
@@ -274,7 +264,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert metrics_group_node, 'expected our test group to appear in the results'
 
     assert metrics_group_node['samplesCount'].is_a?(Integer)
-    assert metrics_group_node['membersCount'].is_a?(Integer)
     assert metrics_group_node['diskUsage'].is_a?(String)
 
     expected_projects = @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).count
@@ -285,7 +274,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     @group.reload
     expected_samples = @group.aggregated_samples_count
     assert_equal expected_samples, metrics_group_node['samplesCount'], 'samplesCount should equal aggregated counter'
-    assert_equal 1, metrics_group_node['membersCount'], 'only jane_doe was added to the group'
 
     expected_disk = calculate_disk_usage(@group)
     assert_equal expected_disk, metrics_group_node['diskUsage'], 'diskUsage should sum attachment byte sizes'
@@ -296,7 +284,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     project_nodes.each do |p|
       # projects now also expose metric fields directly
       assert p['samplesCount'].is_a?(Integer)
-      assert p['membersCount'].is_a?(Integer)
       assert p['diskUsage'].is_a?(String)
 
       project_record = Project.joins(:namespace).find_by(namespaces: { name: p['name'] })
@@ -305,7 +292,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
       expected_proj_disk = calculate_disk_usage(project_record)
       assert_equal expected_proj_disk, p['diskUsage'], 'project diskUsage should agree with our helper'
-      assert_equal 2, p['membersCount'], 'project membersCount should only have two members'
     end
 
     # and sub‑groups should also be iterable at the first level
@@ -313,7 +299,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert(subgroup_nodes.any? { |g| g['name'] == @subgroup.name })
     subgroup_nodes.each do |g|
       assert g['samplesCount'].is_a?(Integer)
-      assert g['membersCount'].is_a?(Integer)
       assert g['diskUsage'].is_a?(String)
     end
   end
@@ -383,17 +368,14 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           project_record = extra_project.reload
           assert p['samplesCount'].is_a?(Integer)
           assert p['diskUsage'].is_a?(String)
-          assert p['membersCount'].is_a?(Integer)
           assert_equal project_record.samples_count.to_i, p['samplesCount']
           expected_proj_disk = calculate_disk_usage(project_record)
           assert_equal expected_proj_disk, p['diskUsage']
-          assert_equal 1, p['membersCount']
         else
           # other projects may have unrelated data so we just make sure the
           # types are as expected
           assert p['samplesCount'].is_a?(Integer)
           assert p['diskUsage'].is_a?(String)
-          assert p['membersCount'].is_a?(Integer)
         end
       end
       proj_after = page['pageInfo']['endCursor']
@@ -427,15 +409,12 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
           group_record = extra_group.reload
           assert g['samplesCount'].is_a?(Integer)
           assert g['diskUsage'].is_a?(String)
-          assert g['membersCount'].is_a?(Integer)
           assert_equal 0, g['samplesCount']
           expected_group_disk = calculate_disk_usage(group_record)
           assert_equal expected_group_disk, g['diskUsage']
-          assert_equal 4, g['membersCount']
         else
           assert g['samplesCount'].is_a?(Integer)
           assert g['diskUsage'].is_a?(String)
-          assert g['membersCount'].is_a?(Integer)
         end
       end
 
@@ -507,9 +486,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     ).count
     assert_equal expected_user_samples, user_node['samplesCount']
 
-    assert user_node['membersCount'].is_a?(Integer)
-    assert_equal 1, user_node['membersCount'], 'only the owner should be counted as a member for the project'
-
     expected_user_disk = calculate_disk_usage(user_ns)
     assert_equal expected_user_disk, user_node['diskUsage']
 
@@ -519,7 +495,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       # projects expose metrics fields directly now
       assert p['samplesCount'].is_a?(Integer)
       assert p['diskUsage'].is_a?(String)
-      assert p['membersCount'].is_a?(Integer)
 
       next unless p['name'] == user_proj.name
 
@@ -527,7 +502,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       assert_equal project_record.samples_count.to_i, p['samplesCount']
       expected_proj_disk = calculate_disk_usage(project_record)
       assert_equal expected_proj_disk, p['diskUsage']
-      assert_equal 1, p['membersCount']
     end
   end
 
@@ -661,11 +635,9 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert_equal @group.name, group_node['name'], 'should return the correct group based on PUID'
     assert group_node['samplesCount'].is_a?(Integer)
     assert group_node['diskUsage'].is_a?(String)
-    assert group_node['membersCount'].is_a?(Integer)
     assert_equal @group.reload.aggregated_samples_count, group_node['samplesCount']
     expected_group_disk = calculate_disk_usage(@group)
     assert_equal expected_group_disk, group_node['diskUsage']
-    assert_equal 1, group_node['membersCount']
   end
 
   test 'get group namespace metrics by full path' do
@@ -682,11 +654,9 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert_equal @group.name, group_node['name'], 'should return the correct group based on full path'
     assert group_node['samplesCount'].is_a?(Integer)
     assert group_node['diskUsage'].is_a?(String)
-    assert group_node['membersCount'].is_a?(Integer)
     assert_equal @group.reload.aggregated_samples_count, group_node['samplesCount']
     expected_group_disk = calculate_disk_usage(@group)
     assert_equal expected_group_disk, group_node['diskUsage']
-    assert_equal 1, group_node['membersCount']
   end
 
   test 'get user namespace metrics by PUID' do
@@ -703,11 +673,9 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert_equal @non_sys_user.email, user_node['name'], 'should return the correct user based on PUID'
     assert user_node['samplesCount'].is_a?(Integer)
     assert user_node['diskUsage'].is_a?(String)
-    assert user_node['membersCount'].is_a?(Integer)
     assert_equal 1, user_node['samplesCount']
     expected_user_disk = calculate_disk_usage(@non_sys_user.namespace)
     assert_equal expected_user_disk, user_node['diskUsage']
-    assert_equal 1, user_node['membersCount']
     assert_equal 2, user_node['projectsCount']
   end
 
@@ -725,11 +693,9 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     assert_equal @non_sys_user.email, user_node['name'], 'should return the correct user based on PUID'
     assert user_node['samplesCount'].is_a?(Integer)
     assert user_node['diskUsage'].is_a?(String)
-    assert user_node['membersCount'].is_a?(Integer)
     assert_equal 1, user_node['samplesCount']
     expected_user_disk = calculate_disk_usage(@non_sys_user.namespace)
     assert_equal expected_user_disk, user_node['diskUsage']
-    assert_equal 1, user_node['membersCount']
     assert_equal 2, user_node['projectsCount']
   end
 
@@ -761,7 +727,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     expected_disk_usage = calculate_disk_usage(@group, direct_only: true)
     assert_equal expected_disk_usage, metrics_group_node['diskUsage'],
                  'diskUsage with directOnly should sum attachment byte sizes for direct projects and samples only'
-    assert_equal 1, metrics_group_node['membersCount'], 'only jane_doe was added to the group'
   end
 
   private

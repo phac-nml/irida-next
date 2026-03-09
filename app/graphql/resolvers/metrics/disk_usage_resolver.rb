@@ -42,7 +42,7 @@ module Resolvers
                              workflow_execution: {
                                namespace_id: ns_ids
                              }
-                           ))
+                           )).select(:id)
         ).where(
           Arel.sql(
             'attachments.id in (select id from namespace_attachments)

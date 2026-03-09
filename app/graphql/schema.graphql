@@ -1321,7 +1321,8 @@ type GroupMetricsType implements NamespaceMetrics & Node {
   createdAt: ISO8601DateTime!
 
   """
-  Subgroups within this group namespace. This field is only applicable for group namespaces.
+  Subgroups within this group namespace. This field is only available within this type and not
+              for the parent type.
   """
   descendantGroups(
     """
@@ -1354,11 +1355,6 @@ type GroupMetricsType implements NamespaceMetrics & Node {
   ID of the object.
   """
   id: ID!
-
-  """
-  Total number of members in the group, subgroups, and/or projects.
-  """
-  membersCount: Int!
 
   """
   Total number of samples in group projects or user project.
@@ -1643,11 +1639,6 @@ interface NamespaceMetrics {
   Disk usage (bytes) of the group projects or user projects.
   """
   diskUsage: String!
-
-  """
-  Total number of members in the group, subgroups, and/or projects.
-  """
-  membersCount: Int!
 
   """
   Total number of samples in group projects or user project.
@@ -2184,12 +2175,7 @@ type ProjectMetricsType implements NamespaceMetrics & Node {
   id: ID!
 
   """
-  Total number of members in the group, subgroups, and/or projects.
-  """
-  membersCount: Int!
-
-  """
-  Name of the namespace.
+  Name of the project.
   """
   name: String!
 
@@ -2199,8 +2185,8 @@ type ProjectMetricsType implements NamespaceMetrics & Node {
   parent: String
 
   """
-  Persistent Unique Identifier of the namespace. For example for a group,
-                                    `INXT_GRP_AAAAAAAAAA`.
+  Persistent Unique Identifier of the project, in the format
+                                    `INXT_PRJ_AAAAAAAAAA`.
   """
   puid: ID!
 
@@ -2208,11 +2194,6 @@ type ProjectMetricsType implements NamespaceMetrics & Node {
   Total number of samples in group projects or user project.
   """
   samplesCount: Int!
-
-  """
-  Type of the namespace
-  """
-  type: String!
 
   """
   Datetime of last update.
@@ -3028,11 +3009,6 @@ type UserNamespaceMetricsType implements NamespaceMetrics & Node {
   ID of the object.
   """
   id: ID!
-
-  """
-  Total number of members in the group, subgroups, and/or projects.
-  """
-  membersCount: Int!
 
   """
   Total number of samples in group projects or user project.

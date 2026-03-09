@@ -10,16 +10,15 @@ module Types
       graphql_name 'ProjectMetricsType'
       description 'Project to get metrics for'
 
-      field :name, String, null: false, description: 'Name of the namespace.'
+      field :name, String, null: false, description: 'Name of the project.'
       field :puid, ID, null: false,
-                       description: 'Persistent Unique Identifier of the namespace. For example for a group,
-                                  `INXT_GRP_AAAAAAAAAA`.'
-      field :type, String, null: false, description: 'Type of the namespace'
+                       description: 'Persistent Unique Identifier of the project, in the format
+                                  `INXT_PRJ_AAAAAAAAAA`.'
 
       field :parent, String, null: true, description: 'Parent namespace of this namespace'
 
       def self.authorized?(object, context)
-        super && context[:system_user]
+        super && context[:current_user]&.system?
       end
     end
   end

@@ -15,9 +15,5 @@ module Types
     field :disk_usage, String, null: false,
                                description: 'Disk usage (bytes) of the group projects or user projects.',
                                resolver: Resolvers::Metrics::DiskUsageResolver
-
-    field :members_count, Integer, null: false,
-                                   description: 'Total number of members in the group, subgroups, and/or projects.',
-                                   resolver: Resolvers::Metrics::MembersCountResolver
   end
 end
