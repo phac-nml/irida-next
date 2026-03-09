@@ -15,7 +15,18 @@ module WorkflowExecutions
       @samplesheet_rows = []
     end
 
-    def execute # rubocop:disable Metrics/MethodLength
+    def execute_copy_step(cursor_index_start) # rubocop:disable Lint/UnusedMethodArgument
+      @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
+        attachments = parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params)
+
+        # TODO: cursor this
+        attachments.each do |key, attachment| # rubocop:disable Lint/UnusedBlockArgument,Style/HashEachMethods
+          copy_attachment_to_run_dir(attachment, sample_workflow_execution)
+        end
+      end
+    end
+
+    def execute_processing_step # rubocop:disable Metrics/MethodLength
       process_samples_workflow_executions
 
       # persist samplesheet in run dir
@@ -64,10 +75,10 @@ module WorkflowExecutions
       # execution being run simultaneously.
       @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
         attachments = parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params)
-        samplesheet_params = sample_workflow_execution.samplesheet_params
+        samplesheet_params = sample_workflow_execution.samplesheet_params.clone
 
         attachments.each do |key, attachment|
-          samplesheet_params[key] = copy_attachment_to_run_dir(attachment, sample_workflow_execution)
+          samplesheet_params[key] = generate_blob_key(attachment)
         end
 
         @samplesheet_rows << @samplesheet_headers.map { |header| samplesheet_params[header] }
@@ -75,19 +86,26 @@ module WorkflowExecutions
     end
 
     def copy_attachment_to_run_dir(attachment, attachable)
-      key = generate_input_key(
+      key = generate_attachment_key(attachment)
+      blob = compose_blob_with_custom_key(attachment.file, key)
+
+      attachable.inputs.attach(blob.signed_id)
+
+      blob_key_to_service_path(blob.key)
+    end
+
+    def generate_blob_key(attachment)
+      blob_key_to_service_path(generate_attachment_key(attachment))
+    end
+
+    def generate_attachment_key(attachment)
+      generate_input_key(
         run_dir: @workflow_execution.blob_run_directory,
         filename: attachment.filename,
         prefix: format('input/%<attachable_type>s_%<attachable_id>s/',
                        attachable_type: attachment.attachable_type,
                        attachable_id: attachment.attachable_id)
       )
-
-      blob = compose_blob_with_custom_key(attachment.file, key)
-
-      attachable.inputs.attach(blob.signed_id)
-
-      blob_key_to_service_path(blob.key)
     end
 
     def samplesheet_file

@@ -115,7 +115,21 @@ class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
     assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
     assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
 
-    assert_difference -> { ActiveStorage::Attachment.count } => 2 do
+    assert_difference -> { ActiveStorage::Attachment.count } => 1 do
+      interrupt_job_after_step(WorkflowExecutionPreparationJob, :copy_attachments_to_run_dir) do
+        perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+      end
+    end
+    @workflow_execution.reload
+
+    assert @workflow_execution.initial?
+    assert_equal 0, @workflow_execution.inputs.size
+    assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
+    assert_performed_jobs(2, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
+    assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
+
+    assert_difference -> { ActiveStorage::Attachment.count } => 1 do
       interrupt_job_after_step(WorkflowExecutionPreparationJob, :build_samplesheet) do
         perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
       end
@@ -125,7 +139,7 @@ class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
     assert @workflow_execution.initial?
     assert_equal 1, @workflow_execution.inputs.size
     assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
-    assert_performed_jobs(2, only: WorkflowExecutionPreparationJob)
+    assert_performed_jobs(3, only: WorkflowExecutionPreparationJob)
     assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
     assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
 
@@ -137,7 +151,7 @@ class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
     assert_equal 'prepared', @workflow_execution.state
     assert_equal 1, @workflow_execution.inputs.size
     assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
-    assert_performed_jobs(3, only: WorkflowExecutionPreparationJob)
+    assert_performed_jobs(4, only: WorkflowExecutionPreparationJob)
     assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob)
     assert_enqueued_jobs(0, only: WorkflowExecutionSubmissionJob)
 
@@ -147,7 +161,7 @@ class WorkflowExecutionPreparationJobTest < ActiveJob::TestCase
     assert_equal 'prepared', @workflow_execution.state
     assert_equal 1, @workflow_execution.inputs.size
     assert_equal 1, @workflow_execution.samples_workflow_executions.first.inputs.size
-    assert_performed_jobs(4, only: WorkflowExecutionPreparationJob)
+    assert_performed_jobs(5, only: WorkflowExecutionPreparationJob)
     assert_enqueued_jobs(0, only: WorkflowExecutionPreparationJob)
     assert_enqueued_jobs(1, only: WorkflowExecutionSubmissionJob)
   end
