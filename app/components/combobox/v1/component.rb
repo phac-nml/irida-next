@@ -29,7 +29,6 @@ module Combobox
           args[:aria][:controls] = @listbox_id
           args[:data] ||= {}
           args[:data][:'v1--combobox-target'] = 'combobox'
-          args[:style] = "anchor-name: --anchor-#{@listbox_id};"
         end
       end
 
