@@ -7,17 +7,25 @@ module Resolvers
       type String, null: false
       include ActionView::Helpers::NumberHelper
 
-      def resolve
+      argument :direct_only, GraphQL::Types::Boolean,
+               required: false,
+               description: 'Whether to only include disk usage for the projects, samples,
+               and workflow executions that directly belong to this namespace. Only need to provide this argument
+               if you only want to include direct projects for a group namespace,as user namespaces only have
+                direct projects.',
+               default_value: false
+
+      def resolve(direct_only:)
         namespace = object.is_a?(Project) ? object.namespace : object
 
-        number_to_human_size(calculate_disk_usage(namespace), precision: 2, significant: false,
-                                                              strip_insignificant_zeros: false)
+        number_to_human_size(calculate_disk_usage(namespace, direct_only), precision: 2, significant: false,
+                                                                           strip_insignificant_zeros: false)
       end
 
       private
 
-      def calculate_disk_usage(namespace) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-        ns_ids = if context[:direct_only] && !namespace.project_namespace?
+      def calculate_disk_usage(namespace, direct_only) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        ns_ids = if direct_only && !namespace.project_namespace?
                    [namespace.id] + namespace.project_namespaces.pluck(:id)
                  else
                    namespace.self_and_descendants_of_type(

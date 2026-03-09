@@ -58,19 +58,19 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
   NAMESPACE_METRICS_DIRECT_QUERY = <<~GRAPHQL
     query($namespaceType: [String!], $first: Int, $directOnly: Boolean) {
-      namespaceMetrics(first: $first, namespaceType: $namespaceType, directOnly: $directOnly) {
+      namespaceMetrics(first: $first, namespaceType: $namespaceType) {
         nodes {
           name
           puid
           type
-          samplesCount
-          diskUsage
-          projectsCount
+          samplesCount(directOnly: $directOnly)
+          diskUsage(directOnly: $directOnly)
+          projectsCount(directOnly: $directOnly)
           ... on GroupMetricsType {
-            projectsCount
+            projectsCount(directOnly: $directOnly)
           }
           ... on UserNamespaceMetricsType {
-            projectsCount
+            projectsCount(directOnly: $directOnly)
           }
         }
       }

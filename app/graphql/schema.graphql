@@ -1349,7 +1349,15 @@ type GroupMetricsType implements NamespaceMetrics & Node {
   """
   Disk usage (bytes) of the group projects or user projects.
   """
-  diskUsage: String!
+  diskUsage(
+    """
+    Whether to only include disk usage for the projects, samples,
+                   and workflow executions that directly belong to this namespace. Only need to provide this argument
+                   if you only want to include direct projects for a group namespace,as user namespaces only have
+                    direct projects.
+    """
+    directOnly: Boolean = false
+  ): String!
 
   """
   ID of the object.
@@ -1359,7 +1367,12 @@ type GroupMetricsType implements NamespaceMetrics & Node {
   """
   Total number of samples in group projects or user project.
   """
-  samplesCount: Int!
+  samplesCount(
+    """
+    Whether to only include samples from projects that directly belong to this namespace.
+    """
+    directOnly: Boolean = false
+  ): Int!
 
   """
   Datetime of last update.
@@ -1638,12 +1651,25 @@ interface NamespaceMetrics {
   """
   Disk usage (bytes) of the group projects or user projects.
   """
-  diskUsage: String!
+  diskUsage(
+    """
+    Whether to only include disk usage for the projects, samples,
+                   and workflow executions that directly belong to this namespace. Only need to provide this argument
+                   if you only want to include direct projects for a group namespace,as user namespaces only have
+                    direct projects.
+    """
+    directOnly: Boolean = false
+  ): String!
 
   """
   Total number of samples in group projects or user project.
   """
-  samplesCount: Int!
+  samplesCount(
+    """
+    Whether to only include samples from projects that directly belong to this namespace.
+    """
+    directOnly: Boolean = false
+  ): Int!
 }
 
 """
@@ -2167,7 +2193,15 @@ type ProjectMetricsType implements NamespaceMetrics & Node {
   """
   Disk usage (bytes) of the group projects or user projects.
   """
-  diskUsage: String!
+  diskUsage(
+    """
+    Whether to only include disk usage for the projects, samples,
+                   and workflow executions that directly belong to this namespace. Only need to provide this argument
+                   if you only want to include direct projects for a group namespace,as user namespaces only have
+                    direct projects.
+    """
+    directOnly: Boolean = false
+  ): String!
 
   """
   ID of the object.
@@ -2193,7 +2227,12 @@ type ProjectMetricsType implements NamespaceMetrics & Node {
   """
   Total number of samples in group projects or user project.
   """
-  samplesCount: Int!
+  samplesCount(
+    """
+    Whether to only include samples from projects that directly belong to this namespace.
+    """
+    directOnly: Boolean = false
+  ): Int!
 
   """
   Datetime of last update.
@@ -3003,7 +3042,15 @@ type UserNamespaceMetricsType implements NamespaceMetrics & Node {
   """
   Disk usage (bytes) of the group projects or user projects.
   """
-  diskUsage: String!
+  diskUsage(
+    """
+    Whether to only include disk usage for the projects, samples,
+                   and workflow executions that directly belong to this namespace. Only need to provide this argument
+                   if you only want to include direct projects for a group namespace,as user namespaces only have
+                    direct projects.
+    """
+    directOnly: Boolean = false
+  ): String!
 
   """
   ID of the object.
@@ -3013,7 +3060,12 @@ type UserNamespaceMetricsType implements NamespaceMetrics & Node {
   """
   Total number of samples in group projects or user project.
   """
-  samplesCount: Int!
+  samplesCount(
+    """
+    Whether to only include samples from projects that directly belong to this namespace.
+    """
+    directOnly: Boolean = false
+  ): Int!
 
   """
   Datetime of last update.

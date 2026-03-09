@@ -29,17 +29,8 @@ module Resolvers
                            For example a group namespace, `INXT_GRP_GGGGGGGGGG.`',
                default_value: nil
 
-      argument :direct_only, GraphQL::Types::Boolean,
-               required: false,
-               description: 'Whether to return only direct records for the object.
-                           For example, if true, it will return only direct records for a namespace,
-                           but not records for subgroups.',
-               default_value: false
-
-      def resolve(namespace_type:, top_level_only:, full_path:, puid:, direct_only:) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      def resolve(namespace_type:, top_level_only:, full_path:, puid:) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
         context.scoped_set!(:system_user, true) if context[:current_user]&.system?
-
-        context.scoped_set!(:direct_only, true) if direct_only
 
         # Top level Project namespaces are not currently supported for metrics
         # so we remove from the list of namespace types
