@@ -117,38 +117,17 @@ export default class extends Controller {
   #selectedSamples;
   #chunkedSelectedSamples;
 
-  #receivedSampleDataCounter = 0;
+  #receivedSampleAttributesCounter = 0;
 
   connect() {
     this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
   }
 
-  async sampleAttributesTargetConnected() {
-    this.#receivedSampleDataCounter++;
-    if (
-      this.#receivedSampleDataCounter === this.#chunkedSelectedSamples.length
-    ) {
-      await this.#processSamplesheetAttributes();
-      await this.#processFileAttributes();
-
-      this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
-
-      if (this.#allSampleIds.length !== this.#selectedSamples.length) {
-        this.samplesheetSpinnerTarget.remove();
-        this.#enableErrorState(this.processingErrorValue);
-      } else {
-        // remove node after retrieving data
-        // this.sampleAttributesTarget.remove();
-        this.#processSamplesheet();
-      }
-    }
-  }
-
   #processSamplesheetAttributes() {
     return new Promise((resolve) => {
-      this.sampleAttributesTargets.forEach((sampleAttributeTarget) => {
-        const dataAttributes = sampleAttributeTarget.dataset;
+      this.sampleAttributesTargets.forEach((sampleAttributesTarget) => {
+        const dataAttributes = sampleAttributesTarget.dataset;
         const sampleAttributes = JSON.parse(
           dataAttributes.sampleAttributes || "{}",
         );
@@ -161,7 +140,7 @@ export default class extends Controller {
         if (this.#allowedToUpdateSamples && !allowedToUpdateSamples) {
           this.#allowedToUpdateSamples = false;
         }
-        sampleAttributeTarget.remove();
+        sampleAttributesTarget.remove();
       });
 
       resolve();
@@ -959,11 +938,15 @@ export default class extends Controller {
     this.#samplesheetProperties =
       this.samplesheetPropertiesTarget.dataset.properties;
 
+    // to prevent browser timeouts on large (10k+) sample requests, samples will be chunked and batched into
+    // 1000 sample requests
     this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
     this.#chunkedSelectedSamples = this.chunkSamples();
     this.#submitSamplesheetParams();
   }
 
+  // example: a 3000 sample request will be chunked into:
+  // [[sample0...sample999], [sample1000...sample1999], [sample2000...sample2999]]
   chunkSamples() {
     const chunkSize = 1000;
     const chunkedArray = [];
@@ -987,6 +970,7 @@ export default class extends Controller {
   }
 
   #submitSamplesheetParams() {
+    // a separate form is created for each sample chunk, and a fetch request is made to retrieve the sample data
     for (let i = 0; i < this.#chunkedSelectedSamples.length; i++) {
       const formFragment =
         this.samplesheetParamsFormTemplateTarget.content.cloneNode(true);
@@ -1001,20 +985,14 @@ export default class extends Controller {
       const form = this.element.lastElementChild;
       form.appendChild(fragment);
 
-      form.addEventListener("submit", async () => {
-        const formData = new FormData(this.samplesheetParamsFormTarget);
-        fetch(this.samplesheetParamsFormTarget.getAttribute("data-fetch-url"), {
-          credentials: "same-origin",
-          method: "POST",
-          body: JSON.stringify(this.#toJson(formData, i)),
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "text/vnd.turbo-stream.html",
-          },
-        })
-          .then((r) => r.text())
-          .then((html) => Turbo.renderStreamMessage(html));
-      });
+      form.addEventListener(
+        "submit",
+        (event) => {
+          event.preventDefault();
+          this.#sampleAttributesFetch(form, i);
+        },
+        { once: true },
+      );
       form.requestSubmit();
       form.remove();
     }
@@ -1022,6 +1000,42 @@ export default class extends Controller {
     this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
     // // clear the now unnecessary DOM element
     this.samplesheetPropertiesTarget.remove();
+  }
+
+  #sampleAttributesFetch(form, index) {
+    const formData = new FormData(form);
+    fetch(form.getAttribute("data-fetch-url"), {
+      credentials: "same-origin",
+      method: "POST",
+      body: JSON.stringify(this.#toJson(formData, index)),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "text/vnd.turbo-stream.html",
+      },
+    })
+      .then((r) => r.text())
+      .then((html) => Turbo.renderStreamMessage(html));
+  }
+
+  async sampleAttributesTargetConnected() {
+    // keep count of each sample retrieval until the expected number of requests have processed
+    this.#receivedSampleAttributesCounter++;
+    if (
+      this.#receivedSampleAttributesCounter ===
+      this.#chunkedSelectedSamples.length
+    ) {
+      await this.#processSamplesheetAttributes();
+      await this.#processFileAttributes();
+
+      this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
+
+      if (this.#allSampleIds.length !== this.#selectedSamples.length) {
+        this.samplesheetSpinnerTarget.remove();
+        this.#enableErrorState(this.processingErrorValue);
+      } else {
+        this.#processSamplesheet();
+      }
+    }
   }
 
   dataPayloadTargetConnected() {
