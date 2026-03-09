@@ -98,7 +98,7 @@
     ) { t("components.advanced_search_component.apply_filter_button") } %>
 
     <% dialog.with_secondary_action do %>
-      <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
+      <%= viral_button(data: { action: "advanced-search#clearForm viral--dialog#close filters#submit" }) do %>
         <%= t("components.advanced_search_component.clear_filter_button") %>
       <% end %>
     <% end %>
