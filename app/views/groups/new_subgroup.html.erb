@@ -8,7 +8,7 @@
   if Flipper.enabled?(:v2_select2)
     { controller: "viral--v2--select2" }
   else
-    { controller: "viral--select2" }
+    { controller: "viral--v1--select2" }
   end, html: { novalidate: true }) do |form| %>
     <div class="grid gap-4">
       <%= if @new_group.errors.any?
