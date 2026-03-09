@@ -2,7 +2,7 @@
 if Flipper.enabled?(:v2_select2)
     { controller: "viral--v2--select2" }
   else
-    { controller: "viral--select2" }
+    { controller: "viral--v1--select2" }
   end) do |form| %>
   <label for="unique_id">Select User</label>
 
@@ -30,6 +30,6 @@ if Flipper.enabled?(:v2_select2)
               if Flipper.enabled?(:v2_select2)
                 { "viral--v2--select2-target": "submitButton" }
               else
-                { "viral--select2-target": "submitButton" }
+                { "viral--v1--select2-target": "submitButton" }
               end %>
 <% end %>

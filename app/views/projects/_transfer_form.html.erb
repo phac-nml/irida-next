@@ -3,7 +3,7 @@
               if Flipper.enabled?(:v2_select2)
                 { turbo_confirm: "", controller: "viral--v2--select2" }
               else
-                { turbo_confirm: "", controller: "viral--select2" }
+                { turbo_confirm: "", controller: "viral--v1--select2" }
               end) do |form| %>
   <div class="mb-2"><%= render partial: "shared/form/required_field_legend" %></div>
 
@@ -64,7 +64,7 @@
                   turbo_content: ".confirm-transfer",
                   confirm_value: @project.name,
                 } else {
-                  "viral--select2-target": "submitButton",
+                  "viral--v1--select2-target": "submitButton",
                   turbo_content: ".confirm-transfer",
                   confirm_value: @project.name,
                 }

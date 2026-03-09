@@ -11,7 +11,7 @@
 if Flipper.enabled?(:v2_select2)
     { remote: true, controller: "viral--v2--select2" }
   else
-    { remote: true, controller: "viral--select2" }
+    { remote: true, controller: "viral--v1--select2" }
   end, html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= if new_group_link.errors.any?
@@ -131,7 +131,7 @@ if Flipper.enabled?(:v2_select2)
                     if Flipper.enabled?(:v2_select2)
                       { "viral--v2--select2-target": "submitButton" }
                     else
-                      { "viral--select2-target": "submitButton" }
+                      { "viral--v1--select2-target": "submitButton" }
                     end %>
 
       <button type="button" class="button button-default" data-action="click->viral--dialog#close">
