@@ -9,10 +9,10 @@ class SessionsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t(:'devise.layout.title'), count: 1
 
     within %(div[class="grid gap-2"]) do
-      click_link I18n.t(:'devise.sessions.new_with_providers.local_button')
+      click_link I18n.t(:'devise.sessions.new.local_button')
     end
 
-    assert_text I18n.t(:'devise.sessions.new_with_providers.return_button')
+    assert_text I18n.t(:'devise.sessions.new.return_button')
     assert_current_path '/users/sign_in?local=true'
   end
 
@@ -24,7 +24,7 @@ class SessionsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t(:'devise.layout.title'), count: 1
 
     within %(div[class="grid gap-2"]) do
-      click_link I18n.t(:'devise.sessions.new_with_providers.local_button')
+      click_link I18n.t(:'devise.sessions.new.local_button')
     end
 
     within %(form[action="/users/sign_in"]) do
