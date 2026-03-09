@@ -16,8 +16,15 @@ module Types
 
     field :group, Types::GroupType, null: true, authorize: { to: :read? }, resolver: Resolvers::GroupResolver,
                                     description: 'Find a group.'
+
     field :groups, Types::GroupType.connection_type, null: false, resolver: Resolvers::GroupsResolver,
                                                      description: 'Find groups.'
+
+    field :namespace_metrics, Types::Metrics::NamespaceWithMetricsType.connection_type,
+          null: false,
+          resolver: Resolvers::Metrics::NamespacesResolver,
+          description: 'Find namespaces for metrics. By default, it returns all group and user namespaces.
+                        You can filter by namespace type (Group or User), full path, or puid.'
 
     field :namespace, Types::NamespaceType, null: true, authorize: { to: :read? },
                                             resolver: Resolvers::NamespaceResolver,
