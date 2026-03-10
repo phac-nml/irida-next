@@ -502,12 +502,12 @@ fr:
       title: Analyser les exportations
     new_linelist_export_dialog:
       available: Disponible
-      close_progress: Fermer la progression de l’exportation
-      created_records: Créé %{current} sur %{total} enregistrements
-      download_started: 'Téléchargement démarré : %{filename}'
       available_description: Champs de métadonnées qui ne seront pas inclus dans l’exportation.
       available_list_title: Non inclus dans l’exportation
+      close_progress: Fermer la progression de l’exportation
+      created_records: Créé %{current} sur %{total} enregistrements
       csv: ".csv"
+      download_started: 'Téléchargement démarré : %{filename}'
       fields_instructions: Sélectionnez un ou plusieurs champs de métadonnées, puis utilisez les boutons d’action pour déplacer les champs entre les listes. L’ordre de la liste sélectionnée détermine l’ordre des colonnes de l’exportation.
       fields_instructions_title: Fonctionnement des listes
       format: Format
@@ -518,9 +518,9 @@ fr:
       preparing_rows: Préparation de %{count} lignes
       selected: Sélectionné
       selected_count: 'Échantillons sélectionnés : %{count}'
-      start_error: 'Impossible de démarrer l’exportation : %{message}'
       selected_description: Champs de métadonnées inclus dans l’exportation. Réorganisez cette liste pour contrôler l’ordre des colonnes.
       selected_list_title: Inclus dans l’exportation
+      start_error: 'Impossible de démarrer l’exportation : %{message}'
       title: Exportation de liste détaillée
       unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
       xlsx: ".xlsx"

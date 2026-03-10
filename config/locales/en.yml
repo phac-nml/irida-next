@@ -502,12 +502,12 @@ en:
       title: Analysis Export
     new_linelist_export_dialog:
       available: Available
-      close_progress: Close export progress
-      created_records: Created %{current} of %{total} records
-      download_started: 'Download started: %{filename}'
       available_description: Metadata fields that will not be included in the export.
       available_list_title: Not in export
+      close_progress: Close export progress
+      created_records: Created %{current} of %{total} records
       csv: ".csv"
+      download_started: 'Download started: %{filename}'
       fields_instructions: Select one or more metadata fields, then use the action buttons to move fields between lists. The ordering of the selected list determines export column order.
       fields_instructions_title: How the lists work
       format: Format
@@ -518,9 +518,9 @@ en:
       preparing_rows: Preparing %{count} rows
       selected: Selected
       selected_count: 'Selected samples: %{count}'
-      start_error: 'Unable to start export: %{message}'
       selected_description: Metadata fields included in the export. Reorder this list to control column order.
       selected_list_title: In export
+      start_error: 'Unable to start export: %{message}'
       title: Linelist Export
       unexpected_error: 'Unexpected error while generating export: %{message}'
       xlsx: ".xlsx"
