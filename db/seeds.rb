@@ -13,7 +13,7 @@ Flipper.enable(:cancel_multiple_workflows)
 Flipper.enable(:advanced_search_with_auto_complete)
 Flipper.enable(:workflow_execution_advanced_search)
 Flipper.enable(:wes_extended_metadata)
-Flipper.enable(:deferred_samplesheet)
+Flipper.enable(:v2_samplesheet)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 

@@ -273,7 +273,7 @@ fr:
         filter:
           clear: Effacer les données de recherche
           placeholder: Rechercher par PUID ou nom
-        label: Échantillons
+        label: Échantillons (%{sample_count})
         next: Suivant
         page_selection:
           aria_label: Sélecteur de page de pagination

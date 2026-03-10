@@ -1,0 +1,257 @@
+<div id="samplesheet">
+  <%= helpers.turbo_frame_tag "sample_attributes" %>
+
+  <div
+    class="hidden"
+    data-nextflow--v2--samplesheet-target="samplesheetProperties"
+    data-properties="<%= @properties.to_json %>"
+  ></div>
+
+  <div class="mb-2 flex justify-between @max-2xl:flex-col">
+    <label class="mt-auto text-sm font-medium text-slate-900 dark:text-white">
+      <%= t("components.nextflow.samplesheet_component.label", sample_count: ) %>
+    </label>
+
+    <div class="relative">
+      <label class="sr-only" for="samplesheet-filter">
+        <%= t("components.nextflow.samplesheet_component.filter.placeholder") %>
+      </label>
+
+      <input
+        id="samplesheet-filter"
+        data-nextflow--v2--samplesheet-target="filter"
+        data-action="keydown.enter->nextflow--v2--samplesheet#filter"
+        type="search"
+        placeholder="<%= t('components.nextflow.samplesheet_component.filter.placeholder') %>"
+        class="
+          t-search-component block h-full w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 pr-11.5
+          text-sm text-slate-900 placeholder-shown:field-sizing-content dark:border-slate-600 dark:bg-slate-700
+          dark:text-white dark:placeholder-slate-300
+        "
+        autocomplete="off"
+      >
+
+      <!--
+  Clear button (shown only when there are existing search results)
+-->
+      <button
+        data-nextflow--v2--samplesheet-target="filterClearButton"
+        data-action="click->nextflow--v2--samplesheet#clearFilter"
+        type="button"
+        class="
+          pointer-events-auto absolute inset-y-0 right-0 flex hidden w-12 cursor-pointer items-center justify-center
+          rounded-r-lg border-t border-r border-b border-slate-300 transition-colors hover:bg-slate-100
+          dark:border-slate-600 dark:hover:bg-slate-600
+        "
+        aria-label="<%= t('components.nextflow.samplesheet_component.filter.clear') %>"
+      >
+        <%= pathogen_icon(:x, size: :sm, color: :subdued) %>
+      </button>
+
+      <!-- Submit/search button (hidden while clear button is active) -->
+      <button
+        data-nextflow--v2--samplesheet-target="filterSearchButton"
+        data-action="click->nextflow--v2--samplesheet#filter"
+        type="button"
+        class="
+          pointer-events-auto absolute inset-y-0 right-0 flex w-12 cursor-pointer items-center justify-center
+          rounded-r-lg border-t border-r border-b border-slate-300 transition-colors hover:bg-slate-100
+          dark:border-slate-600 dark:hover:bg-slate-600
+        "
+        aria-label="<%= t('common.controls.search') %>"
+      >
+        <%= pathogen_icon(:magnifying_glass, size: :sm, color: :subdued) %>
+      </button>
+    </div>
+  </div>
+
+  <div
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+    data-nextflow--v2--samplesheet-target="error"
+    class="
+      alert-component mb-2 hidden border-red-300 bg-red-50 text-red-800 dark:border-red-800/50 dark:bg-red-900/20
+      dark:text-red-400
+    "
+  >
+    <div class="flex w-full items-start">
+      <div class="mr-3 flex-shrink-0"><%= pathogen_icon :x_circle, color: :danger %></div>
+
+      <div class="mt-0.5 min-w-0 flex-1">
+        <div class="text-sm leading-5 font-medium" data-nextflow--v2--samplesheet-target="errorMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-2 @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink">
+    <div class="relative overflow-x-auto">
+      <table
+        data-test-selector="samplesheet-table"
+        class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
+        data-controller="table"
+        data-action="focusin->table#handleCellFocus"
+      >
+        <thead class="z-10 text-xs uppercase @2xl:sticky @2xl:top-0">
+          <tr>
+            <% properties.each do |header, property| %>
+              <%= render Nextflow::V2::Samplesheet::HeaderComponent.new(
+                namespace_id:,
+                header:,
+                property:,
+                metadata_fields:,
+                required_properties:,
+                workflow_params:,
+              ) %>
+            <% end %>
+          </tr>
+        </thead>
+
+        <tbody data-nextflow--v2--samplesheet-target="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div data-nextflow--v2--samplesheet-target="emptyState" class="hidden">
+    <%= render Viral::EmptyStateComponent.new(
+      icon_name: :magnifying_glass,
+      title: t("components.viral.pagy.empty_state.title"),
+      description: t("components.viral.pagy.empty_state.description"),
+    ) %>
+  </div>
+
+  <div data-nextflow--v2--samplesheet-target="paginationContainer" class="flex items-center justify-end"></div>
+  <%= helpers.turbo_frame_tag "samplesheet-payload-container" %>
+</div>
+
+<template data-nextflow--v2--samplesheet-target="trTemplate">
+  <tr class="border-b border-slate-200 bg-white text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"></tr>
+</template>
+
+<template data-nextflow--v2--samplesheet-target="thTemplate">
+  <th class="table-td border border-slate-100 font-medium dark:border-slate-600"></th>
+</template>
+
+<template data-nextflow--v2--samplesheet-target="tdTemplate">
+  <td class="table-td border border-slate-100 dark:border-slate-600"></td>
+</template>
+
+<template data-nextflow--v2--samplesheet-target="sampleIdentifierTemplate">
+  <div class="p-2.5"></div>
+</template>
+
+<template data-nextflow--v2--samplesheet-target="dropdownTemplate">
+  <select
+    class="
+      w-full cursor-pointer border-none bg-slate-50 p-2.5 text-sm text-inherit dark:border-none dark:bg-slate-700
+      dark:placeholder-slate-400
+    "
+    data-action="
+      change->nextflow--v2--samplesheet#updateEditableSamplesheetData
+    "
+  >
+    <option value="" label=" "></option>
+  </select>
+</template>
+
+<template data-nextflow--v2--samplesheet-target="fileTemplate">
+  <a
+    href="#"
+    data-base-path="/-/workflow_executions/file_selector/new"
+    data-turbo-stream="true"
+    data-namespace-id="<%= @namespace_id %>"
+    class="
+      block cursor-pointer border-2 border-transparent bg-inherit p-2 text-sm text-inherit
+      focus-visible:-outline-offset-2!
+    "
+  ></a>
+</template>
+
+<template data-nextflow--v2--samplesheet-target="metadataTemplate">
+  <div class="p-2.5 text-nowrap"><span class="inline-block h-3.5"></span></div>
+</template>
+
+<template data-nextflow--v2--samplesheet-target="textInputTemplate">
+  <label class="sr-only"></label>
+
+  <input
+    class="
+      block w-full border-2 border-transparent bg-inherit p-2 text-sm text-inherit focus-visible:relative
+      focus-visible:z-15 focus-visible:-outline-offset-2!
+    "
+    data-action="
+      change->nextflow--v2--samplesheet#updateEditableSamplesheetData
+    "
+    type="text"
+    autocomplete="off"
+  >
+</template>
+
+<template data-nextflow--v2--samplesheet-target="paginationTemplate">
+  <nav aria-label="<%= t("components.viral.pagy.pagination_component.aria_label") %>">
+    <ul class="inline-flex h-10 text-base">
+      <li>
+        <button
+          type="button"
+          class="
+            cursor ms-0 flex h-10 cursor-pointer items-center justify-center rounded-s-lg border border-e-0
+            border-slate-300 bg-white px-4 leading-tight text-slate-900 hover:bg-slate-100 hover:text-slate-700
+            focus-visible:relative disabled:pointer-events-none disabled:cursor-default disabled:bg-slate-50
+            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white
+            disabled:dark:border-slate-700 disabled:dark:bg-slate-700 disabled:dark:text-slate-300
+          "
+          data-action="click->nextflow--v2--samplesheet#previousPage"
+          data-nextflow--v2--samplesheet-target="previousBtn"
+          disabled
+        >
+          <%= t("components.nextflow.samplesheet_component.previous") %>
+        </button>
+      </li>
+
+      <li>
+        <label class="sr-only" for="pagination-page-selector">
+          <%= t("components.nextflow.samplesheet_component.page_selection.aria_label") %>
+        </label>
+
+        <select
+          style="width: 80px;"
+          class="
+            ms-0 flex h-10 cursor-pointer items-center justify-center border border-slate-300 bg-white px-4
+            leading-tight text-slate-900 hover:bg-slate-100 hover:text-slate-700 focus-visible:relative
+            dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700
+            dark:hover:text-white
+          "
+          data-nextflow--v2--samplesheet-target="pageNum"
+          data-action="change->nextflow--v2--samplesheet#pageSelected"
+          id="pagination-page-selector"
+        >
+          <option value="1" selected>1</option>
+        </select>
+      </li>
+
+      <li>
+        <button
+          class="
+            cursor ms-0 flex h-10 cursor-pointer items-center justify-center rounded-e-lg border border-l-0
+            border-slate-300 bg-white px-4 leading-tight text-slate-900 hover:bg-slate-100 hover:text-slate-700
+            focus-visible:relative disabled:pointer-events-none disabled:cursor-default disabled:bg-slate-50
+            dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white
+            disabled:dark:border-slate-700 disabled:dark:bg-slate-700 disabled:dark:text-slate-300
+          "
+          type="button"
+          data-nextflow--v2--samplesheet-target="nextBtn"
+          data-action="click->nextflow--v2--samplesheet#nextPage"
+          disabled
+        >
+          <%= t("components.nextflow.samplesheet_component.next") %>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</template>
+
+<template data-nextflow--v2--samplesheet-target="metadataHeaderForm">
+  <%= form_with(url: fields_workflow_executions_metadata_path) do |f| %>
+    <%= f.hidden_field :namespace_id, value: namespace_id %>
+  <% end %>
+</template>

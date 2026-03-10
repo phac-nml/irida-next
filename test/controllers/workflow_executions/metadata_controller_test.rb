@@ -6,7 +6,7 @@ module WorkflowExecutions
   class MetadataControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
 
-    # TODO: refactor this file when feature flag deferred_samplesheet is retired
+    # TODO: refactor this file when feature flag v2_samplesheet is retired
     setup do
       sign_in users(:metadata_doe)
       sample61 = samples(:sample61)
@@ -27,7 +27,7 @@ module WorkflowExecutions
     end
 
     test 'metadata values with feature flag' do
-      Flipper.enable(:deferred_samplesheet)
+      Flipper.enable(:v2_samplesheet)
       post fields_workflow_executions_metadata_path(format: :turbo_stream), params: @expected_feature_flag_params
 
       assert_response :ok
@@ -41,7 +41,7 @@ module WorkflowExecutions
 
     test 'unauthorized fields with feature flag' do
       login_as users(:ryan_doe)
-      Flipper.enable(:deferred_samplesheet)
+      Flipper.enable(:v2_samplesheet)
       post fields_workflow_executions_metadata_path(format: :turbo_stream), params: @expected_feature_flag_params
 
       assert_response :unauthorized

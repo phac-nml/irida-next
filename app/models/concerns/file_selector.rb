@@ -4,7 +4,7 @@
 module FileSelector # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
-  ### TODO START: Remove functions between this block when feature flag deferred_samplesheet is retired ###
+  ### TODO START: Remove functions between this block when feature flag v2_samplesheet is retired ###
   def sorted_files
     return {} if attachments.empty?
 
@@ -71,7 +71,7 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
   def most_recent_other_file(autopopulate, pattern)
     return {} unless autopopulate
 
-    if Flipper.enabled?(:deferred_samplesheet)
+    if Flipper.enabled?(:v2_samplesheet)
       most_recent_other_file_with_feature_flag(pattern)
     else
       most_recent_other_file_without_feature_flag(pattern)
@@ -135,7 +135,7 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
     { property => file_attributes(file, 'samplesheet') }
   end
 
-  # TODO: rename to "most_recent_other_file" when deferred_samplesheet is retired
+  # TODO: rename to "most_recent_other_file" when v2_samplesheet is retired
   def most_recent_other_file_with_feature_flag(pattern)
     most_recent_file = if pattern
                          # find file that fits regex
@@ -152,7 +152,7 @@ module FileSelector # rubocop:disable Metrics/ModuleLength
 
   private
 
-  # TODO: Remove fastq_direction when deferred_samplesheet is retired
+  # TODO: Remove fastq_direction when v2_samplesheet is retired
   def fastq_direction(property)
     case property.match(/^fastq_(\d+)$/).to_a[1]
     when '1'
