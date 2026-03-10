@@ -121,9 +121,12 @@ export default class extends Controller {
     };
   }
 
-  handleSubmit() {
-    this.#processRows();
-    notifyRefreshControllers(this);
+  handleSubmit(event) {
+    //TODO: Direct upload is triggering this twice.
+    if (event.isTrusted) {
+      this.#processRows();
+      notifyRefreshControllers(this);
+    }
   }
 
   show() {
