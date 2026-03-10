@@ -1,0 +1,63 @@
+<div
+  class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
+  role="note"
+  aria-describedby="<%= "#{id_prefix}-instructions #{id_prefix}-keyboard-help" %>"
+>
+  <h3 id="<%= "#{id_prefix}-title" %>" class="text-sm font-semibold text-slate-800 dark:text-slate-100">
+    <%= title %>
+  </h3>
+
+  <p id="<%= "#{id_prefix}-instructions" %>" class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+    <%= instructions %>
+  </p>
+
+  <ul class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <li
+      class="
+        flex gap-2.5 rounded-md bg-white p-3 ring-1 ring-slate-200 ring-inset dark:bg-slate-900/40
+        dark:ring-slate-700
+      "
+    >
+      <span
+        class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded bg-slate-100 dark:bg-slate-700/70"
+        aria-hidden="true"
+      >
+        <%= pathogen_icon(available[:icon], size: :sm, color: :subdued, "aria-hidden": true) %>
+      </span>
+
+      <div>
+        <p class="text-xs font-semibold tracking-wide text-slate-700 uppercase dark:text-slate-100">
+          <%= available[:title] %>
+        </p>
+
+        <p class="mt-1 text-xs text-slate-600 dark:text-slate-300"><%= available[:description] %></p>
+      </div>
+    </li>
+
+    <li
+      class="
+        flex gap-2.5 rounded-md bg-white p-3 ring-1 ring-slate-200 ring-inset dark:bg-slate-900/40
+        dark:ring-slate-700
+      "
+    >
+      <span
+        class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded bg-green-100 dark:bg-green-900/40"
+        aria-hidden="true"
+      >
+        <%= pathogen_icon(selected[:icon], size: :sm, color: :success, "aria-hidden": true) %>
+      </span>
+
+      <div>
+        <p class="text-xs font-semibold tracking-wide text-slate-700 uppercase dark:text-slate-100">
+          <%= selected[:title] %>
+        </p>
+
+        <p class="mt-1 text-xs text-slate-600 dark:text-slate-300"><%= selected[:description] %></p>
+      </div>
+    </li>
+  </ul>
+
+  <p id="<%= "#{id_prefix}-keyboard-help" %>" class="mt-3 text-xs font-medium text-slate-700 dark:text-slate-200">
+    <%= keyboard_help %>
+  </p>
+</div>

@@ -504,9 +504,14 @@ en:
       available: Available
       close_progress: Close export progress
       created_records: Created %{current} of %{total} records
-      csv: ".csv"
       download_started: 'Download started: %{filename}'
+      available_description: Metadata fields that will not be included in the export.
+      available_list_title: Not in export
+      csv: ".csv"
+      fields_instructions: Select one or more metadata fields, then use the action buttons to move fields between lists. The ordering of the selected list determines export column order.
+      fields_instructions_title: How the lists work
       format: Format
+      keyboard_help: Keyboard shortcuts are available on the list action buttons.
       metadata: Metadata
       metadata_description: Select the metadata fields for export by moving the metadata fields from the %{available} list to the %{selected} list. The export's metadata ordering will be determined by the ordering of the %{selected} list.
       no_selection: Please select at least 1 sample before exporting.
@@ -515,16 +520,25 @@ en:
       selected: Selected
       selected_count: 'Selected samples: %{count}'
       start_error: 'Unable to start export: %{message}'
+      selected_description: Metadata fields included in the export. Reorder this list to control column order.
+      selected_list_title: In export
       title: Linelist Export
       unexpected_error: 'Unexpected error while generating export: %{message}'
       xlsx: ".xlsx"
       xlsx_unsupported: XLSX export is not supported in this client-side flow yet.
     new_sample_export_dialog:
       available: Available
+      available_description: File formats not included in this export. By default, all formats are included.
+      available_list_title: Not in export
+      fields_instructions: Select file formats to restrict which files are included in the export. Move formats to the selected list to include only those formats.
+      fields_instructions_title: How the lists work
       format_description: By default, all files are included in sample exports. If you would like to filter which files are included based on format, include only those formats within the %{selected} list.
+      keyboard_help: Keyboard shortcuts are available on the list action buttons.
       samples: Samples
       select_formats: Select File Formats
       selected: Selected
+      selected_description: File formats included in the export. Only files matching these formats will be exported.
+      selected_list_title: In export
       title: Sample Export
     new_single_analysis_export_dialog:
       single_selection: Workflow Executions (1 selected)
@@ -1882,12 +1896,17 @@ en:
         file_imports:
           dialog:
             available: Available
+            available_description: Metadata columns from your file that will not be imported into sample metadata.
+            available_list_title: Not imported
             description: Importing a metadata spreadsheet allows multiple metadata fields to multiple samples be added, updated or removed at once.
+            fields_instructions: Select the metadata columns to import by moving them to the selected list. The ordering of the selected list determines import order.
+            fields_instructions_title: How the lists work
             file: File
             file_help: CSV, TSV, XLS or XLSX.
             ignore_empty_values:
               description: If selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this is not selected, any samples with the metadata key and empty value will be deleted.
               label: Ignore empty values
+            keyboard_help: Keyboard shortcuts are available on the list action buttons.
             metadata_columns: Metadata Columns
             namespace:
               description_html: The spreadsheet is required to have a column that contains a sample identifier. The identifier is case-sensitive and can contain either the <b>sample name or PUID</b>.
@@ -1895,6 +1914,8 @@ en:
             sample_id_column: Sample Identifier Column
             select_sample_id_column: Select a Sample Identifier Column
             selected: Selected
+            selected_description: Metadata columns that will be imported into sample metadata.
+            selected_list_title: Will be imported
             submit_button: Import Metadata
             title: Upload Sample Metadata
             uploading: Uploading
@@ -1919,9 +1940,14 @@ en:
       spreadsheet_imports:
         dialog:
           available: Available
+          available_description: Metadata fields from your file that will not be imported into sample metadata.
+          available_list_title: Not imported
           description: Importing a sample spreadsheet allows multiple samples with or without metadata fields to be added at once.
+          fields_instructions: Select the metadata fields to import by moving them to the selected list. The ordering of the selected list determines import order.
+          fields_instructions_title: How the lists work
           file: File
           file_help: CSV, TSV, XLS or XLSX.
+          keyboard_help: Keyboard shortcuts are available on the list action buttons.
           metadata: Metadata
           namespace:
             group:
@@ -1939,6 +1965,8 @@ en:
           select_sample_name_column: Select a Sample Name Column
           select_static_project: Select Static Project
           selected: Selected
+          selected_description: Metadata fields that will be imported into sample metadata.
+          selected_list_title: Will be imported
           static_project: Static Project
           static_project_description: Assigns each sample to the static project if either the Project ID column isn't assigned, or if the Project ID column is assigned but the project value within the spreadsheet is either empty or invalid
           static_project_empty_state: No projects are associated with that name or ID
