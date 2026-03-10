@@ -177,7 +177,7 @@ export default class extends Controller {
   }
 
   #addLoadingCompleteMessage() {
-    this.samplesheetMessagesContainerTarget.innerHTML = "";
+    this.#clearMessagesContainer();
 
     const samplesheetReadyMessage =
       this.samplesheetReadyTemplateTarget.content.cloneNode(true);
@@ -347,12 +347,21 @@ export default class extends Controller {
       behavior: "smooth",
       block: "start",
     });
-    this.samplesheetMessagesContainerTarget.innerHTML = "";
+    this.#clearMessagesContainer();
   }
 
   #disableFormFieldErrorState() {
     this.formFieldErrorTarget.classList.add("hidden");
     this.formFieldErrorMessageTarget.innerHTML = "";
+  }
+
+  #renderProcessingError() {
+    this.samplesheetSpinnerTarget.remove();
+    this.#enableErrorState(this.processingErrorValue);
+  }
+
+  #clearMessagesContainer() {
+    this.samplesheetMessagesContainerTarget.innerHTML = "";
   }
 
   #setSampleData(sampleId, columnName, value) {
@@ -940,9 +949,13 @@ export default class extends Controller {
 
     // to prevent browser timeouts on large (10k+) sample requests, samples will be chunked and batched into
     // 1000 sample requests
-    this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
-    this.#chunkedSelectedSamples = this.chunkSamples();
-    this.#submitSamplesheetParams();
+    if (this.hasSelectionOutlet) {
+      this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
+      this.#chunkedSelectedSamples = this.chunkSamples();
+      this.#submitSamplesheetParams();
+    } else {
+      this.#renderProcessingError();
+    }
   }
 
   // example: a 3000 sample request will be chunked into:
@@ -958,14 +971,12 @@ export default class extends Controller {
 
   #toJson(formData, index) {
     const params = formDataToJsonParams(formData);
-    if (this.hasSelectionOutlet) {
-      normalizeParams(
-        params,
-        "sample_ids[]",
-        this.#chunkedSelectedSamples[index],
-        0,
-      );
-    }
+    normalizeParams(
+      params,
+      "sample_ids[]",
+      this.#chunkedSelectedSamples[index],
+      0,
+    );
     return params;
   }
 
@@ -1030,8 +1041,7 @@ export default class extends Controller {
       this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
 
       if (this.#allSampleIds.length !== this.#selectedSamples.length) {
-        this.samplesheetSpinnerTarget.remove();
-        this.#enableErrorState(this.processingErrorValue);
+        this.#renderProcessingError();
       } else {
         this.#processSamplesheet();
       }
