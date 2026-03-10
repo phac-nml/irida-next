@@ -469,6 +469,10 @@ en:
         name: Name
         status: Status
       title: Data Exports
+    linelist_export_dialog:
+      v2:
+        component:
+          exporting_linelist: Exporting linelist
     list_workflow_execution:
       id: 'ID:'
       name: 'Name:'
@@ -498,13 +502,23 @@ en:
       title: Analysis Export
     new_linelist_export_dialog:
       available: Available
+      close_progress: Close export progress
+      created_records: Created %{current} of %{total} records
       csv: ".csv"
+      download_started: 'Download started: %{filename}'
       format: Format
       metadata: Metadata
       metadata_description: Select the metadata fields for export by moving the metadata fields from the %{available} list to the %{selected} list. The export's metadata ordering will be determined by the ordering of the %{selected} list.
+      no_selection: Please select at least 1 sample before exporting.
+      preparing_export: Preparing linelist export for %{count} rows...
+      preparing_rows: Preparing %{count} rows
       selected: Selected
+      selected_count: 'Selected samples: %{count}'
+      start_error: 'Unable to start export: %{message}'
       title: Linelist Export
-      xlsx: ".xslx"
+      unexpected_error: 'Unexpected error while generating export: %{message}'
+      xlsx: ".xlsx"
+      xlsx_unsupported: XLSX export is not supported in this client-side flow yet.
     new_sample_export_dialog:
       available: Available
       format_description: By default, all files are included in sample exports. If you would like to filter which files are included based on format, include only those formats within the %{selected} list.
