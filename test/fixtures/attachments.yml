@@ -455,3 +455,39 @@ workflow_execution_shared_with_project_output_attachment:
   metadata: { "compression": "none", "format": "json" }
   attachable: workflow_execution_shared2 (WorkflowExecution)
   puid: INXT_ATT_ABAAAAAABH
+
+sample_preparation_test_attachment_1:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample_preparation_test_1 (Sample)
+  puid: INXT_ATT_AAAAAAAAZA
+  created_at: <%= 3.hours.ago %>
+
+sample_preparation_test_attachment_1B:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample_preparation_test_1 (Sample)
+  puid: INXT_ATT_AAAAAAAZZA
+  created_at: <%= 3.hours.ago %>
+
+sample_preparation_test_attachment_2:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample_preparation_test_2 (Sample)
+  puid: INXT_ATT_AAAAAAAAZB
+  created_at: <%= 2.hours.ago %>
+
+sample_preparation_test_attachment_2B:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample_preparation_test_2 (Sample)
+  puid: INXT_ATT_AAAAAAAZZB
+  created_at: <%= 2.hours.ago %>
+
+sample_preparation_test_attachment_3:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample_preparation_test_3 (Sample)
+  puid: INXT_ATT_BAAAAAAAZB
+  created_at: <%= 2.hours.ago %>
+
+sample_preparation_test_attachment_3B:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample_preparation_test_3 (Sample)
+  puid: INXT_ATT_BAAAAAAZZB
+  created_at: <%= 2.hours.ago %>

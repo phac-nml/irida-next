@@ -16,12 +16,16 @@ module WorkflowExecutions
     end
 
     def execute_copy_step(cursor_index_start) # rubocop:disable Lint/UnusedMethodArgument
+      # TODO: cursor this
       @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
         attachments = parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params)
 
         # TODO: cursor this
-        attachments.each do |key, attachment| # rubocop:disable Lint/UnusedBlockArgument,Style/HashEachMethods
-          copy_attachment_to_run_dir(attachment, sample_workflow_execution)
+        attachments.each do |x, attachment| # rubocop:disable Lint/UnusedBlockArgument,Style/HashEachMethods
+          key = generate_attachment_key(attachment)
+          blob = compose_blob_with_custom_key(attachment.file, key)
+
+          sample_workflow_execution.inputs.attach(blob.signed_id)
         end
       end
     end
@@ -83,15 +87,6 @@ module WorkflowExecutions
 
         @samplesheet_rows << @samplesheet_headers.map { |header| samplesheet_params[header] }
       end
-    end
-
-    def copy_attachment_to_run_dir(attachment, attachable)
-      key = generate_attachment_key(attachment)
-      blob = compose_blob_with_custom_key(attachment.file, key)
-
-      attachable.inputs.attach(blob.signed_id)
-
-      blob_key_to_service_path(blob.key)
     end
 
     def generate_blob_key(attachment)
