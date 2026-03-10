@@ -143,7 +143,11 @@ export default class extends Controller {
   buildWorker(workerSource) {
     try {
       return new Worker(workerSource, { type: "module" });
-    } catch {
+    } catch (error) {
+      console.warn(
+        "[linelist-export] Module worker unavailable, falling back to classic worker:",
+        error,
+      );
       return new Worker(workerSource);
     }
   }
@@ -201,6 +205,7 @@ export default class extends Controller {
     if (this._progressBarEl) {
       this._progressBarEl.style.width = `${percent}%`;
       this._progressBarEl.setAttribute("aria-valuenow", Math.round(percent));
+      this._progressBarEl.setAttribute("aria-label", message);
       this._progressBarEl.classList.toggle("bg-red-600", error);
       this._progressBarEl.classList.toggle("bg-primary-600", !error);
     }
@@ -407,11 +412,7 @@ export default class extends Controller {
 
     try {
       const importMap = JSON.parse(importMapScript.textContent);
-      return (
-        importMap?.imports?.["workers/linelist_export_worker"] ||
-        importMap?.imports?.["controllers/linelist_export_worker"] ||
-        null
-      );
+      return importMap?.imports?.["workers/linelist_export_worker"] || null;
     } catch (_error) {
       return null;
     }
@@ -419,7 +420,7 @@ export default class extends Controller {
 
   t(template, vars = {}) {
     return Object.entries(vars).reduce(
-      (str, [key, val]) => str.replace(`%{${key}}`, val),
+      (str, [key, val]) => str.replaceAll(`%{${key}}`, val),
       template,
     );
   }

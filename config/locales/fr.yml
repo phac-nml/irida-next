@@ -514,9 +514,9 @@ fr:
       preparing_rows: Préparation de %{count} lignes
       selected: Sélectionné
       selected_count: 'Échantillons sélectionnés : %{count}'
-      start_error: 'Impossible de démarrer l’exportation : %{message}'
+      start_error: "Impossible de démarrer l’exportation : %{message}"
       title: Exportation de liste détaillée
-      unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
+      unexpected_error: "Erreur inattendue lors de la génération de l’exportation : %{message}"
       xlsx: ".xlsx"
       xlsx_unsupported: L’exportation XLSX n’est pas encore prise en charge dans ce flux côté client.
     new_sample_export_dialog:

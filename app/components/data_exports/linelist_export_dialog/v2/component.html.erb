@@ -87,7 +87,7 @@
         </fieldset>
       </div>
 
-      <%= form_with(url: "#", method: :post, data: { action: "submit->linelist-export#submit" }) do |form| %>
+      <%= form_with(url: "#", method: :get, data: { action: "submit->linelist-export#submit" }) do |form| %>
         <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
         <%= form.submit t("data_exports.new.submit_button"), class: "button button-primary" %>
       <% end %>

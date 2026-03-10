@@ -1,4 +1,4 @@
-self.onmessage = async (event) => {
+self.onmessage = (event) => {
   const {
     sample_ids: sampleIds,
     metadata_fields: metadataFields,
@@ -36,7 +36,6 @@ self.onmessage = async (event) => {
   ];
   const lines = [header.join(",")];
   const progressInterval = Math.max(1, Math.floor(rows / 250));
-  const progressDelayMs = 25;
 
   const escape = (value) => {
     const text = String(value ?? "");
@@ -68,8 +67,6 @@ self.onmessage = async (event) => {
         total: rows,
         percentage,
       });
-
-      await new Promise((resolve) => setTimeout(resolve, progressDelayMs));
     }
   }
 
