@@ -75,8 +75,7 @@ module Treegrid
           'border-b border-slate-200 dark:border-slate-700 last:border-b-0',
           'hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors',
           'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-700',
-          'dark:focus-visible:ring-primary-500',
-          '[&[aria-expanded="true"]]:bg-slate-50 dark:[&[aria-expanded="true"]]:bg-slate-800/50'
+          'dark:focus-visible:ring-primary-500'
         )
       @system_arguments.delete(:classes)
       @system_arguments[:role] = 'row'
