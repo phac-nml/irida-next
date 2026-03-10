@@ -29,6 +29,7 @@ module NamespaceRow
     }.freeze
 
     EMPTY_ARRAY = [].freeze
+    NON_TURBO_LINK_DATA = { turbo: false }.freeze
 
     def avatar_icon
       if @namespace.group_namespace?
@@ -45,6 +46,10 @@ module NamespaceRow
     def count_pill_classes(kind)
       variant_classes = VARIANT_COUNT_PILL_CLASSES[kind.to_sym] || EMPTY_ARRAY
       (BASE_COUNT_PILL_CLASSES + variant_classes).join(' ')
+    end
+
+    def non_turbo_link_data
+      NON_TURBO_LINK_DATA.dup
     end
   end
 end

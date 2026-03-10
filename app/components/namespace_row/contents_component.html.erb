@@ -1,23 +1,16 @@
-<span class="h-8 mr-2 shrink-0 mt-3 inline-block"><%= avatar_icon %></span>
+<span class="mt-3 mr-2 inline-block h-8 shrink-0"><%= avatar_icon %></span>
 
-<div
-  class="
-    flex flex-wrap grow items-center place-content-start gap-2 overflow-hidden
-  "
->
+<div class="flex grow flex-wrap place-content-start items-center gap-2">
   <%= viral_avatar(
     name: @namespace.name,
     size: @icon_size,
     colour_string: "#{@namespace.name}-#{@namespace.id}",
-    data: {
-      turbo: false,
-    },
+    data: non_turbo_link_data,
   ) %>
 
-  <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "underline hover:decoration-2 font-semibold dark:text-white wrap-anywhere min-w-0" do %>
+  <%= link_to namespace_path(@namespace), data: non_turbo_link_data, class: "underline hover:decoration-2 font-semibold dark:text-white wrap-anywhere min-w-0" do %>
     <% if @full_name && @namespace.parent %>
-      <span><%= @namespace.parent.full_name %>
-        /</span>
+      <span><%= @namespace.parent.full_name %> /</span>
       <span class="font-semibold">
         <%= highlight(
           @namespace.name,
@@ -49,14 +42,11 @@
     ) %>
   </div>
 
-  <div
-    class="
-      ml-auto flex flex-row flex-wrap gap-2 text-slate-500 dark:text-slate-400 mr-2
-    "
-  >
-    <% if @namespace.group_namespace? %>
-      <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:"components.namespace_row.contents_component.subnamespaces.aria-label"), class: "group pill-focus-reset") do |component| %>
-        <% component.with_tooltip(
+  <div class="mr-2 ml-auto flex flex-col items-end">
+    <div class="flex flex-row flex-wrap gap-2 text-slate-500 dark:text-slate-400">
+      <% if @namespace.group_namespace? %>
+        <%= pathogen_link(href: namespace_path(@namespace), data: non_turbo_link_data, 'aria-label': t(:"components.namespace_row.contents_component.subnamespaces.aria-label"), class: "group pill-focus-reset") do |component| %>
+          <% component.with_tooltip(
           text:
             t(
               :"components.namespace_row.contents_component.subnamespaces.tooltip",
@@ -67,16 +57,16 @@
           tag: :div,
         ) %>
 
-        <span class="<%= count_pill_classes(:groups) %>">
-          <%= pathogen_icon Group.icon,
+          <span class="<%= count_pill_classes(:groups) %>">
+            <%= pathogen_icon Group.icon,
           size: :sm,
           class: "mr-0.5 text-amber-700 dark:text-amber-200" %>
 
-          <%= @namespace.children.count %>
-        </span>
-      <% end %>
-      <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:"components.namespace_row.contents_component.projects.aria-label"), class: "group pill-focus-reset") do |component| %>
-        <% component.with_tooltip(
+            <%= @namespace.children.count %>
+          </span>
+        <% end %>
+        <%= pathogen_link(href: namespace_path(@namespace), data: non_turbo_link_data, 'aria-label': t(:"components.namespace_row.contents_component.projects.aria-label"), class: "group pill-focus-reset") do |component| %>
+          <% component.with_tooltip(
           text:
             t(
               :"components.namespace_row.contents_component.projects.tooltip",
@@ -87,16 +77,16 @@
           tag: :div,
         ) %>
 
-        <span class="<%= count_pill_classes(:projects) %>">
-          <%= pathogen_icon Project.icon,
+          <span class="<%= count_pill_classes(:projects) %>">
+            <%= pathogen_icon Project.icon,
           size: :sm,
           class: "mr-0.5 text-fuchsia-700 dark:text-fuchsia-200" %>
 
-          <%= @namespace.project_namespaces.count %>
-        </span>
-      <% end %>
-      <%= pathogen_link(href: group_samples_path(@namespace), 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label"), class: "group pill-focus-reset") do |component| %>
-        <% component.with_tooltip(
+            <%= @namespace.project_namespaces.count %>
+          </span>
+        <% end %>
+        <%= pathogen_link(href: group_samples_path(@namespace), data: non_turbo_link_data, 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label"), class: "group pill-focus-reset") do |component| %>
+          <% component.with_tooltip(
           text:
             t(
               :"components.namespace_row.contents_component.samples.tooltip",
@@ -107,22 +97,19 @@
           tag: :div,
         ) %>
 
-        <span
-          id="<%= "#{dom_id(@namespace)}-samples-count" %>"
-          class="<%= count_pill_classes(:samples) %>"
-        >
-          <%= pathogen_icon Sample.icon,
+          <span id="<%= "#{dom_id(@namespace)}-samples-count" %>" class="<%= count_pill_classes(:samples) %>">
+            <%= pathogen_icon Sample.icon,
           size: :sm,
           class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
 
-          <%= @namespace.aggregated_samples_count %>
-        </span>
+            <%= @namespace.aggregated_samples_count %>
+          </span>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <% if @namespace.project_namespace? %>
-      <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project), 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label"), class: "group pill-focus-reset") do |component| %>
-        <% component.with_tooltip(
+      <% if @namespace.project_namespace? %>
+        <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project), data: non_turbo_link_data, 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label"), class: "group pill-focus-reset") do |component| %>
+          <% component.with_tooltip(
           text:
             t(
               :"components.namespace_row.contents_component.samples.tooltip",
@@ -133,17 +120,19 @@
           tag: :div,
         ) %>
 
-        <span
-          id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
-          class="<%= count_pill_classes(:samples) %>"
-        >
-          <%= pathogen_icon Sample.icon,
+          <span id="<%= "#{dom_id(@namespace.project)}-samples-count" %>" class="<%= count_pill_classes(:samples) %>">
+            <%= pathogen_icon Sample.icon,
           size: :sm,
           class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
 
-          <%= @namespace.project.samples.size %>
-        </span>
+            <%= @namespace.project.samples.size %>
+          </span>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
+
+    <div class="mt-1 text-xs whitespace-nowrap text-slate-500 dark:text-slate-400">
+      <%== t(:'components.namespace_row.contents_component.created_at', date: helpers.local_time(@namespace.created_at, "%b %-d, %Y")) %>
+    </div>
   </div>
 </div>

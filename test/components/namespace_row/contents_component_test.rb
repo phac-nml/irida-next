@@ -20,6 +20,7 @@ module NamespaceRow
         assert_selector 'div[data-placement="left"]', count: 3
         # Verify tooltip controller is present
         assert_selector 'div[data-controller="pathogen--tooltip"]', minimum: 3
+        assert_selector 'a[data-turbo="false"]', minimum: 4
       end
     end
 
@@ -40,6 +41,7 @@ module NamespaceRow
         assert_selector 'div[data-placement="left"]', count: 1
         # Verify tooltip controller is present
         assert_selector 'div[data-controller="pathogen--tooltip"]', minimum: 1
+        assert_selector 'a[data-turbo="false"]', minimum: 2
       end
     end
 

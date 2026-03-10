@@ -6,8 +6,12 @@ module Treegrid
     erb_template <<-ERB
       <%= tag.div(**@system_arguments) do %>
         <div role="gridcell" aria-colindex="1" style="display: contents;">
-          <%= tag.button(**@button_arguments) do %>
-            <%= pathogen_icon(:caret_right, size: :sm) %>
+          <% if @expandable %>
+            <%= tag.button(**@button_arguments) do %>
+              <%= pathogen_icon(:caret_right, size: :sm) %>
+            <% end %>
+          <% else %>
+            <div class="w-8 shrink-0 flex items-center justify-center m-0 p-0" aria-hidden="true"></div>
           <% end %>
           <%= content %>
         </div>
@@ -24,16 +28,17 @@ module Treegrid
       button_arguments: {},
       **system_arguments
     )
+      @expandable = expandable
       @button_arguments = button_arguments
       @system_arguments = system_arguments
 
-      set_default_button_arguments(expanded, expandable)
+      set_default_button_arguments(expanded, expandable) if @expandable
       set_default_system_arguments(expanded, expandable, tabindex, level, posinset, setsize)
     end
 
     private
 
-    def set_default_button_arguments(expanded, expandable)
+    def set_default_button_arguments(expanded, expandable) # rubocop:disable Metrics/MethodLength
       @button_arguments[:aria] ||= {}
       @button_arguments[:aria][:label] =
         expandable && expanded ? I18n.t(:'components.treegrid.row.collapse') : I18n.t(:'components.treegrid.row.expand')
@@ -41,15 +46,19 @@ module Treegrid
       @button_arguments[:data] ||= {}
       @button_arguments[:data][:action] = 'click->treegrid#toggleRow'
       @button_arguments[:type] = 'button'
-      @button_arguments[:class] = class_names(@button_arguments[:classes],
-                                              'treegrid-row-toggle h-8 w-8 mt-2 cursor-pointer',
-                                              'hover:bg-slate-100 dark:hover:bg-slate-600',
-                                              'rounded-lg shrink-0 flex items-center justify-center dark:text-white')
+      @button_arguments[:class] = class_names(
+        @button_arguments[:classes],
+        'treegrid-row-toggle h-8 w-8 mt-2 cursor-pointer',
+        'hover:bg-slate-200 dark:hover:bg-slate-700',
+        'rounded-lg shrink-0 flex items-center justify-center dark:text-white',
+        'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-700 outline-none',
+        'dark:focus-visible:ring-primary-500'
+      )
       @button_arguments.delete(:classes)
       @button_arguments[:tabindex] = '-1'
     end
 
-    def set_default_system_arguments(expanded, expandable, tabindex, level, posinset, setsize) # rubocop:disable Metrics/ParameterLists
+    def set_default_system_arguments(expanded, expandable, tabindex, level, posinset, setsize) # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength
       @system_arguments[:aria] = (@system_arguments[:aria] || {}).deep_merge({
                                                                                level: level,
                                                                                posinset: posinset,
@@ -60,7 +69,14 @@ module Treegrid
       @system_arguments[:data]['treegrid-target'] = 'row'
       @system_arguments[:style] = "--treegrid-level: #{level};"
       @system_arguments[:class] =
-        class_names(@system_arguments[:classes], 'treegrid-row rounded-lg flex py-2 px-2 overflow-hidden')
+        class_names(
+          @system_arguments[:classes],
+          'treegrid-row flex py-3 px-2 overflow-hidden outline-none',
+          'border-b border-slate-200 dark:border-slate-700 last:border-b-0',
+          'hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors',
+          'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-700',
+          'dark:focus-visible:ring-primary-500'
+        )
       @system_arguments.delete(:classes)
       @system_arguments[:role] = 'row'
       @system_arguments[:tabindex] = tabindex
