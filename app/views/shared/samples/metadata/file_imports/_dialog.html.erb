@@ -27,13 +27,7 @@
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400"><%= t(".description") %></p>
 
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-            <%= t(".namespace.description") %>
-
-            <% if @namespace.type == 'Group' %>
-              <%= t(".namespace.group.description_html") %>
-            <% else %>
-              <%= t(".namespace.project.description_html") %>
-            <% end %>
+            <%= t(".namespace.description_html") %>
           </p>
 
           <div

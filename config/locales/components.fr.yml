@@ -3,6 +3,13 @@ fr:
   components:
     activity:
       dialog:
+        bulk_metadata_update:
+          description:
+            one: "%{user} a mis à jour les métadonnées pour %{count} échantillon"
+            other: "%{user} a mis à jour les métadonnées pour %{count} échantillons"
+          project: Projet
+          sample: Échantillon
+          title: Uploaded Metadata
         group_sample_transfer:
           description:
             one: "%{user} a transféré un échantillon entre les projets"
@@ -81,6 +88,9 @@ fr:
           link_descriptive_text: Voir les modèles de métadonnées pour le projet
       more_details: Plus de détails
       samples:
+        bulk_metadata_update:
+          more_details:
+            button_descriptive_text: Voir plus de détails sur les métadonnées d'échantillon mises à jour
         clone:
           link_descriptive_text: Voir la page des échantillons du projet ayant l’identifiant unique persistant %{project_puid}
           more_details:
