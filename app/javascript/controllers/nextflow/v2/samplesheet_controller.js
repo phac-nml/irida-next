@@ -46,7 +46,6 @@ export default class extends Controller {
     "updateSamplesCheckbox",
     "updateSamplesLabel",
     "sampleAttributes",
-    "samplesheetParamsForm",
     "samplesheetParamsFormTemplate",
     "samplesheetReadyTemplate",
     "ariaLive",
