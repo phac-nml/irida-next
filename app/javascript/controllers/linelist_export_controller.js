@@ -41,6 +41,7 @@ export default class extends Controller {
 
   connect() {
     this.worker = null;
+    this._exportId = null;
     this.progressWindowDismissed = false;
     this.updateSelectedCount();
   }
@@ -80,6 +81,7 @@ export default class extends Controller {
 
     const filename = `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}.${format}`;
     const totalCount = selectedCount;
+    this._exportId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this.progressWindowDismissed = false;
 
     if (this.hasSampleStatusTarget) {
@@ -183,7 +185,7 @@ export default class extends Controller {
     if (this.progressWindowDismissed) return;
 
     const percent = Math.min(Math.max(percentage, 0), 100);
-    this.ensureProgressWindow();
+    this.ensureExportCard();
 
     if (this._progressMsgEl) {
       this._progressMsgEl.textContent = message;
@@ -301,45 +303,65 @@ export default class extends Controller {
   }
 
   dismissProgressWindow() {
-    const progressWindow = document.getElementById(
+    if (this._exportId) {
+      const card = document.getElementById(
+        `linelist-export-card-${this._exportId}`,
+      );
+      if (card) card.remove();
+    }
+
+    const container = document.getElementById(
       "linelist-export-progress-window",
     );
-    if (!progressWindow) return;
+    if (container && container.children.length === 0) container.remove();
 
-    progressWindow.remove();
     this.progressWindowDismissed = true;
     this._progressMsgEl = null;
     this._progressBarEl = null;
     this._progressPctEl = null;
   }
 
-  ensureProgressWindow() {
-    let progressWindow = document.getElementById(
-      "linelist-export-progress-window",
-    );
-    if (!progressWindow) {
-      progressWindow = this.createProgressWindow();
+  ensureExportCard() {
+    if (!this._exportId) return null;
+
+    const cardId = `linelist-export-card-${this._exportId}`;
+    let card = document.getElementById(cardId);
+
+    if (!card) {
+      card = this.createExportCard(cardId);
     } else if (!this._progressMsgEl) {
       // Recover refs after Turbo reconnect
-      this._progressMsgEl = progressWindow.querySelector(
+      this._progressMsgEl = card.querySelector(
         "[data-linelist-export-progress-message]",
       );
-      this._progressBarEl = progressWindow.querySelector(
+      this._progressBarEl = card.querySelector(
         "[data-linelist-export-progress-bar]",
       );
-      this._progressPctEl = progressWindow.querySelector(
+      this._progressPctEl = card.querySelector(
         "[data-linelist-export-progress-percent]",
       );
     }
-    return progressWindow;
+
+    return card;
   }
 
-  createProgressWindow() {
-    const progressWindow = document.createElement("div");
-    progressWindow.id = "linelist-export-progress-window";
-    progressWindow.className = "fixed bottom-5 right-5 z-50 w-80 space-y-2";
-    progressWindow.setAttribute("data-turbo-permanent", "");
-    progressWindow.addEventListener("click", (event) =>
+  ensureProgressContainer() {
+    let container = document.getElementById("linelist-export-progress-window");
+    if (!container) {
+      container = document.createElement("div");
+      container.id = "linelist-export-progress-window";
+      container.className = "fixed bottom-5 right-5 z-50 w-80 space-y-2";
+      container.setAttribute("data-turbo-permanent", "");
+      document.body.appendChild(container);
+    }
+    return container;
+  }
+
+  createExportCard(cardId) {
+    const container = this.ensureProgressContainer();
+    const card = document.createElement("div");
+    card.id = cardId;
+    card.addEventListener("click", (event) =>
       this.handleProgressWindowClick(event),
     );
 
@@ -354,11 +376,11 @@ export default class extends Controller {
       this._progressPctEl = clone.querySelector(
         "[data-linelist-export-progress-percent]",
       );
-      progressWindow.appendChild(clone);
+      card.appendChild(clone);
     }
 
-    document.body.appendChild(progressWindow);
-    return progressWindow;
+    container.appendChild(card);
+    return card;
   }
 
   showProgressWindow(message) {
