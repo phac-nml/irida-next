@@ -937,3 +937,14 @@ workflow_execution_with_special_chars:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   name: "workflow_with_special_chars"
   state: "running"
+
+irida_next_example_three_samples:
+  <<: *DEFAULTS
+  workflow_params: { "assembler": "stub" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:user32, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:user32_project1_namespace, :uuid) %>
+  email_notification: true
+  cleaned: false
+  name: "irida_next_example_three_samples"

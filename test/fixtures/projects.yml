@@ -385,3 +385,8 @@ projectChunkedSamples:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_chunked_samples_namespace,
     :uuid) %>
   samples_count: 0
+
+projectUser32:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:user32, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:user32_project1_namespace, :uuid) %>
+  samples_count: 3

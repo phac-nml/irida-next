@@ -171,6 +171,12 @@ user31:
   first_name: User
   last_name: "31"
 
+user32:
+  <<: *DEFAULTS
+  email: <%= "user32@localhost" %>
+  first_name: User
+  last_name: "32"
+
 <% 22.times do |n| %>
 user_group_bot_account<%= (n) %>:
   <<: *DEFAULTS

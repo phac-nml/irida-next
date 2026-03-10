@@ -138,3 +138,11 @@ attachment_text_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_p
 attachment_json_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.json", service_name: "test" %>
 attachment_spreadsheet: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.xlsx", service_name: "test" %>
 attachment_image: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.webp", service_name: "test" %>
+
+# preparation test files
+sample_preparation_test_attachment_1_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_fwd_1.fastq", service_name: "test" %>
+sample_preparation_test_attachment_1B_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_rev_1.fastq", service_name: "test" %>
+sample_preparation_test_attachment_2_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_fwd_2.fastq", service_name: "test" %>
+sample_preparation_test_attachment_2B_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_rev_2.fastq", service_name: "test" %>
+sample_preparation_test_attachment_3_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_fwd_3.fastq", service_name: "test" %>
+sample_preparation_test_attachment_3B_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_rev_3.fastq", service_name: "test" %>
