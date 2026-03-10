@@ -116,8 +116,6 @@ export default class extends Controller {
   #selectedSamples;
   #chunkedSelectedSamples;
 
-  #receivedSampleAttributesCounter = 0;
-
   connect() {
     this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
@@ -1028,10 +1026,8 @@ export default class extends Controller {
   }
 
   async sampleAttributesTargetConnected() {
-    // keep count of each sample retrieval until the expected number of requests have processed
-    this.#receivedSampleAttributesCounter++;
     if (
-      this.#receivedSampleAttributesCounter ===
+      this.sampleAttributesTargets.length ===
       this.#chunkedSelectedSamples.length
     ) {
       await this.#processSamplesheetAttributes();
