@@ -513,7 +513,6 @@ en:
       format: Format
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       metadata: Metadata
-      metadata_description: Select the metadata fields for export by moving the metadata fields from the %{available} list to the %{selected} list. The export's metadata ordering will be determined by the ordering of the %{selected} list.
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...
       preparing_rows: Preparing %{count} rows
@@ -532,7 +531,6 @@ en:
       available_list_title: Not in export
       fields_instructions: Select file formats to restrict which files are included in the export. Move formats to the selected list to include only those formats.
       fields_instructions_title: How the lists work
-      format_description: By default, all files are included in sample exports. If you would like to filter which files are included based on format, include only those formats within the %{selected} list.
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       samples: Samples
       select_formats: Select File Formats

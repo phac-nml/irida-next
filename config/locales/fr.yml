@@ -513,7 +513,6 @@ fr:
       format: Format
       keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       metadata: Métadonnées
-      metadata_description: Sélectionnez les champs de métadonnées à exporter en déplaçant les champs de métadonnées de la liste %{available} à la liste %{selected}. L’ordre des métadonnées de l’exportation sera déterminé par l’ordre de la liste %{selected}.
       no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
       preparing_rows: Préparation de %{count} lignes
@@ -532,7 +531,6 @@ fr:
       available_list_title: Non inclus dans l’exportation
       fields_instructions: Sélectionnez les formats de fichiers à inclure dans l’exportation. Déplacez les formats vers la liste sélectionnée pour n’inclure que ces formats.
       fields_instructions_title: Fonctionnement des listes
-      format_description: Par défaut, tous les fichiers sont inclus dans les échantillons d’exportations. Si vous souhaitez filtrer les fichiers inclus en fonction du format, n’incluez que ces formats dans la liste %{selected}.
       keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       samples: Échantillons
       select_formats: Sélectionner les formats de fichiers
