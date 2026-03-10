@@ -535,6 +535,8 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       gzip: false
     )
 
+    workflow_execution.save
+
     analysis_output_filenames = [@analysis1_file_blob.filename, @analysis2_file_blob.filename]
 
     analysis_output_blobs_total_size = @analysis1_file_blob.byte_size + @analysis2_file_blob.byte_size
@@ -553,9 +555,12 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
     assert 'completing', workflow_execution.state
 
-    assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
-
     assert_equal 'my_run_id_g', workflow_execution.run_id
+
+    perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
+      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+    end
+    workflow_execution.reload
 
     assert_equal 3, workflow_execution.outputs.count
 
