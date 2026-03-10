@@ -15,18 +15,23 @@ module WorkflowExecutions
       @samplesheet_rows = []
     end
 
-    def execute_copy_step(cursor_index_start) # rubocop:disable Lint/UnusedMethodArgument
-      # TODO: cursor this
-      @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
-        attachments = parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params)
+    def execute_copy_step(step2d) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      start_x = step2d.cursor[0] # x axis (outer loop)
 
-        # TODO: cursor this
-        attachments.each do |x, attachment| # rubocop:disable Lint/UnusedBlockArgument,Style/HashEachMethods
-          key = generate_attachment_key(attachment)
-          blob = compose_blob_with_custom_key(attachment.file, key)
+      # iterate over sample_workflow_executions using cursor x axis to index starting point
+      @workflow_execution.samples_workflow_executions.sort_by(&:id)&.[](start_x..)&.each&.with_index(start_x) do |sample_workflow_execution, index_x| # rubocop:disable Layout/LineLength,Style/SafeNavigationChainLength
+        start_y = step2d.cursor[1] # y axis (inner loop)
 
-          sample_workflow_execution.inputs.attach(blob.signed_id)
+        attachment_list = map_attachment_list(sample_workflow_execution)
+
+        # iterate over attachments using cursor y axis to index starting point
+        attachment_list.sort_by(&:id)&.[](start_y..)&.each&.with_index(start_y) do |attachment, index_y| # rubocop:disable Style/SafeNavigationChainLength
+          compose_and_attach(attachment, sample_workflow_execution)
+
+          step2d.set! [index_x, index_y + 1] # increment inner loop
         end
+
+        step2d.set! [index_x + 1, 0] # increment outer loop
       end
     end
 
@@ -57,6 +62,19 @@ module WorkflowExecutions
     end
 
     private
+
+    def map_attachment_list(sample_workflow_execution)
+      parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params).map do |_key, value|
+        value
+      end
+    end
+
+    def compose_and_attach(attachment, attachable)
+      key = generate_attachment_key(attachment)
+      blob = compose_blob_with_custom_key(attachment.file, key)
+
+      attachable.inputs.attach(blob.signed_id)
+    end
 
     def parse_attachments_from_samplesheet(samplesheet)
       attachments = {}

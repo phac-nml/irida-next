@@ -19,7 +19,7 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
     step :initial_validation
     step :pipeline_validation
     step :build_run_directory
-    step :copy_attachments_to_run_dir
+    step :copy_attachments_to_run_dir, start: [0, 0]
     step :build_samplesheet
     step :update_state_step
     step :queue_next_job
@@ -50,10 +50,10 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
     @workflow_execution.save
   end
 
-  def copy_attachments_to_run_dir
+  def copy_attachments_to_run_dir(step)
     return if @workflow_execution.state.to_sym == :error
 
-    WorkflowExecutions::SamplesheetPreparationService.new(@workflow_execution).execute_copy_step(0)
+    WorkflowExecutions::SamplesheetPreparationService.new(@workflow_execution).execute_copy_step(step)
   end
 
   def build_samplesheet
