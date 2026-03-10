@@ -4,6 +4,10 @@ export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
   static values = {
     workerUrl: String,
+    minimumVisibleDurationMs: {
+      type: Number,
+      default: 3500,
+    },
     noSelectionErrorMessage: {
       type: String,
       default: "Please select at least 1 sample before exporting.",
@@ -42,6 +46,8 @@ export default class extends Controller {
   connect() {
     this.worker = null;
     this._exportId = null;
+    this._progressWindowOpenedAt = null;
+    this._dismissProgressWindowTimeout = null;
     this.progressWindowDismissed = false;
     this.updateSelectedCount();
   }
@@ -81,7 +87,9 @@ export default class extends Controller {
 
     const filename = `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}.${format}`;
     const totalCount = selectedCount;
+    this.clearProgressWindowDismissTimeout();
     this._exportId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    this._progressWindowOpenedAt = null;
     this.progressWindowDismissed = false;
 
     if (this.hasSampleStatusTarget) {
@@ -172,9 +180,7 @@ export default class extends Controller {
         }),
         100,
       );
-      setTimeout(() => {
-        this.dismissProgressWindow();
-      }, 2500);
+      this.scheduleProgressWindowDismiss();
       this.terminateWorker();
       return;
     }
@@ -308,6 +314,8 @@ export default class extends Controller {
   }
 
   dismissProgressWindow() {
+    this.clearProgressWindowDismissTimeout();
+
     if (this._exportId) {
       const card = document.getElementById(
         `linelist-export-card-${this._exportId}`,
@@ -321,6 +329,8 @@ export default class extends Controller {
     if (container && container.children.length === 0) container.remove();
 
     this.progressWindowDismissed = true;
+    this._exportId = null;
+    this._progressWindowOpenedAt = null;
     this._progressMsgEl = null;
     this._progressBarEl = null;
     this._progressPctEl = null;
@@ -389,7 +399,34 @@ export default class extends Controller {
   }
 
   showProgressWindow(message) {
+    if (!this._progressWindowOpenedAt) {
+      this._progressWindowOpenedAt = Date.now();
+    }
     this.updateProgress(message, 0);
+  }
+
+  scheduleProgressWindowDismiss() {
+    if (this.progressWindowDismissed) return;
+
+    this.clearProgressWindowDismissTimeout();
+
+    const openedAt = this._progressWindowOpenedAt || Date.now();
+    const elapsedMs = Date.now() - openedAt;
+    const remainingMs = Math.max(
+      this.minimumVisibleDurationMsValue - elapsedMs,
+      0,
+    );
+
+    this._dismissProgressWindowTimeout = setTimeout(() => {
+      this.dismissProgressWindow();
+    }, remainingMs);
+  }
+
+  clearProgressWindowDismissTimeout() {
+    if (!this._dismissProgressWindowTimeout) return;
+
+    clearTimeout(this._dismissProgressWindowTimeout);
+    this._dismissProgressWindowTimeout = null;
   }
 
   workerSourceUrl() {
@@ -413,7 +450,7 @@ export default class extends Controller {
     try {
       const importMap = JSON.parse(importMapScript.textContent);
       return importMap?.imports?.["workers/linelist_export_worker"] || null;
-    } catch (_error) {
+    } catch {
       return null;
     }
   }
