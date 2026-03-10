@@ -5,12 +5,10 @@
     name: @namespace.name,
     size: @icon_size,
     colour_string: "#{@namespace.name}-#{@namespace.id}",
-    data: {
-      turbo: false,
-    },
+    data: non_turbo_link_data,
   ) %>
 
-  <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "underline hover:decoration-2 font-semibold dark:text-white wrap-anywhere min-w-0" do %>
+  <%= link_to namespace_path(@namespace), data: non_turbo_link_data, class: "underline hover:decoration-2 font-semibold dark:text-white wrap-anywhere min-w-0" do %>
     <% if @full_name && @namespace.parent %>
       <span><%= @namespace.parent.full_name %> /</span>
       <span class="font-semibold">
@@ -47,7 +45,7 @@
   <div class="mr-2 ml-auto flex flex-col items-end">
     <div class="flex flex-row flex-wrap gap-2 text-slate-500 dark:text-slate-400">
       <% if @namespace.group_namespace? %>
-        <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:"components.namespace_row.contents_component.subnamespaces.aria-label"), class: "group pill-focus-reset") do |component| %>
+        <%= pathogen_link(href: namespace_path(@namespace), data: non_turbo_link_data, 'aria-label': t(:"components.namespace_row.contents_component.subnamespaces.aria-label"), class: "group pill-focus-reset") do |component| %>
           <% component.with_tooltip(
           text:
             t(
@@ -67,7 +65,7 @@
             <%= @namespace.children.count %>
           </span>
         <% end %>
-        <%= pathogen_link(href: namespace_path(@namespace), 'aria-label': t(:"components.namespace_row.contents_component.projects.aria-label"), class: "group pill-focus-reset") do |component| %>
+        <%= pathogen_link(href: namespace_path(@namespace), data: non_turbo_link_data, 'aria-label': t(:"components.namespace_row.contents_component.projects.aria-label"), class: "group pill-focus-reset") do |component| %>
           <% component.with_tooltip(
           text:
             t(
@@ -87,7 +85,7 @@
             <%= @namespace.project_namespaces.count %>
           </span>
         <% end %>
-        <%= pathogen_link(href: group_samples_path(@namespace), 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label"), class: "group pill-focus-reset") do |component| %>
+        <%= pathogen_link(href: group_samples_path(@namespace), data: non_turbo_link_data, 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label"), class: "group pill-focus-reset") do |component| %>
           <% component.with_tooltip(
           text:
             t(
@@ -110,7 +108,7 @@
       <% end %>
 
       <% if @namespace.project_namespace? %>
-        <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project), 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label"), class: "group pill-focus-reset") do |component| %>
+        <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project), data: non_turbo_link_data, 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label"), class: "group pill-focus-reset") do |component| %>
           <% component.with_tooltip(
           text:
             t(
