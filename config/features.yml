@@ -37,9 +37,6 @@ features:
     description: "include additional metadata in WES submission, such as namespaceId\
       \ and samplesCount."
     enable_in_development: true
-  workflow_execution_advanced_search:
-    description: "Enable advanced search for workflow executions."
-    enable_in_development: true
   workflow_execution_attachments_searching:
     description: "Enable searching within the workflow execution attachments table."
     enable_in_development: true
