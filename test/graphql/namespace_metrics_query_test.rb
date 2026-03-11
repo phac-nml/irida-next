@@ -123,12 +123,12 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
   GRAPHQL
 
   NAMESPACE_METRICS_MEMBERS_QUERY = <<~GRAPHQL
-    query($puid: ID!, $userType: [String!], $source: String) {
+    query($puid: ID!, $userType: [String!], $directOnly: Boolean) {
       namespaceMetrics(puid: $puid) {
         nodes {
           name
           ... on GroupMetricsType {
-            members(source: $source, userType: $userType) {
+            members(directOnly: $directOnly, userType: $userType) {
               nodes {
                 user {
                   email
@@ -141,7 +141,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
             projects {
               nodes {
                 name
-                members(source: $source, userType: $userType) {
+                members(directOnly: $directOnly, userType: $userType) {
                   nodes {
                     user {
                       email
@@ -809,7 +809,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     result = IridaSchema.execute(NAMESPACE_METRICS_MEMBERS_QUERY, context: { current_user: @sys_user },
                                                                   variables: {
                                                                     puid: group.puid,
-                                                                    source: 'direct'
+                                                                    directOnly: true
                                                                   },
                                                                   max_complexity: nil)
 
@@ -899,7 +899,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     result = IridaSchema.execute(NAMESPACE_METRICS_MEMBERS_QUERY, context: { current_user: @sys_user },
                                                                   variables: {
                                                                     puid: group.puid,
-                                                                    source: 'direct'
+                                                                    directOnly: true
                                                                   },
                                                                   max_complexity: nil)
 
