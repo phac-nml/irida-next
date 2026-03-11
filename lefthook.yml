@@ -35,6 +35,17 @@ pre-commit:
         - "**/*.erb"
       run: pnpm exec herb-lint --format=simple {staged_files}
 
+    - name: yaml_format
+      glob: "*.{yml,yaml}"
+      exclude:
+        - "lefthook.yml"
+        - "config/locales/*.yml"
+        - "config/locales/**/*.yml"
+        - "config/locales/*.yaml"
+        - "config/locales/**/*.yaml"
+      run: yq -i -S '.' -Y {staged_files}
+      stage_fixed: true
+
     - name: i18n_normalize
       glob:
         - "config/locales/*.yml"

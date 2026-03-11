@@ -9,7 +9,7 @@ module DataExports
     }.freeze
 
     VERSION_RESOLVER = lambda {
-      :v2 if Flipper.enabled?(:client_linelist_exports_v1)
+      :v2 if Flipper.enabled?(:client_linelist_exports_v1, Current.user)
     }
   end
 end

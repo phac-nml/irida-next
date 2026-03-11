@@ -71,6 +71,6 @@ class RefreshNoticeComponent < Component
   #
   # @return [Boolean]
   def show_notice?
-    Flipper.enabled?(:samples_refresh_notice)
+    Flipper.enabled?(:samples_refresh_notice, Current.user)
   end
 end

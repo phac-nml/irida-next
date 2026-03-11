@@ -4,17 +4,6 @@ require 'faker'
 
 Faker::Config.locale = 'en'
 
-Flipper.enable(:compose_with_retry)
-Flipper.enable(:sample_attachments_searching)
-Flipper.enable(:workflow_execution_attachments_searching)
-Flipper.enable(:samples_refresh_notice)
-Flipper.enable(:integration_access_token_generation)
-Flipper.enable(:cancel_multiple_workflows)
-Flipper.enable(:advanced_search_with_auto_complete)
-Flipper.enable(:workflow_execution_advanced_search)
-Flipper.enable(:wes_extended_metadata)
-Flipper.enable(:v2_samplesheet)
-
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
 # This file should contain all the record creation needed to seed the database with its default values.

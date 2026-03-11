@@ -1,6 +1,6 @@
 <%# locals: (pagy:, q:, search_url:, attachments:, workflow_execution:, has_attachments: ) -%>
-<div class="flex justify-end mb-2">
-  <% if Flipper.enabled?(:workflow_execution_attachments_searching) %>
+<div class="mb-2 flex justify-end">
+  <% if Flipper.enabled?(:workflow_execution_attachments_searching, current_user) %>
     <%= render SearchComponent.new(
               query: q,
               search_attribute: :puid_or_file_blob_filename_cont,

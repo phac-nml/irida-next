@@ -35,6 +35,7 @@ lib.mkMerge [
       pnpm_10
       jq
       file
+      yq
     ];
 
     # https://devenv.sh/languages/
