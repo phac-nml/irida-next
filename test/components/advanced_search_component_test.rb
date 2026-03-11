@@ -176,7 +176,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_equal %w[= != in not_in], allowed_operators
         end
 
-        find("select[name$='[operator]']").find("option[value='=']").select_option
+        first("select[name$='[operator]']").find("option[value='=']").select_option
         assert_selector "select[name$='[value]']"
       end
     end
