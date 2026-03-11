@@ -15,10 +15,11 @@ module AdvancedSearch
     }.freeze
 
     class << self
-      def build(options:, groups: {})
+      def build(options:, groups: {}, enum_fields: {})
         {
           options: Array(options),
-          groups: groups || {}
+          groups: groups || {},
+          enum_fields:
         }
       end
 
@@ -41,10 +42,17 @@ module AdvancedSearch
         options = base_fields.map { |field| [workflow_field_label(field), field] }
         metadata_options = metadata_fields.map { |field| [workflow_field_label(field), field] }
 
-        build(options:, groups: metadata_group(metadata_options))
+        build(options:, groups: metadata_group(metadata_options),
+              enum_fields: normalized_enum_fields(field_configuration))
       end
 
       private
+
+      def normalized_enum_fields(field_configuration)
+        return {} unless field_configuration.respond_to?(:enum_fields)
+
+        Array(field_configuration.enum_fields).to_h
+      end
 
       def metadata_group(metadata_options)
         return {} if metadata_options.empty?

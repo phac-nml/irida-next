@@ -65,7 +65,7 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
   end
 
   def workflow_fields
-    field_configuration = Struct.new(:fields).new(WorkflowExecution::FieldConfiguration::SEARCHABLE_FIELDS)
+    field_configuration = WorkflowExecution::FieldConfiguration.new
     AdvancedSearch::Fields.for_workflow_executions(field_configuration:)
   end
 end

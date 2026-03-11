@@ -13,18 +13,42 @@
   <%= @conditions_form.label :value, data: { required: true } %>
 
   <% if %w[in not_in].include?(@condition.operator) %>
-    <div
-      data-controller="list-filter"
-      data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
-      class="list-filter"
-    >
-      <%= render ListInputComponent.new(
-        list_input_form_name: @conditions_form.field_name(:value, multiple: true),
-        show_description: false,
-        "aria-invalid": invalid_value,
-        "aria-describedby": @conditions_form.field_id(:value, "error"),
-      ) %>
-    </div>
+    <% if enum_field? %>
+      <%= @conditions_form.select :value,
+                                 options_for_select(enum_field_options, selected_enum_values),
+                                 {},
+                                 {
+                                   multiple: true,
+                                   "aria-label": value_label,
+                                   "aria-invalid": invalid_value,
+                                   "aria-describedby": @conditions_form.field_id(:value, "error"),
+                                   autofocus: invalid_value
+                                 } %>
+    <% else %>
+      <div
+        data-controller="list-filter"
+        data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
+        class="list-filter"
+      >
+        <%= render ListInputComponent.new(
+          list_input_form_name: @conditions_form.field_name(:value, multiple: true),
+          show_description: false,
+          "aria-invalid": invalid_value,
+          "aria-describedby": @conditions_form.field_id(:value, "error"),
+        ) %>
+      </div>
+    <% end %>
+  <% elsif enum_field? %>
+    <%= @conditions_form.select :value,
+                               options_for_select(enum_field_options,
+                                                 selected_enum_values.first),
+                               { include_blank: true },
+                               {
+                                 "aria-label": value_label,
+                                 "aria-invalid": invalid_value,
+                                 "aria-describedby": @conditions_form.field_id(:value, "error"),
+                                 autofocus: invalid_value
+                               } %>
   <% else %>
     <%= @conditions_form.text_field :value,
                                 "aria-label": value_label,
