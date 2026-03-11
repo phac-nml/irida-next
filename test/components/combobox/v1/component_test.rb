@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 module Combobox
-  module V2
+  module V1
     class ComponentTest < ApplicationSystemTestCase
       def test_default # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         visit('/rails/view_components/combobox_component/default')
