@@ -538,7 +538,7 @@ export default class extends Controller {
 
     try {
       return JSON.parse(payload);
-    } catch (_error) {
+    } catch {
       return null;
     }
   }
