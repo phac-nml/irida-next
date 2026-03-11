@@ -964,36 +964,6 @@ type Group implements Node {
   id: ID!
 
   """
-  Members of the group.
-  """
-  members(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: String
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: String
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Type of the user (e.g., bot, human, etc.)
-    """
-    userType: [String!] = null
-  ): MemberConnection
-
-  """
   Name of the namespace.
   """
   name: String!
@@ -1393,6 +1363,41 @@ type GroupMetricsType implements NamespaceMetrics & Node {
   ID of the object.
   """
   id: ID!
+
+  """
+  Members of the group.
+  """
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    The source of the members (e.g., project, group).
+    """
+    source: String = "inherited"
+
+    """
+    Type of the user (e.g., bot, human, etc.)
+    """
+    userType: [String!] = ["human"]
+  ): MemberConnection
 
   """
   Total number of samples in group projects or user project.
@@ -1925,36 +1930,6 @@ type Project implements Node {
   id: ID!
 
   """
-  Members of the project.
-  """
-  members(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: String
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: String
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Type of the user (e.g., bot, human, etc.)
-    """
-    userType: [String!] = null
-  ): MemberConnection
-
-  """
   Metadata summary for the project
   """
   metadataSummary(
@@ -2342,6 +2317,41 @@ type ProjectMetricsType implements NamespaceMetrics & Node {
   ID of the object.
   """
   id: ID!
+
+  """
+  Members of the project.
+  """
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    The source of the members (e.g., project, group).
+    """
+    source: String = "inherited"
+
+    """
+    Type of the user (e.g., bot, human, etc.)
+    """
+    userType: [String!] = ["human"]
+  ): MemberConnection
 
   """
   Name of the project.

@@ -11,7 +11,7 @@ module Types
     field :user_type, String, null: false, description: 'Type of the user (e.g., bot, human, etc.)'
 
     def self.authorized?(object, context)
-      super && (context[:member_authorized] ||
+      super && (context[:current_user]&.system? ||
         allowed_to?(
           :read?,
           object,

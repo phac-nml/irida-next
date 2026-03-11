@@ -18,9 +18,6 @@ module Types
           complexity: 5,
           resolver: Resolvers::NestedGroupsResolver
 
-    field :members, MemberType.connection_type, null: true, description: 'Members of the group.',
-                                                resolver: Resolvers::MembersResolver
-
     field :parent, GroupType, null: true, description: 'Parent group.'
 
     def self.authorized?(object, context)

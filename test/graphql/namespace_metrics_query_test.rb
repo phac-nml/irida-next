@@ -122,6 +122,44 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     }
   GRAPHQL
 
+  NAMESPACE_METRICS_MEMBERS_QUERY = <<~GRAPHQL
+    query($puid: ID!, $userType: [String!], $source: String) {
+      namespaceMetrics(puid: $puid) {
+        nodes {
+          name
+          ... on GroupMetricsType {
+            members(source: $source, userType: $userType) {
+              nodes {
+                user {
+                  email
+                }
+                accessLevel
+                expiresAt
+              }
+              totalCount
+            }
+            projects {
+              nodes {
+                name
+                members(source: $source, userType: $userType) {
+                  nodes {
+                    user {
+                      email
+                    }
+                    accessLevel
+                    expiresAt
+                  }
+                  totalCount
+                }
+
+              }
+            }
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   # used in the pagination test below; it exposes cursor information on the
   # nested projects/groups connections so that we can walk the pages one at a
   # time.
@@ -718,6 +756,191 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     expected_disk_usage = calculate_disk_usage(@group, direct_only: true)
     assert_equal expected_disk_usage, metrics_group_node['diskUsage'],
                  'diskUsage with directOnly should sum attachment byte sizes for direct projects and samples only'
+  end
+
+  test 'group members query should work' do
+    group = groups(:group_one)
+
+    result = IridaSchema.execute(NAMESPACE_METRICS_MEMBERS_QUERY, context: { current_user: @sys_user },
+                                                                  variables: { puid: group.puid },
+                                                                  max_complexity: nil)
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['namespaceMetrics']['nodes'].find { |n| n['name'] == group.name }
+
+    assert_not_empty data, 'group type should work'
+    assert_equal group.name, data['name']
+
+    members_data = data['members']
+
+    assert_not_empty members_data, 'members field should return data'
+    assert_equal 4, members_data['totalCount'], 'totalCount should be correct'
+
+    member_nodes = members_data['nodes']
+    assert_not_empty member_nodes, 'member nodes should not be empty'
+    assert_equal 4, member_nodes.size, 'should return the correct number of member nodes'
+
+    member_nodes.each do |member_node|
+      user_email = member_node['user']['email']
+      access_level = member_node['accessLevel']
+      expires_at = member_node['expiresAt']
+
+      expected_emails = [users(:john_doe).email, users(:joan_doe).email, users(:ryan_doe).email,
+                         users(:james_doe).email]
+
+      assert_includes expected_emails,
+                      user_email
+
+      access_level_translations = [I18n.t('members.access_levels.level_10'),
+                                   I18n.t('members.access_levels.level_40'),
+                                   I18n.t('members.access_levels.level_50')]
+
+      assert_includes access_level_translations, access_level
+      assert_nil expires_at if user_email == 'john.doe@localhost'
+      assert_not_nil expires_at if user_email != 'john.doe@localhost'
+    end
+  end
+
+  test 'subgroup direct members query should work' do
+    # subgroup1 is a subgroup of group_one
+    group = groups(:subgroup1)
+
+    result = IridaSchema.execute(NAMESPACE_METRICS_MEMBERS_QUERY, context: { current_user: @sys_user },
+                                                                  variables: {
+                                                                    puid: group.puid,
+                                                                    source: 'direct'
+                                                                  },
+                                                                  max_complexity: nil)
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['namespaceMetrics']['nodes'].find { |n| n['name'] == group.name }
+
+    assert_not_empty data, 'group type should work'
+    assert_equal group.name, data['name']
+
+    members_data = data['members']
+
+    assert_not_empty members_data, 'members field should return data'
+    assert_equal 1, members_data['totalCount'], 'totalCount should be correct'
+
+    member_nodes = members_data['nodes']
+    assert_not_empty member_nodes, 'member nodes should not be empty'
+    assert_equal 1, member_nodes.size, 'should return the correct number of member nodes'
+
+    member_nodes.each do |member_node|
+      user_email = member_node['user']['email']
+      access_level = member_node['accessLevel']
+      expires_at = member_node['expiresAt']
+
+      assert_includes ['ryan.doe@localhost'],
+                      user_email
+
+      assert_equal I18n.t('members.access_levels.level_10'), access_level
+
+      assert_nil expires_at
+    end
+  end
+
+  test 'project members query should work' do
+    group = groups(:group_one)
+    project = projects(:project1)
+
+    result = IridaSchema.execute(NAMESPACE_METRICS_MEMBERS_QUERY, context: { current_user: @sys_user },
+                                                                  variables: { puid: group.puid },
+                                                                  max_complexity: nil)
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    group_data = result['data']['namespaceMetrics']['nodes'].find { |n| n['name'] == group.name }
+    data = group_data['projects']['nodes'].find { |p| p['name'] == project.name }
+
+    assert_not_empty data, 'project type should work'
+    assert_equal project.name, data['name']
+    assert_equal 5, data['members']['totalCount']
+
+    members_data = data['members']
+
+    assert_not_empty members_data, 'members field should return data'
+    assert_equal 5, members_data['totalCount'], 'totalCount should be correct'
+
+    member_nodes = members_data['nodes']
+    assert_not_empty member_nodes, 'member nodes should not be empty'
+    assert_equal 5, member_nodes.size, 'should return the correct number of member nodes'
+
+    access_level_translations = [I18n.t('members.access_levels.level_10'),
+                                 I18n.t('members.access_levels.level_30'),
+                                 I18n.t('members.access_levels.level_40'),
+                                 I18n.t('members.access_levels.level_50')]
+
+    expected_emails = [users(:john_doe).email, users(:joan_doe).email, users(:ryan_doe).email, users(:james_doe).email,
+                       users(:michelle_doe).email]
+
+    member_nodes.each do |member_node|
+      user_email = member_node['user']['email']
+      access_level = member_node['accessLevel']
+      expires_at = member_node['expiresAt']
+
+      assert_includes expected_emails,
+                      user_email
+
+      assert_includes access_level_translations, access_level
+
+      assert_nil expires_at if user_email != users(:joan_doe).email
+      assert_not_nil expires_at if user_email == users(:joan_doe).email
+    end
+  end
+
+  test 'project members query with source set to direct should only return direct members' do
+    group = groups(:group_one)
+    project = projects(:project1)
+
+    result = IridaSchema.execute(NAMESPACE_METRICS_MEMBERS_QUERY, context: { current_user: @sys_user },
+                                                                  variables: {
+                                                                    puid: group.puid,
+                                                                    source: 'direct'
+                                                                  },
+                                                                  max_complexity: nil)
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    group_data = result['data']['namespaceMetrics']['nodes'].find { |n| n['name'] == group.name }
+    data = group_data['projects']['nodes'].find { |p| p['name'] == project.name }
+
+    assert_not_empty data, 'project type should work'
+    assert_equal project.name, data['name']
+    assert_equal 4, data['members']['totalCount']
+
+    members_data = data['members']
+
+    assert_not_empty members_data, 'members field should return data'
+    assert_equal 4, members_data['totalCount'], 'totalCount should be correct'
+
+    member_nodes = members_data['nodes']
+    assert_not_empty member_nodes, 'member nodes should not be empty'
+    assert_equal 4, member_nodes.size, 'should return the correct number of member nodes'
+
+    access_level_translations = [I18n.t('members.access_levels.level_10'),
+                                 I18n.t('members.access_levels.level_30'),
+                                 I18n.t('members.access_levels.level_40'),
+                                 I18n.t('members.access_levels.level_50')]
+
+    expected_emails = [users(:john_doe).email, users(:ryan_doe).email, users(:james_doe).email,
+                       users(:michelle_doe).email]
+
+    member_nodes.each do |member_node|
+      user_email = member_node['user']['email']
+      access_level = member_node['accessLevel']
+      expires_at = member_node['expiresAt']
+
+      assert_includes expected_emails,
+                      user_email
+
+      assert_includes access_level_translations, access_level
+
+      assert_nil expires_at if user_email
+    end
   end
 
   private
