@@ -16,6 +16,9 @@ module Types
             complexity: 5,
             resolver: Resolvers::Metrics::SubgroupsResolver
 
+      field :members, MemberType.connection_type, null: true, description: 'Members of the group.',
+                                                  resolver: Resolvers::Metrics::MembersResolver
+
       def self.authorized?(object, context)
         super && context[:current_user]&.system?
       end

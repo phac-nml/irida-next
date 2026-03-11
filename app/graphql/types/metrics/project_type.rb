@@ -17,6 +17,9 @@ module Types
 
       field :parent, String, null: true, description: 'Parent namespace of this namespace'
 
+      field :members, MemberType.connection_type, null: true, description: 'Members of the project.',
+                                                  resolver: Resolvers::Metrics::MembersResolver
+
       def self.authorized?(object, context)
         super && context[:current_user]&.system?
       end

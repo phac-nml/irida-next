@@ -8,14 +8,15 @@ module Types
 
     field :email, String, null: false, description: 'User email.'
     field :id, ID, null: false, description: 'ID of the user.'
+    field :user_type, String, null: false, description: 'Type of the user (e.g., bot, human, etc.)'
 
     def self.authorized?(object, context)
-      super &&
+      super && (context[:current_user]&.system? ||
         allowed_to?(
           :read?,
           object,
           context: { user: context[:current_user], token: context[:token] }
-        )
+        ))
     end
   end
 end
