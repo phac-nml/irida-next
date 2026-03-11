@@ -46,7 +46,7 @@ module WorkflowExecutions
     end
 
     def process_samples
-      if Flipper.enabled?(:v2_samplesheet)
+      if Flipper.enabled?(:v2_samplesheet, current_user)
         @sample_count = params[:sample_count]
       else
         sample_ids = params[:sample_ids]
@@ -72,7 +72,7 @@ module WorkflowExecutions
     end
 
     def allowed_to_update_samples
-      projects = if Flipper.enabled?(:v2_samplesheet)
+      projects = if Flipper.enabled?(:v2_samplesheet, current_user)
                    Project.where(id: @samples.select(:project_id))
                  else
                    @allowed_to_update_samples = true

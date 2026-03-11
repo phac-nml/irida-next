@@ -2,7 +2,7 @@
   <%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
     <% dialog.with_header(title: t(:".title", workflow: @workflow.name)) %>
 
-    <% if Flipper.enabled?(:v2_samplesheet) %>
+    <% if Flipper.enabled?(:v2_samplesheet, current_user) %>
       <%= render NextflowComponent.new(
         workflow: @workflow,
         url: workflow_executions_path,

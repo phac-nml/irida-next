@@ -1,21 +1,23 @@
 <div id="sample-attachments">
   <% if @has_attachments %>
-    <div class="flex flex-wrap gap-2 mb-4">
+    <div class="mb-4 flex flex-wrap gap-2">
       <% if @allowed_to[:update_sample] %>
-        <% if Flipper.enabled?(:sample_attachments_searching) %>
+        <% if Flipper.enabled?(:sample_attachments_searching, current_user) %>
           <%= form_with(
                       url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                       method: :get,
                       id: "select-all-form",
                       class: "max-sm:grow"
                     ) do |f| %>
-            <input type="hidden" name="format" value="turbo_stream"/>
-            <input type="hidden" name="select" value="on"/>
+            <input type="hidden" name="format" value="turbo_stream">
+            <input type="hidden" name="select" value="on">
+
             <input
               type="hidden"
               name="q[puid_or_file_blob_filename_cont]"
-              value="<%=params.dig(:q, :puid_or_file_blob_filename_cont)%>"
+              value="<%= params.dig(:q, :puid_or_file_blob_filename_cont) %>"
             >
+
             <%= f.submit t('common.controls.select_all'), class: "button button-default w-full" %>
           <% end %>
           <%= form_with(
@@ -24,13 +26,15 @@
                       id: "deselect-all-form" ,
                       class: "max-sm:grow",
                     ) do |f| %>
-            <input type="hidden" name="format" value="turbo_stream"/>
+            <input type="hidden" name="format" value="turbo_stream">
             <%= f.submit t('common.controls.deselect_all'), class: "button button-default w-full" %>
           <% end %>
         <% end %>
       <% end %>
-      <div class="sm:grow max-sm:hidden" role="presentation"></div>
-      <% if Flipper.enabled?(:sample_attachments_searching) %>
+
+      <div class="max-sm:hidden sm:grow" role="presentation"></div>
+
+      <% if Flipper.enabled?(:sample_attachments_searching, current_user) %>
         <%= render SearchComponent.new(
                 query: @q,
                 search_attribute: :puid_or_file_blob_filename_cont,
@@ -49,6 +53,7 @@
           <%= hidden_field_tag :limit, @pagy.limit %>
         <% end %>
       <% end %>
+
       <% if @allowed_to[:update_sample] %>
         <%= button_to t("projects.samples.show.new_attachment_button"),
         new_namespace_project_sample_attachment_path(sample_id: @sample.id),
@@ -86,8 +91,10 @@
       <% end %>
     </div>
   <% end %>
+
   <%= turbo_frame_tag "selected" %>
-  <div class="relative overflow-x-auto table-wrapper">
+
+  <div class="table-wrapper relative overflow-x-auto">
     <%= render Attachments::TableComponent.new(
       @sample_attachments,
       @pagy,

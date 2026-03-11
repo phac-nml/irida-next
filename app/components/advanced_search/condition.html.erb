@@ -20,7 +20,7 @@
 
       <%= conditions_form.label :field, data: { required: true } %>
 
-      <% unless Flipper.enabled?(:advanced_search_with_auto_complete) %>
+      <% unless Flipper.enabled?(:advanced_search_with_auto_complete, Current.user) %>
         <%= conditions_form.select :field,
                                options,
                                { include_blank: true },

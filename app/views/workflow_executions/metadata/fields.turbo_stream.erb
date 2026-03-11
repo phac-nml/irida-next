@@ -1,5 +1,5 @@
 <%= turbo_stream.append "samplesheet-payload-container" do %>
-  <% if Flipper.enabled?(:v2_samplesheet) %>
+  <% if Flipper.enabled?(:v2_samplesheet, current_user) %>
     <div
       hidden
       data-metadata="<%= @metadata %>"

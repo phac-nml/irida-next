@@ -75,7 +75,7 @@ class BaseSampleService < BaseService
 
   # Broadcast all turbo broadcasts for sample services where the broadcasts were suppressed
   def broadcast_refresh_later_to_samples_table(old_namespaces, new_namespaces, old_project, new_project)
-    return unless Flipper.enabled?(:samples_refresh_notice)
+    return unless Flipper.enabled?(:samples_refresh_notice, current_user)
 
     Turbo::StreamsChannel.broadcast_refresh_later_to old_project, :samples
 

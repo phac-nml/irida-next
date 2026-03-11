@@ -8,7 +8,7 @@ module WorkflowExecutions
 
     def fields # rubocop:disable Metrics/AbcSize
       authorize! @namespace, to: :update_samplesheet_data?
-      if Flipper.enabled?(:v2_samplesheet)
+      if Flipper.enabled?(:v2_samplesheet, current_user)
         @sample_ids = params[:sample_ids].split(',')
         @metadata_fields = JSON.parse(params[:metadata_fields])
         @headers = @metadata_fields.keys.to_json
@@ -30,7 +30,7 @@ module WorkflowExecutions
     # TODO: when feature flag :v2_samplesheet is retired, move fetch_metadata_with_feature_flag logic
     # into generate_metadata_for_samplesheet
     def generate_metadata_for_samplesheet
-      Flipper.enabled?(:v2_samplesheet) ? fetch_metadata_with_feature_flag : fetch_metadata
+      Flipper.enabled?(:v2_samplesheet, current_user) ? fetch_metadata_with_feature_flag : fetch_metadata
     end
 
     # generate metadata is now updated to handle multiple metadata fields at once. This is to handle metadata changes

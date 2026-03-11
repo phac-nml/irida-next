@@ -60,7 +60,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
     ]
 
     # index, increment for each one, not necessary for functionality
-    attributes.push(:id) unless Flipper.enabled?(:v2_samplesheet)
+    attributes.push(:id) unless Flipper.enabled?(:v2_samplesheet, current_user)
     attributes
   end
 
