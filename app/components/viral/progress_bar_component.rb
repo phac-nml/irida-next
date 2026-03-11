@@ -23,6 +23,7 @@ module Viral
       @system_arguments[:data][:controller] = 'viral--progress-bar'
       @system_arguments[:data]['viral--progress-bar-percentage-value'] = @percentage
       @system_arguments[:data]['viral--progress-bar-open-value'] = @open
+      @system_arguments[:data]['turbo-permanent'] = true
     end
   end
 end
