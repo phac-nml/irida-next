@@ -109,9 +109,9 @@ module Projects
     def page_title
       case action_name
       when 'index'
-        @title = t(:'general.default_sidebar.workflows')
+        @title = [t(:'general.default_sidebar.workflows'), project_title].join(' · ')
       when 'show'
-        @title = @workflow_execution.name.presence || @workflow_execution.id
+        @title = [@workflow_execution.name.presence || @workflow_execution.id, project_title].join(' · ')
       end
     end
   end

@@ -48,7 +48,7 @@ module Projects
     end
 
     def page_title
-      @title = t(:'projects.sidebar.members')
+      @title = [t(:'projects.sidebar.members'), project_title].join(' · ')
     end
   end
 end

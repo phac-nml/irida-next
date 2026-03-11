@@ -7,6 +7,7 @@ module Projects
 
     before_action :project
     before_action :layout_fixed
+    before_action :project_title
 
     layout 'projects'
 
@@ -28,6 +29,12 @@ module Projects
 
     def context_crumbs
       @context_crumbs = route_to_context_crumbs(@project.namespace.route)
+    end
+
+    def project_title
+      return unless @project
+
+      "#{t(:'activerecord.models.namespaces/project_namespace.one')}: #{@project.name} (#{@project.puid})"
     end
 
     def load_samples

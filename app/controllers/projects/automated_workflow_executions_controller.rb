@@ -158,7 +158,7 @@ module Projects
     end
 
     def page_title
-      @title = t(:'projects.sidebar.automated_workflow_executions')
+      @title = [t(:'projects.sidebar.automated_workflow_executions'), project_title].join(' · ')
     end
   end
 end

@@ -157,7 +157,8 @@ module Groups
     end
 
     def page_title
-      @title = t(:'activerecord.models.sample.other')
+      @title = [t(:'activerecord.models.sample.other'),
+                "#{t(:'activerecord.models.group.one')}: #{@group.name} (#{@group.puid})"].join(' · ')
     end
   end
 end
