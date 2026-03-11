@@ -539,17 +539,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
     analysis_output_filenames = [@analysis1_file_blob.filename, @analysis2_file_blob.filename]
 
-    analysis_output_blobs_total_size = @analysis1_file_blob.byte_size + @analysis2_file_blob.byte_size
-
-    existing_attachments_size = 0
-
-    namespace_samples = workflow_execution.namespace.project.samples
-    namespace_samples.each do |sample|
-      sample.attachments.each do |att|
-        existing_attachments_size += att.file.byte_size
-      end
-    end
-
     sample = samples(:sampleA)
     assert_equal 3, sample.attachments.count
 
@@ -563,19 +552,6 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     workflow_execution.reload
 
     assert_equal 3, workflow_execution.outputs.count
-
-    global_analysis_outputs = workflow_execution.outputs.reject { |o| o.file.filename == 'summary.txt' }
-
-    global_output_size = 0
-
-    global_analysis_outputs.each do |global_analysis_output|
-      global_output_size += global_analysis_output.file.byte_size
-    end
-
-    size_with_duplicates = existing_attachments_size + global_output_size + analysis_output_blobs_total_size
-    size_without_duplicates = existing_attachments_size + analysis_output_blobs_total_size
-
-    assert size_without_duplicates < size_with_duplicates
 
     # Workflow execution ran with 2 samples
     assert_equal 2, workflow_execution.samples_workflow_executions.count
@@ -606,11 +582,21 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
     namespace_calculated_disk_usage = calculate_disk_usage(workflow_execution.namespace)
 
-    expected_disk_usage = number_to_human_size(
-      size_without_duplicates, precision: 2, significant: false, strip_insignificant_zeros: false
+    jeff_doe_user_namespace = users(:jeff_doe).namespace
+
+    result = IridaSchema.execute(
+      GROUP_OR_USER_BY_PUID_METRICS_QUERY,
+      context: { current_user: @sys_user },
+      variables: { puid: jeff_doe_user_namespace.puid },
+      max_complexity: nil
     )
 
-    assert_equal expected_disk_usage, namespace_calculated_disk_usage
+    assert_nil result['errors'], 'query should execute without errors'
+    assert_equal 1, result['data']['namespaceMetrics']['nodes'].size, 'should return one namespace'
+    namespace_node = result['data']['namespaceMetrics']['nodes'].first
+    assert_equal jeff_doe_user_namespace.name, namespace_node['name'], 'should return the correct user namespace'
+    assert_equal namespace_calculated_disk_usage, namespace_node['diskUsage'],
+                 'disk usage should match expected value without double counting duplicate attachments'
   end
 
   test 'group namespace metrics query with topLevelOnly flag returns only top level groups' do
@@ -742,13 +728,13 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     namespace = namespace_or_project.is_a?(Project) ? namespace_or_project.namespace : namespace_or_project
 
     samples = []
-    if direct_only
+    if direct_only && !namespace.project_namespace?
       namespace.project_namespaces.each do |pn|
         samples.concat(pn.project.samples) if pn.project.samples_count&.positive?
       end
     else
       namespace.self_and_descendants.each do |ns|
-        if namespace.group_namespace? || namespace.user_namespace?
+        if ns.group_namespace? || ns.user_namespace?
           ns.project_namespaces.each do |pn|
             samples.concat(pn.project.samples) if pn.project.samples_count&.positive?
           end
@@ -760,7 +746,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
     sample_ids = samples.map(&:id)
 
-    namespace_ids = if direct_only
+    namespace_ids = if direct_only && !namespace.project_namespace?
                       [namespace.id] + namespace.project_namespaces.pluck(:id)
                     else
                       namespace.self_and_descendants_of_type(
@@ -775,12 +761,16 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       }
     ).pluck(:id)
 
-    attachable_ids = sample_ids + namespace_ids + sample_workflow_execution_ids
+    workflow_execution_ids = WorkflowExecution.where(namespace_id: namespace_ids).pluck(:id)
+
+    attachable_ids = sample_ids + namespace_ids + sample_workflow_execution_ids + workflow_execution_ids
 
     attachments = Attachment.where(attachable_id: attachable_ids)
 
     total_attachments_size = 0
     blob_ids = []
+    # Duplicates can occur when a blob is attached to multiple records (e.g. a sample attachment that is attached to
+    # both the sample and a workflow execution output), so we track blob ids to avoid double counting the blobs.
     attachments.each do |att|
       total_attachments_size += att.file.blob.byte_size if att.file&.blob && blob_ids.exclude?(att.file.blob_id)
       blob_ids << att.file.blob_id if att.file&.blob_id

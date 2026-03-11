@@ -325,7 +325,7 @@ irida_next_example_completed_with_output:
   workflow_url: "https://github.com/phac-nml/irida_next_example_completed_with_output"
   run_id: "my_run_id_13"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project37_namespace, :uuid) %>
   name: "irida_next_example_completed_with_output"
   state: "completed"
   blob_run_directory: "not a run dir"

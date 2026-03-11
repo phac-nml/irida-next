@@ -1354,7 +1354,7 @@ type GroupMetricsType implements NamespaceMetrics & Node {
     Whether to only include disk usage for the projects, samples,
                    and workflow executions that directly belong to this namespace. Only need to provide this argument
                    if you only want to include direct projects for a group namespace,as user namespaces only have
-                    direct projects.
+                   direct projects.
     """
     directOnly: Boolean = false
   ): String!
@@ -1656,7 +1656,7 @@ interface NamespaceMetrics {
     Whether to only include disk usage for the projects, samples,
                    and workflow executions that directly belong to this namespace. Only need to provide this argument
                    if you only want to include direct projects for a group namespace,as user namespaces only have
-                    direct projects.
+                   direct projects.
     """
     directOnly: Boolean = false
   ): String!
@@ -2198,7 +2198,7 @@ type ProjectMetricsType implements NamespaceMetrics & Node {
     Whether to only include disk usage for the projects, samples,
                    and workflow executions that directly belong to this namespace. Only need to provide this argument
                    if you only want to include direct projects for a group namespace,as user namespaces only have
-                    direct projects.
+                   direct projects.
     """
     directOnly: Boolean = false
   ): String!
@@ -3047,7 +3047,7 @@ type UserNamespaceMetricsType implements NamespaceMetrics & Node {
     Whether to only include disk usage for the projects, samples,
                    and workflow executions that directly belong to this namespace. Only need to provide this argument
                    if you only want to include direct projects for a group namespace,as user namespaces only have
-                    direct projects.
+                   direct projects.
     """
     directOnly: Boolean = false
   ): String!
