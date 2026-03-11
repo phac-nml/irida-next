@@ -1,5 +1,8 @@
 <fieldset
   data-advanced-search-target="conditionsContainer"
+  data-enum-fields="<%= ERB::Util.json_escape(@fields.fetch(:enum_fields, {}).to_json) %>"
+  data-enum-operations="<%= ERB::Util.json_escape(enum_operator_options.to_json) %>"
+  data-standard-operations="<%= ERB::Util.json_escape(@operations.to_json) %>"
   data-advanced-search-group-index="<%= @group_index %>"
   data-advanced-search-condition-index="<%= @condition_index %>"
   data-advanced-search-legend-template="<%= t("components.advanced_search_component.condition", index: "__INDEX__") %>"
@@ -25,6 +28,7 @@
                                options,
                                { include_blank: true },
                                {
+                                 "data-action": "advanced-search#handleFieldChange",
                                  "aria-label": field_label,
                                  "aria-invalid": invalid_field,
                                  "aria-describedby":
@@ -36,6 +40,9 @@
           form: conditions_form,
           field: :field,
           options: options,
+          data: {
+            action: "change->advanced-search#handleFieldChange",
+          },
           aria: {
             label: field_label,
             invalid: invalid_field,
@@ -57,7 +64,7 @@
 
       <%= conditions_form.select :operator,
                              options_for_select(
-                               @operations,
+                               operation_options,
                                selected = @condition.operator,
                              ),
                              { include_blank: true },
@@ -80,6 +87,7 @@
       group_index: @group_index,
       condition: @condition,
       condition_index: @condition_index,
+      fields: @fields,
     ) %>
   <% end %>
 

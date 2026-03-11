@@ -34,4 +34,13 @@ class AdvancedSearch::FieldsTest < ActiveSupport::TestCase # rubocop:disable Sty
     assert_includes fields[:groups][metadata_group_label],
                     [I18n.t('workflow_executions.table_component.workflow_version'), 'metadata.workflow_version']
   end
+
+  test 'for_workflow_executions returns enum fields when provided by configuration' do
+    field_configuration = WorkflowExecution::FieldConfiguration.new
+    fields = AdvancedSearch::Fields.for_workflow_executions(field_configuration:)
+
+    assert_includes fields[:enum_fields].keys, 'state'
+    assert_includes fields[:enum_fields].keys, 'metadata.pipeline_id'
+    assert_includes fields[:enum_fields].keys, 'metadata.workflow_version'
+  end
 end
