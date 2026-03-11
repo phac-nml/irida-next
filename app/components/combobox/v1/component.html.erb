@@ -10,6 +10,7 @@
                      value: @selected_option[:value],
                      id: "#{@combobox_id}_hidden",
                      data: {
+                       action: @combobox_arguments.dig(:data, :action),
                        "combobox--v1-target": "hidden",
                      } %>
 

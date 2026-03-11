@@ -167,7 +167,17 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_selector "div[role='option']",
                           text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.workflow_name'))}\z/,
                           count: 1
+
+          combobox.send_keys(I18n.t('workflow_executions.table_component.state'), :enter)
         end
+
+        within first("select[name$='[operator]']") do
+          allowed_operators = all("option:not([hidden]):not([value=''])").map(&:value)
+          assert_equal %w[= != in not_in], allowed_operators
+        end
+
+        find("select[name$='[operator]']").find("option[value='=']").select_option
+        assert_selector "select[name$='[value]']"
       end
     end
   end
