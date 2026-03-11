@@ -1382,7 +1382,7 @@ type GroupMetricsType implements NamespaceMetrics & Node {
     By default this will return direct and inherited members.
                    Setting this to `true` will return only direct members.
     """
-    directOnly: String = "false"
+    directOnly: Boolean = false
 
     """
     Returns the first _n_ elements from the list.
@@ -2337,7 +2337,7 @@ type ProjectMetricsType implements NamespaceMetrics & Node {
     By default this will return direct and inherited members.
                    Setting this to `true` will return only direct members.
     """
-    directOnly: String = "false"
+    directOnly: Boolean = false
 
     """
     Returns the first _n_ elements from the list.
