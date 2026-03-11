@@ -152,7 +152,7 @@ gem 'opentelemetry-sdk'
 gem 'ruby-progressbar'
 
 # feature flags
-flipper_version = '~> 1.3.2'
+flipper_version = '~> 1.4.0'
 gem 'flipper-active_record', flipper_version
 gem 'flipper-ui', flipper_version
 
