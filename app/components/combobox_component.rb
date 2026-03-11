@@ -6,5 +6,5 @@ class ComboboxComponent < Versioning::VersionedComponent
     v1: Combobox::V1::Component
   }.freeze
 
-  VERSION_RESOLVER = -> {}
+  VERSION_RESOLVER = -> { :v1 }
 end
