@@ -1389,12 +1389,12 @@ type GroupMetricsType implements NamespaceMetrics & Node {
     last: Int
 
     """
-    The source of the members (e.g., project, group).
+    The source of the members (e.g., inherited, or direct).
     """
     source: String = "inherited"
 
     """
-    Type of the user (e.g., bot, human, etc.)
+    Type of the user (e.g., human, group_bot,project_bot, project_automation_bot)
     """
     userType: [String!] = ["human"]
   ): MemberConnection
@@ -2343,12 +2343,12 @@ type ProjectMetricsType implements NamespaceMetrics & Node {
     last: Int
 
     """
-    The source of the members (e.g., project, group).
+    The source of the members (e.g., inherited, or direct).
     """
     source: String = "inherited"
 
     """
-    Type of the user (e.g., bot, human, etc.)
+    Type of the user (e.g., human, group_bot,project_bot, project_automation_bot)
     """
     userType: [String!] = ["human"]
   ): MemberConnection
