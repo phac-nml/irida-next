@@ -72,7 +72,7 @@ export default class extends Controller {
       // Listen for messages from the worker
       this.#worker.onmessage = (e) => {
         console.log("Main thread received:", e.data);
-        if (!e.success) {
+        if (!e.data.success) {
           this.#hasErrors = true;
           this.#addErrorMessage(e.data.error);
         }
@@ -80,10 +80,6 @@ export default class extends Controller {
     } else {
       console.error("Web Workers are not supported in this browser.");
     }
-  }
-
-  disconnect() {
-    this.#worker.terminate(); //TODO: Give the user the ability to navigate to other pages
   }
 
   changeSampleIDInput(event) {
@@ -263,14 +259,13 @@ export default class extends Controller {
       range: 1,
     });
 
-    let count = 0;
     const total = rows.length;
 
-    rows.forEach((row) => {
+    rows.forEach((row, index) => {
       const id = Object.values(row)[0];
       const metadata = Object.entries(row).slice(1);
 
-      console.log("count = ", count);
+      console.log("index = ", index);
       console.log("row = ", row);
       console.log("id = ", id);
       console.log("metadata = ", metadata);
@@ -284,7 +279,7 @@ export default class extends Controller {
 
       if (this.hasViralProgressBarOutlet) {
         this.viralProgressBarOutlet.updatePercentageValue(
-          (++count / total) * 100,
+          ((index + 1) / total) * 100,
         );
       }
     });

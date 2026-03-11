@@ -156,5 +156,7 @@ self.onmessage = async function (e) {
       success: false,
       error: error.message,
     });
+  } finally {
+    self.close();
   }
 };
