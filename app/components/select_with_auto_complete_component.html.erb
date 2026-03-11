@@ -8,9 +8,12 @@
                      value: @selected_option[:value],
                      id: "#{@combobox_id}_hidden",
                      data: {
+                       action: @combobox_arguments.dig(:data, :action),
                        "select-with-auto-complete-target": "hidden",
                      } %>
+
   <%= render Viral::BaseComponent.new(**combobox_arguments) %>
+
   <div
     id="<%= @listbox_id %>"
     role="listbox"
@@ -20,10 +23,6 @@
   >
     <%= @listbox_options %>
   </div>
-  <div
-    class="sr-only"
-    aria-live="polite"
-    data-select-with-auto-complete-target="ariaLiveUpdate"
-  >
-  </div>
+
+  <div class="sr-only" aria-live="polite" data-select-with-auto-complete-target="ariaLiveUpdate"></div>
 </div>
