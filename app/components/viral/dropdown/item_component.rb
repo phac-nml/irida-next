@@ -4,13 +4,14 @@ module Viral
   module Dropdown
     # Item component for dropdown
     class ItemComponent < Viral::Component
-      attr_reader :label, :icon, :url, :section_header, :params, :disableable, :prefix
+      attr_reader :label, :icon, :icon_library, :url, :section_header, :params, :disableable, :prefix
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(label:, url: nil, params: nil, disableable: false, icon_name: nil, section_header: false,
-                     prefix: nil, **system_arguments)
+                     prefix: nil, icon_library: nil, **system_arguments)
         @label = label
         @icon = icon_name
+        @icon_library = icon_library
         @url = url
         @params = params || {}
         @disableable = disableable
