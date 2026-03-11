@@ -79,6 +79,8 @@
 
         <%= render partial: "shared/form/required_field_legend" %>
 
+        <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100"><%= t(".select_formats") %></h2>
+
         <%= render Viral::SortableListsGuidanceComponent.new(
           title: t(".fields_instructions_title"),
           instructions: t(".fields_instructions"),
@@ -93,9 +95,7 @@
           },
         ) %>
 
-        <%= viral_sortable_lists(
-            title: t(".select_formats"),
-            ) do |sortable_lists| %>
+        <%= viral_sortable_lists do |sortable_lists| %>
           <%= sortable_lists.with_list(
             id: "available-list",
             title: t(".available"),

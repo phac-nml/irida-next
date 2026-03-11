@@ -82,6 +82,7 @@
         <%= render partial: "shared/form/required_field_legend" %>
 
         <% unless @namespace.metadata_fields.empty? %>
+          <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100"><%= t(".metadata") %></h2>
           <%= render Viral::SortableListsGuidanceComponent.new(
             title: t(".fields_instructions_title"),
             instructions: t(".fields_instructions"),
@@ -96,7 +97,6 @@
             },
           ) %>
           <%= viral_sortable_lists(
-            title: t(".metadata"),
             templates: templates,
             template_label: t("data_exports.new.template_select_label")
             ) do |sortable_lists| %>
