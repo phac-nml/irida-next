@@ -948,11 +948,13 @@ export default class extends Controller {
     // 1000 sample requests
     if (this.hasSelectionOutlet) {
       this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
-      this.#chunkedSelectedSamples = this.chunkSamples();
-      this.#submitSamplesheetParams();
-    } else {
-      this.#renderProcessingError();
+      if (this.#selectedSamples.length !== 0) {
+        this.#chunkedSelectedSamples = this.chunkSamples();
+        this.#submitSamplesheetParams();
+        return;
+      }
     }
+    this.#renderProcessingError();
   }
 
   // example: a 3000 sample request will be chunked into:
@@ -1012,7 +1014,7 @@ export default class extends Controller {
 
   #sampleAttributesFetch(form, index) {
     const formData = new FormData(form);
-    fetch(form.getAttribute("data-fetch-url"), {
+    fetch(form.action, {
       credentials: "same-origin",
       method: "POST",
       body: JSON.stringify(this.#toJson(formData, index)),
@@ -1021,8 +1023,14 @@ export default class extends Controller {
         Accept: "text/vnd.turbo-stream.html",
       },
     })
-      .then((r) => r.text())
-      .then((html) => Turbo.renderStreamMessage(html));
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error(`samplesheet request failed: ${r.status}`);
+        }
+        return r.text();
+      })
+      .then((html) => Turbo.renderStreamMessage(html))
+      .catch(() => this.#renderProcessingError());
   }
 
   async sampleAttributesTargetConnected() {
