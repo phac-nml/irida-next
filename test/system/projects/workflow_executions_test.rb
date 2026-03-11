@@ -426,7 +426,11 @@ module Projects
           find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
         end
         find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
-        find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+        if has_selector?("select[name$='[value]']", visible: :visible)
+          find("select[name$='[value]']", visible: :visible).select(I18n.t('workflow_executions.state.completed'))
+        else
+          find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+        end
         click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
       end
 
@@ -456,7 +460,11 @@ module Projects
           find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
         end
         find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
-        find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+        if has_selector?("select[name$='[value]']", visible: :visible)
+          find("select[name$='[value]']", visible: :visible).select(I18n.t('workflow_executions.state.completed'))
+        else
+          find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+        end
         click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
       end
 
