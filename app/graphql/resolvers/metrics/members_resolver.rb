@@ -8,18 +8,16 @@ module Resolvers
 
       argument :user_type, [String],
                required: false,
-               description: 'Type of the user (e.g., bot, human, etc.)',
+               description: 'Type of the user (e.g., human, group_bot,project_bot, project_automation_bot)',
                default_value: ['human']
 
       argument :source, GraphQL::Types::String,
                required: false,
-               description: 'The source of the members (e.g., project, group).',
+               description: 'The source of the members (e.g., inherited, or direct).',
                default_value: 'inherited'
 
       def resolve(user_type:, source:)
         return if object.is_a?(Namespaces::UserNamespace)
-
-        # context.scoped_set!(:member_authorized, true)
 
         return if user_type.blank?
 
