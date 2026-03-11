@@ -109,9 +109,23 @@
           </template>
 
           <div data-metadata--file-import-target="metadataColumns" aria-hidden="true" class="grid hidden gap-4">
-            <%= viral_sortable_lists(
-                title: t(".metadata_columns"),
-            ) do |sortable_lists| %>
+            <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100"><%= t(".metadata_columns") %></h2>
+
+            <%= render Viral::SortableListsGuidanceComponent.new(
+              title: t(".fields_instructions_title"),
+              instructions: t(".fields_instructions"),
+              keyboard_help: t(".keyboard_help"),
+              available: {
+                title: t(".available_list_title"),
+                description: t(".available_description"),
+              },
+              selected: {
+                title: t(".selected_list_title"),
+                description: t(".selected_description"),
+              },
+            ) %>
+
+            <%= viral_sortable_lists do |sortable_lists| %>
               <%= sortable_lists.with_list(
                 id: "available-list",
                 title: t(".available"),

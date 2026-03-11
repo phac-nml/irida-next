@@ -265,8 +265,7 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_text @sample1.puid
       end
       assert_text I18n.t('data_exports.new_sample_export_dialog.select_formats')
-      assert_text I18n.t('data_exports.new_sample_export_dialog.format_description',
-                         selected: I18n.t('data_exports.new_sample_export_dialog.selected').downcase)
+      assert_text I18n.t('data_exports.new_sample_export_dialog.fields_instructions')
       within '#available-list' do
         assert_no_selector 'li'
       end
@@ -326,8 +325,7 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_text @sample2.puid
       end
       assert_text I18n.t('data_exports.new_sample_export_dialog.select_formats')
-      assert_text I18n.t('data_exports.new_sample_export_dialog.format_description',
-                         selected: I18n.t('data_exports.new_sample_export_dialog.selected').downcase)
+      assert_text I18n.t('data_exports.new_sample_export_dialog.fields_instructions')
       within '#available-list' do
         assert_no_selector 'li'
       end
@@ -943,9 +941,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_linelist_export_dialog.title')
       assert_text I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       assert_text I18n.t('data_exports.new_linelist_export_dialog.metadata')
-      assert_text I18n.t('data_exports.new_linelist_export_dialog.metadata_description',
-                         available: I18n.t('data_exports.new_linelist_export_dialog.available').downcase,
-                         selected: I18n.t('data_exports.new_linelist_export_dialog.selected').downcase)
+      assert_text I18n.t('data_exports.new_linelist_export_dialog.fields_instructions')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.available')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.selected')
       assert_selector 'button[aria-disabled="true"]',

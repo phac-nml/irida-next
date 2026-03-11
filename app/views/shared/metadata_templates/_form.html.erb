@@ -79,78 +79,21 @@
           <%= t("metadata_templates.form.metadata") %>
         </h2>
 
-        <div
-          class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
-          role="note"
-          aria-describedby="metadata-fields-instructions metadata-fields-keyboard-help"
-        >
-          <h3 id="metadata-list-instructions-title" class="text-sm font-semibold text-slate-800 dark:text-slate-100">
-            <%= t("metadata_templates.form.fields_instructions_title") %>
-          </h3>
+        <%= render Viral::SortableListsGuidanceComponent.new(
+          title: t("metadata_templates.form.fields_instructions_title"),
+          instructions: t("metadata_templates.form.fields_instructions"),
+          keyboard_help: t("metadata_templates.form.keyboard_help"),
+          available: {
+            title: t("metadata_templates.form.available_list_title"),
+            description: t("metadata_templates.form.available_description"),
+          },
+          selected: {
+            title: t("metadata_templates.form.selected_list_title"),
+            description: t("metadata_templates.form.selected_description"),
+          },
+        ) %>
 
-          <p id="metadata-fields-instructions" class="mt-1 text-sm text-slate-700 dark:text-slate-200">
-            <%= t("metadata_templates.form.fields_instructions") %>
-          </p>
-
-          <ul class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <li
-              class="
-                flex gap-2.5 rounded-md bg-white p-3 ring-1 ring-slate-200 ring-inset dark:bg-slate-900/40
-                dark:ring-slate-700
-              "
-            >
-              <span
-                class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded bg-slate-100 dark:bg-slate-700/70"
-                aria-hidden="true"
-              >
-                <%= pathogen_icon(:plus, size: :sm, color: :subdued, "aria-hidden": true) %>
-              </span>
-
-              <div>
-                <p class="text-xs font-semibold tracking-wide text-slate-700 uppercase dark:text-slate-100">
-                  <%= t("metadata_templates.form.available_list_title") %>
-                </p>
-
-                <p class="mt-1 text-xs text-slate-600 dark:text-slate-300">
-                  <%= t("metadata_templates.form.available_description") %>
-                </p>
-              </div>
-            </li>
-
-            <li
-              class="
-                flex gap-2.5 rounded-md bg-white p-3 ring-1 ring-slate-200 ring-inset dark:bg-slate-900/40
-                dark:ring-slate-700
-              "
-            >
-              <span
-                class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded bg-green-100 dark:bg-green-900/40"
-                aria-hidden="true"
-              >
-                <%= pathogen_icon(:list_bullets, size: :sm, color: :success, "aria-hidden": true) %>
-              </span>
-
-              <div>
-                <p class="text-xs font-semibold tracking-wide text-slate-700 uppercase dark:text-slate-100">
-                  <%= t("metadata_templates.form.selected_list_title") %>
-                </p>
-
-                <p class="mt-1 text-xs text-slate-600 dark:text-slate-300">
-                  <%= t("metadata_templates.form.selected_description") %>
-                </p>
-              </div>
-            </li>
-          </ul>
-
-          <p id="metadata-fields-keyboard-help" class="mt-3 text-xs font-medium text-slate-700 dark:text-slate-200">
-            <%= t("metadata_templates.form.keyboard_help") %>
-          </p>
-        </div>
-
-        <%= viral_sortable_lists(
-                    title: nil,
-                    description: nil,
-                    ) do |sortable_lists| %>
+        <%= viral_sortable_lists do |sortable_lists| %>
           <%= sortable_lists.with_list(
             id: "available-list",
             title: t("metadata_templates.form.available"),

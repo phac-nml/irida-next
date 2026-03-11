@@ -1,14 +1,15 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
+
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
     <div
-      data-controller="infinite-scroll <%='viral--sortable-lists--two-lists-selection' unless @namespace.metadata_fields.empty? %>"
+      data-controller="infinite-scroll <%= 'viral--sortable-lists--two-lists-selection' unless @namespace.metadata_fields.empty? %>"
       <% unless @namespace.metadata_fields.empty? %>
-      data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
-      data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
-      data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
+        data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
+        data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
+        data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
       <% end %>
-      data-infinite-scroll-selection-outlet='#samples-table'
+      data-infinite-scroll-selection-outlet="#samples-table"
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
       data-infinite-scroll-plural-description-value="<%= t(:"data_exports.new.sample_description.plural") %>"
@@ -28,14 +29,15 @@
             <button
               type="button"
               class="
-                flex items-center justify-between w-full gap-3 p-3 font-medium text-black border
-                rounded-t-lg rtl:text-right dark:text-white border-slate-200
-                dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800
+                flex w-full items-center justify-between gap-3 rounded-t-lg border border-slate-200 p-3 font-medium
+                text-black hover:bg-slate-100 rtl:text-right dark:border-slate-700 dark:text-white
+                dark:hover:bg-slate-800
               "
               data-collapsible-target="button"
               data-action="collapsible#toggle"
             >
               <span data-infinite-scroll-target="selectionCount"><%= t(:"data_exports.new.samples_count.zero") %></span>
+
               <span
                 data-collapsible-target="icon"
                 class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
@@ -54,19 +56,18 @@
           >
             <div
               class="
-                text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border
-                border-t-0 border-slate-200 dark:border-slate-700
+                border border-t-0 border-slate-200 p-2.5 text-base leading-relaxed text-slate-500
+                dark:border-slate-700 dark:text-slate-400
               "
             >
-              <span data-infinite-scroll-target="summary">
-                <%= t(:"data_exports.new.sample_description.zero") %>
-              </span>
+              <span data-infinite-scroll-target="summary"><%= t(:"data_exports.new.sample_description.zero") %></span>
               <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
             </div>
+
             <div
               class="
-                overflow-y-auto max-h-[200px] border border-t-0 border-slate-200 rounded-b-lg
-                block w-full p-2.5 dark:bg-slate-800 dark:border-slate-700
+                block max-h-[200px] w-full overflow-y-auto rounded-b-lg border border-t-0 border-slate-200 p-2.5
+                dark:border-slate-700 dark:bg-slate-800
               "
               data-action="scroll->infinite-scroll#scroll"
               data-infinite-scroll-target="scrollable"
@@ -81,12 +82,21 @@
         <%= render partial: "shared/form/required_field_legend" %>
 
         <% unless @namespace.metadata_fields.empty? %>
+          <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100"><%= t(".metadata") %></h2>
+          <%= render Viral::SortableListsGuidanceComponent.new(
+            title: t(".fields_instructions_title"),
+            instructions: t(".fields_instructions"),
+            keyboard_help: t(".keyboard_help"),
+            available: {
+              title: t(".available_list_title"),
+              description: t(".available_description"),
+            },
+            selected: {
+              title: t(".selected_list_title"),
+              description: t(".selected_description"),
+            },
+          ) %>
           <%= viral_sortable_lists(
-            title: t(".metadata"),
-            description: t(".metadata_description",
-              available: t(".available").downcase,
-              selected: t(".selected").downcase
-            ),
             templates: templates,
             template_label: t("data_exports.new.template_select_label")
             ) do |sortable_lists| %>
@@ -96,13 +106,13 @@
               list_items: @namespace.metadata_fields,
               group: "metadata_selection",
             ) %>
+
             <%= sortable_lists.with_list(
               id: "selected-list",
               title: t(".selected"),
               group: "metadata_selection",
             ) %>
           <% end %>
-
           <template
             id="sortable-list-item-template"
             data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
@@ -121,8 +131,9 @@
               }
             ) do |form| %>
           <div class="grid gap-4">
-            <div class="mt-1 form-field">
+            <div class="form-field mt-1">
               <%= form.label :name, t(".format"), data: { required: true } %>
+
               <div class="flex">
                 <div class="flex items-center">
                   <input
@@ -130,15 +141,14 @@
                     type="radio"
                     value="csv"
                     name="data_export[export_parameters][linelist_format]"
-                    checked="true"
+                    checked
                   >
-                  <label
-                    for="csv-format"
-                    class="
-                      ml-1 mr-2 text-sm font-medium text-slate-900 dark:text-slate-300
-                    "
-                  ><%= t(".csv") %></label>
+
+                  <label for="csv-format" class="mr-2 ml-1 text-sm font-medium text-slate-900 dark:text-slate-300">
+                    <%= t(".csv") %>
+                  </label>
                 </div>
+
                 <div class="flex items-center">
                   <input
                     id="xlsx-format"
@@ -146,27 +156,26 @@
                     value="xlsx"
                     name="data_export[export_parameters][linelist_format]"
                   >
-                  <label
-                    for="xlsx-format"
-                    class="
-                      ml-1 text-sm font-medium text-slate-900 dark:text-slate-300
-                    "
-                  ><%= t(".xlsx") %></label>
+
+                  <label for="xlsx-format" class="ml-1 text-sm font-medium text-slate-900 dark:text-slate-300">
+                    <%= t(".xlsx") %>
+                  </label>
                 </div>
               </div>
             </div>
+
             <%= render partial: "name_and_email", locals: { form: } %>
+
             <div>
               <%= form.hidden_field :export_type, value: "linelist" %>
+
               <%= form.fields_for :export_parameters do |export_parameters| %>
                 <%= export_parameters.hidden_field :namespace_id, value: namespace_id %>
               <% end %>
             </div>
+
             <% unless @namespace.metadata_fields.empty? %>
-              <div
-                class="hidden"
-                data-viral--sortable-lists--two-lists-selection-target="field"
-              ></div>
+              <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
               <% data = {
                 turbo_frame: "_top",
                 action: "click->viral--sortable-lists--two-lists-selection#constructParams",
@@ -175,6 +184,7 @@
             <% else %>
               <% data = { turbo_frame: "_top" } %>
             <% end %>
+
             <div>
               <%= form.submit t("data_exports.new.submit_button"),
                           data: data,

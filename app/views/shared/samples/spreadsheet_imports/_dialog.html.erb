@@ -214,9 +214,25 @@
           </template>
 
           <div class="grid hidden gap-4" data-spreadsheet-import-target="metadata">
-            <%= viral_sortable_lists(
-            title: t("shared.samples.spreadsheet_imports.dialog.metadata"),
-            ) do |sortable_lists| %>
+            <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100">
+              <%= t("shared.samples.spreadsheet_imports.dialog.metadata") %>
+            </h2>
+
+            <%= render Viral::SortableListsGuidanceComponent.new(
+              title: t("shared.samples.spreadsheet_imports.dialog.fields_instructions_title"),
+              instructions: t("shared.samples.spreadsheet_imports.dialog.fields_instructions"),
+              keyboard_help: t("shared.samples.spreadsheet_imports.dialog.keyboard_help"),
+              available: {
+                title: t("shared.samples.spreadsheet_imports.dialog.available_list_title"),
+                description: t("shared.samples.spreadsheet_imports.dialog.available_description"),
+              },
+              selected: {
+                title: t("shared.samples.spreadsheet_imports.dialog.selected_list_title"),
+                description: t("shared.samples.spreadsheet_imports.dialog.selected_description"),
+              },
+            ) %>
+
+            <%= viral_sortable_lists do |sortable_lists| %>
               <%= sortable_lists.with_list(
                 id: "available-list",
                 title: t("shared.samples.spreadsheet_imports.dialog.available"),

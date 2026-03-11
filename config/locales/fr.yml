@@ -502,18 +502,24 @@ fr:
       title: Analyser les exportations
     new_linelist_export_dialog:
       available: Disponible
+      available_description: Champs de métadonnées qui ne seront pas inclus dans l’exportation.
+      available_list_title: Non inclus dans l’exportation
       close_progress: Fermer la progression de l’exportation
       created_records: Créé %{current} sur %{total} enregistrements
       csv: ".csv"
       download_started: 'Téléchargement démarré : %{filename}'
+      fields_instructions: Sélectionnez un ou plusieurs champs de métadonnées, puis utilisez les boutons d’action pour déplacer les champs entre les listes. L’ordre de la liste sélectionnée détermine l’ordre des colonnes de l’exportation.
+      fields_instructions_title: Fonctionnement des listes
       format: Format
+      keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       metadata: Métadonnées
-      metadata_description: Sélectionnez les champs de métadonnées à exporter en déplaçant les champs de métadonnées de la liste %{available} à la liste %{selected}. L’ordre des métadonnées de l’exportation sera déterminé par l’ordre de la liste %{selected}.
       no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
       preparing_rows: Préparation de %{count} lignes
       selected: Sélectionné
       selected_count: 'Échantillons sélectionnés : %{count}'
+      selected_description: Champs de métadonnées inclus dans l’exportation. Réorganisez cette liste pour contrôler l’ordre des colonnes.
+      selected_list_title: Inclus dans l’exportation
       start_error: 'Impossible de démarrer l’exportation : %{message}'
       title: Exportation de liste détaillée
       unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
@@ -521,10 +527,16 @@ fr:
       xlsx_unsupported: L’exportation XLSX n’est pas encore prise en charge dans ce flux côté client.
     new_sample_export_dialog:
       available: Disponible
-      format_description: Par défaut, tous les fichiers sont inclus dans les échantillons d’exportations. Si vous souhaitez filtrer les fichiers inclus en fonction du format, n’incluez que ces formats dans la liste %{selected}.
+      available_description: Formats de fichiers non inclus dans cette exportation. Par défaut, tous les formats sont inclus.
+      available_list_title: Non inclus dans l’exportation
+      fields_instructions: Sélectionnez les formats de fichiers à inclure dans l’exportation. Déplacez les formats vers la liste sélectionnée pour n’inclure que ces formats.
+      fields_instructions_title: Fonctionnement des listes
+      keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       samples: Échantillons
       select_formats: Sélectionner les formats de fichiers
       selected: Sélectionné
+      selected_description: Formats de fichiers inclus dans l’exportation. Seuls les fichiers correspondant à ces formats seront exportés.
+      selected_list_title: Inclus dans l’exportation
       title: Exportation d’échantillons
     new_single_analysis_export_dialog:
       single_selection: Exécutions de flux de travail (1 sélectionné)
@@ -1886,12 +1898,17 @@ fr:
         file_imports:
           dialog:
             available: Disponible
+            available_description: Colonnes de métadonnées de votre fichier qui ne seront pas importées dans les métadonnées d’échantillon.
+            available_list_title: Non importé
             description: L’importation d’une feuille de calcul de métadonnées permet d’ajouter, de mettre à jour ou de supprimer plusieurs champs de métadonnées dans plusieurs échantillons à la fois.
+            fields_instructions: Sélectionnez les colonnes de métadonnées à importer en les déplaçant vers la liste sélectionnée. L’ordre de la liste sélectionnée détermine l’ordre d’importation.
+            fields_instructions_title: Fonctionnement des listes
             file: Fichier
             file_help: CSV, TSV, XLS ou XLSX.
             ignore_empty_values:
               description: Si cette option est sélectionnée, les champs de métadonnées sans valeur associée seront ignorés et ces clés de métadonnées ne seront pas supprimées de l’échantillon si elles sont présentes. Cependant, si cette option n’est pas sélectionnée, tous les échantillons avec la clé de métadonnées et la valeur vide seront supprimés.
               label: Ignorer les valeurs vides
+            keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
             metadata_columns: Colonnes de métadonnées
             namespace:
               description_html: La feuille de calcul doit comporter une colonne contenant un exemple d’identificateur. L’identificateur est sensible à la casse et peut contenir le <b>nom ou l’PUID de l’échantillon</b>
@@ -1899,11 +1916,13 @@ fr:
             sample_id_column: Colonne identificateur de l’échantillon
             select_sample_id_column: Sélectionner une colonne identificateur de l’échantillon
             selected: Sélectionné
+            selected_description: Colonnes de métadonnées qui seront importées dans les métadonnées d’échantillon.
+            selected_list_title: Sera importé
             submit_button: Importer des métadonnées
             title: Télécharger des échantillons de métadonnées
             uploading: Téléchargement
           errors:
-            description: 'L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :'
+            description: "‘L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :’"
             ok_button: OK
           success:
             description: Les métadonnées ont été importées avec succès!
@@ -1923,9 +1942,14 @@ fr:
       spreadsheet_imports:
         dialog:
           available: Disponible
+          available_description: Champs de métadonnées de votre fichier qui ne seront pas importés dans les métadonnées d’échantillon.
+          available_list_title: Non importé
           description: Importer un tableur d’échantillons permet d’ajouter plusieurs échantillons, avec ou sans champs de métadonnées, en même temps.
+          fields_instructions: Sélectionnez les champs de métadonnées à importer en les déplaçant vers la liste sélectionnée. L’ordre de la liste sélectionnée détermine l’ordre d’importation.
+          fields_instructions_title: Fonctionnement des listes
           file: Fichier
           file_help: CSV, TSV, XLS ou XLSX.
+          keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
           metadata: Métadonnées
           namespace:
             group:
@@ -1943,6 +1967,8 @@ fr:
           select_sample_name_column: Sélectionner une colonne de nom d’échantillon
           select_static_project: Sélectionner un projet statique
           selected: Sélectionné
+          selected_description: Champs de métadonnées qui seront importés dans les métadonnées d'échantillon.
+          selected_list_title: Sera importé
           static_project: Projet statique
           static_project_description: Attribue chaque échantillon au projet statique si la colonne d’identifiant du projet n’est pas attribuée, ou si la colonne d’identifiant du projet est attribuée mais que la valeur du projet dans le tableur est vide ou non valide.
           static_project_empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
