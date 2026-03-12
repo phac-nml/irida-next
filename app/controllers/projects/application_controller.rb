@@ -7,7 +7,6 @@ module Projects
 
     before_action :project
     before_action :layout_fixed
-    before_action :project_title
 
     layout 'projects'
 
