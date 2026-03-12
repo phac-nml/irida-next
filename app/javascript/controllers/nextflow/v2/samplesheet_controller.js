@@ -91,7 +91,7 @@ export default class extends Controller {
   #samplesheetProperties;
 
   // samplesheetAttributes contains the specific sample values for table rendering and form submission
-  #samplesheetAttributes = {};
+  #samplesheetAttributes;
 
   // sample data is contained within a nested object, so we'll extract the sample_ids from the object and utilize
   // allSampleIds array for indexes on the samplesheet table
@@ -99,7 +99,7 @@ export default class extends Controller {
 
   // samplesheetAttributes will contain the file global IDs, however we still require the file IDs and filenames for
   // the file_selector when users want to change the selected file, which will be contained in fileAttributes
-  #fileAttributes = {};
+  #fileAttributes;
 
   // tracks filter state of search/clear buttons on filter
   #filterEnabled = false;
@@ -107,7 +107,7 @@ export default class extends Controller {
   #queuedMetadataChanges = {};
 
   #samplesheetReady = false;
-  #allowedToUpdateSamples = true;
+  #allowedToUpdateSamples;
 
   // current sample 'indexes' present on table, used by metadata and table loading
   #startingIndex;
@@ -115,6 +115,9 @@ export default class extends Controller {
 
   #selectedSamples;
   #chunkedSelectedSamples;
+
+  // fallback in case fetching samples failed
+  #sampleAttributesRequestFailed = false;
 
   connect() {
     this.#updateMetadataColumnHeaderNames();
@@ -353,7 +356,10 @@ export default class extends Controller {
   }
 
   #renderProcessingError() {
-    this.samplesheetSpinnerTarget.remove();
+    if (this.hasSamplesheetSpinnerTarget) {
+      this.samplesheetSpinnerTarget.remove();
+    }
+
     this.#enableErrorState(this.processingErrorValue);
   }
 
@@ -949,7 +955,8 @@ export default class extends Controller {
     if (this.hasSelectionOutlet) {
       this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
       if (this.#selectedSamples.length !== 0) {
-        this.#chunkedSelectedSamples = this.chunkSamples();
+        this.#resetAttributes();
+        this.#chunkedSelectedSamples = this.#chunkSamples();
         this.#submitSamplesheetParams();
         return;
       }
@@ -957,9 +964,15 @@ export default class extends Controller {
     this.#renderProcessingError();
   }
 
+  #resetAttributes() {
+    this.#samplesheetAttributes = {};
+    this.#fileAttributes = {};
+    this.#allowedToUpdateSamples = true;
+  }
+
   // example: a 3000 sample request will be chunked into:
   // [[sample0...sample999], [sample1000...sample1999], [sample2000...sample2999]]
-  chunkSamples() {
+  #chunkSamples() {
     const chunkSize = 1000;
     const chunkedArray = [];
     for (let i = 0; i < this.#selectedSamples.length; i += chunkSize) {
@@ -1025,6 +1038,7 @@ export default class extends Controller {
     })
       .then((r) => {
         if (!r.ok) {
+          this.#sampleAttributesRequestFailed = true;
           throw new Error(`samplesheet request failed: ${r.status}`);
         }
         return r.text();
@@ -1034,6 +1048,7 @@ export default class extends Controller {
   }
 
   async sampleAttributesTargetConnected() {
+    if (this.#sampleAttributesRequestFailed) return;
     if (
       this.sampleAttributesTargets.length ===
       this.#chunkedSelectedSamples.length
