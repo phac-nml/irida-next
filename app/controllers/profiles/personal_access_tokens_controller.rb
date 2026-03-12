@@ -64,7 +64,7 @@ module Profiles
     end
 
     def page_title
-      @title = t(:'profiles.sidebar.access_tokens')
+      @title = t(:'profiles.personal_access_tokens.index.title')
     end
   end
 end

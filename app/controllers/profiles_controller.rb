@@ -36,6 +36,6 @@ class ProfilesController < Profiles::ApplicationController
   end
 
   def page_title
-    @title = t(:'profiles.sidebar.profile')
+    @title = t(:'profiles.show.title')
   end
 end
