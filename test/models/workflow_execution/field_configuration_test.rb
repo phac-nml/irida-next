@@ -60,9 +60,18 @@ class WorkflowExecution
       end
     end
 
-    test 'state config has correct translation key' do
+    test 'state config has nil translation key when labels are provided directly' do
       state_config = @config.enum_fields['state']
-      assert_equal 'workflow_executions.state', state_config[:translation_key]
+      assert_nil state_config[:translation_key]
+    end
+
+    test 'state config has translated labels for each state' do
+      state_config = @config.enum_fields['state']
+      WorkflowExecution.states.each_key do |state|
+        assert state_config[:labels].key?(state), "Expected labels to include #{state}"
+        expected = I18n.t("workflow_executions.state.#{state}", default: state.humanize)
+        assert_equal expected, state_config[:labels][state]
+      end
     end
 
     # pipeline_id_config tests
