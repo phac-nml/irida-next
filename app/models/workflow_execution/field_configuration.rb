@@ -74,10 +74,12 @@ class WorkflowExecution
     #
     # @return [Hash] enum configuration
     def state_config
+      states = WorkflowExecution.states.keys
+      labels = states.index_with { |state| I18n.t("workflow_executions.state.#{state}", default: state.humanize) }
       {
-        values: WorkflowExecution.states.keys,
-        labels: nil,
-        translation_key: 'workflow_executions.state'
+        values: states,
+        labels: labels,
+        translation_key: nil
       }
     end
 
