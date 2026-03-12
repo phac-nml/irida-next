@@ -94,7 +94,7 @@ module Groups
         find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
       end
 
-      click_button I18n.t('components.viral.sortable_list.list_component.add')
+      click_button I18n.t('components.sortable_lists.v1.list_component.add')
       find('input#metadata_template_name').fill_in with: 'Group Template011'
       click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
 
@@ -160,7 +160,7 @@ module Groups
         find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
       end
 
-      click_button I18n.t('components.viral.sortable_list.list_component.add')
+      click_button I18n.t('components.sortable_lists.v1.list_component.add')
 
       click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
 
@@ -194,7 +194,7 @@ module Groups
       existing_metadata_template.fields.each do |field|
         assert_selector "ul[aria-labelledby='#{available_label_id}'] li", text: field
         find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
-        click_button I18n.t('components.viral.sortable_list.list_component.add')
+        click_button I18n.t('components.sortable_lists.v1.list_component.add')
       end
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li",
@@ -237,7 +237,7 @@ module Groups
         find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
       end
 
-      click_button I18n.t('components.viral.sortable_list.list_component.add')
+      click_button I18n.t('components.sortable_lists.v1.list_component.add')
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: group.metadata_fields.count
@@ -293,7 +293,7 @@ module Groups
         find("ul[aria-labelledby='#{available_label_id}'] li", text: field).click
       end
 
-      click_button I18n.t('components.viral.sortable_list.list_component.add')
+      click_button I18n.t('components.sortable_lists.v1.list_component.add')
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: group.metadata_fields.count
