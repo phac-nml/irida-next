@@ -96,7 +96,7 @@
               description: t(".selected_description"),
             },
           ) %>
-          <%= viral_sortable_lists(
+          <%= render SortableListsComponent.new(
             templates: templates,
             template_label: t("data_exports.new.template_select_label")
             ) do |sortable_lists| %>

@@ -1,4 +1,4 @@
-<%= viral_sortable_lists(title: 'A title', description: 'This will have two lists that share values') do |sortable_lists| %>
+<%= render SortableListsComponent.new(title: 'A title', description: 'This will have two lists that share values') do |sortable_lists| %>
   <%= sortable_lists.with_list(
     id: "Available",
     title: "This is a title for List 1",
@@ -12,6 +12,7 @@
     container_classes: "basis-full block mb-1 pr-2 text-sm font-medium mt-2",
     list_classes: "overflow-y-auto max-h-[200px]! w-full",
   ) %>
+
   <%= sortable_lists.with_list(
     id: "Selected",
     title: "This is a title for List 2",

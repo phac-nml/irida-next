@@ -93,7 +93,7 @@
           },
         ) %>
 
-        <%= viral_sortable_lists do |sortable_lists| %>
+        <%= render SortableListsComponent.new do |sortable_lists| %>
           <%= sortable_lists.with_list(
             id: "available-list",
             title: t("metadata_templates.form.available"),
