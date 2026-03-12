@@ -113,10 +113,12 @@ export default class FloatingDropdown {
         offset(this.#distance),
         shift(),
         size({
-          apply({ availableWidth, availableHeight, elements }) {
+          apply({ availableWidth, availableHeight, rects, elements }) {
             Object.assign(elements.floating.style, {
               maxWidth: `${Math.max(0, availableWidth)}px`,
               maxHeight: `${Math.max(0, availableHeight)}px`,
+              minWidth: `${rects.reference.width}px`,
+              minHeight: `${rects.reference.height}px`,
             });
           },
         }),
