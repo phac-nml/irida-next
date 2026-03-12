@@ -33,6 +33,9 @@ features:
   v2_samplesheet:
     description: "Enable the new v2 nextflow samplesheet display and submission process."
     enable_in_development: true
+  v2_select2:
+    description: "Enable the new v2 select2 component in the UI."
+    enable_in_development: true
   wes_extended_metadata:
     description: "include additional metadata in WES submission, such as namespaceId\
       \ and samplesCount."
