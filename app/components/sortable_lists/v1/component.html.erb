@@ -18,14 +18,14 @@
 
     <select
       id="template-selector"
-      data-action="viral--sortable-lists--two-lists-selection#setTemplate"
-      data-viral--sortable-lists--two-lists-selection-target="templateSelector"
+      data-action="sortable-lists--v1--two-lists-selection#setTemplate"
+      data-sortable-lists--v1--two-lists-selection-target="templateSelector"
       class="
         block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900
         dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400
       "
     >
-      <option value="none"><%= t("components.viral.sortable_lists_component.no_template") %></option>
+      <option value="none"><%= t("components.sortable_lists.v1.component.no_template") %></option>
 
       <%= templates.each do |template| %>
         <option data-fields="<%= template[:fields] %>" value="<%= template[:id] %>"><%= template[:name] %></option>
@@ -43,14 +43,14 @@
 <div
   class="sr-only"
   aria-live="polite"
-  data-viral--sortable-lists--two-lists-selection-target="ariaLiveUpdate"
+  data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"
   data-translations="<%= aria_live_translations %>"
 ></div>
 
-<template data-viral--sortable-lists--two-lists-selection-target="checkmarkTemplate">
+<template data-sortable-lists--v1--two-lists-selection-target="checkmarkTemplate">
   <span class="pointer-events-none"><%= pathogen_icon(:check, size: :sm, color: :success) %></span>
 </template>
 
-<template data-viral--sortable-lists--two-lists-selection-target="hiddenCheckmarkTemplate">
+<template data-sortable-lists--v1--two-lists-selection-target="hiddenCheckmarkTemplate">
   <span aria-hidden="true" class="pointer-events-none mx-2"></span>
 </template>

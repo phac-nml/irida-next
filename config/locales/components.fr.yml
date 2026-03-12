@@ -367,6 +367,20 @@ fr:
     search_field_component:
       clear_button: Effacer la recherche
       instructions: Appuyez sur Entrée pour rechercher
+    sortable_lists:
+      v1:
+        component:
+          no_template: Pas de modèle
+        list_component:
+          add: Ajouter
+          aria_role_description: Glisser-déposer dans la liste %{list}
+          down: Bas
+          keyboard_shortcuts:
+            add: Enter
+            down: Alt+ArrowDown
+            remove: Delete
+            up: Alt+ArrowUp
+          up: Haut
     token:
       copied: Copié!
       copy: Copier dans le presse-papiers
@@ -412,19 +426,6 @@ fr:
           previous: Précédent
           previous_aria_label: Aller à la page précédente.
           select_page_aria_label: Sélectionner la page
-      sortable_list:
-        list_component:
-          add: Ajouter
-          aria_role_description: Glisser-déposer dans la liste %{list}
-          down: Bas
-          keyboard_shortcuts:
-            add: Enter
-            down: Alt+ArrowDown
-            remove: Delete
-            up: Alt+ArrowUp
-          up: Haut
-      sortable_lists_component:
-        no_template: Pas de modèle
     workflow_executions:
       table_component:
         counts:

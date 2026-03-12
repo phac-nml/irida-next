@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 import { Sortable } from "sortablejs";
 
 export default class extends Controller {
@@ -11,8 +11,8 @@ export default class extends Controller {
     scrollSpeed: {
       type: Number,
       default: 8,
-    }
-  }
+    },
+  };
   connect() {
     this.sortable = new Sortable(this.element, {
       scroll: true,
@@ -20,7 +20,7 @@ export default class extends Controller {
       scrollSpeed: this.scrollSpeedValue,
       bubbleScroll: true,
       group: this.groupNameValue,
-      animation: 100
-    })
+      animation: 100,
+    });
   }
 }
