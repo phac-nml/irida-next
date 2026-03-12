@@ -6,13 +6,13 @@
     <%= turbo_frame_tag "import_metadata_dialog_alert" %>
 
     <div
-      data-controller="attachment-upload metadata--file-import viral--sortable-lists--two-lists-selection"
-      data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
-      data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
-      data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
-      data-metadata--file-import-viral--sortable-lists--two-lists-selection-outlet="#import-metadata-dialog-content"
+      data-controller="attachment-upload metadata--file-import sortable-lists--v1--two-lists-selection"
+      data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
+      data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
+      data-sortable-lists--v1--two-lists-selection-field-name-value="file_import[metadata_columns][]"
+      data-metadata--file-import-sortable-lists--v1--two-lists-selection-outlet="#import-metadata-dialog-content"
       data-action="
-        metadata--file-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
+        metadata--file-import:sendMetadata->sortable-lists--v1--two-lists-selection#updateMetadataListing
       "
       data-metadata--file-import-refresh-outlet="[data-controller='refresh']"
       data-attachment-upload-uploading-text-value="<%= t('.uploading') %>"
@@ -104,8 +104,8 @@
                         } %>
           </div>
 
-          <template data-viral--sortable-lists--two-lists-selection-target="itemTemplate">
-            <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
+          <template data-sortable-lists--v1--two-lists-selection-target="itemTemplate">
+            <%= render SortableLists::V1::ListItemComponent.new(list_item: "NAME_HERE") %>
           </template>
 
           <div data-metadata--file-import-target="metadataColumns" aria-hidden="true" class="grid hidden gap-4">
@@ -141,7 +141,7 @@
             <% end %>
           </div>
 
-          <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
+          <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
 
           <div class="flex items-center" data-controller="pathogen--tooltip">
             <%= form.check_box :ignore_empty_values,
@@ -173,9 +173,9 @@
                         data: {
                           turbo_frame: "_top",
                           action:
-                            "viral--dialog#setClosable click->viral--sortable-lists--two-lists-selection#constructParams click->metadata--file-import#handleSubmit",
+                            "viral--dialog#setClosable click->sortable-lists--v1--two-lists-selection#constructParams click->metadata--file-import#handleSubmit",
                           "viral--dialog-closable-param": "false",
-                          "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                          "sortable-lists--v1--two-lists-selection-target": "submitBtn",
                           "metadata--file-import-target": "submitButton",
                           "attachment-upload-target": "submitButton",
                         },

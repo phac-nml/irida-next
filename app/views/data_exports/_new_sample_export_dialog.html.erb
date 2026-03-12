@@ -3,10 +3,10 @@
 
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
     <div
-      data-controller="infinite-scroll viral--sortable-lists--two-lists-selection"
-      data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
-      data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
-      data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][attachment_formats][]"
+      data-controller="infinite-scroll sortable-lists--v1--two-lists-selection"
+      data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
+      data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
+      data-sortable-lists--v1--two-lists-selection-field-name-value="data_export[export_parameters][attachment_formats][]"
       data-infinite-scroll-selection-outlet="#samples-table"
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
@@ -131,15 +131,15 @@
               <% end %>
             </div>
 
-            <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
+            <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
 
             <div>
               <%= form.submit t("data_exports.new.submit_button"),
                           data: {
                             turbo_frame: "_top",
                             action:
-                              "click->viral--sortable-lists--two-lists-selection#constructParams",
-                            "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                              "click->sortable-lists--v1--two-lists-selection#constructParams",
+                            "sortable-lists--v1--two-lists-selection-target": "submitBtn",
                           },
                           class: "button button-primary" %>
             </div>

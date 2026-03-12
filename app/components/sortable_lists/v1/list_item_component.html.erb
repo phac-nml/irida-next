@@ -1,0 +1,17 @@
+<li
+  data-action="
+    click->sortable-lists--v1--two-lists-selection#handleClick
+    keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput
+  "
+  role="option"
+  tabindex="-1"
+  aria-selected="false"
+  id="<%= @id %>"
+  class="
+    flex w-full border-b border-slate-200 px-4 py-2 focus:bg-primary-400 focus-visible:-outline-offset-2!
+    dark:border-slate-600 focus:dark:bg-primary-600 focus:dark:hover:bg-primary-700
+  "
+>
+  <span aria-hidden="true" class="pointer-events-none mx-2"></span>
+  <span class="pointer-events-none"><%= list_item %></span>
+</li>

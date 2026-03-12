@@ -6,10 +6,10 @@
     <%= turbo_frame_tag "import_spreadsheet_dialog_alert" %>
 
     <div
-      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload <% if @namespace.group_namespace? %> viral--select2 <% end %>"
-      data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
-      data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
-      data-viral--sortable-lists--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
+      data-controller="spreadsheet-import sortable-lists--v1--two-lists-selection attachment-upload <% if @namespace.group_namespace? %> viral--select2 <% end %>"
+      data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
+      data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
+      data-sortable-lists--v1--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
       data-spreadsheet-import-select-sample-value="<%= t("shared.samples.spreadsheet_imports.dialog.select_sample_name_column") %>"
       data-spreadsheet-import-select-description-value="<%= t("shared.samples.spreadsheet_imports.dialog.select_sample_description_column") %>"
       data-spreadsheet-import-select-project-value="<%= t("shared.samples.spreadsheet_imports.dialog.select_project_puid_column") %>"
@@ -22,7 +22,7 @@
       <% end %>
       data-spreadsheet-import-refresh-outlet="[data-controller='refresh']"
       data-action="
-        spreadsheet-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
+        spreadsheet-import:sendMetadata->sortable-lists--v1--two-lists-selection#updateMetadataListing
       "
       id="spreadsheet-import-dialog-content"
     >
@@ -206,11 +206,8 @@
             </div>
           <% end %>
 
-          <template
-            id="sortable-list-item-template"
-            data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
-          >
-            <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
+          <template id="sortable-list-item-template" data-sortable-lists--v1--two-lists-selection-target="itemTemplate">
+            <%= render SortableLists::V1::ListItemComponent.new(list_item: "NAME_HERE") %>
           </template>
 
           <div class="grid hidden gap-4" data-spreadsheet-import-target="metadata">
@@ -247,7 +244,7 @@
             <% end %>
           </div>
 
-          <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
+          <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
 
           <div>
             <%= form.submit t("shared.samples.spreadsheet_imports.dialog.submit_button"),
@@ -255,7 +252,7 @@
                         data: {
                           turbo_frame: "_top",
                           action:
-                            "viral--dialog#setClosable click->viral--sortable-lists--two-lists-selection#constructParams click->spreadsheet-import#handleSubmit",
+                            "viral--dialog#setClosable click->sortable-lists--v1--two-lists-selection#constructParams click->spreadsheet-import#handleSubmit",
                           "viral--dialog-closable-param": "false",
                           "spreadsheet-import-target": "submitButton",
                           "attachment-upload-target": "submitButton",

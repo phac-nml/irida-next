@@ -329,6 +329,20 @@ en:
     search_field_component:
       clear_button: Clear search
       instructions: Press enter to search
+    sortable_lists:
+      v1:
+        component:
+          no_template: No template
+        list_component:
+          add: Add
+          aria_role_description: "%{list} listbox drag and drop"
+          down: Down
+          keyboard_shortcuts:
+            add: Enter
+            down: Alt+ArrowDown
+            remove: Delete
+            up: Alt+ArrowUp
+          up: Up
     token:
       copied: Copied!
       copy: Copy to clipboard
@@ -374,19 +388,6 @@ en:
           previous: Previous
           previous_aria_label: Go to previous page
           select_page_aria_label: Select page
-      sortable_list:
-        list_component:
-          add: Add
-          aria_role_description: "%{list} listbox drag and drop"
-          down: Down
-          keyboard_shortcuts:
-            add: Enter
-            down: Alt+ArrowDown
-            remove: Delete
-            up: Alt+ArrowUp
-          up: Up
-      sortable_lists_component:
-        no_template: No template
     workflow_executions:
       table_component:
         counts:

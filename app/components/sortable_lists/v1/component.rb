@@ -3,12 +3,12 @@
 module SortableLists
   module V1
     # This component creates the sortable_lists.
-    class Component < Viral::Component
+    class Component < ::Component
       attr_reader :title, :description, :templates, :template_label,
                   :required, :aria_live_translations
 
       renders_many :lists, lambda { |id:, group:, title:, **system_arguments|
-        Viral::SortableList::ListComponent.new(id:, group:, title:, required: @required, **system_arguments)
+        SortableLists::V1::ListComponent.new(id:, group:, title:, required: @required, **system_arguments)
       }
 
       def initialize(title: nil, description: nil, templates: [], template_label: nil, required: false)

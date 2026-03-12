@@ -3,11 +3,11 @@
 
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
     <div
-      data-controller="infinite-scroll <%= 'viral--sortable-lists--two-lists-selection' unless @namespace.metadata_fields.empty? %>"
+      data-controller="infinite-scroll <%= 'sortable-lists--v1--two-lists-selection' unless @namespace.metadata_fields.empty? %>"
       <% unless @namespace.metadata_fields.empty? %>
-        data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
-        data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
-        data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
+        data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
+        data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
+        data-sortable-lists--v1--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
       <% end %>
       data-infinite-scroll-selection-outlet="#samples-table"
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
@@ -113,11 +113,8 @@
               group: "metadata_selection",
             ) %>
           <% end %>
-          <template
-            id="sortable-list-item-template"
-            data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
-          >
-            <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
+          <template id="sortable-list-item-template" data-sortable-lists--v1--two-lists-selection-target="itemTemplate">
+            <%= render SortableLists::V1::ListItemComponent.new(list_item: "NAME_HERE") %>
           </template>
         <% end %>
 
@@ -175,11 +172,11 @@
             </div>
 
             <% unless @namespace.metadata_fields.empty? %>
-              <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
+              <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
               <% data = {
                 turbo_frame: "_top",
-                action: "click->viral--sortable-lists--two-lists-selection#constructParams",
-                "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                action: "click->sortable-lists--v1--two-lists-selection#constructParams",
+                "sortable-lists--v1--two-lists-selection-target": "submitBtn",
               } %>
             <% else %>
               <% data = { turbo_frame: "_top" } %>

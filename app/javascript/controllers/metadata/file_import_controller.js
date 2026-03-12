@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus";
 import { notifyRefreshControllers } from "utilities/refresh";
 
 export default class extends Controller {
-  static outlets = ["viral--sortable-lists--two-lists-selection", "refresh"];
+  static outlets = ["sortable-lists--v1--two-lists-selection", "refresh"];
   static targets = [
     "sampleIdColumn",
     "metadataColumns",
@@ -174,8 +174,8 @@ export default class extends Controller {
   }
 
   #sortableListsConnect() {
-    if (this.hasViralSortableListsTwoListsSelectionOutlet) {
-      this.viralSortableListsTwoListsSelectionOutlet.idempotentConnect();
+    if (this.hasSortableListsV1TwoListsSelectionOutlet) {
+      this.sortableListsV1TwoListsSelectionOutlet.idempotentConnect();
     }
   }
 

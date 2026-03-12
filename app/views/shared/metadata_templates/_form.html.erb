@@ -1,8 +1,8 @@
 <div
-  data-controller="viral--sortable-lists--two-lists-selection"
-  data-viral--sortable-lists--two-lists-selection-selected-list-value="selected-list"
-  data-viral--sortable-lists--two-lists-selection-available-list-value="available-list"
-  data-viral--sortable-lists--two-lists-selection-field-name-value="metadata_template[fields][]"
+  data-controller="sortable-lists--v1--two-lists-selection"
+  data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
+  data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
+  data-sortable-lists--v1--two-lists-selection-field-name-value="metadata_template[fields][]"
   class="font-normal text-slate-500 dark:text-slate-400"
 >
   <%= form_for(@metadata_template, url: template_path, method:, html: { novalidate: true }) do |form| %>
@@ -111,15 +111,15 @@
         <% end %>
       </section>
 
-      <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
+      <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
 
       <div class="mt-4">
         <%= form.submit submit_button_text,
                     data: {
                       turbo_frame: "_top",
                       action:
-                        "click->viral--sortable-lists--two-lists-selection#constructParams",
-                      "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                        "click->sortable-lists--v1--two-lists-selection#constructParams",
+                      "sortable-lists--v1--two-lists-selection-target": "submitBtn",
                     },
                     class: "button button-primary",
                     disabled: true %>
