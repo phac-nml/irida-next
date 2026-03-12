@@ -10,15 +10,13 @@ import {
 import FloatingDropdown from "utilities/floating_dropdown";
 
 /**
- * ComboboxController
- *
  * Accessible, searchable dropdown with keyboard navigation.
  * - Keyboard navigation (Arrow keys, Enter, Escape, Home, End)
  * - Search filtering
  * - ARIA roles and attributes for accessibility
  * - Dropdown positioning and focus management
  */
-export default class ComboboxController extends Controller {
+export default class extends Controller {
   static targets = ["combobox", "listbox", "hidden", "ariaLiveUpdate"];
   static values = {
     noResultsText: String,
