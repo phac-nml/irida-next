@@ -25,14 +25,21 @@ export default class extends Controller {
   };
 
   #floatingDropdown = null;
-  #filter = "";
-  #filteredOptions = [];
-  #allOptions = [];
-  #option = null;
-  #firstOption = null;
-  #lastOption = null;
+  #filter;
+  #filteredOptions;
+  #allOptions;
+  #option;
+  #firstOption;
+  #lastOption;
 
   connect() {
+    this.#filter = "";
+    this.#filteredOptions = [];
+    this.#allOptions = [];
+    this.#option = null;
+    this.#firstOption = null;
+    this.#lastOption = null;
+
     this.boundOnBackgroundMouseDown = this.#onBackgroundMouseDown.bind(this);
     this.boundOnComboboxKeyDown = this.#onComboboxKeyDown.bind(this);
     this.boundOnComboboxKeyUp = this.#onComboboxKeyUp.bind(this);
