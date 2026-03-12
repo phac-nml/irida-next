@@ -78,7 +78,8 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
 
       samples_paths.append({ sample_puid:, data_paths: })
     end
-    samples_paths
+    # Sort paths by puid to ensure ordering on interrupted job
+    samples_paths.sort_by { |x| x[:sample_puid] }
   end
 
   def get_path_mapping(data_paths)
@@ -114,6 +115,8 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
     run_output_data['metadata']['samples']&.each do |sample_puid, sample_metadata|
       items.append({ sample_puid:, sample_metadata: })
     end
+    # Sort metadata by puid to ensure ordering on interrupted job
+    items = items.sort_by { |x| x[:sample_puid] }
 
     items[step.cursor..].each do |i|
       # This assumes the sample puid matches, i.e. happy path
@@ -134,9 +137,11 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
   end
 
   def samples_workflow_executions_map
-    @workflow_execution.samples_workflow_executions.map do |swe|
+    swe_list = @workflow_execution.samples_workflow_executions.map do |swe|
       swe
     end
+    # Sort samples workflow executions by id to ensure ordering on interrupted job
+    swe_list.sort_by(&:id)
   end
 
   def merge_metadata_onto_samples(step) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength

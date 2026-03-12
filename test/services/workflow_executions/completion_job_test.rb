@@ -317,14 +317,8 @@ module WorkflowExecutions
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
 
-      # samples workflow executions can be in either order
-      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
-        swe1 = workflow_execution.samples_workflow_executions[0]
-        swe2 = workflow_execution.samples_workflow_executions[1]
-      else
-        swe2 = workflow_execution.samples_workflow_executions[0]
-        swe1 = workflow_execution.samples_workflow_executions[1]
-      end
+      swe1 = workflow_execution.samples_workflow_executions.min_by(&:id)
+      swe2 = workflow_execution.samples_workflow_executions.sort_by(&:id)[1]
 
       assert_equal @sample41.puid, swe1.sample.puid
       assert_equal @sample42.puid, swe2.sample.puid
@@ -384,14 +378,8 @@ module WorkflowExecutions
 
       assert 'completing', workflow_execution.state
 
-      # samples workflow executions can be in either order
-      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
-        swe1 = workflow_execution.samples_workflow_executions[0]
-        swe2 = workflow_execution.samples_workflow_executions[1]
-      else
-        swe2 = workflow_execution.samples_workflow_executions[0]
-        swe1 = workflow_execution.samples_workflow_executions[1]
-      end
+      swe1 = workflow_execution.samples_workflow_executions.min_by(&:id)
+      swe2 = workflow_execution.samples_workflow_executions.sort_by(&:id)[1]
 
       assert_equal 2, swe1.outputs.count
       assert_equal 0, swe2.outputs.count
@@ -426,14 +414,9 @@ module WorkflowExecutions
                     'organism' => 'a different organism' }
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
-      # samples workflow executions can be in either order
-      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
-        assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
-        assert_equal metadata2, workflow_execution.samples_workflow_executions[1].metadata
-      else
-        assert_equal metadata1, workflow_execution.samples_workflow_executions[1].metadata
-        assert_equal metadata2, workflow_execution.samples_workflow_executions[0].metadata
-      end
+
+      assert_equal metadata1, workflow_execution.samples_workflow_executions.min_by(&:id).metadata
+      assert_equal metadata2, workflow_execution.samples_workflow_executions.sort_by(&:id)[1].metadata
 
       assert_equal 'completed', workflow_execution.state
 
@@ -469,27 +452,17 @@ module WorkflowExecutions
       empty_metadata = {}
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
-      # samples workflow executions can be in either order
-      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
-        assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
-        assert_equal empty_metadata, workflow_execution.samples_workflow_executions[1].metadata
-      else
-        assert_equal metadata1, workflow_execution.samples_workflow_executions[1].metadata
-        assert_equal empty_metadata, workflow_execution.samples_workflow_executions[0].metadata
-      end
+
+      assert_equal metadata1, workflow_execution.samples_workflow_executions.min_by(&:id).metadata
+      assert_equal empty_metadata, workflow_execution.samples_workflow_executions.sort_by(&:id)[1].metadata
 
       perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
       workflow_execution.reload
 
       assert_equal 'completed', workflow_execution.state
 
-      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
-        assert_equal metadata1, workflow_execution.samples_workflow_executions[0].metadata
-        assert_equal metadata2, workflow_execution.samples_workflow_executions[1].metadata
-      else
-        assert_equal metadata1, workflow_execution.samples_workflow_executions[1].metadata
-        assert_equal metadata2, workflow_execution.samples_workflow_executions[0].metadata
-      end
+      assert_equal metadata1, workflow_execution.samples_workflow_executions.min_by(&:id).metadata
+      assert_equal metadata2, workflow_execution.samples_workflow_executions.sort_by(&:id)[1].metadata
 
       assert_no_enqueued_emails
 
@@ -935,15 +908,6 @@ module WorkflowExecutions
       assert_equal 'my_run_id_e', workflow_execution.run_id
 
       metadata1 = {
-        'amr.0.end' => 5678,
-        'amr.0.gene' => 'x',
-        'amr.0.start' => 1234,
-        'amr.1.end' => 2,
-        'amr.1.gene' => 'y',
-        'amr.1.start' => 1,
-        'organism' => 'an organism'
-      }
-      metadata2 = {
         'amr.0.end' => 6789,
         'amr.0.gene' => 'x',
         'amr.0.start' => 2345,
@@ -952,16 +916,20 @@ module WorkflowExecutions
         'amr.1.start' => 2,
         'organism' => 'a different organism'
       }
+      metadata2 = {
+        'amr.0.end' => 5678,
+        'amr.0.gene' => 'x',
+        'amr.0.start' => 1234,
+        'amr.1.end' => 2,
+        'amr.1.gene' => 'y',
+        'amr.1.start' => 1,
+        'organism' => 'an organism'
+      }
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
-      # samples workflow executions can be in either order
-      if workflow_execution.samples_workflow_executions[0].sample.puid == 'INXT_SAM_AAAAAAAABQ'
-        swe1 = workflow_execution.samples_workflow_executions[0]
-        swe2 = workflow_execution.samples_workflow_executions[1]
-      else
-        swe2 = workflow_execution.samples_workflow_executions[0]
-        swe1 = workflow_execution.samples_workflow_executions[1]
-      end
+
+      swe1 = workflow_execution.samples_workflow_executions.min_by(&:id)
+      swe2 = workflow_execution.samples_workflow_executions.sort_by(&:id)[1]
 
       assert_equal metadata1, swe1.metadata
       assert_equal metadata2, swe2.metadata
@@ -989,14 +957,8 @@ module WorkflowExecutions
 
       assert_equal 'my_run_id_d', workflow_execution.run_id
 
-      # samples_workflow_executions can be in either order
-      if workflow_execution.samples_workflow_executions[0].sample.name == 'WorkflowExecutions test sample 1'
-        swe1 = workflow_execution.samples_workflow_executions[0]
-        swe2 = workflow_execution.samples_workflow_executions[1]
-      else
-        swe2 = workflow_execution.samples_workflow_executions[0]
-        swe1 = workflow_execution.samples_workflow_executions[1]
-      end
+      swe1 = workflow_execution.samples_workflow_executions.min_by(&:id)
+      swe2 = workflow_execution.samples_workflow_executions.sort_by(&:id)[1]
 
       assert_equal 0, swe1.outputs.count
 
