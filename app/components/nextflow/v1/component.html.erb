@@ -23,7 +23,7 @@
     <%= @workflow.name %>
   </h1>
 
-  <p class="mb-4 text-lg font-normal text-slate-500 lg:text-xl dark:text-slate-400"><%= @workflow.description %></p>
+  <p class="mb-4 text-lg font-normal text-slate-700 lg:text-xl dark:text-slate-300"><%= @workflow.description %></p>
   <%= helpers.turbo_frame_tag "workflow_execution_errors" %>
 
   <div
@@ -76,7 +76,10 @@
             <%= viral_help_text(state: :error, classes: "hidden") %>
           </div>
 
-          <p id="<%= form.field_id("workflow_execution_name", "hint") %>" class="field-hint">
+          <p
+            id="<%= form.field_id("workflow_execution_name", "hint") %>"
+            class="mt-1 text-sm text-slate-700 dark:text-slate-300"
+          >
             <%== t("components.nextflow_component.name.helper") %>
           </p>
         </div>
@@ -92,7 +95,7 @@
       <%= workflow.fields_for "workflow_params" do |fields| %>
         <% @workflow.workflow_params.each do |item, definition| %>
           <h2 class="text-lg font-extrabold dark:text-white"><%= definition[:title] %></h2>
-          <p class="mb-2 font-normal text-slate-500 dark:text-slate-400"><%= definition[:description] %></p>
+          <p class="mb-2 font-normal text-slate-700 dark:text-slate-300"><%= definition[:description] %></p>
 
           <div class="mb-8 grid grid-cols-1 gap-4">
             <% definition[:properties].each do |name, property| %>

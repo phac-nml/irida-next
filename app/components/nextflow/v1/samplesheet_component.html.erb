@@ -86,7 +86,7 @@
     <div class="relative overflow-x-auto">
       <table
         data-test-selector="samplesheet-table"
-        class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
+        class="w-full text-left text-sm whitespace-nowrap text-slate-700 rtl:text-right dark:text-slate-300"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
       >
@@ -141,8 +141,8 @@
 <template data-nextflow--v1--samplesheet-target="dropdownTemplate">
   <select
     class="
-      w-full cursor-pointer border-none bg-slate-50 p-2.5 text-sm text-inherit dark:border-none dark:bg-slate-700
-      dark:placeholder-slate-400
+      w-full cursor-pointer border-none bg-slate-50 p-2.5 text-sm text-inherit text-slate-900 dark:border-none
+      dark:bg-slate-700 dark:text-white dark:placeholder-slate-400
     "
     data-action="change->nextflow--v1--samplesheet#updateEditableSamplesheetData"
   >
@@ -157,14 +157,14 @@
     data-namespace-id="<%= @namespace_id %>"
     href="#"
     class="
-      block cursor-pointer border-2 border-transparent bg-inherit p-2 text-sm text-inherit
-      focus-visible:-outline-offset-2!
+      block cursor-pointer border-2 border-transparent bg-inherit p-2 text-sm text-slate-900
+      focus-visible:-outline-offset-2! dark:text-white
     "
   ></a>
 </template>
 
 <template data-nextflow--v1--samplesheet-target="metadataTemplate">
-  <div class="p-2.5 text-nowrap"><span class="inline-block h-3.5"></span></div>
+  <div class="p-2.5 text-nowrap text-slate-900 dark:text-slate-300"><span class="inline-block h-3.5"></span></div>
 </template>
 
 <template data-nextflow--v1--samplesheet-target="textInputTemplate">
@@ -173,8 +173,8 @@
   <input
     autocomplete="off"
     class="
-      block w-full border-2 border-transparent bg-inherit p-2 text-sm text-inherit focus-visible:relative
-      focus-visible:z-15 focus-visible:-outline-offset-2!
+      block w-full border-2 border-transparent bg-inherit p-2 text-sm text-slate-900 focus-visible:relative
+      focus-visible:z-15 focus-visible:-outline-offset-2! dark:text-white
     "
     data-action="change->nextflow--v1--samplesheet#updateEditableSamplesheetData"
     type="text"

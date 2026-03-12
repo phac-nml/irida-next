@@ -129,6 +129,15 @@ module Viral
       assert_text 'Custom Item 2'
     end
 
+    test 'renders item icons from an explicit icon library' do
+      render_inline(Viral::DropdownComponent.new(label: 'Menu')) do |dropdown|
+        dropdown.with_item(label: 'Inbox', url: '#', icon_name: :inbox_stack, icon_library: :heroicons)
+      end
+
+      assert_selector('a svg.inbox-stack-icon', visible: :all)
+      assert_no_text("Icon 'inbox-stack' not found", exact: false)
+    end
+
     test 'renders with icon only and aria-label' do
       render_inline(
         Viral::DropdownComponent.new(

@@ -32,7 +32,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
     render Viral::DropdownComponent.new(icon: :list,
                                         aria: { label: 'Organism Dropdown Menu' }) do |dropdown|
       dropdown.with_item(label: 'Checkmark', url: '#', icon_name: :check)
-      dropdown.with_item(label: 'Inbox', url: '#', icon_name: :inbox_stack)
+      dropdown.with_item(label: 'Inbox', url: '#', icon_name: :inbox_stack, icon_library: :heroicons)
     end
   end
 
