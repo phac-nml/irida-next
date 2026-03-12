@@ -383,6 +383,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     groups_attributes = params.dig(:q, :groups_attributes)
     return if groups_attributes.blank?
 
+    # to_unsafe_h is safe here: data is passed to a query model (not AR mass assignment)
+    # and groups_attributes has dynamic nested keys that cannot be permitted via strong params.
     groups_attributes.respond_to?(:to_unsafe_h) ? groups_attributes.to_unsafe_h : groups_attributes
   end
 

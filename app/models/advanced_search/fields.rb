@@ -51,7 +51,7 @@ module AdvancedSearch
       def normalized_enum_fields(field_configuration)
         return {} unless field_configuration.respond_to?(:enum_fields)
 
-        Array(field_configuration.enum_fields).to_h
+        field_configuration.enum_fields.to_h
       end
 
       def metadata_group(metadata_options)
