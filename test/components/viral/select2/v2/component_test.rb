@@ -4,7 +4,7 @@ require 'application_system_test_case'
 
 module Select2
   module V2
-    class Select2ComponentTest < ApplicationSystemTestCase
+    class ComponentTest < ApplicationSystemTestCase
       setup do
         Flipper.enable(:v2_select2)
       end
