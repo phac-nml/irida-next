@@ -197,7 +197,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
              when 'index'
                t(:'general.default_sidebar.data_exports').to_s
              when 'show'
-               @data_export.name.presence || @data_export.id
+               "#{t('activerecord.models.data_export.one')}: #{@data_export.name.presence || @data_export.id}"
              else
                t(:'general.default_sidebar.data_exports')
              end

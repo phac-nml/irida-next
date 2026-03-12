@@ -42,7 +42,7 @@ module Groups
     end
 
     def page_title
-      @title = t(:'groups.sidebar.metadata_templates')
+      @title = [t(:'groups.sidebar.metadata_templates'), group_title].join(' · ')
     end
   end
 end

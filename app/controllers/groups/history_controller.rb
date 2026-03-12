@@ -43,7 +43,7 @@ module Groups
     end
 
     def page_title
-      @title = t(:'groups.sidebar.history')
+      @title = [t(:'groups.sidebar.history'), group_title].join(' · ')
     end
   end
 end

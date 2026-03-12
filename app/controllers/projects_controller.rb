@@ -216,11 +216,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
              when 'show'
                project_title
              when 'activity'
-               [t(:'projects.sidebar.activity'), project_title].join(' · ')
+               [t(:'projects.activity.title'), project_title].join(' · ')
              when 'new'
                t(:'projects.new.title')
              else
-               [t('common.labels.general'), project_title].join(' · ')
+               [t('projects.edit.title'), project_title].join(' · ')
              end
   end
 end

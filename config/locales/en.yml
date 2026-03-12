@@ -169,6 +169,9 @@ en:
       personal_access_token:
         not_found: Could not find personal access token with id %{token_id}
     models:
+      data_export:
+        one: Data Export
+        other: Data Exports
       group:
         one: Group
         other: Groups
@@ -195,6 +198,9 @@ en:
       sample:
         one: Sample
         other: Samples
+      workflow_execution:
+        one: Workflow Execution
+        other: Workflow Executions
   activities:
     show:
       error: Unable to open dialog
@@ -703,7 +709,7 @@ en:
       error: "%{value} must be a string or an array of strings"
   groups:
     activity:
-      title: Group activity
+      title: Group Activity
     attachments:
       create:
         failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'

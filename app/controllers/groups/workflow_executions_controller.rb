@@ -85,9 +85,11 @@ module Groups
     def page_title
       @title = case action_name
                when 'index'
-                 t(:'general.default_sidebar.workflows')
+                 [t(:'general.default_sidebar.workflows'), group_title].join(' · ')
                when 'show'
-                 @workflow_execution.name.presence || @workflow_execution.id
+                 workflow_identifier = @workflow_execution.name.presence || @workflow_execution.id
+                 ["#{t(:'activerecord.models.workflow_execution.one')}: #{workflow_identifier}",
+                  group_title].join(' · ')
                end
     end
   end

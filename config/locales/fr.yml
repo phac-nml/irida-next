@@ -169,6 +169,9 @@ fr:
       personal_access_token:
         not_found: Impossible de trouver le jeton d’accès personnel avec l’identifiant %{token_id}
     models:
+      data_export:
+        one: Exportation de données
+        other: Exportations de données
       group:
         one: Groupe
         other: Groupes
@@ -195,6 +198,9 @@ fr:
       sample:
         one: Échantillon
         other: Échantillons
+      workflow_execution:
+        one: Exécution de flux de travail
+        other: Exécutions de flux de travail
   activities:
     show:
       error: Impossible d’ouvrir la boîte de dialogue

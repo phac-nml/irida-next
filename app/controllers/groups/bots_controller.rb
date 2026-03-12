@@ -41,7 +41,7 @@ module Groups
     end
 
     def page_title
-      @title = t(:'groups.sidebar.bot_accounts')
+      @title = [t(:'groups.sidebar.bot_accounts'), group_title].join(' · ')
     end
   end
 end

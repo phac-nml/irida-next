@@ -111,7 +111,9 @@ module Projects
       when 'index'
         @title = [t(:'general.default_sidebar.workflows'), project_title].join(' · ')
       when 'show'
-        @title = [@workflow_execution.name.presence || @workflow_execution.id, project_title].join(' · ')
+        workflow_identifier = @workflow_execution.name.presence || @workflow_execution.id
+        @title = ["#{t(:'activerecord.models.workflow_execution.one')}: #{workflow_identifier}",
+                  project_title].join(' · ')
       end
     end
   end
