@@ -6,6 +6,7 @@ class Component < ViewComponent::Base
 
   include ViewHelper
   include ClassNameHelper
+  include JsonHelper
   include Pathogen::ViewHelper
   include Pathogen::FormHelper
   include Pathogen::FormTagHelper

@@ -1,8 +1,8 @@
 <fieldset
   data-advanced-search-target="conditionsContainer"
-  data-enum-fields="<%= ERB::Util.json_escape(@fields.fetch(:enum_fields, {}).to_json) %>"
-  data-enum-operations="<%= ERB::Util.json_escape(enum_operator_options.to_json) %>"
-  data-standard-operations="<%= ERB::Util.json_escape(@operations.to_json) %>"
+  data-enum-fields="<%= json_escape_data(enum_fields) %>"
+  data-enum-operations="<%= json_escape_data(enum_operator_options) %>"
+  data-standard-operations="<%= json_escape_data(@operations) %>"
   data-advanced-search-group-index="<%= @group_index %>"
   data-advanced-search-condition-index="<%= @condition_index %>"
   data-advanced-search-legend-template="<%= t("components.advanced_search_component.condition", index: "__INDEX__") %>"
