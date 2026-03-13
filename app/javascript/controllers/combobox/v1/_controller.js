@@ -351,8 +351,8 @@ export default class extends Controller {
         break;
 
       case "Tab": {
-        this.debouncedFilterAndUpdate.flush();
-        this.#setValue(this.#option);
+        this.#setValue();
+        this.#setOption(null);
         this.#floatingDropdown.hide();
         break;
       }
@@ -434,8 +434,8 @@ export default class extends Controller {
       !this.comboboxTarget.contains(event.target) &&
       !this.listboxTarget.contains(event.target)
     ) {
-      this.debouncedFilterAndUpdate.flush();
-      this.#setValue(this.#option);
+      this.#setValue();
+      this.#setOption(null);
       this.#floatingDropdown.hide();
     }
   }
