@@ -1131,6 +1131,30 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert results.include?(@workflow_execution3)
   end
 
+  test 'state enum search with not_in ignores blank values from multi-select submissions' do
+    submitted = workflow_executions(:irida_next_example_submitted)
+    new_workflow = workflow_executions(:irida_next_example_new)
+
+    query = WorkflowExecution::Query.new(
+      namespace_ids: [@workflow_execution2.namespace_id, @workflow_execution3.namespace_id,
+                      submitted.namespace_id, new_workflow.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [WorkflowExecution::SearchCondition.new(
+          field: 'state',
+          operator: 'not_in',
+          value: ['', 'initial', 'prepared', 'submitted', 'running', 'completing', 'error', 'canceling', 'canceled']
+        )]
+      )]
+    )
+
+    assert query.valid?
+    results = query.results
+    assert_includes results, @workflow_execution2
+    assert_not_includes results, @workflow_execution3
+    assert_not_includes results, submitted
+    assert_not_includes results, new_workflow
+  end
+
   test 'metadata field search with special characters in field names' do
     query = WorkflowExecution::Query.new(
       namespace_ids: [@workflow_execution1.namespace_id],
