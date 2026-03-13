@@ -3,17 +3,21 @@
     <% table.with_column(t("personal_access_tokens.table.header.name")) do |row| %>
       <%= row[:name] %>
     <% end %>
+
     <% table.with_column(t("personal_access_tokens.table.header.scopes")) do |row| %>
       <%= row[:scopes].join(", ") %>
     <% end %>
-  <% if Flipper.enabled?(:integration_access_token_generation) && !@namespace.present? %>
+
+    <% if Flipper.enabled?(:integration_access_token_generation) && !@namespace.present? %>
       <% table.with_column(t("personal_access_tokens.table.header.integration_host")) do |row| %>
         <%= row[:integration_host] %>
       <% end %>
     <% end %>
+
     <% table.with_column(t("personal_access_tokens.table.header.created_at")) do |row| %>
       <%= helpers.local_date(row[:created_at], :long) %>
     <% end %>
+
     <% table.with_column(t("personal_access_tokens.table.header.last_used_at")) do |row| %>
       <% if row[:last_used_at].present? %>
         <%= helpers.local_date(row[:last_used_at], :long) %>
@@ -21,6 +25,7 @@
         <%= t("personal_access_tokens.table.never") %>
       <% end %>
     <% end %>
+
     <% table.with_column(t("personal_access_tokens.table.header.expires_at")) do |row| %>
       <% if row[:expires_at].present? %>
         <%= helpers.local_date(row[:expires_at], :long) %>
@@ -28,19 +33,22 @@
         <%= t("personal_access_tokens.table.never") %>
       <% end %>
     <% end %>
-    <% table.with_column(t("personal_access_tokens.table.header.action"),
-        sticky_key: :right,
-        padding: false
-      ) do |row| %>
-      <%= button_to t("personal_access_tokens.table.revoke"),
-      revoke_path(row),
-      data: revoke_data_attributes,
-      method: revoke_http_method,
-      aria: {
-        label: t(:"personal_access_tokens.table.revoke_aria_label", name: row[:name]),
-      },
-      class:
-        "px-3 py-2 bg-white dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+
+    <% if @actions %>
+      <% table.with_column(t("personal_access_tokens.table.header.action"),
+          sticky_key: :right,
+          padding: false
+        ) do |row| %>
+        <%= button_to t("personal_access_tokens.table.revoke"),
+        revoke_path(row),
+        data: revoke_data_attributes,
+        method: revoke_http_method,
+        aria: {
+          label: t(:"personal_access_tokens.table.revoke_aria_label", name: row[:name]),
+        },
+        class:
+          "px-3 py-2 bg-white dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+      <% end %>
     <% end %>
   <% end %>
 <% else %>

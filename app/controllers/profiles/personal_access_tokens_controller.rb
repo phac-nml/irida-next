@@ -5,6 +5,8 @@ module Profiles
   # Controller for the user personal access tokens page
   class PersonalAccessTokensController < Profiles::ApplicationController
     before_action :active_access_tokens
+    before_action :expired_access_tokens
+    before_action :revoked_access_tokens
     before_action :page_title
 
     def index
@@ -76,6 +78,14 @@ module Profiles
 
     def active_access_tokens
       @active_access_tokens = current_user.personal_access_tokens.active
+    end
+
+    def expired_access_tokens
+      @expired_access_tokens = current_user.personal_access_tokens.expired
+    end
+
+    def revoked_access_tokens
+      @revoked_access_tokens = current_user.personal_access_tokens.revoked
     end
 
     def current_page
