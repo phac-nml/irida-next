@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module WorkflowExecutionAdvancedSearchHelper
-  def workflow_advanced_search_params(state:)
+  def workflow_advanced_search_params(state:, operator: '=')
     {
       q: {
         groups_attributes: {
@@ -9,7 +9,7 @@ module WorkflowExecutionAdvancedSearchHelper
             conditions_attributes: {
               '0' => {
                 field: 'state',
-                operator: '=',
+                operator:,
                 value: state
               }
             }

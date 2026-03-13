@@ -98,6 +98,23 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     Flipper.disable(:workflow_execution_advanced_search)
   end
 
+  test 'should apply advanced search not_in state arrays when blank values are submitted' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    get workflow_executions_path,
+        params: workflow_advanced_search_params(
+          operator: 'not_in',
+          state: ['', 'initial', 'prepared', 'submitted', 'running', 'completing', 'error', 'canceling', 'canceled']
+        ).merge(limit: 100)
+
+    assert_response :success
+    assert_includes response.body, @workflow_execution_completed.id
+    assert_not_includes response.body, @workflow_execution_running.id
+    assert_not_includes response.body, @workflow_execution_new.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
   test 'should apply default sort and support sorting workflow executions' do
     workflow_execution = workflow_executions(:irida_next_example)
     workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
