@@ -117,8 +117,7 @@ export default class FloatingDropdown {
             Object.assign(elements.floating.style, {
               maxWidth: `${Math.max(0, availableWidth)}px`,
               maxHeight: `${Math.max(0, availableHeight)}px`,
-              minWidth: `${rects.reference.width}px`,
-              minHeight: `${rects.reference.height}px`,
+              width: `${rects.reference.width}px`,
             });
           },
         }),
