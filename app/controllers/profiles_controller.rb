@@ -36,6 +36,6 @@ class ProfilesController < Profiles::ApplicationController
   end
 
   def page_title
-    @title = [t(:'profiles.sidebar.profile'), current_user.email].join(' · ')
+    @title = t(:'profiles.show.title')
   end
 end

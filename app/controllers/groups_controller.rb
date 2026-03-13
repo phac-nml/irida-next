@@ -260,26 +260,20 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @namespace = group
   end
 
-  def page_title # rubocop:disable Metrics/MethodLength
+  def page_title
     @title = case action_name
              when 'show'
-               if @tab == 'shared_namespaces'
-                 [@group.full_name, t(:'groups.show.tabs.shared_namespaces')].join(' · ')
-               else
-                 [@group.full_name, t(:'groups.show.tabs.subgroups_and_projects')].join(' · ')
-               end
+               group_title
              when 'activity'
-               [t(:'groups.sidebar.activity'), @group.full_name].join(' · ')
-             when 'edit'
-               [t('common.labels.general'), t(:'groups.edit.title'), @group.full_name].join(' · ')
+               [t(:'groups.activity.title'), group_title].join(' · ')
              when 'new', 'create'
                if @group
-                 t(:'groups.new_subgroup.title')
+                 [t(:'groups.new_subgroup.title'), group_title].join(' · ')
                else
                  t(:'groups.create.title')
                end
              else
-               t(:'general.default_sidebar.groups')
+               [t('groups.edit.title'), group_title].join(' · ')
              end
   end
 end

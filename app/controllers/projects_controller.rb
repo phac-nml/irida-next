@@ -214,15 +214,18 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   def page_title
     @title = case action_name
              when 'show'
-               [t('common.labels.details'), @project.full_name].join(' · ')
+               project_title
              when 'activity'
-               [t(:'projects.sidebar.activity'), @project.full_name].join(' · ')
-             when 'edit'
-               [t('common.labels.general'), t(:'projects.edit.title'), @project.full_name].join(' · ')
+               [t(:'projects.activity.title'), project_title].join(' · ')
              when 'new'
-               t(:'projects.new.title')
+               title = t(:'projects.new.title')
+               if params[:group_id]
+                 group = Namespace.find(params[:group_id])
+                 title += " · #{t(:'activerecord.models.group.one')}: #{group.name} (#{group.puid})"
+               end
+               title
              else
-               t(:'general.default_sidebar.projects')
+               [t('projects.edit.title'), project_title].join(' · ')
              end
   end
 end

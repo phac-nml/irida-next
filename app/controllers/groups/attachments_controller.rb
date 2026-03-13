@@ -44,7 +44,7 @@ module Groups
     end
 
     def page_title
-      @title = [t(:'groups.sidebar.files'), @group.full_name].join(' · ')
+      @title = [t(:'groups.sidebar.files'), group_title].join(' · ')
     end
   end
 end

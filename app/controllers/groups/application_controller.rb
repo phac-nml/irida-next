@@ -18,5 +18,11 @@ module Groups
     def context_crumbs
       @context_crumbs = route_to_context_crumbs(@group.route)
     end
+
+    def group_title
+      return unless @group
+
+      "#{t(:'activerecord.models.group.one')}: #{@group.name} (#{@group.puid})"
+    end
   end
 end

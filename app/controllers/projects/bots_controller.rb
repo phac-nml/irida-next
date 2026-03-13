@@ -42,7 +42,7 @@ module Projects
     end
 
     def page_title
-      @title = [t(:'projects.sidebar.bot_accounts'), t(:'projects.edit.title'), @project.full_name].join(' · ')
+      @title = [t(:'projects.sidebar.bot_accounts'), project_title].join(' · ')
     end
   end
 end

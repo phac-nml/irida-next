@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Workflow executions controller
-class WorkflowExecutionsController < ApplicationController # rubocop:disable Metrics/ClassLength
+class WorkflowExecutionsController < ApplicationController
   include BreadcrumbNavigation
   include Metadata
   include WorkflowExecutionActions
@@ -119,23 +119,12 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
     @cancel_path = cancel_multiple_workflow_executions_path
   end
 
-  def page_title # rubocop:disable Metrics/MethodLength
+  def page_title
     case action_name
     when 'index'
       @title = t(:'general.default_sidebar.workflows').to_s
     when 'show'
-      workflow_execution_identifier = @workflow_execution.name.presence || @workflow_execution.id
-      workflow_header = "#{t(:'shared.workflow_executions.workflow_execution')} #{workflow_execution_identifier}"
-      @title = case @tab
-               when 'params'
-                 [workflow_header, t(:'workflow_executions.show.tabs.params')].join(' · ')
-               when 'samplesheet'
-                 [workflow_header, t(:'workflow_executions.show.tabs.samplesheet')].join(' · ')
-               when 'files'
-                 [workflow_header, t(:'workflow_executions.show.tabs.files')].join(' · ')
-               else
-                 [workflow_header, t(:'workflow_executions.show.tabs.summary')].join(' · ')
-               end
+      @title = @workflow_execution.name.presence || @workflow_execution.id
     end
   end
 end

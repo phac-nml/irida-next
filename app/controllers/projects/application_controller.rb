@@ -30,6 +30,12 @@ module Projects
       @context_crumbs = route_to_context_crumbs(@project.namespace.route)
     end
 
+    def project_title
+      return unless @project
+
+      "#{t(:'activerecord.models.namespaces/project_namespace.one')}: #{@project.name} (#{@project.puid})"
+    end
+
     def load_samples
       Sample.where(project_id: @project.id)
     end
