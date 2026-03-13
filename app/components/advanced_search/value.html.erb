@@ -27,7 +27,7 @@
     <% else %>
       <div
         data-controller="list-filter"
-        data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
+        data-list-filter-filters-value="<%= ERB::Util.json_escape(@condition.value.present? ? @condition.value.to_json : '[]') %>"
         class="list-filter"
       >
         <%= render ListInputComponent.new(
