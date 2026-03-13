@@ -1,0 +1,49 @@
+<div class="border-t border-slate-200 pt-6 dark:border-slate-700">
+  <h3 class="sr-only">Personal Access Tokens Information</h3>
+
+  <div class="grid w-full grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+    <%# Active tokens - Takes full width on mobile, half on sm, and full on lg %>
+    <div class="col-span-2 sm:col-span-1">
+      <%= render NamespaceStatisticComponent.new(
+        id_prefix: "active-tokens",
+        label: "Active Tokens",
+        value: @current_user.personal_access_tokens.active.count,
+        icon_name: :lock_key_open,
+        color_scheme: :slate,
+      ) %>
+    </div>
+
+    <%# Expired tokens - Full width on mobile, half on sm and up %>
+    <div class="col-span-2 sm:col-span-1">
+      <%= render NamespaceStatisticComponent.new(
+        icon_name: :clock_counter_clockwise,
+        id_prefix: "expired-tokens",
+        label: "Expired Tokens",
+        value: @current_user.personal_access_tokens.expired.count,
+        color_scheme: :blue,
+      ) %>
+    </div>
+
+    <%# Revoked tokens - Full width on mobile, half on sm and up, moves to second row on lg %>
+    <div class="col-span-2 sm:col-span-1">
+      <%= render NamespaceStatisticComponent.new(
+        id_prefix: "revoked-tokens",
+        icon_name: :lock_key,
+        label: "Revoked Tokens",
+        value: @current_user.personal_access_tokens.revoked.count,
+        color_scheme: :teal,
+      ) %>
+    </div>
+
+    <%# Tokens expiring in 2 weeks - Full width on mobile, half on sm and up, moves to second row on lg %>
+    <div class="col-span-2 sm:col-span-1">
+      <%= render NamespaceStatisticComponent.new(
+        id_prefix: "expiring-tokens",
+        icon_name: :clock_countdown,
+        label: "Tokens expiring in 2 weeks",
+        value: @current_user.personal_access_tokens.expiring_in_two_weeks.count,
+        color_scheme: :indigo,
+      ) %>
+    </div>
+  </div>
+</div>

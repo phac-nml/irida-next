@@ -3,6 +3,7 @@
 require 'ransack/helpers/form_helper'
 
 module PersonalAccessTokens
+  # rubocop:disable Metrics/ParameterLists
   # Component for rendering the PersonalAccessTokens tables
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
@@ -12,14 +13,17 @@ module PersonalAccessTokens
       namespace: nil,
       bot_account: nil,
       empty: {},
+      actions: false,
       **system_arguments
     )
       @personal_access_tokens = personal_access_tokens
       @namespace = namespace
       @bot_account = bot_account
       @empty = empty
+      @actions = actions
       @system_arguments = system_arguments
     end
+    # rubocop:enable Metrics/ParameterLists
 
     private
 
