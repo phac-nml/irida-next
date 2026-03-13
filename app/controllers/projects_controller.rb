@@ -218,7 +218,12 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
              when 'activity'
                [t(:'projects.activity.title'), project_title].join(' · ')
              when 'new'
-               t(:'projects.new.title')
+               title = t(:'projects.new.title')
+               if params[:group_id]
+                 group = Namespace.find(params[:group_id])
+                 title += " · #{t(:'activerecord.models.group.one')}: #{group.name} (#{group.puid})"
+               end
+               title
              else
                [t('projects.edit.title'), project_title].join(' · ')
              end
