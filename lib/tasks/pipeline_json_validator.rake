@@ -3,8 +3,11 @@
 # Rake task to validate pipeline JSON configuration files against a JSON schema
 # USAGE:
 #  rake pipeline_json_validator:validate path/to/PIPELINES_JSON_CONFIG_FILE
+#  cat JSON_INPUT_READ_FROM_ANOTHER_LOCATION | rake pipeline_json_validator:validate
+#  echo JSON_FROM_COMMAND_LINE | rake pipeline_json_validator:validate
 #
-#  If no file path is provided as an argument, the task will prompt for user input.
+#  If no file path is provided as an argument, and the input is not piped,
+#  the task will prompt for user input.
 #  Exits with status code 0 if valid, 1 if invalid.
 namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
   @errors = []
@@ -12,16 +15,32 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
   @required_translation_keys = %w[en fr]
 
   desc 'Validate JSON files against a JSON schema'
-  task :validate do # rubocop:disable Rails/RakeEnvironment
-    if ARGV[1].nil?
+  task :validate do # rubocop:disable Rails/RakeEnvironment,Metrics/BlockLength
+    input = ARGV[1]
+
+    if input.blank? && !$stdin.tty?
+      content = $stdin.read
+      begin
+        # piped input
+        json_data = JSON.parse(content)
+      rescue JSON::ParserError
+        # Treat piped input as file path if not valid JSON
+        json_file_path_input = content.strip
+        json_data = validate_json(Rails.root.join(json_file_path_input))
+      end
+    elsif input.present?
+      if File.file?(input)
+        json_file_path_input = input
+        json_data = validate_json(Rails.root.join(json_file_path_input))
+      else
+        @errors << 'No such file or directory'
+        early_exit
+      end
+    else
       puts 'Please enter path to pipelines json configuration file to validate:'
       json_file_path_input = $stdin.gets.chomp
-    else
-      json_file_path_input = ARGV[1]
+      json_data = validate_json(Rails.root.join(json_file_path_input))
     end
-    json_file_path = Rails.root.join(json_file_path_input)
-
-    json_data = validate_json(json_file_path)
 
     # Exit early if JSON is malformed
     early_exit if @invalid_json
@@ -55,9 +74,9 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
     exit(1)
   end
 
-  # Validate that the JSON file is well-formed
-  def validate_json(json_file_path)
-    JSON.parse(File.read(json_file_path))
+  # Validate that the JSON is well-formed
+  def validate_json(file_path)
+    JSON.parse(File.read(file_path))
   rescue JSON::ParserError => e
     @errors << "Invalid JSON format: #{e.message}"
     @invalid_json = true
