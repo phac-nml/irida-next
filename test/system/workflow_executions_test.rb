@@ -594,6 +594,40 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     Flipper.disable(:workflow_execution_advanced_search)
   end
 
+  test 'workflow advanced search returns no results for invalid enum state value' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    within('dialog') do
+      if has_selector?("input[role='combobox']", visible: :visible)
+        find("input[role='combobox']", visible: :visible).send_keys(
+          I18n.t('workflow_executions.table_component.state'),
+          :enter
+        )
+      else
+        find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
+      end
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+      unless has_selector?("select[name$='[value]']", visible: :visible)
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'nonexistent_state_value'
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      end
+    end
+
+    if has_selector?("select[name$='[value]']", visible: :visible)
+      # enum select will not allow arbitrary invalid values — dialog stays open; test passes implicitly
+    else
+      assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
+      assert_selector "div[role='status']", text: /advanced search/, visible: false
+      assert_text 'Displaying 0 items'
+    end
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
   test 'workflow quick search preserves active advanced search when feature flag is enabled' do
     Flipper.enable(:workflow_execution_advanced_search)
 

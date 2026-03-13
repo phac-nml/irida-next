@@ -64,10 +64,12 @@ class WorkflowExecution
     # Dependency: This class depends on Irida::Pipelines.instance being available.
     # In tests, pass an explicit pipelines array via the constructor to avoid this dependency.
     #
-    # @return [Array<Pipeline>] list of available pipelines
-    # @raise [NoMethodError] if Irida::Pipelines.instance is unavailable
+    # @return [Array<Pipeline>] list of available pipelines, or empty array if unavailable
     def fetch_available_pipelines
       Irida::Pipelines.instance.pipelines('available').values
+    rescue StandardError => e
+      Rails.logger.warn("FieldConfiguration: Irida::Pipelines unavailable: #{e.message}")
+      []
     end
 
     # Configuration for the state enum field.
