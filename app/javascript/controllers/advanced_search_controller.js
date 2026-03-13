@@ -181,24 +181,12 @@ export default class extends Controller {
       value.classList.add(...this.#hiddenClasses);
       this.#clearValueInputs(value);
       return;
-    } else if (["in", "not_in"].includes(operator)) {
-      const selectedField = this.#selectedConditionField(condition);
-      value.outerHTML = this.listValueTemplateTarget.innerHTML
-        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
-
-      const updatedCondition = this.#conditionElements(group)[conditionIndex];
-      const updatedValue = updatedCondition?.querySelector(".value");
-      updatedValue?.classList.remove(...this.#hiddenClasses);
-      this.#updateValueFieldForEnum(
-        updatedValue,
-        updatedCondition,
-        selectedField,
-        operator,
-      );
     } else {
       const selectedField = this.#selectedConditionField(condition);
-      value.outerHTML = this.valueTemplateTarget.innerHTML
+      const templateTarget = ["in", "not_in"].includes(operator)
+        ? this.listValueTemplateTarget
+        : this.valueTemplateTarget;
+      value.outerHTML = templateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
 

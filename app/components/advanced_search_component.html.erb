@@ -119,22 +119,24 @@
     <% end %>
   </template>
 
-  <% @fields.fetch(:enum_fields, {}).each_key do |enum_field| %>
-    <template data-advanced-search-target="enumListValueTemplate" data-field="<%= enum_field %>">
-      <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-        <% condition = @search_condition_class.new(field: enum_field, operator: "in") %>
+  <% enum_template_configs.each do |config| %>
+    <% @enum_fields.each_key do |enum_field| %>
+      <template data-advanced-search-target="<%= config[:target] %>" data-field="<%= enum_field %>">
+        <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+          <% condition = @search_condition_class.new(field: enum_field, operator: config[:operator]) %>
 
-        <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
-          <%= render AdvancedSearch::Value.new(
-            conditions_form: conditions_form,
-            group_index: "GROUP_INDEX_PLACEHOLDER",
-            condition: condition,
-            condition_index: "CONDITION_INDEX_PLACEHOLDER",
-            fields: @fields,
-          ) %>
+          <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
+            <%= render AdvancedSearch::Value.new(
+              conditions_form: conditions_form,
+              group_index: "GROUP_INDEX_PLACEHOLDER",
+              condition: condition,
+              condition_index: "CONDITION_INDEX_PLACEHOLDER",
+              fields: @fields,
+            ) %>
+          <% end %>
         <% end %>
-      <% end %>
-    </template>
+      </template>
+    <% end %>
   <% end %>
 
   <template data-advanced-search-target="valueTemplate">
@@ -152,24 +154,6 @@
       <% end %>
     <% end %>
   </template>
-
-  <% @fields.fetch(:enum_fields, {}).each_key do |enum_field| %>
-    <template data-advanced-search-target="enumValueTemplate" data-field="<%= enum_field %>">
-      <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-        <% condition = @search_condition_class.new(field: enum_field, operator: "=") %>
-
-        <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
-          <%= render AdvancedSearch::Value.new(
-            conditions_form: conditions_form,
-            group_index: "GROUP_INDEX_PLACEHOLDER",
-            condition: condition,
-            condition_index: "CONDITION_INDEX_PLACEHOLDER",
-            fields: @fields,
-          ) %>
-        <% end %>
-      <% end %>
-    </template>
-  <% end %>
 
   <template data-advanced-search-target="conditionTemplate">
     <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>

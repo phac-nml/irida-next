@@ -10,6 +10,7 @@ class AdvancedSearchComponent < Component
     @form = form
     @search = search
     @fields = normalized_fields(fields:, sample_fields:, metadata_fields:)
+    @enum_fields = @fields.fetch(:enum_fields, {})
     @operations = operation_options
     @open = open
     @status = status
@@ -43,6 +44,13 @@ class AdvancedSearchComponent < Component
       ArgumentError,
       'search_condition_class is required when group class does not define .condition_class'
     )
+  end
+
+  def enum_template_configs
+    [
+      { target: 'enumListValueTemplate', operator: 'in' },
+      { target: 'enumValueTemplate', operator: '=' }
+    ]
   end
 
   def operation_options

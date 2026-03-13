@@ -663,9 +663,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       end
     end
 
-    if has_selector?("select[name$='[value]']", visible: :visible)
-      # enum select will not allow arbitrary invalid values — dialog stays open; test passes implicitly
-    else
+    if has_no_selector?("select[name$='[value]']", visible: :visible)
       assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
       assert_selector "div[role='status']", text: /advanced search/, visible: false
       assert_text 'Displaying 0 items'
