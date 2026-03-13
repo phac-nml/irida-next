@@ -33,7 +33,7 @@ export default class extends Controller {
   #lastOption;
 
   connect() {
-    this.#filter = "";
+    this.#filter = this.comboboxTarget.value;
     this.#filteredOptions = [];
     this.#allOptions = [];
     this.#option = null;
@@ -78,7 +78,9 @@ export default class extends Controller {
     this.#addListboxEventListeners(this.listboxTarget);
 
     // Initialize
-    this.#setOption(this.#filterOptions());
+    if (this.#filter) {
+      this.#setOption(this.#filterOptions());
+    }
   }
 
   disconnect() {
