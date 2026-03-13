@@ -16,7 +16,7 @@
     <% if enum_field? %>
       <%= @conditions_form.select :value,
                                  options_for_select(enum_field_options, selected_enum_values),
-                                 {},
+                                 { include_hidden: false },
                                  {
                                    multiple: true,
                                    "aria-label": value_label,

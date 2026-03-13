@@ -711,6 +711,45 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     Flipper.disable(:workflow_execution_advanced_search)
   end
 
+  test 'workflow advanced search keeps completed results visible when broadening state not_in filters' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    within('dialog') do
+      select_state_advanced_search_field
+      find("select[name$='[operator]']", visible: :visible).find("option[value='not_in']").select_option
+      set_advanced_search_multi_select_values(
+        "select[name$='[value][]']",
+        %w[initial prepared submitted]
+      )
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_text @workflow_execution1.id
+    assert_no_text @workflow_execution5.id
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    within('dialog') do
+      set_advanced_search_multi_select_values(
+        "select[name$='[value][]']",
+        %w[initial prepared submitted running completing error canceling canceled]
+      )
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_text @workflow_execution1.id
+    assert_no_text @workflow_execution4.id
+    assert_no_text @workflow_execution5.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
   test 'submitter can edit workflow execution post launch from workflow execution page' do
     ### SETUP START ###
     workflow_execution = workflow_executions(:irida_next_example_new)
@@ -1026,5 +1065,34 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
     assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.error')
+  end
+
+  private
+
+  def select_state_advanced_search_field
+    if has_selector?("input[role='combobox']", visible: :visible)
+      find("input[role='combobox']", visible: :visible).send_keys(
+        I18n.t('workflow_executions.table_component.state'),
+        :enter
+      )
+    else
+      find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
+    end
+  end
+
+  def set_advanced_search_multi_select_values(selector, values)
+    select = find(selector, visible: :visible)
+
+    page.execute_script(<<~JS, select)
+      const element = arguments[0];
+      const values = #{values.to_json};
+
+      Array.from(element.options).forEach((option) => {
+        option.selected = values.includes(option.value);
+      });
+
+      element.dispatchEvent(new Event("input", { bubbles: true }));
+      element.dispatchEvent(new Event("change", { bubbles: true }));
+    JS
   end
 end

@@ -44,7 +44,7 @@ module AdvancedSearch
       end
 
       def compact_values(value)
-        Array(value).compact
+        Array(value).compact_blank
       end
     end
   end
