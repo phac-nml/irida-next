@@ -9,6 +9,6 @@ module JsonHelper
   end
 
   def json_escape_data(value)
-    ERB::Util.html_escape(value.to_json)
+    ERB::Util.json_escape(value.to_json)
   end
 end
