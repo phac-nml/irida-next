@@ -182,6 +182,28 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     end
   end
 
+  test 'workflow preview keeps enum operators available with native field selects' do
+    Flipper.disable(:advanced_search_with_auto_complete)
+
+    visit('rails/view_components/advanced_search_component/workflow')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        find("select[name$='[field]']").find("option[value='state']").select_option
+
+        within first("select[name$='[operator]']") do
+          allowed_operators = all("option:not([hidden]):not([value=''])").map(&:value)
+          assert_equal %w[= != in not_in], allowed_operators
+        end
+
+        first("select[name$='[operator]']").find("option[value='not_in']").select_option
+        assert_selector "select[name$='[value][]']"
+      end
+    end
+  ensure
+    Flipper.enable(:advanced_search_with_auto_complete)
+  end
+
   test 'dynamic condition changes preserve groups_attributes payload naming' do
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller-connected="true"]' do
