@@ -306,15 +306,12 @@ export default class extends Controller {
     }
 
     const enumFields = this.#parseConditionJSON(condition, "enumFields") || {};
-    const enumOperations =
-      this.#parseConditionJSON(condition, "enumOperations") || {};
-    const standardOperations =
-      this.#parseConditionJSON(condition, "standardOperations") || {};
+    const standardOperations = this.#operationOptions(condition, operator);
 
     const enumConfig = enumFields[selectedField];
     const operations =
       selectedField && this.#enumHasValues(enumConfig)
-        ? enumOperations
+        ? this.#enumOperationOptions(standardOperations)
         : standardOperations;
 
     operator.innerHTML = "";
@@ -529,6 +526,42 @@ export default class extends Controller {
     } catch {
       return null;
     }
+  }
+
+  #operationOptions(condition, operator) {
+    const standardOperations =
+      this.#parseConditionJSON(condition, "standardOperations") || {};
+
+    if (Object.keys(standardOperations).length > 0) {
+      return standardOperations;
+    }
+
+    return this.#serializeOptions(operator);
+  }
+
+  #enumOperationOptions(operations) {
+    const enumValues = ["=", "!=", "in", "not_in"];
+
+    return Object.fromEntries(
+      Object.entries(operations).filter(([, value]) =>
+        enumValues.includes(value),
+      ),
+    );
+  }
+
+  #serializeOptions(select) {
+    if (!(select instanceof HTMLSelectElement)) {
+      return {};
+    }
+
+    return Array.from(select.options).reduce((options, option) => {
+      if (!option.value) {
+        return options;
+      }
+
+      options[option.text] = option.value;
+      return options;
+    }, {});
   }
 
   #enumHasValues(enumConfig) {
