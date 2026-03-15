@@ -34,8 +34,11 @@ export default class extends Controller {
   }
 
   renderSearch() {
-    this.searchGroupsContainerTarget.innerHTML =
-      this.searchGroupsTemplateTarget.innerHTML;
+    if (this.searchGroupsContainerTarget.children.length === 0) {
+      this.searchGroupsContainerTarget.innerHTML =
+        this.searchGroupsTemplateTarget.innerHTML;
+    }
+
     this.#cacheSelectedFields();
     this.clearSubmitError();
   }
@@ -286,8 +289,14 @@ export default class extends Controller {
     return Array.from(group.querySelectorAll(this.#conditionSelector));
   }
 
+  #allConditionElements() {
+    return this.#groupElements().flatMap((group) =>
+      this.#conditionElements(group),
+    );
+  }
+
   #cacheSelectedFields() {
-    this.conditionsContainerTargets.forEach((condition) => {
+    this.#allConditionElements().forEach((condition) => {
       condition.dataset.advancedSearchSelectedField =
         this.#selectedConditionField(condition);
     });
@@ -428,7 +437,7 @@ export default class extends Controller {
   }
 
   #hasAtLeastOneCompleteCondition() {
-    return this.conditionsContainerTargets.some((condition) =>
+    return this.#allConditionElements().some((condition) =>
       this.#isConditionComplete(condition),
     );
   }
@@ -467,7 +476,7 @@ export default class extends Controller {
   }
 
   #focusFirstConditionField() {
-    this.#focusConditionInput(this.conditionsContainerTargets[0]);
+    this.#focusConditionInput(this.#allConditionElements()[0]);
   }
 
   #dirty() {
