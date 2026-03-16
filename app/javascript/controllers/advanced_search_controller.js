@@ -65,6 +65,12 @@ export default class extends Controller {
       event.preventDefault();
       event.stopImmediatePropagation();
     }
+
+    if (this.statusValue) {
+      this.#resetToAppliedSearch();
+    } else {
+      this.clear();
+    }
   }
 
   addCondition(event) {
@@ -281,6 +287,13 @@ export default class extends Controller {
     return this.#groupElements().flatMap((group) =>
       this.#conditionElements(group),
     );
+  }
+
+  #resetToAppliedSearch() {
+    this.searchGroupsContainerTarget.innerHTML =
+      this.searchGroupsTemplateTarget.innerHTML;
+    this.#cacheSelectedFields();
+    this.clearSubmitError();
   }
 
   #cacheSelectedFields() {
