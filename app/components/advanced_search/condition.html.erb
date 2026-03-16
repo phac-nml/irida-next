@@ -5,6 +5,7 @@
   data-standard-operations="<%= json_escape_data(@operations) %>"
   data-advanced-search-group-index="<%= @group_index %>"
   data-advanced-search-condition-index="<%= @condition_index %>"
+  data-advanced-search-selected-field="<%= selected_field %>"
   data-advanced-search-legend-template="<%= t("components.advanced_search_component.condition", index: "__INDEX__") %>"
   class="
     flex items-end space-x-2 rounded-lg border border-slate-300 p-4 text-sm text-slate-500 @max-xl:flex-col
