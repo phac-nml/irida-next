@@ -45,14 +45,6 @@ class WorkflowExecutionSubmissionJob < WorkflowExecutionJob
     end
   end
 
-  def update_state(state, run_id: nil)
-    return if @workflow_execution.state.to_sym == state
-
-    @workflow_execution.run_id = run_id unless run_id.nil?
-    @workflow_execution.state = state
-    @workflow_execution.save
-  end
-
   def queue_next_job
     return if @workflow_execution.state.to_sym == :error
 

@@ -61,13 +61,6 @@ class WorkflowExecutionCancelationJob < WorkflowExecutionJob
     update_state(:canceled)
   end
 
-  def update_state(state)
-    return if @workflow_execution.state.to_sym == state
-
-    @workflow_execution.state = state
-    @workflow_execution.save
-  end
-
   def queue_next_job
     return if @workflow_execution.state.to_sym == :error
 
