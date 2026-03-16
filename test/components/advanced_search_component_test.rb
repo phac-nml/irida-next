@@ -189,7 +189,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
-        find("select[name$='[field]']").find("option[value='state']").select_option
+        first("select[name$='[field]']").find("option[value='state']").select_option
 
         within first("select[name$='[operator]']") do
           allowed_operators = all("option:not([hidden]):not([value=''])").map(&:value)

@@ -702,7 +702,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     Flipper.disable(:workflow_execution_advanced_search)
   end
 
-  test 'workflow advanced search maintains dialog state between close and reopen' do
+  test 'workflow advanced search clears form on close when there is no active search' do
     Flipper.enable(:workflow_execution_advanced_search)
 
     visit workflow_executions_path
@@ -719,19 +719,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
         find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
       end
 
-      click_button I18n.t(:'components.advanced_search_component.add_condition_button')
-
-      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[1] do
-        select_state_advanced_search_field
-        find("select[name$='[operator]']", visible: :visible).find("option[value='!=']").select_option
-
-        if has_selector?("select[name$='[value]']", visible: :visible)
-          find("select[name$='[value]']", visible: :visible).select(I18n.t('workflow_executions.state.error'))
-        else
-          find("input[name$='[value]']", visible: :visible).fill_in with: 'error'
-        end
-      end
-
       find('button.dialog--close', visible: :visible).click
     end
 
@@ -740,26 +727,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     click_button I18n.t(:'components.advanced_search_component.title')
 
     within('dialog') do
-      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 2
+      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 1
 
       within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[0] do
-        assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
-
-        if has_selector?("select[name$='[value]']", visible: :visible)
-          assert_equal 'completed', find("select[name$='[value]']", visible: :visible).value
-        else
-          assert_equal 'completed', find("input[name$='[value]']", visible: :visible).value
-        end
-      end
-
-      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[1] do
-        assert_equal '!=', find("select[name$='[operator]']", visible: :visible).value
-
-        if has_selector?("select[name$='[value]']", visible: :visible)
-          assert_equal 'error', find("select[name$='[value]']", visible: :visible).value
-        else
-          assert_equal 'error', find("input[name$='[value]']", visible: :visible).value
-        end
+        assert_equal '', find("select[name$='[operator]']", visible: :visible).value
+        assert_equal '', find("input[name$='[value]']", visible: :all).value
       end
     end
   ensure
@@ -826,7 +798,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     Flipper.disable(:workflow_execution_advanced_search)
   end
 
-  test 'workflow advanced search preserves draft edits on active multi-condition filter between reopen' do
+  test 'workflow advanced search resets to applied state on close when active search exists' do
     Flipper.enable(:workflow_execution_advanced_search)
 
     visit workflow_executions_path
@@ -871,12 +843,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     click_button I18n.t(:'components.advanced_search_component.title')
 
     within('dialog') do
-      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 2
+      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 1
 
-      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[1] do
-        assert_equal 'contains', find("select[name$='[operator]']", visible: :visible).value
-        assert_equal 'draft_run_id', find("input[name$='[value]']", visible: :visible).value
+      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[0] do
+        assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
       end
+
+      assert_no_selector "fieldset[data-advanced-search-target='conditionsContainer'] input[value='draft_run_id']",
+                         visible: :all
     end
   ensure
     Flipper.disable(:workflow_execution_advanced_search)
