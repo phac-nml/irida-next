@@ -75,12 +75,4 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
 
     update_state(:prepared)
   end
-
-  def update_state(state, cleaned_value: nil)
-    return if @workflow_execution.state.to_sym == state
-
-    @workflow_execution.state = state
-    @workflow_execution.cleaned = cleaned_value unless cleaned_value.nil?
-    @workflow_execution.save
-  end
 end

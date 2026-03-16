@@ -214,13 +214,6 @@ class WorkflowExecutionCompletionJob < WorkflowExecutionJob # rubocop:disable Me
     update_state(:completed)
   end
 
-  def update_state(state)
-    return if @workflow_execution.state.to_sym == state
-
-    @workflow_execution.state = state
-    @workflow_execution.save
-  end
-
   def queue_next_job
     WorkflowExecutionCleanupJob.perform_later(@workflow_execution.reload)
   end
