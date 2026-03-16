@@ -61,21 +61,9 @@ export default class extends Controller {
   }
 
   close(event) {
-    if (!this.statusValue) {
-      this.clear();
-      return;
-    }
-
     if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
       event.preventDefault();
       event.stopImmediatePropagation();
-    } else if (!this.#dirty()) {
-      this.renderSearch();
-    } else if (window.confirm(this.confirmCloseTextValue)) {
-      this.renderSearch();
-    } else {
-      event.stopImmediatePropagation();
-      event.preventDefault();
     }
   }
 
@@ -315,12 +303,13 @@ export default class extends Controller {
     }
 
     const enumFields = this.#parseConditionJSON(condition, "enumFields") || {};
+    const enumOperations = this.#enumOperations(condition, operator);
     const standardOperations = this.#operationOptions(condition, operator);
 
     const enumConfig = enumFields[selectedField];
     const operations =
       selectedField && this.#enumHasValues(enumConfig)
-        ? this.#enumOperationOptions(standardOperations)
+        ? enumOperations
         : standardOperations;
 
     operator.innerHTML = "";
@@ -479,47 +468,6 @@ export default class extends Controller {
     this.#focusConditionInput(this.#allConditionElements()[0]);
   }
 
-  #dirty() {
-    const currentState = this.#serializeFormState(
-      this.searchGroupsContainerTarget,
-    );
-
-    const originalContainer = document.createElement("div");
-    originalContainer.innerHTML = this.searchGroupsTemplateTarget.innerHTML;
-    const originalState = this.#serializeFormState(originalContainer);
-
-    return currentState !== originalState;
-  }
-
-  #serializeFormState(rootElement) {
-    const groups = Array.from(
-      rootElement.querySelectorAll(this.#groupSelector),
-    ).map((group) => {
-      return Array.from(group.querySelectorAll(this.#conditionSelector)).map(
-        (condition) => {
-          const listValues = Array.from(
-            condition.querySelectorAll("[name$='[value][]']"),
-          );
-          const singleValue =
-            condition.querySelector("[name$='[value]']")?.value;
-          const expandedListValues =
-            this.#listValueValuesFromElements(listValues);
-
-          return {
-            field: condition.querySelector("[name$='[field]']")?.value,
-            operator: condition.querySelector("[name$='[operator]']")?.value,
-            values:
-              expandedListValues.length > 0
-                ? expandedListValues
-                : [singleValue],
-          };
-        },
-      );
-    });
-
-    return JSON.stringify(groups);
-  }
-
   #selectedConditionField(condition) {
     return condition?.querySelector("[name$='[field]']")?.value?.trim() || "";
   }
@@ -546,6 +494,19 @@ export default class extends Controller {
     }
 
     return this.#serializeOptions(operator);
+  }
+
+  #enumOperations(condition, operator) {
+    const enumOperations =
+      this.#parseConditionJSON(condition, "enumOperations") || {};
+
+    if (Object.keys(enumOperations).length > 0) {
+      return enumOperations;
+    }
+
+    return this.#enumOperationOptions(
+      this.#operationOptions(condition, operator),
+    );
   }
 
   #enumOperationOptions(operations) {

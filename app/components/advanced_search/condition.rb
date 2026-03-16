@@ -51,7 +51,7 @@ module AdvancedSearch
     end
 
     def enum_operator_options
-      @operations.select { |operation| enum_operator_values.include?(operation.last) }
+      @operations.select { |_, value| enum_operator_values.include?(value) }
     end
 
     def enum_operator_values
