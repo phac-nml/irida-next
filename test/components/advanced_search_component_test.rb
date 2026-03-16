@@ -120,6 +120,39 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     end
   end
 
+  test 'close dialog restores applied state when active search exists' do
+    visit('rails/view_components/advanced_search_component/default')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[operator]']").find("option[value='contains']").select_option
+            find("input[name$='[value]']", visible: :visible).fill_in with: 'United States'
+          end
+
+          click_button I18n.t(:'components.advanced_search_component.add_condition_button')
+        end
+
+        click_button I18n.t('components.dialog.close')
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 2
+
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 3
+
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+            assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
+            assert_equal 'Canada', find("input[name$='[value]']", visible: :visible).value
+          end
+        end
+      end
+    end
+  end
+
   test 'apply filter requires at least one complete condition' do
     visit('rails/view_components/advanced_search_component/empty')
     within 'div[data-controller-connected="true"]' do

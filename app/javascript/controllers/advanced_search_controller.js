@@ -23,14 +23,18 @@ export default class extends Controller {
   #groupSelector = "fieldset[data-advanced-search-target='groupsContainer']";
   #conditionSelector =
     "fieldset[data-advanced-search-target='conditionsContainer']";
+  #appliedSearchSnapshot = null;
+  #appliedSearchState = [];
 
   connect() {
     if (this.openValue) {
       this.renderSearch();
+      this.#cacheAppliedSearch();
       return;
     }
 
     this.#cacheSelectedFields();
+    this.#cacheAppliedSearch();
   }
 
   renderSearch() {
@@ -50,6 +54,8 @@ export default class extends Controller {
 
   submit(event) {
     if (this.#hasAtLeastOneCompleteCondition()) {
+      this.statusValue = true;
+      this.#cacheAppliedSearch();
       this.clearSubmitError();
       return;
     }
@@ -60,12 +66,7 @@ export default class extends Controller {
     this.#focusFirstConditionField();
   }
 
-  close(event) {
-    if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    }
-
+  close(_event) {
     if (this.statusValue) {
       this.#resetToAppliedSearch();
     } else {
@@ -152,6 +153,8 @@ export default class extends Controller {
   clearForm() {
     this.clear();
     this.addGroup();
+    this.statusValue = false;
+    this.#cacheAppliedSearch();
     this.clearSubmitError();
   }
 
@@ -290,10 +293,122 @@ export default class extends Controller {
   }
 
   #resetToAppliedSearch() {
-    this.searchGroupsContainerTarget.innerHTML =
-      this.searchGroupsTemplateTarget.innerHTML;
+    if (this.#appliedSearchSnapshot) {
+      this.searchGroupsContainerTarget.replaceChildren(
+        ...Array.from(this.#appliedSearchSnapshot.childNodes).map((node) =>
+          node.cloneNode(true),
+        ),
+      );
+      this.#restoreAppliedSearchState();
+    } else {
+      this.searchGroupsContainerTarget.innerHTML =
+        this.searchGroupsTemplateTarget.innerHTML;
+    }
+
     this.#cacheSelectedFields();
     this.clearSubmitError();
+  }
+
+  #cacheAppliedSearch() {
+    this.#appliedSearchSnapshot =
+      this.searchGroupsContainerTarget.cloneNode(true);
+    this.#appliedSearchState = this.#serializeSearchState(
+      this.searchGroupsContainerTarget,
+    );
+  }
+
+  #restoreAppliedSearchState() {
+    this.#groupElements().forEach((group, groupIndex) => {
+      const groupState = this.#appliedSearchState[groupIndex] || [];
+
+      this.#conditionElements(group).forEach((condition, conditionIndex) => {
+        const conditionState = groupState[conditionIndex];
+        if (!conditionState) {
+          return;
+        }
+
+        this.#restoreConditionState(condition, conditionState);
+      });
+    });
+  }
+
+  #restoreConditionState(condition, conditionState) {
+    const fieldInput = condition.querySelector("[name$='[field]']");
+    if (fieldInput) {
+      fieldInput.value = conditionState.field;
+    }
+
+    const combobox = condition.querySelector("input[role='combobox']");
+    if (combobox) {
+      combobox.value = conditionState.fieldLabel;
+    }
+
+    condition.dataset.advancedSearchSelectedField = conditionState.field;
+
+    const operatorInput = condition.querySelector("[name$='[operator]']");
+    if (operatorInput) {
+      operatorInput.value = conditionState.operator;
+    }
+
+    const listValueInputs = condition.querySelectorAll("[name$='[value][]']");
+    if (listValueInputs.length > 0) {
+      this.#restoreListValueState(listValueInputs, conditionState.values);
+      return;
+    }
+
+    const valueInput = condition.querySelector("[name$='[value]']");
+    if (valueInput) {
+      valueInput.value = conditionState.values[0] || "";
+    }
+  }
+
+  #restoreListValueState(elements, values) {
+    Array.from(elements).forEach((element, index) => {
+      if (element.tagName === "SELECT" && element.multiple) {
+        Array.from(element.options).forEach((option) => {
+          option.selected = values.includes(option.value);
+        });
+        return;
+      }
+
+      element.value = values[index] || "";
+    });
+  }
+
+  #serializeSearchState(rootElement) {
+    return Array.from(rootElement.querySelectorAll(this.#groupSelector)).map(
+      (group) =>
+        Array.from(group.querySelectorAll(this.#conditionSelector)).map(
+          (condition) => {
+            const listValueInputs = condition.querySelectorAll(
+              "[name$='[value][]']",
+            );
+            const singleValueInput =
+              condition.querySelector("[name$='[value]']");
+
+            return {
+              field: condition.querySelector("[name$='[field]']")?.value || "",
+              fieldLabel: this.#fieldDisplayValue(condition),
+              operator:
+                condition.querySelector("[name$='[operator]']")?.value || "",
+              values:
+                listValueInputs.length > 0
+                  ? this.#listValueValuesFromElements(listValueInputs)
+                  : [singleValueInput?.value || ""],
+            };
+          },
+        ),
+    );
+  }
+
+  #fieldDisplayValue(condition) {
+    const combobox = condition.querySelector("input[role='combobox']");
+    if (combobox) {
+      return combobox.value;
+    }
+
+    const select = condition.querySelector("select[name$='[field]']");
+    return select?.selectedOptions?.[0]?.text || select?.value || "";
   }
 
   #cacheSelectedFields() {
