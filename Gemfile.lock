@@ -192,7 +192,7 @@ GEM
     dentaku (3.5.7)
       bigdecimal
       concurrent-ruby
-    devise (5.0.2)
+    devise (5.0.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 7.0)
@@ -772,7 +772,7 @@ DEPENDENCIES
   csv
   debug
   dentaku
-  devise (~> 5.0.2)
+  devise (~> 5.0.3)
   faker
   faraday (~> 2.14)
   faraday-follow_redirects
