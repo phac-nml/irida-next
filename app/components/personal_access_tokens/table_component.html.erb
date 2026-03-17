@@ -1,4 +1,4 @@
-<% if @personal_access_tokens.count.positive? %>
+<% if @personal_access_tokens.size.positive? %>
   <%= viral_data_table(@personal_access_tokens, id: "access-tokens-table") do |table| %>
     <% table.with_column(t("personal_access_tokens.table.header.name")) do |row| %>
       <%= row[:name] %>
@@ -26,11 +26,17 @@
       <% end %>
     <% end %>
 
-    <% table.with_column(t("personal_access_tokens.table.header.expires_at")) do |row| %>
-      <% if row[:expires_at].present? %>
-        <%= helpers.local_date(row[:expires_at], :long) %>
-      <% else %>
-        <%= t("personal_access_tokens.table.never") %>
+    <% if @display_revocation_date %>
+      <% table.with_column("Revocation Date") do |row| %>
+        <%= helpers.local_date(row[:updated_at], :long) %>
+      <% end %>
+    <% else %>
+      <% table.with_column(t("personal_access_tokens.table.header.expires_at")) do |row| %>
+        <% if row[:expires_at].present? %>
+          <%= helpers.local_date(row[:expires_at], :long) %>
+        <% else %>
+          <%= t("personal_access_tokens.table.never") %>
+        <% end %>
       <% end %>
     <% end %>
 

@@ -39,7 +39,7 @@
 
   <%= viral_card(title: t(
     :"profiles.personal_access_tokens.index.active_personal_access_tokens",
-    count: @active_access_tokens.count
+    count: @active_access_tokens.size
   ), title_id: "personal-access-tokens-header") do %>
     <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 
@@ -47,15 +47,22 @@
   <% end %>
 
   <%= viral_card(title: t(
+    :"profiles.personal_access_tokens.index.expiring_personal_access_tokens",
+    count: @expiring_access_tokens.size
+  ), title_id: "expiring-personal-access-tokens-header") do %>
+    <%= render partial: "table", locals: { access_tokens: @expiring_access_tokens, title: t('profiles.personal_access_tokens.table.empty_state.expiring.title'), description: t('profiles.personal_access_tokens.table.empty_state.expiring.description'), actions: true} %>
+  <% end %>
+
+  <%= viral_card(title: t(
     :"profiles.personal_access_tokens.index.expired_personal_access_tokens",
-    count: @expired_access_tokens.count
+    count: @expired_access_tokens.size
   ), title_id: "expired-personal-access-tokens-header") do %>
     <%= render partial: "table", locals: { access_tokens: @expired_access_tokens, title: t('profiles.personal_access_tokens.table.empty_state.expired.title'), description: t('profiles.personal_access_tokens.table.empty_state.expired.description')} %>
   <% end %>
 
   <%= viral_card(title: t(
     :"profiles.personal_access_tokens.index.revoked_personal_access_tokens",
-    count: @revoked_access_tokens.count
+    count: @revoked_access_tokens.size
   ), title_id: "revoked-personal-access-tokens-header") do %>
     <%= render partial: "table", locals: { access_tokens: @revoked_access_tokens, title: t('profiles.personal_access_tokens.table.empty_state.revoked.title'), description: t('profiles.personal_access_tokens.table.empty_state.revoked.description')} %>
   <% end %>
