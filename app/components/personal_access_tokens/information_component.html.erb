@@ -11,6 +11,14 @@
         icon_name: :lock_key_open,
         color_scheme: :slate,
       ) %>
+
+      <%= button_to "Filter list",
+        list_profile_personal_access_tokens_path,
+        data: { 'turbo-stream': true },
+        params: { type: "active" },
+        method: :get,
+        class:
+          "py-2 dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
     </div>
 
     <%# Expired tokens - Full width on mobile, half on sm and up %>
@@ -22,6 +30,14 @@
         value: @current_user.personal_access_tokens.expired.count,
         color_scheme: :blue,
       ) %>
+
+      <%= button_to "Filter list",
+        list_profile_personal_access_tokens_path,
+        data: { 'turbo-stream': true },
+        params: { type: "expired" },
+        method: :get,
+        class:
+          "py-2 dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
     </div>
 
     <%# Revoked tokens - Full width on mobile, half on sm and up, moves to second row on lg %>
@@ -33,6 +49,14 @@
         value: @current_user.personal_access_tokens.revoked.count,
         color_scheme: :teal,
       ) %>
+
+      <%= button_to "Filter list",
+        list_profile_personal_access_tokens_path,
+        data: { 'turbo-stream': true },
+        params: { type: "revoked" },
+        method: :get,
+        class:
+          "py-2 dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
     </div>
 
     <%# Tokens expiring in 2 weeks - Full width on mobile, half on sm and up, moves to second row on lg %>
@@ -44,6 +68,14 @@
         value: @current_user.personal_access_tokens.expiring_in_two_weeks.count,
         color_scheme: :indigo,
       ) %>
+
+      <%= button_to "Filter list",
+        list_profile_personal_access_tokens_path,
+        data: { 'turbo-stream': true },
+        params: { type: "expiring" },
+        method: :get,
+        class:
+          "py-2 dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
     </div>
   </div>
 </div>

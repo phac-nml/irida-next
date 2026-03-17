@@ -1,0 +1,8 @@
+<%= turbo_stream.update "personal-access-tokens-header", @title %>
+
+<%= turbo_stream.update "personal-access-tokens-listing",
+                      partial: "table",
+                      locals: { access_tokens: @personal_access_tokens,
+                      title: @empty_title,
+                      description: @empty_description,
+                      actions: @actions } %>

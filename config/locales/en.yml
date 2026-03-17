@@ -1245,10 +1245,10 @@ en:
         success: Personal access token "%{name}" was successfully created.
         title: Add a personal access token
       index:
-        active_personal_access_tokens: Active Personal Access Tokens (%{count})
-        expired_personal_access_tokens: Expired Personal Access Tokens (%{count})
-        expiring_personal_access_tokens: Expiring Personal Access Tokens (%{count})
-        revoked_personal_access_tokens: Revoked Personal Access Tokens (%{count})
+        active_personal_access_tokens: Active Personal Access Tokens
+        expired_personal_access_tokens: Expired Personal Access Tokens
+        expiring_personal_access_tokens: Expiring Personal Access Tokens
+        revoked_personal_access_tokens: Revoked Personal Access Tokens
         subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
         title: Personal Access Tokens
       revoke:
