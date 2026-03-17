@@ -3,10 +3,22 @@
 <%= render Viral::PageHeaderComponent.new(
   title: t("profiles.personal_access_tokens.index.title"),
   subtitle: t("profiles.personal_access_tokens.index.subtitle"),
-) %>
+) do |component| %>
+  <%= component.with_buttons do %>
+    <%= button_to(
+          "Add new token",
+          new_profile_personal_access_token_path,
+          data: { "turbo-stream": true},
+          method: :get,
+          class: "button button-primary w-full",
+        ) %>
+  <% end %>
+<% end %>
 
 <div class="grid grid-cols-1 gap-4">
   <%= turbo_frame_tag "access-token-section" %>
+
+  <%= turbo_frame_tag("new-token-form") %>
 
   <section aria-labelledby="personal-access-tokens-info-title" class="grid min-h-0 grid-cols-1 gap-6">
     <div class="flex flex-col rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
@@ -30,40 +42,13 @@
     </div>
   </section>
 
-  <%= viral_card(title: t(:"profiles.personal_access_tokens.create.title"), subtitle: t(:"profiles.personal_access_tokens.create.subtitle")) do %>
-    <%= render partial: "form",
-    locals: {
-      personal_access_token: @personal_access_token,
-    } %>
-  <% end %>
-
-  <%= viral_card(title: t(
-    :"profiles.personal_access_tokens.index.active_personal_access_tokens",
-    count: @active_access_tokens.size
-  ), title_id: "personal-access-tokens-header") do %>
+  <%= viral_card(title: turbo_frame_tag("personal-access-tokens-header") do t(
+      :"profiles.personal_access_tokens.index.active_personal_access_tokens"
+    ) end, title_id: "personal-access-tokens-header") do %>
     <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 
-    <%= render partial: "table", locals: { access_tokens: @active_access_tokens, title: t('profiles.personal_access_tokens.table.empty_state.active.title'), description: t('profiles.personal_access_tokens.table.empty_state.active.description'), actions: true} %>
-  <% end %>
-
-  <%= viral_card(title: t(
-    :"profiles.personal_access_tokens.index.expiring_personal_access_tokens",
-    count: @expiring_access_tokens.size
-  ), title_id: "expiring-personal-access-tokens-header") do %>
-    <%= render partial: "table", locals: { access_tokens: @expiring_access_tokens, title: t('profiles.personal_access_tokens.table.empty_state.expiring.title'), description: t('profiles.personal_access_tokens.table.empty_state.expiring.description'), actions: true} %>
-  <% end %>
-
-  <%= viral_card(title: t(
-    :"profiles.personal_access_tokens.index.expired_personal_access_tokens",
-    count: @expired_access_tokens.size
-  ), title_id: "expired-personal-access-tokens-header") do %>
-    <%= render partial: "table", locals: { access_tokens: @expired_access_tokens, title: t('profiles.personal_access_tokens.table.empty_state.expired.title'), description: t('profiles.personal_access_tokens.table.empty_state.expired.description')} %>
-  <% end %>
-
-  <%= viral_card(title: t(
-    :"profiles.personal_access_tokens.index.revoked_personal_access_tokens",
-    count: @revoked_access_tokens.size
-  ), title_id: "revoked-personal-access-tokens-header") do %>
-    <%= render partial: "table", locals: { access_tokens: @revoked_access_tokens, title: t('profiles.personal_access_tokens.table.empty_state.revoked.title'), description: t('profiles.personal_access_tokens.table.empty_state.revoked.description')} %>
+    <%= turbo_frame_tag("personal-access-tokens-listing") do %>
+      <%= render partial: "table", locals: { access_tokens: @personal_access_tokens, title: t('profiles.personal_access_tokens.table.empty_state.active.title'), description: t('profiles.personal_access_tokens.table.empty_state.active.description'), actions: true} %>
+    <% end %>
   <% end %>
 </div>

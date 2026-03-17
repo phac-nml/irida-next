@@ -5,14 +5,37 @@ module Profiles
   # Controller for the user personal access tokens page
   class PersonalAccessTokensController < Profiles::ApplicationController
     before_action :active_access_tokens
-    before_action :expired_access_tokens
-    before_action :revoked_access_tokens
-    before_action :expiring_access_tokens
+    before_action :expired_access_tokens, only: %i[list]
+    before_action :revoked_access_tokens, only: %i[list]
+    before_action :expiring_access_tokens, only: %i[list]
     before_action :page_title
 
     def index
       authorize! @user
+      @personal_access_tokens = @active_access_tokens
+    end
+
+    def new
+      authorize! @user
       @personal_access_token = PersonalAccessToken.new(scopes: [])
+    end
+
+    def list
+      @actions = false
+      type = params[:type]
+
+      case type
+      when 'active'
+        @personal_access_tokens = @active_access_tokens
+        @actions = true
+      when 'expired'
+        @personal_access_tokens = @expired_access_tokens
+      when 'revoked'
+        @personal_access_tokens = @revoked_access_tokens
+      else
+        @personal_access_tokens = @expiring_access_tokens
+      end
+      pat_translations(type)
     end
 
     def create # rubocop:disable Metrics/MethodLength
@@ -72,6 +95,12 @@ module Profiles
     end
 
     private
+
+    def pat_translations(type)
+      @title = I18n.t("profiles.personal_access_tokens.index.#{type}_personal_access_tokens")
+      @empty_title = I18n.t("profiles.personal_access_tokens.table.empty_state.#{type}.title")
+      @empty_description = I18n.t("profiles.personal_access_tokens.table.empty_state.#{type}.description")
+    end
 
     def personal_access_token_params
       params.expect(personal_access_token: [:name, :expires_at, { scopes: [] }])
