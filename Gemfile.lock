@@ -598,9 +598,9 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    reactionview (0.2.1)
+    reactionview (0.2.2)
       actionview (>= 7.0)
-      herb (>= 0.8.0, < 1.0.0)
+      herb (>= 0.8.0, < 0.9.0)
     redcarpet (3.6.1)
     regexp_parser (2.11.3)
     reline (0.6.3)
@@ -822,7 +822,7 @@ DEPENDENCIES
   rails (~> 8.1.2)
   rails_icons (~> 1.7)
   ransack (~> 4.4.1)
-  reactionview (~> 0.2.1)
+  reactionview (~> 0.2.2)
   requestjs-rails
   roo (~> 3.0.0)
   roo-xls
