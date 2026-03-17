@@ -21,6 +21,7 @@ module PersonalAccessTokens
       @bot_account = bot_account
       @empty = empty
       @actions = actions
+      @display_revocation_date = !@personal_access_tokens.first.respond_to?(:expires_at)
       @system_arguments = system_arguments
     end
     # rubocop:enable Metrics/ParameterLists

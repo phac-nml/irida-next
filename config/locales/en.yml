@@ -1254,6 +1254,7 @@ en:
       index:
         active_personal_access_tokens: Active Personal Access Tokens (%{count})
         expired_personal_access_tokens: Expired Personal Access Tokens (%{count})
+        expiring_personal_access_tokens: Expiring Personal Access Tokens (%{count})
         revoked_personal_access_tokens: Revoked Personal Access Tokens (%{count})
         subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
         title: Personal Access Tokens
@@ -1267,6 +1268,9 @@ en:
           expired:
             description: You currently have no expired personal access tokens.
             title: No Expired Personal Access Tokens
+          expiring:
+            description: You currently have no expiring personal access tokens.
+            title: No Expiring Personal Access Tokens
           revoked:
             description: You currently have no revoked personal access tokens.
             title: No Revoked Personal Access Tokens

@@ -7,6 +7,7 @@ module Profiles
     before_action :active_access_tokens
     before_action :expired_access_tokens
     before_action :revoked_access_tokens
+    before_action :expiring_access_tokens
     before_action :page_title
 
     def index
@@ -84,8 +85,14 @@ module Profiles
       @expired_access_tokens = current_user.personal_access_tokens.expired
     end
 
+    def expiring_access_tokens
+      @expiring_access_tokens = current_user.personal_access_tokens.expiring_in_two_weeks
+    end
+
     def revoked_access_tokens
-      @revoked_access_tokens = current_user.personal_access_tokens.revoked
+      excluded_attributes = %w[expires_at log_data]
+      attributes = PersonalAccessToken.attribute_names - excluded_attributes
+      @revoked_access_tokens = current_user.personal_access_tokens.revoked.select(attributes)
     end
 
     def current_page
