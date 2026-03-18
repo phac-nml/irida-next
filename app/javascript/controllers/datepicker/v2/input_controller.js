@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { FOCUSABLE_ELEMENTS } from "controllers/datepicker/constants";
+import FloatingDropdown from "utilities/floating_dropdown";
 
 export default class extends Controller {
   static outlets = ["datepicker--v2--calendar"];
@@ -34,7 +35,7 @@ export default class extends Controller {
   // retrieves next focusable element in DOM after date input
   #nextFocusableElementAfterInput;
 
-  #dropdown;
+  #floatingDropdown;
 
   #minDate;
 
@@ -79,45 +80,26 @@ export default class extends Controller {
   }
 
   #initializeDropdown() {
-    try {
-      if (typeof Dropdown !== "function") {
-        throw new Error(
-          "Flowbite Dropdown class not found. Make sure Flowbite JS is loaded.",
-        );
-      }
-      this.#dropdown = new Dropdown(
-        this.#calendar,
-        this.datepickerInputTarget,
-        {
-          placement: "top",
-          triggerType: "none", // handle via handleDatepickerInputFocus instead
-          offsetSkidding: 0,
-          offsetDistance: 10,
-          delay: 300,
-          onShow: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "true");
-            document.addEventListener("keydown", this.boundHandleGlobalKeydown);
-            this.#calendar.addEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
-          onHide: () => {
-            this.datepickerInputTarget.setAttribute("aria-expanded", "false");
-            document.removeEventListener(
-              "keydown",
-              this.boundHandleGlobalKeydown,
-            );
-            this.#calendar.removeEventListener(
-              "focusin",
-              this.boundHandleCalendarFocus,
-            );
-          },
-        },
-      );
-    } catch (error) {
-      this.#handleError(error, "initializeDropdown");
-    }
+    this.#floatingDropdown = new FloatingDropdown({
+      trigger: this.datepickerInputTarget,
+      dropdown: this.#calendar,
+      distance: 10,
+      onShow: () => this.#onShow(),
+      onHide: () => this.#onHide(),
+    });
+  }
+
+  #onShow() {
+    document.addEventListener("keydown", this.boundHandleGlobalKeydown);
+    this.#calendar.addEventListener("focusin", this.boundHandleCalendarFocus);
+  }
+
+  #onHide() {
+    document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
+    this.#calendar.removeEventListener(
+      "focusin",
+      this.boundHandleCalendarFocus,
+    );
   }
 
   #setMinDate() {
@@ -194,8 +176,8 @@ export default class extends Controller {
   }
 
   handleDatepickerInputFocus() {
-    if (!this.#dropdown.isVisible()) {
-      this.#dropdown.show();
+    if (!this.#floatingDropdown.isVisible()) {
+      this.#floatingDropdown.show();
     }
   }
 
@@ -214,7 +196,7 @@ export default class extends Controller {
   // Hide calendar
   hideCalendar() {
     try {
-      if (this.#dropdown) this.#dropdown.hide();
+      if (this.#floatingDropdown) this.#floatingDropdown.hide();
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
