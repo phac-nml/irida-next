@@ -21,22 +21,21 @@ module Profiles
     end
 
     def list
-      @actions = {}
       type = params[:type]
 
       case type
       when 'active'
         @personal_access_tokens = @active_access_tokens
-        @actions = { revoke: true }
       when 'expired'
         @personal_access_tokens = @expired_access_tokens
+        @actions = {}
       when 'revoked'
         @personal_access_tokens = @revoked_access_tokens
+        @actions = {}
       else
         @personal_access_tokens = @expiring_access_tokens
-        @actions = { revoke: true }
       end
-      empty_state_translations(type)
+      pat_translations(type)
     end
 
     def create # rubocop:disable Metrics/MethodLength
@@ -78,7 +77,8 @@ module Profiles
 
     private
 
-    def empty_state_translations(type)
+    def pat_translations(type)
+      @listing_title = I18n.t("profiles.personal_access_tokens.index.#{type}_personal_access_tokens")
       @empty_title = I18n.t("profiles.personal_access_tokens.table.empty_state.#{type}.title")
       @empty_description = I18n.t("profiles.personal_access_tokens.table.empty_state.#{type}.description")
     end

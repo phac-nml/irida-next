@@ -13,7 +13,7 @@ module PersonalAccessTokens
       namespace: nil,
       bot_account: nil,
       empty: {},
-      actions: false,
+      actions: {},
       **system_arguments
     )
       @personal_access_tokens = personal_access_tokens

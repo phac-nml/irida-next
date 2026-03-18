@@ -1202,6 +1202,15 @@ fr:
       format:
         delimiter: ''
   personal_access_tokens:
+    information_component:
+      active_tokens: Jetons actifs
+      expired_tokens: Jetons expirés
+      expiring_tokens: Jetons expirant dans 2 semaines
+      revoked_tokens: Jetons révoqués
+      view_active: Voir les jetons actifs
+      view_expired: Voir les jetons expirés
+      view_expiring: Voir les jetons expirant
+      view_revoked: Voir les jetons révoqués
     revoke_confirmation:
       description: Êtes-vous sûr de vouloir supprimer le jeton d’accès '%{token_name}' du bot %{bot_name}?
       submit_button: Confirmer
@@ -1249,15 +1258,29 @@ fr:
         success: Le jeton d’accès personnel '%{name}' a été créé avec succès.
         title: Ajouter un jeton d’accès personnel
       index:
-        active_personal_access_tokens: Jetons d’accès personnel actifs (%{count})
-        subtitle: Vous pouvez générer un jeton d’accès personnel pour chaque application que vous utilisez et qui a besoin d’accéder à l’API IRIDA Next.
-        title: Jetons d’accès personnels
+        active_personal_access_tokens: Jetons d'accès personnels actifs
+        add_new_token: Ajouter un nouveau jeton
+        expired_personal_access_tokens: Jetons d'accès personnels expirés
+        expiring_personal_access_tokens: Jetons d'accès personnels arrivant bientôt à expiration
+        revoked_personal_access_tokens: Jetons d'accès personnels révoqués
+        subtitle: Vous pouvez générer un jeton d'accès personnel pour chaque application que vous utilisez et qui a besoin d'accéder à l'API IRIDA Next.
+        title: Jetons d'accès personnels
       revoke:
         success: Le jeton d’accès personnel '%{name}' a été révoqué avec succès.
       table:
         empty_state:
-          description: Vous n’avez actuellement aucun jeton d’accès personnel actif.
-          title: Aucun jeton d’accès personnel actif
+          active:
+            description: Vous n’avez actuellement aucun jeton d’accès personnel actif.
+            title: Aucun jeton d’accès personnel actif
+          expired:
+            description: You currently have no expired personal access tokens.
+            title: No Expired Personal Access Tokens
+          expiring:
+            description: You currently have no expiring personal access tokens.
+            title: No Expiring Personal Access Tokens
+          revoked:
+            description: You currently have no revoked personal access tokens.
+            title: No Revoked Personal Access Tokens
     preferences:
       show:
         dark_theme: Foncé

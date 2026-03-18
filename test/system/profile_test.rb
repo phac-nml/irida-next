@@ -59,13 +59,14 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
 
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count)
+    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens')
   end
 
   test 'can create personal access tokens' do
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    click_button I18n.t(:'profiles.personal_access_tokens.index.add_new_token')
 
     within %(form[action="/-/profile/personal_access_tokens"]) do
       fill_in 'Token name', with: 'my new token'
@@ -77,8 +78,7 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text I18n.t(:'profiles.personal_access_tokens.access_token_section.description')
 
     assert_text 'my new token'
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count + 1)
+    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens')
     assert_text I18n.t('profiles.personal_access_tokens.create.success', name: 'my new token')
   end
 
@@ -86,13 +86,14 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
 
+    click_button I18n.t(:'profiles.personal_access_tokens.index.add_new_token')
+
     within %(form[action="/-/profile/personal_access_tokens"]) do
       fill_in 'Token name', with: 'my new token'
       click_button I18n.t(:'profiles.personal_access_tokens.create.submit')
     end
     assert_no_text 'my new token'
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count)
+    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens')
     assert_text I18n.t(:'errors.format',
                        attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
                        message: I18n.t(:'errors.messages.blank'))
@@ -104,8 +105,7 @@ class ProfileTest < ApplicationSystemTestCase
 
     token_to_revoke = personal_access_tokens(:john_doe_non_expirable_pat)
 
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count)
+    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens')
     within('#access-tokens-table') do
       assert_text token_to_revoke.name
     end
@@ -119,8 +119,7 @@ class ProfileTest < ApplicationSystemTestCase
     within('#access-tokens-table') do
       assert_no_text token_to_revoke.name
     end
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count - 1)
+    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens')
   end
 
   test 'empty personal access tokens state' do
@@ -128,8 +127,7 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
 
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: 0)
+    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens')
     assert_no_selector 'table#personal-access-tokens-table'
 
     assert_text I18n.t('profiles.personal_access_tokens.table.empty_state.title')
