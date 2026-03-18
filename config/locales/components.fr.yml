@@ -117,32 +117,33 @@ fr:
         show:
           link_descriptive_text: Consultez les détails d’exécution de flux de travail pour l’identifiant %{workflow_id}
     advanced_search_component:
-      add_condition_button: Ajouter une condition
-      add_group_button: Ajouter un groupe
-      apply_filter_button: Appliquer un filtre
-      clear_aria_label: Terminer la recherche avancée
-      clear_filter_button: Effacer le filtre
-      condition: Condition %{index}
-      confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
-      description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
-      group: Groupe %{index}
-      minimum_condition_error: Ajoutez au moins une condition complète avant d’appliquer les filtres.
-      operation:
-        contains: contient
-        does_not_contain: ne contient pas
-        equals: "="
-        exists: existe
-        greater_than: ">="
-        in: in (dans)
-        less_than: "<="
-        metadata_fields: Champs de métadonnées
-        not_equals: "!="
-        not_exists: n’existe pas
-        not_in: not in (pas dans)
-      remove_condition_aria_label: Supprimer la condition
-      remove_group_button: Supprimer le groupe
-      rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
-      title: Recherche avancée
+      v1:
+        add_condition_button: Ajouter une condition
+        add_group_button: Ajouter un groupe
+        apply_filter_button: Appliquer un filtre
+        clear_aria_label: Terminer la recherche avancée
+        clear_filter_button: Effacer le filtre
+        condition: Condition %{index}
+        confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
+        description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
+        group: Groupe %{index}
+        minimum_condition_error: Ajoutez au moins une condition complète avant d’appliquer les filtres.
+        operation:
+          contains: contient
+          does_not_contain: ne contient pas
+          equals: "="
+          exists: existe
+          greater_than: ">="
+          in: in (dans)
+          less_than: "<="
+          metadata_fields: Champs de métadonnées
+          not_equals: "!="
+          not_exists: n’existe pas
+          not_in: not in (pas dans)
+        remove_condition_aria_label: Supprimer la condition
+        remove_group_button: Supprimer le groupe
+        rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
+        title: Recherche avancée
     attachments:
       dialogs:
         delete_attachment_component:
