@@ -117,6 +117,8 @@ fr:
         show:
           link_descriptive_text: Consultez les détails d’exécution de flux de travail pour l’identifiant %{workflow_id}
     advanced_search_component:
+      operation:
+        metadata_fields: Champs de métadonnées
       v1:
         add_condition_button: Ajouter une condition
         add_group_button: Ajouter un groupe
@@ -136,7 +138,6 @@ fr:
           greater_than: ">="
           in: in (dans)
           less_than: "<="
-          metadata_fields: Champs de métadonnées
           not_equals: "!="
           not_exists: n’existe pas
           not_in: not in (pas dans)
