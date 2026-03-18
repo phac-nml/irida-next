@@ -36,7 +36,7 @@ module Profiles
         @personal_access_tokens = @expiring_access_tokens
         @actions = { revoke: true }
       end
-      pat_translations(type)
+      empty_state_translations(type)
     end
 
     def create # rubocop:disable Metrics/MethodLength
@@ -78,8 +78,7 @@ module Profiles
 
     private
 
-    def pat_translations(type)
-      @title = I18n.t("profiles.personal_access_tokens.index.#{type}_personal_access_tokens")
+    def empty_state_translations(type)
       @empty_title = I18n.t("profiles.personal_access_tokens.table.empty_state.#{type}.title")
       @empty_description = I18n.t("profiles.personal_access_tokens.table.empty_state.#{type}.description")
     end
