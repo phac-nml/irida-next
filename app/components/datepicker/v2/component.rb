@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Datepicker
-  module V1
+  module V2
     # Datepicker Component
     # Renders the date input along with datepicker calendar
     class Component < ::Component
@@ -99,15 +99,15 @@ module Datepicker
           @system_arguments.delete(:classes)
         )
         @system_arguments[:data] ||= {}
-        @system_arguments[:data][:controller] = 'datepicker--v1--input'
-        @system_arguments[:data]['datepicker--v1--input-datepicker--v1--calendar-outlet'] = "##{@calendar_id}"
-        @system_arguments[:data]['datepicker--v1--input-autosubmit-value'] = @autosubmit
-        @system_arguments[:data]['datepicker--v1--input-invalid-date-value'] =
+        @system_arguments[:data][:controller] = 'datepicker--v2--input'
+        @system_arguments[:data]['datepicker--v2--input-datepicker--v2--calendar-outlet'] = "##{@calendar_id}"
+        @system_arguments[:data]['datepicker--v2--input-autosubmit-value'] = @autosubmit
+        @system_arguments[:data]['datepicker--v2--input-invalid-date-value'] =
           I18n.t('components.datepicker.errors.invalid_date')
-        @system_arguments[:data]['datepicker--v1--input-invalid-min-date-value'] =
+        @system_arguments[:data]['datepicker--v2--input-invalid-min-date-value'] =
           I18n.t('components.datepicker.errors.min_date_error')
-        @system_arguments[:data]['datepicker--v1--input-calendar-id-value'] = @calendar_id
-        @system_arguments[:data]['datepicker--v1--input-date-format-regex-value'] =
+        @system_arguments[:data]['datepicker--v2--input-calendar-id-value'] = @calendar_id
+        @system_arguments[:data]['datepicker--v2--input-date-format-regex-value'] =
           I18n.t('components.datepicker.date_format_regex')
       end
 
@@ -122,10 +122,10 @@ module Datepicker
         )
 
         @calendar_arguments[:data] ||= {}
-        @calendar_arguments[:data][:controller] = 'datepicker--v1--calendar'
-        @calendar_arguments[:data]['datepicker--v1--calendar-datepicker--v1--input-outlet'] =
+        @calendar_arguments[:data][:controller] = 'datepicker--v2--calendar'
+        @calendar_arguments[:data]['datepicker--v2--calendar-datepicker--v2--input-outlet'] =
           "##{@container_id}"
-        @calendar_arguments[:data]['datepicker--v1--calendar-months-value'] = @months
+        @calendar_arguments[:data]['datepicker--v2--calendar-months-value'] = @months
       end
     end
   end

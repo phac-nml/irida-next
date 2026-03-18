@@ -6,17 +6,17 @@
 
 <div class="relative max-w-sm" aria-live="polite">
   <div class="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center ps-3.5">
-    <%= icon(:calendar_dots, color: nil, size: nil, class: "size-6 text-slate-500 dark:text-slate-400") %>
+    <%= pathogen_icon(:calendar_dots, color: nil, size: nil, class: "size-6 text-slate-500 dark:text-slate-400") %>
   </div>
 
   <input
     placeholder="<%= t("components.datepicker.placeholder") %>"
     autocomplete="off"
     value="<%= @selected_date %>"
-    data-datepicker--v1--input-target="datepickerInput"
+    data-datepicker--v2--input-target="datepickerInput"
     data-action="
-      change->datepicker--v1--input#directInput
-      keydown->datepicker--v1--input#handleEnterDirectInput
+      change->datepicker--v2--input#directInput
+      keydown->datepicker--v2--input#handleEnterDirectInput
     "
     type="text"
     name="<%= @input_name %>"
@@ -32,7 +32,7 @@
 </div>
 
 <div
-  data-datepicker--v1--input-target="inputError"
+  data-datepicker--v2--input-target="inputError"
   class="mt-1 hidden text-sm text-red-700 dark:text-red-500"
   aria-hidden="true"
 ></div>
