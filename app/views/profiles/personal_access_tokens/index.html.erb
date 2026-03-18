@@ -49,7 +49,14 @@
     <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 
     <%= turbo_frame_tag("personal-access-tokens-listing") do %>
-      <%= render partial: "table", locals: { access_tokens: @personal_access_tokens, title: t('profiles.personal_access_tokens.table.empty_state.active.title'), description: t('profiles.personal_access_tokens.table.empty_state.active.description'), actions: true} %>
+      <%= render partial: "table",
+                  locals:
+                  {
+                    access_tokens: @personal_access_tokens,
+                    title: t('profiles.personal_access_tokens.table.empty_state.active.title'),
+                    description: t('profiles.personal_access_tokens.table.empty_state.active.description'),
+                    actions: { revoke: true }
+                  } %>
     <% end %>
   <% end %>
 </div>

@@ -21,19 +21,20 @@ module Profiles
     end
 
     def list
-      @actions = false
+      @actions = {}
       type = params[:type]
 
       case type
       when 'active'
         @personal_access_tokens = @active_access_tokens
-        @actions = true
+        @actions = { revoke: true }
       when 'expired'
         @personal_access_tokens = @expired_access_tokens
       when 'revoked'
         @personal_access_tokens = @revoked_access_tokens
       else
         @personal_access_tokens = @expiring_access_tokens
+        @actions = { revoke: true }
       end
       pat_translations(type)
     end
