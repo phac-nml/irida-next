@@ -117,6 +117,8 @@ en:
         show:
           link_descriptive_text: View workflow execution details for workflow execution with id %{workflow_id}
     advanced_search_component:
+      operation:
+        metadata_fields: Metadata fields
       v1:
         add_condition_button: Add Condition
         add_group_button: Add Group
@@ -136,7 +138,6 @@ en:
           greater_than: ">="
           in: in
           less_than: "<="
-          metadata_fields: Metadata fields
           not_equals: "!="
           not_exists: not exists
           not_in: not in
