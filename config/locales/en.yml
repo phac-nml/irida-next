@@ -1205,6 +1205,15 @@ en:
       format:
         delimiter: ''
   personal_access_tokens:
+    information_component:
+      active_tokens: Active tokens
+      expired_tokens: Expired tokens
+      expiring_tokens: Tokens expiring in 2 weeks
+      revoked_tokens: Revoked tokens
+      view_active: View active tokens
+      view_expired: View expired tokens
+      view_expiring: View expiring tokens
+      view_revoked: View revoked tokens
     revoke_confirmation:
       description: Are you sure you'd like to remove access token '%{token_name}' from bot %{bot_name}?
       submit_button: Confirm
@@ -1252,6 +1261,11 @@ en:
         success: Personal access token "%{name}" was successfully created.
         title: Add a personal access token
       index:
+        active_personal_access_tokens: Active Personal Access Tokens
+        add_new_token: Add new token
+        expired_personal_access_tokens: Expired Personal Access Tokens
+        expiring_personal_access_tokens: Expiring Personal Access Tokens
+        revoked_personal_access_tokens: Revoked Personal Access Tokens
         subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
         title: Personal Access Tokens
       revoke:
