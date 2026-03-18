@@ -6,5 +6,7 @@ class AdvancedSearchComponent < Versioning::VersionedComponent
     v1: AdvancedSearch::V1::Component
   }.freeze
 
-  VERSION_RESOLVER = -> {}
+  VERSION_RESOLVER = lambda {
+    :v1
+  }
 end
