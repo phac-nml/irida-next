@@ -20,9 +20,10 @@ export default class extends Controller {
   };
 
   #hiddenClasses = ["invisible", "@max-xl:hidden"];
-  #groupSelector = "fieldset[data-advanced-search-target='groupsContainer']";
+  #groupSelector =
+    "fieldset[data-advanced-search--v1-target='groupsContainer']";
   #conditionSelector =
-    "fieldset[data-advanced-search-target='conditionsContainer']";
+    "fieldset[data-advanced-search--v1-target='conditionsContainer']";
 
   connect() {
     if (this.openValue) {
@@ -227,7 +228,7 @@ export default class extends Controller {
 
   #groupActionsContainer(group) {
     return group
-      .querySelector("button[data-action='advanced-search#addCondition']")
+      .querySelector("button[data-action='advanced-search--v1#addCondition']")
       ?.closest("div");
   }
 
@@ -252,7 +253,7 @@ export default class extends Controller {
       return;
     }
 
-    group.dataset.advancedSearchGroupIndex = String(groupIndex);
+    group.dataset["advancedSearch--V1GroupIndex"] = String(groupIndex);
     this.#updateLegend(group, groupIndex + 1);
 
     this.#conditionElements(group).forEach((condition, conditionIndex) => {
@@ -261,8 +262,9 @@ export default class extends Controller {
   }
 
   #reindexCondition(condition, groupIndex, conditionIndex) {
-    condition.dataset.advancedSearchGroupIndex = String(groupIndex);
-    condition.dataset.advancedSearchConditionIndex = String(conditionIndex);
+    condition.dataset["advancedSearch--V1GroupIndex"] = String(groupIndex);
+    condition.dataset["advancedSearch--V1ConditionIndex"] =
+      String(conditionIndex);
     this.#updateLegend(condition, conditionIndex + 1);
 
     ["name", "id", "for", "aria-describedby"].forEach((attribute) => {
@@ -301,7 +303,8 @@ export default class extends Controller {
     const legend = Array.from(container.children).find(
       (child) => child.tagName === "LEGEND",
     );
-    const legendTemplate = container.dataset.advancedSearchLegendTemplate;
+    const legendTemplate =
+      container.dataset["advancedSearch--V1LegendTemplate"];
 
     if (!legend || !legendTemplate) {
       return;
@@ -315,7 +318,7 @@ export default class extends Controller {
 
     this.#groupElements().forEach((group) => {
       const removeButton = group.querySelector(
-        "button[data-action='advanced-search#removeGroup']",
+        "button[data-action='advanced-search--v1#removeGroup']",
       );
 
       if (!removeButton) {

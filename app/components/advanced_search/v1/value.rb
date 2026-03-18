@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+
+module AdvancedSearch
+  module V1
+    # Component for rendering an advanced search value
+    class Value < ::Component
+      def initialize(conditions_form:, group_index:, condition:, condition_index:)
+        @conditions_form = conditions_form
+        @group_index = group_index
+        @condition = condition
+        @condition_index = condition_index
+      end
+
+      private
+
+      def value_label
+        @condition.class.human_attribute_name(:value)
+      end
+    end
+  end
+end
