@@ -103,7 +103,7 @@ Rails.application.configure do
   config.enable_web_console = ENV['RAILS_ENABLE_WEB_CONSOLE'].present?
 
   # the following settings allow us to forward ports securely using vscode remote port forwarding
-  config.hosts << /.*\.devtunnels\.ms/
+  config.hosts.clear
   config.action_controller.forgery_protection_origin_check = false
 
   # Use EventedFileUpdateChecker for better performance when watching files for changes

@@ -4,6 +4,7 @@ lib.mkMerge [
   {
     env.GA4GH_WES_URL = "http://localhost:1122";
 
+    # TODO: remove when pipelines are confirmed to work with 25.10.2
     overlays = [
       (final: super: {
         # Override the 'nextflow' package to use a newer version
@@ -19,6 +20,16 @@ lib.mkMerge [
             pname = "nextflow";
             data = ./nextflow-deps.json;
           };
+          postPatch = ''
+            # Nextflow invokes the constant "/bin/bash" (not as a shebang) at
+            # several locations so we fix that globally. However, when running inside
+            # a container, we actually *want* "/bin/bash". Thus the global fix needs
+            # to be reverted for this specific use case.
+            substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
+              --replace-fail "['/bin/bash'," "['${super.bash}/bin/bash'," \
+              --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
+                        launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
+          '';
         });
       })
     ];
@@ -59,8 +70,6 @@ lib.mkMerge [
         poetry
       '';
     };
-
-    process.manager.implementation = "honcho";
 
     # https://devenv.sh/processes/
     # processes.dev.exec = "${lib.getExe pkgs.watchexec} -n -- ls -la";
