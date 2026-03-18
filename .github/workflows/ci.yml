@@ -57,7 +57,7 @@ jobs:
           bundler-cache: true
 
       - name: Set up PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 10
 
@@ -135,7 +135,7 @@ jobs:
           bundler-cache: true
 
       - name: Set up PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 10
 
@@ -190,7 +190,7 @@ jobs:
           bundler-cache: true
 
       - name: Set up PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 10
 
@@ -270,7 +270,7 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Set up PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 10
 
