@@ -7,18 +7,14 @@
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "active-tokens",
         label: "Active Tokens",
-        value: @current_user.personal_access_tokens.active.count,
+        value: active_count,
         icon_name: :lock_key_open,
         color_scheme: :slate,
-      ) %>
-
-      <%= button_to "Filter list",
-        list_profile_personal_access_tokens_path,
-        data: { 'turbo-stream': true },
-        params: { type: "active" },
-        method: :get,
-        class:
-          "py-2 dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+      ) do |component| %>
+        <% component.with_buttons do %>
+          <%= statistic_button('active', active_count) %>
+        <% end %>
+      <% end %>
     </div>
 
     <%# Expired tokens - Full width on mobile, half on sm and up %>
@@ -27,17 +23,13 @@
         icon_name: :clock_counter_clockwise,
         id_prefix: "expired-tokens",
         label: "Expired Tokens",
-        value: @current_user.personal_access_tokens.expired.count,
-        color_scheme: :blue,
-      ) %>
-
-      <%= button_to "Filter list",
-        list_profile_personal_access_tokens_path,
-        data: { 'turbo-stream': true },
-        params: { type: "expired" },
-        method: :get,
-        class:
-          "py-2 dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+        value: expired_count,
+        color_scheme: :blue
+      ) do |component| %>
+        <% component.with_buttons do %>
+          <%= statistic_button('expired', expired_count) %>
+        <% end %>
+      <% end %>
     </div>
 
     <%# Revoked tokens - Full width on mobile, half on sm and up, moves to second row on lg %>
@@ -46,17 +38,13 @@
         id_prefix: "revoked-tokens",
         icon_name: :lock_key,
         label: "Revoked Tokens",
-        value: @current_user.personal_access_tokens.revoked.count,
-        color_scheme: :teal,
-      ) %>
-
-      <%= button_to "Filter list",
-        list_profile_personal_access_tokens_path,
-        data: { 'turbo-stream': true },
-        params: { type: "revoked" },
-        method: :get,
-        class:
-          "py-2 dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+        value: revoked_count,
+        color_scheme: :teal
+      ) do |component| %>
+        <% component.with_buttons do %>
+          <%= statistic_button('revoked', revoked_count) %>
+        <% end %>
+      <% end %>
     </div>
 
     <%# Tokens expiring in 2 weeks - Full width on mobile, half on sm and up, moves to second row on lg %>
@@ -65,17 +53,13 @@
         id_prefix: "expiring-tokens",
         icon_name: :clock_countdown,
         label: "Tokens expiring in 2 weeks",
-        value: @current_user.personal_access_tokens.expiring_in_two_weeks.count,
-        color_scheme: :indigo,
-      ) %>
-
-      <%= button_to "Filter list",
-        list_profile_personal_access_tokens_path,
-        data: { 'turbo-stream': true },
-        params: { type: "expiring" },
-        method: :get,
-        class:
-          "py-2 dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+        value: expiring_count,
+        color_scheme: :indigo
+      ) do |component| %>
+        <% component.with_buttons do %>
+          <%= statistic_button('expiring', expiring_count) %>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </div>

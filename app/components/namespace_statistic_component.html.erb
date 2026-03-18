@@ -49,6 +49,10 @@
           <%= @value.presence || "—" %>
         <% end %>
       </div>
+
+      <% if buttons? %>
+        <div><%= buttons %></div>
+      <% end %>
     </div>
   </div>
 </div>

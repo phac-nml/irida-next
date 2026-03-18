@@ -13,7 +13,12 @@
                        partial: "table",
                        locals: {
                          personal_access_token: new_personal_access_token,
+                         access_tokens: @active_access_tokens,
+                         title: t("profiles.personal_access_tokens.table.empty_state.active.title"),
+                         description: t("profiles.personal_access_tokens.table.empty_state.active.description")
+
                        } %>
+  <%= turbo_stream.update "new-token-form", "" %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(
       type: :success,
