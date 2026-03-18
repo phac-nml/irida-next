@@ -21,35 +21,12 @@
 
   <%= turbo_frame_tag "new-token-form", data: { personal_access_tokens_target: "newTokenFormParent" } %>
 
-  <section aria-labelledby="personal-access-tokens-info-title" class="grid min-h-0 grid-cols-1 gap-6">
-    <div class="flex flex-col rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
-      <%# Header with title and description - matches groups layout %>
-      <header class="mb-6">
-        <h2
-          id="personal-access-tokens-info-title"
-          class="flex items-start gap-3 text-xl font-semibold text-slate-900 dark:text-white"
-        >
-          <span aria-hidden="true" class="flex items-center justify-center rounded-lg bg-indigo-100 p-2 dark:bg-indigo-900/30"><%= pathogen_icon(
-                :info,
-                size: :sm,
-                color: nil,
-                class: "text-indigo-600 dark:text-indigo-400",
-              ) %></span>
-          Personal Access Tokens Summary
-        </h2>
-      </header>
+  <div class="flex-1"><%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %></div>
 
-      <div class="flex-1"><%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %></div>
-    </div>
-  </section>
+  <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 
-  <%= viral_card(title: turbo_frame_tag("personal-access-tokens-header") do t(
-      :"profiles.personal_access_tokens.index.active_personal_access_tokens"
-    ) end, title_id: "personal-access-tokens-header") do %>
-    <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
-
-    <%= turbo_frame_tag("personal-access-tokens-listing") do %>
-      <%= render partial: "table",
+  <%= turbo_frame_tag("personal-access-tokens-listing") do %>
+    <%= render partial: "table",
                   locals:
                   {
                     access_tokens: @personal_access_tokens,
@@ -57,6 +34,5 @@
                     description: t('profiles.personal_access_tokens.table.empty_state.active.description'),
                     actions: { revoke: true }
                   } %>
-    <% end %>
   <% end %>
 </div>
