@@ -3,28 +3,29 @@
 require 'ransack/helpers/form_helper'
 
 module PersonalAccessTokens
-  # rubocop:disable Metrics/ParameterLists
   # Component for rendering the PersonalAccessTokens tables
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
-    def initialize(
+    def initialize( # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       personal_access_tokens,
       namespace: nil,
       bot_account: nil,
       empty: {},
-      actions: {},
       **system_arguments
     )
       @personal_access_tokens = personal_access_tokens
       @namespace = namespace
       @bot_account = bot_account
       @empty = empty
-      @actions = actions
-      @display_revocation_date = !@personal_access_tokens.first.respond_to?(:expires_at)
+      @active_pats = @personal_access_tokens&.first&.active?
+      @revoked_pats = @personal_access_tokens&.first&.revoked?
+      @expired_pats = @personal_access_tokens&.first&.expired?
+      @expiring_pats = @personal_access_tokens&.first&.expiring?
       @system_arguments = system_arguments
+      actions
+      status
     end
-    # rubocop:enable Metrics/ParameterLists
 
     private
 
@@ -60,6 +61,27 @@ module PersonalAccessTokens
         :get
       else
         :delete
+      end
+    end
+
+    def actions
+      @actions = if @revoked_pats || @expired_pats
+                   {}
+                 else
+                   { revoke: true }
+                 end
+    end
+
+    def status
+      @status = {}
+      if @active_pats && !@expiring_pats
+        @status.merge!(color: :green, text: I18n.t('personal_access_tokens.table.status.active'))
+      elsif @expiring_pats
+        @status.merge!(color: :orange, text: I18n.t('personal_access_tokens.table.status.expiring'))
+      elsif @expired_pats
+        @status.merge!(color: :amber, text: I18n.t('personal_access_tokens.table.status.expired'))
+      else
+        @status.merge!(color: :red, text: I18n.t('personal_access_tokens.table.status.revoked'))
       end
     end
   end
