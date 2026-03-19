@@ -56,11 +56,69 @@ class ProfileTest < ApplicationSystemTestCase
   end
 
   test 'can view personal access tokens' do
+    valid_params = {
+      name: 'Uploader',
+      scopes: %w[read_api api]
+    }
+
+    PersonalAccessTokens::CreateService.new(@user, valid_params).execute
+
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
 
+    # defaults to active tokens view which includes active (non-expiring) and active (expiring) tokens
+    assert_selector(:xpath,
+                    "//span[contains(@class, 'token-status') and contains(., 'Expiring') or contains(., 'Active')]",
+                    count: @active_token_count + 1)
+  end
+
+  test 'can view revoked personal access tokens' do
+    revoked_token_count = @user.personal_access_tokens.revoked.count
+    assert_equal 1, revoked_token_count
+
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    click_button 'View revoked tokens'
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Revoked')]",
+                    count: revoked_token_count)
+  end
+
+  test 'can view expired personal access tokens' do
+    expired_token_count = @user.personal_access_tokens.expired.count
+    assert_equal 1, expired_token_count
+
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    click_button 'View expired tokens'
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Expired')]",
+                    count: expired_token_count)
+  end
+
+  test 'can view expiring personal access tokens' do
+    valid_params = {
+      name: 'Uploader',
+      scopes: %w[read_api api]
+    }
+
+    PersonalAccessTokens::CreateService.new(@user, valid_params).execute
+
+    active_token_count = @user.personal_access_tokens.active.count
+    assert_equal 4, active_token_count
+
+    expiring_token_count = @user.personal_access_tokens.expiring_in_two_weeks.count
+    assert_equal 3, expiring_token_count
+
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    click_button 'View expiring tokens'
+
     assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Expiring')]",
-                    count: @active_token_count)
+                    count: expiring_token_count)
   end
 
   test 'can create personal access tokens' do
