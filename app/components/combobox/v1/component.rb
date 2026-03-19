@@ -10,7 +10,7 @@ module Combobox
         @form = form
         @field = field
         @listbox_options = create_listbox(options)
-        @selected_option = get_selected_option(options)
+        @selected_option = selected_option(options)
         @combobox_arguments = combobox_arguments
       end
 
@@ -32,7 +32,7 @@ module Combobox
         end
       end
 
-      def get_selected_option(options)
+      def selected_option(options)
         fragment = Nokogiri::HTML.fragment(options)
         fragment.search('option').each do |option|
           return { name: option.text, value: option['value'] } if option.key?('selected')
