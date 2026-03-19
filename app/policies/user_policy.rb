@@ -33,6 +33,10 @@ class UserPolicy < ApplicationPolicy
     false
   end
 
+  def rotate?
+    true if record == user
+  end
+
   def update?
     return true if record == user
 

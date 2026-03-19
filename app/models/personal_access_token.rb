@@ -26,6 +26,16 @@ class PersonalAccessToken < ApplicationRecord
     update!(revoked: true)
   end
 
+  def rotate
+    unless active?
+      errors.add(:base, I18n.t('activerecord.errors.models.personal_access_tokens.rotate.only_active'))
+      return false
+    end
+
+    _new_token, new_token_digest = write_new_token
+    update(token_digest: new_token_digest)
+  end
+
   def revoked?
     revoked == true
   end
