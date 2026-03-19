@@ -7,7 +7,7 @@ module Combobox
     class ComponentTest < ApplicationSystemTestCase
       def test_default # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1--']" do
+        within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
           assert_equal 'age', combobox.value
           assert_equal 'false', combobox['aria-expanded']
@@ -31,7 +31,7 @@ module Combobox
 
       def test_no_results_found
         visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1--']" do
+        within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
           combobox.send_keys('this does not exist')
           assert_selector "div[role='option']", text: I18n.t('combobox_component.no_results_text')
@@ -40,7 +40,7 @@ module Combobox
 
       def test_enter_key
         visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1--']" do
+        within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
           combobox.send_keys(:down, :down, :enter)
           assert_selector "div[role='listbox']", visible: false
@@ -52,7 +52,7 @@ module Combobox
 
       def test_alt_and_down_combination_keys
         visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1--']" do
+        within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
           combobox.send_keys(%i[alt down])
           assert_selector "div[role='listbox']", visible: true
@@ -63,7 +63,7 @@ module Combobox
 
       def test_down_and_up_keys
         visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1--']" do
+        within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
           combobox.send_keys(:down, :down, :down)
           options = all("div[role='option']")
@@ -77,7 +77,7 @@ module Combobox
 
       def test_right_and_left_keys
         visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1--']" do
+        within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
           combobox.click.send_keys(:left, :left, :right)
           cursor_position = page.evaluate_script("document.getElementById('field').selectionStart")
@@ -87,7 +87,7 @@ module Combobox
 
       def test_home_and_end_keys
         visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1--']" do
+        within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
           combobox.click.send_keys(:home)
           cursor_position = page.evaluate_script("document.getElementById('field').selectionStart")
@@ -100,7 +100,7 @@ module Combobox
 
       def test_escape_key
         visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1--']" do
+        within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
           combobox.click
           listbox = find("div[role='listbox']")

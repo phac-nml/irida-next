@@ -28,7 +28,7 @@ module Combobox
           args[:aria][:expanded] = 'false'
           args[:aria][:controls] = @listbox_id
           args[:data] ||= {}
-          args[:data][:'combobox--v1---target'] = 'combobox'
+          args[:data][:'combobox--v1-target'] = 'combobox'
         end
       end
 
