@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { FOCUSABLE_ELEMENTS } from "controllers/datepicker/constants";
 
 export default class extends Controller {
-  static outlets = ["datepicker--calendar"];
+  static outlets = ["datepicker--v1--calendar"];
   static targets = [
     "datepickerInput",
     "calendarTemplate",
@@ -161,7 +161,7 @@ export default class extends Controller {
       this.#selectedYear = this.#todaysYear;
       this.#selectedMonthIndex = this.#todaysMonthIndex;
     }
-    if (this.hasDatepickerCalendarOutlet) {
+    if (this.hasDatepickerV1CalendarOutlet) {
       this.#shareParamsWithCalendar();
     }
   }
@@ -189,7 +189,7 @@ export default class extends Controller {
   }
 
   // once the calendar controller connects, share values used by both controllers
-  datepickerCalendarOutletConnected() {
+  datepickerV1CalendarOutletConnected() {
     this.#shareParamsWithCalendar();
   }
 
@@ -234,7 +234,7 @@ export default class extends Controller {
     if (
       event.key === "Tab" &&
       event.target ===
-        this.datepickerCalendarOutlet.getLastFocusableElement() &&
+        this.datepickerV1CalendarOutlet.getLastFocusableElement() &&
       !event.shiftKey
     ) {
       event.preventDefault();
@@ -250,7 +250,7 @@ export default class extends Controller {
         this.hideCalendar();
       } else if (!event.shiftKey) {
         event.preventDefault();
-        this.datepickerCalendarOutlet.getFirstFocusableElement().focus();
+        this.datepickerV1CalendarOutlet.getFirstFocusableElement().focus();
       }
     }
   }
@@ -352,19 +352,19 @@ export default class extends Controller {
       minDateMessage: this.invalidMinDateValue,
       autosubmit: this.autosubmitValue,
     };
-    this.datepickerCalendarOutlet.shareParamsWithCalendarByInput(
+    this.datepickerV1CalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,
     );
   }
 
   #handleError(error, source) {
     // In production, consider reporting errors to a logging service
-    console.error(`Datepicker--InputController error in ${source}:`, error);
+    console.error(`Datepicker--V1--InputController error in ${source}:`, error);
   }
 
   // used by datepicker/calendar.js
   focusDatepickerInput() {
-    this.datepickerInputTarget.focus();
+    this.datepickerV1InputTarget.focus();
   }
 
   focusNextFocusableElement() {

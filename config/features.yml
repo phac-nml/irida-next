@@ -27,6 +27,9 @@ features:
     description: "Show a notice on the samples table when samples table is out of\
       \ date due to additions, deletions, or updates."
     enable_in_development: true
+  v2_datepicker:
+    description: "Enable the new v2 datepicker component in the UI."
+    enable_in_development: true
   v2_dropdown:
     description: "Enable the new v2 dropdown component in the UI."
     enable_in_development: true
@@ -34,7 +37,7 @@ features:
     description: "Enable the new v2 nextflow samplesheet display and submission process."
     enable_in_development: true
   wes_extended_metadata:
-    description: "include additional metadata in WES submission, such as namespaceId\
+    description: "Include additional metadata in WES submission, such as namespaceId\
       \ and samplesCount."
     enable_in_development: true
   workflow_execution_attachments_searching:

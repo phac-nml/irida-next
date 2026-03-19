@@ -2,7 +2,7 @@
   <% unless @min_date.nil? %>
     <div
       class="text-center text-sm text-slate-900 dark:text-white"
-      data-datepicker--v1--calendar-target="minDateMessage"
+      data-datepicker--v2--calendar-target="minDateMessage"
     ></div>
   <% end %>
 
@@ -10,7 +10,7 @@
     <button
       type="button"
       class="button w-1/2 button-default"
-      data-action="click->datepicker--v1--calendar#showToday"
+      data-action="click->datepicker--v2--calendar#showToday"
       aria-label="<%= t('components.datepicker.aria_label.show_today') %>"
     >
       <%= t("components.datepicker.show_today") %>
@@ -19,8 +19,8 @@
     <button
       type="button"
       class="button w-1/2 button-default"
-      data-action="click->datepicker--v1--calendar#clearSelection"
-      data-datepicker--v1--calendar-target="clearButton"
+      data-action="click->datepicker--v2--calendar#clearSelection"
+      data-datepicker--v2--calendar-target="clearButton"
       aria-label="<%= t('components.datepicker.aria_label.clear_selection') %>"
     >
       <%= t("components.datepicker.clear_selection") %>

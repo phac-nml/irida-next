@@ -10,11 +10,11 @@
       </tr>
     </thead>
 
-    <tbody data-datepicker--v1--calendar-target="calendar"></tbody>
+    <tbody data-datepicker--v2--calendar-target="calendar"></tbody>
   </table>
 </div>
 
-<template data-datepicker--v1--calendar-target="inMonthDateTemplate">
+<template data-datepicker--v2--calendar-target="inMonthDateTemplate">
   <td
     class="
       w-8 cursor-pointer rounded-lg border-0 text-center text-sm leading-9 font-semibold text-slate-900
@@ -22,13 +22,13 @@
     "
     data-date-within-month-position="inMonth"
     data-action="
-      keydown->datepicker--v1--calendar#navigateCalendar
-      click->datepicker--v1--calendar#selectDate
+      keydown->datepicker--v2--calendar#navigateCalendar
+      click->datepicker--v2--calendar#selectDate
     "
   ></td>
 </template>
 
-<template data-datepicker--v1--calendar-target="outOfMonthDateTemplate">
+<template data-datepicker--v2--calendar-target="outOfMonthDateTemplate">
   <td
     class="
       w-8 cursor-pointer rounded-lg border-0 text-center text-sm leading-9 font-semibold text-slate-500
@@ -36,8 +36,8 @@
     "
     data-date-within-month-position="outOfMonth"
     data-action="
-      keydown->datepicker--v1--calendar#navigateCalendar
-      click->datepicker--v1--calendar#selectDate
+      keydown->datepicker--v2--calendar#navigateCalendar
+      click->datepicker--v2--calendar#selectDate
     "
   ></td>
 </template>

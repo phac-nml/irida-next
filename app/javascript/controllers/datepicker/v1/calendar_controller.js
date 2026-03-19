@@ -13,7 +13,7 @@ import {
 } from "controllers/datepicker/utils";
 
 export default class extends Controller {
-  static outlets = ["datepicker--input"];
+  static outlets = ["datepicker--v1--input"];
   static targets = [
     "backButton",
     "monthsArray",
@@ -499,8 +499,8 @@ export default class extends Controller {
         this.backButtonTarget.disabled)
     ) {
       event.preventDefault();
-      this.datepickerInputOutlet.focusDatepickerInput();
-      this.datepickerInputOutlet.hideCalendar();
+      this.datepickerV1InputOutlet.focusDatepickerInput();
+      this.datepickerV1InputOutlet.hideCalendar();
     }
   }
 
@@ -535,29 +535,29 @@ export default class extends Controller {
     // return if disabled date is selected (failsafe as they already shouldn't be selectable)
     if (selectedDate.getAttribute("aria-disabled")) return;
     // fill date input value to the selected date
-    this.datepickerInputOutlet.setInputValue(
+    this.datepickerV1InputOutlet.setInputValue(
       selectedDate.getAttribute("data-date"),
     );
 
     // submit upon click/keyboard interaction if autosubmit is true (ie: on member/group tables)
     if (this.#autosubmit) {
-      this.datepickerInputOutlet.submitDate();
+      this.datepickerV1InputOutlet.submitDate();
     }
 
-    this.datepickerInputOutlet.hideCalendar();
-    this.datepickerInputOutlet.focusNextFocusableElement();
+    this.datepickerV1InputOutlet.hideCalendar();
+    this.datepickerV1InputOutlet.focusNextFocusableElement();
   }
 
   // clear selection by clicking clear button
   clearSelection() {
-    this.datepickerInputOutlet.setInputValue("");
+    this.datepickerV1InputOutlet.setInputValue("");
 
     if (this.#autosubmit) {
-      this.datepickerInputOutlet.submitDate();
+      this.datepickerV1InputOutlet.submitDate();
     }
 
-    this.datepickerInputOutlet.hideCalendar();
-    this.datepickerInputOutlet.focusNextFocusableElement();
+    this.datepickerV1InputOutlet.hideCalendar();
+    this.datepickerV1InputOutlet.focusNextFocusableElement();
   }
 
   // handles ArrowLeft/Right keyboard navigation
