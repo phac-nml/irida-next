@@ -21,7 +21,11 @@
 
   <%= turbo_frame_tag "new-token-form", data: { personal_access_tokens_target: "newTokenFormParent" } %>
 
-  <div class="flex-1"><%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %></div>
+  <div class="flex-1">
+    <%= turbo_frame_tag "token-information-component" do %>
+      <%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %>
+    <% end %>
+  </div>
 
   <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 

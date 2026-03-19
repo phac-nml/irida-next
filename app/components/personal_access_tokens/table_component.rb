@@ -7,7 +7,7 @@ module PersonalAccessTokens
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
-    def initialize( # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    def initialize(
       personal_access_tokens,
       namespace: nil,
       bot_account: nil,
@@ -18,13 +18,10 @@ module PersonalAccessTokens
       @namespace = namespace
       @bot_account = bot_account
       @empty = empty
-      @active_pats = @personal_access_tokens&.first&.active?
       @revoked_pats = @personal_access_tokens&.first&.revoked?
       @expired_pats = @personal_access_tokens&.first&.expired?
-      @expiring_pats = @personal_access_tokens&.first&.expiring?
       @system_arguments = system_arguments
       actions
-      status
     end
 
     private
@@ -72,13 +69,13 @@ module PersonalAccessTokens
                  end
     end
 
-    def status
+    def row_token_status(token)
       @status = {}
-      if @active_pats && !@expiring_pats
+      if token.active? && !token.expiring?
         @status.merge!(color: :green, text: I18n.t('personal_access_tokens.table.status.active'))
-      elsif @expiring_pats
+      elsif token.expiring?
         @status.merge!(color: :orange, text: I18n.t('personal_access_tokens.table.status.expiring'))
-      elsif @expired_pats
+      elsif token.expired?
         @status.merge!(color: :amber, text: I18n.t('personal_access_tokens.table.status.expired'))
       else
         @status.merge!(color: :red, text: I18n.t('personal_access_tokens.table.status.revoked'))

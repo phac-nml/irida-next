@@ -26,3 +26,7 @@
                      locals: {
                        personal_access_token: personal_access_token,
                      } %>
+
+<%= turbo_stream.replace "token-information-component" do %>
+  <%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %>
+<% end %>

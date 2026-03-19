@@ -5,7 +5,8 @@
     <% end %>
 
     <% table.with_column(t("personal_access_tokens.table.header.status")) do |row| %>
-      <%= viral_pill(color: @status[:color], text: @status[:text], classes: "token-status") %>
+      <% row_status = row_token_status(row) %>
+      <%= viral_pill(color: row_status[:color], text: row_status[:text], classes: "token-status") %>
     <% end %>
 
     <% table.with_column(t("personal_access_tokens.table.header.scopes")) do |row| %>
@@ -31,7 +32,7 @@
     <% end %>
 
     <% if @revoked_pats %>
-      <% table.with_column("Revocation Date") do |row| %>
+      <% table.with_column(t("personal_access_tokens.table.header.revocation_date")) do |row| %>
         <%= helpers.local_date(row[:updated_at], :long) %>
       <% end %>
     <% else %>
