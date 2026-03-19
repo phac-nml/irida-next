@@ -58,6 +58,18 @@ class AdvancedSearch::V2::SerializerTest < ActiveSupport::TestCase # rubocop:dis
     end
   end
 
+  test 'raises ParseError when top-level JSON is an array' do
+    assert_raises(AdvancedSearch::V2::Serializer::ParseError) do
+      AdvancedSearch::V2::Serializer.parse('[]')
+    end
+  end
+
+  test 'raises ParseError when top-level JSON is a scalar' do
+    assert_raises(AdvancedSearch::V2::Serializer::ParseError) do
+      AdvancedSearch::V2::Serializer.parse('"foo"')
+    end
+  end
+
   test 'raises ParseError on unknown node type' do
     json = JSON.generate({
                            'version' => '2', 'combinator' => 'and',

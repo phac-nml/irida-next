@@ -111,4 +111,23 @@ class AdvancedSearch::V2::MigratorTest < ActiveSupport::TestCase # rubocop:disab
     # so this condition is kept
     assert_equal 2, tree.nodes.first.nodes.length
   end
+
+  test 'accepts symbol-keyed V1 params' do
+    params = {
+      groups_attributes: {
+        0 => {
+          conditions_attributes: {
+            0 => { field: 'name', operator: '=', value: 'foo' }
+          }
+        }
+      }
+    }
+
+    tree = AdvancedSearch::V2::Migrator.from_v1(params)
+
+    assert_instance_of AdvancedSearch::V2::Tree::GroupNode, tree
+    assert_equal 'or', tree.combinator
+    assert_equal 1, tree.nodes.length
+    assert_equal 'foo', tree.nodes.first.nodes.first.value
+  end
 end

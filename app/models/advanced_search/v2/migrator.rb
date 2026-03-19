@@ -7,28 +7,48 @@ module AdvancedSearch
     class Migrator
       def self.from_v1(params)
         return nil if params.blank?
-        return nil if params['groups_attributes'].blank?
 
-        groups = params['groups_attributes'].values.filter_map { |g| build_group(g) }
+        groups_attributes = attribute_value(params, :groups_attributes)
+        return nil if groups_attributes.blank?
+
+        groups = groups_attributes.values.filter_map { |g| build_group(g) }
         return nil if groups.empty?
 
         Tree::GroupNode.new(combinator: 'or', nodes: groups)
       end
 
       def self.build_group(group_hash)
-        conditions = (group_hash['conditions_attributes'] || {}).values.filter_map { |c| build_condition(c) }
+        conditions_attributes = attribute_value(group_hash, :conditions_attributes) || {}
+        conditions = conditions_attributes.values.filter_map { |c| build_condition(c) }
         return nil if conditions.empty?
 
         Tree::GroupNode.new(combinator: 'and', nodes: conditions)
       end
 
       def self.build_condition(cond)
-        return nil if cond['field'].blank? && cond['operator'].blank? && cond['value'].blank?
+        field = attribute_value(cond, :field)
+        operator = attribute_value(cond, :operator)
+        value = attribute_value(cond, :value)
+        return nil if field.blank? && operator.blank? && value.blank?
 
-        Tree::ConditionNode.new(field: cond['field'], operator: cond['operator'], value: cond['value'])
+        Tree::ConditionNode.new(field:, operator:, value:)
       end
 
-      private_class_method :build_group, :build_condition
+      def self.attribute_value(hash, key)
+        return nil unless hash.respond_to?(:key?)
+
+        return hash[key] if hash.key?(key)
+
+        string_key = key.to_s
+        return hash[string_key] if hash.key?(string_key)
+
+        symbol_key = key.to_sym
+        return hash[symbol_key] if hash.key?(symbol_key)
+
+        nil
+      end
+
+      private_class_method :build_group, :build_condition, :attribute_value
     end
   end
 end
