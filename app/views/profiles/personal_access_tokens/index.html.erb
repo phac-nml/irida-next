@@ -1,25 +1,41 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
 <%= render Viral::PageHeaderComponent.new(
   title: t("profiles.personal_access_tokens.index.title"),
   subtitle: t("profiles.personal_access_tokens.index.subtitle"),
-) %>
+) do |component| %>
+  <%= component.with_buttons do %>
+    <%= button_to(
+          t("profiles.personal_access_tokens.index.add_new_token"),
+          new_profile_personal_access_token_path,
+          data: { "turbo-stream": true},
+          method: :get,
 
-<div class="grid gap-4 grid-cols-1">
+          class: "button button-primary w-full",
+        ) %>
+  <% end %>
+<% end %>
+
+<div class="grid grid-cols-1 gap-4" data-controller="personal-access-tokens">
   <%= turbo_frame_tag "access-token-section" %>
 
-  <%= viral_card(title: t(:"profiles.personal_access_tokens.create.title"), subtitle: t(:"profiles.personal_access_tokens.create.subtitle")) do %>
-    <%= render partial: "form",
-    locals: {
-      personal_access_token: @personal_access_token,
-    } %>
-  <% end %>
+  <%= turbo_frame_tag "new-token-form", data: { personal_access_tokens_target: "newTokenFormParent" } %>
 
-  <%= viral_card(title: t(
-    :"profiles.personal_access_tokens.index.active_personal_access_tokens",
-    count: @active_access_tokens.count
-  ), title_id: "personal-access-tokens-header") do %>
-    <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
+  <div class="flex-1">
+    <%= turbo_frame_tag "token-information-component" do %>
+      <%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %>
+    <% end %>
+  </div>
 
-    <%= render partial: "table" %>
+  <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
+
+  <%= turbo_frame_tag("personal-access-tokens-listing") do %>
+    <%= render partial: "table",
+                  locals:
+                  {
+                    access_tokens: @personal_access_tokens,
+                    title: t('profiles.personal_access_tokens.table.empty_state.active.title'),
+                    description: t('profiles.personal_access_tokens.table.empty_state.active.description')
+                  } %>
   <% end %>
 </div>

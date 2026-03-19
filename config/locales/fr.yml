@@ -1202,6 +1202,15 @@ fr:
       format:
         delimiter: ''
   personal_access_tokens:
+    information_component:
+      active_tokens: Jetons actifs
+      expired_tokens: Jetons expirés
+      expiring_tokens: Jetons expirant dans 2 semaines
+      revoked_tokens: Jetons révoqués
+      view_active: Voir les jetons actifs
+      view_expired: Voir les jetons expirés
+      view_expiring: Voir les jetons expirant
+      view_revoked: Voir les jetons révoqués
     revoke_confirmation:
       description: Êtes-vous sûr de vouloir supprimer le jeton d’accès '%{token_name}' du bot %{bot_name}?
       submit_button: Confirmer
@@ -1214,11 +1223,18 @@ fr:
         integration_host: Integration ID
         last_used_at: Dernière utilisation
         name: Nom du jeton
+        revocation_date: Date de révocation
         scopes: Portées
+        status: Statut
       never: Jamais
       revoke: Révoquer
       revoke_aria_label: 'Révoquer le jeton d’accès personnel : %{name}'
       revoke_confirmation: Êtes-vous sûr de vouloir révoquer ce jeton d’accès personnel?
+      status:
+        active: Actif
+        expired: Expiré
+        expiring: Expirant
+        revoked: Révoqué
   profiles:
     accounts:
       delete:
@@ -1249,15 +1265,25 @@ fr:
         success: Le jeton d’accès personnel '%{name}' a été créé avec succès.
         title: Ajouter un jeton d’accès personnel
       index:
-        active_personal_access_tokens: Jetons d’accès personnel actifs (%{count})
-        subtitle: Vous pouvez générer un jeton d’accès personnel pour chaque application que vous utilisez et qui a besoin d’accéder à l’API IRIDA Next.
-        title: Jetons d’accès personnels
+        add_new_token: Ajouter un nouveau jeton
+        subtitle: Vous pouvez générer un jeton d'accès personnel pour chaque application que vous utilisez et qui a besoin d'accéder à l'API IRIDA Next.
+        title: Jetons d'accès personnels
       revoke:
         success: Le jeton d’accès personnel '%{name}' a été révoqué avec succès.
       table:
         empty_state:
-          description: Vous n’avez actuellement aucun jeton d’accès personnel actif.
-          title: Aucun jeton d’accès personnel actif
+          active:
+            description: Vous n’avez actuellement aucun jeton d’accès personnel actif.
+            title: Aucun jeton d’accès personnel actif
+          expired:
+            description: Vous n’avez actuellement aucun jeton d’accès personnel expiré.
+            title: Aucun jeton d’accès personnel expiré
+          expiring:
+            description: Vous n’avez actuellement aucun jeton d’accès personnel expirant.
+            title: Aucun jeton d’accès personnel expirant
+          revoked:
+            description: Vous n’avez actuellement aucun jeton d’accès personnel révoqué.
+            title: Aucun jeton d’accès personnel révoqué
     preferences:
       show:
         dark_theme: Foncé

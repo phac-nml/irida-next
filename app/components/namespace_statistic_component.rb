@@ -3,6 +3,8 @@
 # NamespaceStatisticComponent 📊 displays a single statistic item with an optional icon, label, and value.
 # It uses unique HTML IDs for accessibility and testability.
 class NamespaceStatisticComponent < Component
+  renders_one :buttons
+
   # @param id_prefix [String] Prefix for unique HTML IDs (e.g., "group-created" becomes "group-created").
   # @param label [String] Translated label for the statistic (e.g., t('groups.show.information.created_on')).
   # @param value [Object] The value to display (can be a number, date, or string).

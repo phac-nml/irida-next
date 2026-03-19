@@ -1198,6 +1198,15 @@ en:
       format:
         delimiter: ''
   personal_access_tokens:
+    information_component:
+      active_tokens: Active tokens
+      expired_tokens: Expired tokens
+      expiring_tokens: Tokens expiring in 2 weeks
+      revoked_tokens: Revoked tokens
+      view_active: View active tokens
+      view_expired: View expired tokens
+      view_expiring: View expiring tokens
+      view_revoked: View revoked tokens
     revoke_confirmation:
       description: Are you sure you'd like to remove access token '%{token_name}' from bot %{bot_name}?
       submit_button: Confirm
@@ -1210,11 +1219,18 @@ en:
         integration_host: Integration ID
         last_used_at: Last Used
         name: Token name
+        revocation_date: Revocation Date
         scopes: Scopes
+        status: Status
       never: Never
       revoke: Revoke
       revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Are you sure you want to revoke this personal access token?
+      status:
+        active: Active
+        expired: Expired
+        expiring: Expiring
+        revoked: Revoked
   profiles:
     accounts:
       delete:
@@ -1245,15 +1261,25 @@ en:
         success: Personal access token "%{name}" was successfully created.
         title: Add a personal access token
       index:
-        active_personal_access_tokens: Active Personal Access Tokens (%{count})
+        add_new_token: Add new token
         subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
         title: Personal Access Tokens
       revoke:
         success: Personal access token "%{name}" was successfully revoked.
       table:
         empty_state:
-          description: You currently have no active personal access tokens.
-          title: No Active Personal Access Tokens
+          active:
+            description: You currently have no active personal access tokens.
+            title: No Active Personal Access Tokens
+          expired:
+            description: You currently have no expired personal access tokens.
+            title: No Expired Personal Access Tokens
+          expiring:
+            description: You currently have no expiring personal access tokens.
+            title: No Expiring Personal Access Tokens
+          revoked:
+            description: You currently have no revoked personal access tokens.
+            title: No Revoked Personal Access Tokens
     preferences:
       show:
         dark_theme: Dark

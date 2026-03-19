@@ -1,7 +1,6 @@
 <%= turbo_frame_tag "personal_access_token_form" do %>
   <%= form_for(personal_access_token, url: profile_personal_access_tokens_path, html: { novalidate: true }) do |f| %>
     <div class="grid gap-4">
-
       <%= if personal_access_token.errors.any?
         viral_alert(
           type: "alert",
@@ -19,9 +18,19 @@
         pat: personal_access_token,
         form: f,
       } %>
+
       <div class="my-2">
         <%= f.submit t("profiles.personal_access_tokens.create.submit"),
                  class: "button button-primary" %>
+
+        <button
+          type="button"
+          class="button button-default"
+          data-action="personal-access-tokens#removeAddNewTokenForm"
+          data-personal-access-tokens-target="cancel-button"
+        >
+          <%= t('common.actions.cancel') %>
+        </button>
       </div>
     </div>
   <% end %>

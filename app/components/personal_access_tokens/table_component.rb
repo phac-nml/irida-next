@@ -18,7 +18,10 @@ module PersonalAccessTokens
       @namespace = namespace
       @bot_account = bot_account
       @empty = empty
+      @revoked_pats = @personal_access_tokens&.first&.revoked?
+      @expired_pats = @personal_access_tokens&.first&.expired?
       @system_arguments = system_arguments
+      actions
     end
 
     private
@@ -55,6 +58,27 @@ module PersonalAccessTokens
         :get
       else
         :delete
+      end
+    end
+
+    def actions
+      @actions = if @revoked_pats || @expired_pats
+                   {}
+                 else
+                   { revoke: true }
+                 end
+    end
+
+    def row_token_status(token)
+      @status = {}
+      if token.active? && !token.expiring?
+        @status.merge!(color: :green, text: I18n.t('personal_access_tokens.table.status.active'))
+      elsif token.expiring?
+        @status.merge!(color: :orange, text: I18n.t('personal_access_tokens.table.status.expiring'))
+      elsif token.expired?
+        @status.merge!(color: :amber, text: I18n.t('personal_access_tokens.table.status.expired'))
+      else
+        @status.merge!(color: :red, text: I18n.t('personal_access_tokens.table.status.revoked'))
       end
     end
   end
