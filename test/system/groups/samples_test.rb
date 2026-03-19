@@ -633,15 +633,15 @@ module Groups
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
-      click_button I18n.t(:'components.advanced_search_component.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
       find("input[role='combobox']").send_keys('Sample PUID', :enter)
       select 'in', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
       find("input[name$='[value][]']").send_keys("#{@sample1.puid}, #{@sample2.puid},")
 
-      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
 
-      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']", focused: true
 
       assert_selector '#samples-table table tbody tr', count: 2
       # sample1 & sample2 found
@@ -649,11 +649,11 @@ module Groups
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
       assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
-      click_button I18n.t(:'components.advanced_search_component.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
 
-      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']", focused: true
 
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}']"
       assert_selector "table tbody tr[id='#{dom_id(@sample2)}']"
@@ -669,13 +669,13 @@ module Groups
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
-      click_button I18n.t(:'components.advanced_search_component.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
 
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-      assert_selector "div[data-advanced-search-target='submitError']",
-                      text: I18n.t(:'components.advanced_search_component.minimum_condition_error')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector "div[data-advanced-search--v1-target='submitError']",
+                      text: I18n.t(:'components.advanced_search_component.v1.minimum_condition_error')
 
       assert_selector '#samples-table table tbody tr', count: 20
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
@@ -694,14 +694,14 @@ module Groups
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
-      click_button I18n.t(:'components.advanced_search_component.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
       find("select[name$='[field]']").find("option[value='puid']").select_option
       select 'in', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
       find("input[name$='[value][]']").send_keys("#{@sample1.puid}, #{@sample2.puid},")
-      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
 
-      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']", focused: true
 
       assert_selector '#samples-table table tbody tr', count: 2
       # sample1 & sample2 found
@@ -709,11 +709,11 @@ module Groups
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
       assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample9)}']"
 
-      click_button I18n.t(:'components.advanced_search_component.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
 
-      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']", focused: true
 
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
@@ -729,13 +729,13 @@ module Groups
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
 
-      click_button I18n.t(:'components.advanced_search_component.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
       find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
       select '=', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
       find("input[name$='[value]']").fill_in with: @sample28.metadata['unique.metadata.field']
 
-      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
 
       assert_selector '#samples-table table tbody tr', count: 1
       # sample28 found
@@ -744,9 +744,9 @@ module Groups
       assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample28)}']"
 
-      click_button I18n.t(:'components.advanced_search_component.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
 
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
@@ -762,11 +762,11 @@ module Groups
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
 
-      click_button I18n.t(:'components.advanced_search_component.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
       find("input[role='combobox']").send_keys('unique.metadata.field', :enter)
       select 'exists', from: 'q[groups_attributes][0][conditions_attributes][0][operator]'
-      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
 
       assert_selector '#samples-table table tbody tr', count: 1
       # sample28 found
@@ -775,9 +775,9 @@ module Groups
       assert_no_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample28)}']"
 
-      click_button I18n.t(:'components.advanced_search_component.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
-      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
 
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
