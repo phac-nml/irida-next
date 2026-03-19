@@ -6,9 +6,12 @@ module Profiles
   class PersonalAccessTokensControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
 
-    test 'should get index' do
-      sign_in users(:john_doe)
+    setup do
+      @user = users(:john_doe)
+      sign_in @user
+    end
 
+    test 'should get index' do
       get profile_personal_access_tokens_path
       assert_response :success
 
@@ -16,9 +19,7 @@ module Profiles
     end
 
     test 'should create personal access token' do
-      sign_in users(:john_doe)
-
-      assert_difference(-> { users(:john_doe).personal_access_tokens.count } => 1) do
+      assert_difference(-> { @user.personal_access_tokens.count } => 1) do
         post profile_personal_access_tokens_path(format: :turbo_stream),
              params: { personal_access_token: { name: 'token', scopes: ['api'] } }
       end
@@ -27,9 +28,7 @@ module Profiles
     end
 
     test 'should not create personal access token without scopes' do
-      sign_in users(:john_doe)
-
-      assert_no_difference(-> { users(:john_doe).personal_access_tokens.count }) do
+      assert_no_difference(-> { @user.personal_access_tokens.count }) do
         post profile_personal_access_tokens_path(format: :turbo_stream),
              params: { personal_access_token: { name: 'token' } }
       end
@@ -38,9 +37,7 @@ module Profiles
     end
 
     test 'should not create personal access token with invalid scopes' do
-      sign_in users(:john_doe)
-
-      assert_no_difference(-> { users(:john_doe).personal_access_tokens.count }) do
+      assert_no_difference(-> { @user.personal_access_tokens.count }) do
         post profile_personal_access_tokens_path(format: :turbo_stream),
              params: { personal_access_token: { name: 'token', scopes: ['write_api'] } }
       end
@@ -49,9 +46,7 @@ module Profiles
     end
 
     test 'should revoke personal access token' do
-      sign_in users(:john_doe)
-
-      assert_difference(-> { users(:john_doe).personal_access_tokens.active.count } => -1) do
+      assert_difference(-> { @user.personal_access_tokens.active.count } => -1) do
         delete revoke_profile_personal_access_token_path(id: personal_access_tokens(:john_doe_valid_pat),
                                                          format: :turbo_stream)
       end
@@ -60,22 +55,56 @@ module Profiles
     end
 
     test 'should not revoke personal access token for another user' do
-      sign_in users(:john_doe)
-
       delete revoke_profile_personal_access_token_path(id: personal_access_tokens(:jane_doe_valid_pat),
                                                        format: :turbo_stream)
       assert_response :not_found
     end
 
     test 'should not revoke personal access token which doesn\'t exist' do
-      sign_in users(:john_doe)
-
-      assert_no_difference -> { users(:john_doe).personal_access_tokens.active.count } do
+      assert_no_difference -> { @user.personal_access_tokens.active.count } do
         delete revoke_profile_personal_access_token_path(id: 'not-a-read-id',
                                                          format: :turbo_stream)
       end
 
       assert_response :not_found
+    end
+
+    test 'should rotate personal access token' do
+      personal_access_token = personal_access_tokens(:john_doe_valid_pat)
+      assert_changes -> { personal_access_token.reload.token_digest } do
+        put rotate_profile_personal_access_token_path(id: personal_access_token,
+                                                      format: :turbo_stream)
+      end
+
+      assert_response :success
+    end
+
+    test 'should not rotate personal access token for another user' do
+      put rotate_profile_personal_access_token_path(id: personal_access_tokens(:jane_doe_valid_pat),
+                                                    format: :turbo_stream)
+      assert_response :not_found
+    end
+
+    test 'should not rotate expired personal access token' do
+      expired_pat = personal_access_tokens(:john_doe_expired_pat)
+
+      assert_no_changes -> { expired_pat.reload.token_digest } do
+        put rotate_profile_personal_access_token_path(id: expired_pat,
+                                                      format: :turbo_stream)
+      end
+
+      assert_response :unprocessable_entity
+    end
+
+    test 'should not rotate revoked personal access token' do
+      revoked_pat = personal_access_tokens(:john_doe_revoked_pat)
+
+      assert_no_changes -> { revoked_pat.reload.token_digest } do
+        put rotate_profile_personal_access_token_path(id: revoked_pat,
+                                                      format: :turbo_stream)
+      end
+
+      assert_response :unprocessable_entity
     end
   end
 end

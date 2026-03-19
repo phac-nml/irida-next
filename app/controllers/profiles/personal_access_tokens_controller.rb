@@ -49,6 +49,26 @@ module Profiles
       end
     end
 
+    def rotate
+      authorize! @user
+      @personal_access_token = current_user.personal_access_tokens.find(params[:id])
+
+      updated = @personal_access_token.rotate
+
+      respond_to do |format|
+        if updated
+          format.turbo_stream do
+            render locals: { new_personal_access_token: @personal_access_token }
+          end
+        else
+          format.turbo_stream do
+            render status: :unprocessable_content, locals: { personal_access_token: @personal_access_token,
+                                                             message: error_message(@personal_access_token) }
+          end
+        end
+      end
+    end
+
     private
 
     def personal_access_token_params

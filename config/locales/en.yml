@@ -151,6 +151,9 @@ en:
               taken: The namespace has already been shared with this group
             namespace_type:
               inclusion: can only be Group or Project
+        personal_access_tokens:
+          rotate:
+            only_active: Only active tokens can be rotated
         user:
           attributes:
             password:

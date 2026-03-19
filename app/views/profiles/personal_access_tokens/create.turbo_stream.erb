@@ -14,7 +14,6 @@
                        locals: {
                          personal_access_token: new_personal_access_token,
                        } %>
-
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(
       type: :success,
@@ -22,6 +21,7 @@
     ) %>
   <% end %>
 <% end %>
+
 <%= turbo_stream.replace "personal_access_token_form",
                      partial: "form",
                      locals: {

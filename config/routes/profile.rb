@@ -8,6 +8,7 @@ resource :profile, only: %i[show update] do
     resources :personal_access_tokens, only: %i[index create] do
       member do
         delete :revoke
+        put :rotate
       end
     end
   end
