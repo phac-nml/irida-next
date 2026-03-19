@@ -23,18 +23,16 @@ module Profiles
     def list
       type = params[:type]
 
-      case type
-      when 'active'
-        @personal_access_tokens = @active_access_tokens
-      when 'expired'
-        @personal_access_tokens = @expired_access_tokens
-        @actions = {}
-      when 'revoked'
-        @personal_access_tokens = @revoked_access_tokens
-        @actions = {}
-      else
-        @personal_access_tokens = @expiring_access_tokens
-      end
+      @personal_access_tokens = case type
+                                when 'active'
+                                  @active_access_tokens
+                                when 'expired'
+                                  @expired_access_tokens
+                                when 'revoked'
+                                  @revoked_access_tokens
+                                else
+                                  @expiring_access_tokens
+                                end
       pat_translations(type)
     end
 
@@ -78,7 +76,6 @@ module Profiles
     private
 
     def pat_translations(type)
-      @listing_title = I18n.t("profiles.personal_access_tokens.index.#{type}_personal_access_tokens")
       @empty_title = I18n.t("profiles.personal_access_tokens.table.empty_state.#{type}.title")
       @empty_description = I18n.t("profiles.personal_access_tokens.table.empty_state.#{type}.description")
     end
@@ -100,9 +97,7 @@ module Profiles
     end
 
     def revoked_access_tokens
-      excluded_attributes = %w[expires_at log_data]
-      attributes = PersonalAccessToken.attribute_names - excluded_attributes
-      @revoked_access_tokens = current_user.personal_access_tokens.revoked.select(attributes)
+      @revoked_access_tokens = current_user.personal_access_tokens.revoked
     end
 
     def current_page

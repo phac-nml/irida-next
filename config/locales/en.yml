@@ -1220,10 +1220,16 @@ en:
         last_used_at: Last Used
         name: Token name
         scopes: Scopes
+        status: Status
       never: Never
       revoke: Revoke
       revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Are you sure you want to revoke this personal access token?
+      status:
+        active: Active
+        expired: Expired
+        expiring: Expiring
+        revoked: Revoked
   profiles:
     accounts:
       delete:
@@ -1254,11 +1260,7 @@ en:
         success: Personal access token "%{name}" was successfully created.
         title: Add a personal access token
       index:
-        active_personal_access_tokens: Active Personal Access Tokens
         add_new_token: Add new token
-        expired_personal_access_tokens: Expired Personal Access Tokens
-        expiring_personal_access_tokens: Expiring Personal Access Tokens
-        revoked_personal_access_tokens: Revoked Personal Access Tokens
         subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
         title: Personal Access Tokens
       revoke:

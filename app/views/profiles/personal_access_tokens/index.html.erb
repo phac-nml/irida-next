@@ -25,17 +25,13 @@
 
   <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 
-  <%= viral_card(title: turbo_frame_tag("personal-access-tokens-header") do t(
-      :"profiles.personal_access_tokens.index.active_personal_access_tokens"
-    ) end, title_id: "personal-access-tokens-header") do %>
-    <%= turbo_frame_tag("personal-access-tokens-listing") do %>
-      <%= render partial: "table",
+  <%= turbo_frame_tag("personal-access-tokens-listing") do %>
+    <%= render partial: "table",
                   locals:
                   {
                     access_tokens: @personal_access_tokens,
                     title: t('profiles.personal_access_tokens.table.empty_state.active.title'),
                     description: t('profiles.personal_access_tokens.table.empty_state.active.description')
                   } %>
-    <% end %>
   <% end %>
 </div>
