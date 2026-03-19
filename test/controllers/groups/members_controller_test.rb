@@ -24,6 +24,50 @@ module Groups
       assert_response :success
     end
 
+    test 'should apply default sort and support sorting group members' do
+      sign_in users(:john_doe)
+
+      group = groups(:group_one)
+      group_member_bot = members(:group_one_member_user_bot_account)
+      group_member_james = members(:group_one_member_james_doe)
+      group_member_joan = members(:group_one_member_joan_doe)
+      group_member_ryan = members(:group_one_member_ryan_doe)
+      owner_emails = [members(:group_one_member_james_doe).user.email, members(:group_one_member_john_doe).user.email]
+
+      get group_members_path(group, format: :turbo_stream)
+      assert_response :success
+      assert_sort_state(1, 'ascending')
+      assert_first_rows_include(group_member_bot.user.email, group_member_james.user.email,
+                                row_scope: '#members-table-body')
+
+      get group_members_path(group, format: :turbo_stream, members_q: { s: 'user_email desc' })
+      assert_response :success
+      assert_sort_state(1, 'descending')
+      assert_first_rows_include(group_member_ryan.user.email, members(:group_one_member_john_doe).user.email,
+                                row_scope: '#members-table-body')
+
+      get group_members_path(group, format: :turbo_stream, members_q: { s: 'access_level asc' })
+      assert_response :success
+      assert_sort_state(2, 'ascending')
+      assert_first_rows_include(group_member_ryan.user.email, group_member_bot.user.email,
+                                row_scope: '#members-table-body')
+
+      get group_members_path(group, format: :turbo_stream, members_q: { s: 'access_level desc' })
+      assert_response :success
+      assert_sort_state(2, 'descending')
+      member_emails = Nokogiri::HTML(response.body).css('#members-table-body tr td:first-child').filter_map do |node|
+        node.text[/[A-Za-z0-9_.+-]+@[A-Za-z0-9\-.]+/]
+      end
+      assert_includes owner_emails, member_emails.first
+      assert_equal group_member_ryan.user.email, member_emails.last
+
+      get group_members_path(group, format: :turbo_stream, members_q: { s: 'expires_at asc' })
+      assert_response :success
+      assert_sort_state(5, 'ascending')
+      assert_first_rows_include(group_member_joan.user.email, group_member_james.user.email,
+                                row_scope: '#members-table-body')
+    end
+
     test 'should add new member to group' do
       sign_in users(:john_doe)
 

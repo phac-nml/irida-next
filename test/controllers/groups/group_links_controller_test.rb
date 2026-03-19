@@ -6,6 +6,34 @@ module Groups
   class GroupLinksControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
 
+    test 'should apply default sort and support sorting group links' do
+      sign_in users(:john_doe)
+
+      namespace = groups(:group_one)
+      group_link5 = namespace_group_links(:namespace_group_link5)
+      group_link14 = namespace_group_links(:namespace_group_link14)
+
+      get group_group_links_path(namespace, format: :turbo_stream)
+      assert_response :success
+      assert_sort_state(1, 'ascending')
+      assert_first_rows_include(group_link5.group.name, group_link14.group.name)
+
+      get group_group_links_path(namespace, format: :turbo_stream, group_links_q: { s: 'group_name desc' })
+      assert_response :success
+      assert_sort_state(1, 'descending')
+      assert_first_rows_include(group_link14.group.name, group_link5.group.name)
+
+      get group_group_links_path(namespace, format: :turbo_stream, group_links_q: { s: 'group_access_level asc' })
+      assert_response :success
+      assert_sort_state(4, 'ascending')
+      assert_first_rows_include(group_link5.group.name, group_link14.group.name)
+
+      get group_group_links_path(namespace, format: :turbo_stream, group_links_q: { s: 'expires_at asc' })
+      assert_response :success
+      assert_sort_state(5, 'ascending')
+      assert_first_rows_include(group_link5.group.name, group_link14.group.name)
+    end
+
     test 'should share group b with group a' do
       sign_in users(:john_doe)
       group = groups(:group_one)
