@@ -44,6 +44,22 @@ class NodesQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  NODES_SAMPLES_LINELIST_QUERY = <<~GRAPHQL
+    query($ids: [ID!]!, $metadataKeys: [String!]) {
+      nodes(ids: $ids) {
+        id
+        ... on Sample {
+          puid
+          name
+          project {
+            puid
+          }
+          metadata(keys: $metadataKeys)
+        }
+      }
+    }
+  GRAPHQL
+
   NODES_USERS_QUERY = <<~GRAPHQL
     query($ids: [ID!]!) {
       nodes(ids: $ids) {
@@ -255,6 +271,27 @@ class NodesQueryTest < ActiveSupport::TestCase
     assert_equal 1, data.length
 
     assert_equal sample.name, data[0]['name']
+  end
+
+  test 'nodes query for sample should return linelist fields with metadata keys filter' do
+    sample = samples(:sample30)
+
+    result = IridaSchema.execute(
+      NODES_SAMPLES_LINELIST_QUERY,
+      context: { current_user: @user },
+      variables: { ids: [sample.to_global_id.to_s], metadataKeys: ['metadatafield1'] }
+    )
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['nodes']
+
+    assert_not_empty data, 'nodes type should work'
+    assert_equal 1, data.length
+    assert_equal sample.puid, data[0]['puid']
+    assert_equal sample.name, data[0]['name']
+    assert_equal sample.project.puid, data[0]['project']['puid']
+    assert_equal({ 'metadatafield1' => 'value1' }, data[0]['metadata'])
   end
 
   test 'nodes query for user should be able to return user attributes' do

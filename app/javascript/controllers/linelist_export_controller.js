@@ -4,6 +4,8 @@ export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
   static values = {
     workerUrl: String,
+    graphqlUrl: String,
+    sampleGraphqlIdPrefix: String,
     minimumVisibleDurationMs: {
       type: Number,
       default: 3500,
@@ -69,6 +71,8 @@ export default class extends Controller {
     const metadataFields = this.selectedMetadataFields();
     const format = this.selectedFormat();
     const namespaceId = this.selectedNamespaceId();
+    const graphqlUrl = this.selectedGraphqlUrl();
+    const sampleGraphqlIdPrefix = this.selectedSampleGraphqlIdPrefix();
     const selectedCount = sampleIds.length;
 
     if (!selectedCount) {
@@ -109,6 +113,8 @@ export default class extends Controller {
         sample_ids: sampleIds,
         metadata_fields: metadataFields,
         namespace_id: namespaceId,
+        graphql_url: graphqlUrl,
+        sample_graphql_id_prefix: sampleGraphqlIdPrefix,
         format,
         filename,
         total_count: totalCount,
@@ -291,6 +297,18 @@ export default class extends Controller {
     } catch {
       return [];
     }
+  }
+
+  selectedGraphqlUrl() {
+    return this.hasGraphqlUrlValue && this.graphqlUrlValue
+      ? this.graphqlUrlValue
+      : "/api/graphql";
+  }
+
+  selectedSampleGraphqlIdPrefix() {
+    return this.hasSampleGraphqlIdPrefixValue && this.sampleGraphqlIdPrefixValue
+      ? this.sampleGraphqlIdPrefixValue
+      : "";
   }
 
   selectionStorageKey() {
