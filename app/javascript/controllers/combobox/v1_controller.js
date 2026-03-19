@@ -29,7 +29,6 @@ export default class extends Controller {
   #filteredOptions;
   #allOptions;
   #option;
-  #value;
   #firstOption;
   #lastOption;
 
@@ -38,7 +37,6 @@ export default class extends Controller {
     this.#filteredOptions = [];
     this.#allOptions = [];
     this.#option = null;
-    this.#value = null;
     this.#firstOption = null;
     this.#lastOption = null;
 
@@ -81,7 +79,9 @@ export default class extends Controller {
 
     // Initialize
     if (this.#filter) {
-      this.#setValue(this.#filterOptions());
+      const option = this.#filterOptions();
+      this.#setOption(option);
+      this.#setValue(option);
     }
   }
 
@@ -231,7 +231,6 @@ export default class extends Controller {
   }
 
   #setValue(option) {
-    this.#value = option;
     this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
     this.#filter = option ? option.textContent : "";
     this.comboboxTarget.value = this.#filter;
@@ -354,7 +353,7 @@ export default class extends Controller {
 
       case "Tab": {
         this.debouncedFilterAndUpdate.flush();
-        this.#setValue(this.#value);
+        this.#setValue(this.#option);
         this.#floatingDropdown.hide();
         break;
       }
@@ -437,7 +436,7 @@ export default class extends Controller {
       !this.listboxTarget.contains(event.target)
     ) {
       this.debouncedFilterAndUpdate.flush();
-      this.#setValue(this.#value);
+      this.#setValue(this.#option);
       this.#floatingDropdown.hide();
     }
   }
