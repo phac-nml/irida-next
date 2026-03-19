@@ -18,15 +18,13 @@ class WorkflowExecutionJob < ApplicationJob
     true
   end
 
-  def handle_error_state_and_clean(workflow_execution)
-    # validation must be skipped in the case where model is already invalid (e.g. no namespace)
-    workflow_execution.update_attribute('state', :error) # rubocop:disable Rails/SkipsModelValidations
-    WorkflowExecutionCleanupJob.perform_later(workflow_execution)
-  end
+  def update_state(state, run_id: nil, cleaned_value: nil)
+    return if @workflow_execution.state.to_sym == state
 
-  def handle_unable_to_process_job(workflow_execution, job_name)
-    error_message = I18n.t('activerecord.errors.models.workflow_execution.invalid_job_state', job_name:)
-    Rails.logger.error(error_message)
-    handle_error_state_and_clean(workflow_execution)
+    @workflow_execution.run_id = run_id unless run_id.nil?
+    @workflow_execution.cleaned = cleaned_value unless cleaned_value.nil?
+
+    @workflow_execution.state = state
+    @workflow_execution.save
   end
 end

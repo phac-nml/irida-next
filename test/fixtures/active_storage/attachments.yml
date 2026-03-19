@@ -297,3 +297,33 @@ sample32_json_attachment:
   name: file
   record: sample32JsonAttachment (Attachment)
   blob: attachment_json_blob
+
+sample_preparation_test_attachment_1_file_A_fastq:
+  name: file
+  record: sample_preparation_test_attachment_1 (Attachment)
+  blob: sample_preparation_test_attachment_1_blob
+
+sample_preparation_test_attachment_1_file_B_fastq:
+  name: file
+  record: sample_preparation_test_attachment_1B (Attachment)
+  blob: sample_preparation_test_attachment_1B_blob
+
+sample_preparation_test_attachment_2_file_A_fastq:
+  name: file
+  record: sample_preparation_test_attachment_2 (Attachment)
+  blob: sample_preparation_test_attachment_2_blob
+
+sample_preparation_test_attachment_2_file_B_fastq:
+  name: file
+  record: sample_preparation_test_attachment_2B (Attachment)
+  blob: sample_preparation_test_attachment_2B_blob
+
+sample_preparation_test_attachment_3_file_A_fastq:
+  name: file
+  record: sample_preparation_test_attachment_3 (Attachment)
+  blob: sample_preparation_test_attachment_3_blob
+
+sample_preparation_test_attachment_3_file_B_fastq:
+  name: file
+  record: sample_preparation_test_attachment_3B (Attachment)
+  blob: sample_preparation_test_attachment_3B_blob
