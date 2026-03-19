@@ -1226,6 +1226,7 @@ en:
         integration_host: Integration ID
         last_used_at: Last Used
         name: Token name
+        revocation_date: Revocation Date
         scopes: Scopes
         status: Status
       never: Never

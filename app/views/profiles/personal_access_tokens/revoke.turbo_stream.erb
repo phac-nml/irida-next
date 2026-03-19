@@ -2,4 +2,8 @@
   <%= viral_flash(type: :success, data: message) %>
 <% end %>
 
+<%= turbo_stream.replace "token-information-component" do %>
+  <%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %>
+<% end %>
+
 <turbo-stream action="refresh"></turbo-stream>
