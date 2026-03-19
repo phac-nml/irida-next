@@ -5,28 +5,37 @@ require 'tempfile'
 
 module WorkflowExecutions
   # Service used to Prepare a WorkflowExecution
-  class PreparationService < BaseService
+  class SamplesheetPreparationService < BaseService
     include BlobHelper
 
-    def initialize(workflow_execution, user = nil, params = {})
-      super(user, params)
+    def initialize(workflow_execution)
+      super(workflow_execution.submitter, {})
       @workflow_execution = workflow_execution
-      @pipeline = workflow_execution.workflow
+      @samplesheet_headers = @workflow_execution.workflow.samplesheet_headers
       @samplesheet_rows = []
-      @storage_service = ActiveStorage::Blob.service
     end
 
-    def execute # rubocop:disable Metrics/MethodLength
-      # confirm pipeline found
-      return false unless validate_pipeline
+    def execute_copy_step(step2d) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      start_x = step2d.cursor[0] # x axis (outer loop)
 
-      @samplesheet_headers = @pipeline.samplesheet_headers
+      # iterate over sample_workflow_executions using cursor x axis to index starting point
+      @workflow_execution.samples_workflow_executions.sort_by(&:id)&.[](start_x..)&.each&.with_index(start_x) do |sample_workflow_execution, index_x| # rubocop:disable Layout/LineLength,Style/SafeNavigationChainLength
+        start_y = step2d.cursor[1] # y axis (inner loop)
 
-      # confirm params/permissions
-      # build workflow execution run directory
-      @workflow_execution.blob_run_directory = generate_run_directory
+        attachment_list = map_attachment_list(sample_workflow_execution)
 
-      # process each sample
+        # iterate over attachments using cursor y axis to index starting point
+        attachment_list.sort_by(&:id)&.[](start_y..)&.each&.with_index(start_y) do |attachment, index_y| # rubocop:disable Style/SafeNavigationChainLength
+          compose_and_attach(attachment, sample_workflow_execution)
+
+          step2d.set! [index_x, index_y + 1] # increment inner loop
+        end
+
+        step2d.set! [index_x + 1, 0] # increment outer loop
+      end
+    end
+
+    def execute_processing_step # rubocop:disable Metrics/MethodLength
       process_samples_workflow_executions
 
       # persist samplesheet in run dir
@@ -49,21 +58,22 @@ module WorkflowExecutions
         }
       )
 
-      # mark workflow execution as prepared
-      @workflow_execution.state = :prepared
-
       @workflow_execution.save
     end
 
     private
 
-    def validate_pipeline # rubocop:disable Naming/PredicateMethod
-      return true if @pipeline.executable?
+    def map_attachment_list(sample_workflow_execution)
+      parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params).map do |_key, value|
+        value
+      end
+    end
 
-      @workflow_execution.state = :error
-      @workflow_execution.cleaned = true
-      @workflow_execution.save
-      false
+    def compose_and_attach(attachment, attachable)
+      key = generate_attachment_key(attachment)
+      blob = compose_blob_with_custom_key(attachment.file, key)
+
+      attachable.inputs.attach(blob.signed_id)
     end
 
     def parse_attachments_from_samplesheet(samplesheet)
@@ -80,49 +90,35 @@ module WorkflowExecutions
     end
 
     def process_samples_workflow_executions
+      # This function could theoretically generate a lot of garbage blobs if it fails midway through.
+      # We could use a 2D cursor array, but after each step a database write is needed to update the samplesheet_rows.
+      # Even if the job fails so a restart occurs and extra blobs are generated, they will be cleaned up by the cleanup
+      # job and as such are temporary bloat that is unlikely to create more blobs than an single extra workflow
+      # execution being run simultaneously.
       @workflow_execution.samples_workflow_executions.each do |sample_workflow_execution|
         attachments = parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params)
-        samplesheet_params = sample_workflow_execution.samplesheet_params
+        samplesheet_params = sample_workflow_execution.samplesheet_params.clone
 
         attachments.each do |key, attachment|
-          samplesheet_params[key] = copy_attachment_to_run_dir(attachment, sample_workflow_execution)
+          samplesheet_params[key] = generate_blob_key(attachment)
         end
 
         @samplesheet_rows << @samplesheet_headers.map { |header| samplesheet_params[header] }
       end
     end
 
-    def copy_attachment_to_run_dir(attachment, attachable)
-      key = generate_input_key(
+    def generate_blob_key(attachment)
+      blob_key_to_service_path(generate_attachment_key(attachment))
+    end
+
+    def generate_attachment_key(attachment)
+      generate_input_key(
         run_dir: @workflow_execution.blob_run_directory,
         filename: attachment.filename,
         prefix: format('input/%<attachable_type>s_%<attachable_id>s/',
                        attachable_type: attachment.attachable_type,
                        attachable_id: attachment.attachable_id)
       )
-
-      blob = compose_blob_with_custom_key(attachment.file, key)
-
-      attachable.inputs.attach(blob.signed_id)
-
-      blob_key_to_service_path(blob.key)
-    end
-
-    def blob_key_to_service_path(blob_key, directory: false)
-      path = case @storage_service.class.to_s
-             when 'ActiveStorage::Service::AzureBlobService'
-               format('az://%<container>s/%<key>s', container: @storage_service.container, key: blob_key)
-             when 'ActiveStorage::Service::S3Service'
-               format('s3://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
-             when 'ActiveStorage::Service::GCSService'
-               format('gcs://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)
-             else
-               ActiveStorage::Blob.service.path_for(blob_key)
-             end
-
-      path = "#{path}/" if directory
-
-      path
     end
 
     def samplesheet_file

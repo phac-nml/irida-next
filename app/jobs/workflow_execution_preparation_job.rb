@@ -1,25 +1,86 @@
 # frozen_string_literal: true
 
+require 'csv'
+require 'tempfile'
+
 # Queues the workflow execution submission job
 class WorkflowExecutionPreparationJob < WorkflowExecutionJob
+  include ActiveJob::Continuable
+  include BlobHelper
+
   queue_as :default
   queue_with_priority 20
 
   def perform(workflow_execution)
+    @workflow_execution = workflow_execution
     # User signaled to cancel
-    return if workflow_execution.canceling? || workflow_execution.canceled?
+    return if @workflow_execution.canceling? || @workflow_execution.canceled?
 
-    # validate workflow_execution object is fit to run jobs on
-    unless validate_initial_state(workflow_execution, [:initial], validate_run_id: false)
-      return handle_error_state_and_clean(workflow_execution)
-    end
+    step :initial_validation
+    step :pipeline_validation
+    step :build_run_directory
+    step :copy_attachments_to_run_dir, start: [0, 0]
+    step :build_samplesheet
+    step :update_state_step
+    step :queue_next_job
+  end
 
-    result = WorkflowExecutions::PreparationService.new(workflow_execution).execute
+  private
 
-    if result
-      WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
+  def initial_validation
+    return if validate_initial_state(@workflow_execution, [:initial], validate_run_id: false)
+
+    update_state(:error)
+  end
+
+  def pipeline_validation
+    return if @workflow_execution.state.to_sym == :error
+
+    # confirm pipeline found
+    return true if @workflow_execution.workflow&.executable?
+
+    update_state(:error, cleaned_value: true)
+    false
+  end
+
+  def build_run_directory
+    return if @workflow_execution.state.to_sym == :error
+
+    @workflow_execution.blob_run_directory = generate_run_directory
+    @workflow_execution.save
+  end
+
+  def copy_attachments_to_run_dir(step)
+    return if @workflow_execution.state.to_sym == :error
+
+    WorkflowExecutions::SamplesheetPreparationService.new(@workflow_execution).execute_copy_step(step)
+  end
+
+  def build_samplesheet
+    return if @workflow_execution.state.to_sym == :error
+
+    WorkflowExecutions::SamplesheetPreparationService.new(@workflow_execution).execute_processing_step
+  end
+
+  def queue_next_job
+    if @workflow_execution.state.to_sym == :error
+      WorkflowExecutionCleanupJob.perform_later(@workflow_execution.reload)
     else
-      handle_unable_to_process_job(workflow_execution, self.class.name)
+      WorkflowExecutionSubmissionJob.perform_later(@workflow_execution.reload)
     end
+  end
+
+  def update_state_step
+    return if @workflow_execution.state.to_sym == :error
+
+    update_state(:prepared)
+  end
+
+  def update_state(state, cleaned_value: nil)
+    return if @workflow_execution.state.to_sym == state
+
+    @workflow_execution.state = state
+    @workflow_execution.cleaned = cleaned_value unless cleaned_value.nil?
+    @workflow_execution.save
   end
 end
