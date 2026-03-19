@@ -1,16 +1,16 @@
 <%= tag.div(
   data: {
-    controller: "combobox--v1--",
-    "combobox--v1---no-results-text-value": t("combobox_component.no_results_text"),
-    "combobox--v1---single-result-text-value": t("combobox_component.single_result_text"),
-    "combobox--v1---multiple-results-text-value": t("combobox_component.multiple_results_text"),
+    controller: "combobox--v1",
+    "combobox--v1-no-results-text-value": t("combobox_component.no_results_text"),
+    "combobox--v1-single-result-text-value": t("combobox_component.single_result_text"),
+    "combobox--v1-multiple-results-text-value": t("combobox_component.multiple_results_text"),
   },
 ) do %>
   <%= @form.hidden_field @field,
                      value: @selected_option[:value],
                      id: "#{@combobox_id}_hidden",
                      data: {
-                       "combobox--v1---target": "hidden",
+                       "combobox--v1-target": "hidden",
                      } %>
 
   <%= render Viral::BaseComponent.new(**combobox_arguments) %>
@@ -19,10 +19,10 @@
     id: @listbox_id,
     role: "listbox",
     "aria-label": combobox_arguments[:aria][:label],
-    "data-combobox--v1---target": "listbox",
+    "data-combobox--v1-target": "listbox",
   ) do %>
     <%= @listbox_options %>
   <% end %>
 
-  <div class="sr-only" aria-live="polite" data-combobox--v1---target="ariaLiveUpdate"></div>
+  <div class="sr-only" aria-live="polite" data-combobox--v1-target="ariaLiveUpdate"></div>
 <% end %>
