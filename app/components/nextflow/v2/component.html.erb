@@ -285,14 +285,12 @@
   </div>
 
   <% unless @automated_workflow %>
-    <%= form_with(
+    <template data-nextflow--v2--samplesheet-target="samplesheetParamsFormTemplate">
+      <%= form_with(
       url: samplesheet_workflow_executions_submissions_path,
-      method: :post,
-      data: {
-        "nextflow--v2--samplesheet-target": "samplesheetParamsForm",
-      },
     ) do |f| %>
-    <% end %>
+      <% end %>
+    </template>
   <% end %>
 
   <div class="sr-only" aria-live="assertive" data-nextflow--v2--samplesheet-target="ariaLive"></div>
