@@ -1,0 +1,64 @@
+# frozen_string_literal: true
+
+module AdvancedSearch
+  module V2
+    # Converts a V2 query tree between its JSON wire format and Ruby value objects.
+    class Serializer
+      class ParseError < StandardError
+      end
+
+      class << self
+        def parse(json)
+          return nil if json.blank?
+
+          hash = JSON.parse(json)
+          parse_group(hash)
+        rescue JSON::ParserError => e
+          raise ParseError, "Invalid V2 query JSON: #{e.message}"
+        end
+
+        def dump(tree)
+          return nil if tree.nil?
+
+          JSON.generate(dump_group(tree))
+        end
+
+        private
+
+        def parse_group(hash)
+          nodes = (hash['nodes'] || []).map do |node|
+            case node['type']
+            when 'condition' then parse_condition(node)
+            when 'group'     then parse_group(node)
+            else raise ParseError, "Unknown node type: #{node['type']}"
+            end
+          end
+          Tree::GroupNode.new(combinator: hash['combinator'] || 'and', nodes:)
+        end
+
+        def parse_condition(hash)
+          Tree::ConditionNode.new(
+            field: hash['field'],
+            operator: hash['operator'],
+            value: hash['value']
+          )
+        end
+
+        def dump_group(node)
+          {
+            'version' => '2',
+            'type' => 'group',
+            'combinator' => node.combinator,
+            'nodes' => node.nodes.map do |n|
+              n.type == :group ? dump_group(n).except('version') : dump_condition(n)
+            end
+          }
+        end
+
+        def dump_condition(node)
+          { 'type' => 'condition', 'field' => node.field, 'operator' => node.operator, 'value' => node.value }
+        end
+      end
+    end
+  end
+end
