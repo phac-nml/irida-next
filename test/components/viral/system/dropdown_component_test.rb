@@ -42,7 +42,7 @@ module System
         assert_no_text 'Bacillus cereus'
         assert_no_text 'Pseudomonas aeruginosa'
         # Click the button itself, not by text if label is not there
-        find('button[data-viral--dropdown-target="trigger"]').click
+        find('button[data-dropdown--v1-target="trigger"]').click
         assert_text 'Aspergillus awamori'
         assert_text 'Bacillus cereus'
         assert_text 'Pseudomonas aeruginosa'
@@ -52,7 +52,7 @@ module System
     test 'dropdown component with item icons' do
       visit('/rails/view_components/viral_dropdown_component/with_item_icon')
       within('.Viral-Preview > [data-controller-connected="true"]') do
-        find('button[data-viral--dropdown-target="trigger"]').click
+        find('button[data-dropdown--v1-target="trigger"]').click
         assert_text 'Checkmark'
         assert_selector 'li svg.check-icon'
         assert_text 'Inbox'

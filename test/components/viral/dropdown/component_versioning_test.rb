@@ -8,34 +8,34 @@ module Dropdown
       Flipper.disable(:v2_dropdown)
       render_component
 
-      assert_selector '[data-controller="viral--dropdown"]'
-      assert_selector '[data-viral--dropdown-target="trigger"]'
-      assert_selector '[data-viral--dropdown-target="menu"]', visible: :hidden
+      assert_selector '[data-controller="dropdown--v1"]'
+      assert_selector '[data-dropdown--v1-target="trigger"]'
+      assert_selector '[data-dropdown--v1-target="menu"]', visible: :hidden
     end
 
     test 'renders v2 when feature flag is enabled' do
       Flipper.enable(:v2_dropdown)
       render_component
 
-      assert_selector '[data-controller="viral--v2--dropdown"]'
-      assert_selector '[data-viral--v2--dropdown-target="trigger"]'
-      assert_selector '[data-viral--v2--dropdown-target="menu"]', visible: :hidden
+      assert_selector '[data-controller="dropdown--v2"]'
+      assert_selector '[data-dropdown--v2-target="trigger"]'
+      assert_selector '[data-dropdown--v2-target="menu"]', visible: :hidden
     end
 
     test 'renders v1 when version override is v1' do
       render_component(version: :v1)
 
-      assert_selector '[data-controller="viral--dropdown"]'
-      assert_selector '[data-viral--dropdown-target="trigger"]'
-      assert_selector '[data-viral--dropdown-target="menu"]', visible: :hidden
+      assert_selector '[data-controller="dropdown--v1"]'
+      assert_selector '[data-dropdown--v1-target="trigger"]'
+      assert_selector '[data-dropdown--v1-target="menu"]', visible: :hidden
     end
 
     test 'renders v2 when version override is v2' do
       render_component(version: :v2)
 
-      assert_selector '[data-controller="viral--v2--dropdown"]'
-      assert_selector '[data-viral--v2--dropdown-target="trigger"]'
-      assert_selector '[data-viral--v2--dropdown-target="menu"]', visible: :hidden
+      assert_selector '[data-controller="dropdown--v2"]'
+      assert_selector '[data-dropdown--v2-target="trigger"]'
+      assert_selector '[data-dropdown--v2-target="menu"]', visible: :hidden
     end
 
     test 'raises when version override is invalid' do

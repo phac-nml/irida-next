@@ -161,8 +161,8 @@ module Layout
       # Tooltip should exist with correct ID and text
       assert_selector("[role='tooltip'][id='#{tooltip_id}']", text: new_label)
 
-      # Should still have viral--dropdown functionality
-      assert_selector('button[data-viral--dropdown-target="trigger"]', count: 3) # goto, new, profile
+      # Should still have dropdown--v1 functionality
+      assert_selector('button[data-dropdown--v1-target="trigger"]', count: 3) # goto, new, profile
     end
 
     test 'profile dropdown has tooltip integration' do
@@ -183,8 +183,8 @@ module Layout
       # Tooltip should exist with correct ID and text
       assert_selector("[role='tooltip'][id='#{tooltip_id}']", text: profile_label)
 
-      # Should still have viral--dropdown functionality
-      assert_selector('button[data-viral--dropdown-target="trigger"]', count: 3) # goto, new, profile
+      # Should still have dropdown--v1 functionality
+      assert_selector('button[data-dropdown--v1-target="trigger"]', count: 3) # goto, new, profile
     end
 
     test 'tooltip IDs are unique across navbar buttons' do
@@ -205,22 +205,22 @@ module Layout
       assert_equal tooltip_ids.uniq.length, tooltip_ids.length, 'All tooltip IDs should be unique'
     end
 
-    test 'dropdown buttons preserve both viral--dropdown and pathogen--tooltip targets' do
+    test 'dropdown buttons preserve both dropdown--v1 and pathogen--tooltip targets' do
       render_inline(Layout::SidebarComponent.new) do |sidebar|
         sidebar.with_header(label: 'Header')
       end
 
       # New dropdown should have both targets
       new_dropdown = page.find("button[aria-label='#{I18n.t('general.navbar.new_dropdown.label')}']")
-      assert new_dropdown['data-viral--dropdown-target'] == 'trigger',
-             'New dropdown should have viral--dropdown-target'
+      assert new_dropdown['data-dropdown--v1-target'] == 'trigger',
+             'New dropdown should have dropdown--v1-target'
       assert new_dropdown['data-pathogen--tooltip-target'] == 'trigger',
              'New dropdown should have pathogen--tooltip-target'
 
       # Profile dropdown should have both targets
       profile_dropdown = page.find("button[aria-label='#{I18n.t('general.navbar.account_dropdown.label')}']")
-      assert profile_dropdown['data-viral--dropdown-target'] == 'trigger',
-             'Profile dropdown should have viral--dropdown-target'
+      assert profile_dropdown['data-dropdown--v1-target'] == 'trigger',
+             'Profile dropdown should have dropdown--v1-target'
       assert profile_dropdown['data-pathogen--tooltip-target'] == 'trigger',
              'Profile dropdown should have pathogen--tooltip-target'
     end
