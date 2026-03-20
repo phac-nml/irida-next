@@ -1,11 +1,11 @@
-<%= tag.div(data: { action: "keydown->viral--v1--select2#keydown" }, class: "select2") do %>
+<%= tag.div(data: { action: "keydown->select2--v1#keydown" }, class: "select2") do %>
   <%= tag.input(
     type: "text",
     id: id,
     name: id,
     data: {
-      "viral--v1--select2-target" => "input",
-      action: "input->viral--v1--select2#input",
+      "select2--v1-target" => "input",
+      action: "input->select2--v1#input",
     },
     placeholder: placeholder,
     required: required,
@@ -20,14 +20,14 @@
     },
   ) %>
 
-  <%= form.hidden_field name, data: { "viral--v1--select2-target": "hidden" } %>
+  <%= form.hidden_field name, data: { "select2--v1-target": "hidden" } %>
 
   <%= tag.div(
-    data: { "viral--v1--select2-target": "dropdown" },
+    data: { "select2--v1-target": "dropdown" },
     class: "z-10 hidden w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100 dark:bg-slate-700",
   ) do %>
     <%= tag.ul(
-      data: { "viral--v1--select2-target": "scroller" },
+      data: { "select2--v1-target": "scroller" },
       role: "listbox",
       class: "max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800",
     ) do %>
@@ -45,7 +45,7 @@
           },
           class:
             "hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:border-blue-800 pointer-events-none",
-          data: { "viral--v1--select2-target": "empty" },
+          data: { "select2--v1-target": "empty" },
         ) %>
       <% end %>
     <% end %>

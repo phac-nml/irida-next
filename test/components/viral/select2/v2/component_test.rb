@@ -15,8 +15,8 @@ module Select2
         assert_selector 'input[type="submit"][disabled]', count: 1
 
         find('input.select2-input[type="text"]').click
-        assert_selector 'div[data-viral--v2--select2-target="dropdown"]', visible: :visible
-        assert_selector 'ul[data-viral--v2--select2-target="scroller"] li', count: 50
+        assert_selector 'div[data-select2--v2-target="dropdown"]', visible: :visible
+        assert_selector 'ul[data-select2--v2-target="scroller"] li', count: 50
 
         find('li[data-label="User 1"]').click
         assert_selector 'input[type="hidden"][name="user"][value="1"]', visible: :hidden, count: 1
