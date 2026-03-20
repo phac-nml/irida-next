@@ -20,6 +20,7 @@ export default class FloatingDropdown {
   #onShow; // Callback fired when dropdown shows
   #onHide; // Callback fired when dropdown hides
   #boundHandleClickOutside; // Bound click outside handler
+  #boundOnTriggerClick; // Bound click handler for trigger
 
   // Public Methods
 
@@ -42,6 +43,9 @@ export default class FloatingDropdown {
     this.#onShow = onShow;
     this.#onHide = onHide;
     this.#boundHandleClickOutside = this.#handleClickOutside.bind(this);
+    this.#boundOnTriggerClick = this.#onTriggerClick.bind(this);
+
+    this.#setupEventListeners();
   }
 
   // Returns boolean indicating if dropdown is currently visible
@@ -93,6 +97,9 @@ export default class FloatingDropdown {
     if (this.isVisible()) {
       this.hide();
     }
+
+    this.#removeEventListeners();
+
     this.#trigger = null;
     this.#dropdown = null;
     this.#strategy = null;
@@ -102,6 +109,7 @@ export default class FloatingDropdown {
     this.#onShow = null;
     this.#onHide = null;
     this.#boundHandleClickOutside = null;
+    this.#boundOnTriggerClick = null;
   }
 
   // Recalculate and apply dropdown position using Floating UI
@@ -142,6 +150,16 @@ export default class FloatingDropdown {
 
   // Private Methods
 
+  // Attach click handler to trigger element
+  #setupEventListeners() {
+    this.#trigger.addEventListener("click", this.#boundOnTriggerClick);
+  }
+
+  // Remove click handler from trigger element
+  #removeEventListeners() {
+    this.#trigger.removeEventListener("click", this.#boundOnTriggerClick);
+  }
+
   // Attach document click handler to detect outside clicks
   #setupClickOutsideListener() {
     document.body.addEventListener(
@@ -171,6 +189,11 @@ export default class FloatingDropdown {
     ) {
       this.hide();
     }
+  }
+
+  // Toggle dropdown if trigger clicked
+  #onTriggerClick() {
+    this.toggle();
   }
 
   // Set ARIA attributes for visible state
