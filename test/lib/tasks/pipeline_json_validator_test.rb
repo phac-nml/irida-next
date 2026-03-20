@@ -21,6 +21,32 @@ class PipelineJsonValidatorTest < ActiveSupport::TestCase
     assert_includes output, 'JSON file is valid.'
   end
 
+  test 'validates valid pipeline JSON from stdin using cat' do
+    valid_file = @fixtures_path.join('valid_pipeline.json')
+    stdout, stderr, status = Open3.capture3("cat #{valid_file} | bundle exec rake pipeline_json_validator:validate",
+                                            chdir: Rails.root.to_s)
+
+    # Should exit with 0 (success)
+    assert_equal 0, status.exitstatus, 'Expected validation to succeed (exit code 0)'
+
+    # Check for success message
+    output = stdout + stderr
+    assert_includes output, 'JSON file is valid.'
+  end
+
+  test 'validates valid pipeline JSON from piped file path using echo' do
+    valid_file = @fixtures_path.join('valid_pipeline.json')
+    stdout, stderr, status = Open3.capture3("echo #{valid_file} | bundle exec rake pipeline_json_validator:validate",
+                                            chdir: Rails.root.to_s)
+
+    # Should exit with 0 (success)
+    assert_equal 0, status.exitstatus, 'Expected validation to succeed (exit code 0)'
+
+    # Check for success message
+    output = stdout + stderr
+    assert_includes output, 'JSON file is valid.'
+  end
+
   test 'detects duplicate pipeline versions' do
     duplicate_file = @fixtures_path.join('duplicate_versions.json')
     stdout, stderr, status = Open3.capture3('bundle', 'exec', 'rake', 'pipeline_json_validator:validate',
