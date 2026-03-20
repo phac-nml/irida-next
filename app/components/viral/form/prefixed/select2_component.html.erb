@@ -30,17 +30,17 @@
           aria: aria
         ) %>
 
-        <%= form.hidden_field name, data: { "viral--v1--select2-target": "hidden" } %>
+        <%= form.hidden_field name, data: { "select2--v1-target": "hidden" } %>
 
         <div
-          data-viral--v1--select2-target="dropdown"
+          data-select2--v1-target="dropdown"
           class="
             absolute z-10 hidden rounded-lg border border-slate-300 bg-white shadow-lg dark:border-slate-700
             dark:bg-slate-800
           "
         >
           <ul
-            data-viral--v1--select2-target="scroller"
+            data-select2--v1-target="scroller"
             role="listbox"
             class="
               max-h-[300px] w-full divide-y divide-slate-200 overflow-y-auto py-2 wrap-anywhere
@@ -60,7 +60,7 @@
                   pointer-events-none hidden border border-blue-300 bg-blue-50 p-4 text-blue-800
                   dark:border-blue-800 dark:bg-slate-800 dark:text-blue-400
                 "
-                data-viral--v1--select2-target="empty"
+                data-select2--v1-target="empty"
               >
                 <%= empty_state %>
               </li>

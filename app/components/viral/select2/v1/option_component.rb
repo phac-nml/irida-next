@@ -13,10 +13,10 @@ module Viral
             aria-selected="false"
             id="select2-option-<%= @value %>"
             role="option"
-            data-viral--v1--select2-target="item"
+            data-select2--v1-target="item"
             data-label="<%= @label %>"
             data-value="<%= @value %>"
-            data-action="click->viral--v1--select2#select keydown->viral--v1--select2#keydown"
+            data-action="click->select2--v1#select keydown->select2--v1#keydown"
           >
             <%= content %>
           </li>

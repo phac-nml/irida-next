@@ -9,7 +9,7 @@ module Viral
     }.freeze
 
     VERSION_RESOLVER = lambda {
-      Flipper.enabled?(:v2_select2) ? :v2 : :v1
+      Flipper.enabled?(:v2_select2, Current.user) ? :v2 : :v1
     }
   end
 end

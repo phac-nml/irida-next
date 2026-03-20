@@ -5,11 +5,7 @@
 
 <div data-controller="slugify" class="@xl:container">
   <%= form_with(model: @new_group, url: groups_path, method: :post, data:
-  if Flipper.enabled?(:v2_select2)
-    { controller: "viral--v2--select2" }
-  else
-    { controller: "viral--v1--select2" }
-  end, html: { novalidate: true }) do |form| %>
+  { controller: "select2--v1" }, html: { novalidate: true }) do |form| %>
     <div class="grid gap-4">
       <%= if @new_group.errors.any?
         viral_alert(

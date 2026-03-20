@@ -1,8 +1,8 @@
 <%= form_with(url: "#", data:
-  if Flipper.enabled?(:v2_select2)
-    { controller: "viral--v2--select2" }
+  if Flipper.enabled?(:v2_select2, Current.user)
+    { controller: "select2--v2" }
   else
-    { controller: "viral--v1--select2" }
+    { controller: "select2--v1" }
   end) do |form| %>
   <label for="unique_id">Select User</label>
 

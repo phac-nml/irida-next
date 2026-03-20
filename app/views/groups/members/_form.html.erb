@@ -3,10 +3,10 @@
 </div>
 
 <%= form_with(model: @new_member, url: group_members_path(tab: @tab), data:
-  if Flipper.enabled?(:v2_select2)
-    { controller: "viral--v2--select2" }
+  if Flipper.enabled?(:v2_select2, Current.user)
+    { controller: "select2--v2" }
   else
-    { controller: "viral--v1--select2" }
+    { controller: "select2--v1" }
   end, method: :post, html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= if @new_member.errors.any?
@@ -110,10 +110,10 @@
                   class: "button button-primary mr-1",
                   disabled: true,
                   data:
-                    if Flipper.enabled?(:v2_select2)
-                      { "viral--v2--select2-target": "submitButton" }
+                    if Flipper.enabled?(:v2_select2, Current.user)
+                      { "select2--v2-target": "submitButton" }
                     else
-                      { "viral--v1--select2-target": "submitButton" }
+                      { "select2--v1-target": "submitButton" }
                     end %>
 
       <button type="button" class="button button-default" data-action="click->viral--dialog#close">

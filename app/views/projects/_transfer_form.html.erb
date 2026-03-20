@@ -1,9 +1,9 @@
 <%= form_with(url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
               data:
-              if Flipper.enabled?(:v2_select2)
-                { turbo_confirm: "", controller: "viral--v2--select2" }
+              if Flipper.enabled?(:v2_select2, Current.user)
+                { turbo_confirm: "", controller: "select2--v2" }
               else
-                { turbo_confirm: "", controller: "viral--v1--select2" }
+                { turbo_confirm: "", controller: "select2--v1" }
               end) do |form| %>
   <div class="mb-2"><%= render partial: "shared/form/required_field_legend" %></div>
 
@@ -58,13 +58,13 @@
                 class: "button button-destructive",
                 disabled: "disabled",
                 data:
-                if Flipper.enabled?(:v2_select2)
+                if Flipper.enabled?(:v2_select2, Current.user)
                 {
-                  "viral--v2--select2-target": "submitButton",
+                  "select2--v2-target": "submitButton",
                   turbo_content: ".confirm-transfer",
                   confirm_value: @project.name,
                 } else {
-                  "viral--v1--select2-target": "submitButton",
+                  "select2--v1-target": "submitButton",
                   turbo_content: ".confirm-transfer",
                   confirm_value: @project.name,
                 }

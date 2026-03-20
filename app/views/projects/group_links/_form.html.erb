@@ -8,10 +8,10 @@
 </div>
 
 <%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project, tab: @tab), method: :post, data:
-if Flipper.enabled?(:v2_select2)
-    { remote: true, controller: "viral--v2--select2" }
+if Flipper.enabled?(:v2_select2, Current.user)
+    { remote: true, controller: "select2--v2" }
   else
-    { remote: true, controller: "viral--v1--select2" }
+    { remote: true, controller: "select2--v1" }
   end, html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= if new_group_link.errors.any?
@@ -128,10 +128,10 @@ if Flipper.enabled?(:v2_select2)
                   class: "button button-primary",
                   disabled: true,
                   data:
-                    if Flipper.enabled?(:v2_select2)
-                      { "viral--v2--select2-target": "submitButton" }
+                    if Flipper.enabled?(:v2_select2, Current.user)
+                      { "select2--v2-target": "submitButton" }
                     else
-                      { "viral--v1--select2-target": "submitButton" }
+                      { "select2--v1-target": "submitButton" }
                     end %>
 
       <button type="button" class="button button-default" data-action="click->viral--dialog#close">
