@@ -29,9 +29,9 @@ module Viral
 
       button = page.find('button[aria-label="Custom Menu"]')
 
-      # Should have viral--dropdown-target (base)
-      assert_equal 'trigger', button['data-viral--dropdown-target'],
-                   'Should preserve viral--dropdown-target from base args'
+      # Should have dropdown--v1-target (base)
+      assert_equal 'trigger', button['data-dropdown--v1-target'],
+                   'Should preserve dropdown--v1-target from base args'
 
       # Should have custom data attributes
       assert_equal 'trigger', button['data-custom-target'],
@@ -68,7 +68,7 @@ module Viral
                    'Should merge custom aria-describedby attribute'
     end
 
-    test 'preserves both viral--dropdown and custom stimulus targets' do
+    test 'preserves both dropdown--v1 and custom stimulus targets' do
       render_inline(
         Viral::DropdownComponent.new(
           icon: :dots,
@@ -84,8 +84,8 @@ module Viral
       button = page.find('button[aria-label="Test Menu"]')
 
       # Should have both targets
-      assert_equal 'trigger', button['data-viral--dropdown-target'],
-                   'Should preserve viral--dropdown-target'
+      assert_equal 'trigger', button['data-dropdown--v1-target'],
+                   'Should preserve dropdown--v1-target'
       assert_equal 'trigger', button['data-pathogen--tooltip-target'],
                    'Should preserve pathogen--tooltip-target'
     end

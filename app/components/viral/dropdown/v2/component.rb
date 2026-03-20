@@ -24,7 +24,7 @@ module Viral
 
         # 🏗️ Build data attributes for the dropdown trigger
         def build_data_attributes
-          data = { 'viral--v2--dropdown-target': 'trigger' }
+          data = { 'dropdown--v2-target': 'trigger' }
           return data unless @action_link
 
           data.merge(

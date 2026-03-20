@@ -211,7 +211,7 @@ module Viral
       #
       # Example:
       #   system_arguments: {
-      #     data: { 'pathogen--tooltip-target': 'trigger' },  # Preserves viral--dropdown-target
+      #     data: { 'pathogen--tooltip-target': 'trigger' },  # Preserves dropdown--v1-target
       #     aria: { describedby: 'tooltip-id' }               # Preserves aria-expanded, aria-haspopup
       #   }
       def build_system_arguments
