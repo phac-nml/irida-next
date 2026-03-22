@@ -47,4 +47,16 @@ class AdvancedSearch::V2::Tree::GroupNodeTest < ActiveSupport::TestCase # ruboco
     assert_equal :group, outer.nodes.first.type
     assert_equal :condition, outer.nodes.first.nodes.first.type
   end
+
+  test 'is frozen after initialization' do
+    node = AdvancedSearch::V2::Tree::GroupNode.new(combinator: 'and', nodes: [condition])
+
+    assert node.frozen?
+  end
+
+  test 'freezes nodes array' do
+    node = AdvancedSearch::V2::Tree::GroupNode.new(combinator: 'and', nodes: [condition])
+
+    assert node.nodes.frozen?
+  end
 end

@@ -80,6 +80,29 @@ class AdvancedSearch::V2::SerializerTest < ActiveSupport::TestCase # rubocop:dis
     end
   end
 
+  test 'raises ParseError when top-level object is missing nodes' do
+    assert_raises(AdvancedSearch::V2::Serializer::ParseError) do
+      AdvancedSearch::V2::Serializer.parse(JSON.generate({ 'version' => '2', 'combinator' => 'and' }))
+    end
+  end
+
+  test 'raises ParseError when top-level object is empty' do
+    assert_raises(AdvancedSearch::V2::Serializer::ParseError) do
+      AdvancedSearch::V2::Serializer.parse('{}')
+    end
+  end
+
+  test 'raises ParseError when top-level object is a condition node' do
+    assert_raises(AdvancedSearch::V2::Serializer::ParseError) do
+      AdvancedSearch::V2::Serializer.parse(JSON.generate({
+                                                           'type' => 'condition',
+                                                           'field' => 'name',
+                                                           'operator' => '=',
+                                                           'value' => 'ERR'
+                                                         }))
+    end
+  end
+
   test 'dumps a tree back to JSON string' do
     tree = AdvancedSearch::V2::Serializer.parse(VALID_JSON)
     json = AdvancedSearch::V2::Serializer.dump(tree)
