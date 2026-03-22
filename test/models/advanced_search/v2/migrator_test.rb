@@ -130,4 +130,26 @@ class AdvancedSearch::V2::MigratorTest < ActiveSupport::TestCase # rubocop:disab
     assert_equal 1, tree.nodes.length
     assert_equal 'foo', tree.nodes.first.nodes.first.value
   end
+
+  test 'returns nil when groups_attributes is not hash-like' do
+    assert_nil AdvancedSearch::V2::Migrator.from_v1({ groups_attributes: 'invalid' })
+  end
+
+  test 'skips malformed groups whose conditions_attributes is not hash-like' do
+    params = {
+      groups_attributes: {
+        0 => { conditions_attributes: 'invalid' },
+        1 => {
+          conditions_attributes: {
+            0 => { field: 'name', operator: '=', value: 'foo' }
+          }
+        }
+      }
+    }
+
+    tree = AdvancedSearch::V2::Migrator.from_v1(params)
+
+    assert_equal 1, tree.nodes.length
+    assert_equal 'foo', tree.nodes.first.nodes.first.value
+  end
 end
