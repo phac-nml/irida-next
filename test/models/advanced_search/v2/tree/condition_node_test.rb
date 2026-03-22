@@ -30,4 +30,10 @@ class AdvancedSearch::V2::Tree::ConditionNodeTest < ActiveSupport::TestCase # ru
     b = AdvancedSearch::V2::Tree::ConditionNode.new(field: 'f', operator: '=', value: 'v')
     assert_not_same a, b
   end
+
+  test 'is frozen after initialization' do
+    node = AdvancedSearch::V2::Tree::ConditionNode.new(field: 'name', operator: '=', value: 'x')
+
+    assert node.frozen?
+  end
 end

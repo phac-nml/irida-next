@@ -12,7 +12,7 @@ module AdvancedSearch
           return nil if json.blank?
 
           hash = JSON.parse(json)
-          parse_group(hash)
+          parse_root(hash)
         rescue JSON::ParserError => e
           raise ParseError, "Invalid V2 query JSON: #{e.message}"
         end
@@ -25,10 +25,17 @@ module AdvancedSearch
 
         private
 
-        def parse_group(hash)
+        def parse_root(hash)
+          validate_hash!(hash, 'root group node')
+          raise ParseError, 'Top-level query node must be a group' if hash['type'].present? && hash['type'] != 'group'
+
+          parse_group(hash, require_nodes: true)
+        end
+
+        def parse_group(hash, require_nodes: false)
           validate_hash!(hash, 'group node')
 
-          nodes = nodes_for(hash).map { |node| parse_node(node) }
+          nodes = nodes_for(hash, require_nodes:).map { |node| parse_node(node) }
           Tree::GroupNode.new(combinator: hash['combinator'] || 'and', nodes:)
         end
 
@@ -42,7 +49,9 @@ module AdvancedSearch
           )
         end
 
-        def nodes_for(hash)
+        def nodes_for(hash, require_nodes: false)
+          raise ParseError, 'Expected group node to include nodes' if require_nodes && !hash.key?('nodes')
+
           raw_nodes = hash['nodes']
           raise ParseError, 'Expected nodes to be an array' if !raw_nodes.nil? && !raw_nodes.is_a?(Array)
 
