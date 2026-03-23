@@ -191,6 +191,58 @@ module Projects
       assert doc.at_css('turbo-frame[src*="metadata_template=all"]')
     end
 
+    test 'should apply default sort and support sorting project samples' do
+      sample2 = samples(:sample2)
+      sample30 = samples(:sample30)
+
+      # default sort: updated_at desc (most recently updated first)
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+      assert_first_rows_include(@sample1.name, sample2.name, row_scope: '#samples-table-body')
+
+      # sort by name asc
+      get namespace_project_samples_url(@namespace, @project), params: { q: { sort: 'name asc' } }
+      assert_response :success
+      assert_sort_state(2, 'ascending')
+      assert_first_rows_include(@sample1.name, sample2.name, row_scope: '#samples-table-body')
+
+      # sort by name desc
+      get namespace_project_samples_url(@namespace, @project), params: { q: { sort: 'name desc' } }
+      assert_response :success
+      assert_sort_state(2, 'descending')
+      assert_first_rows_include(sample30.name, sample2.name, row_scope: '#samples-table-body')
+
+      # sort by puid asc
+      get namespace_project_samples_url(@namespace, @project), params: { q: { sort: 'puid asc' } }
+      assert_response :success
+      assert_sort_state(1, 'ascending')
+      assert_first_rows_include(@sample1.puid, sample2.puid, row_scope: '#samples-table-body')
+
+      # sort by puid desc
+      get namespace_project_samples_url(@namespace, @project), params: { q: { sort: 'puid desc' } }
+      assert_response :success
+      assert_sort_state(1, 'descending')
+      assert_first_rows_include(sample30.puid, sample2.puid, row_scope: '#samples-table-body')
+
+      # sort by created_at asc (oldest first)
+      get namespace_project_samples_url(@namespace, @project), params: { q: { sort: 'created_at asc' } }
+      assert_response :success
+      assert_sort_state(3, 'ascending')
+      assert_first_rows_include(sample30.name, sample2.name, row_scope: '#samples-table-body')
+
+      # sort by created_at desc (newest first)
+      get namespace_project_samples_url(@namespace, @project), params: { q: { sort: 'created_at desc' } }
+      assert_response :success
+      assert_sort_state(3, 'descending')
+      assert_first_rows_include(@sample1.name, sample2.name, row_scope: '#samples-table-body')
+
+      # sort by updated_at asc (oldest first)
+      get namespace_project_samples_url(@namespace, @project), params: { q: { sort: 'updated_at asc' } }
+      assert_response :success
+      assert_sort_state(4, 'ascending')
+      assert_first_rows_include(sample30.name, sample2.name, row_scope: '#samples-table-body')
+    end
+
     test 'accessing samples index on invalid page causes pagy overflow redirect at project level' do
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
       # The rescue_from handler should redirect to first page with page=1 and limit=20
