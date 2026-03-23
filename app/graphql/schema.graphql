@@ -905,7 +905,7 @@ type Group implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = {field: created_at, direction: asc}
+    orderBy: AttachmentOrder = { field: created_at, direction: asc }
   ): AttachmentConnection
 
   """
@@ -1757,8 +1757,8 @@ type Namespace implements Node {
 """
 Common fields for namespace metrics.
 """
-# Interface for namespace metrics
-interface NamespaceMetrics {
+interface # Interface for namespace metrics
+NamespaceMetrics {
   """
   Disk usage (bytes) of the group projects or user projects.
   """
@@ -1831,37 +1831,30 @@ A pipeline
 """
 type Pipeline {
   """
-  
   """
   automatable: Boolean
 
   """
-  
   """
   description: String
 
   """
-  
   """
   executable: Boolean
 
   """
-  
   """
   name: String
 
   """
-  
   """
   pipelineId: String
 
   """
-  
   """
   version: String
 
   """
-  
   """
   workflowParams: JSON!
 }
@@ -1902,7 +1895,7 @@ type Project implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = {field: created_at, direction: asc}
+    orderBy: AttachmentOrder = { field: created_at, direction: asc }
   ): AttachmentConnection
 
   """
@@ -1992,7 +1985,7 @@ type Project implements Node {
     """
     Order by
     """
-    orderBy: SampleOrder = {field: created_at, direction: asc}
+    orderBy: SampleOrder = { field: created_at, direction: asc }
   ): SampleConnection
 
   """
@@ -2500,7 +2493,7 @@ type Query {
     """
     Order by
     """
-    orderBy: GroupOrder = {field: created_at, direction: asc}
+    orderBy: GroupOrder = { field: created_at, direction: asc }
   ): GroupConnection!
 
   """
@@ -2653,7 +2646,7 @@ type Query {
     """
     Order by
     """
-    orderBy: ProjectOrder = {field: created_at, direction: asc}
+    orderBy: ProjectOrder = { field: created_at, direction: asc }
   ): ProjectConnection
 
   """
@@ -2703,7 +2696,7 @@ type Query {
     """
     Order by
     """
-    orderBy: SampleOrder = {field: created_at, direction: asc}
+    orderBy: SampleOrder = { field: created_at, direction: asc }
   ): SampleConnection
 
   """
@@ -2768,7 +2761,7 @@ type Sample implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = {field: created_at, direction: asc}
+    orderBy: AttachmentOrder = { field: created_at, direction: asc }
   ): AttachmentConnection
 
   """
@@ -3099,17 +3092,27 @@ input UpdateSampleMetadataInput {
   """
   The metadata to update the sample with.
   """
-  metadata: JSON!
+  metadataPayload: JSON!
 
   """
-  The Node ID of the sample to be updated. For example, `gid://irida/Sample/a84cd757-dedb-4c64-8b01-097020163077`
+  The Node ID of the project to transfer from. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.
   """
-  sampleId: ID
+  projectId: ID
 
   """
-  Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAA`.
+  Persistent Unique Identifier of the project to transfer from. For example, `INXT_PRJ_AAAAAAAAAA`.
   """
-  samplePuid: ID
+  projectPuid: ID
+
+  """
+  The Node ID of the group to be updated. For example, `gid://irida/group/a84cd757-dedb-4c64-8b01-097020163077`
+  """
+  groupId: ID
+
+  """
+  Persistent Unique Identifier of the group. For example, `INXT_PRJ_AAAAAAAAAA`.
+  """
+  groupPuid: ID
 }
 
 """
