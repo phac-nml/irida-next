@@ -18,6 +18,41 @@ module Groups
       w3c_validate 'Group Workflow Executions Page'
     end
 
+    test 'should apply default sort and support sorting workflow executions' do
+      workflow_execution_running = workflow_executions(:workflow_execution_group_shared_running)
+      workflow_execution_prepared = workflow_executions(:workflow_execution_group_shared_prepared)
+      workflow_execution_submitted = workflow_executions(:workflow_execution_group_shared_submitted)
+      workflow_execution_shared2 = workflow_executions(:workflow_execution_group_shared2)
+      get group_workflow_executions_path(@group)
+      assert_response :success
+      assert_sort_state(8, 'descending', table_selector: '#workflow-executions-table table')
+
+      get group_workflow_executions_path(@group), params: { q: { s: 'run_id asc' } }
+      assert_response :success
+      assert_sort_state(4, 'ascending', table_selector: '#workflow-executions-table table')
+      assert_first_rows_include(workflow_execution_running.run_id, workflow_execution_prepared.run_id,
+                                row_scope: '#workflow-executions-table table tbody')
+
+      get group_workflow_executions_path(@group), params: { q: { s: 'run_id desc' } }
+      assert_response :success
+      assert_sort_state(4, 'descending', table_selector: '#workflow-executions-table table')
+      assert_first_rows_include(workflow_executions(:workflow_execution_group_shared3).run_id,
+                                workflow_execution_shared2.run_id,
+                                row_scope: '#workflow-executions-table table tbody')
+
+      get group_workflow_executions_path(@group), params: { q: { s: 'metadata_pipeline_id asc' } }
+      assert_response :success
+      assert_sort_state(5, 'ascending', table_selector: '#workflow-executions-table table')
+      assert_first_rows_include(@workflow_execution.workflow.name, workflow_execution_shared2.workflow.name,
+                                row_scope: '#workflow-executions-table table tbody')
+
+      get group_workflow_executions_path(@group), params: { q: { s: 'metadata_pipeline_id desc' } }
+      assert_response :success
+      assert_sort_state(5, 'descending', table_selector: '#workflow-executions-table table')
+      assert_first_rows_include(workflow_execution_running.workflow.name, workflow_execution_submitted.workflow.name,
+                                row_scope: '#workflow-executions-table table tbody')
+    end
+
     test 'should not show a listing of workflow executions for the group' do
       sign_in users(:micha_doe)
 

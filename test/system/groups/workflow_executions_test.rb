@@ -30,66 +30,6 @@ module Groups
       assert_selector '#workflow-executions-table table tbody tr', count: 11
     end
 
-    test 'should sort a list of workflow executions' do
-      workflow_execution_running = workflow_executions(:workflow_execution_group_shared_running)
-      workflow_execution_prepared = workflow_executions(:workflow_execution_group_shared_prepared)
-      workflow_execution_submitted = workflow_executions(:workflow_execution_group_shared_submitted)
-      visit group_workflow_executions_path(@group)
-
-      assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
-      assert_selector 'p', text: I18n.t(:'groups.workflow_executions.index.subtitle')
-
-      click_on I18n.t(:'workflow_executions.table_component.run_id')
-      assert_selector "#workflow-executions-table table thead th[aria-sort='ascending']",
-                      text: I18n.t(:'workflow_executions.table_component.run_id').upcase
-
-      within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 11
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_running.run_id
-        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_prepared.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared3.run_id
-      end
-
-      click_on I18n.t(:'workflow_executions.table_component.run_id')
-      assert_selector "#workflow-executions-table table thead th[aria-sort='descending']",
-                      text: I18n.t(:'workflow_executions.table_component.id').upcase
-
-      within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 11
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared3.run_id
-        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared2.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_running.run_id
-      end
-
-      click_on I18n.t(:'workflow_executions.table_component.workflow_name')
-      assert_selector "#workflow-executions-table table thead th[aria-sort='ascending']",
-                      text: I18n.t(:'workflow_executions.table_component.workflow_name').upcase
-
-      within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 11
-        assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared1.workflow.name
-        assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared2.workflow.name
-        assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared3.workflow.name
-      end
-
-      click_on I18n.t(:'workflow_executions.table_component.workflow_name')
-      assert_selector "#workflow-executions-table table thead th[aria-sort='descending']",
-                      text: I18n.t(:'workflow_executions.table_component.workflow_name').upcase
-
-      within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 11
-        assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_running.workflow.name
-        assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution_submitted.workflow.name
-        assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared1.workflow.name
-      end
-    end
-
     test 'can filter by ID and name on groups workflow execution index page' do
       visit group_workflow_executions_path(@group)
 

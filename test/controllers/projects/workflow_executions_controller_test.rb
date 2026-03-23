@@ -21,6 +21,46 @@ module Projects
       w3c_validate 'Project Workflow Executions Page'
     end
 
+    test 'should apply default sort and support sorting workflow executions' do
+      workflow_executions(:automated_workflow_execution)
+      workflow_execution2 = workflow_executions(:automated_example_canceled)
+      workflow_execution3 = workflow_executions(:automated_example_canceling)
+      workflow_execution4 = workflow_executions(:automated_workflow_execution_existing)
+      workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
+      workflow_execution_shared2 = workflow_executions(:workflow_execution_shared2)
+      workflow_execution_shared4 = workflow_executions(:workflow_execution_shared4)
+
+      get namespace_project_workflow_executions_path(@namespace, @project)
+      assert_response :success
+      assert_sort_state(8, 'descending', table_selector: '#workflow-executions-table table')
+
+      get namespace_project_workflow_executions_path(@namespace, @project), params: { q: { s: 'run_id asc' } }
+      assert_response :success
+      assert_sort_state(4, 'ascending', table_selector: '#workflow-executions-table table')
+      assert_select '#workflow-executions-table table tbody tr:first-child td:nth-child(4)',
+                    text: workflow_execution4.run_id
+
+      get namespace_project_workflow_executions_path(@namespace, @project), params: { q: { s: 'run_id desc' } }
+      assert_response :success
+      assert_sort_state(4, 'descending', table_selector: '#workflow-executions-table table')
+      assert_first_rows_include(workflow_execution_shared4.run_id, workflow_execution_shared2.run_id,
+                                row_scope: '#workflow-executions-table table tbody')
+
+      get namespace_project_workflow_executions_path(@namespace, @project),
+          params: { q: { s: 'metadata_pipeline_id asc' } }
+      assert_response :success
+      assert_sort_state(5, 'ascending', table_selector: '#workflow-executions-table table')
+      assert_first_rows_include(workflow_execution2.workflow.name, workflow_execution3.workflow.name,
+                                row_scope: '#workflow-executions-table table tbody')
+
+      get namespace_project_workflow_executions_path(@namespace, @project),
+          params: { q: { s: 'metadata_pipeline_id desc' } }
+      assert_response :success
+      assert_sort_state(5, 'descending', table_selector: '#workflow-executions-table table')
+      assert_first_rows_include(workflow_execution_shared1.workflow.name, workflow_execution_shared2.workflow.name,
+                                row_scope: '#workflow-executions-table table tbody')
+    end
+
     test 'should not show a listing of workflow executions for the project' do
       sign_in users(:micha_doe)
 

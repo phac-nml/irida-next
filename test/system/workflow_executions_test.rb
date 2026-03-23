@@ -58,52 +58,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector '#workflow-executions-table table tbody tr', count: 20
   end
 
-  test 'should sort a list of workflow executions' do
-    workflow_execution = workflow_executions(:irida_next_example)
-    workflow_executions(:workflow_execution_valid)
-    workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
-    workflow_execution_metadata_dates = workflow_executions(:workflow_execution_with_metadata_dates)
-    workflow_execution_metadata_dates2 = workflow_executions(:workflow_execution_with_metadata_dates2)
-
-    visit workflow_executions_path
-
-    assert_selector 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
-
-    click_on 'Run ID'
-    assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.arrow-up-icon"
-
-    within('#workflow-executions-table table tbody') do
-      assert_selector 'tr', count: PAGE_SIZE
-      assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_metadata_dates.run_id
-    end
-
-    click_on 'Run ID'
-    assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.arrow-down-icon"
-
-    within('#workflow-executions-table table tbody') do
-      assert_selector 'tr', count: PAGE_SIZE
-      assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
-    end
-
-    click_on 'Workflow Name'
-    assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.arrow-up-icon"
-
-    within('#workflow-executions-table table tbody') do
-      assert_selector 'tr', count: PAGE_SIZE
-      assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution_metadata_dates2.workflow.name
-    end
-
-    click_on 'Workflow Name'
-    assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.arrow-down-icon"
-
-    within('#workflow-executions-table table tbody') do
-      assert_selector 'tr', count: PAGE_SIZE
-      assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution_shared1.workflow.name
-    end
-  end
-
   test 'should include a shared workflow in the list of workflow executions when the submitter is the current user' do
     workflow_execution = workflow_executions(:workflow_execution_shared1)
 
