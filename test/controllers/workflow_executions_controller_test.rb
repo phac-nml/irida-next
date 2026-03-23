@@ -61,6 +61,41 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, created_workflow_execution.shared_with_namespace
   end
 
+  test 'should apply default sort and support sorting workflow executions' do
+    workflow_execution = workflow_executions(:irida_next_example)
+    workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
+    workflow_execution_metadata_dates = workflow_executions(:workflow_execution_with_metadata_dates)
+    workflow_execution_metadata_dates2 = workflow_executions(:workflow_execution_with_metadata_dates2)
+
+    get workflow_executions_path
+    assert_response :success
+    assert_sort_state(8, 'descending', table_selector: '#workflow-executions-table table')
+
+    get workflow_executions_path, params: { q: { s: 'run_id asc' } }
+    assert_response :success
+    assert_sort_state(4, 'ascending', table_selector: '#workflow-executions-table table')
+    assert_select '#workflow-executions-table table tbody tr:first-child td:nth-child(4)',
+                  text: workflow_execution_metadata_dates.run_id
+
+    get workflow_executions_path, params: { q: { s: 'run_id desc' } }
+    assert_response :success
+    assert_sort_state(4, 'descending', table_selector: '#workflow-executions-table table')
+    assert_select '#workflow-executions-table table tbody tr:first-child td:nth-child(4)',
+                  text: workflow_execution.run_id
+
+    get workflow_executions_path, params: { q: { s: 'metadata_pipeline_id asc' } }
+    assert_response :success
+    assert_sort_state(5, 'ascending', table_selector: '#workflow-executions-table table')
+    assert_select '#workflow-executions-table table tbody tr:first-child td:nth-child(5)',
+                  text: workflow_execution_metadata_dates2.workflow.name
+
+    get workflow_executions_path, params: { q: { s: 'metadata_pipeline_id desc' } }
+    assert_response :success
+    assert_sort_state(5, 'descending', table_selector: '#workflow-executions-table table')
+    assert_select '#workflow-executions-table table tbody tr:first-child td:nth-child(5)',
+                  text: workflow_execution_shared1.workflow.name
+  end
+
   test 'should cancel a new workflow with valid params' do
     put cancel_workflow_execution_path(@workflow_execution_new, format: :turbo_stream)
     assert_response :success
