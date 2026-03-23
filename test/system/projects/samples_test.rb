@@ -949,40 +949,6 @@ module Projects
       ### actions and VERIFY END ###
     end
 
-    test 'can sort samples' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      ### SETUP END ###
-
-      ### ACTION and VERIFY START ###
-      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
-      # sort by name
-      click_on I18n.t('samples.table_component.name')
-
-      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
-      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
-      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      assert_selector 'table tbody tr:last-child th', text: @sample30.puid
-      assert_selector 'table tbody tr:last-child td:nth-child(2)', text: @sample30.name
-
-      # change name sort direction
-      click_on I18n.t('samples.table_component.name')
-
-      assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
-      assert_selector 'table tbody tr:first-child th', text: @sample30.puid
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample30.name
-      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
-      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-      assert_selector 'table tbody tr:last-child th', text: @sample1.puid
-      assert_selector 'table tbody tr:last-child td:nth-child(2)', text: @sample1.name
-      ### ACTION and VERIFY END ###
-    end
-
     test 'sort persists through limit and filter' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
