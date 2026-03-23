@@ -73,6 +73,7 @@ module Mutations
       end
       Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields, current_user).execute
 
+      status = get_status_message(namespace, metadata_payload.keys.count)
       user_errors = namespace.errors.map do |error|
         {
           path: [error.attribute.to_s.camelize(:lower)],
@@ -81,7 +82,7 @@ module Mutations
       end
       {
         samples: nil,
-        status: 'success',
+        status:,
         errors: user_errors
       }
     rescue JSON::ParserError => e
@@ -125,6 +126,16 @@ module Mutations
       end
 
       [metadata_fields, errors]
+    end
+
+    def get_status_message(namespace, sample_count)
+      if namespace.errors.count == sample_count
+        'unsuccessful'
+      elsif namespace.errors.any?
+        'successful with errors'
+      else
+        'successful with no errors'
+      end
     end
   end
 end
