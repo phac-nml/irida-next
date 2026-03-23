@@ -122,6 +122,62 @@ module Groups
       end
     end
 
+    test 'should apply default sort and support sorting group samples' do
+      sample1 = samples(:sample1)
+      sample2 = samples(:sample2)
+      sample28 = samples(:sample28)
+      sample29 = samples(:sample29)
+      sample30 = samples(:sample30)
+      sample31 = samples(:sample31)
+
+      # default sort: updated_at desc (most recently updated first)
+      get group_samples_path(@group)
+      assert_response :success
+      assert_first_rows_include(sample1.name, sample2.name, row_scope: '#samples-table-body')
+
+      # sort by name asc
+      get group_samples_path(@group), params: { q: { sort: 'name asc' } }
+      assert_response :success
+      assert_sort_state(2, 'ascending')
+      assert_first_rows_include(sample1.name, sample2.name, row_scope: '#samples-table-body')
+
+      # sort by name desc (sample30 and sample31 both named "Sample 2" sort first alphabetically)
+      get group_samples_path(@group), params: { q: { sort: 'name desc' } }
+      assert_response :success
+      assert_sort_state(2, 'descending')
+      assert_first_rows_include(sample30.name, sample31.name, row_scope: '#samples-table-body')
+
+      # sort by puid asc (numeric suffix chars < alpha; sample28 AAAAAAAAA6, sample29 AAAAAAAAA7)
+      get group_samples_path(@group), params: { q: { sort: 'puid asc' } }
+      assert_response :success
+      assert_sort_state(1, 'ascending')
+      assert_first_rows_include(sample28.puid, sample29.puid, row_scope: '#samples-table-body')
+
+      # sort by puid desc (sample30 AAAAAAAABA is highest in group; sample25 AAAAAAAAAY is second)
+      get group_samples_path(@group), params: { q: { sort: 'puid desc' } }
+      assert_response :success
+      assert_sort_state(1, 'descending')
+      assert_first_rows_include(sample30.puid, samples(:sample25).puid, row_scope: '#samples-table-body')
+
+      # sort by created_at asc (oldest first: sample31 at 34 weeks, sample30 at 33 weeks)
+      get group_samples_path(@group), params: { q: { sort: 'created_at asc' } }
+      assert_response :success
+      assert_sort_state(4, 'ascending')
+      assert_first_rows_include(sample31.name, sample30.name, row_scope: '#samples-table-body')
+
+      # sort by created_at desc (newest first)
+      get group_samples_path(@group), params: { q: { sort: 'created_at desc' } }
+      assert_response :success
+      assert_sort_state(4, 'descending')
+      assert_first_rows_include(sample1.name, sample2.name, row_scope: '#samples-table-body')
+
+      # sort by updated_at asc (oldest first: sample31 at 34 days, sample30 at 33 days)
+      get group_samples_path(@group), params: { q: { sort: 'updated_at asc' } }
+      assert_response :success
+      assert_sort_state(5, 'ascending')
+      assert_first_rows_include(sample31.name, sample30.name, row_scope: '#samples-table-body')
+    end
+
     test 'accessing samples index on invalid page causes pagy overflow redirect at group level' do
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
       # The rescue_from handler should redirect to first page with page=1 and limit=20

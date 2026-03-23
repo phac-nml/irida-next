@@ -285,52 +285,6 @@ module Groups
       assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
     end
 
-    test 'can sort the list of samples' do
-      visit group_samples_url(@group)
-
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
-      # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
-      # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
-      # they are ordered as expected against one another.
-      assert_selector 'table tbody tr', count: 20
-
-      click_on I18n.t(:'samples.table_component.puid')
-      assert_selector 'table thead th:first-child svg.arrow-up-icon'
-      puids = retrieve_puids
-      (puids.length - 1).times do |n|
-        assert puids[n] < puids[n + 1]
-      end
-
-      click_on I18n.t(:'samples.table_component.puid')
-      assert_selector 'table thead th:first-child svg.arrow-down-icon'
-      puids = retrieve_puids
-      (puids.length - 1).times do |n|
-        assert puids[n] > puids[n + 1]
-      end
-
-      click_on I18n.t(:'samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
-      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
-      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-
-      click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.arrow-up-icon'
-      assert_selector 'table tbody tr:nth-child(3) th', text: @sample28.puid
-      assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: @sample28.name
-      assert_selector 'table tbody tr:nth-child(4) th', text: @sample25.puid
-      assert_selector 'table tbody tr:nth-child(4) td:nth-child(2)', text: @sample25.name
-
-      click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.arrow-down-icon'
-      assert_selector 'table tbody tr:first-child th', text: @sample1.puid
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
-      assert_selector 'table tbody tr:nth-child(2) th', text: @sample2.puid
-      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-    end
-
     test 'can filter by name and then sort the list of samples' do
       visit group_samples_url(@group)
 
