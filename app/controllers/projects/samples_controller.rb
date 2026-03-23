@@ -35,6 +35,16 @@ module Projects
       end
     end
 
+    def query_v2
+      return not_found unless Flipper.enabled?(:advanced_search_v2)
+
+      authorize! @project, to: :sample_listing?
+      build_v2_query
+      respond_to_v2_query
+    rescue AdvancedSearch::V2::Serializer::ParseError
+      head :unprocessable_content
+    end
+
     def show
       authorize! @sample.project, to: :read_sample?
 
@@ -195,6 +205,40 @@ module Projects
 
     def search_key
       :"#{controller_name}_#{@project.id}_search_params"
+    end
+
+    def query_v2_session_key
+      :"#{controller_name}_#{@project.id}_advanced_search_v2"
+    end
+
+    def build_v2_query
+      tree = AdvancedSearch::V2::Serializer.parse(params[:query_v2])
+      store(query_v2_session_key, params[:query_v2]) if params[:persist].present?
+
+      @v2_query = Sample::V2::Query.new(
+        tree:,
+        scope: Sample.where(project_id: @project.id),
+        sort: params[:sort] || 'updated_at desc',
+        page: params[:page] || 1,
+        limit: params[:limit] || 20
+      )
+    end
+
+    def respond_to_v2_query
+      respond_to do |format|
+        format.turbo_stream { render_v2_turbo_stream }
+        format.html { head :not_acceptable }
+      end
+    end
+
+    def render_v2_turbo_stream
+      if @v2_query.valid?
+        @pagy, @samples = @v2_query.results
+        @samples = @samples.includes(project: { namespace: :parent })
+        render :query_v2, status: :ok
+      else
+        render status: :unprocessable_content
+      end
     end
 
     def query
