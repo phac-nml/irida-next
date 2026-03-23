@@ -365,6 +365,7 @@ module Projects
     end
 
     test 'POST query_v2 returns 200 when advanced_search_v2 flag is on with valid query' do
+      Flipper.enable(:advanced_search_v2)
       post query_namespace_project_samples_path(@namespace, @project),
            params: { query_v2: '{"combinator":"and","nodes":[]}' },
            as: :turbo_stream
@@ -372,6 +373,7 @@ module Projects
     end
 
     test 'POST query_v2 returns 422 for invalid json' do
+      Flipper.enable(:advanced_search_v2)
       post query_namespace_project_samples_path(@namespace, @project),
            params: { query_v2: '{bad json' },
            as: :turbo_stream
