@@ -8,8 +8,8 @@
 ### Advanced Search V2
 
 - [x] **ASV2-01**: V2 executor translates GroupNode/ConditionNode trees into Arel SQL queries
-- [ ] **ASV2-02**: V2 search is gated behind a Flipper feature flag — V1 remains fully functional when flag is off
-- [ ] **ASV2-03**: Controller integrates V2 executor when flag is on; routes and params are versioned
+- [x] **ASV2-02**: V2 search is gated behind a Flipper feature flag — V1 remains fully functional when flag is off
+- [x] **ASV2-03**: Controller integrates V2 executor when flag is on; routes and params are versioned
 - [ ] **ASV2-04**: Right-side drawer component renders the query builder UI
 - [ ] **ASV2-05**: Filter bar shows active query summary and drawer toggle button
 - [ ] **ASV2-06**: Stimulus controller allows users to add, remove, and reorder query conditions in the drawer
@@ -72,8 +72,8 @@
 | Requirement | Phase                                              | Status   |
 | ----------- | -------------------------------------------------- | -------- |
 | ASV2-01     | Phase 1 — Advanced Search V2 Backend               | Complete |
-| ASV2-02     | Phase 1 — Advanced Search V2 Backend               | Pending  |
-| ASV2-03     | Phase 1 — Advanced Search V2 Backend               | Pending  |
+| ASV2-02     | Phase 1 — Advanced Search V2 Backend               | Complete |
+| ASV2-03     | Phase 1 — Advanced Search V2 Backend               | Complete |
 | ASV2-04     | Phase 2 — Advanced Search V2 UI Layer              | Pending  |
 | ASV2-05     | Phase 2 — Advanced Search V2 UI Layer              | Pending  |
 | ASV2-06     | Phase 2 — Advanced Search V2 UI Layer              | Pending  |
