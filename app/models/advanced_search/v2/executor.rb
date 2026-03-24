@@ -14,6 +14,8 @@ module AdvancedSearch
       end
 
       def call
+        return @scope if @tree.nil?
+
         visit(@tree, @scope)
       end
 
@@ -23,6 +25,7 @@ module AdvancedSearch
         case node.type
         when :group     then visit_group(node, scope)
         when :condition then visit_condition(node, scope)
+        else scope
         end
       end
 
