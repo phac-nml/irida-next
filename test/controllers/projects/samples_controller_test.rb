@@ -372,6 +372,35 @@ module Projects
       assert_response :ok
     end
 
+    test 'GET index rehydrates persisted query_v2 results when advanced_search_v2 flag is on' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :ok
+
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+
+      table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
+      assert_includes table_text, @sample1.name
+      assert_not_includes table_text, sample2.name
+    end
+
     test 'POST query_v2 returns 422 for invalid json' do
       Flipper.enable(:advanced_search_v2)
       post query_namespace_project_samples_path(@namespace, @project),

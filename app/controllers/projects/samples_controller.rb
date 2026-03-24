@@ -19,10 +19,9 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+      load_index_results
       @samples = @samples.includes(project: { namespace: :parent })
       @has_samples = @project.samples.size.positive?
-      @results_message = results_message
     end
 
     def search
@@ -228,9 +227,31 @@ module Projects
     end
 
     def persist_v2_query(raw_json)
-      return unless params[:persist].present? && raw_json.present? && raw_json.bytesize <= MAX_QUERY_V2_SIZE
+      return unless raw_json.present? && raw_json.bytesize <= MAX_QUERY_V2_SIZE
 
       store(query_v2_session_key, raw_json)
+    end
+
+    def load_index_results
+      if (v2_query = persisted_v2_query_for_index)
+        @pagy, @samples = v2_query.results
+        @results_message = nil
+      else
+        @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+        @results_message = results_message
+      end
+    end
+
+    def persisted_v2_query_for_index
+      return unless v2_query_enabled_for_index?
+
+      raw_json = get_store(query_v2_session_key)
+      return if raw_json.blank?
+
+      build_persisted_v2_query(raw_json)
+    rescue AdvancedSearch::V2::Serializer::ParseError
+      clear_persisted_v2_query
+      nil
     end
 
     def respond_to_v2_query
@@ -292,17 +313,52 @@ module Projects
     end
 
     def search_params
-      updated_params = update_store(search_key,
-                                    params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access
-      updated_params.slice!('name_or_puid_cont', 'name_or_puid_in', 'groups_attributes',
-                            'metadata_template', 'sort')
+      updated_params = sanitized_search_params
+      clear_persisted_v2_query if v1_filters_present?(updated_params)
 
-      if !updated_params.key?(:sort) ||
-         (updated_params[:metadata_template] == 'none' && updated_params['sort']&.match?(/metadata_/))
+      if reset_sort?(updated_params)
         updated_params['sort'] = 'updated_at desc'
         update_store(search_key, updated_params)
       end
       updated_params
+    end
+
+    def clear_persisted_v2_query
+      store(query_v2_session_key, nil)
+    end
+
+    def v2_query_enabled_for_index?
+      action_name == 'index' && Flipper.enabled?(:advanced_search_v2) && !v1_filters_present?(@search_params)
+    end
+
+    def build_persisted_v2_query(raw_json)
+      tree = AdvancedSearch::V2::Serializer.parse(raw_json)
+      Sample::V2::Query.new(
+        tree:,
+        scope: Sample.where(project_id: @project.id),
+        sort: @search_params['sort'] || 'updated_at desc',
+        page: params[:page] || 1,
+        limit: params[:limit] || 20
+      )
+    end
+
+    def sanitized_search_params
+      update_store(search_key,
+                   params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access.tap do |updated_params|
+        updated_params.slice!('name_or_puid_cont', 'name_or_puid_in', 'groups_attributes',
+                              'metadata_template', 'sort')
+      end
+    end
+
+    def reset_sort?(search_params)
+      !search_params.key?(:sort) ||
+        (search_params[:metadata_template] == 'none' && search_params['sort']&.match?(/metadata_/))
+    end
+
+    def v1_filters_present?(search_params)
+      search_params['name_or_puid_cont'].present? ||
+        search_params['name_or_puid_in'].present? ||
+        search_params['groups_attributes'].present?
     end
 
     def page_title
