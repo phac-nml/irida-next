@@ -30,6 +30,8 @@ class Sample::V2::Query
   end
 
   def results
+    raise ArgumentError, 'Cannot execute invalid query tree' unless valid?
+
     relation = AdvancedSearch::V2::Executor.new(@tree, @scope).call
     relation = apply_sort(relation)
     pagy(relation, limit: @limit, page: @page, raise_range_error: true)
