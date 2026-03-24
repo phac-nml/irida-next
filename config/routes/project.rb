@@ -72,7 +72,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         collection do
           get :select
           post :search
-          post :query, action: :query_v2
+          post :query_v2
           post :metadata_template
         end
         resources :attachments, module: :samples, only: %i[index new create destroy] do
