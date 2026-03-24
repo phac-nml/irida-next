@@ -16,6 +16,13 @@ module AdvancedSearch
       STRING_OPERATORS = %w[= != contains not_contains in not_in exists not_exists].freeze
       DATE_OPERATORS = %w[= != <= >= exists not_exists].freeze
       METADATA_OPERATORS = %w[= != contains not_contains in not_in exists not_exists].freeze
+      LEGACY_OPERATOR_ALIASES = {
+        'equals' => '=',
+        'not_equals' => '!=',
+        'does_not_contain' => 'not_contains',
+        'greater_than' => '>=',
+        'less_than' => '<='
+      }.freeze
 
       class << self
         def allowed_fields
@@ -38,8 +45,12 @@ module AdvancedSearch
           end
         end
 
+        def normalize_operator(operator)
+          LEGACY_OPERATOR_ALIASES.fetch(operator, operator)
+        end
+
         def valid_operator?(field, operator)
-          operators_for(field).include?(operator)
+          operators_for(field).include?(normalize_operator(operator))
         end
       end
     end

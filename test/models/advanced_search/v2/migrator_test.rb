@@ -43,6 +43,24 @@ class AdvancedSearch::V2::MigratorTest < ActiveSupport::TestCase # rubocop:disab
     assert_equal 'ERR', cond.value
   end
 
+  test 'normalizes legacy operator aliases from v1 params' do
+    params = {
+      groups_attributes: {
+        0 => {
+          conditions_attributes: {
+            0 => { field: 'name', operator: 'equals', value: 'foo' },
+            1 => { field: 'created_at', operator: 'greater_than', value: '2024-01-01' }
+          }
+        }
+      }
+    }
+
+    tree = AdvancedSearch::V2::Migrator.from_v1(params)
+
+    assert_equal '=', tree.nodes.first.nodes.first.operator
+    assert_equal '>=', tree.nodes.first.nodes.second.operator
+  end
+
   test 'returns nil for nil input' do
     assert_nil AdvancedSearch::V2::Migrator.from_v1(nil)
   end
