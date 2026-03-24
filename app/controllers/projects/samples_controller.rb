@@ -7,6 +7,8 @@ module Projects
     include Storable
     include SampleAttachment
 
+    MAX_QUERY_V2_SIZE = 10_000 # bytes
+
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
     before_action :query, only: %i[index search select]
@@ -212,8 +214,9 @@ module Projects
     end
 
     def build_v2_query
-      tree = AdvancedSearch::V2::Serializer.parse(params[:query_v2])
-      store(query_v2_session_key, params[:query_v2]) if params[:persist].present?
+      raw_json = params[:query_v2]
+      tree = AdvancedSearch::V2::Serializer.parse(raw_json)
+      persist_v2_query(raw_json)
 
       @v2_query = Sample::V2::Query.new(
         tree:,
@@ -224,6 +227,12 @@ module Projects
       )
     end
 
+    def persist_v2_query(raw_json)
+      return unless params[:persist].present? && raw_json.present? && raw_json.bytesize <= MAX_QUERY_V2_SIZE
+
+      store(query_v2_session_key, raw_json)
+    end
+
     def respond_to_v2_query
       respond_to do |format|
         format.turbo_stream { render_v2_turbo_stream }
@@ -232,13 +241,11 @@ module Projects
     end
 
     def render_v2_turbo_stream
-      if @v2_query.valid?
-        @pagy, @samples = @v2_query.results
-        @samples = @samples.includes(project: { namespace: :parent })
-        render :query_v2, status: :ok
-      else
-        render status: :unprocessable_content
-      end
+      @pagy, @samples = @v2_query.results
+      @samples = @samples.includes(project: { namespace: :parent })
+      render :query_v2, status: :ok
+    rescue ArgumentError
+      render status: :unprocessable_content
     end
 
     def query
