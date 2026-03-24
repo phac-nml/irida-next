@@ -44,7 +44,7 @@ module AdvancedSearch
 
           Tree::ConditionNode.new(
             field: hash['field'],
-            operator: hash['operator'],
+            operator: FieldConfiguration.normalize_operator(hash['operator']),
             value: hash['value']
           )
         end

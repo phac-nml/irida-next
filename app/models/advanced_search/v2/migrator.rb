@@ -29,7 +29,7 @@ module AdvancedSearch
 
       def self.build_condition(cond)
         field = attribute_value(cond, :field)
-        operator = attribute_value(cond, :operator)
+        operator = FieldConfiguration.normalize_operator(attribute_value(cond, :operator))
         value = attribute_value(cond, :value)
         return nil if field.blank? && operator.blank? && value.blank?
 

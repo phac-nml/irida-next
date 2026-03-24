@@ -36,6 +36,23 @@ class AdvancedSearch::V2::SerializerTest < ActiveSupport::TestCase # rubocop:dis
     assert_equal 'ERR', condition.value
   end
 
+  test 'normalizes legacy operator aliases while parsing condition nodes' do
+    json = JSON.generate({
+                           'version' => '2',
+                           'combinator' => 'and',
+                           'nodes' => [
+                             { 'type' => 'condition', 'field' => 'name', 'operator' => 'equals', 'value' => 'ERR' },
+                             { 'type' => 'condition', 'field' => 'created_at', 'operator' => 'greater_than',
+                               'value' => '2024-01-01' }
+                           ]
+                         })
+
+    tree = AdvancedSearch::V2::Serializer.parse(json)
+
+    assert_equal '=', tree.nodes.first.operator
+    assert_equal '>=', tree.nodes.second.operator
+  end
+
   test 'parses nested group nodes correctly' do
     tree = AdvancedSearch::V2::Serializer.parse(VALID_JSON)
     sub_group = tree.nodes.last
