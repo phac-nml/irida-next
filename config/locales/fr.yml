@@ -1077,17 +1077,17 @@ fr:
         subject: Votre accès à %{type} '%{name}' a été révoqué
     pipeline_mailer:
       complete_manager_email:
-        body_html: Le pipeline <strong>%{id}</strong> s’est terminé avec succès.
-        subject: Pipeline terminé – %{id}
+        body_html: Le pipeline <strong>%{identifier}</strong> s’est terminé avec succès.
+        subject: Pipeline terminé – %{identifier}
       complete_user_email:
-        body_html: Votre pipeline <strong>%{id}</strong> s’est terminé avec succès.
-        subject: Pipeline terminé – %{id}
+        body_html: Votre pipeline <strong>%{identifier}</strong> s’est terminé avec succès.
+        subject: Pipeline terminé – %{identifier}
       error_manager_email:
-        body_html: Le pipeline <strong>%{id}</strong> n’a pas été complété avec succès en raison d’erreurs.
-        subject: Pipeline erroné – %{id}
+        body_html: Le pipeline <strong>%{identifier}</strong> n’a pas été complété avec succès en raison d’erreurs.
+        subject: Pipeline erroné – %{identifier}
       error_user_email:
-        body_html: Votre pipeline <strong>%{id}</strong> n’a pas été complété avec succès en raison d’erreurs.
-        subject: Pipeline erroné – %{id}
+        body_html: Votre pipeline <strong>%{identifier}</strong> n’a pas été complété avec succès en raison d’erreurs.
+        subject: Pipeline erroné – %{identifier}
       view_details: 'Pour consulter le résumé du pipeline, cliquez sur le bouton ci-dessous :'
   members:
     access_levels:
