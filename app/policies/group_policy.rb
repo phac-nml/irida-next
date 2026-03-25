@@ -246,6 +246,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def update_sample_metadata?
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
+    return true if token_active?(effective_access_level) == true
 
     details[:name] = record.name
     false
