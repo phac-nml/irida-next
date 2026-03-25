@@ -7,7 +7,7 @@ class PipelineMailer < ApplicationMailer
     submitter = @workflow_execution.submitter
     I18n.with_locale(submitter.locale) do
       mail(to: submitter.email,
-           subject: t(:'mailers.pipeline_mailer.complete_user_email.subject', identifier: @workflow_execution.name))
+           subject: t(:'mailers.pipeline_mailer.complete_user_email.subject', name: @workflow_execution.name))
     end
   end
 
@@ -15,7 +15,7 @@ class PipelineMailer < ApplicationMailer
     @workflow_execution = workflow_execution
     I18n.with_locale(locale) do
       mail(bcc: manager_emails,
-           subject: t(:'mailers.pipeline_mailer.complete_manager_email.subject', identifier: @workflow_execution.name))
+           subject: t(:'mailers.pipeline_mailer.complete_manager_email.subject', name: @workflow_execution.name))
     end
   end
 
@@ -24,7 +24,7 @@ class PipelineMailer < ApplicationMailer
     submitter = @workflow_execution.submitter
     I18n.with_locale(submitter.locale) do
       mail(to: submitter.email,
-           subject: t(:'mailers.pipeline_mailer.error_user_email.subject', identifier: @workflow_execution.name))
+           subject: t(:'mailers.pipeline_mailer.error_user_email.subject', name: @workflow_execution.name))
     end
   end
 
@@ -32,7 +32,7 @@ class PipelineMailer < ApplicationMailer
     @workflow_execution = workflow_execution
     I18n.with_locale(locale) do
       mail(bcc: manager_emails,
-           subject: t(:'mailers.pipeline_mailer.error_manager_email.subject', identifier: @workflow_execution.name))
+           subject: t(:'mailers.pipeline_mailer.error_manager_email.subject', name: @workflow_execution.name))
     end
   end
 end

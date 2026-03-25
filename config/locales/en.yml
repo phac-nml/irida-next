@@ -1073,17 +1073,17 @@ en:
         subject: Your access to %{type} '%{name}' has been revoked
     pipeline_mailer:
       complete_manager_email:
-        body_html: Pipeline <strong>%{identifier}</strong> has completed successfully.
-        subject: Pipeline Completed - %{identifier}
+        body_html: 'Pipeline <strong>%{name} (id: %{id})</strong> has completed successfully.'
+        subject: Pipeline Completed - %{name}
       complete_user_email:
-        body_html: Your pipeline <strong>%{identifier}</strong> has completed successfully.
-        subject: Pipeline Completed - %{identifier}
+        body_html: 'Your pipeline <strong>%{name} (id: %{id})</strong> has completed successfully.'
+        subject: Pipeline Completed - %{name}
       error_manager_email:
-        body_html: Pipeline <strong>%{identifier}</strong> did not complete successfully due to errors.
-        subject: Pipeline Errored - %{identifier}
+        body_html: 'Pipeline <strong>%{name} (id: %{id})</strong> did not complete successfully due to errors.'
+        subject: Pipeline Errored - %{name}
       error_user_email:
-        body_html: Your pipeline <strong>%{identifier}</strong> did not complete successfully due to errors.
-        subject: Pipeline Errored - %{identifier}
+        body_html: 'Your pipeline <strong>%{name} (id: %{id})</strong> did not complete successfully due to errors.'
+        subject: Pipeline Errored - %{name}
       view_details: 'To view the pipeline summary, click the button below:'
   members:
     access_levels:

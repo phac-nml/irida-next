@@ -8,7 +8,7 @@ locals: {
       <span style="color:#334155;line-height:24px;">
         <%= t(
           :"mailers.pipeline_mailer.error_user_email.body_html",
-          identifier: "#{@workflow_execution.name} (id: #{@workflow_execution.id})",
+          name: @workflow_execution.name, id: @workflow_execution.id,
         ) %>
       </span>
     </td>
