@@ -39,4 +39,8 @@ class UserPolicyTest < ActiveSupport::TestCase
   test '#create?' do
     assert @policy.apply(:create?)
   end
+
+  test '#rotate_personal_access_token?' do
+    assert @policy.apply(:rotate_personal_access_token?)
+  end
 end

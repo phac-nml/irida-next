@@ -33,8 +33,11 @@ class UserPolicy < ApplicationPolicy
     false
   end
 
-  def rotate?
-    true if record == user
+  def rotate_personal_access_token?
+    return true if record == user
+
+    details[:name] = record.email
+    false
   end
 
   def update?

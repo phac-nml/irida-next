@@ -109,6 +109,7 @@ en:
         new?: You are not authorized to create a user on this server.
         read?: You are not authorized to view profile for user %{name} on this server.
         revoke?: You are not authorized to revoke personal access tokens for user %{name} on this server.
+        rotate_personal_access_token?: You are not authorized to rotate personal access tokens for user %{name} on this server.
         update?: You are not authorized to update user %{name} on this server.
       workflow_execution:
         cancel?: You are not authorized to cancel workflow executions for %{namespace_type} %{name}

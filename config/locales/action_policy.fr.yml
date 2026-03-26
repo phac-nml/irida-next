@@ -109,6 +109,7 @@ fr:
         new?: Vous n’êtes pas autorisé à créer un utilisateur sur ce serveur.
         read?: Vous n’êtes pas autorisé à afficher les profils des utilisateurs %{name} sur ce serveur.
         revoke?: Vous n’êtes pas autorisé à révoquer les jetons d’accès personnels de l’utilisateur %{name} sur ce serveur.
+        rotate_personal_access_token?: Vous n'êtes pas autorisé à faire pivoter les jetons d'accès personnels de l'utilisateur %{name} sur ce serveur.
         update?: Vous n’êtes pas autorisé à mettre à jour l’utilisateur %{name} sur ce serveur.
       workflow_execution:
         cancel?: Vous n’êtes pas autorisé à annuler les exécutions de flux de travail pour %{namespace_type} %{name}

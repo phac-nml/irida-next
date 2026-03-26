@@ -47,38 +47,6 @@ class PersonalAccessTokenTest < ActiveSupport::TestCase
     end
   end
 
-  test 'rotate on non revoked pat changes token digest' do
-    assert_changes -> { @valid_pat.token_digest } do
-      @valid_pat.rotate
-    end
-  end
-
-  test 'rotate on revoked pat does not change token digest' do
-    assert_no_changes -> { @revoked_pat.token_digest } do
-      @revoked_pat.rotate
-    end
-
-    assert @revoked_pat.errors.full_messages.include?(
-      I18n.t('activerecord.errors.models.personal_access_tokens.rotate.only_active')
-    )
-  end
-
-  test 'rotate on expired pat does not change token digest' do
-    assert_no_changes -> { @expired_pat.token_digest } do
-      @expired_pat.rotate
-    end
-
-    assert @expired_pat.errors.full_messages.include?(
-      I18n.t('activerecord.errors.models.personal_access_tokens.rotate.only_active')
-    )
-  end
-
-  test 'rotate on non expired pat changes token digest' do
-    assert_changes -> { @non_expirable_pat.token_digest } do
-      @non_expirable_pat.rotate
-    end
-  end
-
   test '#revoked? on revoked pat returns true' do
     assert @revoked_pat.revoked?
   end

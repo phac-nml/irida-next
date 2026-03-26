@@ -71,26 +71,32 @@ module Profiles
 
     test 'should rotate personal access token' do
       personal_access_token = personal_access_tokens(:john_doe_valid_pat)
-      assert_changes -> { personal_access_token.reload.token_digest } do
-        put rotate_profile_personal_access_token_path(id: personal_access_token,
-                                                      format: :turbo_stream)
+      assert_difference(-> { @user.personal_access_tokens.count } => 1) do
+        assert_changes -> { personal_access_token.reload.revoked? } do
+          put rotate_profile_personal_access_token_path(id: personal_access_token,
+                                                        format: :turbo_stream)
+        end
       end
 
       assert_response :success
     end
 
     test 'should not rotate personal access token for another user' do
-      put rotate_profile_personal_access_token_path(id: personal_access_tokens(:jane_doe_valid_pat),
-                                                    format: :turbo_stream)
+      assert_no_difference(-> { @user.personal_access_tokens.count }) do
+        put rotate_profile_personal_access_token_path(id: personal_access_tokens(:jane_doe_valid_pat),
+                                                      format: :turbo_stream)
+      end
       assert_response :not_found
     end
 
     test 'should not rotate expired personal access token' do
       expired_pat = personal_access_tokens(:john_doe_expired_pat)
 
-      assert_no_changes -> { expired_pat.reload.token_digest } do
-        put rotate_profile_personal_access_token_path(id: expired_pat,
-                                                      format: :turbo_stream)
+      assert_no_difference(-> { @user.personal_access_tokens.count }) do
+        assert_no_changes -> { expired_pat.reload.revoked? } do
+          put rotate_profile_personal_access_token_path(id: expired_pat,
+                                                        format: :turbo_stream)
+        end
       end
 
       assert_response :unprocessable_entity
@@ -99,9 +105,11 @@ module Profiles
     test 'should not rotate revoked personal access token' do
       revoked_pat = personal_access_tokens(:john_doe_revoked_pat)
 
-      assert_no_changes -> { revoked_pat.reload.token_digest } do
-        put rotate_profile_personal_access_token_path(id: revoked_pat,
-                                                      format: :turbo_stream)
+      assert_no_difference(-> { @user.personal_access_tokens.count }) do
+        assert_no_changes -> { revoked_pat.reload.revoked } do
+          put rotate_profile_personal_access_token_path(id: revoked_pat,
+                                                        format: :turbo_stream)
+        end
       end
 
       assert_response :unprocessable_entity
