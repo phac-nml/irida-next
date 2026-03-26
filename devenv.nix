@@ -3,6 +3,8 @@
 lib.mkMerge [
   {
     env.GA4GH_WES_URL = "http://localhost:1122";
+    env.PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright.passthru.browsers}";
+    env.PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS="true";
 
     # TODO: remove when pipelines are confirmed to work with 25.10.2
     overlays = [
@@ -47,6 +49,7 @@ lib.mkMerge [
       jq
       file
       yq
+      playwright-test
     ];
 
     # https://devenv.sh/languages/
@@ -93,10 +96,48 @@ lib.mkMerge [
       listen_addresses = "localhost";
     };
 
+    # https://devenv.sh/scripts/
+    scripts.install-ruby-lsp = {
+      exec = ''
+        newestAvailableRubyLspVersion="$(gem search ruby-lsp -r | grep 'ruby-lsp ' | awk '{print $2}' | tr -d '()')";
+        newestInstalledRubyLspVersion="$(gem list ruby-lsp | grep 'ruby-lsp ' | awk '{print $2}' | tr -d '(),')";
+
+        if [ "$newestInstalledRubyLspVersion" != "$newestAvailableRubyLspVersion" ]; then
+          echo "❌ ruby-lsp version installed does not match newest available version of $newestAvailableRubyLspVersion."
+          gem install ruby-lsp
+        else
+          echo "✅ ruby-lsp version installed matches newest available version."
+        fi
+
+        echo
+      '';
+      description = "Install ruby-lsp gem";
+    };
+
+    scripts.validate-playwright = {
+      exec = ''
+        playwrightNpmVersion="$(pnpm list playwright | grep playwright | awk '{print $2}')"
+
+        echo "❄️ Playwright nix version: ${pkgs.playwright-test.version}"
+        echo "📦 Playwright npm version: $playwrightNpmVersion"
+
+        if [ "${pkgs.playwright-test.version}" != "$playwrightNpmVersion" ]; then
+            echo "❌ Playwright versions in nix (in devenv.yaml) and npm (in package.json) are not the same! Please adapt the configuration."
+        else
+            echo "✅ Playwright versions in nix and npm are the same"
+        fi
+
+        echo
+        env | grep ^PLAYWRIGHT
+      '';
+      packages = [ pkgs.nodejs_24 pkgs.coreutils ];
+      description = "Validate playwright";
+    };
+
     # https://devenv.sh/basics/
     enterShell = ''
-      ruby --version
-      gem install ruby-lsp
+      install-ruby-lsp
+      validate-playwright
     '';
 
     # https://devenv.sh/tasks/
