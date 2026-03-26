@@ -13,7 +13,7 @@
       <%= row[:scopes].join(", ") %>
     <% end %>
 
-    <% if Flipper.enabled?(:integration_access_token_generation) && !@namespace.present? %>
+    <% if show_integration_host? && !@namespace.present? %>
       <% table.with_column(t("personal_access_tokens.table.header.integration_host")) do |row| %>
         <%= row[:integration_host] %>
       <% end %>

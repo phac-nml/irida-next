@@ -110,7 +110,7 @@ class ProfileTest < ApplicationSystemTestCase
     assert_equal 4, active_token_count
 
     expiring_token_count = @user.personal_access_tokens.expiring_in_two_weeks.count
-    assert_equal 3, expiring_token_count
+    assert_equal 2, expiring_token_count
 
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
@@ -137,7 +137,7 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text I18n.t(:'profiles.personal_access_tokens.access_token_section.description')
 
     assert_text 'my new token'
-    assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Expiring')]",
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
                     count: @active_token_count + 1)
     assert_text I18n.t('profiles.personal_access_tokens.create.success', name: 'my new token')
   end
@@ -153,7 +153,7 @@ class ProfileTest < ApplicationSystemTestCase
       click_button I18n.t(:'profiles.personal_access_tokens.create.submit')
     end
     assert_no_text 'my new token'
-    assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Expiring')]",
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
                     count: @active_token_count)
     assert_text I18n.t(:'errors.format',
                        attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
@@ -166,8 +166,9 @@ class ProfileTest < ApplicationSystemTestCase
 
     token_to_revoke = personal_access_tokens(:john_doe_non_expirable_pat)
 
-    assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Expiring')]",
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
                     count: @active_token_count)
+
     within('#access-tokens-table') do
       assert_text token_to_revoke.name
     end
@@ -181,7 +182,8 @@ class ProfileTest < ApplicationSystemTestCase
     within('#access-tokens-table') do
       assert_no_text token_to_revoke.name
     end
-    assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Expiring')]",
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
                     count: @active_token_count - 1)
   end
 

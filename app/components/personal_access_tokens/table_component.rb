@@ -70,16 +70,22 @@ module PersonalAccessTokens
     end
 
     def row_token_status(token)
-      @status = {}
+      status = {}
       if token.active? && !token.expiring?
-        @status.merge!(color: :green, text: I18n.t('personal_access_tokens.table.status.active'))
+        status.merge!(color: :green, text: I18n.t('personal_access_tokens.table.status.active'))
       elsif token.expiring?
-        @status.merge!(color: :orange, text: I18n.t('personal_access_tokens.table.status.expiring'))
+        status.merge!(color: :orange, text: I18n.t('personal_access_tokens.table.status.expiring'))
       elsif token.expired?
-        @status.merge!(color: :amber, text: I18n.t('personal_access_tokens.table.status.expired'))
+        status.merge!(color: :amber, text: I18n.t('personal_access_tokens.table.status.expired'))
       else
-        @status.merge!(color: :red, text: I18n.t('personal_access_tokens.table.status.revoked'))
+        status.merge!(color: :red, text: I18n.t('personal_access_tokens.table.status.revoked'))
       end
+
+      status
+    end
+
+    def show_integration_host?
+      Flipper.enabled?(:integration_access_token_generation)
     end
   end
 end

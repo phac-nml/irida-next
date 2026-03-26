@@ -3,7 +3,7 @@
 module PersonalAccessTokens
   # Component for rendering an personal access tokens information
   class InformationComponent < Component
-    attr_accessor :current_user, :active_count, :expired_count, :revoked_count, :expiring_count
+    attr_reader :current_user, :active_count, :expired_count, :revoked_count, :expiring_count
 
     def initialize(current_user:)
       @current_user = current_user
