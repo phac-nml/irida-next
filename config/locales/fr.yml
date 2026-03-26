@@ -1577,7 +1577,7 @@ fr:
             single_success: La clé de métadonnées '%{deleted_key}' a été supprimée avec succès.
           modal:
             description: 'Champs de métadonnées sélectionnés pour suppression :'
-            key_header: Clé
+            field_name_header: Nom due champ
             title: Supprimer les métadonnées
             value_header: Valeur
         destroy:
@@ -1593,7 +1593,7 @@ fr:
             success: Les métadonnées ont été mises à jour avec succès
         form:
           create_field_button: Ajouter un autre champ de métadonnées
-          key: Clé
+          field_name: Nom du champ
           remove_field: Supprimer le champ
           submit_button: Ajouter
           value: Valeur
@@ -1629,14 +1629,14 @@ fr:
           actions:
             delete_confirm: Êtes-vous sûr de vouloir supprimer le champ de métadonnées '%{deleted_key}' de l'échantillon?
           update:
-            key: Clé
+            field_name: Nom du champ
             update_metadata: Mettre à jour les métadonnées
             value: Valeur
         nav_aria_label: Navigation dans les échantillons
         new_attachment_button: Télécharger des fichiers
         table_header:
           action: Mesure
-          key: Clé
+          field_name: Nom du champ
           last_updated: Dernière mise à jour
           source: Source
           value: Valeur

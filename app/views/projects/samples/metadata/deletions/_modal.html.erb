@@ -4,17 +4,16 @@
 
   <div class="mb-4 font-normal text-slate-500 dark:text-slate-400">
     <p class="mb-4"><%= t(".description") %></p>
-    <div
-      data-controller="projects--samples--metadata--delete-listing"
-      class="overflow-auto scrollbar"
-    >
-      <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
-        <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
+
+    <div data-controller="projects--samples--metadata--delete-listing" class="scrollbar overflow-auto">
+      <table class="mb-4 w-full text-left text-sm text-slate-500 dark:text-slate-400">
+        <thead class="bg-slate-50 text-slate-700 dark:bg-slate-900 dark:text-slate-400">
           <tr>
-            <th class="px-6 py-4"><%= t(".key_header") %></th>
+            <th class="px-6 py-4"><%= t(".field_name_header") %></th>
             <th class="px-6 py-4"><%= t(".value_header") %></th>
           </tr>
         </thead>
+
         <tbody data-projects--samples--metadata--delete-listing-target="tableBody"></tbody>
       </table>
     </div>
@@ -27,6 +26,7 @@
       action: 'turbo:submit-end->projects--samples--metadata--destroy#clear'
     }, method: :delete) do |form| %>
     <div data-projects--samples--metadata--destroy-target="field"></div>
+
     <div>
       <%= form.submit t("common.actions.delete"),
                   id: "destroy-metadata-button",

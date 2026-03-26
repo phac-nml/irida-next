@@ -1573,7 +1573,7 @@ en:
             single_success: Metadata key '%{deleted_key}' was successfully deleted.
           modal:
             description: 'Metadata fields selected for deletion:'
-            key_header: Key
+            field_name_header: Field Name
             title: Delete Metadata
             value_header: Value
         destroy:
@@ -1589,7 +1589,7 @@ en:
             success: Metadata was successfully updated
         form:
           create_field_button: Add another metadata field
-          key: Key
+          field_name: Field Name
           remove_field: Remove Field
           submit_button: Add
           value: Value
@@ -1625,14 +1625,14 @@ en:
           actions:
             delete_confirm: Are you sure you want to remove metadata field '%{deleted_key}' from the sample?
           update:
-            key: Key
+            field_name: Field Name
             update_metadata: Update Metadata
             value: Value
         nav_aria_label: Sample Navigation
         new_attachment_button: Upload Files
         table_header:
           action: Action
-          key: Key
+          field_name: Field Name
           last_updated: Last Updated
           source: Source
           value: Value

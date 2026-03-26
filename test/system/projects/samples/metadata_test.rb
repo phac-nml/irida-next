@@ -28,7 +28,7 @@ module Projects
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
         within '#sample-metadata table' do
-          assert_text I18n.t('projects.samples.show.table_header.key').upcase
+          assert_text I18n.t('projects.samples.show.table_header.field_name').upcase
           assert_selector 'tbody tr', count: 2
           assert_text 'metadatafield1'
           assert_text 'value1'
