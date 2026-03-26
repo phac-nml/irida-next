@@ -63,7 +63,7 @@ lib.mkMerge [
       enable = true;
       # Pin Corepack to Node 24 so pnpm/yarn shims run on Node 24
       package = pkgs.nodejs_24;
-      corepack.enable = true;
+      pnpm.enable = true;
     };
 
     languages.python = {
@@ -116,7 +116,7 @@ lib.mkMerge [
 
     scripts.validate-playwright = {
       exec = ''
-        playwrightNpmVersion="$(pnpm list playwright | grep playwright | awk '{print $2}')"
+        playwrightNpmVersion="$(pnpm list playwright --lockfile-only | grep playwright | awk -F'@' '{print $2}')"
 
         echo "❄️ Playwright nix version: ${pkgs.playwright-test.version}"
         echo "📦 Playwright npm version: $playwrightNpmVersion"
@@ -130,7 +130,6 @@ lib.mkMerge [
         echo
         env | grep ^PLAYWRIGHT
       '';
-      packages = [ pkgs.nodejs_24 pkgs.coreutils ];
       description = "Validate playwright";
     };
 
