@@ -9,6 +9,7 @@ class Component < ViewComponent::Base
   include Pathogen::ViewHelper
   include Pathogen::FormHelper
   include Pathogen::FormTagHelper
+  include IconHelper
 
   # Icon color variations 🎨.
   # Keys: color scheme symbols. Values: Tailwind CSS classes.

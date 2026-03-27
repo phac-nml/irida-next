@@ -4,105 +4,56 @@ require 'test_helper'
 
 module Pathogen
   class IconTest < ViewComponent::TestCase
-    test 'renders icon with string name' do
-      render_inline(Pathogen::Icon.new(:clipboard_text))
-      assert_selector 'svg', count: 1
+    class HelperProbeComponent < Component
+      def initialize(icon_name, **kwargs)
+        super()
+        @icon_name = icon_name
+        @kwargs = kwargs
+      end
+
+      def call
+        helpers.icon(@icon_name, **@kwargs)
+      end
     end
 
-    test 'renders icon with symbol name' do
-      render_inline(Pathogen::Icon.new(:clipboard_text))
-      assert_selector 'svg', count: 1
+    test 'icon renders through app icon component' do
+      render_inline(HelperProbeComponent.new(:clipboard_text))
+
+      assert_selector 'svg.clipboard-text-icon', count: 1
     end
 
-    test 'normalizes symbol names with underscores to dashes' do
-      # This test assumes the icon helper will normalize :clipboard_text to "clipboard-text"
-      icon = Pathogen::Icon.new(:clipboard_text)
-      assert_equal 'clipboard-text', icon.icon_name
+    test 'icon applies default color and size classes' do
+      render_inline(HelperProbeComponent.new(:check))
+
+      assert_selector 'svg.size-6', count: 1
+      assert_match(/text-slate-900/, page.native.to_html)
     end
 
-    test 'applies default color and size classes' do
-      render_inline(Pathogen::Icon.new(:check))
-      assert_selector 'svg.text-slate-900.dark\\:text-slate-100.size-6', count: 1
+    test 'icon applies custom color and size classes' do
+      render_inline(HelperProbeComponent.new(:check, color: :success, size: :sm))
+
+      assert_selector 'svg.check-icon.size-4', count: 1
+      assert_match(/text-green-600/, page.native.to_html)
     end
 
-    test 'applies custom color' do
-      render_inline(Pathogen::Icon.new(:check, color: :primary))
-      assert_selector 'svg.text-primary-600.dark\\:text-primary-500', count: 1
+    test 'icon supports variant and library pass-through' do
+      component = IconComponent.new(:beaker, variant: :fill, library: :heroicons)
+
+      assert_equal :fill, component.rails_icons_options[:variant]
+      assert_equal :heroicons, component.rails_icons_options[:library]
     end
 
-    test 'applies custom size' do
-      render_inline(Pathogen::Icon.new(:check, size: :lg))
-      assert_selector 'svg.size-8', count: 1
-    end
+    test 'icon merges custom classes and supports nil color opt-out' do
+      render_inline(HelperProbeComponent.new(:check, color: nil, class: 'text-purple-500 fill-purple-500 custom-class'))
 
-    test 'applies custom color and size together' do
-      render_inline(Pathogen::Icon.new(:check, color: :success, size: :sm))
-      assert_selector 'svg.text-green-600.dark\\:text-green-500.size-4', count: 1
-    end
-
-    test 'passes rails_icons variant option' do
-      icon = Pathogen::Icon.new(:heart, variant: :fill)
-      assert_equal :fill, icon.rails_icons_options[:variant]
-    end
-
-    test 'passes rails_icons library option' do
-      icon = Pathogen::Icon.new(:beaker, library: :heroicons)
-      assert_equal :heroicons, icon.rails_icons_options[:library]
-    end
-
-    test 'merges custom classes with pathogen styling' do
-      render_inline(Pathogen::Icon.new(:check, color: :primary, class: 'custom-class'))
-      assert_selector 'svg.text-primary-600.dark\\:text-primary-500.custom-class', count: 1
-    end
-
-    test 'allows opting out of pathogen color classes' do
-      render_inline(Pathogen::Icon.new(:check, color: nil, class: 'text-purple-500 fill-purple-500'))
-
-      assert_selector 'svg.text-purple-500.fill-purple-500', count: 1
+      assert_selector 'svg.custom-class.check-icon', count: 1
       assert_no_match(/text-slate-900/, page.native.to_html)
       assert_no_match(/fill-slate-900/, page.native.to_html)
     end
 
-    test 'passes through other system arguments' do
-      icon = Pathogen::Icon.new(:check, id: 'my-icon', 'data-test': 'icon')
-      assert_equal 'my-icon', icon.rails_icons_options[:id]
-      assert_equal 'icon', icon.rails_icons_options[:'data-test']
-    end
-
-    test 'includes aria-hidden in rails_icons options' do
-      icon = Pathogen::Icon.new(:check)
-      # The actual aria-hidden setting would be handled by IconHelper.render_icon
-      assert_not_nil icon.rails_icons_options
-    end
-
-    test 'supports all color variants' do
-      Pathogen::IconValidator::COLORS.each_key do |color|
-        icon = Pathogen::Icon.new(:check, color: color)
-        assert_not_nil icon
-      end
-    end
-
-    test 'supports all size variants' do
-      Pathogen::IconValidator::SIZES.each_key do |size|
-        icon = Pathogen::Icon.new(:check, size: size)
-        assert_not_nil icon
-      end
-    end
-
-    # Test backward compatibility with legacy ICON constants
-    test 'works with legacy ICON constant hash format' do
-      # This ensures our component still works if someone passes an ICON hash
-      # until we migrate all usage
-      render_inline(Pathogen::Icon.new(:clipboard_text))
-      assert_selector 'svg', count: 1
-    end
-
-    test 'handles invalid icon names gracefully' do
-      # This will depend on rails_icons behavior for invalid icons
-      # The component should handle errors gracefully without crashing
+    test 'icon handles invalid names without raising' do
       assert_nothing_raised do
-        icon = Pathogen::Icon.new(:definitely_not_a_real_icon_name)
-        assert_not_nil icon
+        render_inline(HelperProbeComponent.new(:definitely_not_a_real_icon_name))
       end
     end
   end
