@@ -57,7 +57,7 @@ module Mutations
         }
       end
 
-      payload_with_ids, metadata_fields, errors = build_metadata_fields_and_replace_gids(metadata_payload)
+      metadata_fields, errors = validate_and_build_metadata_fields(metadata_payload)
 
       unless errors.empty?
         user_errors = errors.map do |error|
@@ -73,7 +73,7 @@ module Mutations
         }
       end
 
-      Samples::Metadata::BulkUpdateService.new(namespace, payload_with_ids, metadata_fields, current_user).execute
+      Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields, current_user).execute
 
       status = get_status_message(namespace, metadata_payload.keys.count)
       user_errors = namespace.errors.map do |error|
@@ -115,15 +115,10 @@ module Mutations
       end
     end
 
-    def build_metadata_fields_and_replace_gids(metadata_payload) # rubocop:disable Metrics/MethodLength
+    def validate_and_build_metadata_fields(metadata_payload)
       metadata_fields = []
       errors = []
-      sample_gids_to_transform = {}
       metadata_payload.each do |sample_identifier, metadata|
-        if sample_identifier.start_with?('gid://')
-          sample_id = IridaSchema.parse_gid(sample_identifier, { expected_type: Sample }).model_id
-          sample_gids_to_transform[sample_identifier] = sample_id
-        end
         if metadata.is_a?(Hash)
           metadata_fields.concat(metadata.transform_keys(&:downcase).keys)
           metadata_fields.uniq
@@ -132,8 +127,7 @@ module Mutations
         end
       end
 
-      metadata_payload.transform_keys!(sample_gids_to_transform)
-      [metadata_payload, metadata_fields, errors]
+      [metadata_fields, errors]
     end
 
     def get_status_message(namespace, sample_count)

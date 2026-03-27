@@ -87,6 +87,8 @@ module Samples
 
       def find_sample(sample_identifier)
         id_type = determine_sample_identifier_type(sample_identifier)
+        sample_identifier = parse_gid(sample_identifier) if id_type == 'gid'
+
         if @namespace.group_namespace?
           query_group_samples(id_type, sample_identifier)
         else
@@ -99,15 +101,23 @@ module Samples
           'puid'
         elsif sample_identifier.match?(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
           'id'
+        elsif sample_identifier.start_with?('gid://')
+          'gid'
         else
           'name'
         end
       end
 
+      def parse_gid(sample_identifier)
+        IridaSchema.parse_gid(sample_identifier, { expected_type: Sample }).model_id
+      rescue StandardError => e
+        Rails.logger.error "An error occurred: #{e.message}"
+      end
+
       def query_group_samples(id_type, sample_identifier)
         scope_args = if id_type == 'puid'
                        { puid: sample_identifier }
-                     elsif id_type == 'id'
+                     elsif %w[id gid].include?(id_type)
                        { id: sample_identifier }
                      else
                        { name: sample_identifier }
@@ -127,7 +137,7 @@ module Samples
         project = @namespace.project
         if id_type == 'puid'
           Sample.find_by(puid: sample_identifier, project_id: project.id)
-        elsif id_type == 'id'
+        elsif %w[id gid].include?(id_type)
           Sample.find_by(id: sample_identifier, project_id: project.id)
         else
           sample = Sample.find_by(name: sample_identifier, project_id: project.id)
