@@ -21,7 +21,9 @@ FileUtils.chdir APP_ROOT do
   puts '== Installing Playwright driver =='
   PLAYWRIGHT_CLI_VERSION=`bundle exec ruby -e 'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION.strip'`
   system("pnpm add -D playwright@#{PLAYWRIGHT_CLI_VERSION}")
-  system('pnpm exec playwright install --with-deps')
+  if ENV.fetch("PLAYWRIGHT_BROWSERS_PATH", nil).nil?
+    system('pnpm exec playwright install --with-deps')
+  end
 
   puts "\n== Syncing icons =="
   system("bin/rails g rails_icons:sync --libraries=phosphor heroicons")
