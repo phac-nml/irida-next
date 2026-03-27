@@ -22,7 +22,7 @@ module Mutations
     validates required: { one_of: %i[project_id project_puid group_id group_puid] }
 
     field :errors, [Types::UserErrorType], description: 'A list of errors that prevented the mutation.'
-    field :samples, [ID], description: 'List of updated sample ids.'
+    field :samples, [String], description: 'List of updated sample ids.'
     field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation.'
 
     def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -73,7 +73,8 @@ module Mutations
         }
       end
 
-      Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields, current_user).execute
+      samples = Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields,
+                                                         current_user).execute
 
       status = get_status_message(namespace, metadata_payload.keys.count)
       user_errors = namespace.errors.map do |error|
@@ -83,7 +84,7 @@ module Mutations
         }
       end
       {
-        samples: nil,
+        samples:,
         status:,
         errors: user_errors
       }
