@@ -12,7 +12,7 @@
     </div>
 
     <div class="grow">
-      <div data-action="keydown->viral--v1--select2#keydown" class="select2">
+      <div data-action="keydown->select2--v1#keydown" class="select2">
         <%= tag.input(
           type: "text",
           id: id,
@@ -26,7 +26,7 @@
             text-slate-800 sm:text-sm @min-md:rounded-l-none! dark:border-slate-600 dark:bg-slate-800
             dark:text-slate-50 dark:placeholder-slate-400
           ",
-          data: { "viral--v1--select2-target": "input", action: "input->viral--v1--select2#input" },
+          data: { "select2--v1-target": "input", action: "input->select2--v1#input" },
           aria: aria
         ) %>
 
