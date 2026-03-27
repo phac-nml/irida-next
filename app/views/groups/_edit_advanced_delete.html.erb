@@ -1,24 +1,25 @@
 <%= viral_card do |card| %>
   <% card.with_header(title: t(:"groups.edit.advanced.delete.title")) %>
+
   <% card.with_section do %>
-    <div class="hidden confirm-delete">
-      <div
-        class="
-          flex p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-slate-800
-          dark:text-red-400
-        "
-      >
-        <%= pathogen_icon(:warning_circle) %>
-        <div class="flex-1 ml-4">
+    <div class="confirm-delete hidden">
+      <div class="mb-4 flex rounded-lg bg-red-50 p-4 text-red-800 dark:bg-slate-800 dark:text-red-400">
+        <%= icon(:warning_circle) %>
+
+        <div class="ml-4 flex-1">
           <%= t(
             :"groups.edit.advanced.delete.confirm.warning.pre_html",
             group_name: @group.name,
           ) %>
-          <ul class="py-2 ml-4 max-w-md space-y-1 list-disc list-inside">
-            <li><%= t(
+
+          <ul class="ml-4 max-w-md list-inside list-disc space-y-1 py-2">
+            <li>
+              <%= t(
                 :"groups.edit.advanced.delete.confirm.warning.subgroups_count",
                 count: @subgroups_count,
-              ) %></li>
+              ) %>
+            </li>
+
             <li><%= t(
                 :"groups.edit.advanced.delete.confirm.warning.projects_count",
                 count: @projects_count,
@@ -28,9 +29,11 @@
                 count: @samples_count,
               ) %></li>
           </ul>
+
           <%= t(:"groups.edit.advanced.delete.confirm.warning.post_html") %>
         </div>
       </div>
+
       <div class="mb-4">
         <% t(:"groups.edit.advanced.delete.confirm.points_html", group: @group.path).each do |item| %>
           <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
@@ -38,9 +41,7 @@
       </div>
     </div>
 
-    <p class="text-slate-600 dark:text-slate-400">
-      <%= t(:"groups.edit.advanced.delete.description") %>
-    </p>
+    <p class="text-slate-600 dark:text-slate-400"><%= t(:"groups.edit.advanced.delete.description") %></p>
 
     <div class="mt-4">
       <%= button_to t(:"groups.edit.advanced.delete.submit"),

@@ -45,7 +45,7 @@
         "
         aria-label="<%= t('components.nextflow.samplesheet_component.filter.clear') %>"
       >
-        <%= pathogen_icon(:x, size: :sm, color: :subdued) %>
+        <%= icon(:x, size: :sm, color: :subdued) %>
       </button>
 
       <!-- Submit/search button (hidden while clear button is active) -->
@@ -60,7 +60,7 @@
         "
         aria-label="<%= t('common.controls.search') %>"
       >
-        <%= pathogen_icon(:magnifying_glass, size: :sm, color: :subdued) %>
+        <%= icon(:magnifying_glass, size: :sm, color: :subdued) %>
       </button>
     </div>
   </div>
@@ -76,7 +76,7 @@
     "
   >
     <div class="flex w-full items-start">
-      <div class="mr-3 flex-shrink-0"><%= pathogen_icon :x_circle, color: :danger %></div>
+      <div class="mr-3 flex-shrink-0"><%= icon :x_circle, color: :danger %></div>
 
       <div class="mt-0.5 min-w-0 flex-1">
         <div class="text-sm leading-5 font-medium" data-nextflow--v2--samplesheet-target="errorMessage"></div>

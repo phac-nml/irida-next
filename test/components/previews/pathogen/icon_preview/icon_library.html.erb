@@ -1,27 +1,28 @@
-<div class="p-8 bg-gradient-to-br from-purple-50 to-pink-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+<div class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-8 dark:from-slate-900 dark:to-slate-800">
   <!-- Header -->
   <div class="mb-12 text-center">
-    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-      <%= render Pathogen::Icon.new(:squares_four, color: :primary, size: :xl, class: "inline mr-3") %>
-      Icon Library Showcase
+    <h1 class="mb-4 text-4xl font-bold text-slate-900 dark:text-slate-100">
+      <%= icon(:squares_four, color: :primary, size: :xl, class: "inline mr-3") %> Icon Library Showcase
     </h1>
-    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+
+    <p class="mx-auto max-w-3xl text-lg text-slate-600 dark:text-slate-400">
       Comprehensive collection of available icons across different libraries and categories.
     </p>
   </div>
 
   <!-- Phosphor Icons (Default) -->
   <div class="mb-12">
-    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new(:circle, color: :primary, class: "mr-3") %>
-      Phosphor Icons (Default Library)
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:circle, color: :primary, class: "mr-3") %> Phosphor Icons (Default Library)
     </h2>
-    <p class="text-slate-600 dark:text-slate-400 mb-6">The default icon library with a comprehensive set of icons.</p>
+
+    <p class="mb-6 text-slate-600 dark:text-slate-400">The default icon library with a comprehensive set of icons.</p>
 
     <!-- Common Icons -->
     <div class="mb-8">
-      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Common Interface Icons</h3>
-      <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-4">
+      <h3 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-100">Common Interface Icons</h3>
+
+      <div class="grid grid-cols-4 gap-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12">
         <% [
           :house_line, :user, :users, :gear_six, :gear_six, :bell, :envelope,
           :magnifying_glass, :plus, :minus, :x, :check,
@@ -31,11 +32,14 @@
           :arrow_up, :arrow_down, :arrow_left, :arrow_right, :caret_up, :caret_down,
           :question, :info, :warning, :check_circle, :x_circle
         ].each do |icon| %>
-          <div class="bg-white dark:bg-slate-800 rounded-lg p-3 text-center shadow-sm border border-slate-200 dark:border-slate-700">
-            <div class="flex items-center justify-center h-10 mb-2">
-              <%= render Pathogen::Icon.new(icon, color: :default, size: :md) %>
-            </div>
-            <p class="text-xs text-slate-600 dark:text-slate-400 break-words"><%= icon %></p>
+          <div
+            class="
+              rounded-lg border border-slate-200 bg-white p-3 text-center shadow-sm dark:border-slate-700
+              dark:bg-slate-800
+            "
+          >
+            <div class="mb-2 flex h-10 items-center justify-center"><%= icon(icon, color: :default, size: :md) %></div>
+            <p class="text-xs break-words text-slate-600 dark:text-slate-400"><%= icon %></p>
           </div>
         <% end %>
       </div>
@@ -43,8 +47,9 @@
 
     <!-- App-Specific Icons -->
     <div class="mb-8">
-      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Application Icons</h3>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <h3 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-100">Application Icons</h3>
+
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
         <% [
           { icon: :test_tube, name: "Samples", color: :primary },
           { icon: Project.icon, name: "Projects", color: :success },
@@ -53,11 +58,17 @@
           { icon: :export, name: "Data Exports", color: :subdued },
           { icon: :ticket, name: "Tokens", color: :primary }
         ].each do |item| %>
-          <div class="bg-white dark:bg-slate-800 rounded-lg p-4 text-center shadow-sm border border-slate-200 dark:border-slate-700">
-            <div class="flex items-center justify-center h-12 mb-3">
-              <%= render Pathogen::Icon.new(item[:icon], color: item[:color], size: :lg) %>
+          <div
+            class="
+              rounded-lg border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-slate-700
+              dark:bg-slate-800
+            "
+          >
+            <div class="mb-3 flex h-12 items-center justify-center">
+              <%= icon(item[:icon], color: item[:color], size: :lg) %>
             </div>
-            <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-1"><%= item[:name] %></h4>
+
+            <h4 class="mb-1 font-medium text-slate-900 dark:text-slate-100"><%= item[:name] %></h4>
             <code class="text-xs text-slate-500 dark:text-slate-400"><%= item[:icon] %></code>
           </div>
         <% end %>
@@ -67,89 +78,103 @@
 
   <!-- Heroicons -->
   <div class="mb-12">
-    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new(:beaker, library: :heroicons, color: :primary, class: "mr-3") %>
-      Heroicons Library
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:beaker, library: :heroicons, color: :primary, class: "mr-3") %> Heroicons Library
     </h2>
-    <p class="text-slate-600 dark:text-slate-400 mb-6">Beautiful hand-crafted SVG icons by the makers of Tailwind CSS.</p>
 
-    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Heroicons Examples</h3>
-      <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 mb-6">
+    <p class="mb-6 text-slate-600 dark:text-slate-400">
+      Beautiful hand-crafted SVG icons by the makers of Tailwind CSS.
+    </p>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <h3 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-100">Heroicons Examples</h3>
+
+      <div class="mb-6 grid grid-cols-4 gap-4 md:grid-cols-6 lg:grid-cols-8">
         <% [:beaker, :academic_cap, :adjustments_horizontal, :archive_box, :arrow_path, :bell, :book_open].each do |icon| %>
           <div class="text-center">
-            <div class="flex items-center justify-center h-10 mb-2">
-              <%= render Pathogen::Icon.new(icon, library: :heroicons, color: :primary, size: :md) %>
+            <div class="mb-2 flex h-10 items-center justify-center">
+              <%= icon(icon, library: :heroicons, color: :primary, size: :md) %>
             </div>
+
             <p class="text-xs text-slate-600 dark:text-slate-400"><%= icon %></p>
           </div>
         <% end %>
       </div>
 
-      <code class="block text-sm bg-slate-100 dark:bg-slate-700 p-3 rounded text-slate-700 dark:text-slate-300">
-        &lt;%= render Pathogen::Icon.new(:beaker, library: :heroicons) %&gt;
+      <code class="block rounded bg-slate-100 p-3 text-sm text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+        &lt;%= icon(:beaker, library: :heroicons) %&gt;
       </code>
     </div>
   </div>
 
   <!-- Icon Variants -->
   <div class="mb-12">
-    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new(:palette, color: :primary, class: "mr-3") %>
-      Icon Variants
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:palette, color: :primary, class: "mr-3") %> Icon Variants
     </h2>
-    <p class="text-slate-600 dark:text-slate-400 mb-6">Different visual styles for the same icon concept.</p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <p class="mb-6 text-slate-600 dark:text-slate-400">Different visual styles for the same icon concept.</p>
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
       <!-- Phosphor Variants -->
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4">Phosphor Variants</h3>
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <h3 class="mb-4 font-semibold text-slate-900 dark:text-slate-100">Phosphor Variants</h3>
+
         <div class="space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-slate-700 dark:text-slate-300">Regular (default)</span>
+
             <div class="flex items-center gap-3">
-              <%= render Pathogen::Icon.new(:heart, size: :lg, color: :danger) %>
-              <%= render Pathogen::Icon.new(:star, size: :lg, color: :warning) %>
-              <%= render Pathogen::Icon.new(:bookmark, size: :lg, color: :primary) %>
+              <%= icon(:heart, size: :lg, color: :danger) %>
+              <%= icon(:star, size: :lg, color: :warning) %>
+              <%= icon(:bookmark, size: :lg, color: :primary) %>
             </div>
           </div>
+
           <div class="flex items-center justify-between">
             <span class="text-slate-700 dark:text-slate-300">Fill</span>
+
             <div class="flex items-center gap-3">
-              <%= render Pathogen::Icon.new(:heart, variant: :fill, size: :lg, color: :danger) %>
-              <%= render Pathogen::Icon.new(:star, variant: :fill, size: :lg, color: :warning) %>
-              <%= render Pathogen::Icon.new(:bookmark, variant: :fill, size: :lg, color: :primary) %>
+              <%= icon(:heart, variant: :fill, size: :lg, color: :danger) %>
+              <%= icon(:star, variant: :fill, size: :lg, color: :warning) %>
+              <%= icon(:bookmark, variant: :fill, size: :lg, color: :primary) %>
             </div>
           </div>
+
           <div class="flex items-center justify-between">
             <span class="text-slate-700 dark:text-slate-300">Duotone</span>
+
             <div class="flex items-center gap-3">
-              <%= render Pathogen::Icon.new(:heart, variant: :duotone, size: :lg, color: :danger) %>
-              <%= render Pathogen::Icon.new(:star, variant: :duotone, size: :lg, color: :warning) %>
-              <%= render Pathogen::Icon.new(:bookmark, variant: :duotone, size: :lg, color: :primary) %>
+              <%= icon(:heart, variant: :duotone, size: :lg, color: :danger) %>
+              <%= icon(:star, variant: :duotone, size: :lg, color: :warning) %>
+              <%= icon(:bookmark, variant: :duotone, size: :lg, color: :primary) %>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Heroicons Variants -->
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4">Heroicons Variants</h3>
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <h3 class="mb-4 font-semibold text-slate-900 dark:text-slate-100">Heroicons Variants</h3>
+
         <div class="space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-slate-700 dark:text-slate-300">Outline (default)</span>
+
             <div class="flex items-center gap-3">
-              <%= render Pathogen::Icon.new(:heart, library: :heroicons, size: :lg, color: :danger) %>
-              <%= render Pathogen::Icon.new(:star, library: :heroicons, size: :lg, color: :warning) %>
-              <%= render Pathogen::Icon.new(:bookmark, library: :heroicons, size: :lg, color: :primary) %>
+              <%= icon(:heart, library: :heroicons, size: :lg, color: :danger) %>
+              <%= icon(:star, library: :heroicons, size: :lg, color: :warning) %>
+              <%= icon(:bookmark, library: :heroicons, size: :lg, color: :primary) %>
             </div>
           </div>
+
           <div class="flex items-center justify-between">
             <span class="text-slate-700 dark:text-slate-300">Solid</span>
+
             <div class="flex items-center gap-3">
-              <%= render Pathogen::Icon.new(:heart, library: :heroicons, variant: :solid, size: :lg, color: :danger) %>
-              <%= render Pathogen::Icon.new(:star, library: :heroicons, variant: :solid, size: :lg, color: :warning) %>
-              <%= render Pathogen::Icon.new(:bookmark, library: :heroicons, variant: :solid, size: :lg, color: :primary) %>
+              <%= icon(:heart, library: :heroicons, variant: :solid, size: :lg, color: :danger) %>
+              <%= icon(:star, library: :heroicons, variant: :solid, size: :lg, color: :warning) %>
+              <%= icon(:bookmark, library: :heroicons, variant: :solid, size: :lg, color: :primary) %>
             </div>
           </div>
         </div>
@@ -157,27 +182,33 @@
     </div>
 
     <!-- Variant Examples -->
-    <div class="mt-6 bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-      <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4">Using Variants</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <h3 class="mb-4 font-semibold text-slate-900 dark:text-slate-100">Using Variants</h3>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
-          <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-3">Phosphor Variants</h4>
+          <h4 class="mb-3 font-medium text-slate-900 dark:text-slate-100">Phosphor Variants</h4>
+
           <div class="space-y-2 text-sm">
-            <code class="block bg-slate-100 dark:bg-slate-700 p-2 rounded text-slate-700 dark:text-slate-300">
+            <code class="block rounded bg-slate-100 p-2 text-slate-700 dark:bg-slate-700 dark:text-slate-300">
               Icon.new(:heart, variant: :fill)
             </code>
-            <code class="block bg-slate-100 dark:bg-slate-700 p-2 rounded text-slate-700 dark:text-slate-300">
+
+            <code class="block rounded bg-slate-100 p-2 text-slate-700 dark:bg-slate-700 dark:text-slate-300">
               Icon.new(:star, variant: :duotone)
             </code>
           </div>
         </div>
+
         <div>
-          <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-3">Heroicons Variants</h4>
+          <h4 class="mb-3 font-medium text-slate-900 dark:text-slate-100">Heroicons Variants</h4>
+
           <div class="space-y-2 text-sm">
-            <code class="block bg-slate-100 dark:bg-slate-700 p-2 rounded text-slate-700 dark:text-slate-300">
+            <code class="block rounded bg-slate-100 p-2 text-slate-700 dark:bg-slate-700 dark:text-slate-300">
               Icon.new(:heart, library: :heroicons, variant: :solid)
             </code>
-            <code class="block bg-slate-100 dark:bg-slate-700 p-2 rounded text-slate-700 dark:text-slate-300">
+
+            <code class="block rounded bg-slate-100 p-2 text-slate-700 dark:bg-slate-700 dark:text-slate-300">
               Icon.new(:star, library: :heroicons, variant: :outline)
             </code>
           </div>
@@ -188,79 +219,71 @@
 
   <!-- Best Practices -->
   <div>
-    <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6 flex items-center">
-      <%= render Pathogen::Icon.new(:lightbulb, color: :primary, class: "mr-3") %>
-      Best Practices
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:lightbulb, color: :primary, class: "mr-3") %> Best Practices
     </h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
       <!-- Do's -->
-      <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
-        <h3 class="font-semibold text-green-800 dark:text-green-200 mb-4 flex items-center">
-          <%= render Pathogen::Icon.new(:check_circle, color: :success, size: :sm, class: "mr-2") %>
-          Do's
+      <div class="rounded-xl border border-green-200 bg-green-50 p-6 dark:border-green-800 dark:bg-green-900/20">
+        <h3 class="mb-4 flex items-center font-semibold text-green-800 dark:text-green-200">
+          <%= icon(:check_circle, color: :success, size: :sm, class: "mr-2") %> Do's
         </h3>
+
         <ul class="space-y-3 text-sm text-green-700 dark:text-green-300">
           <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Use semantic icons with aria-labels for meaningful content
+            <span class="mr-2">•</span> Use semantic icons with aria-labels for meaningful content
           </li>
+
           <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Choose appropriate sizes for context (sm for inline, lg for features)
+            <span class="mr-2">•</span> Choose appropriate sizes for context (sm for inline, lg for features)
           </li>
+
           <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Use color variants that match your UI state (success, danger, etc.)
+            <span class="mr-2">•</span> Use color variants that match your UI state (success, danger, etc.)
           </li>
+
+          <li class="flex items-start"><span class="mr-2">•</span> Leverage factory methods for common patterns</li>
+
           <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Leverage factory methods for common patterns
-          </li>
-          <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Test with screen readers when using semantic icons
+            <span class="mr-2">•</span> Test with screen readers when using semantic icons
           </li>
         </ul>
       </div>
 
       <!-- Don'ts -->
-      <div class="bg-red-50 dark:bg-red-900/20 rounded-xl p-6 border border-red-200 dark:border-red-800">
-        <h3 class="font-semibold text-red-800 dark:text-red-200 mb-4 flex items-center">
-          <%= render Pathogen::Icon.new(:x_circle, color: :danger, size: :sm, class: "mr-2") %>
-          Don'ts
+      <div class="rounded-xl border border-red-200 bg-red-50 p-6 dark:border-red-800 dark:bg-red-900/20">
+        <h3 class="mb-4 flex items-center font-semibold text-red-800 dark:text-red-200">
+          <%= icon(:x_circle, color: :danger, size: :sm, class: "mr-2") %> Don'ts
         </h3>
+
         <ul class="space-y-3 text-sm text-red-700 dark:text-red-300">
           <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Don't use semantic icons without proper aria-labels
+            <span class="mr-2">•</span> Don't use semantic icons without proper aria-labels
           </li>
+
           <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Don't mix icon libraries unnecessarily in the same interface
+            <span class="mr-2">•</span> Don't mix icon libraries unnecessarily in the same interface
           </li>
+
           <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Don't use colors that don't have semantic meaning
+            <span class="mr-2">•</span> Don't use colors that don't have semantic meaning
           </li>
-          <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Don't ignore the console warnings in development
-          </li>
-          <li class="flex items-start">
-            <span class="mr-2">•</span>
-            Don't use overly large icons in dense interfaces
-          </li>
+
+          <li class="flex items-start"><span class="mr-2">•</span> Don't ignore the console warnings in development</li>
+          <li class="flex items-start"><span class="mr-2">•</span> Don't use overly large icons in dense interfaces</li>
         </ul>
       </div>
     </div>
 
     <!-- Quick Reference -->
-    <div class="mt-6 bg-slate-100 dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
-      <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-4">Quick Reference</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+    <div class="mt-6 rounded-xl border border-slate-200 bg-slate-100 p-6 dark:border-slate-700 dark:bg-slate-800">
+      <h3 class="mb-4 font-semibold text-slate-900 dark:text-slate-100">Quick Reference</h3>
+
+      <div class="grid grid-cols-1 gap-4 text-sm md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-2">Colors</h4>
+          <h4 class="mb-2 font-medium text-slate-900 dark:text-slate-100">Colors</h4>
+
           <ul class="space-y-1 text-slate-600 dark:text-slate-400">
             <li>:default</li>
             <li>:primary</li>
@@ -270,8 +293,10 @@
             <li>:subdued</li>
           </ul>
         </div>
+
         <div>
-          <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-2">Sizes</h4>
+          <h4 class="mb-2 font-medium text-slate-900 dark:text-slate-100">Sizes</h4>
+
           <ul class="space-y-1 text-slate-600 dark:text-slate-400">
             <li>:sm (16px)</li>
             <li>:md (24px)</li>
@@ -279,15 +304,19 @@
             <li>:xl (40px)</li>
           </ul>
         </div>
+
         <div>
-          <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-2">Libraries</h4>
+          <h4 class="mb-2 font-medium text-slate-900 dark:text-slate-100">Libraries</h4>
+
           <ul class="space-y-1 text-slate-600 dark:text-slate-400">
             <li>:phosphor (default)</li>
             <li>:heroicons</li>
           </ul>
         </div>
+
         <div>
-          <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-2">Accessibility</h4>
+          <h4 class="mb-2 font-medium text-slate-900 dark:text-slate-100">Accessibility</h4>
+
           <ul class="space-y-1 text-slate-600 dark:text-slate-400">
             <li>semantic: true</li>
             <li>aria-label: "text"</li>

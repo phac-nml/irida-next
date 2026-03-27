@@ -25,7 +25,7 @@
     <td class="px-6 py-4">
       <div>
         <div class="mb-4 flex items-center">
-          <%= pathogen_icon(:arrow_right, color: :subdued) %>
+          <%= icon(:arrow_right, color: :subdued) %>
 
           <span>
             <%= link_to attachment.file.filename,
@@ -39,7 +39,7 @@
         </div>
 
         <div class="flex items-center">
-          <%= pathogen_icon(:arrow_left, color: :subdued) %>
+          <%= icon(:arrow_left, color: :subdued) %>
 
           <span>
             <%= link_to attachment.associated_attachment.file.filename,
@@ -57,7 +57,7 @@
     <td class="px-6 py-4">
       <div>
         <div class="flex items-center">
-          <%= pathogen_icon(Attachment.icon, color: :subdued) %>
+          <%= icon(Attachment.icon, color: :subdued) %>
 
           <span>
             <%= link_to attachment.file.filename,

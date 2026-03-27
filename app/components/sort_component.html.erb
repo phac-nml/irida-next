@@ -2,8 +2,6 @@
   <%= label %>
 
   <% unless icon.blank? %>
-    <span class="grow-0 ml-2 flex items-center">
-      <%= pathogen_icon(icon, size: :sm) %>
-    </span>
+    <span class="ml-2 flex grow-0 items-center"><%= helpers.icon(icon, size: :sm) %></span>
   <% end %>
 <% end %>

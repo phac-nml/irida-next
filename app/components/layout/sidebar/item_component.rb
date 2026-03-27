@@ -93,7 +93,7 @@ module Layout
           }
         )
 
-        pathogen_icon(@icon, size: nil, color: nil, class: icon_classes, variant: :duotone)
+        helpers.icon(@icon, size: nil, color: nil, class: icon_classes, variant: :duotone)
       end
     end
   end

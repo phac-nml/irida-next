@@ -1,40 +1,37 @@
 <%= viral_card do |card| %>
   <% card.with_header(title: t("groups.edit.advanced.transfer.title")) %>
-  <% card.with_section do %>
 
+  <% card.with_section do %>
     <% t("groups.edit.advanced.transfer.descriptions").each do |description| %>
       <p class="mb-2 text-base text-slate-900 dark:text-white"><%= description %></p>
     <% end %>
-    <ul
-      class="
-        mb-4 ml-4 space-y-1 text-slate-500 list-disc list-inside dark:text-slate-400
-      "
-    >
+
+    <ul class="mb-4 ml-4 list-inside list-disc space-y-1 text-slate-500 dark:text-slate-400">
       <% t("groups.edit.advanced.transfer.points").each do |item| %>
         <li><%= item %></li>
       <% end %>
     </ul>
 
     <div>
-      <div class="hidden confirm-transfer">
-        <div
-          class="
-            flex p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-slate-800
-            dark:text-red-400
-          "
-        >
-          <%= pathogen_icon(:warning_circle) %>
-          <span class="flex-1 ml-4"><%= t(
+      <div class="confirm-transfer hidden">
+        <div class="mb-4 flex rounded-lg bg-red-50 p-4 text-red-800 dark:bg-slate-800 dark:text-red-400">
+          <%= icon(:warning_circle) %>
+
+          <span class="ml-4 flex-1">
+            <%= t(
               "groups.edit.advanced.transfer.confirm.warning_html",
               group_name: group.human_name,
-            ) %></span>
+            ) %>
+          </span>
         </div>
+
         <div class="mb-4">
           <% t("groups.edit.advanced.transfer.confirm.points_html", group: group.path).each do |item| %>
             <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
           <% end %>
         </div>
       </div>
+
       <%= render "edit_advanced_transfer_form", confirm_value: group.path, error: nil %>
     </div>
   <% end %>

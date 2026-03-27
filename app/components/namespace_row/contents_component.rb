@@ -33,9 +33,9 @@ module NamespaceRow
 
     def avatar_icon
       if @namespace.group_namespace?
-        pathogen_icon(Group.icon, size: :md, color: :subdued)
+        icon(Group.icon, size: :md, color: :subdued)
       elsif @namespace.project_namespace?
-        pathogen_icon(Project.icon, size: :md, color: :subdued)
+        icon(Project.icon, size: :md, color: :subdued)
       end
     end
 

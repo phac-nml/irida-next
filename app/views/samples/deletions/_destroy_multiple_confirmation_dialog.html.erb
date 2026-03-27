@@ -1,8 +1,9 @@
 <%= viral_dialog(id: "multiple-deletions-dialog", open: open) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
+
   <div
     data-controller="infinite-scroll"
-    data-infinite-scroll-selection-outlet='#samples-table'
+    data-infinite-scroll-selection-outlet="#samples-table"
     data-infinite-scroll-paged-field-name-value="sample_ids[]"
     data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
     data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
@@ -13,19 +14,19 @@
       ) do %>
       <div data-infinite-scroll-target="pageFormContent"></div>
     <% end %>
+
     <div class="grid gap-4">
-      <p
-        data-infinite-scroll-target="summary"
-        class="text-base leading-relaxed text-slate-500 dark:text-slate-400"
-      ><%= t(".description.zero") %></p>
+      <p data-infinite-scroll-target="summary" class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+        <%= t(".description.zero") %>
+      </p>
+
       <div>
-        <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
-          <%= t(".samples") %>
-        </div>
+        <div class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"><%= t(".samples") %></div>
+
         <div
           class="
-            overflow-y-auto max-h-[300px] border border-slate-300 rounded-lg block w-full
-            p-2.5 dark:bg-slate-800 dark:border-slate-600
+            block max-h-[300px] w-full overflow-y-auto rounded-lg border border-slate-300 p-2.5
+            dark:border-slate-600 dark:bg-slate-800
           "
           data-action="scroll->infinite-scroll#scroll"
           data-infinite-scroll-target="scrollable"
@@ -60,16 +61,17 @@
         </div>
       <% end %>
     </div>
+
     <div
       role="status"
       id="spinner"
       class="
-        absolute grid hidden w-full h-full -translate-x-1/2 -translate-y-1/2
-        backdrop-blur-sm top-2/4 left-1/2 place-items-center
+        absolute top-2/4 left-1/2 grid hidden h-full w-full -translate-x-1/2 -translate-y-1/2 place-items-center
+        backdrop-blur-sm
       "
     >
       <div class="grid place-items-center">
-        <%= pathogen_icon :faded_spinner, library: "animated" %>
+        <%= icon :faded_spinner, library: "animated" %>
         <span class="text-black dark:text-white"><%= t(:".spinner") %>.</span>
       </div>
     </div>

@@ -1,5 +1,6 @@
 <%= render Viral::BaseComponent.new(tag: :div, **system_arguments) do %>
   <%= @form.label @field_name, @label, class: "sr-only" %>
+
   <div class="relative h-[44px]">
     <%= @form.search_field @field_name,
                        "data-search-field-target": "input",
@@ -13,21 +14,18 @@
                        },
                        placeholder: @placeholder,
                        value: @value %>
+
     <!-- Clear button (shown only when there are existing search results) -->
     <button
       type="button"
       data-search-field-target="clearButton"
       data-action="click->search-field#clear"
-      class="
-        absolute inset-y-0 right-0 flex items-center justify-center w-[44px]
-        pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
-        border-r border-b border-slate-300 dark:border-slate-600 hover:bg-slate-100
-        dark:hover:bg-slate-600 <%= clear_button? ? '' : 'hidden' %>
-      "
+      class="pointer-events-auto absolute inset-y-0 right-0 flex w-[44px] cursor-pointer items-center justify-center rounded-r-lg border-t border-r border-b border-slate-300 transition-colors hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-600 <%= clear_button? ? '' : 'hidden' %>"
       aria-label="<%= t('components.search_field_component.clear_button') %>"
     >
-      <%= pathogen_icon(:x, size: :sm, color: :subdued) %>
+      <%= icon(:x, size: :sm, color: :subdued) %>
     </button>
+
     <!-- Submit/search button (hidden while clear button is active) -->
     <button
       type="submit"
@@ -36,15 +34,10 @@
         click->search-field#clearSelection
         click->search-field#updateFocus
       "
-      class="
-        absolute inset-y-0 right-0 flex items-center justify-center w-[44px]
-        pointer-events-auto cursor-pointer rounded-r-lg transition-colors border-t
-        border-r border-b border-slate-300 dark:border-slate-600 hover:bg-slate-100
-        dark:hover:bg-slate-600 <%= clear_button? ? 'hidden' : '' %>
-      "
+      class="pointer-events-auto absolute inset-y-0 right-0 flex w-[44px] cursor-pointer items-center justify-center rounded-r-lg border-t border-r border-b border-slate-300 transition-colors hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-600 <%= clear_button? ? 'hidden' : '' %>"
       aria-label="<%= t('common.controls.search') %>"
     >
-      <%= pathogen_icon(:magnifying_glass, size: :sm, color: :subdued) %>
+      <%= icon(:magnifying_glass, size: :sm, color: :subdued) %>
     </button>
   </div>
 <% end %>

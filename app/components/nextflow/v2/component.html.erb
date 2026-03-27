@@ -39,7 +39,7 @@
     "
   >
     <div class="flex w-full items-start">
-      <div class="mr-3 flex-shrink-0"><%= pathogen_icon :x_circle, color: :danger %></div>
+      <div class="mr-3 flex-shrink-0"><%= icon :x_circle, color: :danger %></div>
 
       <div class="mt-0.5 min-w-0 flex-1">
         <div class="text-sm leading-5 font-medium" data-nextflow--v2--samplesheet-target="formFieldErrorMessage"></div>
@@ -130,7 +130,7 @@
                         dark:text-gray-400
                       "
                     >
-                      <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+                      <%= icon :faded_spinner, library: "animated", color: :primary %>
 
                       <span class="text-sm font-normal">
                         <%= t("components.nextflow_component.processing_samplesheet") %>
@@ -203,7 +203,7 @@
             "
             role="alert"
           >
-            <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+            <%= icon :faded_spinner, library: "animated", color: :primary %>
 
             <span class="text-sm font-medium text-slate-900 dark:text-white">
               <%= t("components.nextflow.verifying_update_samples") %>

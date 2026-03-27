@@ -18,7 +18,7 @@
       <% if icon.present? %>
         <span class="mr-2 grow-0">
           <% unless icon == :blank %>
-            <%= pathogen_icon(icon, size: :sm, color: :subdued, library: icon_library) %>
+            <%= helpers.icon(icon, size: :sm, color: :subdued, library: icon_library) %>
           <% end %>
         </span>
       <% end %>
@@ -36,7 +36,7 @@
       <% if icon.present? %>
         <span class="mr-2 size-4 grow-0">
           <% unless icon == :blank %>
-            <%= pathogen_icon(icon, size: :sm, color: :subdued, library: icon_library) %>
+            <%= helpers.icon(icon, size: :sm, color: :subdued, library: icon_library) %>
           <% end %>
         </span>
       <% end %>

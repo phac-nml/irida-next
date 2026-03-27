@@ -12,11 +12,11 @@ module Layout
     #     current_page: request.path
     #   ) do |menu| %>
     #     <% menu.with_menu_item(url: projects_path, selected: current_page?(projects_path)) do |item| %>
-    #       <% item.with_icon { pathogen_icon(Group.icon) } %>
+    #       <% item.with_icon { icon(Group.icon) } %>
     #       All Projects
     #     <% end %>
     #     <% menu.with_menu_item(url: new_project_path, selected: current_page?(new_project_path)) do |item| %>
-    #       <% item.with_icon { pathogen_icon(:plus) } %>
+    #       <% item.with_icon { icon(:plus) } %>
     #       New Project
     #     <% end %>
     #   <% end %>
@@ -84,7 +84,7 @@ module Layout
         # Only set variant for non-selected items to use duotone
         variant = @selected ? nil : :duotone
 
-        pathogen_icon(@icon, size: nil, color: nil, class: icon_classes, variant: variant)
+        helpers.icon(@icon, size: nil, color: nil, class: icon_classes, variant: variant)
       end
 
       # Determines if the menu should be expanded by default
