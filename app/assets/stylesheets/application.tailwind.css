@@ -399,7 +399,7 @@ input[type="search"] {
 
 @utility button {
   /* Base styles with WCAG AAA compliance */
-  @apply inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-lg border px-5 py-2.5 text-sm font-medium transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto;
+  @apply inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-lg border px-5 py-2.5 text-sm font-medium disabled:cursor-not-allowed sm:w-auto;
 
   /* Ensure focus is always visible */
   &:focus-visible {
@@ -408,13 +408,13 @@ input[type="search"] {
 
   /* Disabled state for button */
   &[aria-disabled="true"] {
-    @apply pointer-events-none cursor-not-allowed opacity-50;
+    @apply pointer-events-none cursor-not-allowed;
   }
 }
 
 @utility button-default {
   /* High contrast colors for WCAG AAA */
-  @apply border-slate-300 bg-white text-slate-900 hover:border-slate-400 hover:bg-slate-50 hover:text-slate-950 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:hover:border-slate-500 dark:hover:bg-slate-700 dark:hover:text-white;
+  @apply border-slate-300 bg-white text-slate-900 hover:border-slate-400 hover:bg-slate-50 hover:text-slate-950 disabled:border-slate-300 disabled:bg-slate-100 disabled:text-slate-600 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:hover:border-slate-500 dark:hover:bg-slate-700 dark:hover:text-white dark:disabled:border-slate-600 dark:disabled:bg-slate-700 dark:disabled:text-slate-300;
 
   /* Focus styles with high contrast */
   &:focus-visible {
@@ -424,7 +424,7 @@ input[type="search"] {
 
 @utility button-destructive {
   /* High contrast colors for WCAG AAA */
-  @apply border-red-700 bg-red-700 text-white hover:border-red-800 hover:bg-red-800 dark:border-red-600 dark:bg-red-600 dark:hover:border-red-700 dark:hover:bg-red-700;
+  @apply border-red-700 bg-red-700 text-white hover:border-red-800 hover:bg-red-800 disabled:border-red-200 disabled:bg-red-100 disabled:text-red-900 dark:border-red-600 dark:bg-red-600 dark:hover:border-red-700 dark:hover:bg-red-700 dark:disabled:border-red-800 dark:disabled:bg-red-900/40 dark:disabled:text-red-200;
 
   /* Focus styles with high contrast */
   &:focus-visible {
@@ -434,7 +434,7 @@ input[type="search"] {
 
 @utility button-primary {
   /* High contrast colors for WCAG AAA */
-  @apply border-primary-800 bg-primary-800 hover:bg-primary-900 hover:border-primary-900 dark:border-primary-700 dark:bg-primary-800 dark:hover:bg-primary-800 dark:hover:border-primary-800 text-white shadow-sm disabled:border-slate-300 disabled:bg-slate-300 disabled:text-slate-700 disabled:opacity-100 dark:disabled:border-slate-600 dark:disabled:bg-slate-700 dark:disabled:text-slate-200;
+  @apply border-primary-800 bg-primary-800 hover:border-primary-900 hover:bg-primary-900 dark:border-primary-700 dark:bg-primary-800 dark:hover:border-primary-800 dark:hover:bg-primary-800 text-white shadow-sm disabled:border-slate-300 disabled:bg-slate-300 disabled:text-slate-700 dark:disabled:border-slate-600 dark:disabled:bg-slate-700 dark:disabled:text-slate-200;
 
   /* Focus styles with high contrast */
   &:focus-visible {
