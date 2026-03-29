@@ -45,7 +45,7 @@ module Projects
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] th:first-child", text: @sample1.puid
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(2)", text: @sample1.name
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(3)",
-                      text: I18n.l(@sample1.created_at.to_date, format: :long)
+                      text: I18n.l(@sample1.created_at.localtime.to_date, format: :long)
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(4)", text: '3 hours ago'
       assert_selector "table tbody tr[id='#{dom_id(@sample1)}'] td:nth-child(5)", text: '2 hours ago'
       # actions tested by role in separate test
