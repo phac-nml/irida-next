@@ -19,8 +19,7 @@ module Samples
       def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         authorize! @namespace, to: :update_sample_metadata?
         activity_data = {}
-        not_updated = {}
-        unchanged = {}
+        unsuccessful_updates = { not_updated: {}, unchanged: {} }
         successful_samples = []
 
         starting_index = 0
@@ -30,7 +29,7 @@ module Samples
           should_update_progress_bar = true
         end
 
-        @metadata_payload.each.with_index(starting_index) do |(sample_identifier, metadata), index|
+        @metadata_payload.each.with_index(starting_index) do |(sample_identifier, metadata), index| # rubocop:disable Metrics/BlockLength
           update_progress_bar(index, @progress_bar_denominator, @broadcast_target) if should_update_progress_bar
           next unless validate_metadata_param(metadata, sample_identifier)
 
@@ -40,8 +39,14 @@ module Samples
           project_puid = sample.project.puid
           metadata_changes = perform_metadata_update(sample, metadata, false)
 
-          not_updated[sample_identifier] = metadata_changes[:not_updated] unless metadata_changes[:not_updated].empty?
-          unchanged[sample_identifier] = metadata_changes[:unchanged] unless metadata_changes[:unchanged].empty?
+          unless metadata_changes[:not_updated].empty?
+            unsuccessful_updates[:not_updated][sample_identifier] =
+              metadata_changes[:not_updated]
+          end
+          unless metadata_changes[:unchanged].empty?
+            unsuccessful_updates[:unchanged][sample_identifier] =
+              metadata_changes[:unchanged]
+          end
 
           if metadata_changes[:added].empty? && metadata_changes[:deleted].empty? && metadata_changes[:updated].empty?
             next
@@ -60,10 +65,7 @@ module Samples
           add_changes_to_metadata_summary(project_puid, metadata_changes)
         end
 
-        handle_unsuccessful_fields(unchanged, 'unchanged') unless unchanged.empty?
-        handle_unsuccessful_fields(not_updated, 'not_updated') unless not_updated.empty?
-        # handle_unchanged_fields(unchanged) unless unchanged.empty?
-        # handle_not_updated_fields(not_updated) unless not_updated.empty?
+        handle_unsuccessful_updates(unsuccessful_updates)
 
         create_activities_and_update_metadata_summary(activity_data) unless activity_data.empty?
         successful_samples
@@ -220,12 +222,14 @@ module Samples
                                           false)
       end
 
-      def handle_unsuccessful_fields(unsuccessful_updates, update_type)
-        unsuccessful_updates.each do |sample_identifier, changes|
-          @namespace.errors.add(:sample,
-                                I18n.t("services.samples.metadata.bulk_update.sample_metadata_fields_#{update_type}",
-                                       sample_name: sample_identifier,
-                                       metadata_fields: changes.join(', ')))
+      def handle_unsuccessful_updates(unsuccessful_updates)
+        unsuccessful_updates.each do |key, updates|
+          updates.each do |sample_identifier, changes|
+            @namespace.errors.add(:sample,
+                                  I18n.t("services.samples.metadata.bulk_update.sample_metadata_fields_#{key}",
+                                         sample_name: sample_identifier,
+                                         metadata_fields: changes.join(', ')))
+          end
         end
       end
 

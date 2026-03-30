@@ -76,7 +76,7 @@ module Mutations
       samples = Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields,
                                                          current_user).execute
 
-      status = get_status_message(namespace, metadata_payload.keys.count)
+      status = get_status_message(namespace, samples.count)
       user_errors = namespace.errors.map do |error|
         {
           path: [error.attribute.to_s.camelize(:lower)],
@@ -131,13 +131,13 @@ module Mutations
       [metadata_fields, errors]
     end
 
-    def get_status_message(namespace, sample_count)
-      if namespace.errors.count == sample_count
+    def get_status_message(namespace, successful_samples_count)
+      if successful_samples_count.zero? && namespace.errors.any?
         'unsuccessful'
-      elsif namespace.errors.any?
+      elsif successful_samples_count.positive? && namespace.errors.any?
         'successful with errors'
-      else
-        'successful with no errors'
+      elsif successful_samples_count.positive? && namespace.errors.none?
+        'successful'
       end
     end
   end
