@@ -313,7 +313,7 @@ GEM
       nokogiri (>= 1.14.3)
     highline (3.1.2)
       reline
-    holidays (8.8.0)
+    holidays (9.0.0)
     htmlbeautifier (1.4.3)
     htmlentities (4.3.4)
     i18n (1.14.8)
