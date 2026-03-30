@@ -16,12 +16,14 @@ export default class extends Controller {
     "errorMessageTemplate",
     "errorMessage",
     "ariaLive",
+    "maxDate",
   ];
 
   static values = {
     autosubmit: Boolean,
     calendarId: String,
     invalidDate: String,
+    invalidMaxDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
     errorMessageId: String,
@@ -45,11 +47,16 @@ export default class extends Controller {
 
   #dropdown;
 
+  #maxDate;
   #minDate;
 
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
+    }
+
+    if (this.hasMaxDateTarget) {
+      this.#setMaxDate();
     }
 
     this.boundHandleDatepickerInputFocus =
@@ -127,6 +134,12 @@ export default class extends Controller {
     } catch (error) {
       this.#handleError(error, "initializeDropdown");
     }
+  }
+
+  #setMaxDate() {
+    this.#maxDate = this.maxDateTarget.firstElementChild.innerText;
+    this.invalidMaxDateValue = this.invalidMaxDateValue.concat(this.#maxDate);
+    this.maxDateTarget.remove();
   }
 
   #setMinDate() {
@@ -269,7 +282,9 @@ export default class extends Controller {
     event.preventDefault();
     const dateInput = event.target.value;
     if (this.#validateDateInput(dateInput)) {
-      if (this.#minDate && this.#minDate > dateInput) {
+      if (this.#maxDate && dateInput > this.#maxDate) {
+        this.#enableInputErrorState(this.invalidMaxDateValue);
+      } else if (this.#minDate && this.#minDate > dateInput) {
         this.#enableInputErrorState(this.invalidMinDateValue);
       } else {
         if (this.autosubmitValue) {
@@ -407,6 +422,8 @@ export default class extends Controller {
       selectedDate: this.#selectedDate,
       selectedYear: this.#selectedYear,
       selectedMonthIndex: this.#selectedMonthIndex,
+      maxDate: this.#maxDate,
+      maxDateMessage: this.invalidMaxDateValue,
       minDate: this.#minDate,
       minDateMessage: this.invalidMinDateValue,
       autosubmit: this.autosubmitValue,
