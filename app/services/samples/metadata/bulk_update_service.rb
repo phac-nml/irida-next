@@ -87,10 +87,11 @@ module Samples
         false
       end
 
-      def validate_metadata_value(key, value, sample_name)
-        return unless value.is_a?(Hash)
+      def validate_metadata_value(key, value, sample_name) # rubocop:disable Naming/PredicateMethod
+        return true unless value.is_a?(Hash)
 
         @namespace.errors.add(:sample, I18n.t('services.samples.metadata.nested_metadata', sample_name:, key:))
+        false
       end
 
       def find_sample(sample_identifier)
@@ -143,18 +144,19 @@ module Samples
 
       def query_project_samples(id_type, sample_identifier)
         project = @namespace.project
-        if id_type == 'puid'
-          Sample.find_by(puid: sample_identifier, project_id: project.id)
-        elsif %w[id gid].include?(id_type)
-          Sample.find_by(id: sample_identifier, project_id: project.id)
-        else
-          sample = Sample.find_by(name: sample_identifier, project_id: project.id)
-          return sample unless sample.nil?
+        sample = if id_type == 'puid'
+                   Sample.find_by(puid: sample_identifier, project_id: project.id)
+                 elsif %w[id gid].include?(id_type)
+                   Sample.find_by(id: sample_identifier, project_id: project.id)
+                 else
+                   Sample.find_by(name: sample_identifier, project_id: project.id)
+                 end
+        return sample unless sample.nil?
 
-          @namespace.errors.add(:sample,
-                                I18n.t('services.samples.metadata.bulk_update.sample_not_found', sample_identifier:))
-          nil
-        end
+        @namespace.errors.add(:sample,
+                              I18n.t('services.samples.metadata.bulk_update.sample_not_found',
+                                     sample_identifier:))
+        nil
       end
 
       def add_group_sample_query_error(sample, sample_identifier)

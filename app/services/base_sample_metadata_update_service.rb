@@ -12,7 +12,8 @@ class BaseSampleMetadataUpdateService < BaseService
     metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
     sample.with_lock do
       metadata.each do |key, value|
-        validate_metadata_value(key, value, sample.name)
+        next unless validate_metadata_value(key, value, sample.name)
+
         key = strip_whitespaces(key.to_s.downcase)
         value = strip_whitespaces(value.to_s) # remove data types
         status = get_metadata_change_status(sample, key, value, force_update)

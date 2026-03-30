@@ -132,7 +132,7 @@ module Mutations
     end
 
     def get_status_message(namespace, successful_samples_count)
-      if successful_samples_count.zero? && namespace.errors.any?
+      if successful_samples_count.zero?
         'unsuccessful'
       elsif successful_samples_count.positive? && namespace.errors.any?
         'successful with errors'
