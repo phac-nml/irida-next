@@ -13,7 +13,9 @@ class ApplicationSetting < ApplicationRecord
     {
       signup_enabled: true,
       password_authentication_enabled: true,
-      cleanup_inactive_access_tokens_after_days: 30
+      cleanup_inactive_access_tokens_after_days: 30,
+      require_personal_access_token_expiry: false,
+      max_personal_access_token_lifetime_in_days: 365
     }
   end
 
