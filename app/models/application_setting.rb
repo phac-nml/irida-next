@@ -25,7 +25,6 @@ class ApplicationSetting < ApplicationRecord
 
   def self.build_from_defaults(attributes = {})
     final_attributes = defaults.merge(attributes).stringify_keys.slice(*column_names)
-
     new(final_attributes)
   end
 
@@ -40,7 +39,7 @@ class ApplicationSetting < ApplicationRecord
   private
 
   def only_one_instance
-    return unless ApplicationSetting.count >= 1
+    return unless ApplicationSetting.many?
 
     errors.add(:base, 'Only one instance of ApplicationSetting is allowed')
   end
