@@ -44,6 +44,7 @@ module Datepicker
         @required = required
         @errored = errored
         @min_date = min_date
+        @max_date = max_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments
         @min_year = calculate_min_year
@@ -110,6 +111,8 @@ module Datepicker
         @system_arguments[:data]['datepicker--v1--input-autosubmit-value'] = @autosubmit
         @system_arguments[:data]['datepicker--v1--input-invalid-date-value'] =
           I18n.t('components.datepicker.errors.invalid_date')
+        @system_arguments[:data]['datepicker--v1--input-invalid-max-date-value'] =
+          I18n.t('components.datepicker.errors.max_date_error')
         @system_arguments[:data]['datepicker--v1--input-invalid-min-date-value'] =
           I18n.t('components.datepicker.errors.min_date_error')
         @system_arguments[:data]['datepicker--v1--input-calendar-id-value'] = @calendar_id
@@ -138,6 +141,14 @@ module Datepicker
         @calendar_arguments[:data]['datepicker--v1--calendar-datepicker--v1--input-outlet'] =
           "##{@container_id}"
         @calendar_arguments[:data]['datepicker--v1--calendar-months-value'] = @months
+      end
+
+      def max_date
+        if Irida::CurrentSettings.require_personal_access_token_expiry?
+          return Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days
+        end
+
+        nil
       end
     end
   end
