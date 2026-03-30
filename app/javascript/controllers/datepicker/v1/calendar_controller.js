@@ -425,7 +425,6 @@ export default class extends Controller {
       this.#todaysFormattedFullDate,
     );
     const selectedDate = getDateNode(this.calendarTarget, this.#selectedDate);
-    const maxDate = getDateNode(this.calendarTarget, this.#maxDate);
     const minDate = getDateNode(this.calendarTarget, this.#minDate);
     // if minimum date and selected or todays date land on same calendar (year/month),
     // prioritize selectedDate > todaysDate > minDate as tabbable
