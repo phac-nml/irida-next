@@ -35,7 +35,7 @@ class ApplicationSetting < ApplicationRecord
   private
 
   def only_one_instance
-    return unless ApplicationSetting.many?
+    return unless ApplicationSetting.count >= 1
 
     errors.add(:base, 'Only one instance of ApplicationSetting is allowed')
   end
