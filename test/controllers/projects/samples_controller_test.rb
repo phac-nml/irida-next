@@ -262,6 +262,32 @@ module Projects
       end
     end
 
+    test 'should filter project samples by name' do
+      sample2 = samples(:sample2)
+      sample30 = samples(:sample30)
+
+      get namespace_project_samples_url(@namespace, @project),
+          params: { q: { name_or_puid_cont: @sample1.name } }
+
+      assert_response :success
+      assert_includes rendered_sample_puids, @sample1.puid
+      assert_not_includes rendered_sample_puids, sample2.puid
+      assert_not_includes rendered_sample_puids, sample30.puid
+    end
+
+    test 'should filter project samples by puid' do
+      sample2 = samples(:sample2)
+      sample30 = samples(:sample30)
+
+      get namespace_project_samples_url(@namespace, @project),
+          params: { q: { name_or_puid_cont: sample2.puid } }
+
+      assert_response :success
+      assert_not_includes rendered_sample_puids, @sample1.puid
+      assert_includes rendered_sample_puids, sample2.puid
+      assert_not_includes rendered_sample_puids, sample30.puid
+    end
+
     test 'should persist quick-search sort state across requests via session' do
       sample2 = samples(:sample2)
 
@@ -277,6 +303,26 @@ module Projects
       assert_sort_state(2, 'ascending')
       assert_includes rendered_sample_puids, @sample1.puid
       assert_not_includes rendered_sample_puids, sample2.puid
+    end
+
+    test 'should persist quick-search filter state across requests via session' do
+      sample2 = samples(:sample2)
+      sample30 = samples(:sample30)
+
+      get namespace_project_samples_url(@namespace, @project),
+          params: { q: { name_or_puid_cont: @sample1.name } }
+      assert_response :success
+      assert_equal @sample1.name, rendered_search_field_value
+      assert_includes rendered_sample_puids, @sample1.puid
+      assert_not_includes rendered_sample_puids, sample2.puid
+      assert_not_includes rendered_sample_puids, sample30.puid
+
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+      assert_equal @sample1.name, rendered_search_field_value
+      assert_includes rendered_sample_puids, @sample1.puid
+      assert_not_includes rendered_sample_puids, sample2.puid
+      assert_not_includes rendered_sample_puids, sample30.puid
     end
 
     test 'should clear metadata sort when metadata template is none' do
@@ -315,6 +361,11 @@ module Projects
     def rendered_sample_puids
       doc = Nokogiri::HTML(response.body)
       doc.css('#samples-table table tbody tr th:first-child').map { |node| node.text.strip }
+    end
+
+    def rendered_search_field_value
+      doc = Nokogiri::HTML(response.body)
+      doc.at_css('input[data-test-selector="search-field-input"]')['value']
     end
   end
 end
