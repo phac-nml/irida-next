@@ -287,7 +287,6 @@ module Projects
       assert_includes rendered_sample_puids, sample2.puid
       assert_not_includes rendered_sample_puids, sample30.puid
     end
-
     test 'should persist quick-search sort state across requests via session' do
       sample2 = samples(:sample2)
 
@@ -304,7 +303,6 @@ module Projects
       assert_includes rendered_sample_puids, @sample1.puid
       assert_not_includes rendered_sample_puids, sample2.puid
     end
-
     test 'should persist quick-search filter state across requests via session' do
       sample2 = samples(:sample2)
       sample30 = samples(:sample30)
@@ -324,7 +322,6 @@ module Projects
       assert_not_includes rendered_sample_puids, sample2.puid
       assert_not_includes rendered_sample_puids, sample30.puid
     end
-
     test 'should clear metadata sort when metadata template is none' do
       get namespace_project_samples_url(@namespace, @project),
           params: { q: { metadata_template: 'all', sort: 'metadata_metadatafield1 asc' } }
