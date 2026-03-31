@@ -44,6 +44,7 @@ class LayoutComponentTest < ViewComponent::TestCase
 
       # Verify main content
       assert_selector '.content', text: 'Hello, World!'
+      assert_selector 'main#main-content[tabindex="0"]'
 
       # Verify language selection
       assert_button I18n.t('locales.en')
