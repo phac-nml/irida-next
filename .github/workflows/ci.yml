@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  pull_request: null
+  pull_request:
   push:
     branches: [main]
 
@@ -47,7 +47,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -74,13 +73,10 @@ jobs:
       - name: Prepare RuboCop cache
         uses: actions/cache@v5
         env:
-          DEPENDENCIES_HASH: ${{ hashFiles('.ruby-version', '**/.rubocop.yml', '**/.rubocop_todo.yml',
-            'Gemfile.lock') }}
+          DEPENDENCIES_HASH: ${{ hashFiles('.ruby-version', '**/.rubocop.yml', '**/.rubocop_todo.yml', 'Gemfile.lock') }}
         with:
           path: ${{ env.RUBOCOP_CACHE_ROOT }}
-          key: rubocop-${{ runner.os }}-${{ env.DEPENDENCIES_HASH }}-${{ github.ref_name
-            == github.event.repository.default_branch && github.run_id || 'default'
-            }}
+          key: rubocop-${{ runner.os }}-${{ env.DEPENDENCIES_HASH }}-${{ github.ref_name == github.event.repository.default_branch && github.run_id || 'default' }}
           restore-keys: |
             rubocop-${{ runner.os }}-${{ env.DEPENDENCIES_HASH }}-
 
@@ -97,8 +93,7 @@ jobs:
 
       - name: Lint ERB templates (Herb)
         if: steps.changed-erb-files.outputs.any_changed == 'true'
-        run: pnpm run herb:lint ${{ steps.changed-erb-files.outputs.all_changed_files
-          }}
+        run: pnpm run herb:lint ${{ steps.changed-erb-files.outputs.all_changed_files }}
 
       - name: Check ERB formatting (Herb)
         if: steps.changed-erb-files.outputs.any_changed == 'true'
@@ -113,13 +108,12 @@ jobs:
         image: postgres:14.17
         env:
           POSTGRES_DB: irida_next_test
-          POSTGRES_HOST: postgres
           POSTGRES_PASSWORD: test
           POSTGRES_USER: test
+          POSTGRES_HOST: postgres
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s
-          --health-retries=3
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
       validator:
         image: ghcr.io/validator/validator:24.10.17
@@ -169,13 +163,12 @@ jobs:
         image: postgres
         env:
           POSTGRES_DB: irida_next_test
-          POSTGRES_HOST: postgres
           POSTGRES_PASSWORD: test
           POSTGRES_USER: test
+          POSTGRES_HOST: postgres
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s
-          --health-retries=3
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
       validator:
         image: ghcr.io/validator/validator:24.10.17
@@ -240,9 +233,9 @@ jobs:
         uses: actions/upload-artifact@v7
         if: failure()
         with:
-          if-no-files-found: ignore
           name: screenshots
           path: ${{ github.workspace }}/tmp/capybara/screenshots
+          if-no-files-found: ignore
 
   sapporo-test:
     timeout-minutes: 10
@@ -253,9 +246,9 @@ jobs:
         image: postgres:14.17
         env:
           POSTGRES_DB: irida_next_test
-          POSTGRES_HOST: postgres
           POSTGRES_PASSWORD: test
           POSTGRES_USER: test
+          POSTGRES_HOST: postgres
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
@@ -272,7 +265,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Set up PNPM
         uses: pnpm/action-setup@v5
@@ -291,9 +284,9 @@ jobs:
       - name: Download Sapporo
         uses: actions/checkout@v6
         with:
-          path: ./sapporo
-          ref: irida-next
           repository: phac-nml/sapporo-service
+          ref: irida-next
+          path: ./sapporo
 
       - name: Build Sapporo
         run: |
@@ -306,8 +299,8 @@ jobs:
         with:
           run: |
             IRIDA_NEXT_PATH=${GITHUB_WORKSPACE}/tmp MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml exec app bash -c "sapporo"
-          wait-for: 2m
           wait-on: http-get://localhost:1122/service-info
+          wait-for: 2m
           working-directory: sapporo
 
       - name: Update permissions
