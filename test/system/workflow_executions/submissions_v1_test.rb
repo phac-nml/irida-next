@@ -721,6 +721,7 @@ module WorkflowExecutions
     end
 
     test 'samplesheet pagination' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       user = users(:john_doe)
       login_as user
@@ -789,6 +790,7 @@ module WorkflowExecutions
     end
 
     test 'data retained in samplesheet after data and page change' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       user = users(:john_doe)
       login_as user
@@ -865,6 +867,7 @@ module WorkflowExecutions
     end
 
     test 'pagination does not render if only one page of samples' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       user = users(:john_doe)
       login_as user
@@ -913,6 +916,7 @@ module WorkflowExecutions
     end
 
     test 'pagination filtering' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       user = users(:john_doe)
       sample3 = samples(:sample3)
@@ -985,6 +989,7 @@ module WorkflowExecutions
     end
 
     test 'samplesheet filtering still paginates' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       user = users(:john_doe)
       login_as user
@@ -1049,6 +1054,7 @@ module WorkflowExecutions
     end
 
     test 'samplesheet filtering empty state' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       user = users(:john_doe)
       login_as user
@@ -1116,6 +1122,7 @@ module WorkflowExecutions
     end
 
     test 'samplesheet filter search and clear buttons' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       user = users(:john_doe)
       login_as user
@@ -1317,6 +1324,7 @@ module WorkflowExecutions
     end
 
     test 'samplesheet metadata values retained after workflow submission' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       user = users(:john_doe)
       namespace = groups(:group_twelve)
@@ -1458,6 +1466,7 @@ module WorkflowExecutions
     end
 
     test 'default fastq files retained upon workflow submission' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
       # verify samples table loaded
@@ -1515,6 +1524,7 @@ module WorkflowExecutions
     end
 
     test 'samplesheet fastq file data retained after changing file selection after workflow submission' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
       # verify samples table loaded
@@ -1585,6 +1595,7 @@ module WorkflowExecutions
     end
 
     test 'samplesheet fastq file data retained after changing file selection to non-PE after workflow submission' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       attachment_d = attachments(:attachmentD)
       visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
@@ -1655,6 +1666,7 @@ module WorkflowExecutions
     end
 
     test 'samplesheet metadata change while filtering' do
+      skip 'Covered by v2 samplesheet matrix; keep v1 smoke coverage only'
       ### SETUP START ###
       user = users(:metadata_doe)
       project = projects(:projectMetadata)
