@@ -19,15 +19,12 @@ module Datepicker
       # @param input_name [String] The name attribute for the date input. This is required.
       # @param label [String] A label for the input (optional).
       # @param input_aria_label [String] Aria label for the input. Necessary for accessibility if no label is passed.
+      # @param max_date [String] A maximum date the user can input.
       # @param min_date [String] A minimum date the user can input.
       # @param selected_date [String] The already selected date if it exists.
       # @param autosubmit [Boolean] Submits the date upon selection if true
-<<<<<<< HEAD
       # @param required [Boolean] Sets aria-required="true" on input_field_component if true
       # @param errored [Boolean] Initializes the datepicker in an error state if true (determined by backend validation)
-=======
-      # @param type [String] The type of datepicker, which can affect behavior such as max_date calculation.
->>>>>>> 78be9ca25 (Updated datepicker to accept a type which accepts a string so we can differentiate between regular datepicker vs the personal access token datepicker since we can set a max date for personal access tokens)
       # @param calendar_arguments [Hash] HTML attributes for the datepicker
       # @param system_arguments [Hash] HTML attributes for the main container (<div>).
       # @raise [ArgumentError] if id is not provided.
@@ -35,12 +32,8 @@ module Datepicker
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
-<<<<<<< HEAD
-                     selected_date: nil, autosubmit: false, required: false, errored: false,
+                     max_date: nil, selected_date: nil, autosubmit: false, required: false, errored: false,
                      calendar_arguments: {}, **system_arguments)
-=======
-                     selected_date: nil, autosubmit: false, type: 'default', calendar_arguments: {}, **system_arguments)
->>>>>>> 78be9ca25 (Updated datepicker to accept a type which accepts a string so we can differentiate between regular datepicker vs the personal access token datepicker since we can set a max date for personal access tokens)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'input_name is required' if input_name.blank?
 
@@ -48,7 +41,6 @@ module Datepicker
         @input_name = input_name
         @input_aria_label = input_aria_label
         @selected_date = selected_date
-        @type = type
         @autosubmit = autosubmit
         @required = required
         @errored = errored
@@ -150,14 +142,6 @@ module Datepicker
         @calendar_arguments[:data]['datepicker--v1--calendar-datepicker--v1--input-outlet'] =
           "##{@container_id}"
         @calendar_arguments[:data]['datepicker--v1--calendar-months-value'] = @months
-      end
-
-      def max_date
-        if @type == 'personal_access_token' && Irida::CurrentSettings.require_personal_access_token_expiry?
-          return Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days
-        end
-
-        nil
       end
     end
   end
