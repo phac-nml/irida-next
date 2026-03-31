@@ -427,7 +427,6 @@ export default class extends Controller {
       minDate: this.#minDate,
       minDateMessage: this.invalidMinDateValue,
       autosubmit: this.autosubmitValue,
-      type: this.typeValue,
     };
     this.datepickerV1CalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,

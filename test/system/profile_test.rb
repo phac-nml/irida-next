@@ -142,6 +142,27 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text I18n.t('profiles.personal_access_tokens.create.success', name: 'my new token')
   end
 
+  test 'cannot create personal access token without expiration date if require_personal_access_token_expiry is set' do
+    Irida::CurrentSettings.current_application_settings.update(require_personal_access_token_expiry: true)
+
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    within %(form[action="/-/profile/personal_access_tokens"]) do
+      fill_in 'Token name', with: 'my new token'
+      check 'api', allow_label_click: true
+      click_button I18n.t(:'profiles.personal_access_tokens.create.submit')
+    end
+
+    assert_no_text 'my new token'
+    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
+                       count: @active_token_count)
+
+    assert_text I18n.t(:'errors.format',
+                       attribute: I18n.t(:'activerecord.attributes.personal_access_token.expires_at'),
+                       message: I18n.t(:'errors.messages.blank'))
+  end
+
   test 'cannot create personal access token without scope selection' do
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
