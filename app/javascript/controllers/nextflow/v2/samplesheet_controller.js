@@ -968,6 +968,7 @@ export default class extends Controller {
     this.#samplesheetAttributes = {};
     this.#fileAttributes = {};
     this.#allowedToUpdateSamples = true;
+    this.#sampleAttributesRequestFailed = false;
   }
 
   // example: a 3000 sample request will be chunked into:
