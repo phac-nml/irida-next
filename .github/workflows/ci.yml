@@ -207,8 +207,8 @@ jobs:
         id: playwright-cache
         uses: actions/cache@v5
         with:
-          path: ~/.cache/ms-playwright
           key: playwright-browsers-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          path: ~/.cache/ms-playwright
 
       - name: Install Playwright Chromium browser (with deps)
         if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -219,12 +219,10 @@ jobs:
         run: pnpm exec playwright install-deps chromium
 
       - name: Install icons
-        run: |
-          bin/rails generate rails_icons:install --libraries=phosphor heroicons
+        run: bin/rails generate rails_icons:install --libraries=phosphor heroicons
 
       - name: Precompile assets
-        run: |
-          bin/rails assets:precompile
+        run: bin/rails assets:precompile
 
       - name: Run System Tests
         env:
@@ -236,7 +234,7 @@ jobs:
         if: failure()
         with:
           name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
+          path: ${{ github.workspace }}/tmp/capybara/screenshots
           if-no-files-found: ignore
 
   sapporo-test:
@@ -309,5 +307,4 @@ jobs:
         run: sudo chmod -R 777 ${GITHUB_WORKSPACE}
 
       - name: Run tests
-        run: |
-          bin/rails test test/integration/sapporo/integration_sapporo_test.rb
+        run: bin/rails test test/integration/sapporo/integration_sapporo_test.rb

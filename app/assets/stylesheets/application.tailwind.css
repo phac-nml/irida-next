@@ -570,7 +570,7 @@ input[type="search"] {
   }
 
   .dialog--section {
-    @apply p-5 break-words sm:max-h-[calc(75vh-1.25rem-3.5rem)] sm:overflow-y-auto;
+    @apply p-5 break-words -outline-offset-3! sm:max-h-[calc(75vh-1.25rem-3.5rem)] sm:overflow-y-auto;
   }
 
   strong {

@@ -2,10 +2,10 @@
   controller: "viral--dialog",
   "viral--dialog-open-value": open
 }, classes: ["dialog"]) do %>
-
   <% if trigger.present? %>
     <%= trigger %>
   <% end %>
+
   <div class="contents">
     <%= render Viral::BaseComponent.new(tag: :dialog, classes: ["overflow-visible", @dialog_size], data: { 'viral--dialog-target': 'dialog'}) do %>
       <%= render Viral::BaseComponent.new(tag: :div, id: id, **system_arguments) do %>
@@ -13,20 +13,14 @@
           <%= header %>
         <% end %>
 
-        <div class="dialog--section border-t border-slate-200 dark:border-slate-600">
-          <%= content %>
-        </div>
+        <div class="dialog--section border-t border-slate-200 dark:border-slate-600" tabindex="0"><%= content %></div>
 
         <% if render_footer? %>
-          <div
-            class="
-              flex items-center p-5 space-x-2 border-t rounded-b-lg border-slate-200
-              dark:border-slate-600
-            "
-          >
+          <div class="flex items-center space-x-2 rounded-b-lg border-t border-slate-200 p-5 dark:border-slate-600">
             <% if primary_action? %>
               <%= primary_action %>
             <% end %>
+
             <% if secondary_actions? %>
               <% secondary_actions.each do |action| %>
                 <%= action %>
