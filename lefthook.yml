@@ -38,7 +38,11 @@ pre-commit:
     - name: yaml_format
       glob: "*.{yml,yaml}"
       exclude:
+        - ".herb.yml"
+        - ".octocov.yml"
+        - ".rubocop.yml"
         - "lefthook.yml"
+        - "pnpm-lock.yaml"
         - "config/locales/*.yml"
         - "config/locales/**/*.yml"
         - "config/locales/*.yaml"
