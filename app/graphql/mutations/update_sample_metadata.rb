@@ -72,9 +72,9 @@ module Mutations
           errors: user_errors
         }
       end
-      params = namespace.group_namespace? ? { group_access_level: Member::AccessLevel::UPLOADER } : {}
+
       samples = Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields,
-                                                         current_user, params).execute
+                                                         current_user).execute
 
       status = get_status_message(namespace, samples.count)
       user_errors = namespace.errors.map do |error|
