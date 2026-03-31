@@ -311,34 +311,6 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal({ 'newmetadatafield2' => 'value2', 'newmetadatafield3' => 'value3' }, @sample2.reload.metadata)
   end
 
-  # TODO: figure out group pat permission
-  # test 'valid params and api scope token with uploader level at group level' do
-  #   user = users(:user_group_bot_account0)
-  #   token = personal_access_tokens(:user_group_bot_account0_valid_pat)
-
-  #   assert @sample1.metadata.empty?
-  #   assert @sample2.metadata.empty?
-  #   metadata_payload = { @sample1.to_global_id.to_s => { 'newmetadatafield1' => 'value1' },
-  #                        @sample2.name => { 'newmetadatafield2' => 'value2', 'newmetadatafield3' => 'value3' } }
-  #   result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
-  #                                context: { current_user: user, token: },
-  #                                variables: { metadataPayload: metadata_payload,
-  #                                             groupId: @group1.to_global_id.to_s })
-
-  #   assert_nil result['errors'], 'should work and have no errors.'
-
-  #   data = result['data']['updateSampleMetadata']
-  #   assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
-  #   assert_empty data['errors']
-  #   assert_equal 'successful', data['status']
-  #   assert_equal 2, data['samples'].count
-  #   # assert_includes(data['samples'], @sample1.to_global_id.to_s)
-  #   # assert_includes(data['samples'], @sample2.name)
-
-  #   # assert_equal({ 'newmetadatafield1' => 'value1' }, @sample1.reload.metadata)
-  #   # assert_equal({ 'newmetadatafield2' => 'value2', 'newmetadatafield3' => 'value3' }, @sample2.reload.metadata)
-  # end
-
   test 'empty metadata' do
     assert @sample3.metadata.empty?
     metadata_payload = { @sample3.to_global_id.to_s => { 'newmetadatafield1' => 'value1' },
@@ -558,5 +530,51 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal({ 'newmetadatafield2' => 'newvalue2' }, @sample2.reload.metadata)
     assert_equal({ 'new metadatafield3' => 'new value 3' }, @sample3.reload.metadata)
     assert_equal({ 'new metadatafield 4' => 'new value 4' }, @sample4.reload.metadata)
+  end
+
+  test 'cannot update shared sample without proper shared access' do
+    token = personal_access_tokens(:sample_actions_doe_valid_pat)
+    group = groups(:group_sample_actions)
+    user = users(:sample_actions_doe)
+    sample = samples(:sample71)
+
+    metadata_payload = { sample.puid => { 'newmetadatafield1' => 'value1' } }
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_PUID_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { metadataPayload: metadata_payload,
+                                              groupPuid: group.puid })
+    data = result['data']['updateSampleMetadata']
+    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    assert_equal 'unsuccessful', data['status']
+    assert_empty data['samples']
+    assert_includes data['errors'], {
+      'path' => ['sample'],
+      'message' => I18n.t('services.samples.metadata.bulk_update.sample_not_found', sample_identifier: sample.puid)
+    }
+  end
+
+  test 'can update shared sample with proper shared access' do
+    token = personal_access_tokens(:sample_actions_doe_valid_pat)
+    group = groups(:group_sample_actions)
+    user = users(:sample_actions_doe)
+    sample = samples(:sample70)
+
+    assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample.metadata)
+    metadata_payload = { sample.puid => { 'newmetadatafield1' => 'value1' } }
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { metadataPayload: metadata_payload,
+                                              groupId: group.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['updateSampleMetadata']
+    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    assert_empty data['errors']
+    assert_equal 'successful', data['status']
+    assert_equal [sample.puid], data['samples']
+
+    assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'newmetadatafield1' => 'value1' },
+                 sample.reload.metadata)
   end
 end
