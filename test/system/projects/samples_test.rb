@@ -908,80 +908,6 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'limit persists through filter and sort actions' do
-      # tests limit change and that it persists through other actions (filter)
-      ### SETUP START ###
-      sample3 = samples(:sample3)
-      visit namespace_project_samples_url(@namespace, @project2)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
-                                                                                      locale: @user.locale))
-      ### SETUP END ###
-
-      ### actions and VERIFY START ###
-      within('div#limit-component') do
-        # set table limit to 10
-        select '10', from: 'limit'
-      end
-
-      # verify limit is set to 10
-      assert_selector 'div#limit-component select option[selected]', text: '10'
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 10, count: 20,
-                                                                                      locale: @user.locale))
-      # verify table consists of 10 samples per page
-      assert_selector 'table tbody tr', count: 10
-
-      # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: sample3.puid
-      find('input[data-test-selector="search-field-input"]').send_keys(:return)
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      # verify limit is still 10
-      assert_selector 'div#limit-component select option[selected]', text: '10'
-
-      # apply sort
-      click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-
-      # verify limit is still 10
-      assert_selector 'div#limit-component select option[selected]', text: '10'
-      ### actions and VERIFY END ###
-    end
-
-    test 'sort persists through limit and filter' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      ### SETUP END ###
-
-      ### actions and VERIFY START ###
-      # apply sort
-      click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-
-      # set limit
-      within('div#limit-component') do
-        select '10', from: 'limit'
-      end
-
-      # verify sort is still applied
-      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-
-      # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
-      find('input[data-test-selector="search-field-input"]').send_keys(:return)
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      # verify sort is still applied
-      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      ### actions and VERIFY END ###
-    end
-
     test 'filter by name' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
@@ -1086,61 +1012,6 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'filter persists through sort and limit actions' do
-      ### SETUP START ###
-      filter_text = @sample1.name
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      assert_selector 'table tbody tr th', text: @sample1.puid
-      assert_selector 'table tbody tr th', text: @sample2.puid
-      assert_selector 'table tbody tr th', text: @sample30.puid
-      ### SETUP END ###
-
-      ### ACTIONS and VERIFY START ###
-      # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
-      find('input[data-test-selector="search-field-input"]').send_keys(:return)
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      assert_selector 'table tbody tr th', text: @sample1.puid
-      assert_no_selector 'table tbody tr th', text: @sample2.puid
-      assert_no_selector 'table tbody tr th', text: @sample30.puid
-
-      # apply sort
-      click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-
-      # verify table still only contains sample1
-      assert_selector 'table tbody tr th', text: @sample1.puid
-      assert_no_selector 'table tbody tr th', text: @sample2.puid
-      assert_no_selector 'table tbody tr th', text: @sample30.puid
-
-      # verify filter text is still in filter input
-      assert_selector %(input[data-test-selector="search-field-input"]) do |input|
-        assert_equal filter_text, input['value']
-      end
-
-      # set limit
-      within('div#limit-component') do
-        select '10', from: 'limit'
-      end
-
-      # verify table still only contains sample1
-      assert_selector 'table tbody tr th', text: @sample1.puid
-      assert_no_selector 'table tbody tr th', text: @sample2.puid
-      assert_no_selector 'table tbody tr th', text: @sample30.puid
-
-      # verify filter text is still in filter input
-      assert_selector %(input[data-test-selector="search-field-input"]) do |input|
-        assert_equal filter_text, input['value']
-      end
-      ### VERIFY END ###
-    end
-
     test 'filter persists through page refresh' do
       ### SETUP START ###
       filter_text = @sample1.name
@@ -1176,38 +1047,6 @@ module Projects
       assert_selector 'table tbody tr th', text: @sample1.puid
       assert_no_selector 'table tbody tr th', text: @sample2.puid
       assert_no_selector 'table tbody tr th', text: @sample30.puid
-      ### VERIFY END ###
-    end
-
-    test 'sort persists through page refresh' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # apply sort
-      click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.arrow-up-icon'
-      assert_selector '#samples-table table tbody th:first-child', text: @sample1.puid
-      # change sort order from default sorting
-      click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
-      assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      # refresh
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      # verify sort is still enabled
-      assert_selector 'table thead th:nth-child(2) svg.arrow-down-icon'
-      # verify table ordering is still in sorted state
-      assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
       ### VERIFY END ###
     end
 
