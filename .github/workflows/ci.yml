@@ -1,313 +1,261 @@
-name: CI
-
-on:
-  pull_request:
-  push:
-    branches: [main]
-
-permissions:
-  contents: read
-  pull-requests: write
-
 jobs:
-  scan_ruby:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
-
-      - name: Scan for known security vulnerabilities in gems used
-        run: bin/bundler-audit
-
-  scan_js:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
-
   lint:
-    runs-on: ubuntu-latest
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-
       - name: Set up PNPM
         uses: pnpm/action-setup@v5
         with:
           version: 10
-
       - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
-          node-version: 24
           cache: "pnpm"
-
+          node-version: 24
       - name: Install JavaScript dependencies
         run: pnpm install
-
-      - name: Prepare RuboCop cache
+      - env:
+          DEPENDENCIES_HASH: ${{ hashFiles('.ruby-version', '**/.rubocop.yml', '**/.rubocop_todo.yml',
+            'Gemfile.lock') }}
+        name: Prepare RuboCop cache
         uses: actions/cache@v5
-        env:
-          DEPENDENCIES_HASH: ${{ hashFiles('.ruby-version', '**/.rubocop.yml', '**/.rubocop_todo.yml', 'Gemfile.lock') }}
         with:
+          key: rubocop-${{ runner.os }}-${{ env.DEPENDENCIES_HASH }}-${{ github.ref_name
+            == github.event.repository.default_branch && github.run_id || 'default'
+            }}
           path: ${{ env.RUBOCOP_CACHE_ROOT }}
-          key: rubocop-${{ runner.os }}-${{ env.DEPENDENCIES_HASH }}-${{ github.ref_name == github.event.repository.default_branch && github.run_id || 'default' }}
           restore-keys: |
             rubocop-${{ runner.os }}-${{ env.DEPENDENCIES_HASH }}-
-
       - name: Lint code for consistent style
         run: bin/rubocop -f github
-
-      - name: Get changed ERB files
-        id: changed-erb-files
+      - id: changed-erb-files
+        name: Get changed ERB files
         uses: tj-actions/changed-files@v47
         with:
           files: |
             **/*.erb
             **/*.html.erb
-
-      - name: Lint ERB templates (Herb)
-        if: steps.changed-erb-files.outputs.any_changed == 'true'
-        run: pnpm run herb:lint ${{ steps.changed-erb-files.outputs.all_changed_files }}
-
-      - name: Check ERB formatting (Herb)
-        if: steps.changed-erb-files.outputs.any_changed == 'true'
-        run: pnpm run herb:format:check ${{ steps.changed-erb-files.outputs.all_changed_files }}
-
-  test:
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:14.17
-        env:
-          POSTGRES_DB: irida_next_test
-          POSTGRES_PASSWORD: test
-          POSTGRES_USER: test
-          POSTGRES_HOST: postgres
-        ports:
-          - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      validator:
-        image: ghcr.io/validator/validator:24.10.17
-        env:
-          VALIDATOR_HOST: validator
-        ports:
-          - 8888:8888
-
-    steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y curl libjemalloc2 libvips
-
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Set up PNPM
-        uses: pnpm/action-setup@v5
-        with:
-          version: 10
-
-      - name: Use Node.js 24
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Run tests
-        env:
-          RAILS_ENV: test
-          DEFAULT_TEST_EXCLUDE: test/{system,components,integration/sapporo,dummy,fixtures}/**/*_test.rb
-        run: bin/rails db:test:prepare test
-
-  system-test:
-    timeout-minutes: 30
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_DB: irida_next_test
-          POSTGRES_PASSWORD: test
-          POSTGRES_USER: test
-          POSTGRES_HOST: postgres
-        ports:
-          - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      validator:
-        image: ghcr.io/validator/validator:24.10.17
-        env:
-          VALIDATOR_HOST: validator
-        ports:
-          - 8888:8888
-
-    steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y curl libjemalloc2 libvips
-
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Set up PNPM
-        uses: pnpm/action-setup@v5
-        with:
-          version: 10
-
-      - name: Use Node.js 24
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Cache Playwright Chromium browser
-        id: playwright-cache
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-
-      - name: Install Playwright Chromium browser (with deps)
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Install Playwright Chromium browser deps
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm exec playwright install-deps chromium
-
-      - name: Install icons
-        run: |
-          bin/rails generate rails_icons:install --libraries=phosphor heroicons
-
-      - name: Precompile assets
-        run: |
-          bin/rails assets:precompile
-
-      - name: Run System Tests
-        env:
-          RAILS_ENV: test
-        run: bin/rails db:test:prepare test:system test:components
-
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v7
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
-
+      - if: steps.changed-erb-files.outputs.any_changed == 'true'
+        name: Lint ERB templates (Herb)
+        run: pnpm run herb:lint ${{ steps.changed-erb-files.outputs.all_changed_files
+          }}
+      - if: steps.changed-erb-files.outputs.any_changed == 'true'
+        name: Check ERB formatting (Herb)
+        run: pnpm run herb:format:check ${{ steps.changed-erb-files.outputs.all_changed_files
+          }}
   sapporo-test:
-    timeout-minutes: 10
     runs-on: ubuntu-latest
-
     services:
       postgres:
-        image: postgres:14.17
         env:
           POSTGRES_DB: irida_next_test
+          POSTGRES_HOST: postgres
           POSTGRES_PASSWORD: test
           POSTGRES_USER: test
-          POSTGRES_HOST: postgres
+        image: postgres:14.17
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries
+          5
         ports:
           - 5432:5432
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Check out code
         uses: actions/checkout@v6
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
+          bundler-cache: true
       - name: Set up PNPM
         uses: pnpm/action-setup@v5
         with:
           version: 10
-
       - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
-          node-version: 24
           cache: "pnpm"
-
+          node-version: 24
       - name: Install dependencies
         run: pnpm install
-
       - name: Download Sapporo
         uses: actions/checkout@v6
         with:
-          repository: phac-nml/sapporo-service
-          ref: irida-next
           path: ./sapporo
-
+          ref: irida-next
+          repository: phac-nml/sapporo-service
       - name: Build Sapporo
         run: |
           cd sapporo
           IRIDA_NEXT_PATH=${GITHUB_WORKSPACE}/tmp MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml up -d --build
           cd ..
-
       - name: Run Sapporo
         uses: JarvusInnovations/background-action@v1
         with:
           run: |
             IRIDA_NEXT_PATH=${GITHUB_WORKSPACE}/tmp MYUID="$(id -u)" MYGID="$(id -g)" docker compose -f compose.irida-next.yml exec app bash -c "sapporo"
-          wait-on: http-get://localhost:1122/service-info
           wait-for: 2m
+          wait-on: http-get://localhost:1122/service-info
           working-directory: sapporo
-
       - name: Update permissions
         run: sudo chmod -R 777 ${GITHUB_WORKSPACE}
-
       - name: Run tests
         run: |
           bin/rails test test/integration/sapporo/integration_sapporo_test.rb
+    timeout-minutes: 10
+  scan_js:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Scan for security vulnerabilities in JavaScript dependencies
+        run: bin/importmap audit
+  scan_ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Scan for common Rails security vulnerabilities using static analysis
+        run: bin/brakeman --no-pager
+      - name: Scan for known security vulnerabilities in gems used
+        run: bin/bundler-audit
+  system-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        env:
+          POSTGRES_DB: irida_next_test
+          POSTGRES_HOST: postgres
+          POSTGRES_PASSWORD: test
+          POSTGRES_USER: test
+        image: postgres
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 5432:5432
+      validator:
+        env:
+          VALIDATOR_HOST: validator
+        image: ghcr.io/validator/validator:24.10.17
+        ports:
+          - 8888:8888
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y
+          curl libjemalloc2 libvips
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          cache: "pnpm"
+          node-version: 24
+      - name: Install dependencies
+        run: pnpm install
+      - id: playwright-cache
+        name: Cache Playwright Chromium browser
+        uses: actions/cache@v5
+        with:
+          key: playwright-browsers-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml')
+            }}
+          path: ~/.cache/ms-playwright
+      - if: steps.playwright-cache.outputs.cache-hit != 'true'
+        name: Install Playwright Chromium browser (with deps)
+        run: pnpm exec playwright install --with-deps chromium
+      - if: steps.playwright-cache.outputs.cache-hit == 'true'
+        name: Install Playwright Chromium browser deps
+        run: pnpm exec playwright install-deps chromium
+      - name: Install icons
+        run: |
+          bin/rails generate rails_icons:install --libraries=phosphor heroicons
+      - name: Precompile assets
+        run: |
+          bin/rails assets:precompile
+      - env:
+          RAILS_ENV: test
+        name: Run System Tests
+        run: bin/rails db:test:prepare test:system test:components
+      - if: failure()
+        name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v7
+        with:
+          if-no-files-found: ignore
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/capybara/screenshots
+    timeout-minutes: 30
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        env:
+          POSTGRES_DB: irida_next_test
+          POSTGRES_HOST: postgres
+          POSTGRES_PASSWORD: test
+          POSTGRES_USER: test
+        image: postgres:14.17
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 5432:5432
+      validator:
+        env:
+          VALIDATOR_HOST: validator
+        image: ghcr.io/validator/validator:24.10.17
+        ports:
+          - 8888:8888
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y
+          curl libjemalloc2 libvips
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          cache: "pnpm"
+          node-version: 24
+      - name: Install dependencies
+        run: pnpm install
+      - env:
+          DEFAULT_TEST_EXCLUDE: test/{system,components,integration/sapporo,dummy,fixtures}/**/*_test.rb
+          RAILS_ENV: test
+        name: Run tests
+        run: bin/rails db:test:prepare test
+    timeout-minutes: 15
+name: CI
+'on':
+  pull_request: null
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  pull-requests: write
