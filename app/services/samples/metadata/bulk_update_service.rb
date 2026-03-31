@@ -14,6 +14,8 @@ module Samples
         @metadata_summary_data = {}
         @broadcast_target = params.key?(:broadcast_target) ? params[:broadcast_target] : nil
         @progress_bar_denominator = params.key?(:progress_bar_denominator) ? params[:progress_bar_denominator] : nil
+        @group_access_level =
+          params.key?(:group_access_level) ? params[:group_access_level] : Member::AccessLevel::MAINTAINER
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -133,7 +135,7 @@ module Samples
                      end
         sample = authorized_scope(Sample, type: :relation, as: :namespace_samples,
                                           scope_options: { namespace: @namespace,
-                                                           minimum_access_level: Member::AccessLevel::MAINTAINER })
+                                                           minimum_access_level: @group_access_level })
                  .where(scope_args)
 
         return sample.first unless sample.count != 1
