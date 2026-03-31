@@ -243,6 +243,57 @@ module Projects
       assert_first_rows_include(sample30.name, sample2.name, row_scope: '#samples-table-body')
     end
 
+    test 'should apply sort semantics to filtered project samples' do
+      sample2 = samples(:sample2)
+
+      get namespace_project_samples_url(@namespace, @project),
+          params: { q: { name_or_puid_cont: 'Sample 2', sort: 'puid desc' }, limit: 50 }
+
+      assert_response :success
+      assert_sort_state(1, 'descending')
+
+      rendered_puids = rendered_sample_puids
+      assert_includes rendered_puids, sample2.puid
+      assert_includes rendered_puids, samples(:sample30).puid
+      assert_not_includes rendered_puids, @sample1.puid
+
+      rendered_puids.each_cons(2) do |left, right|
+        assert_operator left, :>=, right
+      end
+    end
+
+    test 'should persist quick-search sort state across requests via session' do
+      sample2 = samples(:sample2)
+
+      get namespace_project_samples_url(@namespace, @project),
+          params: { q: { name_or_puid_cont: @sample1.puid, sort: 'name asc' } }
+      assert_response :success
+      assert_sort_state(2, 'ascending')
+      assert_includes rendered_sample_puids, @sample1.puid
+      assert_not_includes rendered_sample_puids, sample2.puid
+
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+      assert_sort_state(2, 'ascending')
+      assert_includes rendered_sample_puids, @sample1.puid
+      assert_not_includes rendered_sample_puids, sample2.puid
+    end
+
+    test 'should clear metadata sort when metadata template is none' do
+      get namespace_project_samples_url(@namespace, @project),
+          params: { q: { metadata_template: 'all', sort: 'metadata_metadatafield1 asc' } }
+
+      assert_response :success
+      assert_sort_state(6, 'ascending')
+
+      get namespace_project_samples_url(@namespace, @project),
+          params: { q: { metadata_template: 'none' } }
+
+      assert_response :success
+      assert_sort_state(4, 'descending')
+      assert_equal 'updated_at desc', session["samples_#{@project.id}_search_params"]['sort']
+    end
+
     test 'accessing samples index on invalid page causes pagy overflow redirect at project level' do
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
       # The rescue_from handler should redirect to first page with page=1 and limit=20
@@ -257,6 +308,13 @@ module Projects
       # Follow the redirect and verify it's successful
       follow_redirect!
       assert_response :success
+    end
+
+    private
+
+    def rendered_sample_puids
+      doc = Nokogiri::HTML(response.body)
+      doc.css('#samples-table table tbody tr th:first-child').map { |node| node.text.strip }
     end
   end
 end
