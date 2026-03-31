@@ -6,18 +6,17 @@ import {
   getLowercaseContent,
   highlightOption,
   setActiveDescendant,
-} from "controllers/select_with_auto_complete/utils";
+} from "controllers/combobox/utils";
+import FloatingDropdown from "utilities/floating_dropdown";
 
 /**
- * SelectWithAutoCompleteController
- *
  * Accessible, searchable dropdown with keyboard navigation.
  * - Keyboard navigation (Arrow keys, Enter, Escape, Home, End)
  * - Search filtering
  * - ARIA roles and attributes for accessibility
  * - Dropdown positioning and focus management
  */
-export default class SelectWithAutoCompleteController extends Controller {
+export default class extends Controller {
   static targets = ["combobox", "listbox", "hidden", "ariaLiveUpdate"];
   static values = {
     noResultsText: String,
@@ -25,6 +24,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     multipleResultsText: String,
   };
 
+  #floatingDropdown = null;
   #filter;
   #filteredOptions;
   #allOptions;
@@ -33,6 +33,13 @@ export default class SelectWithAutoCompleteController extends Controller {
   #lastOption;
 
   connect() {
+    this.#filter = this.comboboxTarget.value;
+    this.#filteredOptions = [];
+    this.#allOptions = [];
+    this.#option = null;
+    this.#firstOption = null;
+    this.#lastOption = null;
+
     this.boundOnBackgroundMouseDown = this.#onBackgroundMouseDown.bind(this);
     this.boundOnComboboxKeyDown = this.#onComboboxKeyDown.bind(this);
     this.boundOnComboboxKeyUp = this.#onComboboxKeyUp.bind(this);
@@ -40,20 +47,24 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.boundOnOptionClick = this.#onOptionClick.bind(this);
     this.boundOnComboboxFocus = this.#onComboboxFocus.bind(this);
 
-    this.#filter = "";
-    this.#filteredOptions = [];
-    this.#allOptions = [];
-    this.#option = null;
-    this.#firstOption = null;
-    this.#lastOption = null;
+    this.#floatingDropdown = new FloatingDropdown({
+      trigger: this.comboboxTarget,
+      dropdown: this.listboxTarget,
+      manageAria: false,
+      onShow: () => this.#onShow(),
+      onHide: () => this.#onHide(),
+    });
 
     // Add debounced filter for search input
     this.debouncedFilterAndUpdate = debounce(() => {
       const option = this.#filterOptions();
-      if (this.#isClosed() && this.comboboxTarget.value.length) {
-        this.#open();
-      }
       this.#setOption(option);
+      if (
+        !this.#floatingDropdown.isVisible() &&
+        this.comboboxTarget.value.length
+      ) {
+        this.#floatingDropdown.show();
+      }
     }, 300);
 
     // Add event handlers
@@ -67,7 +78,11 @@ export default class SelectWithAutoCompleteController extends Controller {
     this.#addListboxEventListeners(this.listboxTarget);
 
     // Initialize
-    this.#setOption(this.#filterOptions());
+    if (this.#filter) {
+      const option = this.#filterOptions();
+      this.#setOption(option);
+      this.#setValue(option);
+    }
   }
 
   disconnect() {
@@ -82,6 +97,9 @@ export default class SelectWithAutoCompleteController extends Controller {
 
     this.#removeComboboxEventListeners(this.comboboxTarget);
     this.#removeListboxEventListeners(this.listboxTarget);
+
+    this.#floatingDropdown?.destroy();
+    this.#floatingDropdown = null;
   }
 
   #addListboxEventListeners(container) {
@@ -99,17 +117,6 @@ export default class SelectWithAutoCompleteController extends Controller {
       .forEach((item) => {
         this.#removeListboxOptionEventListeners(item);
       });
-  }
-
-  #setValue(option) {
-    this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
-    this.#filter = option ? option.textContent : "";
-    this.comboboxTarget.value = this.#filter;
-    this.comboboxTarget.setSelectionRange(
-      this.#filter.length,
-      this.#filter.length,
-    );
-    this.#filterOptions();
   }
 
   #renderNoResults() {
@@ -194,7 +201,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     if (option === null) {
       this.#renderNoResults();
     }
-    if (this.#isOpen()) {
+    if (this.#floatingDropdown.isVisible()) {
       this.#announceNumberOfResults();
     }
 
@@ -221,6 +228,16 @@ export default class SelectWithAutoCompleteController extends Controller {
       this.#lastOption = null;
     }
     return option;
+  }
+
+  #setValue(option) {
+    this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
+    this.#filter = option ? option.textContent : "";
+    this.comboboxTarget.value = this.#filter;
+    this.comboboxTarget.setSelectionRange(
+      this.#filter.length,
+      this.#filter.length,
+    );
   }
 
   #setOption(option) {
@@ -255,25 +272,17 @@ export default class SelectWithAutoCompleteController extends Controller {
 
   // Menu display methods
 
-  #isOpen() {
-    return this.listboxTarget.style.display === "block";
-  }
-
-  #isClosed() {
-    return this.listboxTarget.style.display !== "block";
-  }
-
   #hasOptions() {
     return this.#filteredOptions.length;
   }
 
-  #open() {
+  #onShow() {
     this.listboxTarget.style.display = "block";
     this.listboxTarget.removeAttribute("aria-hidden");
     this.comboboxTarget.setAttribute("aria-expanded", "true");
   }
 
-  #close() {
+  #onHide() {
     this.listboxTarget.style.display = "none";
     this.listboxTarget.setAttribute("aria-hidden", "true");
     this.comboboxTarget.setAttribute("aria-expanded", "false");
@@ -293,7 +302,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Enter": {
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
-        this.#close();
+        this.#floatingDropdown.hide();
         flag = true;
         break;
       }
@@ -309,8 +318,8 @@ export default class SelectWithAutoCompleteController extends Controller {
               this.#setOption(this.#firstOption);
             }
           }
-          if (this.#isClosed()) {
-            this.#open();
+          if (!this.#floatingDropdown.isVisible()) {
+            this.#floatingDropdown.show();
           }
         }
         flag = true;
@@ -319,10 +328,10 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Up":
       case "ArrowUp":
         if (this.#hasOptions()) {
-          if (this.#isOpen()) {
+          if (this.#floatingDropdown.isVisible()) {
             this.#setOption(this.#getPreviousOption(this.#option));
           } else {
-            this.#open();
+            this.#floatingDropdown.show();
             if (!altKey) {
               this.#setOption(this.#lastOption);
             }
@@ -333,8 +342,8 @@ export default class SelectWithAutoCompleteController extends Controller {
 
       case "Esc":
       case "Escape":
-        if (this.#isOpen()) {
-          this.#close();
+        if (this.#floatingDropdown.isVisible()) {
+          this.#floatingDropdown.hide();
         } else {
           this.#setValue();
           this.#setOption(null);
@@ -345,7 +354,7 @@ export default class SelectWithAutoCompleteController extends Controller {
       case "Tab": {
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
-        this.#close();
+        this.#floatingDropdown.hide();
         break;
       }
       case "Home": {
@@ -414,11 +423,7 @@ export default class SelectWithAutoCompleteController extends Controller {
   }
 
   #onComboboxClick() {
-    if (this.#isOpen()) {
-      this.#close();
-    } else {
-      this.#open();
-    }
+    this.#floatingDropdown.toggle();
   }
 
   #onComboboxFocus() {
@@ -432,7 +437,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     ) {
       this.debouncedFilterAndUpdate.flush();
       this.#setValue(this.#option);
-      this.#close();
+      this.#floatingDropdown.hide();
     }
   }
 
@@ -443,7 +448,7 @@ export default class SelectWithAutoCompleteController extends Controller {
     if (option) {
       this.#setValue(option);
       this.#setOption(option);
-      this.#close();
+      this.#floatingDropdown.hide();
       this.comboboxTarget.focus();
     }
   }
