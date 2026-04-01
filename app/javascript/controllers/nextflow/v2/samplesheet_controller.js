@@ -116,6 +116,10 @@ export default class extends Controller {
   #selectedSamples;
   #chunkedSelectedSamples;
 
+  // to prevent submitting all the sample chunks at once, we'll keep a counter and as the chunked requests connect
+  // the counter will be updated until the number of counters === chunkedSamples.length
+  #currentChunkedCounter = 0;
+
   // fallback in case fetching samples failed
   #sampleAttributesRequestFailed = false;
 
@@ -957,7 +961,7 @@ export default class extends Controller {
       if (this.#selectedSamples.length !== 0) {
         this.#resetAttributes();
         this.#chunkedSelectedSamples = this.#chunkSamples();
-        this.#submitSamplesheetParams();
+        this.#submitSamplesheetParams(this.#currentChunkedCounter);
         return;
       }
     }
@@ -993,37 +997,31 @@ export default class extends Controller {
     return params;
   }
 
-  #submitSamplesheetParams() {
+  #submitSamplesheetParams(index) {
     // a separate form is created for each sample chunk, and a fetch request is made to retrieve the sample data
-    for (let i = 0; i < this.#chunkedSelectedSamples.length; i++) {
-      const formFragment =
-        this.samplesheetParamsFormTemplateTarget.content.cloneNode(true);
-      const fragment = document.createDocumentFragment();
+    const formFragment =
+      this.samplesheetParamsFormTemplateTarget.content.cloneNode(true);
+    const fragment = document.createDocumentFragment();
 
-      fragment.appendChild(
-        createHiddenInput("properties", this.#samplesheetProperties),
-      );
+    fragment.appendChild(
+      createHiddenInput("properties", this.#samplesheetProperties),
+    );
 
-      this.element.appendChild(formFragment);
+    this.element.appendChild(formFragment);
 
-      const form = this.element.lastElementChild;
-      form.appendChild(fragment);
+    const form = this.element.lastElementChild;
+    form.appendChild(fragment);
 
-      form.addEventListener(
-        "submit",
-        (event) => {
-          event.preventDefault();
-          this.#sampleAttributesFetch(form, i);
-        },
-        { once: true },
-      );
-      form.requestSubmit();
-      form.remove();
-    }
-
-    this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
-    // // clear the now unnecessary DOM element
-    this.samplesheetPropertiesTarget.remove();
+    form.addEventListener(
+      "submit",
+      (event) => {
+        event.preventDefault();
+        this.#sampleAttributesFetch(form, index);
+      },
+      { once: true },
+    );
+    form.requestSubmit();
+    form.remove();
   }
 
   #sampleAttributesFetch(form, index) {
@@ -1050,10 +1048,13 @@ export default class extends Controller {
 
   async sampleAttributesTargetConnected() {
     if (this.#sampleAttributesRequestFailed) return;
-    if (
-      this.sampleAttributesTargets.length ===
-      this.#chunkedSelectedSamples.length
-    ) {
+    this.#currentChunkedCounter += 1;
+    if (this.#currentChunkedCounter < this.#chunkedSelectedSamples.length) {
+      this.#submitSamplesheetParams(this.#currentChunkedCounter);
+    } else {
+      this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
+      // // clear the now unnecessary DOM element
+      this.samplesheetPropertiesTarget.remove();
       await this.#processSamplesheetAttributes();
       await this.#processFileAttributes();
 
