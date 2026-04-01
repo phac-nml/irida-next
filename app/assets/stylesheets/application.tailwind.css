@@ -434,7 +434,7 @@ input[type="search"] {
 
 @utility button-primary {
   /* High contrast colors for WCAG AAA */
-  @apply border-primary-700 bg-primary-700 hover:bg-primary-800 hover:border-primary-800 dark:border-primary-600 dark:bg-primary-700 dark:hover:bg-primary-700 dark:hover:border-primary-700 text-white shadow-sm;
+  @apply border-primary-800 bg-primary-800 hover:bg-primary-900 hover:border-primary-900 dark:border-primary-700 dark:bg-primary-800 dark:hover:bg-primary-800 dark:hover:border-primary-800 text-white shadow-sm disabled:border-slate-300 disabled:bg-slate-300 disabled:text-slate-700 disabled:opacity-100 dark:disabled:border-slate-600 dark:disabled:bg-slate-700 dark:disabled:text-slate-200;
 
   /* Focus styles with high contrast */
   &:focus-visible {
