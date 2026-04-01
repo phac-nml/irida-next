@@ -23,27 +23,16 @@ export default class extends Controller {
   #groupSelector = "fieldset[data-advanced-search-target='groupsContainer']";
   #conditionSelector =
     "fieldset[data-advanced-search-target='conditionsContainer']";
-  #appliedSearchSnapshot = null;
-  #appliedSearchState = [];
 
   connect() {
     if (this.openValue) {
       this.renderSearch();
-      this.#cacheAppliedSearch();
-      return;
     }
-
-    this.#cacheSelectedFields();
-    this.#cacheAppliedSearch();
   }
 
   renderSearch() {
-    if (this.searchGroupsContainerTarget.children.length === 0) {
-      this.searchGroupsContainerTarget.innerHTML =
-        this.searchGroupsTemplateTarget.innerHTML;
-    }
-
-    this.#cacheSelectedFields();
+    this.searchGroupsContainerTarget.innerHTML =
+      this.searchGroupsTemplateTarget.innerHTML;
     this.clearSubmitError();
   }
 
@@ -54,8 +43,6 @@ export default class extends Controller {
 
   submit(event) {
     if (this.#hasAtLeastOneCompleteCondition()) {
-      this.statusValue = true;
-      this.#cacheAppliedSearch();
       this.clearSubmitError();
       return;
     }
@@ -66,11 +53,22 @@ export default class extends Controller {
     this.#focusFirstConditionField();
   }
 
-  close(_event) {
-    if (this.statusValue) {
-      this.#resetToAppliedSearch();
-    } else {
+  close(event) {
+    if (!this.statusValue) {
+      this.renderSearch();
+      return;
+    }
+
+    if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    } else if (!this.#dirty()) {
       this.clear();
+    } else if (window.confirm(this.confirmCloseTextValue)) {
+      this.clear();
+    } else {
+      event.stopImmediatePropagation();
+      event.preventDefault();
     }
   }
 
@@ -153,8 +151,6 @@ export default class extends Controller {
   clearForm() {
     this.clear();
     this.addGroup();
-    this.statusValue = false;
-    this.#cacheAppliedSearch();
     this.clearSubmitError();
   }
 
@@ -179,26 +175,19 @@ export default class extends Controller {
 
     if (["", "exists", "not_exists"].includes(operator)) {
       value.classList.add(...this.#hiddenClasses);
-      this.#clearValueInputs(value);
-      return;
-    } else {
-      const selectedField = this.#selectedConditionField(condition);
-      const templateTarget = ["in", "not_in"].includes(operator)
-        ? this.listValueTemplateTarget
-        : this.valueTemplateTarget;
-      value.outerHTML = templateTarget.innerHTML
+      value.querySelectorAll("input").forEach((input) => {
+        input.value = "";
+      });
+    } else if (["in", "not_in"].includes(operator)) {
+      value.classList.remove(...this.#hiddenClasses);
+      value.outerHTML = this.listValueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
-
-      const updatedCondition = this.#conditionElements(group)[conditionIndex];
-      const updatedValue = updatedCondition?.querySelector(".value");
-      updatedValue?.classList.remove(...this.#hiddenClasses);
-      this.#updateValueFieldForEnum(
-        updatedValue,
-        updatedCondition,
-        selectedField,
-        operator,
-      );
+    } else {
+      value.classList.remove(...this.#hiddenClasses);
+      value.outerHTML = this.valueTemplateTarget.innerHTML
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
     }
 
     this.clearSubmitError();
@@ -286,138 +275,6 @@ export default class extends Controller {
     return Array.from(group.querySelectorAll(this.#conditionSelector));
   }
 
-  #allConditionElements() {
-    return this.#groupElements().flatMap((group) =>
-      this.#conditionElements(group),
-    );
-  }
-
-  #resetToAppliedSearch() {
-    if (this.#appliedSearchSnapshot) {
-      this.searchGroupsContainerTarget.replaceChildren(
-        ...Array.from(this.#appliedSearchSnapshot.childNodes).map((node) =>
-          node.cloneNode(true),
-        ),
-      );
-      this.#restoreAppliedSearchState();
-    } else {
-      this.searchGroupsContainerTarget.innerHTML =
-        this.searchGroupsTemplateTarget.innerHTML;
-    }
-
-    this.#cacheSelectedFields();
-    this.clearSubmitError();
-  }
-
-  #cacheAppliedSearch() {
-    this.#appliedSearchSnapshot =
-      this.searchGroupsContainerTarget.cloneNode(true);
-    this.#appliedSearchState = this.#serializeSearchState(
-      this.searchGroupsContainerTarget,
-    );
-  }
-
-  #restoreAppliedSearchState() {
-    this.#groupElements().forEach((group, groupIndex) => {
-      const groupState = this.#appliedSearchState[groupIndex] || [];
-
-      this.#conditionElements(group).forEach((condition, conditionIndex) => {
-        const conditionState = groupState[conditionIndex];
-        if (!conditionState) {
-          return;
-        }
-
-        this.#restoreConditionState(condition, conditionState);
-      });
-    });
-  }
-
-  #restoreConditionState(condition, conditionState) {
-    const fieldInput = condition.querySelector("[name$='[field]']");
-    if (fieldInput) {
-      fieldInput.value = conditionState.field;
-    }
-
-    const combobox = condition.querySelector("input[role='combobox']");
-    if (combobox) {
-      combobox.value = conditionState.fieldLabel;
-    }
-
-    condition.dataset.advancedSearchSelectedField = conditionState.field;
-
-    const operatorInput = condition.querySelector("[name$='[operator]']");
-    if (operatorInput) {
-      operatorInput.value = conditionState.operator;
-    }
-
-    const listValueInputs = condition.querySelectorAll("[name$='[value][]']");
-    if (listValueInputs.length > 0) {
-      this.#restoreListValueState(listValueInputs, conditionState.values);
-      return;
-    }
-
-    const valueInput = condition.querySelector("[name$='[value]']");
-    if (valueInput) {
-      valueInput.value = conditionState.values[0] || "";
-    }
-  }
-
-  #restoreListValueState(elements, values) {
-    Array.from(elements).forEach((element, index) => {
-      if (element.tagName === "SELECT" && element.multiple) {
-        Array.from(element.options).forEach((option) => {
-          option.selected = values.includes(option.value);
-        });
-        return;
-      }
-
-      element.value = values[index] || "";
-    });
-  }
-
-  #serializeSearchState(rootElement) {
-    return Array.from(rootElement.querySelectorAll(this.#groupSelector)).map(
-      (group) =>
-        Array.from(group.querySelectorAll(this.#conditionSelector)).map(
-          (condition) => {
-            const listValueInputs = condition.querySelectorAll(
-              "[name$='[value][]']",
-            );
-            const singleValueInput =
-              condition.querySelector("[name$='[value]']");
-
-            return {
-              field: condition.querySelector("[name$='[field]']")?.value || "",
-              fieldLabel: this.#fieldDisplayValue(condition),
-              operator:
-                condition.querySelector("[name$='[operator]']")?.value || "",
-              values:
-                listValueInputs.length > 0
-                  ? this.#listValueValuesFromElements(listValueInputs)
-                  : [singleValueInput?.value || ""],
-            };
-          },
-        ),
-    );
-  }
-
-  #fieldDisplayValue(condition) {
-    const combobox = condition.querySelector("input[role='combobox']");
-    if (combobox) {
-      return combobox.value;
-    }
-
-    const select = condition.querySelector("select[name$='[field]']");
-    return select?.selectedOptions?.[0]?.text || select?.value || "";
-  }
-
-  #cacheSelectedFields() {
-    this.#allConditionElements().forEach((condition) => {
-      condition.dataset.advancedSearchSelectedField =
-        this.#selectedConditionField(condition);
-    });
-  }
-
   #reindexAllGroups() {
     this.#groupElements().forEach((group, groupIndex) => {
       this.#reindexGroup(group, groupIndex);
@@ -429,30 +286,6 @@ export default class extends Controller {
     if (!operator) {
       return;
     }
-
-    const enumFields = this.#parseConditionJSON(condition, "enumFields") || {};
-    const enumOperations = this.#enumOperations(condition, operator);
-    const standardOperations = this.#operationOptions(condition, operator);
-
-    const enumConfig = enumFields[selectedField];
-    const operations =
-      selectedField && this.#enumHasValues(enumConfig)
-        ? enumOperations
-        : standardOperations;
-
-    operator.innerHTML = "";
-
-    const blankOption = document.createElement("option");
-    blankOption.value = "";
-    blankOption.text = "";
-    operator.appendChild(blankOption);
-
-    Object.entries(operations).forEach(([label, value]) => {
-      const option = document.createElement("option");
-      option.value = value;
-      option.text = label;
-      operator.appendChild(option);
-    });
 
     operator.value = "";
   }
@@ -554,7 +387,7 @@ export default class extends Controller {
   }
 
   #hasAtLeastOneCompleteCondition() {
-    return this.#allConditionElements().some((condition) =>
+    return this.conditionsContainerTargets.some((condition) =>
       this.#isConditionComplete(condition),
     );
   }
@@ -574,9 +407,9 @@ export default class extends Controller {
     }
 
     if (["in", "not_in"].includes(operator)) {
-      return this.#listValueValues(condition).some(
-        (value) => value.trim() !== "",
-      );
+      const values = condition.querySelectorAll("[name$='[value][]']");
+
+      return Array.from(values).some((input) => input.value.trim() !== "");
     }
 
     const value = condition.querySelector("[name$='[value]']")?.value?.trim();
@@ -593,163 +426,47 @@ export default class extends Controller {
   }
 
   #focusFirstConditionField() {
-    this.#focusConditionInput(this.#allConditionElements()[0]);
+    this.#focusConditionInput(this.conditionsContainerTargets[0]);
   }
 
   #selectedConditionField(condition) {
     return condition?.querySelector("[name$='[field]']")?.value?.trim() || "";
   }
 
-  #parseConditionJSON(condition, key) {
-    const payload = condition?.dataset?.[key];
-    if (!payload) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(payload);
-    } catch {
-      return null;
-    }
-  }
-
-  #operationOptions(condition, operator) {
-    const standardOperations =
-      this.#parseConditionJSON(condition, "standardOperations") || {};
-
-    if (Object.keys(standardOperations).length > 0) {
-      return standardOperations;
-    }
-
-    return this.#serializeOptions(operator);
-  }
-
-  #enumOperations(condition, operator) {
-    const enumOperations =
-      this.#parseConditionJSON(condition, "enumOperations") || {};
-
-    if (Object.keys(enumOperations).length > 0) {
-      return enumOperations;
-    }
-
-    return this.#enumOperationOptions(
-      this.#operationOptions(condition, operator),
-    );
-  }
-
-  #enumOperationOptions(operations) {
-    const enumValues = ["=", "!=", "in", "not_in"];
-
-    return Object.fromEntries(
-      Object.entries(operations).filter(([, value]) =>
-        enumValues.includes(value),
-      ),
-    );
-  }
-
-  #serializeOptions(select) {
-    if (!(select instanceof HTMLSelectElement)) {
-      return {};
-    }
-
-    return Array.from(select.options).reduce((options, option) => {
-      if (!option.value) {
-        return options;
-      }
-
-      options[option.text] = option.value;
-      return options;
-    }, {});
-  }
-
-  #enumHasValues(enumConfig) {
-    if (!enumConfig) {
-      return false;
-    }
-
-    const values = Array.isArray(enumConfig.values) ? enumConfig.values : [];
-    const labels =
-      enumConfig.labels && typeof enumConfig.labels === "object"
-        ? Object.keys(enumConfig.labels)
-        : [];
-
-    return values.length > 0 || labels.length > 0;
-  }
-
-  #updateValueFieldForEnum(valueContainer, condition, selectedField, operator) {
-    if (!valueContainer || !condition || !selectedField) {
-      return;
-    }
-
-    const enumFields = this.#parseConditionJSON(condition, "enumFields") || {};
-    const enumConfig = enumFields[selectedField];
-    if (!this.#enumHasValues(enumConfig)) {
-      return;
-    }
-
-    const listOperator = ["in", "not_in"].includes(operator);
-    const currentInput = listOperator
-      ? valueContainer.querySelector("div[data-controller='list-filter']")
-      : valueContainer.querySelector("[name$='[value]']");
-    if (!currentInput) {
-      return;
-    }
-
-    const sourceInput = listOperator
-      ? currentInput.querySelector("input[name$='[value][]']")
-      : currentInput;
-    const inputName = sourceInput?.name;
-    if (!inputName) {
-      return;
-    }
-
-    const select = document.createElement("select");
-    select.name = listOperator ? inputName : inputName;
-    select.id = sourceInput.id;
-    select.setAttribute(
-      "aria-label",
-      sourceInput.getAttribute("aria-label") ||
-        valueContainer.querySelector("label")?.textContent?.trim() ||
-        "",
+  #dirty() {
+    const currentState = this.#serializeFormState(
+      this.searchGroupsContainerTarget,
     );
 
-    const describedBy = sourceInput.getAttribute("aria-describedby");
-    if (describedBy) {
-      select.setAttribute("aria-describedby", describedBy);
-    }
+    const originalContainer = document.createElement("div");
+    originalContainer.innerHTML = this.searchGroupsTemplateTarget.innerHTML;
+    const originalState = this.#serializeFormState(originalContainer);
 
-    const ariaInvalid = sourceInput.getAttribute("aria-invalid");
-    if (ariaInvalid) {
-      select.setAttribute("aria-invalid", ariaInvalid);
-    }
+    return currentState !== originalState;
+  }
 
-    if (listOperator) {
-      select.multiple = true;
-    } else {
-      const blankOption = document.createElement("option");
-      blankOption.value = "";
-      blankOption.text = "";
-      select.appendChild(blankOption);
-    }
+  #serializeFormState(rootElement) {
+    const groups = Array.from(
+      rootElement.querySelectorAll(this.#groupSelector),
+    ).map((group) => {
+      return Array.from(group.querySelectorAll(this.#conditionSelector)).map(
+        (condition) => {
+          const listValues = Array.from(
+            condition.querySelectorAll("[name$='[value][]']"),
+          ).map((input) => input.value);
+          const singleValue =
+            condition.querySelector("[name$='[value]']")?.value;
 
-    const values = Array.isArray(enumConfig.values) ? enumConfig.values : [];
-    const labels =
-      enumConfig.labels && typeof enumConfig.labels === "object"
-        ? enumConfig.labels
-        : {};
-
-    values.forEach((value) => {
-      const option = document.createElement("option");
-      option.value = value;
-      option.text =
-        labels[value] ||
-        value
-          .replace(/[_-]/g, " ")
-          .replace(/\b\w/g, (char) => char.toUpperCase());
-      select.appendChild(option);
+          return {
+            field: condition.querySelector("[name$='[field]']")?.value,
+            operator: condition.querySelector("[name$='[operator]']")?.value,
+            values: listValues.length > 0 ? listValues : [singleValue],
+          };
+        },
+      );
     });
 
-    currentInput.replaceWith(select);
+    return JSON.stringify(groups);
   }
 
   #clearValueInputs(valueContainer) {
@@ -759,22 +476,6 @@ export default class extends Controller {
       if (element.tagName === "SELECT") {
         element.selectedIndex = -1;
       }
-    });
-  }
-
-  #listValueValues(condition) {
-    return this.#listValueValuesFromElements(
-      condition.querySelectorAll("[name$='[value][]']"),
-    );
-  }
-
-  #listValueValuesFromElements(elements) {
-    return Array.from(elements).flatMap((input) => {
-      if (input.tagName === "SELECT" && input.multiple) {
-        return Array.from(input.selectedOptions).map((option) => option.value);
-      }
-
-      return [input.value];
     });
   }
 }
