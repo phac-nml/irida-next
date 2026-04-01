@@ -45,7 +45,6 @@ lib.mkMerge [
       postgresql_14
       nextflow
       nodejs_24
-      pnpm_10
       jq
       file
       yq
@@ -63,7 +62,7 @@ lib.mkMerge [
       enable = true;
       # Pin Corepack to Node 24 so pnpm/yarn shims run on Node 24
       package = pkgs.nodejs_24;
-      pnpm.enable = true;
+      corepack.enable = true;
     };
 
     languages.python = {
