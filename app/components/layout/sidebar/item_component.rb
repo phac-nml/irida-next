@@ -8,7 +8,7 @@ module Layout
     #   <%= render Layout::Sidebar::ItemComponent.new(
     #     url: root_path,
     #     label: 'Dashboard',
-    #     icon: :house,
+    #     icon_name: :house,
     #     selected: current_page?(root_path)
     #   ) %>
     #
@@ -16,7 +16,7 @@ module Layout
     #   <%= render Layout::Sidebar::ItemComponent.new(
     #     url: notifications_path,
     #     label: 'Notifications',
-    #     icon: :bell,
+    #     icon_name: :bell,
     #     badge: '3',
     #     selected: current_page?(notifications_path)
     #   ) %>
@@ -28,10 +28,6 @@ module Layout
       # @!attribute [r] label
       #   @return [String] the display text for the item
       attr_reader :label
-
-      # @!attribute [r] icon
-      #   @return [Symbol, nil] the name of the icon to display
-      attr_reader :icon
 
       # @!attribute [r] badge
       #   @return [String, Numeric, nil] optional badge to display next to the label
@@ -48,6 +44,10 @@ module Layout
       # @!attribute [r] avatar
       #   @return [Boolean] whether to display an avatar next to the label
       attr_reader :avatar
+
+      # @!attribute [r] icon_name
+      #   @return [Symbol, nil] the name of the icon displayed next to the label
+      attr_reader :icon_name
 
       # Initialize a new Sidebar ItemComponent
       #
@@ -69,7 +69,7 @@ module Layout
       )
         @url = url
         @label = label
-        @icon = icon
+        @icon_name = icon
         @badge = badge
         @selected = selected
         @avatar = avatar
@@ -81,7 +81,7 @@ module Layout
       #
       # @return [ActiveSupport::SafeBuffer] the rendered icon HTML
       def create_icon
-        return unless @icon
+        return unless @icon_name
 
         icon_classes = class_names(
           'size-5 transition-colors duration-200',
@@ -93,7 +93,7 @@ module Layout
           }
         )
 
-        helpers.icon(@icon, size: nil, color: nil, class: icon_classes, variant: :duotone)
+        icon(@icon_name, size: nil, color: nil, class: icon_classes, variant: :duotone)
       end
     end
   end

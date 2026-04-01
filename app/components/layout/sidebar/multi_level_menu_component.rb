@@ -33,9 +33,9 @@ module Layout
       #   @return [String] the current page path for comparison
       attr_reader :current_page
 
-      # @!attribute [r] icon
+      # @!attribute [r] icon_name
       #   @return [Symbol, nil] the name of the icon to display
-      attr_reader :icon
+      attr_reader :icon_name
 
       # @!attribute [r] selected
       #   @return [Boolean] whether the menu is in a selected/active state
@@ -58,7 +58,7 @@ module Layout
         **system_arguments
       )
         @title = title
-        @icon = icon
+        @icon_name = icon
         @selectable_pages = selectable_pages
         @current_page = current_page
         @selected = selectable_pages.include?(current_page)
@@ -69,7 +69,7 @@ module Layout
       #
       # @return [ActiveSupport::SafeBuffer, nil] the rendered icon HTML or nil if no icon is set
       def create_icon
-        return unless @icon
+        return unless @icon_name
 
         icon_classes = class_names(
           'size-5 transition-colors duration-200',
@@ -84,7 +84,7 @@ module Layout
         # Only set variant for non-selected items to use duotone
         variant = @selected ? nil : :duotone
 
-        helpers.icon(@icon, size: nil, color: nil, class: icon_classes, variant: variant)
+        icon(@icon_name, size: nil, color: nil, class: icon_classes, variant: variant)
       end
 
       # Determines if the menu should be expanded by default
