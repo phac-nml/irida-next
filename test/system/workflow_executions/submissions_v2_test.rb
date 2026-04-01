@@ -1720,14 +1720,12 @@ module WorkflowExecutions
       project = projects(:projectChunkedSamples)
       namespace = namespaces_user_namespaces(:chunked_samples_doe_namespace)
       login_as user
-
       visit namespace_project_samples_url(namespace, project)
 
       # verify samples table loaded
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 1002,
                                                                                       locale: user.locale))
       # select samples
-
       click_button I18n.t('common.controls.select_all')
 
       assert_selector 'input[name="sample_ids[]"]:checked', count: 20
