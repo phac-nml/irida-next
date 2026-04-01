@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Mutations
-  # Mutation that updates sample metadata
+  # Mutation that updates metadata for samples
   class UpdateSampleMetadata < BaseMutation # rubocop:disable Metrics/ClassLength
-    description 'Update metadata for a sample.'
+    description 'Update metadata for samples.'
 
     argument :group_id, ID,
              required: false,
@@ -12,7 +12,7 @@ module Mutations
              required: false,
              description: 'Persistent Unique Identifier of the group. For example, `INXT_PRJ_AAAAAAAAAA`.'
     argument :metadata_payload, GraphQL::Types::JSON, required: true, # rubocop:disable GraphQL/ExtractInputType
-                                                      description: 'The metadata to update the sample with.'
+                                                      description: 'The metadata to update the samples with. Note: if using sample Node ids, use a stringified JSON input' # rubocop:disable Layout/LineLength
     argument :project_id, ID, # rubocop:disable GraphQL/ExtractInputType
              required: false,
              description: 'The Node ID of the project to be updated. For example, `gid://irida/project/a84cd757-dedb-4c64-8b01-097020163077`' # rubocop:disable Layout/LineLength
