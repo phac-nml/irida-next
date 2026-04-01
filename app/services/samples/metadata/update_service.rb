@@ -77,7 +77,7 @@ module Samples
       end
 
       def validate_metadata_value(key, value, sample_name)
-        return unless value.is_a?(Hash)
+        return true unless value.is_a?(Hash)
 
         raise SampleMetadataUpdateValidationError,
               I18n.t('services.samples.metadata.nested_metadata', sample_name:, key:)
