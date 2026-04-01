@@ -183,16 +183,33 @@ export default class extends Controller {
       value.querySelectorAll("input").forEach((input) => {
         input.value = "";
       });
-    } else if (["in", "not_in"].includes(operator)) {
-      value.classList.remove(...this.#hiddenClasses);
-      value.outerHTML = this.listValueTemplateTarget.innerHTML
-        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
     } else {
-      value.classList.remove(...this.#hiddenClasses);
-      value.outerHTML = this.valueTemplateTarget.innerHTML
-        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+      const selectedField = this.#selectedConditionField(condition);
+      if (Object.hasOwn(this.enumFieldsValue, selectedField)) {
+        const templateTarget = ["in", "not_in"].includes(operator)
+          ? this.listSelectValueTemplateTarget
+          : this.selectValueTemplateTarget;
+        value.outerHTML = templateTarget.innerHTML
+          .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+          .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+
+        const updatedCondition = this.#conditionElements(group)[conditionIndex];
+        const updatedValue = updatedCondition?.querySelector(".value");
+        updatedValue?.classList.remove(...this.#hiddenClasses);
+        this.#updateValueFieldForEnum(
+          updatedValue,
+          updatedCondition,
+          selectedField,
+          operator,
+        );
+      } else {
+        const templateTarget = ["in", "not_in"].includes(operator)
+          ? this.listValueTemplateTarget
+          : this.valueTemplateTarget;
+        value.outerHTML = templateTarget.innerHTML
+          .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+          .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+      }
     }
 
     this.clearSubmitError();
@@ -470,6 +487,42 @@ export default class extends Controller {
         : [];
 
     return values.length > 0 || labels.length > 0;
+  }
+
+  #updateValueFieldForEnum(valueContainer, condition, selectedField, operator) {
+    if (!valueContainer || !condition || !selectedField) {
+      return;
+    }
+
+    const enumConfig = this.enumFieldsValue[selectedField];
+    if (!this.#enumHasValues(enumConfig)) {
+      return;
+    }
+
+    const listOperator = ["in", "not_in"].includes(operator);
+    const select = listOperator
+      ? valueContainer.querySelector("select[name$='[value][]']")
+      : valueContainer.querySelector("select[name$='[value]']");
+    if (!select) {
+      return;
+    }
+
+    const values = Array.isArray(enumConfig.values) ? enumConfig.values : [];
+    const labels =
+      enumConfig.labels && typeof enumConfig.labels === "object"
+        ? enumConfig.labels
+        : {};
+
+    values.forEach((value) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.text =
+        labels[value] ||
+        value
+          .replace(/[_-]/g, " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase());
+      select.appendChild(option);
+    });
   }
 
   #dirty() {
