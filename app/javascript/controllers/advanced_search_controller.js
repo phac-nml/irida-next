@@ -7,14 +7,19 @@ export default class extends Controller {
     "groupsContainer",
     "groupTemplate",
     "listValueTemplate",
+    "listSelectValueTemplate",
     "searchGroupsContainer",
     "searchGroupsTemplate",
+    "selectValueTemplate",
     "submitError",
     "valueTemplate",
   ];
   static outlets = ["list-filter"];
   static values = {
     confirmCloseText: String,
+    enumFields: Object,
+    enumOperations: Object,
+    standardOperations: Object,
     open: Boolean,
     status: Boolean,
   };
@@ -287,6 +292,26 @@ export default class extends Controller {
       return;
     }
 
+    const enumConfig = this.enumFieldsValue[selectedField];
+    const operations =
+      selectedField && this.#enumHasValues(enumConfig)
+        ? this.enumOperationsValue
+        : this.standardOperationsValue;
+
+    operator.innerHTML = "";
+
+    const blankOption = document.createElement("option");
+    blankOption.value = "";
+    blankOption.text = "";
+    operator.appendChild(blankOption);
+
+    Object.entries(operations).forEach(([label, value]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.text = label;
+      operator.appendChild(option);
+    });
+
     operator.value = "";
   }
 
@@ -431,6 +456,20 @@ export default class extends Controller {
 
   #selectedConditionField(condition) {
     return condition?.querySelector("[name$='[field]']")?.value?.trim() || "";
+  }
+
+  #enumHasValues(enumConfig) {
+    if (!enumConfig) {
+      return false;
+    }
+
+    const values = Array.isArray(enumConfig.values) ? enumConfig.values : [];
+    const labels =
+      enumConfig.labels && typeof enumConfig.labels === "object"
+        ? Object.keys(enumConfig.labels)
+        : [];
+
+    return values.length > 0 || labels.length > 0;
   }
 
   #dirty() {
