@@ -745,6 +745,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     click_button I18n.t(:'components.advanced_search_component.title')
 
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
     within('dialog') do
       select_state_advanced_search_field
       find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
@@ -774,8 +775,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
     end
 
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
+
     click_button I18n.t(:'components.advanced_search_component.title')
 
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
     within('dialog') do
       assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 2
 
@@ -805,6 +809,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     click_button I18n.t(:'components.advanced_search_component.title')
 
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
     within('dialog') do
       select_state_advanced_search_field
       find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
@@ -818,8 +823,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
     end
 
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
+
     click_button I18n.t(:'components.advanced_search_component.title')
 
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
     within('dialog') do
       click_button I18n.t(:'components.advanced_search_component.add_condition_button')
 
@@ -837,11 +845,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
         find("input[name$='[value]']", visible: :visible).fill_in with: 'draft_run_id'
       end
 
-      find('button.dialog--close', visible: :visible).click
+      accept_confirm do
+        find('button.dialog--close', visible: :visible).click
+      end
     end
 
     click_button I18n.t(:'components.advanced_search_component.title')
 
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
     within('dialog') do
       assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 1
 
@@ -864,6 +875,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     click_button I18n.t(:'components.advanced_search_component.title')
 
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
     within('dialog') do
       select_state_advanced_search_field
       find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
@@ -877,8 +889,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
     end
 
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
+
     click_button I18n.t(:'components.advanced_search_component.title')
 
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
     within('dialog') do
       assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
 
