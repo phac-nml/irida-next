@@ -4,7 +4,7 @@ require 'test_helper'
 
 module Pathogen
   class IconTest < ViewComponent::TestCase
-    class HelperProbeComponent < Component
+    class HelperProbeComponent < ::Component
       def initialize(icon_name, **kwargs)
         super()
         @icon_name = icon_name
@@ -12,7 +12,7 @@ module Pathogen
       end
 
       def call
-        helpers.icon(@icon_name, **@kwargs)
+        icon(@icon_name, **@kwargs)
       end
     end
 

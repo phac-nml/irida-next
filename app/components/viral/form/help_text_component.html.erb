@@ -1,7 +1,7 @@
 <%= render Viral::BaseComponent.new(**system_arguments) do %>
-  <% if icon.present? %>
-    <%= helpers.icon(
-      icon,
+  <% if icon_name.present? %>
+    <%= icon(
+      icon_name,
       size: :sm,
       color: icon_color,
       class: "mr-1.5",
