@@ -3107,7 +3107,8 @@ input UpdateSampleMetadataInput {
   groupPuid: ID
 
   """
-  The metadata to update the samples with. Note: if using sample Node ids, use a stringified JSON input
+  The metadata to update the samples with. Note: to escape special characters
+  (like those found in sample Node ids), use a stringified JSON input
   """
   metadataPayload: JSON!
 
