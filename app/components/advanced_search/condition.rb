@@ -16,6 +16,12 @@ module AdvancedSearch
     end
     # rubocop:enable Metrics/ParameterLists
 
+    def value_options
+      return nil unless enum_field?
+
+      enum_field_options
+    end
+
     private
 
     def field_options
@@ -56,6 +62,30 @@ module AdvancedSearch
 
     def enum_operator_values
       %w[= != in not_in]
+    end
+
+    def enum_field_config
+      return if selected_field.blank?
+
+      enum_fields.fetch(selected_field, nil)
+    end
+
+    def enum_field_values
+      @enum_field_values ||= Array(enum_field_config&.fetch(:values, nil))
+    end
+
+    def enum_field_options
+      enum_field_values.map { |value| [enum_field_option_label(value), value] }
+    end
+
+    def enum_field_option_label(value)
+      labels = enum_field_config.fetch(:labels, {}) if enum_field_config
+      translation_key = enum_field_config&.fetch(:translation_key, nil)
+
+      return labels[value.to_s] if labels&.key?(value.to_s)
+      return I18n.t("#{translation_key}.#{value}", default: value.to_s.humanize) if translation_key
+
+      value.to_s.humanize
     end
   end
 end
