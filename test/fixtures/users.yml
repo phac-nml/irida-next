@@ -249,3 +249,9 @@ subgroup_sample_actions_doe:
   email: <%= "subgroup.sample.actions.doe@localhost" %>
   first_name: SubgroupSampleActions
   last_name: Doe
+
+chunked_samples_doe:
+  <<: *DEFAULTS
+  email: <%= "chunked.samples.doe@localhost" %>
+  first_name: ChunkedSamples
+  last_name: Doe

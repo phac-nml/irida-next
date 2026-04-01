@@ -644,3 +644,13 @@ sample73:
   puid: INXT_SAM_AAAAAAAAGT
   created_at: <%= 34.weeks.ago %>
   updated_at: <%= 34.days.ago %>
+
+<% (1..1002).each do |n| %>
+chunked_sample<%= (n) %>:
+  name: <%= "Chunked Project Sample #{n}" %>
+  description: <%= "Chunked Project Sample #{n} description." %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectChunkedSamples, :uuid) %>
+  puid: <%= "INXT_SAM_AAADAAAAA#{n}" %>
+  created_at: <%= n.weeks.ago %>
+  updated_at: <%= n.days.ago %>
+<% end %>

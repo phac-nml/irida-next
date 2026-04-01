@@ -672,3 +672,12 @@ projectUser31_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:user31_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
   puid: INXT_PRJ_AAAAAAAACK
+
+project_chunked_samples_namespace:
+  <<: *DEFAULTS
+  name: Project Chunked Samples
+  path: project-chunked-samples
+  description: Project Chunked Samples description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe_namespace, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAACL
