@@ -67,4 +67,12 @@ class AdvancedSearchComponent < Component
       I18n.t('components.advanced_search_component.operation.not_in') => 'not_in'
     }
   end
+
+  def enum_operation_options
+    operation_options.select { |_, value| enum_operation_values.include?(value) }
+  end
+
+  def enum_operation_values
+    %w[= != in not_in]
+  end
 end

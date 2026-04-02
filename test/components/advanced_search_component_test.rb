@@ -11,12 +11,13 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 2
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 3
@@ -87,6 +88,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/empty')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         assert_accessible
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
@@ -101,12 +104,13 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         click_button I18n.t('components.dialog.close')
       end
-      assert_no_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      assert_no_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
 
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         assert_accessible
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
@@ -124,6 +128,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
@@ -134,10 +140,14 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           click_button I18n.t(:'components.advanced_search_component.add_condition_button')
         end
 
-        click_button I18n.t('components.dialog.close')
+        accept_confirm do
+          click_button I18n.t('components.dialog.close')
+        end
       end
 
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 2
 
@@ -157,6 +167,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/empty')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
         assert_selector "div[data-advanced-search-target='submitError']",
@@ -180,6 +192,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/workflow')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         assert_accessible
 
@@ -221,6 +235,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/workflow')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         first("select[name$='[field]']").find("option[value='state']").select_option
 
@@ -241,6 +257,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         click_button I18n.t(:'components.advanced_search_component.add_group_button')
 

@@ -1,8 +1,5 @@
 <fieldset
   data-advanced-search-target="conditionsContainer"
-  data-enum-fields="<%= json_escape_data(enum_fields) %>"
-  data-enum-operations="<%= json_escape_data(enum_operator_options) %>"
-  data-standard-operations="<%= json_escape_data(@operations) %>"
   data-advanced-search-group-index="<%= @group_index %>"
   data-advanced-search-condition-index="<%= @condition_index %>"
   data-advanced-search-selected-field="<%= selected_field %>"
@@ -88,7 +85,7 @@
       group_index: @group_index,
       condition: @condition,
       condition_index: @condition_index,
-      fields: @fields,
+      options: value_options,
     ) %>
   <% end %>
 

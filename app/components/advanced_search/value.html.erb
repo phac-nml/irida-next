@@ -13,18 +13,7 @@
   <%= @conditions_form.label :value, data: { required: true } %>
 
   <% if %w[in not_in].include?(@condition.operator) %>
-    <% if enum_field? %>
-      <%= @conditions_form.select :value,
-                                 options_for_select(enum_field_options, selected_enum_values),
-                                 { include_hidden: false },
-                                 {
-                                   multiple: true,
-                                   "aria-label": value_label,
-                                   "aria-invalid": invalid_value,
-                                   "aria-describedby": @conditions_form.field_id(:value, "error"),
-                                   autofocus: invalid_value
-                                 } %>
-    <% else %>
+    <% if @options.nil? %>
       <div
         data-controller="list-filter"
         data-list-filter-filters-value="<%= ERB::Util.json_escape(@condition.value.present? ? @condition.value.to_json : '[]') %>"
@@ -38,11 +27,28 @@
           "aria-describedby": @conditions_form.field_id(:value, "error"),
         ) %>
       </div>
+    <% else %>
+      <%= @conditions_form.select :value,
+                                 options_for_select(@options, selected_values),
+                                 { include_hidden: false },
+                                 {
+                                   multiple: true,
+                                   "aria-label": value_label,
+                                   "aria-invalid": invalid_value,
+                                   "aria-describedby": @conditions_form.field_id(:value, "error"),
+                                   autofocus: invalid_value
+                                 } %>
     <% end %>
-  <% elsif enum_field? %>
+  <% elsif @options.nil? %>
+    <%= @conditions_form.text_field :value,
+                                "aria-label": value_label,
+                                "aria-invalid": invalid_value,
+                                "aria-describedby":
+                                  @conditions_form.field_id(:value, "error"),
+                                autofocus: invalid_value %>
+  <% else %>
     <%= @conditions_form.select :value,
-                               options_for_select(enum_field_options,
-                                                 selected_enum_values.first),
+                               options_for_select(@options, selected_values.first),
                                { include_blank: true },
                                {
                                  "aria-label": value_label,
@@ -50,13 +56,6 @@
                                  "aria-describedby": @conditions_form.field_id(:value, "error"),
                                  autofocus: invalid_value
                                } %>
-  <% else %>
-    <%= @conditions_form.text_field :value,
-                                "aria-label": value_label,
-                                "aria-invalid": invalid_value,
-                                "aria-describedby":
-                                  @conditions_form.field_id(:value, "error"),
-                                autofocus: invalid_value %>
   <% end %>
 
   <%= render "shared/form/field_errors",
