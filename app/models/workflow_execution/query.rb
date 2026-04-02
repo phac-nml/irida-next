@@ -40,7 +40,7 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   def normalize_state_value(condition)
     if %w[in not_in].include?(condition.operator)
-      Array(condition.value).map { |value| state_filter_value(value) }
+      Array(condition.value).filter_map { |value| state_filter_value(value) }
     else
       state_filter_value(condition.value)
     end
