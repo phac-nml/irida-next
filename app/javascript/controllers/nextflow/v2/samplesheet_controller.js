@@ -129,38 +129,31 @@ export default class extends Controller {
   }
 
   #processSamplesheetAttributes() {
-    return new Promise((resolve) => {
-      this.sampleAttributesTargets.forEach((sampleAttributesTarget) => {
-        const dataAttributes = sampleAttributesTarget.dataset;
-        const sampleAttributes = JSON.parse(
-          dataAttributes.sampleAttributes || "{}",
-        );
-        Object.assign(this.#samplesheetAttributes, sampleAttributes);
+    this.sampleAttributesTargets.forEach((sampleAttributesTarget) => {
+      const dataAttributes = sampleAttributesTarget.dataset;
+      const sampleAttributes = JSON.parse(
+        dataAttributes.sampleAttributes || "{}",
+      );
+      Object.assign(this.#samplesheetAttributes, sampleAttributes);
 
-        const allowedToUpdateSamples = JSON.parse(
-          dataAttributes.allowedToUpdateSamples || "false",
-        );
+      const allowedToUpdateSamples = JSON.parse(
+        dataAttributes.allowedToUpdateSamples || "false",
+      );
 
-        if (this.#allowedToUpdateSamples && !allowedToUpdateSamples) {
-          this.#allowedToUpdateSamples = false;
-        }
-        sampleAttributesTarget.remove();
-      });
-
-      resolve();
+      if (this.#allowedToUpdateSamples && !allowedToUpdateSamples) {
+        this.#allowedToUpdateSamples = false;
+      }
+      sampleAttributesTarget.remove();
     });
   }
 
   #processFileAttributes() {
-    return new Promise((resolve) => {
-      this.fileAttributesTargets.forEach((fileAttributeTarget) => {
-        Object.assign(
-          this.#fileAttributes,
-          JSON.parse(fileAttributeTarget.innerHTML),
-        );
-        fileAttributeTarget.remove();
-      });
-      resolve();
+    this.fileAttributesTargets.forEach((fileAttributeTarget) => {
+      Object.assign(
+        this.#fileAttributes,
+        JSON.parse(fileAttributeTarget.innerHTML),
+      );
+      fileAttributeTarget.remove();
     });
   }
 
@@ -973,6 +966,7 @@ export default class extends Controller {
     this.#fileAttributes = {};
     this.#allowedToUpdateSamples = true;
     this.#sampleAttributesRequestFailed = false;
+    this.#currentChunkedCounter = 0;
   }
 
   // example: a 3000 sample request will be chunked into:
@@ -1046,7 +1040,7 @@ export default class extends Controller {
       .catch(() => this.#renderProcessingError());
   }
 
-  async sampleAttributesTargetConnected() {
+  sampleAttributesTargetConnected() {
     if (this.#sampleAttributesRequestFailed) return;
     this.#currentChunkedCounter += 1;
     if (this.#currentChunkedCounter < this.#chunkedSelectedSamples.length) {
@@ -1055,8 +1049,8 @@ export default class extends Controller {
       this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
       // // clear the now unnecessary DOM element
       this.samplesheetPropertiesTarget.remove();
-      await this.#processSamplesheetAttributes();
-      await this.#processFileAttributes();
+      this.#processSamplesheetAttributes();
+      this.#processFileAttributes();
 
       this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
 

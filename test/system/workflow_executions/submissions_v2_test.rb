@@ -1753,13 +1753,7 @@ module WorkflowExecutions
         I18n.t('components.nextflow_component.loading_complete.alert_message_html', count: 1002)
       )
       expected_text[expected_text.index('.')] = '. '
-      if has_selector?('div', text: I18n.t('components.nextflow_component.loading_samplesheet', count: 1002),
-                              wait: 0.25.seconds)
-        assert_no_selector 'div',
-                           text: I18n.t('components.nextflow_component.loading_samplesheet', count: 1002)
-
-        assert_text expected_text
-      end
+      assert_text expected_text
       ### VERIFY END ###
     end
   end
