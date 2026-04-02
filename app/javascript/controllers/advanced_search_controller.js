@@ -30,7 +30,7 @@ export default class extends Controller {
     "fieldset[data-advanced-search-target='conditionsContainer']";
 
   connect() {
-    if (this.openValue) {
+    if (this.openValue || this.statusValue) {
       this.renderSearch();
     }
   }
@@ -58,6 +58,16 @@ export default class extends Controller {
     this.#focusFirstConditionField();
   }
 
+  handleSubmitEnd(event) {
+    if (!event.detail.success) {
+      return;
+    }
+
+    this.element
+      .querySelector("[data-viral--dialog-target='closeButton']")
+      ?.click();
+  }
+
   close(event) {
     if (!this.statusValue) {
       this.renderSearch();
@@ -68,9 +78,9 @@ export default class extends Controller {
       event.preventDefault();
       event.stopImmediatePropagation();
     } else if (!this.#dirty()) {
-      this.clear();
+      this.renderSearch();
     } else if (window.confirm(this.confirmCloseTextValue)) {
-      this.clear();
+      this.renderSearch();
     } else {
       event.stopImmediatePropagation();
       event.preventDefault();
@@ -545,7 +555,12 @@ export default class extends Controller {
         (condition) => {
           const listValues = Array.from(
             condition.querySelectorAll("[name$='[value][]']"),
-          ).map((input) => input.value);
+          ).flatMap((input) => {
+            if (input.tagName === "SELECT" && input.multiple) {
+              return Array.from(input.selectedOptions).map((o) => o.value);
+            }
+            return [input.value];
+          });
           const singleValue =
             condition.querySelector("[name$='[value]']")?.value;
 
