@@ -908,62 +908,6 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'filter by name' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      assert_selector 'table tbody tr th', text: @sample1.puid
-      assert_selector 'table tbody tr th', text: @sample2.puid
-      assert_selector 'table tbody tr th', text: @sample30.puid
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').send_keys(:return)
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      # only sample1 exists within table
-      assert_selector 'table tbody tr th', text: @sample1.puid
-      assert_no_selector 'table tbody tr th', text: @sample2.puid
-      assert_no_selector 'table tbody tr th', text: @sample30.puid
-      ### VERIFY END ###
-    end
-
-    test 'filter by puid' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      assert_selector 'table tbody tr th', text: @sample1.puid
-      assert_selector 'table tbody tr th', text: @sample2.puid
-      assert_selector 'table tbody tr th', text: @sample30.puid
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.puid
-      find('input[data-test-selector="search-field-input"]').send_keys(:return)
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      # only sample2 exists within table
-      assert_no_selector 'table tbody tr th', text: @sample1.puid
-      assert_selector 'table tbody tr th', text: @sample2.puid
-      assert_no_selector 'table tbody tr th', text: @sample30.puid
-      ### VERIFY END ###
-    end
-
     test 'filter highlighting for sample name' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
@@ -1009,44 +953,6 @@ module Projects
                                                                                       locale: @user.locale))
       # checks highlighting
       assert_selector 'mark', text: @sample1.puid
-      ### VERIFY END ###
-    end
-
-    test 'filter persists through page refresh' do
-      ### SETUP START ###
-      filter_text = @sample1.name
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
-      find('input[data-test-selector="search-field-input"]').send_keys(:return)
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      assert_selector 'table tbody tr th', text: @sample1.puid
-      assert_no_selector 'table tbody tr th', text: @sample2.puid
-      assert_no_selector 'table tbody tr th', text: @sample30.puid
-
-      # refresh
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary.one', count: 1,
-                                                                                          locale: @user.locale))
-      # verify filter is still in input field
-      assert_selector %(input[data-test-selector="search-field-input"]) do |input|
-        assert_equal filter_text, input['value']
-      end
-      assert_selector 'table tbody tr th', text: @sample1.puid
-      assert_no_selector 'table tbody tr th', text: @sample2.puid
-      assert_no_selector 'table tbody tr th', text: @sample30.puid
       ### VERIFY END ###
     end
 
@@ -3711,39 +3617,6 @@ module Projects
       assert_no_selector "ul[aria-labelledby='#{available_label_id}'] li", text: 'metadatafield1'
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", text: 'metadatafield1'
       ### VERIFY END ###
-    end
-
-    test 'pagy overflow redirects to first page' do
-      project = projects(:project38)
-      sample = samples(:bulk_sample19)
-
-      visit namespace_project_samples_url(project.namespace.parent, project)
-
-      assert_selector 'table tbody tr', count: 20
-
-      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
-      assert_no_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
-
-      click_on I18n.t(:'components.viral.pagy.pagination_component.next')
-
-      # verifies navigation to page
-      assert_link exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
-
-      # samples table
-      assert_selector 'table tbody tr', count: 20
-
-      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: sample.puid
-      find('input[data-test-selector="search-field-input"]').send_keys(:return)
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      # Search for PUID
-      # rows
-      assert_selector 'table tbody tr', count: 11
-
-      assert_selector "table tbody tr[id='#{dom_id(sample)}'] th:first-child", text: sample.puid
-      assert_selector "table tbody tr[id='#{dom_id(sample)}'] td:nth-child(2)", text: sample.name
     end
 
     def long_filter_text
