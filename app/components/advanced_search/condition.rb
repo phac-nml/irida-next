@@ -79,6 +79,7 @@ module AdvancedSearch
     end
 
     def enum_field_option_label(value)
+      labels = {}
       labels = enum_field_config.fetch(:labels, {}) if enum_field_config
       translation_key = enum_field_config&.fetch(:translation_key, nil)
 
