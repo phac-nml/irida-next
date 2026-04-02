@@ -63,7 +63,7 @@
       <%= conditions_form.select :operator,
                              options_for_select(
                                operation_options,
-                               selected = @condition.operator,
+                               @condition.operator,
                              ),
                              { include_blank: true },
                              {
