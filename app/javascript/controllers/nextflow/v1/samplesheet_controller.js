@@ -834,7 +834,7 @@ export default class extends Controller {
     const compactFormData = new FormData();
     for (const [key, value] of this.#formData.entries()) {
       // exclude empty values from form data for samplesheet_params
-      if (!(/[samplesheet_params]/.test(key) && value === "")) {
+      if (!(key.includes("[samplesheet_params]") && value === "")) {
         compactFormData.append(key, value);
       }
     }
