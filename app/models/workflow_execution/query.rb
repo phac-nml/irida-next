@@ -54,7 +54,7 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
       state_filter_aliases(candidate).any? { |state_value| state_value.casecmp?(normalized_value) }
     end
 
-    WorkflowExecution.states[state_key || normalized_value] || normalized_value
+    WorkflowExecution.states[state_key]
   end
 
   def state_filter_aliases(state_key)
