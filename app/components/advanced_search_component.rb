@@ -73,6 +73,6 @@ class AdvancedSearchComponent < Component
   end
 
   def enum_operation_values
-    %w[= != in not_in]
+    AdvancedSearch::ENUM_OPERATOR_VALUES
   end
 end

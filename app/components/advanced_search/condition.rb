@@ -61,7 +61,7 @@ module AdvancedSearch
     end
 
     def enum_operator_values
-      %w[= != in not_in]
+      AdvancedSearch::ENUM_OPERATOR_VALUES
     end
 
     def enum_field_config

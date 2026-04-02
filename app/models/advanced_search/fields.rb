@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module AdvancedSearch
+  ENUM_OPERATOR_VALUES = %w[= != in not_in].freeze
+
   # Builds field option payloads for advanced-search UI rendering.
   class Fields
     WORKFLOW_FIELD_LABELS = {
