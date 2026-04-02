@@ -1,11 +1,10 @@
-<div class="flex items-center wrap-anywhere" data-controller="clipboard" data-clipboard-copied-value="<%= t("components.clipboard.copied") %>">
-  <span id="<%= button_name %>-content">
-    <% if content.present? %>
-      <%= content %>
-    <% else %>
-      <%= value %>
-    <% end %>
-  </span>
+<div
+  class="flex items-center wrap-anywhere"
+  data-controller="clipboard"
+  data-clipboard-copied-value="<%= t("components.clipboard.copied") %>"
+>
+  <span id="<%= button_name %>-content"><% if content.present? %><%= content %><% else %><%= value %><% end %></span>
+
   <button
     type="button"
     id="<%= button_name %>"
@@ -17,20 +16,21 @@
     class="<%= button_classes %>"
     value="<%= value %>"
   >
-    <%= pathogen_icon :clipboard_text, size: :sm, class: "pointer-events-none" %>
+    <%= icon :clipboard_text, size: :sm, class: "pointer-events-none" %>
   </button>
+
   <div
     id="<%= button_name %>-tooltip"
     data-clipboard-target="content"
     role="tooltip"
     class="
-      absolute z-10 invisible inline-block px-3 py-2 text-sm text-white
-      transition-opacity bg-green-800 rounded-lg shadow-lg opacity-95 duration-300
-      tooltip dark:bg-green-900 dark:text-green-50 border border-green-700
-      dark:border-green-800 font-semibold
+      tooltip invisible absolute z-10 inline-block rounded-lg border border-green-700 bg-green-800 px-3 py-2 text-sm
+      font-semibold text-white opacity-95 shadow-lg transition-opacity duration-300 dark:border-green-800
+      dark:bg-green-900 dark:text-green-50
     "
   >
     <%= t("components.clipboard.copied") %>
   </div>
+
   <div class="sr-only" aria-live="polite" data-clipboard-target="ariaLive"></div>
 </div>

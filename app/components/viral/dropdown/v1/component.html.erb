@@ -6,7 +6,7 @@
 >
   <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
     <% if icon_name.present? %>
-      <%= pathogen_icon(
+      <%= icon(
         icon_name,
         size: nil,
         class: class_names("size-5", { "mr-2": label.present? }),
@@ -22,7 +22,7 @@
     <% end %>
 
     <% if caret %>
-      <%= pathogen_icon(:caret_down, size: :sm, class: "ml-2 flex-none") %>
+      <%= icon(:caret_down, size: :sm, class: "ml-2 flex-none") %>
     <% end %>
   <% end %>
 

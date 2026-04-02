@@ -1,0 +1,188 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="mb-4 text-4xl font-bold text-slate-900 dark:text-slate-100">
+      <%= icon(:test_tube, color: :primary, size: :xl, class: "inline mr-3") %> App Icons - Basic Usage
+    </h1>
+
+    <p class="mx-auto max-w-3xl text-lg text-slate-600 dark:text-slate-400">
+      Simple, accessible icons with built-in theming, error handling, and developer-friendly features.
+    </p>
+  </div>
+
+  <!-- Basic Examples -->
+  <div class="mb-12">
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:clipboard_text, color: :primary, class: "mr-3") %> Basic Examples
+    </h2>
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <!-- String Icon -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <div class="mb-4 flex h-16 items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-700">
+          <%= icon(:check_circle, color: :success, size: :lg) %>
+        </div>
+
+        <h3 class="mb-2 font-semibold text-slate-900 dark:text-slate-100">String Icon Name</h3>
+
+        <code class="block rounded bg-slate-100 px-3 py-1 text-sm text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+          icon(:check_circle)
+        </code>
+      </div>
+
+      <!-- Symbol Icon -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <div class="mb-4 flex h-16 items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-700">
+          <%= icon(:arrow_up, color: :primary, size: :lg) %>
+        </div>
+
+        <h3 class="mb-2 font-semibold text-slate-900 dark:text-slate-100">Symbol Icon Name</h3>
+
+        <code class="block rounded bg-slate-100 px-3 py-1 text-sm text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+          icon(:arrow_up)
+        </code>
+
+        <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Underscores automatically convert to dashes</p>
+      </div>
+
+      <!-- With Options -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <div class="mb-4 flex h-16 items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-700">
+          <%= icon(:heart, variant: :fill, color: :danger, size: :lg) %>
+        </div>
+
+        <h3 class="mb-2 font-semibold text-slate-900 dark:text-slate-100">With Options</h3>
+
+        <code class="block rounded bg-slate-100 px-3 py-1 text-sm text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+          icon(:heart, variant: :fill, color: :danger)
+        </code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Helper Methods -->
+  <div class="mb-12">
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:code, color: :primary, class: "mr-3") %> Helper Methods in ERB
+    </h2>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <div>
+          <h3 class="mb-4 font-semibold text-slate-900 dark:text-slate-100">Using render</h3>
+
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <%= icon(:check, color: :success) %>
+              <code class="rounded bg-slate-100 px-2 py-1 text-sm dark:bg-slate-700"> &lt;%= icon(:check) %&gt; </code>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <%= icon(:x, color: :danger) %>
+              <code class="rounded bg-slate-100 px-2 py-1 text-sm dark:bg-slate-700"> &lt;%= icon(:x) %&gt; </code>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="mb-4 font-semibold text-slate-900 dark:text-slate-100">Using icon helper</h3>
+
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <%= icon(:info, color: :primary) %>
+              <code class="rounded bg-slate-100 px-2 py-1 text-sm dark:bg-slate-700"> &lt;%= icon(:info) %&gt; </code>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <%= icon(:warning, color: :warning) %>
+
+              <code class="rounded bg-slate-100 px-2 py-1 text-sm dark:bg-slate-700">
+                &lt;%= icon(:warning) %&gt;
+              </code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Common Parameters -->
+  <div>
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:sliders_horizontal, color: :primary, class: "mr-3") %> Common Parameters
+    </h2>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-slate-200 dark:border-slate-700">
+              <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">Parameter</th>
+              <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">Type</th>
+              <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">Options</th>
+              <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">Example</th>
+            </tr>
+          </thead>
+
+          <tbody class="text-sm">
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="px-4 py-3 font-mono text-blue-600 dark:text-blue-400">color</td>
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">Symbol</td>
+
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">
+                :default, :primary, :success, :warning, :danger, :subdued
+              </td>
+
+              <td class="px-4 py-3">
+                <code class="rounded bg-slate-100 px-2 py-1 text-xs dark:bg-slate-700">color: :success</code>
+              </td>
+            </tr>
+
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="px-4 py-3 font-mono text-blue-600 dark:text-blue-400">size</td>
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">Symbol</td>
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">:sm, :md, :lg, :xl</td>
+
+              <td class="px-4 py-3">
+                <code class="rounded bg-slate-100 px-2 py-1 text-xs dark:bg-slate-700">size: :lg</code>
+              </td>
+            </tr>
+
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="px-4 py-3 font-mono text-blue-600 dark:text-blue-400">semantic</td>
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">Boolean</td>
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">true, false</td>
+
+              <td class="px-4 py-3">
+                <code class="rounded bg-slate-100 px-2 py-1 text-xs dark:bg-slate-700">semantic: true</code>
+              </td>
+            </tr>
+
+            <tr class="border-b border-slate-100 dark:border-slate-700">
+              <td class="px-4 py-3 font-mono text-blue-600 dark:text-blue-400">variant</td>
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">Symbol</td>
+
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">
+                :fill, :outline, :duotone (depends on library)
+              </td>
+
+              <td class="px-4 py-3">
+                <code class="rounded bg-slate-100 px-2 py-1 text-xs dark:bg-slate-700">variant: :fill</code>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="px-4 py-3 font-mono text-blue-600 dark:text-blue-400">library</td>
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">Symbol</td>
+              <td class="px-4 py-3 text-slate-600 dark:text-slate-400">:phosphor, :heroicons</td>
+
+              <td class="px-4 py-3">
+                <code class="rounded bg-slate-100 px-2 py-1 text-xs dark:bg-slate-700">library: :heroicons</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

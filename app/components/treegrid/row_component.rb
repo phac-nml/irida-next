@@ -8,7 +8,7 @@ module Treegrid
         <div role="gridcell" aria-colindex="1" style="display: contents;">
           <% if @expandable %>
             <%= tag.button(**@button_arguments) do %>
-              <%= pathogen_icon(:caret_right, size: :sm) %>
+              <%= icon(:caret_right, size: :sm) %>
             <% end %>
           <% else %>
             <div class="w-8 shrink-0 flex items-center justify-center m-0 p-0" aria-hidden="true"></div>

@@ -1,26 +1,22 @@
 <%= render Viral::BaseComponent.new(tag: "div", **system_arguments_with_data) do %>
-  <div class="flex items-start w-full">
+  <div class="flex w-full items-start">
     <!-- Icon Container -->
-    <div class="flex-shrink-0 mr-3">
-      <%= pathogen_icon(icon_name, color: icon_color, class: "w-5 h-5 stroke-2") %>
-    </div>
+    <div class="mr-3 flex-shrink-0"><%= icon(icon_name, color: icon_color, class: "w-5 h-5 stroke-2") %></div>
+
     <!-- Content Container -->
-    <div class="flex-1 min-w-0">
+    <div class="min-w-0 flex-1">
       <% if message.present? %>
-        <div class="text-sm font-medium leading-5">
-          <%= message %>
-        </div>
+        <div class="text-sm leading-5 font-medium"><%= message %></div>
       <% end %>
 
       <% if content.present? %>
-        <div class="mt-2 text-sm leading-5">
-          <%= content %>
-        </div>
+        <div class="mt-2 text-sm leading-5"><%= content %></div>
       <% end %>
     </div>
+
     <!-- Dismiss Button -->
     <% if dismissible %>
-      <div class="flex-shrink-0 ml-3">
+      <div class="ml-3 flex-shrink-0">
         <button
           type="button"
           id="<%= dismiss_button_id %>"
@@ -28,19 +24,17 @@
           class="<%= classes_for_dismiss %>"
           aria-label="<%= t('general.screen_reader.close') %>"
         >
-          <%= pathogen_icon(:x, size: :sm, color: icon_color) %>
+          <%= icon(:x, size: :sm, color: icon_color) %>
           <span class="sr-only"><%= t("general.screen_reader.close") %></span>
         </button>
       </div>
     <% end %>
   </div>
+
   <!-- Progress Bar for Auto-dismiss -->
   <% if auto_dismiss %>
     <div
-      class="
-        absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-300
-        ease-out
-      "
+      class="absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-300 ease-out"
       data-viral--alert-target="progressBar"
       style="width: 100%;"
     ></div>

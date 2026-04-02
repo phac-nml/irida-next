@@ -1,8 +1,9 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
+
   <div
     data-controller="infinite-scroll"
-    data-infinite-scroll-selection-outlet='#workflow-executions-table'
+    data-infinite-scroll-selection-outlet="#workflow-executions-table"
     data-infinite-scroll-paged-field-name-value="workflow_execution_ids[]"
     data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
     data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
@@ -22,19 +23,20 @@
           <button
             type="button"
             class="
-              flex items-center justify-between w-full p-3 font-medium rtl:text-right
-              text-black dark:text-white border border-slate-200 dark:border-slate-700
-              hover:bg-slate-100 dark:hover:bg-slate-800 gap-3 rounded-t-lg
+              flex w-full items-center justify-between gap-3 rounded-t-lg border border-slate-200 p-3 font-medium
+              text-black hover:bg-slate-100 rtl:text-right dark:border-slate-700 dark:text-white
+              dark:hover:bg-slate-800
             "
             data-collapsible-target="button"
             data-action="collapsible#toggle"
           >
             <span data-infinite-scroll-target="selectionCount">"<%= t(".selection_count.zero") %>"</span>
+
             <span
               data-collapsible-target="icon"
               class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
             >
-              <%= pathogen_icon(:caret_down, size: :sm) %>
+              <%= icon(:caret_down, size: :sm) %>
             </span>
           </button>
         </h2>
@@ -46,21 +48,18 @@
           role="region"
           aria-labelledby="<%= "accordion-collapse-heading-workflows" %>"
         >
-          <div
-            class="
-              text-base leading-relaxed border-slate-200 dark:border-slate-700 p-2.5 border
-              border-t-0
-            "
-          >
+          <div class="border border-t-0 border-slate-200 p-2.5 text-base leading-relaxed dark:border-slate-700">
             <span data-infinite-scroll-target="summary">
               <%= t(:"data_exports.new_analysis_export_dialog.description.zero") %>
             </span>
+
             <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
           </div>
+
           <div
             class="
-              overflow-y-auto max-h-[200px] border border-t-0 border-slate-200 rounded-b-lg
-              block w-full p-2.5 dark:bg-slate-800 dark:border-slate-700
+              block max-h-[200px] w-full overflow-y-auto rounded-b-lg border border-t-0 border-slate-200 p-2.5
+              dark:border-slate-700 dark:bg-slate-800
             "
             data-action="scroll->infinite-scroll#scroll"
             data-infinite-scroll-target="scrollable"
@@ -71,6 +70,7 @@
           </div>
         </div>
       </div>
+
       <%= form_for(:data_export, url: data_exports_path, method: :post,
             data: {
               controller: "form--json-submission",
@@ -82,21 +82,17 @@
           ) do |form| %>
         <div class="grid gap-4">
           <%= render partial: "name_and_email", locals: { form: } %>
+
           <div>
             <%= form.hidden_field :export_type, value: "analysis" %>
-            <input
-              type="hidden"
-              name="data_export[export_parameters][analysis_type]"
-              value="<%= analysis_type %>"
-            >
+
+            <input type="hidden" name="data_export[export_parameters][analysis_type]" value="<%= analysis_type %>">
+
             <% unless namespace_id.nil? %>
-              <input
-                type="hidden"
-                name="data_export[export_parameters][namespace_id]"
-                value="<%= namespace_id %>"
-              >
+              <input type="hidden" name="data_export[export_parameters][namespace_id]" value="<%= namespace_id %>">
             <% end %>
           </div>
+
           <div>
             <%= form.submit t("data_exports.new.submit_button"),
                         data: {

@@ -144,6 +144,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Install icons
+        run: |
+          bin/rails generate rails_icons:sync --libraries=phosphor heroicons
+
       - name: Run tests
         env:
           RAILS_ENV: test

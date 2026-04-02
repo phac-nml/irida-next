@@ -23,7 +23,7 @@ module Ransack
       end
     end
 
-    def icon
+    def sort_icon
       unless @ransack_obj&.sorts.present? && @ransack_obj.sorts[0].name == URI.encode_www_form_component(@field.to_s)
         return
       end

@@ -1,27 +1,32 @@
 <div
   <% if id %>
-  id="<%= id %>"
+    id="<%= id %>"
   <% else %>
-  data-test-selector="spinner"
+    data-test-selector="spinner"
   <% end %>
   class="
-    absolute z-50 grid w-full h-full -translate-x-1/2 -translate-y-1/2
-    backdrop-blur-xs top-2/4 left-1/2 place-items-center
+    absolute top-2/4 left-1/2 z-50 grid h-full w-full -translate-x-1/2 -translate-y-1/2 place-items-center
+    backdrop-blur-xs
   "
 >
   <div class="grid place-items-start">
     <div
       class="
-        flex items-center w-full max-w-xs p-4 space-x-2 text-gray-500 bg-white
-        rounded-lg shadow-sm rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400
-        dark:divide-gray-700 dark:bg-gray-800
+        flex w-full max-w-xs items-center space-x-2 rounded-lg bg-white p-4 text-gray-500 shadow-sm
+        rtl:space-x-reverse rtl:divide-x-reverse dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-400
       "
       role="alert"
     >
-      <%= pathogen_icon :faded_spinner, library: "animated", color: :primary %>
+      <%= icon :faded_spinner, library: "animated", color: :primary %>
+
       <span
-        <% if id %> id="<%= id %>-message"
-        <% end %> class="text-sm font-normal"><%= message %></span>
+        <% if id %>
+          id="<%= id %>-message"
+        <% end %>
+        class="text-sm font-normal"
+      >
+        <%= message %>
+      </span>
     </div>
   </div>
 </div>

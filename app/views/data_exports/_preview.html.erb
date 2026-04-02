@@ -1,21 +1,22 @@
 <div class="mt-2">
   <%= viral_card do |card| %>
     <% card.with_header(title: "#{@data_export.file.filename}", classes: "pb-0") %>
+
     <% card.with_section do %>
-      <ul class="space-y-3 list-inside list-none mt-3">
+      <ul class="mt-3 list-inside list-none space-y-3">
         <li>
           <div class="flex text-primary-800 dark:text-primary-400">
-            <%= pathogen_icon(Attachment.icon, size: :sm) %>
-            <span class="ml-2 text-sm">
-              <%= t(".manifest_json") %>
-            </span>
+            <%= icon(Attachment.icon, size: :sm) %>
+            <span class="ml-2 text-sm"><%= t(".manifest_json") %></span>
           </div>
         </li>
+
         <% if @data_export.export_type == 'sample' %>
           <% @manifest['children'].each do |project| %>
             <li>
               <div class="flex text-primary-800 dark:text-primary-400">
-                <%= pathogen_icon(Attachment.icon, size: :sm) %>
+                <%= icon(Attachment.icon, size: :sm) %>
+
                 <span class="ml-2">
                   <%= link_to project["name"],
                   redirect_data_export_path(identifier: project["name"]),
@@ -25,11 +26,13 @@
                   class: "underline hover:decoration-2 text-sm" %>
                 </span>
               </div>
+
               <% project["children"].each do |sample| %>
-                <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                <ul class="mt-3 list-inside list-none space-y-1 ps-5">
                   <li>
                     <div class="flex text-purple-800 dark:text-purple-300">
-                      <%= pathogen_icon(:folder_open, size: :sm) %>
+                      <%= icon(:folder_open, size: :sm) %>
+
                       <span class="ml-2">
                         <%= link_to sample["name"],
                         redirect_data_export_path(identifier: sample["name"]),
@@ -39,23 +42,21 @@
                         class: "underline hover:decoration-2 text-sm" %>
                       </span>
                     </div>
+
                     <% sample["children"].each do |attachments| %>
-                      <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                      <ul class="mt-3 list-inside list-none space-y-1 ps-5">
                         <li>
                           <div class="flex text-blue-800 dark:text-blue-300">
-                            <%= pathogen_icon(:folder_open, size: :sm) %>
-                            <span class="ml-2 text-sm">
-                              <%= attachments["name"] %>
-                            </span>
+                            <%= icon(:folder_open, size: :sm) %>
+                            <span class="ml-2 text-sm"><%= attachments["name"] %></span>
                           </div>
+
                           <% attachments["children"].each do |attachment| %>
-                            <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                            <ul class="mt-3 list-inside list-none space-y-1 ps-5">
                               <li>
                                 <div class="flex text-slate-900 dark:text-white">
-                                  <%= pathogen_icon(Attachment.icon, size: :sm) %>
-                                  <span class="ml-2 text-sm">
-                                    <%= attachment["name"] %>
-                                  </span>
+                                  <%= icon(Attachment.icon, size: :sm) %>
+                                  <span class="ml-2 text-sm"><%= attachment["name"] %></span>
                                 </div>
                               </li>
                             </ul>
@@ -72,7 +73,8 @@
           <% @manifest['children'].each do |workflow_execution_id| %>
             <li>
               <div class="flex text-primary-800 dark:text-primary-400">
-                <%= pathogen_icon(:folder_open, class: "size-5 m-0") %>
+                <%= icon(:folder_open, class: "size-5 m-0") %>
+
                 <span class="ml-2">
                   <%= link_to workflow_execution_id["name"],
                   redirect_data_export_path(identifier: workflow_execution_id["name"]),
@@ -82,12 +84,13 @@
                   class: "underline hover:decoration-2 text-sm" %>
                 </span>
               </div>
+
               <% workflow_execution_id["children"].each do |child| %>
-                <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                <ul class="mt-3 list-inside list-none space-y-1 ps-5">
                   <li>
                     <div class="flex text-purple-800 dark:text-purple-300">
                       <% if child["type"] == "folder" %>
-                        <%= pathogen_icon(:folder_open, class: "size-5 m-0") %>
+                        <%= icon(:folder_open, class: "size-5 m-0") %>
                         <span class="ml-2">
                           <%= link_to child["name"],
                           redirect_data_export_path(identifier: child["name"]),
@@ -97,21 +100,18 @@
                           class: "underline hover:decoration-2 text-sm" %>
                         </span>
                       <% else %>
-                        <%= pathogen_icon(Attachment.icon, class: "size-5 m-0") %>
-                        <span class="ml-2 text-sm">
-                          <%= child["name"] %>
-                        </span>
+                        <%= icon(Attachment.icon, class: "size-5 m-0") %>
+                        <span class="ml-2 text-sm"><%= child["name"] %></span>
                       <% end %>
                     </div>
+
                     <% unless child["children"].nil? %>
                       <% child["children"].each do |attachments| %>
-                        <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
+                        <ul class="mt-3 list-inside list-none space-y-1 ps-5">
                           <li>
                             <div class="flex text-blue-800 dark:text-blue-300">
-                              <%= pathogen_icon(Attachment.icon, class: "size -5 m-0") %>
-                              <span class="ml-2 text-sm">
-                                <%= attachments["name"] %>
-                              </span>
+                              <%= icon(Attachment.icon, class: "size -5 m-0") %>
+                              <span class="ml-2 text-sm"><%= attachments["name"] %></span>
                             </div>
                           </li>
                         </ul>

@@ -1,7 +1,6 @@
 <%= render Viral::BaseComponent.new(tag: "div", **system_arguments.except(:close_action)) do %>
-  <h1 class="dialog--title">
-    <%= title %>
-  </h1>
+  <h1 class="dialog--title"><%= title %></h1>
+
   <%= tag.button(
     class: "dialog--close cursor-pointer",
     type: "button",
@@ -12,6 +11,6 @@
     },
     aria: { label: t(:"components.dialog.close") }
   ) do %>
-    <%= pathogen_icon(:x, size: :sm) %>
+    <%= icon(:x, size: :sm) %>
   <% end %>
 <% end %>

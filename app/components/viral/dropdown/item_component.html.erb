@@ -15,10 +15,10 @@
 <% elsif disableable %>
   <li role="none">
     <%= button_to url, method: :get, params: params, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", role: "menuitem", **system_arguments do %>
-      <% if icon.present? %>
+      <% if icon_name.present? %>
         <span class="mr-2 grow-0">
-          <% unless icon == :blank %>
-            <%= pathogen_icon(icon, size: :sm, color: :subdued, library: icon_library) %>
+          <% unless icon_name == :blank %>
+            <%= icon(icon_name, size: :sm, color: :subdued, library: icon_library) %>
           <% end %>
         </span>
       <% end %>
@@ -33,10 +33,10 @@
 <% else %>
   <li role="none">
     <%= link_to url, class: "flex w-full relative focus-visible:z-10 items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer", role: "menuitem", **system_arguments do %>
-      <% if icon.present? %>
+      <% if icon_name.present? %>
         <span class="mr-2 size-4 grow-0">
-          <% unless icon == :blank %>
-            <%= pathogen_icon(icon, size: :sm, color: :subdued, library: icon_library) %>
+          <% unless icon_name == :blank %>
+            <%= icon(icon_name, size: :sm, color: :subdued, library: icon_library) %>
           <% end %>
         </span>
       <% end %>

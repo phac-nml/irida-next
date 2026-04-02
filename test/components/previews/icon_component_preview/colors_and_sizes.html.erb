@@ -1,0 +1,286 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8 dark:from-slate-900 dark:to-slate-800">
+  <!-- Header -->
+  <div class="mb-12 text-center">
+    <h1 class="mb-4 text-4xl font-bold text-slate-900 dark:text-slate-100">
+      <%= icon(
+        :palette,
+        color: :primary,
+        size: :xl,
+        class: "inline mr-3",
+      ) %>
+      Colors & Sizes
+    </h1>
+
+    <p class="mx-auto max-w-3xl text-lg text-slate-600 dark:text-slate-400">
+      Consistent theming with built-in color variants and responsive sizes.
+    </p>
+  </div>
+
+  <!-- Color Variants -->
+  <div class="mb-12">
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:swatches, color: :primary, class: "mr-3") %> Color Variants
+    </h2>
+
+    <div class="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+      <% [
+        { color: :default, icon: :heart, name: "Default", desc: "Standard text color" },
+        { color: :primary, icon: :star, name: "Primary", desc: "Brand primary color" },
+        { color: :success, icon: :check_circle, name: "Success", desc: "Green for positive actions" },
+        { color: :warning, icon: :warning, name: "Warning", desc: "Yellow for caution" },
+        { color: :danger, icon: :x_circle, name: "Danger", desc: "Red for errors/deletion" },
+        { color: :subdued, icon: :info, name: "Subdued", desc: "Muted for secondary content" }
+      ].each do |item| %>
+        <div
+          class="
+            rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm dark:border-slate-700
+            dark:bg-slate-800
+          "
+        >
+          <div class="mb-4 flex h-16 items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-700">
+            <%= icon(item[:icon], color: item[:color], size: :lg) %>
+          </div>
+
+          <h3 class="mb-1 font-semibold text-slate-900 dark:text-slate-100"><%= item[:name] %></h3>
+
+          <p class="mb-3 text-xs text-slate-500 dark:text-slate-400"><%= item[:desc] %></p>
+
+          <code class="rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+            color: :<%= item[:color] %>
+          </code>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Color Examples in Context -->
+    <div class="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <h3 class="mb-4 font-semibold text-slate-900 dark:text-slate-100">Colors in Context</h3>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 rounded-lg bg-green-50 p-3 dark:bg-green-900/20">
+            <%= icon(:check_circle, color: :success) %>
+            <span class="text-green-800 dark:text-green-200">Task completed successfully</span>
+          </div>
+
+          <div class="flex items-center gap-3 rounded-lg bg-red-50 p-3 dark:bg-red-900/20">
+            <%= icon(:x_circle, color: :danger) %>
+            <span class="text-red-800 dark:text-red-200">Error occurred while processing</span>
+          </div>
+
+          <div class="flex items-center gap-3 rounded-lg bg-yellow-50 p-3 dark:bg-yellow-900/20">
+            <%= icon(:warning, color: :warning) %>
+            <span class="text-yellow-800 dark:text-yellow-200">Please review before continuing</span>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 rounded-lg bg-blue-50 p-3 dark:bg-blue-900/20">
+            <%= icon(:info, color: :primary) %>
+            <span class="text-blue-800 dark:text-blue-200">Additional information available</span>
+          </div>
+
+          <div class="flex items-center gap-3 rounded-lg bg-slate-50 p-3 dark:bg-slate-700">
+            <%= icon(:clock, color: :subdued) %>
+            <span class="text-slate-600 dark:text-slate-300">Updated 2 hours ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Size Variants -->
+  <div class="mb-12">
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:resize, color: :primary, class: "mr-3") %> Size Variants
+    </h2>
+
+    <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+      <% [
+        { size: :sm, name: "Small", pixels: "16px", use: "Inline text, badges" },
+        { size: :md, name: "Medium", pixels: "24px", use: "Buttons, list items" },
+        { size: :lg, name: "Large", pixels: "32px", use: "Headers, feature highlights" },
+        { size: :xl, name: "Extra Large", pixels: "40px", use: "Hero sections, empty states" }
+      ].each do |item| %>
+        <div
+          class="
+            rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm dark:border-slate-700
+            dark:bg-slate-800
+          "
+        >
+          <div class="mb-4 flex h-20 items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-700">
+            <%= icon(:star, size: item[:size], color: :primary) %>
+          </div>
+
+          <h3 class="mb-1 font-semibold text-slate-900 dark:text-slate-100"><%= item[:name] %></h3>
+
+          <p class="mb-2 text-xs text-slate-500 dark:text-slate-400"><%= item[:pixels] %></p>
+          <p class="mb-3 text-xs text-slate-600 dark:text-slate-400"><%= item[:use] %></p>
+
+          <code class="rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+            size: :<%= item[:size] %>
+          </code>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Size Comparison -->
+    <div class="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <h3 class="mb-4 font-semibold text-slate-900 dark:text-slate-100">Size Comparison</h3>
+
+      <div class="flex items-end justify-center gap-8 py-6">
+        <div class="text-center">
+          <%= icon(:heart, size: :sm, color: :danger) %>
+
+          <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">:sm</p>
+        </div>
+
+        <div class="text-center">
+          <%= icon(:heart, size: :md, color: :danger) %>
+
+          <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">:md</p>
+        </div>
+
+        <div class="text-center">
+          <%= icon(:heart, size: :lg, color: :danger) %>
+
+          <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">:lg</p>
+        </div>
+
+        <div class="text-center">
+          <%= icon(:heart, size: :xl, color: :danger) %>
+
+          <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">:xl</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage Examples -->
+  <div>
+    <h2 class="mb-6 flex items-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
+      <%= icon(:sparkle, color: :primary, class: "mr-3") %> Real-World Usage
+    </h2>
+
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <!-- Form Example -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <h3 class="mb-4 flex items-center font-semibold text-slate-900 dark:text-slate-100">
+          <%= icon(
+            :clipboard_text,
+            size: :sm,
+            color: :primary,
+            class: "mr-2",
+          ) %>
+          Form with Icon Feedback
+        </h3>
+
+        <div class="space-y-4">
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
+
+            <div class="relative">
+              <input
+                type="email"
+                autocomplete="email"
+                class="
+                  w-full rounded-lg border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500
+                  dark:bg-green-900/20
+                "
+                value="user@example.com"
+              >
+
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                <%= icon(:check_circle, color: :success, size: :sm) %>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+
+            <div class="relative">
+              <input
+                type="password"
+                autocomplete="current-password"
+                class="
+                  w-full rounded-lg border border-red-300 bg-red-50 px-3 py-2 focus:ring-2 focus:ring-red-500
+                  dark:bg-red-900/20
+                "
+              >
+
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                <%= icon(:x_circle, color: :danger, size: :sm) %>
+              </div>
+            </div>
+
+            <p class="mt-1 flex items-center text-sm text-red-600 dark:text-red-400">
+              <%= icon(:warning, color: :danger, size: :sm, class: "mr-2") %> Password must be at least 8 characters
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Example -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <h3 class="mb-4 flex items-center font-semibold text-slate-900 dark:text-slate-100">
+          <%= icon(
+            :list_bullets,
+            size: :sm,
+            color: :primary,
+            class: "mr-2",
+          ) %>
+          Navigation Menu
+        </h3>
+
+        <nav class="space-y-2">
+          <a
+            href="#"
+            class="
+              flex items-center rounded-lg bg-primary-50 px-3 py-2 text-sm text-primary-700 dark:bg-primary-900/20
+              dark:text-primary-300
+            "
+          >
+            <%= icon(
+              :house_line,
+              size: :sm,
+              color: :primary,
+              class: "mr-3",
+            ) %>
+            Dashboard
+          </a>
+
+          <a
+            href="#"
+            class="
+              flex items-center rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-400
+              dark:hover:bg-slate-700
+            "
+          >
+            <%= icon(:users, size: :sm, color: :subdued, class: "mr-3") %> Team Members
+          </a>
+
+          <a
+            href="#"
+            class="
+              flex items-center rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-400
+              dark:hover:bg-slate-700
+            "
+          >
+            <%= icon(:gear_six, size: :sm, color: :subdued, class: "mr-3") %> Settings
+          </a>
+
+          <a
+            href="#"
+            class="
+              flex items-center rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-400
+              dark:hover:bg-slate-700
+            "
+          >
+            <%= icon(:question, size: :sm, color: :subdued, class: "mr-3") %> Help & Support
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

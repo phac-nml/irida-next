@@ -1,30 +1,15 @@
-<div
-  class="container px-4 py-8 mx-auto"
-  data-controller="copy"
-  id="<%= dom_id(@attachment) %>"
->
-  <div
-    class="
-      bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800
-      dark:border-gray-700
-    "
-  >
+<div class="container mx-auto px-4 py-8" data-controller="copy" id="<%= dom_id(@attachment) %>">
+  <div class="rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
     <!-- Header with filename and actions -->
-    <div
-      class="
-        flex items-center justify-between p-4 border-b border-gray-200 md:p-5
-        dark:border-gray-700
-      "
-    >
+    <div class="flex items-center justify-between border-b border-gray-200 p-4 md:p-5 dark:border-gray-700">
       <div class="flex items-center space-x-4">
-        <div class="text-gray-500 dark:text-gray-400">
-          <%= pathogen_icon(Attachment.icon, size: :xl) %>
-        </div>
+        <div class="text-gray-500 dark:text-gray-400"><%= icon(Attachment.icon, size: :xl) %></div>
+
         <div>
           <h1 class="text-xl font-semibold text-gray-900 dark:text-white"><%= @attachment.file.filename %></h1>
+
           <p class="text-sm text-gray-500 dark:text-gray-400">
-            <%= number_to_human_size(@attachment.file.byte_size) %>
-            •
+            <%= number_to_human_size(@attachment.file.byte_size) %> •
             <%= time_tag @attachment.created_at, class: "text-gray-500 dark:text-gray-400" %>
           </p>
         </div>
@@ -36,18 +21,18 @@
             data-copy-target="button"
             data-action="copy#copy"
             class="
-              inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
-              border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
-              focus-visible:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600
-              dark:hover:text-white dark:hover:bg-gray-700
+              inline-flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium
+              text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus-visible:z-10 dark:border-gray-600
+              dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white
             "
           >
-            <span class="flex items-center hidden" data-copy-target="successIcon">
-              <%= pathogen_icon(:check, size: :sm, color: :success, class: "mr-2") %>
+            <span class="flex hidden items-center" data-copy-target="successIcon">
+              <%= icon(:check, size: :sm, color: :success, class: "mr-2") %>
               <%= t("attachment.show.copied") %>
             </span>
+
             <span class="flex items-center" data-copy-target="buttonLabel">
-              <%= pathogen_icon(:clipboard_text, size: :sm, class: "mr-2") %>
+              <%= icon(:clipboard_text, size: :sm, class: "mr-2") %>
               <%= t("attachment.show.copy") %>
             </span>
           </button>
@@ -60,26 +45,25 @@
         method: :get,
         class:
           "inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus-visible:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
-          <%= pathogen_icon(:file_arrow_down, size: :sm, class: "mr-2") %>
+          <%= icon(:file_arrow_down, size: :sm, class: "mr-2") %>
           <%= t('common.actions.download') %>
         <% end %>
       </div>
     </div>
+
     <!-- File preview area -->
     <div class="p-4 md:p-5">
       <% if @attachment.previewable? %>
         <%= yield %>
       <% else %>
         <div class="flex flex-col items-center justify-center py-12 text-center">
-          <div class="mb-4">
-            <%= pathogen_icon(Attachment.icon, size: :xl, color: :subdued) %>
-          </div>
+          <div class="mb-4"><%= icon(Attachment.icon, size: :xl, color: :subdued) %></div>
+
           <h3 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">
             <%= t("attachment.show.not_available.title") %>
           </h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            <%= t("attachment.show.not_available.details") %>
-          </p>
+
+          <p class="text-sm text-gray-500 dark:text-gray-400"><%= t("attachment.show.not_available.details") %></p>
         </div>
       <% end %>
     </div>

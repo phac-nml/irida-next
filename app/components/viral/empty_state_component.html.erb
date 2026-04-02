@@ -2,10 +2,7 @@
 <% title_id = "empty-state-title-#{self.object_id}" %>
 
 <section
-  class="
-    w-full max-w-md mx-auto flex flex-col items-center justify-center text-center
-    px-8 py-12 space-y-6
-  "
+  class="mx-auto flex w-full max-w-md flex-col items-center justify-center space-y-6 px-8 py-12 text-center"
   role="status"
   aria-labelledby="<%= title_id %>"
   aria-describedby="<%= desc_id %>"
@@ -13,12 +10,11 @@
   <div
     aria-hidden="true"
     class="
-      flex items-center justify-center w-20 h-20 rounded-full bg-emerald-100
-      dark:bg-emerald-800 shadow-md mb-6 outline-4 outline-emerald-200
-      dark:outline-emerald-900
+      mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 shadow-md outline-4
+      outline-emerald-200 dark:bg-emerald-800 dark:outline-emerald-900
     "
   >
-    <%= pathogen_icon(
+    <%= icon(
       @icon_name,
       size: :xl,
       color: nil,
@@ -26,25 +22,16 @@
     ) %>
   </div>
 
-  <h2
-    id="<%= title_id %>"
-    class="
-      text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight
-    "
-  >
+  <h2 id="<%= title_id %>" class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
     <%= @title %>
   </h2>
 
   <% if render_content_area? %>
-    <div
-      id="<%= desc_id %>"
-      class="text-base text-slate-600 dark:text-slate-300 max-w-prose mx-auto"
-    >
+    <div id="<%= desc_id %>" class="mx-auto max-w-prose text-base text-slate-600 dark:text-slate-300">
       <% if @description.present? %>
         <span><%= @description %></span>
       <% end %>
     </div>
-
     <% if @action_text.present? && @action_path.present? %>
       <%= link_to @action_text,
       @action_path,

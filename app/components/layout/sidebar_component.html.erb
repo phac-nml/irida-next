@@ -16,7 +16,7 @@
         "
       >
         <a href="<%= root_path %>" class="inline-flex items-center py-2.5 whitespace-nowrap" data-layout-target="logo">
-          <%= pathogen_icon(
+          <%= icon(
             :beaker,
             library: :heroicons,
             size: :lg,
@@ -33,7 +33,7 @@
 
           <div data-controller="pathogen--tooltip">
             <%= tag.button(
-              pathogen_icon(:sidebar),
+              icon(:sidebar),
               type: :button,
               data: {
                 action: "click->layout#collapse",
@@ -226,7 +226,7 @@
         "
         aria-label="<%= t('general.help') %> - <%= t('general.opens_in_new_tab') %>"
       >
-        <%= pathogen_icon :question, class: "mr-2" %>
+        <%= icon :question, class: "mr-2" %>
         <%= t("general.help") %>
       </a>
     </div>

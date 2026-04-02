@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   around_action :use_logidze_responsible, only: %i[create destroy update transfer] # rubocop:disable Rails/LexicallyScopedActionFilter
   around_action :switch_locale
 
+  helper IconHelper
   helper_method :error_message
 
   rescue_from Pagy::RangeError, with: :redirect_to_first_page

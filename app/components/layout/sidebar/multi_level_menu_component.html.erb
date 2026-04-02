@@ -41,7 +41,7 @@
       data: { "collapsible-target": "icon" },
       class: class_names("transition-transform duration-200 mr-2 flex-shrink-0", "rotate-180" => @selected),
     ) do %>
-      <%= pathogen_icon(:caret_down, size: :sm, color: @selected ? :primary : :default) %>
+      <%= icon(:caret_down, size: :sm, color: @selected ? :primary : :default) %>
     <% end %>
   <% end %>
 
@@ -68,7 +68,7 @@
           aria: { current: ("page" if menu_item.selected) },
         ) do %>
           <%= tag.span(menu_item.label, class: "grow") %>
-          <%= render_icon(menu_item.icon, menu_item.selected) if menu_item.icon.present? %>
+          <%= icon(menu_item.icon_name, size: :sm, color: menu_item.selected ? :primary : :default) if menu_item.icon_name.present? %>
         <% end %>
       <% end %>
     <% end %>

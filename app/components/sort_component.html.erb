@@ -1,9 +1,7 @@
 <%= render Viral::BaseComponent.new(tag: 'a', href: url, classes: class_names('inline-flex items-center'), **system_arguments) do %>
   <%= label %>
 
-  <% unless icon.blank? %>
-    <span class="grow-0 ml-2 flex items-center">
-      <%= pathogen_icon(icon, size: :sm) %>
-    </span>
+  <% unless sort_icon.blank? %>
+    <span class="ml-2 flex grow-0 items-center"><%= icon(sort_icon, size: :sm) %></span>
   <% end %>
 <% end %>

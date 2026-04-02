@@ -4,7 +4,7 @@ module Viral
   module Form
     # Component to render form help text can be either default, success or error
     class HelpTextComponent < Component
-      attr_reader :icon
+      attr_reader :icon_name
 
       STATE_MAPPINGS = {
         default: 'mt-2 text-sm text-slate-500 dark:text-slate-400',
@@ -21,7 +21,7 @@ module Viral
       def initialize(state: :default, **system_arguments)
         @state = state
         @arguments = system_arguments
-        @icon = ICON_MAPPINGS.key?(@state) ? ICON_MAPPINGS[@state] : ICON_MAPPINGS[:default]
+        @icon_name = ICON_MAPPINGS.key?(@state) ? ICON_MAPPINGS[@state] : ICON_MAPPINGS[:default]
       end
 
       def icon_color
