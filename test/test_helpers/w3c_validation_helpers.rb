@@ -184,6 +184,7 @@ module W3cValidationHelpers
     end.compact
   ensure
     # Records it in Logger
+    removeds ||= []
     Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect) if !removeds.empty? && prefix.present?
   end
 
@@ -221,6 +222,7 @@ module W3cValidationHelpers
     end.compact
   ensure
     # Records it in Logger
+    removeds ||= []
     Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect) if !removeds.empty? && prefix.present?
   end
 
@@ -256,6 +258,7 @@ module W3cValidationHelpers
     end.compact
   ensure
     # Records it in Logger
+    removeds ||= []
     Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect) if !removeds.empty? && prefix.present?
   end
 
@@ -299,6 +302,7 @@ module W3cValidationHelpers
     end.compact
   ensure
     # Records it in Logger
+    removeds ||= []
     Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect) if !removeds.empty? && prefix.present?
   end
 
@@ -318,6 +322,7 @@ module W3cValidationHelpers
     end.compact
   ensure
     # Records it in Logger
+    removeds ||= []
     Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect) if !removeds.empty? && prefix.present?
   end
 
