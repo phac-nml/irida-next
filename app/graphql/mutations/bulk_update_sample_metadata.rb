@@ -12,7 +12,7 @@ module Mutations
              description: 'The Node ID of the group to be updated. For example, `gid://irida/group/a84cd757-dedb-4c64-8b01-097020163077`' # rubocop:disable Layout/LineLength
     argument :group_puid, ID, # rubocop:disable GraphQL/ExtractInputType
              required: false,
-             description: 'Persistent Unique Identifier of the group. For example, `INXT_PRJ_AAAAAAAAAA`.'
+             description: 'Persistent Unique Identifier of the group. For example, `INXT_GRP_AAAAAAAAAA`.'
     argument :project_id, ID, # rubocop:disable GraphQL/ExtractInputType
              required: false,
              description: 'The Node ID of the project to be updated. For example, `gid://irida/project/a84cd757-dedb-4c64-8b01-097020163077`' # rubocop:disable Layout/LineLength
