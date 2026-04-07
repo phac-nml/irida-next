@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 # Common bot personal access token actions
-module BotPersonalAccessTokenActions
+module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
     before_action proc { namespace }
     before_action proc { bot_account }
-    before_action proc { personal_access_tokens }, only: %i[index revoke]
-    before_action proc { personal_access_token }, only: %i[revoke revoke_confirmation]
+    before_action proc { personal_access_tokens }, only: %i[index revoke rotate]
+    before_action proc { personal_access_token }, only: %i[revoke revoke_confirmation rotate_confirmation]
     before_action proc { bot_accounts }
   end
 
@@ -86,6 +86,44 @@ module BotPersonalAccessTokenActions
         end
       end
     end
+  end
+
+  def rotate
+    rotated_personal_access_token = PersonalAccessTokens::RotateService.new(current_user, @personal_access_token,
+                                                                            @namespace,
+                                                                            @bot_account.user).execute
+
+    respond_to do |format|
+      if rotated_personal_access_token.errors.empty?
+        format.turbo_stream do
+          render status: :ok, locals: { personal_access_token: rotated_personal_access_token }
+        end
+      else
+        format.turbo_stream do
+          render status: :unprocessable_content, locals: { type: 'alert',
+                                                           message: error_message(@personal_access_token) }
+        end
+      end
+    end
+  end
+
+  def rotate_confirmation
+    authorize! @namespace, to: :rotate_bot_personal_access_token?
+
+    url_path = if @namespace.project_namespace?
+                 rotate_project_bot_personal_access_token_path
+               else
+                 rotate_group_bot_personal_access_token_path
+               end
+
+    render turbo_stream: turbo_stream.update('token_dialog',
+                                             partial: 'shared/personal_access_tokens/rotate_confirmation_modal',
+                                             locals: {
+                                               open: true,
+                                               personal_access_token: @personal_access_token,
+                                               bot_account: @bot_account,
+                                               url_path: url_path
+                                             }), status: :ok
   end
 
   private

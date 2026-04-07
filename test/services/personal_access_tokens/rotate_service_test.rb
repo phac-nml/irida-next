@@ -66,5 +66,149 @@ module PersonalAccessTokens
         end
       end
     end
+
+    test 'rotate personal access token for group bot account' do
+      bot_account = namespace_bots(:group1_bot0)
+      personal_access_token = personal_access_tokens(:user_group_bot_account0_valid_pat)
+      bot_user = bot_account.user
+      namespace = bot_account.namespace
+
+      assert_difference(-> { bot_user.personal_access_tokens.count } => 1) do
+        assert_changes -> { personal_access_token.reload.revoked? } do
+          new_token = PersonalAccessTokens::RotateService.new(@user, personal_access_token, namespace, bot_user).execute
+
+          assert_not_equal new_token, personal_access_token
+          assert_not_equal new_token.token_digest, personal_access_token.token_digest
+          assert_not_equal new_token.created_at, personal_access_token.created_at
+          assert_equal new_token.name, personal_access_token.name
+          assert_equal new_token.expires_at, personal_access_token.expires_at
+          assert_equal new_token.scopes, personal_access_token.scopes
+        end
+      end
+    end
+
+    test 'should not rotate personal access token for group bot account without proper authorization' do
+      bot_account = namespace_bots(:group1_bot0)
+      personal_access_token = personal_access_tokens(:user_group_bot_account0_valid_pat)
+      bot_user = bot_account.user
+      namespace = bot_account.namespace
+      user = users(:jeff_doe)
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        PersonalAccessTokens::RotateService.new(user, personal_access_token, namespace, bot_user).execute
+      end
+
+      assert_equal GroupPolicy, exception.policy
+      assert_equal :rotate_bot_personal_access_token?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+
+      assert_equal I18n.t(:'action_policy.policy.group.rotate_bot_personal_access_token?',
+                          name: namespace.name),
+                   exception.result.message
+    end
+
+    test 'should not rotate expired group bot personal access token' do
+      bot_account = namespace_bots(:group1_bot0)
+      expired_pat = personal_access_tokens(:user_group_bot_account0_expired_pat)
+      bot_user = bot_account.user
+      namespace = bot_account.namespace
+
+      assert_no_difference(-> { bot_user.personal_access_tokens.count }) do
+        assert_no_changes -> { expired_pat.reload.revoked? } do
+          pat = PersonalAccessTokens::RotateService.new(@user, expired_pat, namespace, bot_user).execute
+          assert pat.errors.full_messages.include?(
+            I18n.t('activerecord.errors.models.personal_access_tokens.rotate.only_active')
+          )
+        end
+      end
+    end
+
+    test 'should not rotate revoked group bot personal access token' do
+      bot_account = namespace_bots(:group1_bot0)
+      revoked_pat = personal_access_tokens(:user_group_bot_account0_revoked_pat)
+      bot_user = bot_account.user
+      namespace = bot_account.namespace
+
+      assert_no_difference(-> { bot_user.personal_access_tokens.count }) do
+        assert_no_changes -> { revoked_pat.reload.revoked? } do
+          pat = PersonalAccessTokens::RotateService.new(@user, revoked_pat, namespace, bot_user).execute
+          assert pat.errors.full_messages.include?(
+            I18n.t('activerecord.errors.models.personal_access_tokens.rotate.only_active')
+          )
+        end
+      end
+    end
+
+    test 'rotate personal access token for project bot account' do
+      bot_account = namespace_bots(:project1_bot0)
+      personal_access_token = personal_access_tokens(:user_bot_account0_valid_pat)
+      bot_user = bot_account.user
+      namespace = bot_account.namespace
+
+      assert_difference(-> { bot_user.personal_access_tokens.count } => 1) do
+        assert_changes -> { personal_access_token.reload.revoked? } do
+          new_token = PersonalAccessTokens::RotateService.new(@user, personal_access_token, namespace, bot_user).execute
+
+          assert_not_equal new_token, personal_access_token
+          assert_not_equal new_token.token_digest, personal_access_token.token_digest
+          assert_not_equal new_token.created_at, personal_access_token.created_at
+          assert_equal new_token.name, personal_access_token.name
+          assert_equal new_token.expires_at, personal_access_token.expires_at
+          assert_equal new_token.scopes, personal_access_token.scopes
+        end
+      end
+    end
+
+    test 'should not rotate personal access token for project bot account without proper authorization' do
+      bot_account = namespace_bots(:project1_bot0)
+      personal_access_token = personal_access_tokens(:user_bot_account0_valid_pat)
+      bot_user = bot_account.user
+      namespace = bot_account.namespace
+      user = users(:jeff_doe)
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        PersonalAccessTokens::RotateService.new(user, personal_access_token, namespace, bot_user).execute
+      end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :rotate_bot_personal_access_token?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.rotate_bot_personal_access_token?',
+                          name: namespace.name),
+                   exception.result.message
+    end
+
+    test 'should not rotate expired project bot personal access token' do
+      bot_account = namespace_bots(:project1_bot0)
+      expired_pat = personal_access_tokens(:user_bot_account0_expired_pat)
+      bot_user = bot_account.user
+      namespace = bot_account.namespace
+
+      assert_no_difference(-> { bot_user.personal_access_tokens.count }) do
+        assert_no_changes -> { expired_pat.reload.revoked? } do
+          pat = PersonalAccessTokens::RotateService.new(@user, expired_pat, namespace, bot_user).execute
+          assert pat.errors.full_messages.include?(
+            I18n.t('activerecord.errors.models.personal_access_tokens.rotate.only_active')
+          )
+        end
+      end
+    end
+
+    test 'should not rotate revoked project bot personal access token' do
+      bot_account = namespace_bots(:project1_bot0)
+      revoked_pat = personal_access_tokens(:user_bot_account0_revoked_pat)
+      bot_user = bot_account.user
+      namespace = bot_account.namespace
+
+      assert_no_difference(-> { bot_user.personal_access_tokens.count }) do
+        assert_no_changes -> { revoked_pat.reload.revoked? } do
+          pat = PersonalAccessTokens::RotateService.new(@user, revoked_pat, namespace, bot_user).execute
+          assert pat.errors.full_messages.include?(
+            I18n.t('activerecord.errors.models.personal_access_tokens.rotate.only_active')
+          )
+        end
+      end
+    end
   end
 end
