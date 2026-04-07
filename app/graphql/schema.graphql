@@ -1663,7 +1663,7 @@ type Mutation {
   ): TransferSamplesPayload
 
   """
-  Update metadata for samples.
+  Update metadata for a sample.
   """
   updateSampleMetadata(
     """
@@ -1673,7 +1673,7 @@ type Mutation {
   ): UpdateSampleMetadataPayload
 
   """
-  Bulk update metadata for samples.
+  Bulk update metadata for multiple samples.
   """
   bulkUpdateSampleMetadata(
     """
