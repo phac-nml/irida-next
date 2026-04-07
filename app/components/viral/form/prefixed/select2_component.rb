@@ -7,7 +7,7 @@ module Viral
       class Select2Component < Viral::Component
         attr_reader :form, :id, :name, :selected_value, :placeholder, :required, :path_separator, :aria
 
-        renders_many :options, Viral::Select2OptionComponent
+        renders_many :options, Viral::Select2::V1::OptionComponent
         renders_one :empty_state
 
         # rubocop:disable Metrics/ParameterLists
