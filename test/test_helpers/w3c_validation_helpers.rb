@@ -347,7 +347,7 @@ module W3cValidationHelpers
   # @param prefix [String] Prefix of the warning message recorded with Logger.
   #    If empty, no message is recorded in Logger.
   # @return [Array<String, W3CValidators::Message>]
-  def _ignore_aria_label_on_div_without_role(errs, prefix = '')
+  def _ignore_aria_label_on_div_without_role(errs, prefix = ''); removeds = nil
     removeds = []
     errs.map do |es|
       # Example of an Error:
@@ -383,20 +383,22 @@ module W3cValidationHelpers
   # @return [Array<String, W3CValidators::Message>]
   def _ignore_role_on_table_child_elements(errs, prefix = '')
     removeds = []
-    errs.map do |es|
-      # Example of an Error:
-      #   ERROR; line 34532: The "role" attribute must not be used on a "tr" element which has a "table"
-      #     ancestor with no "role" attribute, or with a "role" attribute whose value is "table", "grid",
-      #     or "treegrid".
-      if /\AERROR\b.+\brole\b.*\battribute\b.*\bmust\b\s\bnot\b\s\bbe\b\s\bused\b\s\bon\b\s\ba?\b.*\b(tr|th|td)\b.*\btable\b.*\bancestor\b/i =~ es.to_s
-        removeds << es
-        nil
-      else
-        es
-      end
-    end.compact
-  ensure
-    Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect) if !removeds.empty? && prefix.present?
+    begin
+      errs.map do |es|
+        # Example of an Error:
+        #   ERROR; line 34532: The "role" attribute must not be used on a "tr" element which has a "table"
+        #     ancestor with no "role" attribute, or with a "role" attribute whose value is "table", "grid",
+        #     or "treegrid".
+        if /\AERROR\b.+\brole\b.*\battribute\b.*\bmust\b\s\bnot\b\s\bbe\b\s\bused\b\s\bon\b\s\ba?\b.*\b(tr|th|td)\b.*\btable\b.*\bancestor\b/i =~ es.to_s
+          removeds << es
+          nil
+        else
+          es
+        end
+      end.compact
+    ensure
+      Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect) if !removeds.empty? && prefix.present?
+    end
   end
 
   ## Playing safe though this should be defined in /app/helpers/application_helper.rb
