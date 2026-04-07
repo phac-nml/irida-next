@@ -1677,7 +1677,7 @@ type Mutation {
   """
   bulkUpdateSampleMetadata(
     """
-    Parameters for UpdateSampleMetadata
+    Parameters for BulkUpdateSampleMetadata
     """
     input: BulkUpdateSampleMetadataInput!
   ): BulkUpdateSampleMetadataPayload
