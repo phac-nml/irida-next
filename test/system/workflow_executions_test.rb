@@ -658,7 +658,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
             with: 'irida_next_example'
     find('input.t-search-component').send_keys(:return)
 
-    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+    assert_button I18n.t(:'components.search_field_component.clear_button')
+
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
     assert_selector "div[role='status']", text: /advanced search/, visible: false
     assert_text @workflow_execution1.id
     assert_no_text @workflow_execution4.id
