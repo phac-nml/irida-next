@@ -347,7 +347,7 @@ module W3cValidationHelpers
   # @param prefix [String] Prefix of the warning message recorded with Logger.
   #    If empty, no message is recorded in Logger.
   # @return [Array<String, W3CValidators::Message>]
-  def _ignore_aria_label_on_div_without_role(errs, prefix = '')
+  def _ignore_aria_label_on_div_without_role(errs, prefix = ''); removeds = nil
     removeds = []
     errs.map do |es|
       # Example of an Error:
