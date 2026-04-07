@@ -4,8 +4,8 @@ require 'test_helper'
 
 class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION = <<~GRAPHQL
-    mutation($metadataPayload: JSON!, $projectId: ID!) {
-      bulkUpdateSampleMetadata(input: { metadataPayload: $metadataPayload, projectId: $projectId }) {
+    mutation($bulkMetadata: JSON!, $projectId: ID!) {
+      bulkUpdateSampleMetadata(input: { bulkMetadata: $bulkMetadata, projectId: $projectId }) {
         samples,
         status,
         errors {
@@ -17,8 +17,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   GRAPHQL
 
   UPDATE_SAMPLE_METADATA_BY_PROJECT_PUID_MUTATION = <<~GRAPHQL
-    mutation($metadataPayload: JSON!, $projectPuid: ID!) {
-      bulkUpdateSampleMetadata(input: { metadataPayload: $metadataPayload, projectPuid: $projectPuid }) {
+    mutation($bulkMetadata: JSON!, $projectPuid: ID!) {
+      bulkUpdateSampleMetadata(input: { bulkMetadata: $bulkMetadata, projectPuid: $projectPuid }) {
         samples,
         status,
         errors {
@@ -30,8 +30,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   GRAPHQL
 
   UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION = <<~GRAPHQL
-    mutation($metadataPayload: JSON!, $groupId: ID!) {
-      bulkUpdateSampleMetadata(input: { metadataPayload: $metadataPayload, groupId: $groupId }) {
+    mutation($bulkMetadata: JSON!, $groupId: ID!) {
+      bulkUpdateSampleMetadata(input: { bulkMetadata: $bulkMetadata, groupId: $groupId }) {
         samples,
         status,
         errors {
@@ -43,8 +43,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   GRAPHQL
 
   UPDATE_SAMPLE_METADATA_BY_GROUP_PUID_MUTATION = <<~GRAPHQL
-    mutation($metadataPayload: JSON!, $groupPuid: ID!) {
-      bulkUpdateSampleMetadata(input: { metadataPayload: $metadataPayload, groupPuid: $groupPuid }) {
+    mutation($bulkMetadata: JSON!, $groupPuid: ID!) {
+      bulkUpdateSampleMetadata(input: { bulkMetadata: $bulkMetadata, groupPuid: $groupPuid }) {
         samples,
         status,
         errors {
@@ -78,13 +78,13 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                          @sample5.puid => { 'newmetadatafield3' => 'value3' } }
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_PUID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectPuid: @project2.puid })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
     assert_equal 'successful', data['status']
     assert_equal 3, data['samples'].count
@@ -106,13 +106,13 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                          @sample5.puid => { 'newmetadatafield3' => 'value3' } }
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectId: @project2.to_global_id.to_s })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
     assert_equal 'successful', data['status']
     assert_equal 3, data['samples'].count
@@ -134,13 +134,13 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                          @sample5.puid => { 'newmetadatafield3' => 'value3' } }
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_PUID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupPuid: @group1.puid })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
     assert_equal 'successful', data['status']
     assert_equal 3, data['samples'].count
@@ -162,13 +162,13 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                          @sample5.puid => { 'newmetadatafield3' => 'value3' } }
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupId: @group1.to_global_id.to_s })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
     assert_equal 'successful', data['status']
     assert_equal 3, data['samples'].count
@@ -189,11 +189,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupId: @group1.to_global_id.to_s })
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'successful with errors', data['status']
     assert_equal [@sample3.to_global_id.to_s], data['samples']
 
@@ -216,11 +216,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectId: @project2.to_global_id.to_s })
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'successful with errors', data['status']
     assert_equal [@sample3.to_global_id.to_s], data['samples']
     assert_includes data['errors'], {
@@ -242,11 +242,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupId: @group1.to_global_id.to_s })
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'unsuccessful', data['status']
     assert_empty data['samples']
     assert_includes data['errors'], {
@@ -267,11 +267,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectId: @project2.to_global_id.to_s })
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'unsuccessful', data['status']
     assert_empty data['samples']
     assert_includes data['errors'], {
@@ -294,13 +294,13 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                          @sample2.name => { 'newmetadatafield2' => 'value2', 'newmetadatafield3' => 'value3' } }
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: user, token: },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectId: @project1.to_global_id.to_s })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
     assert_equal 'successful', data['status']
     assert_equal 2, data['samples'].count
@@ -318,11 +318,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectId: @project2.to_global_id.to_s })
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'successful with errors', data['status']
     assert_equal [@sample3.to_global_id.to_s], data['samples']
     assert_includes data['errors'], {
@@ -336,7 +336,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     metadata_payload = { @sample3.to_global_id.to_s => { 'newmetadatafield1' => 'value1' } }
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: @user, token: @read_api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectId: @project2.to_global_id.to_s })
 
     assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
@@ -353,7 +353,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: user, token: api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectId: @project2.to_global_id.to_s })
 
     assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
@@ -371,7 +371,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
                                  context: { current_user: user, token: api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupId: @group1.to_global_id.to_s })
 
     assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
@@ -388,7 +388,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
                                  context: { current_user: user, token: },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupId: @group1.to_global_id.to_s })
 
     assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
@@ -405,7 +405,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: user, token: },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectId: @project2.to_global_id.to_s })
 
     assert_not_nil result['errors'], 'shouldn\'t work and have errors.'
@@ -421,11 +421,10 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               projectId: @project2.to_global_id.to_s })
-
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'unsuccessful', data['status']
     assert_includes data['errors'], {
       'path' => ['sample'],
@@ -437,10 +436,10 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   test 'invalid JSON formatting' do
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: 'metadata_payload',
+                                 variables: { bulkMetadata: 'metadata_payload',
                                               projectId: @project2.to_global_id.to_s })
 
-    data = result['data']['updateSampleMetadata']
+    data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data
     assert_not_empty data['errors']
 
@@ -457,11 +456,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupId: @group1.to_global_id.to_s })
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'unsuccessful', data['status']
 
     assert_includes data['errors'], {
@@ -483,11 +482,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupId: @group1.to_global_id.to_s })
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'successful', data['status']
     assert_equal 3, data['samples'].count
     assert_includes(data['samples'], @sample1.name)
@@ -514,11 +513,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     }
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupId: @group1.to_global_id.to_s })
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'successful', data['status']
     assert_equal 4, data['samples'].count
     assert_includes(data['samples'], @sample1.puid)
@@ -541,10 +540,10 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     metadata_payload = { sample.puid => { 'newmetadatafield1' => 'value1' } }
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_PUID_MUTATION,
                                  context: { current_user: user, token: },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupPuid: group.puid })
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_equal 'unsuccessful', data['status']
     assert_empty data['samples']
     assert_includes data['errors'], {
@@ -563,13 +562,13 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     metadata_payload = { sample.puid => { 'newmetadatafield1' => 'value1' } }
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
                                  context: { current_user: user, token: },
-                                 variables: { metadataPayload: metadata_payload,
+                                 variables: { bulkMetadata: metadata_payload,
                                               groupId: group.to_global_id.to_s })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['updateSampleMetadata']
-    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
     assert_equal 'successful', data['status']
     assert_equal [sample.puid], data['samples']

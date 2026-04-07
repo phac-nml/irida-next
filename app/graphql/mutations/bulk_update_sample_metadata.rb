@@ -41,7 +41,7 @@ module Mutations
         }
       end
 
-      metadata_payload = args[:metadata_payload]
+      metadata_payload = args[:bulk_metadata]
       # convert string to hash if json string as given
       metadata_payload = JSON.parse(metadata_payload) if metadata_payload.is_a?(String)
 
