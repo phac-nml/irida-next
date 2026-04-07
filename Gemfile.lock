@@ -9,14 +9,15 @@ GIT
 
 GIT
   remote: https://github.com/phac-nml/pathogen-view-components.git
-  revision: b48211836759f98bfdc2ef056bf2b6781853e0f1
-  branch: main
+  revision: 674bc07af5b81c19648ed466de534a311e0a965a
+  tag: v1.0.0
   specs:
     pathogen_view_components (0.0.1)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
       nokogiri
       rails_icons (>= 1.4.0)
+      turbo-rails
       view_component (>= 4.0, < 5.0)
 
 GEM
