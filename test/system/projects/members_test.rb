@@ -250,7 +250,7 @@ module Projects
 
       # Members tab should be selected by default
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
-      assert_selector '[role="tabpanel"]#members-panel:not(.hidden)'
+      assert_selector '[role="tabpanel"]#members-panel:not([hidden])'
 
       assert_button I18n.t(:'projects.members.index.add'), disabled: false
 
@@ -472,29 +472,29 @@ module Projects
 
       # Members tab should be selected by default
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
-      assert_selector '[role="tabpanel"]#members-panel:not(.hidden)'
+      assert_selector '[role="tabpanel"]#members-panel:not([hidden])'
       assert_selector '[role="tab"]#groups-tab[aria-selected="false"]'
-      # Groups panel should have hidden class
+      # Groups panel should have hidden attribute
       groups_panel = find('[role="tabpanel"]#groups-panel', visible: :all)
-      assert groups_panel[:class].include?('hidden'), 'Groups panel should have hidden class'
+      assert groups_panel['hidden'], 'Groups panel should have hidden attribute'
 
       # Click groups tab
       find('[role="tab"]#groups-tab').click
 
       # Groups tab should now be selected
       assert_selector '[role="tab"]#groups-tab[aria-selected="true"]'
-      assert_selector '[role="tabpanel"]#groups-panel:not(.hidden)'
+      assert_selector '[role="tabpanel"]#groups-panel:not([hidden])'
       assert_selector '[role="tab"]#members-tab[aria-selected="false"]'
-      # Members panel should have hidden class
+      # Members panel should have hidden attribute
       members_panel = find('[role="tabpanel"]#members-panel', visible: :all)
-      assert members_panel[:class].include?('hidden'), 'Members panel should have hidden class'
+      assert members_panel['hidden'], 'Members panel should have hidden attribute'
 
       # Click members tab again
       find('[role="tab"]#members-tab').click
 
       # Members tab should be selected again
       assert_selector '[role="tab"]#members-tab[aria-selected="true"]'
-      assert_selector '[role="tabpanel"]#members-panel:not(.hidden)'
+      assert_selector '[role="tabpanel"]#members-panel:not([hidden])'
     end
   end
 end
