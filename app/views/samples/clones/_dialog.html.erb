@@ -108,7 +108,7 @@
                           class: "button button-primary",
                           disabled: true,
                           data:
-                          if Flipper.enabled?(:v2_select2)
+                          if Flipper.enabled?(:v2_select2, Current.user)
                           {
                             action: "viral--dialog#setClosable",
                             "viral--dialog-closable-param": "false",
