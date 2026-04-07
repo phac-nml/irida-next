@@ -151,6 +151,9 @@ fr:
               taken: L’espace de noms a déjà été partagé avec ce groupe
             namespace_type:
               inclusion: Ne peut être qu’un groupe ou un projet
+        personal_access_tokens:
+          rotate:
+            only_active: Seuls les jetons actifs peuvent être remis en rotation
         user:
           attributes:
             password:

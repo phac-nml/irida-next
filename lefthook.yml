@@ -49,6 +49,7 @@ pre-commit:
         - "config/locales/**/*.yaml"
         - ".github/workflows/*.yml"
         - ".github/workflows/**/*.yml"
+        - "test/fixtures/*.yml"
       run: yq -i -S '.' -Y {staged_files}
       stage_fixed: true
 

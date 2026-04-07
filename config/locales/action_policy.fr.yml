@@ -29,6 +29,7 @@ fr:
         member_listing?: Vous n’êtes pas autorisé à afficher les membres sous le groupe %{name} sur ce serveur.
         new?: Vous n’êtes pas autorisé à créer un projet sous le groupe %{name} sur ce serveur.
         read?: Vous n’êtes pas autorisé à afficher le groupe %{name} de ce serveur.
+        rotate_bot_personal_access_token?: Vous n’êtes pas autorisé à faire pivoter les jetons d’accès personnels pour les comptes de bots pour le groupe %{name} sur ce serveur.
         sample_listing?: Vous n’êtes pas autorisé à afficher des échantillons pour le groupe %{name} sur ce serveur.
         submit_workflow?: Vous n’êtes pas autorisé à soumettre des flux de travail pour les échantillons au sein du groupe %{name} sur ce serveur.
         transfer?: Vous n’êtes pas autorisé à transférer le groupe %{name} de ce serveur.
@@ -60,6 +61,7 @@ fr:
         import_samples_and_metadata?: Vous n’êtes pas autorisé à importer des échantillons et des métadonnées pour le groupe %{name} sur ce serveur.
         link_namespace_with_group?: Vous n’êtes pas autorisé à lier le projet %{name} à d’autres groupes sur ce serveur.
         member_listing?: Vous n’êtes pas autorisé à afficher des membres pour l’espace de noms du projet %{name} sur ce serveur.
+        rotate_bot_personal_access_token?: Vous n’êtes pas autorisé à faire pivoter les jetons d’accès personnels pour les comptes de bots pour le projet %{name} sur ce serveur.
         submit_workflow?: Vous n’êtes pas autorisé à soumettre des flux de travail pour les échantillons au sein du projet %{name} sur ce serveur.
         unlink_namespace_with_group?: Vous n’êtes pas autorisé à dissocier le projet %{name} d’autres groupes sur ce serveur.
         update?: Vous n’êtes pas autorisé à mettre à jour l’espace de noms du projet %{name} sur ce serveur.
@@ -109,6 +111,7 @@ fr:
         new?: Vous n’êtes pas autorisé à créer un utilisateur sur ce serveur.
         read?: Vous n’êtes pas autorisé à afficher les profils des utilisateurs %{name} sur ce serveur.
         revoke?: Vous n’êtes pas autorisé à révoquer les jetons d’accès personnels de l’utilisateur %{name} sur ce serveur.
+        rotate_personal_access_token?: Vous n'êtes pas autorisé à faire pivoter les jetons d'accès personnels de l'utilisateur %{name} sur ce serveur.
         update?: Vous n’êtes pas autorisé à mettre à jour l’utilisateur %{name} sur ce serveur.
       workflow_execution:
         cancel?: Vous n’êtes pas autorisé à annuler les exécutions de flux de travail pour %{namespace_type} %{name}

@@ -28,6 +28,8 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           member do
             delete :revoke
             get :revoke_confirmation
+            put :rotate
+            get :rotate_confirmation
           end
         end
       end

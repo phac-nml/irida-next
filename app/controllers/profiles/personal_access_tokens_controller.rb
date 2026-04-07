@@ -49,6 +49,25 @@ module Profiles
       end
     end
 
+    def rotate
+      personal_access_token = current_user.personal_access_tokens.find(params[:id])
+
+      @personal_access_token = PersonalAccessTokens::RotateService.new(current_user, personal_access_token).execute
+
+      respond_to do |format|
+        if @personal_access_token.errors.empty?
+          format.turbo_stream do
+            render locals: { new_personal_access_token: @personal_access_token }
+          end
+        else
+          format.turbo_stream do
+            render status: :unprocessable_content, locals: { personal_access_token: personal_access_token,
+                                                             message: error_message(personal_access_token) }
+          end
+        end
+      end
+    end
+
     private
 
     def personal_access_token_params

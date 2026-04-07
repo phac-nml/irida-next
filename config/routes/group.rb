@@ -23,6 +23,8 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
         member do
           get :revoke_confirmation
           delete :revoke
+          put :rotate
+          get :rotate_confirmation
         end
       end
     end

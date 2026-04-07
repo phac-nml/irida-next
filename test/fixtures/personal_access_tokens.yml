@@ -149,3 +149,25 @@ user_group_bot_account0_expired_pat:
   expires_at: <%= 5.days.ago.to_date %>
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "TA3wwK3sWCjn0xdCyZtH") %>
   last_used_at: nil
+
+user_bot_account0_revoked_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid) %>
+  scopes:
+    - read_api
+    - api
+  name: Revoked Valid PAT0
+  revoked: true
+  expires_at: <%= 10.days.ago.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "VX3wwK3sWTjn0xdCyZtH") %>
+  last_used_at: nil
+
+user_group_bot_account0_revoked_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid) %>
+  scopes:
+    - read_api
+    - api
+  name: Revoked PAT 0
+  revoked: true
+  expires_at: <%= 5.days.ago.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "TA3wwK3sWCjr0xdCyZtH") %>
+  last_used_at: nil

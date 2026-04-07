@@ -230,6 +230,13 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def rotate_bot_personal_access_token?
+    return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+    details[:name] = record.name
+    false
+  end
+
   def transfer_sample?
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
