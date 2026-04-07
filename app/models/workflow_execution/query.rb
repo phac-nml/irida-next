@@ -40,10 +40,25 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   def normalize_state_value(condition)
     if %w[in not_in].include?(condition.operator)
-      Array(condition.value).map { |v| WorkflowExecution.states[v] || v }
+      Array(condition.value).filter_map { |value| state_filter_value(value) }
     else
-      WorkflowExecution.states[condition.value] || condition.value
+      state_filter_value(condition.value)
     end
+  end
+
+  def state_filter_value(value)
+    return value if value.blank? || WorkflowExecution.states.value?(value)
+
+    normalized_value = value.to_s.strip
+    state_key = WorkflowExecution.states.keys.find do |candidate|
+      state_filter_aliases(candidate).any? { |state_value| state_value.casecmp?(normalized_value) }
+    end
+
+    WorkflowExecution.states[state_key]
+  end
+
+  def state_filter_aliases(state_key)
+    [state_key, I18n.t("workflow_executions.state.#{state_key}", default: state_key.humanize)]
   end
 
   def ransack_params

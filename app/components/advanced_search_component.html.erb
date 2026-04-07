@@ -5,8 +5,10 @@
     advanced_search_open_value: @open,
     advanced_search_status_value: @status,
     advanced_search_confirm_close_text_value: t("components.advanced_search_component.confirm_close_text"),
-
     advanced_search_list_filter_outlet: ".list-filter",
+    advanced_search_enum_fields_value: json_escape_data(@fields.fetch(:enum_fields, {})),
+    advanced_search_enum_operations_value: json_escape_data(enum_operation_options),
+    advanced_search_standard_operations_value: json_escape_data(operation_options),
   },
 ) do %>
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
@@ -80,11 +82,11 @@
     </div>
 
     <% dialog.with_primary_action(
-      "data-action": "advanced-search#submit filters#submit",
+      "data-action": "advanced-search#submit viral--dialog#close filters#submit",
     ) { t("components.advanced_search_component.apply_filter_button") } %>
 
     <% dialog.with_secondary_action do %>
-      <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
+      <%= viral_button(data: { action: "advanced-search#clearForm viral--dialog#close filters#submit" }) do %>
         <%= t("components.advanced_search_component.clear_filter_button") %>
       <% end %>
     <% end %>
@@ -92,7 +94,7 @@
 
   <template data-advanced-search-target="listValueTemplate">
     <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-      <% condition = @search_condition_class.new(operator: "in") %>
+      <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "in") %>
 
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
@@ -105,9 +107,9 @@
     <% end %>
   </template>
 
-  <template data-advanced-search-target="valueTemplate">
+  <template data-advanced-search-target="listSelectValueTemplate">
     <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-      <% condition = @search_condition_class.new(operator: "=") %>
+      <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "in") %>
 
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
         <%= render AdvancedSearch::Value.new(
@@ -115,6 +117,38 @@
           group_index: "GROUP_INDEX_PLACEHOLDER",
           condition: condition,
           condition_index: "CONDITION_INDEX_PLACEHOLDER",
+          options: [],
+        ) %>
+      <% end %>
+    <% end %>
+  </template>
+
+  <template data-advanced-search-target="valueTemplate">
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "=") %>
+
+      <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
+        <%= render AdvancedSearch::Value.new(
+          conditions_form: conditions_form,
+          group_index: "GROUP_INDEX_PLACEHOLDER",
+          condition: condition,
+          condition_index: "CONDITION_INDEX_PLACEHOLDER",
+        ) %>
+      <% end %>
+    <% end %>
+  </template>
+
+  <template data-advanced-search-target="selectValueTemplate">
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "=") %>
+
+      <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
+        <%= render AdvancedSearch::Value.new(
+          conditions_form: conditions_form,
+          group_index: "GROUP_INDEX_PLACEHOLDER",
+          condition: condition,
+          condition_index: "CONDITION_INDEX_PLACEHOLDER",
+          options: [],
         ) %>
       <% end %>
     <% end %>

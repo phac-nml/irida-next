@@ -238,6 +238,8 @@ export default class extends Controller {
       this.#filter.length,
       this.#filter.length,
     );
+    this.hiddenTarget.dispatchEvent(new Event("change", { bubbles: true }));
+    this.comboboxTarget.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
   #setOption(option) {

@@ -13,25 +13,49 @@
   <%= @conditions_form.label :value, data: { required: true } %>
 
   <% if %w[in not_in].include?(@condition.operator) %>
-    <div
-      data-controller="list-filter"
-      data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
-      class="list-filter"
-    >
-      <%= render ListInputComponent.new(
-        list_input_form_name: @conditions_form.field_name(:value, multiple: true),
-        show_description: false,
-        "aria-invalid": invalid_value,
-        "aria-describedby": @conditions_form.field_id(:value, "error"),
-      ) %>
-    </div>
-  <% else %>
+    <% if @options.nil? %>
+      <div
+        data-controller="list-filter"
+        data-list-filter-filters-value="<%= ERB::Util.json_escape(@condition.value.present? ? @condition.value.to_json : '[]') %>"
+        class="list-filter"
+      >
+        <%= render ListInputComponent.new(
+          list_input_form_name: @conditions_form.field_name(:value, multiple: true),
+          id: @conditions_form.field_id(:value),
+          show_description: false,
+          "aria-invalid": invalid_value,
+          "aria-describedby": @conditions_form.field_id(:value, "error"),
+        ) %>
+      </div>
+    <% else %>
+      <%= @conditions_form.select :value,
+                                 options_for_select(@options, selected_values),
+                                 { include_hidden: false },
+                                 {
+                                   multiple: true,
+                                   "aria-label": value_label,
+                                   "aria-invalid": invalid_value,
+                                   "aria-describedby": @conditions_form.field_id(:value, "error"),
+                                   autofocus: invalid_value
+                                 } %>
+    <% end %>
+  <% elsif @options.nil? %>
     <%= @conditions_form.text_field :value,
                                 "aria-label": value_label,
                                 "aria-invalid": invalid_value,
                                 "aria-describedby":
                                   @conditions_form.field_id(:value, "error"),
                                 autofocus: invalid_value %>
+  <% else %>
+    <%= @conditions_form.select :value,
+                               options_for_select(@options, selected_values.first),
+                               { include_blank: true },
+                               {
+                                 "aria-label": value_label,
+                                 "aria-invalid": invalid_value,
+                                 "aria-describedby": @conditions_form.field_id(:value, "error"),
+                                 autofocus: invalid_value
+                               } %>
   <% end %>
 
   <%= render "shared/form/field_errors",

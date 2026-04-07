@@ -7,14 +7,19 @@ export default class extends Controller {
     "groupsContainer",
     "groupTemplate",
     "listValueTemplate",
+    "listSelectValueTemplate",
     "searchGroupsContainer",
     "searchGroupsTemplate",
+    "selectValueTemplate",
     "submitError",
     "valueTemplate",
   ];
   static outlets = ["list-filter"];
   static values = {
     confirmCloseText: String,
+    enumFields: Object,
+    enumOperations: Object,
+    standardOperations: Object,
     open: Boolean,
     status: Boolean,
   };
@@ -178,19 +183,70 @@ export default class extends Controller {
       value.querySelectorAll("input").forEach((input) => {
         input.value = "";
       });
-    } else if (["in", "not_in"].includes(operator)) {
-      value.classList.remove(...this.#hiddenClasses);
-      value.outerHTML = this.listValueTemplateTarget.innerHTML
-        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
     } else {
-      value.classList.remove(...this.#hiddenClasses);
-      value.outerHTML = this.valueTemplateTarget.innerHTML
-        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+      const selectedField = this.#selectedConditionField(condition);
+      if (Object.hasOwn(this.enumFieldsValue, selectedField)) {
+        const templateTarget = ["in", "not_in"].includes(operator)
+          ? this.listSelectValueTemplateTarget
+          : this.selectValueTemplateTarget;
+        value.outerHTML = templateTarget.innerHTML
+          .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+          .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+
+        const updatedCondition = this.#conditionElements(group)[conditionIndex];
+        const updatedValue = updatedCondition?.querySelector(".value");
+        updatedValue?.classList.remove(...this.#hiddenClasses);
+        this.#updateValueFieldForEnum(
+          updatedValue,
+          updatedCondition,
+          selectedField,
+          operator,
+        );
+      } else {
+        const templateTarget = ["in", "not_in"].includes(operator)
+          ? this.listValueTemplateTarget
+          : this.valueTemplateTarget;
+        value.outerHTML = templateTarget.innerHTML
+          .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+          .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+      }
     }
 
     this.clearSubmitError();
+  }
+
+  handleFieldChange(event) {
+    const condition = event.target.closest(this.#conditionSelector);
+    if (!condition) {
+      this.clearSubmitError();
+      return;
+    }
+
+    const operator = condition.querySelector("[name$='[operator]']");
+    if (!operator) {
+      this.clearSubmitError();
+      return;
+    }
+
+    const selectedField =
+      event.target.matches("[name$='[field]']") && event.target.value
+        ? event.target.value
+        : this.#selectedConditionField(condition);
+
+    const previousField = condition.dataset.advancedSearchSelectedField || "";
+    if (previousField === selectedField) {
+      this.clearSubmitError();
+      return;
+    }
+
+    condition.dataset.advancedSearchSelectedField = selectedField;
+    this.#updateOperatorDropdown(condition, selectedField);
+
+    const value = condition.querySelector(".value");
+    if (value) {
+      this.#clearValueInputs(value);
+      value.classList.add(...this.#hiddenClasses);
+    }
   }
 
   clearSubmitError() {
@@ -245,6 +301,35 @@ export default class extends Controller {
     this.#groupElements().forEach((group, groupIndex) => {
       this.#reindexGroup(group, groupIndex);
     });
+  }
+
+  #updateOperatorDropdown(condition, selectedField) {
+    const operator = condition.querySelector("[name$='[operator]']");
+    if (!operator) {
+      return;
+    }
+
+    const enumConfig = this.enumFieldsValue[selectedField];
+    const operations =
+      selectedField && this.#enumHasValues(enumConfig)
+        ? this.enumOperationsValue
+        : this.standardOperationsValue;
+
+    operator.innerHTML = "";
+
+    const blankOption = document.createElement("option");
+    blankOption.value = "";
+    blankOption.text = "";
+    operator.appendChild(blankOption);
+
+    Object.entries(operations).forEach(([label, value]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.text = label;
+      operator.appendChild(option);
+    });
+
+    operator.value = "";
   }
 
   #reindexGroup(group, groupIndex) {
@@ -386,6 +471,60 @@ export default class extends Controller {
     this.#focusConditionInput(this.conditionsContainerTargets[0]);
   }
 
+  #selectedConditionField(condition) {
+    return condition?.querySelector("[name$='[field]']")?.value?.trim() || "";
+  }
+
+  #enumHasValues(enumConfig) {
+    if (!enumConfig) {
+      return false;
+    }
+
+    const values = Array.isArray(enumConfig.values) ? enumConfig.values : [];
+    const labels =
+      enumConfig.labels && typeof enumConfig.labels === "object"
+        ? Object.keys(enumConfig.labels)
+        : [];
+
+    return values.length > 0 || labels.length > 0;
+  }
+
+  #updateValueFieldForEnum(valueContainer, condition, selectedField, operator) {
+    if (!valueContainer || !condition || !selectedField) {
+      return;
+    }
+
+    const enumConfig = this.enumFieldsValue[selectedField];
+    if (!this.#enumHasValues(enumConfig)) {
+      return;
+    }
+
+    const listOperator = ["in", "not_in"].includes(operator);
+    const select = listOperator
+      ? valueContainer.querySelector("select[name$='[value][]']")
+      : valueContainer.querySelector("select[name$='[value]']");
+    if (!select) {
+      return;
+    }
+
+    const values = Array.isArray(enumConfig.values) ? enumConfig.values : [];
+    const labels =
+      enumConfig.labels && typeof enumConfig.labels === "object"
+        ? enumConfig.labels
+        : {};
+
+    values.forEach((value) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.text =
+        labels[value] ||
+        value
+          .replace(/[_-]/g, " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase());
+      select.appendChild(option);
+    });
+  }
+
   #dirty() {
     const currentState = this.#serializeFormState(
       this.searchGroupsContainerTarget,
@@ -406,7 +545,12 @@ export default class extends Controller {
         (condition) => {
           const listValues = Array.from(
             condition.querySelectorAll("[name$='[value][]']"),
-          ).map((input) => input.value);
+          ).flatMap((input) => {
+            if (input.tagName === "SELECT" && input.multiple) {
+              return Array.from(input.selectedOptions).map((o) => o.value);
+            }
+            return [input.value];
+          });
           const singleValue =
             condition.querySelector("[name$='[value]']")?.value;
 
@@ -420,5 +564,15 @@ export default class extends Controller {
     });
 
     return JSON.stringify(groups);
+  }
+
+  #clearValueInputs(valueContainer) {
+    valueContainer.querySelectorAll("input, select").forEach((element) => {
+      element.value = "";
+
+      if (element.tagName === "SELECT") {
+        element.selectedIndex = -1;
+      }
+    });
   }
 }

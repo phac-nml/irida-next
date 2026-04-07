@@ -2,6 +2,7 @@
   data-advanced-search-target="conditionsContainer"
   data-advanced-search-group-index="<%= @group_index %>"
   data-advanced-search-condition-index="<%= @condition_index %>"
+  data-advanced-search-selected-field="<%= selected_field %>"
   data-advanced-search-legend-template="<%= t("components.advanced_search_component.condition", index: "__INDEX__") %>"
   class="
     flex items-end space-x-2 rounded-lg border border-slate-300 p-4 text-sm text-slate-500 @max-xl:flex-col
@@ -25,6 +26,7 @@
                                options,
                                { include_blank: true },
                                {
+                                 "data-action": "change->advanced-search#handleFieldChange",
                                  "aria-label": field_label,
                                  "aria-invalid": invalid_field,
                                  "aria-describedby":
@@ -36,6 +38,9 @@
           form: conditions_form,
           field: :field,
           options: options,
+          data: {
+            action: "change->advanced-search#handleFieldChange",
+          },
           aria: {
             label: field_label,
             invalid: invalid_field,
@@ -57,8 +62,8 @@
 
       <%= conditions_form.select :operator,
                              options_for_select(
-                               @operations,
-                               selected = @condition.operator,
+                               operation_options,
+                               @condition.operator,
                              ),
                              { include_blank: true },
                              {
@@ -80,6 +85,7 @@
       group_index: @group_index,
       condition: @condition,
       condition_index: @condition_index,
+      options: value_options,
     ) %>
   <% end %>
 

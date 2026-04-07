@@ -536,6 +536,389 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
   end
 
+  test 'workflow advanced search is hidden when workflow advanced-search feature flag is disabled' do
+    Flipper.disable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    assert_no_button I18n.t(:'components.advanced_search_component.title')
+
+    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
+            with: @workflow_execution1.id
+    find('input.t-search-component').send_keys(:return)
+
+    assert_text 'Displaying 1 item'
+    assert_selector 'table tbody tr', count: 1
+    assert_text @workflow_execution1.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow advanced search filters results when workflow advanced-search feature flag is enabled' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    assert_button I18n.t(:'components.advanced_search_component.title')
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    within('dialog') do
+      assert_selector "[name='q[groups_attributes][0][conditions_attributes][0][field]']", visible: :all
+
+      if has_selector?("input[role='combobox']", visible: :visible)
+        find("input[role='combobox']", visible: :visible).send_keys(
+          I18n.t('workflow_executions.table_component.state'),
+          :enter
+        )
+      else
+        find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
+      end
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+      if has_selector?("select[name$='[value]']", visible: :visible)
+        find("select[name$='[value]']", visible: :visible).select(
+          I18n.t('workflow_executions.state.completed')
+        )
+      else
+        find("input[name$='[value]']", visible: :visible).fill_in with: I18n.t('workflow_executions.state.completed')
+      end
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
+    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+    assert_selector "div[role='status']", text: /advanced search/, visible: false
+    assert_text @workflow_execution1.id
+    assert_no_text @workflow_execution4.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow advanced search returns no results for invalid enum state value' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    within('dialog') do
+      if has_selector?("input[role='combobox']", visible: :visible)
+        find("input[role='combobox']", visible: :visible).send_keys(
+          I18n.t('workflow_executions.table_component.state'),
+          :enter
+        )
+      else
+        find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
+      end
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+      unless has_selector?("select[name$='[value]']", visible: :visible)
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'nonexistent_state_value'
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+      end
+    end
+
+    if has_no_selector?("select[name$='[value]']", visible: :visible)
+      assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
+      assert_selector "div[role='status']", text: /advanced search/, visible: false
+      assert_text 'Displaying 0 items'
+    end
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow quick search preserves active advanced search when feature flag is enabled' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      if has_selector?("input[role='combobox']", visible: :visible)
+        find("input[role='combobox']", visible: :visible).send_keys(
+          I18n.t('workflow_executions.table_component.state'),
+          :enter
+        )
+      else
+        find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
+      end
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+      if has_selector?("select[name$='[value]']", visible: :visible)
+        find("select[name$='[value]']", visible: :visible).select(I18n.t('workflow_executions.state.completed'))
+      else
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+      end
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
+
+    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
+            with: 'irida_next_example'
+    find('input.t-search-component').send_keys(:return)
+
+    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+    assert_selector "div[role='status']", text: /advanced search/, visible: false
+    assert_text @workflow_execution1.id
+    assert_no_text @workflow_execution4.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow advanced search keeps completed results visible when broadening state not_in filters' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      select_state_advanced_search_field
+      find("select[name$='[operator]']", visible: :visible).find("option[value='not_in']").select_option
+      set_advanced_search_multi_select_values(
+        "select[name$='[value][]']",
+        %w[initial prepared submitted]
+      )
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
+
+    assert_text @workflow_execution1.id
+    assert_no_text @workflow_execution5.id
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      set_advanced_search_multi_select_values(
+        "select[name$='[value][]']",
+        %w[initial prepared submitted running completing error canceling canceled]
+      )
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
+
+    assert_text @workflow_execution1.id
+    assert_no_text @workflow_execution4.id
+    assert_no_text @workflow_execution5.id
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow advanced search clears form on close when there is no active search' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      select_state_advanced_search_field
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+
+      if has_selector?("select[name$='[value]']", visible: :visible)
+        find("select[name$='[value]']", visible: :visible).select(I18n.t('workflow_executions.state.completed'))
+      else
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+      end
+
+      find('button.dialog--close', visible: :visible).click
+    end
+
+    assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 1
+
+      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[0] do
+        assert_equal '', find("select[name$='[operator]']", visible: :visible).value
+        assert_equal '', find("input[name$='[value]']", visible: :all).value
+      end
+    end
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow advanced search retains applied state with multiple conditions when reopening dialog' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      select_state_advanced_search_field
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+
+      if has_selector?("select[name$='[value]']", visible: :visible)
+        find("select[name$='[value]']", visible: :visible).select(I18n.t('workflow_executions.state.completed'))
+      else
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.add_condition_button')
+
+      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[1] do
+        if has_selector?("input[role='combobox']", visible: :visible)
+          find("input[role='combobox']", visible: :visible).send_keys(
+            I18n.t('workflow_executions.table_component.run_id'),
+            :enter
+          )
+        else
+          find("select[name$='[field]']", visible: :visible).find("option[value='run_id']").select_option
+        end
+
+        find("select[name$='[operator]']", visible: :visible).find("option[value='contains']").select_option
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'my_run_id'
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 2
+
+      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[0] do
+        assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
+
+        if has_selector?("select[name$='[value]']", visible: :visible)
+          assert_equal 'completed', find("select[name$='[value]']", visible: :visible).value
+        else
+          assert_equal 'completed', find("input[name$='[value]']", visible: :visible).value
+        end
+      end
+
+      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[1] do
+        assert_equal 'contains', find("select[name$='[operator]']", visible: :visible).value
+        assert_equal 'my_run_id', find("input[name$='[value]']", visible: :visible).value
+      end
+    end
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow advanced search resets to applied state on close when active search exists' do
+    Flipper.enable(:workflow_execution_advanced_search)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      select_state_advanced_search_field
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+
+      if has_selector?("select[name$='[value]']", visible: :visible)
+        find("select[name$='[value]']", visible: :visible).select(I18n.t('workflow_executions.state.completed'))
+      else
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      click_button I18n.t(:'components.advanced_search_component.add_condition_button')
+
+      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[1] do
+        if has_selector?("input[role='combobox']", visible: :visible)
+          find("input[role='combobox']", visible: :visible).send_keys(
+            I18n.t('workflow_executions.table_component.run_id'),
+            :enter
+          )
+        else
+          find("select[name$='[field]']", visible: :visible).find("option[value='run_id']").select_option
+        end
+
+        find("select[name$='[operator]']", visible: :visible).find("option[value='contains']").select_option
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'draft_run_id'
+      end
+
+      accept_confirm do
+        find('button.dialog--close', visible: :visible).click
+      end
+    end
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 1
+
+      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[0] do
+        assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
+      end
+
+      assert_no_selector "fieldset[data-advanced-search-target='conditionsContainer'] input[value='draft_run_id']",
+                         visible: :all
+    end
+  ensure
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
+  test 'workflow advanced search retains operator and value after reopen with autocomplete enabled' do
+    Flipper.enable(:workflow_execution_advanced_search)
+    Flipper.enable(:advanced_search_with_auto_complete, @user)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      select_state_advanced_search_field
+      find("select[name$='[operator]']", visible: :visible).find("option[value='=']").select_option
+
+      if has_selector?("select[name$='[value]']", visible: :visible)
+        find("select[name$='[value]']", visible: :visible).select(I18n.t('workflow_executions.state.completed'))
+      else
+        find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+    end
+
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
+
+    click_button I18n.t(:'components.advanced_search_component.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+    within('dialog') do
+      assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
+
+      if has_selector?("select[name$='[value]']", visible: :visible)
+        assert_equal 'completed', find("select[name$='[value]']", visible: :visible).value
+      else
+        assert_equal 'completed', find("input[name$='[value]']", visible: :visible).value
+      end
+    end
+  ensure
+    Flipper.disable(:advanced_search_with_auto_complete, @user)
+    Flipper.disable(:workflow_execution_advanced_search)
+  end
+
   test 'submitter can edit workflow execution post launch from workflow execution page' do
     ### SETUP START ###
     workflow_execution = workflow_executions(:irida_next_example_new)
@@ -851,5 +1234,89 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
     assert_selector '#workflow-executions-table table tbody tr', count: PAGE_SIZE
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.error')
+  end
+
+  private
+
+  def select_state_advanced_search_field
+    if has_selector?("input[role='combobox']", visible: :visible)
+      find("input[role='combobox']", visible: :visible).send_keys(
+        I18n.t('workflow_executions.table_component.state'),
+        :enter
+      )
+    else
+      find("select[name$='[field]']", visible: :visible).find("option[value='state']").select_option
+    end
+  end
+
+  def set_advanced_search_multi_select_values(selector, values)
+    return apply_select_values(find(selector, visible: :visible), values) if has_selector?(selector, visible: :visible)
+    return apply_select_values(find(selector, visible: :all), values) if has_selector?(selector, visible: :all)
+    return apply_list_filter_values(values) if has_selector?("div[data-controller='list-filter']", visible: :visible)
+
+    apply_hidden_input_values(values)
+  end
+
+  def apply_select_values(select, values)
+    page.execute_script(<<~JS, select)
+      const element = arguments[0];
+      const values = #{values.to_json};
+      Array.from(element.options).forEach((option) => { option.selected = values.includes(option.value); });
+      element.dispatchEvent(new Event("input", { bubbles: true }));
+      element.dispatchEvent(new Event("change", { bubbles: true }));
+    JS
+  end
+
+  def apply_list_filter_values(values) # rubocop:disable Metrics/MethodLength
+    list_filter = find("div[data-controller='list-filter']", visible: :visible)
+
+    page.execute_script(<<~JS, list_filter)
+      const element = arguments[0];
+      const values = #{values.to_json};
+      const template = element.querySelector("template[data-list-filter-target='template']");
+      const tags = element.querySelector("[data-list-filter-target='tags']");
+      const input = element.querySelector("[data-list-filter-target='input']");
+
+      if (!template || !tags || !input) { return; }
+
+      while (tags.firstChild && tags.firstChild !== input) { tags.firstChild.remove(); }
+
+      values.forEach((value) => {
+        if (!value) { return; }
+        const clone = template.content.cloneNode(true);
+        const hiddenInput = clone.querySelector("input[name$='[value][]']");
+        const label = clone.querySelector(".label");
+        if (hiddenInput) { hiddenInput.value = value; }
+        if (label) { label.textContent = value; }
+        tags.insertBefore(clone, input);
+      });
+
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    JS
+  end
+
+  def apply_hidden_input_values(values) # rubocop:disable Metrics/MethodLength
+    condition = find("[data-advanced-search-target='conditionsContainer']", visible: :visible)
+    operator_select = condition.find("select[name$='[operator]']", visible: :all)
+    input_name = operator_select[:name].sub(/\[operator\]\z/, '[value][]')
+
+    page.execute_script(<<~JS, condition, input_name)
+      const conditionElement = arguments[0];
+      const inputName = arguments[1];
+      const values = #{values.to_json};
+
+      conditionElement.querySelectorAll("input, select").forEach((element) => {
+        if (element.name === inputName) { element.remove(); }
+      });
+
+      values.forEach((value) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = inputName;
+        input.value = value;
+        conditionElement.appendChild(input);
+      });
+    JS
   end
 end

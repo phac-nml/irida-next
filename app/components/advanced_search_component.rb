@@ -10,6 +10,7 @@ class AdvancedSearchComponent < Component
     @form = form
     @search = search
     @fields = normalized_fields(fields:, sample_fields:, metadata_fields:)
+    @enum_fields = @fields.fetch(:enum_fields, {})
     @operations = operation_options
     @open = open
     @status = status
@@ -45,6 +46,13 @@ class AdvancedSearchComponent < Component
     )
   end
 
+  def enum_template_configs
+    [
+      { target: 'enumListValueTemplate', operator: 'in' },
+      { target: 'enumValueTemplate', operator: '=' }
+    ]
+  end
+
   def operation_options
     {
       I18n.t('components.advanced_search_component.operation.equals') => '=',
@@ -58,5 +66,13 @@ class AdvancedSearchComponent < Component
       I18n.t('components.advanced_search_component.operation.in') => 'in',
       I18n.t('components.advanced_search_component.operation.not_in') => 'not_in'
     }
+  end
+
+  def enum_operation_options
+    operation_options.select { |_, value| enum_operation_values.include?(value) }
+  end
+
+  def enum_operation_values
+    AdvancedSearch::ENUM_OPERATOR_VALUES
   end
 end

@@ -7,4 +7,8 @@ module JsonHelper
 
     JSON.parse json_string.gsub('=>', ':')
   end
+
+  def json_escape_data(value)
+    ERB::Util.json_escape(value.to_json)
+  end
 end

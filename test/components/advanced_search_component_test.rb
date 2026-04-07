@@ -11,12 +11,13 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         # verify accessibility
         assert_accessible
 
         # verify the form is pre-populated
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 2
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 3
@@ -87,6 +88,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/empty')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         assert_accessible
         assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
@@ -101,12 +104,13 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         click_button I18n.t('components.dialog.close')
       end
-      assert_no_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
+      assert_no_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
 
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         assert_accessible
-        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.title')
         assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 1
         within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 1
@@ -120,10 +124,51 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     end
   end
 
+  test 'close dialog restores applied state when active search exists' do
+    visit('rails/view_components/advanced_search_component/default')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[operator]']").find("option[value='contains']").select_option
+            find("input[name$='[value]']", visible: :visible).fill_in with: 'United States'
+          end
+
+          click_button I18n.t(:'components.advanced_search_component.add_condition_button')
+        end
+
+        accept_confirm do
+          click_button I18n.t('components.dialog.close')
+        end
+      end
+
+      click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        assert_selector "fieldset[data-advanced-search-target='groupsContainer']", count: 2
+
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", count: 3
+
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
+            assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
+            assert_equal 'Canada', find("input[name$='[value]']", visible: :visible).value
+          end
+        end
+      end
+    end
+  end
+
   test 'apply filter requires at least one complete condition' do
     visit('rails/view_components/advanced_search_component/empty')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
         assert_selector "div[data-advanced-search-target='submitError']",
@@ -147,6 +192,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     visit('rails/view_components/advanced_search_component/workflow')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         assert_accessible
 
@@ -167,15 +214,51 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_selector "div[role='option']",
                           text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.workflow_name'))}\z/,
                           count: 1
+
+          combobox.send_keys(I18n.t('workflow_executions.table_component.state'), :enter)
         end
+
+        within first("select[name$='[operator]']") do
+          allowed_operators = all("option:not([hidden]):not([value=''])").map(&:value)
+          assert_equal %w[= != in not_in], allowed_operators
+        end
+
+        first("select[name$='[operator]']").find("option[value='=']").select_option
+        assert_selector "select[name$='[value]']"
       end
     end
+  end
+
+  test 'workflow preview keeps enum operators available with native field selects' do
+    Flipper.disable(:advanced_search_with_auto_complete)
+
+    visit('rails/view_components/advanced_search_component/workflow')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+      within 'dialog' do
+        first("select[name$='[field]']").find("option[value='state']").select_option
+
+        within first("select[name$='[operator]']") do
+          allowed_operators = all("option:not([hidden]):not([value=''])").map(&:value)
+          assert_equal %w[= != in not_in], allowed_operators
+        end
+
+        first("select[name$='[operator]']").find("option[value='not_in']").select_option
+        assert_selector "select[name$='[value][]']"
+      end
+    end
+  ensure
+    Flipper.enable(:advanced_search_with_auto_complete)
   end
 
   test 'dynamic condition changes preserve groups_attributes payload naming' do
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'components.advanced_search_component.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         click_button I18n.t(:'components.advanced_search_component.add_group_button')
 
