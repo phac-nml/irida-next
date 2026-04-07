@@ -5,8 +5,8 @@ module Mutations
   class BulkUpdateSampleMetadata < BaseMutation # rubocop:disable Metrics/ClassLength
     description 'Update metadata for samples.'
 
-    argument :bulk_metadata_payload, GraphQL::Types::JSON, required: true,
-                                                           description: 'The metadata to update the samples with. Note: to escape special characters (like those found in sample Node ids), use a stringified JSON input' # rubocop:disable Layout/LineLength
+    argument :bulk_metadata, GraphQL::Types::JSON, required: true,
+                                                   description: 'The metadata to update the samples with. Note: to escape special characters (like those found in sample Node ids), use a stringified JSON input' # rubocop:disable Layout/LineLength
     argument :group_id, ID,
              required: false,
              description: 'The Node ID of the group to be updated. For example, `gid://irida/group/a84cd757-dedb-4c64-8b01-097020163077`' # rubocop:disable Layout/LineLength
