@@ -11,6 +11,7 @@ export default class FloatingDropdown {
   // Private Fields
 
   #trigger; // DOM element that triggers the dropdown
+  #triggerType; // Type of trigger (e.g. 'click', 'none')
   #dropdown; // DOM element of the floating dropdown
   #strategy; // Positioning strategy ('absolute' or 'fixed')
   #distance; // Distance in pixels between trigger and dropdown
@@ -27,6 +28,7 @@ export default class FloatingDropdown {
   // Initialize floating dropdown with config options
   constructor({
     trigger,
+    triggerType = "none",
     dropdown,
     strategy = "absolute",
     distance = 0,
@@ -35,6 +37,7 @@ export default class FloatingDropdown {
     onHide,
   }) {
     this.#trigger = trigger;
+    this.#triggerType = triggerType;
     this.#dropdown = dropdown;
     this.#strategy = strategy;
     this.#distance = distance;
@@ -153,12 +156,16 @@ export default class FloatingDropdown {
 
   // Attach click handler to trigger element
   #setupEventListeners() {
-    this.#trigger.addEventListener("click", this.#boundOnTriggerClick);
+    if (this.#triggerType === "click") {
+      this.#trigger.addEventListener("click", this.#boundOnTriggerClick);
+    }
   }
 
   // Remove click handler from trigger element
   #removeEventListeners() {
-    this.#trigger.removeEventListener("click", this.#boundOnTriggerClick);
+    if (this.#triggerType === "click") {
+      this.#trigger.removeEventListener("click", this.#boundOnTriggerClick);
+    }
   }
 
   // Attach document click handler to detect outside clicks

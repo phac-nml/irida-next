@@ -339,6 +339,7 @@ export default class Select2Controller extends Controller {
   #initializeDropdown() {
     this.#floatingDropdown = new FloatingDropdown({
       trigger: this.inputTarget,
+      triggerType: "click",
       dropdown: this.dropdownTarget,
       distance: 10,
       onShow: () => {
