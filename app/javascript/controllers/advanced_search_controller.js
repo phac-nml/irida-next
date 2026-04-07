@@ -30,7 +30,7 @@ export default class extends Controller {
     "fieldset[data-advanced-search-target='conditionsContainer']";
 
   connect() {
-    if (this.openValue || this.statusValue) {
+    if (this.openValue) {
       this.renderSearch();
     }
   }
@@ -58,16 +58,6 @@ export default class extends Controller {
     this.#focusFirstConditionField();
   }
 
-  handleSubmitEnd(event) {
-    if (!event.detail.success) {
-      return;
-    }
-
-    this.element
-      .querySelector("[data-viral--dialog-target='closeButton']")
-      ?.click();
-  }
-
   close(event) {
     if (!this.statusValue) {
       this.renderSearch();
@@ -78,9 +68,9 @@ export default class extends Controller {
       event.preventDefault();
       event.stopImmediatePropagation();
     } else if (!this.#dirty()) {
-      this.renderSearch();
+      this.clear();
     } else if (window.confirm(this.confirmCloseTextValue)) {
-      this.renderSearch();
+      this.clear();
     } else {
       event.stopImmediatePropagation();
       event.preventDefault();
