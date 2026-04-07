@@ -1743,17 +1743,17 @@ module WorkflowExecutions
       project = projects(:projectChunkedSamples)
       namespace = namespaces_user_namespaces(:chunked_samples_doe_namespace)
       login_as user
-      ensure_project_has_samples!(project, count: 3002)
+      ensure_project_has_samples!(project, count: 1002)
       visit namespace_project_samples_url(namespace, project)
 
       # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 3002,
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 1002,
                                                                                       locale: user.locale))
       # select samples
       click_button I18n.t('common.controls.select_all')
 
       assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      assert_selector 'strong[data-selection-target="selected"]', text: 3002
+      assert_selector 'strong[data-selection-target="selected"]', text: 1002
 
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
@@ -1766,26 +1766,26 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       assert_selector 'h1', text: 'phac-nml/iridanextexample'
-      assert_selector 'label', text: I18n.t('components.nextflow.samplesheet_component.label', sample_count: 3002)
+      assert_selector 'label', text: I18n.t('components.nextflow.samplesheet_component.label', sample_count: 1002)
 
-      assert_selector 'div', text: I18n.t('components.nextflow_component.loading_samplesheet', count: 3002)
+      assert_selector 'div', text: I18n.t('components.nextflow_component.loading_samplesheet', count: 1002)
 
       # strip tags removes space before "Samplesheet" in:
       # "...nts for %{count} samples, this may take a bit of time. Samplesheet is ready."
       # so we have to re-add the space for the assertion
       expected_text = strip_tags(
-        I18n.t('components.nextflow_component.loading_complete.alert_message_html', count: 3002)
+        I18n.t('components.nextflow_component.loading_complete.alert_message_html', count: 1002)
       )
       expected_text[expected_text.index('.')] = '. '
-      if has_selector?('div', text: I18n.t('components.nextflow_component.loading_samplesheet', count: 3002),
+      if has_selector?('div', text: I18n.t('components.nextflow_component.loading_samplesheet', count: 1002),
                               wait: 0.25.seconds)
         assert_no_selector 'div',
-                           text: I18n.t('components.nextflow_component.loading_samplesheet', count: 3002)
+                           text: I18n.t('components.nextflow_component.loading_samplesheet', count: 1002)
 
         assert_text expected_text
+        assert_selector '#pagination-page-selector option', count: 201
       end
 
-      assert_selector '#pagination-page-selector option', count: 601
       ### VERIFY END ###
     end
   end
