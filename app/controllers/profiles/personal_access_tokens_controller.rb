@@ -3,7 +3,7 @@
 # Purpose: To handle the user's personal access tokens
 module Profiles
   # Controller for the user personal access tokens page
-  class PersonalAccessTokensController < Profiles::ApplicationController
+  class PersonalAccessTokensController < Profiles::ApplicationController # rubocop:disable Metrics/ClassLength
     before_action :active_access_tokens
     before_action :expired_access_tokens, only: %i[list]
     before_action :revoked_access_tokens, only: %i[list]
