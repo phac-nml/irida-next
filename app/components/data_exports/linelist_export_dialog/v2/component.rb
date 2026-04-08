@@ -18,7 +18,7 @@ module DataExports
         end
 
         def sample_graphql_id_prefix
-          "gid://#{GlobalID.app}/#{Sample.name}/"
+          "gid://#{GlobalID.app}/Sample/"
         end
       end
     end
