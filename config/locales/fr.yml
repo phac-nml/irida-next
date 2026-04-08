@@ -1273,6 +1273,7 @@ fr:
         title: Ajouter un jeton d’accès personnel
       index:
         add_new_token: Ajouter un nouveau jeton
+        screen_reader_context: Informations sur les jetons d'accès personnels
         subtitle: Vous pouvez générer un jeton d'accès personnel pour chaque application que vous utilisez et qui a besoin d'accéder à l'API IRIDA Next.
         title: Jetons d'accès personnels
       revoke:

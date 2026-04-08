@@ -1269,6 +1269,7 @@ en:
         title: Add a personal access token
       index:
         add_new_token: Add new token
+        screen_reader_context: Personal Access Tokens Information
         subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
         title: Personal Access Tokens
       revoke:
