@@ -130,6 +130,10 @@ input[type="search"] {
     @apply mb-1 block text-sm font-medium text-slate-900 dark:text-white;
   }
 
+  & abbr.req {
+    @apply align-baseline text-sm leading-none text-red-500 no-underline;
+  }
+
   & div.field_with_errors {
     @apply block w-full;
   }
