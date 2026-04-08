@@ -70,12 +70,12 @@ export default class extends Controller {
     this.#tooltip.show();
     this.buttonTarget.setAttribute("disabled", "");
     this.ariaLiveTarget.innerText = this.copiedValue;
-    // Change the button to a checkmark for 1 second
+    // Change the button to a check mark for 1 second
     const originalContent = this.buttonTarget.innerHTML;
     this.buttonTarget.innerHTML = `
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="size-3"
+        class="size-4 pointer-events-none"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
