@@ -77,7 +77,7 @@ export default class extends Controller {
         xmlns="http://www.w3.org/2000/svg"
         class="size-4 pointer-events-none"
         fill="none"
-        viewBox="0 0 256 256"
+        viewBox="0 0 24 24"
         stroke="currentColor"
       >
         <path
