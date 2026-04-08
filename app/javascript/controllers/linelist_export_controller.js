@@ -71,8 +71,8 @@ export default class extends Controller {
     const metadataFields = this.selectedMetadataFields();
     const format = this.selectedFormat();
     const namespaceId = this.selectedNamespaceId();
-    const graphqlUrl = this.selectedGraphqlUrl();
-    const sampleGraphqlIdPrefix = this.selectedSampleGraphqlIdPrefix();
+    const graphqlUrl = this.graphqlUrl();
+    const sampleGraphqlIdPrefix = this.sampleGraphqlIdPrefix();
     const selectedCount = sampleIds.length;
 
     if (!selectedCount) {
@@ -299,16 +299,12 @@ export default class extends Controller {
     }
   }
 
-  selectedGraphqlUrl() {
-    return this.hasGraphqlUrlValue && this.graphqlUrlValue
-      ? this.graphqlUrlValue
-      : "/api/graphql";
+  graphqlUrl() {
+    return this.graphqlUrlValue;
   }
 
-  selectedSampleGraphqlIdPrefix() {
-    return this.hasSampleGraphqlIdPrefixValue && this.sampleGraphqlIdPrefixValue
-      ? this.sampleGraphqlIdPrefixValue
-      : "";
+  sampleGraphqlIdPrefix() {
+    return this.sampleGraphqlIdPrefixValue;
   }
 
   selectionStorageKey() {

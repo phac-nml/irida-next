@@ -38,7 +38,7 @@ const chunk = (items, size) => {
 };
 
 const toSampleGraphqlId = (sampleId, sampleGraphqlIdPrefix) => {
-  const id = String(sampleId || "");
+  const id = String(sampleId ?? "");
 
   if (id.startsWith("gid://")) return id;
   if (sampleGraphqlIdPrefix) return `${sampleGraphqlIdPrefix}${id}`;
@@ -108,7 +108,7 @@ self.onmessage = async (event) => {
     return;
   }
 
-  if (format !== "csv" && format !== undefined && format !== null) {
+  if (format != null && format !== "csv") {
     self.postMessage({
       type: "error",
       message: "Unsupported linelist format for this flow.",
