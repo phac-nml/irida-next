@@ -82,6 +82,8 @@ module Groups
       group_workflow_executions_path
     end
 
+    def search_key = :"#{controller_name}_#{@group.id}_search_params"
+
     def page_title
       @title = case action_name
                when 'index'
