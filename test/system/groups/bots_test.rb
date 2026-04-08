@@ -222,10 +222,10 @@ module Groups
 
           within "tr[id='#{dom_id(token)}']" do
             assert_selector 'th[scope="row"]', text: 'Valid PAT0'
-            assert_selector 'td:nth-child(2)', text: 'read_api, api'
+            assert_selector 'td:nth-child(3)', text: 'read_api, api'
 
-            assert_selector 'td:nth-child(3)', text: I18n.l(token.created_at.getlocal.to_date, format: :long)
-            assert_selector 'td:nth-child(5)',
+            assert_selector 'td:nth-child(4)', text: I18n.l(token.created_at.getlocal.to_date, format: :long)
+            assert_selector 'td:nth-child(6)',
                             text: I18n.l(DateTime.parse(token.expires_at.to_s).getlocal.to_date, format: :long)
           end
         end

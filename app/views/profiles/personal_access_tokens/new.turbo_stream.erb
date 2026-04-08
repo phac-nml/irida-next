@@ -1,0 +1,8 @@
+<%= turbo_stream.update "new-token-form" do %>
+  <%= viral_card(title: t(:"profiles.personal_access_tokens.create.title"), subtitle: t(:"profiles.personal_access_tokens.create.subtitle")) do %>
+    <%= render partial: "form",
+    locals: {
+      personal_access_token: @personal_access_token,
+    } %>
+  <% end %>
+<% end %>

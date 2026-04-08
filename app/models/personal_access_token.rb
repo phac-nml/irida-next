@@ -19,8 +19,10 @@ class PersonalAccessToken < ApplicationRecord
 
   scope :active, -> { not_revoked.not_expired }
   scope :not_revoked, -> { where(revoked: [false, nil]) }
-  scope :expired, -> { where('expires_at IS NOT NULL AND expires_at <= ?', Time.current) }
-  scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.current) }
+  scope :revoked, -> { where(revoked: true) }
+  scope :expired, -> { not_revoked.where.not(expires_at: nil).where(expires_at: ..Time.current) }
+  scope :not_expired, -> { not_revoked.where('expires_at IS NULL OR expires_at > ?', Time.current) }
+  scope :expiring_in_two_weeks, -> { active.where(expires_at: Time.current..14.days.from_now) }
 
   def revoke!
     update!(revoked: true)
@@ -35,11 +37,15 @@ class PersonalAccessToken < ApplicationRecord
   end
 
   def expired?
-    expires? && expires_at <= Time.current
+    expires? && expires_at <= Time.current && !revoked?
   end
 
   def active?
     !revoked? && !expired?
+  end
+
+  def expiring?
+    active? && expires? && expires_at.between?(Time.current, 14.days.from_now)
   end
 
   def self.find_by_token(token)

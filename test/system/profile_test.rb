@@ -56,16 +56,76 @@ class ProfileTest < ApplicationSystemTestCase
   end
 
   test 'can view personal access tokens' do
+    valid_params = {
+      name: 'Uploader',
+      scopes: %w[read_api api]
+    }
+
+    PersonalAccessTokens::CreateService.new(@user, valid_params).execute
+
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
 
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count)
+    # defaults to active tokens view which includes active (non-expiring) and active (expiring) tokens
+    assert_selector(:xpath,
+                    "//span[contains(@class, 'token-status') and contains(., 'Expiring') or contains(., 'Active')]",
+                    count: @active_token_count + 1)
+  end
+
+  test 'can view revoked personal access tokens' do
+    revoked_token_count = @user.personal_access_tokens.revoked.count
+    assert_equal 1, revoked_token_count
+
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    click_button 'View revoked tokens'
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Revoked')]",
+                    count: revoked_token_count)
+  end
+
+  test 'can view expired personal access tokens' do
+    expired_token_count = @user.personal_access_tokens.expired.count
+    assert_equal 1, expired_token_count
+
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    click_button 'View expired tokens'
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Expired')]",
+                    count: expired_token_count)
+  end
+
+  test 'can view expiring personal access tokens' do
+    valid_params = {
+      name: 'Uploader',
+      scopes: %w[read_api api]
+    }
+
+    PersonalAccessTokens::CreateService.new(@user, valid_params).execute
+
+    active_token_count = @user.personal_access_tokens.active.count
+    assert_equal 4, active_token_count
+
+    expiring_token_count = @user.personal_access_tokens.expiring_in_two_weeks.count
+    assert_equal 2, expiring_token_count
+
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    click_button 'View expiring tokens'
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status') and contains(., 'Expiring')]",
+                    count: expiring_token_count)
   end
 
   test 'can create personal access tokens' do
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    click_button I18n.t(:'profiles.personal_access_tokens.index.add_new_token')
 
     within %(form[action="/-/profile/personal_access_tokens"]) do
       fill_in 'Token name', with: 'my new token'
@@ -77,8 +137,8 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text I18n.t(:'profiles.personal_access_tokens.access_token_section.description')
 
     assert_text 'my new token'
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count + 1)
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: @active_token_count + 1)
     assert_text I18n.t('profiles.personal_access_tokens.create.success', name: 'my new token')
   end
 
@@ -86,13 +146,15 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
 
+    click_button I18n.t(:'profiles.personal_access_tokens.index.add_new_token')
+
     within %(form[action="/-/profile/personal_access_tokens"]) do
       fill_in 'Token name', with: 'my new token'
       click_button I18n.t(:'profiles.personal_access_tokens.create.submit')
     end
     assert_no_text 'my new token'
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count)
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: @active_token_count)
     assert_text I18n.t(:'errors.format',
                        attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
                        message: I18n.t(:'errors.messages.blank'))
@@ -104,8 +166,9 @@ class ProfileTest < ApplicationSystemTestCase
 
     token_to_revoke = personal_access_tokens(:john_doe_non_expirable_pat)
 
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count)
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: @active_token_count)
+
     within('#access-tokens-table') do
       assert_text token_to_revoke.name
     end
@@ -119,8 +182,9 @@ class ProfileTest < ApplicationSystemTestCase
     within('#access-tokens-table') do
       assert_no_text token_to_revoke.name
     end
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count - 1)
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: @active_token_count - 1)
   end
 
   test 'empty personal access tokens state' do
@@ -128,12 +192,13 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
 
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: 0)
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: 0)
+
     assert_no_selector 'table#personal-access-tokens-table'
 
-    assert_text I18n.t('profiles.personal_access_tokens.table.empty_state.title')
-    assert_text I18n.t('profiles.personal_access_tokens.table.empty_state.description')
+    assert_text I18n.t('profiles.personal_access_tokens.table.empty_state.active.title')
+    assert_text I18n.t('profiles.personal_access_tokens.table.empty_state.active.description')
   end
 
   test 'can view language selection' do
