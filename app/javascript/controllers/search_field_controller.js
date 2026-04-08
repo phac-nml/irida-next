@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static outlets = ["selection"];
+  static outlets = ["advanced-search", "selection"];
   static targets = ["input", "clearButton", "submitButton"];
 
   /**
@@ -156,6 +156,12 @@ export default class extends Controller {
   onFocusout(event) {
     if (!this.element.contains(event.relatedTarget)) {
       this.inputTarget.removeAttribute("data-turbo-permanent");
+    }
+  }
+
+  beforeSubmit(event) {
+    if (this.hasAdvancedSearchOutlet) {
+      this.advancedSearchOutlet.renderSearch();
     }
   }
 }

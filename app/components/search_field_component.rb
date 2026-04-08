@@ -2,7 +2,7 @@
 
 # Component for rendering a search field with a submit button
 class SearchFieldComponent < Component
-  def initialize(label:, placeholder:, form:, field_name:, value: nil, **system_arguments) # rubocop:disable Metrics/ParameterLists
+  def initialize(label:, placeholder:, form:, field_name:, value: nil, include_advanced_search_outlet: false, **system_arguments) # rubocop:disable Metrics/ParameterLists,Metrics/MethodLength,Layout/LineLength
     @label = label
     @placeholder = placeholder
     @form = form
@@ -16,6 +16,10 @@ class SearchFieldComponent < Component
     @system_arguments[:data] ||= {}
     @system_arguments[:data][:action] = 'focusin->search-field#onFocusin focusout->search-field#onFocusout'
     @system_arguments[:data][:controller] = 'search-field'
+    return unless include_advanced_search_outlet
+
+    @system_arguments[:data][:'search-field-advanced-search-outlet'] =
+      '#advanced-search'
   end
 
   def clear_button?

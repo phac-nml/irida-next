@@ -658,10 +658,18 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
             with: 'irida_next_example'
     find('input.t-search-component').send_keys(:return)
 
-    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+    assert_button I18n.t(:'components.search_field_component.clear_button')
+
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
     assert_selector "div[role='status']", text: /advanced search/, visible: false
     assert_text @workflow_execution1.id
     assert_no_text @workflow_execution4.id
+
+    # clicking clear button on quick search should clear quick search but preserve advanced search
+    click_button I18n.t(:'components.search_field_component.clear_button')
+
+    assert_no_button I18n.t(:'components.search_field_component.clear_button')
+    assert_button I18n.t(:'components.advanced_search_component.clear_aria_label')
   ensure
     Flipper.disable(:workflow_execution_advanced_search)
   end
