@@ -83,11 +83,11 @@
     </div>
 
     <% dialog.with_primary_action(
-      "data-action": "advanced-search--v1#submit filters#submit",
+      "data-action": "advanced-search--v1#submit viral--dialog#close filters#submit",
     ) { t("components.advanced_search_component.v1.apply_filter_button") } %>
 
     <% dialog.with_secondary_action do %>
-      <%= viral_button(data: { action: "advanced-search--v1#clearForm filters#submit" }) do %>
+      <%= viral_button(data: { action: "advanced-search--v1#clearForm viral--dialog#close filters#submit" }) do %>
         <%= t("components.advanced_search_component.v1.clear_filter_button") %>
       <% end %>
     <% end %>

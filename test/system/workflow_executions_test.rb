@@ -746,9 +746,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
     within('dialog') do
-      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 1
+      assert_selector "fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible, count: 1
 
-      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[0] do
+      within all("fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible)[0] do
         assert_equal '', find("select[name$='[operator]']", visible: :visible).value
         assert_equal '', find("input[name$='[value]']", visible: :all).value
       end
@@ -777,7 +777,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
       click_button I18n.t(:'components.advanced_search_component.v1.add_condition_button')
 
-      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[1] do
+      within all("fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible)[1] do
         if has_selector?("input[role='combobox']", visible: :visible)
           find("input[role='combobox']", visible: :visible).send_keys(
             I18n.t('workflow_executions.table_component.run_id'),
@@ -800,9 +800,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
     within('dialog') do
-      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 2
+      assert_selector "fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible, count: 2
 
-      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[0] do
+      within all("fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible)[0] do
         assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
 
         if has_selector?("select[name$='[value]']", visible: :visible)
@@ -812,7 +812,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
         end
       end
 
-      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[1] do
+      within all("fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible)[1] do
         assert_equal 'contains', find("select[name$='[operator]']", visible: :visible).value
         assert_equal 'my_run_id', find("input[name$='[value]']", visible: :visible).value
       end
@@ -850,7 +850,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within('dialog') do
       click_button I18n.t(:'components.advanced_search_component.v1.add_condition_button')
 
-      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[1] do
+      within all("fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible)[1] do
         if has_selector?("input[role='combobox']", visible: :visible)
           find("input[role='combobox']", visible: :visible).send_keys(
             I18n.t('workflow_executions.table_component.run_id'),
@@ -873,13 +873,13 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
     within('dialog') do
-      assert_selector "fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible, count: 1
+      assert_selector "fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible, count: 1
 
-      within all("fieldset[data-advanced-search-target='conditionsContainer']", visible: :visible)[0] do
+      within all("fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible)[0] do
         assert_equal '=', find("select[name$='[operator]']", visible: :visible).value
       end
 
-      assert_no_selector "fieldset[data-advanced-search-target='conditionsContainer'] input[value='draft_run_id']",
+      assert_no_selector "fieldset[data-advanced-search--v1-target='conditionsContainer'] input[value='draft_run_id']",
                          visible: :all
     end
   ensure
@@ -1305,7 +1305,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   def apply_hidden_input_values(values) # rubocop:disable Metrics/MethodLength
-    condition = find("[data-advanced-search-target='conditionsContainer']", visible: :visible)
+    condition = find("[data-advanced-search--v1-target='conditionsContainer']", visible: :visible)
     operator_select = condition.find("select[name$='[operator]']", visible: :all)
     input_name = operator_select[:name].sub(/\[operator\]\z/, '[value][]')
 
