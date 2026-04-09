@@ -5,14 +5,16 @@
     <% end %>
 
     <% table.with_column(t("bots.index.table.header.active_tokens")) do |row| %>
-      <% if row.user.personal_access_tokens.active.count.positive? %>
-        <%= button_to row.user.personal_access_tokens.active.count,
+      <% active_count = row.user.personal_access_tokens.active.count %>
+
+      <% if active_count.positive? %>
+        <%= button_to active_count,
         bot_tokens_path(row),
         data: {
           turbo_stream: true,
         },
         aria: {
-          label: t("bots.index.table.active_tokens_aria_label", count: row.user.personal_access_tokens.active.count, name: row.user.email),
+          label: t("bots.index.table.active_tokens_aria_label", count: active_count, name: row.user.email),
         },
         method: :get,
         class:
@@ -23,14 +25,16 @@
     <% end %>
 
     <% table.with_column(t("bots.index.table.header.inactive_tokens")) do |row| %>
-      <% if row.user.personal_access_tokens.inactive.count.positive? %>
-        <%= button_to row.user.personal_access_tokens.inactive.count,
+      <% inactive_count = row.user.personal_access_tokens.inactive.count %>
+
+      <% if inactive_count.positive? %>
+        <%= button_to inactive_count,
         bot_inactive_tokens_path(row),
         data: {
           turbo_stream: true,
         },
         aria: {
-          label: t("bots.index.table.inactive_tokens_aria_label", count: row.user.personal_access_tokens.inactive.count, name: row.user.email),
+          label: t("bots.index.table.inactive_tokens_aria_label", count: inactive_count, name: row.user.email),
         },
         method: :get,
         class:
