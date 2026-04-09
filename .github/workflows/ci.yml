@@ -97,6 +97,28 @@ jobs:
         if: steps.changed-erb-files.outputs.any_changed == 'true'
         run: pnpm run herb:format:check ${{ steps.changed-erb-files.outputs.all_changed_files }}
 
+  test_js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v5
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: "pnpm"
+
+      - name: Install JavaScript dependencies
+        run: pnpm install
+
+      - name: Run JavaScript tests
+        run: pnpm run test:js
+
   test:
     timeout-minutes: 15
     runs-on: ubuntu-latest
