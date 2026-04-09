@@ -47,8 +47,7 @@
 
     <% if !@actions.empty? %>
       <% table.with_column(t("personal_access_tokens.table.header.action"),
-          sticky_key: :right,
-          padding: false
+          classes: "flex justify-start"
         ) do |row| %>
         <% if @actions[:revoke] %>
           <%= button_to t("personal_access_tokens.table.revoke"),
@@ -59,7 +58,19 @@
             label: t(:"personal_access_tokens.table.revoke_aria_label", name: row[:name]),
           },
           class:
-            "px-3 py-2 bg-white dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+            "bg-white dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer mr-2" %>
+        <% end %>
+
+        <% if @actions[:rotate] %>
+          <%= button_to t("personal_access_tokens.table.rotate"),
+          rotate_path(row),
+          data: rotate_data_attributes,
+          method: :put,
+          aria: {
+            label: t(:"personal_access_tokens.table.rotate_aria_label", name: row[:name]),
+          },
+          class:
+            "bg-white dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
         <% end %>
       <% end %>
     <% end %>

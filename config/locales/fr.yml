@@ -1237,6 +1237,9 @@ fr:
       revoke: Révoquer
       revoke_aria_label: 'Révoquer le jeton d’accès personnel : %{name}'
       revoke_confirmation: Êtes-vous sûr de vouloir révoquer ce jeton d’accès personnel?
+      rotate: Faire pivoter
+      rotate_aria_label: 'Faire pivoter le jeton d''accès personnel : %{name}'
+      rotate_confirmation: Êtes-vous sûr de vouloir faire pivoter ce jeton d'accès personnel?
       status:
         active: Actif
         expired: Expiré

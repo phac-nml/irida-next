@@ -61,11 +61,31 @@ module PersonalAccessTokens
       end
     end
 
+    def rotate_path(token)
+      if @namespace.is_a?(Group)
+        rotate_group_bot_personal_access_token_path(
+          bot_id: @bot_account.id,
+          id: token.id
+        )
+      elsif @namespace.is_a?(Namespaces::ProjectNamespace)
+        rotate_namespace_project_bot_personal_access_token_path(
+          bot_id: @bot_account.id,
+          id: token.id
+        )
+      else
+        rotate_profile_personal_access_token_path(id: token.id)
+      end
+    end
+
+    def rotate_data_attributes
+      { 'turbo-stream': true, turbo_confirm: t('personal_access_tokens.table.rotate_confirmation') }
+    end
+
     def actions
       @actions = if @revoked_pats || @expired_pats
                    {}
                  else
-                   { revoke: true }
+                   { revoke: true, rotate: true }
                  end
     end
 

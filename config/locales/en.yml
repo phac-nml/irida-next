@@ -1233,6 +1233,9 @@ en:
       revoke: Revoke
       revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Are you sure you want to revoke this personal access token?
+      rotate: Rotate
+      rotate_aria_label: 'Rotate personal access token: %{name}'
+      rotate_confirmation: Are you sure you want to rotate this personal access token?
       status:
         active: Active
         expired: Expired

@@ -1,1 +1,19 @@
+<% if new_personal_access_token %>
+  <%= turbo_stream.replace "access-token-section",
+                       partial: "access_token_section",
+                       locals: {
+                         token: new_personal_access_token.token,
+                       } %>
+  <%= turbo_stream.replace "personal_access_tokens",
+                       partial: "table",
+                       locals: {
+                         personal_access_token: new_personal_access_token,
+                         access_tokens: @active_access_tokens,
+                         title: t("profiles.personal_access_tokens.table.empty_state.active.title"),
+                         description: t("profiles.personal_access_tokens.table.empty_state.active.description")
+                       } %>
+<% end %>
 
+<%= turbo_stream.replace "token-information-component" do %>
+  <%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %>
+<% end %>
