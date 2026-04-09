@@ -25,6 +25,9 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       resources :bots, only: %i[create destroy index new] do
         get :destroy_confirmation
         resources :personal_access_tokens, module: :bots, only: %i[index new create] do
+          collection do
+            get :inactive_tokens
+          end
           member do
             delete :revoke
             get :revoke_confirmation

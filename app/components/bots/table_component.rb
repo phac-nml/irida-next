@@ -35,6 +35,14 @@ module Bots
       end
     end
 
+    def bot_inactive_tokens_path(bot)
+      if @namespace.is_a?(Group)
+        inactive_tokens_group_bot_personal_access_tokens_path(bot_id: bot.id)
+      elsif @namespace.is_a?(Namespaces::ProjectNamespace)
+        inactive_tokens_namespace_project_bot_personal_access_tokens_path(bot_id: bot.id)
+      end
+    end
+
     def new_token_path(bot)
       if @namespace.is_a?(Group)
         new_group_bot_personal_access_token_path(bot_id: bot.id)
