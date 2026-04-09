@@ -776,7 +776,9 @@ en:
             title: New Bot Account
             token_details: Token details
         personal_access_tokens_listing_modal:
-          description: Viewing a list of active personal access tokens for %{bot_account}
+          description:
+            active: Viewing a list of active personal access tokens for %{bot_account}
+            inactive: Viewing a list of inactive personal access tokens for %{bot_account}
           personal_access_token:
             empty:
               description: Bot %{bot_name} has no active personal access tokens.
@@ -1393,7 +1395,9 @@ en:
             title: New Bot Account
             token_details: Token details
         personal_access_tokens_listing_modal:
-          description: Viewing a list of active personal access tokens for %{bot_account}
+          description:
+            active: Viewing a list of active personal access tokens for %{bot_account}
+            inactive: Viewing a list of inactive personal access tokens for %{bot_account}
           personal_access_token:
             empty:
               description: Bot %{bot_name} has no active personal access tokens.

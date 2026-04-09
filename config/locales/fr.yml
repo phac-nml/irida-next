@@ -778,7 +778,9 @@ fr:
             title: Nouveau compte de bot
             token_details: Détails du jeton
         personal_access_tokens_listing_modal:
-          description: Affichage d’une liste de jetons d’accès personnels actifs pour %{bot_account}
+          description:
+            active: Affichage d’une liste de jetons d’accès personnels actifs pour %{bot_account}
+            inactive: Affichage d’une liste de jetons d’accès personnels inactifs pour %{bot_account}
           personal_access_token:
             empty:
               description: Le bot %{bot_name} n’a pas de jetons d’accès personnel actifs.
@@ -1397,7 +1399,9 @@ fr:
             title: Nouveau compte de bot
             token_details: Détails du jeton
         personal_access_tokens_listing_modal:
-          description: Affichage d’une liste de jetons d’accès personnels actifs pour %{bot_account}
+          description:
+            active: Affichage d’une liste de jetons d’accès personnels actifs pour %{bot_account}
+            inactive: Affichage d’une liste de jetons d’accès personnels inactifs pour %{bot_account}
           personal_access_token:
             empty:
               description: Le bot %{bot_name} n’a pas de jetons d’accès personnel actifs.
