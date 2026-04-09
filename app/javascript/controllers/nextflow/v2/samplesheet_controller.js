@@ -46,7 +46,7 @@ export default class extends Controller {
     "updateSamplesCheckbox",
     "updateSamplesLabel",
     "sampleAttributes",
-    "samplesheetParamsForm",
+    "samplesheetParamsFormTemplate",
     "samplesheetReadyTemplate",
     "ariaLive",
   ];
@@ -113,41 +113,48 @@ export default class extends Controller {
   #startingIndex;
   #lastIndex;
 
+  #selectedSamples;
+  #chunkedSelectedSamples;
+
+  // to prevent submitting all the sample chunks at once, we'll keep a counter and as the chunked requests connect
+  // the counter will be updated until the number of counters === chunkedSamples.length
+  #currentChunkedCounter = 0;
+
+  // fallback in case fetching samples failed
+  #sampleAttributesRequestFailed = false;
+
   connect() {
     this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
   }
 
-  disconnect() {
-    if (this.hasSamplesheetParamsFormTarget && this.boundAmendForm) {
-      this.samplesheetParamsFormTarget.removeEventListener(
-        "turbo:before-fetch-request",
-        this.boundAmendForm,
+  #processSamplesheetAttributes() {
+    this.sampleAttributesTargets.forEach((sampleAttributesTarget) => {
+      const dataAttributes = sampleAttributesTarget.dataset;
+      const sampleAttributes = JSON.parse(
+        dataAttributes.sampleAttributes || "{}",
       );
-    }
+      Object.assign(this.#samplesheetAttributes, sampleAttributes);
+
+      const allowedToUpdateSamples = JSON.parse(
+        dataAttributes.allowedToUpdateSamples || "false",
+      );
+
+      if (this.#allowedToUpdateSamples && !allowedToUpdateSamples) {
+        this.#allowedToUpdateSamples = false;
+      }
+      sampleAttributesTarget.remove();
+    });
   }
 
-  sampleAttributesTargetConnected() {
-    const dataAttributes = this.sampleAttributesTarget.dataset;
-    this.#samplesheetAttributes = JSON.parse(
-      dataAttributes.sampleAttributes || "{}",
-    );
-    this.#allowedToUpdateSamples = JSON.parse(
-      dataAttributes.allowedToUpdateSamples || "false",
-    );
-    this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
-
-    this.#fileAttributes = JSON.parse(this.fileAttributesTarget.innerHTML);
-    this.fileAttributesTarget.remove();
-
-    if (Object.keys(this.#samplesheetAttributes).length === 0) {
-      this.samplesheetSpinnerTarget.remove();
-      this.#enableErrorState(this.processingErrorValue);
-    } else {
-      // remove node after retrieving data
-      this.sampleAttributesTarget.remove();
-      this.#processSamplesheet();
-    }
+  #processFileAttributes() {
+    this.fileAttributesTargets.forEach((fileAttributeTarget) => {
+      Object.assign(
+        this.#fileAttributes,
+        JSON.parse(fileAttributeTarget.innerHTML),
+      );
+      fileAttributeTarget.remove();
+    });
   }
 
   #processSamplesheet() {
@@ -167,7 +174,7 @@ export default class extends Controller {
   }
 
   #addLoadingCompleteMessage() {
-    this.samplesheetMessagesContainerTarget.innerHTML = "";
+    this.#clearMessagesContainer();
 
     const samplesheetReadyMessage =
       this.samplesheetReadyTemplateTarget.content.cloneNode(true);
@@ -337,12 +344,24 @@ export default class extends Controller {
       behavior: "smooth",
       block: "start",
     });
-    this.samplesheetMessagesContainerTarget.innerHTML = "";
+    this.#clearMessagesContainer();
   }
 
   #disableFormFieldErrorState() {
     this.formFieldErrorTarget.classList.add("hidden");
     this.formFieldErrorMessageTarget.innerHTML = "";
+  }
+
+  #renderProcessingError() {
+    if (this.hasSamplesheetSpinnerTarget) {
+      this.samplesheetSpinnerTarget.remove();
+    }
+
+    this.#enableErrorState(this.processingErrorValue);
+  }
+
+  #clearMessagesContainer() {
+    this.samplesheetMessagesContainerTarget.innerHTML = "";
   }
 
   #setSampleData(sampleId, columnName, value) {
@@ -927,49 +946,120 @@ export default class extends Controller {
   samplesheetPropertiesTargetConnected() {
     this.#samplesheetProperties =
       this.samplesheetPropertiesTarget.dataset.properties;
-    this.boundAmendForm = this.amendForm.bind(this);
 
-    this.samplesheetParamsFormTarget.addEventListener(
-      "turbo:before-fetch-request",
-      this.boundAmendForm,
-    );
-    this.#submitSamplesheetParams();
-  }
-
-  amendForm(event) {
-    const formData = new FormData(this.samplesheetParamsFormTarget);
-    event.detail.fetchOptions.body = JSON.stringify(this.#toJson(formData));
-    event.detail.fetchOptions.headers["Content-Type"] = "application/json";
-
-    event.detail.resume();
-  }
-
-  #toJson(formData) {
-    const params = formDataToJsonParams(formData);
+    // to prevent browser timeouts on large (10k+) sample requests, samples will be chunked and batched into
+    // 1000 sample requests
     if (this.hasSelectionOutlet) {
-      normalizeParams(
-        params,
-        "sample_ids[]",
-        this.selectionOutlet.getOrCreateStoredItems(),
-        0,
-      );
+      this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
+      if (this.#selectedSamples.length !== 0) {
+        this.#resetAttributes();
+        this.#chunkedSelectedSamples = this.#chunkSamples();
+        this.#submitSamplesheetParams(this.#currentChunkedCounter);
+        return;
+      }
     }
+    this.#renderProcessingError();
+  }
+
+  #resetAttributes() {
+    this.#samplesheetAttributes = {};
+    this.#fileAttributes = {};
+    this.#allowedToUpdateSamples = true;
+    this.#sampleAttributesRequestFailed = false;
+    this.#currentChunkedCounter = 0;
+  }
+
+  // example: a 3000 sample request will be chunked into:
+  // [[sample0...sample999], [sample1000...sample1999], [sample2000...sample2999]]
+  #chunkSamples() {
+    const chunkSize = 1000;
+    const chunkedArray = [];
+    for (let i = 0; i < this.#selectedSamples.length; i += chunkSize) {
+      chunkedArray.push(this.#selectedSamples.slice(i, i + chunkSize));
+    }
+    return chunkedArray;
+  }
+
+  #toJson(formData, index) {
+    const params = formDataToJsonParams(formData);
+    normalizeParams(
+      params,
+      "sample_ids[]",
+      this.#chunkedSelectedSamples[index],
+      0,
+    );
     return params;
   }
 
-  #submitSamplesheetParams() {
+  #submitSamplesheetParams(index) {
+    // a separate form is created for each sample chunk, and a fetch request is made to retrieve the sample data
+    const formFragment =
+      this.samplesheetParamsFormTemplateTarget.content.cloneNode(true);
     const fragment = document.createDocumentFragment();
 
     fragment.appendChild(
       createHiddenInput("properties", this.#samplesheetProperties),
     );
 
-    this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
-    // clear the now unnecessary DOM element
-    this.samplesheetPropertiesTarget.remove();
+    this.element.appendChild(formFragment);
 
-    this.samplesheetParamsFormTarget.appendChild(fragment);
-    this.samplesheetParamsFormTarget.requestSubmit();
+    const form = this.element.lastElementChild;
+    form.appendChild(fragment);
+
+    form.addEventListener(
+      "submit",
+      (event) => {
+        event.preventDefault();
+        this.#sampleAttributesFetch(form, index);
+      },
+      { once: true },
+    );
+    form.requestSubmit();
+    form.remove();
+  }
+
+  #sampleAttributesFetch(form, index) {
+    const formData = new FormData(form);
+    fetch(form.action, {
+      credentials: "same-origin",
+      method: "POST",
+      body: JSON.stringify(this.#toJson(formData, index)),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "text/vnd.turbo-stream.html",
+      },
+    })
+      .then((r) => {
+        if (!r.ok) {
+          this.#sampleAttributesRequestFailed = true;
+          throw new Error(`samplesheet request failed: ${r.status}`);
+        }
+        return r.text();
+      })
+      .then((html) => Turbo.renderStreamMessage(html))
+      .catch(() => this.#renderProcessingError());
+  }
+
+  sampleAttributesTargetConnected() {
+    if (this.#sampleAttributesRequestFailed) return;
+    this.#currentChunkedCounter += 1;
+    if (this.#currentChunkedCounter < this.#chunkedSelectedSamples.length) {
+      this.#submitSamplesheetParams(this.#currentChunkedCounter);
+    } else {
+      this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
+      // // clear the now unnecessary DOM element
+      this.samplesheetPropertiesTarget.remove();
+      this.#processSamplesheetAttributes();
+      this.#processFileAttributes();
+
+      this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
+
+      if (this.#allSampleIds.length !== this.#selectedSamples.length) {
+        this.#renderProcessingError();
+      } else {
+        this.#processSamplesheet();
+      }
+    }
   }
 
   dataPayloadTargetConnected() {

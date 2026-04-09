@@ -793,3 +793,13 @@ user31_project1_namespace_route:
   name: user.31@localhost / Project 1
   path: user.31_at_localhost/project-1
   source: projectUser31_namespace (Namespace)
+
+chunked_samples_doe_namespace_route:
+  name: chunked_samples_doe@localhost
+  path: chunked-samples-doe-at-localhost
+  source: chunked_samples_doe_namespace (Namespace)
+
+project_chunked_samples_namespace_route:
+  name: chunked_samples_doe@localhost / Project Chunked Samples
+  path: chunked-samples-doe-at-localhost/project-chunked-samples
+  source: project_chunked_samples_namespace (Namespace)

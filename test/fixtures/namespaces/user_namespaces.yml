@@ -181,3 +181,10 @@ user31_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
   puid: INXT_USR_AAAAAAAAAY
+
+chunked_samples_doe_namespace:
+  name: chunked_samples_doe@localhost
+  path: chunked-samples-doe-at-localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
+  puid: INXT_USR_AAAAAAAAAZ

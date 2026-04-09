@@ -379,3 +379,9 @@ projectUser31:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectUser31_namespace, :uuid) %>
   samples_count: 1
+
+projectChunkedSamples:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_chunked_samples_namespace,
+    :uuid) %>
+  samples_count: 0
