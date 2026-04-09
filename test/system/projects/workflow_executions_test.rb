@@ -391,7 +391,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_no_button I18n.t(:'components.advanced_search_component.title')
+      assert_no_button I18n.t(:'components.advanced_search_component.v1.title')
 
       fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
               with: @workflow_execution1.id
@@ -412,9 +412,9 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_button I18n.t(:'components.advanced_search_component.title')
+      assert_button I18n.t(:'components.advanced_search_component.v1.title')
 
-      click_button I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
 
       within('dialog') do
         if has_selector?("input[role='combobox']", visible: :visible)
@@ -431,11 +431,11 @@ module Projects
         else
           find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
         end
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
       end
 
-      assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
-      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+      assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.clear_aria_label')}']"
       assert_selector "div[role='status']", text: /advanced search/, visible: false
       assert_text @workflow_execution1.id
       assert_no_text @workflow_execution3.id
@@ -448,7 +448,7 @@ module Projects
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      click_button I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
 
       within('dialog') do
         if has_selector?("input[role='combobox']", visible: :visible)
@@ -465,16 +465,16 @@ module Projects
         else
           find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
         end
-        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
       end
 
-      click_button I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
 
       within('dialog') do
-        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
       end
 
-      assert_no_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
+      assert_no_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.clear_aria_label')}']"
       assert_text @workflow_execution1.id
       assert_text @workflow_execution3.id
     ensure
