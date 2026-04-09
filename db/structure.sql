@@ -800,7 +800,7 @@ CREATE TABLE public.personal_access_tokens (
     scopes character varying,
     name character varying,
     revoked boolean DEFAULT false NOT NULL,
-    expires_at date,
+    expires_at timestamp(6) without time zone,
     token_digest character varying,
     last_used_at timestamp without time zone,
     created_at timestamp(6) without time zone NOT NULL,
@@ -2153,6 +2153,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260409113640'),
 ('20260306153207'),
 ('20260223130000'),
 ('20251201162848'),
