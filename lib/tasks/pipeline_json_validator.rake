@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'git'
+
 # Rake task to validate pipeline JSON configuration files against a JSON schema
 # USAGE:
 #  rake pipeline_json_validator:validate path/to/PIPELINES_JSON_CONFIG_FILE
@@ -126,21 +128,50 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
       pipeline_hash['versions'].each do |version|
         next unless version.key?('name')
 
-        filename = 'nextflow_schema.json'
-        uri = URI.parse(base_url)
-        url = URI("https://raw.githubusercontent.com#{uri.path}/#{version['name']}/#{filename}")
-
         begin
-          response = Net::HTTP.get_response(URI(url))
-          unless response.is_a?(Net::HTTPSuccess)
-            @errors << "URL is NOT reachable (Status: #{response.code}): #{url}. Please check if version/branch exists at source." # rubocop:disable Layout/LineLength
-          end
-        rescue StandardError => e
-          @errors << "Error reaching URL #{url}: #{e.message}"
+          refs = Git.ls_remote(base_url)
+          version_exists = version_exists_in_remote?(refs, version['name'])
+
+          # If version not found in remote refs, try cloning and checking
+          version_exists ||= check_version_in_cloned_repo(base_url, version['name'])
+
+          @errors << "Version/branch '#{version['name']}' not found in repository: #{base_url}" unless version_exists
+        rescue Git::Error => e
+          @errors << "Repository not accessible at #{base_url}: #{e.message}"
         end
       end
       progressbar.increment
     end
+  end
+
+  # Check if a version/branch exists in the remote references
+  def version_exists_in_remote?(refs, query)
+    case refs
+    when Hash
+      refs.any? { |key, value| key.to_s.include?(query) || version_exists_in_remote?(value, query) }
+    when Array
+      refs.any? { |value| version_exists_in_remote?(value, query) }
+    else
+      refs.to_s.include?(query)
+    end
+  end
+
+  # Check if version exists by cloning the repository and attempting checkout
+  def check_version_in_cloned_repo(base_url, version_name)
+    Dir.mktmpdir('irida_pipeline_validate') do |clone_dir|
+      try_clone_and_checkout(base_url, version_name, clone_dir)
+    end
+  rescue Git::Error
+    false
+  end
+
+  # Attempt to clone and checkout a specific version
+  def try_clone_and_checkout(base_url, version_name, clone_dir)
+    repo = Git.clone(base_url, clone_dir)
+    repo.checkout(version_name)
+    true
+  rescue Git::Error
+    false
   end
 
   # Verify that all required translation keys are present
