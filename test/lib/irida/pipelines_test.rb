@@ -2,31 +2,26 @@
 
 require 'test_helper'
 require 'webmock/minitest'
+require 'mocha/minitest'
 
 class PipelinesTest < ActiveSupport::TestCase
   setup do
     @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
+    @test_schema_body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json').read
 
-    # Read in schema file to json
-    body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
+    # Use a closure to capture @test_schema_body for the clone_repo implementation
+    schema_body = @test_schema_body
+    clone_repo_impl = lambda do |_uri, _sha, clone_dir|
+      FileUtils.mkdir_p(clone_dir)
+      File.write(File.join(clone_dir, 'nextflow_schema.json'), schema_body)
 
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"a1Ab"]' })
+      # Create assets/schema_input.json
+      FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
+      File.write(File.join(clone_dir, 'assets', 'schema_input.json'), schema_body)
+      nil
+    end
 
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"b1Bc"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.1/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"c1Cd"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.1/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"d1De"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.0/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"e1Ef"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.0/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
 
     @pipelines = Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines/pipelines.json',
                                       pipeline_schema_file_dir: @pipeline_schema_file_dir)
@@ -66,12 +61,22 @@ class PipelinesTest < ActiveSupport::TestCase
   end
 
   test 'fail on trying to get new etag for cached pipeline' do
-    # The regular pipelines have already been loaded once and files written to the pipeline schema file dir.
-    # This simulates a restart where the init checks to fetch a fresh etag to compare versions, but fails
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/nextflow_schema.json')
-      .to_return(status: 404)
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/assets/schema_input.json')
-      .to_return(status: 404)
+    # Pre-create the cached schema files so they exist before trying to fetch new ones
+    schema_body = @test_schema_body
+    cached_path = File.join(@pipeline_schema_file_dir, 'github.com/phac-nml/iridanextexample', '1.0.2')
+    FileUtils.mkdir_p(File.join(cached_path, 'assets'))
+    File.write(File.join(cached_path, 'nextflow_schema.json'), schema_body)
+    File.write(File.join(cached_path, 'assets', 'schema_input.json'), schema_body)
+
+    # Mock Rails.logger.error to capture the call
+    Rails.logger.expects(:error).with('Pipeline phac-nml/iridanextexample_1.0.2 could not be updated').once
+
+    # Override the mock to raise an exception for this test (simulating fetch failure)
+    clone_repo_impl = lambda do |_uri, _sha, _clone_dir|
+      raise Git::Error, 'Failed to clone'
+    end
+
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
 
     pipeline_refresh = Irida::Pipelines.new(
       pipeline_config_file: 'test/config/pipelines_fail_to_get_etag_for_cached_pipeline/pipelines.json',
@@ -81,52 +86,35 @@ class PipelinesTest < ActiveSupport::TestCase
     pl = pipeline_refresh.pipelines['phac-nml/iridanextexample_1.0.2']
     assert_not_nil pl
     assert_not pl.executable
+
+    # Restore the original mock
+    clone_repo_impl_default = lambda do |_uri, _sha, clone_dir|
+      FileUtils.mkdir_p(clone_dir)
+      File.write(File.join(clone_dir, 'nextflow_schema.json'), schema_body)
+      FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
+      File.write(File.join(clone_dir, 'assets', 'schema_input.json'), schema_body)
+      nil
+    end
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl_default)
   end
 
-  test 'fail on trying to get etag for new pipeline' do
-    # ok pipeline, no cache
-    body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.8/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"e1Ef"]' })
+  test 'raises exception and logs error on git repo not accessible' do
+    # Mock Rails.logger.error to capture the call
+    Rails.logger.expects(:error).with('Pipeline phac-nml/iridanextexample_1.0.2 could not be registered').once
 
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.8/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
+    # Override the clone_repo to raise a 503 error
+    clone_repo_impl = lambda do |_uri, _sha, _clone_dir|
+      raise Irida::Pipelines::PipelinesInvalidUrlException.new('503', false)
+    end
 
-    # pipeline that should fail, no cache
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.9/nextflow_schema.json')
-      .to_return(status: 404)
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.9/assets/schema_input.json')
-      .to_return(status: 404)
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
 
-    pipeline_refresh = Irida::Pipelines.new(
-      pipeline_config_file: 'test/config/pipelines_fail_to_get_etag_for_new_pipeline/pipelines.json',
+    pipelines = Irida::Pipelines.new(
+      pipeline_config_file: 'test/config/pipelines_fail_to_get_etag_for_cached_pipeline/pipelines.json',
       pipeline_schema_file_dir: @pipeline_schema_file_dir
     )
 
-    pl8 = pipeline_refresh.pipelines['phac-nml/iridanextexample_1.0.8']
-    pl9 = pipeline_refresh.pipelines['phac-nml/iridanextexample_1.0.9']
-
-    # ok pipeline
-    assert_not_nil pl8
-    assert pl8.executable
-    # failed pipeline
-    assert_nil pl9
-  end
-
-  test 'fail on github not accessible' do
-    # if github is inaccessible we want to hard crash with a custom exception
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/nextflow_schema.json')
-      .to_return(status: 503)
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/assets/schema_input.json')
-      .to_return(status: 503)
-
-    error = assert_raises(Irida::Pipelines::PipelinesInvalidUrlException) do
-      Irida::Pipelines.new(
-        pipeline_config_file: 'test/config/pipelines_fail_to_get_etag_for_cached_pipeline/pipelines.json',
-        pipeline_schema_file_dir: @pipeline_schema_file_dir
-      )
-    end
-
-    assert_equal '503', error.code
+    # For non-cached, the pipeline should not be registered
+    assert_nil pipelines.pipelines['phac-nml/iridanextexample_1.0.2']
   end
 end

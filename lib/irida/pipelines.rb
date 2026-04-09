@@ -82,8 +82,6 @@ module Irida
 
       Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
     rescue PipelinesInvalidUrlException => e
-      raise e if e.code == '503' # re-raise error to force crash
-
       if e.previously_fetched # log error and mark pipeline as non executable
         Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be updated")
         version['executable'] = false
@@ -105,6 +103,15 @@ module Irida
       end
 
       [nextflow_schema_location, schema_input_location]
+    rescue Git::Error => e
+      previously_fetched = pipeline_schema_files_exist?(uri, version)
+      raise PipelinesInvalidUrlException.new('404', previously_fetched), e.message
+    end
+
+    def pipeline_schema_files_exist?(uri, version)
+      pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path, version['name'])
+      File.exist?(File.join(pipeline_schema_files_path, 'nextflow_schema.json')) ||
+        File.exist?(File.join(pipeline_schema_files_path, 'assets', 'schema_input.json'))
     end
 
     # read in the json pipeline config
