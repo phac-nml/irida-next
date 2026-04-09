@@ -35,7 +35,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.attachments_updated_at'),
                                                 count: 1
           assert_selector "div[role='presentation']",
-                          text: I18n.t('components.advanced_search_component.v1.operation.metadata_fields'),
+                          text: I18n.t('components.advanced_search_component.operation.metadata_fields'),
                           count: 1
         end
 
