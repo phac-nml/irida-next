@@ -19,7 +19,7 @@
       <% end %>
     <% end %>
 
-    <% table.with_column("Inactive Tokens") do |row| %>
+    <% table.with_column(t("bots.index.table.header.inactive_tokens")) do |row| %>
       <% if row.user.personal_access_tokens.inactive.count.positive? %>
         <%= button_to row.user.personal_access_tokens.inactive.count,
         bot_inactive_tokens_path(row),

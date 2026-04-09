@@ -346,6 +346,7 @@ fr:
           active_tokens: Jetons actifs
           created: Créé
           expiration: Expiration
+          inactive_tokens: Jetons inactifs
           username: Nom d’utilisateur
         never: Jamais
   combobox_component:

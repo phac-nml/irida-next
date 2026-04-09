@@ -346,6 +346,7 @@ en:
           active_tokens: Active Tokens
           created: Created
           expiration: Expiration
+          inactive_tokens: Inactive Tokens
           username: Username
         never: Never
   combobox_component:

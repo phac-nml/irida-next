@@ -8,7 +8,7 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
     before_action proc { namespace }
     before_action proc { bot_account }
     before_action proc { personal_access_tokens }, only: %i[index revoke rotate]
-    before_action proc { inactive_personal_access_tokens }, only: %i[inactive_tokens]
+    before_action proc { inactive_personal_access_tokens }, only: %i[inactive]
     before_action proc { personal_access_token }, only: %i[revoke revoke_confirmation rotate_confirmation]
     before_action proc { bot_accounts }
   end
@@ -35,7 +35,7 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def inactive_tokens
+  def inactive
     authorize! @namespace, to: :view_bot_personal_access_tokens?
 
     respond_to do |format|
