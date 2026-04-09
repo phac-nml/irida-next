@@ -1,4 +1,4 @@
-<% if new_personal_access_token %>
+<% if defined?(new_personal_access_token) %>
   <%= turbo_stream.replace "access-token-section",
                        partial: "access_token_section",
                        locals: {
@@ -12,8 +12,11 @@
                          title: t("profiles.personal_access_tokens.table.empty_state.active.title"),
                          description: t("profiles.personal_access_tokens.table.empty_state.active.description")
                        } %>
-<% end %>
-
-<%= turbo_stream.replace "token-information-component" do %>
-  <%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %>
+  <%= turbo_stream.replace "token-information-component" do %>
+    <%= render PersonalAccessTokens::InformationComponent.new(current_user: current_user) %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type: :error, data: message) %>
+  <% end %>
 <% end %>
