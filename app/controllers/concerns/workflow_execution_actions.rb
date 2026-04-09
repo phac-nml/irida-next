@@ -5,7 +5,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include ListActions
   include NamespacePathHelper
-  include Storable
   include WorkflowExecutionAttachment
 
   included do
@@ -32,13 +31,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     @results_message = results_message
 
     setup_ransack_for_form
-
-    respond_to do |format|
-      format.html
-      format.turbo_stream do
-        render status: @query.valid? ? :ok : :unprocessable_content
-      end
-    end
   end
 
   def edit
@@ -340,10 +332,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     raise NotImplementedError
   end
 
-  def search_key
-    raise NotImplementedError
-  end
-
   def format_samplesheet_params
     workflow = @workflow_execution.workflow
 
@@ -378,36 +366,26 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def search_params
-    build_search_params(stored_search_params).compact
+    search_params = {}
+    search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
+    search_params[:name_or_id_in] = params.dig(:q, :name_or_id_in)
+    search_params[:sort] = params.dig(:q, :s)
+
+    if Flipper.enabled?(:workflow_execution_advanced_search)
+      groups_attributes = workflow_advanced_search_groups_attributes
+      search_params[:groups_attributes] = groups_attributes if groups_attributes.present?
+    end
+
+    search_params.compact
   end
 
-  def stored_search_params
-    search_params = update_store(search_key, incoming_search_params)
-    search_params.slice!('name_or_id_cont', 'name_or_id_in', 'groups_attributes', 's')
+  def workflow_advanced_search_groups_attributes
+    groups_attributes = params.dig(:q, :groups_attributes)
+    return if groups_attributes.blank?
 
-    return search_params if search_params['s'].present?
-
-    search_params['s'] = 'updated_at desc'
-    update_store(search_key, search_params)
-  end
-
-  def incoming_search_params
-    params[:q].present? ? params[:q].to_unsafe_h : {}
-  end
-
-  def build_search_params(search_params)
-    {
-      name_or_id_cont: search_params['name_or_id_cont'],
-      name_or_id_in: search_params['name_or_id_in'],
-      sort: search_params['s'],
-      groups_attributes: search_groups_attributes(search_params)
-    }
-  end
-
-  def search_groups_attributes(search_params)
-    return unless Flipper.enabled?(:workflow_execution_advanced_search)
-
-    search_params['groups_attributes'].presence
+    # to_unsafe_h is safe here: data is passed to a query model (not AR mass assignment)
+    # and groups_attributes has dynamic nested keys that cannot be permitted via strong params.
+    groups_attributes.respond_to?(:to_unsafe_h) ? groups_attributes.to_unsafe_h : groups_attributes
   end
 
   def results_message

@@ -106,8 +106,6 @@ module Projects
       namespace_project_workflow_executions_path
     end
 
-    def search_key = :"#{controller_name}_#{@project.id}_search_params"
-
     def page_title
       case action_name
       when 'index'

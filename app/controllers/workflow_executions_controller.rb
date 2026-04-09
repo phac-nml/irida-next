@@ -87,8 +87,6 @@ class WorkflowExecutionsController < ApplicationController
     workflow_executions_path
   end
 
-  def search_key = :"#{controller_name}_#{current_user.id}_search_params"
-
   def view_authorizations
     @allowed_to = {
       export_data: true,

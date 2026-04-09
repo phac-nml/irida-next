@@ -26,8 +26,6 @@
       <%= hidden_field_tag "q[s]", "#{query.sorts.first.name} #{query.sorts.first.dir}" %>
     <% end %>
 
-    <%= hidden_field_tag :format, "turbo_stream" %>
-
     <% if local_assigns.fetch(:page_limit, nil).present? %>
       <%= hidden_field_tag :limit, local_assigns[:page_limit] %>
     <% end %>

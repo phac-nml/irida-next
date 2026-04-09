@@ -55,18 +55,16 @@
 
     <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
-    <div id="table-filter" role="presentation" class="contents">
-      <%= render partial: "workflow_executions/table_filter", locals: {
-        query: @q,
-        search: @query,
-        url: group_workflow_executions_path,
-        total_count: @pagy.count,
-        page_limit: @pagy.limit,
-        form_data: {
-          "search-field-selection-outlet": "#workflow-executions-table",
-        },
-      } %>
-    </div>
+    <%= render partial: "workflow_executions/table_filter", locals: {
+      query: @q,
+      search: @query,
+      url: group_workflow_executions_path,
+      total_count: @pagy.count,
+      page_limit: @pagy.limit,
+      form_data: {
+        "search-field-selection-outlet": "#workflow-executions-table",
+      },
+    } %>
   </div>
 <% end %>
 
