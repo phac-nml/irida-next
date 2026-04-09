@@ -337,6 +337,7 @@ fr:
           destroy_aria_label: 'Supprimer le compte de bot : %{name}'
           generate_new_token: Générer un nouveau jeton
           generate_new_token_aria_label: 'Générer un nouveau jeton d’accès personnel pour le compte de bot : %{name}'
+        active_tokens_aria_label: 'Afficher %{count} jetons d''accès personnel actifs pour le compte de bot : %{name}'
         empty_state:
           description: Il n’y a pas de comptes de bot associés.
           title: Aucun compte de bot
@@ -348,6 +349,7 @@ fr:
           expiration: Expiration
           inactive_tokens: Jetons inactifs
           username: Nom d’utilisateur
+        inactive_tokens_aria_label: 'Afficher %{count} jetons d''accès personnel inactifs pour le compte de bot : %{name}'
         never: Jamais
   combobox_component:
     multiple_results_text: "%{num} résultats trouvés"

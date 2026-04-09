@@ -16,6 +16,7 @@ module Projects
       @project2 = projects(:project2)
       @project_bot = namespace_bots(:project1_bot0)
       @project_bot_active_tokens = @project_bot.user.personal_access_tokens.active
+      @project_bot_inactive_tokens = @project_bot.user.personal_access_tokens.inactive
     end
 
     test 'can see a table listing of project bot accounts' do
@@ -203,7 +204,8 @@ module Projects
 
       ### ACTIONS START ###
       within "tr[id='#{dom_id(@project_bot)}']" do
-        click_button @project_bot_active_tokens.count.to_s
+        click_button I18n.t('bots.index.table.active_tokens_aria_label', count: @project_bot_active_tokens.count,
+                                                                         name: @project_bot.user.email)
       end
       ### ACTIONS END ###
 
@@ -213,7 +215,7 @@ module Projects
         assert_selector 'h1', text: I18n.t('projects.bots.index.personal_access_tokens_listing_modal.title')
         assert_selector 'p',
                         text: I18n.t(
-                          'projects.bots.index.personal_access_tokens_listing_modal.description',
+                          'projects.bots.index.personal_access_tokens_listing_modal.description.active',
                           bot_account: @project_bot.user.email
                         )
 
@@ -227,6 +229,61 @@ module Projects
             assert_selector 'td:nth-child(4)', text: I18n.l(token.created_at.getlocal.to_date, format: :long)
             assert_selector 'td:nth-child(6)',
                             text: I18n.l(DateTime.parse(token.expires_at.to_s).getlocal.to_date, format: :long)
+          end
+        end
+      end
+      ### VERIFY END ###
+    end
+
+    test 'can view inactive personal access tokens for bot account' do
+      ### SETUP START ###
+      expired_token = @project_bot_inactive_tokens.find { |t| !t.expires_at.nil? }
+      revoked_token = @project_bot_inactive_tokens.find(&:revoked?)
+      visit namespace_project_bots_path(@namespace, @project)
+
+      assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                                      locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within "tr[id='#{dom_id(@project_bot)}']" do
+        click_button I18n.t('bots.index.table.inactive_tokens_aria_label', count: @project_bot_inactive_tokens.count,
+                                                                           name: @project_bot.user.email)
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_selector '#bot_tokens_dialog'
+      within('#bot_tokens_dialog') do
+        assert_selector 'h1', text: I18n.t('projects.bots.index.personal_access_tokens_listing_modal.title')
+        assert_selector 'p',
+                        text: I18n.t(
+                          'projects.bots.index.personal_access_tokens_listing_modal.description.inactive',
+                          bot_account: @project_bot.user.email
+                        )
+
+        within('table') do
+          assert_selector 'tr', count: @project_bot_inactive_tokens.count + 1 # header row + inactive tokens
+
+          within "tr[id='#{dom_id(expired_token)}']" do
+            assert_selector 'th[scope="row"]', text: 'Expired Valid PAT0'
+            assert_selector 'td:nth-child(3)', text: 'read_api, api'
+
+            assert_selector 'td:nth-child(4)', text: I18n.l(expired_token.created_at.getlocal.to_date, format: :long)
+            assert_selector 'td:nth-child(7)',
+                            text: I18n.l(DateTime.parse(expired_token.expires_at.to_s).getlocal.to_date, format: :long)
+          end
+
+          within "tr[id='#{dom_id(revoked_token)}']" do
+            assert_selector 'th[scope="row"]', text: 'Revoked Valid PAT0'
+            assert_selector 'td:nth-child(3)', text: 'read_api, api'
+
+            assert_selector 'td:nth-child(4)', text: I18n.l(revoked_token.created_at.getlocal.to_date, format: :long)
+            assert_selector 'td:nth-child(6)', text: I18n.l(revoked_token.updated_at.getlocal.to_date, format: :long)
+            assert_selector 'td:nth-child(7)',
+                            text: I18n.l(DateTime.parse(revoked_token.expires_at.to_s).getlocal.to_date, format: :long)
           end
         end
       end
@@ -372,9 +429,11 @@ module Projects
       # additional asserts to prevent flakes
       assert_selector '#bots-table'
       assert_selector '#bots-table table tbody tr', count: 20
+
       within "tr[id='#{dom_id(@project_bot)}']" do
         # click active tokens number
-        click_button @project_bot_active_tokens.count.to_s
+        click_button I18n.t('bots.index.table.active_tokens_aria_label', count: @project_bot_active_tokens.count,
+                                                                         name: @project_bot.user.email)
       end
 
       # bot's current PATs dialog
@@ -443,7 +502,7 @@ module Projects
       assert_selector '#bots-table'
       assert_selector '#bots-table table tbody tr', count: 20
       assert_selector "#bots-table table tbody tr[id='#{dom_id(@project_bot)}']"
-      within("#bots-table table tbody tr[id='#{dom_id(@project_bot)}'] td:nth-child(6)") do
+      within("#bots-table table tbody tr[id='#{dom_id(@project_bot)}'] td:nth-child(7)") do
         # destroy bot
         click_button I18n.t('common.actions.delete')
       end

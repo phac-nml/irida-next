@@ -11,6 +11,9 @@
         data: {
           turbo_stream: true,
         },
+        aria: {
+          label: t("bots.index.table.active_tokens_aria_label", count: row.user.personal_access_tokens.active.count, name: row.user.email),
+        },
         method: :get,
         class:
           "font-semibold text-slate-800 dark:text-slate-300 underline hover:decoration-2 cursor-pointer" %>
@@ -25,6 +28,9 @@
         bot_inactive_tokens_path(row),
         data: {
           turbo_stream: true,
+        },
+        aria: {
+          label: t("bots.index.table.inactive_tokens_aria_label", count: row.user.personal_access_tokens.inactive.count, name: row.user.email),
         },
         method: :get,
         class:
