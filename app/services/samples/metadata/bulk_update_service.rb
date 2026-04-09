@@ -226,11 +226,11 @@ module Samples
 
       def handle_unsuccessful_updates(unsuccessful_updates)
         unsuccessful_updates.each do |key, updates|
-          updates.each do |sample_identifier, changes|
+          updates.each do |sample_identifier, fields|
             @namespace.errors.add(:sample,
                                   I18n.t("services.samples.metadata.bulk_update.sample_metadata_fields_#{key}",
                                          sample_name: sample_identifier,
-                                         metadata_fields: changes.join(', ')))
+                                         metadata_fields: fields.join(', ')))
           end
         end
       end
