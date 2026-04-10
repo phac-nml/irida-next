@@ -13,7 +13,8 @@ module Projects
     def view_authorizations
       @allowed_to = {
         create_attachment: allowed_to?(:create_attachment?, @project),
-        destroy_attachment: allowed_to?(:destroy_attachment?, @project)
+        destroy_attachment: allowed_to?(:destroy_attachment?, @project),
+        preview_attachment: allowed_to?(:preview_attachment?, @project)
       }
     end
 

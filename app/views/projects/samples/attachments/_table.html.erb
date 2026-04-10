@@ -106,6 +106,7 @@
         select_attachments: @allowed_to[:update_sample],
       },
       row_actions: {
+        preview: @allowed_to[:preview_attachment],
         destroy: @allowed_to[:destroy_attachment],
       },
       empty:

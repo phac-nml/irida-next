@@ -14,7 +14,8 @@ module Groups
     def view_authorizations
       @allowed_to = {
         create_attachment: allowed_to?(:create_attachment?, @group),
-        destroy_attachment: allowed_to?(:destroy_attachment?, @group)
+        destroy_attachment: allowed_to?(:destroy_attachment?, @group),
+        preview_attachment: allowed_to?(:preview_attachment?, @group)
       }
     end
 
