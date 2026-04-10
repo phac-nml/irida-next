@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Rails.application.configure do
+Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # good_job configuration
   config.good_job.enable_cron = ENV.fetch('ENABLE_CRON', 'true') == 'true'
   cron_cleanup_after_days = ENV.fetch('CRON_CLEANUP_AFTER_DAYS', '7')
@@ -22,6 +22,11 @@ Rails.application.configure do
       cron: '0 3 * * *', # Daily, 3 AM
       class: 'DataExports::CleanupJob', # job class as a String, must be an ActiveJob job
       description: 'Permanently deletes expired data exports.'
+    },
+    personal_access_tokens_cleanup_task: {
+      cron: '0 4 * * *', # Daily, 4 AM
+      class: 'PersonalAccessTokens::CleanupJob', # job class as a String, must be an ActiveJob job
+      description: 'Permanently deletes expired and revoked personal access tokens.'
     }
   }
 end
