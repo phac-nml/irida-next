@@ -6,7 +6,7 @@
     <%= turbo_frame_tag "import_spreadsheet_dialog_alert" %>
 
     <div
-      data-controller="spreadsheet-import sortable-lists--v1--two-lists-selection attachment-upload <% if @namespace.group_namespace? %> viral--select2 <% end %>"
+      data-controller="spreadsheet-import sortable-lists--v1--two-lists-selection attachment-upload <% if @namespace.group_namespace? %> <%= Flipper.enabled?(:v2_select2, Current.user) ? 'select2--v2' : 'select2--v1' %> <% end %>"
       data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
       data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
       data-sortable-lists--v1--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
@@ -16,9 +16,16 @@
       data-attachment-upload-uploading-text-value="<%= t('shared.samples.spreadsheet_imports.dialog.uploading') %>"
       data-attachment-upload-success-text-value="<%= t('common.upload.uploaded_successfully') %>"
       data-attachment-upload-error-fallback-text-value="<%= t('common.upload.failed') %>"
-      data-viral--select2-enable-controller-coordination-value="<%= true %>"
-      <% if @namespace.group_namespace? %>
-        data-viral--select2-spreadsheet-import-outlet="#spreadsheet-import-dialog-content"
+      <% if Flipper.enabled?(:v2_select2, Current.user) %>
+        data-select2--v2-enable-controller-coordination-value="<%= true %>"
+        <% if @namespace.group_namespace? %>
+          data-select2--v2-spreadsheet-import-outlet="#spreadsheet-import-dialog-content"
+        <% end %>
+      <% else %>
+        data-select2--v1-enable-controller-coordination-value="<%= true %>"
+        <% if @namespace.group_namespace? %>
+          data-select2--v1-spreadsheet-import-outlet="#spreadsheet-import-dialog-content"
+        <% end %>
       <% end %>
       data-spreadsheet-import-refresh-outlet="[data-controller='refresh']"
       data-action="
