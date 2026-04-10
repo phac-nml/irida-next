@@ -79,6 +79,19 @@ class AdvancedSearch::V2::ExecutorTest < ActiveSupport::TestCase # rubocop:disab
     assert_not_includes result, sample2
   end
 
+  test 'empty nested subgroup does not broaden an OR query' do
+    tree = GroupNode.new(
+      combinator: 'or',
+      nodes: [
+        GroupNode.new(combinator: 'or', nodes: []),
+        ConditionNode.new(field: 'name', operator: '=', value: '__definitely_missing__')
+      ]
+    )
+    result = AdvancedSearch::V2::Executor.new(tree, @scope).call
+
+    assert_equal 0, result.count
+  end
+
   test 'metadata field condition returns matching samples' do
     # sample43 fixture has metadata: { insdc_accession: 'ERR86724108' }
     sample = samples(:sample43)

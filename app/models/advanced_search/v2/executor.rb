@@ -16,21 +16,22 @@ module AdvancedSearch
       def call
         return @scope if @tree.nil?
 
-        visit(@tree, @scope)
+        visit(@tree, @scope, root: true)
       end
 
       private
 
-      def visit(node, scope)
+      def visit(node, scope, root: false)
         case node.type
-        when :group     then visit_group(node, scope)
+        when :group     then visit_group(node, scope, root:)
         when :condition then visit_condition(node, scope)
         else scope
         end
       end
 
-      def visit_group(node, base_scope)
-        return base_scope if node.nodes.empty?
+      def visit_group(node, base_scope, root: false)
+        return base_scope if root && node.nodes.empty?
+        return base_scope.none if node.nodes.empty?
 
         child_relations = node.nodes.map { |n| visit(n, base_scope) }
         child_relations.reduce do |acc, rel|

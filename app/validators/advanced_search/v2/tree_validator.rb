@@ -40,6 +40,11 @@ module AdvancedSearch
           errors << { path:, message: "invalid combinator: #{node.combinator.inspect}" }
         end
 
+        if path != 'root' && node.nodes.empty?
+          errors << { path:, message: 'group must contain at least one child node' }
+          return
+        end
+
         node.nodes.each_with_index do |child, i|
           child_path = "#{path}.nodes[#{i}]"
           if child.type == :group

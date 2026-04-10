@@ -61,6 +61,21 @@ class Sample::V2::QueryTest < ActiveSupport::TestCase # rubocop:disable Style/Cl
     assert_not_empty query.errors
   end
 
+  test '#valid? rejects an empty nested subgroup and relation raises' do
+    tree = GroupNode.new(
+      combinator: 'or',
+      nodes: [
+        GroupNode.new(combinator: 'or', nodes: []),
+        ConditionNode.new(field: 'name', operator: '=', value: '__definitely_missing__')
+      ]
+    )
+    query = build_query(tree:)
+
+    assert_not query.valid?
+    assert_includes query.errors, { path: 'root.nodes[0]', message: 'group must contain at least one child node' }
+    assert_raises(ArgumentError) { query.relation }
+  end
+
   test '#valid? returns false for nil tree' do
     query = Sample::V2::Query.new(tree: nil, scope: @scope)
 
