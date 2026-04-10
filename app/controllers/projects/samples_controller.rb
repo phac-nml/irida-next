@@ -40,10 +40,15 @@ module Projects
       return not_found unless Flipper.enabled?(:advanced_search_v2)
 
       authorize! @project, to: :sample_listing?
+      return invalid_v2_query_response if query_v2_too_large?(params[:query_v2])
+
       build_v2_query
+      return invalid_v2_query_response unless @v2_query.valid?
+
+      persist_v2_query(params[:query_v2])
       respond_to_v2_query
     rescue AdvancedSearch::V2::Serializer::ParseError
-      head :unprocessable_content
+      invalid_v2_query_response
     end
 
     def show
@@ -215,7 +220,6 @@ module Projects
     def build_v2_query
       raw_json = params[:query_v2]
       tree = AdvancedSearch::V2::Serializer.parse(raw_json)
-      persist_v2_query(raw_json)
 
       @v2_query = Sample::V2::Query.new(
         tree:,
@@ -227,7 +231,7 @@ module Projects
     end
 
     def persist_v2_query(raw_json)
-      return unless raw_json.present? && raw_json.bytesize <= MAX_QUERY_V2_SIZE
+      return if raw_json.blank?
 
       store(query_v2_session_key, raw_json)
     end
@@ -248,8 +252,12 @@ module Projects
       raw_json = get_store(query_v2_session_key)
       return if raw_json.blank?
 
-      build_persisted_v2_query(raw_json)
-    rescue AdvancedSearch::V2::Serializer::ParseError
+      query = build_persisted_v2_query(raw_json)
+      return query if query.valid?
+
+      clear_persisted_v2_query
+      nil
+    rescue AdvancedSearch::V2::Serializer::ParseError, ArgumentError
       clear_persisted_v2_query
       nil
     end
@@ -325,6 +333,15 @@ module Projects
 
     def clear_persisted_v2_query
       store(query_v2_session_key, nil)
+    end
+
+    def invalid_v2_query_response
+      clear_persisted_v2_query
+      head :unprocessable_content
+    end
+
+    def query_v2_too_large?(raw_json)
+      raw_json.present? && raw_json.to_s.bytesize > MAX_QUERY_V2_SIZE
     end
 
     def v2_query_enabled_for_index?
