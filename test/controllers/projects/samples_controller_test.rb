@@ -507,6 +507,34 @@ module Projects
       assert_nil session["samples_#{@project.id}_advanced_search_v2"]
     end
 
+    test 'POST query_v2 returns 422 for non-string condition fields' do
+      Flipper.enable(:advanced_search_v2)
+
+      [
+        ['name'],
+        { name: 'sample' }
+      ].each do |field|
+        post query_namespace_project_samples_path(@namespace, @project),
+             params: {
+               query_v2: {
+                 combinator: 'and',
+                 nodes: [
+                   {
+                     type: 'condition',
+                     field:,
+                     operator: 'equals',
+                     value: @sample1.name
+                   }
+                 ]
+               }.to_json
+             },
+             as: :turbo_stream
+
+        assert_response :unprocessable_content
+        assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+      end
+    end
+
     test 'POST query_v2 clears persisted state for invalid parseable trees' do
       Flipper.enable(:advanced_search_v2)
       sample2 = samples(:sample2)

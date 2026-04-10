@@ -32,6 +32,11 @@ class AdvancedSearch::V2::FieldConfigurationTest < ActiveSupport::TestCase # rub
     assert_not AdvancedSearch::V2::FieldConfiguration.valid_field?('')
   end
 
+  test '.valid_field? returns false for non-string fields' do
+    assert_not AdvancedSearch::V2::FieldConfiguration.valid_field?(['name'])
+    assert_not AdvancedSearch::V2::FieldConfiguration.valid_field?({ name: 'sample' })
+  end
+
   test '.operators_for string field returns string operators' do
     ops = AdvancedSearch::V2::FieldConfiguration.operators_for('name')
     assert_includes ops, '='
@@ -68,6 +73,7 @@ class AdvancedSearch::V2::FieldConfigurationTest < ActiveSupport::TestCase # rub
     assert_not AdvancedSearch::V2::FieldConfiguration.valid_operator?('name', '>=')
     assert_not AdvancedSearch::V2::FieldConfiguration.valid_operator?('name', '<=')
     assert_not AdvancedSearch::V2::FieldConfiguration.valid_operator?('created_at', 'contains')
+    assert_not AdvancedSearch::V2::FieldConfiguration.valid_operator?(['name'], '=')
   end
 
   test '.valid_operator? returns true when operator supported for field' do

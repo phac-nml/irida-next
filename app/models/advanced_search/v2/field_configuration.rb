@@ -30,12 +30,15 @@ module AdvancedSearch
         end
 
         def valid_field?(field)
+          return false unless field.is_a?(String)
           return false if field.blank?
 
           CORE_FIELDS.key?(field) || field.start_with?('metadata.')
         end
 
         def operators_for(field)
+          return [] unless field.is_a?(String)
+
           if field.start_with?('metadata.')
             METADATA_OPERATORS
           elsif CORE_FIELDS[field]&.include?(:date)
