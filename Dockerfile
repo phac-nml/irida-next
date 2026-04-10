@@ -16,7 +16,7 @@ WORKDIR /rails
 
 # Install base packages (include sudo for runtime sudo support)
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl postgresql-client libvips libjemalloc2 sudo && \
+    apt-get install --no-install-recommends -y curl git postgresql-client libvips libjemalloc2 sudo && \
     ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
