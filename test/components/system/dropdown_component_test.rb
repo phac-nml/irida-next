@@ -5,7 +5,7 @@ require 'application_system_test_case'
 module System
   class DropdownComponentTest < ApplicationSystemTestCase
     test 'dropdown component default rendering' do
-      visit('/rails/view_components/viral_dropdown_component/default')
+      visit('/rails/view_components/dropdown_component/default')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_text 'Organism'
         assert_no_selector 'svg' # No caret by default
@@ -18,7 +18,7 @@ module System
     end
 
     test 'dropdown component with label and caret' do
-      visit('/rails/view_components/viral_dropdown_component/with_caret')
+      visit('/rails/view_components/dropdown_component/with_caret')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_text 'Organism'
         assert_selector 'svg' # Assert caret is present
@@ -34,7 +34,7 @@ module System
     end
 
     test 'dropdown component with icon' do
-      visit('/rails/view_components/viral_dropdown_component/with_icon')
+      visit('/rails/view_components/dropdown_component/with_icon')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_no_text 'Organism' # Label is not rendered when only icon is present
         assert_selector 'svg.plus-circle-icon' # Assert icon is present
@@ -50,7 +50,7 @@ module System
     end
 
     test 'dropdown component with item icons' do
-      visit('/rails/view_components/viral_dropdown_component/with_item_icon')
+      visit('/rails/view_components/dropdown_component/with_item_icon')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         find('button[data-dropdown--v1-target="trigger"]').click
         assert_text 'Checkmark'
@@ -60,7 +60,7 @@ module System
     end
 
     test 'dropdown component uses custom button_styles when provided' do
-      visit('/rails/view_components/viral_dropdown_component/with_custom_button_styles')
+      visit('/rails/view_components/dropdown_component/with_custom_button_styles')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         button = find('button')
         assert button[:class].include?('bg-emerald-800'), 'Expected custom button style to be applied'
@@ -72,7 +72,7 @@ module System
     end
 
     test 'dropdown component with data attributes on items' do
-      visit('/rails/view_components/viral_dropdown_component/with_data_attributes')
+      visit('/rails/view_components/dropdown_component/with_data_attributes')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_text 'Data Attributes Test'
         click_on 'Data Attributes Test'

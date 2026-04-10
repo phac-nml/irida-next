@@ -47,9 +47,9 @@ module Dropdown
     private
 
     def render_component(version: nil)
-      render_inline Viral::DropdownComponent.new(version: version, label: 'Organism',
-                                                 aria: { label: 'Organism dropdown list' },
-                                                 title: 'Organisms that really shine') do |dropdown|
+      render_inline DropdownComponent.new(version: version, label: 'Organism',
+                                          aria: { label: 'Organism dropdown list' },
+                                          title: 'Organisms that really shine') do |dropdown|
         dropdown.with_item(label: 'Aspergillus awamori', url: '#')
         dropdown.with_item(label: 'Bacillus cereus', url: '#')
         dropdown.with_item(label: 'Pseudomonas aeruginosa', url: '#')
