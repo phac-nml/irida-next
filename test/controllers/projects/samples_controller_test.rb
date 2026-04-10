@@ -436,6 +436,35 @@ module Projects
       assert_not_includes table_text, sample2.name
     end
 
+    test 'GET select uses persisted query_v2 result set when advanced_search_v2 flag is on' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :ok
+
+      get select_namespace_project_samples_url(@namespace, @project),
+          params: { select: 'on', timestamp: 1.day.from_now.iso8601 }
+      assert_response :success
+
+      assert_equal [@sample1.id], rendered_selected_sample_ids
+      assert_not_includes rendered_selected_sample_ids, sample2.id
+    end
+
     test 'POST query_v2 returns 422 for invalid json' do
       Flipper.enable(:advanced_search_v2)
       post query_namespace_project_samples_path(@namespace, @project),
@@ -567,6 +596,11 @@ module Projects
     def rendered_search_field_value
       doc = Nokogiri::HTML(response.body)
       doc.at_css('input[data-test-selector="search-field-input"]')['value']
+    end
+
+    def rendered_selected_sample_ids
+      doc = Nokogiri::HTML(response.body)
+      JSON.parse(doc.at_css('[data-controller="table-selection"]')['data-table-selection-ids-value'])
     end
   end
 end
