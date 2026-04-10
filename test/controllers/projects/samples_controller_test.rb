@@ -636,6 +636,34 @@ module Projects
       assert_includes table_text, sample2.name
     end
 
+    test 'POST query_v2 returns 422 for empty nested subgroups' do
+      Flipper.enable(:advanced_search_v2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'or',
+               nodes: [
+                 {
+                   type: 'group',
+                   combinator: 'or',
+                   nodes: []
+                 },
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: '__definitely_missing__'
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+    end
+
     test 'POST query_v2 returns 422 for payloads larger than persistence limit' do
       Flipper.enable(:advanced_search_v2)
       sample2 = samples(:sample2)

@@ -131,6 +131,20 @@ class AdvancedSearch::V2::TreeValidatorTest < ActiveSupport::TestCase # rubocop:
     assert_empty result[:errors]
   end
 
+  test 'empty subgroup directly under root fails validation' do
+    tree = GroupNode.new(
+      combinator: 'or',
+      nodes: [
+        GroupNode.new(combinator: 'or', nodes: []),
+        ConditionNode.new(field: 'name', operator: '=', value: 'test')
+      ]
+    )
+    result = validator.validate(tree)
+
+    assert_not result[:valid]
+    assert_includes result[:errors], { path: 'root.nodes[0]', message: 'group must contain at least one child node' }
+  end
+
   test 'valid metadata field passes' do
     tree = GroupNode.new(
       combinator: 'and',
