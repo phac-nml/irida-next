@@ -187,6 +187,98 @@ class ProfileTest < ApplicationSystemTestCase
                     count: @active_token_count - 1)
   end
 
+  test 'can rotate active personal access tokens' do
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    token_to_rotate = personal_access_tokens(:john_doe_non_expirable_pat)
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: @active_token_count)
+
+    within('#access-tokens-table') do
+      assert_text token_to_rotate.name
+    end
+
+    click_button 'View revoked tokens'
+
+    within('#access-tokens-table') do
+      assert_no_text token_to_rotate.name
+    end
+
+    click_button 'View active tokens'
+
+    within %(tr[id="#{dom_id(token_to_rotate)}"]) do
+      click_button I18n.t(:'personal_access_tokens.table.rotate')
+    end
+
+    within('#turbo-confirm[open]') do
+      click_button I18n.t('common.controls.confirm')
+    end
+
+    assert_text I18n.t(:'profiles.personal_access_tokens.access_token_section.label')
+    assert_text I18n.t(:'profiles.personal_access_tokens.access_token_section.description')
+
+    within('#access-tokens-table') do
+      assert_text token_to_rotate.name
+    end
+
+    click_button 'View revoked tokens'
+
+    within('#access-tokens-table') do
+      assert_text token_to_rotate.name
+    end
+
+    click_button 'View active tokens'
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: @active_token_count)
+  end
+
+  test 'cannot rotate revoked personal access tokens' do
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    revoked_token_count = @user.personal_access_tokens.revoked.count
+
+    token_to_rotate = personal_access_tokens(:john_doe_revoked_pat)
+
+    click_button 'View revoked tokens'
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: revoked_token_count)
+
+    within('#access-tokens-table') do
+      assert_text token_to_rotate.name
+    end
+
+    within %(tr[id="#{dom_id(token_to_rotate)}"]) do
+      assert_no_button I18n.t(:'personal_access_tokens.table.rotate')
+    end
+  end
+
+  test 'cannot rotate expired personal access tokens' do
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    expired_token_count = @user.personal_access_tokens.expired.count
+
+    token_to_rotate = personal_access_tokens(:john_doe_expired_pat)
+
+    click_button 'View expired tokens'
+
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: expired_token_count)
+
+    within('#access-tokens-table') do
+      assert_text token_to_rotate.name
+    end
+
+    within %(tr[id="#{dom_id(token_to_rotate)}"]) do
+      assert_no_button I18n.t(:'personal_access_tokens.table.rotate')
+    end
+  end
+
   test 'empty personal access tokens state' do
     login_as users(:empty_doe)
     visit profile_path
