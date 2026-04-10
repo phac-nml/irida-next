@@ -10,6 +10,7 @@ module AdvancedSearch
       class << self
         def parse(json)
           return nil if json.blank?
+          raise ParseError, 'Invalid V2 query JSON: expected a JSON string' unless json.is_a?(String)
 
           hash = JSON.parse(json)
           parse_root(hash)

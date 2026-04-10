@@ -473,6 +473,22 @@ module Projects
       assert_response :unprocessable_content
     end
 
+    test 'POST query_v2 returns 422 for nested form payloads' do
+      Flipper.enable(:advanced_search_v2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: []
+             }
+           },
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+    end
+
     test 'POST query_v2 returns 422 for blank payload' do
       Flipper.enable(:advanced_search_v2)
 
