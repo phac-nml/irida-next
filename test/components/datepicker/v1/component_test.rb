@@ -14,7 +14,7 @@ module Datepicker
         assert_selector 'input[type="text"]', count: 1
         assert_selector 'svg.calendar-dots-icon', count: 1
         assert_match(/id="test_id-calendar"/, rendered_content)
-        assert_match(/class="[^"]*\bhidden\b[^"]*"/, rendered_content)
+        assert_selector('template[data-datepicker--v1--input-target="calendarTemplate"]', visible: :all)
         assert_match(/data-controller="datepicker--v1--input"/, rendered_content)
         assert_match(/data-controller="datepicker--v1--calendar"/, rendered_content)
       end
