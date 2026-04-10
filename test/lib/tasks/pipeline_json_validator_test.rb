@@ -70,7 +70,7 @@ class PipelineJsonValidatorTest < ActiveSupport::TestCase
 
     # Check for URL error
     output = stdout + stderr
-    assert_includes output, 'URL is NOT reachable'
+    assert_includes output, 'Repository not accessible'
   end
 
   test 'detects missing translations' do

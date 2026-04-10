@@ -159,6 +159,9 @@ gem 'flipper-ui', flipper_version
 # Expression calculator
 gem 'dentaku'
 
+# Git interaction
+gem 'git'
+
 group :development, :rubocop do
   # rubocop
   gem 'rubocop', require: false

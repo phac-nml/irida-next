@@ -2,47 +2,37 @@
 
 require 'test_helper'
 require 'webmock/minitest'
+require 'mocha/minitest'
 
 class PipelinesOverrides < ActiveSupport::TestCase
   setup do
     @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
 
     # Read in schema file to json
-    body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
-    nextflow_fastmatch_body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema_fastmatch.json')
+    body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json').read
+    nextflow_fastmatch_body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema_fastmatch.json').read
     nextflow_samplesheet_fastmatch_body = Rails.root.join(
       'test/fixtures/files/nextflow/samplesheet_schema_fastmatch.json'
-    )
+    ).read
 
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.2/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"a1Ab"]' })
+    # Mock clone_repo to simulate Git operations
+    clone_repo_impl = lambda do |_uri, sha, clone_dir|
+      FileUtils.mkdir_p(clone_dir)
+      if ['2.0.2', '2.0.1', '2.0.0'].include?(sha)
+        # iridanextexample
+        File.write(File.join(clone_dir, 'nextflow_schema.json'), body)
+        FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
+        File.write(File.join(clone_dir, 'assets', 'schema_input.json'), body)
+      elsif ['0.4.1', '0.4.0'].include?(sha)
+        # fastmatchirida
+        File.write(File.join(clone_dir, 'nextflow_schema.json'), nextflow_fastmatch_body)
+        FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
+        File.write(File.join(clone_dir, 'assets', 'schema_input.json'), nextflow_samplesheet_fastmatch_body)
+      end
+      nil
+    end
 
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.2/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"b1Bc"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.1/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"c1Cd"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.1/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"d1De"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.0/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"e1Ef"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/2.0.0/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/fastmatchirida/0.4.1/nextflow_schema.json')
-      .to_return(status: 200, body: nextflow_fastmatch_body, headers: { etag: '[W/"g1gh"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/fastmatchirida/0.4.1/assets/schema_input.json')
-      .to_return(status: 200, body: nextflow_samplesheet_fastmatch_body, headers: { etag: '[W/"h1hi"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/fastmatchirida/0.4.0/nextflow_schema.json')
-      .to_return(status: 200, body: nextflow_fastmatch_body, headers: { etag: '[W/"i1ij"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/fastmatchirida/0.4.0/assets/schema_input.json')
-      .to_return(status: 200, body: nextflow_samplesheet_fastmatch_body, headers: { etag: '[W/"j1kl"]' })
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
   end
 
   teardown do
