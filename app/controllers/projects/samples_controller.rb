@@ -109,7 +109,7 @@ module Projects
 
       return if params[:select].blank?
 
-      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params[:timestamp].to_datetime).pluck(:id)
+      @sample_ids = selection_scope.reorder(nil).where(updated_at: ..params[:timestamp].to_datetime).pluck(:id)
     end
 
     private
@@ -241,7 +241,7 @@ module Projects
     end
 
     def load_index_results
-      if (v2_query = persisted_v2_query_for_index)
+      if (v2_query = persisted_v2_query_for_listing)
         @pagy, @samples = v2_query.results
         @results_message = nil
       else
@@ -250,8 +250,8 @@ module Projects
       end
     end
 
-    def persisted_v2_query_for_index
-      return unless v2_query_enabled_for_index?
+    def persisted_v2_query_for_listing
+      return unless v2_query_enabled_for_listing?
 
       raw_json = get_store(query_v2_session_key)
       return if raw_json.blank?
@@ -264,6 +264,14 @@ module Projects
     rescue AdvancedSearch::V2::Serializer::ParseError, ArgumentError
       clear_persisted_v2_query
       nil
+    end
+
+    def selection_scope
+      if (v2_query = persisted_v2_query_for_listing)
+        v2_query.relation
+      else
+        @query.results
+      end
     end
 
     def respond_to_v2_query
@@ -352,8 +360,8 @@ module Projects
       raw_json.present? && raw_json.to_s.bytesize > MAX_QUERY_V2_SIZE
     end
 
-    def v2_query_enabled_for_index?
-      action_name == 'index' && Flipper.enabled?(:advanced_search_v2) && !v1_filters_present?(@search_params)
+    def v2_query_enabled_for_listing?
+      action_name.in?(%w[index select]) && Flipper.enabled?(:advanced_search_v2) && !v1_filters_present?(@search_params)
     end
 
     def build_persisted_v2_query(raw_json)
