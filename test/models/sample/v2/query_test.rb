@@ -112,4 +112,14 @@ class Sample::V2::QueryTest < ActiveSupport::TestCase # rubocop:disable Style/Cl
     updated_ats = relation.pluck(:updated_at)
     assert_equal updated_ats.sort.reverse, updated_ats
   end
+
+  test 'metadata sorts include stable id tie-breaker ordering' do
+    query = build_query(sort: 'metadata_insdc_accession asc')
+    sql = query.relation.to_sql
+
+    assert_match(
+      /ORDER BY .*"samples"\."metadata" ->> 'insdc_accession' collate numeric ASC,\s*"samples"\."id" ASC/i,
+      sql
+    )
+  end
 end
