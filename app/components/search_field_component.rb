@@ -20,6 +20,8 @@ class SearchFieldComponent < Component
 
     @system_arguments[:data][:'search-field-advanced-search-outlet'] =
       '#advanced-search'
+    @system_arguments[:data][:'search-field-advanced-search--v1-outlet'] =
+      '#advanced-search'
   end
 
   def clear_button?
