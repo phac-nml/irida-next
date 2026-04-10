@@ -10,7 +10,7 @@ module Select2
       end
 
       test 'default' do
-        visit '/rails/view_components/viral_select2_component/default'
+        visit '/rails/view_components/select2_component/default'
         assert_selector 'input[type="hidden"][name="user"]', visible: :hidden, count: 1
         assert_selector 'input[type="submit"][disabled]', count: 1
 
