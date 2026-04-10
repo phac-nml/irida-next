@@ -1,57 +1,55 @@
-<div>
-  <div class="bg-white px-2 py-3 text-center font-semibold dark:bg-slate-700 dark:text-white" style="display: none;"></div>
+<div class="bg-white px-2 py-3 text-center font-semibold dark:bg-slate-700 dark:text-white"></div>
 
-  <div class="mb-2 flex justify-between">
-    <button
-      type="button"
-      class="
-        prev-btn mr-2 rounded-lg bg-white p-2.5 text-lg enabled:cursor-pointer enabled:text-slate-800
-        enabled:hover:bg-slate-100 enabled:hover:text-slate-900 disabled:cursor-not-allowed dark:bg-slate-700
-        enabled:dark:text-white enabled:dark:hover:bg-slate-600 enabled:dark:hover:text-white
-      "
-      data-action="
+<div class="mb-2 flex justify-between">
+  <button
+    type="button"
+    class="
+      prev-btn mr-2 rounded-lg bg-white p-2.5 text-lg enabled:cursor-pointer enabled:text-slate-800
+      enabled:hover:bg-slate-100 enabled:hover:text-slate-900 disabled:cursor-not-allowed dark:bg-slate-700
+      enabled:dark:text-white enabled:dark:hover:bg-slate-600 enabled:dark:hover:text-white
+    "
+    data-action="
         click->datepicker--v2--calendar#previousMonth
         keydown->datepicker--v2--calendar#tabBackToInput
       "
-      data-datepicker--v2--calendar-target="backButton"
-      aria-label="<%= t("components.datepicker.aria_label.previous_month_button") %>"
-    >
-      <%= icon(:arrow_left, color: nil, size: nil, class: "size-6") %>
-    </button>
+    data-datepicker--v2--calendar-target="backButton"
+    aria-label="<%= t("components.datepicker.aria_label.previous_month_button") %>"
+  >
+    <%= icon(:arrow_left, color: nil, size: nil, class: "size-6") %>
+  </button>
 
-    <div
-      data-datepicker--v2--calendar-target="monthSelectContainer"
-      data-action="keydown->datepicker--v2--calendar#tabBackToInput"
-    ></div>
+  <div
+    data-datepicker--v2--calendar-target="monthSelectContainer"
+    data-action="keydown->datepicker--v2--calendar#tabBackToInput"
+  ></div>
 
-    <div>
-      <input
-        data-datepicker--v2--calendar-target="year"
-        data-action="change->datepicker--v2--calendar#changeYear"
-        type="number"
-        autocomplete="off"
-        max="9999"
-        min="<%= @min_year %>"
-        class="
-          ml-1 w-22 rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800
-          dark:text-white
-        "
-        aria-label="<%= t('components.datepicker.aria_label.select_year') %>"
-      >
-    </div>
-
-    <button
-      type="button"
+  <div>
+    <input
+      data-datepicker--v2--calendar-target="year"
+      data-action="change->datepicker--v2--calendar#changeYear"
+      type="number"
+      autocomplete="off"
+      max="9999"
+      min="<%= @min_year %>"
       class="
-        next-btn ml-2 cursor-pointer rounded-lg bg-white p-2.5 text-lg text-slate-800 hover:bg-slate-100
-        hover:text-slate-900 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600 dark:hover:text-white
+        ml-1 w-22 rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800
+        dark:text-white
       "
-      data-action="click->datepicker--v2--calendar#nextMonth"
-      aria-label="<%= t("components.datepicker.aria_label.next_month_button") %>"
+      aria-label="<%= t('components.datepicker.aria_label.select_year') %>"
     >
-      <%= icon(:arrow_right, color: nil, size: nil, class: "size-6") %>
-    </button>
   </div>
+
+  <button
+    type="button"
+    class="
+      next-btn ml-2 cursor-pointer rounded-lg bg-white p-2.5 text-lg text-slate-800 hover:bg-slate-100
+      hover:text-slate-900 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600 dark:hover:text-white
+    "
+    data-action="click->datepicker--v2--calendar#nextMonth"
+    aria-label="<%= t("components.datepicker.aria_label.next_month_button") %>"
+  >
+    <%= icon(:arrow_right, color: nil, size: nil, class: "size-6") %>
+  </button>
 </div>
 
 <template data-datepicker--v2--calendar-target="monthSelectTemplate">
