@@ -248,4 +248,41 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
 
     assert_equal 11, workflow_executions.count
   end
+
+  test 'preview_attachment?' do
+    assert @policy.apply(:preview_attachment?)
+
+    # automated workflow execution
+    # user is ANALYST
+    user = users(:james_doe)
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert policy.apply(:preview_attachment?)
+
+    # user is GUEST
+    user = users(:ryan_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert_not policy.apply(:preview_attachment?)
+
+    # shared workflow execution
+    # user is submitter
+    workflow_execution = workflow_executions(:workflow_execution_shared2)
+    user = users(:james_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert policy.apply(:preview_attachment?)
+
+    # user is member of project
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
+
+    assert policy.apply(:preview_attachment?)
+
+    # user is not member of project
+    user = users(:micha_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert_not policy.apply(:preview_attachment?)
+  end
 end
