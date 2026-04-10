@@ -26,6 +26,13 @@ class AdvancedSearch::V2::TreeValidatorTest < ActiveSupport::TestCase # rubocop:
     assert_empty result[:errors]
   end
 
+  test 'nil tree fails with root error' do
+    result = validator.validate(nil)
+
+    assert_not result[:valid]
+    assert_includes result[:errors], { path: 'root', message: 'query tree is required' }
+  end
+
   test 'tree with unknown field fails with field error' do
     tree = GroupNode.new(
       combinator: 'and',
@@ -84,6 +91,17 @@ class AdvancedSearch::V2::TreeValidatorTest < ActiveSupport::TestCase # rubocop:
     result = validator.validate(tree)
     assert_not result[:valid]
     assert(result[:errors].any? { |e| e[:message].include?('array') })
+  end
+
+  test 'scalar operator with object value fails' do
+    tree = GroupNode.new(
+      combinator: 'and',
+      nodes: [ConditionNode.new(field: 'name', operator: '=', value: { bad: 'value' })]
+    )
+    result = validator.validate(tree)
+
+    assert_not result[:valid]
+    assert(result[:errors].any? { |e| e[:message].include?('scalar value') })
   end
 
   test 'subgroup nested inside subgroup fails (max depth 2)' do
