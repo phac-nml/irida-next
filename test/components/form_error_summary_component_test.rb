@@ -33,6 +33,28 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
     assert_selector 'a[href="#user_last_name"]', text: user.errors.full_messages_for(:last_name).first
     assert_selector 'a', text: user.errors.full_messages_for(:email).first, count: 1
     assert_no_text user.errors.full_messages_for(:email).second
+    assert_selector ".alert-component[class*='focus-within:outline-red-600']"
+  end
+
+  test 'component forwards caller-provided system arguments to the alert wrapper' do
+    entries = [
+      FormErrorSummaryEntryBuilder::Entry.new(
+        attribute: :email,
+        message: "Email can't be blank",
+        target_id: 'user_email'
+      )
+    ]
+
+    render_inline(
+      FormErrorSummaryComponent.new(
+        entries:,
+        id: 'custom-summary',
+        data: { testid: 'form-summary' },
+        aria: { label: 'Form error summary' }
+      )
+    )
+
+    assert_selector '.alert-component#custom-summary[data-testid="form-summary"][aria-label="Form error summary"]'
   end
 
   test 'entry builder derives nested builder target ids' do

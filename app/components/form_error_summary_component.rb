@@ -38,11 +38,14 @@ class FormErrorSummaryComponent < Component
   end
 
   def alert_system_arguments
-    {
+    system_arguments.except(:classes).merge(
       type: :alert,
       dismissible: false,
       announce_alert: false,
-      classes: class_names('mb-4', system_arguments[:classes])
-    }
+      classes: class_names(
+        'mb-4 outline-hidden focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-red-600',
+        system_arguments[:classes]
+      )
+    )
   end
 end

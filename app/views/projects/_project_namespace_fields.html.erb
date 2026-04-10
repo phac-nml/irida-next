@@ -85,7 +85,7 @@
     <% if invalid_namespace %>
       <%= render "shared/form/field_errors",
       id: builder.field_id(:namespace, "error"),
-      errors: @project.namespace.errors.messages.values.flatten %>
+      errors: @project.namespace.errors.full_messages_for(:namespace) %>
     <% end %>
 
     <span id="<%= builder.field_id(:namespace, "hint") %>" class="field-hint">
