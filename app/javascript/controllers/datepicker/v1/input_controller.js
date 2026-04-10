@@ -364,7 +364,7 @@ export default class extends Controller {
 
   // used by datepicker/calendar.js
   focusDatepickerInput() {
-    this.datepickerV1InputTarget.focus();
+    this.datepickerInputTarget.focus();
   }
 
   focusNextFocusableElement() {
