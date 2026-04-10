@@ -236,6 +236,7 @@ module Projects
       return if raw_json.blank?
       raise QueryV2TooLargeError if query_v2_too_large?(raw_json)
 
+      clear_persisted_v1_search
       store(query_v2_session_key, raw_json)
     end
 
@@ -325,7 +326,7 @@ module Projects
 
     def search_params
       updated_params = sanitized_search_params
-      clear_persisted_v2_query if v1_filters_present?(updated_params)
+      clear_persisted_v2_query if request_v1_filters_present?
 
       if reset_sort?(updated_params)
         updated_params['sort'] = 'updated_at desc'
@@ -336,6 +337,10 @@ module Projects
 
     def clear_persisted_v2_query
       store(query_v2_session_key, nil)
+    end
+
+    def clear_persisted_v1_search
+      store(search_key, nil)
     end
 
     def invalid_v2_query_response
@@ -379,6 +384,10 @@ module Projects
       search_params['name_or_puid_cont'].present? ||
         search_params['name_or_puid_in'].present? ||
         search_params['groups_attributes'].present?
+    end
+
+    def request_v1_filters_present?
+      params[:q].present? && v1_filters_present?(params[:q].to_unsafe_h.with_indifferent_access)
     end
 
     def page_title
