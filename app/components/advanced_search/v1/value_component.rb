@@ -3,7 +3,7 @@
 module AdvancedSearch
   module V1
     # Component for rendering an advanced search value
-    class Value < ::Component
+    class ValueComponent < ::Component
       def initialize(conditions_form:, group_index:, condition:, condition_index:, options: nil)
         @conditions_form = conditions_form
         @group_index = group_index

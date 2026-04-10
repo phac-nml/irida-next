@@ -11,7 +11,7 @@
 
   <%= @form.fields_for :groups, @group, child_index: @group_index do |groups_form| %>
     <% @group.conditions.each_with_index do |condition, condition_index| %>
-      <%= render AdvancedSearch::V1::Condition.new(
+      <%= render AdvancedSearch::V1::ConditionComponent.new(
         groups_form: groups_form,
         group_index: @group_index,
         condition: condition,

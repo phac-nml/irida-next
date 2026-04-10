@@ -3,7 +3,7 @@
 module AdvancedSearch
   module V1
     # Component for rendering an advanced search group
-    class Group < ::Component
+    class GroupComponent < ::Component
       # rubocop:disable Metrics/ParameterLists
       def initialize(form:, group:, group_index:, group_number:, show_remove_group_button:, fields: {}, operations: [])
         @form = form

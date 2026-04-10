@@ -80,7 +80,7 @@
       id: conditions_form.field_id(:operator, "error") %>
     </div>
 
-    <%= render AdvancedSearch::V1::Value.new(
+    <%= render AdvancedSearch::V1::ValueComponent.new(
       conditions_form: conditions_form,
       group_index: @group_index,
       condition: @condition,

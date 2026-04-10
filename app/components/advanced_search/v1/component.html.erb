@@ -69,7 +69,7 @@
 
       <template data-advanced-search--v1-target="searchGroupsTemplate">
         <% @search.groups.each_with_index do |group, group_index| %>
-          <%= render AdvancedSearch::V1::Group.new(
+          <%= render AdvancedSearch::V1::GroupComponent.new(
             form: @form,
             group: group,
             group_index: group_index,
@@ -98,7 +98,7 @@
       <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "in") %>
 
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
-        <%= render AdvancedSearch::V1::Value.new(
+        <%= render AdvancedSearch::V1::ValueComponent.new(
           conditions_form: conditions_form,
           group_index: "GROUP_INDEX_PLACEHOLDER",
           condition: condition,
@@ -113,7 +113,7 @@
       <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "in") %>
 
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
-        <%= render AdvancedSearch::V1::Value.new(
+        <%= render AdvancedSearch::V1::ValueComponent.new(
           conditions_form: conditions_form,
           group_index: "GROUP_INDEX_PLACEHOLDER",
           condition: condition,
@@ -129,7 +129,7 @@
       <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "=") %>
 
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
-        <%= render AdvancedSearch::V1::Value.new(
+        <%= render AdvancedSearch::V1::ValueComponent.new(
           conditions_form: conditions_form,
           group_index: "GROUP_INDEX_PLACEHOLDER",
           condition: condition,
@@ -144,7 +144,7 @@
       <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "=") %>
 
       <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
-        <%= render AdvancedSearch::V1::Value.new(
+        <%= render AdvancedSearch::V1::ValueComponent.new(
           conditions_form: conditions_form,
           group_index: "GROUP_INDEX_PLACEHOLDER",
           condition: condition,
@@ -157,7 +157,7 @@
 
   <template data-advanced-search--v1-target="conditionTemplate">
     <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
-      <%= render AdvancedSearch::V1::Condition.new(
+      <%= render AdvancedSearch::V1::ConditionComponent.new(
         groups_form: group_form,
         group_index: "GROUP_INDEX_PLACEHOLDER",
         condition: @search_condition_class.new,
@@ -170,7 +170,7 @@
   </template>
 
   <template data-advanced-search--v1-target="groupTemplate">
-    <%= render AdvancedSearch::V1::Group.new(
+    <%= render AdvancedSearch::V1::GroupComponent.new(
       form: @form,
       group: @search_group_class.new,
       group_index: "GROUP_INDEX_PLACEHOLDER",
