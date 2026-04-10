@@ -304,7 +304,6 @@ export default class extends Controller {
       if (this.#selectedMonthIndex === 0) {
         year--;
         month = 11;
-        // return { year: this.#selectedYear - 1, month: 11 };
       } else {
         month--;
       }
