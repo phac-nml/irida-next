@@ -47,7 +47,6 @@ module Projects
       build_v2_query
       return invalid_v2_query_response unless @v2_query.valid?
 
-      persist_v2_query(params[:query_v2])
       respond_to_v2_query
     rescue AdvancedSearch::V2::Serializer::ParseError, QueryV2TooLargeError
       invalid_v2_query_response
@@ -276,7 +275,10 @@ module Projects
 
     def respond_to_v2_query
       respond_to do |format|
-        format.turbo_stream { render_v2_turbo_stream }
+        format.turbo_stream do
+          persist_v2_query(params[:query_v2])
+          render_v2_turbo_stream
+        end
         format.html { head :not_acceptable }
       end
     end

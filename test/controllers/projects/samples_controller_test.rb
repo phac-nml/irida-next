@@ -372,6 +372,43 @@ module Projects
       assert_response :ok
     end
 
+    test 'POST query_v2 returns 406 for HTML without mutating persisted V2 state' do
+      Flipper.enable(:advanced_search_v2)
+      persisted_query = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: @sample1.name
+          }
+        ]
+      }.to_json
+      rejected_query = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: samples(:sample2).name
+          }
+        ]
+      }.to_json
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: persisted_query },
+           as: :turbo_stream
+      assert_response :ok
+      assert_equal persisted_query, session["samples_#{@project.id}_advanced_search_v2"]
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: rejected_query }
+      assert_response :not_acceptable
+      assert_equal persisted_query, session["samples_#{@project.id}_advanced_search_v2"]
+    end
+
     test 'GET index rehydrates persisted query_v2 results when advanced_search_v2 flag is on' do
       Flipper.enable(:advanced_search_v2)
       sample2 = samples(:sample2)
