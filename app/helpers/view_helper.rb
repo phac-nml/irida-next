@@ -18,7 +18,7 @@ module ViewHelper
     pageheader: 'Viral::PageHeaderComponent',
     prefixed_boolean: 'Viral::Form::Prefixed::BooleanComponent',
     prefixed_select: 'Viral::Form::Prefixed::SelectComponent',
-    prefixed_select2: 'Viral::Form::Prefixed::Select2Component',
+    prefixed_select2: 'Prefixed::Select2Component',
     prefixed_text_input: 'Viral::Form::Prefixed::TextInputComponent',
     pill: 'Viral::PillComponent',
     select2: 'Select2Component',

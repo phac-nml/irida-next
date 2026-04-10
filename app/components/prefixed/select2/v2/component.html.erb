@@ -1,0 +1,77 @@
+<div class="@container">
+  <div class="flex flex-row @max-md:flex-col">
+    <div
+      class="
+        overflow-hidden rounded-l-lg rounded-r-lg border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-medium
+        text-ellipsis text-slate-700 @md:!rounded-r-none @md:border-r-0 dark:border-slate-600 dark:bg-slate-700
+        dark:text-slate-300
+      "
+      title="<%= root_url %>"
+    >
+      <%= root_url %>
+    </div>
+
+    <div class="grow">
+      <div data-action="keydown->select2--v2#keydown" class="select2">
+        <%= tag.input(
+          type: "text",
+          id: id,
+          name: id,
+          placeholder: placeholder,
+          required: required,
+          autocomplete: "off",
+          value: selected_value,
+          class: "
+            select2-input block w-full overflow-hidden rounded-l-lg rounded-r-lg border-slate-300 p-2 text-ellipsis
+            text-slate-800 sm:text-sm @min-md:rounded-l-none! dark:border-slate-600 dark:bg-slate-800
+            dark:text-slate-50 dark:placeholder-slate-400
+          ",
+          data: { "select2--v2-target": "input", action: "input->select2--v2#input" },
+          aria: aria
+        ) %>
+
+        <%= form.hidden_field name, data: { "select2--v2-target": "hidden" } %>
+
+        <div
+          data-select2--v2-target="dropdown"
+          class="
+            absolute z-10 hidden rounded-lg border border-slate-300 bg-white shadow-lg dark:border-slate-700
+            dark:bg-slate-800
+          "
+        >
+          <ul
+            data-select2--v2-target="scroller"
+            role="listbox"
+            class="
+              max-h-[300px] w-full divide-y divide-slate-200 overflow-y-auto py-2 wrap-anywhere
+              dark:divide-slate-800
+            "
+          >
+            <% options.each do |option| %>
+              <%= option %>
+            <% end %>
+
+            <% if empty_state? %>
+              <li
+                role="option"
+                aria-disabled="true"
+                aria-selected="false"
+                class="
+                  pointer-events-none hidden border border-blue-300 bg-blue-50 p-4 text-blue-800
+                  dark:border-blue-800 dark:bg-slate-800 dark:text-blue-400
+                "
+                data-select2--v2-target="empty"
+              >
+                <%= empty_state %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <% if path_separator %>
+      <div class="w-1 @max-md:hidden @min-md:mt-2 @min-md:ml-4 dark:text-slate-300">/</div>
+    <% end %>
+  </div>
+</div>

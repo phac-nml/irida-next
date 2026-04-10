@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-module Viral
-  module Form
-    module Prefixed
+module Prefixed
+  module Select2
+    module V1
       # Select2 component with a prefix
-      class Select2Component < Viral::Component
+      class Component < ::Component
         attr_reader :form, :id, :name, :selected_value, :placeholder, :required, :path_separator, :aria
 
         renders_many :options, Select2::V1::OptionComponent
