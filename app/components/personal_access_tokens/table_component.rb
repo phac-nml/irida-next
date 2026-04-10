@@ -4,7 +4,7 @@ require 'ransack/helpers/form_helper'
 
 module PersonalAccessTokens
   # Component for rendering the PersonalAccessTokens tables
-  class TableComponent < Component
+  class TableComponent < Component # rubocop:disable Metrics/ClassLength
     include Ransack::Helpers::FormHelper
 
     def initialize(
@@ -82,6 +82,14 @@ module PersonalAccessTokens
         { 'turbo-stream': true }
       else
         { 'turbo-stream': true, turbo_confirm: t('personal_access_tokens.table.rotate_confirmation') }
+      end
+    end
+
+    def rotate_http_method
+      if @namespace
+        :get
+      else
+        :put
       end
     end
 
