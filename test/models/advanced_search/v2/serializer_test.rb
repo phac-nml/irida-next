@@ -75,6 +75,16 @@ class AdvancedSearch::V2::SerializerTest < ActiveSupport::TestCase # rubocop:dis
     end
   end
 
+  test 'raises ParseError for non-string payloads' do
+    payload = ActionController::Parameters.new(combinator: 'and', nodes: [])
+
+    error = assert_raises(AdvancedSearch::V2::Serializer::ParseError) do
+      AdvancedSearch::V2::Serializer.parse(payload)
+    end
+
+    assert_equal 'Invalid V2 query JSON: expected a JSON string', error.message
+  end
+
   test 'raises ParseError when top-level JSON is an array' do
     assert_raises(AdvancedSearch::V2::Serializer::ParseError) do
       AdvancedSearch::V2::Serializer.parse('[]')
