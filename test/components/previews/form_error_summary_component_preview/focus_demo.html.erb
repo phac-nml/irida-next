@@ -1,0 +1,38 @@
+<div class="mx-auto max-w-2xl space-y-4 p-4">
+  <%= render LiveRegionComponent.new(id: "sr-status", politeness: :assertive) %>
+  <%= render FormErrorSummaryComponent.new(entries:) %>
+
+  <div class="form-field">
+    <label for="user_email">Email</label>
+
+    <input
+      id="user_email"
+      aria-describedby="user_email_error"
+      aria-invalid="true"
+      autocomplete="email"
+      class="block w-full"
+      type="email"
+    >
+
+    <ul id="user_email_error" class="max-w-md list-inside text-sm text-slate-500 dark:text-slate-400">
+      <li><%= viral_help_text(state: :error) { "Email can't be blank" } %></li>
+    </ul>
+  </div>
+
+  <div class="form-field">
+    <label for="namespace-select">Namespace</label>
+
+    <input
+      id="namespace-select"
+      aria-describedby="namespace_error"
+      aria-invalid="true"
+      autocomplete="off"
+      class="block w-full"
+      type="text"
+    >
+
+    <ul id="namespace_error" class="max-w-md list-inside text-sm text-slate-500 dark:text-slate-400">
+      <li><%= viral_help_text(state: :error) { 'Namespace required' } %></li>
+    </ul>
+  </div>
+</div>

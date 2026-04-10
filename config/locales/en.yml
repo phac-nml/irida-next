@@ -720,7 +720,14 @@ en:
       title: Your work
       workflows: Workflow Executions
     form:
-      error_notification: 'Please review the problems below:'
+      error_notification: 'Please review the following problems:'
+      error_summary:
+        announcement:
+          one: There is 1 problem with your submission
+          other: There are %{count} problems with your submission
+        title:
+          one: There is 1 problem with your submission
+          other: There are %{count} problems with your submission
     help: Help
     name: IRIDA Next
     navbar:

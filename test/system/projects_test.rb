@@ -142,6 +142,39 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_current_path new_project_path
   end
 
+  test 'invalid nested project create focuses the summary and namespace link' do
+    visit new_project_path
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      fill_in 'Name', with: 'New Project'
+      fill_in 'Path', with: 'new-project'
+      page.execute_script <<~JS
+        const namespaceField = document.querySelector('[name="project[namespace_attributes][parent_id]"]');
+        if (namespaceField) {
+          namespaceField.value = "";
+          namespaceField.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      JS
+      click_on I18n.t(:'projects.new.submit')
+    end
+
+    assert_selector 'turbo-frame#project_form [data-controller="form-error-summary"]', focused: true
+    assert_selector '#sr-status',
+                    text: I18n.t('general.form.error_summary.announcement', count: 1),
+                    visible: false
+    assert_selector '#project_namespace_attributes_namespace_error',
+                    text: I18n.t('services.projects.create.namespace_required')
+
+    within 'turbo-frame#project_form [data-controller="form-error-summary"]' do
+      click_link I18n.t('services.projects.create.namespace_required')
+    end
+
+    assert_selector '#namespace-select', focused: true
+    click_on I18n.t(:'projects.new.submit')
+    assert_selector 'turbo-frame#project_form [data-controller="form-error-summary"]', focused: true
+    assert_accessible
+  end
+
   test 'can update project name and description' do
     project_name = 'New Project'
     project_description = 'New Project Description'

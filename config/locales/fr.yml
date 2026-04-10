@@ -722,7 +722,14 @@ fr:
       title: Votre travail
       workflows: Exécutions de flux de travail
     form:
-      error_notification: 'Veuillez examiner les problèmes ci-dessous:'
+      error_notification: 'Veuillez examiner les problèmes suivants :'
+      error_summary:
+        announcement:
+          one: Il y a 1 problème avec votre soumission
+          other: Il y a %{count} problèmes avec votre soumission
+        title:
+          one: Il y a 1 problème avec votre soumission
+          other: Il y a %{count} problèmes avec votre soumission
     help: Aide
     name: IRIDA Next
     navbar:
