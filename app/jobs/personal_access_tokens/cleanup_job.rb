@@ -7,7 +7,7 @@ module PersonalAccessTokens
     queue_with_priority 50
 
     def perform
-      Rails.logger.info 'Cleaning up all expired personal access tokens'
+      Rails.logger.info 'Cleaning up all inactive (revoked and expired) personal access tokens'
 
       inactive_as_of_days_ago = Irida::CurrentSettings.current_application_settings.cleanup_inactive_access_tokens_after_days
       cutoff_date = inactive_as_of_days_ago.days.ago.to_date
