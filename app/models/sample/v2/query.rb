@@ -51,15 +51,19 @@ class Sample::V2::Query
     column, direction = @sort.to_s.split(' ', 2)
     direction = 'desc' unless %w[asc desc].include?(direction)
 
-    if column&.start_with?('metadata_')
-      metadata_key = column.delete_prefix('metadata_')
-      relation.order(Sample.metadata_sort(metadata_key, direction))
-    elsif Sample.column_names.include?(column)
-      ordered = relation.order(column => direction)
-      column == 'id' ? ordered : ordered.order(id: direction)
-    else
-      relation.order(updated_at: :desc)
-    end
+    ordered, tie_breaker_direction =
+      if column&.start_with?('metadata_')
+        metadata_key = column.delete_prefix('metadata_')
+        [relation.order(Sample.metadata_sort(metadata_key, direction)), direction]
+      elsif Sample.column_names.include?(column)
+        [relation.order(column => direction), direction]
+      else
+        [relation.order(updated_at: :desc), 'desc']
+      end
+
+    return ordered if column == 'id'
+
+    ordered.order(id: tie_breaker_direction)
   end
 end
 
