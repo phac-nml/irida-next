@@ -491,6 +491,37 @@ module Projects
       assert_includes table_text, sample2.name
     end
 
+    test 'POST query_v2 returns 422 for payloads larger than persistence limit' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+      oversized_query = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: 'a' * Projects::SamplesController::MAX_QUERY_V2_SIZE
+          }
+        ]
+      }.to_json
+
+      assert_operator oversized_query.bytesize, :>, Projects::SamplesController::MAX_QUERY_V2_SIZE
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: oversized_query },
+           as: :turbo_stream
+      assert_response :unprocessable_content
+      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+
+      table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
+      assert_includes table_text, @sample1.name
+      assert_includes table_text, sample2.name
+    end
+
     private
 
     def rendered_sample_puids
