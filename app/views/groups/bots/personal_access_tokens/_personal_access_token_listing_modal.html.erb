@@ -2,18 +2,24 @@
   <% dialog.with_header(
     title: t("groups.bots.index.personal_access_tokens_listing_modal.title"),
   ) %>
+
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">
-      <%= t(
-        "groups.bots.index.personal_access_tokens_listing_modal.description",
-        bot_account: @bot_account.user.email,
-      ) %>
+      <% if defined?(@inactive_personal_access_tokens) %>
+        <%= t(
+          "groups.bots.index.personal_access_tokens_listing_modal.description.inactive",
+          bot_account: @bot_account.user.email,
+        ) %>
+      <% else %>
+        <%= t(
+          "groups.bots.index.personal_access_tokens_listing_modal.description.active",
+          bot_account: @bot_account.user.email,
+        ) %>
+      <% end %>
     </p>
   </div>
 
-  <div class="mb-4">
-    <%= turbo_frame_tag("personal-access-token-alert") %>
-  </div>
+  <div class="mb-4"><%= turbo_frame_tag("personal-access-token-alert") %></div>
 
   <%= render partial: "table", locals: { personal_access_tokens: } %>
 <% end %>

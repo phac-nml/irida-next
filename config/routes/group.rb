@@ -20,6 +20,9 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     resources :bots, only: %i[create destroy index new] do
       get :destroy_confirmation
       resources :personal_access_tokens, module: :bots, only: %i[index new create] do
+        collection do
+          get :inactive
+        end
         member do
           get :revoke_confirmation
           delete :revoke

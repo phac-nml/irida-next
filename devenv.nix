@@ -87,6 +87,7 @@ lib.mkMerge [
       enable = true;
       package = pkgs.postgresql_14;
       createDatabase = false;
+      port = 5432;
       initialScript = ''
         CREATE ROLE test LOGIN SUPERUSER PASSWORD 'test';
         CREATE EXTENSION IF NOT EXISTS hstore;

@@ -3,12 +3,18 @@
     <% table.with_column(t("bots.index.table.header.username")) do |row| %>
       <%= row.user.email %>
     <% end %>
+
     <% table.with_column(t("bots.index.table.header.active_tokens")) do |row| %>
-      <% if row.user.personal_access_tokens.active.count.positive? %>
-        <%= button_to row.user.personal_access_tokens.active.count,
+      <% active_count = row.user.personal_access_tokens.active.count %>
+
+      <% if active_count.positive? %>
+        <%= button_to active_count,
         bot_tokens_path(row),
         data: {
           turbo_stream: true,
+        },
+        aria: {
+          label: t("bots.index.table.active_tokens_aria_label", count: active_count, name: row.user.email),
         },
         method: :get,
         class:
@@ -17,14 +23,37 @@
         0
       <% end %>
     <% end %>
+
+    <% table.with_column(t("bots.index.table.header.inactive_tokens")) do |row| %>
+      <% inactive_count = row.user.personal_access_tokens.inactive.count %>
+
+      <% if inactive_count.positive? %>
+        <%= button_to inactive_count,
+        bot_inactive_tokens_path(row),
+        data: {
+          turbo_stream: true,
+        },
+        aria: {
+          label: t("bots.index.table.inactive_tokens_aria_label", count: inactive_count, name: row.user.email),
+        },
+        method: :get,
+        class:
+          "font-semibold text-slate-800 dark:text-slate-300 underline hover:decoration-2 cursor-pointer" %>
+      <% else %>
+        0
+      <% end %>
+    <% end %>
+
     <% table.with_column(t("bots.index.table.header.created")) do |row| %>
       <%= helpers.local_time_ago(row.user.created_at) %>
     <% end %>
+
     <% table.with_column(t("bots.index.table.header.access_level")) do |row| %>
       <% unless row.membership.nil? %>
         <%= t(:"bots.index.table.access_level.level_#{row.membership.access_level}") %>
       <% end %>
     <% end %>
+
     <% table.with_column(t("bots.index.table.header.expiration")) do |row| %>
       <% if !row.membership&.expires_at.nil? %>
         <%= helpers.local_date(row.membership.expires_at, :long) %>
@@ -32,6 +61,7 @@
         <%= t("bots.index.table.never") %>
       <% end %>
     <% end %>
+
     <% table.with_column(t("bots.index.table.header.actions"),
         classes: "flex justify-start"
       ) do |row| %>
@@ -52,6 +82,7 @@
         class:
           "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer mr-2" %>
       <% end %>
+
       <% if @abilities[:destroy_bot] %>
         <%= button_to t('common.actions.delete'),
         destroy_path(row),
@@ -64,7 +95,6 @@
         },
         class:
           "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
-
       <% end %>
     <% end %>
   <% end %>

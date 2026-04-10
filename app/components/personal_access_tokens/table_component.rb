@@ -18,8 +18,8 @@ module PersonalAccessTokens
       @namespace = namespace
       @bot_account = bot_account
       @empty = empty
-      @revoked_pats = @personal_access_tokens&.first&.revoked?
-      @expired_pats = @personal_access_tokens&.first&.expired?
+      @revoked_pats = personal_access_tokens.any?(&:revoked?)
+      @expired_pats = personal_access_tokens.any?(&:expired?)
       @system_arguments = system_arguments
       actions
     end

@@ -8,6 +8,7 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
     before_action proc { namespace }
     before_action proc { bot_account }
     before_action proc { personal_access_tokens }, only: %i[index revoke rotate]
+    before_action proc { inactive_personal_access_tokens }, only: %i[inactive]
     before_action proc { personal_access_token }, only: %i[revoke revoke_confirmation rotate_confirmation]
     before_action proc { bot_accounts }
   end
@@ -26,6 +27,16 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
     authorize! @namespace, to: :generate_bot_personal_access_token?
 
     @personal_access_token = PersonalAccessToken.new
+
+    respond_to do |format|
+      format.turbo_stream do
+        render status: :ok
+      end
+    end
+  end
+
+  def inactive
+    authorize! @namespace, to: :view_bot_personal_access_tokens?
 
     respond_to do |format|
       format.turbo_stream do
@@ -111,7 +122,7 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
     authorize! @namespace, to: :rotate_bot_personal_access_token?
 
     url_path = if @namespace.project_namespace?
-                 rotate_project_bot_personal_access_token_path
+                 rotate_namespace_project_bot_personal_access_token_path
                else
                  rotate_group_bot_personal_access_token_path
                end
@@ -134,6 +145,10 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
 
   def personal_access_tokens
     @personal_access_tokens = @bot_account.user.personal_access_tokens.active
+  end
+
+  def inactive_personal_access_tokens
+    @inactive_personal_access_tokens = @bot_account.user.personal_access_tokens.inactive
   end
 
   def personal_access_token
