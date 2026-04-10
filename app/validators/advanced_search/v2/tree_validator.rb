@@ -7,8 +7,11 @@ module AdvancedSearch
     class TreeValidator
       VALID_COMBINATORS = %w[and or].freeze
       ARRAY_OPERATORS = %w[in not_in].freeze
+      VALUELESS_OPERATORS = %w[exists not_exists].freeze
 
       def validate(tree)
+        return { valid: false, errors: [{ path: 'root', message: 'query tree is required' }] } if tree.nil?
+
         errors = []
         validate_node(tree, 'root', depth: 0, errors:)
         { valid: errors.empty?, errors: }
@@ -17,11 +20,18 @@ module AdvancedSearch
       private
 
       def validate_node(node, path, depth:, errors:)
+        unless node.respond_to?(:type)
+          errors << { path:, message: 'node must be a group or condition' }
+          return
+        end
+
         case node.type
         when :group
           validate_group(node, path, depth:, errors:)
         when :condition
           validate_condition(node, path, errors:)
+        else
+          errors << { path:, message: "unknown node type: #{node.type.inspect}" }
         end
       end
 
@@ -57,7 +67,7 @@ module AdvancedSearch
 
         validate_condition_field(node, path, errors)
         validate_condition_operator(node, path, errors)
-        validate_array_value(node, path, errors)
+        validate_condition_value(node, path, errors)
       end
 
       def validate_condition_field(node, path, errors)
@@ -73,10 +83,26 @@ module AdvancedSearch
         errors << { path:, message: "invalid operator #{node.operator.inspect} for field #{node.field.inspect}" }
       end
 
+      def validate_condition_value(node, path, errors)
+        if ARRAY_OPERATORS.include?(node.operator)
+          validate_array_value(node, path, errors)
+          return
+        end
+
+        return if VALUELESS_OPERATORS.include?(node.operator)
+        return if scalar_value?(node.value)
+
+        errors << { path:, message: "operator #{node.operator.inspect} requires a scalar value" }
+      end
+
       def validate_array_value(node, path, errors)
-        return unless ARRAY_OPERATORS.include?(node.operator) && !node.value.is_a?(Array)
+        return if node.value.is_a?(Array)
 
         errors << { path:, message: "operator #{node.operator.inspect} requires an array value" }
+      end
+
+      def scalar_value?(value)
+        value.nil? || value.is_a?(String) || value.is_a?(Numeric) || value == true || value == false
       end
     end
   end
