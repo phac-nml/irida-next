@@ -369,6 +369,8 @@ en:
         success: Successfully generated new personal access token for bot
       revoke:
         success: Successfully revoked personal access token %{pat_name}
+      rotate:
+        success: Successfully rotated personal access token %{pat_name}
     membership_actions:
       create:
         success: Member %{user} added successfully
@@ -1223,6 +1225,10 @@ en:
       description: Are you sure you'd like to remove access token '%{token_name}' from bot %{bot_name}?
       submit_button: Confirm
       title: Revoke personal access token
+    rotate_confirmation:
+      description: Are you sure you'd like to rotate access token '%{token_name}' for bot %{bot_name}? This will revoke the existing token and create a new token with the same permissions.
+      submit_button: Confirm
+      title: Rotate personal access token
     table:
       header:
         action: Action

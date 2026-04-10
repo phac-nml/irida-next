@@ -99,7 +99,7 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def rotate
+  def rotate # rubocop:disable Metrics/MethodLength
     rotated_personal_access_token = PersonalAccessTokens::RotateService.new(current_user, @personal_access_token,
                                                                             @namespace,
                                                                             @bot_account.user).execute
@@ -107,7 +107,9 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
     respond_to do |format|
       if rotated_personal_access_token.errors.empty?
         format.turbo_stream do
-          render status: :ok, locals: { personal_access_token: rotated_personal_access_token }
+          render status: :ok, locals: { personal_access_token: rotated_personal_access_token, type: 'success',
+                                        message: t('concerns.bot_personal_access_token_actions.rotate.success',
+                                                   pat_name: rotated_personal_access_token.name) }
         end
       else
         format.turbo_stream do
@@ -121,11 +123,11 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
   def rotate_confirmation
     authorize! @namespace, to: :rotate_bot_personal_access_token?
 
-    url_path = if @namespace.project_namespace?
-                 rotate_namespace_project_bot_personal_access_token_path
-               else
-                 rotate_group_bot_personal_access_token_path
-               end
+    rotate_path = if @namespace.project_namespace?
+                    rotate_namespace_project_bot_personal_access_token_path
+                  else
+                    rotate_group_bot_personal_access_token_path
+                  end
 
     render turbo_stream: turbo_stream.update('token_dialog',
                                              partial: 'shared/personal_access_tokens/rotate_confirmation_modal',
@@ -133,7 +135,7 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
                                                open: true,
                                                personal_access_token: @personal_access_token,
                                                bot_account: @bot_account,
-                                               url_path: url_path
+                                               rotate_path: rotate_path
                                              }), status: :ok
   end
 

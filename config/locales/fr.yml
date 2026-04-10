@@ -369,6 +369,8 @@ fr:
         success: Génération réussie d’un nouveau jeton d’accès personnel pour le bot
       revoke:
         success: Jeton d’accès personnel %{pat_name} révoqué avec succès
+      rotate:
+        success: Le jeton d’accès personnel %{pat_name} a été fait pivoter avec succès
     membership_actions:
       create:
         success: Membre %{user} ajouté avec succès
@@ -1227,6 +1229,10 @@ fr:
       description: Êtes-vous sûr de vouloir supprimer le jeton d’accès '%{token_name}' du bot %{bot_name}?
       submit_button: Confirmer
       title: Révoquer le jeton d’accès personnel
+    rotate_confirmation:
+      description: Êtes-vous sûr de vouloir faire pivoter le jeton d’accès '%{token_name}' du bot %{bot_name}? Cela révoquera le jeton existant et créera un nouveau jeton avec les mêmes autorisations.
+      submit_button: Confirmer
+      title: Faire pivoter le jeton d’accès personnel
     table:
       header:
         action: Mesure
