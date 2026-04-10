@@ -409,6 +409,54 @@ module Projects
       assert_response :unprocessable_content
     end
 
+    test 'POST query_v2 clears persisted state for invalid parseable trees' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :ok
+      assert_not_nil session["samples_#{@project.id}_advanced_search_v2"]
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'not_a_field',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :unprocessable_content
+      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+
+      table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
+      assert_includes table_text, @sample1.name
+      assert_includes table_text, sample2.name
+    end
+
     private
 
     def rendered_sample_puids
