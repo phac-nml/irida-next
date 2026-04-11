@@ -226,8 +226,8 @@ module Projects
         tree:,
         scope: Sample.where(project_id: @project.id),
         sort: params[:sort] || 'updated_at desc',
-        page: params[:page] || 1,
-        limit: params[:limit] || 20
+        page: params[:page],
+        limit: params[:limit]
       )
     end
 
@@ -240,8 +240,8 @@ module Projects
     end
 
     def load_index_results
-      if (v2_query = persisted_v2_query_for_listing)
-        @pagy, @samples = v2_query.results
+      if (v2_query = persisted_v2_query_for_listing) && (v2_results = execute_v2_query(v2_query))
+        @pagy, @samples = v2_results
         @results_message = nil
       else
         @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
@@ -276,19 +276,24 @@ module Projects
     def respond_to_v2_query
       respond_to do |format|
         format.turbo_stream do
-          persist_v2_query(params[:query_v2])
-          render_v2_turbo_stream
+          if (v2_results = execute_v2_query(@v2_query))
+            @pagy, @samples = v2_results
+            @samples = @samples.includes(project: { namespace: :parent })
+            persist_v2_query(params[:query_v2])
+            render :query_v2, status: :ok
+          else
+            head :unprocessable_content
+          end
         end
         format.html { head :not_acceptable }
       end
     end
 
-    def render_v2_turbo_stream
-      @pagy, @samples = @v2_query.results
-      @samples = @samples.includes(project: { namespace: :parent })
-      render :query_v2, status: :ok
-    rescue ArgumentError
-      render status: :unprocessable_content
+    def execute_v2_query(query)
+      query.results
+    rescue ArgumentError, Pagy::VariableError
+      clear_persisted_v2_query
+      nil
     end
 
     def query
@@ -372,8 +377,8 @@ module Projects
         tree:,
         scope: Sample.where(project_id: @project.id),
         sort: @search_params['sort'] || 'updated_at desc',
-        page: params[:page] || 1,
-        limit: params[:limit] || 20
+        page: params[:page],
+        limit: params[:limit]
       )
     end
 

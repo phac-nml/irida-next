@@ -9,9 +9,9 @@ class Sample::V2::QueryTest < ActiveSupport::TestCase # rubocop:disable Style/Cl
     @scope = Sample.where(project_id: projects(:project1).id)
   end
 
-  def build_query(tree: nil, **)
+  def build_query(tree: nil, scope: @scope, **)
     tree ||= GroupNode.new(combinator: 'and', nodes: [])
-    Sample::V2::Query.new(tree:, scope: @scope, **)
+    Sample::V2::Query.new(tree:, scope:, **)
   end
 
   test '#results returns a [Pagy, ActiveRecord::Relation] tuple' do
@@ -117,6 +117,22 @@ class Sample::V2::QueryTest < ActiveSupport::TestCase # rubocop:disable Style/Cl
     query = Sample::V2::Query.new(tree:, scope:, limit: 5, page: 2)
     pagy, _relation = query.results
     assert_equal 2, pagy.page
+  end
+
+  test 'blank pagination params default safely' do
+    query = build_query(scope: Sample.all, limit: '', page: '')
+    pagy, = query.results
+
+    assert_equal 20, pagy.limit
+    assert_equal 1, pagy.page
+  end
+
+  test 'invalid pagination params default safely' do
+    query = build_query(scope: Sample.all, limit: 'abc', page: 0)
+    pagy, = query.results
+
+    assert_equal 20, pagy.limit
+    assert_equal 1, pagy.page
   end
 
   test 'sort by name asc orders results correctly' do
