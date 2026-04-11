@@ -145,6 +145,14 @@ class AdvancedSearch::V2::TreeValidatorTest < ActiveSupport::TestCase # rubocop:
     assert_includes result[:errors], { path: 'root.nodes[0]', message: 'group must contain at least one child node' }
   end
 
+  test 'malformed child node returns structured validation error' do
+    tree = GroupNode.new(combinator: 'and', nodes: [Object.new])
+    result = validator.validate(tree)
+
+    assert_not result[:valid]
+    assert_includes result[:errors], { path: 'root.nodes[0]', message: 'node must be a group or condition' }
+  end
+
   test 'valid metadata field passes' do
     tree = GroupNode.new(
       combinator: 'and',

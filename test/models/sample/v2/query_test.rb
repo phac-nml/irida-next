@@ -76,6 +76,15 @@ class Sample::V2::QueryTest < ActiveSupport::TestCase # rubocop:disable Style/Cl
     assert_raises(ArgumentError) { query.relation }
   end
 
+  test '#valid? returns structured errors for malformed child nodes' do
+    tree = GroupNode.new(combinator: 'and', nodes: [Object.new])
+    query = build_query(tree:)
+
+    assert_not query.valid?
+    assert_includes query.errors, { path: 'root.nodes[0]', message: 'node must be a group or condition' }
+    assert_raises(ArgumentError) { query.relation }
+  end
+
   test '#valid? returns false for nil tree' do
     query = Sample::V2::Query.new(tree: nil, scope: @scope)
 
