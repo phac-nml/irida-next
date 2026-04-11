@@ -18,8 +18,8 @@ class Sample::V2::Query
     @tree = tree
     @scope = scope
     @sort = sort
-    @page = page.to_i
-    @limit = limit.to_i
+    @page = positive_integer_or_default(page, 1)
+    @limit = positive_integer_or_default(limit, 20)
     @errors = []
   end
 
@@ -45,6 +45,11 @@ class Sample::V2::Query
   # Provide a minimal hash — pagination params are injected via #results arguments.
   def request
     { params: {} }
+  end
+
+  def positive_integer_or_default(value, default)
+    parsed = Integer(value, exception: false)
+    parsed&.positive? ? parsed : default
   end
 
   def apply_sort(relation)

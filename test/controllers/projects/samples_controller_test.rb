@@ -372,6 +372,28 @@ module Projects
       assert_response :ok
     end
 
+    test 'POST query_v2 defaults blank pagination params safely' do
+      Flipper.enable(:advanced_search_v2)
+      query_json = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: @sample1.name
+          }
+        ]
+      }.to_json
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: query_json, page: '', limit: '' },
+           as: :turbo_stream
+
+      assert_response :ok
+      assert_equal query_json, session["samples_#{@project.id}_advanced_search_v2"]
+    end
+
     test 'POST query_v2 returns 406 for HTML without mutating persisted V2 state' do
       Flipper.enable(:advanced_search_v2)
       persisted_query = {
@@ -431,6 +453,35 @@ module Projects
       assert_response :ok
 
       get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+
+      table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
+      assert_includes table_text, @sample1.name
+      assert_not_includes table_text, sample2.name
+    end
+
+    test 'GET index defaults blank pagination params safely for persisted query_v2' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :ok
+
+      get namespace_project_samples_url(@namespace, @project), params: { page: '', limit: '' }
       assert_response :success
 
       table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
@@ -634,6 +685,36 @@ module Projects
       table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
       assert_includes table_text, @sample1.name
       assert_includes table_text, sample2.name
+    end
+
+    test 'POST query_v2 clears persisted state when results execution fails' do
+      Flipper.enable(:advanced_search_v2)
+      query_json = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: @sample1.name
+          }
+        ]
+      }.to_json
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: query_json },
+           as: :turbo_stream
+      assert_response :ok
+      assert_equal query_json, session["samples_#{@project.id}_advanced_search_v2"]
+
+      Sample::V2::Query.any_instance.stubs(:results).raises(ArgumentError)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: query_json },
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
     end
 
     test 'POST query_v2 returns 422 for empty nested subgroups' do
