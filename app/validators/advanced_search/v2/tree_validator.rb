@@ -19,7 +19,7 @@ module AdvancedSearch
 
       private
 
-      def validate_node(node, path, depth:, errors:)
+      def validate_node(node, path, depth:, errors:, nested: false)
         unless node.respond_to?(:type)
           errors << { path:, message: 'node must be a group or condition' }
           return
@@ -27,6 +27,8 @@ module AdvancedSearch
 
         case node.type
         when :group
+          return validate_nested_group(node, path, depth:, errors:) if nested
+
           validate_group(node, path, depth:, errors:)
         when :condition
           validate_condition(node, path, errors:)
@@ -36,6 +38,8 @@ module AdvancedSearch
       end
 
       def validate_group(node, path, depth:, errors:)
+        return unless valid_group_shape?(node, path, errors)
+
         unless VALID_COMBINATORS.include?(node.combinator)
           errors << { path:, message: "invalid combinator: #{node.combinator.inspect}" }
         end
@@ -47,11 +51,7 @@ module AdvancedSearch
 
         node.nodes.each_with_index do |child, i|
           child_path = "#{path}.nodes[#{i}]"
-          if child.type == :group
-            validate_nested_group(child, child_path, depth:, errors:)
-          else
-            validate_condition(child, child_path, errors:)
-          end
+          validate_node(child, child_path, depth:, errors:, nested: true)
         end
       end
 
@@ -65,6 +65,8 @@ module AdvancedSearch
       end
 
       def validate_condition(node, path, errors:)
+        return unless valid_condition_shape?(node, path, errors)
+
         if node.operator.blank?
           errors << { path:, message: 'operator is required' }
           return
@@ -104,6 +106,20 @@ module AdvancedSearch
         return if node.value.is_a?(Array)
 
         errors << { path:, message: "operator #{node.operator.inspect} requires an array value" }
+      end
+
+      def valid_group_shape?(node, path, errors)
+        return true if node.respond_to?(:combinator) && node.respond_to?(:nodes) && node.nodes.is_a?(Array)
+
+        errors << { path:, message: 'group node is malformed' }
+        false
+      end
+
+      def valid_condition_shape?(node, path, errors)
+        return true if node.respond_to?(:field) && node.respond_to?(:operator) && node.respond_to?(:value)
+
+        errors << { path:, message: 'condition node is malformed' }
+        false
       end
 
       def scalar_value?(value)
