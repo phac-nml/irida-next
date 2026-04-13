@@ -396,6 +396,6 @@ en:
           one: 1 workflow execution selected
           other: "%{selected} of %{total} workflow executions selected"
         select_page_state:
-          none: None selected
-          some: "%{selected} of %{total} selected"
-          all: All selected
+          none: None checked
+          some: "%{selected} of %{total} checked"
+          all: All checked

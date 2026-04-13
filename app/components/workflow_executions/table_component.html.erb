@@ -3,14 +3,7 @@
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <%= render LiveRegionComponent.new(controller: "selection") %>
 
-      <span
-        id="select-page-status"
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-        class="sr-only"
-        data-selection-target="selectPageStatus"
-      ></span>
+      <span id="select-page-status" class="sr-only" data-selection-target="selectPageStatus"></span>
 
       <table
         class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"

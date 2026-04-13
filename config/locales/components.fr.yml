@@ -434,6 +434,6 @@ fr:
           one: 1 exécution de flux de travail sélectionnée
           other: "%{selected} sur %{total} exécutions de flux de travail sélectionnées"
         select_page_state:
-          none: Aucune sélection
-          some: "%{selected} sur %{total} sélectionnées"
-          all: Toutes sélectionnées
+          none: Aucune case cochée
+          some: "%{selected} sur %{total} cases cochées"
+          all: Toutes les cases cochées

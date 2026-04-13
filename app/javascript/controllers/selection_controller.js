@@ -93,7 +93,6 @@ export default class extends Controller {
           valuesToToggle = indices.map(
             (i) => this.rowSelectionTargets[i].value,
           );
-          this.#lastActiveCheckbox;
         } else {
           valuesToToggle = [];
         }
@@ -185,7 +184,7 @@ export default class extends Controller {
 
       this.#updateActionButtons(ids.length);
       this.#updateCounts(ids.length, announce);
-      this.#setSelectPageCheckboxValue();
+      this.#setSelectPageCheckboxValue(announce);
     } catch (error) {
       console.error("selectionController: Failed to update UI", error);
     }
@@ -202,7 +201,7 @@ export default class extends Controller {
     });
   }
 
-  #setSelectPageCheckboxValue() {
+  #setSelectPageCheckboxValue(announce) {
     if (this.hasSelectPageTarget) {
       const totalOnPage = this.rowSelectionTargets.length;
       const selectedOnPage = this.rowSelectionTargets.filter(
@@ -219,15 +218,21 @@ export default class extends Controller {
       // when an arbitrary subset (e.g. 1 of 8) is selected.
       this.selectPageTarget.indeterminate = false;
 
-      this.#updateSelectPageStatusText({
-        selectedOnPage,
-        totalOnPage,
-        state: mixed ? "some" : allChecked ? "all" : "none",
-      });
+      this.#updateSelectPageStatusText(
+        {
+          selectedOnPage,
+          totalOnPage,
+          state: mixed ? "some" : allChecked ? "all" : "none",
+        },
+        announce,
+      );
     }
   }
 
-  #updateSelectPageStatusText({ selectedOnPage, totalOnPage, state }) {
+  #updateSelectPageStatusText(
+    { selectedOnPage, totalOnPage, state },
+    announce,
+  ) {
     if (!this.hasSelectPageStatusTarget) return;
 
     const template =
@@ -241,7 +246,11 @@ export default class extends Controller {
       .replace("%{selected}", String(selectedOnPage))
       .replace("%{total}", String(totalOnPage));
 
-    announce(text, { element: this.selectPageStatusTarget });
+    this.selectPageStatusTarget.textContent = text;
+
+    if (announce) {
+      announce(text);
+    }
   }
 
   #updateCounts(selected, announce) {
