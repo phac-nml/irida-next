@@ -1,11 +1,11 @@
 <div
   class="flex max-sm:grow"
-  data-controller="viral--dropdown"
-  data-viral--dropdown-skidding-value="0"
-  data-viral--dropdown-distance-value="10"
+  data-controller="dropdown--v1"
+  data-dropdown--v1-skidding-value="0"
+  data-dropdown--v1-distance-value="10"
 >
   <button
-    data-viral--dropdown-target="trigger"
+    data-dropdown--v1-target="trigger"
     title="<%= t("shared.samples.metadata_templates.tooltip") %>"
     id="metadata-template-dd-trigger"
     class="button w-full button-default"
@@ -22,7 +22,7 @@
   <%= turbo_frame_tag "metadata-template-dd-menu", class: "
       hidden w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
       dark:bg-slate-700 dark:divide-slate-600 z-30
-    ", "data-viral--dropdown-target": "menu", src: url, refresh: "morph", loading: :lazy do %>
+    ", "data-dropdown--v1-target": "menu", src: url, refresh: "morph", loading: :lazy do %>
     <%= render SpinnerComponent.new(
       message: t("shared.samples.metadata_templates.loading"),
     ) %>

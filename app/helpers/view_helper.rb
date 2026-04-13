@@ -10,7 +10,7 @@ module ViewHelper
     dialog: 'Viral::DialogComponent',
     empty: 'Viral::EmptyStateComponent',
     data_table: 'Viral::DataTableComponent',
-    dropdown: 'Viral::DropdownComponent',
+    dropdown: 'DropdownComponent',
     file_input: 'Viral::Form::FileInputComponent',
     flash: 'Viral::FlashComponent',
     help_text: 'Viral::Form::HelpTextComponent',

@@ -102,7 +102,7 @@ module Projects
       click_button I18n.t(:'projects.members.index.tabs.groups')
 
       within('table') do
-        assert_selector 'button.viral-dropdown--icon', count: 0
+        assert_selector 'button.dropdown--icon', count: 0
       end
     end
 
