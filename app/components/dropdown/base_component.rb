@@ -75,9 +75,13 @@ module Dropdown
     end
 
     def assign_identity_attributes
-      @dd_id = "dd-#{SecureRandom.hex(10)}"
       @prefix = @params[:prefix]
       @trigger_id = @params[:trigger_id]
+      @dd_id = if @trigger_id.present?
+                 "#{@trigger_id}-menu"
+               else
+                 "dd-#{SecureRandom.hex(10)}"
+               end
     end
 
     # 🛠️ Build and enhance system arguments for the dropdown trigger
