@@ -16,6 +16,8 @@ export default class extends Controller {
     invalidDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
+    requiredError: String,
+    renderRequiredError: Boolean,
   };
 
   // today's date attributes for quick access
@@ -41,6 +43,9 @@ export default class extends Controller {
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
+    }
+    if (this.renderRequiredErrorValue) {
+      this.#enableInputErrorState(this.requiredErrorValue);
     }
 
     this.boundHandleDatepickerInputFocus =
@@ -308,7 +313,9 @@ export default class extends Controller {
       this.inputErrorTarget.classList.remove("hidden");
       this.inputErrorTarget.setAttribute("aria-hidden", false);
     }
-    this.setInputValue(this.#selectedDate);
+    if (this.#selectedDate) {
+      this.setInputValue(this.#selectedDate);
+    }
   }
 
   // disables the error state once a valid date is entered/selected

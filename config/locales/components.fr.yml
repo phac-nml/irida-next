@@ -210,6 +210,7 @@ fr:
       errors:
         invalid_date: Date non valide
         min_date_error: 'Date la plus ancienne autorisée : '
+        required: Sélection de date requise
       months:
         april: avril
         august: août

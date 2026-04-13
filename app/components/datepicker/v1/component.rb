@@ -23,6 +23,7 @@ module Datepicker
       # @param selected_date [String] The already selected date if it exists.
       # @param autosubmit [Boolean] Submits the date upon selection if true
       # @param required [Boolean] Sets aria-required="true" on input_field_component if true
+      # @param render_required_error [Boolean] Shows error if true
       # @param calendar_arguments [Hash] HTML attributes for the datepicker
       # @param system_arguments [Hash] HTML attributes for the main container (<div>).
       # @raise [ArgumentError] if id is not provided.
@@ -30,7 +31,8 @@ module Datepicker
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
-                     selected_date: nil, autosubmit: false, required: false, calendar_arguments: {}, **system_arguments)
+                     selected_date: nil, autosubmit: false, required: false, render_required_error: false,
+                     calendar_arguments: {}, **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'input_name is required' if input_name.blank?
 
@@ -40,6 +42,7 @@ module Datepicker
         @selected_date = selected_date
         @autosubmit = autosubmit
         @required = required
+        @render_required_error = render_required_error
         @min_date = min_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments
@@ -111,6 +114,9 @@ module Datepicker
         @system_arguments[:data]['datepicker--v1--input-calendar-id-value'] = @calendar_id
         @system_arguments[:data]['datepicker--v1--input-date-format-regex-value'] =
           I18n.t('components.datepicker.date_format_regex')
+        @system_arguments[:data]['datepicker--v2--input-render-required-error-value'] = @render_required_error
+        @system_arguments[:data]['datepicker--v2--input-required-error-value'] =
+          I18n.t('components.datepicker.errors.required')
       end
 
       # Configures HTML attributes for the <div> datepicker calendar.
