@@ -6,6 +6,7 @@ require 'mocha/minitest'
 
 class PipelinesOverrides < ActiveSupport::TestCase
   setup do
+    @original_clone_repo_method = Irida::PipelineRepository.method(:clone_repo)
     @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
 
     # Read in schema file to json
@@ -37,6 +38,7 @@ class PipelinesOverrides < ActiveSupport::TestCase
 
   teardown do
     FileUtils.remove_dir(@pipeline_schema_file_dir, true)
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, @original_clone_repo_method)
   end
 
   test 'pipelines with overrides' do

@@ -9,7 +9,8 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
   include FaradayTestHelpers
   include ActiveJob::Continuation::TestHelper
 
-  def setup
+  def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    @original_clone_repo_method = Irida::PipelineRepository.method(:clone_repo)
     @workflow_execution = workflow_executions(:irida_next_example_submitted)
     @workflow_execution.email_notification = true
     @workflow_execution.save!
@@ -36,6 +37,7 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
   def teardown
     # reset connections after each test to clear cache
     Faraday.default_connection = nil
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, @original_clone_repo_method)
   end
 
   test 'successful job execution' do

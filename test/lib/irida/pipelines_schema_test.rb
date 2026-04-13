@@ -5,6 +5,7 @@ require 'webmock/minitest'
 
 class PipelinesSchemaTest < ActiveSupport::TestCase
   setup do
+    @original_clone_repo_method = Irida::PipelineRepository.method(:clone_repo)
     @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
 
     @test_schema_body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json').read
@@ -25,6 +26,7 @@ class PipelinesSchemaTest < ActiveSupport::TestCase
   end
 
   teardown do
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, @original_clone_repo_method)
     FileUtils.remove_dir(@pipeline_schema_file_dir, true)
   end
 
