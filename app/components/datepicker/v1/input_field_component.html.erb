@@ -28,6 +28,9 @@
     <% if @input_aria_label %>
       aria-label="<%= @input_aria_label %>"
     <% end %>
+    <% if @required %>
+      aria-required="true"
+    <% end %>
   >
 </div>
 

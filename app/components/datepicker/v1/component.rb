@@ -22,6 +22,7 @@ module Datepicker
       # @param min_date [String] A minimum date the user can input.
       # @param selected_date [String] The already selected date if it exists.
       # @param autosubmit [Boolean] Submits the date upon selection if true
+      # @param required [Boolean] Sets aria-required="true" on input_field_component if true
       # @param calendar_arguments [Hash] HTML attributes for the datepicker
       # @param system_arguments [Hash] HTML attributes for the main container (<div>).
       # @raise [ArgumentError] if id is not provided.
@@ -29,7 +30,7 @@ module Datepicker
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
-                     selected_date: nil, autosubmit: false, calendar_arguments: {}, **system_arguments)
+                     selected_date: nil, autosubmit: false, required: false, calendar_arguments: {}, **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'input_name is required' if input_name.blank?
 
@@ -38,6 +39,7 @@ module Datepicker
         @input_aria_label = input_aria_label
         @selected_date = selected_date
         @autosubmit = autosubmit
+        @required = required
         @min_date = min_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments

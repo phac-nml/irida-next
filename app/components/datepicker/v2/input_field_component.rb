@@ -4,12 +4,15 @@ module Datepicker
   module V2
     # Renders the label and text input for the datepicker.
     class InputFieldComponent < ::Component
-      def initialize(label:, input_id:, selected_date:, input_name:, input_aria_label:)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(label:, input_id:, selected_date:, input_name:, input_aria_label:, required:)
         @label = label
         @input_id = input_id
         @selected_date = selected_date
         @input_name = input_name
         @input_aria_label = input_aria_label
+        @required = required
+        # rubocop:enable Metrics/ParameterLists
       end
     end
   end
