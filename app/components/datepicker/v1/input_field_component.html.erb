@@ -1,6 +1,10 @@
 <% if @label %>
   <label for="<%= @input_id %>" class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
     <%= @label %>
+
+    <% if @required %>
+      <abbr class="req" title="required" aria-hidden="true">*</abbr>
+    <% end %>
   </label>
 <% end %>
 
