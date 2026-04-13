@@ -75,6 +75,9 @@ export default class extends Controller {
       this.boundHandleDatepickerInputFocus,
     );
 
+    this.#floatingDropdown?.destroy();
+    this.#floatingDropdown = null;
+
     this.#calendar.remove();
     this.#calendar = null;
   }
