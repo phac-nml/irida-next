@@ -2,6 +2,11 @@
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <%= render LiveRegionComponent.new(controller: "selection") %>
+      <span
+        id="select-page-status"
+        class="sr-only"
+        data-selection-target="selectPageStatus"
+      ></span>
 
       <table
         class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
@@ -32,6 +37,7 @@
                       id: "select-page",
                       aria: {
                         label: t(:".select_page"),
+                        describedby: "select-page-status",
                       },
                       data: {
                         table: true,

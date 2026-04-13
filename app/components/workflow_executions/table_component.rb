@@ -95,6 +95,12 @@ module WorkflowExecutions
         I18n.t('components.workflow_executions.table_component.counts.one')
       args[:data][:'selection-count-message-other-value'] =
         I18n.t('components.workflow_executions.table_component.counts.other')
+      args[:data][:'selection-select-page-none-value'] =
+        I18n.t('components.workflow_executions.table_component.select_page_state.none')
+      args[:data][:'selection-select-page-some-value'] =
+        I18n.t('components.workflow_executions.table_component.select_page_state.some')
+      args[:data][:'selection-select-page-all-value'] =
+        I18n.t('components.workflow_executions.table_component.select_page_state.all')
     end
 
     def columns

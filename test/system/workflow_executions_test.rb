@@ -1169,6 +1169,29 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.success')
   end
 
+  test 'select page checkbox exposes accurate aria-checked state' do
+    visit workflow_executions_path
+
+    select_page = find("input#select-page", visible: :all)
+    assert_equal 'false', select_page['aria-checked']
+    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.none'),
+                visible: :all
+
+    first_row_checkbox =
+      find("input[name='workflow_execution_ids[]']", match: :first, visible: :all)
+    first_row_checkbox.click
+
+    select_page = find("input#select-page", visible: :all)
+    assert_equal 'mixed', select_page['aria-checked']
+
+    select_page.click
+
+    select_page = find("input#select-page", visible: :all)
+    assert_equal 'true', select_page['aria-checked']
+    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.all'),
+                visible: :all
+  end
+
   test 'can partially cancel multiple workflows at once' do
     # attempt to cancel cancellable and non-cancellable workflows
     visit workflow_executions_path

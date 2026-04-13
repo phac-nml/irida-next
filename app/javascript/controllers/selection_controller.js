@@ -2,7 +2,13 @@ import { Controller } from "@hotwired/stimulus";
 import { announce } from "utilities/live_region";
 
 export default class extends Controller {
-  static targets = ["rowSelection", "selectPage", "selected", "status"];
+  static targets = [
+    "rowSelection",
+    "selectPage",
+    "selectPageStatus",
+    "selected",
+    "status",
+  ];
   static outlets = ["action-button"];
 
   static values = {
@@ -12,6 +18,9 @@ export default class extends Controller {
     total: Number,
     countMessageOne: String,
     countMessageOther: String,
+    selectPageNone: String,
+    selectPageSome: String,
+    selectPageAll: String,
   };
 
   #lastActiveCheckbox;
@@ -195,15 +204,49 @@ export default class extends Controller {
 
   #setSelectPageCheckboxValue() {
     if (this.hasSelectPageTarget) {
-      const uncheckedBoxes = this.rowSelectionTargets.filter(
-        (row) => !row.checked,
+      const totalOnPage = this.rowSelectionTargets.length;
+      const selectedOnPage = this.rowSelectionTargets.filter(
+        (row) => row.checked,
+      ).length;
+
+      const allChecked = totalOnPage > 0 && selectedOnPage === totalOnPage;
+      const noneChecked = selectedOnPage === 0;
+      const mixed = !allChecked && !noneChecked;
+
+      this.selectPageTarget.checked = allChecked;
+      this.selectPageTarget.indeterminate = mixed;
+
+      // Ensure screen readers announce meaningful state rather than just
+      // "checked"/"not checked" or an ambiguous "half checked".
+      // Use ARIA checkbox tri-state: true | false | mixed.
+      this.selectPageTarget.setAttribute(
+        "aria-checked",
+        mixed ? "mixed" : allChecked ? "true" : "false",
       );
-      this.selectPageTarget.checked = uncheckedBoxes.length === 0;
-      this.selectPageTarget.indeterminate = !(
-        uncheckedBoxes.length === 0 ||
-        uncheckedBoxes.length === this.rowSelectionTargets.length
-      );
+
+      this.#updateSelectPageStatusText({
+        selectedOnPage,
+        totalOnPage,
+        state: mixed ? "some" : allChecked ? "all" : "none",
+      });
     }
+  }
+
+  #updateSelectPageStatusText({ selectedOnPage, totalOnPage, state }) {
+    if (!this.hasSelectPageStatusTarget) return;
+
+    const template =
+      state === "all"
+        ? this.selectPageAllValue
+        : state === "none"
+          ? this.selectPageNoneValue
+          : this.selectPageSomeValue;
+
+    const text = template
+      .replace("%{selected}", String(selectedOnPage))
+      .replace("%{total}", String(totalOnPage));
+
+    this.selectPageStatusTarget.textContent = text;
   }
 
   #updateCounts(selected, announce) {
