@@ -15,11 +15,13 @@ module WorkflowExecutions
       @samplesheet_rows = []
     end
 
-    def execute_copy_step(step2d) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    def execute_copy_step(step2d) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
       start_x = step2d.cursor[0] # x axis (outer loop)
 
       # iterate over sample_workflow_executions using cursor x axis to index starting point
-      @workflow_execution.samples_workflow_executions.sort_by(&:id)&.[](start_x..)&.each&.with_index(start_x) do |sample_workflow_execution, index_x| # rubocop:disable Layout/LineLength,Style/SafeNavigationChainLength
+      @workflow_execution.samples_workflow_executions.find_each.with_index do |sample_workflow_execution, index_x|
+        next if index_x < start_x
+
         start_y = step2d.cursor[1] # y axis (inner loop)
 
         attachment_list = map_attachment_list(sample_workflow_execution)
