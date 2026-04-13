@@ -114,6 +114,7 @@ export default class extends Controller {
         metadata_fields: metadataFields,
         namespace_id: namespaceId,
         graphql_url: graphqlUrl,
+        csrf_token: this.csrfToken(),
         sample_graphql_id_prefix: sampleGraphqlIdPrefix,
         format,
         filename,
@@ -301,6 +302,11 @@ export default class extends Controller {
 
   graphqlUrl() {
     return this.graphqlUrlValue;
+  }
+
+  csrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta?.getAttribute("content") || "";
   }
 
   sampleGraphqlIdPrefix() {

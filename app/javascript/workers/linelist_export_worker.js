@@ -46,7 +46,13 @@ const toSampleGraphqlId = (sampleId, sampleGraphqlIdPrefix) => {
   throw new Error("Unable to build GraphQL sample IDs for export.");
 };
 
-const postGraphql = async ({ graphqlUrl, query, variables, operationName }) => {
+const postGraphql = async ({
+  graphqlUrl,
+  query,
+  variables,
+  operationName,
+  csrfToken,
+}) => {
   let response;
 
   try {
@@ -56,6 +62,7 @@ const postGraphql = async ({ graphqlUrl, query, variables, operationName }) => {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/graphql-response+json, application/json",
+        ...(csrfToken ? { "X-CSRF-Token": csrfToken } : {}),
       },
       body: JSON.stringify({ query, variables, operationName }),
     });
@@ -91,6 +98,7 @@ self.onmessage = async (event) => {
     sample_ids: sampleIds,
     metadata_fields: metadataFields,
     graphql_url: graphqlUrl,
+    csrf_token: csrfToken,
     sample_graphql_id_prefix: sampleGraphqlIdPrefix,
     filename,
     format,
@@ -139,6 +147,7 @@ self.onmessage = async (event) => {
         query: LINELIST_SAMPLES_QUERY,
         variables: { ids: idChunk, metadataKeys: fields },
         operationName: "LinelistSamples",
+        csrfToken,
       });
 
       const nodes = payload?.data?.nodes;
