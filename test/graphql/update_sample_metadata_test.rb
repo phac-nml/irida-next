@@ -429,4 +429,27 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_not_empty data['sample']['metadata']['key 1']
     assert_equal 'value 1', data['sample']['metadata']['key 1']
   end
+
+  test 'delete metadata field' do
+    sample = samples(:sample43)
+
+    assert_equal({ 'insdc_accession' => 'ERR86724108', 'country' => 'Canada' },
+                 sample.metadata)
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { sampleId: sample.to_global_id.to_s,
+                                              metadata: { 'country' => '' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['updateSampleMetadata']
+
+    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    assert_empty data['errors']
+    assert_not_empty data['status']
+    assert_not_empty data['status'][:deleted]
+    assert_equal 'country', data['status'][:deleted].first
+
+    assert_equal({ 'insdc_accession' => 'ERR86724108' }, sample.reload.metadata)
+  end
 end

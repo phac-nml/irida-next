@@ -689,7 +689,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                  sample.reload.metadata)
   end
 
-  test 'test update where a field is provided the same value to update at group level' do
+  test 'update where a field is provided the same value to update at group level' do
     group = groups(:group_sixteen)
     sample43 = samples(:sample43)
     sample44 = samples(:sample44)
@@ -736,5 +736,34 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                  sample43.reload.metadata)
     assert_equal({ 'country' => 'Moldova', 'insdc_accession' => 'ERR31551163', 'newmetadatafield2' => 'newvalue2' },
                  sample44.reload.metadata)
+  end
+
+  test 'can delete metadata field' do
+    group = groups(:group_sixteen)
+    sample43 = samples(:sample43)
+    sample44 = samples(:sample44)
+
+    assert_equal({ 'insdc_accession' => 'ERR86724108', 'country' => 'Canada' },
+                 sample43.metadata)
+    assert_equal({ 'insdc_accession' => 'ERR31551163', 'country' => 'Moldova' },
+                 sample44.metadata)
+    metadata_payload = { sample43.puid => { country: '' },
+                         sample44.name => { insdc_accession: '' } }
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { metadata: metadata_payload,
+                                              groupId: group.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
+    assert_empty data['errors']
+    assert_equal 'successful', data['overallStatus']
+    assert_equal ['country'], data['status'][sample43.puid][:deleted]
+    assert_equal ['insdc_accession'], data['status'][sample44.name][:deleted]
+
+    assert_equal({ 'insdc_accession' => 'ERR86724108' }, sample43.reload.metadata)
+    assert_equal({ 'country' => 'Moldova' }, sample44.reload.metadata)
   end
 end
