@@ -635,9 +635,9 @@ type BulkUpdateSampleMetadataPayload {
   errors: [UserError!]
 
   """
-  List of updated sample ids.
+  Overall description of mutation after completion
   """
-  samples: [String!]
+  overallStatus: String
 
   """
   The status of the mutation.

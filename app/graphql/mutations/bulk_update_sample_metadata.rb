@@ -22,7 +22,8 @@ module Mutations
     validates required: { one_of: %i[project_id project_puid group_id group_puid] }
 
     field :errors, [Types::UserErrorType], description: 'A list of errors that prevented the mutation.'
-    field :samples, [String], description: 'List of updated sample ids.'
+    field :overall_status, GraphQL::Types::String, null: true,
+                                                   description: 'Overall description of mutation after completion'
     field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation.'
 
     def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -36,7 +37,7 @@ module Mutations
                                                                        :group_id).compact[0]}"
         }]
         return {
-          samples: nil,
+          overall_status: nil,
           status: nil,
           errors: user_errors
         }
@@ -52,14 +53,13 @@ module Mutations
           message: 'is not JSON data'
         }]
         return {
-          samples: nil,
+          overall_status: nil,
           status: nil,
           errors: user_errors
         }
       end
 
       metadata_fields, errors = validate_and_build_metadata_fields(metadata_payload)
-
       unless errors.empty?
         user_errors = errors.map do |error|
           {
@@ -68,16 +68,16 @@ module Mutations
           }
         end
         return {
-          samples: nil,
+          overall_status: nil,
           status: nil,
           errors: user_errors
         }
       end
 
-      samples = Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields,
-                                                         current_user).execute
+      metadata_changes = Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields,
+                                                                  current_user).execute
 
-      status = get_status_message(namespace, samples.count)
+      overall_status = get_overall_status_message(namespace, metadata_changes.keys.count)
       user_errors = namespace.errors.map do |error|
         {
           path: [error.attribute.to_s.camelize(:lower)],
@@ -85,8 +85,8 @@ module Mutations
         }
       end
       {
-        samples:,
-        status:,
+        overall_status:,
+        status: metadata_changes,
         errors: user_errors
       }
     rescue JSON::ParserError => e
@@ -95,7 +95,7 @@ module Mutations
         message: "JSON data is not formatted correctly. #{e.message}"
       }]
       {
-        samples: nil,
+        overall_status: nil,
         status: nil,
         errors: user_errors
       }
@@ -132,7 +132,7 @@ module Mutations
       [metadata_fields, errors]
     end
 
-    def get_status_message(namespace, successful_samples_count)
+    def get_overall_status_message(namespace, successful_samples_count)
       if successful_samples_count.zero?
         'unsuccessful'
       elsif successful_samples_count.positive? && namespace.errors.any?

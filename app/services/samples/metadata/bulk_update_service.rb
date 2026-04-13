@@ -20,7 +20,7 @@ module Samples
         authorize! @namespace, to: :update_sample_metadata?
         activity_data = {}
         unsuccessful_updates = { not_updated: {}, unchanged: {} }
-        successful_samples = []
+        full_metadata_changes = {}
 
         starting_index = 0
         should_update_progress_bar = false
@@ -39,6 +39,11 @@ module Samples
           project_puid = sample.project.puid
           metadata_changes = perform_metadata_update(sample, metadata, false)
 
+          # no changes made for sample (metadata was invalid)
+          next if metadata_changes == { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
+
+          full_metadata_changes[sample_identifier] = metadata_changes
+
           unless metadata_changes[:not_updated].empty?
             unsuccessful_updates[:not_updated][sample_identifier] =
               metadata_changes[:not_updated]
@@ -52,7 +57,6 @@ module Samples
             next
           end
 
-          successful_samples << sample_identifier
           if activity_data.key?(project_puid)
             activity_data[project_puid] << { sample_puid: sample.puid, sample_name: sample.name,
                                              project_name: sample.project.name,
@@ -68,7 +72,7 @@ module Samples
         handle_unsuccessful_updates(unsuccessful_updates)
 
         create_activities_and_update_metadata_summary(activity_data) unless activity_data.empty?
-        successful_samples
+        full_metadata_changes
       end
 
       private

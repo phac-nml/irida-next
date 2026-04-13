@@ -6,7 +6,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION = <<~GRAPHQL
     mutation($metadata: JSON!, $projectId: ID!) {
       bulkUpdateSampleMetadata(input: { metadata: $metadata, projectId: $projectId }) {
-        samples,
+        overallStatus,
         status,
         errors {
           path
@@ -19,7 +19,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   UPDATE_SAMPLE_METADATA_BY_PROJECT_PUID_MUTATION = <<~GRAPHQL
     mutation($metadata: JSON!, $projectPuid: ID!) {
       bulkUpdateSampleMetadata(input: { metadata: $metadata, projectPuid: $projectPuid }) {
-        samples,
+        overallStatus,
         status,
         errors {
           path
@@ -32,7 +32,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   UPDATE_SAMPLE_METADATA_BY_GROUP_ID_MUTATION = <<~GRAPHQL
     mutation($metadata: JSON!, $groupId: ID!) {
       bulkUpdateSampleMetadata(input: { metadata: $metadata, groupId: $groupId }) {
-        samples,
+        overallStatus,
         status,
         errors {
           path
@@ -45,7 +45,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
   UPDATE_SAMPLE_METADATA_BY_GROUP_PUID_MUTATION = <<~GRAPHQL
     mutation($metadata: JSON!, $groupPuid: ID!) {
       bulkUpdateSampleMetadata(input: { metadata: $metadata, groupPuid: $groupPuid }) {
-        samples,
+        overallStatus,
         status,
         errors {
           path
@@ -86,11 +86,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
-    assert_equal 'successful', data['status']
-    assert_equal 3, data['samples'].count
-    assert_includes(data['samples'], @sample3.to_global_id.to_s)
-    assert_includes(data['samples'], @sample4.name)
-    assert_includes(data['samples'], @sample5.puid)
+    assert_equal 'successful', data['overallStatus']
+    assert_equal 3, data['status'].keys.count
+    assert_equal ['newmetadatafield1'], data['status'][@sample3.to_global_id.to_s][:added]
+    assert_equal ['newmetadatafield2'], data['status'][@sample4.name][:added]
+    assert_equal ['newmetadatafield3'], data['status'][@sample5.puid][:added]
 
     assert_equal({ 'newmetadatafield1' => 'value1' }, @sample3.reload.metadata)
     assert_equal({ 'newmetadatafield2' => 'value2' }, @sample4.reload.metadata)
@@ -114,11 +114,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
-    assert_equal 'successful', data['status']
-    assert_equal 3, data['samples'].count
-    assert_includes(data['samples'], @sample3.to_global_id.to_s)
-    assert_includes(data['samples'], @sample4.name)
-    assert_includes(data['samples'], @sample5.puid)
+    assert_equal 'successful', data['overallStatus']
+    assert_equal 3, data['status'].keys.count
+    assert_equal ['newmetadatafield1'], data['status'][@sample3.to_global_id.to_s][:added]
+    assert_equal ['newmetadatafield2'], data['status'][@sample4.name][:added]
+    assert_equal ['newmetadatafield3'], data['status'][@sample5.puid][:added]
 
     assert_equal({ 'newmetadatafield1' => 'value1' }, @sample3.reload.metadata)
     assert_equal({ 'newmetadatafield2' => 'value2' }, @sample4.reload.metadata)
@@ -142,11 +142,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
-    assert_equal 'successful', data['status']
-    assert_equal 3, data['samples'].count
-    assert_includes(data['samples'], @sample3.to_global_id.to_s)
-    assert_includes(data['samples'], @sample4.name)
-    assert_includes(data['samples'], @sample5.puid)
+    assert_equal 'successful', data['overallStatus']
+    assert_equal 3, data['status'].keys.count
+    assert_equal ['newmetadatafield1'], data['status'][@sample3.to_global_id.to_s][:added]
+    assert_equal ['newmetadatafield2'], data['status'][@sample4.name][:added]
+    assert_equal ['newmetadatafield3'], data['status'][@sample5.puid][:added]
 
     assert_equal({ 'newmetadatafield1' => 'value1' }, @sample3.reload.metadata)
     assert_equal({ 'newmetadatafield2' => 'value2' }, @sample4.reload.metadata)
@@ -170,11 +170,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
-    assert_equal 'successful', data['status']
-    assert_equal 3, data['samples'].count
-    assert_includes(data['samples'], @sample3.to_global_id.to_s)
-    assert_includes(data['samples'], @sample4.name)
-    assert_includes(data['samples'], @sample5.puid)
+    assert_equal 'successful', data['overallStatus']
+    assert_equal 3, data['status'].keys.count
+    assert_equal ['newmetadatafield1'], data['status'][@sample3.to_global_id.to_s][:added]
+    assert_equal ['newmetadatafield2'], data['status'][@sample4.name][:added]
+    assert_equal ['newmetadatafield3'], data['status'][@sample5.puid][:added]
 
     assert_equal({ 'newmetadatafield1' => 'value1' }, @sample3.reload.metadata)
     assert_equal({ 'newmetadatafield2' => 'value2' }, @sample4.reload.metadata)
@@ -194,8 +194,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'successful with errors', data['status']
-    assert_equal [@sample3.to_global_id.to_s], data['samples']
+    assert_equal 'successful with errors', data['overallStatus']
+    assert_equal ['newmetadatafield1'], data['status'][@sample3.to_global_id.to_s][:added]
 
     assert_includes data['errors'], {
       'path' => ['sample'],
@@ -221,8 +221,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'successful with errors', data['status']
-    assert_equal [@sample3.to_global_id.to_s], data['samples']
+    assert_equal 'successful with errors', data['overallStatus']
+    assert_equal ['newmetadatafield1'], data['status'][@sample3.to_global_id.to_s][:added]
     assert_includes data['errors'], {
       'path' => ['sample'],
       'message' => I18n.t('services.samples.metadata.bulk_update.sample_not_found', sample_identifier: 'INVALID_NAME_1')
@@ -247,8 +247,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'unsuccessful', data['status']
-    assert_empty data['samples']
+    assert_equal 'unsuccessful', data['overallStatus']
+    assert_empty data['status']
     assert_includes data['errors'], {
       'path' => ['sample'],
       'message' => I18n.t('services.samples.metadata.bulk_update.sample_not_found', sample_identifier: 'INVALID_NAME_1')
@@ -272,8 +272,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'unsuccessful', data['status']
-    assert_empty data['samples']
+    assert_equal 'unsuccessful', data['overallStatus']
+    assert_empty data['status']
     assert_includes data['errors'], {
       'path' => ['sample'],
       'message' => I18n.t('services.samples.metadata.bulk_update.sample_not_found', sample_identifier: 'INVALID_NAME_1')
@@ -302,10 +302,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
-    assert_equal 'successful', data['status']
-    assert_equal 2, data['samples'].count
-    assert_includes(data['samples'], @sample1.to_global_id.to_s)
-    assert_includes(data['samples'], @sample2.name)
+    assert_equal 'successful', data['overallStatus']
+    assert_equal 2, data['status'].keys.count
+    assert_equal ['newmetadatafield1'], data['status'][@sample1.to_global_id.to_s][:added]
+    assert_includes(data['status'][@sample2.name][:added], 'newmetadatafield2')
+    assert_includes(data['status'][@sample2.name][:added], 'newmetadatafield3')
 
     assert_equal({ 'newmetadatafield1' => 'value1' }, @sample1.reload.metadata)
     assert_equal({ 'newmetadatafield2' => 'value2', 'newmetadatafield3' => 'value3' }, @sample2.reload.metadata)
@@ -323,8 +324,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'successful with errors', data['status']
-    assert_equal [@sample3.to_global_id.to_s], data['samples']
+    assert_equal 'successful with errors', data['overallStatus']
+    assert_equal ['newmetadatafield1'], data['status'][@sample3.to_global_id.to_s][:added]
     assert_includes data['errors'], {
       'path' => ['sample'],
       'message' => I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample4.name)
@@ -425,7 +426,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                                               projectId: @project2.to_global_id.to_s })
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'unsuccessful', data['status']
+    assert_equal 'unsuccessful', data['overallStatus']
     assert_includes data['errors'], {
       'path' => ['sample'],
       'message' => I18n.t('services.samples.metadata.bulk_update.sample_not_found',
@@ -461,7 +462,7 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'unsuccessful', data['status']
+    assert_equal 'unsuccessful', data['overallStatus']
 
     assert_includes data['errors'], {
       'path' => ['sample'],
@@ -487,11 +488,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'successful', data['status']
-    assert_equal 3, data['samples'].count
-    assert_includes(data['samples'], @sample1.name)
-    assert_includes(data['samples'], @sample3.puid)
-    assert_includes(data['samples'], @sample4.to_global_id.to_s)
+    assert_equal 'successful', data['overallStatus']
+    assert_equal 3, data['status'].keys.count
+    assert_equal ['newmetadatafield1'], data['status'][@sample1.name][:added]
+    assert_equal ['newmetadatafield2'], data['status'][@sample3.puid][:added]
+    assert_equal ['newmetadatafield3'], data['status'][@sample4.to_global_id.to_s][:added]
 
     assert_equal({ 'newmetadatafield1' => 'Value1' }, @sample1.reload.metadata)
     assert_equal({ 'newmetadatafield2' => 'true' }, @sample3.reload.metadata)
@@ -518,12 +519,12 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'successful', data['status']
-    assert_equal 4, data['samples'].count
-    assert_includes(data['samples'], @sample1.puid)
-    assert_includes(data['samples'], @sample2.to_global_id.to_s)
-    assert_includes(data['samples'], @sample3.puid)
-    assert_includes(data['samples'], @sample4.name)
+    assert_equal 'successful', data['overallStatus']
+    assert_equal 4, data['status'].keys.count
+    assert_equal ['newmetadatafield1'], data['status'][@sample1.puid][:added]
+    assert_equal ['newmetadatafield2'], data['status'][@sample2.to_global_id.to_s][:added]
+    assert_equal ['new metadatafield3'], data['status'][@sample3.puid][:added]
+    assert_equal ['new metadatafield 4'], data['status'][@sample4.name][:added]
 
     assert_equal({ 'newmetadatafield1' => 'newvalue1' }, @sample1.reload.metadata)
     assert_equal({ 'newmetadatafield2' => 'newvalue2' }, @sample2.reload.metadata)
@@ -544,8 +545,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                                               groupPuid: group.puid })
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
-    assert_equal 'unsuccessful', data['status']
-    assert_empty data['samples']
+    assert_equal 'unsuccessful', data['overallStatus']
+    assert_empty data['status']
     assert_includes data['errors'], {
       'path' => ['sample'],
       'message' => I18n.t('services.samples.metadata.bulk_update.sample_not_found', sample_identifier: sample.puid)
@@ -570,8 +571,8 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_empty data['errors']
-    assert_equal 'successful', data['status']
-    assert_equal [sample.puid], data['samples']
+    assert_equal 'successful', data['overallStatus']
+    assert_equal ['newmetadatafield1'], data['status'][sample.puid][:added]
 
     assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'newmetadatafield1' => 'value1' },
                  sample.reload.metadata)
@@ -638,8 +639,10 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_not_empty data['errors']
-    assert_equal 'successful with errors', data['status']
-    assert_equal [sample.puid], data['samples']
+    assert_equal 'successful with errors', data['overallStatus']
+    assert_equal ['newmetadatafield'], data['status'][sample.puid][:added]
+    assert_equal ['country'], data['status'][sample.puid][:updated]
+    assert_equal ['insdc_accession'], data['status'][sample.puid][:unchanged]
 
     expected_error = [{
       'path' => ['sample'],
@@ -670,8 +673,10 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_not_empty data['errors']
-    assert_equal 'successful with errors', data['status']
-    assert_equal [sample.puid], data['samples']
+    assert_equal 'successful with errors', data['overallStatus']
+    assert_equal ['newmetadatafield'], data['status'][sample.puid][:added]
+    assert_equal ['country'], data['status'][sample.puid][:updated]
+    assert_equal ['insdc_accession'], data['status'][sample.puid][:unchanged]
 
     expected_error = [{
       'path' => ['sample'],
@@ -707,9 +712,13 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['bulkUpdateSampleMetadata']
     assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
     assert_not_empty data['errors']
-    assert_equal 'successful with errors', data['status']
-    assert_includes data['samples'], sample43.puid
-    assert_includes data['samples'], sample44.name
+    assert_equal 'successful with errors', data['overallStatus']
+    assert_equal ['newmetadatafield1'], data['status'][sample43.puid][:added]
+    assert_equal ['country'], data['status'][sample43.puid][:updated]
+    assert_equal ['insdc_accession'], data['status'][sample43.puid][:unchanged]
+    assert_equal ['newmetadatafield2'], data['status'][sample44.name][:added]
+    assert_includes(data['status'][sample44.name][:unchanged], 'country')
+    assert_includes(data['status'][sample44.name][:unchanged], 'insdc_accession')
 
     assert_includes data['errors'], {
       'path' => ['sample'],
