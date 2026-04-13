@@ -10,42 +10,34 @@ class WorkflowExecutionStatusJobTest < ActiveJob::TestCase
   include ActiveJob::Continuation::TestHelper
 
   def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    @original_clone_repo_method = Irida::PipelineRepository.method(:clone_repo)
     @workflow_execution = workflow_executions(:irida_next_example_submitted)
     @workflow_execution.email_notification = true
     @workflow_execution.save!
     @workflow_execution.create_logidze_snapshot!
     @stubs = faraday_test_adapter_stubs
 
-    body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json')
+    @test_schema_body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json').read
 
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"a1Ab"]' })
+    # Use a closure to capture @test_schema_body for the clone_repo implementation
+    schema_body = @test_schema_body
+    clone_repo_impl = lambda do |_uri, _sha, clone_dir|
+      FileUtils.mkdir_p(clone_dir)
+      File.write(File.join(clone_dir, 'nextflow_schema.json'), schema_body)
 
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.2/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"b1Bc"]' })
+      # Create assets/schema_input.json
+      FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
+      File.write(File.join(clone_dir, 'assets', 'schema_input.json'), schema_body)
+      nil
+    end
 
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.1/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"c1Cd"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.1/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"d1De"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.0/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"e1Ef"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.0/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/gasclustering/0.4.2/nextflow_schema.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"g1gh"]' })
-
-    stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/gasclustering/0.4.2/assets/schema_input.json')
-      .to_return(status: 200, body:, headers: { etag: '[W/"h1hi"]' })
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
   end
 
   def teardown
     # reset connections after each test to clear cache
     Faraday.default_connection = nil
+    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, @original_clone_repo_method)
   end
 
   test 'successful job execution' do
