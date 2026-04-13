@@ -87,20 +87,25 @@ module WorkflowExecutions
     private
 
     def add_selection_data_attributes(args)
-      args[:data] ||= {}
-      args[:data][:controller] = 'selection'
-      args[:data][:'selection-total-value'] = @pagy.count
-      args[:data][:'selection-action-button-outlet'] = '.action-button'
-      args[:data][:'selection-count-message-one-value'] =
-        I18n.t('components.workflow_executions.table_component.counts.one')
-      args[:data][:'selection-count-message-other-value'] =
-        I18n.t('components.workflow_executions.table_component.counts.other')
-      args[:data][:'selection-select-page-none-value'] =
-        I18n.t('components.workflow_executions.table_component.select_page_state.none')
-      args[:data][:'selection-select-page-some-value'] =
-        I18n.t('components.workflow_executions.table_component.select_page_state.some')
-      args[:data][:'selection-select-page-all-value'] =
-        I18n.t('components.workflow_executions.table_component.select_page_state.all')
+      args[:data] = (args[:data] || {}).merge(selection_data_attributes)
+    end
+
+    def selection_data_attributes
+      {
+        controller: 'selection',
+        'selection-total-value': @pagy.count,
+        'selection-action-button-outlet': '.action-button',
+        'selection-count-message-one-value':
+          I18n.t('components.workflow_executions.table_component.counts.one'),
+        'selection-count-message-other-value':
+          I18n.t('components.workflow_executions.table_component.counts.other'),
+        'selection-select-page-none-value':
+          I18n.t('components.workflow_executions.table_component.select_page_state.none'),
+        'selection-select-page-some-value':
+          I18n.t('components.workflow_executions.table_component.select_page_state.some'),
+        'selection-select-page-all-value':
+          I18n.t('components.workflow_executions.table_component.select_page_state.all')
+      }
     end
 
     def columns

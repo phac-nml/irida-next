@@ -1169,27 +1169,56 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.success')
   end
 
-  test 'select page checkbox exposes accurate aria-checked state' do
+  test 'select page checkbox exposes accurate state and status text' do
     visit workflow_executions_path
 
-    select_page = find("input#select-page", visible: :all)
-    assert_equal 'false', select_page['aria-checked']
-    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.none'),
-                visible: :all
+    select_page = find('input#select-page', visible: :all)
+    assert_not select_page.checked?
+    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.none')
 
     first_row_checkbox =
-      find("input[name='workflow_execution_ids[]']", match: :first, visible: :all)
+      find('input[name=\'workflow_execution_ids[]\']', match: :first, visible: :all)
     first_row_checkbox.click
 
-    select_page = find("input#select-page", visible: :all)
-    assert_equal 'mixed', select_page['aria-checked']
+    select_page = find('input#select-page', visible: :all)
+    assert_not select_page.checked?
+    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.some',
+                       selected: 1,
+                       total: PAGE_SIZE)
 
     select_page.click
 
-    select_page = find("input#select-page", visible: :all)
-    assert_equal 'true', select_page['aria-checked']
-    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.all'),
-                visible: :all
+    select_page = find('input#select-page', visible: :all)
+    assert select_page.checked?
+    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.all')
+  end
+
+  test 'select page status text is localized in french' do
+    visit workflow_executions_path
+
+    find('#language-selection-dd-trigger').click
+    within find('#language-selection-dd-menu') do
+      click_button I18n.t(:'locales.fr', locale: :fr)
+    end
+
+    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.none', locale: :fr)
+
+    first_row_checkbox =
+      find('input[name=\'workflow_execution_ids[]\']', match: :first, visible: :all)
+    first_row_checkbox.click
+
+    select_page = find('input#select-page', visible: :all)
+    assert_not select_page.checked?
+    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.some',
+                       selected: 1,
+                       total: PAGE_SIZE,
+                       locale: :fr)
+
+    select_page.click
+
+    select_page = find('input#select-page', visible: :all)
+    assert select_page.checked?
+    assert_text I18n.t('components.workflow_executions.table_component.select_page_state.all', locale: :fr)
   end
 
   test 'can partially cancel multiple workflows at once' do

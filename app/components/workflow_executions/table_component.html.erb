@@ -4,6 +4,9 @@
       <%= render LiveRegionComponent.new(controller: "selection") %>
       <span
         id="select-page-status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
         class="sr-only"
         data-selection-target="selectPageStatus"
       ></span>

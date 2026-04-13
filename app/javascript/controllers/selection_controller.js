@@ -214,15 +214,10 @@ export default class extends Controller {
       const mixed = !allChecked && !noneChecked;
 
       this.selectPageTarget.checked = allChecked;
-      this.selectPageTarget.indeterminate = mixed;
-
-      // Ensure screen readers announce meaningful state rather than just
-      // "checked"/"not checked" or an ambiguous "half checked".
-      // Use ARIA checkbox tri-state: true | false | mixed.
-      this.selectPageTarget.setAttribute(
-        "aria-checked",
-        mixed ? "mixed" : allChecked ? "true" : "false",
-      );
+      // Do not expose an indeterminate checkbox state here because many
+      // screen readers announce it as "half checked", which is misleading
+      // when an arbitrary subset (e.g. 1 of 8) is selected.
+      this.selectPageTarget.indeterminate = false;
 
       this.#updateSelectPageStatusText({
         selectedOnPage,
@@ -246,7 +241,7 @@ export default class extends Controller {
       .replace("%{selected}", String(selectedOnPage))
       .replace("%{total}", String(totalOnPage));
 
-    this.selectPageStatusTarget.textContent = text;
+    announce(text, { element: this.selectPageStatusTarget });
   }
 
   #updateCounts(selected, announce) {
