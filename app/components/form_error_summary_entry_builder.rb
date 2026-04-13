@@ -20,7 +20,7 @@ class FormErrorSummaryEntryBuilder
     errors.attribute_names.uniq.filter_map do |attribute|
       next if attribute == :base
 
-      message = errors.full_messages_for(attribute).first
+      message = errors.full_messages_for(attribute).to_sentence
       target_id = target_id_for(attribute)
       next if message.blank? || target_id.blank?
 
