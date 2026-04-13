@@ -1,4 +1,4 @@
-<template data-datepicker--input-target="calendarTemplate">
+<template data-datepicker--v1--input-target="calendarTemplate">
   <%= render Viral::BaseComponent.new(**@calendar_arguments) do %>
     <div class="inline-block rounded-lg bg-white p-4 shadow-sm max-[384px]:p-1 dark:bg-slate-700">
       <%= render Datepicker::V1::Calendar::HeaderComponent.new(min_year: @min_year, months: @months) %>
