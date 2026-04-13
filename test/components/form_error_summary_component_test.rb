@@ -15,7 +15,7 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
     assert_empty FormErrorSummaryEntryBuilder.new(builder:).call
   end
 
-  test 'component renders one linked entry per invalid field using the first message' do
+  test 'component renders one linked entry per invalid field using all messages' do
     user = build_user
     user.errors.add(:email, :blank)
     user.errors.add(:email, :invalid)
@@ -25,14 +25,15 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
 
     render_inline(FormErrorSummaryComponent.new(entries:))
 
+    email_message = user.errors.full_messages_for(:email).to_sentence
+
     assert_selector '.alert-component', count: 1
     assert_selector '[data-controller="form-error-summary"]', count: 1
     assert_selector 'h2', text: I18n.t('general.form.error_summary.title', count: 2)
     assert_selector 'p', text: I18n.t('general.form.error_notification')
-    assert_selector 'a[href="#user_email"]', text: user.errors.full_messages_for(:email).first
+    assert_selector 'a[href="#user_email"]', text: email_message
     assert_selector 'a[href="#user_last_name"]', text: user.errors.full_messages_for(:last_name).first
-    assert_selector 'a', text: user.errors.full_messages_for(:email).first, count: 1
-    assert_no_text user.errors.full_messages_for(:email).second
+    assert_selector 'a', text: email_message, count: 1
     assert_selector ".alert-component[class*='focus-within:outline-red-600']"
   end
 
