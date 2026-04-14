@@ -7,6 +7,7 @@ require 'tempfile'
 class WorkflowExecutionPreparationJob < WorkflowExecutionJob
   include ActiveJob::Continuable
   include BlobHelper
+  include SamplesheetPreparationHelper
 
   queue_as :default
   queue_with_priority 20
@@ -53,13 +54,13 @@ class WorkflowExecutionPreparationJob < WorkflowExecutionJob
   def copy_attachments_to_run_dir(step)
     return if @workflow_execution.state.to_sym == :error
 
-    WorkflowExecutions::SamplesheetPreparationService.new(@workflow_execution).execute_copy_step(step)
+    execute_copy_step(@workflow_execution, step)
   end
 
   def build_samplesheet
     return if @workflow_execution.state.to_sym == :error
 
-    WorkflowExecutions::SamplesheetPreparationService.new(@workflow_execution).execute_processing_step
+    execute_processing_step(@workflow_execution)
   end
 
   def queue_next_job
