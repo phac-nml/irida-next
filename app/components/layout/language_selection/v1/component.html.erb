@@ -33,13 +33,11 @@
     id="language-selection-dd-menu"
     data-dropdown--v1-target="menu"
     role="menu"
-    class="
-      z-30 hidden w-32 rounded-lg bg-white py-2 text-sm text-slate-700 shadow-sm dark:bg-slate-700
-      dark:text-slate-200
-    "
+    class="z-30 w-32 rounded-lg bg-white py-2 text-sm text-slate-700 shadow-sm dark:bg-slate-700 dark:text-slate-200"
     aria-label="<%= t(:'components.layout.language_selection.title') %>"
     aria-hidden="true"
     tabindex="-1"
+    hidden
   >
     <% @locale_options.each do |locale_name, locale_value| %>
       <% if locale == locale_value %>
