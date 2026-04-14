@@ -6,7 +6,6 @@ export default class extends Controller {
   static targets = [
     "datepickerInput",
     "calendarTemplate",
-    "inputError",
     "minDate",
     "errorContainer",
     "errorMessageTemplate",
@@ -330,9 +329,9 @@ export default class extends Controller {
 
     this.ariaLiveTarget.innerText = messages.join(", ");
 
-    if (this.inputErrorTarget.classList.contains("hidden")) {
-      this.inputErrorTarget.classList.remove("hidden");
-      this.inputErrorTarget.setAttribute("aria-hidden", false);
+    if (this.errorContainerTarget.classList.contains("hidden")) {
+      this.errorContainerTarget.classList.remove("hidden");
+      this.errorContainerTarget.setAttribute("aria-hidden", false);
     }
     if (this.#selectedDate) {
       this.setInputValue(this.#selectedDate);
@@ -341,12 +340,12 @@ export default class extends Controller {
 
   // disables the error state once a valid date is entered/selected
   disableInputErrorState() {
-    this.inputErrorTarget.innerText = "";
+    this.errorContainerTarget.innerText = "";
     this.datepickerInputTarget.removeAttribute("aria-invalid");
     this.datepickerInputTarget.removeAttribute("aria-describedby");
-    if (!this.inputErrorTarget.classList.contains("hidden")) {
-      this.inputErrorTarget.classList.add("hidden");
-      this.inputErrorTarget.setAttribute("aria-hidden", true);
+    if (!this.errorContainerTarget.classList.contains("hidden")) {
+      this.errorContainerTarget.classList.add("hidden");
+      this.errorContainerTarget.setAttribute("aria-hidden", true);
     }
   }
 
