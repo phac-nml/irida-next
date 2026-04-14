@@ -27,4 +27,16 @@ class DatepickerComponentPreview < ViewComponent::Preview
       selected_date: Time.zone.today + 7.days
     )
   end
+
+  def with_errors
+    datepicker(
+      id: 'test_id',
+      input_name: 'test_input_name',
+      min_date: nil,
+      selected_date: Time.zone.today + 7.days,
+      errors: ['error 1', 'error 2'],
+      label: 'datepicker label',
+      required: true
+    )
+  end
 end
