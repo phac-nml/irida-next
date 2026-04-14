@@ -74,7 +74,11 @@ class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLengt
   end
 
   def workflow
-    Irida::Pipelines.instance.find_pipeline_by(metadata['pipeline_id'], metadata['workflow_version'])
+    @workflow ||= Irida::Pipelines.instance.find_pipeline_by(metadata['pipeline_id'], metadata['workflow_version'])
+  end
+
+  def samplesheet_properties
+    @samplesheet_properties ||= Irida::Nextflow::Samplesheet::Properties.new(workflow.workflow_params[:input_output_options][:properties][:input][:schema])
   end
 
   ransacker :id do

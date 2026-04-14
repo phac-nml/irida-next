@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Validator for Workflow Execution Samplesheet Params
-class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rubocop:disable Metrics/ClassLength
+class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
   def validate(record)
     return unless record.workflow_execution.state == 'initial' # only validate on creation
 
@@ -9,51 +9,14 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rub
 
     return if workflow.unknown?
 
-    workflow_params = workflow.workflow_params
-    samplesheet_schema = workflow_params[:input_output_options][:properties][:input][:schema]
-    @required_properties = samplesheet_schema['items']['required']
-    @properties = extract_properties(samplesheet_schema)
+    samplesheet_properties = record.workflow_execution.samplesheet_properties
+    @required_properties = samplesheet_properties.required_properties
+    @properties = samplesheet_properties.properties
 
     validate_samplesheet_params(record)
   end
 
   private
-
-  def extract_properties(schema)
-    properties = schema['items']['properties']
-    properties.each do |property, entry|
-      properties[property]['required'] = schema['items']['required'].include?(property)
-      properties[property]['cell_type'] = identify_cell_type(property, entry)
-    end
-
-    if @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
-      properties['fastq_1']['pe_only'] = true
-    end
-
-    properties
-  end
-
-  def identify_cell_type(property, entry)
-    return 'sample_cell' if property == 'sample'
-
-    return 'sample_name_cell' if property == 'sample_name'
-
-    return 'fastq_cell' if property.match(/fastq_\d+/)
-
-    return 'file_cell' if check_for_file(entry)
-
-    return 'metadata_cell' if entry['meta'].present?
-
-    return 'dropdown_cell' if entry['enum'].present?
-
-    'input_cell'
-  end
-
-  def check_for_file(entry)
-    entry['format'] == 'file-path' || (entry.key?('anyOf') && entry['anyOf'].any? do |e|
-      e['format'] == 'file-path'
-    end)
-  end
 
   def validate_samplesheet_params(record)
     @properties.each do |property, entry|
@@ -139,7 +102,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rub
   end
 
   def validate_sample_attachment(record, attachment, property) # rubocop:disable Naming/PredicateMethod
-    return true if attachment.attachable == record.sample
+    return true if attachment.attachable_id == record.sample_id && attachment.attachable_type == 'Sample'
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_attachment_error',
