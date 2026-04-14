@@ -5,8 +5,8 @@
   data-advanced-search--v1-legend-template="<%= t("components.advanced_search_component.v1.condition", index: "__INDEX__") %>"
   data-advanced-search-selected-field="<%= selected_field %>"
   class="
-    flex items-end space-x-2 rounded-lg border border-slate-300 p-4 text-sm text-slate-500 @max-xl:flex-col
-    @max-xl:space-y-2 dark:border-slate-600 dark:text-slate-400
+    relative flex flex-col space-y-3 rounded-lg border border-slate-300 p-4 pr-14 text-sm text-slate-500
+    dark:border-slate-600 dark:text-slate-400
   "
 >
   <legend><%= t("components.advanced_search_component.v1.condition", index: @condition_number) %></legend>
@@ -14,7 +14,7 @@
   <%= @groups_form.fields_for :conditions, @condition, child_index: @condition_index do |conditions_form| %>
     <% invalid_field = @condition.errors.include?(:field) %>
 
-    <div class="form-field min-w-[200px] flex-1 @max-xl:w-full <%= 'invalid' if invalid_field %>">
+    <div class="form-field w-full <%= 'invalid' if invalid_field %>">
       <% options = options_for_select(field_options, @condition.field).concat(
         grouped_options_for_select(grouped_field_options, @condition.field),
       ) %>
@@ -57,7 +57,7 @@
 
     <% invalid_operator = @condition.errors.include?(:operator) %>
 
-    <div class="form-field min-w-[180px] flex-1 @max-xl:w-full <%= 'invalid' if invalid_operator %>">
+    <div class="form-field w-full max-w-xs <%= 'invalid' if invalid_operator %>">
       <%= conditions_form.label :operator, data: { required: true } %>
 
       <%= conditions_form.select :operator,
@@ -92,7 +92,7 @@
   <button
     type="button"
     class="
-      mb-1 inline-flex h-8 w-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg p-1.5
+      absolute right-2 top-2 inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg
       text-slate-400 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-500 dark:hover:bg-slate-700
       dark:hover:text-white
     "
