@@ -55,6 +55,15 @@ module WorkflowExecutions
       )
 
       assert_response :ok
+
+      payload = parsed_v2_files_payload
+
+      assert_equal samples(:sample43).id, payload['attachable_id']
+      assert_equal 2, payload['files'].length
+      assert_equal 'fastq_1', payload['files'][0]['property']
+      assert_equal attachment.id, payload['files'][0]['id']
+      assert_equal 'fastq_2', payload['files'][1]['property']
+      assert_equal attachments(:attachmentPEREV43).id, payload['files'][1]['id']
     end
 
     test 'create file selection with fastq params without feature flag' do
@@ -68,6 +77,34 @@ module WorkflowExecutions
       )
 
       assert_response :ok
+
+      payload = parsed_v1_files_payload
+
+      assert_equal '0', payload['index']
+      assert_equal 2, payload['files'].length
+      assert_equal 'fastq_1', payload['files'][0]['property']
+      assert_equal attachment.id, payload['files'][0]['id']
+      assert_equal 'fastq_2', payload['files'][1]['property']
+      assert_equal attachments(:attachmentPEREV43).id, payload['files'][1]['id']
+    end
+
+    test 'create file selection with no attachment keeps empty payload for selected property' do
+      Flipper.enable(:v2_samplesheet)
+
+      post workflow_executions_file_selector_index_path(
+        file_selector: @expected_fastq_params,
+        attachment_id: 'no_attachment',
+        format: :turbo_stream
+      )
+
+      assert_response :ok
+
+      payload = parsed_v2_files_payload
+
+      assert_equal 1, payload['files'].length
+      assert_equal 'fastq_1', payload['files'][0]['property']
+      assert_equal '', payload['files'][0]['id']
+      assert_equal '', payload['files'][0]['filename']
     end
 
     test 'new file selection with other params with feature flag' do
@@ -150,6 +187,20 @@ module WorkflowExecutions
       )
 
       assert_response :unauthorized
+    end
+
+    private
+
+    def parsed_v2_files_payload
+      doc = Nokogiri::HTML(response.body)
+
+      JSON.parse(doc.at_css('[data-payload-type="files"]')['data-files'])
+    end
+
+    def parsed_v1_files_payload
+      doc = Nokogiri::HTML(response.body)
+
+      JSON.parse(doc.at_css('[data-controller="nextflow--v1--file"]')['data-nextflow--v1--file-files-value'])
     end
   end
 end
