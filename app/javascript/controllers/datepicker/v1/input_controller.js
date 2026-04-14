@@ -11,6 +11,7 @@ export default class extends Controller {
     "errorContainer",
     "errorMessageTemplate",
     "errorMessage",
+    "ariaLive",
   ];
 
   static values = {
@@ -326,6 +327,8 @@ export default class extends Controller {
       this.errorMessageTargets[this.errorMessageTargets.length - 1].innerText =
         message;
     });
+
+    this.ariaLiveTarget.innerText = messages.join(", ");
 
     if (this.inputErrorTarget.classList.contains("hidden")) {
       this.inputErrorTarget.classList.remove("hidden");
