@@ -210,7 +210,6 @@ en:
       errors:
         invalid_date: Invalid date.
         min_date_error: 'Earliest allowed date: '
-        required: Date selection required
       months:
         april: April
         august: August

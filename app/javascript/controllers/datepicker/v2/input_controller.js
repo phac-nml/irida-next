@@ -20,7 +20,6 @@ export default class extends Controller {
     invalidDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
-    requiredError: String,
     errors: Array,
   };
 

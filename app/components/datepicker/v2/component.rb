@@ -112,8 +112,6 @@ module Datepicker
         @system_arguments[:data]['datepicker--v2--input-invalid-min-date-value'] =
           I18n.t('components.datepicker.errors.min_date_error')
         @system_arguments[:data]['datepicker--v2--input-calendar-id-value'] = @calendar_id
-        @system_arguments[:data]['datepicker--v2--input-required-error-value'] =
-          I18n.t('components.datepicker.errors.required')
         @system_arguments[:data]['datepicker--v2--input-date-format-regex-value'] =
           I18n.t('components.datepicker.date_format_regex')
         return if @errors.empty?

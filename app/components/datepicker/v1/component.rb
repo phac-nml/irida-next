@@ -114,8 +114,6 @@ module Datepicker
         @system_arguments[:data]['datepicker--v1--input-calendar-id-value'] = @calendar_id
         @system_arguments[:data]['datepicker--v1--input-date-format-regex-value'] =
           I18n.t('components.datepicker.date_format_regex')
-        @system_arguments[:data]['datepicker--v2--input-required-error-value'] =
-          I18n.t('components.datepicker.errors.required')
         return if @errors.empty?
 
         @system_arguments[:data]['datepicker--v2--input-errors-value'] = @errors
