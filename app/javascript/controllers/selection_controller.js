@@ -247,10 +247,6 @@ export default class extends Controller {
       .replace("%{total}", String(totalOnPage));
 
     this.selectPageStatusTarget.textContent = text;
-
-    if (announce) {
-      announce(text);
-    }
   }
 
   #updateCounts(selected, announce) {

@@ -1173,7 +1173,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     visit workflow_executions_path
 
     select_page = find('input#select-page', visible: :all)
-    assert_equal 'select-page-status', select_page['aria-describedby']
     assert_not select_page.checked?
 
     within '#select-page-status' do
@@ -1193,6 +1192,10 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
                          selected: 1,
                          total: PAGE_SIZE)
     end
+
+    # Ensure select-page state text is not announced via the global live region.
+    # Selection announcements should be count-only via the local selection live region.
+    assert_no_selector '#sr-status', visible: false
 
     select_page.click
 
@@ -1215,6 +1218,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within '#select-page-status' do
       assert_text I18n.t('components.workflow_executions.table_component.select_page_state.none', locale: :fr)
     end
+
+    # Ensure select-page state text is not announced via the global live region.
+    assert_no_selector '#sr-status', visible: false
 
     first_row_checkbox =
       find('input[name=\'workflow_execution_ids[]\']', match: :first, visible: :all)
