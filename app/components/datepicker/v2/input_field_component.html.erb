@@ -38,8 +38,17 @@
   >
 </div>
 
-<div
+<span
   data-datepicker--v2--input-target="inputError"
-  class="mt-1 hidden text-sm text-red-700 dark:text-red-500"
+  class="mt-1 flex hidden items-center text-sm text-red-600 dark:text-red-400"
   aria-hidden="true"
-></div>
+  id="<%= @input_id %>-message"
+></span>
+
+<template data-datepicker--v2--input-target="errorIconTemplate">
+  <%= icon(:x_circle, size: :sm,
+      color: :danger,
+      class: "mr-1.5") %>
+
+  <span data-datepicker--v2--input-target="inputErrorMessage"></span>
+</template>

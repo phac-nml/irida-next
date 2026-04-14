@@ -9,6 +9,8 @@ export default class extends Controller {
     "calendarTemplate",
     "inputError",
     "minDate",
+    "errorIconTemplate",
+    "inputErrorMessage",
   ];
 
   static values = {
@@ -18,7 +20,7 @@ export default class extends Controller {
     invalidMinDate: String,
     dateFormatRegex: String,
     requiredError: String,
-    renderRequiredError: Boolean,
+    errors: Array,
   };
 
   // today's date attributes for quick access
@@ -46,8 +48,8 @@ export default class extends Controller {
       this.#setMinDate();
     }
 
-    if (this.renderRequiredErrorValue) {
-      this.#enableInputErrorState(this.requiredErrorValue);
+    if (this.errorsValue.length > 0) {
+      this.#enableInputErrorState(this.errorsValue.join("\n"));
     }
 
     this.boundHandleDatepickerInputFocus =
@@ -294,7 +296,15 @@ export default class extends Controller {
 
   // adds error message if invalid date or a date prior to minDate was entered
   #enableInputErrorState(message) {
-    this.inputErrorTarget.innerText = message;
+    this.inputErrorTarget.innerText = "";
+    const errorIcon = this.errorIconTemplateTarget.content.cloneNode(true);
+    this.inputErrorTarget.appendChild(errorIcon);
+    this.inputErrorMessageTarget.innerText = message;
+    this.datepickerInputTarget.setAttribute("aria-invalid", "true");
+    this.datepickerInputTarget.setAttribute(
+      "aria-describedby",
+      `${this.datepickerInputTarget.id}-message`,
+    );
     if (this.inputErrorTarget.classList.contains("hidden")) {
       this.inputErrorTarget.classList.remove("hidden");
       this.inputErrorTarget.setAttribute("aria-hidden", false);
@@ -307,6 +317,8 @@ export default class extends Controller {
   // disables the error state once a valid date is entered/selected
   #disableInputErrorState() {
     this.inputErrorTarget.innerText = "";
+    this.datepickerInputTarget.removeAttribute("aria-invalid");
+    this.datepickerInputTarget.removeAttribute("aria-describedby");
     if (!this.inputErrorTarget.classList.contains("hidden")) {
       this.inputErrorTarget.classList.add("hidden");
       this.inputErrorTarget.setAttribute("aria-hidden", true);
