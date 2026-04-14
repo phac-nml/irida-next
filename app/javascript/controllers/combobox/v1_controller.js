@@ -40,6 +40,7 @@ export default class extends Controller {
   #option;
   #firstOption;
   #lastOption;
+  #clearShouldKeepOpen;
 
   connect() {
     this.#filter = this.comboboxTarget.value;
@@ -48,6 +49,7 @@ export default class extends Controller {
     this.#option = null;
     this.#firstOption = null;
     this.#lastOption = null;
+    this.#clearShouldKeepOpen = false;
 
     this.boundOnBackgroundMouseDown = this.#onBackgroundMouseDown.bind(this);
     this.boundOnComboboxKeyDown = this.#onComboboxKeyDown.bind(this);
@@ -318,11 +320,17 @@ export default class extends Controller {
     );
   }
 
-  #clearSelection() {
+  #clearSelection({ keepOpen = false } = {}) {
     this.#setValue();
     this.#setOption(null);
     this.#filterOptions();
-    this.#floatingDropdown.hide();
+
+    if (keepOpen) {
+      this.#floatingDropdown.show();
+    } else {
+      this.#floatingDropdown.hide();
+    }
+
     this.comboboxTarget.focus();
   }
 
@@ -496,6 +504,7 @@ export default class extends Controller {
 
   onIndicatorMouseDown(event) {
     event.preventDefault();
+    this.#clearShouldKeepOpen = this.#floatingDropdown.isVisible();
   }
 
   onIndicatorClick(event) {
@@ -510,7 +519,8 @@ export default class extends Controller {
     event.preventDefault();
     event.stopPropagation();
 
-    this.#clearSelection();
+    this.#clearSelection({ keepOpen: this.#clearShouldKeepOpen });
+    this.#clearShouldKeepOpen = false;
   }
 
   // Listbox Option events
