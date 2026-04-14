@@ -1174,9 +1174,10 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     select_page = find('input#select-page', visible: :all)
     assert_not select_page.checked?
+    assert_nil select_page[:'aria-describedby']
 
     within '#select-page-status' do
-      assert_text I18n.t('components.workflow_executions.table_component.select_page_state.none')
+      assert_no_text I18n.t('components.workflow_executions.table_component.select_page_state.none')
     end
 
     first_row_checkbox =
@@ -1186,6 +1187,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     select_page = find('input#select-page', visible: :all)
     assert_not select_page.checked?
     assert_equal false, page.evaluate_script("document.querySelector('#select-page').indeterminate")
+    assert_equal 'select-page-status', select_page[:'aria-describedby']
 
     within '#select-page-status' do
       assert_text I18n.t('components.workflow_executions.table_component.select_page_state.some',
@@ -1201,9 +1203,10 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     select_page = find('input#select-page', visible: :all)
     assert select_page.checked?
+    assert_nil select_page[:'aria-describedby']
 
     within '#select-page-status' do
-      assert_text I18n.t('components.workflow_executions.table_component.select_page_state.all')
+      assert_no_text I18n.t('components.workflow_executions.table_component.select_page_state.all')
     end
   end
 
@@ -1216,7 +1219,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     within '#select-page-status' do
-      assert_text I18n.t('components.workflow_executions.table_component.select_page_state.none', locale: :fr)
+      assert_no_text I18n.t('components.workflow_executions.table_component.select_page_state.none', locale: :fr)
     end
 
     # Ensure select-page state text is not announced via the global live region.
@@ -1228,6 +1231,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     select_page = find('input#select-page', visible: :all)
     assert_not select_page.checked?
+    assert_equal 'select-page-status', select_page[:'aria-describedby']
 
     within '#select-page-status' do
       assert_text I18n.t('components.workflow_executions.table_component.select_page_state.some',
@@ -1240,9 +1244,10 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     select_page = find('input#select-page', visible: :all)
     assert select_page.checked?
+    assert_nil select_page[:'aria-describedby']
 
     within '#select-page-status' do
-      assert_text I18n.t('components.workflow_executions.table_component.select_page_state.all', locale: :fr)
+      assert_no_text I18n.t('components.workflow_executions.table_component.select_page_state.all', locale: :fr)
     end
   end
 

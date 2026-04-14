@@ -56,7 +56,9 @@ export default class extends Controller {
    */
   togglePage(event) {
     const valuesToToggle = this.rowSelectionTargets.map((row) => row.value);
-    this.#modifySelection(event.target.checked, valuesToToggle);
+    this.#modifySelection(event.target.checked, valuesToToggle, {
+      announceSelectPageStatus: false,
+    });
   }
 
   /**
@@ -116,14 +118,14 @@ export default class extends Controller {
     this.update([]);
   }
 
-  update(ids, announce = true) {
+  update(ids, announce = true, options = {}) {
     if (!Array.isArray(ids)) {
       console.warn("SelectionController: ids must be an array");
       return;
     }
     // Persist selection and reflect changes in the UI
     sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
-    this.#updateUI(ids, announce);
+    this.#updateUI(ids, announce, options);
   }
 
   getOrCreateStoredItems() {
@@ -154,7 +156,7 @@ export default class extends Controller {
    * @param {Array<string>} values - array of ids to add or remove
    * @private
    */
-  #modifySelection(add, values) {
+  #modifySelection(add, values, options = {}) {
     let newStorageValue = this.getOrCreateStoredItems();
     if (add) {
       // Use a Set to deduplicate values
@@ -164,7 +166,7 @@ export default class extends Controller {
         (value) => !values.includes(value),
       );
     }
-    this.update(newStorageValue);
+    this.update(newStorageValue, true, options);
   }
 
   /**
@@ -175,7 +177,7 @@ export default class extends Controller {
    * @param {boolean} announce - whether to announce via aria-live region
    * @private
    */
-  #updateUI(ids, announce) {
+  #updateUI(ids, announce, options = {}) {
     try {
       // Set checkbox checked states based on whether their value is included
       this.rowSelectionTargets.forEach((row) => {
@@ -184,7 +186,9 @@ export default class extends Controller {
 
       this.#updateActionButtons(ids.length);
       this.#updateCounts(ids.length, announce);
-      this.#setSelectPageCheckboxValue(announce);
+      this.#setSelectPageCheckboxValue(
+        options.announceSelectPageStatus ?? announce,
+      );
     } catch (error) {
       console.error("selectionController: Failed to update UI", error);
     }
@@ -201,7 +205,7 @@ export default class extends Controller {
     });
   }
 
-  #setSelectPageCheckboxValue(announce) {
+  #setSelectPageCheckboxValue(shouldAnnounce) {
     if (this.hasSelectPageTarget) {
       const totalOnPage = this.rowSelectionTargets.length;
       const selectedOnPage = this.rowSelectionTargets.filter(
@@ -217,6 +221,7 @@ export default class extends Controller {
       // screen readers announce it as "half checked", which is misleading
       // when an arbitrary subset (e.g. 1 of 8) is selected.
       this.selectPageTarget.indeterminate = false;
+      this.#updateSelectPageDescription(mixed);
 
       this.#updateSelectPageStatusText(
         {
@@ -224,29 +229,34 @@ export default class extends Controller {
           totalOnPage,
           state: mixed ? "some" : allChecked ? "all" : "none",
         },
-        announce,
+        shouldAnnounce,
       );
     }
   }
 
-  #updateSelectPageStatusText(
-    { selectedOnPage, totalOnPage, state },
-    announce,
-  ) {
+  #updateSelectPageStatusText({ selectedOnPage, totalOnPage, state }) {
     if (!this.hasSelectPageStatusTarget) return;
 
-    const template =
-      state === "all"
-        ? this.selectPageAllValue
-        : state === "none"
-          ? this.selectPageNoneValue
-          : this.selectPageSomeValue;
+    const template = state === "some" ? this.selectPageSomeValue : "";
 
     const text = template
       .replace("%{selected}", String(selectedOnPage))
       .replace("%{total}", String(totalOnPage));
 
     this.selectPageStatusTarget.textContent = text;
+  }
+
+  #updateSelectPageDescription(mixed) {
+    if (!this.hasSelectPageTarget || !this.hasSelectPageStatusTarget) return;
+
+    if (mixed) {
+      this.selectPageTarget.setAttribute(
+        "aria-describedby",
+        this.selectPageStatusTarget.id,
+      );
+    } else {
+      this.selectPageTarget.removeAttribute("aria-describedby");
+    }
   }
 
   #updateCounts(selected, announce) {
