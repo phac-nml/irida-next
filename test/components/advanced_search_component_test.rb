@@ -54,7 +54,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
-            find('button').click
+            find("button[data-action='advanced-search--v1#removeCondition']").click
           end
           assert_selector "fieldset[data-advanced-search--v1-target='conditionsContainer']", count: 2
         end
@@ -264,7 +264,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
                           visible: :all
 
           within all("fieldset[data-advanced-search--v1-target='conditionsContainer']").first do
-            find('button').click
+            find("button[data-action='advanced-search--v1#removeCondition']").click
           end
 
           assert_selector :xpath,
