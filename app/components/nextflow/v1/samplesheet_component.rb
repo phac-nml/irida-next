@@ -3,132 +3,61 @@
 module Nextflow
   module V1
     # Render the contents of a Nextflow samplesheet to a table
-    class SamplesheetComponent < Component # rubocop:disable Metrics/ClassLength
-      attr_reader :properties, :samples, :required_properties, :metadata_fields, :namespace_id, :workflow_params
-
-      FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
+    class SamplesheetComponent < Component
+      attr_reader :properties, :samples, :required_properties, :metadata_fields, :namespace_id, :workflow_params,
+                  :sample_attributes
 
       def initialize(schema:, samples:, fields:, namespace_id:, workflow_params:)
         @samples = samples
         @namespace_id = namespace_id
         @metadata_fields = fields
-        @required_properties = schema['items']['required'] || []
         @workflow_params = workflow_params
-        extract_properties(schema)
+
+        samplesheet_properties = ::Irida::Nextflow::Samplesheet::Properties.new(schema)
+        @properties = samplesheet_properties.properties
+        @required_properties = samplesheet_properties.required_properties
+        @sample_attributes = ::Irida::Nextflow::Samplesheet::SampleAttributes.new(samples: samples,
+                                                                                  properties: @properties)
       end
 
       def samples_workflow_executions_attributes
-        samples.each_with_index.to_h do |sample, index|
-          [index, samples_workflow_execution_attributes(sample)]
+        sample_attributes.samples_workflow_executions_attributes.values.each_with_index.to_h do |attributes, index|
+          [index, adapt_v1_samplesheet_attributes(attributes)]
         end
       end
 
       private
 
-      def samples_workflow_execution_attributes(sample)
+      def adapt_v1_samplesheet_attributes(attributes)
         {
-          'sample_id' => sample.id,
-          'samplesheet_params' => sample_samplesheet_params(sample)
+          'sample_id' => attributes['sample_id'],
+          'samplesheet_params' => adapt_v1_samplesheet_params(attributes['samplesheet_params'], attributes['sample_id'])
         }
       end
 
-      def sample_samplesheet_params(sample) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
-        @properties.to_h do |name, property|
-          case property['cell_type']
-          when 'sample_cell'
-            [name, { form_value: sample.puid }]
-          when 'sample_name_cell'
-            [name, { form_value: sample.name }]
-          when 'fastq_cell'
-            [name,
-             file_samplesheet_values(
-               sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
-                                                                              property['pattern'])
-             )]
-          when 'file_cell'
-            [name,
-             file_samplesheet_values(sample.most_recent_other_file(property['autopopulate'], property['pattern']))]
-          when 'metadata_cell'
-            [name, metadata_samplesheet_values(sample, name, property)]
-          when 'dropdown_cell', 'input_cell'
-            [name, { form_value: '' }]
+      def adapt_v1_samplesheet_params(raw_params, sample_id)
+        raw_params.to_h do |name, value|
+          if file_column?(name)
+            [name, adapt_v1_file_value(sample_id, name, value)]
+          else
+            [name, { form_value: value }]
           end
         end
       end
 
-      def expected_pattern(entry)
-        if entry.key?('pattern')
-          entry['pattern']
-        elsif entry.key?('anyOf')
-          entry['anyOf'].select do |condition|
-            condition.key?('pattern')
-          end.pluck('pattern').join('|')
-        end
+      def file_column?(name)
+        %w[file_cell fastq_cell].include?(@properties[name]['cell_type'])
       end
 
-      def file_samplesheet_values(file)
-        { form_value: file.empty? ? '' : file[:global_id],
-          filename: if file.empty?
-                      I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-                    else
-                      file[:filename]
-                    end,
-          attachment_id: file.empty? ? '' : file[:id] }
-      end
+      def adapt_v1_file_value(sample_id, name, value)
+        file_data = sample_attributes.file_attributes.dig(sample_id, name) || {}
 
-      def metadata_samplesheet_values(sample, name, property)
-        metadata = sample.metadata.fetch(property.fetch('x-irida-next-selected', name), '')
-        { form_value: metadata.empty? ? '' : metadata }
-      end
-
-      def extract_properties(schema) # rubocop:disable Metrics/AbcSize
-        @properties = schema['items']['properties']
-        @properties.each do |property, entry|
-          @properties[property]['required'] = schema['items']['required'].include?(property)
-          @properties[property]['cell_type'] = identify_cell_type(property, entry)
-          @properties[property]['pattern'] = expected_pattern(entry)
-        end
-
-        if @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
-          @properties['fastq_1']['pe_only'] = true
-        end
-
-        identify_autopopulated_file_properties
-      end
-
-      def identify_cell_type(property, entry)
-        return 'sample_cell' if property == 'sample'
-
-        return 'sample_name_cell' if property == 'sample_name'
-
-        return 'fastq_cell' if property.match(/^fastq_\d+$/)
-
-        return 'file_cell' if check_for_file(entry)
-
-        return 'metadata_cell' if entry['meta'].present?
-
-        return 'dropdown_cell' if entry['enum'].present?
-
-        'input_cell'
-      end
-
-      def check_for_file(entry)
-        entry['format'] == 'file-path' || (entry.key?('anyOf') && entry['anyOf'].any? do |e|
-          e['format'] == 'file-path'
-        end)
-      end
-
-      def identify_autopopulated_file_properties
-        file_properties = @properties.select { |_property, entry| FILE_CELL_TYPES.include?(entry['cell_type']) }
-
-        required_file_properties = file_properties.select { |_property, entry| entry['required'] }
-
-        file_properties.each_key do |property|
-          next unless required_file_properties.key?(property) ||
-                      (required_file_properties.empty? && property == 'fastq_1')
-
-          @properties[property]['autopopulate'] = true
-        end
+        {
+          form_value: value,
+          filename:
+            file_data[:filename] || I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file'),
+          attachment_id: file_data[:attachment_id] || ''
+        }
       end
     end
   end
