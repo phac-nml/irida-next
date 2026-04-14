@@ -29,7 +29,7 @@
   <% end %>
 </div>
 
-<% invalid_expires_at = pat.errors.include?(:expires_at) %>
+<% invalid_expires_at = true %>
 
 <div class="form-field <%= 'invalid' if invalid_expires_at %>">
   <%= datepicker(
@@ -38,7 +38,7 @@
     label: t("activerecord.attributes.personal_access_token.expires_at"),
     selected_date: pat[:expires_at],
     required: true,
-    errors: invalid_expires_at ? pat.errors.full_messages_for(:expires_at) : []
+    errors: invalid_expires_at ? ['test error', 'test error 2']: []
   ) %>
 </div>
 

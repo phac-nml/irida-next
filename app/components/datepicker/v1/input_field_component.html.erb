@@ -38,17 +38,21 @@
   >
 </div>
 
-<span
-  data-datepicker--v1--input-target="inputError"
-  class="mt-1 flex hidden items-center text-sm text-red-600 dark:text-red-400"
+<ul
+  data-datepicker--v1--input-target="errorContainer"
+  class="hidden max-w-md list-inside text-sm text-slate-500 dark:text-slate-400"
   aria-hidden="true"
   id="<%= @input_id %>-message"
-></span>
+></ul>
 
-<template data-datepicker--v1--input-target="errorIconTemplate">
-  <%= icon(:x_circle, size: :sm,
+<template data-datepicker--v1--input-target="errorMessageTemplate">
+  <li>
+    <span class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+      <%= icon(:x_circle, size: :sm,
       color: :danger,
       class: "mr-1.5") %>
 
-  <span data-datepicker--v1--input-target="inputErrorMessage"></span>
+      <span class="grow" data-datepicker--v1--input-target="errorMessage"></span>
+    </span>
+  </li>
 </template>

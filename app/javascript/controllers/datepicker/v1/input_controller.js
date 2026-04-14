@@ -8,8 +8,9 @@ export default class extends Controller {
     "calendarTemplate",
     "inputError",
     "minDate",
-    "errorIconTemplate",
-    "inputErrorMessage",
+    "errorContainer",
+    "errorMessageTemplate",
+    "errorMessage",
   ];
 
   static values = {
@@ -48,7 +49,7 @@ export default class extends Controller {
     }
 
     if (this.errorsValue.length > 0) {
-      this.#enableInputErrorState(this.errorsValue.join("\n"));
+      this.#enableInputErrorState(this.errorsValue);
     }
 
     this.boundHandleDatepickerInputFocus =
@@ -269,7 +270,7 @@ export default class extends Controller {
     const dateInput = event.target.value;
     if (this.#validateDateInput(dateInput)) {
       if (this.#minDate && this.#minDate > dateInput) {
-        this.#enableInputErrorState(this.invalidMinDateValue);
+        this.#enableInputErrorState([this.invalidMinDateValue]);
       } else {
         if (this.autosubmitValue) {
           this.submitDate();
@@ -280,7 +281,7 @@ export default class extends Controller {
         this.focusNextFocusableElement();
       }
     } else {
-      this.#enableInputErrorState(this.invalidDateValue);
+      this.#enableInputErrorState([this.invalidDateValue]);
     }
     this.hideCalendar();
   }
@@ -310,16 +311,23 @@ export default class extends Controller {
   }
 
   // adds error message if invalid date or a date prior to minDate was entered
-  #enableInputErrorState(message) {
-    this.inputErrorMessageTarget.innerText = "";
-    const errorIcon = this.errorIconTemplateTarget.content.cloneNode(true);
-    this.inputErrorTarget.appendChild(errorIcon);
-    this.inputErrorMessageTarget.innerText = message;
+  #enableInputErrorState(messages) {
+    this.errorContainerTarget.innerHTML = "";
+
     this.datepickerInputTarget.setAttribute("aria-invalid", "true");
     this.datepickerInputTarget.setAttribute(
       "aria-describedby",
       `${this.datepickerInputTarget.id}-message`,
     );
+
+    messages.forEach((message) => {
+      const errorMessage =
+        this.errorMessageTemplateTarget.content.cloneNode(true);
+      this.errorContainerTarget.appendChild(errorMessage);
+      this.errorMessageTargets[this.errorMessageTargets.length - 1].innerText =
+        message;
+    });
+
     if (this.inputErrorTarget.classList.contains("hidden")) {
       this.inputErrorTarget.classList.remove("hidden");
       this.inputErrorTarget.setAttribute("aria-hidden", false);
