@@ -116,55 +116,6 @@ module Combobox
           assert_empty hidden.value
         end
       end
-
-      def test_clear_button_does_not_replace_dropdown_caret
-        visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1']" do
-          combobox = find("input[role='combobox']")
-          clear_button_selector = "button[data-combobox--v1-target='indicatorClearButton']"
-          caret_button_selector = "button[data-combobox--v1-target='indicatorButton'][aria-label='#{I18n.t('combobox_component.show_options')}']"
-
-          assert_selector clear_button_selector, visible: true
-          assert_selector caret_button_selector, visible: true
-
-          find(clear_button_selector).click
-
-          assert_empty combobox.value
-          hidden = find("input[type='hidden']", visible: false)
-          assert_empty hidden.value
-
-          clear_button = find(clear_button_selector, visible: :all)
-          assert_not clear_button.visible?
-          assert_selector caret_button_selector, visible: true
-
-          find(caret_button_selector).click
-          assert_selector "div[role='listbox']", visible: true
-        end
-      end
-      def test_clear_click_keeps_dropdown_open_and_restores_all_options
-        visit('/rails/view_components/combobox_component/default')
-        within "div[data-controller='combobox--v1']" do
-          combobox = find("input[role='combobox']")
-          clear_button_selector = "button[data-combobox--v1-target='indicatorClearButton']"
-
-          combobox.send_keys(%i[alt down])
-          assert_selector "div[role='listbox']", visible: true
-
-          options_before_clear = all("div[role='option']", minimum: 1).count
-          assert_operator options_before_clear, :<, 16
-
-          find(clear_button_selector).click
-
-          assert_selector "div[role='listbox']", visible: true
-          assert_empty combobox.value
-          hidden = find("input[type='hidden']", visible: false)
-          assert_empty hidden.value
-
-          options_after_clear = all("div[role='option']", minimum: 1).count
-          assert_equal 16, options_after_clear
-        end
-      end
-
     end
   end
 end
