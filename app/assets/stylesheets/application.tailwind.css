@@ -668,11 +668,7 @@ a.pill-focus-reset:focus-visible {
   @apply relative text-slate-900 dark:text-white;
 
   input {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' aria-hidden='true' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
-    background-position: right 0.75rem center;
-    background-repeat: no-repeat;
-    background-size: 0.75em 0.75em;
-    @apply relative m-0 box-border w-full cursor-pointer rounded-lg border border-slate-300 px-3 py-2 align-bottom outline-none focus-visible:shadow-none focus-visible:outline dark:border-slate-600 dark:bg-slate-800;
+    @apply relative m-0 box-border w-full cursor-pointer rounded-lg border border-slate-300 px-3 py-2 pr-20 align-bottom outline-none focus-visible:shadow-none focus-visible:outline dark:border-slate-600 dark:bg-slate-800;
   }
 
   input[aria-invalid="true"] {

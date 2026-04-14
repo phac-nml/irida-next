@@ -1,7 +1,9 @@
 <%= tag.div(
   data: {
     controller: "combobox--v1",
+    "combobox--v1-clear-selection-label-value": t("combobox_component.clear_selection"),
     "combobox--v1-no-results-text-value": t("combobox_component.no_results_text"),
+    "combobox--v1-show-options-label-value": t("combobox_component.show_options"),
     "combobox--v1-single-result-text-value": t("combobox_component.single_result_text"),
     "combobox--v1-multiple-results-text-value": t("combobox_component.multiple_results_text"),
   },
@@ -15,6 +17,37 @@
                      } %>
 
   <%= render Viral::BaseComponent.new(**combobox_arguments) %>
+
+  <div class="absolute inset-y-0 right-0 z-10 flex items-center">
+    <button
+      type="button"
+      class="
+        <%= selection_present? ? 'flex' : 'hidden' %>
+        h-full w-8 items-center justify-center text-slate-500
+        transition-colors hover:bg-slate-100 focus-visible:outline-3 dark:text-slate-300 dark:hover:bg-slate-700
+      "
+      data-combobox--v1-target="indicatorClearButton"
+      data-action="mousedown->combobox--v1#onIndicatorMouseDown click->combobox--v1#onClearClick"
+      aria-label="<%= t('combobox_component.clear_selection') %>"
+      title="<%= t('combobox_component.clear_selection') %>"
+    >
+      <%= icon(:x, size: :sm, color: :subdued) %>
+    </button>
+
+    <button
+      type="button"
+      class="
+        flex h-full w-10 items-center justify-center rounded-r-lg text-slate-500
+        transition-colors hover:bg-slate-100 focus-visible:outline-3 dark:text-slate-300 dark:hover:bg-slate-700
+      "
+      data-combobox--v1-target="indicatorButton"
+      data-action="mousedown->combobox--v1#onIndicatorMouseDown click->combobox--v1#onIndicatorClick"
+      aria-label="<%= t('combobox_component.show_options') %>"
+      title="<%= t('combobox_component.show_options') %>"
+    >
+      <%= icon(:caret_down, size: :sm, color: :subdued) %>
+    </button>
+  </div>
 
   <%= tag.div(
     id: @listbox_id,

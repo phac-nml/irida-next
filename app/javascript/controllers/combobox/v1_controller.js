@@ -17,9 +17,18 @@ import FloatingDropdown from "utilities/floating_dropdown";
  * - Dropdown positioning and focus management
  */
 export default class extends Controller {
-  static targets = ["combobox", "listbox", "hidden", "ariaLiveUpdate"];
+  static targets = [
+    "combobox",
+    "listbox",
+    "hidden",
+    "ariaLiveUpdate",
+    "indicatorButton",
+    "indicatorClearButton",
+  ];
   static values = {
+    clearSelectionLabel: String,
     noResultsText: String,
+    showOptionsLabel: String,
     singleResultText: String,
     multipleResultsText: String,
   };
@@ -83,6 +92,8 @@ export default class extends Controller {
       this.#setOption(option);
       this.#setValue(option);
     }
+
+    this.#updateIndicatorState();
   }
 
   disconnect() {
@@ -240,6 +251,7 @@ export default class extends Controller {
     );
     this.hiddenTarget.dispatchEvent(new Event("change", { bubbles: true }));
     this.comboboxTarget.dispatchEvent(new Event("change", { bubbles: true }));
+    this.#updateIndicatorState();
   }
 
   #setOption(option) {
@@ -276,6 +288,42 @@ export default class extends Controller {
 
   #hasOptions() {
     return this.#filteredOptions.length;
+  }
+
+  #hasSelection() {
+    return this.hiddenTarget.value.length > 0;
+  }
+
+  #updateIndicatorState() {
+    if (this.hasIndicatorButtonTarget) {
+      this.indicatorButtonTarget.setAttribute(
+        "aria-label",
+        this.showOptionsLabelValue,
+      );
+      this.indicatorButtonTarget.setAttribute("title", this.showOptionsLabelValue);
+    }
+
+    if (!this.hasIndicatorClearButtonTarget) return;
+
+    const hasSelection = this.#hasSelection();
+    this.indicatorClearButtonTarget.classList.toggle("hidden", !hasSelection);
+    this.indicatorClearButtonTarget.classList.toggle("flex", hasSelection);
+    this.indicatorClearButtonTarget.setAttribute(
+      "aria-label",
+      this.clearSelectionLabelValue,
+    );
+    this.indicatorClearButtonTarget.setAttribute(
+      "title",
+      this.clearSelectionLabelValue,
+    );
+  }
+
+  #clearSelection() {
+    this.#setValue();
+    this.#setOption(null);
+    this.#filterOptions();
+    this.#floatingDropdown.hide();
+    this.comboboxTarget.focus();
   }
 
   #onShow() {
@@ -435,12 +483,34 @@ export default class extends Controller {
   #onBackgroundMouseDown(event) {
     if (
       !this.comboboxTarget.contains(event.target) &&
-      !this.listboxTarget.contains(event.target)
+      !this.listboxTarget.contains(event.target) &&
+      !this.indicatorButtonTarget.contains(event.target) &&
+      (!this.hasIndicatorClearButtonTarget ||
+        !this.indicatorClearButtonTarget.contains(event.target))
     ) {
       this.debouncedFilterAndUpdate.flush();
       this.#setValue(this.#option);
       this.#floatingDropdown.hide();
     }
+  }
+
+  onIndicatorMouseDown(event) {
+    event.preventDefault();
+  }
+
+  onIndicatorClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.comboboxTarget.focus();
+    this.#floatingDropdown.toggle();
+  }
+
+  onClearClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.#clearSelection();
   }
 
   // Listbox Option events
