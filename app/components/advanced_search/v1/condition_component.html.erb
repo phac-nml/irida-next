@@ -57,7 +57,7 @@
 
     <% invalid_operator = @condition.errors.include?(:operator) %>
 
-    <div class="form-field w-full max-w-xs <%= 'invalid' if invalid_operator %>">
+    <div class="form-field w-full sm:max-w-xs <%= 'invalid' if invalid_operator %>">
       <%= conditions_form.label :operator, data: { required: true } %>
 
       <%= conditions_form.select :operator,
