@@ -28,9 +28,10 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
     email_message = user.errors.full_messages_for(:email).to_sentence
 
     assert_selector '.alert-component', count: 1
-    assert_selector '[data-controller="form-error-summary"]', count: 1
+    assert_selector 'div[data-controller="form-error-summary"]', count: 1
     assert_no_selector '[data-form-error-summary-announcement-value]'
-    assert_selector 'h2', text: I18n.t('general.form.error_summary.title', count: 2)
+    assert_selector 'h2[data-form-error-summary-target="heading"][aria-describedby][tabindex="-1"]',
+                    text: I18n.t('general.form.error_summary.title', count: 2)
     assert_selector 'p', text: I18n.t('general.form.error_notification')
     assert_selector 'a[href="#user_email"]', text: email_message
     assert_selector 'a[href="#user_last_name"]', text: user.errors.full_messages_for(:last_name).first

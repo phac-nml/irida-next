@@ -1,12 +1,15 @@
 <%= viral_alert(**alert_system_arguments) do %>
-  <section
-    aria-describedby="<%= description_id %>"
-    aria-labelledby="<%= heading_id %>"
-    class="outline-hidden"
-    data-controller="form-error-summary"
-    tabindex="-1"
-  >
-    <h2 id="<%= heading_id %>" class="text-sm font-semibold"><%= title_text %></h2>
+  <div class="outline-hidden" data-controller="form-error-summary">
+    <h2
+      id="<%= heading_id %>"
+      aria-describedby="<%= description_id %>"
+      class="text-sm font-semibold outline-hidden"
+      data-form-error-summary-target="heading"
+      tabindex="-1"
+    >
+      <%= title_text %>
+    </h2>
+
     <p id="<%= description_id %>" class="mt-1"><%= description_text %></p>
 
     <ul class="mt-2 list-disc space-y-1 ps-5">
@@ -22,5 +25,5 @@
         </li>
       <% end %>
     </ul>
-  </section>
+  </div>
 <% end %>
