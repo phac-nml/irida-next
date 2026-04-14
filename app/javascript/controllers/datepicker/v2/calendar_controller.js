@@ -541,6 +541,8 @@ export default class extends Controller {
     // submit upon click/keyboard interaction if autosubmit is true (ie: on member/group tables)
     if (this.#autosubmit) {
       this.datepickerV2InputOutlet.submitDate();
+    } else {
+      this.datepickerV2InputOutlet.disableInputErrorState();
     }
 
     this.datepickerV2InputOutlet.hideCalendar();

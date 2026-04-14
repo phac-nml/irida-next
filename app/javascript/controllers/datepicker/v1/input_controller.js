@@ -274,7 +274,7 @@ export default class extends Controller {
         if (this.autosubmitValue) {
           this.submitDate();
         } else {
-          this.#disableInputErrorState();
+          this.disableInputErrorState();
         }
         this.#setSelectedDate();
         this.focusNextFocusableElement();
@@ -330,7 +330,7 @@ export default class extends Controller {
   }
 
   // disables the error state once a valid date is entered/selected
-  #disableInputErrorState() {
+  disableInputErrorState() {
     this.inputErrorTarget.innerText = "";
     this.datepickerInputTarget.removeAttribute("aria-invalid");
     this.datepickerInputTarget.removeAttribute("aria-describedby");
@@ -342,7 +342,7 @@ export default class extends Controller {
 
   // submits the selected date
   submitDate() {
-    this.#disableInputErrorState();
+    this.disableInputErrorState();
     this.element.closest("form").requestSubmit();
     this.#setSelectedDate();
   }
