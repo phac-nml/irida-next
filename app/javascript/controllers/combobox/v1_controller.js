@@ -360,6 +360,7 @@ export default class extends Controller {
       case "Enter": {
         this.debouncedFilterAndUpdate.flush();
         this.#setValue(this.#option);
+        this.#setOption(this.#filterOptions());
         this.#floatingDropdown.hide();
         flag = true;
         break;
