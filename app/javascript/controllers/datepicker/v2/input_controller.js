@@ -7,7 +7,6 @@ export default class extends Controller {
   static targets = [
     "datepickerInput",
     "calendarTemplate",
-    "errorContainer",
     "minDate",
     "errorContainer",
     "errorMessageTemplate",
