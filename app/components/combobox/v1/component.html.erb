@@ -22,9 +22,8 @@
     <button
       type="button"
       class="
+        h-full w-8 cursor-pointer items-center justify-center text-slate-500 transition-colors hover:bg-slate-100 focus-visible:outline-3 dark:text-slate-300 dark:hover:bg-slate-700
         <%= selection_present? ? 'flex' : 'hidden' %>
-        h-full w-8 items-center justify-center text-slate-500 cursor-pointer
-        transition-colors hover:bg-slate-100 focus-visible:outline-3 dark:text-slate-300 dark:hover:bg-slate-700
       "
       data-combobox--v1-target="indicatorClearButton"
       data-action="mousedown->combobox--v1#onIndicatorMouseDown click->combobox--v1#onClearClick"
@@ -37,8 +36,8 @@
     <button
       type="button"
       class="
-        flex h-full w-10 items-center justify-center rounded-r-lg text-slate-500 cursor-pointer
-        transition-colors hover:bg-slate-100 focus-visible:outline-3 dark:text-slate-300 dark:hover:bg-slate-700
+        flex h-full w-10 cursor-pointer items-center justify-center rounded-r-lg text-slate-500 transition-colors
+        hover:bg-slate-100 focus-visible:outline-3 dark:text-slate-300 dark:hover:bg-slate-700
       "
       data-combobox--v1-target="indicatorButton"
       data-action="mousedown->combobox--v1#onIndicatorMouseDown click->combobox--v1#onIndicatorClick"
