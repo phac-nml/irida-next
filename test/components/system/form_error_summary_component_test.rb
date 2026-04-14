@@ -8,9 +8,7 @@ module System
       visit('rails/view_components/form_error_summary_component/focus_demo')
 
       assert_selector '[data-controller="form-error-summary"]', focused: true
-      assert_selector '#sr-status',
-                      text: I18n.t('general.form.error_summary.announcement', count: 2),
-                      visible: false
+      assert_selector '[data-controller="form-error-summary"][aria-describedby][aria-labelledby][tabindex="-1"]'
 
       within '[data-controller="form-error-summary"]' do
         click_link "Email can't be blank"

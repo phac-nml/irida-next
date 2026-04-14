@@ -29,6 +29,7 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
 
     assert_selector '.alert-component', count: 1
     assert_selector '[data-controller="form-error-summary"]', count: 1
+    assert_no_selector '[data-form-error-summary-announcement-value]'
     assert_selector 'h2', text: I18n.t('general.form.error_summary.title', count: 2)
     assert_selector 'p', text: I18n.t('general.form.error_notification')
     assert_selector 'a[href="#user_email"]', text: email_message

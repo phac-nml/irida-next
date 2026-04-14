@@ -724,9 +724,6 @@ fr:
     form:
       error_notification: 'Veuillez examiner les problèmes suivants :'
       error_summary:
-        announcement:
-          one: Il y a 1 champ présentant un problème qui empêche la soumission
-          other: Il y a %{count} champs présentant des problèmes qui empêchent la soumission
         title:
           one: Il y a 1 champ présentant un problème qui empêche la soumission
           other: Il y a %{count} champs présentant des problèmes qui empêchent la soumission

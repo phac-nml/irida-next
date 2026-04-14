@@ -722,9 +722,6 @@ en:
     form:
       error_notification: 'Please review the following problems:'
       error_summary:
-        announcement:
-          one: There is 1 field with problems preventing submission
-          other: There are %{count} fields with problems preventing submission
         title:
           one: There is 1 field with problems preventing submission
           other: There are %{count} fields with problems preventing submission

@@ -33,10 +33,6 @@ class FormErrorSummaryComponent < Component
     I18n.t('general.form.error_notification')
   end
 
-  def announcement_text
-    I18n.t('general.form.error_summary.announcement', count: entries.count)
-  end
-
   def alert_system_arguments
     system_arguments.except(:classes).merge(
       type: :alert,
