@@ -443,3 +443,33 @@ samples_automated_workflow_execution:
       "sample": INXT_SAM_AAAAAAAAAA,
       "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }
+
+samples_workflow_executions_preparation_test_1:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample_preparation_test_1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_three_samples, :uuid) %>
+  samplesheet_params:
+    {
+      "sample": INXT_SAM_AAAAAAAAZA,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_1, :uuid)}" %>,
+      "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_1B, :uuid)}" %>
+    }
+
+samples_workflow_executions_preparation_test_2:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample_preparation_test_2, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_three_samples, :uuid) %>
+  samplesheet_params:
+    {
+      "sample": INXT_SAM_AAAAAAAAZB,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_2, :uuid)}" %>,
+      "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_2B, :uuid)}" %>
+    }
+
+samples_workflow_executions_preparation_test_3:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample_preparation_test_3, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_three_samples, :uuid) %>
+  samplesheet_params:
+    {
+      "sample": INXT_SAM_AAAAAAAAZC,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_3, :uuid)}" %>,
+      "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_3B, :uuid)}" %>
+    }
