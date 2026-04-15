@@ -584,8 +584,8 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
 
     assert_equal 'my_run_id_g', workflow_execution.run_id
 
-    perform_enqueued_jobs(only: WorkflowExecutionCompletionJob) do
-      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
+    perform_enqueued_jobs(only: WorkflowExecutions::WorkflowExecutionCompletionJob) do
+      WorkflowExecutions::WorkflowExecutionCompletionJob.perform_later(workflow_execution)
     end
     workflow_execution.reload
 
