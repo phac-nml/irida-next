@@ -4,6 +4,7 @@ require 'test_helper'
 
 class IntegrationSapporoTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
+  include WorkflowExecutions
 
   def setup
     Flipper.enable(:wes_extended_metadata)
