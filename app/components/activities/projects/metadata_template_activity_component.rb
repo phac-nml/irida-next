@@ -14,7 +14,7 @@ module Activities
         !@activity[:template].deleted?
       end
 
-      def activity_message
+      def activity_message # rubocop:disable Metrics/MethodLength
         href = if template_exists?
 
                  link_to(
@@ -25,6 +25,8 @@ module Activities
                    ),
                    class: active_link_classes,
                    title:
+                     t('components.activity.metadata_templates.project.link_descriptive_text'),
+                   'aria-label' =>
                      t('components.activity.metadata_templates.project.link_descriptive_text')
                  )
                else

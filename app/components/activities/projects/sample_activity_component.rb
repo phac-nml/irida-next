@@ -52,6 +52,11 @@ module Activities
                 t(
                   'components.activity.samples.link_descriptive_text',
                   sample_puid: @activity[:sample_puid]
+                ),
+              'aria-label' =>
+                t(
+                  'components.activity.samples.link_descriptive_text',
+                  sample_puid: @activity[:sample_puid]
                 )
             )
 

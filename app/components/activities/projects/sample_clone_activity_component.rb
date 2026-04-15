@@ -32,6 +32,11 @@ module Activities
                      t(
                        'components.activity.samples.clone.link_descriptive_text',
                        project_puid: namespace_puid(namespace)
+                     ),
+                   'aria-label' =>
+                     t(
+                       'components.activity.samples.clone.link_descriptive_text',
+                       project_puid: namespace_puid(namespace)
                      )
                  )
                else

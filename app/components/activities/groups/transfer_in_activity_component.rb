@@ -24,6 +24,11 @@ module Activities
                      t(
                        'components.activity.subgroups.link_descriptive_text',
                        subgroup_puid: @activity[:transferred_group_puid]
+                     ),
+                   'aria-label' =>
+                     t(
+                       'components.activity.subgroups.link_descriptive_text',
+                       subgroup_puid: @activity[:transferred_group_puid]
                      )
                  )
                else
