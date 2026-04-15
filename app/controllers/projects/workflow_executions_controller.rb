@@ -17,8 +17,7 @@ module Projects
         export_data: allowed_to?(:export_data?, @project),
         cancel: allowed_to?(:update?, namespace),
         destroy: allowed_to?(:update?, namespace),
-        update: allowed_to?(:update?, namespace),
-        preview: allowed_to?(:preview_attachment?, namespace)
+        update: allowed_to?(:update?, namespace)
       }
 
       @render_workflow_actions = @allowed_to.slice(:export_data, :cancel, :update, :destroy).value?(true)
@@ -29,7 +28,8 @@ module Projects
         export_data: allowed_to?(:export_data?, @project),
         cancel: allowed_to?(:cancel?, @workflow_execution),
         destroy: allowed_to?(:destroy?, @workflow_execution),
-        update: allowed_to?(:update?, @workflow_execution)
+        update: allowed_to?(:update?, @workflow_execution),
+        preview: allowed_to?(:preview_attachment?, @workflow_execution)
       }
     end
 

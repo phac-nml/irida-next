@@ -108,10 +108,11 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     return true if record.submitter.id == user.id
 
     # submitted by automation bot and user is analyst or higher
-    if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
-       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
-       (effective_access_level >= Member::AccessLevel::ANALYST)
-      return true
+    if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) && (effective_access_level >= Member::AccessLevel::ANALYST)
+
+      return true if record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id)
+
+      return true if record.shared_with_namespace
     end
 
     details[:id] = record.id
