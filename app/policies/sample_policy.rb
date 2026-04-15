@@ -19,6 +19,13 @@ class SamplePolicy < ApplicationPolicy
     false
   end
 
+  def preview_attachment?
+    return true if effective_access_level >= Member::AccessLevel::GUEST
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation, :namespace_samples do |relation, options| # rubocop:disable Metrics/BlockLength
     namespace = options[:namespace]
     minimum_access_level = if options.key?(:minimum_access_level)

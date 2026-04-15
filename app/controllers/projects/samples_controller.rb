@@ -144,7 +144,7 @@ module Projects
 
     def show_view_authorizations
       @allowed_to = {
-        preview_attachment: allowed_to?(:preview_attachment?, @project),
+        preview_attachment: allowed_to?(:preview_attachment?, @sample),
         destroy_sample: allowed_to?(:destroy_sample?, @project),
         destroy_attachment: allowed_to?(:destroy_attachment?, @sample),
         update_sample: allowed_to?(:update_sample?, @project)
