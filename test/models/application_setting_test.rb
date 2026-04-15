@@ -3,6 +3,10 @@
 require 'test_helper'
 
 class ApplicationSettingTest < ActiveSupport::TestCase
+  setup do
+    ApplicationSetting.delete_all
+  end
+
   test 'only one instance allowed' do
     current_settings = ApplicationSetting.create_from_defaults
     assert current_settings.persisted?
