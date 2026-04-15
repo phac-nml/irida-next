@@ -57,7 +57,7 @@ jobs:
           bundler-cache: true
 
       - name: Set up PNPM
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
 
       - name: Use Node.js 24
         uses: actions/setup-node@v6
@@ -133,7 +133,7 @@ jobs:
           bundler-cache: true
 
       - name: Set up PNPM
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
 
       - name: Use Node.js 24
         uses: actions/setup-node@v6
@@ -190,7 +190,7 @@ jobs:
           bundler-cache: true
 
       - name: Set up PNPM
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
 
       - name: Use Node.js 24
         uses: actions/setup-node@v6
@@ -266,7 +266,7 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Set up PNPM
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
 
       - name: Use Node.js 24
         uses: actions/setup-node@v6
