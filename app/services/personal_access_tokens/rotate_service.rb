@@ -16,7 +16,7 @@ module PersonalAccessTokens
       @bot_user = bot_user
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       authorize! @existing_personal_access_token.user, to: :rotate_personal_access_token? if bot_user.nil?
       authorize! namespace, to: :rotate_bot_personal_access_token? unless bot_user.nil?
 
@@ -29,6 +29,7 @@ module PersonalAccessTokens
       @new_personal_access_token = @existing_personal_access_token.dup.tap do |token|
         token.token_digest = nil
         token.last_used_at = nil
+        token.revoked = false
       end
 
       @new_personal_access_token.save
