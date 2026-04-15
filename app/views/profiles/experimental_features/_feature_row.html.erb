@@ -14,25 +14,24 @@
                 data: { controller: "experimental-feature-toggle" } do |f| %>
     <%= f.hidden_field :feature_key, value: feature[:key] %>
 
-    <label
-      class="relative inline-flex cursor-pointer items-center"
-      aria-label="<%= t('profiles.experimental_features.toggle_label',
-                              feature: t("profiles.experimental_features.features.#{feature[:key]}.name")) %>"
-    >
+    <label class="relative inline-flex cursor-pointer items-center">
       <%= f.check_box :enabled,
             checked: feature[:enabled],
             class: "sr-only peer",
+            aria: { label: t('profiles.experimental_features.toggle_label',
+                              feature: t("profiles.experimental_features.features.#{feature[:key]}.name")) },
             data: { action: "change->experimental-feature-toggle#submit" } %>
 
-      <div
+      <span
         class="
           relative h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-primary-600 peer-focus-visible:outline
           peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black
-          after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white
-          after:transition-all after:content-[''] peer-checked:after:translate-x-5 dark:bg-slate-700
+          after:absolute after:top-[2px] after:left-[2px] after:inline-block after:h-5 after:w-5 after:rounded-full
+          after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-5 dark:bg-slate-700
           dark:peer-checked:bg-primary-500 dark:peer-focus-visible:outline-white
         "
-      ></div>
+        aria-hidden="true"
+      ></span>
     </label>
   <% end %>
 

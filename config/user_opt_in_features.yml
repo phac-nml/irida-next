@@ -1,1 +1,3 @@
-user_opt_in_features: {}
+user_opt_in_features:
+  data_grid_samples_table:
+    allowlist: all
