@@ -12,7 +12,7 @@ module PersonalAccessTokens
       inactive_as_of_days_ago = Irida::CurrentSettings.current_application_settings.cleanup_inactive_access_tokens_after_days
       cutoff_date = inactive_as_of_days_ago.days.ago.to_date
 
-      inactive_tokens = PersonalAccessToken.where(revoked: true).where(updated_at: ..cutoff_date).or(
+      inactive_tokens = PersonalAccessToken.where(revoked: true, updated_at: ..cutoff_date).or(
         PersonalAccessToken.where(revoked: false).where.not(expires_at: nil).where(expires_at: ..cutoff_date)
       )
 
