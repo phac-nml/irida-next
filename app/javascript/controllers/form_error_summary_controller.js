@@ -2,12 +2,8 @@ import { Controller } from "@hotwired/stimulus";
 import { focusWhenVisible } from "utilities/focus";
 
 export default class extends Controller {
-  static targets = ["heading"];
-
   connect() {
-    if (this.hasHeadingTarget) {
-      focusWhenVisible(this.headingTarget);
-    }
+    focusWhenVisible(this.element);
   }
 
   focusField(event) {

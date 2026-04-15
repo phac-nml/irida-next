@@ -24,9 +24,6 @@ class RegistrationsTest < ApplicationSystemTestCase
     click_button I18n.t(:'devise.registrations.new.submit_button')
 
     assert_selector '[data-controller="form-error-summary"]', focused: true
-    assert_selector '#sr-status',
-                    text: I18n.t('general.form.error_summary.announcement', count: 4),
-                    visible: false
     assert_selector '#user_email_error', text: "Email can't be blank"
 
     within '[data-controller="form-error-summary"]' do

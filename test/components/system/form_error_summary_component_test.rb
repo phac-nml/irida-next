@@ -7,8 +7,8 @@ module System
     test 'focus demo' do
       visit('rails/view_components/form_error_summary_component/focus_demo')
 
-      assert_selector 'h2[data-form-error-summary-target="heading"]', focused: true
-      assert_selector 'h2[data-form-error-summary-target="heading"][aria-describedby][tabindex="-1"]'
+      assert_selector '[data-controller="form-error-summary"]', focused: true
+      assert_selector 'div[data-controller="form-error-summary"][tabindex="-1"]'
 
       within '[data-controller="form-error-summary"]' do
         click_link "Email can't be blank"

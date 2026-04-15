@@ -1,12 +1,6 @@
 <%= viral_alert(**alert_system_arguments) do %>
-  <div class="outline-hidden" data-controller="form-error-summary">
-    <h2
-      id="<%= heading_id %>"
-      aria-describedby="<%= description_id %>"
-      class="text-sm font-semibold outline-hidden"
-      data-form-error-summary-target="heading"
-      tabindex="-1"
-    >
+  <div class="outline-hidden" data-controller="form-error-summary" tabindex="-1">
+    <h2 id="<%= heading_id %>" class="text-sm font-semibold">
       <%= title_text %>
     </h2>
 

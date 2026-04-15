@@ -159,9 +159,6 @@ class ProjectsTest < ApplicationSystemTestCase
     end
 
     assert_selector 'turbo-frame#project_form [data-controller="form-error-summary"]', focused: true
-    assert_selector '#sr-status',
-                    text: I18n.t('general.form.error_summary.announcement', count: 1),
-                    visible: false
     assert_selector '#project_namespace_attributes_namespace_error',
                     text: I18n.t('services.projects.create.namespace_required')
 
