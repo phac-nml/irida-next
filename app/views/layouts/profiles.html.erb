@@ -1,10 +1,13 @@
 <!DOCTYPE html>
+
 <html class="light" lang="<%= locale %>">
   <%= render "layouts/partials/head" %>
+
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: true) do |layout| %>
       <% layout.with_sidebar(label: t(:'profiles.sidebar.header'), icon_name: User.icon, pipelines_enabled: @pipelines_enabled) do |navigation| %>
         <%= navigation.with_header(label: t(:"profiles.sidebar.header")) %>
+
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: profile_path,
@@ -12,6 +15,7 @@
             label: t(:"profiles.sidebar.profile"),
             selected: @current_page == t(:"profiles.sidebar.profile"),
           ) %>
+
           <% if allowed_to?(:edit_password?, @user) %>
             <%= render section.with_item(
               url: edit_profile_password_path,
@@ -20,18 +24,28 @@
               selected: @current_page == t(:"profiles.sidebar.password"),
             ) %>
           <% end %>
+
           <%= render section.with_item(
             url: profile_personal_access_tokens_path,
             icon: PersonalAccessToken.icon,
             label: t(:"profiles.sidebar.access_tokens"),
             selected: @current_page == t(:"profiles.sidebar.access_tokens"),
           ) %>
+
           <%= render section.with_item(
             url: profile_preferences_path,
             icon: :sliders_horizontal,
             label: t(:"profiles.sidebar.preferences"),
             selected: @current_page == t(:"profiles.sidebar.preferences"),
           ) %>
+
+          <%= render section.with_item(
+            url: profile_experimental_features_path,
+            icon: :flask_conical,
+            label: t(:"profiles.sidebar.experimental_features"),
+            selected: @current_page == t(:"profiles.sidebar.experimental_features"),
+          ) %>
+
           <%= render section.with_item(
             url: profile_account_path,
             icon: :bank,
@@ -39,7 +53,9 @@
             selected: @current_page == t(:"profiles.sidebar.account"),
           ) %>
         <% end %>
+
         <% layout.with_language_selection %>
+
         <% layout.with_body do %>
           <%= yield %>
         <% end %>
