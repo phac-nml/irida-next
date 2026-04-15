@@ -3646,7 +3646,7 @@ module Projects
 
       # change language
       find('#language-selection-dd-trigger').click
-      within find('#language-selection-dd-menu') do
+      within find('#language-selection-dd-trigger-menu') do
         click_button I18n.t(:'locales.fr', locale: :fr)
       end
 
