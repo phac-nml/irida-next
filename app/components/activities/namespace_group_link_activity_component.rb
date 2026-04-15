@@ -38,11 +38,10 @@ module Activities
           @activity[:namespace_puid],
           group_path(@activity[:group_link].namespace),
           class: active_link_classes,
-          title =>
-            t(
-              'components.activity.groups.link_descriptive_text',
-              group_puid: @activity[:namespace_puid]
-            ),
+          title: t(
+            'components.activity.groups.link_descriptive_text',
+            group_puid: @activity[:namespace_puid]
+          ),
           'aria-label' =>
             t(
               'components.activity.groups.link_descriptive_text',
