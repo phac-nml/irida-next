@@ -11,10 +11,12 @@
   },
 ) do |dropdown| %>
   <% dropdown.with_custom_item do %>
-    <%= helpers.turbo_frame_tag "metadata-template-dd-menu", src: url, refresh: "morph", loading: :lazy do %>
-      <%= render SpinnerComponent.new(
+    <li>
+      <%= helpers.turbo_frame_tag "metadata-template-dd-menu", src: url, refresh: "morph", loading: :lazy do %>
+        <%= render SpinnerComponent.new(
         message: t("shared.samples.metadata_templates.loading"),
       ) %>
-    <% end %>
+      <% end %>
+    </li>
   <% end %>
 <% end %>
