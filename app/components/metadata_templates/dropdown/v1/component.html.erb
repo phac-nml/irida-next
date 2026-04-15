@@ -1,30 +1,20 @@
-<div
-  class="flex max-sm:grow"
-  data-controller="dropdown--v1"
-  data-dropdown--v1-skidding-value="0"
-  data-dropdown--v1-distance-value="10"
->
-  <button
-    data-dropdown--v1-target="trigger"
-    title="<%= t("shared.samples.metadata_templates.tooltip") %>"
-    id="metadata-template-dd-trigger"
-    class="button w-full button-default"
-    type="button"
-    aria-haspopup="true"
-    aria-expanded="false"
-    aria-controls="metadata-template-dd-menu"
-  >
-    <span id="metadata-template-dd-label"><%= t("shared.samples.metadata_templates.label") %></span>
-    <%= icon(:sliders_horizontal, size: :sm, class: "ml-2 flex-none") %>
-  </button>
-
-  <!-- Dropdown menu -->
-  <%= helpers.turbo_frame_tag "metadata-template-dd-menu", class: "
-      w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
-      dark:bg-slate-700 dark:divide-slate-600 z-30
-    ", "data-dropdown--v1-target": "menu", src: url, refresh: "morph", loading: :lazy, hidden: true do %>
-    <%= render SpinnerComponent.new(
-      message: t("shared.samples.metadata_templates.loading"),
-    ) %>
+<%= viral_dropdown(
+  label: t("shared.samples.metadata_templates.label"),
+  icon: :sliders_horizontal,
+  title: t("shared.samples.metadata_templates.tooltip"),
+  trigger_id: "metadata-template-dd-trigger",
+  skidding: 0,
+  distance: 10,
+  styles: {
+    button: "button w-full button-default",
+    dropdown: "w-48 divide-y divide-slate-100 dark:divide-slate-600 z-30",
+  },
+) do |dropdown| %>
+  <% dropdown.with_custom_item do %>
+    <%= helpers.turbo_frame_tag "metadata-template-dd-menu", src: url, refresh: "morph", loading: :lazy do %>
+      <%= render SpinnerComponent.new(
+        message: t("shared.samples.metadata_templates.loading"),
+      ) %>
+    <% end %>
   <% end %>
-</div>
+<% end %>
