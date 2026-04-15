@@ -114,82 +114,70 @@
         </div>
       </div>
 
-      <div
-        class="pt shrink-0 p-2"
-        data-controller="dropdown--v1"
-        data-dropdown--v1-skidding-value="0"
-        data-dropdown--v1-distance-value="5"
-        data-dropdown--v1-position-value="bottom-start"
-      >
-        <button
-          class="
-            inline-flex h-auto min-h-11 w-full min-w-11 cursor-pointer items-center justify-center rounded-lg border
-            border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition duration-200
-            hover:bg-slate-100 hover:text-slate-950 disabled:cursor-not-allowed disabled:border-slate-200
-            disabled:bg-slate-100 disabled:text-slate-500 disabled:opacity-80 dark:border-slate-700
-            dark:bg-slate-900 dark:text-slate-50 dark:hover:bg-slate-800 dark:hover:text-white
-            disabled:dark:border-slate-700 disabled:dark:bg-slate-800 disabled:dark:text-slate-400
-          "
-          data-dropdown--v1-target="trigger"
-          aria-haspopup="true"
-          aria-controls="sidebar-dd-menu"
-          aria-expanded="false"
-        >
-          <%= t(:"general.default_sidebar.goto") %>
-        </button>
+      <div class="pt shrink-0 p-2">
+        <%= viral_dropdown(
+          label: t(:"general.default_sidebar.goto"),
+          trigger_id: "sidebar-goto-dropdown-trigger",
+          skidding: 0,
+          distance: 5,
+          styles: {
+            button: "
+              inline-flex h-auto min-h-11 w-full min-w-11 cursor-pointer items-center justify-center rounded-lg border
+              border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition duration-200
+              hover:bg-slate-100 hover:text-slate-950 disabled:cursor-not-allowed disabled:border-slate-200
+              disabled:bg-slate-100 disabled:text-slate-500 disabled:opacity-80 dark:border-slate-700
+              dark:bg-slate-900 dark:text-slate-50 dark:hover:bg-slate-800 dark:hover:text-white
+              disabled:dark:border-slate-700 disabled:dark:bg-slate-800 disabled:dark:text-slate-400
+            ",
+            dropdown: "z-20 divide-y divide-slate-100 dark:bg-slate-700",
+          },
+        ) do |dropdown| %>
+          <% dropdown.with_custom_item do %>
+            <li role="none">
+              <div id="sidebar-dd-your-work-group" class="py-2 pl-4 font-semibold text-slate-900 dark:text-white">
+                <%= t(:"general.default_sidebar.title") %>
+              </div>
 
-        <ul
-          id="sidebar-dd-menu"
-          data-dropdown--v1-target="menu"
-          class="z-20 divide-y divide-slate-100 rounded-lg bg-white shadow-sm dark:bg-slate-700"
-          tabindex="-1"
-          hidden
-          role="menu"
-        >
-          <li role="none">
-            <div id="sidebar-dd-your-work-group" class="py-2 pl-4 font-semibold text-slate-900 dark:text-white">
-              <%= t(:"general.default_sidebar.title") %>
-            </div>
+              <ul
+                class="w-full py-2 text-sm text-slate-700 dark:text-slate-200"
+                aria-labelledby="sidebar-dd-your-work-group"
+                tabindex="-1"
+              >
+                <li role="presentation">
+                  <%= link_to t(:"general.default_sidebar.projects"),
+                  dashboard_projects_path,
+                  role: "menuitem",
+                  class:
+                    "px-4 py-2 relative focus-visible:z-10 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
+                </li>
 
-            <ul
-              class="w-full py-2 text-sm text-slate-700 dark:text-slate-200"
-              aria-labelledby="sidebar-dd-your-work-group"
-              tabindex="-1"
-            >
-              <li role="presentation">
-                <%= link_to t(:"general.default_sidebar.projects"),
-                dashboard_projects_path,
-                role: "menuitem",
-                class:
-                  "px-4 py-2 relative focus-visible:z-10 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
-              </li>
+                <li role="presentation">
+                  <%= link_to t(:"general.default_sidebar.groups"),
+                  groups_path,
+                  role: "menuitem",
+                  class:
+                    "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
+                </li>
 
-              <li role="presentation">
-                <%= link_to t(:"general.default_sidebar.groups"),
-                groups_path,
-                role: "menuitem",
-                class:
-                  "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
-              </li>
+                <li role="presentation">
+                  <%= link_to t(:"general.default_sidebar.workflows"),
+                  workflow_executions_path,
+                  role: "menuitem",
+                  class:
+                    "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
+                </li>
 
-              <li role="presentation">
-                <%= link_to t(:"general.default_sidebar.workflows"),
-                workflow_executions_path,
-                role: "menuitem",
-                class:
-                  "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
-              </li>
-
-              <li role="presentation">
-                <%= link_to t(:"general.default_sidebar.data_exports"),
-                data_exports_path,
-                role: "menuitem",
-                class:
-                  "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
-              </li>
-            </ul>
-          </li>
-        </ul>
+                <li role="presentation">
+                  <%= link_to t(:"general.default_sidebar.data_exports"),
+                  data_exports_path,
+                  role: "menuitem",
+                  class:
+                    "px-4 py-2 block relative focus-visible:z-10 text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-600" %>
+                </li>
+              </ul>
+            </li>
+          <% end %>
+        <% end %>
       </div>
     </header>
 
