@@ -1,0 +1,27 @@
+<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+
+<%= viral_card do |card| %>
+  <% card.with_section(border_bottom: true, border_top: true) do %>
+    <p class="text-sm text-slate-500 dark:text-slate-400"><%= t(".description") %></p>
+  <% end %>
+
+  <% if @eligible_features.empty? %>
+    <% card.with_section do %>
+      <div class="py-12 text-center">
+        <p class="mb-2 text-sm font-semibold text-slate-800 dark:text-white">
+          <%= t(".empty_state.title") %>
+        </p>
+
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+          <%= t(".empty_state.description") %>
+        </p>
+      </div>
+    <% end %>
+  <% else %>
+    <% @eligible_features.each do |feature| %>
+      <% card.with_section(border_bottom: true) do %>
+        <%= render "feature_row", feature: feature %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,5 @@
+<%= turbo_stream.update "experimental-feature-#{feature_key}-status" do %>
+  <% unless success %>
+    <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= t('.error') %></p>
+  <% end %>
+<% end %>

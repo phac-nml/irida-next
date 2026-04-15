@@ -1,0 +1,45 @@
+<div id="experimental-feature-<%= feature[:key] %>" class="flex items-center justify-between gap-4 py-1">
+  <div class="min-w-0 flex-1">
+    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+      <%= t("profiles.experimental_features.features.#{feature[:key]}.name") %>
+    </p>
+
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+      <%= t("profiles.experimental_features.features.#{feature[:key]}.description") %>
+    </p>
+  </div>
+
+  <%= form_with url: profile_experimental_features_path,
+                method: :patch,
+                data: { controller: "experimental-feature-toggle" } do |f| %>
+    <%= f.hidden_field :feature_key, value: feature[:key] %>
+
+    <label
+      class="relative inline-flex cursor-pointer items-center"
+      aria-label="<%= t('profiles.experimental_features.toggle_label',
+                              feature: t("profiles.experimental_features.features.#{feature[:key]}.name")) %>"
+    >
+      <%= f.check_box :enabled,
+            checked: feature[:enabled],
+            class: "sr-only peer",
+            data: { action: "change->experimental-feature-toggle#submit" } %>
+
+      <div
+        class="
+          relative h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-primary-600 peer-focus-visible:outline
+          peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black
+          after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white
+          after:transition-all after:content-[''] peer-checked:after:translate-x-5 dark:bg-slate-700
+          dark:peer-checked:bg-primary-500 dark:peer-focus-visible:outline-white
+        "
+      ></div>
+    </label>
+  <% end %>
+
+  <div
+    id="experimental-feature-<%= feature[:key] %>-status"
+    role="alert"
+    aria-live="polite"
+    class="mt-1 w-full text-sm text-red-600 empty:hidden dark:text-red-400"
+  ></div>
+</div>
