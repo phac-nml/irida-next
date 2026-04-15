@@ -6,9 +6,9 @@ class AttachmentPolicy < ApplicationPolicy
     case record.attachable
     when SamplesWorkflowExecution
       allowed_to?(:preview_attachment?, record.attachable.workflow_execution)
-    when WorkflowExecution, Group
+    when WorkflowExecution, Group, Sample
       allowed_to?(:preview_attachment?, record.attachable)
-    when Namespaces::ProjectNamespace, Sample
+    when Namespaces::ProjectNamespace
       allowed_to?(:preview_attachment?, record.attachable.project)
     else
       false
