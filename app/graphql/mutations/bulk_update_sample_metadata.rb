@@ -24,55 +24,22 @@ module Mutations
     field :errors, [Types::UserErrorType], description: 'A list of errors that prevented the mutation.'
     field :overall_status, GraphQL::Types::String, null: true,
                                                    description: 'Overall description of mutation after completion'
-    field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation.'
+    field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation which lists the fields which were added, removed, updated, unchanged, and not found.' # rubocop:disable Layout/LineLength
 
-    def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       namespace = retrieve_namespace(args)
 
-      if namespace.nil?
-        path = args.key?(:project_puid) || args.key?(:project_id) ? 'project' : 'group'
-        user_errors = [{
-          path: [path],
-          message: "not found by provided ID or PUID: #{args.values_at(:project_puid, :project_id, :group_puid,
-                                                                       :group_id).compact[0]}"
-        }]
-        return {
-          overall_status: nil,
-          status: nil,
-          errors: user_errors
-        }
-      end
+      return namespace_error(args) if namespace.nil?
 
       metadata_payload = args[:metadata]
       # convert string to hash if json string as given
       metadata_payload = JSON.parse(metadata_payload) if metadata_payload.is_a?(String)
 
-      unless metadata_payload.is_a?(Hash)
-        user_errors = [{
-          path: ['metadataPayload'],
-          message: 'is not JSON data'
-        }]
-        return {
-          overall_status: nil,
-          status: nil,
-          errors: user_errors
-        }
-      end
+      return metadata_payload_format_error unless metadata_payload.is_a?(Hash)
 
       metadata_fields, errors = validate_and_build_metadata_fields(metadata_payload)
-      unless errors.empty?
-        user_errors = errors.map do |error|
-          {
-            path: ['metadata'],
-            message: "#{error} metadata is not JSON data"
-          }
-        end
-        return {
-          overall_status: nil,
-          status: nil,
-          errors: user_errors
-        }
-      end
+
+      return sample_metadata_format_error(errors) unless errors.empty?
 
       metadata_changes = Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields,
                                                                   current_user).execute
@@ -84,21 +51,14 @@ module Mutations
           message: error.message
         }
       end
-      {
-        overall_status:,
-        status: metadata_changes,
-        errors: user_errors
-      }
+
+      attach_return_values(overall_status:, status: metadata_changes, errors: user_errors)
     rescue JSON::ParserError => e
       user_errors = [{
         path: ['metadata'],
         message: "JSON data is not formatted correctly. #{e.message}"
       }]
-      {
-        overall_status: nil,
-        status: nil,
-        errors: user_errors
-      }
+      attach_return_values(errors: user_errors)
     end
 
     def ready?(**_args)
@@ -115,6 +75,43 @@ module Mutations
       else
         get_group_from_id_or_puid_args(args)
       end
+    end
+
+    def namespace_error(args)
+      path = args.key?(:project_puid) || args.key?(:project_id) ? 'project' : 'group'
+      user_errors = [{
+        path: [path],
+        message: "not found by provided ID or PUID: #{args.values_at(:project_puid, :project_id, :group_puid,
+                                                                     :group_id).compact[0]}"
+      }]
+
+      attach_return_values(errors: user_errors)
+    end
+
+    def metadata_payload_format_error
+      user_errors = [{
+        path: ['metadataPayload'],
+        message: 'is not JSON data'
+      }]
+      attach_return_values(errors: user_errors)
+    end
+
+    def sample_metadata_format_error(errors)
+      user_errors = errors.map do |error|
+        {
+          path: ['metadata'],
+          message: "#{error} metadata is not JSON data"
+        }
+      end
+      attach_return_values(errors: user_errors)
+    end
+
+    def attach_return_values(overall_status: nil, status: nil, errors: [])
+      {
+        overall_status:,
+        status:,
+        errors:
+      }
     end
 
     def validate_and_build_metadata_fields(metadata_payload)
