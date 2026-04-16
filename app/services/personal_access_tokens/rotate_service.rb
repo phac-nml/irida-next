@@ -33,6 +33,8 @@ module PersonalAccessTokens
       @existing_personal_access_token
     end
 
+    private
+
     def validate_existing_token
       return if @existing_personal_access_token.active?
 

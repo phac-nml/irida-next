@@ -1,16 +1,2 @@
-<%= turbo_stream.update "personal-access-token-alert", viral_alert(type:, message:) %>
-
-<% if local_assigns[:personal_access_token] %>
-  <%= turbo_stream.update "rotate-access-token-section",
-                        partial: "groups/bots/access_token_section",
-                        locals: {
-                          bot_account_name: @bot_account.user.email,
-                          token: personal_access_token.token,
-                        } %>
-  <%= turbo_stream.replace "personal_access_tokens",
-                      partial: "table",
-                      locals: {
-                        personal_access_tokens: @personal_access_tokens,
-                      } %>
-  <turbo-stream action="refresh"></turbo-stream>
-<% end %>
+<%= render partial: "shared/personal_access_tokens/rotate",
+           locals: { partial_path: "groups/bots/access_token_section", type: type, message: message, personal_access_token: personal_access_token } %>

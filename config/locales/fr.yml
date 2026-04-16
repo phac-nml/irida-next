@@ -370,7 +370,7 @@ fr:
       revoke:
         success: Jeton d’accès personnel %{pat_name} révoqué avec succès
       rotate:
-        success: Le jeton d’accès personnel %{pat_name} a été fait pivoter avec succès
+        success: Le jeton d’accès personnel %{pat_name} a été pivoté avec succès
     membership_actions:
       create:
         success: Membre %{user} ajouté avec succès
