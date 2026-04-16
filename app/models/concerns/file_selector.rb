@@ -4,47 +4,6 @@
 module FileSelector
   extend ActiveSupport::Concern
 
-  ### TODO START: Remove functions between this block when feature flag v2_samplesheet is retired ###
-  def sorted_files
-    return {} if attachments.empty?
-
-    @sorted_files || sort_files
-  end
-
-  def sort_files # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    singles = []
-    pe_forward = []
-    pe_reverse = []
-    node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
-                                           Arel::Nodes::Quoted.new('direction'))
-    non_reverse_attachments = attachments.where(node.eq(nil).or(node.not_eq('reverse'))).order(:created_at, :id)
-
-    non_reverse_attachments.each do |attachment|
-      case attachment.metadata['direction']
-      when nil
-        singles << retrieve_attachment_attributes(attachment)
-      when 'forward'
-        pe_forward << retrieve_attachment_attributes(attachment)
-        pe_reverse << retrieve_attachment_attributes(attachment.associated_attachment)
-      end
-    end
-
-    @sorted_files = { singles:, pe_forward:, pe_reverse: }
-    @sorted_files
-  end
-
-  def retrieve_attachment_attributes(attachment)
-    {
-      filename: attachment.file.filename.to_s,
-      global_id: attachment.to_global_id,
-      id: attachment.id,
-      byte_size: attachment.byte_size,
-      created_at: attachment.created_at,
-      metadata: attachment.metadata
-    }
-  end
-  ### TODO END ###
-
   def file_selector_fastq_files(property, pattern, pe_only)
     fastq_files = query_fastq_files(property == 'fastq_1' ? 'forward' : 'reverse', pattern,
                                     property == 'fastq_1' && !pe_only)
