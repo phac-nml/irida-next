@@ -327,4 +327,45 @@ class ProfileTest < ApplicationSystemTestCase
       end
     end
   end
+
+  test 'can toggle experimental features with keyboard and keep focus' do
+    original_config = USER_OPT_IN_FEATURE_CONFIG.dup
+    config_with_email_allowlist = {
+      'user_opt_in_features' => {
+        'data_grid_samples_table' => {
+          'allowlist' => [@user.email],
+          'name' => { 'en' => 'Data Grid Samples Table' },
+          'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+        }
+      }
+    }
+
+    silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, config_with_email_allowlist) }
+    Flipper.disable(:data_grid_samples_table)
+    Flipper.disable_actor(:data_grid_samples_table, @user)
+
+    visit profile_experimental_features_path
+
+    toggle_selector = '#experimental-feature-data_grid_samples_table-toggle'
+    toggle_id = 'experimental-feature-data_grid_samples_table-toggle'
+    find(toggle_selector, visible: :all)
+
+    reached_toggle = false
+    20.times do
+      find('body').send_keys(:tab)
+      reached_toggle = evaluate_script('document.activeElement && document.activeElement.id') == toggle_id
+      break if reached_toggle
+    end
+
+    assert reached_toggle
+
+    find('body').send_keys(:space)
+
+    assert_selector "#{toggle_selector}:checked", visible: :all
+    assert_equal toggle_id, evaluate_script('document.activeElement && document.activeElement.id')
+  ensure
+    silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, original_config) }
+    Flipper.enable(:data_grid_samples_table)
+    Flipper.disable_actor(:data_grid_samples_table, @user)
+  end
 end

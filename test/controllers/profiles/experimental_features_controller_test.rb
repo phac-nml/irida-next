@@ -46,6 +46,28 @@ module Profiles
       end
     end
 
+    test 'should render toggle with switch semantics and status association' do
+      sign_in @user
+      original_config = USER_OPT_IN_FEATURE_CONFIG.dup
+      config_with_email_allowlist = {
+        'user_opt_in_features' => {
+          'data_grid_samples_table' => {
+            'allowlist' => [@user.email],
+            'name' => { 'en' => 'Data Grid Samples Table' },
+            'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+          }
+        }
+      }
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, config_with_email_allowlist) }
+
+      get profile_experimental_features_url
+
+      assert_response :success
+      assert_select "input[type='checkbox'][id$='-toggle'][role='switch'][aria-describedby$='-status']"
+    ensure
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, original_config) }
+    end
+
     test 'should enable actor for allowlisted feature via turbo_stream' do
       sign_in @user
       patch profile_experimental_features_path(format: :turbo_stream),

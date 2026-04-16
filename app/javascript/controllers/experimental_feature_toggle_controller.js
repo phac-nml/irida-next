@@ -1,5 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
+const focusRestoreKeys = new Set();
+
 /**
  * Experimental Feature Toggle Controller
  *
@@ -15,14 +17,28 @@ import { Controller } from "@hotwired/stimulus";
  */
 export default class extends Controller {
   static targets = ["checkbox", "pill"];
+  static values = { featureKey: String };
 
   connect() {
     this.updatePill();
+    this.restoreFocus();
   }
 
   toggle() {
+    if (this.hasFeatureKeyValue) {
+      focusRestoreKeys.add(this.featureKeyValue);
+    }
+
     this.updatePill();
     this.element.requestSubmit();
+  }
+
+  restoreFocus() {
+    if (!this.hasCheckboxTarget || !this.hasFeatureKeyValue) return;
+    if (!focusRestoreKeys.has(this.featureKeyValue)) return;
+
+    this.checkboxTarget.focus();
+    focusRestoreKeys.delete(this.featureKeyValue);
   }
 
   updatePill() {
