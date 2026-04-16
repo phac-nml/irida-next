@@ -40,16 +40,18 @@ module Profiles
           render :update, locals: { feature_key:, success: true, feature:, message: nil }
         end
         format.html do
-          flash[:success] = t('.success')
+          flash[:success] = t('profiles.experimental_features.update.success')
           redirect_to profile_experimental_features_path
         end
       end
     end
 
+    # i18n-tasks-use t('profiles.experimental_features.update.not_eligible')
     def reject_ineligible_feature(feature_key)
       reject_request(:forbidden, 'profiles.experimental_features.update.not_eligible', feature_key:)
     end
 
+    # i18n-tasks-use t('profiles.experimental_features.update.error')
     def reject_toggle_error(feature_key, feature)
       reject_request(:unprocessable_content, 'profiles.experimental_features.update.error', feature_key:, feature:)
     end
