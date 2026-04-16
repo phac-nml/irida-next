@@ -179,6 +179,9 @@ module Profiles
     end
 
     test 'should handle flipper failure gracefully when enabling actor' do
+      flipper_singleton = nil
+      original_enable_actor = nil
+
       sign_in @user
       flipper_singleton = Flipper.singleton_class
       original_enable_actor = Flipper.method(:enable_actor)
@@ -195,7 +198,9 @@ module Profiles
       assert_match 'target="flashes"', response.body
       assert_not Flipper[:data_grid_samples_table].actors_value.include?(@user.flipper_id)
     ensure
-      flipper_singleton.send(:define_method, :enable_actor, original_enable_actor)
+      if flipper_singleton && original_enable_actor
+        flipper_singleton.send(:define_method, :enable_actor, original_enable_actor)
+      end
     end
 
     test 'should redirect unauthenticated user to sign in' do
