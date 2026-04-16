@@ -4,7 +4,7 @@
   "type": "module",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@herb-tools/formatter": "^0.9.5",
+    "@herb-tools/formatter": "^0.9.6",
     "@herb-tools/linter": "^0.9.6",
     "axe-core": "^4.11.2",
     "eslint": "^10.2.0",
