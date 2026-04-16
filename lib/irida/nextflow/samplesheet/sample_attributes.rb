@@ -17,10 +17,12 @@ module Irida
         end
 
         def samples_workflow_executions_attributes
-          attachments = samples_attachments(samples)
-          samples.to_h do |sample|
-            [sample.id, workflow_execution_attributes(sample, attachments)]
-          end
+          samples.each_slice(1000).map do |samples_batch|
+            attachments = samples_attachments(samples_batch)
+            samples_batch.to_h do |sample|
+              [sample.id, workflow_execution_attributes(sample, attachments)]
+            end
+          end.reduce({}, :merge)
         end
 
         private
@@ -61,7 +63,7 @@ module Irida
 
               attachments[property] = attachments[property].select(
                 'DISTINCT ON (attachable_id) attachments.*, active_storage_blobs.filename as filename'
-              ).order(:attachable_id, created_at: :desc, id: :desc).index_by(&:attachable_id)
+              ).order(:attachable_id).recent.index_by(&:attachable_id)
             end
           end
           attachments
