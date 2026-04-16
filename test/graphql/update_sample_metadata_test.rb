@@ -317,7 +317,7 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     data = result['data']['updateSampleMetadata']
 
     assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
-    assert_empty data['errors']
+    assert_not_empty data['errors']
 
     assert_not_empty data['status']
     assert_not_empty data['status'][:added]
@@ -344,6 +344,14 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal 'A Test', data['sample']['metadata']['string']
     assert_not data['sample']['metadata'].include?('empty')
     assert_not data['sample']['metadata'].include?('nil')
+
+    expected_error = [{
+      'path' => %w[sample base],
+      'message' => I18n.t('services.samples.metadata.metadata_fields_not_found',
+                          sample_name: @sample.name,
+                          metadata_fields: %w[empty nil].join(', '))
+    }]
+    assert_equal expected_error, data['errors']
   end
 
   test 'updateSampleMetadata mutation should strip leading/trailing whitespaces from metadata value' do
