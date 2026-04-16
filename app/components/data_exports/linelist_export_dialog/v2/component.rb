@@ -12,6 +12,14 @@ module DataExports
           @templates = templates
           @system_arguments = system_arguments
         end
+
+        def graphql_url
+          helpers.api_graphql_path
+        end
+
+        def sample_graphql_id_prefix
+          "gid://#{GlobalID.app}/Sample/"
+        end
       end
     end
   end

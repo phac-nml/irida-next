@@ -4,6 +4,8 @@ export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
   static values = {
     workerUrl: String,
+    graphqlUrl: String,
+    sampleGraphqlIdPrefix: String,
     minimumVisibleDurationMs: {
       type: Number,
       default: 3500,
@@ -69,6 +71,8 @@ export default class extends Controller {
     const metadataFields = this.selectedMetadataFields();
     const format = this.selectedFormat();
     const namespaceId = this.selectedNamespaceId();
+    const graphqlUrl = this.graphqlUrl();
+    const sampleGraphqlIdPrefix = this.sampleGraphqlIdPrefix();
     const selectedCount = sampleIds.length;
 
     if (!selectedCount) {
@@ -109,6 +113,9 @@ export default class extends Controller {
         sample_ids: sampleIds,
         metadata_fields: metadataFields,
         namespace_id: namespaceId,
+        graphql_url: graphqlUrl,
+        csrf_token: this.csrfToken(),
+        sample_graphql_id_prefix: sampleGraphqlIdPrefix,
         format,
         filename,
         total_count: totalCount,
@@ -291,6 +298,19 @@ export default class extends Controller {
     } catch {
       return [];
     }
+  }
+
+  graphqlUrl() {
+    return this.graphqlUrlValue;
+  }
+
+  csrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta?.getAttribute("content") || "";
+  }
+
+  sampleGraphqlIdPrefix() {
+    return this.sampleGraphqlIdPrefixValue;
   }
 
   selectionStorageKey() {
