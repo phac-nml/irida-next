@@ -85,7 +85,10 @@ module Profiles
         assert_equal :error, result.error_key
         assert_equal false, result.feature[:enabled]
       ensure
-        flipper_singleton.send(:define_method, :enable_actor, original_enable_actor) if flipper_singleton && original_enable_actor
+        if flipper_singleton && original_enable_actor
+          flipper_singleton.send(:define_method, :enable_actor,
+                                 original_enable_actor)
+        end
       end
 
       private
