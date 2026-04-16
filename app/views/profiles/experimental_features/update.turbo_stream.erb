@@ -5,7 +5,13 @@
 <% end %>
 
 <% unless success %>
-  <%= turbo_stream.update "experimental-feature-#{feature_key}-status" do %>
-    <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= t('.error') %></p>
+  <% error_message = local_assigns[:message].presence || t('.error') %>
+  <% if feature.present? %>
+    <%= turbo_stream.update "experimental-feature-#{feature_key}-status" do %>
+      <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= error_message %></p>
+    <% end %>
+  <% end %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type: :error, data: error_message) %>
   <% end %>
 <% end %>

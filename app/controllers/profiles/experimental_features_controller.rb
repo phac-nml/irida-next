@@ -3,7 +3,7 @@
 # Purpose: To handle user opt-in to experimental features via Flipper actor gates
 module Profiles
   # Controller for the user experimental features opt-in page
-  class ExperimentalFeaturesController < Profiles::ApplicationController
+  class ExperimentalFeaturesController < Profiles::ApplicationController # rubocop:disable Metrics/ClassLength
     before_action :page_title
 
     def show
@@ -14,11 +14,15 @@ module Profiles
     def update
       authorize! @user, to: :update?
 
-      feature_key = params[:feature_key].to_sym
+      feature_key = parsed_feature_key
+      return reject_invalid_params unless feature_key
+
+      enabled = parsed_enabled
+      return reject_invalid_params(feature_key) if enabled.nil?
 
       return reject_ineligible_feature(feature_key) unless allowlisted_feature?(feature_key, @user)
 
-      toggle_feature(feature_key)
+      toggle_feature(feature_key, enabled)
     end
 
     def current_page
@@ -29,16 +33,35 @@ module Profiles
 
     def reject_ineligible_feature(feature_key)
       respond_to do |format|
-        format.turbo_stream { render :update, locals: { feature_key:, success: false, feature: nil } }
+        format.turbo_stream do
+          render :update,
+                 status: :forbidden,
+                 locals: { feature_key:, success: false, feature: nil,
+                           message: t('profiles.experimental_features.update.not_eligible') }
+        end
         format.html do
-          flash[:error] = t('.not_eligible')
+          flash[:error] = t('profiles.experimental_features.update.not_eligible')
           redirect_to profile_experimental_features_path
         end
       end
     end
 
-    def toggle_feature(feature_key) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      enabled = params[:enabled] == '1'
+    def reject_invalid_params(feature_key = nil)
+      respond_to do |format|
+        format.turbo_stream do
+          render :update,
+                 status: :unprocessable_content,
+                 locals: { feature_key:, success: false, feature: nil,
+                           message: t('profiles.experimental_features.update.error') }
+        end
+        format.html do
+          flash[:error] = t('profiles.experimental_features.update.error')
+          redirect_to profile_experimental_features_path
+        end
+      end
+    end
+
+    def toggle_feature(feature_key, enabled) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       if enabled
         Flipper.enable_actor(feature_key, @user)
       else
@@ -49,16 +72,22 @@ module Profiles
         format.turbo_stream do
           render :update, locals: { feature_key:, success: true, feature: feature_hash_for(feature_key, enabled) }
         end
-        format.html { redirect_to profile_experimental_features_path }
+        format.html do
+          flash[:success] = t('profiles.experimental_features.update.success')
+          redirect_to profile_experimental_features_path
+        end
       end
     rescue StandardError => e
       Rails.logger.error "ExperimentalFeaturesController#update error: #{e.message}"
       respond_to do |format|
         format.turbo_stream do
-          render :update, locals: { feature_key:, success: false, feature: { key: feature_key, enabled: !enabled } }
+          render :update,
+                 status: :unprocessable_content,
+                 locals: { feature_key:, success: false, feature: { key: feature_key, enabled: !enabled },
+                           message: t('profiles.experimental_features.update.error') }
         end
         format.html do
-          flash[:error] = t('.error')
+          flash[:error] = t('profiles.experimental_features.update.error')
           redirect_to profile_experimental_features_path
         end
       end
@@ -86,8 +115,15 @@ module Profiles
       }
     end
 
-    def user_eligible?(_user, feature_config)
-      feature_config['allowlist'] == 'all'
+    def user_eligible?(user, feature_config)
+      allowlist = feature_config['allowlist']
+      return true if allowlist == 'all'
+      return false unless allowlist.is_a?(Array)
+
+      user_email = user&.email.to_s.strip.downcase
+      return false if user_email.blank?
+
+      allowlist.any? { |email| email.to_s.strip.downcase == user_email }
     end
 
     def allowlisted_feature?(key, user)
@@ -98,6 +134,20 @@ module Profiles
       return false if feature_config.nil?
 
       user_eligible?(user, feature_config)
+    end
+
+    def parsed_feature_key
+      raw_feature_key = params[:feature_key].to_s.strip
+      return nil if raw_feature_key.blank?
+
+      raw_feature_key.to_sym
+    end
+
+    def parsed_enabled
+      return true if params[:enabled] == '1'
+      return false if params[:enabled] == '0'
+
+      nil
     end
 
     def page_title
