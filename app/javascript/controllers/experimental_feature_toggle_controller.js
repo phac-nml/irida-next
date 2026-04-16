@@ -5,11 +5,13 @@ const focusRestoreKeys = new Set();
 /**
  * Experimental Feature Toggle Controller
  *
- * Submits the parent form when the toggle checkbox changes and keeps the
- * visual pill in sync with the checkbox state.
+ * Submits the parent form when the toggle checkbox changes, keeps the
+ * visual pill in sync with the checkbox state, and restores focus after
+ * Turbo replaces the DOM.
  *
  * @example
- * <form data-controller="experimental-feature-toggle">
+ * <form data-controller="experimental-feature-toggle"
+ *       data-experimental-feature-toggle-feature-key-value="my_feature">
  *   <input type="checkbox" data-experimental-feature-toggle-target="checkbox"
  *          data-action="change->experimental-feature-toggle#toggle">
  *   <span data-experimental-feature-toggle-target="pill"></span>
@@ -20,11 +22,21 @@ export default class extends Controller {
   static values = { featureKey: String };
 
   connect() {
+    this.submitting = false;
     this.updatePill();
     this.restoreFocus();
   }
 
+  disconnect() {
+    if (this.hasFeatureKeyValue) {
+      focusRestoreKeys.delete(this.featureKeyValue);
+    }
+  }
+
   toggle() {
+    if (this.submitting) return;
+    this.submitting = true;
+
     if (this.hasFeatureKeyValue) {
       focusRestoreKeys.add(this.featureKeyValue);
     }
@@ -43,6 +55,7 @@ export default class extends Controller {
 
   updatePill() {
     if (!this.hasPillTarget || !this.hasCheckboxTarget) return;
+
     const on = this.checkboxTarget.checked;
     this.pillTarget.classList.toggle("bg-primary-600", on);
     this.pillTarget.classList.toggle("dark:bg-primary-500", on);
