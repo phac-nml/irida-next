@@ -1268,10 +1268,6 @@ en:
       show:
         title: Delete account
     experimental_features:
-      features:
-        data_grid_samples_table:
-          description: Enable the new data grid for the samples table.
-          name: Data Grid Samples Table
       show:
         description: These features are experimental and may change or be removed. You can enable or disable them for your account at any time.
         empty_state:
