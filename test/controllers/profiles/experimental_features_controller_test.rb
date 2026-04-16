@@ -84,5 +84,69 @@ module Profiles
       assert_response :redirect
       assert_redirected_to profile_experimental_features_path
     end
+
+    test 'should render feature name from config' do
+      sign_in @user
+      original_config = USER_OPT_IN_FEATURE_CONFIG.dup
+      config_with_custom_name = {
+        'user_opt_in_features' => {
+          'data_grid_samples_table' => {
+            'allowlist' => 'all',
+            'name' => { 'en' => 'Custom Config Feature Name' },
+            'description' => { 'en' => 'Custom config description.' }
+          }
+        }
+      }
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, config_with_custom_name) }
+      get profile_experimental_features_url
+      assert_response :success
+      assert_match 'Custom Config Feature Name', response.body
+    ensure
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, original_config) }
+    end
+
+    test 'should render French feature name from config when locale is fr' do
+      sign_in @user
+      original_config = USER_OPT_IN_FEATURE_CONFIG.dup
+      config_with_fr = {
+        'user_opt_in_features' => {
+          'data_grid_samples_table' => {
+            'allowlist' => 'all',
+            'name' => { 'en' => 'Data Grid Samples Table', 'fr' => 'Grille de données config' },
+            'description' => { 'en' => 'Enable the new data grid.', 'fr' => 'Activer la grille config.' }
+          }
+        }
+      }
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, config_with_fr) }
+      I18n.with_locale(:fr) do
+        get profile_experimental_features_url
+        assert_response :success
+        assert_match 'Grille de données config', response.body
+      end
+    ensure
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, original_config) }
+    end
+
+    test 'should fall back to English name when current locale missing from config' do
+      sign_in @user
+      original_config = USER_OPT_IN_FEATURE_CONFIG.dup
+      config_en_only = {
+        'user_opt_in_features' => {
+          'data_grid_samples_table' => {
+            'allowlist' => 'all',
+            'name' => { 'en' => 'English Only Feature Name' },
+            'description' => { 'en' => 'English only description.' }
+          }
+        }
+      }
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, config_en_only) }
+      I18n.with_locale(:fr) do
+        get profile_experimental_features_url
+        assert_response :success
+        assert_match 'English Only Feature Name', response.body
+      end
+    ensure
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, original_config) }
+    end
   end
 end

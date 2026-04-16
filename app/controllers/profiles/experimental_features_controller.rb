@@ -29,7 +29,7 @@ module Profiles
 
     def reject_ineligible_feature(feature_key)
       respond_to do |format|
-        format.turbo_stream { render :update, locals: { feature_key:, success: false, message: t('.not_eligible') } }
+        format.turbo_stream { render :update, locals: { feature_key:, success: false, feature: nil } }
         format.html do
           flash[:error] = t('.not_eligible')
           redirect_to profile_experimental_features_path
@@ -38,20 +38,25 @@ module Profiles
     end
 
     def toggle_feature(feature_key) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      if params[:enabled] == '1'
+      enabled = params[:enabled] == '1'
+      if enabled
         Flipper.enable_actor(feature_key, @user)
       else
         Flipper.disable_actor(feature_key, @user)
       end
 
       respond_to do |format|
-        format.turbo_stream { render :update, locals: { feature_key:, success: true } }
+        format.turbo_stream do
+          render :update, locals: { feature_key:, success: true, feature: feature_hash_for(feature_key, enabled) }
+        end
         format.html { redirect_to profile_experimental_features_path }
       end
     rescue StandardError => e
       Rails.logger.error "ExperimentalFeaturesController#update error: #{e.message}"
       respond_to do |format|
-        format.turbo_stream { render :update, locals: { feature_key:, success: false, message: t('.error') } }
+        format.turbo_stream do
+          render :update, locals: { feature_key:, success: false, feature: { key: feature_key, enabled: !enabled } }
+        end
         format.html do
           flash[:error] = t('.error')
           redirect_to profile_experimental_features_path
@@ -66,11 +71,19 @@ module Profiles
       features.filter_map do |key, feature_config|
         next unless user_eligible?(user, feature_config)
 
-        {
-          key: key.to_sym,
-          enabled: Flipper[key.to_sym].actors_value.include?(user.flipper_id)
-        }
+        feature_hash_for(key.to_sym, Flipper.enabled?(key.to_sym, user), feature_config)
       end
+    end
+
+    def feature_hash_for(key, enabled, feature_config = nil)
+      feature_config ||= USER_OPT_IN_FEATURE_CONFIG.dig('user_opt_in_features', key.to_s)
+      locale = I18n.locale.to_s
+      {
+        key:,
+        enabled:,
+        name: feature_config&.dig('name', locale) || feature_config&.dig('name', 'en'),
+        description: feature_config&.dig('description', locale) || feature_config&.dig('description', 'en')
+      }
     end
 
     def user_eligible?(_user, feature_config)
