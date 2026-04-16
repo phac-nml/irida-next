@@ -1,5 +1,11 @@
-<%= turbo_stream.update "experimental-feature-#{feature_key}-status" do %>
-  <% unless success %>
+<% if feature %>
+  <%= turbo_stream.replace "experimental-feature-#{feature_key}" do %>
+    <%= render "feature_row", feature: feature %>
+  <% end %>
+<% end %>
+
+<% unless success %>
+  <%= turbo_stream.update "experimental-feature-#{feature_key}-status" do %>
     <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= t('.error') %></p>
   <% end %>
 <% end %>
