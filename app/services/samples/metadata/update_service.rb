@@ -53,7 +53,8 @@ module Samples
         @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateValidationError => e
         @sample.reload.errors.add(:base, e.message)
-        { added: [], updated: [], deleted: [], not_updated: @metadata.nil? ? [] : @metadata.keys, unchanged: [] }
+        { added: [], updated: [], deleted: [], not_updated: @metadata.nil? ? [] : @metadata.keys, unchanged: [],
+          not_found: [] }
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.reload.errors.add(:base, e.message)
         @metadata_changes
