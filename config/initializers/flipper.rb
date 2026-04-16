@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 FLIPPER_FEATURE_CONFIG = YAML.safe_load(Rails.root.join('config/features.yml').read)
-USER_OPT_IN_FEATURE_CONFIG = YAML.safe_load(Rails.root.join('config/user_opt_in_features.yml').read)
 
 Rails.application.configure do
   config.flipper.memoize = ->(request) { !request.path.start_with?('/assets') }

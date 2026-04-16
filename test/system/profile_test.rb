@@ -5,8 +5,13 @@ require 'application_system_test_case'
 class ProfileTest < ApplicationSystemTestCase
   def setup
     @user = users(:john_doe)
+    @original_user_opt_in_features = current_application_settings.user_opt_in_features.deep_dup
     login_as @user
     @active_token_count = @user.personal_access_tokens.active.count
+  end
+
+  def teardown
+    current_application_settings.update!(user_opt_in_features: @original_user_opt_in_features || {})
   end
 
   test 'is accessible' do
@@ -329,18 +334,7 @@ class ProfileTest < ApplicationSystemTestCase
   end
 
   test 'can toggle experimental features with keyboard and keep focus' do
-    original_config = USER_OPT_IN_FEATURE_CONFIG.dup
-    config_with_email_allowlist = {
-      'user_opt_in_features' => {
-        'data_grid_samples_table' => {
-          'allowlist' => [@user.email],
-          'name' => { 'en' => 'Data Grid Samples Table' },
-          'description' => { 'en' => 'Enable the new data grid for the samples table.' }
-        }
-      }
-    }
-
-    silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, config_with_email_allowlist) }
+    update_user_opt_in_features(default_user_opt_in_features(allowlist: [@user.email]))
     Flipper.disable(:data_grid_samples_table)
     Flipper.disable_actor(:data_grid_samples_table, @user)
 
@@ -364,8 +358,28 @@ class ProfileTest < ApplicationSystemTestCase
     assert_selector "#{toggle_selector}:checked", visible: :all
     assert_equal toggle_id, evaluate_script('document.activeElement && document.activeElement.id')
   ensure
-    silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, original_config) }
     Flipper.enable(:data_grid_samples_table)
     Flipper.disable_actor(:data_grid_samples_table, @user)
+  end
+
+  private
+
+  def current_application_settings
+    Irida::CurrentSettings.current_application_settings
+  end
+
+  def update_user_opt_in_features(features)
+    current_application_settings.update!(user_opt_in_features: features)
+  end
+
+  def default_user_opt_in_features(allowlist: 'all', name_en: 'Data Grid Samples Table',
+                                   description_en: 'Enable the new data grid for the samples table.')
+    {
+      'data_grid_samples_table' => {
+        'allowlist' => allowlist,
+        'name' => { 'en' => name_en },
+        'description' => { 'en' => description_en }
+      }
+    }
   end
 end

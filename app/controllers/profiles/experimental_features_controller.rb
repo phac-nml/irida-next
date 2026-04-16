@@ -94,7 +94,7 @@ module Profiles
     end
 
     def eligible_features_for(user)
-      features = USER_OPT_IN_FEATURE_CONFIG['user_opt_in_features']
+      features = user_opt_in_features
       return [] if features.blank?
 
       features.filter_map do |key, feature_config|
@@ -109,7 +109,7 @@ module Profiles
     end
 
     def feature_hash_for(key, enabled, feature_config = nil)
-      feature_config ||= USER_OPT_IN_FEATURE_CONFIG.dig('user_opt_in_features', key.to_s)
+      feature_config ||= user_opt_in_features[key.to_s]
       locale = I18n.locale.to_s
       {
         key:,
@@ -131,7 +131,7 @@ module Profiles
     end
 
     def allowlisted_feature?(key, user)
-      features = USER_OPT_IN_FEATURE_CONFIG['user_opt_in_features']
+      features = user_opt_in_features
       return false if features.blank?
 
       feature_config = features[key.to_s]
@@ -145,6 +145,10 @@ module Profiles
       return nil if raw_feature_key.blank?
 
       raw_feature_key.to_sym
+    end
+
+    def user_opt_in_features
+      Irida::CurrentSettings.current_application_settings.user_opt_in_features
     end
 
     def parsed_enabled

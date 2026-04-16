@@ -520,7 +520,8 @@ CREATE TABLE public.application_settings (
     password_authentication_enabled boolean DEFAULT true NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    cleanup_inactive_access_tokens_after_days integer DEFAULT 30 NOT NULL
+  cleanup_inactive_access_tokens_after_days integer DEFAULT 30 NOT NULL,
+  user_opt_in_features jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -2142,6 +2143,7 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20260410170502'),
+('20260416000000'),
 ('20260306153207'),
 ('20260223130000'),
 ('20251201162848'),
