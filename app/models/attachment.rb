@@ -69,6 +69,10 @@ class Attachment < ApplicationRecord
     :file_text
   end
 
+  def self.metadata_arel_node(key)
+    Arel::Nodes::InfixOperation.new('->>', arel_table[:metadata], Arel::Nodes::Quoted.new(key))
+  end
+
   # override destroy so that on soft delete we don't delete the ActiveStorage::Attachment
   def destroy
     update(deleted_at: Time.current)
