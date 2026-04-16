@@ -118,11 +118,9 @@ module Profiles
         }
       }
       silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, config_with_fr) }
-      I18n.with_locale(:fr) do
-        get profile_experimental_features_url
-        assert_response :success
-        assert_match 'Grille de données config', response.body
-      end
+      get profile_experimental_features_url, params: { locale: 'fr' }
+      assert_response :success
+      assert_match 'Grille de données config', response.body
     ensure
       silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, original_config) }
     end
@@ -140,11 +138,9 @@ module Profiles
         }
       }
       silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, config_en_only) }
-      I18n.with_locale(:fr) do
-        get profile_experimental_features_url
-        assert_response :success
-        assert_match 'English Only Feature Name', response.body
-      end
+      get profile_experimental_features_url, params: { locale: 'fr' }
+      assert_response :success
+      assert_match 'English Only Feature Name', response.body
     ensure
       silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, original_config) }
     end

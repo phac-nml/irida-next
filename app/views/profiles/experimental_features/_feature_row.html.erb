@@ -1,11 +1,11 @@
 <div id="experimental-feature-<%= feature[:key] %>" class="flex items-center justify-between gap-4 py-1">
   <div class="min-w-0 flex-1">
     <p class="text-sm font-semibold text-slate-800 dark:text-white">
-      <%= t("profiles.experimental_features.features.#{feature[:key]}.name") %>
+      <%= feature[:name] %>
     </p>
 
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-      <%= t("profiles.experimental_features.features.#{feature[:key]}.description") %>
+      <%= feature[:description] %>
     </p>
   </div>
 
@@ -17,20 +17,17 @@
     <label class="relative inline-flex cursor-pointer items-center">
       <%= f.check_box :enabled,
             checked: feature[:enabled],
-            class: "sr-only peer",
-            aria: { label: t('profiles.experimental_features.toggle_label',
-                              feature: t("profiles.experimental_features.features.#{feature[:key]}.name")) },
-            data: { action: "change->experimental-feature-toggle#submit" } %>
+            class: "sr-only",
+            aria: { label: t('profiles.experimental_features.toggle_label', feature: feature[:name]) },
+            data: {
+              action: "change->experimental-feature-toggle#toggle",
+              experimental_feature_toggle_target: "checkbox"
+            } %>
 
       <span
-        class="
-          relative h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-primary-600 peer-focus-visible:outline
-          peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black
-          after:absolute after:top-[2px] after:left-[2px] after:inline-block after:h-5 after:w-5 after:rounded-full
-          after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-5 dark:bg-slate-700
-          dark:peer-checked:bg-primary-500 dark:peer-focus-visible:outline-white
-        "
+        class="relative h-6 w-11 rounded-full after:absolute after:top-[2px] after:left-[2px] after:inline-block after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-black dark:focus-within:outline-white <%= feature[:enabled] ? 'bg-primary-600 dark:bg-primary-500 after:translate-x-5' : 'bg-slate-200 dark:bg-slate-700' %>"
         aria-hidden="true"
+        data-experimental-feature-toggle-target="pill"
       ></span>
     </label>
   <% end %>
