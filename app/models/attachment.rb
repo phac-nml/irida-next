@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # entity class for Attachment
-class Attachment < ApplicationRecord
+class Attachment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include HasPuid
   include MetadataSortable
 
@@ -39,6 +39,30 @@ class Attachment < ApplicationRecord
   belongs_to :attachable, touch: :attachments_updated_at, polymorphic: true
 
   has_one_attached :file
+
+  scope :matching_filename, lambda { |pattern|
+    joins(:file_blob).where(ActiveStorage::Blob.arel_table[:filename].matches_regexp(pattern))
+  }
+
+  scope :with_direction, lambda { |direction, include_nils: false|
+    where(
+      if include_nils
+        Attachment.metadata_arel_node('direction').eq(nil).or(Attachment.metadata_arel_node('direction').eq(direction))
+      else
+        Attachment.metadata_arel_node('direction').eq(direction)
+      end
+    )
+  }
+
+  scope :with_associated_attachment, lambda {
+    where(Attachment.metadata_arel_node('associated_attachment_id').not_eq(nil))
+  }
+
+  scope :recent, -> { order(created_at: :desc, id: :desc) }
+
+  scope :prefer_associated_attachment, lambda {
+    order(Arel::Nodes::Case.new.when(Attachment.metadata_arel_node('associated_attachment_id').not_eq(nil)).then(0).else(1))
+  }
 
   validates :file, attached: true
 

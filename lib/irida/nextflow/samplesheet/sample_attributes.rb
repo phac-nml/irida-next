@@ -7,7 +7,7 @@ module Irida
       #
       # This class transforms schema-defined sample properties into workflow execution
       # parameters and collects file metadata for client-side rendering.
-      class SampleAttributes # rubocop:disable Metrics/ClassLength
+      class SampleAttributes
         attr_reader :samples, :properties, :file_attributes
 
         def initialize(samples:, properties:)
@@ -32,41 +32,22 @@ module Irida
           end
         end
 
-        def file_cell_pattern(entry)
-          if entry.key?('pattern')
-            entry['pattern']
-          elsif entry.key?('anyOf')
-            entry['anyOf'].select do |condition|
-              condition.key?('pattern')
-            end.pluck('pattern').join('|')
-          end
-        end
-
         def samples_attachments(samples) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           attachments = {}
-          file_cells.each do |property, entry| # rubocop:disable Metrics/BlockLength
-            expected_pattern = file_cell_pattern(entry)
+          file_cells.each do |property, entry|
+            expected_pattern = entry['pattern']
             next unless expected_pattern
 
             # fastq_2 files are queried in relation to fastq_1 files, so we can skip querying them here
             next if property == 'fastq_2'
 
-            attachments[property] = Attachment.joins(:file_blob)
+            attachments[property] = Attachment.matching_filename(expected_pattern)
                                               .where(attachable_type: 'Sample', attachable_id: samples.pluck(:id))
-                                              .where(ActiveStorage::Blob.arel_table[:filename].matches_regexp(expected_pattern))
 
             if property == 'fastq_1'
-              attachments[property] = attachments[property].where(
-                Attachment.metadata_arel_node('direction').eq(nil).or(
-                  Attachment.metadata_arel_node('direction').not_eq('reverse')
-                )
-              ).select(
+              attachments[property] = attachments[property].with_direction('forward', include_nils: true).select(
                 'DISTINCT ON (attachable_id) attachments.*, active_storage_blobs.filename as filename'
-              ).order(
-                :attachable_id,
-                Arel::Nodes::Case.new.when(Attachment.metadata_arel_node('associated_attachment_id').not_eq(nil)).then(0).else(1),
-                created_at: :desc, id: :desc
-              ).index_by(&:attachable_id)
+              ).order(:attachable_id).prefer_associated_attachment.recent.index_by(&:attachable_id)
 
               if file_cells.key?('fastq_2')
                 attachments['fastq_2'] = Attachment.joins(:file_blob)

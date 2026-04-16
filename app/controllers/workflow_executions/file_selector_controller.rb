@@ -2,7 +2,7 @@
 
 module WorkflowExecutions
   # Controller actions for FileSelector
-  class FileSelectorController < ApplicationController # rubocop:disable Metrics/ClassLength
+  class FileSelectorController < ApplicationController
     before_action :namespace, only: %i[new create]
     before_action :attachable, only: %i[new create]
     before_action :attachments, only: %i[create]
@@ -43,40 +43,15 @@ module WorkflowExecutions
     end
 
     def listing_attachments
-      if Flipper.enabled?(:v2_samplesheet, current_user)
-        listing_attachments_with_feature_flag
-      else
-        listing_attachments_without_feature_flag
-      end
-    end
-
-    def listing_attachments_with_feature_flag
-      pe_only = file_selector_params.key?('required_properties') &&
-                file_selector_params['required_properties'].include?('fastq_1') &&
-                file_selector_params['required_properties'].include?('fastq_2')
       @listing_attachments = case file_selector_params['property']
                              when 'fastq_1', 'fastq_2'
-                               @attachable.file_selector_fastq_files(file_selector_params['property'], pe_only)
+                               pe_only = file_selector_params.key?('required_properties') &&
+                                         file_selector_params['required_properties'].include?('fastq_1') &&
+                                         file_selector_params['required_properties'].include?('fastq_2')
+                               @attachable.file_selector_fastq_files(file_selector_params['property'],
+                                                                     file_selector_params['pattern'], pe_only)
                              else
                                @attachable.file_selector_other_files(file_selector_params['pattern'])
-                             end
-    end
-
-    def listing_attachments_without_feature_flag
-      @listing_attachments = case file_selector_params['property']
-                             when 'fastq_1', 'fastq_2'
-                               @attachable.samplesheet_fastq_files(
-                                 file_selector_params['property'], file_selector_params['pattern']
-                               )
-                             else
-                               if file_selector_params['pattern']
-                                 @attachable.filter_files_by_pattern(
-                                   @attachable.sorted_files[:singles] || [],
-                                   file_selector_params['pattern']
-                                 )
-                               else
-                                 @attachable.sorted_files[:singles] || []
-                               end
                              end
     end
 
