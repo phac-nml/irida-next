@@ -6,4 +6,4 @@ user_opt_in_features:
       fr: "Activer la nouvelle grille de données pour le tableau d'échantillons."
     name:
       en: "Data Grid Samples Table"
-      fr: "Tableau de données"
+      fr: "Tableau de données des échantillons"
