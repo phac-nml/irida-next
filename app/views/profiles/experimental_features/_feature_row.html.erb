@@ -2,7 +2,7 @@
 <% checkbox_id = "#{feature_dom_id}-toggle" %>
 <% status_id = "#{feature_dom_id}-status" %>
 
-<div id="<%= feature_dom_id %>" class="flex items-center justify-between gap-4 py-1">
+<div id="<%= feature_dom_id %>" class="flex flex-wrap items-center justify-between gap-4 py-1">
   <div class="min-w-0 flex-1">
     <p class="text-sm font-semibold text-slate-800 dark:text-white">
       <%= feature[:name] %>
@@ -55,6 +55,6 @@
     id="<%= status_id %>"
     role="status"
     aria-live="polite"
-    class="mt-1 w-full text-sm text-red-600 empty:hidden dark:text-red-400"
+    class="mt-1 basis-full text-sm text-red-600 empty:hidden dark:text-red-400"
   ></div>
 </div>

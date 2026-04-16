@@ -100,8 +100,12 @@ module Profiles
       features.filter_map do |key, feature_config|
         next unless user_eligible?(user, feature_config)
 
-        feature_hash_for(key.to_sym, Flipper.enabled?(key.to_sym, user), feature_config)
+        feature_hash_for(key.to_sym, actor_opted_in?(key, user), feature_config)
       end
+    end
+
+    def actor_opted_in?(feature_key, user)
+      Flipper[feature_key.to_sym].actors_value.include?(user.flipper_id)
     end
 
     def feature_hash_for(key, enabled, feature_config = nil)

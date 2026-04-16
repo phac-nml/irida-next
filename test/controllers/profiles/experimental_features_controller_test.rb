@@ -9,13 +9,26 @@ module Profiles
     def setup
       @user = users(:john_doe)
       @other_user = users(:jane_doe)
+      @original_user_opt_in_feature_config = USER_OPT_IN_FEATURE_CONFIG.deep_dup
+      baseline_config = {
+        'user_opt_in_features' => {
+          'data_grid_samples_table' => {
+            'allowlist' => 'all',
+            'name' => { 'en' => 'Data Grid Samples Table' },
+            'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+          }
+        }
+      }
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, baseline_config) }
       Flipper.add(:data_grid_samples_table) unless Flipper.exist?(:data_grid_samples_table)
       Flipper.disable(:data_grid_samples_table)
     end
 
     def teardown
+      silence_warnings { Object.const_set(:USER_OPT_IN_FEATURE_CONFIG, @original_user_opt_in_feature_config) }
       Flipper.disable_actor(:data_grid_samples_table, @user) if Flipper.exist?(:data_grid_samples_table)
       Flipper.disable_actor(:data_grid_samples_table, @other_user) if Flipper.exist?(:data_grid_samples_table)
+      Flipper.disable(:data_grid_samples_table) if Flipper.exist?(:data_grid_samples_table)
     end
 
     test 'should get show' do
@@ -44,6 +57,19 @@ module Profiles
       assert_select 'form[method=post]' do
         assert_select 'input[name="_method"][value=patch]'
       end
+    end
+
+    test 'should render toggle unchecked when feature is globally enabled but actor is not opted in' do
+      sign_in @user
+      Flipper.enable(:data_grid_samples_table)
+
+      get profile_experimental_features_url
+
+      assert_response :success
+      assert_select '#experimental-feature-data_grid_samples_table-toggle[checked]', count: 0
+      assert_not Flipper[:data_grid_samples_table].actors_value.include?(@user.flipper_id)
+    ensure
+      Flipper.disable(:data_grid_samples_table)
     end
 
     test 'should render toggle with switch semantics and status association' do
@@ -210,6 +236,38 @@ module Profiles
       assert_match I18n.t('profiles.experimental_features.update.error'), response.body
       assert_match 'target="flashes"', response.body
       assert Flipper[:data_grid_samples_table].actors_value.include?(@user.flipper_id)
+    end
+
+    test 'should reject missing enabled param' do
+      sign_in @user
+
+      patch profile_experimental_features_path(format: :turbo_stream),
+            params: { feature_key: 'data_grid_samples_table' }
+
+      assert_response :unprocessable_content
+      assert_match I18n.t('profiles.experimental_features.update.error'), response.body
+      assert_match 'target="flashes"', response.body
+      assert_not Flipper[:data_grid_samples_table].actors_value.include?(@user.flipper_id)
+    end
+
+    test 'should handle flipper failure gracefully when enabling actor' do
+      sign_in @user
+      flipper_singleton = Flipper.singleton_class
+      original_enable_actor = Flipper.method(:enable_actor)
+
+      flipper_singleton.send(:define_method, :enable_actor) do |_feature_key, _actor|
+        raise StandardError, 'simulated flipper failure'
+      end
+
+      patch profile_experimental_features_path(format: :turbo_stream),
+            params: { feature_key: 'data_grid_samples_table', enabled: '1' }
+
+      assert_response :unprocessable_content
+      assert_match I18n.t('profiles.experimental_features.update.error'), response.body
+      assert_match 'target="flashes"', response.body
+      assert_not Flipper[:data_grid_samples_table].actors_value.include?(@user.flipper_id)
+    ensure
+      flipper_singleton.send(:define_method, :enable_actor, original_enable_actor)
     end
 
     test 'should redirect unauthenticated user to sign in' do
