@@ -920,7 +920,7 @@ if Rails.env.development?
   app_setting.update!(
     user_opt_in_features: {
       'data_grid_samples_table' => {
-        'allowlist' => ['user1@email.com'],
+        'allowlist' => 'all',
         'name' => {
           'en' => 'Data Grid Samples Table',
           'fr' => 'Tableau de données des échantillons'

@@ -43,7 +43,6 @@ pre-commit:
         - ".rubocop.yml"
         - "lefthook.yml"
         - "pnpm-lock.yaml"
-        - "config/user_opt_in_features.yml"
         - "config/locales/*.yml"
         - "config/locales/**/*.yml"
         - "config/locales/*.yaml"
