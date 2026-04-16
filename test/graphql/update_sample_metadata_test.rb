@@ -452,4 +452,24 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     assert_equal({ 'insdc_accession' => 'ERR86724108' }, sample.reload.metadata)
   end
+
+  test 'empty metadata value when field does not exist' do
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { sampleId: @sample.to_global_id.to_s,
+                                              metadata: { newmetadatafield1: '' } }) # rubocop:disable Style/StringLiterals,Lint/RedundantCopDisableDirective
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['updateSampleMetadata']
+    puts data
+    assert_not_empty data
+    assert_not_empty data['errors']
+
+    expected_error = [{
+      'path' => ['metadata'],
+      'message' => "JSON data is not formatted correctly. unexpected character: 'bad' at line 1 column 1"
+    }]
+    assert_equal expected_error, data['errors']
+  end
 end

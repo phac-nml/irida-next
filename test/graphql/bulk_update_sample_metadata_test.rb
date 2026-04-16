@@ -766,4 +766,27 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal({ 'insdc_accession' => 'ERR86724108' }, sample43.reload.metadata)
     assert_equal({ 'country' => 'Moldova' }, sample44.reload.metadata)
   end
+
+  test 'empty metadata value when field does not exist' do
+    assert @sample3.metadata.empty?
+    assert @sample4.metadata.empty?
+    metadata_payload = { @sample3.puid => { 'newmetadatafield1' => '' },
+                         @sample4.name => { 'newmetadatafield2' => nil } }
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { metadata: metadata_payload,
+                                              projectId: @project2.to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when no authorization errors'
+    assert_not_empty data['errors']
+    assert_equal 'successful with errors', data['overallStatus']
+    assert_equal 2, data['status'].keys.count
+    assert_equal ['newmetadatafield1'], data['status'][@sample3.puid][:not_found]
+    assert_equal ['newmetadatafield2'], data['status'][@sample4.name][:not_found]
+    assert @sample3.reload.metadata.empty?
+    assert @sample4.reload.metadata.empty?
+  end
 end

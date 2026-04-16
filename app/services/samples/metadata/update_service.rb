@@ -24,7 +24,7 @@ module Samples
         @force_update = params.key?('force_update') ? params['force_update'] : false
       end
 
-      def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+      def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         authorize! sample.project, to: :update_sample?
 
         validate_sample_in_project
@@ -48,7 +48,7 @@ module Samples
         update_namespace_metadata_summary(@project.namespace, @metadata_changes[:deleted], @metadata_changes[:added],
                                           true)
 
-        handle_not_updated_fields if @metadata_changes[:not_updated].any?
+        handle_not_updated_fields if @metadata_changes[:not_updated].any? || @metadata_changes[:not_found].any?
 
         @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateValidationError => e
@@ -87,11 +87,19 @@ module Samples
       # analysis in assign_metadata_to_sample are handled here, where they are assigned to the @sample.error
       # and will be used for a :error flash message in the UI.
       def handle_not_updated_fields
-        metadata_fields_not_updated = @metadata_changes[:not_updated]
+        if @metadata_changes[:not_updated].any?
+          metadata_fields_not_updated = @metadata_changes[:not_updated]
+
+          raise SampleMetadataUpdateError,
+                I18n.t('services.samples.metadata.user_cannot_update_metadata',
+                       sample_name: @sample.name, metadata_fields: metadata_fields_not_updated.join(', '))
+        end
+
+        return unless @metadata_changes[:not_found].any?
 
         raise SampleMetadataUpdateError,
-              I18n.t('services.samples.metadata.user_cannot_update_metadata',
-                     sample_name: @sample.name, metadata_fields: metadata_fields_not_updated.join(', '))
+              I18n.t('services.samples.metadata.metadata_fields_not_found',
+                     sample_name: @sample.name, metadata_fields: @metadata_changes[:not_found].join(', '))
       end
 
       def update_metadata_summary

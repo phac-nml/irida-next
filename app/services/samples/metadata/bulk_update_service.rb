@@ -19,7 +19,7 @@ module Samples
       def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         authorize! @namespace, to: :update_sample_metadata?
         activity_data = {}
-        unsuccessful_updates = { not_updated: {}, unchanged: {} }
+        unsuccessful_updates = { not_updated: {}, unchanged: {}, not_found: {} }
         full_metadata_changes = {}
 
         starting_index = 0
@@ -40,17 +40,16 @@ module Samples
           metadata_changes = perform_metadata_update(sample, metadata, false)
 
           # no changes made for sample (metadata was invalid)
-          next if metadata_changes == { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
+          next if metadata_changes == { added: [], updated: [], deleted: [], not_updated: [], unchanged: [],
+                                        not_found: [] }
 
           full_metadata_changes[sample_identifier] = metadata_changes
 
-          unless metadata_changes[:not_updated].empty?
-            unsuccessful_updates[:not_updated][sample_identifier] =
-              metadata_changes[:not_updated]
-          end
-          unless metadata_changes[:unchanged].empty?
-            unsuccessful_updates[:unchanged][sample_identifier] =
-              metadata_changes[:unchanged]
+          %i[not_updated unchanged not_found].each do |unsuccessful_metadata_change_key|
+            next if metadata_changes[unsuccessful_metadata_change_key].empty?
+
+            unsuccessful_updates[unsuccessful_metadata_change_key][sample_identifier] =
+              metadata_changes[unsuccessful_metadata_change_key]
           end
 
           if metadata_changes[:added].empty? && metadata_changes[:deleted].empty? && metadata_changes[:updated].empty?
