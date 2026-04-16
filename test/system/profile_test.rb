@@ -346,6 +346,10 @@ class ProfileTest < ApplicationSystemTestCase
 
     assert_selector "#{toggle_selector}:checked", visible: :all
     assert_equal toggle[:id], evaluate_script('document.activeElement && document.activeElement.id')
+
+    # Verify the Turbo Stream round-trip persisted the toggle
+    visit profile_experimental_features_path
+    assert_selector "#{toggle_selector}:checked", visible: :all
   ensure
     Flipper.disable(:data_grid_samples_table)
     Flipper.disable_actor(:data_grid_samples_table, @user)

@@ -17,9 +17,11 @@ module Profiles
 
     def teardown
       current_application_settings.update!(user_opt_in_features: @original_user_opt_in_features || {})
-      Flipper.disable_actor(:data_grid_samples_table, @user) if Flipper.exist?(:data_grid_samples_table)
-      Flipper.disable_actor(:data_grid_samples_table, @other_user) if Flipper.exist?(:data_grid_samples_table)
-      Flipper.disable(:data_grid_samples_table) if Flipper.exist?(:data_grid_samples_table)
+      return unless Flipper.exist?(:data_grid_samples_table)
+
+      Flipper.disable_actor(:data_grid_samples_table, @user)
+      Flipper.disable_actor(:data_grid_samples_table, @other_user)
+      Flipper.disable(:data_grid_samples_table)
     end
 
     test 'should get show' do
@@ -190,27 +192,16 @@ module Profiles
     end
 
     test 'should handle flipper failure gracefully when enabling actor' do
-      flipper_singleton = nil
-      original_enable_actor = nil
-
       sign_in @user
-      flipper_singleton = Flipper.singleton_class
-      original_enable_actor = Flipper.method(:enable_actor)
 
-      flipper_singleton.send(:define_method, :enable_actor) do |_feature_key, _actor|
-        raise Flipper::Error, 'simulated flipper failure'
-      end
+      Flipper.stub(:enable_actor, ->(*) { raise Flipper::Error, 'simulated flipper failure' }) do
+        patch profile_experimental_features_path(format: :turbo_stream),
+              params: { feature_key: 'data_grid_samples_table', enabled: '1' }
 
-      patch profile_experimental_features_path(format: :turbo_stream),
-            params: { feature_key: 'data_grid_samples_table', enabled: '1' }
-
-      assert_response :unprocessable_content
-      assert_match I18n.t('profiles.experimental_features.update.error'), response.body
-      assert_match 'target="flashes"', response.body
-      assert_not Flipper[:data_grid_samples_table].actors_value.include?(@user.flipper_id)
-    ensure
-      if flipper_singleton && original_enable_actor
-        flipper_singleton.send(:define_method, :enable_actor, original_enable_actor)
+        assert_response :unprocessable_content
+        assert_match I18n.t('profiles.experimental_features.update.error'), response.body
+        assert_match 'target="flashes"', response.body
+        assert_not Flipper[:data_grid_samples_table].actors_value.include?(@user.flipper_id)
       end
     end
 

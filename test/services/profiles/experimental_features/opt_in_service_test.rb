@@ -68,26 +68,15 @@ module Profiles
       end
 
       test 'toggle returns unprocessable result when flipper raises' do
-        flipper_singleton = nil
-        original_enable_actor = nil
         service = OptInService.new(user: @user, settings: feature_settings(allowlist: [@user.email]))
-        flipper_singleton = Flipper.singleton_class
-        original_enable_actor = Flipper.method(:enable_actor)
 
-        flipper_singleton.send(:define_method, :enable_actor) do |_feature_key, _actor|
-          raise Flipper::Error, 'simulated flipper failure'
-        end
+        Flipper.stub(:enable_actor, ->(*) { raise Flipper::Error, 'simulated flipper failure' }) do
+          result = service.toggle(feature_key: 'data_grid_samples_table', enabled: true)
 
-        result = service.toggle(feature_key: 'data_grid_samples_table', enabled: true)
-
-        assert_equal false, result.success?
-        assert_equal :unprocessable_content, result.status
-        assert_equal :error, result.error_key
-        assert_equal false, result.feature[:enabled]
-      ensure
-        if flipper_singleton && original_enable_actor
-          flipper_singleton.send(:define_method, :enable_actor,
-                                 original_enable_actor)
+          assert_equal false, result.success?
+          assert_equal :unprocessable_content, result.status
+          assert_equal :error, result.error_key
+          assert_equal false, result.feature[:enabled]
         end
       end
 
