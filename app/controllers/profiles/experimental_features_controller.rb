@@ -11,10 +11,11 @@ module Profiles
 
     def update
       authorize! @user, to: :update?
-      parsed_input = parse_update_input
-      return unless parsed_input
+      feature_key = parsed_feature_key
+      enabled = parsed_enabled
 
-      feature_key, enabled = parsed_input
+      return reject_invalid_params(feature_key) unless feature_key && !enabled.nil?
+
       result = opt_in_service.toggle(feature_key:, enabled:)
       handle_toggle_result(feature_key, result)
     end
@@ -26,22 +27,6 @@ module Profiles
 
     private
 
-    def parse_update_input
-      feature_key = parsed_feature_key
-      unless feature_key
-        reject_invalid_params
-        return nil
-      end
-
-      enabled = parsed_enabled
-      if enabled.nil?
-        reject_invalid_params(feature_key)
-        return nil
-      end
-
-      [feature_key, enabled]
-    end
-
     def handle_toggle_result(feature_key, result)
       return reject_ineligible_feature(feature_key) if result.error_key == :not_eligible
       return reject_toggle_error(feature_key, result.feature) unless result.success?
@@ -52,7 +37,7 @@ module Profiles
     def render_toggle_success(feature_key, feature)
       respond_to do |format|
         format.turbo_stream do
-          render :update, locals: { feature_key:, success: true, feature: }
+          render :update, locals: { feature_key:, success: true, feature:, message: nil }
         end
         format.html do
           flash[:success] = t('.success')
@@ -90,11 +75,14 @@ module Profiles
     end
 
     def parsed_feature_key
-      raw_feature_key = params[:feature_key].to_s.strip
-      return nil if raw_feature_key.blank?
-      return nil unless /\A[a-z0-9_]+\z/.match?(raw_feature_key)
+      raw = params[:feature_key]
+      return nil unless raw.is_a?(String)
 
-      raw_feature_key
+      raw = raw.strip
+      return nil if raw.blank?
+      return nil unless /\A[a-z0-9_]+\z/.match?(raw)
+
+      raw
     end
 
     def parsed_enabled

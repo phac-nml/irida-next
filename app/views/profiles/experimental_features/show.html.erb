@@ -18,8 +18,8 @@
       </div>
     <% end %>
   <% else %>
-    <% @eligible_features.each do |feature| %>
-      <% card.with_section(border_bottom: true) do %>
+    <% @eligible_features.each.with_index do |feature, index| %>
+      <% card.with_section(border_bottom: index < @eligible_features.size - 1) do %>
         <%= render "feature_row", feature: feature %>
       <% end %>
     <% end %>
