@@ -41,8 +41,6 @@ class ApplicationSetting < ApplicationRecord
   end
 
   def validate_user_opt_in_features
-    return if user_opt_in_features.nil?
-
     unless user_opt_in_features.is_a?(Hash)
       errors.add(:user_opt_in_features, 'must be a hash')
       return

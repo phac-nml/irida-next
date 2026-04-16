@@ -78,6 +78,7 @@ module Profiles
         translations[locale] || translations['en']
       end
 
+      # TODO: Consider batch-fetching actor gates if feature count grows significantly.
       def actor_opted_in?(feature_key)
         # Intentional: actor gate state reflects user opt-in only, unlike Flipper.enabled?
         Flipper[feature_key.to_sym].actors_value.include?(user.flipper_id)
@@ -95,7 +96,7 @@ module Profiles
       end
 
       def normalized_user_email
-        @normalized_user_email ||= user&.email.to_s.strip.downcase
+        @normalized_user_email ||= (user&.email || '').strip.downcase
       end
 
       def normalize_settings(explicit_settings)
