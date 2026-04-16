@@ -640,7 +640,7 @@ type BulkUpdateSampleMetadataPayload {
   overallStatus: String
 
   """
-  The status of the mutation.
+  The status of the mutation which lists the fields which were added, removed, updated, unchanged, and not found.
   """
   status: JSON
 }
