@@ -142,6 +142,17 @@ module Profiles
       assert_not Flipper.exist?(:not_a_real_feature)
     end
 
+    test 'should reject malformed feature key params' do
+      sign_in @user
+
+      patch profile_experimental_features_path(format: :turbo_stream),
+            params: { feature_key: 'data-grid-samples-table', enabled: '1' }
+
+      assert_response :unprocessable_content
+      assert_match I18n.t('profiles.experimental_features.update.error'), response.body
+      assert_not Flipper[:data_grid_samples_table].actors_value.include?(@user.flipper_id)
+    end
+
     test 'should reject missing feature key' do
       sign_in @user
       patch profile_experimental_features_path(format: :turbo_stream),
@@ -187,7 +198,7 @@ module Profiles
       original_enable_actor = Flipper.method(:enable_actor)
 
       flipper_singleton.send(:define_method, :enable_actor) do |_feature_key, _actor|
-        raise StandardError, 'simulated flipper failure'
+        raise Flipper::Error, 'simulated flipper failure'
       end
 
       patch profile_experimental_features_path(format: :turbo_stream),
@@ -254,33 +265,6 @@ module Profiles
       get profile_experimental_features_url, params: { locale: 'fr' }
       assert_response :success
       assert_match 'English Only Feature Name', response.body
-    end
-
-    private
-
-    def current_application_settings
-      Irida::CurrentSettings.current_application_settings
-    end
-
-    def update_user_opt_in_features(features)
-      current_application_settings.update!(user_opt_in_features: features)
-    end
-
-    def default_user_opt_in_features(allowlist: 'all', name_en: 'Data Grid Samples Table',
-                                     description_en: 'Enable the new data grid for the samples table.',
-                                     name_fr: nil, description_fr: nil)
-      feature_name = { 'en' => name_en }
-      feature_description = { 'en' => description_en }
-      feature_name['fr'] = name_fr if name_fr
-      feature_description['fr'] = description_fr if description_fr
-
-      {
-        'data_grid_samples_table' => {
-          'allowlist' => allowlist,
-          'name' => feature_name,
-          'description' => feature_description
-        }
-      }
     end
   end
 end

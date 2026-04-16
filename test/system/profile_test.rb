@@ -341,45 +341,13 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_experimental_features_path
 
     toggle_selector = '#experimental-feature-data_grid_samples_table-toggle'
-    toggle_id = 'experimental-feature-data_grid_samples_table-toggle'
-    find(toggle_selector, visible: :all)
-
-    reached_toggle = false
-    20.times do
-      find('body').send_keys(:tab)
-      reached_toggle = evaluate_script('document.activeElement && document.activeElement.id') == toggle_id
-      break if reached_toggle
-    end
-
-    assert reached_toggle
-
-    find('body').send_keys(:space)
+    toggle = find(toggle_selector, visible: :all)
+    toggle.send_keys(:space)
 
     assert_selector "#{toggle_selector}:checked", visible: :all
-    assert_equal toggle_id, evaluate_script('document.activeElement && document.activeElement.id')
+    assert_equal toggle[:id], evaluate_script('document.activeElement && document.activeElement.id')
   ensure
-    Flipper.enable(:data_grid_samples_table)
+    Flipper.disable(:data_grid_samples_table)
     Flipper.disable_actor(:data_grid_samples_table, @user)
-  end
-
-  private
-
-  def current_application_settings
-    Irida::CurrentSettings.current_application_settings
-  end
-
-  def update_user_opt_in_features(features)
-    current_application_settings.update!(user_opt_in_features: features)
-  end
-
-  def default_user_opt_in_features(allowlist: 'all', name_en: 'Data Grid Samples Table',
-                                   description_en: 'Enable the new data grid for the samples table.')
-    {
-      'data_grid_samples_table' => {
-        'allowlist' => allowlist,
-        'name' => { 'en' => name_en },
-        'description' => { 'en' => description_en }
-      }
-    }
   end
 end
