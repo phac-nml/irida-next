@@ -548,6 +548,7 @@ fr:
       start_error: 'Impossible de démarrer l’exportation : %{message}'
       title: Exportation de liste détaillée
       unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
+      view_data_export: Voir dans les exportations de données
       xlsx: Excel (.xlsx)
     new_sample_export_dialog:
       available: Disponible

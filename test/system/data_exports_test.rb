@@ -1060,6 +1060,8 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector '#linelist-export-progress-window',
                     text: I18n.t('data_exports.new_linelist_export_dialog.save_queued', id: 'stub-export-id'),
                     wait: 5
+    assert_selector "#linelist-export-progress-window a[href$='/-/data_exports/stub-export-id']",
+                    text: I18n.t('data_exports.new_linelist_export_dialog.view_data_export')
     assert_no_text 'Download started:'
     assert_equal 1, evaluate_script('window.__linelistSaveRequests.length')
 

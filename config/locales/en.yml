@@ -548,6 +548,7 @@ en:
       start_error: 'Unable to start export: %{message}'
       title: Linelist Export
       unexpected_error: 'Unexpected error while generating export: %{message}'
+      view_data_export: View in Data Exports
       xlsx: Excel (.xlsx)
     new_sample_export_dialog:
       available: Available
