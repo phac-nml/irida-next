@@ -1,0 +1,23 @@
+<%= viral_alert(**alert_system_arguments) do %>
+  <div class="outline-hidden" data-controller="form-error-summary" tabindex="-1">
+    <h2 id="<%= heading_id %>" class="text-sm font-semibold">
+      <%= title_text %>
+    </h2>
+
+    <p id="<%= description_id %>" class="mt-1"><%= description_text %></p>
+
+    <ul class="mt-2 list-disc space-y-1 ps-5">
+      <% entries.each do |entry| %>
+        <li>
+          <%= link_to entry.message,
+          entry.href,
+          class: "font-medium underline underline-offset-2",
+          data: {
+            action: "form-error-summary#focusField",
+            "form-error-summary-target-id-param": entry.target_id,
+          } %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

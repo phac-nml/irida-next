@@ -725,7 +725,11 @@ en:
       title: Your work
       workflows: Workflow Executions
     form:
-      error_notification: 'Please review the problems below:'
+      error_notification: 'Please review the following problems:'
+      error_summary:
+        title:
+          one: There is 1 field with problems preventing submission
+          other: There are %{count} fields with problems preventing submission
     help: Help
     name: IRIDA Next
     navbar:
