@@ -469,5 +469,147 @@ module WorkflowExecutions
                       )
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
+
+    test 'create new workflow execution with array sample attributes' do
+      samples_workflow_executions_attributes = [
+        {
+          sample_id: @sample.id,
+          samplesheet_params: {
+            sample: @sample.puid,
+            fastq_1: @attachment.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        }
+      ]
+
+      workflow_params = {
+        name: 'Array Attribute Samples Test',
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert @workflow_execution.persisted?
+      assert_equal 1, @workflow_execution.samples_workflow_executions.size
+      assert_equal '1', @workflow_execution.tags['samplesCount']
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
+    end
+
+    test 'create new workflow execution with invalid attachment gid format' do
+      samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: @sample.id,
+          samplesheet_params: {
+            sample: @sample.puid,
+            fastq_1: 'not-a-gid' # rubocop:disable Naming/VariableNumber
+          }
+        }
+      }
+
+      workflow_params = {
+        name: 'Invalid GID Format Test',
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert_includes @workflow_execution.errors.full_messages,
+                      I18n.t(
+                        'validators.workflow_execution_samplesheet_params_validator.attachment_gid_error',
+                        property: 'fastq_1',
+                        sample_id: @sample.puid
+                      )
+      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
+    end
+
+    test 'create new workflow execution with missing attachment record gid' do
+      missing_attachment_gid = @attachment.to_global_id.to_s.sub(%r{/[^/]+\z}, '/does-not-exist')
+
+      samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: @sample.id,
+          samplesheet_params: {
+            sample: @sample.puid,
+            fastq_1: missing_attachment_gid # rubocop:disable Naming/VariableNumber
+          }
+        }
+      }
+
+      workflow_params = {
+        name: 'Missing Attachment Record Test',
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert_includes @workflow_execution.errors.full_messages,
+                      I18n.t(
+                        'validators.workflow_execution_samplesheet_params_validator.sample_attachment_error',
+                        property: 'fastq_1',
+                        sample_id: @sample.puid
+                      )
+      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
+    end
+
+    test 'create new workflow execution with blank required file cell' do
+      samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: @sample.id,
+          samplesheet_params: {
+            sample: @sample.puid,
+            fastq_1: nil # rubocop:disable Naming/VariableNumber
+          }
+        }
+      }
+
+      workflow_params = {
+        name: 'Blank Required File Cell Test',
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert_includes @workflow_execution.errors.full_messages,
+                      I18n.t(
+                        'validators.workflow_execution_samplesheet_params_validator.blank_error',
+                        property: 'fastq_1',
+                        sample_id: @sample.puid
+                      )
+      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
+    end
+
+    test 'does not create samples workflow executions when transaction rolls back after save!' do
+      workflow_params = {
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
+      }
+
+      assert_no_difference(-> { SamplesWorkflowExecution.count }, -> { WorkflowExecution.count }) do
+        WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+      end
+    end
   end
 end

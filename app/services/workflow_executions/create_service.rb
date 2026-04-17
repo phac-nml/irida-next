@@ -17,29 +17,16 @@ module WorkflowExecutions
       )
     end
 
-    def execute # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+    def execute
       return false if params.empty?
 
-      autoset_params if @workflow
-      @workflow_execution = WorkflowExecution.new(params.except(:samples_workflow_executions_attributes))
-
-      authorize! @workflow_execution.namespace, to: :submit_workflow?
-
-      @workflow_execution.submitter = current_user
-
-      @samples_count = if params[:samples_workflow_executions_attributes].is_a?(Array)
-                         params[:samples_workflow_executions_attributes].length
-                       else
-                         params[:samples_workflow_executions_attributes].keys.length
-                       end
+      initialize_workflow_execution
 
       add_workflow_execution_tags
 
       return @workflow_execution unless @workflow_execution.valid?
 
-      if @workflow_execution.valid? && params.key?(:workflow_params)
-        @workflow_execution.workflow_params = sanitized_workflow_params
-      end
+      assign_workflow_params
 
       # Check if required number of samples (min/max) is set for pipeline and set error to
       # non persisted workflow execution object if selected samples exceeds/doesn't meet this requirement
@@ -48,25 +35,51 @@ module WorkflowExecutions
       autoset_samplesheet_params
       validate_samplesheet_params
 
+      persist_workflow_execution
+      queue_preparation_job
+
+      @workflow_execution
+    end
+
+    def initialize_workflow_execution
+      autoset_params if @workflow
+      @workflow_execution = WorkflowExecution.new(params.except(:samples_workflow_executions_attributes))
+
+      authorize! @workflow_execution.namespace, to: :submit_workflow?
+
+      @workflow_execution.submitter = current_user
+      @samples_count = samples_workflow_execution_attributes.length
+    end
+
+    def assign_workflow_params
+      return unless params.key?(:workflow_params)
+
+      @workflow_execution.workflow_params = sanitized_workflow_params
+    end
+
+    def persist_workflow_execution
       ActiveRecord::Base.transaction do
         raise ActiveRecord::Rollback unless @workflow_execution.errors.empty?
 
-        @workflow_execution.save
-
-        SamplesWorkflowExecution.insert_all( # rubocop:disable Rails/SkipsModelValidations
-          @samplesheet_params.map do |params|
-            params.merge(workflow_execution_id: @workflow_execution.id)
-          end,
-          record_timestamps: true
-        )
+        @workflow_execution.save!
+        insert_samples_workflow_executions
       end
+    end
 
-      if @workflow_execution.errors.empty? && @workflow_execution.persisted?
-        create_activities
-        WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
-      end
+    def insert_samples_workflow_executions
+      SamplesWorkflowExecution.insert_all( # rubocop:disable Rails/SkipsModelValidations
+        @samplesheet_params.map do |params|
+          params.merge(workflow_execution_id: @workflow_execution.id)
+        end,
+        record_timestamps: true
+      )
+    end
 
-      @workflow_execution
+    def queue_preparation_job
+      return unless @workflow_execution.errors.empty? && @workflow_execution.persisted?
+
+      create_activities
+      WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
     end
 
     def add_workflow_execution_tags
@@ -99,6 +112,14 @@ module WorkflowExecutions
       return if @workflow.default_workflow_params.empty?
 
       params['workflow_params'].reverse_merge!(@workflow.default_workflow_params)
+    end
+
+    def samples_workflow_execution_attributes
+      attributes = params[:samples_workflow_executions_attributes]
+
+      return attributes if attributes.is_a?(Array)
+
+      attributes.values
     end
 
     def sanitize_workflow_param(property, value)
@@ -145,105 +166,119 @@ module WorkflowExecutions
                                                     }
     end
 
-    def autoset_samplesheet_params # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def autoset_samplesheet_params
       has_sample_name_param = @samplesheet_properties.properties.key?('sample_name')
-      samples_workflow_executions_attributes = if params[:samples_workflow_executions_attributes].is_a?(Array)
-                                                 params[:samples_workflow_executions_attributes]
-                                               else
-                                                 params[:samples_workflow_executions_attributes].values
-                                               end
-
-      @samplesheet_params = samples_workflow_executions_attributes.each_slice(1000).map do |batch|
-        batch_samples = Sample.where(id: batch.map { |attr| attr[:sample_id] }).select(:id, :puid, :name).index_by(&:id)
-
-        batch.map do |swe_params|
-          sample = batch_samples[swe_params[:sample_id]]
-
-          return swe_params unless sample
-
-          swe_params.with_indifferent_access
-                    .slice(:sample_id, :samplesheet_params)
-                    .deep_merge(samplesheet_params: {
-                      sample: sample.puid,
-                      sample_name: has_sample_name_param ? sample.name : nil
-                    }.compact)
-        end
-      end.flatten
+      @samplesheet_params = samples_workflow_execution_attributes.each_slice(1000).flat_map do |batch|
+        build_samplesheet_batch(batch, has_sample_name_param)
+      end
     end
 
-    def validate_samplesheet_params # rubocop:disable Metrics/AbcSize
+    def build_samplesheet_batch(batch, has_sample_name_param)
+      sample_ids = batch.pluck(:sample_id)
+      batch_samples = Sample.where(id: sample_ids).select(:id, :puid, :name).index_by(&:id)
+
+      batch.map do |swe_params|
+        sample = batch_samples[swe_params[:sample_id]]
+        next swe_params unless sample
+
+        swe_params.with_indifferent_access
+                  .slice(:sample_id, :samplesheet_params)
+                  .deep_merge(samplesheet_params: {
+                    sample: sample.puid,
+                    sample_name: has_sample_name_param ? sample.name : nil
+                  }.compact)
+      end
+    end
+
+    def validate_samplesheet_params
       file_cell_properties = @samplesheet_properties.properties.select do |_property, entry|
         Irida::Nextflow::Samplesheet::Properties::FILE_CELL_TYPES.include?(entry['cell_type'])
       end
 
       @samplesheet_params.each_slice(1000) do |batch|
-        file_cell_properties.each do |property, entry|
-          attachments = GlobalID::Locator.locate_many(batch.map do |params|
-            GlobalID.parse(params[:samplesheet_params][property])
-          end.compact, only: Attachment, ignore_missing: true).index_by(&:id)
+        validate_file_cells_in_batch(batch, file_cell_properties)
+      end
+    end
 
-          batch.each do |params|
-            value = params[:samplesheet_params][property]
+    def validate_file_cells_in_batch(batch, file_cell_properties)
+      file_cell_properties.each do |property, entry|
+        attachments = locate_batch_attachments(batch, property)
 
-            validate_file_cell(params[:sample_id], params[:samplesheet_params][:sample], value, property, entry,
-                               attachments)
-          end
+        batch.each do |params|
+          validate_file_cell(params:, property:, entry:, attachments:)
         end
       end
     end
 
-    def validate_file_cell(sample_id, sample_puid, value, property, entry, attachments) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity,Metrics/ParameterLists
-      if value.blank?
-        if entry['required']
-          @workflow_execution.errors.add(
-            :base,
-            I18n.t('validators.workflow_execution_samplesheet_params_validator.blank_error',
-                   property: property, sample_id: sample_puid)
-          )
-        end
+    def locate_batch_attachments(batch, property)
+      GlobalID::Locator.locate_many(batch.map do |params|
+        GlobalID.parse(params[:samplesheet_params][property])
+      end.compact, only: Attachment, ignore_missing: true).index_by(&:id)
+    end
 
-        return
-      end
+    def validate_file_cell(params:, property:, entry:, attachments:)
+      sample_id = params[:sample_id]
+      sample_puid = params[:samplesheet_params][:sample]
+      value = params[:samplesheet_params][property]
 
-      gid = GlobalID.parse(value)
+      return if missing_optional_value?(value, entry, property, sample_puid)
 
-      unless gid
-        @workflow_execution.errors.add(
-          :base,
-          I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_gid_error',
-                 property: property, sample_id: sample_puid)
-        )
-
-        return
-      end
+      gid = parse_gid(value, property, sample_puid)
+      return unless gid
 
       attachment = attachments[gid.model_id]
+      return unless valid_sample_attachment_or_add_error?(attachment, sample_id, property, sample_puid)
+      return if valid_file_format?(attachment, entry)
 
-      unless attachment.attachable_id == sample_id && attachment.attachable_type == 'Sample'
-        @workflow_execution.errors.add(
-          :base,
-          I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_attachment_error',
-                 property: property, sample_id: sample_puid)
-        )
+      add_file_cell_error('attachment_format_error', property:, sample_puid:, file_format: entry['pattern'])
+    end
 
-        return
-      end
+    def missing_optional_value?(value, entry, property, sample_puid)
+      return false if value.present?
 
-      valid = true
+      add_file_cell_error('blank_error', property:, sample_puid:) if entry['required']
+      true
+    end
 
+    def parse_gid(value, property, sample_puid)
+      gid = GlobalID.parse(value)
+      return gid if gid
+
+      add_file_cell_error('attachment_gid_error', property:, sample_puid:)
+      nil
+    end
+
+    def valid_sample_attachment_or_add_error?(attachment, sample_id, property, sample_puid)
+      return true if valid_sample_attachment?(attachment, sample_id)
+
+      add_file_cell_error('sample_attachment_error', property:, sample_puid:)
+      false
+    end
+
+    def valid_sample_attachment?(attachment, sample_id)
+      attachment.present? && attachment.attachable_id == sample_id && attachment.attachable_type == 'Sample'
+    end
+
+    def valid_file_format?(attachment, entry)
       case entry['cell_type']
       when 'fastq_cell'
-        valid = attachment.fastq?
+        attachment.fastq?
       when 'file_cell'
-        valid = attachment.filename.to_s.match?(entry['pattern']) if entry['pattern']
-      end
+        return true unless entry['pattern']
 
-      return if valid
+        attachment.filename.to_s.match?(entry['pattern'])
+      else
+        true
+      end
+    end
+
+    def add_file_cell_error(error_key, property:, sample_puid:, file_format: nil)
+      error_options = { property:, sample_id: sample_puid }
+      error_options[:file_format] = file_format if file_format
 
       @workflow_execution.errors.add(
         :base,
-        I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_format_error',
-               property: property, sample_id: sample_puid, file_format: entry['pattern'])
+        I18n.t("validators.workflow_execution_samplesheet_params_validator.#{error_key}", **error_options)
       )
     end
   end
