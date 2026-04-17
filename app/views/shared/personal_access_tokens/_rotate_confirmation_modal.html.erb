@@ -1,1 +1,23 @@
+<%= viral_dialog(open: open, id: 'rotate_confirmation_dialog') do |dialog| %>
+  <% dialog.with_header(title: t("personal_access_tokens.rotate_confirmation.title")) %>
 
+  <div class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400">
+    <p class="mb-4">
+      <%= t(
+        "personal_access_tokens.rotate_confirmation.description",
+        token_name: personal_access_token.name,
+        bot_name: bot_account.user.email,
+      ) %>
+    </p>
+
+    <%= form_with(url: rotate_path, method: :put,
+            data: {
+              turbo_frame: "_top",
+              controller: "token",
+              action:"turbo:submit-end->viral--dialog#close"
+            }
+          ) do |form| %>
+      <%= form.submit t('personal_access_tokens.rotate_confirmation.submit_button'), class: "button button-primary" %>
+    <% end %>
+  </div>
+<% end %>

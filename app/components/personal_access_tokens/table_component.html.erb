@@ -67,7 +67,7 @@
           <%= button_to t("personal_access_tokens.table.rotate"),
           rotate_path(row),
           data: rotate_data_attributes,
-          method: :put,
+          method: rotate_http_method,
           aria: {
             label: t(:"personal_access_tokens.table.rotate_aria_label", name: row[:name]),
           },

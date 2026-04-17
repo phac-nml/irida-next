@@ -390,6 +390,68 @@ module Groups
       ### VERIFY END ###
     end
 
+    test 'can rotate a personal access token' do
+      ### SETUP START ###
+      token = @group_bot_active_tokens.first
+      initial_active_token_count = @group_bot_active_tokens.count
+      initial_inactive_token_count = @group_bot_inactive_tokens.count
+
+      visit group_bots_path(@namespace)
+      # verify page rendered
+      assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                                      locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within "tr[id='#{dom_id(@group_bot)}']" do
+        click_button I18n.t('bots.index.table.active_tokens_aria_label', count: @group_bot_active_tokens.count,
+                                                                         name: @group_bot.user.email)
+      end
+
+      # verify bots token dialog rendered
+      assert_selector '#bot_tokens_dialog'
+      within('#bot_tokens_dialog') do
+        # verify PAT table rendered
+        assert_selector '#personal_access_tokens'
+        within('table tbody') do
+          assert_selector 'tr', count: 1
+        end
+        # rotate PAT
+        within "tr[id='#{dom_id(token)}']" do
+          click_button I18n.t('personal_access_tokens.table.rotate')
+        end
+      end
+
+      # verify rotate dialog rendered
+      assert_selector '#rotate_confirmation_dialog'
+      within('#rotate_confirmation_dialog') do
+        assert_text I18n.t('personal_access_tokens.rotate_confirmation.title')
+        # rotate
+        click_button I18n.t('personal_access_tokens.rotate_confirmation.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # success msg
+      assert_selector '#personal-access-token-alert'
+      within('#personal-access-token-alert') do
+        assert_text I18n.t('concerns.bot_personal_access_token_actions.rotate.success', pat_name: token.name)
+      end
+
+      # verify active token count did not change
+      within "tr[id='#{dom_id(@group_bot)}'] td:nth-child(2)" do
+        assert_text initial_active_token_count.to_s
+      end
+
+      # verify inactive token count increased
+      within "tr[id='#{dom_id(@group_bot)}'] td:nth-child(3)" do
+        assert_text (initial_inactive_token_count + 1).to_s
+      end
+      ### VERIFY END ###
+    end
+
     test 'PAT panel removed after personal access token revoke' do
       ### SETUP START ###
       visit group_bots_path(@namespace)
