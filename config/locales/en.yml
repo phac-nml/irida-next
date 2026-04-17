@@ -1091,7 +1091,7 @@ en:
         subject: Your access to %{type} '%{name}' has been revoked
     personal_access_token_mailer:
       new_ip_address_for_token:
-        body_html: Your personal access token '%{token_name}' was used from a new IP address %{ip_address}. If you do not recognize this ip address, please either revoke or rotate the token. Otherwise, no action is needed on your part.
+        body_html: Your personal access token '%{token_name}' was used from a new IP address %{ip_address}. If you do not recognize this IP address, please either revoke or rotate the token. Otherwise, no action is needed on your part.
         subject: New IP Address Added to Personal Access Token '%{token_name}'
     pipeline_mailer:
       complete_manager_email:
