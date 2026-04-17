@@ -158,6 +158,41 @@ module DataExports
       end
     end
 
+    test 'does not raise when sample_ids includes missing records' do
+      node_payload = {
+        'data' => { 'nodes' => [
+          {
+            'id' => @sample32.to_global_id.to_s,
+            '__typename' => 'Sample',
+            'puid' => @sample32.puid,
+            'name' => @sample32.name,
+            'project' => { 'puid' => @sample32.project.puid },
+            'metadata' => { 'metadatafield1' => @sample32.metadata['metadatafield1'] }
+          },
+          nil
+        ] }
+      }
+
+      schema_singleton = IridaSchema.singleton_class
+      schema_singleton.alias_method :__execute_for_test, :execute
+      schema_singleton.define_method(:execute) { |_query, **_kwargs| node_payload }
+
+      begin
+        missing_id = SecureRandom.uuid
+        result = DataExports::LinelistRowsService.call(
+          sample_ids: [@sample32.id, missing_id],
+          metadata_fields: ['metadatafield1'],
+          current_user: @user
+        )
+
+        assert_equal @sample32.puid, result[1][0]
+        assert_equal ['', '', '', ''], result[2]
+      ensure
+        schema_singleton.alias_method :execute, :__execute_for_test
+        schema_singleton.remove_method :__execute_for_test
+      end
+    end
+
     # nil metadata_fields ---------------------------------------------------
 
     test 'nil metadata_fields produces header with no metadata columns' do

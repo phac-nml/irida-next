@@ -82,9 +82,10 @@ module DataExports
     end
 
     def to_global_id(id)
-      return id.to_s if id.to_s.start_with?('gid://')
+      value = id.to_s
+      return value if value.start_with?('gid://')
 
-      Sample.find(id).to_global_id.to_s
+      "gid://#{GlobalID.app}/Sample/#{value}"
     end
 
     def build_header
