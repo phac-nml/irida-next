@@ -354,9 +354,6 @@ export default class extends Controller {
       this.errorContainerTarget.classList.remove("hidden");
       this.errorContainerTarget.setAttribute("aria-hidden", false);
     }
-    if (this.#selectedDate) {
-      this.setInputValue(this.#selectedDate);
-    }
   }
 
   // disables the error state once a valid date is entered/selected
