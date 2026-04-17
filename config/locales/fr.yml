@@ -536,6 +536,7 @@ fr:
       no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
       preparing_rows: Préparation de %{count} lignes
+      queueing_save: Mise en file d’attente de l’enregistrement dans les exportations de données...
       save_failed: 'La sauvegarde sur le serveur a échoué : %{message}'
       save_queued: 'Enregistré dans les exportations de données (ID : %{id})'
       save_to_server: Enregistrer dans les exportations de données
