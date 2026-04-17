@@ -544,7 +544,6 @@ en:
       title: Linelist Export
       unexpected_error: 'Unexpected error while generating export: %{message}'
       xlsx: ".xlsx"
-      xlsx_unsupported: XLSX export is not supported in this client-side flow yet.
     new_sample_export_dialog:
       available: Available
       available_description: File formats not included in this export. By default, all formats are included.
