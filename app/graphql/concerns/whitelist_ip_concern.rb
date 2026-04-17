@@ -8,7 +8,7 @@ module WhitelistIpConcern # rubocop:disable GraphQL/ObjectDescription
   # if it is not already present. If it is a new IP address, an email notification will be sent to the user
   # associated with the personal access token.
   def whitelist_ip(personal_access_token, ip_address)
-    return if personal_access_token.nil? || ip_address.nil?
+    return if personal_access_token.nil? || ip_address.nil? || personal_access_token.integration?
 
     existing_ip_addresses = personal_access_token.ip_addresses || []
     ip_address = IPAddr.new(ip_address)
@@ -20,7 +20,7 @@ module WhitelistIpConcern # rubocop:disable GraphQL/ObjectDescription
         personal_access_token.update(ip_addresses: existing_ip_addresses + [ip_address])
         # send email to user about new IP address being added to their token and that
         # they should either revoke or rotate the token if they do not recognize the IP address
-        PersonalAccessTokenMailer.new_ip_address_for_token(personal_access_token, ip_address).deliver_later
+        PersonalAccessTokenMailer.new_ip_address_for_token(personal_access_token, ip_address.to_s).deliver_later
       end
     end
   end

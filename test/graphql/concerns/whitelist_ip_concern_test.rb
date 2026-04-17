@@ -64,4 +64,31 @@ class WhitelistIpConcernTest < ActionDispatch::IntegrationTest
 
     assert_enqueued_emails 0
   end
+
+  test 'whitelist_ip returns early if personal access token is an integration token' do
+    @personal_access_token.update(integration: true)
+    post api_graphql_path, params: { query: '{ __schema }' },
+                           headers: { Authorization: @authorization_header, 'REMOTE_ADDR' => '192.168.1.1' }
+
+    assert_enqueued_emails 0
+    assert_empty @personal_access_token.reload.ip_addresses
+    assert_response :success
+  end
+
+  test 'whitelist_ip returns early if IP address is nil' do
+    post api_graphql_path, params: { query: '{ __schema }' },
+                           headers: { Authorization: @authorization_header, 'REMOTE_ADDR' => nil }
+
+    assert_enqueued_emails 0
+    assert_empty @personal_access_token.reload.ip_addresses
+    assert_response :success
+  end
+
+  test 'whitelist_ip returns early if personal access token is nil' do
+    post api_graphql_path, params: { query: '{ __schema }' },
+                           headers: { Authorization: @authorization_header, 'REMOTE_ADDR' => '192.168.1.1' }
+
+    assert_enqueued_emails 0
+    assert_response :success
+  end
 end
