@@ -7,6 +7,7 @@
   "linelist-export-save-to-server-url-value": data_exports_url,
   "linelist-export-sample-graphql-id-prefix-value": sample_graphql_id_prefix,
   "linelist-export-minimum-visible-duration-ms-value": 3500,
+  "linelist-export-save-result-visible-duration-ms-value": 6000,
   "linelist-export-no-selection-error-message-value": t("data_exports.new_linelist_export_dialog.no_selection"),
   "linelist-export-selected-count-message-value": t("data_exports.new_linelist_export_dialog.selected_count"),
   "linelist-export-preparing-rows-message-value": t("data_exports.new_linelist_export_dialog.preparing_rows"),
@@ -15,6 +16,7 @@
   "linelist-export-unexpected-error-message-value": t("data_exports.new_linelist_export_dialog.unexpected_error"),
   "linelist-export-download-started-message-value": t("data_exports.new_linelist_export_dialog.download_started"),
   "linelist-export-queueing-save-message-value": t("data_exports.new_linelist_export_dialog.queueing_save"),
+  "linelist-export-view-data-export-message-value": t("data_exports.new_linelist_export_dialog.view_data_export"),
   "linelist-export-created-records-message-value": t("data_exports.new_linelist_export_dialog.created_records"),
   "linelist-export-save-queued-message-value": t("data_exports.new_linelist_export_dialog.save_queued"),
   "linelist-export-save-failed-message-value": t("data_exports.new_linelist_export_dialog.save_failed"),
@@ -265,6 +267,14 @@
             <h4 class="text-sm font-semibold text-slate-900 dark:text-slate-100"><%= t(".exporting_linelist") %></h4>
 
             <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400" data-linelist-export-progress-message></p>
+
+            <p class="mt-1 hidden text-xs" data-linelist-export-target="progressLinkRow">
+              <a
+                href="/-/data_exports"
+                class="text-primary-700 hover:underline dark:text-primary-300"
+                data-linelist-export-target="progressLink"
+              ></a>
+            </p>
           </div>
 
           <button

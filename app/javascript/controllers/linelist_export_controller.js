@@ -2,7 +2,13 @@ import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
 
 export default class extends Controller {
-  static targets = ["sampleStatus", "progressTemplate", "saveDetailsFieldset"];
+  static targets = [
+    "sampleStatus",
+    "progressTemplate",
+    "saveDetailsFieldset",
+    "progressLink",
+    "progressLinkRow",
+  ];
   static values = {
     workerUrl: String,
     graphqlUrl: String,
@@ -11,6 +17,10 @@ export default class extends Controller {
     minimumVisibleDurationMs: {
       type: Number,
       default: 3500,
+    },
+    saveResultVisibleDurationMs: {
+      type: Number,
+      default: 6000,
     },
     noSelectionErrorMessage: {
       type: String,
@@ -40,6 +50,10 @@ export default class extends Controller {
     queueingSaveMessage: {
       type: String,
       default: "Queueing save to Data Exports...",
+    },
+    viewDataExportMessage: {
+      type: String,
+      default: "View in Data Exports",
     },
     createdRecordsMessage: {
       type: String,
@@ -445,16 +459,21 @@ export default class extends Controller {
       const message = this.t(this.saveQueuedMessageValue, {
         id: payload.id,
       });
+      this.setProgressLink(this.dataExportShowUrl(payload.id));
 
       if (this.hasSampleStatusTarget) {
         this.sampleStatusTarget.textContent = message;
       }
       this.updateProgress(message, 100);
-      this.scheduleProgressWindowDismiss();
+      this.scheduleProgressWindowDismiss(
+        this.saveResultVisibleDurationMsValue,
+        true,
+      );
     } catch (error) {
       const message = this.t(this.saveFailedMessageValue, {
         message: error?.message || "unknown error",
       });
+      this.clearProgressLink();
 
       if (this.hasSampleStatusTarget) {
         this.sampleStatusTarget.textContent = message;
@@ -517,6 +536,8 @@ export default class extends Controller {
     this._progressMsgEl = null;
     this._progressBarEl = null;
     this._progressPctEl = null;
+    this._progressLinkEl = null;
+    this._progressLinkRowEl = null;
   }
 
   ensureExportCard() {
@@ -537,6 +558,12 @@ export default class extends Controller {
       );
       this._progressPctEl = card.querySelector(
         "[data-linelist-export-progress-percent]",
+      );
+      this._progressLinkEl = card.querySelector(
+        "[data-linelist-export-target='progressLink']",
+      );
+      this._progressLinkRowEl = card.querySelector(
+        "[data-linelist-export-target='progressLinkRow']",
       );
     }
 
@@ -574,6 +601,12 @@ export default class extends Controller {
       this._progressPctEl = clone.querySelector(
         "[data-linelist-export-progress-percent]",
       );
+      this._progressLinkEl = clone.querySelector(
+        "[data-linelist-export-target='progressLink']",
+      );
+      this._progressLinkRowEl = clone.querySelector(
+        "[data-linelist-export-target='progressLinkRow']",
+      );
       card.appendChild(clone);
     }
 
@@ -585,20 +618,24 @@ export default class extends Controller {
     if (!this._progressWindowOpenedAt) {
       this._progressWindowOpenedAt = Date.now();
     }
+    this.clearProgressLink();
     this.updateProgress(message, 0);
   }
 
-  scheduleProgressWindowDismiss() {
+  scheduleProgressWindowDismiss(
+    minimumVisibleDurationMs = this.minimumVisibleDurationMsValue,
+    restartWindowTimer = false,
+  ) {
     if (this.progressWindowDismissed) return;
 
     this.clearProgressWindowDismissTimeout();
+    if (restartWindowTimer) {
+      this._progressWindowOpenedAt = Date.now();
+    }
 
     const openedAt = this._progressWindowOpenedAt || Date.now();
     const elapsedMs = Date.now() - openedAt;
-    const remainingMs = Math.max(
-      this.minimumVisibleDurationMsValue - elapsedMs,
-      0,
-    );
+    const remainingMs = Math.max(minimumVisibleDurationMs - elapsedMs, 0);
 
     this._dismissProgressWindowTimeout = setTimeout(() => {
       this.dismissProgressWindow();
@@ -610,6 +647,37 @@ export default class extends Controller {
 
     clearTimeout(this._dismissProgressWindowTimeout);
     this._dismissProgressWindowTimeout = null;
+  }
+
+  setProgressLink(url) {
+    if (!url) {
+      this.clearProgressLink();
+      return;
+    }
+
+    this.ensureExportCard();
+    if (!this._progressLinkEl || !this._progressLinkRowEl) return;
+
+    this._progressLinkEl.href = url;
+    this._progressLinkEl.textContent = this.t(this.viewDataExportMessageValue);
+    this._progressLinkRowEl.classList.remove("hidden");
+  }
+
+  clearProgressLink() {
+    if (this._progressLinkEl) {
+      this._progressLinkEl.removeAttribute("href");
+      this._progressLinkEl.textContent = "";
+    }
+    if (this._progressLinkRowEl) {
+      this._progressLinkRowEl.classList.add("hidden");
+    }
+  }
+
+  dataExportShowUrl(exportId) {
+    const saveUrl = this.saveToServerUrl();
+    if (!saveUrl || !exportId) return "";
+
+    return `${saveUrl.replace(/\/$/, "")}/${encodeURIComponent(exportId)}`;
   }
 
   workerSourceUrl() {
