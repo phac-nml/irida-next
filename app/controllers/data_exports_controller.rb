@@ -94,7 +94,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       end
 
       format.any do
-        flash[:success] = t('.success', name: @data_export.name || @data_export.id)
+        flash[:success] = t('data_exports.create.success', name: @data_export.name || @data_export.id)
         redirect_to data_export_path(@data_export), status: :see_other
       end
     end
