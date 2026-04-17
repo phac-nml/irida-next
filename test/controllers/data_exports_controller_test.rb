@@ -122,6 +122,29 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  test 'should create new linelist csv export with viable params as json without redirect' do
+    params = {
+      'data_export' => {
+        'export_type' => 'linelist',
+        'export_parameters' => {
+          'ids' => [@sample1.id],
+          'namespace_id' => @project1.namespace.id,
+          'linelist_format' => 'csv',
+          'metadata_fields' => ['metadatafield1']
+        }
+      }
+    }
+
+    assert_difference('DataExport.count', 1) do
+      post data_exports_path, params:, as: :json
+    end
+
+    assert_response :accepted
+    payload = response.parsed_body
+    assert_equal('processing', payload['status'])
+    assert payload['id'].present?
+  end
+
   test 'should delete export through destroy action' do
     assert_difference('DataExport.count', -1) do
       delete data_export_path(@data_export1),
@@ -304,6 +327,28 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
            }
          }
     assert_response :unprocessable_content
+  end
+
+  test 'should return json errors for invalid linelist json create request' do
+    params = {
+      'data_export' => {
+        'export_type' => 'linelist',
+        'export_parameters' => {
+          'ids' => [@sample1.id],
+          'namespace_id' => @project1.namespace.id,
+          'metadata_fields' => ['metadatafield1']
+        }
+      }
+    }
+
+    assert_no_difference('DataExport.count') do
+      post data_exports_path, params:, as: :json
+    end
+
+    assert_response :unprocessable_content
+    payload = response.parsed_body
+    assert_kind_of(Array, payload['errors'])
+    assert payload['errors'].any?
   end
 
   test 'should not create sample export without attachment_formats param' do

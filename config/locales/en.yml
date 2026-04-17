@@ -532,6 +532,10 @@ en:
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...
       preparing_rows: Preparing %{count} rows
+      save_failed: 'Download completed, but saving to server failed: %{message}'
+      save_queued: 'Saved to Data Exports (ID: %{id})'
+      save_to_server: Save to Data Exports
+      save_to_server_help: Optionally keep a server-side copy in your Data Exports history.
       selected: Selected
       selected_count: 'Selected samples: %{count}'
       selected_description: Metadata fields included in the export. Reorder this list to control column order.

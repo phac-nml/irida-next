@@ -1,7 +1,10 @@
+<% metadata_fields = @namespace&.metadata_fields || [] %>
+
 <% linelist_data = {
   controller: "linelist-export",
   "linelist-export-worker-url-value": asset_path("workers/linelist_export_worker.js"),
   "linelist-export-graphql-url-value": graphql_url,
+  "linelist-export-save-to-server-url-value": data_exports_url,
   "linelist-export-sample-graphql-id-prefix-value": sample_graphql_id_prefix,
   "linelist-export-minimum-visible-duration-ms-value": 3500,
   "linelist-export-no-selection-error-message-value": t("data_exports.new_linelist_export_dialog.no_selection"),
@@ -9,11 +12,19 @@
   "linelist-export-preparing-rows-message-value": t("data_exports.new_linelist_export_dialog.preparing_rows"),
   "linelist-export-preparing-export-message-value": t("data_exports.new_linelist_export_dialog.preparing_export"),
   "linelist-export-start-error-message-value": t("data_exports.new_linelist_export_dialog.start_error"),
-  "linelist-export-xlsx-unsupported-message-value": t("data_exports.new_linelist_export_dialog.xlsx_unsupported"),
   "linelist-export-unexpected-error-message-value": t("data_exports.new_linelist_export_dialog.unexpected_error"),
   "linelist-export-download-started-message-value": t("data_exports.new_linelist_export_dialog.download_started"),
   "linelist-export-created-records-message-value": t("data_exports.new_linelist_export_dialog.created_records"),
+  "linelist-export-save-queued-message-value": t("data_exports.new_linelist_export_dialog.save_queued"),
+  "linelist-export-save-failed-message-value": t("data_exports.new_linelist_export_dialog.save_failed"),
 } %>
+
+<% if metadata_fields.any? %>
+  <% linelist_data[:controller] = "linelist-export sortable-lists--v1--two-lists-selection" %>
+  <% linelist_data["sortable-lists--v1--two-lists-selection-selected-list-value"] = "selected-list" %>
+  <% linelist_data["sortable-lists--v1--two-lists-selection-available-list-value"] = "available-list" %>
+  <% linelist_data["sortable-lists--v1--two-lists-selection-field-name-value"] = "data_export[export_parameters][metadata_fields][]" %>
+<% end %>
 
 <%= viral_dialog(open: @open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t("data_exports.new_linelist_export_dialog.title")) %>
@@ -39,60 +50,99 @@
 
             <label class="inline-flex items-center gap-1">
               <%= radio_button_tag :linelist_format,
-                                   "xlsx",
-                                   false,
-                                   id: "linelist-format-xlsx",
-                                   disabled: true,
-                                   name: "data_export[export_parameters][linelist_format]" %>
+                                    "xlsx",
+                                    false,
+                                    id: "linelist-format-xlsx",
+                                    name: "data_export[export_parameters][linelist_format]" %>
 
               <span><%= t("data_exports.new_linelist_export_dialog.xlsx") %></span>
             </label>
           </div>
         </fieldset>
+      </div>
 
-        <p class="mt-2 text-xs text-slate-600 dark:text-slate-400">
-          <%= t("data_exports.new_linelist_export_dialog.xlsx_unsupported") %>
+      <% if metadata_fields.any? %>
+        <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100">
+          <%= t("data_exports.new_linelist_export_dialog.metadata") %>
+        </h2>
+        <%= render Viral::SortableListsGuidanceComponent.new(
+          title: t("data_exports.new_linelist_export_dialog.fields_instructions_title"),
+          instructions: t("data_exports.new_linelist_export_dialog.fields_instructions"),
+          keyboard_help: t("data_exports.new_linelist_export_dialog.keyboard_help"),
+          available: {
+            title: t("data_exports.new_linelist_export_dialog.available_list_title"),
+            description: t("data_exports.new_linelist_export_dialog.available_description"),
+          },
+          selected: {
+            title: t("data_exports.new_linelist_export_dialog.selected_list_title"),
+            description: t("data_exports.new_linelist_export_dialog.selected_description"),
+          },
+        ) %>
+        <%= render SortableListsComponent.new(
+          templates: @templates,
+          template_label: t("data_exports.new.template_select_label")
+        ) do |sortable_lists| %>
+          <%= sortable_lists.with_list(
+            id: "available-list",
+            title: t("data_exports.new_linelist_export_dialog.available"),
+            list_items: metadata_fields,
+            group: "metadata_selection",
+          ) %>
+
+          <%= sortable_lists.with_list(
+            id: "selected-list",
+            title: t("data_exports.new_linelist_export_dialog.selected"),
+            group: "metadata_selection",
+          ) %>
+        <% end %>
+        <template id="sortable-list-item-template" data-sortable-lists--v1--two-lists-selection-target="itemTemplate">
+          <%= render SortableLists::V1::ListItemComponent.new(list_item: "NAME_HERE") %>
+        </template>
+      <% else %>
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+          <%= t("data_exports.new_linelist_export_dialog.selected") %>
         </p>
-      </div>
+      <% end %>
 
-      <div class="form-field">
-        <fieldset>
-          <legend class="mb-1 text-sm text-slate-900 dark:text-slate-400">
-            <%= t("data_exports.new_linelist_export_dialog.metadata") %>
-          </legend>
+      <%= form_with(url: "#", method: :get, scope: :data_export, data: { action: "submit->linelist-export#submit" }) do |form| %>
+        <div class="grid gap-4">
+          <%= render partial: "data_exports/name_and_email", locals: { form: } %>
 
-          <div class="grid max-h-48 gap-1 overflow-y-auto rounded-lg border border-slate-200 p-2 dark:border-slate-700">
-            <% metadata_fields = @namespace&.metadata_fields || [] %>
+          <div class="form-field">
+            <label class="inline-flex items-center gap-2">
+              <%= form.check_box :save_to_server,
+                                 {
+                                   checked: false,
+                                   id: "linelist-save-to-server",
+                                   class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                                 },
+                                 true,
+                                 false %>
 
-            <% if metadata_fields.any? %>
-              <% metadata_fields.each_with_index do |field, index| %>
-                <% field_id = "metadata-field-#{index}-#{field.to_s.parameterize}" %>
+              <span class="text-slate-700 dark:text-slate-300">
+                <%= t("data_exports.new_linelist_export_dialog.save_to_server") %>
+              </span>
+            </label>
 
-                <div class="flex items-center gap-2">
-                  <%= check_box_tag(
-                        "metadata_fields[]",
-                        field,
-                        false,
-                        id: field_id,
-                        name: "data_export[export_parameters][metadata_fields][]",
-                        class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
-                      ) %>
-
-                  <%= label_tag field_id, field, class: "text-slate-700 dark:text-slate-300" %>
-                </div>
-              <% end %>
-            <% else %>
-              <p class="text-sm text-slate-500 dark:text-slate-400">
-                <%= t("data_exports.new_linelist_export_dialog.selected") %>
-              </p>
-            <% end %>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">
+              <%= t("data_exports.new_linelist_export_dialog.save_to_server_help") %>
+            </p>
           </div>
-        </fieldset>
-      </div>
 
-      <%= form_with(url: "#", method: :get, data: { action: "submit->linelist-export#submit" }) do |form| %>
-        <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
-        <%= form.submit t("data_exports.new.submit_button"), class: "button button-primary" %>
+          <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
+
+          <% if metadata_fields.any? %>
+            <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
+            <% submit_data = {
+              action: "click->sortable-lists--v1--two-lists-selection#constructParams",
+              "sortable-lists--v1--two-lists-selection-target": "submitBtn",
+            } %>
+          <% else %>
+            <% submit_data = {} %>
+          <% end %>
+
+          <%= form.submit t("data_exports.new.submit_button"), data: submit_data, class: "button button-primary" %>
+        </div>
       <% end %>
 
       <p
