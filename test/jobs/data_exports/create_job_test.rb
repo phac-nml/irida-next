@@ -597,5 +597,46 @@ module DataExports
 
       assert_match I18n.t('data_exports.create.error'), error.message
     end
+
+    test 'linelist export delegates row hydration to LinelistRowsService' do
+      data_export8 = data_exports(:data_export_eight)
+
+      rows_called = false
+      rows_result = [
+        ['SAMPLE PUID', 'SAMPLE NAME', 'PROJECT PUID', 'METADATAFIELD1', 'METADATAFIELD2'],
+        ['INXT_SAM_AAAAAAAABC', 'Sample 32', 'INXT_PRJ_AAAAAAAAAD', 'value1', 'value2']
+      ]
+
+      DataExports::LinelistRowsService.stub :call, lambda { |**_kwargs|
+        rows_called = true
+        rows_result
+      } do
+        DataExports::CreateJob.perform_now(data_export8)
+      end
+
+      assert rows_called, 'Expected LinelistRowsService.call to be invoked during linelist export'
+      assert_equal 'ready', data_export8.status
+      assert data_export8.file.valid?
+    end
+
+    test 'linelist csv export stays processing until CreateJob attaches file and marks ready' do
+      # This test documents the queue lifecycle contract for linelist exports:
+      # the DataExport starts in processing and must not be ready until the job completes.
+      data_export8 = data_exports(:data_export_eight)
+      # Override status to processing to simulate enqueued state
+      data_export8.status = 'processing'
+      data_export8.save!(validate: false)
+
+      assert_equal 'processing', data_export8.status
+      assert_not data_export8.file.valid?
+
+      assert_difference -> { ActiveStorage::Attachment.count } => +1 do
+        DataExports::CreateJob.perform_now(data_export8)
+      end
+
+      assert_equal 'ready', data_export8.reload.status
+      assert data_export8.file.valid?
+      assert_equal "#{data_export8.id}.csv", data_export8.file.filename.to_s
+    end
   end
 end
