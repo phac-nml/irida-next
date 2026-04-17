@@ -53,10 +53,14 @@ class WhitelistIpConcernTest < ActionDispatch::IntegrationTest
     ip_addresses << ip_address
     @personal_access_token.update(ip_addresses: ip_addresses)
 
+    assert_includes @personal_access_token.reload.ip_addresses, ip_address
+
     post api_graphql_path, params: { query: '{ __schema }' },
                            headers: { Authorization: @authorization_header, 'REMOTE_ADDR' => ip_address }
     assert_response :success
-    assert_includes @personal_access_token.reload.ip_addresses, ip_address
+
+    count = @personal_access_token.reload.ip_addresses.count { |ip| ip == ip_address }
+    assert_equal 1, count, 'IP address should not be added again if it is already whitelisted'
 
     assert_enqueued_emails 0
   end
