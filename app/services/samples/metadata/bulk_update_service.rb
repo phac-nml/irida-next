@@ -123,7 +123,8 @@ module Samples
       def parse_gid(sample_identifier)
         IridaSchema.parse_gid(sample_identifier, { expected_type: Sample }).model_id
       rescue StandardError => e
-        Rails.logger.error "An error occurred: #{e.message}"
+        Rails.logger.error "An error occurred while attempting to parse Sample gid with the following message: #{e.message}" # rubocop:disable Layout/LineLength
+        nil
       end
 
       def query_group_samples(id_type, sample_identifier)
