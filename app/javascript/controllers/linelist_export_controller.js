@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
 
 export default class extends Controller {
-  static targets = ["sampleStatus", "progressTemplate"];
+  static targets = ["sampleStatus", "progressTemplate", "saveDetailsFieldset"];
   static values = {
     workerUrl: String,
     graphqlUrl: String,
@@ -59,6 +59,7 @@ export default class extends Controller {
     this._pendingSaveRequest = null;
     this.progressWindowDismissed = false;
     this.updateSelectedCount();
+    this.updateSaveToServerFields();
   }
 
   disconnect() {
@@ -77,7 +78,7 @@ export default class extends Controller {
     const sampleIds = this.selectedSampleIds();
     const metadataFields = this.selectedMetadataFields();
     const format = this.selectedFormat();
-    const saveToServer = this.saveToServerSelected();
+    const saveToServer = this.saveModeSelected();
     const exportName = this.selectedExportName();
     const emailNotification = this.selectedEmailNotification();
     const namespaceId = this.selectedNamespaceId();
@@ -114,22 +115,31 @@ export default class extends Controller {
     }
 
     try {
-      this.showProgressWindow(
-        this.t(this.preparingRowsMessageValue, { count: totalCount }),
-      );
-      this.spawnWorker();
+      if (saveToServer) {
+        this.showProgressWindow(
+          this.t(this.preparingExportMessageValue, { count: totalCount }),
+        );
+        const saveRequest = this._pendingSaveRequest;
+        this._pendingSaveRequest = null;
+        void this.saveToServer(saveRequest);
+      } else {
+        this.showProgressWindow(
+          this.t(this.preparingRowsMessageValue, { count: totalCount }),
+        );
+        this.spawnWorker();
 
-      this.worker.postMessage({
-        sample_ids: sampleIds,
-        metadata_fields: metadataFields,
-        namespace_id: namespaceId,
-        graphql_url: graphqlUrl,
-        csrf_token: this.csrfToken(),
-        sample_graphql_id_prefix: sampleGraphqlIdPrefix,
-        format,
-        filename,
-        total_count: totalCount,
-      });
+        this.worker.postMessage({
+          sample_ids: sampleIds,
+          metadata_fields: metadataFields,
+          namespace_id: namespaceId,
+          graphql_url: graphqlUrl,
+          csrf_token: this.csrfToken(),
+          sample_graphql_id_prefix: sampleGraphqlIdPrefix,
+          format,
+          filename,
+          total_count: totalCount,
+        });
+      }
     } catch (error) {
       this.updateProgress(
         this.t(this.startErrorMessageValue, {
@@ -337,11 +347,19 @@ export default class extends Controller {
     return Boolean(emailCheckbox?.checked);
   }
 
-  saveToServerSelected() {
-    const checkbox = this.element.querySelector(
-      "input[name='data_export[save_to_server]']",
+  selectedDeliveryMode() {
+    const selected = this.element.querySelector(
+      "input[name='data_export[delivery_mode]']:checked",
     );
-    return Boolean(checkbox?.checked);
+    return selected?.value || "immediate_download";
+  }
+
+  saveModeSelected() {
+    return this.selectedDeliveryMode() === "save_to_server";
+  }
+
+  toggleSaveToServer() {
+    this.updateSaveToServerFields();
   }
 
   selectedSampleIds() {
@@ -450,6 +468,17 @@ export default class extends Controller {
         { count: selected },
       );
     }
+  }
+
+  updateSaveToServerFields() {
+    if (!this.hasSaveDetailsFieldsetTarget) return;
+
+    const enabled = this.saveModeSelected();
+    this.saveDetailsFieldsetTarget.disabled = !enabled;
+    this.saveDetailsFieldsetTarget.setAttribute(
+      "aria-disabled",
+      String(!enabled),
+    );
   }
 
   handleProgressWindowClick(event) {

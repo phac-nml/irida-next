@@ -106,28 +106,45 @@
 
       <%= form_with(url: "#", method: :get, scope: :data_export, data: { action: "submit->linelist-export#submit" }) do |form| %>
         <div class="grid gap-4">
-          <%= render partial: "data_exports/name_and_email", locals: { form: } %>
-
           <div class="form-field">
-            <label class="inline-flex items-center gap-2">
-              <%= form.check_box :save_to_server,
-                                 {
-                                   checked: false,
-                                   id: "linelist-save-to-server",
-                                   class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
-                                 },
-                                 true,
-                                 false %>
+            <fieldset>
+              <legend class="mb-2 text-sm text-slate-900 dark:text-slate-400">
+                <%= t("data_exports.new_linelist_export_dialog.delivery_mode") %>
+              </legend>
 
-              <span class="text-slate-700 dark:text-slate-300">
-                <%= t("data_exports.new_linelist_export_dialog.save_to_server") %>
-              </span>
-            </label>
+              <div class="flex gap-4">
+                <label class="inline-flex items-center gap-1">
+                  <%= radio_button_tag :linelist_delivery_mode,
+                                       "immediate_download",
+                                       true,
+                                       id: "linelist-delivery-download",
+                                       name: "data_export[delivery_mode]",
+                                       data: { action: "change->linelist-export#toggleSaveToServer" } %>
+
+                  <span><%= t("data_exports.new_linelist_export_dialog.immediate_download") %></span>
+                </label>
+
+                <label class="inline-flex items-center gap-1">
+                  <%= radio_button_tag :linelist_delivery_mode,
+                                       "save_to_server",
+                                       false,
+                                       id: "linelist-delivery-save",
+                                       name: "data_export[delivery_mode]",
+                                       data: { action: "change->linelist-export#toggleSaveToServer" } %>
+
+                  <span><%= t("data_exports.new_linelist_export_dialog.save_to_server") %></span>
+                </label>
+              </div>
+            </fieldset>
 
             <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">
-              <%= t("data_exports.new_linelist_export_dialog.save_to_server_help") %>
+              <%= t("data_exports.new_linelist_export_dialog.delivery_mode_help") %>
             </p>
           </div>
+
+          <fieldset class="grid gap-4 disabled:opacity-60" data-linelist-export-target="saveDetailsFieldset" disabled>
+            <%= render partial: "data_exports/name_and_email", locals: { form: } %>
+          </fieldset>
 
           <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
 

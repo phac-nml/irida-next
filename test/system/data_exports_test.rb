@@ -1012,7 +1012,10 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       assert_selector "[data-controller*='linelist-export']"
       assert_selector 'input#linelist-format-xlsx:not([disabled])'
-      assert_field 'data_export[save_to_server]', checked: false
+      assert_selector "input#linelist-delivery-download[type='radio']:checked"
+      assert_selector "input#linelist-delivery-save[type='radio']:not(:checked)"
+      assert_field 'data_export[name]', disabled: true
+      assert_field 'data_export[email_notification]', disabled: true
       assert_text I18n.t('data_exports.new.name_label')
       assert_text I18n.t('data_exports.new.email_label')
       assert_selector 'ul#available-list'
@@ -1029,7 +1032,6 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       find('li', exact_text: 'metadatafield1').click
       click_button I18n.t('components.sortable_lists.v1.list_component.add')
-      fill_in 'data_export_name', with: 'v2 unchecked save export'
       click_button I18n.t('data_exports.new.submit_button')
     end
 
@@ -1045,15 +1047,18 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       find('li', exact_text: 'metadatafield1').click
       click_button I18n.t('components.sortable_lists.v1.list_component.add')
+      find("input[type='radio'][id='linelist-delivery-save']").click
+      assert_field 'data_export[name]', disabled: false
+      assert_field 'data_export[email_notification]', disabled: false
       fill_in 'data_export_name', with: 'v2 checked save export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      find("input[type='checkbox'][id='linelist-save-to-server']").click
       click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector '#linelist-export-progress-window',
                     text: I18n.t('data_exports.new_linelist_export_dialog.save_queued', id: 'stub-export-id'),
                     wait: 5
+    assert_no_text 'Download started:'
     assert_equal 1, evaluate_script('window.__linelistSaveRequests.length')
 
     payload = evaluate_script('JSON.parse(window.__linelistSaveRequests[0].body)')

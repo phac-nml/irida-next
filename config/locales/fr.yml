@@ -523,19 +523,21 @@ fr:
       close_progress: Fermer la progression de l’exportation
       created_records: Créé %{current} sur %{total} enregistrements
       csv: ".csv"
+      delivery_mode: Mode de livraison
+      delivery_mode_help: Choisissez une seule option de livraison.
       download_started: 'Téléchargement démarré : %{filename}'
       fields_instructions: Sélectionnez un ou plusieurs champs de métadonnées, puis utilisez les boutons d’action pour déplacer les champs entre les listes. L’ordre de la liste sélectionnée détermine l’ordre des colonnes de l’exportation.
       fields_instructions_title: Fonctionnement des listes
       format: Format
+      immediate_download: Téléchargement immédiat
       keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       metadata: Métadonnées
       no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
       preparing_rows: Préparation de %{count} lignes
-      save_failed: 'Téléchargement terminé, mais la sauvegarde sur le serveur a échoué : %{message}'
+      save_failed: 'La sauvegarde sur le serveur a échoué : %{message}'
       save_queued: 'Enregistré dans les exportations de données (ID : %{id})'
       save_to_server: Enregistrer dans les exportations de données
-      save_to_server_help: Conservez éventuellement une copie côté serveur dans votre historique d'exportations de données.
       selected: Sélectionné
       selected_count: 'Échantillons sélectionnés : %{count}'
       selected_description: Champs de métadonnées inclus dans l’exportation. Réorganisez cette liste pour contrôler l’ordre des colonnes.

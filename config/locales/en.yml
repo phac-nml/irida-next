@@ -523,19 +523,21 @@ en:
       close_progress: Close export progress
       created_records: Created %{current} of %{total} records
       csv: ".csv"
+      delivery_mode: Delivery Mode
+      delivery_mode_help: Choose one delivery option.
       download_started: 'Download started: %{filename}'
       fields_instructions: Select one or more metadata fields, then use the action buttons to move fields between lists. The ordering of the selected list determines export column order.
       fields_instructions_title: How the lists work
       format: Format
+      immediate_download: Immediate Download
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       metadata: Metadata
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...
       preparing_rows: Preparing %{count} rows
-      save_failed: 'Download completed, but saving to server failed: %{message}'
+      save_failed: 'Saving to server failed: %{message}'
       save_queued: 'Saved to Data Exports (ID: %{id})'
       save_to_server: Save to Data Exports
-      save_to_server_help: Optionally keep a server-side copy in your Data Exports history.
       selected: Selected
       selected_count: 'Selected samples: %{count}'
       selected_description: Metadata fields included in the export. Reorder this list to control column order.
