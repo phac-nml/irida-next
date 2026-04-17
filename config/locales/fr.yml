@@ -524,7 +524,6 @@ fr:
       created_records: Créé %{current} sur %{total} enregistrements
       csv: CSV
       delivery_mode: Mode de livraison
-      delivery_mode_help: Choisissez une seule option de livraison.
       download_started: 'Téléchargement démarré : %{filename}'
       export_data_button: Exporter les données
       fields_instructions: Sélectionnez un ou plusieurs champs de métadonnées, puis utilisez les boutons d’action pour déplacer les champs entre les listes. L’ordre de la liste sélectionnée détermine l’ordre des colonnes de l’exportation.

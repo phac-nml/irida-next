@@ -524,7 +524,6 @@ en:
       created_records: Created %{current} of %{total} records
       csv: CSV
       delivery_mode: Delivery Mode
-      delivery_mode_help: Choose one delivery option.
       download_started: 'Download started: %{filename}'
       export_data_button: Export Data
       fields_instructions: Select one or more metadata fields, then use the action buttons to move fields between lists. The ordering of the selected list determines export column order.
