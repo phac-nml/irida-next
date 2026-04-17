@@ -163,6 +163,20 @@ data_export_twelve:
   expires_at: <%= 5.days.from_now %>
   manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
 
+data_export_linelist_processing:
+  name: Data Export Linelist Processing
+  export_type: linelist
+  status: processing
+  export_parameters: {
+    ids: [<%= ActiveRecord::FixtureSet.identify(:sample32, :uuid) %>],
+    linelist_format: 'csv',
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>,
+    metadata_fields: ['metadatafield1', 'metadatafield2']
+  }
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+
 data_export_thirteen:
   name: Data Export 13
   export_type: analysis

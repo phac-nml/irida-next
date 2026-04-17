@@ -284,60 +284,34 @@ module DataExports
 
     # Linelist export specific functions---------------------------------------------------------------------
     def create_linelist_spreadsheet(data_export, temp_export_file)
-      samples = Sample.includes(project: :namespace).where(id: data_export.export_parameters['ids'])
+      rows = DataExports::LinelistRowsService.call(
+        sample_ids: data_export.export_parameters['ids'],
+        metadata_fields: data_export.export_parameters['metadata_fields'],
+        current_user: data_export.user
+      )
+
       if data_export.export_parameters['linelist_format'] == 'csv'
-        write_csv_export(data_export, samples, temp_export_file)
+        write_csv_export(rows, temp_export_file)
       else
-        write_xlsx_export(data_export, samples, temp_export_file)
+        write_xlsx_export(rows, temp_export_file)
       end
     end
 
-    def write_csv_export(data_export, samples, temp_export_file)
+    def write_csv_export(rows, temp_export_file)
       temp_export_file.tap do |tempfile|
         CSV.open(tempfile, 'wb') do |csv|
-          csv << write_spreadsheet_header(data_export.export_parameters['metadata_fields'])
-          samples.each do |sample|
-            csv << write_spreadsheet_row(sample, data_export)
-          end
+          rows.each { |row| csv << row }
         end
       end
     end
 
-    def write_xlsx_export(data_export, samples, temp_export_file)
+    def write_xlsx_export(rows, temp_export_file)
       temp_export_file.tap do |tempfile|
         Axlsx::Package.new do |workbook|
           workbook.workbook.add_worksheet(name: 'linelist') do |sheet|
-            sheet.add_row write_spreadsheet_header(data_export.export_parameters['metadata_fields'])
-            samples.each do |sample|
-              sheet.add_row write_spreadsheet_row(sample, data_export)
-            end
+            rows.each { |row| sheet.add_row row }
           end
           workbook.serialize(tempfile.path)
-        end
-      end
-    end
-
-    def write_spreadsheet_header(metadata_fields)
-      header = ['SAMPLE PUID', 'SAMPLE NAME', 'PROJECT PUID']
-      header += metadata_fields.map(&:upcase) unless metadata_fields.nil?
-      header
-    end
-
-    def write_spreadsheet_row(sample, data_export)
-      row = [sample.puid, sample.name, sample.project.puid]
-      unless data_export.export_parameters['metadata_fields'].nil?
-        row += map_metadata_fields(data_export.export_parameters['metadata_fields'],
-                                   sample.metadata)
-      end
-      row
-    end
-
-    def map_metadata_fields(metadata_fields, sample_metadata)
-      metadata_fields.map do |metadata_field|
-        if sample_metadata.key?(metadata_field)
-          sample_metadata[metadata_field]
-        else
-          ''
         end
       end
     end
