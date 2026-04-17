@@ -620,23 +620,20 @@ module DataExports
     end
 
     test 'linelist csv export stays processing until CreateJob attaches file and marks ready' do
-      # This test documents the queue lifecycle contract for linelist exports:
-      # the DataExport starts in processing and must not be ready until the job completes.
-      data_export8 = data_exports(:data_export_eight)
-      # Override status to processing to simulate enqueued state
-      data_export8.status = 'processing'
-      data_export8.save!(validate: false)
+      # Documents the queue lifecycle contract: DataExport starts in processing
+      # and is only marked ready once CreateJob attaches the generated file.
+      data_export = data_exports(:data_export_linelist_processing)
 
-      assert_equal 'processing', data_export8.status
-      assert_not data_export8.file.valid?
+      assert_equal 'processing', data_export.status
+      assert_not data_export.file.valid?
 
       assert_difference -> { ActiveStorage::Attachment.count } => +1 do
-        DataExports::CreateJob.perform_now(data_export8)
+        DataExports::CreateJob.perform_now(data_export)
       end
 
-      assert_equal 'ready', data_export8.reload.status
-      assert data_export8.file.valid?
-      assert_equal "#{data_export8.id}.csv", data_export8.file.filename.to_s
+      assert_equal 'ready', data_export.reload.status
+      assert data_export.file.valid?
+      assert_equal "#{data_export.id}.csv", data_export.file.filename.to_s
     end
   end
 end
