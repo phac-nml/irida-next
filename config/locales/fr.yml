@@ -522,10 +522,11 @@ fr:
       available_list_title: Non inclus dans l’exportation
       close_progress: Fermer la progression de l’exportation
       created_records: Créé %{current} sur %{total} enregistrements
-      csv: ".csv"
+      csv: CSV
       delivery_mode: Mode de livraison
       delivery_mode_help: Choisissez une seule option de livraison.
       download_started: 'Téléchargement démarré : %{filename}'
+      export_data_button: Exporter les données
       fields_instructions: Sélectionnez un ou plusieurs champs de métadonnées, puis utilisez les boutons d’action pour déplacer les champs entre les listes. L’ordre de la liste sélectionnée détermine l’ordre des colonnes de l’exportation.
       fields_instructions_title: Fonctionnement des listes
       format: Format
@@ -541,11 +542,12 @@ fr:
       selected: Sélectionné
       selected_count: 'Échantillons sélectionnés : %{count}'
       selected_description: Champs de métadonnées inclus dans l’exportation. Réorganisez cette liste pour contrôler l’ordre des colonnes.
+      selected_empty_state: Aucun champ sélectionné. Sélectionnez des champs à gauche pour les inclure.
       selected_list_title: Inclus dans l’exportation
       start_error: 'Impossible de démarrer l’exportation : %{message}'
       title: Exportation de liste détaillée
       unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
-      xlsx: ".xlsx"
+      xlsx: Excel (.xlsx)
     new_sample_export_dialog:
       available: Disponible
       available_description: Formats de fichiers non inclus dans cette exportation. Par défaut, tous les formats sont inclus.

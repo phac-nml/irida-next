@@ -378,10 +378,10 @@ fr:
           aria_role_description: Glisser-déposer dans la liste %{list}
           down: Bas
           keyboard_shortcuts:
-            add: Enter
-            down: Alt+ArrowDown
-            remove: Delete
-            up: Alt+ArrowUp
+            add: Entrée
+            down: Alt+FlècheBas
+            remove: Suppr
+            up: Alt+FlècheHaut
           up: Haut
     token:
       copied: Copié!

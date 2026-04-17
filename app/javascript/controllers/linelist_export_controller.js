@@ -37,6 +37,10 @@ export default class extends Controller {
       type: String,
       default: "Download started: %{filename}",
     },
+    queueingSaveMessage: {
+      type: String,
+      default: "Queueing save to Data Exports...",
+    },
     createdRecordsMessage: {
       type: String,
       default: "Created %{current} of %{total} records",
@@ -47,7 +51,7 @@ export default class extends Controller {
     },
     saveFailedMessage: {
       type: String,
-      default: "Download completed, but saving to server failed: %{message}",
+      default: "Saving to server failed: %{message}",
     },
   };
 
@@ -116,9 +120,12 @@ export default class extends Controller {
 
     try {
       if (saveToServer) {
-        this.showProgressWindow(
-          this.t(this.preparingExportMessageValue, { count: totalCount }),
-        );
+        const queueingMessage = this.t(this.queueingSaveMessageValue);
+        this.showProgressWindow(queueingMessage);
+        this.updateProgress(queueingMessage, 75);
+        if (this.hasSampleStatusTarget) {
+          this.sampleStatusTarget.textContent = queueingMessage;
+        }
         const saveRequest = this._pendingSaveRequest;
         this._pendingSaveRequest = null;
         void this.saveToServer(saveRequest);
@@ -202,12 +209,13 @@ export default class extends Controller {
 
     if (payload.type === "done") {
       this.download(payload);
-      this.updateProgress(
-        this.t(this.downloadStartedMessageValue, {
-          filename: payload.filename,
-        }),
-        100,
-      );
+      const downloadMessage = this.t(this.downloadStartedMessageValue, {
+        filename: payload.filename,
+      });
+      this.updateProgress(downloadMessage, 100);
+      if (this.hasSampleStatusTarget) {
+        this.sampleStatusTarget.textContent = downloadMessage;
+      }
       const saveRequest = this._pendingSaveRequest;
       this._pendingSaveRequest = null;
       if (saveRequest?.saveToServer) {
@@ -475,6 +483,7 @@ export default class extends Controller {
 
     const enabled = this.saveModeSelected();
     this.saveDetailsFieldsetTarget.disabled = !enabled;
+    this.saveDetailsFieldsetTarget.classList.toggle("hidden", !enabled);
     this.saveDetailsFieldsetTarget.setAttribute(
       "aria-disabled",
       String(!enabled),

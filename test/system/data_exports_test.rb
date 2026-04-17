@@ -1014,10 +1014,12 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector 'input#linelist-format-xlsx:not([disabled])'
       assert_selector "input#linelist-delivery-download[type='radio']:checked"
       assert_selector "input#linelist-delivery-save[type='radio']:not(:checked)"
-      assert_field 'data_export[name]', disabled: true
-      assert_field 'data_export[email_notification]', disabled: true
-      assert_text I18n.t('data_exports.new.name_label')
-      assert_text I18n.t('data_exports.new.email_label')
+      assert_text I18n.t('data_exports.new_linelist_export_dialog.fields_instructions_title')
+      assert_text I18n.t('data_exports.new_linelist_export_dialog.fields_instructions')
+      assert_no_field 'data_export[name]'
+      assert_no_field 'data_export[email_notification]'
+      assert_text I18n.t('common.actions.cancel')
+      assert_button I18n.t('data_exports.new_linelist_export_dialog.export_data_button')
       assert_selector 'ul#available-list'
       assert_selector 'ul#selected-list'
     end
@@ -1032,7 +1034,7 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       find('li', exact_text: 'metadatafield1').click
       click_button I18n.t('components.sortable_lists.v1.list_component.add')
-      click_button I18n.t('data_exports.new.submit_button')
+      click_button I18n.t('data_exports.new_linelist_export_dialog.export_data_button')
     end
 
     assert_text 'Download started:'
@@ -1052,7 +1054,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_field 'data_export[email_notification]', disabled: false
       fill_in 'data_export_name', with: 'v2 checked save export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new.submit_button')
+      click_button I18n.t('data_exports.new_linelist_export_dialog.export_data_button')
     end
 
     assert_selector '#linelist-export-progress-window',
