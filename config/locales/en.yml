@@ -522,10 +522,11 @@ en:
       available_list_title: Not in export
       close_progress: Close export progress
       created_records: Created %{current} of %{total} records
-      csv: ".csv"
+      csv: CSV
       delivery_mode: Delivery Mode
       delivery_mode_help: Choose one delivery option.
       download_started: 'Download started: %{filename}'
+      export_data_button: Export Data
       fields_instructions: Select one or more metadata fields, then use the action buttons to move fields between lists. The ordering of the selected list determines export column order.
       fields_instructions_title: How the lists work
       format: Format
@@ -541,11 +542,12 @@ en:
       selected: Selected
       selected_count: 'Selected samples: %{count}'
       selected_description: Metadata fields included in the export. Reorder this list to control column order.
+      selected_empty_state: No fields selected. Select fields from the left to include them.
       selected_list_title: In export
       start_error: 'Unable to start export: %{message}'
       title: Linelist Export
       unexpected_error: 'Unexpected error while generating export: %{message}'
-      xlsx: ".xlsx"
+      xlsx: Excel (.xlsx)
     new_sample_export_dialog:
       available: Available
       available_description: File formats not included in this export. By default, all formats are included.

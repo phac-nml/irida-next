@@ -34,11 +34,69 @@
   </div>
 <% end %>
 
-<div class="grid gap-2 max-sm:grid-cols-1 sm:grid-cols-2">
-  <% lists.each do |list| %>
-    <%= list %>
-  <% end %>
-</div>
+<% if grouped_controls && lists.size == 2 %>
+  <% available_list = lists.first %>
+  <% selected_list = lists.second %>
+  <div class="grid gap-3 max-sm:grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto] sm:items-start">
+    <%= available_list %>
+
+    <div class="flex sm:items-center sm:self-stretch">
+      <div class="flex gap-2 sm:mt-6 sm:flex-col" role="group" aria-label="<%= t('common.labels.actions') %>">
+        <button
+          type="button"
+          class="button button-default whitespace-nowrap"
+          data-action="click->sortable-lists--v1--two-lists-selection#addSelectionByAddButton"
+          data-sortable-lists--v1--two-lists-selection-target="addButton"
+          aria-keyshortcuts="<%= t('components.sortable_lists.v1.list_component.keyboard_shortcuts.add') %>"
+        >
+          <%= t('components.sortable_lists.v1.list_component.add') %>
+        </button>
+
+        <button
+          type="button"
+          class="button button-default whitespace-nowrap"
+          data-action="click->sortable-lists--v1--two-lists-selection#removeSelectionByRemoveButton"
+          data-sortable-lists--v1--two-lists-selection-target="removeButton"
+          aria-keyshortcuts="<%= t('components.sortable_lists.v1.list_component.keyboard_shortcuts.remove') %>"
+        >
+          <%= t('common.actions.remove') %>
+        </button>
+      </div>
+    </div>
+
+    <%= selected_list %>
+
+    <div class="flex sm:items-start sm:self-stretch">
+      <div class="flex gap-2 sm:mt-6 sm:flex-col" role="group" aria-label="<%= t('common.labels.actions') %>">
+        <button
+          type="button"
+          class="button button-default whitespace-nowrap"
+          data-action="click->sortable-lists--v1--two-lists-selection#moveSelection"
+          data-sortable-lists--v1--two-lists-selection-target="upButton"
+          aria-keyshortcuts="<%= t('components.sortable_lists.v1.list_component.keyboard_shortcuts.up') %>"
+        >
+          <%= t('components.sortable_lists.v1.list_component.up') %>
+        </button>
+
+        <button
+          type="button"
+          class="button button-default whitespace-nowrap"
+          data-action="click->sortable-lists--v1--two-lists-selection#moveSelection"
+          data-sortable-lists--v1--two-lists-selection-target="downButton"
+          aria-keyshortcuts="<%= t('components.sortable_lists.v1.list_component.keyboard_shortcuts.down') %>"
+        >
+          <%= t('components.sortable_lists.v1.list_component.down') %>
+        </button>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="grid gap-2 max-sm:grid-cols-1 sm:grid-cols-2">
+    <% lists.each do |list| %>
+      <%= list %>
+    <% end %>
+  </div>
+<% end %>
 
 <div
   class="sr-only"

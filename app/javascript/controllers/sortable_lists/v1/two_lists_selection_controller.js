@@ -10,6 +10,7 @@ export default class extends Controller {
     "removeButton",
     "upButton",
     "downButton",
+    "selectedEmptyState",
     "templateSelector",
     "itemTemplate",
     "checkmarkTemplate",
@@ -291,6 +292,14 @@ export default class extends Controller {
     });
 
     this.templateSelectorTarget.value = matchingTemplate?.value ?? "none";
+  }
+
+  #checkSelectedEmptyState() {
+    if (!this.hasSelectedEmptyStateTarget) return;
+
+    const hasSelectedItems =
+      this.selectedList.querySelectorAll("li").length > 0;
+    this.selectedEmptyStateTarget.classList.toggle("hidden", hasSelectedItems);
   }
 
   #setSubmitButtonDisableState(disableState) {
@@ -944,6 +953,7 @@ export default class extends Controller {
   #checkStates() {
     this.#saveListStates();
     this.#checkButtonStates();
+    this.#checkSelectedEmptyState();
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
       this.#cleanupAvailableList();
