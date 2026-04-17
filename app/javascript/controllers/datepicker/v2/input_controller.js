@@ -106,7 +106,7 @@ export default class extends Controller {
   #findClosestFormField() {
     const closestFormField = this.element.closest(".form-field");
 
-    if (closestFormField.contains(this.element)) {
+    if (closestFormField && closestFormField.contains(this.element)) {
       this.#formFieldContainer = closestFormField;
     }
   }
