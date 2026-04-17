@@ -61,6 +61,7 @@ module DataExports
       gids.each_slice(CHUNK_SIZE) do |chunk|
         nodes = execute_query(chunk)
         nodes.each do |node|
+          next unless node.is_a?(Hash)
           next unless node['__typename'] == 'Sample' && node['id']
 
           result[node['id']] = node
