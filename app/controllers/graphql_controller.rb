@@ -24,7 +24,7 @@ class GraphqlController < ApplicationController
   def execute
     variables = prepare_variables(params[:variables])
     operation_name = params[:operationName]
-    whitelist_ip(context[:token], context[:remote_ip])
+    whitelist_ip(context[:token], request.remote_ip)
     result = IridaSchema.execute(query, variables:, context:, operation_name:)
     render json: result
   rescue StandardError => e
@@ -38,7 +38,7 @@ class GraphqlController < ApplicationController
   end
 
   def context
-    @context ||= { current_user:, token:, remote_ip: request.remote_ip }
+    @context ||= { current_user:, token: }
   end
 
   private

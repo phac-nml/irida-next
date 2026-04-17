@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Query Concern
+# Concern for whitelisting ip addresses for a personal access token
 module WhitelistIpConcern # rubocop:disable GraphQL/ObjectDescription
   include ActiveSupport::Concern
 
@@ -11,6 +11,7 @@ module WhitelistIpConcern # rubocop:disable GraphQL/ObjectDescription
     return if personal_access_token.nil? || ip_address.nil?
 
     existing_ip_addresses = personal_access_token.ip_addresses || []
+    ip_address = IPAddr.new(ip_address)
 
     if existing_ip_addresses.empty?
       personal_access_token.update(ip_addresses: [ip_address])
