@@ -411,14 +411,16 @@ module WorkflowExecutions
     test 'create new workflow execution with non matching sample puid in sample sheet' do
       samples_workflow_executions_attributes = {
         '0': {
-          sample_id: samples(:sample1).id,
+          sample_id: @sample.id,
           samplesheet_params: {
-            sample: samples(:sample2).puid
+            sample: samples(:sample2).puid,
+            fastq_1: @attachment.to_global_id # belongs to :sample1 # rubocop:disable Naming/VariableNumber
           }
         }
       }
 
       workflow_params = {
+        name: 'Autoset Sample Test',
         metadata:
           { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
@@ -429,12 +431,11 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
-      assert_includes @workflow_execution.errors.full_messages,
-                      "Samples workflow executions[0] samplesheet params #{I18n.t(
-                        'validators.workflow_execution_samplesheet_params_validator.sample_puid_error',
-                        property: 'sample'
-                      )}"
-      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
+      assert @workflow_execution.persisted?
+      assert_equal 1, @workflow_execution.reload.samples_workflow_executions.size
+      assert_equal samples(:sample1).puid,
+                   @workflow_execution.samples_workflow_executions.first.samplesheet_params['sample']
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'create new workflow execution with non matching attachments to sample' do
@@ -449,6 +450,7 @@ module WorkflowExecutions
       }
 
       workflow_params = {
+        name: 'Non Matching Attachment Test',
         metadata:
           { pipeline_id: 'phac-nml/iridanextexample',
             workflow_version: '1.0.2' },
@@ -460,10 +462,11 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
       assert_includes @workflow_execution.errors.full_messages,
-                      "Samples workflow executions[0] samplesheet params #{I18n.t(
+                      I18n.t(
                         'validators.workflow_execution_samplesheet_params_validator.sample_attachment_error',
-                        property: 'fastq_1'
-                      )}"
+                        property: 'fastq_1',
+                        sample_id: samples(:sample2).puid
+                      )
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
   end

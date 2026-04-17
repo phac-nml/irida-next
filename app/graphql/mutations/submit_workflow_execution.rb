@@ -100,8 +100,8 @@ module Mutations
       samples_workflow_executions_attributes.each_with_index do |data, index|
         sample_id = IridaSchema.object_from_id(data['sample_id'], { expected_type: Sample }).id
         result[index.to_s] = {
-          'sample_id' => sample_id,
-          'samplesheet_params' => data['samplesheet_params']
+          sample_id: sample_id,
+          samplesheet_params: data['samplesheet_params']
         }
       end
 

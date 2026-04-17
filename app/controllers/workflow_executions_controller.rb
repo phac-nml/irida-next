@@ -9,7 +9,7 @@ class WorkflowExecutionsController < ApplicationController
   before_action :page_title
 
   def create
-    @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
+    @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params.to_h).execute
 
     if @workflow_execution.persisted?
       redirect_to workflow_executions_path

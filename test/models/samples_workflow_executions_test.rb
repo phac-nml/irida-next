@@ -28,7 +28,7 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
     assert_not_nil samples_workflow_executions_invalid_mismatch_sample_puid.errors
     expected_error =
       "Samplesheet params #{I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_puid_error',
-                                   property: 'sample')}"
+                                   property: 'sample', sample_id: samples(:sample1).puid)}"
     assert_equal expected_error, samples_workflow_executions_invalid_mismatch_sample_puid.errors.full_messages[0]
   end
 
@@ -46,7 +46,7 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
     assert_not_nil samples_workflow_executions_invalid_no_sample_puid.errors
     expected_error =
       "Samplesheet params #{I18n.t('validators.workflow_execution_samplesheet_params_validator.blank_error',
-                                   property: 'sample')}"
+                                   property: 'sample', sample_id: samples(:sample1).puid)}"
     assert_equal expected_error, samples_workflow_executions_invalid_no_sample_puid.errors.full_messages[0]
   end
 
@@ -64,7 +64,7 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
     assert_not_nil samples_workflow_executions_invalid_file_id.errors
     expected_error =
       "Samplesheet params #{I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_gid_error',
-                                   property: 'fastq_1')}"
+                                   property: 'fastq_1', sample_id: samples(:sample1).puid)}"
     assert_equal(
       expected_error,
       samples_workflow_executions_invalid_file_id.errors.full_messages[0]
@@ -85,7 +85,8 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
     assert_not_nil samples_workflow_executions_invalid_file_format.errors
     expected_error =
       "Samplesheet params #{I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_format_error',
-                                   property: 'fastq_2', file_format: '^\\S+\\.f(ast)?q(\\.gz)?$')}"
+                                   property: 'fastq_2', sample_id: samples(:sample3).puid,
+                                   file_format: '^\\S+\\.f(ast)?q(\\.gz)?$')}"
     assert_includes samples_workflow_executions_invalid_file_format.errors.full_messages,
                     expected_error
   end
@@ -105,7 +106,8 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
     expected_error =
       "Samplesheet params #{I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_format_error',
                                    property: 'mlst_alleles',
-                                   file_format: '^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$')}"
+                                   file_format: '^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$',
+                                   sample_id: samples(:sample3).puid)}"
     assert_includes samples_workflow_executions_invalid_file_format_non_fastq.errors.full_messages,
                     expected_error
   end
@@ -115,7 +117,8 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
     assert_not_nil @samples_workflow_executions_mismatch_file_id.errors
     expected_error =
       "Samplesheet params #{I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_attachment_error',
-                                   property: 'fastq_1')}"
+                                   property: 'fastq_1',
+                                   sample_id: @samples_workflow_executions_mismatch_file_id.sample.puid)}"
     assert_equal(
       expected_error,
       @samples_workflow_executions_mismatch_file_id.errors.full_messages[0]
