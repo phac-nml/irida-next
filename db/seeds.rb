@@ -602,7 +602,6 @@ if Rails.env.development?
       member_emails_by_role:
     }
   ]
-  streptococcus_projects = generic_projects.map { |entry| entry.merge({ sample_count: 200 }) }
 
   groups = [
     { name: 'Bacillus', path: 'bacillus', owner_email: group_owner_emails[0],
@@ -756,34 +755,24 @@ if Rails.env.development?
     { name: 'Streptococcus', path: 'streptococcus', owner_email: group_owner_emails[1],
       member_emails_by_role:,
       subgroups: [
-        { name: 'Streptococcus agalactiae', path: 'streptococcus-agalactiae', projects: streptococcus_projects },
-        { name: 'Streptococcus pneumoniae', path: 'streptococcus-pneumoniae', projects: streptococcus_projects },
-        { name: 'Streptococcus pyogenes', path: 'streptococcus-pyogenes', projects: streptococcus_projects,
+        { name: 'Streptococcus agalactiae', path: 'streptococcus-agalactiae', projects: generic_projects },
+        { name: 'Streptococcus pneumoniae', path: 'streptococcus-pneumoniae', projects: generic_projects },
+        { name: 'Streptococcus pyogenes', path: 'streptococcus-pyogenes', projects: generic_projects,
           subgroups: [
-            { name: 'Streptococcus pyogenes M1', path: 'streptococcus-pyogenes-m1', projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M3', path: 'streptococcus-pyogenes-m3', projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M5', path: 'streptococcus-pyogenes-m5', projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M18', path: 'streptococcus-pyogenes-m18',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M28', path: 'streptococcus-pyogenes-m28',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M41', path: 'streptococcus-pyogenes-m41',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M49', path: 'streptococcus-pyogenes-m49',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M58', path: 'streptococcus-pyogenes-m58',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M60', path: 'streptococcus-pyogenes-m60',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M66', path: 'streptococcus-pyogenes-m66',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M75', path: 'streptococcus-pyogenes-m75',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M77', path: 'streptococcus-pyogenes-m77',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M89', path: 'streptococcus-pyogenes-m89',
-              projects: streptococcus_projects },
-            { name: 'Streptococcus pyogenes M92', path: 'streptococcus-pyogenes-m92', projects: streptococcus_projects }
+            { name: 'Streptococcus pyogenes M1', path: 'streptococcus-pyogenes-m1', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M3', path: 'streptococcus-pyogenes-m3', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M5', path: 'streptococcus-pyogenes-m5', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M18', path: 'streptococcus-pyogenes-m18', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M28', path: 'streptococcus-pyogenes-m28', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M41', path: 'streptococcus-pyogenes-m41', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M49', path: 'streptococcus-pyogenes-m49', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M58', path: 'streptococcus-pyogenes-m58', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M60', path: 'streptococcus-pyogenes-m60', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M66', path: 'streptococcus-pyogenes-m66', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M75', path: 'streptococcus-pyogenes-m75', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M77', path: 'streptococcus-pyogenes-m77', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M89', path: 'streptococcus-pyogenes-m89', projects: generic_projects },
+            { name: 'Streptococcus pyogenes M92', path: 'streptococcus-pyogenes-m92', projects: generic_projects }
           ] }
       ] },
     { name: 'Treponema', path: 'treponema-pallidum', owner_email: group_owner_emails[2],
