@@ -19,10 +19,19 @@ module DataExports
           )
 
           graphql_path = Rails.application.routes.url_helpers.api_graphql_path
+          data_exports_path = Rails.application.routes.url_helpers.data_exports_path
 
-          assert_selector "[data-controller='linelist-export']"
+          assert_selector "[data-controller*='linelist-export']"
           assert_selector "[data-linelist-export-graphql-url-value='#{graphql_path}']"
+          assert_selector "[data-linelist-export-save-to-server-url-value='#{data_exports_path}']"
           assert_selector "[data-linelist-export-sample-graphql-id-prefix-value='gid://#{GlobalID.app}/Sample/']"
+          assert_selector 'input#linelist-format-xlsx:not([disabled])'
+          assert_selector "input#linelist-save-to-server[type='checkbox']"
+          assert_no_selector 'input#linelist-save-to-server[checked]'
+          assert_selector "input[name='data_export[name]']"
+          assert_selector "input[name='data_export[email_notification]']"
+          assert_selector 'ul#available-list'
+          assert_selector 'ul#selected-list'
         end
       end
     end

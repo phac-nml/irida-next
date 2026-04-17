@@ -38,14 +38,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def create
     @data_export = DataExports::CreateService.new(current_user, data_export_params).execute
 
-    if @data_export.errors.any?
-      render status: :unprocessable_content,
-             locals: { type: 'alert', message: error_message(@data_export),
-                       export_type: data_export_params['export_type'] }
-    else
-      flash[:success] = t('.success', name: @data_export.name || @data_export.id)
-      redirect_to data_export_path(@data_export), status: :see_other
-    end
+    @data_export.errors.any? ? render_create_error_response : render_create_success_response
   end
 
   def redirect
@@ -75,6 +68,37 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   private
+
+  def render_create_error_response
+    respond_to do |format|
+      format.json do
+        render json: { errors: @data_export.errors.full_messages }, status: :unprocessable_content
+      end
+
+      format.any do
+        render status: :unprocessable_content,
+               locals: { type: 'alert', message: error_message(@data_export),
+                         export_type: data_export_params['export_type'] }
+      end
+    end
+  end
+
+  def render_create_success_response
+    respond_to do |format|
+      format.json do
+        render json: {
+          id: @data_export.id,
+          status: @data_export.status,
+          export_type: @data_export.export_type
+        }, status: :accepted
+      end
+
+      format.any do
+        flash[:success] = t('.success', name: @data_export.name || @data_export.id)
+        redirect_to data_export_path(@data_export), status: :see_other
+      end
+    end
+  end
 
   def export_dialog_render_method
     return :render_analysis_single_workflow_export_dialog if analysis_single_workflow_export_dialog?

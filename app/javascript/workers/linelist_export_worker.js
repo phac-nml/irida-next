@@ -104,6 +104,7 @@ self.onmessage = async (event) => {
     format,
   } = event.data || {};
 
+  const exportFormat = format === "xlsx" ? "xlsx" : "csv";
   const fields = Array.isArray(metadataFields) ? metadataFields : [];
   const ids = Array.isArray(sampleIds) ? sampleIds : [];
   const rows = ids.length;
@@ -116,7 +117,7 @@ self.onmessage = async (event) => {
     return;
   }
 
-  if (format != null && format !== "csv") {
+  if (format != null && !["csv", "xlsx"].includes(format)) {
     self.postMessage({
       type: "error",
       message: "Unsupported linelist format for this flow.",
@@ -177,7 +178,7 @@ self.onmessage = async (event) => {
       "PROJECT PUID",
       ...fields.map((field) => String(field).toUpperCase()),
     ];
-    const lines = [header.join(",")];
+    const exportRows = [header];
 
     sampleGraphqlIds.forEach((sampleGraphqlId) => {
       const sample = sampleById.get(sampleGraphqlId);
@@ -191,23 +192,37 @@ self.onmessage = async (event) => {
       const metadata = sample.metadata || {};
 
       const row = [
-        escapeCsv(sample.puid),
-        escapeCsv(sample.name),
-        escapeCsv(sample.project?.puid),
+        String(sample.puid ?? ""),
+        String(sample.name ?? ""),
+        String(sample.project?.puid ?? ""),
       ];
 
       fields.forEach((field) => {
-        row.push(escapeCsv(metadata[field]));
+        row.push(String(metadata[field] ?? ""));
       });
 
-      lines.push(row.join(","));
+      exportRows.push(row);
     });
 
-    self.postMessage({
-      type: "done",
-      filename,
-      content: lines.join("\n"),
-    });
+    if (exportFormat === "xlsx") {
+      self.postMessage({
+        type: "done",
+        filename,
+        format: exportFormat,
+        rows: exportRows,
+      });
+    } else {
+      const content = exportRows
+        .map((row) => row.map((value) => escapeCsv(value)).join(","))
+        .join("\n");
+
+      self.postMessage({
+        type: "done",
+        filename,
+        format: exportFormat,
+        content,
+      });
+    }
   } catch (error) {
     self.postMessage({
       type: "error",

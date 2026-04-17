@@ -1,10 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
+import * as XLSX from "xlsx";
 
 export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
   static values = {
     workerUrl: String,
     graphqlUrl: String,
+    saveToServerUrl: String,
     sampleGraphqlIdPrefix: String,
     minimumVisibleDurationMs: {
       type: Number,
@@ -27,10 +29,6 @@ export default class extends Controller {
       type: String,
       default: "Unable to start export: %{message}",
     },
-    xlsxUnsupportedMessage: {
-      type: String,
-      default: "XLSX export is not supported in this client-side flow yet.",
-    },
     unexpectedErrorMessage: {
       type: String,
       default: "Unexpected error while generating export: %{message}",
@@ -43,6 +41,14 @@ export default class extends Controller {
       type: String,
       default: "Created %{current} of %{total} records",
     },
+    saveQueuedMessage: {
+      type: String,
+      default: "Saved to Data Exports (ID: %{id})",
+    },
+    saveFailedMessage: {
+      type: String,
+      default: "Download completed, but saving to server failed: %{message}",
+    },
   };
 
   connect() {
@@ -50,6 +56,7 @@ export default class extends Controller {
     this._exportId = null;
     this._progressWindowOpenedAt = null;
     this._dismissProgressWindowTimeout = null;
+    this._pendingSaveRequest = null;
     this.progressWindowDismissed = false;
     this.updateSelectedCount();
   }
@@ -70,6 +77,9 @@ export default class extends Controller {
     const sampleIds = this.selectedSampleIds();
     const metadataFields = this.selectedMetadataFields();
     const format = this.selectedFormat();
+    const saveToServer = this.saveToServerSelected();
+    const exportName = this.selectedExportName();
+    const emailNotification = this.selectedEmailNotification();
     const namespaceId = this.selectedNamespaceId();
     const graphqlUrl = this.graphqlUrl();
     const sampleGraphqlIdPrefix = this.sampleGraphqlIdPrefix();
@@ -80,21 +90,21 @@ export default class extends Controller {
       return;
     }
 
-    if (format !== "csv") {
-      this.updateProgress(
-        this.t(this.xlsxUnsupportedMessageValue, { format }),
-        100,
-        true,
-      );
-      return;
-    }
-
     const filename = `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}.${format}`;
     const totalCount = selectedCount;
     this.clearProgressWindowDismissTimeout();
     this._exportId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this._progressWindowOpenedAt = null;
     this.progressWindowDismissed = false;
+    this._pendingSaveRequest = {
+      saveToServer,
+      sampleIds,
+      metadataFields,
+      namespaceId,
+      format,
+      exportName,
+      emailNotification,
+    };
 
     if (this.hasSampleStatusTarget) {
       this.sampleStatusTarget.textContent = this.t(
@@ -128,6 +138,7 @@ export default class extends Controller {
         100,
         true,
       );
+      this._pendingSaveRequest = null;
       this.terminateWorker();
     }
   }
@@ -180,7 +191,7 @@ export default class extends Controller {
     }
 
     if (payload.type === "done") {
-      this.download(payload.filename, payload.content);
+      this.download(payload);
       this.updateProgress(
         this.t(this.downloadStartedMessageValue, {
           filename: payload.filename,
@@ -188,12 +199,18 @@ export default class extends Controller {
         100,
       );
       this.scheduleProgressWindowDismiss();
+      const saveRequest = this._pendingSaveRequest;
+      this._pendingSaveRequest = null;
+      if (saveRequest?.saveToServer) {
+        void this.saveToServer(saveRequest);
+      }
       this.terminateWorker();
       return;
     }
 
     if (payload.type === "error") {
       this.updateProgress(payload.message, 100, true);
+      this._pendingSaveRequest = null;
       this.terminateWorker();
     }
   }
@@ -228,8 +245,16 @@ export default class extends Controller {
     }
   }
 
-  download(filename, csvContent) {
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  download(payload) {
+    const filename = payload?.filename || "linelist-export.csv";
+    const format = payload?.format === "xlsx" ? "xlsx" : "csv";
+    const blob =
+      format === "xlsx"
+        ? this.xlsxBlobFromRows(payload?.rows)
+        : new Blob([payload?.content || ""], {
+            type: "text/csv;charset=utf-8;",
+          });
+
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
@@ -238,6 +263,16 @@ export default class extends Controller {
     anchor.click();
     anchor.remove();
     URL.revokeObjectURL(url);
+  }
+
+  xlsxBlobFromRows(rows) {
+    const workbook = XLSX.utils.book_new();
+    const sheet = XLSX.utils.aoa_to_sheet(Array.isArray(rows) ? rows : []);
+    XLSX.utils.book_append_sheet(workbook, sheet, "Linelist");
+    const content = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    return new Blob([content], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
   }
 
   closeDialog() {
@@ -268,9 +303,9 @@ export default class extends Controller {
   selectedMetadataFields() {
     return Array.from(
       this.element.querySelectorAll(
-        "input[name='data_export[export_parameters][metadata_fields][]']:checked",
+        "input[name='data_export[export_parameters][metadata_fields][]']",
       ),
-    ).map((checkbox) => checkbox.value);
+    ).map((input) => input.value);
   }
 
   selectedFormat() {
@@ -285,6 +320,27 @@ export default class extends Controller {
       "input[name='data_export[export_parameters][namespace_id]']",
     );
     return namespaceInput?.value || "";
+  }
+
+  selectedExportName() {
+    const nameInput = this.element.querySelector(
+      "input[name='data_export[name]']",
+    );
+    return nameInput?.value?.trim() || "";
+  }
+
+  selectedEmailNotification() {
+    const emailCheckbox = this.element.querySelector(
+      "input[name='data_export[email_notification]']",
+    );
+    return Boolean(emailCheckbox?.checked);
+  }
+
+  saveToServerSelected() {
+    const checkbox = this.element.querySelector(
+      "input[name='data_export[save_to_server]']",
+    );
+    return Boolean(checkbox?.checked);
   }
 
   selectedSampleIds() {
@@ -311,6 +367,72 @@ export default class extends Controller {
 
   sampleGraphqlIdPrefix() {
     return this.sampleGraphqlIdPrefixValue;
+  }
+
+  saveToServerUrl() {
+    return this.saveToServerUrlValue;
+  }
+
+  async saveToServer(request) {
+    const saveUrl = this.saveToServerUrl();
+    if (!saveUrl) return;
+
+    try {
+      const response = await fetch(saveUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-CSRF-Token": this.csrfToken(),
+        },
+        body: JSON.stringify({
+          data_export: {
+            ...(request.exportName ? { name: request.exportName } : {}),
+            email_notification: request.emailNotification,
+            export_type: "linelist",
+            export_parameters: {
+              ids: request.sampleIds,
+              namespace_id: request.namespaceId,
+              linelist_format: request.format,
+              metadata_fields: request.metadataFields,
+            },
+          },
+        }),
+      });
+
+      let payload = {};
+      try {
+        payload = await response.json();
+      } catch {
+        payload = {};
+      }
+
+      if (!response.ok) {
+        const detail = Array.isArray(payload?.errors)
+          ? payload.errors.join(", ")
+          : `Request failed (${response.status})`;
+        throw new Error(detail);
+      }
+
+      if (this.hasSampleStatusTarget) {
+        this.sampleStatusTarget.textContent = this.t(
+          this.saveQueuedMessageValue,
+          {
+            id: payload.id,
+          },
+        );
+      }
+    } catch (error) {
+      if (!this.hasSampleStatusTarget) return;
+
+      this.sampleStatusTarget.textContent = this.t(
+        this.saveFailedMessageValue,
+        {
+          message: error?.message || "unknown error",
+        },
+      );
+    }
   }
 
   selectionStorageKey() {

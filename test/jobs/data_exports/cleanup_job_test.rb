@@ -25,5 +25,19 @@ module DataExports
 
       assert_raises(ActiveRecord::RecordNotFound) { @data_export.reload }
     end
+
+    test 'cleanup expired linelist export attachment' do
+      linelist_export = data_exports(:data_export_eight)
+      assert linelist_export.file.valid?
+
+      linelist_export.update!(expires_at: 1.day.ago)
+
+      assert_difference -> { ActiveStorage::Attachment.count } => -1,
+                        -> { DataExport.count } => -1 do
+        DataExports::CleanupJob.perform_now
+      end
+
+      assert_raises(ActiveRecord::RecordNotFound) { linelist_export.reload }
+    end
   end
 end

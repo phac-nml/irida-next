@@ -992,6 +992,77 @@ class DataExportsTest < ApplicationSystemTestCase
     end
   end
 
+  test 'v2 linelist export dialog enables xlsx and defaults save-to-server unchecked' do
+    Flipper.enable(:client_linelist_exports_v1, @user)
+
+    visit namespace_project_samples_url(@group1, @project1)
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within %(#samples-table) do
+      find("input[type='checkbox'][value='#{@sample30.id}']").click
+    end
+
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_selector "[data-controller*='linelist-export']"
+      assert_selector 'input#linelist-format-xlsx:not([disabled])'
+      assert_field 'data_export[save_to_server]', checked: false
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
+      assert_selector 'ul#available-list'
+      assert_selector 'ul#selected-list'
+    end
+  end
+
+  test 'v2 linelist submit downloads without background save when save-to-server is unchecked' do
+    open_v2_linelist_dialog
+    install_v2_linelist_export_stubs
+
+    current_path = page.current_path
+
+    within 'dialog[open].dialog--size-lg' do
+      find('li', exact_text: 'metadatafield1').click
+      click_button I18n.t('components.sortable_lists.v1.list_component.add')
+      fill_in 'data_export_name', with: 'v2 unchecked save export'
+      click_button I18n.t('data_exports.new.submit_button')
+    end
+
+    assert_text 'Download started:'
+    assert_equal 0, evaluate_script('window.__linelistSaveRequests.length')
+    assert_equal current_path, page.current_path
+  end
+
+  test 'v2 linelist submit triggers background save when save-to-server is checked' do
+    open_v2_linelist_dialog
+    install_v2_linelist_export_stubs
+
+    within 'dialog[open].dialog--size-lg' do
+      find('li', exact_text: 'metadatafield1').click
+      click_button I18n.t('components.sortable_lists.v1.list_component.add')
+      fill_in 'data_export_name', with: 'v2 checked save export'
+      find("input[type='checkbox'][id='data_export_email_notification']").click
+      find("input[type='checkbox'][id='linelist-save-to-server']").click
+      click_button I18n.t('data_exports.new.submit_button')
+    end
+
+    assert_text :all,
+                I18n.t('data_exports.new_linelist_export_dialog.save_queued', id: 'stub-export-id'),
+                wait: 5
+    assert_equal 1, evaluate_script('window.__linelistSaveRequests.length')
+
+    payload = evaluate_script('JSON.parse(window.__linelistSaveRequests[0].body)')
+    assert_equal 'linelist', payload['data_export']['export_type']
+    assert_equal 'v2 checked save export', payload['data_export']['name']
+    assert_equal true, payload['data_export']['email_notification']
+    assert_equal ['metadatafield1'], payload['data_export']['export_parameters']['metadata_fields']
+  end
+
   test 'sortable list buttons in new linelist export dialog' do
     visit namespace_project_samples_url(@group1, @project1)
     click_button I18n.t('shared.samples.actions_dropdown.label')
@@ -1780,5 +1851,79 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('components.viral.pagy.empty_state.title')
       assert_text I18n.t('components.viral.pagy.empty_state.description')
     end
+  end
+
+  def open_v2_linelist_dialog
+    Flipper.enable(:client_linelist_exports_v1, @user)
+
+    visit namespace_project_samples_url(@group1, @project1)
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within %(#samples-table) do
+      find("input[type='checkbox'][value='#{@sample30.id}']").click
+    end
+
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
+  end
+
+  LINELIST_EXPORT_STUBS_SCRIPT = <<~JS
+    window.__linelistSaveRequests = [];
+    window.__linelistOriginalFetch ||= window.fetch.bind(window);
+
+    window.fetch = async (input, init = {}) => {
+      const url = typeof input === "string" ? input : input?.url;
+      const method = (init?.method || "GET").toUpperCase();
+
+      if (url && url.includes("/-/data_exports") && method === "POST") {
+        window.__linelistSaveRequests.push({ url, body: init.body });
+        return new Response(
+          JSON.stringify({
+            id: "stub-export-id",
+            status: "processing",
+            export_type: "linelist",
+          }),
+          {
+            status: 202,
+            headers: { "Content-Type": "application/json" },
+          },
+        );
+      }
+
+      return window.__linelistOriginalFetch(input, init);
+    };
+
+    window.Worker = class {
+      postMessage(payload) {
+        const donePayload =
+          payload.format === "xlsx"
+            ? {
+                type: "done",
+                filename: payload.filename,
+                format: "xlsx",
+                rows: [["SAMPLE PUID"], ["INXT_SAM_STUB"]],
+              }
+            : {
+                type: "done",
+                filename: payload.filename,
+                format: "csv",
+                content: "SAMPLE PUID\\\\nINXT_SAM_STUB",
+              };
+
+        setTimeout(() => {
+          if (this.onmessage) this.onmessage({ data: donePayload });
+        }, 10);
+      }
+
+      terminate() {}
+    };
+  JS
+
+  def install_v2_linelist_export_stubs
+    execute_script LINELIST_EXPORT_STUBS_SCRIPT
   end
 end
