@@ -2,7 +2,7 @@
 
 # Personal Access Token Mailer
 class PersonalAccessTokenMailer < ApplicationMailer
-  def complete_user_email(personal_access_token, ip_address)
+  def new_ip_address_for_token(personal_access_token, ip_address)
     @personal_access_token = personal_access_token
     @ip_address = ip_address
     I18n.with_locale(@personal_access_token.user.locale) do
