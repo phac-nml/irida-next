@@ -1,5 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
-import { FOCUSABLE_ELEMENTS } from "controllers/datepicker/constants";
+import {
+  FOCUSABLE_ELEMENTS,
+  INPUT_CLASSES,
+} from "controllers/datepicker/constants";
+import { replaceStyleClasses } from "controllers/datepicker/utils";
 import FloatingDropdown from "utilities/floating_dropdown";
 
 export default class extends Controller {
@@ -23,12 +27,6 @@ export default class extends Controller {
     dateFormatRegex: String,
     errors: Array,
   };
-
-  #labelErrorClasses = ["text-red-700", "dark:text-red-400"];
-  #labelDefaultClasses = ["text-slate-900", "dark:text-white"];
-
-  #inputErrorClasses = ["!border-red-500", "!dark:border-red-400"];
-  #inputDefaultClasses = ["border-slate-300", "dark:border-slate-600"];
 
   // today's date attributes for quick access
   #todaysFullDate = new Date();
@@ -364,20 +362,30 @@ export default class extends Controller {
 
   #toggleErrorState(erroring) {
     if (erroring) {
-      this.datepickerInputTarget.classList.remove(...this.#inputDefaultClasses);
-      this.datepickerInputTarget.classList.add(...this.#inputErrorClasses);
+      replaceStyleClasses(
+        this.datepickerInputTarget,
+        INPUT_CLASSES["INPUT_DEFAULT"],
+        INPUT_CLASSES["INPUT_ERROR"],
+      );
       if (this.hasDatepickerLabelTarget) {
-        this.datepickerLabelTarget.classList.remove(
-          ...this.#labelDefaultClasses,
+        replaceStyleClasses(
+          this.datepickerLabelTarget,
+          INPUT_CLASSES["LABEL_DEFAULT"],
+          INPUT_CLASSES["LABEL_ERROR"],
         );
-        this.datepickerLabelTarget.classList.add(...this.#labelErrorClasses);
       }
     } else {
-      this.datepickerInputTarget.classList.remove(...this.#inputErrorClasses);
-      this.datepickerInputTarget.classList.add(...this.#inputDefaultClasses);
+      replaceStyleClasses(
+        this.datepickerInputTarget,
+        INPUT_CLASSES["INPUT_ERROR"],
+        INPUT_CLASSES["INPUT_DEFAULT"],
+      );
       if (this.hasDatepickerLabelTarget) {
-        this.datepickerLabelTarget.classList.remove(...this.#labelErrorClasses);
-        this.datepickerLabelTarget.classList.add(...this.#labelDefaultClasses);
+        replaceStyleClasses(
+          this.datepickerLabelTarget,
+          INPUT_CLASSES["LABEL_ERROR"],
+          INPUT_CLASSES["LABEL_DEFAULT"],
+        );
       }
     }
   }
