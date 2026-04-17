@@ -27,18 +27,6 @@ module FileSelector
 
   private
 
-  # TODO: Remove fastq_direction when v2_samplesheet is retired
-  def fastq_direction(property)
-    case property.match(/^fastq_(\d+)$/).to_a[1]
-    when '1'
-      :pe_forward
-    when '2'
-      :pe_reverse
-    else
-      :single
-    end
-  end
-
   # return the necessary file attributes, format currently == 'samplesheet' or 'file_selector'
   def file_attributes(file, format)
     attributes = {
@@ -58,11 +46,9 @@ module FileSelector
 
   # queries fastq files for what's displayed in the samplesheet and file_selector of the samplesheet
   # param direction (string): query specific direction
-  # param include_singles (boolean):
-  #   - false when querying for what's displayed in samplesheet (if no PE attachment found, samplesheet will perform
-  #   a separate query to find first non-PE single)
-  #   - true when querying file_selector fastq files, specifically for forward direction. This query will include both
-  #   all PE forward files and any non-pe fastq files.
+  # param include_singles (boolean): whether to include files without a direction (i.e. single end fastq files)
+  #  - This is ignored if direction is 'reverse' since single end files should only be included with forward direction
+  # returns an ActiveRecord::Relation of matching attachments
   def query_fastq_files(direction, pattern, include_singles)
     attachments
       .matching_filename(pattern)
