@@ -557,6 +557,7 @@ export default class extends Controller {
       this.datepickerV2InputOutlet.submitDate();
     }
 
+    this.datepickerV2InputOutlet.disableInputErrorState();
     this.datepickerV2InputOutlet.hideCalendar();
     this.datepickerV2InputOutlet.focusNextFocusableElement();
   }

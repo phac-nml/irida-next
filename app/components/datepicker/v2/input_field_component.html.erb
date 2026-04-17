@@ -1,5 +1,9 @@
 <% if @label %>
-  <label for="<%= @input_id %>" class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
+  <label
+    data-datepicker--v2--input-target="datepickerLabel"
+    for="<%= @input_id %>"
+    class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+  >
     <%= @label %>
 
     <% if @required %>

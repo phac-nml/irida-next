@@ -5,6 +5,7 @@ import FloatingDropdown from "utilities/floating_dropdown";
 export default class extends Controller {
   static outlets = ["datepicker--v2--calendar"];
   static targets = [
+    "datepickerLabel",
     "datepickerInput",
     "calendarTemplate",
     "minDate",
@@ -22,6 +23,12 @@ export default class extends Controller {
     dateFormatRegex: String,
     errors: Array,
   };
+
+  #labelErrorClasses = ["text-red-700", "dark:text-red-400"];
+  #labelDefaultClasses = ["text-slate-900", "dark:text-white"];
+
+  #inputErrorClasses = ["!border-red-500", "!dark:border-red-400"];
+  #inputDefaultClasses = ["border-slate-300", "dark:border-slate-600"];
 
   // today's date attributes for quick access
   #todaysFullDate = new Date();
@@ -43,6 +50,8 @@ export default class extends Controller {
 
   #minDate;
 
+  #formFieldContainer;
+
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
@@ -51,6 +60,8 @@ export default class extends Controller {
     if (this.errorsValue.length > 0) {
       this.#enableInputErrorState(this.errorsValue);
     }
+
+    this.#findClosestFormField();
 
     this.boundHandleDatepickerInputFocus =
       this.handleDatepickerInputFocus.bind(this);
@@ -88,6 +99,16 @@ export default class extends Controller {
 
     this.#calendar.remove();
     this.#calendar = null;
+  }
+
+  // verifies if the datepicker is within a form-field container. This will then allow us to disable any backend
+  // validation error state styling classes (eg: remove .invalid) from this container
+  #findClosestFormField() {
+    const closestFormField = this.element.closest(".form-field");
+
+    if (closestFormField.contains(this.element)) {
+      this.#formFieldContainer = closestFormField;
+    }
   }
 
   #initializeDropdown() {
@@ -304,6 +325,7 @@ export default class extends Controller {
       `${this.datepickerInputTarget.id}-message`,
     );
 
+    this.#toggleErrorState(true);
     messages.forEach((message) => {
       const errorMessage =
         this.errorMessageTemplateTarget.content.cloneNode(true);
@@ -331,6 +353,35 @@ export default class extends Controller {
     if (!this.errorContainerTarget.classList.contains("hidden")) {
       this.errorContainerTarget.classList.add("hidden");
       this.errorContainerTarget.setAttribute("aria-hidden", true);
+    }
+
+    if (
+      this.#formFieldContainer &&
+      this.#formFieldContainer.classList.contains("invalid")
+    ) {
+      this.#formFieldContainer.classList.remove("invalid");
+    }
+
+    this.#toggleErrorState(false);
+  }
+
+  #toggleErrorState(erroring) {
+    if (erroring) {
+      this.datepickerInputTarget.classList.remove(...this.#inputDefaultClasses);
+      this.datepickerInputTarget.classList.add(...this.#inputErrorClasses);
+      if (this.hasDatepickerLabelTarget) {
+        this.datepickerLabelTarget.classList.remove(
+          ...this.#labelDefaultClasses,
+        );
+        this.datepickerLabelTarget.classList.add(...this.#labelErrorClasses);
+      }
+    } else {
+      this.datepickerInputTarget.classList.remove(...this.#inputErrorClasses);
+      this.datepickerInputTarget.classList.add(...this.#inputDefaultClasses);
+      if (this.hasDatepickerLabelTarget) {
+        this.datepickerLabelTarget.classList.remove(...this.#labelErrorClasses);
+        this.datepickerLabelTarget.classList.add(...this.#labelDefaultClasses);
+      }
     }
   }
 
