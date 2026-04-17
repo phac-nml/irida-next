@@ -1051,9 +1051,9 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('data_exports.new.submit_button')
     end
 
-    assert_text :all,
-                I18n.t('data_exports.new_linelist_export_dialog.save_queued', id: 'stub-export-id'),
-                wait: 5
+    assert_selector '#linelist-export-progress-window',
+                    text: I18n.t('data_exports.new_linelist_export_dialog.save_queued', id: 'stub-export-id'),
+                    wait: 5
     assert_equal 1, evaluate_script('window.__linelistSaveRequests.length')
 
     payload = evaluate_script('JSON.parse(window.__linelistSaveRequests[0].body)')

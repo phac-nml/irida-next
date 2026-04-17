@@ -198,11 +198,12 @@ export default class extends Controller {
         }),
         100,
       );
-      this.scheduleProgressWindowDismiss();
       const saveRequest = this._pendingSaveRequest;
       this._pendingSaveRequest = null;
       if (saveRequest?.saveToServer) {
         void this.saveToServer(saveRequest);
+      } else {
+        this.scheduleProgressWindowDismiss();
       }
       this.terminateWorker();
       return;
@@ -415,23 +416,25 @@ export default class extends Controller {
         throw new Error(detail);
       }
 
-      if (this.hasSampleStatusTarget) {
-        this.sampleStatusTarget.textContent = this.t(
-          this.saveQueuedMessageValue,
-          {
-            id: payload.id,
-          },
-        );
-      }
-    } catch (error) {
-      if (!this.hasSampleStatusTarget) return;
+      const message = this.t(this.saveQueuedMessageValue, {
+        id: payload.id,
+      });
 
-      this.sampleStatusTarget.textContent = this.t(
-        this.saveFailedMessageValue,
-        {
-          message: error?.message || "unknown error",
-        },
-      );
+      if (this.hasSampleStatusTarget) {
+        this.sampleStatusTarget.textContent = message;
+      }
+      this.updateProgress(message, 100);
+      this.scheduleProgressWindowDismiss();
+    } catch (error) {
+      const message = this.t(this.saveFailedMessageValue, {
+        message: error?.message || "unknown error",
+      });
+
+      if (this.hasSampleStatusTarget) {
+        this.sampleStatusTarget.textContent = message;
+      }
+      this.updateProgress(message, 100, true);
+      this.scheduleProgressWindowDismiss();
     }
   }
 
