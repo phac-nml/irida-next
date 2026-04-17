@@ -26,8 +26,9 @@ module DataExports
           assert_selector "[data-linelist-export-save-to-server-url-value='#{data_exports_path}']"
           assert_selector "[data-linelist-export-sample-graphql-id-prefix-value='gid://#{GlobalID.app}/Sample/']"
           assert_selector 'input#linelist-format-xlsx:not([disabled])'
-          assert_selector "input#linelist-save-to-server[type='checkbox']"
-          assert_no_selector 'input#linelist-save-to-server[checked]'
+          assert_selector "input#linelist-delivery-download[type='radio'][checked]"
+          assert_no_selector "input#linelist-delivery-save[type='radio'][checked]"
+          assert_selector "fieldset[data-linelist-export-target='saveDetailsFieldset'][disabled]"
           assert_selector "input[name='data_export[name]']"
           assert_selector "input[name='data_export[email_notification]']"
           assert_selector 'ul#available-list'
