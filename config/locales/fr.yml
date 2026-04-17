@@ -1093,6 +1093,10 @@ fr:
       access_revoked_user_email:
         body_html: Votre accès à %{type} '%{name}' a été <strong>révoqué</strong>
         subject: Votre accès à %{type} '%{name}' a été révoqué
+    personal_access_token_mailer:
+      new_ip_address_for_token:
+        body_html: Votre jeton d'accès personnel « %{token_name} » a été utilisé à partir d'une nouvelle adresse IP %{ip_address}. Si vous ne reconnaissez pas cette adresse IP, veuillez révoquer ou faire pivoter le jeton. Sinon, aucune action n'est requise de votre part.
+        subject: Nouvelle adresse IP ajoutée au jeton d'accès personnel « %{token_name} »
     pipeline_mailer:
       complete_manager_email:
         body_html: 'Le pipeline <strong>%{name} (id: %{id})</strong> s’est terminé avec succès.'
