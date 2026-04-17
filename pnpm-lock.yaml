@@ -22,8 +22,8 @@ importers:
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.2.0(jiti@2.6.1))
       '@herb-tools/formatter':
-        specifier: ^0.9.5
-        version: 0.9.5(tailwindcss@4.2.2)
+        specifier: ^0.9.6
+        version: 0.9.6(tailwindcss@4.2.2)
       '@herb-tools/linter':
         specifier: ^0.9.6
         version: 0.9.6(tailwindcss@4.2.2)
@@ -90,20 +90,14 @@ packages:
     resolution: {integrity: sha512-ejvBr8MQCbVsWNZnCwDXjUKq40MDmHalq7cJ6e9s/qzTUFIIo/afzt1Vui9T97FM/V/pN4YsFVoed5NIa96RDg==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@herb-tools/config@0.9.5':
-    resolution: {integrity: sha512-tVUvgxHZgoKSOChotYEIn8iNquavTd6RgzOfRk7NSokXlVpHOYf2wF94X+nGS0cDyj6pOxTIae9RF6LPAbRVEg==}
-
   '@herb-tools/config@0.9.6':
     resolution: {integrity: sha512-GE3KkN7749HFrsdhjdt7qJixVasOU6Mk748gwuw4xeOIwzU3u+z4D832IohbsuoWjF65iV7GuB1t0o2U8KpgeA==}
-
-  '@herb-tools/core@0.9.5':
-    resolution: {integrity: sha512-YgPunnLxCu3L5IrZkPFFyp32jNSThIBbqhdXyJyFBXn4/36gWHu19SKXXfoHx/fQvFP5HkX30IvkF4LGV3MH2g==}
 
   '@herb-tools/core@0.9.6':
     resolution: {integrity: sha512-H0LsafXLv8ouj/jWKDkdaojUDmd5ssV3CjmSuZEoxb5qIyHt/xqXC+3HY51eUP0MNrHPDMipRV7kW9qNWENcSA==}
 
-  '@herb-tools/formatter@0.9.5':
-    resolution: {integrity: sha512-/M/DyJQ234QOZiu2GR/Pj4L6KlZNtrtJgG/e895/PPSftpoqkKNzOZ+dVxBF+LQkSabcB6XRIpQE7rZHF7X3CQ==}
+  '@herb-tools/formatter@0.9.6':
+    resolution: {integrity: sha512-SwIH9HFy1bbPrh750OuX8hpVa2Xd9d4mr5yxof/yRjKII4VO6L+u0oNm/wtl7l9xr0VtYkg3Yf6DZ/jGOf2Zlg==}
     hasBin: true
 
   '@herb-tools/highlighter@0.9.6':
@@ -117,25 +111,12 @@ packages:
   '@herb-tools/node-wasm@0.9.6':
     resolution: {integrity: sha512-eqWWI5U10qGQ5C3PKxP9tHQmX1YNfmA9VZpyueyQ8T6Sh7UmolLvTaRoA6QEl2Xj62jCiJ5C14/36OiwVBSveA==}
 
-  '@herb-tools/printer@0.9.5':
-    resolution: {integrity: sha512-8Ftj3qoVOdNtpwuJWmUgrl6SV2ObsR9IEfuDbAs/yL0rr3mqtAtk5wkOqrx0xiwHxNFW0JB9zTTgY6zCFMJFhg==}
-    hasBin: true
-
   '@herb-tools/printer@0.9.6':
     resolution: {integrity: sha512-20uhj90hKGcTQaDTsxtJFhB2E6s4diplpGXFJRxmfNdgoFBQHh5P2Ssnq1W4lUGTZrlTD8P0b7iohqw+IhNONA==}
     hasBin: true
 
-  '@herb-tools/rewriter@0.9.5':
-    resolution: {integrity: sha512-XtUqheyHZtE1gTL8PPEMneOaM6b1LndXBkeTk+PNUIG2NnZsU33ERPbbKQW48YkoA3HzMrBIM19zU0xvkmRaKA==}
-
   '@herb-tools/rewriter@0.9.6':
     resolution: {integrity: sha512-ZZywAoFEh7y8FozGz78iPPyWDg1vpjH/osI4xotvHULd0du8Vi3IN30oRfOUmqXdg2f6HOy9pSIBtqOTNku3Pw==}
-
-  '@herb-tools/tailwind-class-sorter@0.9.5':
-    resolution: {integrity: sha512-xtFMknhguJbBOeNpXxAsdDJe5C4qUyi4+q/LqpU3/l0J5+8LXEYO+9Iy2F0C/QTGkdm9fHGNUQtiQWj1xTRuKg==}
-    engines: {node: '>=14.21.3'}
-    peerDependencies:
-      tailwindcss: ^3.0 || ^4.0
 
   '@herb-tools/tailwind-class-sorter@0.9.6':
     resolution: {integrity: sha512-RHA+04Wy26S9unRAtL5zb4AX5eCA5l4Dmq5fVpawevuCgHeEegfr5RQNg7cHZR8svngixLGvylXQ6Hn4iYP97A==}
@@ -449,6 +430,10 @@ packages:
   enhanced-resolve@5.20.1:
     resolution: {integrity: sha512-Qohcme7V1inbAfvjItgw0EaxVX5q2rdVEZHRBrEQdRZTssLDGsL8Lwrznl8oQ/6kuTJONLaDcGjkNP247XEhcA==}
     engines: {node: '>=10.13.0'}
+
+  es-errors@1.3.0:
+    resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
+    engines: {node: '>= 0.4'}
 
   escalade@3.2.0:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
@@ -797,12 +782,12 @@ packages:
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
 
-  postcss@8.5.3:
-    resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
+  postcss@8.5.10:
+    resolution: {integrity: sha512-pMMHxBOZKFU6HgAZ4eyGnwXF/EvPGGqUr0MnZ5+99485wwW41kW91A4LOGxSHhgugZmSChL5AlElNdwlNgcnLQ==}
     engines: {node: ^10 || ^12 || >=14}
 
-  postcss@8.5.9:
-    resolution: {integrity: sha512-7a70Nsot+EMX9fFU3064K/kdHWZqGVY+BADLyXc8Dfv+mTLLVl6JzJpPaCZ2kQL9gIJvKXSLMHhqdRRjwQeFtw==}
+  postcss@8.5.3:
+    resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
   prelude-ls@1.2.1:
@@ -880,8 +865,8 @@ packages:
     resolution: {integrity: sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==}
     engines: {node: '>=8'}
 
-  resolve@1.22.11:
-    resolution: {integrity: sha512-RfqAvLnMl313r7c9oclB1HhUEAezcpLjz95wFH4LVuhk9JF/r22qmVP9AMmOU4vMX7Q8pN8jwNg/CSpdFnMjTQ==}
+  resolve@1.22.12:
+    resolution: {integrity: sha512-TyeJ1zif53BPfHootBGwPRYT1RUt6oGWsaQr8UyZW/eAm9bKoijtvruSDEmZHm92CwS9nj7/fWttqPCgzep8CA==}
     engines: {node: '>= 0.4'}
     hasBin: true
 
@@ -977,13 +962,6 @@ snapshots:
       '@eslint/core': 1.2.0
       levn: 0.4.1
 
-  '@herb-tools/config@0.9.5':
-    dependencies:
-      '@herb-tools/core': 0.9.5
-      picomatch: 4.0.4
-      tinyglobby: 0.2.16
-      yaml: 2.8.3
-
   '@herb-tools/config@0.9.6':
     dependencies:
       '@herb-tools/core': 0.9.6
@@ -991,16 +969,14 @@ snapshots:
       tinyglobby: 0.2.16
       yaml: 2.8.3
 
-  '@herb-tools/core@0.9.5': {}
-
   '@herb-tools/core@0.9.6': {}
 
-  '@herb-tools/formatter@0.9.5(tailwindcss@4.2.2)':
+  '@herb-tools/formatter@0.9.6(tailwindcss@4.2.2)':
     dependencies:
-      '@herb-tools/config': 0.9.5
-      '@herb-tools/core': 0.9.5
-      '@herb-tools/printer': 0.9.5
-      '@herb-tools/rewriter': 0.9.5(tailwindcss@4.2.2)
+      '@herb-tools/config': 0.9.6
+      '@herb-tools/core': 0.9.6
+      '@herb-tools/printer': 0.9.6
+      '@herb-tools/rewriter': 0.9.6(tailwindcss@4.2.2)
       tinyglobby: 0.2.16
     transitivePeerDependencies:
       - tailwindcss
@@ -1027,23 +1003,10 @@ snapshots:
     dependencies:
       '@herb-tools/core': 0.9.6
 
-  '@herb-tools/printer@0.9.5':
-    dependencies:
-      '@herb-tools/core': 0.9.5
-      tinyglobby: 0.2.16
-
   '@herb-tools/printer@0.9.6':
     dependencies:
       '@herb-tools/core': 0.9.6
       tinyglobby: 0.2.16
-
-  '@herb-tools/rewriter@0.9.5(tailwindcss@4.2.2)':
-    dependencies:
-      '@herb-tools/core': 0.9.5
-      '@herb-tools/tailwind-class-sorter': 0.9.5(tailwindcss@4.2.2)
-      tinyglobby: 0.2.16
-    transitivePeerDependencies:
-      - tailwindcss
 
   '@herb-tools/rewriter@0.9.6(tailwindcss@4.2.2)':
     dependencies:
@@ -1053,22 +1016,13 @@ snapshots:
     transitivePeerDependencies:
       - tailwindcss
 
-  '@herb-tools/tailwind-class-sorter@0.9.5(tailwindcss@4.2.2)':
-    dependencies:
-      clear-module: 4.1.2
-      escalade: 3.2.0
-      jiti: 2.6.1
-      postcss: 8.5.9
-      postcss-import: 16.1.1(postcss@8.5.9)
-      tailwindcss: 4.2.2
-
   '@herb-tools/tailwind-class-sorter@0.9.6(tailwindcss@4.2.2)':
     dependencies:
       clear-module: 4.1.2
       escalade: 3.2.0
       jiti: 2.6.1
-      postcss: 8.5.9
-      postcss-import: 16.1.1(postcss@8.5.9)
+      postcss: 8.5.10
+      postcss-import: 16.1.1(postcss@8.5.10)
       tailwindcss: 4.2.2
 
   '@humanfs/core@0.19.1': {}
@@ -1304,6 +1258,8 @@ snapshots:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.2
+
+  es-errors@1.3.0: {}
 
   escalade@3.2.0: {}
 
@@ -1605,24 +1561,24 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  postcss-import@16.1.1(postcss@8.5.9):
+  postcss-import@16.1.1(postcss@8.5.10):
     dependencies:
-      postcss: 8.5.9
+      postcss: 8.5.10
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.11
+      resolve: 1.22.12
 
   postcss-value-parser@4.2.0: {}
+
+  postcss@8.5.10:
+    dependencies:
+      nanoid: 3.3.11
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
 
   postcss@8.5.3:
     dependencies:
       nanoid: 3.3.8
-      picocolors: 1.1.1
-      source-map-js: 1.2.1
-
-  postcss@8.5.9:
-    dependencies:
-      nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -1642,8 +1598,9 @@ snapshots:
 
   resolve-from@5.0.0: {}
 
-  resolve@1.22.11:
+  resolve@1.22.12:
     dependencies:
+      es-errors: 1.3.0
       is-core-module: 2.16.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
