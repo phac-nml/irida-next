@@ -536,6 +536,7 @@ en:
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...
       preparing_rows: Preparing %{count} rows
+      queueing_save: Queueing save to Data Exports...
       save_failed: 'Saving to server failed: %{message}'
       save_queued: 'Saved to Data Exports (ID: %{id})'
       save_to_server: Save to Data Exports
