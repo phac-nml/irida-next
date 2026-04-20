@@ -27,7 +27,7 @@
         autocomplete="off"
       >
     <% else %>
-      <%= viral_select2(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
+      <%= render Select2Component.new(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,

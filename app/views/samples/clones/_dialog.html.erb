@@ -79,7 +79,7 @@
                   autocomplete="off"
                 >
               <% else %>
-                <%= viral_select2(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.clones.dialog.select_project")) do |select| %>
+                <%= render Select2Component.new(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.clones.dialog.select_project")) do |select| %>
                   <% @projects.each do |project| %>
                     <% select.with_option(
                       value: project.id,
