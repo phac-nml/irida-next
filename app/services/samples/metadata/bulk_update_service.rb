@@ -19,7 +19,8 @@ module Samples
       def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         authorize! @namespace, to: :update_sample_metadata?
         activity_data = {}
-        unsuccessful_updates = {}
+        unsuccessful_updates = { not_updated: {}, unchanged: {}, not_found: {} }
+        full_metadata_changes = {}
 
         starting_index = 0
         should_update_progress_bar = false
@@ -28,7 +29,7 @@ module Samples
           should_update_progress_bar = true
         end
 
-        @metadata_payload.each.with_index(starting_index) do |(sample_identifier, metadata), index|
+        @metadata_payload.each.with_index(starting_index) do |(sample_identifier, metadata), index| # rubocop:disable Metrics/BlockLength
           update_progress_bar(index, @progress_bar_denominator, @broadcast_target) if should_update_progress_bar
           next unless validate_metadata_param(metadata, sample_identifier)
 
@@ -38,8 +39,17 @@ module Samples
           project_puid = sample.project.puid
           metadata_changes = perform_metadata_update(sample, metadata, false)
 
-          unless metadata_changes[:not_updated].empty?
-            unsuccessful_updates[sample_identifier] = metadata_changes[:not_updated]
+          # no changes made for sample (metadata was invalid)
+          next if metadata_changes == { added: [], updated: [], deleted: [], not_updated: [], unchanged: [],
+                                        not_found: [] }
+
+          full_metadata_changes[sample_identifier] = metadata_changes
+
+          %i[not_updated unchanged not_found].each do |unsuccessful_metadata_change_key|
+            next if metadata_changes[unsuccessful_metadata_change_key].empty?
+
+            unsuccessful_updates[unsuccessful_metadata_change_key][sample_identifier] =
+              metadata_changes[unsuccessful_metadata_change_key]
           end
 
           if metadata_changes[:added].empty? && metadata_changes[:deleted].empty? && metadata_changes[:updated].empty?
@@ -58,9 +68,10 @@ module Samples
           add_changes_to_metadata_summary(project_puid, metadata_changes)
         end
 
-        handle_not_updated_fields(unsuccessful_updates) unless unsuccessful_updates.empty?
+        handle_unsuccessful_updates(unsuccessful_updates)
 
         create_activities_and_update_metadata_summary(activity_data) unless activity_data.empty?
+        full_metadata_changes
       end
 
       private
@@ -79,14 +90,17 @@ module Samples
         false
       end
 
-      def validate_metadata_value(key, value, sample_name)
-        return unless value.is_a?(Hash)
+      def validate_metadata_value(key, value, sample_name) # rubocop:disable Naming/PredicateMethod
+        return true unless value.is_a?(Hash)
 
         @namespace.errors.add(:sample, I18n.t('services.samples.metadata.nested_metadata', sample_name:, key:))
+        false
       end
 
       def find_sample(sample_identifier)
         id_type = determine_sample_identifier_type(sample_identifier)
+        sample_identifier = parse_gid(sample_identifier) if id_type == 'gid'
+
         if @namespace.group_namespace?
           query_group_samples(id_type, sample_identifier)
         else
@@ -99,15 +113,24 @@ module Samples
           'puid'
         elsif sample_identifier.match?(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
           'id'
+        elsif sample_identifier.start_with?('gid://')
+          'gid'
         else
           'name'
         end
       end
 
+      def parse_gid(sample_identifier)
+        IridaSchema.parse_gid(sample_identifier, { expected_type: Sample }).model_id
+      rescue StandardError => e
+        Rails.logger.error "An error occurred while attempting to parse Sample gid with the following message: #{e.message}" # rubocop:disable Layout/LineLength
+        nil
+      end
+
       def query_group_samples(id_type, sample_identifier)
         scope_args = if id_type == 'puid'
                        { puid: sample_identifier }
-                     elsif id_type == 'id'
+                     elsif %w[id gid].include?(id_type)
                        { id: sample_identifier }
                      else
                        { name: sample_identifier }
@@ -125,18 +148,19 @@ module Samples
 
       def query_project_samples(id_type, sample_identifier)
         project = @namespace.project
-        if id_type == 'puid'
-          Sample.find_by(puid: sample_identifier, project_id: project.id)
-        elsif id_type == 'id'
-          Sample.find_by(id: sample_identifier, project_id: project.id)
-        else
-          sample = Sample.find_by(name: sample_identifier, project_id: project.id)
-          return sample unless sample.nil?
+        sample = if id_type == 'puid'
+                   Sample.find_by(puid: sample_identifier, project_id: project.id)
+                 elsif %w[id gid].include?(id_type)
+                   Sample.find_by(id: sample_identifier, project_id: project.id)
+                 else
+                   Sample.find_by(name: sample_identifier, project_id: project.id)
+                 end
+        return sample unless sample.nil?
 
-          @namespace.errors.add(:sample,
-                                I18n.t('services.samples.metadata.bulk_update.sample_not_found', sample_identifier:))
-          nil
-        end
+        @namespace.errors.add(:sample,
+                              I18n.t('services.samples.metadata.bulk_update.sample_not_found',
+                                     sample_identifier:))
+        nil
       end
 
       def add_group_sample_query_error(sample, sample_identifier)
@@ -204,12 +228,14 @@ module Samples
                                           false)
       end
 
-      def handle_not_updated_fields(unsuccessful_updates)
-        unsuccessful_updates.each do |sample_identifier, changes|
-          @namespace.errors.add(:sample,
-                                I18n.t('services.samples.metadata.bulk_update.sample_metadata_fields_not_updated',
-                                       sample_name: sample_identifier,
-                                       metadata_fields: changes.join(', ')))
+      def handle_unsuccessful_updates(unsuccessful_updates)
+        unsuccessful_updates.each do |key, updates|
+          updates.each do |sample_identifier, fields|
+            @namespace.errors.add(:sample,
+                                  I18n.t("services.samples.metadata.bulk_update.sample_metadata_fields_#{key}",
+                                         sample_name: sample_identifier,
+                                         metadata_fields: fields.join(', ')))
+          end
         end
       end
 

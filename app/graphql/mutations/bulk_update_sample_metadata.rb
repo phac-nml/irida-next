@@ -1,0 +1,142 @@
+# frozen_string_literal: true
+
+module Mutations
+  # Mutation that updates metadata for samples
+  class BulkUpdateSampleMetadata < BaseMutation # rubocop:disable Metrics/ClassLength
+    description 'Update metadata for samples.'
+
+    argument :group_id, ID,
+             required: false,
+             description: 'The Node ID of the group to be updated. For example, `gid://irida/group/a84cd757-dedb-4c64-8b01-097020163077`' # rubocop:disable Layout/LineLength
+    argument :group_puid, ID,
+             required: false,
+             description: 'Persistent Unique Identifier of the group. For example, `INXT_GRP_AAAAAAAAAA`.'
+    argument :metadata, GraphQL::Types::JSON, required: true, # rubocop:disable GraphQL/ExtractInputType
+                                              description: 'The metadata to update the samples with. Note: to escape special characters (like those found in sample Node ids), use a stringified JSON input' # rubocop:disable Layout/LineLength
+    argument :project_id, ID, # rubocop:disable GraphQL/ExtractInputType
+             required: false,
+             description: 'The Node ID of the project to be updated. For example, `gid://irida/project/a84cd757-dedb-4c64-8b01-097020163077`' # rubocop:disable Layout/LineLength
+    argument :project_puid, ID, # rubocop:disable GraphQL/ExtractInputType
+             required: false,
+             description: 'Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.'
+    validates required: { one_of: %i[project_id project_puid group_id group_puid] }
+
+    field :errors, [Types::UserErrorType], description: 'A list of errors that prevented the mutation.'
+    field :overall_status, GraphQL::Types::String, null: true,
+                                                   description: 'Overall description of mutation after completion'
+    field :status, GraphQL::Types::JSON, null: true, description: 'The status of the mutation which lists the fields which were added, removed, updated, unchanged, and not found.' # rubocop:disable Layout/LineLength
+
+    def resolve(args) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+      namespace = retrieve_namespace(args)
+
+      return namespace_error(args) if namespace.nil?
+
+      metadata_payload = args[:metadata]
+      # convert string to hash if json string as given
+      metadata_payload = JSON.parse(metadata_payload) if metadata_payload.is_a?(String)
+
+      return metadata_payload_format_error unless metadata_payload.is_a?(Hash)
+
+      metadata_fields, errors = validate_and_build_metadata_fields(metadata_payload)
+
+      return sample_metadata_format_error(errors) unless errors.empty?
+
+      metadata_changes = Samples::Metadata::BulkUpdateService.new(namespace, metadata_payload, metadata_fields,
+                                                                  current_user).execute
+
+      overall_status = get_overall_status_message(namespace, metadata_changes.keys.count)
+      user_errors = namespace.errors.map do |error|
+        {
+          path: [error.attribute.to_s.camelize(:lower)],
+          message: error.message
+        }
+      end
+
+      attach_return_values(overall_status:, status: metadata_changes, errors: user_errors)
+    rescue JSON::ParserError => e
+      user_errors = [{
+        path: ['metadata'],
+        message: "JSON data is not formatted correctly. #{e.message}"
+      }]
+      attach_return_values(errors: user_errors)
+    end
+
+    def ready?(**_args)
+      authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
+      true
+    end
+
+    private
+
+    def retrieve_namespace(args)
+      if args.key?(:project_puid) || args.key?(:project_id)
+        project = get_project_from_id_or_puid_args(args)
+        project&.namespace
+      else
+        get_group_from_id_or_puid_args(args)
+      end
+    end
+
+    def namespace_error(args)
+      path = args.key?(:project_puid) || args.key?(:project_id) ? 'project' : 'group'
+      user_errors = [{
+        path: [path],
+        message: "not found by provided ID or PUID: #{args.values_at(:project_puid, :project_id, :group_puid,
+                                                                     :group_id).compact[0]}"
+      }]
+
+      attach_return_values(errors: user_errors)
+    end
+
+    def metadata_payload_format_error
+      user_errors = [{
+        path: ['metadataPayload'],
+        message: 'is not JSON data'
+      }]
+      attach_return_values(errors: user_errors)
+    end
+
+    def sample_metadata_format_error(errors)
+      user_errors = errors.map do |error|
+        {
+          path: ['metadata'],
+          message: "#{error} metadata is not JSON data"
+        }
+      end
+      attach_return_values(errors: user_errors)
+    end
+
+    def attach_return_values(overall_status: nil, status: nil, errors: [])
+      {
+        overall_status:,
+        status:,
+        errors:
+      }
+    end
+
+    def validate_and_build_metadata_fields(metadata_payload)
+      metadata_fields = []
+      errors = []
+      metadata_payload.each do |sample_identifier, metadata|
+        if metadata.is_a?(Hash)
+          metadata_fields.concat(metadata.transform_keys(&:downcase).keys)
+          metadata_fields.uniq
+        else
+          errors.append(sample_identifier)
+        end
+      end
+
+      [metadata_fields, errors]
+    end
+
+    def get_overall_status_message(namespace, successful_samples_count)
+      if successful_samples_count.zero?
+        'unsuccessful'
+      elsif successful_samples_count.positive? && namespace.errors.any?
+        'successful with errors'
+      elsif successful_samples_count.positive? && namespace.errors.none?
+        'successful'
+      end
+    end
+  end
+end

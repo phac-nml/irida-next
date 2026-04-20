@@ -11,6 +11,14 @@ module Namespaces
       @access_level
     end
 
+    def token_active?(access_level)
+      return false unless access_level == Member::AccessLevel::UPLOADER
+
+      return false if Current.token.nil?
+
+      Current.token.active?
+    end
+
     def update?
       return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
@@ -184,6 +192,7 @@ module Namespaces
 
     def update_sample_metadata?
       return true if Member::AccessLevel.manageable.include?(effective_access_level)
+      return true if token_active?(effective_access_level) == true
 
       details[:name] = record.name
       false
