@@ -58,7 +58,7 @@
           </div>
 
           <!-- Add new items -->
-          <%= viral_dropdown(
+          <%= render DropdownComponent.new(
             icon: :plus,
             trigger_id: "sidebar-new-dropdown-trigger",
             tooltip: t("general.navbar.new_dropdown.label"),
@@ -84,7 +84,7 @@
           <% end %>
 
           <!-- Profile menu -->
-          <%= viral_dropdown(
+          <%= render DropdownComponent.new(
             icon: User.icon,
             trigger_id: "sidebar-account-dropdown-trigger",
             tooltip: t(:"general.navbar.account_dropdown.label"),

@@ -188,7 +188,7 @@
                   <%= t("shared.samples.spreadsheet_imports.dialog.static_project_description") %>
                 </p>
 
-                <%= viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select| %>
+                <%= render Select2Component.new(form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select| %>
                   <% @group_projects.each do |project| %>
                     <% select.with_option(
                         value: project.id,

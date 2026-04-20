@@ -30,7 +30,7 @@
                      class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
                      data: { required: true } %>
 
-      <%= viral_select2(form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
+      <%= render Select2Component.new(form:, name: :user_id, id: form_id, selected_value: @new_member.user_id, aria_invalid: invalid_user_id, field_hint: true) do |select| %>
         <% @available_users.each do |user| %>
           <% select.with_option(
                       value: user.id,

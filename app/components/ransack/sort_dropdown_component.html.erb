@@ -1,4 +1,4 @@
-<%= viral_dropdown(label: t("components.ransack.sort_dropdown_component.sorting.#{@ransack_obj.sorts[0].name}_#{@ransack_obj.sorts[0].dir}"),
+<%= render DropdownComponent.new(label: t("components.ransack.sort_dropdown_component.sorting.#{@ransack_obj.sorts[0].name}_#{@ransack_obj.sorts[0].dir}"),
                    caret: true, prefix: t("components.ransack.sort_dropdown_component.prefix")) do |dropdown| %>
   <% @sort_options.each do |sort| %>
     <%= helpers.sorting_item(

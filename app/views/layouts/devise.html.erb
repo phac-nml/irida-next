@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html class="light" lang="<%= locale %>">
   <% content_for :head do %>
     <style>
@@ -8,21 +9,22 @@
       }
     </style>
   <% end %>
+
   <%= render "layouts/partials/head" %>
+
   <body class="bg-slate-50 dark:bg-slate-900">
     <main class="grid h-screen place-items-center" data-turbo="false">
       <div class="flex flex-col space-y-2">
-
         <section
           class="
-            w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:w-lg xl:p-0
-            dark:bg-slate-800 dark:border-slate-700
+            w-full rounded-lg bg-white shadow sm:w-lg md:mt-0 xl:p-0 dark:border dark:border-slate-700
+            dark:bg-slate-800
           "
         >
-          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <div class="space-y-4 p-6 sm:p-8 md:space-y-6">
             <div class="relative">
               <div class="absolute right-0">
-                <%= viral_dropdown(icon: :translate, label: t(:"locales.#{locale}", locale: locale), aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}) do |dropdown| %>
+                <%= render DropdownComponent.new(icon: :translate, label: t(:"locales.#{locale}", locale: locale), aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}) do |dropdown| %>
                   <%- I18n.available_locales.each do |locale| %>
                     <%= dropdown.with_item(
                       label: t(:"locales.#{locale}", locale: locale),
@@ -40,17 +42,21 @@
                 name: "beaker",
                 classes: "w-20 h-20 text-green-500 rotate-12",
               ) %>
+
               <h1
                 class="
-                  text-xl font-bold leading-tight tracking-tight text-center text-slate-900
-                  md:text-2xl dark:text-white
+                  text-center text-xl leading-tight font-bold tracking-tight text-slate-900 md:text-2xl
+                  dark:text-white
                 "
-              ><%= t("devise.layout.title") %></h1>
+              >
+                <%= t("devise.layout.title") %>
+              </h1>
             </div>
 
             <% flash.each do |type, msg| %>
               <%= viral_alert(type: type, message: msg) %>
             <% end %>
+
             <%= yield %>
           </div>
         </section>

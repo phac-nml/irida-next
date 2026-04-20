@@ -10,7 +10,6 @@ module ViewHelper
     dialog: 'Viral::DialogComponent',
     empty: 'Viral::EmptyStateComponent',
     data_table: 'Viral::DataTableComponent',
-    dropdown: 'DropdownComponent',
     file_input: 'Viral::Form::FileInputComponent',
     flash: 'Viral::FlashComponent',
     help_text: 'Viral::Form::HelpTextComponent',
@@ -18,10 +17,8 @@ module ViewHelper
     pageheader: 'Viral::PageHeaderComponent',
     prefixed_boolean: 'Viral::Form::Prefixed::BooleanComponent',
     prefixed_select: 'Viral::Form::Prefixed::SelectComponent',
-    prefixed_select2: 'Prefixed::Select2Component',
     prefixed_text_input: 'Viral::Form::Prefixed::TextInputComponent',
     pill: 'Viral::PillComponent',
-    select2: 'Select2Component',
     select: 'Viral::Form::SelectComponent',
     text_input: 'Viral::Form::TextInputComponent',
     tooltip: 'Viral::TooltipComponent'

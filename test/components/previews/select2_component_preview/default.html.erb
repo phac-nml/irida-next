@@ -6,7 +6,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
   end) do |form| %>
   <label for="unique_id">Select User</label>
 
-  <%= viral_select2(form:, name: :user, id: "unique_id") do |select| %>
+  <%= render Select2Component.new(form:, name: :user, id: "unique_id") do |select| %>
     <% (1..50).each do |num| %>
       <% select.with_option(
                       value: num,
