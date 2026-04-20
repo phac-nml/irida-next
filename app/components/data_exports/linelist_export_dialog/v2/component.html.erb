@@ -55,40 +55,56 @@
         </p>
       </div>
 
-      <div class="form-field">
-        <fieldset>
-          <legend class="mb-1 text-sm text-slate-900 dark:text-slate-400">
+      <% metadata_fields = @namespace&.metadata_fields || [] %>
+
+      <% if metadata_fields.any? %>
+        <div
+          data-controller="sortable-lists--v1--two-lists-selection"
+          data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
+          data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
+          data-sortable-lists--v1--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
+        >
+          <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100">
             <%= t("data_exports.new_linelist_export_dialog.metadata") %>
-          </legend>
+          </h2>
 
-          <div class="grid max-h-48 gap-1 overflow-y-auto rounded-lg border border-slate-200 p-2 dark:border-slate-700">
-            <% metadata_fields = @namespace&.metadata_fields || [] %>
+          <%= render Viral::SortableListsGuidanceComponent.new(
+            title: t("data_exports.new_linelist_export_dialog.fields_instructions_title"),
+            instructions: t("data_exports.new_linelist_export_dialog.fields_instructions"),
+            keyboard_help: t("data_exports.new_linelist_export_dialog.keyboard_help"),
+            available: {
+              title: t("data_exports.new_linelist_export_dialog.available_list_title"),
+              description: t("data_exports.new_linelist_export_dialog.available_description"),
+            },
+            selected: {
+              title: t("data_exports.new_linelist_export_dialog.selected_list_title"),
+              description: t("data_exports.new_linelist_export_dialog.selected_description"),
+            },
+          ) %>
 
-            <% if metadata_fields.any? %>
-              <% metadata_fields.each_with_index do |field, index| %>
-                <% field_id = "metadata-field-#{index}-#{field.to_s.parameterize}" %>
+          <%= render SortableListsComponent.new(
+            templates: @templates,
+            template_label: t("data_exports.new.template_select_label")
+          ) do |sortable_lists| %>
+            <%= sortable_lists.with_list(
+              id: "available-list",
+              title: t("data_exports.new_linelist_export_dialog.available"),
+              list_items: metadata_fields,
+              group: "metadata_selection",
+            ) %>
 
-                <div class="flex items-center gap-2">
-                  <%= check_box_tag(
-                        "metadata_fields[]",
-                        field,
-                        false,
-                        id: field_id,
-                        name: "data_export[export_parameters][metadata_fields][]",
-                        class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
-                      ) %>
+            <%= sortable_lists.with_list(
+              id: "selected-list",
+              title: t("data_exports.new_linelist_export_dialog.selected"),
+              group: "metadata_selection",
+            ) %>
+          <% end %>
 
-                  <%= label_tag field_id, field, class: "text-slate-700 dark:text-slate-300" %>
-                </div>
-              <% end %>
-            <% else %>
-              <p class="text-sm text-slate-500 dark:text-slate-400">
-                <%= t("data_exports.new_linelist_export_dialog.selected") %>
-              </p>
-            <% end %>
-          </div>
-        </fieldset>
-      </div>
+          <template id="sortable-list-item-template" data-sortable-lists--v1--two-lists-selection-target="itemTemplate">
+            <%= render SortableLists::V1::ListItemComponent.new(list_item: "NAME_HERE") %>
+          </template>
+        </div>
+      <% end %>
 
       <%= form_with(url: "#", method: :get, data: { action: "submit->linelist-export#submit" }) do |form| %>
         <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
