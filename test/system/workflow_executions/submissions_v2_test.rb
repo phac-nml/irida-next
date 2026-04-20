@@ -1765,10 +1765,8 @@ module WorkflowExecutions
       ### SETUP END ###
 
       ### VERIFY START ###
-      assert_selector 'h1', text: 'phac-nml/iridanextexample'
+      assert_selector 'dialog h1', text: 'phac-nml/iridanextexample'
       assert_selector 'label', text: I18n.t('components.nextflow.samplesheet_component.label', sample_count: 1002)
-
-      assert_selector 'div', text: I18n.t('components.nextflow_component.loading_samplesheet', count: 1002)
 
       # strip tags removes space before "Samplesheet" in:
       # "...nts for %{count} samples, this may take a bit of time. Samplesheet is ready."

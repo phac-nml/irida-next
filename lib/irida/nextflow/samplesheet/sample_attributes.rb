@@ -17,38 +17,79 @@ module Irida
         end
 
         def samples_workflow_executions_attributes
-          samples.to_h do |sample|
-            [sample.id, workflow_execution_attributes(sample)]
-          end
+          samples.each_slice(1000).map do |samples_batch|
+            attachments = samples_attachments(samples_batch)
+            samples_batch.to_h do |sample|
+              [sample.id, workflow_execution_attributes(sample, attachments)]
+            end
+          end.reduce({}, :merge)
         end
 
         private
 
-        def workflow_execution_attributes(sample)
+        def file_cells
+          properties.select do |name, entry|
+            entry['cell_type'] == 'file_cell' || (%w[fastq_1
+                                                     fastq_2].include?(name) && entry['cell_type'] == 'fastq_cell')
+          end
+        end
+
+        def samples_attachments(samples) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+          attachments = {}
+          file_cells.each do |property, entry|
+            expected_pattern = entry['pattern']
+            next unless expected_pattern
+
+            # fastq_2 files are queried in relation to fastq_1 files, so we can skip querying them here
+            next if property == 'fastq_2'
+
+            attachments[property] = Attachment.matching_filename(expected_pattern)
+                                              .where(attachable_type: 'Sample', attachable_id: samples.pluck(:id))
+
+            if property == 'fastq_1'
+              attachments[property] = attachments[property].with_direction('forward', include_nils: true).select(
+                'DISTINCT ON (attachable_id) attachments.*, active_storage_blobs.filename as filename'
+              ).order(:attachable_id).prefer_associated_attachment.recent.index_by(&:attachable_id)
+
+              if file_cells.key?('fastq_2')
+                attachments['fastq_2'] = Attachment.joins(:file_blob)
+                                                   .where(id: attachments[property].map do |_, att|
+                                                                att.metadata['associated_attachment_id']
+                                                              end)
+                                                   .select(:id, :attachable_id, :metadata, ActiveStorage::Blob.arel_table[:filename].as('filename'))
+                                                   .index_by(&:attachable_id)
+              end
+            else
+
+              attachments[property] = attachments[property].select(
+                'DISTINCT ON (attachable_id) attachments.*, active_storage_blobs.filename as filename'
+              ).order(:attachable_id).recent.index_by(&:attachable_id)
+            end
+          end
+          attachments
+        end
+
+        def workflow_execution_attributes(sample, attachments)
           {
             'sample_id' => sample.id,
-            'samplesheet_params' => sample_samplesheet_params(sample)
+            'samplesheet_params' => sample_samplesheet_params(sample, attachments)
           }
         end
 
-        def sample_samplesheet_params(sample) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
-          fastq_2_property = properties.key?('fastq_2')
-
-          samplesheet_params = properties.to_h do |name, property|
+        def sample_samplesheet_params(sample, attachments) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+          properties.to_h do |name, property|
             case property['cell_type']
             when 'sample_cell'
               [name, sample.puid]
             when 'sample_name_cell'
               [name, sample.name]
             when 'file_cell'
-              [name, file_samplesheet_values(
-                sample.most_recent_other_file(property['autopopulate'], property['pattern']), sample.id, name
-              )]
+              [name, file_samplesheet_values(attachments[name][sample.id], sample.id, name)]
             when 'fastq_cell'
-              if fastq_2_property
-                [name, '']
+              if %w[fastq_1 fastq_2].include?(name)
+                [name, file_samplesheet_values(attachments[name][sample.id], sample.id, name)]
               else
-                [name, fastq_file_samplesheet_values(sample.most_recent_single_fastq_file(name), sample.id)]
+                [name, '']
               end
             when 'metadata_cell'
               [name, metadata_samplesheet_values(sample, name, property)]
@@ -56,31 +97,20 @@ module Irida
               [name, '']
             end
           end
-
-          return samplesheet_params unless fastq_2_property
-
-          fastq_file_values = sample.most_recent_fastq_files(properties['fastq_1'].key?('pe_only'))
-          samplesheet_params.merge!(fastq_file_samplesheet_values(fastq_file_values, sample.id))
         end
 
         def file_samplesheet_values(file, sample_id, column_name)
           file_attributes[sample_id] ||= {}
           file_attributes[sample_id][column_name] = {
-            filename: if file.empty?
+            filename: if file.nil?
                         I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
                       else
                         file[:filename]
                       end,
-            attachment_id: file.empty? ? '' : file[:id]
+            attachment_id: file.nil? ? '' : file[:id]
           }
 
-          file.empty? ? '' : file[:global_id]
-        end
-
-        def fastq_file_samplesheet_values(files, sample_id)
-          files.each_with_object({}) do |(name, file), params|
-            params[name] = file_samplesheet_values(file, sample_id, name)
-          end
+          file.nil? ? '' : file.to_global_id.to_s
         end
 
         def metadata_samplesheet_values(sample, name, property)

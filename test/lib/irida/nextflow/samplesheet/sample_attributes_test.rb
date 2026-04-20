@@ -9,26 +9,24 @@ module Irida
         class FakeSample
           attr_reader :id, :puid, :name, :metadata
 
-          def initialize(id:, puid:, name:, metadata:, other_file:, single_fastq_file:, fastq_files:) # rubocop:disable Metrics/ParameterLists
+          def initialize(id:, puid:, name:, metadata:)
             @id = id
             @puid = puid
             @name = name
             @metadata = metadata
-            @other_file = other_file
-            @single_fastq_file = single_fastq_file
-            @fastq_files = fastq_files
+          end
+        end
+
+        class FakeAttachment < Hash
+          def initialize(id:, filename:, global_id:)
+            super()
+            self[:id] = id
+            self[:filename] = filename
+            @global_id = global_id
           end
 
-          def most_recent_other_file(_autopopulate, _pattern)
-            @other_file
-          end
-
-          def most_recent_single_fastq_file(_name)
-            @single_fastq_file
-          end
-
-          def most_recent_fastq_files(_pe_only)
-            @fastq_files
+          def to_global_id
+            @global_id
           end
         end
 
@@ -37,10 +35,7 @@ module Irida
             id: 1,
             puid: 'PUID-1',
             name: 'Sample 1',
-            metadata: { 'field' => 'value' },
-            other_file: { filename: 'test.fastq', id: 42, global_id: 'gid://test' },
-            single_fastq_file: { 'fastq_1' => { filename: 'single.fastq', id: 43, global_id: 'gid://single' } },
-            fastq_files: { 'fastq_1' => { filename: 'single.fastq', id: 43, global_id: 'gid://single' } }
+            metadata: { 'field' => 'value' }
           )
 
           properties = {
@@ -48,13 +43,21 @@ module Irida
             'sample_name_cell' => { 'cell_type' => 'sample_name_cell' },
             'metadata_cell' => { 'cell_type' => 'metadata_cell', 'x-irida-next-selected' => 'field' },
             'file_cell' => { 'cell_type' => 'file_cell', 'autopopulate' => true, 'pattern' => '*.fastq' },
-            'fastq_cell' => { 'cell_type' => 'fastq_cell' }
+            'fastq_1' => { 'cell_type' => 'fastq_cell' }
           }
 
           builder = Irida::Nextflow::Samplesheet::SampleAttributes.new(
             samples: [sample],
             properties: properties
           )
+
+          # Mock the attachments
+          fake_file_attachment = FakeAttachment.new(id: 42, filename: 'test.fastq', global_id: 'gid://test')
+          fake_fastq_attachment = FakeAttachment.new(id: 43, filename: 'single.fastq', global_id: 'gid://single')
+          builder.stubs(:samples_attachments).returns({
+                                                        'file_cell' => { 1 => fake_file_attachment },
+                                                        'fastq_1' => { 1 => fake_fastq_attachment }
+                                                      })
 
           result = builder.samples_workflow_executions_attributes[1]
 
@@ -63,7 +66,7 @@ module Irida
           assert_equal 'Sample 1', result['samplesheet_params']['sample_name_cell']
           assert_equal 'value', result['samplesheet_params']['metadata_cell']
           assert_equal 'gid://test', result['samplesheet_params']['file_cell']
-          assert_equal({ 'fastq_1' => 'gid://single' }, result['samplesheet_params']['fastq_cell'])
+          assert_equal 'gid://single', result['samplesheet_params']['fastq_1']
 
           assert_equal(
             {
@@ -81,13 +84,7 @@ module Irida
             id: 2,
             puid: 'PUID-2',
             name: 'Sample 2',
-            metadata: {},
-            other_file: {},
-            single_fastq_file: {},
-            fastq_files: {
-              'fastq_1' => { filename: 'fwd.fastq', id: 51, global_id: 'gid://fwd' },
-              'fastq_2' => { filename: 'rev.fastq', id: 52, global_id: 'gid://rev' }
-            }
+            metadata: {}
           )
 
           properties = {
@@ -99,6 +96,14 @@ module Irida
             samples: [sample],
             properties: properties
           )
+
+          # Mock the attachments
+          fake_fwd_attachment = FakeAttachment.new(id: 51, filename: 'fwd.fastq', global_id: 'gid://fwd')
+          fake_rev_attachment = FakeAttachment.new(id: 52, filename: 'rev.fastq', global_id: 'gid://rev')
+          builder.stubs(:samples_attachments).returns({
+                                                        'fastq_1' => { 2 => fake_fwd_attachment },
+                                                        'fastq_2' => { 2 => fake_rev_attachment }
+                                                      })
 
           result = builder.samples_workflow_executions_attributes[2]
 

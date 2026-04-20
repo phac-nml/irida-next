@@ -153,6 +153,8 @@ lib.mkMerge [
         git branch -D irida-next &>/dev/null || true
         git checkout irida-next
         poetry install -v
+        mkdir -p sapporo/runs/.nextflow
+        printf "docker {\n\tenabled = true\n\trunOptions = '--network host'\n}" > sapporo/runs/.nextflow/config
       '';
       cwd = "${config.git.root}/.devenv";
       before = [ "devenv:processes:sapporo-service" ];
