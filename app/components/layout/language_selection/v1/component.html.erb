@@ -1,5 +1,5 @@
 <div class="inline-flex items-center">
-  <%= viral_dropdown(
+  <%= render DropdownComponent.new(
     icon: :translate,
     label: I18n.t(:"locales.#{locale}", locale: locale),
     trigger_id: "language-selection-dd-trigger",

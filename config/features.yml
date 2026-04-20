@@ -1,20 +1,17 @@
 features:
   advanced_search_with_auto_complete:
-    description:
-      "Enable auto-complete suggestions for the field dropdown within the\
+    description: "Enable auto-complete suggestions for the field dropdown within the\
       \ advanced search dialog."
     enable_in_development: true
   cancel_multiple_workflows:
-    description:
-      "Allow users to select and cancel multiple workflow executions at\
+    description: "Allow users to select and cancel multiple workflow executions at\
       \ once."
     enable_in_development: true
   client_linelist_exports_v1:
     description: "Enable the experimental client side linelist export."
     enable_in_development: false
   compose_with_retry:
-    description:
-      "Exponentially backoff and retry failed compose operations. This\
+    description: "Exponentially backoff and retry failed compose operations. This\
       \ is intended to mitigate transient errors in the compose process."
     enable_in_development: true
   data_grid_samples_table:
@@ -27,8 +24,7 @@ features:
     description: "Enable searching within the sample attachments table."
     enable_in_development: true
   samples_refresh_notice:
-    description:
-      "Show a notice on the samples table when samples table is out of\
+    description: "Show a notice on the samples table when samples table is out of\
       \ date due to additions, deletions, or updates."
     enable_in_development: true
   v2_datepicker:
@@ -39,9 +35,6 @@ features:
     enable_in_development: true
   v2_prefixed_select2:
     description: "Enable the new v2 prefixed select2 component in the UI."
-  v2_language_selection:
-    description: "Enable the new v2 language selection component in the UI."
-    enable_in_development: true
   v2_samplesheet:
     description: "Enable the new v2 nextflow samplesheet display and submission process."
     enable_in_development: true
@@ -49,8 +42,7 @@ features:
     description: "Enable the new v2 select2 component in the UI."
     enable_in_development: true
   wes_extended_metadata:
-    description:
-      "Include additional metadata in WES submission, such as namespaceId\
+    description: "Include additional metadata in WES submission, such as namespaceId\
       \ and samplesCount."
     enable_in_development: true
   workflow_execution_advanced_search:
