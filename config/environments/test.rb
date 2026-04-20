@@ -70,4 +70,8 @@ Rails.application.configure do
   config.ignore_w3c_validate_hidden_autocomplete = false
 
   config.ga4gh_wes_server_endpoint = nil
+
+  # Disable logging while testing to speed up tests
+  config.logger = ActiveSupport::TaggedLogging.new(Logger.new(nil))
+  config.log_level = :fatal
 end
