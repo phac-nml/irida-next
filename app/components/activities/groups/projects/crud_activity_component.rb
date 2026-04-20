@@ -11,13 +11,18 @@ module Activities
           !@activity[:project].deleted?
         end
 
-        def activity_message
+        def activity_message # rubocop:disable Metrics/MethodLength
           href = if project_exists?
                    link_to(
                      @activity[:project_puid],
                      namespace_project_path(@activity[:group], @activity[:project].project),
                      class: active_link_classes,
                      title:
+                       t(
+                         'components.activity.groups.projects.link_descriptive_text',
+                         project_puid: @activity[:project_puid]
+                       ),
+                     'aria-label' =>
                        t(
                          'components.activity.groups.projects.link_descriptive_text',
                          project_puid: @activity[:project_puid]

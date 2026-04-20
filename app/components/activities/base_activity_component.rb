@@ -18,7 +18,9 @@ module Activities
     end
 
     def active_link_classes
-      'text-slate-800 dark:text-slate-300 font-medium underline hover:decoration-2'
+      'text-slate-800 dark:text-slate-300 font-medium underline hover:decoration-2 ' \
+        'focus-visible:outline-3! focus-visible:outline-offset-2! focus-visible:outline-black! ' \
+        'dark:focus-visible:outline-white! focus-visible:outline-solid!'
     end
 
     def more_details_button_classes

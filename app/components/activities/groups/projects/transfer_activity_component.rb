@@ -24,6 +24,11 @@ module Activities
                        t(
                          'components.activity.groups.projects.link_descriptive_text',
                          project_puid: @activity[:project_puid]
+                       ),
+                     'aria-label' =>
+                       t(
+                         'components.activity.groups.projects.link_descriptive_text',
+                         project_puid: @activity[:project_puid]
                        )
                    )
                  else

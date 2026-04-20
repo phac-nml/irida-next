@@ -20,13 +20,18 @@ module Activities
       !@activity[:member].deleted?
     end
 
-    def activity_message # rubocop:disable Metrics/MethodLength
+    def activity_message # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       href = if member_exists?
                link_to(
                  @activity[:member_email],
                  members_page,
                  class: active_link_classes,
                  title:
+                   t(
+                     'components.activity.members.link_descriptive_text',
+                     namespace_type: @activity[:member].namespace.type.downcase
+                   ),
+                 'aria-label' =>
                    t(
                      'components.activity.members.link_descriptive_text',
                      namespace_type: @activity[:member].namespace.type.downcase

@@ -36,7 +36,7 @@ module Activities
       end
     end
 
-    def automated_workflow_execution_activity
+    def automated_workflow_execution_activity # rubocop:disable Metrics/MethodLength
       href = if workflow_execution_exists?
                link_to(
                  @activity[:workflow_id],
@@ -46,6 +46,8 @@ module Activities
                  ),
                  class: active_link_classes,
                  title:
+                   t('components.activity.workflow_executions.index.link_descriptive_text'),
+                 'aria-label' =>
                    t('components.activity.workflow_executions.index.link_descriptive_text')
                )
              else
@@ -68,6 +70,11 @@ module Activities
           t(
             'components.activity.workflow_executions.show.link_descriptive_text',
             workflow_id: @activity[:workflow_id]
+          ),
+        'aria-label' =>
+          t(
+            'components.activity.workflow_executions.show.link_descriptive_text',
+            workflow_id: @activity[:workflow_id]
           )
       )
 
@@ -80,6 +87,11 @@ module Activities
         ),
         class: active_link_classes,
         title:
+          t(
+            'components.activity.samples.link_descriptive_text',
+            sample_puid: @activity[:sample_puid]
+          ),
+        'aria-label' =>
           t(
             'components.activity.samples.link_descriptive_text',
             sample_puid: @activity[:sample_puid]
@@ -103,6 +115,11 @@ module Activities
           t(
             'components.activity.workflow_executions.show.link_descriptive_text',
             workflow_id: @activity[:workflow_id]
+          ),
+        'aria-label' =>
+          t(
+            'components.activity.workflow_executions.show.link_descriptive_text',
+            workflow_id: @activity[:workflow_id]
           )
       )
 
@@ -123,6 +140,11 @@ module Activities
         ),
         class: active_link_classes,
         title:
+          t(
+            'components.activity.samples.link_descriptive_text',
+            sample_puid: @activity[:sample_puid]
+          ),
+        'aria-label' =>
           t(
             'components.activity.samples.link_descriptive_text',
             sample_puid: @activity[:sample_puid]

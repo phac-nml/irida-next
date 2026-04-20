@@ -21,6 +21,8 @@ module Activities
                    group_metadata_templates_path(@activity[:group]),
                    class: active_link_classes,
                    title:
+                     t('components.activity.metadata_templates.group.link_descriptive_text'),
+                   'aria-label' =>
                      t('components.activity.metadata_templates.group.link_descriptive_text')
                  )
                else

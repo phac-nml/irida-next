@@ -32,13 +32,17 @@ module Activities
 
     private
 
-    def active_links # rubocop:disable Metrics/MethodLength
+    def active_links # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       if link_to_shared_group?
         link_to(
           @activity[:namespace_puid],
           group_path(@activity[:group_link].namespace),
           class: active_link_classes,
-          title:
+          title: t(
+            'components.activity.groups.link_descriptive_text',
+            group_puid: @activity[:namespace_puid]
+          ),
+          'aria-label' =>
             t(
               'components.activity.groups.link_descriptive_text',
               group_puid: @activity[:namespace_puid]
@@ -49,7 +53,11 @@ module Activities
           @activity[:group_puid],
           group_path(@activity[:group_link].group),
           class: active_link_classes,
-          title:
+          title: t(
+            'components.activity.groups.link_descriptive_text',
+            group_puid: @activity[:group_puid]
+          ),
+          'aria-label' =>
             t(
               'components.activity.groups.link_descriptive_text',
               group_puid: @activity[:group_puid]
