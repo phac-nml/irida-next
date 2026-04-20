@@ -115,7 +115,7 @@
       </div>
 
       <div class="pt shrink-0 p-2">
-        <%= viral_dropdown(
+        <%= render DropdownComponent.new(
           label: t(:"general.default_sidebar.goto"),
           trigger_id: "sidebar-goto-dropdown-trigger",
           skidding: 0,
