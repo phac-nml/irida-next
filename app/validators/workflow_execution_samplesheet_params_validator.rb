@@ -39,11 +39,11 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
 
     return if value.blank?
 
-    return unless value != record.sample&.puid
+    return unless value != record.sample.puid
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_puid_error',
-                             property:)
+                             property:, sample_id: record.sample.puid)
 
     false
   end
@@ -56,7 +56,8 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
     return unless value != record.sample&.name
 
     record.errors.add :samplesheet_params,
-                      I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_name_error', property:)
+                      I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_name_error',
+                             property:, sample_id: record.sample.puid)
 
     false
   end
@@ -77,7 +78,8 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
     return if value.present?
 
     record.errors.add :samplesheet_params,
-                      I18n.t('validators.workflow_execution_samplesheet_params_validator.blank_error', property:)
+                      I18n.t('validators.workflow_execution_samplesheet_params_validator.blank_error',
+                             property:, sample_id: record.sample.puid)
   end
 
   def validate_attachment(record, value, property, entry)
@@ -97,7 +99,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_gid_error',
-                             property:)
+                             property:, sample_id: record.sample.puid)
     nil
   end
 
@@ -106,7 +108,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_attachment_error',
-                             property:)
+                             property:, sample_id: record.sample.puid)
 
     false
   end
@@ -132,6 +134,6 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_format_error',
-                             property:, file_format: expected_pattern)
+                             property:, sample_id: record.sample.puid, file_format: expected_pattern)
   end
 end

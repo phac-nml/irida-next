@@ -2117,12 +2117,12 @@ fr:
     pm: pm
   validators:
     workflow_execution_samplesheet_params_validator:
-      attachment_format_error: La propriété '%{property}' doit correspondre au format de fichier attendu de '%{file_format}'
-      attachment_gid_error: La propriété '%{property}' doit être une pièce jointe GID valide
-      blank_error: La propriété '%{property}' est obligatoire et ne peut pas être vide
-      sample_attachment_error: La propriété '%{property}' doit appartenir à l’échantillon
-      sample_name_error: La propriété '%{property}' doit correspondre au nom de l’échantillon
-      sample_puid_error: La propriété '%{property}' doit correspondre au PUID de l’échantillon
+      attachment_format_error: La propriété '%{property}' pour %{sample_id} doit correspondre au format de fichier attendu de '%{file_format}'
+      attachment_gid_error: La propriété '%{property}' pour %{sample_id} doit être une pièce jointe GID valide
+      blank_error: La propriété '%{property}' pour %{sample_id} est obligatoire et ne peut pas être vide
+      sample_attachment_error: La propriété '%{property}' pour %{sample_id} doit appartenir à l’échantillon
+      sample_name_error: La propriété '%{property}' pour %{sample_id} doit correspondre au nom de l’échantillon
+      sample_puid_error: La propriété '%{property}' pour %{sample_id} doit correspondre au PUID de l’échantillon
   workflow_executions:
     actions:
       cancel_aria_label: 'Annuler l’exécution du flux de travail : %{name}'
