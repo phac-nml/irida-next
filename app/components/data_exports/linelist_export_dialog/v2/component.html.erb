@@ -82,23 +82,25 @@
             },
           ) %>
 
-          <%= render SortableListsComponent.new(
+          <div class="mt-4">
+            <%= render SortableListsComponent.new(
             templates: @templates,
             template_label: t("data_exports.new.template_select_label")
           ) do |sortable_lists| %>
-            <%= sortable_lists.with_list(
+              <%= sortable_lists.with_list(
               id: "available-list",
               title: t("data_exports.new_linelist_export_dialog.available"),
               list_items: metadata_fields,
               group: "metadata_selection",
             ) %>
 
-            <%= sortable_lists.with_list(
+              <%= sortable_lists.with_list(
               id: "selected-list",
               title: t("data_exports.new_linelist_export_dialog.selected"),
               group: "metadata_selection",
             ) %>
-          <% end %>
+            <% end %>
+          </div>
 
           <template id="sortable-list-item-template" data-sortable-lists--v1--two-lists-selection-target="itemTemplate">
             <%= render SortableLists::V1::ListItemComponent.new(list_item: "NAME_HERE") %>
