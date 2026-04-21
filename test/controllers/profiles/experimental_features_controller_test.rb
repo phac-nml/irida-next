@@ -194,7 +194,9 @@ module Profiles
     test 'should handle flipper failure gracefully when enabling actor' do
       sign_in @user
 
-      Flipper.stub(:enable_actor, ->(*) { raise Flipper::Error, 'simulated flipper failure' }) do
+      Flipper.stubs(:enable_actor).raises(Flipper::Error, 'simulated flipper failure')
+
+      begin
         patch profile_experimental_features_path(format: :turbo_stream),
               params: { feature_key: 'data_grid_samples_table', enabled: '1' }
 
@@ -202,6 +204,8 @@ module Profiles
         assert_match I18n.t('profiles.experimental_features.update.error'), response.body
         assert_match 'target="flashes"', response.body
         assert_not Flipper[:data_grid_samples_table].actors_value.include?(@user.flipper_id)
+      ensure
+        Flipper.unstub(:enable_actor)
       end
     end
 
