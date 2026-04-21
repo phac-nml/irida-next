@@ -25,7 +25,7 @@ export default class extends Controller {
     invalidDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
-    errors: Array,
+    errorMessageId: String,
   };
 
   // today's date attributes for quick access
@@ -48,18 +48,14 @@ export default class extends Controller {
 
   #minDate;
 
-  #formFieldContainer;
-
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
     }
 
-    if (this.errorsValue.length > 0) {
-      this.#enableInputErrorState(this.errorsValue);
+    if (this.errorMessageIdValue) {
+      this.#enableInputErrorState("");
     }
-
-    this.#findClosestFormField();
 
     this.boundHandleDatepickerInputFocus =
       this.handleDatepickerInputFocus.bind(this);
@@ -97,16 +93,6 @@ export default class extends Controller {
 
     this.#calendar.remove();
     this.#calendar = null;
-  }
-
-  // verifies if the datepicker is within a form-field container. This will then allow us to disable any backend
-  // validation error state styling classes (eg: remove .invalid) from this container
-  #findClosestFormField() {
-    const closestFormField = this.element.closest(".form-field");
-
-    if (closestFormField && closestFormField.contains(this.element)) {
-      this.#formFieldContainer = closestFormField;
-    }
   }
 
   #initializeDropdown() {
@@ -273,7 +259,7 @@ export default class extends Controller {
     const dateInput = event.target.value;
     if (this.#validateDateInput(dateInput)) {
       if (this.#minDate && this.#minDate > dateInput) {
-        this.#enableInputErrorState([this.invalidMinDateValue]);
+        this.#enableInputErrorState(this.invalidMinDateValue);
       } else {
         if (this.autosubmitValue) {
           this.submitDate();
@@ -284,7 +270,7 @@ export default class extends Controller {
         this.focusNextFocusableElement();
       }
     } else {
-      this.#enableInputErrorState([this.invalidDateValue]);
+      this.#enableInputErrorState(this.invalidDateValue);
     }
     this.hideCalendar();
   }
@@ -314,50 +300,50 @@ export default class extends Controller {
   }
 
   // adds error message if invalid date or a date prior to minDate was entered
-  #enableInputErrorState(messages) {
+  #enableInputErrorState(message) {
+    console.log("enable?");
     this.errorContainerTarget.innerHTML = "";
 
     this.datepickerInputTarget.setAttribute("aria-invalid", "true");
+    const errorContainerId =
+      this.errorMessageIdValue === ""
+        ? `${this.datepickerInputTarget.id}-message`
+        : this.errorMessageIdValue;
     this.datepickerInputTarget.setAttribute(
       "aria-describedby",
-      `${this.datepickerInputTarget.id}-message`,
+      errorContainerId,
     );
 
     this.#toggleErrorState(true);
-    messages.forEach((message) => {
+
+    if (this.autosubmitValue) {
       const errorMessage =
         this.errorMessageTemplateTarget.content.cloneNode(true);
       this.errorContainerTarget.appendChild(errorMessage);
-      this.errorMessageTargets[this.errorMessageTargets.length - 1].innerText =
-        message;
-    });
+      this.errorMessageTarget.innerText = message;
 
-    this.ariaLiveTarget.innerText = messages.join(", ");
+      this.ariaLiveTarget.innerText = message;
 
-    if (this.errorContainerTarget.classList.contains("hidden")) {
-      this.errorContainerTarget.classList.remove("hidden");
-      this.errorContainerTarget.setAttribute("aria-hidden", false);
+      if (this.errorContainerTarget.classList.contains("hidden")) {
+        this.errorContainerTarget.classList.remove("hidden");
+        this.errorContainerTarget.setAttribute("aria-hidden", false);
+      }
     }
   }
 
   // disables the error state once a valid date is entered/selected
   disableInputErrorState() {
-    this.errorContainerTarget.innerHTML = "";
-    this.datepickerInputTarget.removeAttribute("aria-invalid");
-    this.datepickerInputTarget.removeAttribute("aria-describedby");
-    if (!this.errorContainerTarget.classList.contains("hidden")) {
-      this.errorContainerTarget.classList.add("hidden");
-      this.errorContainerTarget.setAttribute("aria-hidden", true);
-    }
+    if (this.autosubmitValue) {
+      this.errorContainerTarget.innerHTML = "";
+      this.datepickerInputTarget.removeAttribute("aria-invalid");
+      this.datepickerInputTarget.removeAttribute("aria-describedby");
+      if (!this.errorContainerTarget.classList.contains("hidden")) {
+        this.errorContainerTarget.classList.add("hidden");
+        this.errorContainerTarget.setAttribute("aria-hidden", true);
+      }
 
-    if (
-      this.#formFieldContainer &&
-      this.#formFieldContainer.classList.contains("invalid")
-    ) {
-      this.#formFieldContainer.classList.remove("invalid");
+      this.#toggleErrorState(false);
     }
-
-    this.#toggleErrorState(false);
   }
 
   #toggleErrorState(erroring) {

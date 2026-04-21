@@ -29,7 +29,11 @@
   <% end %>
 </div>
 
-<% invalid_expires_at = pat.errors.include?(:expires_at) %>
+<% invalid_expires_at = true %>
+
+<% if invalid_expires_at %>
+  <% error_container_id = form.field_id(:expires_at, "error") %>
+<% end %>
 
 <div class="form-field <%= 'invalid' if invalid_expires_at %>">
   <%= datepicker(
@@ -38,8 +42,14 @@
     label: t("activerecord.attributes.personal_access_token.expires_at"),
     selected_date: pat[:expires_at],
     required: false,
-    errors: invalid_expires_at ? pat.errors.full_messages_for(:expires_at) : []
+    error_message_id: invalid_expires_at ? error_container_id : ''
   ) %>
+
+  <% if invalid_expires_at %>
+    <%= render "shared/form/field_errors",
+    id: error_container_id,
+    errors: pat.errors.full_messages_for(:expires_at) %>
+  <% end %>
 </div>
 
 <% invalid_scopes = pat.errors.include?(:scopes) %>
