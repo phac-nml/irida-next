@@ -29,7 +29,7 @@
   <% end %>
 </div>
 
-<% invalid_expires_at = true %>
+<% invalid_expires_at = pat.errors.include?(:expires_at) %>
 
 <% if invalid_expires_at %>
   <% error_container_id = form.field_id(:expires_at, "error") %>
@@ -42,7 +42,7 @@
     label: t("activerecord.attributes.personal_access_token.expires_at"),
     selected_date: pat[:expires_at],
     required: false,
-    error_message_id: invalid_expires_at ? error_container_id : ''
+    errored: invalid_expires_at
   ) %>
 
   <% if invalid_expires_at %>

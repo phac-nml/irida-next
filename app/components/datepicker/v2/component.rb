@@ -23,7 +23,7 @@ module Datepicker
       # @param selected_date [String] The already selected date if it exists.
       # @param autosubmit [Boolean] Submits the date upon selection if true
       # @param required [Boolean] Sets aria-required="true" on input_field_component if true
-      # @param error_message_id [String] The error container DOM ID if backend validation errors are present to point aria-describedby towards # rubocop:disable Layout/LineLength
+      # @param errored [Boolean] Initializes the datepicker in an error state if true (determined by backend validation)
       # @param calendar_arguments [Hash] HTML attributes for the datepicker
       # @param system_arguments [Hash] HTML attributes for the main container (<div>).
       # @raise [ArgumentError] if id is not provided.
@@ -31,7 +31,7 @@ module Datepicker
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
-                     selected_date: nil, autosubmit: false, required: false, error_message_id: '',
+                     selected_date: nil, autosubmit: false, required: false, errored: false,
                      calendar_arguments: {},  **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'input_name is required' if input_name.blank?
@@ -42,7 +42,7 @@ module Datepicker
         @selected_date = selected_date
         @autosubmit = autosubmit
         @required = required
-        @error_message_id = error_message_id
+        @errored = errored
         @min_date = min_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments
@@ -91,6 +91,7 @@ module Datepicker
         @container_id = "#{id}-datepicker"
         @input_id = "#{id}-input"
         @calendar_id = "#{id}-calendar"
+        @error_id = "#{id}_error"
       end
 
       # Configures HTML attributes for the main <div> container.
@@ -114,9 +115,10 @@ module Datepicker
         @system_arguments[:data]['datepicker--v2--input-calendar-id-value'] = @calendar_id
         @system_arguments[:data]['datepicker--v2--input-date-format-regex-value'] =
           I18n.t('components.datepicker.date_format_regex')
-        return if @error_message_id.blank?
+        @system_arguments[:data]['datepicker--v2--input-error-message-id-value'] = @error_id
+        return unless @errored
 
-        @system_arguments[:data]['datepicker--v2--input-error-message-id-value'] = @error_message_id
+        @system_arguments[:data]['datepicker--v2--input-errored-value'] = @errored
       end
 
       # Configures HTML attributes for the <div> datepicker calendar.
