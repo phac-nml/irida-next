@@ -29,7 +29,7 @@ module Projects
         cancel: allowed_to?(:cancel?, @workflow_execution),
         destroy: allowed_to?(:destroy?, @workflow_execution),
         update: allowed_to?(:update?, @workflow_execution),
-        preview: allowed_to?(:preview_attachment?, @workflow_execution)
+        preview: allowed_to?(:view_attachment?, @workflow_execution)
       }
     end
 

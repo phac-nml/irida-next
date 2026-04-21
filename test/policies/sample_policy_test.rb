@@ -13,10 +13,6 @@ class SamplePolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:destroy_attachment?)
   end
 
-  test '#preview_attachment?' do
-    assert @policy.apply(:preview_attachment?)
-  end
-
   test 'scope' do
     group_one = groups(:group_one)
     policy = SamplePolicy.new(group_one, user: @user)

@@ -141,10 +141,6 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:update_samplesheet_data?)
   end
 
-  test '#preview_attachment?' do
-    assert @policy.apply(:preview_attachment?)
-  end
-
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
