@@ -267,10 +267,9 @@ export default class extends Controller {
 
   selectedMetadataFields() {
     return Array.from(
-      this.element.querySelectorAll(
-        "input[name='data_export[export_parameters][metadata_fields][]']:checked",
-      ),
-    ).map((checkbox) => checkbox.value);
+      this.element.querySelectorAll("#selected-list li"),
+      (item) => item.lastElementChild?.textContent?.trim() || "",
+    ).filter((value) => value.length > 0);
   }
 
   selectedFormat() {

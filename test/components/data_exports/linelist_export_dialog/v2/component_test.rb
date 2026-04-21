@@ -24,6 +24,25 @@ module DataExports
           assert_selector "[data-linelist-export-graphql-url-value='#{graphql_path}']"
           assert_selector "[data-linelist-export-sample-graphql-id-prefix-value='gid://#{GlobalID.app}/Sample/']"
         end
+
+        test 'renders metadata sortable lists' do
+          project = projects(:project1)
+
+          render_inline(
+            Component.new(
+              open: true,
+              namespace_id: project.namespace.id,
+              namespace: project.namespace,
+              templates: []
+            )
+          )
+
+          assert_selector "[data-controller='sortable-lists--v1--two-lists-selection']"
+          assert_selector 'ul#available-list li', text: 'metadatafield1'
+          assert_selector 'ul#available-list li', text: 'metadatafield2'
+          assert_selector 'ul#selected-list'
+          assert_no_selector "input[type='checkbox'][name='data_export[export_parameters][metadata_fields][]']"
+        end
       end
     end
   end
