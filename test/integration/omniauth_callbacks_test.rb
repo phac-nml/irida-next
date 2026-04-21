@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/OneClassPerFile
-
 require 'omniauth_integration_test_case'
 
 class OmniauthCallbacksDeveloperTest < OmniauthIntegrationTestCase
@@ -75,4 +73,3 @@ class OmniauthCallbacksSamlTest < OmniauthIntegrationTestCase
     assert_redirected_to new_user_session_path
   end
 end
-# rubocop:enable Style/OneClassPerFile

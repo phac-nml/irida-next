@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/OneClassPerFile
-
 require 'test_helper'
 
 class TestClassController < ApplicationController
@@ -81,4 +79,3 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
     assert @member.nil?
   end
 end
-# rubocop:enable Style/OneClassPerFile
