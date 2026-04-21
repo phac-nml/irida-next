@@ -162,4 +162,24 @@ class Sample::V2::QueryTest < ActiveSupport::TestCase # rubocop:disable Style/Cl
       sql
     )
   end
+
+  test 'metadata dot-notation sort is applied' do
+    query = build_query(sort: 'metadata.insdc_accession asc')
+    sql = query.relation.to_sql
+
+    assert_match(
+      /ORDER BY .*"samples"\."metadata" ->> 'insdc_accession' collate numeric ASC,\s*"samples"\."id" ASC/i,
+      sql
+    )
+  end
+
+  test 'metadata sort supports keys with spaces' do
+    query = build_query(sort: 'metadata_field with spaces asc')
+    sql = query.relation.to_sql
+
+    assert_match(
+      /ORDER BY .*"samples"\."metadata" ->> 'field with spaces' collate numeric ASC,\s*"samples"\."id" ASC/i,
+      sql
+    )
+  end
 end
