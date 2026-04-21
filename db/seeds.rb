@@ -52,10 +52,18 @@ def seed_project(project_params:, creator:, namespace:) # rubocop:disable Metric
   return 0 unless project_params[:sample_count]
 
   # seed the project samples
-  seed_samples(project, project_params[:sample_count]) if project_params[:sample_count]
-  project.update_columns(samples_count: project_params[:sample_count]) # rubocop:disable Rails/SkipsModelValidations
-  project.namespace.update_columns(metadata_summary: fake_metadata_summary(project_params[:sample_count])) # rubocop:disable Rails/SkipsModelValidations
-  project_params[:sample_count]
+  samples_count = seed_samples(project, project_params[:sample_count]) if project_params[:sample_count]
+  project.update_columns(samples_count: samples_count) # rubocop:disable Rails/SkipsModelValidations
+  project.namespace.update_columns(metadata_summary: fake_metadata_summary(samples_count)) # rubocop:disable Rails/SkipsModelValidations
+
+  # wait at minimum 10 / 12_228.0 seconds to ensure unique puids for samples
+  wait_until = project.created_at.to_f + ((samples_count + 10) * 1 / 12_228.0)
+  loop do
+    sleep(20 / 12_228.0)
+    break if Time.now.to_f > wait_until
+  end
+
+  samples_count
 end
 
 def seed_members(email, access_level, namespace)
@@ -79,7 +87,7 @@ def fake_metadata # rubocop:disable Metrics/MethodLength
 
   {
     'WGS_id' => Faker::Number.number(digits: 10),
-    'NCBI_ACCESSION' => "NM_#{Faker::Number.decimal(l_digits: 7, r_digits: 1)}",
+    'ncbi_accession' => "NM_#{Faker::Number.decimal(l_digits: 7, r_digits: 1)}",
     'country' => Faker::Address.country,
     'food' => Faker::Food.dish,
     'gender' => Faker::Gender.binary_type,
@@ -95,7 +103,7 @@ end
 def fake_metadata_provenance(user_id, time = Time.zone.now)
   {
     'WGS_id' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
-    'NCBI_ACCESSION' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'ncbi_accession' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
     'country' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
     'food' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
     'gender' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
@@ -111,7 +119,7 @@ end
 def fake_metadata_summary(sample_count)
   {
     'WGS_id' => sample_count,
-    'NCBI_ACCESSION' => sample_count,
+    'ncbi_accession' => sample_count,
     'country' => sample_count,
     'food' => sample_count,
     'gender' => sample_count,
@@ -127,32 +135,34 @@ end
 def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
   samples = []
   sample_count.times do |x|
+    timestamp = project.created_at + ((x + 1) * 1 / 12_228.0)
     samples << {
-      puid: Irida::PersistentUniqueId.generate(object_class: Sample,
-                                               time: project.created_at + ((x + 1) * 10 / 1000.0).seconds),
+      puid: Irida::PersistentUniqueId.generate(object_class: Sample, time: timestamp),
       name: "#{project.namespace.parent.name}/#{project.name} Sample #{x + 1}",
       description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{x + 1}.",
       metadata: fake_metadata,
-      metadata_provenance: fake_metadata_provenance(project.creator.id,
-                                                    project.created_at + ((x + 1) * 10 / 1000.0).seconds),
+      metadata_provenance: fake_metadata_provenance(project.creator.id, timestamp),
       project_id: project.id,
-      created_at: project.created_at + ((x + 1) * 10 / 1000.0),
-      updated_at: project.created_at + ((x + 1) * 10 / 1000.0)
+      created_at: timestamp,
+      updated_at: timestamp
     }
   end
-  Sample.insert_all(samples) # rubocop:disable Rails/SkipsModelValidations
+  seeded_samples = Sample.upsert_all(samples, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
 
-  samples.each do |sample|
-    seed_attachments(Sample.find_by(puid: sample[:puid]))
+  Sample.where(id: seeded_samples).find_each do |sample|
+    seed_attachments(sample)
   end
+
+  seeded_samples.count
 end
 
-def seed_attachments(sample) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+def seed_attachments(sample) # rubocop:disable Metrics/MethodLength
   Rails.logger.info "seeding... Sample: #{sample.name}, Attachments"
 
+  attachment_timestamp = sample.created_at + (10 / 12_228.0)
   fwd_id = SecureRandom.uuid
   rev_id = SecureRandom.uuid
-  puid = Irida::PersistentUniqueId.generate(object_class: Attachment, time: sample.created_at + (100 / 1000.0).seconds)
+  puid = Irida::PersistentUniqueId.generate(object_class: Attachment, time: attachment_timestamp)
 
   attachments = [
     {
@@ -162,8 +172,8 @@ def seed_attachments(sample) # rubocop:disable Metrics/AbcSize,Metrics/MethodLen
       attachable_type: 'Sample',
       metadata: { type: 'illumina_pe', format: 'fastq', direction: 'forward', compression: 'gzip',
                   associated_attachment_id: rev_id },
-      created_at: sample.created_at + (100 / 1000.0).seconds,
-      updated_at: sample.created_at + (100 / 1000.0).seconds
+      created_at: attachment_timestamp,
+      updated_at: attachment_timestamp
     },
     {
       id: rev_id,
@@ -172,12 +182,12 @@ def seed_attachments(sample) # rubocop:disable Metrics/AbcSize,Metrics/MethodLen
       attachable_type: 'Sample',
       metadata: { type: 'illumina_pe', format: 'fastq', direction: 'reverse', compression: 'gzip',
                   associated_attachment_id: fwd_id },
-      created_at: sample.created_at + (100 / 1000.0).seconds,
-      updated_at: sample.created_at + (100 / 1000.0).seconds
+      created_at: attachment_timestamp,
+      updated_at: attachment_timestamp
     }
   ]
 
-  Attachment.insert_all(attachments) # rubocop:disable Rails/SkipsModelValidations
+  Attachment.upsert_all(attachments, unique_by: %i[puid attachable_id attachable_type]) # rubocop:disable Rails/SkipsModelValidations
 
   activestorage_attachments = [
     {
@@ -185,18 +195,18 @@ def seed_attachments(sample) # rubocop:disable Metrics/AbcSize,Metrics/MethodLen
       record_type: 'Attachment',
       record_id: fwd_id,
       blob_id: @illumina_pe_fwd,
-      created_at: sample.created_at + (100 / 1000.0).seconds
+      created_at: attachment_timestamp
     },
     {
       name: 'file',
       record_type: 'Attachment',
       record_id: rev_id,
       blob_id: @illumina_pe_rev,
-      created_at: sample.created_at + (100 / 1000.0).seconds
+      created_at: attachment_timestamp
     }
   ]
 
-  ActiveStorage::Attachment.insert_all(activestorage_attachments) # rubocop:disable Rails/SkipsModelValidations
+  ActiveStorage::Attachment.upsert_all(activestorage_attachments, unique_by: %i[record_type record_id blob_id]) # rubocop:disable Rails/SkipsModelValidations
 end
 
 def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
@@ -235,7 +245,9 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
 
   group.update_columns(samples_count: sample_count, metadata_summary: fake_metadata_summary(sample_count)) # rubocop:disable Rails/SkipsModelValidations
 
-  sample_count
+  return sample_count unless parent.nil?
+
+  group
 end
 
 def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -426,9 +438,9 @@ if Rails.env.development?
       updated_at: starting_created_at + x.minutes
     }
   end
-  User.insert_all(users) # rubocop:disable Rails/SkipsModelValidations
+  seeded_users = User.upsert_all(users, unique_by: [:email]) # rubocop:disable Rails/SkipsModelValidations
 
-  user_namespaces = User.all.map do |user|
+  user_namespaces = User.where(id: seeded_users).map do |user|
     {
       name: user.email,
       puid: Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: user.created_at),
@@ -437,9 +449,9 @@ if Rails.env.development?
       updated_at: user.created_at
     }
   end
-  Namespaces::UserNamespace.insert_all(user_namespaces) # rubocop:disable Rails/SkipsModelValidations
+  seeded_user_namespaces = Namespaces::UserNamespace.upsert_all(user_namespaces, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
 
-  user_namespaces_routes = Namespaces::UserNamespace.all.map do |user_namespace|
+  user_namespaces_routes = Namespaces::UserNamespace.where(id: seeded_user_namespaces).map do |user_namespace|
     {
       name: user_namespace.name,
       path: format('%<email>s', email: user_namespace.name).sub!('@', '_at_'),
@@ -449,7 +461,7 @@ if Rails.env.development?
       updated_at: user_namespace.created_at
     }
   end
-  Route.insert_all(user_namespaces_routes) # rubocop:disable Rails/SkipsModelValidations
+  Route.upsert_all(user_namespaces_routes, unique_by: [:path]) # rubocop:disable Rails/SkipsModelValidations
 
   # Workflow Metadata
   #
@@ -614,7 +626,7 @@ if Rails.env.development?
     Guest: [users[8][:email]]
   }
 
-  default_sample_count = 10
+  default_sample_count = 1000
 
   generic_projects = [
     {
@@ -830,16 +842,14 @@ if Rails.env.development?
       ] }
   ]
 
-  groups.each do |group|
+  seeded_parent_groups = groups.map do |group|
     seed_group(group_params: group)
   end
 
   # Create namespace group links (group to group)
-  all_groups_without_parent = Group.where(parent: nil)
-
-  all_groups_without_parent.each do |namespace|
-    groups_to_link_to_namespace = all_groups_without_parent.where.not(id: namespace.self_and_ancestor_ids)
-                                                           .where(parent: nil).limit(5)
+  seeded_parent_groups.each do |namespace|
+    # link each namespace to 5 other random namespaces with analyst access
+    groups_to_link_to_namespace = (seeded_parent_groups - [namespace]).sample(5)
     groups_to_link_to_namespace.each do |group_to_link_to_namespace|
       seed_namespace_group_links(namespace.owner, namespace, group_to_link_to_namespace, Member::AccessLevel::ANALYST)
     end
@@ -849,7 +859,7 @@ if Rails.env.development?
   all_projects = Project.all
 
   all_projects.each do |proj|
-    direct_group_to_link_to_namespace = all_groups_without_parent.last
+    direct_group_to_link_to_namespace = seeded_parent_groups.last
     seed_namespace_group_links(proj.namespace.owner, proj.namespace, direct_group_to_link_to_namespace,
                                Member::AccessLevel::ANALYST)
   end
