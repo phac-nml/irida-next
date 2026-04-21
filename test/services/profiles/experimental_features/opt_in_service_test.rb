@@ -70,13 +70,17 @@ module Profiles
       test 'toggle returns unprocessable result when flipper raises' do
         service = OptInService.new(user: @user, settings: feature_settings(allowlist: [@user.email]))
 
-        Flipper.stub(:enable_actor, ->(*) { raise Flipper::Error, 'simulated flipper failure' }) do
+        Flipper.stubs(:enable_actor).raises(Flipper::Error, 'simulated flipper failure')
+
+        begin
           result = service.toggle(feature_key: 'data_grid_samples_table', enabled: true)
 
           assert_equal false, result.success?
           assert_equal :unprocessable_content, result.status
           assert_equal :error, result.error_key
           assert_equal false, result.feature[:enabled]
+        ensure
+          Flipper.unstub(:enable_actor)
         end
       end
 
