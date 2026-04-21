@@ -268,10 +268,11 @@
               <% if @renders_row_actions %>
                 <%= render_cell(
                   tag: 'td',
-                  classes: class_names('px-3 py-3 space-x-2')
+                  classes: class_names('px-3 py-3')
                 ) do %>
-                  <% if @row_actions[:preview] && attachment.previewable? %>
-                    <%= link_to(
+                  <div class="flex items-center gap-3">
+                    <% if @row_actions[:preview] && attachment.previewable? %>
+                      <%= link_to(
                       t("components.attachments.table_component.preview"),
                       attachment_path(attachment),
                       aria: {
@@ -287,10 +288,10 @@
                       class:
                         "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer",
                     ) %>
-                  <% end %>
+                    <% end %>
 
-                  <% if @row_actions[:destroy] %>
-                    <%= button_to(
+                    <% if @row_actions[:destroy] %>
+                      <%= button_to(
                       t("common.actions.delete"),
                       destroy_path(attachment.id),
                       aria: {
@@ -318,7 +319,8 @@
                       class:
                         "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer",
                     ) %>
-                  <% end %>
+                    <% end %>
+                  </div>
                 <% end %>
               <% end %>
             <% end %>
