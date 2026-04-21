@@ -134,8 +134,11 @@ end
 
 def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
   samples = []
+  # round the project created_at to the nearest 1 / 12_228.0 seconds to ensure puid uniqueness
+  interval = Rational(1, 12_228)
+  project_created_at = Time.at((project.created_at.utc.to_r / interval).round * interval, in: 'UTC')
   sample_count.times do |x|
-    timestamp = project.created_at + ((x + 1) * 1 / 12_228.0)
+    timestamp = project_created_at + ((x + 1) * interval)
     samples << {
       puid: Irida::PersistentUniqueId.generate(object_class: Sample, time: timestamp),
       name: "#{project.namespace.parent.name}/#{project.name} Sample #{x + 1}",
@@ -147,6 +150,7 @@ def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize,Metric
       updated_at: timestamp
     }
   end
+
   seeded_samples = Sample.upsert_all(samples, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
 
   Sample.where(id: seeded_samples).find_each do |sample|
