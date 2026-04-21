@@ -1,3 +1,10 @@
+export class XlsxLibraryLoadError extends Error {
+  constructor() {
+    super("Failed to load XLSX export library.");
+    this.name = "XlsxLibraryLoadError";
+  }
+}
+
 export async function downloadExport(filename, content, format = "csv") {
   if (format === "xlsx") {
     await downloadXlsx(filename, content);
@@ -24,7 +31,14 @@ async function downloadXlsx(filename, rows) {
     throw new Error("Invalid spreadsheet data received from export worker.");
   }
 
-  const XLSX = await import("xlsx");
+  let XLSX;
+
+  try {
+    XLSX = await import("xlsx");
+  } catch {
+    throw new XlsxLibraryLoadError();
+  }
+
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.aoa_to_sheet(rows);
   XLSX.utils.book_append_sheet(workbook, worksheet, "linelist");

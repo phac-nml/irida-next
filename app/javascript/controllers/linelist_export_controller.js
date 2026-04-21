@@ -1,5 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
-import { downloadExport } from "controllers/linelist_export/downloader";
+import {
+  downloadExport,
+  XlsxLibraryLoadError,
+} from "controllers/linelist_export/downloader";
 import {
   clearProgressWindowDismissTimeout as clearProgressWindowDismissTimeoutState,
   dismissProgressWindow as dismissProgressWindowState,
@@ -46,6 +49,11 @@ export default class extends Controller {
     startErrorMessage: {
       type: String,
       default: "Unable to start export: %{message}",
+    },
+    xlsxLoadErrorMessage: {
+      type: String,
+      default:
+        "Unable to load the XLSX export library. Please retry or export as CSV.",
     },
     unexpectedErrorMessage: {
       type: String,
@@ -177,6 +185,11 @@ export default class extends Controller {
     try {
       await this.download(payload.filename, payload.content, payload.format);
     } catch (error) {
+      if (error instanceof XlsxLibraryLoadError) {
+        this.handleWorkerError(this.t(this.xlsxLoadErrorMessageValue));
+        return;
+      }
+
       this.handleWorkerError(this.formatUnexpectedError(error?.message || ""));
       return;
     }

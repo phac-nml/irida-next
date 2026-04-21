@@ -542,6 +542,7 @@ en:
       title: Linelist Export
       unexpected_error: 'Unexpected error while generating export: %{message}'
       xlsx: ".xlsx"
+      xlsx_load_error: Unable to load the XLSX export library. Please retry or export as CSV.
     new_sample_export_dialog:
       available: Available
       available_description: File formats not included in this export. By default, all formats are included.
