@@ -1,4 +1,5 @@
 const SAMPLE_CHUNK_SIZE = 100;
+const SUPPORTED_FORMATS = new Set(["csv", "xlsx"]);
 
 const LINELIST_SAMPLES_QUERY = `
   query LinelistSamples($ids: [ID!]!, $metadataKeys: [String!]) {
@@ -25,6 +26,11 @@ const escapeCsv = (value) => {
   }
 
   return text;
+};
+
+const toCellValue = (value) => {
+  if (value == null) return "";
+  return value;
 };
 
 const chunk = (items, size) => {
@@ -107,6 +113,7 @@ self.onmessage = async (event) => {
   const fields = Array.isArray(metadataFields) ? metadataFields : [];
   const ids = Array.isArray(sampleIds) ? sampleIds : [];
   const rows = ids.length;
+  const normalizedFormat = format || "csv";
 
   if (!rows) {
     self.postMessage({
@@ -116,7 +123,7 @@ self.onmessage = async (event) => {
     return;
   }
 
-  if (format != null && format !== "csv") {
+  if (!SUPPORTED_FORMATS.has(normalizedFormat)) {
     self.postMessage({
       type: "error",
       message: "Unsupported linelist format for this flow.",
@@ -177,7 +184,7 @@ self.onmessage = async (event) => {
       "PROJECT PUID",
       ...fields.map((field) => String(field).toUpperCase()),
     ];
-    const lines = [header.join(",")];
+    const tableRows = [header];
 
     sampleGraphqlIds.forEach((sampleGraphqlId) => {
       const sample = sampleById.get(sampleGraphqlId);
@@ -191,22 +198,31 @@ self.onmessage = async (event) => {
       const metadata = sample.metadata || {};
 
       const row = [
-        escapeCsv(sample.puid),
-        escapeCsv(sample.name),
-        escapeCsv(sample.project?.puid),
+        toCellValue(sample.puid),
+        toCellValue(sample.name),
+        toCellValue(sample.project?.puid),
       ];
 
       fields.forEach((field) => {
-        row.push(escapeCsv(metadata[field]));
+        row.push(toCellValue(metadata[field]));
       });
 
-      lines.push(row.join(","));
+      tableRows.push(row);
     });
+
+    let content;
+    if (normalizedFormat === "xlsx") {
+      content = tableRows;
+    } else {
+      const lines = tableRows.map((row) => row.map(escapeCsv).join(","));
+      content = lines.join("\n");
+    }
 
     self.postMessage({
       type: "done",
       filename,
-      content: lines.join("\n"),
+      format: normalizedFormat,
+      content,
     });
   } catch (error) {
     self.postMessage({

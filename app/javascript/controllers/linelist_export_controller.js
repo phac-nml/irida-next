@@ -27,10 +27,6 @@ export default class extends Controller {
       type: String,
       default: "Unable to start export: %{message}",
     },
-    xlsxUnsupportedMessage: {
-      type: String,
-      default: "XLSX export is not supported in this client-side flow yet.",
-    },
     unexpectedErrorMessage: {
       type: String,
       default: "Unexpected error while generating export: %{message}",
@@ -77,15 +73,6 @@ export default class extends Controller {
 
     if (!selectedCount) {
       this.updateProgress(this.t(this.noSelectionErrorMessageValue), 100, true);
-      return;
-    }
-
-    if (format !== "csv") {
-      this.updateProgress(
-        this.t(this.xlsxUnsupportedMessageValue, { format }),
-        100,
-        true,
-      );
       return;
     }
 
@@ -144,7 +131,9 @@ export default class extends Controller {
 
     const workerSource = this.workerSourceUrl();
     const worker = this.buildWorker(workerSource);
-    worker.onmessage = (event) => this.handleWorkerMessage(event);
+    worker.onmessage = (event) => {
+      void this.handleWorkerMessage(event);
+    };
     worker.onerror = (event) => {
       const detail = event?.message || event?.error?.message || "";
       const message = this.t(this.unexpectedErrorMessageValue, {
@@ -167,7 +156,7 @@ export default class extends Controller {
     }
   }
 
-  handleWorkerMessage(event) {
+  async handleWorkerMessage(event) {
     const payload = event.data || {};
 
     if (payload.type === "progress") {
@@ -180,7 +169,18 @@ export default class extends Controller {
     }
 
     if (payload.type === "done") {
-      this.download(payload.filename, payload.content);
+      try {
+        await this.download(payload.filename, payload.content, payload.format);
+      } catch (error) {
+        const detail = error?.message || "";
+        const message = this.t(this.unexpectedErrorMessageValue, {
+          message: detail,
+        }).replace(/:\s*$/, "");
+        this.updateProgress(message, 100, true);
+        this.terminateWorker();
+        return;
+      }
+
       this.updateProgress(
         this.t(this.downloadStartedMessageValue, {
           filename: payload.filename,
@@ -228,7 +228,16 @@ export default class extends Controller {
     }
   }
 
-  download(filename, csvContent) {
+  async download(filename, content, format = "csv") {
+    if (format === "xlsx") {
+      await this.downloadXlsx(filename, content);
+      return;
+    }
+
+    this.downloadCsv(filename, content);
+  }
+
+  downloadCsv(filename, csvContent) {
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -238,6 +247,18 @@ export default class extends Controller {
     anchor.click();
     anchor.remove();
     URL.revokeObjectURL(url);
+  }
+
+  async downloadXlsx(filename, rows) {
+    if (!Array.isArray(rows)) {
+      throw new Error("Invalid spreadsheet data received from export worker.");
+    }
+
+    const XLSX = await import("xlsx");
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet(rows);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "linelist");
+    XLSX.writeFile(workbook, filename);
   }
 
   closeDialog() {

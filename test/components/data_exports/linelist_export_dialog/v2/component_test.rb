@@ -43,6 +43,22 @@ module DataExports
           assert_selector 'ul#selected-list'
           assert_no_selector "input[type='checkbox'][name='data_export[export_parameters][metadata_fields][]']"
         end
+
+        test 'renders enabled xlsx format option' do
+          project = projects(:project1)
+
+          render_inline(
+            Component.new(
+              open: true,
+              namespace_id: project.namespace.id,
+              namespace: project.namespace,
+              templates: []
+            )
+          )
+
+          assert_selector "input#linelist-format-xlsx[type='radio'][value='xlsx']"
+          assert_no_selector 'input#linelist-format-xlsx[disabled]'
+        end
       end
     end
   end
