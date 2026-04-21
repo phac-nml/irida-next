@@ -7,8 +7,8 @@
     <% if icon_name.present? %>
       <%= icon(
         icon_name,
-        size: nil,
-        class: class_names("size-5", { "mr-2": label.present? }),
+        size: icon_size,
+        class: class_names({ "mr-2": label.present?, "size-5": icon_size.nil? }),
       ) %>
     <% end %>
 

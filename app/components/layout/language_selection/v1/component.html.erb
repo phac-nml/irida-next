@@ -1,6 +1,7 @@
 <div class="inline-flex items-center">
   <%= render DropdownComponent.new(
     icon: :translate,
+    icon_size: :sm,
     label: I18n.t(:"locales.#{locale}", locale: locale),
     trigger_id: "language-selection-dd-trigger",
     skidding: 0,
