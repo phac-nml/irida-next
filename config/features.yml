@@ -10,6 +10,9 @@ features:
   client_linelist_exports_v1:
     description: "Enable the experimental client side linelist export."
     enable_in_development: false
+  client_linelist_imports_v1:
+    description: "Enable the experimental client side linelist import."
+    enable_in_development: false
   compose_with_retry:
     description: "Exponentially backoff and retry failed compose operations. This\
       \ is intended to mitigate transient errors in the compose process."

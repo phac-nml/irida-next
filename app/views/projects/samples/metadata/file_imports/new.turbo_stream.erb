@@ -1,7 +1,6 @@
-<%= turbo_stream.update "samples_dialog",
-                    partial: "shared/samples/metadata/file_imports/dialog",
-                    locals: {
-                      open: true,
-                      url: namespace_project_samples_file_import_path,
-                      closable: true,
-                    } %>
+<%= turbo_stream.update "samples_dialog" do %>
+  <%= render DataImports::LinelistImportDialogComponent.new(
+    open: true,
+    url: namespace_project_samples_file_import_path,
+    closable: true) %>
+<% end %>
