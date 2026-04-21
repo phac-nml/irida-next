@@ -15,6 +15,10 @@ import {
   selectedSampleIds as selectedSampleIdsFromSession,
   selectionStorageKey as buildSelectionStorageKey,
 } from "controllers/linelist_export/selection";
+import {
+  LinelistExportWorkerClient,
+  resolveLinelistExportWorkerSource,
+} from "controllers/linelist_export/worker_client";
 
 export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
@@ -58,7 +62,7 @@ export default class extends Controller {
   };
 
   connect() {
-    this.worker = null;
+    this.workerClient = this.buildWorkerClient();
     this._exportId = null;
     this._progressWindowOpenedAt = null;
     this._dismissProgressWindowTimeout = null;
@@ -113,9 +117,12 @@ export default class extends Controller {
       this.showProgressWindow(
         this.t(this.preparingRowsMessageValue, { count: totalCount }),
       );
-      this.spawnWorker();
 
-      this.worker.postMessage({
+      if (!this.workerClient) {
+        this.workerClient = this.buildWorkerClient();
+      }
+
+      this.workerClient.start({
         sample_ids: sampleIds,
         metadata_fields: metadataFields,
         namespace_id: namespaceId,
@@ -139,82 +146,60 @@ export default class extends Controller {
   }
 
   terminateWorker() {
-    if (this.worker) {
-      this.worker.terminate();
-      this.worker = null;
-    }
+    this.workerClient?.stop();
   }
 
-  spawnWorker() {
-    this.terminateWorker();
-
-    const workerSource = this.workerSourceUrl();
-    const worker = this.buildWorker(workerSource);
-    worker.onmessage = (event) => {
-      void this.handleWorkerMessage(event);
-    };
-    worker.onerror = (event) => {
-      const detail = event?.message || event?.error?.message || "";
-      const message = this.t(this.unexpectedErrorMessageValue, {
-        message: detail,
-      }).replace(/:\s*$/, "");
-      this.updateProgress(message, 100, true);
-    };
-    this.worker = worker;
+  buildWorkerClient() {
+    return new LinelistExportWorkerClient({
+      resolveWorkerSource: () => resolveLinelistExportWorkerSource(this),
+      onProgress: (payload) => {
+        this.handleWorkerProgress(payload);
+      },
+      onDone: async (payload) => {
+        await this.handleWorkerDone(payload);
+      },
+      onError: (message) => {
+        this.handleWorkerError(message);
+      },
+      formatUnexpectedError: (detail) => this.formatUnexpectedError(detail),
+    });
   }
 
-  buildWorker(workerSource) {
+  handleWorkerProgress(payload) {
+    const message = this.t(this.createdRecordsMessageValue, {
+      current: payload.current,
+      total: payload.total,
+    });
+    this.updateProgress(message, payload.percentage);
+  }
+
+  async handleWorkerDone(payload) {
     try {
-      return new Worker(workerSource, { type: "module" });
+      await this.download(payload.filename, payload.content, payload.format);
     } catch (error) {
-      console.warn(
-        "[linelist-export] Module worker unavailable, falling back to classic worker:",
-        error,
-      );
-      return new Worker(workerSource);
+      this.handleWorkerError(this.formatUnexpectedError(error?.message || ""));
+      return;
     }
+
+    this.updateProgress(
+      this.t(this.downloadStartedMessageValue, {
+        filename: payload.filename,
+      }),
+      100,
+    );
+    this.scheduleProgressWindowDismiss();
+    this.terminateWorker();
   }
 
-  async handleWorkerMessage(event) {
-    const payload = event.data || {};
+  handleWorkerError(message) {
+    this.updateProgress(message, 100, true);
+    this.terminateWorker();
+  }
 
-    if (payload.type === "progress") {
-      const message = this.t(this.createdRecordsMessageValue, {
-        current: payload.current,
-        total: payload.total,
-      });
-      this.updateProgress(message, payload.percentage);
-      return;
-    }
-
-    if (payload.type === "done") {
-      try {
-        await this.download(payload.filename, payload.content, payload.format);
-      } catch (error) {
-        const detail = error?.message || "";
-        const message = this.t(this.unexpectedErrorMessageValue, {
-          message: detail,
-        }).replace(/:\s*$/, "");
-        this.updateProgress(message, 100, true);
-        this.terminateWorker();
-        return;
-      }
-
-      this.updateProgress(
-        this.t(this.downloadStartedMessageValue, {
-          filename: payload.filename,
-        }),
-        100,
-      );
-      this.scheduleProgressWindowDismiss();
-      this.terminateWorker();
-      return;
-    }
-
-    if (payload.type === "error") {
-      this.updateProgress(payload.message, 100, true);
-      this.terminateWorker();
-    }
+  formatUnexpectedError(detail) {
+    return this.t(this.unexpectedErrorMessageValue, {
+      message: detail,
+    }).replace(/:\s*$/, "");
   }
 
   updateProgress(message, percentage, error = false) {
@@ -306,32 +291,6 @@ export default class extends Controller {
 
   clearProgressWindowDismissTimeout() {
     clearProgressWindowDismissTimeoutState(this);
-  }
-
-  workerSourceUrl() {
-    if (this.hasWorkerUrlValue && this.workerUrlValue) {
-      return this.workerUrlValue;
-    }
-
-    const resolvedFromImportMap = this.workerSourceFromImportMap();
-    if (resolvedFromImportMap) {
-      return new URL(resolvedFromImportMap, location.origin).href;
-    }
-
-    return new URL("../workers/linelist_export_worker.js", import.meta.url)
-      .href;
-  }
-
-  workerSourceFromImportMap() {
-    const importMapScript = document.querySelector("script[type='importmap']");
-    if (!importMapScript?.textContent) return null;
-
-    try {
-      const importMap = JSON.parse(importMapScript.textContent);
-      return importMap?.imports?.["workers/linelist_export_worker"] || null;
-    } catch {
-      return null;
-    }
   }
 
   t(template, vars = {}) {
