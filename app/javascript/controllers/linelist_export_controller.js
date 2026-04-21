@@ -70,14 +70,15 @@ export default class extends Controller {
   };
 
   connect() {
-    this.workerClient = this.buildWorkerClient();
-    this._exportId = null;
-    this._progressWindowOpenedAt = null;
-    this._dismissProgressWindowTimeout = null;
+    // Preserve in-flight export state if Stimulus reconnects this controller.
+    this.workerClient ||= this.buildWorkerClient();
+    this._exportId ||= null;
+    this._progressWindowOpenedAt ||= null;
+    this._dismissProgressWindowTimeout ||= null;
     this._progressMsgEl = null;
     this._progressBarEl = null;
     this._progressPctEl = null;
-    this.progressWindowDismissed = false;
+    this.progressWindowDismissed ??= false;
     this.updateSelectedCount();
   }
 
