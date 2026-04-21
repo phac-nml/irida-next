@@ -249,8 +249,8 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     assert_equal 11, workflow_executions.count
   end
 
-  test 'view_attachment?' do
-    assert @policy.apply(:view_attachment?)
+  test 'view_attachments?' do
+    assert @policy.apply(:view_attachments?)
 
     # automated workflow execution
     # user is ANALYST
@@ -258,13 +258,13 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     workflow_execution = workflow_executions(:automated_workflow_execution)
     policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
-    assert policy.apply(:view_attachment?)
+    assert policy.apply(:view_attachments?)
 
     # user is GUEST
     user = users(:ryan_doe)
     policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
-    assert_not policy.apply(:view_attachment?)
+    assert_not policy.apply(:view_attachments?)
 
     # shared workflow execution
     # user is submitter
@@ -272,17 +272,17 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     user = users(:james_doe)
     policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
-    assert policy.apply(:view_attachment?)
+    assert policy.apply(:view_attachments?)
 
     # user is member of project
     policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
 
-    assert policy.apply(:view_attachment?)
+    assert policy.apply(:view_attachments?)
 
     # user is not member of project
     user = users(:micha_doe)
     policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
-    assert_not policy.apply(:view_attachment?)
+    assert_not policy.apply(:view_attachments?)
   end
 end

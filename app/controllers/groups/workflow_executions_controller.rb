@@ -26,7 +26,7 @@ module Groups
         cancel: allowed_to?(:update?, @workflow_execution),
         destroy: allowed_to?(:destroy?, @workflow_execution),
         update: allowed_to?(:cancel?, @workflow_execution),
-        preview: allowed_to?(:view_attachment?, @workflow_execution)
+        preview: allowed_to?(:view_attachments?, @workflow_execution)
       }
     end
 

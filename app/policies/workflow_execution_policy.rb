@@ -104,7 +104,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def view_attachment? # rubocop:disable Metrics/AbcSize
+  def view_attachments? # rubocop:disable Metrics/AbcSize
     return true if record.submitter.id == user.id
 
     # if project workflow
