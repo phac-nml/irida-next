@@ -126,10 +126,6 @@ export default class extends Controller {
         this.t(this.preparingRowsMessageValue, { count: totalCount }),
       );
 
-      if (!this.workerClient) {
-        this.workerClient = this.buildWorkerClient();
-      }
-
       this.workerClient.start({
         sample_ids: sampleIds,
         metadata_fields: metadataFields,
