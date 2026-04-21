@@ -53,12 +53,11 @@ class Sample::V2::Query
   end
 
   def apply_sort(relation)
-    column, direction = @sort.to_s.split(' ', 2)
-    direction = 'desc' unless %w[asc desc].include?(direction)
+    column, direction = parse_sort
 
     ordered, tie_breaker_direction =
-      if column&.start_with?('metadata_')
-        metadata_key = column.delete_prefix('metadata_')
+      if column&.start_with?('metadata.')
+        metadata_key = column.delete_prefix('metadata.')
         [relation.order(Sample.metadata_sort(metadata_key, direction)), direction]
       elsif Sample.column_names.include?(column)
         [relation.order(column => direction), direction]
@@ -69,6 +68,21 @@ class Sample::V2::Query
     return ordered if column == 'id'
 
     ordered.order(id: tie_breaker_direction)
+  end
+
+  def parse_sort
+    sort_value = @sort.to_s.presence || 'updated_at desc'
+    column, _space, direction = sort_value.rpartition(' ')
+
+    if column.blank?
+      column = 'updated_at'
+      direction = direction.presence || 'desc'
+    end
+
+    column = column.gsub('metadata_', 'metadata.') if column.match?(/metadata_/)
+    direction = 'desc' unless %w[asc desc].include?(direction)
+
+    [column, direction]
   end
 end
 
