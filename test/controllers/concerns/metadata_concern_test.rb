@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/OneClassPerFile
-
 require 'test_helper'
 
 class TestController < ApplicationController
@@ -117,4 +115,3 @@ class MetadataConcernTest < ActionDispatch::IntegrationTest
     assert_includes actual_templates, [template.name, template.id]
   end
 end
-# rubocop:enable Style/OneClassPerFile
