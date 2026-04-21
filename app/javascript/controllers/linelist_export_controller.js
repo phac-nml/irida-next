@@ -266,22 +266,6 @@ export default class extends Controller {
   }
 
   selectedMetadataFields() {
-    const metadataFieldSelector =
-      "input[name='data_export[export_parameters][metadata_fields][]']";
-    const metadataInputs = Array.from(
-      this.element.querySelectorAll(metadataFieldSelector),
-    );
-
-    if (metadataInputs.some((input) => input.type === "checkbox")) {
-      return metadataInputs
-        .filter((input) => input.checked)
-        .map((input) => input.value);
-    }
-
-    if (metadataInputs.length > 0) {
-      return metadataInputs.map((input) => input.value);
-    }
-
     return Array.from(
       this.element.querySelectorAll("#selected-list li"),
       (item) => item.lastElementChild?.textContent?.trim() || "",
