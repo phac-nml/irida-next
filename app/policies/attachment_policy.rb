@@ -11,7 +11,7 @@ class AttachmentPolicy < ApplicationPolicy
     when Namespaces::ProjectNamespace
       allowed_to?(:view_attachments?, record.attachable.project)
     when Sample
-      allowed_to?(:read_sample?, record.project)
+      allowed_to?(:read_sample?, record.attachable.project)
     else
       false
     end
