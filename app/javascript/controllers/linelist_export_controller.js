@@ -1,4 +1,20 @@
 import { Controller } from "@hotwired/stimulus";
+import { downloadExport } from "controllers/linelist_export/downloader";
+import {
+  clearProgressWindowDismissTimeout as clearProgressWindowDismissTimeoutState,
+  dismissProgressWindow as dismissProgressWindowState,
+  scheduleProgressWindowDismiss as scheduleProgressWindowDismissState,
+  showProgressWindow as showProgressWindowState,
+  updateProgressWindow,
+} from "controllers/linelist_export/progress_window";
+import {
+  csrfToken as csrfTokenFromDocument,
+  selectedFormat as selectedFormatFromForm,
+  selectedMetadataFields as selectedMetadataFieldsFromList,
+  selectedNamespaceId as selectedNamespaceIdFromForm,
+  selectedSampleIds as selectedSampleIdsFromSession,
+  selectionStorageKey as buildSelectionStorageKey,
+} from "controllers/linelist_export/selection";
 
 export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
@@ -46,6 +62,9 @@ export default class extends Controller {
     this._exportId = null;
     this._progressWindowOpenedAt = null;
     this._dismissProgressWindowTimeout = null;
+    this._progressMsgEl = null;
+    this._progressBarEl = null;
+    this._progressPctEl = null;
     this.progressWindowDismissed = false;
     this.updateSelectedCount();
   }
@@ -199,66 +218,11 @@ export default class extends Controller {
   }
 
   updateProgress(message, percentage, error = false) {
-    if (this.progressWindowDismissed) return;
-
-    const percent = Math.min(Math.max(percentage, 0), 100);
-    this.ensureExportCard();
-
-    if (this._progressMsgEl) {
-      this._progressMsgEl.textContent = message;
-      if (error) {
-        this._progressMsgEl.setAttribute("role", "alert");
-        this._progressMsgEl.removeAttribute("aria-live");
-      } else {
-        this._progressMsgEl.setAttribute("aria-live", "polite");
-        this._progressMsgEl.removeAttribute("role");
-      }
-    }
-
-    if (this._progressBarEl) {
-      this._progressBarEl.style.width = `${percent}%`;
-      this._progressBarEl.setAttribute("aria-valuenow", Math.round(percent));
-      this._progressBarEl.setAttribute("aria-label", message);
-      this._progressBarEl.classList.toggle("bg-red-600", error);
-      this._progressBarEl.classList.toggle("bg-primary-600", !error);
-    }
-
-    if (this._progressPctEl) {
-      this._progressPctEl.textContent = `${Math.round(percent)}%`;
-    }
+    updateProgressWindow(this, message, percentage, error);
   }
 
   async download(filename, content, format = "csv") {
-    if (format === "xlsx") {
-      await this.downloadXlsx(filename, content);
-      return;
-    }
-
-    this.downloadCsv(filename, content);
-  }
-
-  downloadCsv(filename, csvContent) {
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  async downloadXlsx(filename, rows) {
-    if (!Array.isArray(rows)) {
-      throw new Error("Invalid spreadsheet data received from export worker.");
-    }
-
-    const XLSX = await import("xlsx");
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.aoa_to_sheet(rows);
-    XLSX.utils.book_append_sheet(workbook, worksheet, "linelist");
-    XLSX.writeFile(workbook, filename);
+    await downloadExport(filename, content, format);
   }
 
   closeDialog() {
@@ -287,37 +251,19 @@ export default class extends Controller {
   }
 
   selectedMetadataFields() {
-    return Array.from(
-      this.element.querySelectorAll("#selected-list li"),
-      (item) => item.lastElementChild?.textContent?.trim() || "",
-    ).filter((value) => value.length > 0);
+    return selectedMetadataFieldsFromList(this.element);
   }
 
   selectedFormat() {
-    const selected = this.element.querySelector(
-      "input[name='data_export[export_parameters][linelist_format]']:checked",
-    );
-    return selected?.value || "csv";
+    return selectedFormatFromForm(this.element);
   }
 
   selectedNamespaceId() {
-    const namespaceInput = this.element.querySelector(
-      "input[name='data_export[export_parameters][namespace_id]']",
-    );
-    return namespaceInput?.value || "";
+    return selectedNamespaceIdFromForm(this.element);
   }
 
   selectedSampleIds() {
-    const storageKey = this.selectionStorageKey();
-    const value = sessionStorage.getItem(storageKey);
-    if (!value) return [];
-
-    try {
-      const parsed = JSON.parse(value);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
+    return selectedSampleIdsFromSession(this.selectionStorageKey());
   }
 
   graphqlUrl() {
@@ -325,8 +271,7 @@ export default class extends Controller {
   }
 
   csrfToken() {
-    const meta = document.querySelector('meta[name="csrf-token"]');
-    return meta?.getAttribute("content") || "";
+    return csrfTokenFromDocument();
   }
 
   sampleGraphqlIdPrefix() {
@@ -334,7 +279,7 @@ export default class extends Controller {
   }
 
   selectionStorageKey() {
-    return `${location.protocol}//${location.host}${location.pathname}`;
+    return buildSelectionStorageKey();
   }
 
   updateSelectedCount() {
@@ -347,126 +292,20 @@ export default class extends Controller {
     }
   }
 
-  handleProgressWindowClick(event) {
-    if (!event?.target?.closest?.('[data-linelist-export-dismiss="true"]'))
-      return;
-    this.dismissProgressWindow();
-  }
-
   dismissProgressWindow() {
-    this.clearProgressWindowDismissTimeout();
-
-    if (this._exportId) {
-      const card = document.getElementById(
-        `linelist-export-card-${this._exportId}`,
-      );
-      if (card) card.remove();
-    }
-
-    const container = document.getElementById(
-      "linelist-export-progress-window",
-    );
-    if (container && container.children.length === 0) container.remove();
-
-    this.progressWindowDismissed = true;
-    this._exportId = null;
-    this._progressWindowOpenedAt = null;
-    this._progressMsgEl = null;
-    this._progressBarEl = null;
-    this._progressPctEl = null;
-  }
-
-  ensureExportCard() {
-    if (!this._exportId) return null;
-
-    const cardId = `linelist-export-card-${this._exportId}`;
-    let card = document.getElementById(cardId);
-
-    if (!card) {
-      card = this.createExportCard(cardId);
-    } else if (!this._progressMsgEl) {
-      // Recover refs after Turbo reconnect
-      this._progressMsgEl = card.querySelector(
-        "[data-linelist-export-progress-message]",
-      );
-      this._progressBarEl = card.querySelector(
-        "[data-linelist-export-progress-bar]",
-      );
-      this._progressPctEl = card.querySelector(
-        "[data-linelist-export-progress-percent]",
-      );
-    }
-
-    return card;
-  }
-
-  ensureProgressContainer() {
-    let container = document.getElementById("linelist-export-progress-window");
-    if (!container) {
-      container = document.createElement("div");
-      container.id = "linelist-export-progress-window";
-      container.className = "fixed bottom-5 right-5 z-50 w-80 space-y-2";
-      container.setAttribute("data-turbo-permanent", "");
-      document.body.appendChild(container);
-    }
-    return container;
-  }
-
-  createExportCard(cardId) {
-    const container = this.ensureProgressContainer();
-    const card = document.createElement("div");
-    card.id = cardId;
-    card.addEventListener("click", (event) =>
-      this.handleProgressWindowClick(event),
-    );
-
-    if (this.hasProgressTemplateTarget) {
-      const clone = this.progressTemplateTarget.content.cloneNode(true);
-      this._progressMsgEl = clone.querySelector(
-        "[data-linelist-export-progress-message]",
-      );
-      this._progressBarEl = clone.querySelector(
-        "[data-linelist-export-progress-bar]",
-      );
-      this._progressPctEl = clone.querySelector(
-        "[data-linelist-export-progress-percent]",
-      );
-      card.appendChild(clone);
-    }
-
-    container.appendChild(card);
-    return card;
+    dismissProgressWindowState(this);
   }
 
   showProgressWindow(message) {
-    if (!this._progressWindowOpenedAt) {
-      this._progressWindowOpenedAt = Date.now();
-    }
-    this.updateProgress(message, 0);
+    showProgressWindowState(this, message);
   }
 
   scheduleProgressWindowDismiss() {
-    if (this.progressWindowDismissed) return;
-
-    this.clearProgressWindowDismissTimeout();
-
-    const openedAt = this._progressWindowOpenedAt || Date.now();
-    const elapsedMs = Date.now() - openedAt;
-    const remainingMs = Math.max(
-      this.minimumVisibleDurationMsValue - elapsedMs,
-      0,
-    );
-
-    this._dismissProgressWindowTimeout = setTimeout(() => {
-      this.dismissProgressWindow();
-    }, remainingMs);
+    scheduleProgressWindowDismissState(this);
   }
 
   clearProgressWindowDismissTimeout() {
-    if (!this._dismissProgressWindowTimeout) return;
-
-    clearTimeout(this._dismissProgressWindowTimeout);
-    this._dismissProgressWindowTimeout = null;
+    clearProgressWindowDismissTimeoutState(this);
   }
 
   workerSourceUrl() {
