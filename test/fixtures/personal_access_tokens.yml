@@ -6,7 +6,7 @@ john_doe_expired_pat:
     - api
   name: Expired PAT
   revoked: false
-  expires_at: <%= 10.days.ago.to_date %>
+  expires_at: <%= Irida::CurrentSettings.current_application_settings.cleanup_inactive_access_tokens_after_days.days.ago.to_date %>
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "byb8myzkJ7HNeFS2La-8") %>
   last_used_at: nil
 
@@ -19,6 +19,7 @@ john_doe_revoked_pat:
   expires_at: <%= 10.days.from_now.to_date %>
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "osvR7Re6ZN_7sem8wF9z") %>
   last_used_at: nil
+  updated_at: <%= 31.days.ago %>
 
 john_doe_valid_pat:
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
@@ -160,6 +161,7 @@ user_bot_account0_revoked_pat:
   expires_at: <%= 10.days.ago.to_date %>
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "VX3wwK3sWTjn0xdCyZtH") %>
   last_used_at: nil
+  updated_at: <%= 31.days.ago %>
 
 user_group_bot_account0_revoked_pat:
   user_id: <%= ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid) %>
@@ -171,6 +173,7 @@ user_group_bot_account0_revoked_pat:
   expires_at: <%= 5.days.ago.to_date %>
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "TA3wwK3sWCjr0xdCyZtH") %>
   last_used_at: nil
+  updated_at: <%= 29.days.ago %>
 
 sample_actions_doe_valid_pat:
   user_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>

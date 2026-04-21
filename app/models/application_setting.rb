@@ -12,7 +12,8 @@ class ApplicationSetting < ApplicationRecord
   def self.defaults
     {
       signup_enabled: true,
-      password_authentication_enabled: true
+      password_authentication_enabled: true,
+      cleanup_inactive_access_tokens_after_days: 30
     }
   end
 

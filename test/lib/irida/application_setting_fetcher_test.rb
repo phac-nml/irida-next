@@ -3,6 +3,10 @@
 require 'test_helper'
 
 class ApplicationSettingFetcherTest < ActiveSupport::TestCase
+  setup do
+    ApplicationSetting.delete_all
+  end
+
   test 'current_application_settings returns the current settings' do
     settings = ApplicationSetting.create_from_defaults
     assert_equal settings, Irida::ApplicationSettingFetcher.current_application_settings

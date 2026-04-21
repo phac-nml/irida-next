@@ -431,19 +431,6 @@ CREATE FUNCTION public.logidze_version(v bigint, data jsonb, ts timestamp with t
 $$;
 
 
---
--- Name: action_cable_large_payloads_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.action_cable_large_payloads_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -532,7 +519,8 @@ CREATE TABLE public.application_settings (
     signup_enabled boolean DEFAULT true NOT NULL,
     password_authentication_enabled boolean DEFAULT true NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    cleanup_inactive_access_tokens_after_days integer DEFAULT 30 NOT NULL
 );
 
 
@@ -936,7 +924,7 @@ CREATE TABLE public.site_banners (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     CONSTRAINT site_banners_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
-    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY (ARRAY[('info'::character varying)::text, ('warning'::character varying)::text, ('danger'::character varying)::text, ('success'::character varying)::text])))
+    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY ((ARRAY['info'::character varying, 'warning'::character varying, 'danger'::character varying, 'success'::character varying])::text[])))
 );
 
 
@@ -2153,11 +2141,11 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260410170502'),
 ('20260306153207'),
 ('20260223130000'),
 ('20251201162848'),
 ('20251029175823'),
-('20251022175801'),
 ('20251006195129'),
 ('20250826161932'),
 ('20250716174346'),
