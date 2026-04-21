@@ -116,7 +116,7 @@ module Datepicker
           I18n.t('components.datepicker.date_format_regex')
         return if @errors.empty?
 
-        @system_arguments[:data]['datepicker--v2--input-errors-value'] = @errors
+        @system_arguments[:data]['datepicker--v1--input-errors-value'] = @errors
       end
 
       # Configures HTML attributes for the <div> datepicker calendar.

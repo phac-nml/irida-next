@@ -8,6 +8,7 @@ import { replaceStyleClasses } from "controllers/datepicker/utils";
 export default class extends Controller {
   static outlets = ["datepicker--v1--calendar"];
   static targets = [
+    "datepickerLabel",
     "datepickerInput",
     "calendarTemplate",
     "minDate",
@@ -356,7 +357,7 @@ export default class extends Controller {
 
   // disables the error state once a valid date is entered/selected
   disableInputErrorState() {
-    this.errorContainerTarget.innerText = "";
+    this.errorContainerTarget.innerHTML = "";
     this.datepickerInputTarget.removeAttribute("aria-invalid");
     this.datepickerInputTarget.removeAttribute("aria-describedby");
     if (!this.errorContainerTarget.classList.contains("hidden")) {

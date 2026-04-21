@@ -49,14 +49,17 @@
   id="<%= @input_id %>-message"
 ></ul>
 
-<div class="sr-only" aria-live="assertive" data-datepicker--v2--input-target="ariaLive"></div>
+<div class="sr-only" aria-live="polite" data-datepicker--v2--input-target="ariaLive"></div>
 
 <template data-datepicker--v2--input-target="errorMessageTemplate">
   <li>
     <span class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
       <%= icon(:x_circle, size: :sm,
       color: :danger,
-      class: "mr-1.5") %>
+      class: "mr-1.5",
+      aria: {
+        hidden: true
+      }) %>
 
       <span class="grow" data-datepicker--v2--input-target="errorMessage"></span>
     </span>
