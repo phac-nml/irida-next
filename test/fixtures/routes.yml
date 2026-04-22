@@ -803,3 +803,11 @@ project_chunked_samples_namespace_route:
   name: chunked_samples_doe@localhost / Project Chunked Samples
   path: chunked-samples-doe-at-localhost/project-chunked-samples
   source: project_chunked_samples_namespace (Namespace)
+
+
+<% (1..10).each do |n| %>
+public_group_<%= n %>_route:
+  name: Public Group <%= n %>
+  path: public-group-<%= n %>
+  source: public_group<%= n %> (Namespace)
+<% end %>
