@@ -52,7 +52,7 @@ def seed_project(project_params:, creator:, namespace:) # rubocop:disable Metric
   return 0 unless project_params[:sample_count]
 
   # seed the project samples
-  samples_count = seed_samples(project, project_params[:sample_count]) if project_params[:sample_count]
+  samples_count = seed_samples(project, project_params[:sample_count])
   project.update_columns(samples_count: samples_count) # rubocop:disable Rails/SkipsModelValidations
   project.namespace.update_columns(metadata_summary: fake_metadata_summary(samples_count)) # rubocop:disable Rails/SkipsModelValidations
 
