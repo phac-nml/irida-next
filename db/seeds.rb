@@ -662,7 +662,7 @@ if Rails.env.development?
     Guest: [users[8][:email]]
   }
 
-  default_sample_count = 1000
+  default_sample_count = ENV.fetch('DEFAULT_SAMPLE_COUNT', 100).to_i
 
   generic_projects = [
     {
