@@ -628,4 +628,5 @@ public_group<%= (n) %>:
   description: <%= "Public Group #{n} description" %>
   puid: <%= "INXT_GRP_AXATAA#{((n/26).round+66).chr}AA#{((n%26)+65).chr}" %>
   samples_count: 0
+  updated_at: <%= (n + 1).days.ago %>
 <% end %>
