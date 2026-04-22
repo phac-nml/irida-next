@@ -36,6 +36,26 @@ module Irida
         assert_equal true, properties['fastq_1']['autopopulate']
         assert_equal true, properties['fastq_2']['autopopulate']
       end
+
+      test 'autopopulates fastq_2 when no file_cells are required and fastq_2 has pattern' do
+        schema = {
+          'items' => {
+            'required' => %w[sample],
+            'properties' => {
+              'sample' => { 'type' => 'string' },
+              'fastq_1' => { 'type' => 'string', 'pattern' => '*_R1*.fastq' },
+              'fastq_2' => { 'type' => 'string', 'pattern' => '*_R2*.fastq' }
+            }
+          }
+        }
+
+        properties = Irida::Nextflow::Samplesheet::Properties.new(schema).properties
+
+        # fastq_1 should be autopopulated because no file cells are required (default behavior)
+        assert_equal true, properties['fastq_1']['autopopulate']
+        # fastq_2 should be autopopulated because fastq_1 is autopopulated and fastq_2 has a pattern
+        assert_equal true, properties['fastq_2']['autopopulate']
+      end
     end
   end
 end

@@ -63,7 +63,7 @@ module Irida
           end)
         end
 
-        def identify_autopopulated_file_properties(properties)
+        def identify_autopopulated_file_properties(properties) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
           file_properties = properties.select { |_property, entry| FILE_CELL_TYPES.include?(entry['cell_type']) }
           required_file_properties = file_properties.select { |_property, entry| entry['required'] }
 
@@ -74,6 +74,12 @@ module Irida
 
             properties[property]['autopopulate'] = true
           end
+
+          # If fastq_1 is required and marked for autopopulation, and fastq_2 has a pattern defined,
+          # mark fastq_2 for autopopulation as well
+          return unless properties.dig('fastq_1', 'autopopulate') && properties.dig('fastq_2', 'pattern').present?
+
+          properties['fastq_2']['autopopulate'] = true
         end
       end
     end

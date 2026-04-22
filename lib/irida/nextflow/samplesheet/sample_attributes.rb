@@ -27,23 +27,21 @@ module Irida
 
         private
 
-        def file_cells
-          properties.select do |name, entry|
-            entry['cell_type'] == 'file_cell' || (%w[fastq_1
-                                                     fastq_2].include?(name) && entry['cell_type'] == 'fastq_cell')
+        def autopopulated_file_cells
+          @autopopulated_file_cells ||= properties.select do |_name, entry|
+            Properties::FILE_CELL_TYPES.include?(entry['cell_type']) &&
+              entry['autopopulate'] == true &&
+              entry['pattern'].present?
           end
         end
 
         def samples_attachments(samples) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           attachments = {}
-          file_cells.each do |property, entry|
-            expected_pattern = entry['pattern']
-            next unless expected_pattern
-
+          autopopulated_file_cells.each do |property, entry|
             # fastq_2 files are queried in relation to fastq_1 files, so we can skip querying them here
             next if property == 'fastq_2'
 
-            attachments[property] = Attachment.matching_filename(expected_pattern)
+            attachments[property] = Attachment.matching_filename(entry['pattern'])
                                               .where(attachable_type: 'Sample', attachable_id: samples.pluck(:id))
 
             if property == 'fastq_1'
@@ -51,7 +49,7 @@ module Irida
                 'DISTINCT ON (attachable_id) attachments.*, active_storage_blobs.filename as filename'
               ).order(:attachable_id).prefer_associated_attachment.recent.index_by(&:attachable_id)
 
-              if file_cells.key?('fastq_2')
+              if autopopulated_file_cells.key?('fastq_2')
                 attachments['fastq_2'] = Attachment.joins(:file_blob)
                                                    .where(id: attachments[property].map do |_, att|
                                                                 att.metadata['associated_attachment_id']
@@ -84,10 +82,10 @@ module Irida
             when 'sample_name_cell'
               [name, sample.name]
             when 'file_cell'
-              [name, file_samplesheet_values(attachments[name][sample.id], sample.id, name)]
+              [name, file_samplesheet_values(attachments.dig(name, sample.id), sample.id, name)]
             when 'fastq_cell'
               if %w[fastq_1 fastq_2].include?(name)
-                [name, file_samplesheet_values(attachments[name][sample.id], sample.id, name)]
+                [name, file_samplesheet_values(attachments.dig(name, sample.id), sample.id, name)]
               else
                 [name, '']
               end

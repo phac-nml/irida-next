@@ -119,6 +119,95 @@ module Irida
             builder.file_attributes
           )
         end
+
+        test 'only autopopulates file_cells with autopopulate true' do
+          sample = FakeSample.new(
+            id: 3,
+            puid: 'PUID-3',
+            name: 'Sample 3',
+            metadata: {}
+          )
+
+          properties = {
+            'sample_cell' => { 'cell_type' => 'sample_cell' },
+            'file_cell_autopopulate' => { 'cell_type' => 'file_cell', 'autopopulate' => true, 'pattern' => '*.fastq' },
+            'file_cell_no_autopopulate' => { 'cell_type' => 'file_cell', 'pattern' => '*.bam' }
+          }
+
+          builder = Irida::Nextflow::Samplesheet::SampleAttributes.new(
+            samples: [sample],
+            properties: properties
+          )
+
+          # Mock the attachments - only autopopulated file cells should be queried
+          fake_autopopulate_attachment = FakeAttachment.new(id: 61, filename: 'auto.fastq', global_id: 'gid://auto')
+          builder.stubs(:samples_attachments)
+                 .returns({
+                            'file_cell_autopopulate' => { 3 => fake_autopopulate_attachment }
+                          })
+
+          result = builder.samples_workflow_executions_attributes[3]
+
+          # Autopopulated file_cell should have the attachment value
+          assert_equal 'gid://auto', result['samplesheet_params']['file_cell_autopopulate']
+          # Non-autopopulated file_cell should be empty
+          assert_equal '', result['samplesheet_params']['file_cell_no_autopopulate']
+
+          # file_attributes should only include the autopopulated cell
+          assert_equal(
+            {
+              3 => {
+                'file_cell_autopopulate' => { filename: 'auto.fastq', attachment_id: 61 },
+                'file_cell_no_autopopulate' => { filename: 'No selected file', attachment_id: '' }
+              }
+            },
+            builder.file_attributes
+          )
+        end
+
+        test 'autopopulates fastq_2 when fastq_1 has autopopulate true and fastq_2 has pattern' do
+          sample = FakeSample.new(
+            id: 4,
+            puid: 'PUID-4',
+            name: 'Sample 4',
+            metadata: {}
+          )
+
+          properties = {
+            'fastq_1' => { 'cell_type' => 'fastq_cell', 'autopopulate' => true, 'pattern' => '*_R1*.fastq' },
+            'fastq_2' => { 'cell_type' => 'fastq_cell', 'pattern' => '*_R2*.fastq' }
+          }
+
+          builder = Irida::Nextflow::Samplesheet::SampleAttributes.new(
+            samples: [sample],
+            properties: properties
+          )
+
+          # Mock the attachments - fastq_2 should be autopopulated along with fastq_1
+          fake_fwd_attachment = FakeAttachment.new(id: 71, filename: 'sample_R1.fastq', global_id: 'gid://fwd')
+          fake_rev_attachment = FakeAttachment.new(id: 72, filename: 'sample_R2.fastq', global_id: 'gid://rev')
+          builder.stubs(:samples_attachments).returns({
+                                                        'fastq_1' => { 4 => fake_fwd_attachment },
+                                                        'fastq_2' => { 4 => fake_rev_attachment }
+                                                      })
+
+          result = builder.samples_workflow_executions_attributes[4]
+
+          # Both fastq_1 and fastq_2 should be autopopulated
+          assert_equal 'gid://fwd', result['samplesheet_params']['fastq_1']
+          assert_equal 'gid://rev', result['samplesheet_params']['fastq_2']
+
+          # Both should be in file_attributes
+          assert_equal(
+            {
+              4 => {
+                'fastq_1' => { filename: 'sample_R1.fastq', attachment_id: 71 },
+                'fastq_2' => { filename: 'sample_R2.fastq', attachment_id: 72 }
+              }
+            },
+            builder.file_attributes
+          )
+        end
       end
     end
   end
