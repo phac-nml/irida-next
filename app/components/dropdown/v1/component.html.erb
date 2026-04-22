@@ -18,7 +18,9 @@
     <% end %>
 
     <% if label.present? %>
-      <span class="grow truncate text-center md:text-left"><%= label %></span>
+      <%= tag.span(class: class_names("grow truncate text-center md:text-left", styles[:label])) do %>
+        <%= label %>
+      <% end %>
     <% end %>
 
     <% if caret %>
