@@ -24,10 +24,16 @@ import {
 } from "controllers/linelist_export/worker_client";
 
 export default class extends Controller {
-  static targets = ["sampleStatus", "progressTemplate"];
+  static targets = [
+    "sampleStatus",
+    "progressTemplate",
+    "saveToServerNameWrapper",
+    "saveToServerNameInput",
+  ];
   static values = {
     workerUrl: String,
     graphqlUrl: String,
+    uploadUrl: String,
     sampleGraphqlIdPrefix: String,
     minimumVisibleDurationMs: {
       type: Number,
@@ -67,6 +73,22 @@ export default class extends Controller {
       type: String,
       default: "Created %{current} of %{total} records",
     },
+    saveToServerUploadingMessage: {
+      type: String,
+      default: "Saving linelist export to server...",
+    },
+    saveToServerSuccessMessage: {
+      type: String,
+      default: "Linelist export saved to server.",
+    },
+    saveToServerErrorMessage: {
+      type: String,
+      default: "Upload failed: %{message}",
+    },
+    viewExportLinkLabel: {
+      type: String,
+      default: "View saved export",
+    },
   };
 
   connect() {
@@ -75,11 +97,14 @@ export default class extends Controller {
     this._exportId ||= null;
     this._progressWindowOpenedAt ||= null;
     this._dismissProgressWindowTimeout ||= null;
+    this._pendingUpload ||= null;
+    this._lastCompletedPayload ||= null;
     this._progressMsgEl = null;
     this._progressBarEl = null;
     this._progressPctEl = null;
     this.progressWindowDismissed ??= false;
     this.updateSelectedCount();
+    this.toggleSaveToServer();
   }
 
   disconnect() {
@@ -99,6 +124,8 @@ export default class extends Controller {
     const metadataFields = this.selectedMetadataFields();
     const format = this.selectedFormat();
     const namespaceId = this.selectedNamespaceId();
+    const saveToServer = this.saveToServerSelected();
+    const exportName = this.selectedExportName();
     const graphqlUrl = this.graphqlUrl();
     const sampleGraphqlIdPrefix = this.sampleGraphqlIdPrefix();
     const selectedCount = sampleIds.length;
@@ -114,6 +141,15 @@ export default class extends Controller {
     this._exportId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this._progressWindowOpenedAt = null;
     this.progressWindowDismissed = false;
+    this._pendingUpload = {
+      saveToServer,
+      name: exportName,
+      namespaceId,
+      format,
+      sampleIds,
+      metadataFields,
+    };
+    this._lastCompletedPayload = null;
 
     if (this.hasSampleStatusTarget) {
       this.sampleStatusTarget.textContent = this.t(
@@ -179,6 +215,14 @@ export default class extends Controller {
   }
 
   async handleWorkerDone(payload) {
+    this._lastCompletedPayload = payload;
+
+    if (this._pendingUpload?.saveToServer) {
+      await this.handleServerSave(payload);
+      this.terminateWorker();
+      return;
+    }
+
     try {
       await this.download(payload.filename, payload.content, payload.format);
     } catch (error) {
@@ -214,6 +258,132 @@ export default class extends Controller {
 
   updateProgress(message, percentage, error = false) {
     updateProgressWindow(this, message, percentage, error);
+  }
+
+  async handleServerSave(payload) {
+    this.hideUploadLink();
+    this.hideUploadActions();
+    this.updateProgress(this.saveToServerUploadingMessageValue, 100);
+
+    try {
+      const response = await this.uploadToServer(payload);
+      this.updateProgress(this.saveToServerSuccessMessageValue, 100);
+      this.showUploadLink(response.url);
+    } catch (error) {
+      if (error instanceof XlsxLibraryLoadError) {
+        this.updateProgress(this.t(this.xlsxLoadErrorMessageValue), 100, true);
+      } else {
+        this.updateProgress(
+          this.t(this.saveToServerErrorMessageValue, {
+            message: error?.message || "request failed",
+          }),
+          100,
+          true,
+        );
+      }
+
+      this.showUploadActions();
+    }
+  }
+
+  async uploadToServer(payload) {
+    if (!this.hasUploadUrlValue || !this.uploadUrlValue) {
+      throw new Error("Upload endpoint is not configured.");
+    }
+
+    const pendingUpload = this._pendingUpload || {};
+    const formData = new FormData();
+
+    if (pendingUpload.name) {
+      formData.append("data_export[name]", pendingUpload.name);
+    }
+
+    const uploadFile = await this.fileForUpload(payload);
+    formData.append("data_export[file]", uploadFile, payload.filename);
+    formData.append(
+      "data_export[export_parameters][namespace_id]",
+      pendingUpload.namespaceId || "",
+    );
+    formData.append(
+      "data_export[export_parameters][linelist_format]",
+      pendingUpload.format || "csv",
+    );
+
+    (pendingUpload.sampleIds || []).forEach((sampleId) => {
+      formData.append("data_export[export_parameters][ids][]", sampleId);
+    });
+    (pendingUpload.metadataFields || []).forEach((field) => {
+      formData.append("data_export[export_parameters][metadata_fields][]", field);
+    });
+
+    const response = await fetch(this.uploadUrlValue, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "X-CSRF-Token": this.csrfToken(),
+      },
+      body: formData,
+    });
+
+    const responseBody = await this.parseJsonResponse(response);
+    if (!response.ok) {
+      throw new Error(
+        responseBody?.error || `Upload failed (${response.status}).`,
+      );
+    }
+
+    if (!responseBody?.url) {
+      throw new Error("Upload succeeded but no export link was returned.");
+    }
+
+    return responseBody;
+  }
+
+  async parseJsonResponse(response) {
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) return null;
+
+    try {
+      return await response.json();
+    } catch {
+      return null;
+    }
+  }
+
+  async fileForUpload(payload) {
+    if (payload.content instanceof Blob || payload.content instanceof File) {
+      return payload.content;
+    }
+
+    if (payload.format === "xlsx") {
+      return this.buildXlsxBlob(payload.content);
+    }
+
+    return new Blob([payload.content], { type: "text/csv;charset=utf-8;" });
+  }
+
+  async buildXlsxBlob(rows) {
+    if (!Array.isArray(rows)) {
+      throw new Error("Invalid spreadsheet data received from export worker.");
+    }
+
+    let XLSX;
+
+    try {
+      XLSX = await import("xlsx");
+    } catch {
+      throw new XlsxLibraryLoadError();
+    }
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet(rows);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "linelist");
+    const output = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+
+    return new Blob([output], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
   }
 
   async download(filename, content, format = "csv") {
@@ -261,6 +431,33 @@ export default class extends Controller {
     return selectedSampleIdsFromSession(this.selectionStorageKey());
   }
 
+  saveToServerSelected() {
+    const saveToServerInput = this.element.querySelector(
+      "input[name='data_export[save_to_server]']",
+    );
+    return !!saveToServerInput?.checked;
+  }
+
+  selectedExportName() {
+    if (!this.hasSaveToServerNameInputTarget) return "";
+
+    return this.saveToServerNameInputTarget.value.trim();
+  }
+
+  toggleSaveToServer() {
+    if (!this.hasSaveToServerNameWrapperTarget) return;
+
+    const showNameInput = this.saveToServerSelected();
+    this.saveToServerNameWrapperTarget.classList.toggle(
+      "hidden",
+      !showNameInput,
+    );
+
+    if (!showNameInput && this.hasSaveToServerNameInputTarget) {
+      this.saveToServerNameInputTarget.value = "";
+    }
+  }
+
   graphqlUrl() {
     return this.graphqlUrlValue;
   }
@@ -287,12 +484,132 @@ export default class extends Controller {
     }
   }
 
+  handleProgressWindowClick(event) {
+    if (event?.target?.closest?.('[data-linelist-export-dismiss="true"]')) {
+      this.dismissProgressWindow();
+      return;
+    }
+
+    if (
+      event?.target?.closest?.('[data-linelist-export-retry-upload="true"]')
+    ) {
+      void this.retryUpload();
+      return;
+    }
+
+    if (
+      event?.target?.closest?.('[data-linelist-export-download-local="true"]')
+    ) {
+      void this.downloadLocalFallback();
+    }
+  }
+
+  async retryUpload() {
+    if (!this._lastCompletedPayload) return;
+
+    await this.handleServerSave(this._lastCompletedPayload);
+  }
+
+  async downloadLocalFallback() {
+    if (!this._lastCompletedPayload) return;
+
+    try {
+      await this.download(
+        this._lastCompletedPayload.filename,
+        this._lastCompletedPayload.content,
+        this._lastCompletedPayload.format,
+      );
+    } catch (error) {
+      if (error instanceof XlsxLibraryLoadError) {
+        this.updateProgress(this.t(this.xlsxLoadErrorMessageValue), 100, true);
+      } else {
+        this.updateProgress(
+          this.formatUnexpectedError(error?.message || ""),
+          100,
+          true,
+        );
+      }
+      return;
+    }
+
+    this.hideUploadActions();
+    this.updateProgress(
+      this.t(this.downloadStartedMessageValue, {
+        filename: this._lastCompletedPayload.filename,
+      }),
+      100,
+    );
+    this.scheduleProgressWindowDismiss();
+  }
+
   dismissProgressWindow() {
     dismissProgressWindowState(this);
+    this._pendingUpload = null;
+    this._lastCompletedPayload = null;
   }
 
   showProgressWindow(message) {
+    this.hideUploadLink();
+    this.hideUploadActions();
     showProgressWindowState(this, message);
+  }
+
+  showUploadLink(url) {
+    const linkContainer = this.progressLinkContainerElement();
+    const link = this.progressLinkElement();
+    if (!linkContainer || !link) return;
+
+    link.href = url;
+    link.textContent = this.viewExportLinkLabelValue;
+    linkContainer.classList.remove("hidden");
+  }
+
+  hideUploadLink() {
+    const linkContainer = this.progressLinkContainerElement();
+    const link = this.progressLinkElement();
+    if (!linkContainer || !link) return;
+
+    linkContainer.classList.add("hidden");
+    link.href = link.getAttribute("data-default-href") || link.href;
+    link.textContent = "";
+  }
+
+  showUploadActions() {
+    const uploadActions = this.uploadActionsElement();
+    if (!uploadActions) return;
+
+    uploadActions.classList.remove("hidden");
+  }
+
+  hideUploadActions() {
+    const uploadActions = this.uploadActionsElement();
+    if (!uploadActions) return;
+
+    uploadActions.classList.add("hidden");
+  }
+
+  progressCardElement() {
+    if (!this._exportId) return null;
+
+    return document.getElementById(`linelist-export-card-${this._exportId}`);
+  }
+
+  progressLinkContainerElement() {
+    return this.progressCardElement()?.querySelector(
+      "[data-linelist-export-progress-link-container]",
+    );
+  }
+
+  progressLinkElement() {
+    return this.progressCardElement()?.querySelector(
+      "[data-linelist-export-progress-link]",
+    );
+  }
+
+  uploadActionsElement() {
+    return this.progressCardElement()?.querySelector(
+      "[data-linelist-export-upload-actions]",
+    );
   }
 
   scheduleProgressWindowDismiss() {

@@ -23,6 +23,7 @@
 <%= viral_dialog(open: @open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t("data_exports.new_linelist_export_dialog.title")) %>
 
+
   <%= tag.div class: "font-normal text-slate-500 dark:text-slate-400", data: linelist_data do %>
     <div class="grid gap-4">
       <div class="form-field mt-1">
@@ -199,6 +200,7 @@
         <div class="mt-3 hidden text-sm" data-linelist-export-progress-link-container>
           <a
             href="<%= data_exports_path %>"
+            data-default-href="<%= data_exports_path %>"
             data-linelist-export-progress-link
             data-turbo="false"
             class="font-medium text-blue-600 underline hover:decoration-2 dark:text-blue-400"
