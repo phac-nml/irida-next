@@ -153,14 +153,15 @@ def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize,Metric
 
   seeded_samples = Sample.upsert_all(samples, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
 
-  seed_attachments(Sample.where(id: seeded_samples.map { |row| row['id'] })) # rubocop:disable Rails/Pluck
+  seed_attachments(project, Sample.where(id: seeded_samples.map { |row| row['id'] })) # rubocop:disable Rails/Pluck
 
   seeded_samples.count
 end
 
-def seed_attachments(samples) # rubocop:disable Metrics/MethodLength
+def seed_attachments(project, samples) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   samples_attachments = []
   activestorage_attachments = []
+  activities = []
 
   samples.each do |sample| # rubocop:disable Metrics/BlockLength
     attachment_timestamp = sample.created_at + (10 / 12_228.0)
@@ -203,11 +204,25 @@ def seed_attachments(samples) # rubocop:disable Metrics/MethodLength
       blob_id: @illumina_pe_rev,
       created_at: attachment_timestamp
     }
+    activities << {
+      key: 'namespaces_project_namespace.samples.attachment.create',
+      owner_id: project.creator_id,
+      owner_type: 'User',
+      trackable_id: project.namespace_id,
+      trackable_type: 'Namespace',
+      parameters: {
+        sample_puid: sample.puid,
+        sample_id: sample.id,
+        action: 'attachment_create'
+      }
+    }
   end
 
   Attachment.upsert_all(samples_attachments) # rubocop:disable Rails/SkipsModelValidations
 
   ActiveStorage::Attachment.upsert_all(activestorage_attachments) # rubocop:disable Rails/SkipsModelValidations
+
+  PublicActivity::Activity.upsert_all(activities) # rubocop:disable Rails/SkipsModelValidations
 end
 
 def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
