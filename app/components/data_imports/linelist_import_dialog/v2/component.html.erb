@@ -1,5 +1,5 @@
 <% linelist_data = {
-  controller:"attachment-upload metadata--file-import sortable-lists--v1--two-lists-selection",
+  controller:"linelist-import metadata--file-import sortable-lists--v1--two-lists-selection",
   "sortable-lists--v1--two-lists-selection-selected-list-value": "selected-list",
   "sortable-lists--v1--two-lists-selection-available-list-value": "available-list",
   "sortable-lists--v1--two-lists-selection-field-name-value": "file_import[metadata_columns][]",
@@ -19,7 +19,9 @@
     <%= helpers.turbo_frame_tag "import_metadata_dialog_alert" %>
 
     <%= tag.div id: "import-metadata-dialog-content", data: linelist_data do %>
-      <%= form_for(:file_import, url: @url, method: :post) do |form| %>
+      <%= form_for(:file_import, url: "#", method: :get, data: {
+        action: "submit->viral--dialog#close submit->linelist-import#submit"
+      }) do |form| %>
         <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>">
 
         <div class="grid gap-4">
@@ -60,7 +62,6 @@
 
             <%= form.file_field :file,
                             required: true,
-                            direct_upload: true,
                             accept:
                               # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
                               "text/csv,.tsv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
