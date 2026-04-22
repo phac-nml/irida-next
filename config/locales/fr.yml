@@ -542,7 +542,7 @@ fr:
       title: Exportation de liste détaillée
       unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
       xlsx: ".xlsx"
-      xlsx_unsupported: L’exportation XLSX n’est pas encore prise en charge dans ce flux côté client.
+      xlsx_load_error: Impossible de charger la bibliothèque d’exportation XLSX. Veuillez réessayer ou exporter en CSV.
     new_sample_export_dialog:
       available: Disponible
       available_description: Formats de fichiers non inclus dans cette exportation. Par défaut, tous les formats sont inclus.
