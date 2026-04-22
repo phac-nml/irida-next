@@ -700,3 +700,9 @@ project_chunked_samples_member_chunked_samples_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_chunked_samples_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
+
+public_group_one_member_john_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:public_group1, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
