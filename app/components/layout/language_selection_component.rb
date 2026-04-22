@@ -1,17 +1,12 @@
 # frozen_string_literal: true
 
 module Layout
-  # Component for rendering language selection
-  class LanguageSelectionComponent < Component
-    def initialize(user: Current.user)
-      @user = user
-      @locale_options = I18n.available_locales.map { |locale| [I18n.t(:"locales.#{locale}", locale: locale), locale] }
-    end
+  # Stable entrypoint for rendering a language selection menu across UI versions.
+  class LanguageSelectionComponent < Versioning::VersionedComponent
+    IMPLEMENTATIONS = {
+      v1: Layout::LanguageSelection::V1::Component
+    }.freeze
 
-    private
-
-    def locale
-      @user.locale.to_sym
-    end
+    VERSION_RESOLVER = -> { :v1 }
   end
 end

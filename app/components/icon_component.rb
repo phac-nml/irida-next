@@ -60,6 +60,7 @@ class IconComponent < Component
   end
 
   def validate_size(value)
+    return nil if value.nil?
     return value if IconRenderer::SIZES.key?(value)
 
     :md

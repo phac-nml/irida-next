@@ -2,7 +2,7 @@
 
 module Versioning
   # Shared helper for components that dispatch to versioned implementations.
-  class VersionedComponent
+  class VersionedComponent < Component
     VERSION_RESOLVER = -> { raise NotImplementedError, "VERSION_RESOLVER must be defined in #{name}" }
 
     DEFAULT_VERSION = :v1
