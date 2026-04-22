@@ -525,6 +525,7 @@ fr:
       close_progress: Fermer la progression de l’exportation
       created_records: Créé %{current} sur %{total} enregistrements
       csv: ".csv"
+      download_locally_instead: Télécharger localement à la place
       download_started: 'Téléchargement démarré : %{filename}'
       fields_instructions: Sélectionnez un ou plusieurs champs de métadonnées, puis utilisez les boutons d’action pour déplacer les champs entre les listes. L’ordre de la liste sélectionnée détermine l’ordre des colonnes de l’exportation.
       fields_instructions_title: Fonctionnement des listes
@@ -534,6 +535,9 @@ fr:
       no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
       preparing_rows: Préparation de %{count} lignes
+      retry_upload: Réessayer le téléversement
+      save_to_server_label: Enregistrer l’exportation sur le serveur
+      saved_to_server: Exportation de liste détaillée enregistrée sur le serveur.
       selected: Sélectionné
       selected_count: 'Échantillons sélectionnés : %{count}'
       selected_description: Champs de métadonnées inclus dans l’exportation. Réorganisez cette liste pour contrôler l’ordre des colonnes.
@@ -541,6 +545,9 @@ fr:
       start_error: 'Impossible de démarrer l’exportation : %{message}'
       title: Exportation de liste détaillée
       unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
+      upload_failed: 'Échec du téléversement : %{message}'
+      uploading_to_server: Enregistrement de l’exportation de liste détaillée sur le serveur...
+      view_saved_export: Voir l’exportation enregistrée
       xlsx: ".xlsx"
       xlsx_load_error: Impossible de charger la bibliothèque d’exportation XLSX. Veuillez réessayer ou exporter en CSV.
     new_sample_export_dialog:
@@ -1833,6 +1840,9 @@ fr:
         invalid_export_samples: Impossible de créer une exportation en raison des autorisations d’échantillonnage ou d’échantillons introuvables.
         invalid_export_workflow_executions: Impossible de créer une exportation en raison des autorisations d’exécution du flux de travail ou des exécutions de flux de travail introuvables.
         non_completed_workflow_executions: Impossible de créer une exportation en raison des exécutions de flux de travail sélectionnées ayant un état autre que « Terminé ».
+      upload:
+        attach_failed: Impossible d’attacher le fichier d’exportation téléversé.
+        missing_file: Le fichier à téléverser est requis.
     groups:
       share:
         group_not_found: Le groupe avec l’identifiant %{group_id} avec lequel partager l’espace de noms est introuvable.

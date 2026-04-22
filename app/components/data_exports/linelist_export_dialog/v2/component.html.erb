@@ -2,6 +2,7 @@
   controller: "linelist-export",
   "linelist-export-worker-url-value": asset_path("workers/linelist_export_worker.js"),
   "linelist-export-graphql-url-value": graphql_url,
+  "linelist-export-upload-url-value": upload_url,
   "linelist-export-sample-graphql-id-prefix-value": sample_graphql_id_prefix,
   "linelist-export-minimum-visible-duration-ms-value": 3500,
   "linelist-export-no-selection-error-message-value": t("data_exports.new_linelist_export_dialog.no_selection"),
@@ -13,6 +14,10 @@
   "linelist-export-unexpected-error-message-value": t("data_exports.new_linelist_export_dialog.unexpected_error"),
   "linelist-export-download-started-message-value": t("data_exports.new_linelist_export_dialog.download_started"),
   "linelist-export-created-records-message-value": t("data_exports.new_linelist_export_dialog.created_records"),
+  "linelist-export-save-to-server-uploading-message-value": t("data_exports.new_linelist_export_dialog.uploading_to_server"),
+  "linelist-export-save-to-server-success-message-value": t("data_exports.new_linelist_export_dialog.saved_to_server"),
+  "linelist-export-save-to-server-error-message-value": t("data_exports.new_linelist_export_dialog.upload_failed"),
+  "linelist-export-view-export-link-label-value": t("data_exports.new_linelist_export_dialog.view_saved_export"),
 } %>
 
 <%= viral_dialog(open: @open, size: :large) do |dialog| %>
@@ -105,6 +110,31 @@
 
       <%= form_with(url: "#", method: :get, data: { action: "submit->linelist-export#submit" }) do |form| %>
         <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
+
+        <div class="form-field mt-2">
+          <div class="flex items-center gap-2">
+            <%= check_box_tag "data_export[save_to_server]",
+                              "1",
+                              false,
+                              id: "linelist-save-to-server",
+                              data: { action: "change->linelist-export#toggleSaveToServer" },
+                              class: "h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" %>
+
+            <%= label_tag "linelist-save-to-server",
+                          t("data_exports.new_linelist_export_dialog.save_to_server_label"),
+                          class: "text-sm text-slate-700 dark:text-slate-300" %>
+          </div>
+        </div>
+
+        <div class="form-field mt-2 hidden" data-linelist-export-target="saveToServerNameWrapper">
+          <%= form.label :name, t("data_exports.new.name_label") %>
+
+          <%= form.text_field :name,
+                              name: "data_export[name]",
+                              class: "form-control",
+                              data: { linelist_export_target: "saveToServerNameInput" } %>
+        </div>
+
         <%= form.submit t("data_exports.new.submit_button"), class: "button button-primary" %>
       <% end %>
 
@@ -164,6 +194,25 @@
           >
             0%
           </span>
+        </div>
+
+        <div class="mt-3 hidden text-sm" data-linelist-export-progress-link-container>
+          <a
+            href="<%= data_exports_path %>"
+            data-linelist-export-progress-link
+            data-turbo="false"
+            class="font-medium text-blue-600 underline hover:decoration-2 dark:text-blue-400"
+          ></a>
+        </div>
+
+        <div class="mt-3 flex hidden flex-wrap gap-2" data-linelist-export-upload-actions>
+          <button type="button" data-linelist-export-retry-upload="true" class="button button-default">
+            <%= t("data_exports.new_linelist_export_dialog.retry_upload") %>
+          </button>
+
+          <button type="button" data-linelist-export-download-local="true" class="button button-default">
+            <%= t("data_exports.new_linelist_export_dialog.download_locally_instead") %>
+          </button>
         </div>
       </div>
     </template>
