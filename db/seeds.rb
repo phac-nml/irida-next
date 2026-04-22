@@ -153,7 +153,7 @@ def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize,Metric
 
   seeded_samples = Sample.upsert_all(samples, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
 
-  Sample.where(id: seeded_samples).find_each do |sample|
+  Sample.where(id: seeded_samples.map { |row| row['id'] }).find_each do |sample|
     seed_attachments(sample)
   end
 
@@ -191,7 +191,7 @@ def seed_attachments(sample) # rubocop:disable Metrics/MethodLength
     }
   ]
 
-  Attachment.upsert_all(attachments, unique_by: %i[puid attachable_id attachable_type]) # rubocop:disable Rails/SkipsModelValidations
+  Attachment.upsert_all(attachments) # rubocop:disable Rails/SkipsModelValidations
 
   activestorage_attachments = [
     {
@@ -210,7 +210,7 @@ def seed_attachments(sample) # rubocop:disable Metrics/MethodLength
     }
   ]
 
-  ActiveStorage::Attachment.upsert_all(activestorage_attachments, unique_by: %i[record_type record_id blob_id]) # rubocop:disable Rails/SkipsModelValidations
+  ActiveStorage::Attachment.upsert_all(activestorage_attachments) # rubocop:disable Rails/SkipsModelValidations
 end
 
 def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
@@ -444,7 +444,7 @@ if Rails.env.development?
   end
   seeded_users = User.upsert_all(users, unique_by: [:email]) # rubocop:disable Rails/SkipsModelValidations
 
-  user_namespaces = User.where(id: seeded_users).map do |user|
+  user_namespaces = User.where(id: seeded_users.map { |row| row['id'] }).map do |user|
     {
       name: user.email,
       puid: Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: user.created_at),
@@ -455,7 +455,9 @@ if Rails.env.development?
   end
   seeded_user_namespaces = Namespaces::UserNamespace.upsert_all(user_namespaces, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
 
-  user_namespaces_routes = Namespaces::UserNamespace.where(id: seeded_user_namespaces).map do |user_namespace|
+  user_namespaces_routes = Namespaces::UserNamespace.where(id: seeded_user_namespaces.map do |row|
+    row['id']
+  end).map do |user_namespace|
     {
       name: user_namespace.name,
       path: format('%<email>s', email: user_namespace.name).sub!('@', '_at_'),
