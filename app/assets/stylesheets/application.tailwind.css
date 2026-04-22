@@ -1,6 +1,11 @@
-@import "tailwindcss";
-@plugin "flowbite/plugin";
+@import "tailwindcss" source(none);
+@source "../../components/**/*.{rb,erb}";
+@source "../../javascript/**/*.js";
+@source "../../views/**/*.erb";
 @source "../../../node_modules/flowbite/**/*.js";
+@source "../../helpers/**/*.rb";
+
+@plugin "flowbite/plugin";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
