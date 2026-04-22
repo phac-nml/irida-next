@@ -128,6 +128,22 @@ class GroupMemberTest < ActiveSupport::TestCase
     end
   end
 
+  test 'effective access level is returned for public group where user is a member' do
+    group = groups(:public_group1)
+    user = users(:john_doe)
+
+    access_level = Member.effective_access_level(group, user)
+    assert_equal Member::AccessLevel::OWNER, access_level
+  end
+
+  test 'access level of GUEST is returned for public group and user is not a member' do
+    group = groups(:public_group1)
+    user = users(:joan_doe)
+
+    access_level = Member.effective_access_level(group, user)
+    assert_equal Member::AccessLevel::GUEST, access_level
+  end
+
   test '#scope for_namespace_and_ancestors returns the correct collection' do
     namespace = groups(:subgroup1)
     members = Member.for_namespace_and_ancestors(namespace)
