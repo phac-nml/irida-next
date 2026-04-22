@@ -151,9 +151,27 @@ def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize,Metric
     }
   end
 
-  seeded_samples = Sample.upsert_all(samples, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
+  seeded_samples_response = Sample.upsert_all(samples, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
 
-  seed_attachments(project, Sample.where(id: seeded_samples.map { |row| row['id'] })) # rubocop:disable Rails/Pluck
+  seeded_samples = Sample.where(id: seeded_samples_response.map { |row| row['id'] }) # rubocop:disable Rails/Pluck
+
+  activities = seeded_samples.map do |sample|
+    {
+      key: 'namespaces_project_namespace.samples.create',
+      owner_id: project.creator_id,
+      owner_type: 'User',
+      trackable_id: project.namespace_id,
+      trackable_type: 'Namespace',
+      parameters: {
+        sample_puid: sample.puid,
+        sample_id: sample.id,
+        action: 'sample_create'
+      }
+    }
+  end
+  PublicActivity::Activity.upsert_all(activities) # rubocop:disable Rails/SkipsModelValidations
+
+  seed_attachments(project, seeded_samples)
 
   seeded_samples.count
 end
