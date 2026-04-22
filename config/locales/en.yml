@@ -527,6 +527,7 @@ en:
       close_progress: Close export progress
       created_records: Created %{current} of %{total} records
       csv: ".csv"
+      download_locally_instead: Download locally instead
       download_started: 'Download started: %{filename}'
       fields_instructions: Select one or more metadata fields, then use the action buttons to move fields between lists. The ordering of the selected list determines export column order.
       fields_instructions_title: How the lists work
@@ -536,6 +537,9 @@ en:
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...
       preparing_rows: Preparing %{count} rows
+      retry_upload: Retry upload
+      save_to_server_label: Save export to server
+      saved_to_server: Linelist export saved to server.
       selected: Selected
       selected_count: 'Selected samples: %{count}'
       selected_description: Metadata fields included in the export. Reorder this list to control column order.
@@ -543,6 +547,9 @@ en:
       start_error: 'Unable to start export: %{message}'
       title: Linelist Export
       unexpected_error: 'Unexpected error while generating export: %{message}'
+      upload_failed: 'Upload failed: %{message}'
+      uploading_to_server: Saving linelist export to server...
+      view_saved_export: View saved export
       xlsx: ".xlsx"
       xlsx_load_error: Unable to load the XLSX export library. Please retry or export as CSV.
     new_sample_export_dialog:
@@ -1831,6 +1838,9 @@ en:
         invalid_export_samples: Unable to create export due to either sample permissions or not found samples.
         invalid_export_workflow_executions: Unable to create export due to either workflow execution permissions or not found workflow executions.
         non_completed_workflow_executions: Unable to create export due to selected workflow executions having a state other than 'Completed'.
+      upload:
+        attach_failed: Unable to attach uploaded export file.
+        missing_file: Upload file is required.
     groups:
       share:
         group_not_found: Group with id %{group_id} to share namespace with cannot be found.
