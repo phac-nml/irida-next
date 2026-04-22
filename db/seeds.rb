@@ -153,23 +153,22 @@ def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize,Metric
 
   seeded_samples = Sample.upsert_all(samples, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
 
-  Sample.where(id: seeded_samples.map { |row| row['id'] }).find_each do |sample|
-    seed_attachments(sample)
-  end
+  seed_attachments(Sample.where(id: seeded_samples.map { |row| row['id'] })) # rubocop:disable Rails/Pluck
 
   seeded_samples.count
 end
 
-def seed_attachments(sample) # rubocop:disable Metrics/MethodLength
-  Rails.logger.info "seeding... Sample: #{sample.name}, Attachments"
+def seed_attachments(samples) # rubocop:disable Metrics/MethodLength
+  samples_attachments = []
+  activestorage_attachments = []
 
-  attachment_timestamp = sample.created_at + (10 / 12_228.0)
-  fwd_id = SecureRandom.uuid
-  rev_id = SecureRandom.uuid
-  puid = Irida::PersistentUniqueId.generate(object_class: Attachment, time: attachment_timestamp)
+  samples.each do |sample| # rubocop:disable Metrics/BlockLength
+    attachment_timestamp = sample.created_at + (10 / 12_228.0)
+    fwd_id = SecureRandom.uuid
+    rev_id = SecureRandom.uuid
+    puid = Irida::PersistentUniqueId.generate(object_class: Attachment, time: attachment_timestamp)
 
-  attachments = [
-    {
+    samples_attachments << {
       id: fwd_id,
       puid: puid,
       attachable_id: sample.id,
@@ -178,8 +177,8 @@ def seed_attachments(sample) # rubocop:disable Metrics/MethodLength
                   associated_attachment_id: rev_id },
       created_at: attachment_timestamp,
       updated_at: attachment_timestamp
-    },
-    {
+    }
+    samples_attachments << {
       id: rev_id,
       puid: puid,
       attachable_id: sample.id,
@@ -189,26 +188,24 @@ def seed_attachments(sample) # rubocop:disable Metrics/MethodLength
       created_at: attachment_timestamp,
       updated_at: attachment_timestamp
     }
-  ]
 
-  Attachment.upsert_all(attachments) # rubocop:disable Rails/SkipsModelValidations
-
-  activestorage_attachments = [
-    {
+    activestorage_attachments << {
       name: 'file',
       record_type: 'Attachment',
       record_id: fwd_id,
       blob_id: @illumina_pe_fwd,
       created_at: attachment_timestamp
-    },
-    {
+    }
+    activestorage_attachments << {
       name: 'file',
       record_type: 'Attachment',
       record_id: rev_id,
       blob_id: @illumina_pe_rev,
       created_at: attachment_timestamp
     }
-  ]
+  end
+
+  Attachment.upsert_all(samples_attachments) # rubocop:disable Rails/SkipsModelValidations
 
   ActiveStorage::Attachment.upsert_all(activestorage_attachments) # rubocop:disable Rails/SkipsModelValidations
 end
