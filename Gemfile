@@ -117,7 +117,7 @@ gem 'good_job', '~> 4.14.2'
 # spreadsheet parser [https://github.com/roo-rb/roo]
 gem 'roo', '~> 3.0.0'
 gem 'roo-xls'
-gem 'spreadsheet', '1.3.4'
+gem 'spreadsheet', '1.3.5'
 
 # activity tracking
 gem 'public_activity'
