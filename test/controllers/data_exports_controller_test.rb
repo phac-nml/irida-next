@@ -122,6 +122,108 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  test 'should upload linelist csv export and return show url' do
+    file = fixture_file_upload('data_export_8.csv', 'text/csv')
+
+    assert_difference('DataExport.count', 1) do
+      post upload_data_exports_path, params: {
+        data_export: {
+          name: 'v2 saved export',
+          file:,
+          export_parameters: {
+            ids: [@sample1.id],
+            namespace_id: @project1.namespace.id,
+            linelist_format: 'csv',
+            metadata_fields: ['metadatafield1']
+          }
+        }
+      }
+    end
+
+    assert_response :created
+
+    payload = response.parsed_body
+    data_export = DataExport.find(payload['id'])
+
+    assert_equal data_export_path(data_export), payload['url']
+    assert_equal 'ready', data_export.status
+    assert_equal 'linelist', data_export.export_type
+    assert_equal 'v2 saved export', data_export.name
+    assert_equal @project1.namespace.id, data_export.export_parameters['namespace_id']
+    assert_equal ['metadatafield1'], data_export.export_parameters['metadata_fields']
+    assert_equal [@sample1.id], data_export.export_parameters['ids']
+    assert_equal ApplicationController.helpers.add_business_days(Date.current, 3).to_date,
+                 data_export.expires_at.to_date
+    assert data_export.file.attached?
+    assert_equal "#{data_export.id}.csv", data_export.file.filename.to_s
+  end
+
+  test 'should upload linelist export with group namespace id' do
+    group = groups(:group_one)
+    file = fixture_file_upload('data_export_8.csv', 'text/csv')
+
+    assert_difference('DataExport.count', 1) do
+      post upload_data_exports_path, params: {
+        data_export: {
+          file:,
+          export_parameters: {
+            ids: [@sample1.id],
+            namespace_id: group.id,
+            linelist_format: 'csv',
+            metadata_fields: ['metadatafield1']
+          }
+        }
+      }
+    end
+
+    assert_response :created
+
+    payload = response.parsed_body
+    data_export = DataExport.find(payload['id'])
+    assert_equal group.id, data_export.export_parameters['namespace_id']
+  end
+
+  test 'should not upload linelist export without file' do
+    assert_no_difference('DataExport.count') do
+      post upload_data_exports_path, params: {
+        data_export: {
+          export_parameters: {
+            ids: [@sample1.id],
+            namespace_id: @project1.namespace.id,
+            linelist_format: 'csv',
+            metadata_fields: ['metadatafield1']
+          }
+        }
+      }
+    end
+
+    assert_response :unprocessable_content
+
+    payload = response.parsed_body
+    assert payload['error'].present?
+  end
+
+  test 'should not upload linelist export without authorization' do
+    sign_in users(:jane_doe)
+    file = fixture_file_upload('data_export_8.csv', 'text/csv')
+
+    assert_no_difference('DataExport.count') do
+      post upload_data_exports_path, params: {
+        data_export: {
+          file:,
+          export_parameters: {
+            ids: [@sample1.id],
+            namespace_id: @project1.namespace.id,
+            linelist_format: 'csv',
+            metadata_fields: ['metadatafield1']
+          }
+        }
+      }
+    end
+
+    assert_response :unauthorized
+  end
+
   test 'should delete export through destroy action' do
     assert_difference('DataExport.count', -1) do
       delete data_export_path(@data_export1),
