@@ -1212,9 +1212,10 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
   test 'select page status text is localized in french' do
     visit workflow_executions_path
+    Capybara.execute_script 'sessionStorage.clear()'
 
     find('#language-selection-dd-trigger').click
-    within find('#language-selection-dd-menu') do
+    within find('#language-selection-dd-trigger-menu') do
       click_button I18n.t(:'locales.fr', locale: :fr)
     end
 
