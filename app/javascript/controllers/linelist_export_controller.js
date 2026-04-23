@@ -22,6 +22,7 @@ import {
   LinelistExportWorkerClient,
   resolveLinelistExportWorkerSource,
 } from "controllers/linelist_export/worker_client";
+import { uploadLinelistExport } from "controllers/linelist_export/server_upload";
 
 export default class extends Controller {
   static targets = [
@@ -103,6 +104,9 @@ export default class extends Controller {
     this._progressBarEl = null;
     this._progressPctEl = null;
     this.progressWindowDismissed ??= false;
+    this.progressWindowActionsEnabled = true;
+    this.progressWindowClickHandler ||= (event) =>
+      this.handleProgressWindowClick(event);
     this.updateSelectedCount();
     this.toggleSaveToServer();
   }
@@ -291,101 +295,11 @@ export default class extends Controller {
       throw new Error("Upload endpoint is not configured.");
     }
 
-    const pendingUpload = this._pendingUpload || {};
-    const formData = new FormData();
-
-    if (pendingUpload.name) {
-      formData.append("data_export[name]", pendingUpload.name);
-    }
-
-    const uploadFile = await this.fileForUpload(payload);
-    formData.append("data_export[file]", uploadFile, payload.filename);
-    formData.append(
-      "data_export[export_parameters][namespace_id]",
-      pendingUpload.namespaceId || "",
-    );
-    formData.append(
-      "data_export[export_parameters][linelist_format]",
-      pendingUpload.format || "csv",
-    );
-
-    (pendingUpload.sampleIds || []).forEach((sampleId) => {
-      formData.append("data_export[export_parameters][ids][]", sampleId);
-    });
-    (pendingUpload.metadataFields || []).forEach((field) => {
-      formData.append(
-        "data_export[export_parameters][metadata_fields][]",
-        field,
-      );
-    });
-
-    const response = await fetch(this.uploadUrlValue, {
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "X-CSRF-Token": this.csrfToken(),
-      },
-      body: formData,
-    });
-
-    const responseBody = await this.parseJsonResponse(response);
-    if (!response.ok) {
-      throw new Error(
-        responseBody?.error || `Upload failed (${response.status}).`,
-      );
-    }
-
-    if (!responseBody?.url) {
-      throw new Error("Upload succeeded but no export link was returned.");
-    }
-
-    return responseBody;
-  }
-
-  async parseJsonResponse(response) {
-    const contentType = response.headers.get("content-type") || "";
-    if (!contentType.includes("application/json")) return null;
-
-    try {
-      return await response.json();
-    } catch {
-      return null;
-    }
-  }
-
-  async fileForUpload(payload) {
-    if (payload.content instanceof Blob || payload.content instanceof File) {
-      return payload.content;
-    }
-
-    if (payload.format === "xlsx") {
-      return this.buildXlsxBlob(payload.content);
-    }
-
-    return new Blob([payload.content], { type: "text/csv;charset=utf-8;" });
-  }
-
-  async buildXlsxBlob(rows) {
-    if (!Array.isArray(rows)) {
-      throw new Error("Invalid spreadsheet data received from export worker.");
-    }
-
-    let XLSX;
-
-    try {
-      XLSX = await import("xlsx");
-    } catch {
-      throw new XlsxLibraryLoadError();
-    }
-
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.aoa_to_sheet(rows);
-    XLSX.utils.book_append_sheet(workbook, worksheet, "linelist");
-    const output = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-
-    return new Blob([output], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    return uploadLinelistExport({
+      uploadUrl: this.uploadUrlValue,
+      csrfToken: this.csrfToken(),
+      payload,
+      pendingUpload: this._pendingUpload || {},
     });
   }
 
@@ -591,6 +505,8 @@ export default class extends Controller {
     uploadActions.classList.add("hidden");
   }
 
+  // Progress cards are cloned from a template and mounted under document.body,
+  // which puts them outside this controller's target scope.
   progressCardElement() {
     if (!this._exportId) return null;
 
