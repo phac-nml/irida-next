@@ -1949,6 +1949,12 @@ en:
             title: Confirmation required
         file_imports:
           dialog:
+            title: Upload Sample Metadata
+            uploading: Uploading
+          errors:
+            description: 'The sample metadata import completed with the following errors:'
+            ok_button: OK
+          form_fields:
             available: Available
             available_description: Metadata columns from your file that will not be imported into sample metadata.
             available_list_title: Not imported
@@ -1971,11 +1977,6 @@ en:
             selected_description: Metadata columns that will be imported into sample metadata.
             selected_list_title: Will be imported
             submit_button: Import Metadata
-            title: Upload Sample Metadata
-            uploading: Uploading
-          errors:
-            description: 'The sample metadata import completed with the following errors:'
-            ok_button: OK
           success:
             description: The metadata was imported successfully!
             ok_button: OK

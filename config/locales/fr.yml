@@ -1953,6 +1953,12 @@ fr:
             title: Confirmation requise
         file_imports:
           dialog:
+            title: Télécharger des échantillons de métadonnées
+            uploading: Téléchargement
+          errors:
+            description: "‘L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :’"
+            ok_button: OK
+          form_fields:
             available: Disponible
             available_description: Colonnes de métadonnées de votre fichier qui ne seront pas importées dans les métadonnées d’échantillon.
             available_list_title: Non importé
@@ -1975,11 +1981,6 @@ fr:
             selected_description: Colonnes de métadonnées qui seront importées dans les métadonnées d’échantillon.
             selected_list_title: Sera importé
             submit_button: Importer des métadonnées
-            title: Télécharger des échantillons de métadonnées
-            uploading: Téléchargement
-          errors:
-            description: "‘L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :’"
-            ok_button: OK
           success:
             description: Les métadonnées ont été importées avec succès!
             ok_button: OK
