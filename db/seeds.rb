@@ -285,7 +285,7 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
 end
 
 def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  workflow_execution_basic = WorkflowExecution.create(
+  workflow_execution_basic = WorkflowExecution.new(
     metadata: { pipeline_id: 'phac-nml/iridanextexample', workflow_version: '1.0.3' },
     name: 'irida-next-example-basic',
     namespace_id: Sample.first.project.namespace.id,
@@ -307,14 +307,16 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
       }
     }
   )
+  workflow_execution_basic.save(validate: false)
 
-  SamplesWorkflowExecution.create(
+  sample_workflow_execution_basic = SamplesWorkflowExecution.new(
     samplesheet_params: { my_key1: 'my_value_1', my_key2: 'my_value_2' },
     sample: Sample.first,
     workflow_execution: workflow_execution_basic
   )
+  sample_workflow_execution_basic.save(validate: false)
 
-  workflow_execution_completed = WorkflowExecution.create(
+  workflow_execution_completed = WorkflowExecution.new(
     metadata: {
       pipeline_id: 'phac-nml/iridanextexample',
       workflow_version: '1.0.3'
@@ -342,10 +344,13 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     }
   )
 
-  SamplesWorkflowExecution.create(
+  workflow_execution_completed.save(validate: false)
+
+  sample_workflow_execution_completed = SamplesWorkflowExecution.new(
     sample: Sample.first,
     workflow_execution: workflow_execution_completed
   )
+  sample_workflow_execution_completed.save(validate: false)
 
   # Iterate over all files in tes/fixtures/fils/blob_outputs/normal and attach them to the workflow_execution_completed
   Dir.foreach(Rails.root.join('test/fixtures/files/blob_outputs/normal')) do |f|
