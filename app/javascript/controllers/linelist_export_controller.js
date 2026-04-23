@@ -476,7 +476,10 @@ export default class extends Controller {
     const link = this.progressLinkElement();
     if (!linkContainer || !link) return;
 
-    link.href = url;
+    const safeUrl = this.safeInternalHref(url);
+    if (!safeUrl) return;
+
+    link.href = safeUrl;
     link.textContent = this.viewExportLinkLabelValue;
     linkContainer.classList.remove("hidden");
   }
@@ -487,7 +490,14 @@ export default class extends Controller {
     if (!linkContainer || !link) return;
 
     linkContainer.classList.add("hidden");
-    link.href = link.getAttribute("data-default-href") || link.href;
+    const defaultHref = this.safeInternalHref(
+      link.getAttribute("data-default-href"),
+    );
+    if (defaultHref) {
+      link.href = defaultHref;
+    } else {
+      link.removeAttribute("href");
+    }
     link.textContent = "";
   }
 
@@ -537,6 +547,20 @@ export default class extends Controller {
 
   clearProgressWindowDismissTimeout() {
     clearProgressWindowDismissTimeoutState(this);
+  }
+
+  safeInternalHref(rawUrl) {
+    if (!rawUrl) return null;
+
+    try {
+      const parsed = new URL(rawUrl, window.location.origin);
+      if (!["http:", "https:"].includes(parsed.protocol)) return null;
+      if (parsed.origin !== window.location.origin) return null;
+
+      return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    } catch {
+      return null;
+    }
   }
 
   t(template, vars = {}) {
