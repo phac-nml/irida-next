@@ -11,7 +11,7 @@
   "attachment-upload-error-fallback-text-value": t('common.upload.failed')
 } %>
 
-<%= viral_dialog(open: @open, size: :large) do |dialog| %>
+<%= viral_dialog(open: true, size: :large) do |dialog| %>
   <% dialog.with_header(title: t("shared.samples.metadata.file_imports.dialog.title")) %>
   <%= helpers.turbo_stream_from @broadcast_target %>
 

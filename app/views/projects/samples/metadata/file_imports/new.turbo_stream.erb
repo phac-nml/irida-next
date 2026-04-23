@@ -1,7 +1,5 @@
 <%= turbo_stream.update "samples_dialog" do %>
   <%= render DataImports::LinelistImportDialogComponent.new(
     broadcast_target: @broadcast_target,
-    open: true,
-    url: namespace_project_samples_file_import_path,
-    closable: true) %>
+    url: namespace_project_samples_file_import_path) %>
 <% end %>

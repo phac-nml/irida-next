@@ -11,8 +11,7 @@ module DataImports
 
           render_inline(
             Component.new(
-              broadcast_target: broadcast_target,
-              open: true
+              broadcast_target: broadcast_target
             )
           )
 
