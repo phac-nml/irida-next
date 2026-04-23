@@ -26,7 +26,6 @@ export default class extends Controller {
     invalidMinDate: String,
     dateFormatRegex: String,
     errorMessageId: String,
-    errored: { type: Boolean, default: false },
   };
 
   // today's date attributes for quick access
@@ -52,10 +51,6 @@ export default class extends Controller {
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
-    }
-
-    if (this.erroredValue) {
-      this.#enableInputErrorState("");
     }
 
     this.boundHandleDatepickerInputFocus =
@@ -302,14 +297,13 @@ export default class extends Controller {
 
   // adds error message if invalid date or a date prior to minDate was entered
   #enableInputErrorState(message) {
-    this.datepickerInputTarget.setAttribute("aria-invalid", "true");
-    this.datepickerInputTarget.setAttribute(
-      "aria-describedby",
-      this.errorMessageIdValue,
-    );
-
     if (this.autosubmitValue) {
       this.errorContainerTarget.innerHTML = "";
+      this.datepickerInputTarget.setAttribute("aria-invalid", "true");
+      this.datepickerInputTarget.setAttribute(
+        "aria-describedby",
+        this.errorMessageIdValue,
+      );
       this.#toggleErrorState(true);
       const errorMessage =
         this.errorMessageTemplateTarget.content.cloneNode(true);

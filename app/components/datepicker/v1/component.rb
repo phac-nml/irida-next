@@ -116,9 +116,11 @@ module Datepicker
         @system_arguments[:data]['datepicker--v1--input-date-format-regex-value'] =
           I18n.t('components.datepicker.date_format_regex')
         @system_arguments[:data]['datepicker--v1--input-error-message-id-value'] = @error_id
-        return unless @errored
+        return unless @autosubmit
 
-        @system_arguments[:data]['datepicker--v1--input-errored-value'] = @errored
+        # require the error container DOM ID to point aria-describedby when autosubmit is true for front-end
+        # validation
+        @system_arguments[:data]['datepicker--v1--input-error-message-id-value'] = @error_id
       end
 
       # Configures HTML attributes for the <div> datepicker calendar.
