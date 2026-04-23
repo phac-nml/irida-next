@@ -776,7 +776,8 @@ CREATE TABLE public.namespaces (
     parent_id uuid,
     puid character varying NOT NULL,
     attachments_updated_at timestamp(6) without time zone,
-    samples_count integer DEFAULT 0
+    samples_count integer DEFAULT 0,
+    public boolean DEFAULT false NOT NULL
 );
 
 
@@ -2141,6 +2142,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260421182359'),
 ('20260410170502'),
 ('20260306153207'),
 ('20260223130000'),
