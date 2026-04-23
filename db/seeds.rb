@@ -4,6 +4,8 @@ require 'faker'
 
 Faker::Config.locale = 'en'
 
+return unless Rails.env.development?
+
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
 # This file should contain all the record creation needed to seed the database with its default values.
@@ -14,20 +16,15 @@ Faker::Config.locale = 'en'
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-# Limit the number of file attachments to add when seeding to reduce time.
-# default limit of 2 can be overriden with env variable 'SEED_ATTACHMENT_PER_SAMPLE'
-@attachments_per_sample = (ENV['SEED_ATTACHMENT_PER_SAMPLE'].presence || 2).to_i
-# Array of sample file names
-@sequencing_file_list = Rails.root.join('db/files').entries.select do |f|
-  File.file?(File.join('db/files/', f))
-end.first(@attachments_per_sample)
+@illumina_pe_fwd = ActiveStorage::Blob.create_and_upload!(
+  io: Rails.root.join('db/files/08-5578-small_S1_L001_R1_001.fastq.gz').open,
+  filename: '08-5578-small_S1_L001_R1_001.fastq.gz'
+).id
 
-@sequencing_file_blobs = @sequencing_file_list.map do |file|
-  ActiveStorage::Blob.create_and_upload!(
-    io: Rails.root.join('db/files', file).open,
-    filename: file.to_s
-  ).signed_id
-end
+@illumina_pe_rev = ActiveStorage::Blob.create_and_upload!(
+  io: Rails.root.join('db/files/08-5578-small_S1_L001_R2_001.fastq.gz').open,
+  filename: '08-5578-small_S1_L001_R2_001.fastq.gz'
+).id
 
 # Select a reference file
 @reference_file = ActiveStorage::Blob.create_and_upload!(
@@ -35,7 +32,7 @@ end
   filename: 'reference.fasta'
 ).signed_id
 
-def seed_project(project_params:, creator:, namespace:) # rubocop:disable Metrics/MethodLength
+def seed_project(project_params:, creator:, namespace:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   project = Projects::CreateService.new(creator,
                                         {
                                           namespace_attributes: project_params.slice(
@@ -52,11 +49,21 @@ def seed_project(project_params:, creator:, namespace:) # rubocop:disable Metric
     end
   end
 
-  # prevent sample broadcasts
-  Sample.suppressing_turbo_broadcasts do
-    # seed the project samples
-    seed_samples(project, project_params[:sample_count]) if project_params[:sample_count]
+  return 0 unless project_params[:sample_count]
+
+  # seed the project samples
+  samples_count = seed_samples(project, project_params[:sample_count])
+  project.update_columns(samples_count: samples_count) # rubocop:disable Rails/SkipsModelValidations
+  project.namespace.update_columns(metadata_summary: fake_metadata_summary(samples_count)) # rubocop:disable Rails/SkipsModelValidations
+
+  # wait at minimum 10 / 12_228.0 seconds to ensure unique puids for samples
+  wait_until = project.created_at.to_f + ((samples_count + 10) * 1 / 12_228.0)
+  loop do
+    sleep(20 / 12_228.0)
+    break if Time.now.to_f > wait_until
   end
+
+  samples_count
 end
 
 def seed_members(email, access_level, namespace)
@@ -80,7 +87,7 @@ def fake_metadata # rubocop:disable Metrics/MethodLength
 
   {
     'WGS_id' => Faker::Number.number(digits: 10),
-    'NCBI_ACCESSION' => "NM_#{Faker::Number.decimal(l_digits: 7, r_digits: 1)}",
+    'ncbi_accession' => "NM_#{Faker::Number.decimal(l_digits: 7, r_digits: 1)}",
     'country' => Faker::Address.country,
     'food' => Faker::Food.dish,
     'gender' => Faker::Gender.binary_type,
@@ -93,32 +100,151 @@ def fake_metadata # rubocop:disable Metrics/MethodLength
   }
 end
 
-def seed_samples(project, sample_count)
-  1.upto(sample_count) do |i|
-    sample = Samples::CreateService.new(
-      project.creator, project,
-      { name: "#{project.namespace.parent.name}/#{project.name} Sample #{i}",
-        description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{i}." }
-    ).execute
-
-    # Add metadata
-    Samples::Metadata::UpdateService.new(project, sample, project.creator, { 'metadata' => fake_metadata }).execute
-    # prevent sample attachment broadcasts
-    Attachment.suppressing_turbo_broadcasts do
-      seed_attachments(sample)
-    end
-  end
+def fake_metadata_provenance(user_id, time = Time.zone.now)
+  {
+    'WGS_id' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'ncbi_accession' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'country' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'food' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'gender' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'age' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'onset' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'earliest_date' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'patient_sex' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'patient_age' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time },
+    'insdc_accession' => { 'source' => 'user', 'id' => user_id, 'updated_at' => time }
+  }
 end
 
-def seed_attachments(sample)
-  Rails.logger.info "seeding... Sample: #{sample.name}, Attachments"
-  files = @sequencing_file_blobs.first(@attachments_per_sample)
-  files << @reference_file
-  Attachments::CreateService.new(sample.project.creator, sample,
-                                 { files: }).execute
+def fake_metadata_summary(sample_count)
+  {
+    'WGS_id' => sample_count,
+    'ncbi_accession' => sample_count,
+    'country' => sample_count,
+    'food' => sample_count,
+    'gender' => sample_count,
+    'age' => sample_count,
+    'onset' => sample_count,
+    'earliest_date' => sample_count,
+    'patient_sex' => sample_count,
+    'patient_age' => sample_count,
+    'insdc_accession' => sample_count
+  }
+end
+
+def seed_samples(project, sample_count) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  samples = []
+  # round the project created_at to the nearest 1 / 12_228.0 seconds to ensure puid uniqueness
+  interval = Rational(1, 12_228)
+  project_created_at = Time.at((project.created_at.utc.to_r / interval).round * interval, in: 'UTC')
+  sample_count.times do |x|
+    timestamp = project_created_at + ((x + 1) * interval)
+    samples << {
+      puid: Irida::PersistentUniqueId.generate(object_class: Sample, time: timestamp),
+      name: "#{project.namespace.parent.name}/#{project.name} Sample #{x + 1}",
+      description: "This is a description for sample #{project.namespace.parent.name}/#{project.name} Sample #{x + 1}.",
+      metadata: fake_metadata,
+      metadata_provenance: fake_metadata_provenance(project.creator.id, timestamp),
+      project_id: project.id,
+      created_at: timestamp,
+      updated_at: timestamp
+    }
+  end
+
+  seeded_samples_response = Sample.upsert_all(samples, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
+
+  seeded_samples = Sample.where(id: seeded_samples_response.map { |row| row['id'] }) # rubocop:disable Rails/Pluck
+
+  activities = seeded_samples.map do |sample|
+    {
+      key: 'namespaces_project_namespace.samples.create',
+      owner_id: project.creator_id,
+      owner_type: 'User',
+      trackable_id: project.namespace_id,
+      trackable_type: 'Namespace',
+      parameters: {
+        sample_puid: sample.puid,
+        sample_id: sample.id,
+        action: 'sample_create'
+      }
+    }
+  end
+  PublicActivity::Activity.upsert_all(activities) # rubocop:disable Rails/SkipsModelValidations
+
+  seed_attachments(project, seeded_samples)
+
+  seeded_samples.count
+end
+
+def seed_attachments(project, samples) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  samples_attachments = []
+  activestorage_attachments = []
+  activities = []
+
+  samples.each do |sample| # rubocop:disable Metrics/BlockLength
+    attachment_timestamp = sample.created_at + (10 / 12_228.0)
+    fwd_id = SecureRandom.uuid
+    rev_id = SecureRandom.uuid
+    puid = Irida::PersistentUniqueId.generate(object_class: Attachment, time: attachment_timestamp)
+
+    samples_attachments << {
+      id: fwd_id,
+      puid: puid,
+      attachable_id: sample.id,
+      attachable_type: 'Sample',
+      metadata: { type: 'illumina_pe', format: 'fastq', direction: 'forward', compression: 'gzip',
+                  associated_attachment_id: rev_id },
+      created_at: attachment_timestamp,
+      updated_at: attachment_timestamp
+    }
+    samples_attachments << {
+      id: rev_id,
+      puid: puid,
+      attachable_id: sample.id,
+      attachable_type: 'Sample',
+      metadata: { type: 'illumina_pe', format: 'fastq', direction: 'reverse', compression: 'gzip',
+                  associated_attachment_id: fwd_id },
+      created_at: attachment_timestamp,
+      updated_at: attachment_timestamp
+    }
+
+    activestorage_attachments << {
+      name: 'file',
+      record_type: 'Attachment',
+      record_id: fwd_id,
+      blob_id: @illumina_pe_fwd,
+      created_at: attachment_timestamp
+    }
+    activestorage_attachments << {
+      name: 'file',
+      record_type: 'Attachment',
+      record_id: rev_id,
+      blob_id: @illumina_pe_rev,
+      created_at: attachment_timestamp
+    }
+    activities << {
+      key: 'namespaces_project_namespace.samples.attachment.create',
+      owner_id: project.creator_id,
+      owner_type: 'User',
+      trackable_id: project.namespace_id,
+      trackable_type: 'Namespace',
+      parameters: {
+        sample_puid: sample.puid,
+        sample_id: sample.id,
+        action: 'attachment_create'
+      }
+    }
+  end
+
+  Attachment.upsert_all(samples_attachments) # rubocop:disable Rails/SkipsModelValidations
+
+  ActiveStorage::Attachment.upsert_all(activestorage_attachments) # rubocop:disable Rails/SkipsModelValidations
+
+  PublicActivity::Activity.upsert_all(activities) # rubocop:disable Rails/SkipsModelValidations
 end
 
 def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  sample_count = 0
   owner = User.find_by(email: group_params[:owner_email]) if group_params[:owner_email]
 
   raise 'Attempting to seed group without an owner.' if owner.blank?
@@ -140,22 +266,26 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
     group_params[:projects].each do |project_params|
       Rails.logger.info { "seeding... Group: #{group_params[:name]}, Project: #{project_params[:name]}" }
       # prevent project broadcasts
-      Project.suppressing_turbo_broadcasts do
-        seed_project(project_params:, creator: owner, namespace: group)
-      end
+      sample_count += seed_project(project_params:, creator: owner, namespace: group)
     end
   end
 
   # seed the subgroups
-  return unless group_params[:subgroups]
-
-  group_params[:subgroups].each do |subgroup_params|
-    seed_group(group_params: subgroup_params, owner:, parent: group)
+  if group_params[:subgroups] # rubocop:disable Style/SafeNavigation
+    group_params[:subgroups].each do |subgroup_params|
+      sample_count += seed_group(group_params: subgroup_params, owner:, parent: group)
+    end
   end
+
+  group.update_columns(samples_count: sample_count, metadata_summary: fake_metadata_summary(sample_count)) # rubocop:disable Rails/SkipsModelValidations
+
+  return sample_count unless parent.nil?
+
+  group
 end
 
 def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  workflow_execution_basic = WorkflowExecution.create(
+  workflow_execution_basic = WorkflowExecution.new(
     metadata: { pipeline_id: 'phac-nml/iridanextexample', workflow_version: '1.0.3' },
     name: 'irida-next-example-basic',
     namespace_id: Sample.first.project.namespace.id,
@@ -177,14 +307,16 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
       }
     }
   )
+  workflow_execution_basic.save(validate: false)
 
-  SamplesWorkflowExecution.create(
+  sample_workflow_execution_basic = SamplesWorkflowExecution.new(
     samplesheet_params: { my_key1: 'my_value_1', my_key2: 'my_value_2' },
     sample: Sample.first,
     workflow_execution: workflow_execution_basic
   )
+  sample_workflow_execution_basic.save(validate: false)
 
-  workflow_execution_completed = WorkflowExecution.create(
+  workflow_execution_completed = WorkflowExecution.new(
     metadata: {
       pipeline_id: 'phac-nml/iridanextexample',
       workflow_version: '1.0.3'
@@ -212,10 +344,13 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     }
   )
 
-  SamplesWorkflowExecution.create(
+  workflow_execution_completed.save(validate: false)
+
+  sample_workflow_execution_completed = SamplesWorkflowExecution.new(
     sample: Sample.first,
     workflow_execution: workflow_execution_completed
   )
+  sample_workflow_execution_completed.save(validate: false)
 
   # Iterate over all files in tes/fixtures/fils/blob_outputs/normal and attach them to the workflow_execution_completed
   Dir.foreach(Rails.root.join('test/fixtures/files/blob_outputs/normal')) do |f|
@@ -327,100 +462,47 @@ end
 if Rails.env.development?
   current_year = Time.zone.now.year
 
-  users = [
-    {
-      email: 'user0@email.com',
-      password: 'password1',
-      password_confirmation: 'password1',
-      first_name: 'ad',
-      last_name: 'min',
-      personal_access_tokens: [
-        { name: 'API r/w Token', scopes: ['api'],
-          token_digest: Devise.token_generator.digest(PersonalAccessToken, :token_digest, 'zs83sKD3jeysfnr_kgu9') },
-        { name: 'API read only Token', scopes: ['read_api'],
-          token_digest: Devise.token_generator.digest(PersonalAccessToken, :token_digest, 'yK1euURqVRtQ1D-3uKsW') }
-      ]
-    },
-    {
-      email: 'user1@email.com',
-      first_name: 'user',
-      last_name: 'one',
-      password: 'password1',
-      password_confirmation: 'password1'
-    },
-    {
-      email: 'user2@email.com',
-      first_name: 'user',
-      last_name: 'two',
-      password: 'password1',
-      password_confirmation: 'password1'
-    },
-    {
-      email: 'user3@email.com',
-      first_name: 'user',
-      last_name: 'three',
-      password: 'password1',
-      password_confirmation: 'password1'
-    },
-    {
-      email: 'user4@email.com',
-      first_name: 'user',
-      last_name: 'four',
-      password: 'password1',
-      password_confirmation: 'password1'
-    },
-    {
-      email: 'user5@email.com',
-      first_name: 'user',
-      last_name: 'five',
-      password: 'password1',
-      password_confirmation: 'password1'
-    }, {
-      email: 'user6@email.com',
-      first_name: 'user',
-      last_name: 'six',
-      password: 'password1',
-      password_confirmation: 'password1'
-    },
-    {
-      email: 'user7@email.com',
-      first_name: 'user',
-      last_name: 'seven',
-      password: 'password1',
-      password_confirmation: 'password1'
-    },
-    {
-      email: 'user8@email.com',
-      first_name: 'user',
-      last_name: 'eight',
-      password: 'password1',
-      password_confirmation: 'password1'
-    },
-    {
-      email: 'user9@email.com',
-      first_name: 'user',
-      last_name: 'nine',
-      password: 'password1',
-      password_confirmation: 'password1'
+  password_hash = Devise::Encryptor.digest(User, 'password1')
+
+  starting_created_at = 1.week.ago
+
+  users = []
+  10.times do |x|
+    users << {
+      email: "user#{x}@email.com",
+      encrypted_password: password_hash,
+      first_name: 'User',
+      last_name: x.to_s,
+      created_at: starting_created_at + x.minutes,
+      updated_at: starting_created_at + x.minutes
     }
-  ]
-
-  users.each do |user_params|
-    user = User.create_with(user_params.slice(
-                              :password,
-                              :password_confirmation
-                            )).find_or_create_by!(
-                              email: user_params[:email],
-                              first_name: user_params[:first_name],
-                              last_name: user_params[:last_name]
-                            )
-    next unless user_params[:personal_access_tokens]
-
-    user_params[:personal_access_tokens].each do |pat|
-      PersonalAccessToken.find_or_create_by!(name: pat[:name], scopes: pat[:scopes], user:,
-                                             token_digest: pat[:token_digest])
-    end
   end
+  seeded_users = User.upsert_all(users, unique_by: [:email]) # rubocop:disable Rails/SkipsModelValidations
+
+  user_namespaces = User.where(id: seeded_users.map { |row| row['id'] }).map do |user|
+    {
+      name: user.email,
+      puid: Irida::PersistentUniqueId.generate(object_class: Namespaces::UserNamespace, time: user.created_at),
+      owner_id: user.id,
+      created_at: user.created_at,
+      updated_at: user.created_at
+    }
+  end
+  seeded_user_namespaces = Namespaces::UserNamespace.upsert_all(user_namespaces, unique_by: [:puid]) # rubocop:disable Rails/SkipsModelValidations
+
+  user_namespaces_routes = Namespaces::UserNamespace.where(id: seeded_user_namespaces.map do |row|
+    row['id']
+  end).map do |user_namespace|
+    {
+      name: user_namespace.name,
+      path: format('%<email>s', email: user_namespace.name).sub!('@', '_at_'),
+      source_id: user_namespace.id,
+      source_type: 'Namespace',
+      created_at: user_namespace.created_at,
+      updated_at: user_namespace.created_at
+    }
+  end
+  Route.upsert_all(user_namespaces_routes, unique_by: [:path]) # rubocop:disable Rails/SkipsModelValidations
 
   # Workflow Metadata
   #
@@ -585,12 +667,14 @@ if Rails.env.development?
     Guest: [users[8][:email]]
   }
 
+  default_sample_count = ENV.fetch('DEFAULT_SAMPLE_COUNT', 100).to_i
+
   generic_projects = [
     {
       name: "Outbreak #{current_year - 2}",
       path: "outbreak-#{current_year - 2}",
       description: "This is a description for project Outbreak #{current_year - 2}",
-      sample_count: 10,
+      sample_count: default_sample_count,
       member_emails_by_role:
 
     },
@@ -598,7 +682,7 @@ if Rails.env.development?
       name: "Outbreak #{current_year - 1}",
       path: "outbreak-#{current_year - 1}",
       description: "This is a description for project Outbreak #{current_year - 1}",
-      sample_count: 10,
+      sample_count: default_sample_count,
       member_emails_by_role:
     }
   ]
@@ -799,16 +883,14 @@ if Rails.env.development?
       ] }
   ]
 
-  groups.each do |group|
+  seeded_parent_groups = groups.map do |group|
     seed_group(group_params: group)
   end
 
   # Create namespace group links (group to group)
-  all_groups_without_parent = Group.where(parent: nil)
-
-  all_groups_without_parent.each do |namespace|
-    groups_to_link_to_namespace = all_groups_without_parent.where.not(id: namespace.self_and_ancestor_ids)
-                                                           .where(parent: nil).limit(5)
+  seeded_parent_groups.each do |namespace|
+    # link each namespace to 5 other random namespaces with analyst access
+    groups_to_link_to_namespace = (seeded_parent_groups - [namespace]).sample(5)
     groups_to_link_to_namespace.each do |group_to_link_to_namespace|
       seed_namespace_group_links(namespace.owner, namespace, group_to_link_to_namespace, Member::AccessLevel::ANALYST)
     end
@@ -818,7 +900,7 @@ if Rails.env.development?
   all_projects = Project.all
 
   all_projects.each do |proj|
-    direct_group_to_link_to_namespace = all_groups_without_parent.last
+    direct_group_to_link_to_namespace = seeded_parent_groups.last
     seed_namespace_group_links(proj.namespace.owner, proj.namespace, direct_group_to_link_to_namespace,
                                Member::AccessLevel::ANALYST)
   end
