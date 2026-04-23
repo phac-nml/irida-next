@@ -134,8 +134,11 @@ function createExportCard(controller, cardId) {
   const card = document.createElement("div");
   card.id = cardId;
   card.addEventListener("click", (event) => {
-    if (typeof controller.handleProgressWindowClick === "function") {
-      controller.handleProgressWindowClick(event);
+    if (
+      controller.progressWindowActionsEnabled === true &&
+      typeof controller.progressWindowClickHandler === "function"
+    ) {
+      controller.progressWindowClickHandler(event);
       return;
     }
 
