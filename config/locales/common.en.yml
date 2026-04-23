@@ -18,6 +18,13 @@ en:
       search: Search
       select_all: Select All
       submit: Submit
+    date:
+      errors:
+        invalid_date: Invalid Date
+        invalid_format: Invalid date format
+        invalid_input: Invalid date input
+        invalid_min_date: Date is before minimum date
+        nil: Date cannot be nil
     labels:
       access_level: Access Level
       actions: Actions
