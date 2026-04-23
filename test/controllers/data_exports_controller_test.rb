@@ -158,6 +158,38 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "#{data_export.id}.csv", data_export.file.filename.to_s
   end
 
+  test 'should upload linelist xlsx export and return show url' do
+    file = fixture_file_upload(
+      'data_export_9.xlsx',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+
+    assert_difference('DataExport.count', 1) do
+      post upload_data_exports_path, params: {
+        data_export: {
+          name: 'v2 saved xlsx export',
+          file:,
+          export_parameters: {
+            ids: [@sample1.id],
+            namespace_id: @project1.namespace.id,
+            linelist_format: 'xlsx',
+            metadata_fields: ['metadatafield1']
+          }
+        }
+      }
+    end
+
+    assert_response :created
+
+    payload = response.parsed_body
+    data_export = DataExport.find(payload['id'])
+
+    assert_equal data_export_path(data_export), payload['url']
+    assert_equal 'xlsx', data_export.export_parameters['linelist_format']
+    assert data_export.file.attached?
+    assert_equal "#{data_export.id}.xlsx", data_export.file.filename.to_s
+  end
+
   test 'should upload linelist export with group namespace id' do
     group = groups(:group_one)
     file = fixture_file_upload('data_export_8.csv', 'text/csv')
