@@ -313,7 +313,10 @@ export default class extends Controller {
       formData.append("data_export[export_parameters][ids][]", sampleId);
     });
     (pendingUpload.metadataFields || []).forEach((field) => {
-      formData.append("data_export[export_parameters][metadata_fields][]", field);
+      formData.append(
+        "data_export[export_parameters][metadata_fields][]",
+        field,
+      );
     });
 
     const response = await fetch(this.uploadUrlValue, {
