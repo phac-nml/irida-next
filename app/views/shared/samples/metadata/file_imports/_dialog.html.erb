@@ -1,6 +1,6 @@
-<%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
-  <%= turbo_stream_from @broadcast_target %>
+  <%= turbo_stream_from broadcast_target %>
 
   <%= turbo_frame_tag "import_metadata_dialog_content" do %>
     <%= turbo_frame_tag "import_metadata_dialog_alert" %>
@@ -21,7 +21,7 @@
       id="import-metadata-dialog-content"
     >
       <%= form_for(:file_import, url: url, method: :post) do |form| %>
-        <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>">
+        <input type="hidden" name="broadcast_target" value="<%= broadcast_target %>">
 
         <div class="grid gap-4">
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400"><%= t(".description") %></p>

@@ -5,15 +5,15 @@ module DataImports
     module V1
       # Renders the existing linelist import dialog partial as the v1 implementation.
       class Component < ::Component
-        def initialize(open:, url:, closable:, **_system_arguments)
+        def initialize(broadcast_target:, open:, url:, **_system_arguments)
+          @broadcast_target = broadcast_target
           @open = open
           @url = url
-          @closable = closable
         end
 
         def call
           render(partial: 'shared/samples/metadata/file_imports/dialog',
-                 locals: { open: @open, url: @url, closable: @closable })
+                 locals: { broadcast_target: @broadcast_target, open: @open, url: @url })
         end
       end
     end
