@@ -29,7 +29,7 @@
   <% end %>
 </div>
 
-<% invalid_expires_at = true %>
+<% invalid_expires_at = pat.errors.include?(:expires_at) %>
 
 <% if invalid_expires_at %>
   <% error_container_id = form.field_id(:expires_at, "error") %>
@@ -48,7 +48,7 @@
   <% if invalid_expires_at %>
     <%= render "shared/form/field_errors",
     id: error_container_id,
-    errors: ['error 1'] %>
+    errors: pat.errors.full_messages_for(:expires_at) %>
   <% end %>
 </div>
 
