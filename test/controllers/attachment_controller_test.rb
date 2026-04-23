@@ -54,4 +54,46 @@ class AttachmentsControllerTest < ActionDispatch::IntegrationTest
     get attachment_path(@attachment)
     assert_redirected_to new_user_session_path
   end
+
+  test 'user with role >= guest for project can preview sample attachment' do
+    sign_in users(:ryan_doe)
+    get attachment_path(@attachment)
+
+    assert_response :success
+  end
+
+  test 'user with role >= analyst can preview project attachment' do
+    attachment = attachments(:attachmentCSV)
+    sign_in users(:michelle_doe)
+
+    get attachment_path(attachment)
+
+    assert_response :success
+  end
+
+  test 'user with role == guest cannot preview project attachment' do
+    attachment = attachments(:attachmentCSV)
+    sign_in users(:ryan_doe)
+    get attachment_path(attachment)
+
+    assert_response :unauthorized
+  end
+
+  test 'user with role >= analyst can preview group attachment' do
+    attachment = attachments(:group16AttachmentCSV)
+    sign_in users(:james_doe)
+
+    get attachment_path(attachment)
+
+    assert_response :success
+  end
+
+  test 'user with role == guest cannot preview group attachment' do
+    attachment = attachments(:group16AttachmentCSV)
+    sign_in users(:ryan_doe)
+
+    get attachment_path(attachment)
+
+    assert_response :unauthorized
+  end
 end

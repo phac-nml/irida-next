@@ -497,3 +497,9 @@ sample_preparation_test_attachment_3B:
   attachable: sample_preparation_test_3 (Sample)
   puid: INXT_ATT_BAAAAAAZZB
   created_at: <%= 2.hours.ago %>
+
+group16AttachmentCSV:
+  metadata: { "compression": "none", "format": "csv" }
+  attachable: group_sixteen (Namespace)
+  puid: INXT_ATT_ABAAAAAABI
+  created_at: <%= 2.hours.ago %>

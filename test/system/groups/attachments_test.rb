@@ -263,5 +263,18 @@ module Groups
         assert_text I18n.t('components.viral.pagy.empty_state.description')
       end
     end
+
+    test 'member with role >= analyst can see attachment preview link' do
+      group = groups(:group_sixteen)
+      attachment = attachments(:group16AttachmentCSV)
+      user = users(:james_doe)
+      sign_in user
+      visit group_attachments_path(group)
+
+      assert_selector 'table tbody tr', count: 1
+
+      assert_selector "tr#attachment_#{attachment.id} td:last-child",
+                      text: I18n.t('components.attachments.table_component.preview', locale: user.locale)
+    end
   end
 end

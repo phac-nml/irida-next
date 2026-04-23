@@ -28,7 +28,8 @@ module Projects
         export_data: allowed_to?(:export_data?, @project),
         cancel: allowed_to?(:cancel?, @workflow_execution),
         destroy: allowed_to?(:destroy?, @workflow_execution),
-        update: allowed_to?(:update?, @workflow_execution)
+        update: allowed_to?(:update?, @workflow_execution),
+        preview: allowed_to?(:view_attachments?, @workflow_execution)
       }
     end
 

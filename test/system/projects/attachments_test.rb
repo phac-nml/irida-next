@@ -264,5 +264,18 @@ module Projects
         assert_text I18n.t('components.viral.pagy.empty_state.description')
       end
     end
+
+    test 'member with role >= analyst can see attachment preview link' do
+      project2 = projects(:project2)
+      attachment = attachments(:attachmentCSV)
+      login_as users(:michelle_doe)
+      visit namespace_project_attachments_path(@namespace, project2)
+
+      assert_text 'Displaying 1-6 of 6 items'
+      assert_selector 'table tbody tr', count: 6
+
+      assert_selector "tr#attachment_#{attachment.id} td:last-child",
+                      text: I18n.t('components.attachments.table_component.preview')
+    end
   end
 end

@@ -5,11 +5,13 @@ class AttachmentPolicy < ApplicationPolicy
   def read?
     case record.attachable
     when SamplesWorkflowExecution
-      allowed_to?(:read?, record.attachable.workflow_execution)
+      allowed_to?(:view_attachments?, record.attachable.workflow_execution)
     when WorkflowExecution, Group
-      allowed_to?(:read?, record.attachable)
+      allowed_to?(:view_attachments?, record.attachable)
     when Namespaces::ProjectNamespace
-      allowed_to?(:read?, record.attachable.project)
+      allowed_to?(:view_attachments?, record.attachable.project)
+    when Sample
+      allowed_to?(:read_sample?, record.attachable.project)
     else
       false
     end

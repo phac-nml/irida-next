@@ -104,6 +104,23 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
+  def view_attachments? # rubocop:disable Metrics/AbcSize
+    return true if record.submitter.id == user.id
+
+    # if project workflow
+    if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) && (effective_access_level >= Member::AccessLevel::ANALYST)
+
+      # submitted by automation bot and user is analyst or higher
+      return true if record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id)
+
+      # shared workflow
+      return true if record.shared_with_namespace
+    end
+
+    details[:id] = record.id
+    false
+  end
+
   scope_for :relation, :automated do |relation, options|
     project = options[:project]
 

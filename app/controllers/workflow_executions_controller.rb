@@ -92,7 +92,8 @@ class WorkflowExecutionsController < ApplicationController
       export_data: true,
       cancel: true,
       destroy: true,
-      update: true
+      update: true,
+      preview: true
     }
   end
 
