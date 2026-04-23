@@ -27,6 +27,6 @@ pin 'sortablejs' # @1.15.2
 pin 'local-time' # @3.0.2
 pin 'focus-trap' # @7.6.5
 pin 'tabbable' # @6.2.0
-pin 'uuid' # @13.0.0
+pin 'uuid' # @14.0.0
 pin 'debounce' # @3.0.0
 pin 'deepmerge' # @4.3.1
