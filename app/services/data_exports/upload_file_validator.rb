@@ -45,12 +45,11 @@ module DataExports
 
     def validate_file_content_type!
       allowed_content_types = CONTENT_TYPES_BY_FORMAT.fetch(@linelist_format)
-      detected_content_type = detected_mime_type
+      detected_content_type = detected_mime_type.presence
       reported_content_type = @file.content_type.to_s.presence
+      content_type = detected_content_type || reported_content_type
 
-      return if [detected_content_type, reported_content_type].compact.any? do |content_type|
-        allowed_content_types.include?(content_type)
-      end
+      return if content_type.present? && allowed_content_types.include?(content_type)
 
       raise UploadValidationError,
             I18n.t('services.data_exports.upload.invalid_file_type', file_format: @linelist_format.upcase)

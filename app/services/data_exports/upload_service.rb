@@ -87,9 +87,11 @@ module DataExports
       file_validator = UploadFileValidator.new(file:, linelist_format:)
       file_validator.validate!
 
-      @data_export.save!
-      attach_file(file, file_validator.content_type_for_attachment)
-      validate_attachment!
+      DataExport.transaction do
+        @data_export.save!
+        attach_file(file, file_validator.content_type_for_attachment)
+        validate_attachment!
+      end
     rescue UploadFileValidator::UploadValidationError => e
       raise DataExportUploadError, e.message
     rescue ActiveRecord::RecordInvalid => e
