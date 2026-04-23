@@ -84,10 +84,14 @@ module DataExports
 
     def attach_upload
       file = uploaded_file
+      file_validator = UploadFileValidator.new(file:, linelist_format:)
+      file_validator.validate!
 
       @data_export.save!
-      attach_file(file)
+      attach_file(file, file_validator.content_type_for_attachment)
       validate_attachment!
+    rescue UploadFileValidator::UploadValidationError => e
+      raise DataExportUploadError, e.message
     rescue ActiveRecord::RecordInvalid => e
       raise DataExportUploadError, e.record.errors.full_messages.to_sentence
     end
@@ -99,11 +103,11 @@ module DataExports
       raise DataExportUploadError, I18n.t('services.data_exports.upload.missing_file')
     end
 
-    def attach_file(file)
+    def attach_file(file, content_type)
       @data_export.file.attach(
         io: file.tempfile,
         filename: "#{@data_export.id}.#{linelist_format}",
-        content_type: file.content_type.presence || fallback_content_type
+        content_type: content_type
       )
     end
 
@@ -111,13 +115,6 @@ module DataExports
       return if @data_export.file.attached?
 
       raise DataExportUploadError, I18n.t('services.data_exports.upload.attach_failed')
-    end
-
-    def fallback_content_type
-      return 'text/csv' if linelist_format == 'csv'
-      return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' if linelist_format == 'xlsx'
-
-      'application/octet-stream'
     end
   end
 end
