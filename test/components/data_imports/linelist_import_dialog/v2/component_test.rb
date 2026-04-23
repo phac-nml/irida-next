@@ -18,7 +18,7 @@ module DataImports
           assert_selector 'h1', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
           assert_selector "form[action='#'][method='get']" do
             assert_selector "input[type='hidden'][name='broadcast_target'][value='#{broadcast_target}']", visible: false
-            assert_selector "input[type='file'][name='file_import[file]']"
+            assert_selector "input[type='file'][name='file_import[file]']:not([data-direct-upload-url])"
             assert_selector "select[name='file_import[sample_id_column]']"
             assert_selector "input[type='checkbox'][name='file_import[ignore_empty_values]']"
             assert_selector "input[type='submit'][disabled][value='#{I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')}']" # rubocop:disable Layout/LineLength
