@@ -490,14 +490,7 @@ export default class extends Controller {
     if (!linkContainer || !link) return;
 
     linkContainer.classList.add("hidden");
-    const defaultHref = this.safeInternalHref(
-      link.getAttribute("data-default-href"),
-    );
-    if (defaultHref) {
-      link.href = defaultHref;
-    } else {
-      link.removeAttribute("href");
-    }
+    link.removeAttribute("href");
     link.textContent = "";
   }
 
