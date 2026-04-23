@@ -23,7 +23,6 @@
 <%= viral_dialog(open: @open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t("data_exports.new_linelist_export_dialog.title")) %>
 
-
   <%= tag.div class: "font-normal text-slate-500 dark:text-slate-400", data: linelist_data do %>
     <div class="grid gap-4">
       <div class="form-field mt-1">
@@ -33,25 +32,23 @@
           </legend>
 
           <div class="flex gap-4">
-            <label class="inline-flex items-center gap-1">
-              <%= radio_button_tag :linelist_format,
-                                   "csv",
-                                   true,
-                                   id: "linelist-format-csv",
-                                   name: "data_export[export_parameters][linelist_format]" %>
+            <%= pathogen_radio_button(
+              attribute: :linelist_format,
+              value: "csv",
+              input_name: "data_export[export_parameters][linelist_format]",
+              id: "linelist-format-csv",
+              label: t("data_exports.new_linelist_export_dialog.csv"),
+              checked: true,
+            ) %>
 
-              <span><%= t("data_exports.new_linelist_export_dialog.csv") %></span>
-            </label>
-
-            <label class="inline-flex items-center gap-1">
-              <%= radio_button_tag :linelist_format,
-                                   "xlsx",
-                                   false,
-                                   id: "linelist-format-xlsx",
-                                   name: "data_export[export_parameters][linelist_format]" %>
-
-              <span><%= t("data_exports.new_linelist_export_dialog.xlsx") %></span>
-            </label>
+            <%= pathogen_radio_button(
+              attribute: :linelist_format,
+              value: "xlsx",
+              input_name: "data_export[export_parameters][linelist_format]",
+              id: "linelist-format-xlsx",
+              label: t("data_exports.new_linelist_export_dialog.xlsx"),
+              checked: false,
+            ) %>
           </div>
         </fieldset>
       </div>
@@ -112,7 +109,7 @@
       <%= form_with(url: "#", method: :get, data: { action: "submit->linelist-export#submit" }) do |form| %>
         <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
 
-        <div class="form-field mt-2">
+        <div class="form-field mt-2 mb-4">
           <div class="flex items-center gap-2">
             <%= check_box_tag "data_export[save_to_server]",
                               "1",
@@ -127,7 +124,7 @@
           </div>
         </div>
 
-        <div class="form-field mt-2 hidden" data-linelist-export-target="saveToServerNameWrapper">
+        <div class="form-field mt-2 mb-4 hidden" data-linelist-export-target="saveToServerNameWrapper">
           <%= form.label :name, t("data_exports.new.name_label") %>
 
           <%= form.text_field :name,
