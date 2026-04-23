@@ -15,8 +15,7 @@ module DataImports
             Component.new(
               broadcast_target: broadcast_target,
               open: true,
-              url: url,
-              closable: true
+              url: url
             )
           )
 
@@ -26,7 +25,7 @@ module DataImports
             assert_selector "input[type='file'][name='file_import[file]']"
             assert_selector "select[name='file_import[sample_id_column]']"
             assert_selector "input[type='checkbox'][name='file_import[ignore_empty_values]']"
-            assert_selector "input[type='submit'][disabled][value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}']" # rubocop:disable Layout/LineLength
+            assert_selector "input[type='submit'][disabled][value='#{I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')}']" # rubocop:disable Layout/LineLength
           end
         end
       end

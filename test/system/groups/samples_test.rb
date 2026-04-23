@@ -670,7 +670,7 @@ module Groups
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
 
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      click_on I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
 
       ### VERIFY START ###
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
@@ -693,7 +693,7 @@ module Groups
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
       assert_no_selector '#available-list'
       assert_no_selector '#selected-list'
-      assert_button I18n.t('shared.samples.metadata.file_imports.dialog.submit_button'), disabled: true
+      assert_button I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button'), disabled: true
     end
 
     test 'should import metadata with ignore empty values' do
@@ -718,7 +718,7 @@ module Groups
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
 
       check 'file_import_ignore_empty_values'
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      click_on I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
 
       ### VERIFY START ###
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
@@ -763,7 +763,7 @@ module Groups
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
       uncheck 'Ignore empty values'
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      click_on I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
 
       ### VERIFY START ###
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
@@ -802,7 +802,7 @@ module Groups
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
       assert_selector 'ul#selected-list li', count: 4
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      click_on I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
 
       ### VERIFY START ###
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
@@ -833,7 +833,7 @@ module Groups
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
       assert_selector 'ul#selected-list li', count: 3
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      click_on I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
 
       ### VERIFY START ###
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
@@ -855,8 +855,8 @@ module Groups
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
 
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.no_valid_metadata')
-      assert_button I18n.t('shared.samples.metadata.file_imports.dialog.submit_button'), disabled: true
+      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.no_valid_metadata')
+      assert_button I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button'), disabled: true
     end
 
     test 'should partially import metadata with missing sample errors' do
@@ -885,7 +885,7 @@ module Groups
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield2'
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
       assert_selector 'ul#selected-list li', count: 3
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      click_on I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
 
       ### VERIFY START ###
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
@@ -930,7 +930,7 @@ module Groups
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield1'
       assert_selector 'ul#selected-list li', exact_text: 'metadatafield3'
       assert_selector 'ul#selected-list li', count: 2
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      click_on I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
 
       ### VERIFY START ###
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
@@ -977,7 +977,7 @@ module Groups
       assert_selector 'ul#selected-list li', count: 3
       assert_no_selector 'li', exact_text: 'description'
       assert_no_selector 'li', exact_text: 'project_puid'
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      click_on I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
       ### VERIFY START ###
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
       assert_text I18n.t('shared.progress_bar.in_progress')
@@ -1038,7 +1038,7 @@ module Groups
       assert_selector 'button.dialog--close'
 
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
-      click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      click_on I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
 
       ### VERIFY START ###
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
