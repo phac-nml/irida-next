@@ -1844,6 +1844,8 @@ fr:
         non_completed_workflow_executions: Impossible de créer une exportation en raison des exécutions de flux de travail sélectionnées ayant un état autre que « Terminé ».
       upload:
         attach_failed: Impossible d’attacher le fichier d’exportation téléversé.
+        file_too_large: Le fichier à téléverser doit être de %{max_mb} Mo ou moins.
+        invalid_file_type: Le fichier téléversé doit correspondre au format %{file_format}.
         missing_file: Le fichier à téléverser est requis.
     groups:
       share:

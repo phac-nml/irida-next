@@ -203,6 +203,83 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert payload['error'].present?
   end
 
+  test 'should not upload linelist export with invalid format' do
+    file = fixture_file_upload('data_export_8.csv', 'text/csv')
+
+    assert_no_difference('DataExport.count') do
+      post upload_data_exports_path, params: {
+        data_export: {
+          file:,
+          export_parameters: {
+            ids: [@sample1.id],
+            namespace_id: @project1.namespace.id,
+            linelist_format: 'tsv',
+            metadata_fields: ['metadatafield1']
+          }
+        }
+      }
+    end
+
+    assert_response :unprocessable_content
+
+    payload = response.parsed_body
+    assert_includes payload['error'],
+                    I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_file_format')
+  end
+
+  test 'should not upload linelist export with invalid upload content type' do
+    file = fixture_file_upload('attachment_preview.webp', 'image/webp')
+
+    assert_no_difference('DataExport.count') do
+      post upload_data_exports_path, params: {
+        data_export: {
+          file:,
+          export_parameters: {
+            ids: [@sample1.id],
+            namespace_id: @project1.namespace.id,
+            linelist_format: 'csv',
+            metadata_fields: ['metadatafield1']
+          }
+        }
+      }
+    end
+
+    assert_response :unprocessable_content
+
+    payload = response.parsed_body
+    assert_includes payload['error'], I18n.t('services.data_exports.upload.invalid_file_type', file_format: 'CSV')
+  end
+
+  test 'should not upload linelist export when file exceeds max size' do
+    Tempfile.create(['linelist-too-large', '.csv']) do |tempfile|
+      tempfile.write("sample_id\nINXT_SAM_TEST\n")
+      tempfile.flush
+      tempfile.truncate(DataExports::UploadFileValidator::MAX_UPLOAD_SIZE_BYTES + 1)
+      file = Rack::Test::UploadedFile.new(tempfile.path, 'text/csv', original_filename: 'linelist-too-large.csv')
+
+      assert_no_difference('DataExport.count') do
+        post upload_data_exports_path, params: {
+          data_export: {
+            file:,
+            export_parameters: {
+              ids: [@sample1.id],
+              namespace_id: @project1.namespace.id,
+              linelist_format: 'csv',
+              metadata_fields: ['metadatafield1']
+            }
+          }
+        }
+      end
+    end
+
+    assert_response :unprocessable_content
+
+    payload = response.parsed_body
+    assert_includes payload['error'],
+                    I18n.t('services.data_exports.upload.file_too_large',
+                           max_mb: DataExports::UploadFileValidator::MAX_UPLOAD_SIZE_BYTES / 1.megabyte)
+  end
+
   test 'should not upload linelist export without authorization' do
     sign_in users(:jane_doe)
     file = fixture_file_upload('data_export_8.csv', 'text/csv')
