@@ -8,8 +8,6 @@ module Projects
     include SampleAttachment
 
     MAX_QUERY_V2_SIZE = 10_000 # bytes
-    class QueryV2TooLargeError < StandardError
-    end
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
@@ -49,7 +47,7 @@ module Projects
       return invalid_v2_query_response unless @v2_query.valid?
 
       respond_to_v2_query
-    rescue AdvancedSearch::V2::Serializer::ParseError, QueryV2TooLargeError
+    rescue AdvancedSearch::V2::Serializer::ParseError
       invalid_v2_query_response
     end
 
@@ -221,7 +219,6 @@ module Projects
 
     def persist_v2_query(raw_json)
       return if raw_json.blank?
-      raise QueryV2TooLargeError if query_v2_too_large?(raw_json)
 
       v2_search_service.store_v2_query(raw_json)
     end
