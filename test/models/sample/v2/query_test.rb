@@ -102,6 +102,14 @@ class Sample::V2::QueryTest < ActiveSupport::TestCase # rubocop:disable Style/Cl
     assert(query.errors.any? { |e| e[:message].include?('bad_field') })
   end
 
+  test '#relation reuses cached validation result' do
+    query = build_query
+    AdvancedSearch::V2::TreeValidator.any_instance.expects(:validate).once.returns({ valid: true, errors: [] })
+
+    assert query.valid?
+    query.relation
+  end
+
   test 'pagination limit param is respected' do
     # Use a scope with more samples than our default limit
     scope = Sample.all
