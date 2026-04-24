@@ -97,5 +97,14 @@
     "**/.devenv/profile/": true,
     "**/.devenv/run/": true,
     "**/.devenv/state/.bundle": true
+  },
+  "files.watcherExclude": {
+    "**/.git/**": true,
+    "**/node_modules/**": true,
+    "**/tmp/**": true,
+    "**/log/**": true,
+    "**/.direnv/**": true,
+    "**/.devenv/**": true,
+    "**/storage/**": true
   }
 }
