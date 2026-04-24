@@ -1,14 +1,22 @@
 import { Controller } from "@hotwired/stimulus";
-import { FOCUSABLE_ELEMENTS } from "controllers/datepicker/constants";
+import {
+  FOCUSABLE_ELEMENTS,
+  INPUT_CLASSES,
+} from "controllers/datepicker/constants";
+import { replaceStyleClasses } from "controllers/datepicker/utils";
 import FloatingDropdown from "utilities/floating_dropdown";
 
 export default class extends Controller {
   static outlets = ["datepicker--v2--calendar"];
   static targets = [
+    "datepickerLabel",
     "datepickerInput",
     "calendarTemplate",
-    "inputError",
     "minDate",
+    "errorContainer",
+    "errorMessageTemplate",
+    "errorMessage",
+    "ariaLive",
   ];
 
   static values = {
@@ -17,6 +25,7 @@ export default class extends Controller {
     invalidDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
+    errorMessageId: String,
   };
 
   // today's date attributes for quick access
@@ -251,7 +260,7 @@ export default class extends Controller {
         if (this.autosubmitValue) {
           this.submitDate();
         } else {
-          this.#disableInputErrorState();
+          this.disableInputErrorState();
         }
         this.#setSelectedDate();
         this.focusNextFocusableElement();
@@ -288,26 +297,76 @@ export default class extends Controller {
 
   // adds error message if invalid date or a date prior to minDate was entered
   #enableInputErrorState(message) {
-    this.inputErrorTarget.innerText = message;
-    if (this.inputErrorTarget.classList.contains("hidden")) {
-      this.inputErrorTarget.classList.remove("hidden");
-      this.inputErrorTarget.setAttribute("aria-hidden", false);
+    if (this.autosubmitValue) {
+      this.errorContainerTarget.innerHTML = "";
+      this.datepickerInputTarget.setAttribute("aria-invalid", "true");
+      this.datepickerInputTarget.setAttribute(
+        "aria-describedby",
+        this.errorMessageIdValue,
+      );
+      this.#toggleErrorState(true);
+      const errorMessage =
+        this.errorMessageTemplateTarget.content.cloneNode(true);
+      this.errorContainerTarget.appendChild(errorMessage);
+      this.errorMessageTarget.innerText = message;
+
+      this.ariaLiveTarget.innerText = message;
+
+      if (this.errorContainerTarget.classList.contains("hidden")) {
+        this.errorContainerTarget.classList.remove("hidden");
+        this.errorContainerTarget.setAttribute("aria-hidden", false);
+      }
     }
-    this.setInputValue(this.#selectedDate);
   }
 
   // disables the error state once a valid date is entered/selected
-  #disableInputErrorState() {
-    this.inputErrorTarget.innerText = "";
-    if (!this.inputErrorTarget.classList.contains("hidden")) {
-      this.inputErrorTarget.classList.add("hidden");
-      this.inputErrorTarget.setAttribute("aria-hidden", true);
+  disableInputErrorState() {
+    if (this.autosubmitValue) {
+      this.errorContainerTarget.innerHTML = "";
+      this.datepickerInputTarget.removeAttribute("aria-invalid");
+      this.datepickerInputTarget.removeAttribute("aria-describedby");
+      if (!this.errorContainerTarget.classList.contains("hidden")) {
+        this.errorContainerTarget.classList.add("hidden");
+        this.errorContainerTarget.setAttribute("aria-hidden", true);
+      }
+
+      this.#toggleErrorState(false);
+    }
+  }
+
+  #toggleErrorState(erroring) {
+    if (erroring) {
+      replaceStyleClasses(
+        this.datepickerInputTarget,
+        INPUT_CLASSES["INPUT_DEFAULT"],
+        INPUT_CLASSES["INPUT_ERROR"],
+      );
+      if (this.hasDatepickerLabelTarget) {
+        replaceStyleClasses(
+          this.datepickerLabelTarget,
+          INPUT_CLASSES["LABEL_DEFAULT"],
+          INPUT_CLASSES["LABEL_ERROR"],
+        );
+      }
+    } else {
+      replaceStyleClasses(
+        this.datepickerInputTarget,
+        INPUT_CLASSES["INPUT_ERROR"],
+        INPUT_CLASSES["INPUT_DEFAULT"],
+      );
+      if (this.hasDatepickerLabelTarget) {
+        replaceStyleClasses(
+          this.datepickerLabelTarget,
+          INPUT_CLASSES["LABEL_ERROR"],
+          INPUT_CLASSES["LABEL_DEFAULT"],
+        );
+      }
     }
   }
 
   // submits the selected date
   submitDate() {
-    this.#disableInputErrorState();
+    this.disableInputErrorState();
     this.element.closest("form").requestSubmit();
     this.#setSelectedDate();
   }

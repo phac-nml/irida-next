@@ -30,6 +30,17 @@ module Datepicker
         assert_selector 'input[type="text"]', count: 1
         assert_selector 'svg.calendar-dots-icon', count: 1
       end
+
+      test 'datepicker with required' do
+        datepicker = Datepicker::V1::Component.new(
+          id: 'test_id',
+          input_name: 'test_input_name',
+          label: 'this is a label',
+          required: true
+        )
+        render_inline(datepicker)
+        assert_selector 'abbr', text: '*'
+      end
     end
   end
 end

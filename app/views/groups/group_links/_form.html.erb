@@ -110,11 +110,26 @@ if Flipper.enabled?(:v2_select2, Current.user)
       </p>
     </div>
 
-    <%= datepicker(
-      id: "namespace_group_link_expires_at",
+    <% invalid_expires_at = new_group_link.errors.include?(:expires_at) %>
+
+    <% if invalid_expires_at %>
+      <% error_container_id = form.field_id(:expires_at, "error") %>
+    <% end %>
+
+    <div class="form-field <%= 'invalid' if invalid_expires_at %>">
+      <%= datepicker(
+      id: form.field_id(:expires_at),
       label: t("groups.group_links.new.label.access_expiration"),
       input_name: "namespace_group_link[expires_at]",
+      errored: invalid_expires_at
     ) %>
+    </div>
+
+    <% if invalid_expires_at %>
+      <%= render "shared/form/field_errors",
+      id: error_container_id,
+      errors: new_group_link.errors[:expires_at] %>
+    <% end %>
 
     <div class="my-4">
       <%= form.submit I18n.t('common.actions.share'),

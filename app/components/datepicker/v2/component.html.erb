@@ -12,6 +12,10 @@
       selected_date: @selected_date,
       input_name: @input_name,
       input_aria_label: @input_aria_label,
+      required: @required,
+      error_id: @error_id,
+      errored: @errored,
+      autosubmit: @autosubmit,
     ) %>
 
     <%= render Datepicker::V2::CalendarComponent.new(

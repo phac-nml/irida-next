@@ -1,6 +1,14 @@
 <% if @label %>
-  <label for="<%= @input_id %>" class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
+  <label
+    data-datepicker--v2--input-target="datepickerLabel"
+    for="<%= @input_id %>"
+    class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+  >
     <%= @label %>
+
+    <% if @required %>
+      <abbr class="req" title="<%= t('pathogen.label.title') %>"><%= t("pathogen.label.required_indicator") %></abbr>
+    <% end %>
   </label>
 <% end %>
 
@@ -28,11 +36,36 @@
     <% if @input_aria_label %>
       aria-label="<%= @input_aria_label %>"
     <% end %>
+    <% if @required %>
+      aria-required="true"
+    <% end %>
+    <% if @errored %>
+      aria-describedby="<%= @error_id %>"
+      aria-invalid="true"
+    <% end %>
   >
 </div>
 
-<div
-  data-datepicker--v2--input-target="inputError"
-  class="mt-1 hidden text-sm text-red-700 dark:text-red-500"
-  aria-hidden="true"
-></div>
+<% if @autosubmit %>
+  <ul
+    data-datepicker--v2--input-target="errorContainer"
+    class="hidden max-w-md list-inside text-sm text-slate-500 dark:text-slate-400"
+    aria-hidden="true"
+    id="<%= @error_id %>"
+  ></ul>
+  <div class="sr-only" aria-live="polite" data-datepicker--v2--input-target="ariaLive"></div>
+  <template data-datepicker--v2--input-target="errorMessageTemplate">
+    <li>
+      <span class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
+        <%= icon(:x_circle, size: :sm,
+      color: :danger,
+      class: "mr-1.5",
+      aria: {
+        hidden: true
+      }) %>
+
+        <span class="grow" data-datepicker--v2--input-target="errorMessage"></span>
+      </span>
+    </li>
+  </template>
+<% end %>

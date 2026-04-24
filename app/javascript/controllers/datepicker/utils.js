@@ -24,3 +24,8 @@ export function focusDate(calendar, dateNode) {
   dateNode.tabIndex = 0;
   dateNode.focus();
 }
+
+export function replaceStyleClasses(node, classesToRemove, classesToAdd) {
+  node.classList.remove(...classesToRemove);
+  node.classList.add(...classesToAdd);
+}
