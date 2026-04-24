@@ -120,7 +120,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def higher_access_level_than_group
-    return unless highest_group_member && highest_group_member.access_level > access_level
+    return unless highest_group_member && access_level.present? && highest_group_member.access_level > access_level
 
     errors.add(:access_level, I18n.t('activerecord.errors.models.member.attributes.access_level.invalid',
                                      user: user.email,
