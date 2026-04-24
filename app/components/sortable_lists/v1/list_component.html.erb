@@ -3,6 +3,9 @@
     <%= title %>
 
     <% if required %>
+      <span id="<%= id %>-required" class="sr-only">
+        <%= t('components.sortable_lists.v1.list_component.required') %>
+      </span>
       <span class="text-sm text-slate-500 dark:text-slate-300">
         <span class="mr-1 text-red-500 dark:text-red-500" aria-hidden="true"> *</span>
       </span>
@@ -11,12 +14,11 @@
 
   <ul
     id="<%= id %>"
-    data-sortable-lists--v1--list-group-name-value="<%= group %>"
     class="<%= @system_arguments[:list_classes] %>"
-    tabindex="0"
+    tabindex="<%= list_items.empty? ? 0 : -1 %>"
     role="listbox"
     aria-labelledby="<%= id %>-list-label"
-    aria-roledescription="<%= t('components.sortable_lists.v1.list_component.aria_role_description', list: title) %>"
+    aria-describedby="<%= described_by_ids %>"
     aria-required="<%= required %>"
     aria-multiselectable="true"
   >
@@ -28,6 +30,8 @@
       <button
         type="button"
         class="button button-default"
+        disabled
+        aria-controls="<%= add_remove_controls %>"
         data-action="
           click->sortable-lists--v1--two-lists-selection#addSelectionByAddButton
         "
@@ -42,6 +46,8 @@
       <button
         type="button"
         class="button button-default"
+        disabled
+        aria-controls="<%= add_remove_controls %>"
         data-action="
           click->sortable-lists--v1--two-lists-selection#removeSelectionByRemoveButton
         "
@@ -53,6 +59,8 @@
       <button
         type="button"
         class="button button-default"
+        disabled
+        aria-controls="<%= id %>"
         data-action="
           click->sortable-lists--v1--two-lists-selection#moveSelection
         "
@@ -64,6 +72,8 @@
       <button
         type="button"
         class="button button-default"
+        disabled
+        aria-controls="<%= id %>"
         data-action="
           click->sortable-lists--v1--two-lists-selection#moveSelection
         "

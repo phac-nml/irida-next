@@ -372,16 +372,17 @@ fr:
     sortable_lists:
       v1:
         component:
+          keyboard_instructions: Utilisez les touches Flèche haut et Flèche bas pour naviguer entre les options. Appuyez sur Espace pour sélectionner ou désélectionner des options. Appuyez sur Entrée pour ajouter les options sélectionnées, sur Supprimer pour retirer les options sélectionnées, sur Alt plus Flèche haut ou Flèche bas pour réordonner les options sélectionnées, sur Maj plus les touches de direction pour sélectionner une plage, et sur Contrôle plus A pour tout sélectionner dans la liste active.
           no_template: Pas de modèle
         list_component:
           add: Ajouter
-          aria_role_description: Glisser-déposer dans la liste %{list}
           down: Bas
           keyboard_shortcuts:
             add: Enter
             down: Alt+ArrowDown
             remove: Delete
             up: Alt+ArrowUp
+          required: Obligatoire
           up: Haut
     token:
       copied: Copié!
