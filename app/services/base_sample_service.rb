@@ -80,7 +80,7 @@ class BaseSampleService < BaseService
     Turbo::StreamsChannel.broadcast_refresh_later_to old_project, :samples if old_project && !old_project.deleted?
 
     old_namespaces.each do |old_namespace|
-      next unless old_namespace && !old_namespace.deleted?
+      next if old_namespace&.deleted?
 
       Turbo::StreamsChannel.broadcast_refresh_later_to old_namespace, :samples
     end
@@ -88,7 +88,7 @@ class BaseSampleService < BaseService
     Turbo::StreamsChannel.broadcast_refresh_later_to new_project, :samples if new_project && !new_project.deleted?
 
     new_namespaces.each do |new_namespace|
-      next unless new_namespace && !new_namespace.deleted?
+      next if new_namespace&.deleted?
 
       Turbo::StreamsChannel.broadcast_refresh_later_to new_namespace, :samples
     end

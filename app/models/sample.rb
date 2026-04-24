@@ -81,7 +81,7 @@ class Sample < ApplicationRecord
     end
 
     projects.each do |proj|
-      next unless proj&.deleted?
+      next if proj&.deleted?
 
       proj.broadcast_refresh_later_to_samples_table
     end
