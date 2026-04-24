@@ -148,6 +148,8 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
 
+    click_button I18n.t(:'profiles.personal_access_tokens.index.add_new_token')
+
     within %(form[action="/-/profile/personal_access_tokens"]) do
       fill_in 'Token name', with: 'my new token'
       check 'api', allow_label_click: true
@@ -155,8 +157,8 @@ class ProfileTest < ApplicationSystemTestCase
     end
 
     assert_no_text 'my new token'
-    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
-                       count: @active_token_count)
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: @active_token_count)
 
     assert_text I18n.t(:'errors.format',
                        attribute: I18n.t(:'activerecord.attributes.personal_access_token.expires_at'),
