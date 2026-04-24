@@ -22,7 +22,7 @@ class Sample < ApplicationRecord
   scope :sort_by_attachments_updated_at_nulls_last_desc,
         -> { order('attachments_updated_at DESC NULLS LAST') }
 
-  has_many :samples_workflow_executions, dependent: :nullify
+  has_many :samples_workflow_executions, -> { with_deleted }, dependent: :nullify # rubocop:disable Rails/InverseOf
   has_many :workflow_executions, through: :samples_workflow_executions
 
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
@@ -71,14 +71,19 @@ class Sample < ApplicationRecord
 
   private
 
-  def broadcast_refresh_later_to_samples_table
+  def broadcast_refresh_later_to_samples_table # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     return if Sample.suppressed_turbo_broadcasts
 
-    projects = [project]
+    projects = project && !project.deleted? ? [project] : []
+
     if previous_changes['project_id'] && !previous_changes['project_id'][0].nil?
       projects << Project.find(previous_changes['project_id'][0])
     end
 
-    projects.each(&:broadcast_refresh_later_to_samples_table)
+    projects.each do |proj|
+      next if proj&.deleted?
+
+      proj.broadcast_refresh_later_to_samples_table
+    end
   end
 end

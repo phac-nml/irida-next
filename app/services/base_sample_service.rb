@@ -74,18 +74,22 @@ class BaseSampleService < BaseService
   end
 
   # Broadcast all turbo broadcasts for sample services where the broadcasts were suppressed
-  def broadcast_refresh_later_to_samples_table(old_namespaces, new_namespaces, old_project, new_project)
+  def broadcast_refresh_later_to_samples_table(old_namespaces, new_namespaces, old_project, new_project) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     return unless Flipper.enabled?(:samples_refresh_notice, current_user)
 
-    Turbo::StreamsChannel.broadcast_refresh_later_to old_project, :samples
+    Turbo::StreamsChannel.broadcast_refresh_later_to old_project, :samples if old_project && !old_project.deleted?
 
     old_namespaces.each do |old_namespace|
+      next if old_namespace&.deleted?
+
       Turbo::StreamsChannel.broadcast_refresh_later_to old_namespace, :samples
     end
 
-    Turbo::StreamsChannel.broadcast_refresh_later_to new_project, :samples
+    Turbo::StreamsChannel.broadcast_refresh_later_to new_project, :samples if new_project && !new_project.deleted?
 
     new_namespaces.each do |new_namespace|
+      next if new_namespace&.deleted?
+
       Turbo::StreamsChannel.broadcast_refresh_later_to new_namespace, :samples
     end
   end
