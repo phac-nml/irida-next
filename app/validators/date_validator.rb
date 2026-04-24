@@ -5,7 +5,7 @@ class DateValidator < ActiveModel::EachValidator
   class DateValidatorError < StandardError
   end
 
-  def validate_each(record, attribute, value) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+  def validate_each(record, attribute, value)
     return true unless attribute == :expires_at # currently only handles :expires_at
 
     # Value is only present when the input can be coerced into a date.
