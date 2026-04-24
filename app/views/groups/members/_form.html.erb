@@ -114,7 +114,7 @@
     <% if invalid_expires_at %>
       <%= render "shared/form/field_errors",
       id: error_container_id,
-      errors: @new_member.errors.full_messages_for(:expires_at) %>
+      errors: @new_member.errors[:expires_at] %>
     <% end %>
 
     <div class="my-4">

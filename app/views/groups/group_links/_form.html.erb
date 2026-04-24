@@ -128,7 +128,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
     <% if invalid_expires_at %>
       <%= render "shared/form/field_errors",
       id: error_container_id,
-      errors: new_group_link.errors.full_messages_for(:expires_at) %>
+      errors: new_group_link.errors[:expires_at] %>
     <% end %>
 
     <div class="my-4">
