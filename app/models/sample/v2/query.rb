@@ -21,12 +21,15 @@ class Sample::V2::Query
     @page = positive_integer_or_default(page, 1)
     @limit = positive_integer_or_default(limit, 20)
     @errors = []
+    @valid = nil
   end
 
   def valid?
+    return @valid unless @valid.nil?
+
     result = AdvancedSearch::V2::TreeValidator.new.validate(@tree)
     @errors = result[:errors]
-    result[:valid]
+    @valid = result[:valid]
   end
 
   def relation
