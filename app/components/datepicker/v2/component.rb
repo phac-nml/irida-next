@@ -31,7 +31,7 @@ module Datepicker
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
-                     selected_date: nil, autosubmit: false, required: false, errored: false,
+                     max_date: nil, selected_date: nil, autosubmit: false, required: false, errored: false,
                      calendar_arguments: {},  **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'input_name is required' if input_name.blank?
@@ -43,6 +43,7 @@ module Datepicker
         @autosubmit = autosubmit
         @required = required
         @errored = errored
+        @max_date = max_date
         @min_date = min_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments
@@ -110,6 +111,8 @@ module Datepicker
         @system_arguments[:data]['datepicker--v2--input-autosubmit-value'] = @autosubmit
         @system_arguments[:data]['datepicker--v2--input-invalid-date-value'] =
           I18n.t('components.datepicker.errors.invalid_date')
+        @system_arguments[:data]['datepicker--v2--input-invalid-max-date-value'] =
+          I18n.t('components.datepicker.errors.max_date_error')
         @system_arguments[:data]['datepicker--v2--input-invalid-min-date-value'] =
           I18n.t('components.datepicker.errors.min_date_error')
         @system_arguments[:data]['datepicker--v2--input-calendar-id-value'] = @calendar_id
