@@ -38,6 +38,8 @@ module PersonalAccessTokens
       # DateValidator forbids past expires_at on create; set in DB for an expired date still after the job cutoff.
       token.update_columns(expires_at: (@current_date - 10.days).to_date) # rubocop:disable Rails/SkipsModelValidations
 
+      token.update!(expires_at: (@current_date - 10.days).to_date)
+
       assert_no_difference -> { PersonalAccessToken.where(id: token.id).count } do
         PersonalAccessTokens::CleanupJob.perform_now
       end
