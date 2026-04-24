@@ -8,7 +8,8 @@ class DateValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
     return true unless attribute == :expires_at # currently only handles :expires_at
 
-    expires_at_value = record.read_attribute_before_type_cast(attribute) # grab input prior to it be casted as datetime
+    # grab input prior to it be casted as datetime
+    expires_at_value = record.read_attribute_before_type_cast(attribute).to_s
 
     # validate if input match any valid date input (YYYY-MM-DD, DD-MM-YYYY, etc.)
     raise DateValidatorError, I18n.t('common.date.errors.invalid_input') if value.nil?
