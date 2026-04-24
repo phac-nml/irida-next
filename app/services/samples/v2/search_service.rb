@@ -14,7 +14,7 @@ module Samples
         @query_v2_session_key = context.fetch(:query_v2_session_key)
       end
 
-      def build_v2_query(raw_json:, sort:)
+      def build_query(raw_json:, sort:)
         tree = AdvancedSearch::V2::Serializer.parse(raw_json)
 
         Sample::V2::Query.new(
@@ -39,7 +39,7 @@ module Samples
         raw_json = get_store(query_v2_session_key)
         return if raw_json.blank?
 
-        query = build_persisted_v2_query(raw_json)
+        query = build_query(raw_json:, sort: sort_for_listing)
         return query if query.valid?
 
         clear_persisted_v2_query
@@ -86,15 +86,8 @@ module Samples
           !v1_filters_present?(search_params)
       end
 
-      def build_persisted_v2_query(raw_json)
-        tree = AdvancedSearch::V2::Serializer.parse(raw_json)
-        Sample::V2::Query.new(
-          tree:,
-          scope: Sample.where(project_id: project.id),
-          sort: search_params['sort'] || 'updated_at desc',
-          page: params[:page],
-          limit: params[:limit]
-        )
+      def sort_for_listing
+        search_params['sort'] || 'updated_at desc'
       end
 
       def v1_filters_present?(current_search_params)
