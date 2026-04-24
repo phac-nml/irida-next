@@ -747,7 +747,7 @@ export default class extends Controller {
     // get all date nodes that are 'inMonth' and focus the last node
     const allInMonthDatesNodes = Array.from(
       this.calendarTarget.querySelectorAll(
-        '[data-date-within-month-position="inMonth"]',
+        '[data-date-within-month-position="inMonth"]:not([aria-disabled="true"])',
       ),
     );
 
