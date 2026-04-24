@@ -8,7 +8,7 @@ module AdvancedSearch
         attr_reader :combinator, :nodes
 
         def initialize(combinator: 'and', nodes: [])
-          @combinator = combinator.is_a?(String) ? combinator.dup.freeze : combinator
+          @combinator = combinator
           @nodes = Array(nodes).dup.freeze
           freeze
         end

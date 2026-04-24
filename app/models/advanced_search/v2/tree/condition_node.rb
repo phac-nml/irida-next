@@ -8,30 +8,13 @@ module AdvancedSearch
         attr_reader :field, :operator, :value
 
         def initialize(field:, operator:, value:)
-          @field = freeze_scalar(field)
-          @operator = freeze_scalar(operator)
-          @value = freeze_value(value)
+          @field = field
+          @operator = operator
+          @value = value.is_a?(Array) ? value.dup.freeze : value
           freeze
         end
 
         def type = :condition
-
-        private
-
-        def freeze_scalar(value)
-          return value unless value.is_a?(String)
-
-          value.dup.freeze
-        end
-
-        def freeze_value(value)
-          case value
-          when Array
-            value.map { |item| freeze_scalar(item) }.freeze
-          else
-            freeze_scalar(value)
-          end
-        end
       end
     end
   end
