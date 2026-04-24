@@ -44,8 +44,8 @@ module Projects
       authorize! @project, to: :sample_listing?
       return invalid_v2_query_response if query_v2_too_large?(params[:query_v2])
 
-      @v2_query = v2_search_service.build_v2_query(raw_json: params[:query_v2],
-                                                   sort: params[:sort] || 'updated_at desc')
+      @v2_query = v2_search_service.build_query(raw_json: params[:query_v2],
+                                                sort: params[:sort] || 'updated_at desc')
       return invalid_v2_query_response unless @v2_query.valid?
 
       respond_to_v2_query
