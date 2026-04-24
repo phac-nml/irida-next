@@ -99,14 +99,12 @@
           <%= sortable_lists.with_list(
             id: "available-list",
             title: t(".available"),
-            group: "format_selection",
           ) %>
 
           <%= sortable_lists.with_list(
             id: "selected-list",
             title: t(".selected"),
             list_items: formats,
-            group: "format_selection",
             required: true,
           ) %>
         <% end %>

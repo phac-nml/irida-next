@@ -25,8 +25,6 @@ export default class extends Controller {
 
   static ARIA_SELECTED_TRUE = "true";
   static ARIA_SELECTED_FALSE = "false";
-  static ARIA_DISABLED_TRUE = "true";
-  static ARIA_DISABLED_FALSE = "false";
   static ARIA_REQUIRED_TRUE = "true";
 
   #originalAvailableList;
@@ -36,10 +34,7 @@ export default class extends Controller {
 
   #ariaLiveTranslations;
 
-  #savedOptionsState;
-
   connect() {
-    // this.DnDListener = this.#updateAriaByDnD.bind(this);
     this.boundEndShiftSelect = this.#endShiftSelect.bind(this);
 
     // Get a handle on the available and selected lists
@@ -58,10 +53,6 @@ export default class extends Controller {
     }
 
     if (this.availableList && this.selectedList) {
-      // Temporarily disabled drag and drop functionality
-      // this.selectedList.addEventListener("drop", this.DnDListener);
-      // this.availableList.addEventListener("drop", this.DnDListener);
-
       // Get a handle on the original available list
       this.#originalAvailableList = [
         ...this.availableList.querySelectorAll("li"),
@@ -74,129 +65,6 @@ export default class extends Controller {
       this.#checkStates();
     }
   }
-
-  // Temporarily disabled - drag and drop functionality removed
-  // #updateAriaByDnD() {
-  //   let ariaLiveParams;
-  //   // get the current list options to compare with the lists' previous states
-  //   let currentAvailableOptions = this.#extractOptionsIntoArray(
-  //     document.getElementById(this.availableListValue),
-  //   );
-  //   let currentSelectedOptions = this.#extractOptionsIntoArray(
-  //     document.getElementById(this.selectedListValue),
-  //   );
-
-  //   // if length is equal, means only ordering could have changed
-  //   if (
-  //     currentSelectedOptions.length ===
-  //     this.#savedOptionsState["selected"].length
-  //   ) {
-  //     ariaLiveParams = this.#verifyDnDOrderChange(
-  //       currentSelectedOptions,
-  //       currentAvailableOptions,
-  //     );
-
-  //     // lengths are not equal, therefore an option was added/removed
-  //   } else {
-  //     ariaLiveParams = this.#verifyDnDAddOrRemoveChange(
-  //       currentSelectedOptions,
-  //       currentAvailableOptions,
-  //     );
-  //   }
-
-  //   if (ariaLiveParams) {
-  //     // update aria-live text
-  //     const ariaLiveText = this.#generateAriaLiveText(ariaLiveParams);
-  //     this.#updateAriaLive(ariaLiveText);
-
-  //     // option was moved between lists; remove selected attributes (checkmark)
-  //     if (ariaLiveParams.hasOwnProperty("movedOption")) {
-  //       const movedOption = ariaLiveParams.movedOption;
-  //       const movedOptionElement = this.#getOptionNode(movedOption);
-
-  //       if (movedOptionElement.getAttribute("aria-selected") === "true") {
-  //         this.#removeSelectedAttributes(movedOptionElement);
-  //       }
-  //     }
-  //   }
-  //   this.#checkStates();
-  // }
-
-  // Temporarily disabled - drag and drop functionality removed
-  // #verifyDnDOrderChange(currentSelectedOptions, currentAvailableOptions) {
-  //   let params;
-  //   // stringify options arrays and verify any differences. If a difference exists, ordering has been changed
-  //   if (
-  //     // check selected list
-  //     JSON.stringify(currentSelectedOptions) !==
-  //     JSON.stringify(this.#savedOptionsState["selected"])
-  //   ) {
-  //     params = {
-  //       action: "list_order_changed",
-  //       listName: this.selectedListValue,
-  //       options: currentSelectedOptions,
-  //     };
-  //   } else if (
-  //     // check available list
-  //     JSON.stringify(currentAvailableOptions) !==
-  //     JSON.stringify(this.#savedOptionsState["available"])
-  //   ) {
-  //     params = {
-  //       action: "list_order_changed",
-  //       listName: this.availableListValue,
-  //       options: currentAvailableOptions,
-  //     };
-  //   }
-  //   return params;
-  // }
-
-  // Temporarily disabled - drag and drop functionality removed
-  // #verifyDnDAddOrRemoveChange(currentSelectedOptions, currentAvailableOptions) {
-  //   let movedOption;
-  //   let params;
-  //   if (
-  //     // option was added to selected list
-  //     currentSelectedOptions.length > this.#savedOptionsState["selected"].length
-  //   ) {
-  //     movedOption = this.#verifyOptionsDifference(
-  //       currentSelectedOptions,
-  //       this.#savedOptionsState["selected"],
-  //     );
-  //     params = {
-  //       action: "added",
-  //       movedOption: movedOption,
-  //     };
-  //   } else if (
-  //     // option was added (removed) to available list
-  //     currentAvailableOptions.length >
-  //     this.#savedOptionsState["available"].length
-  //   ) {
-  //     movedOption = this.#verifyOptionsDifference(
-  //       currentAvailableOptions,
-  //       this.#savedOptionsState["available"],
-  //     );
-  //     params = {
-  //       action: "removed",
-  //       movedOption: movedOption,
-  //     };
-  //   }
-  //   // fix tabindexing after option moved via drag and drop
-  //   this.#updateListAttributes(this.#getOptionNode(params.movedOption));
-  //   return params;
-  // }
-
-  // Temporarily disabled - drag and drop functionality removed
-  // #generateAriaLiveText(params) {
-  //   const action = params["action"];
-  //   let ariaLiveString = this.#ariaLiveTranslations[action];
-  //   if (action === "list_order_changed") {
-  //     return ariaLiveString
-  //       .replace(/LIST_PLACEHOLDER/g, params["listName"])
-  //       .concat(params["options"].join(", "));
-  //   } else {
-  //     return ariaLiveString.concat(params["movedOption"]);
-  //   }
-  // }
 
   #cleanupAvailableList() {
     const itemsToRemove = Array.from(
@@ -300,14 +168,7 @@ export default class extends Controller {
   }
 
   #setButtonDisableState(button, disableState) {
-    if (disableState) {
-      button.setAttribute("aria-disabled", this.constructor.ARIA_DISABLED_TRUE);
-    } else {
-      button.setAttribute(
-        "aria-disabled",
-        this.constructor.ARIA_DISABLED_FALSE,
-      );
-    }
+    button.disabled = disableState;
   }
 
   #getSelectedOptions(list) {
@@ -322,12 +183,6 @@ export default class extends Controller {
         createHiddenInput(this.fieldNameValue, li.lastElementChild.textContent),
       ),
     );
-  }
-
-  disconnect() {
-    // Temporarily disabled drag and drop functionality
-    // this.selectedList.removeEventListener("drop", this.DnDListener);
-    // this.availableList.removeEventListener("drop", this.DnDListener);
   }
 
   /**
@@ -395,7 +250,6 @@ export default class extends Controller {
     this.#removeTabIndexFromList(this.selectedList);
     this.#initializeLists();
     this.#checkButtonStates();
-    this.#saveListStates();
   }
 
   handleKeyboardInput(event) {
@@ -453,10 +307,7 @@ export default class extends Controller {
   }
 
   addSelectionByAddButton() {
-    if (
-      this.addButtonTarget.getAttribute("aria-disabled") ===
-      this.constructor.ARIA_DISABLED_FALSE
-    ) {
+    if (!this.addButtonTarget.disabled) {
       this.#performSelection(
         false,
         false,
@@ -472,10 +323,7 @@ export default class extends Controller {
   }
 
   removeSelectionByRemoveButton() {
-    if (
-      this.removeButtonTarget.getAttribute("aria-disabled") ===
-      this.constructor.ARIA_DISABLED_FALSE
-    ) {
+    if (!this.removeButtonTarget.disabled) {
       this.#performSelection(
         false,
         false,
@@ -708,11 +556,7 @@ export default class extends Controller {
 
   // handles up and down buttons
   moveSelection(event) {
-    if (
-      event.target.getAttribute("aria-disabled") ===
-      this.constructor.ARIA_DISABLED_TRUE
-    )
-      return;
+    if (event.target.disabled) return;
 
     const selectedOption = this.#getSelectedOptions(this.selectedList)[0];
     const listOptions = Array.from(this.selectedList.querySelectorAll("li"));
@@ -882,42 +726,6 @@ export default class extends Controller {
     list.append(template);
   }
 
-  // updates and retains the options lists to compare for aria-live updating
-  #saveListStates() {
-    this.#savedOptionsState = {};
-
-    this.#savedOptionsState["available"] = this.#extractOptionsIntoArray(
-      this.availableList,
-    );
-    this.#savedOptionsState["selected"] = this.#extractOptionsIntoArray(
-      this.selectedList,
-    );
-  }
-
-  // turns <ul> DOM element and returns an array of its list
-  // eg: receives <ul><li>OPTION1</li><li>OPTION2</li></ul> and returns ['OPTION1', 'OPTION2']
-  #extractOptionsIntoArray(list) {
-    return Array.from(
-      list.querySelectorAll("li"),
-      (option) => option.lastElementChild.textContent,
-    );
-  }
-
-  // finds the difference between two lists. This is specifically used for the drag and drop listener, so only one
-  // option difference at most will be found
-  // eg: receives [1, 2, 3] and [1, 2, 3, 4] and returns 4
-  // Temporarily disabled - drag and drop functionality removed
-  // #verifyOptionsDifference(listOne, listTwo) {
-  //   let difference = listOne.filter((x) => !listTwo.includes(x));
-  //   return difference[0];
-  // }
-
-  // Temporarily disabled - drag and drop functionality removed
-  // receives OPTION_NAME and returns <li id="OPTION_NAME">OPTION_NAME</li>
-  // #getOptionNode(option) {
-  //   return document.getElementById(this.#validateId(option));
-  // }
-
   #updateAriaLive(updateString) {
     if (this.hasAriaLiveUpdateTarget) {
       announce(updateString, { element: this.ariaLiveUpdateTarget });
@@ -929,20 +737,23 @@ export default class extends Controller {
     const selectedListFirstOption = this.selectedList.firstElementChild;
     if (availableListFirstOption) {
       this.#setActiveListElement(this.availableList, availableListFirstOption);
+    } else {
+      this.availableList.tabIndex = 0;
     }
     if (selectedListFirstOption) {
       this.#setActiveListElement(this.selectedList, selectedListFirstOption);
+    } else {
+      this.selectedList.tabIndex = 0;
     }
   }
 
   #setActiveListElement(list, option) {
+    list.tabIndex = -1;
     option.tabIndex = 0;
     option.setAttribute("data-tabbable", "true");
-    list.setAttribute("aria-activedescendant", option.id);
   }
 
   #checkStates() {
-    this.#saveListStates();
     this.#checkButtonStates();
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
@@ -968,13 +779,15 @@ export default class extends Controller {
 
   #verifyListHasTabIndex(list) {
     const firstChild = list.firstElementChild;
-    // if no options within list, remove aria-activedescendant from list
+    // if no options within list, keep list focusable
     if (!firstChild) {
-      list.removeAttribute("aria-activedescendant");
+      list.tabIndex = 0;
       // else if list doesn't contain a tabbable option (eg: previous tabbable option moved to other list), set first
       // option to tabbable/active
     } else if (!list.querySelector('[data-tabbable="true"]')) {
       this.#setActiveListElement(list, firstChild);
+    } else {
+      list.tabIndex = -1;
     }
   }
 
@@ -984,7 +797,7 @@ export default class extends Controller {
 
     if (tababbleOptions) {
       for (let i = 0; i < tababbleOptions.length; i++) {
-        tababbleOptions[i].tabIndex = "-1";
+        tababbleOptions[i].tabIndex = -1;
         tababbleOptions[i].removeAttribute("data-tabbable");
       }
     }

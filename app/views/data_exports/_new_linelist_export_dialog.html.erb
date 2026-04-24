@@ -104,13 +104,11 @@
               id: "available-list",
               title: t(".available"),
               list_items: @namespace.metadata_fields,
-              group: "metadata_selection",
             ) %>
 
             <%= sortable_lists.with_list(
               id: "selected-list",
               title: t(".selected"),
-              group: "metadata_selection",
             ) %>
           <% end %>
           <template id="sortable-list-item-template" data-sortable-lists--v1--two-lists-selection-target="itemTemplate">
