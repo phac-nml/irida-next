@@ -4,14 +4,16 @@ module Samples
   module V2
     # Encapsulates V2 sample query parsing, persistence, and relation execution.
     class SearchService
+      V1_STATE = 1
+      V2_STATE = 2
+
       def initialize(project:, session:, params:, context:)
         @project = project
         @session = session
         @params = params
         @action_name = context.fetch(:action_name)
         @search_params = context.fetch(:search_params) || {}
-        @search_key = context.fetch(:search_key)
-        @query_v2_session_key = context.fetch(:query_v2_session_key)
+        @search_state_key = context.fetch(:search_state_key)
       end
 
       def build_query(raw_json:, sort:)
@@ -29,14 +31,13 @@ module Samples
       def store_v2_query(raw_json)
         return if raw_json.blank?
 
-        clear_persisted_v1_search
-        store(query_v2_session_key, raw_json)
+        store(search_state_key, { version: V2_STATE, query_v2: raw_json })
       end
 
       def persisted_v2_query_for_listing
         return unless v2_query_enabled_for_listing?
 
-        raw_json = get_store(query_v2_session_key)
+        raw_json = current_search_state['query_v2']
         return if raw_json.blank?
 
         query = build_query(raw_json:, sort: sort_for_listing)
@@ -65,7 +66,11 @@ module Samples
       end
 
       def clear_persisted_v2_query
-        store(query_v2_session_key, nil)
+        store(search_state_key, nil)
+      end
+
+      def activate_v1_search!
+        store(search_state_key, { version: V1_STATE })
       end
 
       def request_v1_filters_present?
@@ -74,16 +79,12 @@ module Samples
 
       private
 
-      attr_reader :project, :session, :params, :action_name, :search_params, :search_key, :query_v2_session_key
-
-      def clear_persisted_v1_search
-        store(search_key, nil)
-      end
+      attr_reader :project, :session, :params, :action_name, :search_params, :search_state_key
 
       def v2_query_enabled_for_listing?
         action_name.in?(%w[index select]) &&
           Flipper.enabled?(:advanced_search_v2) &&
-          !v1_filters_present?(search_params)
+          current_search_state['version'] == V2_STATE
       end
 
       def sort_for_listing
@@ -102,6 +103,11 @@ module Samples
 
       def get_store(session_key)
         session[session_key]
+      end
+
+      def current_search_state
+        state = get_store(search_state_key)
+        state.is_a?(Hash) ? state.with_indifferent_access : {}
       end
     end
   end

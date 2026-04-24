@@ -215,8 +215,8 @@ module Projects
       :"#{controller_name}_#{@project.id}_search_params"
     end
 
-    def query_v2_session_key
-      :"#{controller_name}_#{@project.id}_advanced_search_v2"
+    def search_state_key
+      :"#{controller_name}_#{@project.id}_search_state"
     end
 
     def persist_v2_query(raw_json)
@@ -303,7 +303,7 @@ module Projects
     def search_params
       updated_params = sanitized_search_params
       service = v2_search_service(search_params: updated_params)
-      service.clear_persisted_v2_query if service.request_v1_filters_present?
+      service.activate_v1_search! if service.request_v1_filters_present?
 
       if reset_sort?(updated_params)
         updated_params['sort'] = 'updated_at desc'
@@ -346,8 +346,7 @@ module Projects
         context: {
           action_name:,
           search_params:,
-          search_key:,
-          query_v2_session_key:
+          search_state_key:
         }
       )
     end
