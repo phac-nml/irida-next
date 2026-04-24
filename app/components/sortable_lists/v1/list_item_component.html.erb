@@ -8,8 +8,9 @@
   aria-selected="false"
   id="<%= @id %>"
   class="
-    flex w-full border-b border-slate-200 px-4 py-2 focus:bg-primary-400 focus-visible:-outline-offset-2!
-    dark:border-slate-600 focus:dark:bg-primary-600 focus:dark:hover:bg-primary-700
+    relative flex w-full border-b border-slate-200 px-4 py-2 focus:bg-primary-400 focus-visible:z-10
+    focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-primary-700 dark:border-slate-600
+    focus:dark:bg-primary-600 focus:dark:hover:bg-primary-700 dark:focus-visible:outline-primary-300
   "
 >
   <span aria-hidden="true" class="pointer-events-none mx-2"></span>
