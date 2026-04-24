@@ -1,3 +1,5 @@
+<% list_ids = lists.map(&:id).join(' ') %>
+
 <% if title.present? || description.present? %>
   <div>
     <% if title.present? %>
@@ -20,6 +22,7 @@
       id="template-selector"
       data-action="sortable-lists--v1--two-lists-selection#setTemplate"
       data-sortable-lists--v1--two-lists-selection-target="templateSelector"
+      aria-controls="<%= list_ids %>"
       class="
         block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900
         dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400
@@ -33,6 +36,10 @@
     </select>
   </div>
 <% end %>
+
+<p id="<%= instructions_id %>" class="sr-only">
+  <%= t('components.sortable_lists.v1.component.keyboard_instructions') %>
+</p>
 
 <div class="grid gap-2 max-sm:grid-cols-1 sm:grid-cols-2">
   <% lists.each do |list| %>

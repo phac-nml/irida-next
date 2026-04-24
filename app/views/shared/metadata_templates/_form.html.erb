@@ -98,14 +98,12 @@
             id: "available-list",
             title: t("metadata_templates.form.available"),
             list_items: @available_metadata_fields,
-            group: "metadata_selection",
           ) %>
 
           <%= sortable_lists.with_list(
             id: "selected-list",
             title: t("metadata_templates.form.selected"),
             list_items: @current_template_fields,
-            group: "metadata_selection",
             required: true,
           ) %>
         <% end %>
