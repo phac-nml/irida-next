@@ -44,7 +44,8 @@ module Projects
       authorize! @project, to: :sample_listing?
       return invalid_v2_query_response if query_v2_too_large?(params[:query_v2])
 
-      build_v2_query
+      @v2_query = v2_search_service.build_v2_query(raw_json: params[:query_v2],
+                                                   sort: params[:sort] || 'updated_at desc')
       return invalid_v2_query_response unless @v2_query.valid?
 
       respond_to_v2_query
@@ -218,29 +219,16 @@ module Projects
       :"#{controller_name}_#{@project.id}_advanced_search_v2"
     end
 
-    def build_v2_query
-      raw_json = params[:query_v2]
-      tree = AdvancedSearch::V2::Serializer.parse(raw_json)
-
-      @v2_query = Sample::V2::Query.new(
-        tree:,
-        scope: Sample.where(project_id: @project.id),
-        sort: params[:sort] || 'updated_at desc',
-        page: params[:page],
-        limit: params[:limit]
-      )
-    end
-
     def persist_v2_query(raw_json)
       return if raw_json.blank?
       raise QueryV2TooLargeError if query_v2_too_large?(raw_json)
 
-      clear_persisted_v1_search
-      store(query_v2_session_key, raw_json)
+      v2_search_service.store_v2_query(raw_json)
     end
 
     def load_index_results
-      if (v2_query = persisted_v2_query_for_listing) && (v2_results = execute_v2_query(v2_query))
+      v2_query = v2_search_service.persisted_v2_query_for_listing
+      if v2_query && (v2_results = v2_search_service.execute_v2_query(v2_query))
         @pagy, @samples = v2_results
         @results_message = nil
       else
@@ -249,34 +237,14 @@ module Projects
       end
     end
 
-    def persisted_v2_query_for_listing
-      return unless v2_query_enabled_for_listing?
-
-      raw_json = get_store(query_v2_session_key)
-      return if raw_json.blank?
-
-      query = build_persisted_v2_query(raw_json)
-      return query if query.valid?
-
-      clear_persisted_v2_query
-      nil
-    rescue AdvancedSearch::V2::Serializer::ParseError, ArgumentError
-      clear_persisted_v2_query
-      nil
-    end
-
     def selection_scope
-      if (v2_query = persisted_v2_query_for_listing)
-        v2_query.relation
-      else
-        @query.results
-      end
+      v2_search_service.selection_scope(fallback_scope: @query.results)
     end
 
     def respond_to_v2_query
       respond_to do |format|
         format.turbo_stream do
-          if (v2_results = execute_v2_query(@v2_query))
+          if (v2_results = v2_search_service.execute_v2_query(@v2_query))
             @pagy, @samples = v2_results
             @samples = @samples.includes(project: { namespace: :parent })
             persist_v2_query(params[:query_v2])
@@ -287,13 +255,6 @@ module Projects
         end
         format.html { head :not_acceptable }
       end
-    end
-
-    def execute_v2_query(query)
-      query.results
-    rescue ArgumentError, Pagy::VariableError
-      clear_persisted_v2_query
-      nil
     end
 
     def query
@@ -341,7 +302,8 @@ module Projects
 
     def search_params
       updated_params = sanitized_search_params
-      clear_persisted_v2_query if request_v1_filters_present?
+      service = v2_search_service(search_params: updated_params)
+      service.clear_persisted_v2_query if service.request_v1_filters_present?
 
       if reset_sort?(updated_params)
         updated_params['sort'] = 'updated_at desc'
@@ -351,11 +313,7 @@ module Projects
     end
 
     def clear_persisted_v2_query
-      store(query_v2_session_key, nil)
-    end
-
-    def clear_persisted_v1_search
-      store(search_key, nil)
+      v2_search_service.clear_persisted_v2_query
     end
 
     def invalid_v2_query_response
@@ -365,21 +323,6 @@ module Projects
 
     def query_v2_too_large?(raw_json)
       raw_json.present? && raw_json.to_s.bytesize > MAX_QUERY_V2_SIZE
-    end
-
-    def v2_query_enabled_for_listing?
-      action_name.in?(%w[index select]) && Flipper.enabled?(:advanced_search_v2) && !v1_filters_present?(@search_params)
-    end
-
-    def build_persisted_v2_query(raw_json)
-      tree = AdvancedSearch::V2::Serializer.parse(raw_json)
-      Sample::V2::Query.new(
-        tree:,
-        scope: Sample.where(project_id: @project.id),
-        sort: @search_params['sort'] || 'updated_at desc',
-        page: params[:page],
-        limit: params[:limit]
-      )
     end
 
     def sanitized_search_params
@@ -395,14 +338,18 @@ module Projects
         (search_params[:metadata_template] == 'none' && search_params['sort']&.match?(/metadata_/))
     end
 
-    def v1_filters_present?(search_params)
-      search_params['name_or_puid_cont'].present? ||
-        search_params['name_or_puid_in'].present? ||
-        search_params['groups_attributes'].present?
-    end
-
-    def request_v1_filters_present?
-      params[:q].present? && v1_filters_present?(params[:q].to_unsafe_h.with_indifferent_access)
+    def v2_search_service(search_params: @search_params || {})
+      ::Samples::V2::SearchService.new(
+        project: @project,
+        session:,
+        params:,
+        context: {
+          action_name:,
+          search_params:,
+          search_key:,
+          query_v2_session_key:
+        }
+      )
     end
 
     def page_title
