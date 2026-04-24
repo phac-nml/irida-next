@@ -391,7 +391,8 @@ module Projects
            as: :turbo_stream
 
       assert_response :ok
-      assert_equal query_json, session["samples_#{@project.id}_advanced_search_v2"]
+      assert_equal query_json, persisted_v2_query
+      assert_equal 2, search_state_version
     end
 
     test 'POST query_v2 returns 406 for HTML without mutating persisted V2 state' do
@@ -423,12 +424,12 @@ module Projects
            params: { query_v2: persisted_query },
            as: :turbo_stream
       assert_response :ok
-      assert_equal persisted_query, session["samples_#{@project.id}_advanced_search_v2"]
+      assert_equal persisted_query, persisted_v2_query
 
       post query_namespace_project_samples_path(@namespace, @project),
            params: { query_v2: rejected_query }
       assert_response :not_acceptable
-      assert_equal persisted_query, session["samples_#{@project.id}_advanced_search_v2"]
+      assert_equal persisted_query, persisted_v2_query
     end
 
     test 'GET index rehydrates persisted query_v2 results when advanced_search_v2 flag is on' do
@@ -489,7 +490,7 @@ module Projects
       assert_not_includes table_text, sample2.name
     end
 
-    test 'POST query_v2 clears persisted V1 filters so the next GET index keeps V2 results' do
+    test 'POST query_v2 activates V2 state so the next GET index keeps V2 results' do
       Flipper.enable(:advanced_search_v2)
       sample2 = samples(:sample2)
 
@@ -514,7 +515,8 @@ module Projects
            },
            as: :turbo_stream
       assert_response :ok
-      assert_nil session["samples_#{@project.id}_search_params"]
+      assert_equal sample2.name, session["samples_#{@project.id}_search_params"]['name_or_puid_cont']
+      assert_equal 2, search_state_version
 
       get namespace_project_samples_url(@namespace, @project)
       assert_response :success
@@ -574,7 +576,7 @@ module Projects
            as: :turbo_stream
 
       assert_response :unprocessable_content
-      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+      assert_nil persisted_v2_query
     end
 
     test 'POST query_v2 returns 422 for blank payload' do
@@ -585,7 +587,7 @@ module Projects
            as: :turbo_stream
 
       assert_response :unprocessable_content
-      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+      assert_nil persisted_v2_query
     end
 
     test 'POST query_v2 returns 422 for object-valued condition payloads' do
@@ -608,7 +610,7 @@ module Projects
            as: :turbo_stream
 
       assert_response :unprocessable_content
-      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+      assert_nil persisted_v2_query
     end
 
     test 'POST query_v2 returns 422 for non-string condition fields' do
@@ -635,7 +637,7 @@ module Projects
              as: :turbo_stream
 
         assert_response :unprocessable_content
-        assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+        assert_nil persisted_v2_query
       end
     end
 
@@ -659,7 +661,7 @@ module Projects
            },
            as: :turbo_stream
       assert_response :ok
-      assert_not_nil session["samples_#{@project.id}_advanced_search_v2"]
+      assert_not_nil persisted_v2_query
 
       post query_namespace_project_samples_path(@namespace, @project),
            params: {
@@ -677,7 +679,7 @@ module Projects
            },
            as: :turbo_stream
       assert_response :unprocessable_content
-      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+      assert_nil persisted_v2_query
 
       get namespace_project_samples_url(@namespace, @project)
       assert_response :success
@@ -705,7 +707,7 @@ module Projects
            params: { query_v2: query_json },
            as: :turbo_stream
       assert_response :ok
-      assert_equal query_json, session["samples_#{@project.id}_advanced_search_v2"]
+      assert_equal query_json, persisted_v2_query
 
       Sample::V2::Query.any_instance.stubs(:results).raises(ArgumentError)
 
@@ -714,7 +716,7 @@ module Projects
            as: :turbo_stream
 
       assert_response :unprocessable_content
-      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+      assert_nil persisted_v2_query
     end
 
     test 'POST query_v2 returns 422 for empty nested subgroups' do
@@ -742,7 +744,7 @@ module Projects
            as: :turbo_stream
 
       assert_response :unprocessable_content
-      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+      assert_nil persisted_v2_query
     end
 
     test 'POST query_v2 returns 422 for payloads larger than persistence limit' do
@@ -766,7 +768,7 @@ module Projects
            params: { query_v2: oversized_query },
            as: :turbo_stream
       assert_response :unprocessable_content
-      assert_nil session["samples_#{@project.id}_advanced_search_v2"]
+      assert_nil persisted_v2_query
 
       get namespace_project_samples_url(@namespace, @project)
       assert_response :success
@@ -786,6 +788,18 @@ module Projects
     def rendered_search_field_value
       doc = Nokogiri::HTML(response.body)
       doc.at_css('input[data-test-selector="search-field-input"]')['value']
+    end
+
+    def search_state
+      session["samples_#{@project.id}_search_state"]
+    end
+
+    def persisted_v2_query
+      search_state&.dig('query_v2') || search_state&.dig(:query_v2)
+    end
+
+    def search_state_version
+      search_state&.dig('version') || search_state&.dig(:version)
     end
 
     def rendered_selected_sample_ids
