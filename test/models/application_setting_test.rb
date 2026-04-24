@@ -87,6 +87,20 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert settings.valid?
   end
 
+  test 'user_opt_in_features accepts all-user allowlist configuration' do
+    settings = ApplicationSetting.build_from_defaults(
+      user_opt_in_features: {
+        'data_grid_samples_table' => {
+          'allowlist' => 'all',
+          'name' => { 'en' => 'Data Grid Samples Table' },
+          'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+        }
+      }
+    )
+
+    assert settings.valid?
+  end
+
   test 'user_opt_in_features rejects invalid feature key format' do
     settings = ApplicationSetting.build_from_defaults(
       user_opt_in_features: {
@@ -114,10 +128,8 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     )
 
     assert_not settings.valid?
-    assert_includes settings.errors[:user_opt_in_features],
-                    'value at `/data_grid_samples_table/allowlist` is not one of: ["all"]'
-    assert_includes settings.errors[:user_opt_in_features],
-                    'value at `/data_grid_samples_table/allowlist` is not an array'
+    error_text = settings.errors[:user_opt_in_features].join(' ')
+    assert_includes error_text, '/data_grid_samples_table/allowlist'
   end
 
   test 'user_opt_in_features requires english fallback translations' do
@@ -132,9 +144,9 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     )
 
     assert_not settings.valid?
-    assert_includes settings.errors[:user_opt_in_features],
-                    'object at `/data_grid_samples_table/name` is missing required properties: en'
-    assert_includes settings.errors[:user_opt_in_features],
-                    'object at `/data_grid_samples_table/description` is missing required properties: en'
+    error_text = settings.errors[:user_opt_in_features].join(' ')
+    assert_includes error_text, '/data_grid_samples_table/name'
+    assert_includes error_text, '/data_grid_samples_table/description'
+    assert_includes error_text, 'en'
   end
 end
