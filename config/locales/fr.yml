@@ -352,8 +352,10 @@ fr:
         inactive_tokens_aria_label: 'Afficher %{count} jetons d''accès personnel inactifs pour le compte de bot : %{name}'
         never: Jamais
   combobox_component:
+    clear_selection: Effacer la sélection
     multiple_results_text: "%{num} résultats trouvés"
     no_results_text: Aucun résultat trouvé
+    show_options: Afficher les options
     single_result_text: 1 résultat trouvé
   concerns:
     attachment_actions:

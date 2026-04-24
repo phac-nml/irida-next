@@ -352,8 +352,10 @@ en:
         inactive_tokens_aria_label: 'View %{count} inactive personal access tokens for bot account: %{name}'
         never: Never
   combobox_component:
+    clear_selection: Clear selection
     multiple_results_text: "%{num} results found"
     no_results_text: No results found
+    show_options: Show options
     single_result_text: 1 result found
   concerns:
     attachment_actions:

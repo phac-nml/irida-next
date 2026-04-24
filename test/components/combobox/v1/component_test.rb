@@ -47,6 +47,9 @@ module Combobox
           assert_equal 'patient_age', combobox.value
           hidden = find("input[type='hidden']", visible: false)
           assert_equal 'metadata.patient_age', hidden.value
+          combobox.click
+          assert_selector "div[role='listbox']", visible: true
+          assert_selector "div[role='option'][data-value='metadata.patient_age']", count: 1
         end
       end
 

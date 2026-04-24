@@ -32,6 +32,10 @@ module Combobox
         end
       end
 
+      def selection_present?
+        @selected_option[:value].present?
+      end
+
       def selected_option(options)
         fragment = Nokogiri::HTML.fragment(options)
         fragment.search('option').each do |option|
