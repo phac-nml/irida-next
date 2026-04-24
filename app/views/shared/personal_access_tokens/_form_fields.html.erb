@@ -41,7 +41,7 @@
     input_name: form.field_name(:expires_at),
     label: t("activerecord.attributes.personal_access_token.expires_at"),
     selected_date: pat[:expires_at],
-    required: false,
+    required: Irida::CurrentSettings.require_personal_access_token_expiry?,
     errored: invalid_expires_at,
     max_date: Irida::CurrentSettings.require_personal_access_token_expiry? ? Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days : nil
   ) %>
