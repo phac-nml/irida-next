@@ -52,7 +52,7 @@ module PersonalAccessTokens
       Irida::CurrentSettings.current_application_settings.update(require_personal_access_token_expiry: true)
 
       # default is 365 days, so we add 1 to get outside the max allowed date
-      expires_at = Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days.days + 1
+      expires_at = (Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days).to_s
 
       invalid_params = {
         scopes: %w[read_api api],
@@ -114,7 +114,7 @@ module PersonalAccessTokens
       Irida::CurrentSettings.current_application_settings.update(require_personal_access_token_expiry: true)
 
       # default is 365 days, so we add 1 to get outside the max allowed date
-      expires_at = Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days.days + 1
+      expires_at = (Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days.days).to_s
 
       invalid_params = {
         scopes: %w[read_api api],
