@@ -17,6 +17,12 @@ class DateValidatorTest < ActiveSupport::TestCase
     assert member.valid?
   end
 
+  test 'member with no expires_at input' do
+    member = create_group_member('')
+
+    assert member.valid?
+  end
+
   test 'member with valid date format but invalid expires_at date' do
     before_expires_at = (Time.zone.today - 10.days).strftime('%Y-%m-%d')
     member = create_group_member(before_expires_at)
@@ -47,6 +53,12 @@ class DateValidatorTest < ActiveSupport::TestCase
   test 'group link with valid expires_at date' do
     tomorrow = (Time.zone.today + 1.day).strftime('%Y-%m-%d')
     group_link = create_group_link(tomorrow)
+
+    assert group_link.valid?
+  end
+
+  test 'group link with no expires_at input' do
+    group_link = create_group_link('')
 
     assert group_link.valid?
   end
