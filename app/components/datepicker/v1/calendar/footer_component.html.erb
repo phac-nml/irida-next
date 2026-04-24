@@ -7,7 +7,10 @@
   <% end %>
 
   <% unless @max_date.nil? %>
-    <div class="text-center text-sm text-slate-900 dark:text-white" data-datepicker--calendar-target="maxDateMessage"></div>
+    <div
+      class="text-center text-sm text-slate-900 dark:text-white"
+      data-datepicker--v1--calendar-target="maxDateMessage"
+    ></div>
   <% end %>
 
   <div class="mt-2 flex space-x-2 rtl:space-x-reverse">
