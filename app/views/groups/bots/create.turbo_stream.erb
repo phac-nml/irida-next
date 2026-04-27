@@ -4,6 +4,7 @@
                       open: @bot_account.invalid?,
                       bot_account: @bot_account,
                     } %>
+
 <% if @bot_account.persisted? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
