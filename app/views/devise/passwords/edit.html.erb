@@ -9,8 +9,10 @@
     <%= render partial: "shared/form/required_field_legend" %>
 
     <% invalid_password = resource.errors.include?(:password) %>
+
     <div class="form-field <%= 'invalid' if invalid_password %>">
       <%= f.label :password, t(".password_label"), data: { required: true } %>
+
       <%= f.password_field :password,
                        autofocus: resource.errors.none?,
                        required: true,
@@ -20,6 +22,7 @@
                          required: true,
                        },
                        autocomplete: "new-password" %>
+
       <% if invalid_password %>
         <%= render "shared/form/field_errors",
         id: f.field_id(:password, "error"),
@@ -28,12 +31,14 @@
     </div>
 
     <% invalid_password_confirmation = resource.errors.include?(:password_confirmation) %>
+
     <div class="form-field <%= 'invalid' if invalid_password_confirmation %>">
       <%= f.label :password_confirmation,
               t(".password_confirmation_label"),
               data: {
                 required: true,
               } %>
+
       <%= f.password_field :password_confirmation,
                        required: true,
                        aria: {
@@ -43,6 +48,7 @@
                          required: true,
                        },
                        autocomplete: "new-password" %>
+
       <% if invalid_password_confirmation %>
         <%= render "shared/form/field_errors",
         id: f.field_id(:password_confirmation, "error"),
