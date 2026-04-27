@@ -14,10 +14,12 @@ if Flipper.enabled?(:v2_select2, Current.user)
     { controller: "select2--v1" }
   end, html: { novalidate: true }) do |form| %>
   <% form_id = "invite-group-select2" %>
+
   <div class="grid gap-4">
     <%= form_error_summary(form, target_overrides: { group_id: form_id }) %>
 
     <%= render partial: "shared/form/required_field_legend" %>
+
     <% invalid_group_id = new_group_link.errors.include?(:group_id) %>
 
     <div class="form-field <%= 'invalid' if invalid_group_id %>">
