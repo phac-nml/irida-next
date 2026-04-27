@@ -6,9 +6,10 @@
  */
 import { Controller } from "@hotwired/stimulus";
 import debounce from "debounce";
+import { focusWhenVisible } from "utilities/focus";
 
 export default class extends Controller {
-  static targets = ["form", "emailField", "errorContainer"];
+  static targets = ["form", "emailField", "errorContainer", "summary"];
 
   static values = {
     emailMissing: { type: String },
@@ -16,9 +17,6 @@ export default class extends Controller {
   };
 
   connect() {
-    // Initialize field state
-    this.isSubmitting = false;
-
     // Validate required Stimulus values
     this.#validateRequiredValues();
 
@@ -45,18 +43,10 @@ export default class extends Controller {
   submit(event) {
     event.preventDefault();
 
-    // Prevent double submission
-    if (this.isSubmitting) return;
-
-    this.isSubmitting = true;
-
     if (this.validateEmail()) {
-      // Use requestAnimationFrame instead of setTimeout for better performance
       requestAnimationFrame(() => {
         this.formTarget.submit();
       });
-    } else {
-      this.isSubmitting = false;
     }
   }
 
@@ -79,6 +69,8 @@ export default class extends Controller {
     if (!email) {
       if (showMissingError) {
         this.showError(this.emailMissingValue, shouldFocus);
+      } else {
+        this.clearError();
       }
       return false;
     }
@@ -95,7 +87,7 @@ export default class extends Controller {
   /**
    * Shows error message and updates field styling
    * @param {string} message - The error message to display
-   * @param {boolean} shouldFocus - Whether to focus the field
+   * @param {boolean} shouldFocus - Whether to focus the summary
    */
   showError(message, shouldFocus = true) {
     const messageTextSpan =
@@ -103,11 +95,6 @@ export default class extends Controller {
     // Update error message
     messageTextSpan.textContent = message;
     this.errorContainerTarget.classList.remove("hidden");
-
-    // Generate a unique ID for ARIA attributes if needed
-    if (!this.errorContainerTarget.id) {
-      this.errorContainerTarget.id = `email-error-${Date.now()}`;
-    }
 
     // Set validity using the Constraint Validation API
     // This makes the :invalid pseudo-class active, which Tailwind's invalid: prefix uses
@@ -121,7 +108,9 @@ export default class extends Controller {
     );
 
     if (shouldFocus) {
-      this.emailFieldTarget.focus();
+      this.showSummary(message);
+    } else {
+      this.hideSummary();
     }
   }
 
@@ -138,6 +127,7 @@ export default class extends Controller {
     // Update accessibility attributes
     this.emailFieldTarget.setAttribute("aria-invalid", "false");
     this.emailFieldTarget.removeAttribute("aria-describedby");
+    this.hideSummary();
   }
 
   /**
@@ -186,5 +176,27 @@ export default class extends Controller {
     if (this.emailFormatValue === undefined) {
       throw new Error("email-format value is required");
     }
+  }
+
+  showSummary(message) {
+    if (!this.hasSummaryTarget) return;
+
+    this.summaryTarget.classList.remove("hidden");
+
+    const summaryLink = this.summaryTarget.querySelector("a");
+    if (summaryLink) {
+      summaryLink.textContent = message;
+    }
+
+    const summaryContent = this.summaryTarget.querySelector(
+      '[data-controller="form-error-summary"]',
+    );
+    focusWhenVisible(summaryContent);
+  }
+
+  hideSummary() {
+    if (!this.hasSummaryTarget) return;
+
+    this.summaryTarget.classList.add("hidden");
   }
 }
