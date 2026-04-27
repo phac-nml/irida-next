@@ -1,16 +1,6 @@
 <%= turbo_frame_tag "personal_access_token_form" do %>
   <%= form_for(personal_access_token, url: profile_personal_access_tokens_path, html: { novalidate: true }) do |f| %>
     <div class="grid gap-4">
-      <%= if personal_access_token.errors.any?
-        viral_alert(
-          type: "alert",
-          message: I18n.t(:"general.form.error_notification"),
-          aria: {
-            live: "assertive",
-          },
-        )
-      end %>
-
       <%= render partial: "shared/form/required_field_legend" %>
 
       <%= render partial: "shared/personal_access_tokens/form_fields",
