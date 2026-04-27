@@ -7,12 +7,15 @@
   <div class="mb-4">
     <%= render partial: "shared/form/required_field_legend" %>
   </div>
+
   <%= form_with(model: user, url: profile_password_path, method: :patch, html: {class: "space-y-4", novalidate: true}) do |form| %>
     <%= form_error_summary(form) %>
 
     <% invalid_current = user.errors.include?(:current_password) %>
+
     <div class="form-field <%= 'invalid' if invalid_current %>">
       <%= form.label :current_password, data: { required: true } %>
+
       <%= form.password_field :current_password,
                           required: true,
                           aria: {
@@ -30,15 +33,21 @@
                             required: true,
                           },
                           autocomplete: "current-password" %>
+
       <%= render "shared/form/field_errors",
       id: form.field_id(:current_password, "error"),
       errors: user.errors.full_messages_for(:current_password) %>
-      <p id="<%= form.field_id(:current_password, "hint") %>" class="field-hint"><%= t :"profiles.passwords.update.hint" %></p>
+
+      <p id="<%= form.field_id(:current_password, "hint") %>" class="field-hint">
+        <%= t :"profiles.passwords.update.hint" %>
+      </p>
     </div>
 
     <% invalid_password = user.errors.include?(:password) %>
+
     <div class="form-field <%= 'invalid' if invalid_password %>">
       <%= form.label :password, data: { required: true } %>
+
       <%= form.password_field :password,
                           required: true,
                           aria: {
@@ -56,6 +65,7 @@
                             required: true,
                           },
                           autocomplete: "new-password" %>
+
       <% if @minimum_password_length %>
         <p id="<%= form.field_id(:password, "hint") %>" class="field-hint">
           <%= t(
@@ -64,14 +74,17 @@
           ) %>
         </p>
       <% end %>
+
       <%= render "shared/form/field_errors",
       id: form.field_id(:password, "error"),
       errors: user.errors.full_messages_for(:password) %>
     </div>
 
     <% invalid_password_confirmation = user.errors.include?(:password_confirmation) %>
+
     <div class="form-field mt-2 <%= 'invalid' if invalid_password_confirmation %>">
       <%= form.label :password_confirmation, data: { required: true } %>
+
       <%= form.password_field :password_confirmation,
                           required: true,
                           aria: {
@@ -87,16 +100,21 @@
                             required: true,
                           },
                           autocomplete: "new-password" %>
+
       <%= render "shared/form/field_errors",
       id: form.field_id(:password_confirmation, "error"),
       errors: user.errors.full_messages_for(:password_confirmation) %>
     </div>
-    <div class="flex items-center justify-between my-2">
+
+    <div class="my-2 flex items-center justify-between">
       <%= form.submit t(:"profiles.passwords.update.submit"),
                   class: "button button-primary" %>
-      <p class="field-hint"><%= link_to t("profiles.passwords.update.forgot"),
+
+      <p class="field-hint">
+        <%= link_to t("profiles.passwords.update.forgot"),
         profile_password_path(@user),
-        class: "link" %></p>
+        class: "link" %>
+      </p>
     </div>
   <% end %>
 </div>
