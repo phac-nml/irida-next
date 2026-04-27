@@ -6,17 +6,39 @@
   <%= form_for(resource, as: resource_name, url: password_path(resource_name), data: {
     email_input_target: "form",
     action: "submit->email-input#submit"
-    }, html: { method: :post, class: "space-y-4" }) do |f| %>
+    }, html: { method: :post, class: "space-y-4", novalidate: true }) do |f| %>
+    <% if resource.errors.any? %>
+      <%= form_error_summary(f) %>
+    <% else %>
+      <% client_summary_entries = [
+           FormErrorSummaryEntryBuilder::Entry.new(
+             attribute: :email,
+             message: t('devise.passwords.new.email.required_error'),
+             target_id: f.field_id(:email)
+           )
+         ] %>
+      <%= render FormErrorSummaryComponent.new(
+        entries: client_summary_entries,
+        classes: "hidden",
+        data: { email_input_target: "summary" }
+      ) %>
+    <% end %>
+
     <div class="space-y-4">
       <%= render "devise/shared/hidden_locale_input" %>
 
       <%= render partial: "shared/form/required_field_legend" %>
 
-      <div class="form-field">
+      <% invalid_email = resource.errors.include?(:email) %>
+
+      <div class="form-field <%= 'invalid' if invalid_email %>">
         <%= f.label :email, data: { required: true } %>
+
         <%= f.email_field :email,
-                      autofocus: true,
+                      autofocus: resource.errors.none?,
                       aria: {
+                        describedby: invalid_email ? f.field_id(:email, "error") : nil,
+                        invalid: invalid_email,
                         required: true,
                       },
                       autocomplete: "email",
@@ -25,17 +47,23 @@
                                   border-slate-300 focus:ring-blue-500 focus:border-blue-500
                                   invalid:border-red-500 invalid:focus:border-red-500 invalid:focus:ring-red-500
                                 ",
-                      data: {
-                        email_input_target: "emailField",
-                        action: "input->email-input#handleInput",
-                      } %>
+                       data: {
+                         email_input_target: "emailField",
+                         action: "input->email-input#handleInput",
+                       } %>
+
+        <% if invalid_email %>
+          <%= render "shared/form/field_errors",
+          id: f.field_id(:email, "error"),
+          errors: resource.errors.full_messages_for(:email) %>
+        <% end %>
       </div>
+
       <!-- Error messages container -->
       <ul
+        id="<%= invalid_email ? nil : f.field_id(:email, 'error') %>"
         data-email-input-target="errorContainer"
-        class="
-          max-w-md text-sm text-slate-500 list-inside dark:text-slate-400 hidden
-        "
+        class="hidden max-w-md list-inside text-sm text-slate-500 dark:text-slate-400"
       >
         <li>
           <%= viral_help_text(state: :error) %>
