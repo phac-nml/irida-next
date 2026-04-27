@@ -126,6 +126,31 @@ module Groups
       assert_not_nil find(:table_row, { 'Username' => user_to_add.email })
     end
 
+    test 'invalid member create focuses the summary and linked custom control' do
+      visit group_members_path(@namespace)
+
+      click_button I18n.t(:'groups.members.index.add')
+
+      error_message = I18n.t(:'errors.format',
+                             attribute: Member.human_attribute_name(:user),
+                             message: I18n.t(:'errors.messages.blank'))
+
+      within('dialog') do
+        find('#member_access_level').find('option',
+                                          text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+        click_button I18n.t(:'groups.members.new.add_member_to_group')
+
+        assert_text error_message
+        assert_selector '[data-controller="form-error-summary"]', focused: true
+
+        within '[data-controller="form-error-summary"]' do
+          click_link error_message
+        end
+
+        assert_selector '#group-add-member-select2', focused: true
+      end
+    end
+
     test 'can remove a member from the group' do
       visit group_members_path(@namespace)
 
