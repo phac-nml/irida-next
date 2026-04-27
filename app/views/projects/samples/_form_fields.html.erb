@@ -1,12 +1,4 @@
-<%= if @sample.errors.any?
-  viral_alert(
-    type: "alert",
-    message: I18n.t(:"general.form.error_notification"),
-    aria: {
-      live: "assertive",
-    },
-  )
-end %>
+<%= form_error_summary(form) %>
 
 <%= render partial: "shared/form/required_field_legend" %>
 
