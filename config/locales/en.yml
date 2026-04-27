@@ -535,7 +535,7 @@ en:
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...
       preparing_rows: Preparing %{count} rows
-      retry_upload: Retry upload
+      retry_upload: Retry export
       save_to_server_label: Save export to server
       saved_to_server: Linelist export saved to server.
       selected: Selected
@@ -545,7 +545,7 @@ en:
       start_error: 'Unable to start export: %{message}'
       title: Linelist Export
       unexpected_error: 'Unexpected error while generating export: %{message}'
-      upload_failed: 'Upload failed: %{message}'
+      upload_failed: 'Export failed: %{message}'
       uploading_to_server: Saving linelist export to server...
       view_saved_export: View saved export
       xlsx: ".xlsx"

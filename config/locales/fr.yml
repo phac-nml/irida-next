@@ -535,7 +535,7 @@ fr:
       no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
       preparing_rows: Préparation de %{count} lignes
-      retry_upload: Réessayer le téléversement
+      retry_upload: Réessayer l’exportation
       save_to_server_label: Enregistrer l’exportation sur le serveur
       saved_to_server: Exportation de liste détaillée enregistrée sur le serveur.
       selected: Sélectionné
@@ -545,7 +545,7 @@ fr:
       start_error: 'Impossible de démarrer l’exportation : %{message}'
       title: Exportation de liste détaillée
       unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
-      upload_failed: 'Échec du téléversement : %{message}'
+      upload_failed: 'Échec de l’exportation : %{message}'
       uploading_to_server: Enregistrement de l’exportation de liste détaillée sur le serveur...
       view_saved_export: Voir l’exportation enregistrée
       xlsx: ".xlsx"
