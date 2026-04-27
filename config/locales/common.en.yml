@@ -22,6 +22,7 @@ en:
       errors:
         invalid_format: Invalid date format
         invalid_input: Invalid date input
+        invalid_max_date: Date is after maximum date
         invalid_min_date: Date is before minimum date
     labels:
       access_level: Access Level

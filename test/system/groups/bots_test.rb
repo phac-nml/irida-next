@@ -159,6 +159,54 @@ module Groups
       ### VERIFY END ###
     end
 
+    test 'can\'t create a new group bot account without missing mandatory expiration date' do
+      Irida::CurrentSettings.current_application_settings.update(require_personal_access_token_expiry: true)
+
+      ### SETUP START ###
+      visit group_bots_path(groups(:group_two))
+
+      assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
+      assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
+
+      assert_selector 'a', text: I18n.t(:'groups.bots.index.add_new_bot'), count: 1
+
+      assert_selector 'tr', count: 0
+
+      within('div.empty_state_message') do
+        assert_text I18n.t(:'bots.index.table.empty_state.title')
+        assert_text I18n.t(:'bots.index.table.empty_state.description')
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_link I18n.t(:'groups.bots.index.add_new_bot')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        assert_selector 'h1', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.title')
+        assert_selector 'p', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.description')
+
+        fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Uploader'
+        select I18n.t('activerecord.models.member.access_level.analyst'),
+               from: I18n.t(:'activerecord.attributes.member.access_level')
+
+        assert_html5_inputs_valid
+
+        click_button I18n.t('common.controls.submit')
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_selector '#new_bot_account-error-alert'
+        within('#new_bot_account-error-alert') do
+          assert_text I18n.t(:'general.form.error_notification')
+        end
+        assert_text I18n.t(:'errors.format',
+                           attribute: I18n.t(:'activerecord.attributes.personal_access_token.expires_at'),
+                           message: I18n.t(:'errors.messages.blank'))
+      end
+      ### VERIFY END ###
+    end
+
     test 'can delete a group bot account' do
       ### SETUP START ###
       visit group_bots_path(@namespace)

@@ -5,10 +5,11 @@ class DateValidator < ActiveModel::EachValidator
   class DateValidatorError < StandardError
   end
 
-  def validate_each(record, attribute, value)
+  def validate_each(record, attribute, value) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
     return true unless attribute == :expires_at # currently only handles :expires_at
 
-    expires_at_value = record.read_attribute_before_type_cast(attribute) # grab input prior to it be casted as datetime
+    # grab input prior to it be casted as datetime
+    expires_at_value = record.read_attribute_before_type_cast(attribute).to_s
 
     # validate if input match any valid date input (YYYY-MM-DD, DD-MM-YYYY, etc.)
     raise DateValidatorError, I18n.t('common.date.errors.invalid_input') if value.nil?
@@ -21,6 +22,12 @@ class DateValidator < ActiveModel::EachValidator
 
     # validate if date input is later than today's date
     raise DateValidatorError, I18n.t('common.date.errors.invalid_min_date') if value < Time.zone.today
+
+    if Irida::CurrentSettings.require_personal_access_token_expiry? &&
+       value > (Time.current + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days)
+      raise DateValidatorError,
+            I18n.t('common.date.errors.invalid_max_date')
+    end
 
     true
   rescue DateValidator::DateValidatorError => e

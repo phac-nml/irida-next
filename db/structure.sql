@@ -520,6 +520,8 @@ CREATE TABLE public.application_settings (
     password_authentication_enabled boolean DEFAULT true NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
+    require_personal_access_token_expiry boolean DEFAULT false NOT NULL,
+    max_personal_access_token_lifetime_in_days integer DEFAULT 365 NOT NULL,
     cleanup_inactive_access_tokens_after_days integer DEFAULT 30 NOT NULL
 );
 
@@ -924,7 +926,7 @@ CREATE TABLE public.site_banners (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     CONSTRAINT site_banners_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
-    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY ((ARRAY['info'::character varying, 'warning'::character varying, 'danger'::character varying, 'success'::character varying])::text[])))
+    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY (ARRAY[('info'::character varying)::text, ('warning'::character varying)::text, ('danger'::character varying)::text, ('success'::character varying)::text])))
 );
 
 
@@ -2142,10 +2144,10 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20260410170502'),
+('20260327212553'),
 ('20260306153207'),
 ('20260223130000'),
 ('20251201162848'),
-('20251029175823'),
 ('20251006195129'),
 ('20250826161932'),
 ('20250716174346'),
