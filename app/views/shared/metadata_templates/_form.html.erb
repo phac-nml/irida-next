@@ -6,7 +6,9 @@
   class="font-normal text-slate-500 dark:text-slate-400"
 >
   <%= form_for(@metadata_template, url: template_path, method:, html: { novalidate: true }) do |form| %>
+    <%= form_error_summary(form) %>
     <%= render partial: "shared/form/required_field_legend" %>
+
     <% invalid_name = @metadata_template.errors&.include?(:name) %>
     <% name_hint_id = form.field_id(:name, "hint") %>
     <% name_error_id = invalid_name ? form.field_id(:name, "error") : nil %>
@@ -30,14 +32,13 @@
           <%= form.label :name, data: { required: true } %>
 
           <%= form.text_field :name,
-                          required: true,
-                          class: "form-control",
-                          aria: {
-                            describedby: name_describedby,
-                            invalid: invalid_name,
-                            required: true,
-                          },
-                          autofocus: invalid_name %>
+                           required: true,
+                           class: "form-control",
+                           aria: {
+                             describedby: name_describedby,
+                             invalid: invalid_name,
+                             required: true,
+                           } %>
 
           <p id="<%= name_hint_id %>" class="mt-2 text-xs font-medium text-slate-600 dark:text-slate-300">
             <%= t("metadata_templates.form.name_hint") %>
@@ -54,13 +55,12 @@
           <%= form.label :description %>
 
           <%= form.text_area :description,
-                         rows: 3,
-                         class: "form-control",
-                         aria: {
-                           describedby: description_describedby,
-                           invalid: invalid_description,
-                         },
-                         autofocus: invalid_description %>
+                          rows: 3,
+                          class: "form-control",
+                          aria: {
+                            describedby: description_describedby,
+                            invalid: invalid_description,
+                          } %>
 
           <p id="<%= description_hint_id %>" class="mt-2 text-xs font-medium text-slate-600 dark:text-slate-300">
             <%= t("metadata_templates.form.description_hint") %>
