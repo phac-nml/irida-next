@@ -33,4 +33,22 @@ class RegistrationsTest < ApplicationSystemTestCase
     assert_selector '#user_email', focused: true
     assert_accessible
   end
+
+  test 'invalid account update focuses the summary and linked control' do
+    login_as users(:john_doe)
+
+    visit edit_user_registration_path
+
+    click_button I18n.t('common.actions.update')
+
+    assert_selector '[data-controller="form-error-summary"]', focused: true
+    assert_selector '#user_current_password_error', text: "Current password can't be blank"
+
+    within '[data-controller="form-error-summary"]' do
+      click_link "Current password can't be blank"
+    end
+
+    assert_selector '#user_current_password', focused: true
+    assert_accessible
+  end
 end

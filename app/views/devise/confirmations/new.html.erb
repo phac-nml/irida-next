@@ -1,15 +1,20 @@
 <h2><%= t(".title") %></h2>
 
-<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, novalidate: true }) do |f| %>
+  <%= form_error_summary(f) %>
 
   <%= render "devise/shared/hidden_locale_input" %>
 
-  <div class="field">
+  <% invalid_email = resource.errors.include?(:email) %>
+  <div class="field <%= 'invalid' if invalid_email %>">
     <%= f.label :email %><br/>
     <%= f.email_field :email,
-                  autofocus: true,
+                  autofocus: resource.errors.none?,
                   autocomplete: "email",
+                  aria: {
+                    describedby: invalid_email ? f.field_id(:email, "error") : nil,
+                    invalid: invalid_email,
+                  },
                   value:
                     (
                       if resource.pending_reconfirmation?
@@ -18,6 +23,11 @@
                         resource.email
                       end
                     ) %>
+    <% if invalid_email %>
+      <%= render "shared/form/field_errors",
+      id: f.field_id(:email, "error"),
+      errors: resource.errors.full_messages_for(:email) %>
+    <% end %>
   </div>
 
   <div class="actions">
