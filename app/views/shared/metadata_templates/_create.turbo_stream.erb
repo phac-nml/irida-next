@@ -16,7 +16,4 @@
       ) %>
     <% end %>
   <% end %>
-<% else %>
-  <%= turbo_stream.update "metadata_template_error_alert",
-                      viral_alert(type:, message:, classes: "mb-4") %>
 <% end %>
