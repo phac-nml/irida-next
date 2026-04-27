@@ -107,7 +107,7 @@ module Groups
 
       click_button I18n.t(:'groups.members.index.add')
 
-      within('dialog') do
+      within('#new-member-dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
         find('input.select2-input').click
         find("li[data-label='#{user_to_add.email}']").click
@@ -132,13 +132,15 @@ module Groups
       click_button I18n.t(:'groups.members.index.add')
 
       error_message = I18n.t(:'errors.format',
-                             attribute: Member.human_attribute_name(:user),
-                             message: I18n.t(:'errors.messages.blank'))
+                             attribute: Member.human_attribute_name(:user_id),
+                             message: I18n.t(:'errors.messages.required'))
 
-      within('dialog') do
+      within('#new-member-dialog') do
         find('#member_access_level').find('option',
                                           text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
-        click_button I18n.t(:'groups.members.new.add_member_to_group')
+        page.execute_script(
+          "document.querySelector('#new-member-dialog form').requestSubmit()"
+        )
 
         assert_text error_message
         assert_selector '[data-controller="form-error-summary"]', focused: true
@@ -308,7 +310,7 @@ module Groups
 
       click_button I18n.t(:'groups.members.index.add')
 
-      within('dialog') do
+      within('#new-member-dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
         find('input.select2-input').click
         find("li[data-label='#{user_to_add.email}']").click
@@ -339,7 +341,7 @@ module Groups
 
       click_button I18n.t(:'groups.members.index.add')
 
-      within('dialog') do
+      within('#new-member-dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
 
         find('input.select2-input').click

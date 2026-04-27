@@ -11,11 +11,11 @@
   <% form_id = "add-user-select2" %>
 
   <div class="grid gap-4">
-    <%= form_error_summary(form, target_overrides: { user: form_id }) %>
+    <%= form_error_summary(form, target_overrides: { user: form_id, user_id: form_id }) %>
 
     <%= render partial: "shared/form/required_field_legend" %>
 
-    <% invalid_user_id = @new_member.errors.include?(:user) %>
+    <% invalid_user_id = @new_member.errors.include?(:user) || @new_member.errors.include?(:user_id) %>
 
     <div class="form-field <%= 'invalid' if invalid_user_id %>">
       <%= form.label :user_id, t("projects.members.new.user_select"),
