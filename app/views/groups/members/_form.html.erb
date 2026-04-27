@@ -8,23 +8,16 @@
   else
     { controller: "select2--v1" }
   end, method: :post, html: { novalidate: true }) do |form| %>
+  <% form_id = "group-add-member-select2" %>
+
   <div class="grid gap-4">
-    <%= if @new_member.errors.any?
-      viral_alert(
-        type: "alert",
-        message: I18n.t(:"general.form.error_notification"),
-        aria: {
-          live: "assertive",
-        },
-      )
-    end %>
+    <%= form_error_summary(form, target_overrides: { user: form_id, user_id: form_id }) %>
 
     <%= render partial: "shared/form/required_field_legend" %>
-    <% invalid_user_id = @new_member.errors.include?(:user) %>
+
+    <% invalid_user_id = @new_member.errors.include?(:user) || @new_member.errors.include?(:user_id) %>
 
     <div class="form-field <%= 'invalid' if invalid_user_id %>">
-      <% form_id = "group-add-member-select2" %>
-
       <%= form.label :user_id, t("groups.members.new.user_select"),
                      for: form_id,
                      class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
@@ -82,7 +75,6 @@
                       invalid: invalid_access_level,
                       required: true,
                     },
-                    autofocus: invalid_access_level,
                     value: @new_member.access_level,
                   } %>
 
