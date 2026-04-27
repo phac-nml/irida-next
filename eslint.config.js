@@ -77,6 +77,39 @@ export default defineConfig([
     },
   },
 
+  // Test JavaScript files (Vitest + Stimulus controller tests)
+  {
+    name: "test-javascript",
+    files: ["test/javascript/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        ...globals.browser,
+        // Vitest globals (enabled via vitest.config.js globals: true)
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
+        vi: "readonly",
+        // Flowbite globals (may be stubbed in tests)
+        Tooltip: "readonly",
+        Modal: "readonly",
+        Drawer: "readonly",
+        Dropdown: "readonly",
+      },
+    },
+    rules: {
+      "no-console": ["warn", { allow: ["error", "warn"] }],
+      "prefer-const": "error",
+      "no-var": "error",
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    },
+  },
+
   // Disable Prettier-conflicting rules (must be last)
   prettierConfig,
 ]);

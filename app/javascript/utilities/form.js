@@ -89,7 +89,7 @@ export function normalizeParams(params, name, v, depth) {
 
     if (!Array.isArray(params[k])) {
       throw new ParameterTypeError(
-        `expected Array (got ${params[k].class.name}) for param \`${k}'`,
+        `expected Array (got ${params[k].constructor.name}) for param \`${k}'`,
       );
     }
 
@@ -117,7 +117,7 @@ export function normalizeParams(params, name, v, depth) {
 
     if (!Array.isArray(params[k])) {
       throw new ParameterTypeError(
-        `expected Array (got ${params[k].class.name}) for param \`${k}'`,
+        `expected Array (got ${params[k].constructor.name}) for param \`${k}'`,
       );
     }
 
@@ -133,7 +133,7 @@ export function normalizeParams(params, name, v, depth) {
 
     if (Array.isArray(params[k])) {
       throw new ParameterTypeError(
-        `expected Hash (got ${params[k].class.name}) for param \`${k}'`,
+        `expected Hash (got ${params[k].constructor.name}) for param \`${k}'`,
       );
     }
 
