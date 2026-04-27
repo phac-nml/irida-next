@@ -13,11 +13,6 @@
       ) %>
     </p>
   </div>
-
-  <div class="mb-4">
-    <%= turbo_frame_tag("personal-access-token-error-alert") %>
-  </div>
-
   <%= form_for(@personal_access_token, url: namespace_project_bot_personal_access_tokens_path, method: :post,  html: { novalidate: true}) do |form| %>
     <div class="grid gap-4">
       <%= render partial: "shared/form/required_field_legend" %>
