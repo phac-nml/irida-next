@@ -1,0 +1,23 @@
+<%= render DropdownComponent.new(
+  label: t("shared.samples.metadata_templates.label"),
+  icon: :sliders_horizontal,
+  icon_size: :sm,
+  title: t("shared.samples.metadata_templates.tooltip"),
+  trigger_id: "metadata-template-dd-trigger",
+  skidding: 0,
+  distance: 10,
+  styles: {
+    button: "button w-full button-default",
+    dropdown: "divide-y divide-slate-100 dark:divide-slate-600",
+  },
+) do |dropdown| %>
+  <% dropdown.with_custom_item do %>
+    <li>
+      <%= helpers.turbo_frame_tag "metadata-template-dd-menu", src: url, refresh: "morph", loading: :lazy do %>
+        <%= render SpinnerComponent.new(
+        message: t("shared.samples.metadata_templates.loading"),
+      ) %>
+      <% end %>
+    </li>
+  <% end %>
+<% end %>
