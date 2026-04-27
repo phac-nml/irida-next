@@ -1169,6 +1169,89 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.success')
   end
 
+  test 'select page checkbox exposes accurate state and status text' do
+    visit workflow_executions_path
+
+    select_page = find('input#select-page', visible: :all)
+    assert_not select_page.checked?
+    assert_nil select_page[:'aria-describedby']
+
+    within '#select-page-status' do
+      assert_no_text I18n.t('components.workflow_executions.table_component.select_page_state.none')
+    end
+
+    first_row_checkbox =
+      find('input[name=\'workflow_execution_ids[]\']', match: :first, visible: :all)
+    first_row_checkbox.click
+
+    select_page = find('input#select-page', visible: :all)
+    assert_not select_page.checked?
+    assert_equal false, page.evaluate_script("document.querySelector('#select-page').indeterminate")
+    assert_equal 'select-page-status', select_page[:'aria-describedby']
+
+    within '#select-page-status' do
+      assert_text I18n.t('components.workflow_executions.table_component.select_page_state.some',
+                         selected: 1,
+                         total: PAGE_SIZE)
+    end
+
+    # Ensure select-page state text is not announced via the global live region.
+    # Selection announcements should be count-only via the local selection live region.
+    assert_no_selector '#sr-status', visible: false
+
+    select_page.click
+
+    select_page = find('input#select-page', visible: :all)
+    assert select_page.checked?
+    assert_nil select_page[:'aria-describedby']
+
+    within '#select-page-status' do
+      assert_no_text I18n.t('components.workflow_executions.table_component.select_page_state.all')
+    end
+  end
+
+  test 'select page status text is localized in french' do
+    visit workflow_executions_path
+    Capybara.execute_script 'sessionStorage.clear()'
+
+    find('#language-selection-dd-trigger').click
+    within find('#language-selection-dd-trigger-menu') do
+      click_button I18n.t(:'locales.fr', locale: :fr)
+    end
+
+    within '#select-page-status' do
+      assert_no_text I18n.t('components.workflow_executions.table_component.select_page_state.none', locale: :fr)
+    end
+
+    # Ensure select-page state text is not announced via the global live region.
+    assert_no_selector '#sr-status', visible: false
+
+    first_row_checkbox =
+      find('input[name=\'workflow_execution_ids[]\']', match: :first, visible: :all)
+    first_row_checkbox.click
+
+    select_page = find('input#select-page', visible: :all)
+    assert_not select_page.checked?
+    assert_equal 'select-page-status', select_page[:'aria-describedby']
+
+    within '#select-page-status' do
+      assert_text I18n.t('components.workflow_executions.table_component.select_page_state.some',
+                         selected: 1,
+                         total: PAGE_SIZE,
+                         locale: :fr)
+    end
+
+    select_page.click
+
+    select_page = find('input#select-page', visible: :all)
+    assert select_page.checked?
+    assert_nil select_page[:'aria-describedby']
+
+    within '#select-page-status' do
+      assert_no_text I18n.t('components.workflow_executions.table_component.select_page_state.all', locale: :fr)
+    end
+  end
+
   test 'can partially cancel multiple workflows at once' do
     # attempt to cancel cancellable and non-cancellable workflows
     visit workflow_executions_path

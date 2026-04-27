@@ -72,10 +72,8 @@ module Samples
           args[:data][:'selection-total-value'] = @pagy.count
           args[:data][:'selection-action-button-outlet'] = '.action-button'
           # i18n-tasks-use t('components.samples.table_component.counts.status')
-          args[:data][:'selection-count-message-one-value'] =
-            I18n.t('components.samples.table_component.counts.status.one')
-          args[:data][:'selection-count-message-other-value'] =
-            I18n.t('components.samples.table_component.counts.status.other')
+          args[:data][:'selection-count-message-value'] =
+            I18n.t('components.samples.table_component.counts.status')
         end
 
         def wrapper_arguments

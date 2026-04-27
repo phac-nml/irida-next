@@ -2,7 +2,13 @@ import { Controller } from "@hotwired/stimulus";
 import { announce } from "utilities/live_region";
 
 export default class extends Controller {
-  static targets = ["rowSelection", "selectPage", "selected", "status"];
+  static targets = [
+    "rowSelection",
+    "selectPage",
+    "selectPageStatus",
+    "selected",
+    "status",
+  ];
   static outlets = ["action-button"];
 
   static values = {
@@ -10,8 +16,10 @@ export default class extends Controller {
       type: String,
     },
     total: Number,
-    countMessageOne: String,
-    countMessageOther: String,
+    countMessage: String,
+    selectPageNone: String,
+    selectPageSome: String,
+    selectPageAll: String,
   };
 
   #lastActiveCheckbox;
@@ -47,7 +55,9 @@ export default class extends Controller {
    */
   togglePage(event) {
     const valuesToToggle = this.rowSelectionTargets.map((row) => row.value);
-    this.#modifySelection(event.target.checked, valuesToToggle);
+    this.#modifySelection(event.target.checked, valuesToToggle, {
+      announceSelectPageStatus: false,
+    });
   }
 
   /**
@@ -84,7 +94,6 @@ export default class extends Controller {
           valuesToToggle = indices.map(
             (i) => this.rowSelectionTargets[i].value,
           );
-          this.#lastActiveCheckbox;
         } else {
           valuesToToggle = [];
         }
@@ -108,14 +117,14 @@ export default class extends Controller {
     this.update([]);
   }
 
-  update(ids, announce = true) {
+  update(ids, announce = true, options = {}) {
     if (!Array.isArray(ids)) {
       console.warn("SelectionController: ids must be an array");
       return;
     }
     // Persist selection and reflect changes in the UI
     sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
-    this.#updateUI(ids, announce);
+    this.#updateUI(ids, announce, options);
   }
 
   getOrCreateStoredItems() {
@@ -146,7 +155,7 @@ export default class extends Controller {
    * @param {Array<string>} values - array of ids to add or remove
    * @private
    */
-  #modifySelection(add, values) {
+  #modifySelection(add, values, options = {}) {
     let newStorageValue = this.getOrCreateStoredItems();
     if (add) {
       // Use a Set to deduplicate values
@@ -156,7 +165,7 @@ export default class extends Controller {
         (value) => !values.includes(value),
       );
     }
-    this.update(newStorageValue);
+    this.update(newStorageValue, true, options);
   }
 
   /**
@@ -167,7 +176,7 @@ export default class extends Controller {
    * @param {boolean} announce - whether to announce via aria-live region
    * @private
    */
-  #updateUI(ids, announce) {
+  #updateUI(ids, announce, options = {}) {
     try {
       // Set checkbox checked states based on whether their value is included
       this.rowSelectionTargets.forEach((row) => {
@@ -176,7 +185,9 @@ export default class extends Controller {
 
       this.#updateActionButtons(ids.length);
       this.#updateCounts(ids.length, announce);
-      this.#setSelectPageCheckboxValue();
+      this.#setSelectPageCheckboxValue(
+        options.announceSelectPageStatus ?? announce,
+      );
     } catch (error) {
       console.error("selectionController: Failed to update UI", error);
     }
@@ -193,16 +204,57 @@ export default class extends Controller {
     });
   }
 
-  #setSelectPageCheckboxValue() {
+  #setSelectPageCheckboxValue(shouldAnnounce) {
     if (this.hasSelectPageTarget) {
-      const uncheckedBoxes = this.rowSelectionTargets.filter(
-        (row) => !row.checked,
+      const totalOnPage = this.rowSelectionTargets.length;
+      const selectedOnPage = this.rowSelectionTargets.filter(
+        (row) => row.checked,
+      ).length;
+
+      const allChecked = totalOnPage > 0 && selectedOnPage === totalOnPage;
+      const noneChecked = selectedOnPage === 0;
+      const mixed = !allChecked && !noneChecked;
+
+      this.selectPageTarget.checked = allChecked;
+      // Do not expose an indeterminate checkbox state here because many
+      // screen readers announce it as "half checked", which is misleading
+      // when an arbitrary subset (e.g. 1 of 8) is selected.
+      this.selectPageTarget.indeterminate = false;
+      this.#updateSelectPageDescription(mixed);
+
+      this.#updateSelectPageStatusText(
+        {
+          selectedOnPage,
+          totalOnPage,
+          state: mixed ? "some" : allChecked ? "all" : "none",
+        },
+        shouldAnnounce,
       );
-      this.selectPageTarget.checked = uncheckedBoxes.length === 0;
-      this.selectPageTarget.indeterminate = !(
-        uncheckedBoxes.length === 0 ||
-        uncheckedBoxes.length === this.rowSelectionTargets.length
+    }
+  }
+
+  #updateSelectPageStatusText({ selectedOnPage, totalOnPage, state }) {
+    if (!this.hasSelectPageStatusTarget) return;
+
+    const template = state === "some" ? this.selectPageSomeValue : "";
+
+    const text = template
+      .replace("%{selected}", String(selectedOnPage))
+      .replace("%{total}", String(totalOnPage));
+
+    this.selectPageStatusTarget.textContent = text;
+  }
+
+  #updateSelectPageDescription(mixed) {
+    if (!this.hasSelectPageTarget || !this.hasSelectPageStatusTarget) return;
+
+    if (mixed) {
+      this.selectPageTarget.setAttribute(
+        "aria-describedby",
+        this.selectPageStatusTarget.id,
       );
+    } else {
+      this.selectPageTarget.removeAttribute("aria-describedby");
     }
   }
 
@@ -218,17 +270,18 @@ export default class extends Controller {
   /**
    * 🔊 Announce current selection status to an aria-live region.
    *
-   * - 🧮 Builds a localized message using one/other templates: "X of Y selected".
-   * - 🧩 Reads values from data attributes (`countMessageOneValue`, `countMessageOtherValue`).
+   * - 🧮 Builds a localized message using a single template: "X of Y selected".
+   * - 🧩 Reads value from the data attribute (`countMessageValue`).
    * - ♿ Updates the component's hidden polite live region, falling back to `#sr-status` if absent.
    *
    * @param {number} selected - Current number of selected items.
    * @private
    */
   #announceSelectionStatus(selected) {
-    // 🧮 Choose the correct i18n template based on count
-    const messageTemplate =
-      selected === 1 ? this.countMessageOneValue : this.countMessageOtherValue;
+    const messageTemplate = this.countMessageValue;
+
+    // Skip announcement if this selection context is not configured with a count template.
+    if (!messageTemplate) return;
 
     // 🔁 Interpolate counts into the template
     const message = messageTemplate
