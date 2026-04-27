@@ -8,16 +8,7 @@
     <%= render partial: "shared/form/required_field_legend" %>
   </div>
   <%= form_with(model: user, url: profile_password_path, method: :patch, html: {class: "space-y-4", novalidate: true}) do |form| %>
-
-    <%= if user.errors.any?
-      viral_alert(
-        type: "alert",
-        message: I18n.t(:"general.form.error_notification"),
-        aria: {
-          live: "assertive",
-        },
-      )
-    end %>
+    <%= form_error_summary(form) %>
 
     <% invalid_current = user.errors.include?(:current_password) %>
     <div class="form-field <%= 'invalid' if invalid_current %>">
@@ -40,6 +31,7 @@
                           },
                           autocomplete: "current-password" %>
       <%= render "shared/form/field_errors",
+      id: form.field_id(:current_password, "error"),
       errors: user.errors.full_messages_for(:current_password) %>
       <p id="<%= form.field_id(:current_password, "hint") %>" class="field-hint"><%= t :"profiles.passwords.update.hint" %></p>
     </div>
@@ -73,6 +65,7 @@
         </p>
       <% end %>
       <%= render "shared/form/field_errors",
+      id: form.field_id(:password, "error"),
       errors: user.errors.full_messages_for(:password) %>
     </div>
 
@@ -95,6 +88,7 @@
                           },
                           autocomplete: "new-password" %>
       <%= render "shared/form/field_errors",
+      id: form.field_id(:password_confirmation, "error"),
       errors: user.errors.full_messages_for(:password_confirmation) %>
     </div>
     <div class="flex items-center justify-between my-2">
