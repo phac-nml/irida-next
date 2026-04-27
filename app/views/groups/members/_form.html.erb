@@ -9,10 +9,12 @@
     { controller: "select2--v1" }
   end, method: :post, html: { novalidate: true }) do |form| %>
   <% form_id = "group-add-member-select2" %>
+
   <div class="grid gap-4">
     <%= form_error_summary(form, target_overrides: { user: form_id }) %>
 
     <%= render partial: "shared/form/required_field_legend" %>
+
     <% invalid_user_id = @new_member.errors.include?(:user) %>
 
     <div class="form-field <%= 'invalid' if invalid_user_id %>">
