@@ -17,6 +17,10 @@ module DataExports
           helpers.api_graphql_path
         end
 
+        def upload_url
+          helpers.upload_data_exports_path
+        end
+
         def sample_graphql_id_prefix
           "gid://#{GlobalID.app}/Sample/"
         end
