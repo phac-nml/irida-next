@@ -36,6 +36,7 @@ require 'test_helpers/workflow_execution_advanced_search_helper'
 require 'test_helpers/dashboard_sorting_helper'
 require 'test_helpers/sorting_test_helper'
 require 'test_helpers/w3c_validation_helpers'
+require 'test_helpers/user_opt_in_features_test_helper'
 require 'turbo/broadcastable/test_helper'
 require 'minitest/retry'
 
@@ -74,6 +75,7 @@ module ActiveSupport
     include Turbo::Broadcastable::TestHelper
     include W3cValidationHelpers
     include SortingTestHelper
+    include UserOptInFeaturesTestHelper
 
     PublicActivity.enabled = true
   end
