@@ -3,6 +3,7 @@
   <% card.with_section do %>
     <%= form_with(model: @group, url: group_path, method: :patch, html: { novalidate: true }) do |form| %>
       <div class="grid gap-4">
+        <%= form_error_summary(form) %>
         <p class="text-slate-600 dark:text-slate-400">
           <%= t(:"groups.edit.advanced.path.description") %>
         </p>
@@ -38,15 +39,14 @@
                                 title: @group.path,
                                 class:
                                   "text-ellipsis overflow-hidden border-slate-300 text-slate-800 sm:text-sm rounded-r-lg @md:!rounded-l-none",
-                                aria: {
-                                  describedby: [
-                                    invalid_path ? form.field_id(:path, "error") : nil,
-                                    form.field_id(:path, "hint"),
-                                  ].join(" "),
-                                  invalid: invalid_path,
-                                  required: true,
-                                },
-                                autofocus: invalid_path %>
+                                 aria: {
+                                   describedby: [
+                                     invalid_path ? form.field_id(:path, "error") : nil,
+                                     form.field_id(:path, "hint"),
+                                   ].join(" "),
+                                   invalid: invalid_path,
+                                   required: true,
+                                 } %>
               </div>
             </div>
             <% if invalid_path %>

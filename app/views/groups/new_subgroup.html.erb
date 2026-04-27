@@ -11,16 +11,6 @@
     { controller: "select2--v1" }
   end, html: { novalidate: true }) do |form| %>
     <div class="grid gap-4">
-      <%= if @new_group.errors.any?
-        viral_alert(
-          type: "alert",
-          message: I18n.t(:"general.form.error_notification"),
-          aria: {
-            live: "assertive",
-          },
-        )
-      end %>
-
       <%= render partial: "form_fields",
       locals: {
         form: form,

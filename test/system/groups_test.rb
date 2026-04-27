@@ -44,10 +44,14 @@ class GroupsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t(:'general.form.error_notification')
+    assert_text 'Group name is too short'
+    assert_selector '[data-controller="form-error-summary"]', focused: true
+
+    within '[data-controller="form-error-summary"]' do
+      click_link 'Group name is too short'
+    end
 
     assert_selector '#group_name', focused: true
-
-    assert_text 'Group name is too short'
     assert_current_path '/-/groups/new'
   end
 
@@ -61,10 +65,14 @@ class GroupsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t(:'general.form.error_notification')
+    assert_text 'Group name has already been taken'
+    assert_selector '[data-controller="form-error-summary"]', focused: true
+
+    within '[data-controller="form-error-summary"]' do
+      click_link 'Group name has already been taken'
+    end
 
     assert_selector '#group_name', focused: true
-
-    assert_text 'Group name has already been taken'
     assert_current_path '/-/groups/new'
   end
 
@@ -78,10 +86,14 @@ class GroupsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t(:'general.form.error_notification')
+    assert_text 'Description is too long'
+    assert_selector '[data-controller="form-error-summary"]', focused: true
+
+    within '[data-controller="form-error-summary"]' do
+      click_link 'Description is too long'
+    end
 
     assert_selector '#group_description', focused: true
-
-    assert_text 'Description is too long'
     assert_current_path '/-/groups/new'
   end
 
@@ -96,10 +108,14 @@ class GroupsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t(:'general.form.error_notification')
+    assert_text 'Path has already been taken'
+    assert_selector '[data-controller="form-error-summary"]', focused: true
+
+    within '[data-controller="form-error-summary"]' do
+      click_link 'Path has already been taken'
+    end
 
     assert_selector '#group_path', focused: true
-
-    assert_text 'Path has already been taken'
     assert_current_path '/-/groups/new'
   end
 
