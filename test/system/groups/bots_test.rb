@@ -143,18 +143,22 @@ module Groups
                from: I18n.t(:'activerecord.attributes.member.access_level')
 
         assert_html5_inputs_valid
+      end
+      ### ACTIONS END ###
 
-        click_button I18n.t('common.controls.submit')
-        ### ACTIONS END ###
+      click_button I18n.t('common.controls.submit')
 
-        ### VERIFY START ###
-        assert_selector '#new_bot_account-error-alert'
-        within('#new_bot_account-error-alert') do
+      ### VERIFY START ###
+      # Turbo replaces the frame; do not assert inside a stale within('#dialog') from before submit.
+      within('#bot_modal') do
+        assert_selector '[data-controller="form-error-summary"]'
+        within('[data-controller="form-error-summary"]') do
+          assert_text I18n.t(:'general.form.error_summary.title', count: 1)
           assert_text I18n.t(:'general.form.error_notification')
+          assert_text I18n.t(:'errors.format',
+                             attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
+                             message: I18n.t(:'errors.messages.blank'))
         end
-        assert_text I18n.t(:'errors.format',
-                           attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
-                           message: I18n.t(:'errors.messages.blank'))
       end
       ### VERIFY END ###
     end

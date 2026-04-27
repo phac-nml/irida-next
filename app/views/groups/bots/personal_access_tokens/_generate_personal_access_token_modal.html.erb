@@ -5,6 +5,7 @@
         "groups.bots.index.bot_listing.generate_personal_access_token_modal.title",
       ),
   ) %>
+
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">
       <%= t(
@@ -14,26 +15,21 @@
     </p>
   </div>
 
-  <div class="mb-4">
-    <%= turbo_frame_tag("personal-access-token-error-alert") %>
-  </div>
-
   <%= form_for(@personal_access_token, url: group_bot_personal_access_tokens_path, method: :post, html: { novalidate: true}) do |form| %>
     <div class="grid gap-4">
       <%= render partial: "shared/form/required_field_legend" %>
+
       <%= render partial: "shared/personal_access_tokens/form_fields",
       locals: {
         pat: @personal_access_token,
         form: form,
       } %>
     </div>
+
     <div class="mt-4">
       <%= form.submit t('common.controls.submit'), class: "button button-primary" %>
-      <button
-        type="button"
-        class="button button-default"
-        data-action="click->viral--dialog#close"
-      >
+
+      <button type="button" class="button button-default" data-action="click->viral--dialog#close">
         <%= t('common.actions.cancel') %>
       </button>
     </div>

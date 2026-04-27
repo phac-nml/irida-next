@@ -4,7 +4,7 @@
                       open: @bot_account.invalid?,
                       bot_account: @bot_account,
                     } %>
-<%= turbo_stream.update "new_bot_account-error-alert", viral_alert(type:, message:) %>
+
 <% if @bot_account.persisted? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
@@ -15,6 +15,5 @@
                          bot_account_name: @bot_account.user.email,
                          token: personal_access_token.token,
                        } %>
-
   <turbo-stream action="refresh"></turbo-stream>
 <% end %>
