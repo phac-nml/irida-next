@@ -127,13 +127,11 @@
               <%= sortable_lists.with_list(
                 id: "available-list",
                 title: t(".available"),
-                group: "metadata_selection",
               ) %>
 
               <%= sortable_lists.with_list(
                 id: "selected-list",
                 title: t(".selected"),
-                group: "metadata_selection",
                 required: true,
               ) %>
             <% end %>

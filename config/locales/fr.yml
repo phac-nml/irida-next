@@ -2047,7 +2047,6 @@ fr:
     sortable_lists:
       aria_live_update:
         added: 'Les options suivantes ont été ajoutées : '
-        list_order_changed: 'L’ordre des options a changé pour la liste LIST_PLACEHOLDER. L’ordre est le suivant : '
         move_down: L’option OPTION_PLACEHOLDER a été déplacée vers le bas.
         move_up: L’option OPTION_PLACEHOLDER a été déplacée vers le haut.
         removed: 'Les options suivantes ont été retirées : '
