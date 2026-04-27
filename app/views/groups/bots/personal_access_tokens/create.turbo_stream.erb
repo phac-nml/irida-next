@@ -4,6 +4,7 @@
                       open: @personal_access_token.errors.any?,
                       personal_access_token: @personal_access_token,
                     } %>
+
 <% if @personal_access_token.persisted? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
