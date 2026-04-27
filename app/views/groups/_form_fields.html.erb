@@ -1,3 +1,5 @@
+<%= form_error_summary(form, target_overrides: { parent_id: "namespace-select" }) %>
+
 <%= render partial: "shared/form/required_field_legend" %>
 
 <% invalid_name = group.errors.include?(:name) %>
@@ -15,15 +17,14 @@
                   pattern: "[a-zA-Z0-9_\\-\\.\\s\\p{Emoji}]+",
                   placeholder: t(:"groups.create.name_placeholder"),
                   required: true,
-                  aria: {
-                    describedby: [
-                      invalid_name ? form.field_id(:name, "error") : nil,
-                      form.field_id(:name, "hint"),
-                    ].join(" "),
-                    invalid: invalid_name,
-                    required: true,
-                  },
-                  autofocus: invalid_name %>
+                   aria: {
+                     describedby: [
+                       invalid_name ? form.field_id(:name, "error") : nil,
+                       form.field_id(:name, "hint"),
+                     ].join(" "),
+                     invalid: invalid_name,
+                     required: true,
+                   } %>
 
   <% if invalid_name %>
     <%= render "shared/form/field_errors",
@@ -91,15 +92,14 @@
                         maxlength: 255,
                         pattern: Irida::PathRegex::PATH_REGEX_STR,
                         required: true,
-                        aria: {
-                          describedby: [
-                            invalid_path ? form.field_id(:path, "error") : nil,
-                            form.field_id(:path, "hint"),
-                          ].join(" "),
-                          invalid: invalid_path,
-                          required: true,
-                        },
-                        autofocus: invalid_path %>
+                         aria: {
+                           describedby: [
+                             invalid_path ? form.field_id(:path, "error") : nil,
+                             form.field_id(:path, "hint"),
+                           ].join(" "),
+                           invalid: invalid_path,
+                           required: true,
+                         } %>
 
         <% if invalid_path %>
           <%= render "shared/form/field_errors",
@@ -121,15 +121,14 @@
                       },
                       pattern: Irida::PathRegex::PATH_REGEX_STR,
                       required: true,
-                      aria: {
-                        describedby: [
-                          invalid_path ? form.field_id(:path, "error") : nil,
-                          form.field_id(:path, "hint"),
-                        ].join(" "),
-                        invalid: invalid_path,
-                        required: true,
-                      },
-                      autofocus: invalid_path %>
+                       aria: {
+                         describedby: [
+                           invalid_path ? form.field_id(:path, "error") : nil,
+                           form.field_id(:path, "hint"),
+                         ].join(" "),
+                         invalid: invalid_path,
+                         required: true,
+                       } %>
 
       <% if invalid_path %>
         <%= render "shared/form/field_errors",
@@ -159,10 +158,9 @@
                        end
                      ),
                      form.field_id(:description, "hint"),
-                   ].join(" "),
-                   "aria-invalid" => invalid_description,
-                   :autofocus => invalid_description,
-                 } %>
+                    ].join(" "),
+                    "aria-invalid" => invalid_description,
+                  } %>
 
   <% if invalid_description %>
     <%= render "shared/form/field_errors",
