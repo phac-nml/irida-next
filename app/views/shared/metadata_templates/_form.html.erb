@@ -8,6 +8,7 @@
   <%= form_for(@metadata_template, url: template_path, method:, html: { novalidate: true }) do |form| %>
     <%= form_error_summary(form) %>
     <%= render partial: "shared/form/required_field_legend" %>
+
     <% invalid_name = @metadata_template.errors&.include?(:name) %>
     <% name_hint_id = form.field_id(:name, "hint") %>
     <% name_error_id = invalid_name ? form.field_id(:name, "error") : nil %>
@@ -30,7 +31,7 @@
         <div class="form-field <%= 'invalid' if invalid_name %>">
           <%= form.label :name, data: { required: true } %>
 
-           <%= form.text_field :name,
+          <%= form.text_field :name,
                            required: true,
                            class: "form-control",
                            aria: {
@@ -53,7 +54,7 @@
         <div class="form-field <%= 'invalid' if invalid_description %>">
           <%= form.label :description %>
 
-           <%= form.text_area :description,
+          <%= form.text_area :description,
                           rows: 3,
                           class: "form-control",
                           aria: {
