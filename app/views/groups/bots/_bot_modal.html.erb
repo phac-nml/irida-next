@@ -65,6 +65,8 @@
               <%= t("groups.bots.index.bot_listing.new_bot_modal.token_details") %>
             </p>
 
+            <%= form_error_summary(pat_fields) %>
+
             <%= render partial: "shared/personal_access_tokens/form_fields",
             locals: {
               pat: @bot_account.user.personal_access_tokens[0],
