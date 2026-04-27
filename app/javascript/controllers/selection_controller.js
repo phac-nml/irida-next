@@ -16,8 +16,7 @@ export default class extends Controller {
       type: String,
     },
     total: Number,
-    countMessageOne: String,
-    countMessageOther: String,
+    countMessage: String,
     selectPageNone: String,
     selectPageSome: String,
     selectPageAll: String,
@@ -271,17 +270,18 @@ export default class extends Controller {
   /**
    * 🔊 Announce current selection status to an aria-live region.
    *
-   * - 🧮 Builds a localized message using one/other templates: "X of Y selected".
-   * - 🧩 Reads values from data attributes (`countMessageOneValue`, `countMessageOtherValue`).
+   * - 🧮 Builds a localized message using a single template: "X of Y selected".
+   * - 🧩 Reads value from the data attribute (`countMessageValue`).
    * - ♿ Updates the component's hidden polite live region, falling back to `#sr-status` if absent.
    *
    * @param {number} selected - Current number of selected items.
    * @private
    */
   #announceSelectionStatus(selected) {
-    // 🧮 Choose the correct i18n template based on count
-    const messageTemplate =
-      selected === 1 ? this.countMessageOneValue : this.countMessageOtherValue;
+    const messageTemplate = this.countMessageValue;
+
+    // Skip announcement if this selection context is not configured with a count template.
+    if (!messageTemplate) return;
 
     // 🔁 Interpolate counts into the template
     const message = messageTemplate

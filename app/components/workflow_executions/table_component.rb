@@ -95,10 +95,8 @@ module WorkflowExecutions
         controller: 'selection',
         'selection-total-value': @pagy.count,
         'selection-action-button-outlet': '.action-button',
-        'selection-count-message-one-value':
-          I18n.t('components.workflow_executions.table_component.counts.one'),
-        'selection-count-message-other-value':
-          I18n.t('components.workflow_executions.table_component.counts.other'),
+        'selection-count-message-value':
+          I18n.t('components.workflow_executions.table_component.counts.status'),
         'selection-select-page-none-value':
           I18n.t('components.workflow_executions.table_component.select_page_state.none'),
         'selection-select-page-some-value':
