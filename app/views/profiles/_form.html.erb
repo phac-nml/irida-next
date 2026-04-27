@@ -1,15 +1,5 @@
 <%= form_with(model: user, url: profile_path, method: :patch, html: { novalidate: true }) do |f| %>
-
-  <%= if user.errors.any?
-    viral_alert(
-      type: "alert",
-      message: I18n.t(:"general.form.error_notification"),
-      aria: {
-        live: "assertive",
-      },
-      classes: "mb-2",
-    )
-  end %>
+  <%= form_error_summary(f, classes: "mb-2") %>
 
   <%= render partial: "shared/form/required_field_legend" %>
 
