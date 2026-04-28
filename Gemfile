@@ -112,7 +112,7 @@ gem 'azure-blob', github: 'phac-nml/azure-blob', branch: 'put-blob-from-url_sing
 gem 'google-cloud-storage', '~> 1.59', require: false
 
 # job queueing
-gem 'good_job', '~> 4.14.2'
+gem 'good_job', '~> 4.18.2'
 
 # spreadsheet parser [https://github.com/roo-rb/roo]
 gem 'roo', '~> 3.0.0'
