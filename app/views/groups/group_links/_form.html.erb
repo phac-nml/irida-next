@@ -14,9 +14,13 @@ if Flipper.enabled?(:v2_select2, Current.user)
     { controller: "select2--v1" }
   end, html: { novalidate: true }) do |form| %>
   <% form_id = "invite-group-select2" %>
+  <% expires_at_input_id = "#{form.field_id(:expires_at)}-input" %>
 
   <div class="grid gap-4">
-    <%= form_error_summary(form, target_overrides: { group_id: form_id }) %>
+    <%= form_error_summary(
+      form,
+      target_overrides: { group_id: form_id, expires_at: expires_at_input_id }
+    ) %>
 
     <%= render partial: "shared/form/required_field_legend" %>
 
