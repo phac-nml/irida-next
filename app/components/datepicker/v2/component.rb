@@ -133,6 +133,9 @@ module Datepicker
           @calendar_arguments.delete(:classes)
         )
 
+        @calendar_arguments[:role] = 'dialog'
+        @calendar_arguments[:aria] = { modal: 'true', label: 'choose date' } # TODO: localize
+
         @calendar_arguments[:data] ||= {}
         @calendar_arguments[:data][:controller] = 'datepicker--v2--calendar'
         @calendar_arguments[:data]['datepicker--v2--calendar-datepicker--v2--input-outlet'] =
