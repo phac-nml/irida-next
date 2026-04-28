@@ -209,19 +209,13 @@
 
       <div id="table-filter" role="presentation" class="contents"><%= render partial: "table_filter" %></div>
 
-      <%= render partial: "shared/samples/metadata_template_dropdown",
-      locals: {
-        url:
-          list_namespace_project_metadata_templates_url(
-            @project.namespace.parent,
-            @project,
-            metadata_template: @metadata_template[:id],
-            limit: @pagy&.limit,
-            page: @pagy&.page,
-          ),
-        metadata_template: @metadata_template,
-        pagy: @pagy,
-      } %>
+      <%= render MetadataTemplates::DropdownComponent.new(
+      url:
+        list_namespace_project_metadata_templates_url(
+          @project.namespace.parent, @project, metadata_template: @metadata_template[:id],
+          limit: @pagy&.limit, page: @pagy&.page
+        )
+      ) %>
     </div>
   <% end %>
 
