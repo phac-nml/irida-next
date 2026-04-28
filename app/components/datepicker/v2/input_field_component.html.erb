@@ -25,7 +25,6 @@
     data-action="
       change->datepicker--v2--input#directInput
       keydown->datepicker--v2--input#handleEnterDirectInput
-      click->datepicker--v2--input#openCalendar
     "
     type="text"
     name="<%= @input_name %>"
@@ -34,6 +33,10 @@
       rounded-lg border-slate-300 p-2.5 ps-10 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800
       dark:text-white dark:placeholder-slate-400
     "
+    role="combobox"
+    aria-haspopup="dialog"
+    aria-autocomplete="none"
+    aria-controls="<%= @calendar_id %>"
     <% if @input_aria_label %>
       aria-label="<%= @input_aria_label %>"
     <% end %>
