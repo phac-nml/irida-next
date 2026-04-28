@@ -1,36 +1,40 @@
 <%= viral_card do |card| %>
   <% card.with_header(title: t(:"groups.edit.advanced.path.title")) %>
+
   <% card.with_section do %>
     <%= form_with(model: @group, url: group_path, method: :patch, html: { novalidate: true }) do |form| %>
       <div class="grid gap-4">
+        <%= form_error_summary(form) %>
+
         <p class="text-slate-600 dark:text-slate-400">
           <%= t(:"groups.edit.advanced.path.description") %>
         </p>
+
         <%= render partial: "shared/form/required_field_legend" %>
+
         <% invalid_path = @group.errors.include?(:path) %>
+
         <div class="form-field <%= 'invalid' if invalid_path %>">
           <div class="@container">
             <%= form.label :path, data: { required: true } %>
+
             <div class="flex flex-row @max-md:flex-col">
               <div
                 class="
-                  text-ellipsis overflow-hidden px-4 py-2 text-sm font-medium text-slate-700
-                  bg-slate-100 border @md:border-r-0 border-slate-300 rounded-l-lg rounded-r-lg
-                  @md:!rounded-r-none dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600
-                  whitespace-nowrap max-w-md
+                  max-w-md overflow-hidden rounded-l-lg rounded-r-lg border border-slate-300 bg-slate-100 px-4 py-2
+                  text-sm font-medium text-ellipsis whitespace-nowrap text-slate-700 @md:!rounded-r-none
+                  @md:border-r-0 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300
                 "
                 title="<%= "#{root_url}#{@group&.parent&.full_path}" %>"
               >
-
                 <% if @group.parent %>
                   <%= root_url %>
-                  <span class="font-bold">
-                    <%= @group.parent.full_path + "/" %>
-                  </span>
+                  <span class="font-bold"><%= @group.parent.full_path + "/" %></span>
                 <% else %>
                   <%= root_url %>
                 <% end %>
               </div>
+
               <div class="grow">
                 <%= form.text_field :path,
                                 pattern: Irida::PathRegex::PATH_REGEX_STR,
@@ -38,27 +42,29 @@
                                 title: @group.path,
                                 class:
                                   "text-ellipsis overflow-hidden border-slate-300 text-slate-800 sm:text-sm rounded-r-lg @md:!rounded-l-none",
-                                aria: {
-                                  describedby: [
-                                    invalid_path ? form.field_id(:path, "error") : nil,
-                                    form.field_id(:path, "hint"),
-                                  ].join(" "),
-                                  invalid: invalid_path,
-                                  required: true,
-                                },
-                                autofocus: invalid_path %>
+                                 aria: {
+                                   describedby: [
+                                     invalid_path ? form.field_id(:path, "error") : nil,
+                                     form.field_id(:path, "hint"),
+                                   ].join(" "),
+                                   invalid: invalid_path,
+                                   required: true,
+                                 } %>
               </div>
             </div>
+
             <% if invalid_path %>
               <%= render "shared/form/field_errors",
               id: form.field_id(:path, "error"),
               errors: @group.errors.full_messages_for(:path) %>
             <% end %>
+
             <span id="<%= form.field_id(:path, "hint") %>" class="field-hint">
               <%== t(:"groups.create.path_help") %>
             </span>
           </div>
         </div>
+
         <div>
           <%= form.submit t(:"groups.edit.advanced.path.submit"),
                       data: {
