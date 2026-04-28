@@ -394,18 +394,23 @@ export default class extends Controller {
     if (minDate) {
       if (selectedDate && this.#selectedDate > this.#minDate) {
         selectedDate.tabIndex = 0;
+        return;
       } else if (today && this.#todaysFormattedFullDate > this.#minDate) {
         today.tabIndex = 0;
-      } else {
+        return;
+      } else if (verifyDateIsInMonth(minDate)) {
         minDate.tabIndex = 0;
+        return;
       }
     } else if (selectedDate && verifyDateIsInMonth(selectedDate)) {
       selectedDate.tabIndex = 0;
+      return;
     } else if (today && verifyDateIsInMonth(today)) {
       today.tabIndex = 0;
-    } else {
-      getFirstOfMonthNode(this.calendarTarget).tabIndex = 0;
+      return;
     }
+
+    getFirstOfMonthNode(this.calendarTarget).tabIndex = 0;
   }
 
   #setBackButton() {

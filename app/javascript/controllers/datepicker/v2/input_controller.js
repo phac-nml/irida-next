@@ -175,7 +175,7 @@ export default class extends Controller {
     this.#shareParamsWithCalendar();
   }
 
-  openCalendar() {
+  toggleCalendar() {
     if (!this.#floatingDropdown.isVisible()) {
       this.#floatingDropdown.show();
     } else {
@@ -282,7 +282,7 @@ export default class extends Controller {
       event.preventDefault();
       this.directInput(event);
     } else if (event.key === "ArrowDown") {
-      this.openCalendar();
+      this.toggleCalendar();
       this.datepickerV2CalendarOutlet.focusCurrentDate();
     }
   }
