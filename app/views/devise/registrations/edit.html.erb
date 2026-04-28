@@ -1,60 +1,107 @@
 <h2><%= t(".title", resource_name: resource_name.to_s.humanize) %></h2>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, novalidate: true }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= form_error_summary(f) %>
   <%= render partial: "shared/form/required_field_legend" %>
 
   <%= render "devise/shared/hidden_locale_input", form: f %>
 
-  <div class="form-field">
-    <%= f.label :email, data: { required: true } %><br/>
+  <% invalid_email = resource.errors.include?(:email) %>
+
+  <div class="form-field <%= 'invalid' if invalid_email %>">
+    <%= f.label :email, data: { required: true } %><br>
+
     <%= f.email_field :email,
-                  autofocus: true,
+                  autofocus: resource.errors.none?,
                   required: true,
                   aria: {
+                    describedby: invalid_email ? f.field_id(:email, "error") : nil,
+                    invalid: invalid_email,
                     required: true,
                   },
                   autocomplete: "email" %>
+
+    <% if invalid_email %>
+      <%= render "shared/form/field_errors",
+      id: f.field_id(:email, "error"),
+      errors: resource.errors.full_messages_for(:email) %>
+    <% end %>
   </div>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
     <div><%= t(".confirmation_message", email: @resource.unconfirmed_email) %></div>
   <% end %>
 
-  <div class="form-field">
+  <% invalid_password = resource.errors.include?(:password) %>
+
+  <div class="form-field <%= 'invalid' if invalid_password %>">
     <%= f.label :password, data: { required: true } %>
-    <i><%= t(".password_blank_hint") %></i><br/>
+    <i><%= t(".password_blank_hint") %></i><br>
+
     <%= f.password_field :password,
                      required: true,
                      aria: {
+                       describedby: invalid_password ? f.field_id(:password, "error") : nil,
+                       invalid: invalid_password,
                        required: true,
                      },
                      autocomplete: "new-password" %>
+
     <% if @minimum_password_length %>
-      <br/>
+      <br>
       <em><%= t(".password_length_hint", minimum_password_length: @minimum_password_length) %></em>
+    <% end %>
+
+    <% if invalid_password %>
+      <%= render "shared/form/field_errors",
+      id: f.field_id(:password, "error"),
+      errors: resource.errors.full_messages_for(:password) %>
     <% end %>
   </div>
 
-  <div class="form-field">
-    <%= f.label :password_confirmation, data: { required: true } %><br/>
+  <% invalid_password_confirmation = resource.errors.include?(:password_confirmation) %>
+
+  <div class="form-field <%= 'invalid' if invalid_password_confirmation %>">
+    <%= f.label :password_confirmation, data: { required: true } %><br>
+
     <%= f.password_field :password_confirmation,
                      required: true,
                      aria: {
+                       describedby:
+                         invalid_password_confirmation ? f.field_id(:password_confirmation, "error") : nil,
+                       invalid: invalid_password_confirmation,
                        required: true,
                      },
                      autocomplete: "new-password" %>
+
+    <% if invalid_password_confirmation %>
+      <%= render "shared/form/field_errors",
+      id: f.field_id(:password_confirmation, "error"),
+      errors: resource.errors.full_messages_for(:password_confirmation) %>
+    <% end %>
   </div>
 
-  <div class="form-field">
+  <% invalid_current_password = resource.errors.include?(:current_password) %>
+
+  <div class="form-field <%= 'invalid' if invalid_current_password %>">
     <%= f.label :current_password, data: { required: true } %>
-    <i><%= t(".current_password_hint") %></i><br/>
+    <i><%= t(".current_password_hint") %></i><br>
+
     <%= f.password_field :current_password,
                      required: true,
                      aria: {
+                       describedby:
+                         invalid_current_password ? f.field_id(:current_password, "error") : nil,
+                       invalid: invalid_current_password,
                        required: true,
                      },
                      autocomplete: "current-password" %>
+
+    <% if invalid_current_password %>
+      <%= render "shared/form/field_errors",
+      id: f.field_id(:current_password, "error"),
+      errors: resource.errors.full_messages_for(:current_password) %>
+    <% end %>
   </div>
 
   <div class="actions">
@@ -64,13 +111,16 @@
 
 <h3><%= t(".cancel_title") %></h3>
 
-<div><%= t(".unhappy") %>
+<div>
+  <%= t(".unhappy") %>
+
   <%= button_to t(".cancel_button"),
   registration_path(resource_name),
   data: {
     confirm: t(".cancel_confirmation"),
     turbo_confirm: t(".cancel_confirmation"),
   },
-  method: :delete %></div>
+  method: :delete %>
+</div>
 
 <%= link_to t(".back_link"), :back %>
