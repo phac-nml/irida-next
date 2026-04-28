@@ -395,6 +395,7 @@ export default class extends Controller {
     // Keep visual precedence clear: disabled dates should not also look selected/today.
     if (selectedDate && selectedDate.getAttribute("aria-disabled") !== "true") {
       this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
+      selectedDate.setAttribute("aria-selected", "true");
     }
 
     // don't need to add 'today' styling if today == selectedDate
@@ -629,8 +630,12 @@ export default class extends Controller {
       this.datepickerV2InputOutlet.disableInputErrorState();
     }
 
-    this.datepickerV2InputOutlet.hideCalendar();
-    this.datepickerV2InputOutlet.focusNextFocusableElement();
+    if (event.key === " ") {
+      this.focusCurrentDate();
+    } else {
+      this.datepickerV2InputOutlet.hideCalendar();
+      this.datepickerV2InputOutlet.focusDatepickerInput();
+    }
   }
 
   // clear selection by clicking clear button
@@ -640,10 +645,6 @@ export default class extends Controller {
     if (this.#autosubmit) {
       this.datepickerV2InputOutlet.submitDate();
     }
-
-    this.datepickerV2InputOutlet.disableInputErrorState();
-    this.datepickerV2InputOutlet.hideCalendar();
-    this.datepickerV2InputOutlet.focusNextFocusableElement();
   }
 
   // handles ArrowLeft/Right keyboard navigation
