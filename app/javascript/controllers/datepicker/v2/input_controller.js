@@ -53,8 +53,6 @@ export default class extends Controller {
       this.#setMinDate();
     }
 
-    this.boundHandleDatepickerInputFocus =
-      this.handleDatepickerInputFocus.bind(this);
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
@@ -70,20 +68,10 @@ export default class extends Controller {
     // Position the calendar
     this.#initializeDropdown();
 
-    this.datepickerInputTarget.addEventListener(
-      "focus",
-      this.boundHandleDatepickerInputFocus,
-    );
-
     this.#findNextFocusableElement();
   }
 
   disconnect() {
-    this.datepickerInputTarget.removeEventListener(
-      "focus",
-      this.boundHandleDatepickerInputFocus,
-    );
-
     this.#floatingDropdown?.destroy();
     this.#floatingDropdown = null;
 
@@ -187,9 +175,11 @@ export default class extends Controller {
     this.#shareParamsWithCalendar();
   }
 
-  handleDatepickerInputFocus() {
+  openCalendar() {
     if (!this.#floatingDropdown.isVisible()) {
       this.#floatingDropdown.show();
+    } else {
+      this.#floatingDropdown.hide();
     }
   }
 
@@ -232,20 +222,19 @@ export default class extends Controller {
       !event.shiftKey
     ) {
       event.preventDefault();
-      this.hideCalendar();
-      this.focusNextFocusableElement();
+      this.datepickerV2CalendarOutlet.getFirstFocusableElement().focus();
       return;
     }
 
-    // If we Tab while on the datepicker input, Shift+Tab should close the datepicker,
-    // while Tab focuses on the first focusable element within the calendar
-    if (event.key === "Tab" && event.target === this.datepickerInputTarget) {
-      if (event.shiftKey) {
-        this.hideCalendar();
-      } else if (!event.shiftKey) {
-        event.preventDefault();
-        this.datepickerV2CalendarOutlet.getFirstFocusableElement().focus();
-      }
+    if (
+      event.key === "Tab" &&
+      event.shiftKey &&
+      event.target ===
+        this.datepickerV2CalendarOutlet.getFirstFocusableElement()
+    ) {
+      event.preventDefault();
+      this.datepickerV2CalendarOutlet.getLastFocusableElement().focus();
+      return;
     }
   }
 
@@ -292,6 +281,9 @@ export default class extends Controller {
     if (event.key === "Enter") {
       event.preventDefault();
       this.directInput(event);
+    } else if (event.key === "ArrowDown") {
+      this.openCalendar();
+      this.datepickerV2CalendarOutlet.focusCurrentDate();
     }
   }
 

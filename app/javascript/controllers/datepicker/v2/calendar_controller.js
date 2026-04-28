@@ -713,4 +713,10 @@ export default class extends Controller {
   getLastFocusableElement() {
     return this.clearButtonTarget;
   }
+
+  focusCurrentDate() {
+    const currentDate =
+      this.calendarTarget.querySelectorAll('[tabindex="0"]')[0];
+    focusDate(this.calendarTarget, currentDate);
+  }
 }
