@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: https://github.com/phac-nml/pathogen-view-components.git
-  revision: 674bc07af5b81c19648ed466de534a311e0a965a
-  tag: v1.0.0
+  revision: c5ba9b7142bc9d1b671b50fdd5ba2e5321b3a18b
+  tag: v1.1.1
   specs:
     pathogen_view_components (0.0.1)
       actionview (>= 5.0.0)
@@ -416,7 +416,7 @@ GEM
       uri (>= 0.11.1)
     net-http-persistent (4.0.6)
       connection_pool (~> 2.2, >= 2.2.4)
-    net-imap (0.6.3)
+    net-imap (0.6.4)
       date
       net-protocol
     net-pop (0.1.2)
