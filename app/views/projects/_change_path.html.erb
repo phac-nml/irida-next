@@ -5,7 +5,7 @@
     <%= form_with(model: @project, url: namespace_project_path, method: :patch, html: {novalidate: true}) do |form| %>
       <%= form.fields_for :namespace, include_id: false do |builder| %>
         <div class="grid gap-4">
-          <%= form_error_summary(builder) %>
+          <%= form_error_summary(builder, include: %i[path]) %>
 
           <p class="text-slate-600 dark:text-slate-400">
             <%= t(:"projects.edit.advanced.path.description") %>
