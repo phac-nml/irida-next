@@ -64,7 +64,7 @@ gem 'faraday-net_http_persistent', '~> 2.1'
 gem 'openssl', '~> 4.0'
 
 gem 'heroicon-rails', '>= 0.2.9'
-gem 'pathogen_view_components', github: 'phac-nml/pathogen-view-components', tag: 'v1.1.0'
+gem 'pathogen_view_components', github: 'phac-nml/pathogen-view-components', tag: 'v1.1.1'
 gem 'reactionview', '~> 0.3.0'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
