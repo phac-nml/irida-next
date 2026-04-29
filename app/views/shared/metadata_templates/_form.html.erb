@@ -17,6 +17,9 @@
     <% description_hint_id = form.field_id(:description, "hint") %>
     <% description_error_id = invalid_description ? form.field_id(:description, "error") : nil %>
     <% description_describedby = [description_hint_id, description_error_id].compact.join(" ") %>
+    <% invalid_fields = @metadata_template.errors&.include?(:fields) %>
+    <% fields_error_id = invalid_fields ? form.field_id(:fields, "error") : nil %>
+    <% fields_describedby = [fields_error_id].compact.join(" ") %>
 
     <div class="grid gap-5">
       <section aria-labelledby="metadata-template-details-heading" class="grid gap-4">
@@ -93,7 +96,14 @@
           },
         ) %>
 
-        <div id="<%= form.field_id(:fields) %>" class="outline-hidden" tabindex="-1">
+        <div
+          id="<%= form.field_id(:fields) %>"
+          class="outline-hidden"
+          tabindex="-1"
+          aria-describedby="<%= fields_describedby.presence %>"
+          aria-invalid="<%= invalid_fields %>"
+          aria-required="true"
+        >
           <%= render SortableListsComponent.new do |sortable_lists| %>
             <%= sortable_lists.with_list(
               id: "available-list",
@@ -111,6 +121,12 @@
             ) %>
           <% end %>
         </div>
+
+        <% if invalid_fields %>
+          <%= render "shared/form/field_errors",
+          id: fields_error_id,
+          errors: @metadata_template.errors.full_messages_for(:fields) %>
+        <% end %>
       </section>
 
       <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
