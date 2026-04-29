@@ -2,17 +2,19 @@ const SAMPLE_CHUNK_SIZE = 100;
 const SUPPORTED_FORMATS = new Set(["csv", "xlsx"]);
 
 const LINELIST_SAMPLES_QUERY = `
-  query LinelistSamples($ids: [ID!]!, $metadataKeys: [String!]) {
-    nodes(ids: $ids) {
+  query LinelistSamplesForExport($namespaceId: ID!, $sampleIds: [ID!]!, $metadataKeys: [String!]) {
+    linelistExportRows(
+      namespaceId: $namespaceId
+      sampleIds: $sampleIds
+      metadataKeys: $metadataKeys
+    ) {
       id
       __typename
-      ... on Sample {
+      puid
+      name
+      metadata
+      project {
         puid
-        name
-        metadata(keys: $metadataKeys)
-        project {
-          puid
-        }
       }
     }
   }
@@ -106,6 +108,7 @@ self.onmessage = async (event) => {
     graphql_url: graphqlUrl,
     csrf_token: csrfToken,
     sample_graphql_id_prefix: sampleGraphqlIdPrefix,
+    namespace_id: namespaceId,
     filename,
     format,
   } = event.data || {};
@@ -139,6 +142,19 @@ self.onmessage = async (event) => {
     return;
   }
 
+  const namespaceIdStr =
+    namespaceId != null && String(namespaceId).trim() !== ""
+      ? String(namespaceId).trim()
+      : "";
+
+  if (!namespaceIdStr) {
+    self.postMessage({
+      type: "error",
+      message: "Missing namespace for linelist export.",
+    });
+    return;
+  }
+
   try {
     const sampleGraphqlIds = ids.map((id) =>
       toSampleGraphqlId(id, sampleGraphqlIdPrefix),
@@ -146,35 +162,42 @@ self.onmessage = async (event) => {
 
     const sampleById = new Map();
     let fetched = 0;
-    const idChunks = chunk(sampleGraphqlIds, SAMPLE_CHUNK_SIZE);
+    const idChunks = chunk(ids, SAMPLE_CHUNK_SIZE);
 
     for (const idChunk of idChunks) {
       const payload = await postGraphql({
         graphqlUrl,
         query: LINELIST_SAMPLES_QUERY,
-        variables: { ids: idChunk, metadataKeys: fields },
-        operationName: "LinelistSamples",
+        variables: {
+          namespaceId: namespaceIdStr,
+          sampleIds: idChunk.map((id) => String(id)),
+          metadataKeys: fields.length ? fields : [],
+        },
+        operationName: "LinelistSamplesForExport",
         csrfToken,
       });
 
-      const nodes = payload?.data?.nodes;
+      const exportRows = payload?.data?.linelistExportRows;
 
-      if (!Array.isArray(nodes)) {
-        throw new Error("GraphQL response did not include sample nodes.");
+      if (!Array.isArray(exportRows)) {
+        throw new Error(
+          "GraphQL response did not include linelist export rows.",
+        );
       }
 
-      nodes.forEach((node) => {
-        if (node?.__typename === "Sample" && node.id) {
+      exportRows.forEach((node) => {
+        if (node?.__typename === "LinelistSampleExportRow" && node.id) {
           sampleById.set(node.id, node);
         }
       });
 
       fetched += idChunk.length;
+      const current = Math.min(fetched, rows);
       self.postMessage({
         type: "progress",
-        current: Math.min(fetched, rows),
+        current,
         total: rows,
-        percentage: (Math.min(fetched, rows) / rows) * 100,
+        percentage: (current / rows) * 100,
       });
     }
 
