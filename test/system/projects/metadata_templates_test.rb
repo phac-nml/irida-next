@@ -184,6 +184,29 @@ module Projects
                                           message: I18n.t('errors.messages.blank'))
     end
 
+    test 'fields error summary entry focuses sortable list section' do
+      project = projects(:project1)
+
+      visit namespace_project_metadata_templates_url(project.namespace.parent, project)
+
+      click_on I18n.t('projects.metadata_templates.index.new_button')
+
+      assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+      assert_text I18n.t('metadata_templates.form.metadata')
+
+      find('input#metadata_template_name').fill_in with: 'Template with missing fields'
+      submit_button_text = I18n.t('metadata_templates.new_template_dialog.submit_button')
+      submit_button = find("input[type='submit'][value='#{submit_button_text}']", visible: :all)
+      execute_script("arguments[0].removeAttribute('disabled')", submit_button)
+      click_button submit_button_text
+
+      within '[data-controller="form-error-summary"]' do
+        find("a[data-form-error-summary-target-id-param='metadata_template_fields']").click
+      end
+
+      assert_selector '#metadata_template_fields', focused: true
+    end
+
     test 'cannot create a template with duplicate fields with same ordering in another template' do
       project = projects(:project1)
       existing_metadata_template = metadata_templates(:valid_metadata_template)

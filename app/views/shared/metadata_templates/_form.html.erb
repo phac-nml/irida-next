@@ -93,22 +93,24 @@
           },
         ) %>
 
-        <%= render SortableListsComponent.new do |sortable_lists| %>
-          <%= sortable_lists.with_list(
-            id: "available-list",
-            title: t("metadata_templates.form.available"),
-            list_items: @available_metadata_fields,
-            group: "metadata_selection",
-          ) %>
+        <div id="<%= form.field_id(:fields) %>" class="outline-hidden" tabindex="-1">
+          <%= render SortableListsComponent.new do |sortable_lists| %>
+            <%= sortable_lists.with_list(
+              id: "available-list",
+              title: t("metadata_templates.form.available"),
+              list_items: @available_metadata_fields,
+              group: "metadata_selection",
+            ) %>
 
-          <%= sortable_lists.with_list(
-            id: "selected-list",
-            title: t("metadata_templates.form.selected"),
-            list_items: @current_template_fields,
-            group: "metadata_selection",
-            required: true,
-          ) %>
-        <% end %>
+            <%= sortable_lists.with_list(
+              id: "selected-list",
+              title: t("metadata_templates.form.selected"),
+              list_items: @current_template_fields,
+              group: "metadata_selection",
+              required: true,
+            ) %>
+          <% end %>
+        </div>
       </section>
 
       <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
