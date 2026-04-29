@@ -18,7 +18,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should update namespace when email changes' do
-    @user.email = 'john.doe@example'
+    @user.email = 'john.doe@example.com'
     namespace_path_before = @user.namespace.path
     namespace_name_before = @user.namespace.name
     assert @user.save
@@ -51,6 +51,15 @@ class UserTest < ActiveSupport::TestCase
 
   test 'ensure_namespace with valid user with namespace' do
     assert_equal 'john.doe@localhost', @user.send(:ensure_namespace)
+  end
+
+  test 'invalid email should not add namespace errors' do
+    @user.email = 'not-an-email'
+
+    assert_not @user.valid?
+    assert @user.errors.include?(:email)
+    assert_not @user.errors.include?(:namespace_name)
+    assert_not @user.errors.include?(:namespace_path)
   end
 
   test 'ensure_namespace with bot' do
