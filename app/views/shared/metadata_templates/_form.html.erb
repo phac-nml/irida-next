@@ -101,8 +101,6 @@
           class="outline-hidden"
           tabindex="-1"
           aria-describedby="<%= fields_describedby.presence %>"
-          aria-invalid="<%= invalid_fields %>"
-          aria-required="true"
         >
           <%= render SortableListsComponent.new do |sortable_lists| %>
             <%= sortable_lists.with_list(
