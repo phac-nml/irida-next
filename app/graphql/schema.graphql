@@ -1545,6 +1545,46 @@ Represents untyped JSON
 scalar JSON
 
 """
+Minimal project shape for linelist export.
+"""
+type LinelistSampleExportProject {
+  """
+  Persistent Unique Identifier of the project.
+  """
+  puid: ID!
+}
+
+"""
+Sample metadata row for linelist export (namespace-scoped, analyst-level access).
+"""
+type LinelistSampleExportRow {
+  """
+  Relay global ID of the sample.
+  """
+  id: ID!
+
+  """
+  Metadata for the sample.
+  """
+  metadata: JSON!
+
+  """
+  Name of the sample.
+  """
+  name: String!
+
+  """
+  Project the sample is on.
+  """
+  project: LinelistSampleExportProject!
+
+  """
+  Persistent Unique Identifier of the sample.
+  """
+  puid: ID!
+}
+
+"""
 A member
 """
 type Member implements Node {
@@ -2583,6 +2623,26 @@ type Query {
     """
     id: ID!
   ): Boolean!
+
+  """
+  Sample rows for linelist export (requires export_data on namespace; analyst-level samples only).
+  """
+  linelistExportRows(
+    """
+    Optional metadata keys to include in each row.
+    """
+    metadataKeys: [String!] = null
+
+    """
+    Namespace ID (database id) the user is exporting from.
+    """
+    namespaceId: ID!
+
+    """
+    Database ids of samples to include (must all be exportable at analyst level).
+    """
+    sampleIds: [ID!]!
+  ): [LinelistSampleExportRow!]!
 
   """
   Find a namespace.
