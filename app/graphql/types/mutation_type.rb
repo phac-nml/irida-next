@@ -12,6 +12,7 @@ module Types
     field :copy_samples, mutation: Mutations::CloneSamples # rubocop:disable GraphQL/FieldDescription
     field :create_direct_upload, mutation: Mutations::CreateDirectUpload # rubocop:disable GraphQL/FieldDescription
     field :create_group, mutation: Mutations::CreateGroup # rubocop:disable GraphQL/FieldDescription
+    field :create_linelist_data_export, mutation: Mutations::CreateLinelistDataExport # rubocop:disable GraphQL/FieldDescription
     field :create_project, mutation: Mutations::CreateProject # rubocop:disable GraphQL/FieldDescription
     field :create_sample, mutation: Mutations::CreateSample # rubocop:disable GraphQL/FieldDescription,GraphQL/ExtractType
     field :submit_workflow_execution, mutation: Mutations::SubmitWorkflowExecution # rubocop:disable GraphQL/FieldDescription
