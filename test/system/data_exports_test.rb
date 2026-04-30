@@ -1789,18 +1789,40 @@ class DataExportsTest < ApplicationSystemTestCase
       window.__linelistOriginalFetch = window.fetch;
 
       window.Worker = class FakeWorker {
-        postMessage() {
+        async postMessage(message) {
+          if (message?.action === "upload_to_server") {
+            await this.saveToServer(message);
+            return;
+          }
+
           setTimeout(() => {
-            if (this.onmessage) {
-              this.onmessage({
-                data: {
-                  type: "done",
-                  filename: "linelist-test.csv",
-                  content: "SAMPLE PUID\\nINXT_SAM_TEST"
-                }
-              });
-            }
+            void this.saveToServer({
+              filename: "linelist-test.csv",
+              format: "csv",
+              content: "SAMPLE PUID\\nINXT_SAM_TEST",
+            });
           }, 0);
+        }
+
+        async saveToServer(message) {
+          await window.fetch("/-/graphql", { method: "POST" });
+          await window.fetch("/rails/active_storage/direct_uploads/test", { method: "PUT" });
+          await window.fetch("/-/graphql", { method: "POST" });
+
+          if (this.onmessage) {
+            this.onmessage({
+              data: {
+                type: "server_saved",
+                filename: message.filename,
+                format: message.format,
+                content: message.content,
+                serverResponse: {
+                  id: "saved-export-id",
+                  url: "/-/data_exports/saved-export-id"
+                }
+              }
+            });
+          }
         }
 
         terminate() {}
@@ -1813,9 +1835,9 @@ class DataExportsTest < ApplicationSystemTestCase
         });
 
         return new Response(
-          JSON.stringify({ id: "saved-export-id", url: "/-/data_exports/saved-export-id" }),
+          "{}",
           {
-            status: 201,
+            status: 200,
             headers: { "Content-Type": "application/json" },
           }
         );
@@ -1834,8 +1856,10 @@ class DataExportsTest < ApplicationSystemTestCase
                   href: '/-/data_exports/saved-export-id'
     end
 
-    assert_equal 1, page.evaluate_script('window.__linelistUploadRequests.length')
+    assert_equal 3, page.evaluate_script('window.__linelistUploadRequests.length')
     assert_equal 'POST', page.evaluate_script('window.__linelistUploadRequests[0].method')
+    assert_equal 'PUT', page.evaluate_script('window.__linelistUploadRequests[1].method')
+    assert_equal 'POST', page.evaluate_script('window.__linelistUploadRequests[2].method')
   ensure
     page.execute_script <<~JS
       if (window.__linelistOriginalWorker) {

@@ -55,7 +55,6 @@ Rails.application.routes.draw do
       end
       collection do
         post :list
-        post :upload
       end
     end
 

@@ -22,7 +22,7 @@ import {
   LinelistExportWorkerClient,
   resolveLinelistExportWorkerSource,
 } from "controllers/linelist_export/worker_client";
-import { uploadLinelistExport } from "controllers/linelist_export/server_upload";
+import { xlsxRowsToBlob } from "controllers/linelist_export/downloader";
 
 export default class extends Controller {
   static targets = [
@@ -34,7 +34,6 @@ export default class extends Controller {
   static values = {
     workerUrl: String,
     graphqlUrl: String,
-    uploadUrl: String,
     sampleGraphqlIdPrefix: String,
     minimumVisibleDurationMs: {
       type: Number,
@@ -174,6 +173,8 @@ export default class extends Controller {
         graphql_url: graphqlUrl,
         csrf_token: this.csrfToken(),
         sample_graphql_id_prefix: sampleGraphqlIdPrefix,
+        save_to_server: saveToServer,
+        upload_metadata: this._pendingUpload,
         format,
         filename,
         total_count: totalCount,
@@ -203,6 +204,12 @@ export default class extends Controller {
       onDone: async (payload) => {
         await this.handleWorkerDone(payload);
       },
+      onServerSaved: (payload) => {
+        this.handleWorkerServerSaved(payload);
+      },
+      onUploadError: (payload) => {
+        this.handleWorkerUploadError(payload);
+      },
       onError: (message) => {
         this.handleWorkerError(message);
       },
@@ -222,8 +229,38 @@ export default class extends Controller {
     this._lastCompletedPayload = payload;
 
     if (this._pendingUpload?.saveToServer) {
-      await this.handleServerSave(payload);
-      this.terminateWorker();
+      if (payload.serverResponse) {
+        this.handleWorkerServerSaved(payload);
+        return;
+      }
+
+      if (payload.format === "xlsx") {
+        try {
+          const blob = await xlsxRowsToBlob(payload.content);
+          this.handleServerSave({ ...payload, content: blob });
+        } catch (error) {
+          if (error instanceof XlsxLibraryLoadError) {
+            this.updateProgress(
+              this.t(this.xlsxLoadErrorMessageValue),
+              100,
+              true,
+            );
+          } else {
+            this.updateProgress(
+              this.t(this.saveToServerErrorMessageValue, {
+                message: error?.message || "request failed",
+              }),
+              100,
+              true,
+            );
+          }
+
+          this.showUploadActions();
+        }
+        return;
+      }
+
+      this.handleServerSave(payload);
       return;
     }
 
@@ -254,6 +291,34 @@ export default class extends Controller {
     this.terminateWorker();
   }
 
+  handleWorkerServerSaved(payload) {
+    this._lastCompletedPayload = {
+      filename: payload.filename,
+      content: payload.content,
+      format: payload.format,
+    };
+    this.updateProgress(this.saveToServerSuccessMessageValue, 100);
+    this.showUploadLink(payload.serverResponse?.url);
+    this.terminateWorker();
+  }
+
+  handleWorkerUploadError(payload) {
+    this._lastCompletedPayload = {
+      filename: payload.filename,
+      content: payload.content,
+      format: payload.format,
+    };
+    this.updateProgress(
+      this.t(this.saveToServerErrorMessageValue, {
+        message: payload.message || "request failed",
+      }),
+      100,
+      true,
+    );
+    this.showUploadActions();
+    this.terminateWorker();
+  }
+
   formatUnexpectedError(detail) {
     return this.t(this.unexpectedErrorMessageValue, {
       message: detail,
@@ -264,42 +329,19 @@ export default class extends Controller {
     updateProgressWindow(this, message, percentage, error);
   }
 
-  async handleServerSave(payload) {
+  handleServerSave(payload) {
     this.hideUploadLink();
     this.hideUploadActions();
     this.updateProgress(this.saveToServerUploadingMessageValue, 100);
 
-    try {
-      const response = await this.uploadToServer(payload);
-      this.updateProgress(this.saveToServerSuccessMessageValue, 100);
-      this.showUploadLink(response.url);
-    } catch (error) {
-      if (error instanceof XlsxLibraryLoadError) {
-        this.updateProgress(this.t(this.xlsxLoadErrorMessageValue), 100, true);
-      } else {
-        this.updateProgress(
-          this.t(this.saveToServerErrorMessageValue, {
-            message: error?.message || "request failed",
-          }),
-          100,
-          true,
-        );
-      }
-
-      this.showUploadActions();
-    }
-  }
-
-  async uploadToServer(payload) {
-    if (!this.hasUploadUrlValue || !this.uploadUrlValue) {
-      throw new Error("Upload endpoint is not configured.");
-    }
-
-    return uploadLinelistExport({
-      uploadUrl: this.uploadUrlValue,
-      csrfToken: this.csrfToken(),
-      payload,
-      pendingUpload: this._pendingUpload || {},
+    this.workerClient.start({
+      action: "upload_to_server",
+      graphql_url: this.graphqlUrl(),
+      csrf_token: this.csrfToken(),
+      filename: payload.filename,
+      format: payload.format,
+      content: payload.content,
+      upload_metadata: this._pendingUpload || {},
     });
   }
 
@@ -424,7 +466,7 @@ export default class extends Controller {
   async retryUpload() {
     if (!this._lastCompletedPayload) return;
 
-    await this.handleServerSave(this._lastCompletedPayload);
+    this.handleServerSave(this._lastCompletedPayload);
   }
 
   async downloadLocalFallback() {

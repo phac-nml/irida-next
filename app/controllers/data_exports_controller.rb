@@ -48,16 +48,6 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     end
   end
 
-  def upload
-    @data_export = DataExports::UploadService.new(current_user, upload_data_export_params).execute
-
-    if @data_export.errors.any?
-      render json: { error: error_message(@data_export) }, status: :unprocessable_content
-    else
-      render json: { id: @data_export.id, url: data_export_path(@data_export) }, status: :created
-    end
-  end
-
   def redirect
     if params['identifier'].include?('INXT_SAM')
       redirect_to_sample
@@ -135,12 +125,6 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     params.expect(data_export: [:name, :export_type, :email_notification,
                                 { export_parameters: [:linelist_format, :namespace_id, :analysis_type,
                                                       { ids: [], metadata_fields: [], attachment_formats: [] }] }])
-  end
-
-  def upload_data_export_params
-    params.expect(data_export: [:name, :file,
-                                { export_parameters: [:linelist_format, :namespace_id,
-                                                      { ids: [], metadata_fields: [] }] }])
   end
 
   def data_export

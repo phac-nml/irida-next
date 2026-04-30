@@ -1,5 +1,9 @@
 const SAMPLE_CHUNK_SIZE = 100;
 const SUPPORTED_FORMATS = new Set(["csv", "xlsx"]);
+const CONTENT_TYPES_BY_FORMAT = {
+  csv: "text/csv",
+  xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+};
 
 const LINELIST_SAMPLES_QUERY = `
   query LinelistSamplesForExport($namespaceId: ID!, $sampleIds: [ID!]!, $metadataKeys: [String!]) {
@@ -15,6 +19,50 @@ const LINELIST_SAMPLES_QUERY = `
       metadata
       project {
         puid
+      }
+    }
+  }
+`;
+
+const CREATE_DIRECT_UPLOAD_MUTATION = `
+  mutation CreateDirectUpload($filename: String!, $contentType: String!, $checksum: String!, $byteSize: BigInt!) {
+    createDirectUpload(input: {
+      filename: $filename
+      contentType: $contentType
+      checksum: $checksum
+      byteSize: $byteSize
+    }) {
+      directUpload {
+        url
+        headers
+        signedBlobId
+      }
+    }
+  }
+`;
+
+const CREATE_LINELIST_DATA_EXPORT_MUTATION = `
+  mutation CreateLinelistDataExport(
+    $name: String
+    $signedBlobId: ID!
+    $namespaceId: ID!
+    $linelistFormat: String!
+    $sampleIds: [ID!]!
+    $metadataFields: [String!]
+  ) {
+    createLinelistDataExport(input: {
+      name: $name
+      signedBlobId: $signedBlobId
+      namespaceId: $namespaceId
+      linelistFormat: $linelistFormat
+      sampleIds: $sampleIds
+      metadataFields: $metadataFields
+    }) {
+      id
+      url
+      errors {
+        message
+        path
       }
     }
   }
@@ -60,6 +108,7 @@ const postGraphql = async ({
   variables,
   operationName,
   csrfToken,
+  errorContext = "GraphQL request",
 }) => {
   let response;
 
@@ -76,7 +125,7 @@ const postGraphql = async ({
     });
   } catch (error) {
     throw new Error(
-      `Network error while loading samples: ${error?.message || "request failed"}`,
+      `Network error during ${errorContext}: ${error?.message || "request failed"}`,
       { cause: error },
     );
   }
@@ -101,8 +150,187 @@ const postGraphql = async ({
   return payload;
 };
 
+const leftRotate = (value, amount) =>
+  ((value << amount) | (value >>> (32 - amount))) >>> 0;
+
+const md5Bytes = (input) => {
+  const bytes = new Uint8Array(input);
+  const originalLength = bytes.length;
+  const bitLength = originalLength * 8;
+  const paddedLength = (((originalLength + 8) >> 6) + 1) * 64;
+  const buffer = new Uint8Array(paddedLength);
+  buffer.set(bytes);
+  buffer[originalLength] = 0x80;
+
+  const view = new DataView(buffer.buffer);
+  view.setUint32(paddedLength - 8, bitLength >>> 0, true);
+  view.setUint32(paddedLength - 4, Math.floor(bitLength / 0x100000000), true);
+
+  let a0 = 0x67452301;
+  let b0 = 0xefcdab89;
+  let c0 = 0x98badcfe;
+  let d0 = 0x10325476;
+
+  const shifts = [
+    7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 5, 9, 14, 20, 5,
+    9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11,
+    16, 23, 4, 11, 16, 23, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10,
+    15, 21,
+  ];
+  const constants = Array.from(
+    { length: 64 },
+    (_, i) => Math.floor(Math.abs(Math.sin(i + 1)) * 0x100000000) >>> 0,
+  );
+
+  for (let offset = 0; offset < paddedLength; offset += 64) {
+    let a = a0;
+    let b = b0;
+    let c = c0;
+    let d = d0;
+    const words = Array.from({ length: 16 }, (_, i) =>
+      view.getUint32(offset + i * 4, true),
+    );
+
+    for (let i = 0; i < 64; i += 1) {
+      let f;
+      let g;
+
+      if (i < 16) {
+        f = (b & c) | (~b & d);
+        g = i;
+      } else if (i < 32) {
+        f = (d & b) | (~d & c);
+        g = (5 * i + 1) % 16;
+      } else if (i < 48) {
+        f = b ^ c ^ d;
+        g = (3 * i + 5) % 16;
+      } else {
+        f = c ^ (b | ~d);
+        g = (7 * i) % 16;
+      }
+
+      const next = d;
+      d = c;
+      c = b;
+      b =
+        (b + leftRotate((a + f + constants[i] + words[g]) >>> 0, shifts[i])) >>>
+        0;
+      a = next;
+    }
+
+    a0 = (a0 + a) >>> 0;
+    b0 = (b0 + b) >>> 0;
+    c0 = (c0 + c) >>> 0;
+    d0 = (d0 + d) >>> 0;
+  }
+
+  const digest = new Uint8Array(16);
+  const digestView = new DataView(digest.buffer);
+  [a0, b0, c0, d0].forEach((word, index) => {
+    digestView.setUint32(index * 4, word, true);
+  });
+  return digest;
+};
+
+const base64FromBytes = (bytes) => {
+  let binary = "";
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary);
+};
+
+const blobForUpload = (content, format) => {
+  if (content instanceof Blob) return content;
+
+  return new Blob([content], {
+    type: CONTENT_TYPES_BY_FORMAT[format] || "application/octet-stream",
+  });
+};
+
+const uploadLinelistExport = async ({
+  graphqlUrl,
+  csrfToken,
+  filename,
+  format,
+  content,
+  uploadMetadata = {},
+}) => {
+  const blob = blobForUpload(content, format);
+  const arrayBuffer = await blob.arrayBuffer();
+  const checksum = base64FromBytes(md5Bytes(arrayBuffer));
+  const contentType = CONTENT_TYPES_BY_FORMAT[format] || blob.type;
+
+  const directUploadPayload = await postGraphql({
+    graphqlUrl,
+    query: CREATE_DIRECT_UPLOAD_MUTATION,
+    variables: {
+      filename,
+      contentType,
+      checksum,
+      byteSize: blob.size,
+    },
+    operationName: "CreateDirectUpload",
+    csrfToken,
+    errorContext: "direct upload creation",
+  });
+  const directUpload =
+    directUploadPayload?.data?.createDirectUpload?.directUpload;
+
+  if (!directUpload?.url || !directUpload?.signedBlobId) {
+    throw new Error("Direct upload credentials were not returned.");
+  }
+
+  let headers = {};
+  if (directUpload.headers) {
+    try {
+      headers = JSON.parse(directUpload.headers);
+    } catch {
+      throw new Error("Direct upload headers were not valid JSON.");
+    }
+  }
+
+  const uploadResponse = await fetch(directUpload.url, {
+    method: "PUT",
+    headers,
+    body: blob,
+  });
+
+  if (!uploadResponse.ok) {
+    throw new Error(`File upload failed (${uploadResponse.status}).`);
+  }
+
+  const createPayload = await postGraphql({
+    graphqlUrl,
+    query: CREATE_LINELIST_DATA_EXPORT_MUTATION,
+    variables: {
+      name: uploadMetadata.name || null,
+      signedBlobId: directUpload.signedBlobId,
+      namespaceId: String(uploadMetadata.namespaceId || ""),
+      linelistFormat: format,
+      sampleIds: (uploadMetadata.sampleIds || []).map((id) => String(id)),
+      metadataFields: uploadMetadata.metadataFields || [],
+    },
+    operationName: "CreateLinelistDataExport",
+    csrfToken,
+    errorContext: "linelist data export creation",
+  });
+  const result = createPayload?.data?.createLinelistDataExport;
+
+  if (Array.isArray(result?.errors) && result.errors.length > 0) {
+    throw new Error(result.errors[0]?.message || "Unable to save export.");
+  }
+
+  if (!result?.url) {
+    throw new Error("Saved export link was not returned.");
+  }
+
+  return { id: result.id, url: result.url };
+};
+
 self.onmessage = async (event) => {
   const {
+    action,
     sample_ids: sampleIds,
     metadata_fields: metadataFields,
     graphql_url: graphqlUrl,
@@ -111,7 +339,40 @@ self.onmessage = async (event) => {
     namespace_id: namespaceId,
     filename,
     format,
+    content: uploadContent,
+    save_to_server: saveToServer,
+    upload_metadata: uploadMetadata,
   } = event.data || {};
+
+  if (action === "upload_to_server") {
+    try {
+      const serverResponse = await uploadLinelistExport({
+        graphqlUrl,
+        csrfToken,
+        filename,
+        format,
+        content: uploadContent,
+        uploadMetadata,
+      });
+
+      self.postMessage({
+        type: "server_saved",
+        filename,
+        format,
+        content: uploadContent,
+        serverResponse,
+      });
+    } catch (error) {
+      self.postMessage({
+        type: "upload_error",
+        filename,
+        format,
+        content: uploadContent,
+        message: error?.message || "Upload failed.",
+      });
+    }
+    return;
+  }
 
   const fields = Array.isArray(metadataFields) ? metadataFields : [];
   const ids = Array.isArray(sampleIds) ? sampleIds : [];
@@ -175,6 +436,7 @@ self.onmessage = async (event) => {
         },
         operationName: "LinelistSamplesForExport",
         csrfToken,
+        errorContext: "sample export row loading",
       });
 
       const exportRows = payload?.data?.linelistExportRows;
@@ -241,12 +503,41 @@ self.onmessage = async (event) => {
       content = lines.join("\n");
     }
 
-    self.postMessage({
-      type: "done",
-      filename,
-      format: normalizedFormat,
-      content,
-    });
+    if (saveToServer && normalizedFormat === "csv") {
+      try {
+        const serverResponse = await uploadLinelistExport({
+          graphqlUrl,
+          csrfToken,
+          filename,
+          format: normalizedFormat,
+          content,
+          uploadMetadata,
+        });
+
+        self.postMessage({
+          type: "server_saved",
+          filename,
+          format: normalizedFormat,
+          content,
+          serverResponse,
+        });
+      } catch (error) {
+        self.postMessage({
+          type: "upload_error",
+          filename,
+          format: normalizedFormat,
+          content,
+          message: error?.message || "Upload failed.",
+        });
+      }
+    } else {
+      self.postMessage({
+        type: "done",
+        filename,
+        format: normalizedFormat,
+        content,
+      });
+    }
   } catch (error) {
     self.postMessage({
       type: "error",
