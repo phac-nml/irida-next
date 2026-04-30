@@ -46,10 +46,9 @@ export const CALENDAR_CLASSES = {
     "text-slate-500",
     "dark:text-slate-300",
   ],
-  BACK_BUTTON_DISABLED: ["text-slate-400", "dark:text-slate-500"],
-  BACK_BUTTON_ENABLED: ["text-slate-900", "dark:text-slate-100"],
-  FORWARD_BUTTON_DISABLED: ["text-slate-400", "dark:text-slate-500"],
-  FORWARD_BUTTON_ENABLED: ["text-slate-900", "dark:text-slate-100"],
+
+  MONTH_NAV_BUTTON_DISABLED: ["text-slate-400", "dark:text-slate-500"],
+  MONTH_NAV_BUTTON_ENABLED: ["text-slate-900", "dark:text-slate-100"],
 };
 
 export const INPUT_CLASSES = {

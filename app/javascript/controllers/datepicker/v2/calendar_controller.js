@@ -455,12 +455,16 @@ export default class extends Controller {
     // we disable the back button so user can't navigate further back
     if (this.#preventPreviousMonthNavigation()) {
       backButton.disabled = true;
-      backArrow.classList.remove(...CALENDAR_CLASSES["BACK_BUTTON_ENABLED"]);
-      backArrow.classList.add(...CALENDAR_CLASSES["BACK_BUTTON_DISABLED"]);
+      backArrow.classList.remove(
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"],
+      );
+      backArrow.classList.add(...CALENDAR_CLASSES["MONTH_NAV_BUTTON_DISABLED"]);
     } else {
       backButton.disabled = false;
-      backArrow.classList.add(...CALENDAR_CLASSES["BACK_BUTTON_ENABLED"]);
-      backArrow.classList.remove(...CALENDAR_CLASSES["BACK_BUTTON_DISABLED"]);
+      backArrow.classList.add(...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"]);
+      backArrow.classList.remove(
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_DISABLED"],
+      );
     }
   }
 
@@ -471,16 +475,18 @@ export default class extends Controller {
     if (this.#preventNextMonthNavigation()) {
       forwardButton.disabled = true;
       forwardArrow.classList.remove(
-        ...CALENDAR_CLASSES["FORWARD_BUTTON_ENABLED"],
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"],
       );
       forwardArrow.classList.add(
-        ...CALENDAR_CLASSES["FORWARD_BUTTON_DISABLED"],
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_DISABLED"],
       );
     } else {
       forwardButton.disabled = false;
-      forwardArrow.classList.add(...CALENDAR_CLASSES["FORWARD_BUTTON_ENABLED"]);
+      forwardArrow.classList.add(
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"],
+      );
       forwardArrow.classList.remove(
-        ...CALENDAR_CLASSES["FORWARD_BUTTON_DISABLED"],
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_DISABLED"],
       );
     }
   }

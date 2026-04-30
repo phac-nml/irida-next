@@ -17,12 +17,6 @@ class DateValidator < ActiveModel::EachValidator
     # validate if date input is later than today's date
     raise DateValidatorError, I18n.t('common.date.errors.invalid_min_date') if value < Time.zone.today
 
-    if Irida::CurrentSettings.require_personal_access_token_expiry? &&
-       value > (Time.current + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days)
-      raise DateValidatorError,
-            I18n.t('common.date.errors.invalid_max_date')
-    end
-
     true
   rescue DateValidator::DateValidatorError => e
     record.errors.add(:expires_at, e.message)
