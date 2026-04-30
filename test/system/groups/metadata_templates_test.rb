@@ -131,7 +131,7 @@ module Groups
 
       find('input#metadata_template_name').fill_in with: 'Newest template'
 
-      assert_selector 'button[aria-disabled="true"]',
+      assert_selector 'button[disabled]',
                       text: I18n.t('metadata_templates.new_template_dialog.submit_button')
     end
 
