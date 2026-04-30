@@ -465,6 +465,14 @@ export default class extends Controller {
   // TODO: Likely need to clean this up and be more inclusive, maybe change year by up or down
   // change year via year input
   changeYear() {
+    if (this.yearTarget.value < this.#selectedYear) {
+      this.previousYear();
+    } else if (this.yearTarget.value > this.#selectedYear) {
+      this.nextYear();
+    }
+  }
+
+  previousYear() {
     // if minDate exists, check if user tried to hard type in a year amount earlier than minDate's year
     if (this.#minDate) {
       const minDate = new Date(this.#minDate);
@@ -479,6 +487,12 @@ export default class extends Controller {
         }
       }
     }
+    this.#selectedYear = this.yearTarget.value;
+    this.idempotentConnect();
+  }
+
+  // TODO: implement max date
+  nextYear() {
     this.#selectedYear = this.yearTarget.value;
     this.idempotentConnect();
   }
@@ -677,9 +691,11 @@ export default class extends Controller {
 
   #handleNavigationByPageUp(event) {
     if (event.shiftKey) {
-      this.yearTarget.value = parseInt(this.yearTarget.value) - 1;
-      this.#selectedYear = this.yearTarget.value;
-      this.changeYear();
+      const targetYear = parseInt(this.yearTarget.value) - 1;
+      if (targetYear < this.#selectedYear) {
+        this.yearTarget.value = targetYear;
+        this.previousYear();
+      }
     } else {
       // if we're on the earliest allowed month based on minDate, don't allow us to navigate to the previous month
       if (this.#preventPreviousMonthNavigation()) return;
@@ -703,10 +719,11 @@ export default class extends Controller {
 
   #handleNavigationByPageDown(event) {
     if (event.shiftKey) {
-      // TODO: validate once max year is implemented
-      this.yearTarget.value = parseInt(this.yearTarget.value) + 1;
-      this.#selectedYear = this.yearTarget.value;
-      this.changeYear();
+      const targetYear = parseInt(this.yearTarget.value) + 1;
+      if (targetYear > this.#selectedYear) {
+        this.yearTarget.value = targetYear;
+        this.nextYear();
+      }
     } else {
       this.nextMonth();
     }
