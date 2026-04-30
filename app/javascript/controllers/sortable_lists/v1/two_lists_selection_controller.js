@@ -187,7 +187,7 @@ export default class extends Controller {
 
   #setSubmitButtonDisableState(disableState) {
     if (this.hasSubmitBtnTarget) {
-      this.#setDisabled(this.submitBtnTarget, disableState);
+      this.submitBtnTarget.disabled = disableState;
     }
   }
 
