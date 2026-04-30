@@ -1,0 +1,30 @@
+<fieldset>
+  <legend class="sr-only"><%= t("components.datepicker.date_selection") %></legend>
+
+  <%= render Viral::BaseComponent.new(**@system_arguments) do %>
+    <% unless @min_date.nil? %>
+      <%= render ComboboxDatepicker::V1::MinDateComponent.new(min_date: @min_date) %>
+    <% end %>
+
+    <%= render ComboboxDatepicker::V1::InputFieldComponent.new(
+      label: @label,
+      input_id: @input_id,
+      selected_date: @selected_date,
+      input_name: @input_name,
+      input_aria_label: @input_aria_label,
+      required: @required,
+      error_id: @error_id,
+      errored: @errored,
+      autosubmit: @autosubmit,
+      calendar_id: @calendar_id
+    ) %>
+
+    <%= render ComboboxDatepicker::V1::CalendarComponent.new(
+      calendar_arguments: @calendar_arguments,
+      days_of_the_week: @days_of_the_week,
+      months: @months,
+      min_year: @min_year,
+      min_date: @min_date,
+    ) %>
+  <% end %>
+</fieldset>

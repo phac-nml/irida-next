@@ -31,7 +31,7 @@ module ViewHelper
   end
 
   def datepicker(*, **, &)
-    render(DatepickerComponent.new(*, **), &)
+    render(ComboboxDatepickerComponent.new(*, **), &)
   end
 
   def viral_icon_source(name)

@@ -1,0 +1,29 @@
+<div>
+  <% unless @min_date.nil? %>
+    <div
+      class="text-center text-sm text-slate-900 dark:text-white"
+      data-combobox-datepicker--v1--calendar-target="minDateMessage"
+    ></div>
+  <% end %>
+
+  <div class="mt-2 flex space-x-2 rtl:space-x-reverse">
+    <button
+      type="button"
+      class="button w-1/2 button-default"
+      data-action="click->combobox-datepicker--v1--calendar#showToday"
+      aria-label="<%= t('components.datepicker.aria_label.show_today') %>"
+    >
+      <%= t("components.datepicker.show_today") %>
+    </button>
+
+    <button
+      type="button"
+      class="button w-1/2 button-default"
+      data-action="click->combobox-datepicker--v1--calendar#clearSelection"
+      data-combobox-datepicker--v1--calendar-target="clearButton"
+      aria-label="<%= t('components.datepicker.aria_label.clear_selection') %>"
+    >
+      <%= t("components.datepicker.clear_selection") %>
+    </button>
+  </div>
+</div>
