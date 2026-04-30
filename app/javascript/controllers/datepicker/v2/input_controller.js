@@ -17,6 +17,7 @@ export default class extends Controller {
     "errorMessageTemplate",
     "errorMessage",
     "ariaLive",
+    "inputArrow",
   ];
 
   static values = {
@@ -48,11 +49,14 @@ export default class extends Controller {
 
   #minDate;
 
+  #arrowSvg;
+
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
     }
 
+    this.#arrowSvg = this.inputArrowTarget.firstElementChild;
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
@@ -92,6 +96,7 @@ export default class extends Controller {
   #onShow() {
     document.addEventListener("keydown", this.boundHandleGlobalKeydown);
     this.#calendar.addEventListener("focusin", this.boundHandleCalendarFocus);
+    this.#arrowSvg.classList.add("rotate-180");
   }
 
   #onHide() {
@@ -100,6 +105,7 @@ export default class extends Controller {
       "focusin",
       this.boundHandleCalendarFocus,
     );
+    this.#arrowSvg.classList.remove("rotate-180");
   }
 
   #setMinDate() {
@@ -179,7 +185,7 @@ export default class extends Controller {
     if (!this.#floatingDropdown.isVisible()) {
       this.#floatingDropdown.show();
     } else {
-      this.#floatingDropdown.hide();
+      this.hideCalendar();
     }
   }
 
@@ -198,7 +204,9 @@ export default class extends Controller {
   // Hide calendar
   hideCalendar() {
     try {
-      if (this.#floatingDropdown) this.#floatingDropdown.hide();
+      if (this.#floatingDropdown) {
+        this.#floatingDropdown.hide();
+      }
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
@@ -210,6 +218,7 @@ export default class extends Controller {
     if (event.key === "Escape") {
       this.hideCalendar();
       this.setInputValue(this.#selectedDate);
+      this.datepickerInputTarget.focus();
       return;
     }
 
