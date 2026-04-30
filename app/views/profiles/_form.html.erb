@@ -1,5 +1,5 @@
 <%= form_with(model: user, url: profile_path, method: :patch, html: { novalidate: true }) do |f| %>
-  <%= form_error_summary(f, classes: "mb-2", include: [:email]) %>
+  <%= form_error_summary(f, classes: "mb-2", include: [:email, :first_name, :last_name]) %>
 
   <%= render partial: "shared/form/required_field_legend" %>
 
