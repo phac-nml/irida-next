@@ -354,7 +354,6 @@ export default class extends Controller {
     // Keep visual precedence clear: disabled dates should not also look selected/today.
     if (selectedDate && selectedDate.getAttribute("aria-disabled") !== "true") {
       this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
-      selectedDate.setAttribute("aria-selected", "true");
     }
 
     // don't need to add 'today' styling if today == selectedDate
@@ -394,23 +393,18 @@ export default class extends Controller {
     if (minDate) {
       if (selectedDate && this.#selectedDate > this.#minDate) {
         selectedDate.tabIndex = 0;
-        return;
       } else if (today && this.#todaysFormattedFullDate > this.#minDate) {
         today.tabIndex = 0;
-        return;
-      } else if (verifyDateIsInMonth(minDate)) {
+      } else {
         minDate.tabIndex = 0;
-        return;
       }
     } else if (selectedDate && verifyDateIsInMonth(selectedDate)) {
       selectedDate.tabIndex = 0;
-      return;
     } else if (today && verifyDateIsInMonth(today)) {
       today.tabIndex = 0;
-      return;
+    } else {
+      getFirstOfMonthNode(this.calendarTarget).tabIndex = 0;
     }
-
-    getFirstOfMonthNode(this.calendarTarget).tabIndex = 0;
   }
 
   #setBackButton() {
@@ -462,17 +456,8 @@ export default class extends Controller {
     this.monthSelectTarget.focus();
   }
 
-  // TODO: Likely need to clean this up and be more inclusive, maybe change year by up or down
   // change year via year input
   changeYear() {
-    if (this.yearTarget.value < this.#selectedYear) {
-      this.previousYear();
-    } else if (this.yearTarget.value > this.#selectedYear) {
-      this.nextYear();
-    }
-  }
-
-  previousYear() {
     // if minDate exists, check if user tried to hard type in a year amount earlier than minDate's year
     if (this.#minDate) {
       const minDate = new Date(this.#minDate);
@@ -487,12 +472,6 @@ export default class extends Controller {
         }
       }
     }
-    this.#selectedYear = this.yearTarget.value;
-    this.idempotentConnect();
-  }
-
-  // TODO: implement max date
-  nextYear() {
     this.#selectedYear = this.yearTarget.value;
     this.idempotentConnect();
   }
@@ -543,8 +522,8 @@ export default class extends Controller {
       ArrowDown: (event) => this.#handleVerticalNavigation(event, "down"),
       Home: this.#navigateToStart.bind(this),
       End: this.#navigateToEnd.bind(this),
-      PageUp: (event) => this.#handleNavigationByPageUp(event),
-      PageDown: (event) => this.#handleNavigationByPageDown(event),
+      PageUp: this.#previousMonthByPageUp.bind(this),
+      PageDown: this.#nextMonthByPageDown.bind(this),
     };
     return handlers[key];
   }
@@ -566,12 +545,8 @@ export default class extends Controller {
       this.datepickerV2InputOutlet.disableInputErrorState();
     }
 
-    if (event.key === " ") {
-      this.focusCurrentDate();
-    } else {
-      this.datepickerV2InputOutlet.hideCalendar();
-      this.datepickerV2InputOutlet.focusDatepickerInput();
-    }
+    this.datepickerV2InputOutlet.hideCalendar();
+    this.datepickerV2InputOutlet.focusNextFocusableElement();
   }
 
   // clear selection by clicking clear button
@@ -581,6 +556,10 @@ export default class extends Controller {
     if (this.#autosubmit) {
       this.datepickerV2InputOutlet.submitDate();
     }
+
+    this.datepickerV2InputOutlet.disableInputErrorState();
+    this.datepickerV2InputOutlet.hideCalendar();
+    this.datepickerV2InputOutlet.focusNextFocusableElement();
   }
 
   // handles ArrowLeft/Right keyboard navigation
@@ -689,44 +668,28 @@ export default class extends Controller {
     );
   }
 
-  #handleNavigationByPageUp(event) {
-    if (event.shiftKey) {
-      const targetYear = parseInt(this.yearTarget.value) - 1;
-      if (targetYear < this.#selectedYear) {
-        this.yearTarget.value = targetYear;
-        this.previousYear();
-      }
-    } else {
-      // if we're on the earliest allowed month based on minDate, don't allow us to navigate to the previous month
-      if (this.#preventPreviousMonthNavigation()) return;
-      // load previous month onto calendar
-      this.previousMonth();
+  #previousMonthByPageUp() {
+    // if we're on the earliest allowed month based on minDate, don't allow us to navigate to the previous month
+    if (this.#preventPreviousMonthNavigation()) return;
+    // load previous month onto calendar
+    this.previousMonth();
 
-      // if minDate exists, check if it's date node is present and focus that, else focus 1st of the month
-      if (this.#minDate) {
-        const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
-        // if there's a minimum date and it exists in the calendar, focus that
-        // else focus 1st
-        if (minDateNode && verifyDateIsInMonth(minDateNode)) {
-          focusDate(this.calendarTarget, minDateNode);
-          return;
-        }
+    // if minDate exists, check if it's date node is present and focus that, else focus 1st of the month
+    if (this.#minDate) {
+      const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
+      // if there's a minimum date and it exists in the calendar, focus that
+      // else focus 1st
+      if (minDateNode && verifyDateIsInMonth(minDateNode)) {
+        focusDate(this.calendarTarget, minDateNode);
+        return;
       }
     }
-    // TODO: need to verify min date still
     focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
   }
 
-  #handleNavigationByPageDown(event) {
-    if (event.shiftKey) {
-      const targetYear = parseInt(this.yearTarget.value) + 1;
-      if (targetYear > this.#selectedYear) {
-        this.yearTarget.value = targetYear;
-        this.nextYear();
-      }
-    } else {
-      this.nextMonth();
-    }
+  // load next month and focus 1st of the month
+  #nextMonthByPageDown() {
+    this.nextMonth();
     focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
   }
 
@@ -750,12 +713,4 @@ export default class extends Controller {
   getLastFocusableElement() {
     return this.clearButtonTarget;
   }
-
-  focusCurrentDate() {
-    const currentDate =
-      this.calendarTarget.querySelectorAll('[tabindex="0"]')[0];
-    focusDate(this.calendarTarget, currentDate);
-  }
-
-  navigateToSpecificDate(date) {}
 }

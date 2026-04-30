@@ -17,7 +17,6 @@ export default class extends Controller {
     "errorMessageTemplate",
     "errorMessage",
     "ariaLive",
-    "inputArrow",
   ];
 
   static values = {
@@ -49,14 +48,13 @@ export default class extends Controller {
 
   #minDate;
 
-  #arrowSvg;
-
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
     }
 
-    this.#arrowSvg = this.inputArrowTarget.firstElementChild;
+    this.boundHandleDatepickerInputFocus =
+      this.handleDatepickerInputFocus.bind(this);
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
@@ -72,10 +70,20 @@ export default class extends Controller {
     // Position the calendar
     this.#initializeDropdown();
 
+    this.datepickerInputTarget.addEventListener(
+      "focus",
+      this.boundHandleDatepickerInputFocus,
+    );
+
     this.#findNextFocusableElement();
   }
 
   disconnect() {
+    this.datepickerInputTarget.removeEventListener(
+      "focus",
+      this.boundHandleDatepickerInputFocus,
+    );
+
     this.#floatingDropdown?.destroy();
     this.#floatingDropdown = null;
 
@@ -96,7 +104,6 @@ export default class extends Controller {
   #onShow() {
     document.addEventListener("keydown", this.boundHandleGlobalKeydown);
     this.#calendar.addEventListener("focusin", this.boundHandleCalendarFocus);
-    this.#arrowSvg.classList.add("rotate-180");
   }
 
   #onHide() {
@@ -105,7 +112,6 @@ export default class extends Controller {
       "focusin",
       this.boundHandleCalendarFocus,
     );
-    this.#arrowSvg.classList.remove("rotate-180");
   }
 
   #setMinDate() {
@@ -181,11 +187,9 @@ export default class extends Controller {
     this.#shareParamsWithCalendar();
   }
 
-  toggleCalendar() {
+  handleDatepickerInputFocus() {
     if (!this.#floatingDropdown.isVisible()) {
       this.#floatingDropdown.show();
-    } else {
-      this.hideCalendar();
     }
   }
 
@@ -204,9 +208,7 @@ export default class extends Controller {
   // Hide calendar
   hideCalendar() {
     try {
-      if (this.#floatingDropdown) {
-        this.#floatingDropdown.hide();
-      }
+      if (this.#floatingDropdown) this.#floatingDropdown.hide();
     } catch (error) {
       this.#handleError(error, "hideDropdown");
     }
@@ -218,7 +220,6 @@ export default class extends Controller {
     if (event.key === "Escape") {
       this.hideCalendar();
       this.setInputValue(this.#selectedDate);
-      this.datepickerInputTarget.focus();
       return;
     }
 
@@ -231,19 +232,20 @@ export default class extends Controller {
       !event.shiftKey
     ) {
       event.preventDefault();
-      this.datepickerV2CalendarOutlet.getFirstFocusableElement().focus();
+      this.hideCalendar();
+      this.focusNextFocusableElement();
       return;
     }
 
-    if (
-      event.key === "Tab" &&
-      event.shiftKey &&
-      event.target ===
-        this.datepickerV2CalendarOutlet.getFirstFocusableElement()
-    ) {
-      event.preventDefault();
-      this.datepickerV2CalendarOutlet.getLastFocusableElement().focus();
-      return;
+    // If we Tab while on the datepicker input, Shift+Tab should close the datepicker,
+    // while Tab focuses on the first focusable element within the calendar
+    if (event.key === "Tab" && event.target === this.datepickerInputTarget) {
+      if (event.shiftKey) {
+        this.hideCalendar();
+      } else if (!event.shiftKey) {
+        event.preventDefault();
+        this.datepickerV2CalendarOutlet.getFirstFocusableElement().focus();
+      }
     }
   }
 
@@ -290,9 +292,6 @@ export default class extends Controller {
     if (event.key === "Enter") {
       event.preventDefault();
       this.directInput(event);
-    } else if (event.key === "ArrowDown") {
-      this.toggleCalendar();
-      this.datepickerV2CalendarOutlet.focusCurrentDate();
     }
   }
 
