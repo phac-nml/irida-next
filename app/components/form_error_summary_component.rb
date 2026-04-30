@@ -2,10 +2,10 @@
 
 # Renders an accessible validation summary with linked field errors.
 class FormErrorSummaryComponent < Component
-  attr_reader :entries
-
-  def initialize(entries:, **system_arguments)
-    @entries = Array(entries)
+  def initialize(entries:, include: nil, **system_arguments)
+    @entries_all = Array(entries)
+    @include_attributes =
+      Array(include).compact_blank.map { |a| a.to_s.delete_suffix('_id') }.uniq
     @system_arguments = system_arguments
   end
 
@@ -13,9 +13,17 @@ class FormErrorSummaryComponent < Component
     entries.any?
   end
 
+  def entries
+    return entries_all if include_attributes.blank?
+
+    entries_all.select do |entry|
+      include_attributes.include?(entry.attribute.to_s.delete_suffix('_id'))
+    end
+  end
+
   private
 
-  attr_reader :system_arguments
+  attr_reader :entries_all, :include_attributes, :system_arguments
 
   def heading_id
     @heading_id ||= "form-error-summary-heading-#{object_id}"

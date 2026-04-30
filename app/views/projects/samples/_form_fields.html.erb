@@ -1,18 +1,12 @@
-<%= if @sample.errors.any?
-  viral_alert(
-    type: "alert",
-    message: I18n.t(:"general.form.error_notification"),
-    aria: {
-      live: "assertive",
-    },
-  )
-end %>
+<%= form_error_summary(form) %>
 
 <%= render partial: "shared/form/required_field_legend" %>
 
 <% invalid_name = sample.errors.include?(:name) %>
+
 <div class="form-field <%= 'invalid' if invalid_name %>">
   <%= form.label :name, data: { required: true } %>
+
   <%= form.text_field :name,
                   required: true,
                   minlength: 3,
@@ -32,8 +26,10 @@ end %>
 </div>
 
 <% invalid_description = sample.errors.include?(:description) %>
+
 <div class="form-field <%= 'invalid' if invalid_description %>">
   <%= form.label :description %>
+
   <%= form.text_area :description,
                  rows: 4,
                  aria: {
@@ -48,6 +44,7 @@ end %>
                    invalid: invalid_description,
                    required: true,
                  } %>
+
   <% if invalid_description %>
     <%= render "shared/form/field_errors",
     id: form.field_id(:description, "error"),

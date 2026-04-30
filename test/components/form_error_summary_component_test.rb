@@ -60,6 +60,28 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
     assert_selector '.alert-component#custom-summary[data-testid="form-summary"][aria-label="Form error summary"]'
   end
 
+  test 'component can limit rendered entries with include argument' do
+    entries = [
+      FormErrorSummaryEntryBuilder::Entry.new(
+        attribute: :name,
+        message: "Name can't be blank",
+        target_id: 'project_name'
+      ),
+      FormErrorSummaryEntryBuilder::Entry.new(
+        attribute: :path,
+        message: "Path can't be blank",
+        target_id: 'project_path'
+      )
+    ]
+
+    render_inline(FormErrorSummaryComponent.new(entries:, include: %i[path]))
+
+    assert_selector 'a[href="#project_path"]', text: "Path can't be blank"
+    assert_no_selector 'a[href="#project_name"]'
+    assert_selector 'h2',
+                    text: I18n.t('general.form.error_summary.title', count: 1)
+  end
+
   test 'entry builder derives nested builder target ids' do
     namespace = Namespaces::ProjectNamespace.new
     namespace.errors.add(:path, :taken)
