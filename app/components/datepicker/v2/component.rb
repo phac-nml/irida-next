@@ -100,7 +100,6 @@ module Datepicker
           @system_arguments.delete(:class),
           @system_arguments.delete(:classes)
         )
-
         @system_arguments[:data] ||= {}
         @system_arguments[:data][:controller] = 'datepicker--v2--input'
         @system_arguments[:data]['datepicker--v2--input-datepicker--v2--calendar-outlet'] = "##{@calendar_id}"
@@ -122,7 +121,7 @@ module Datepicker
       end
 
       # Configures HTML attributes for the <div> datepicker calendar.
-      def setup_calendar_attributes # rubocop:disable Metrics/MethodLength
+      def setup_calendar_attributes
         @calendar_arguments[:id] = @calendar_id
         @calendar_arguments[:tag] = TAG_DEFAULT
         @calendar_arguments[:hidden] = true
@@ -131,10 +130,6 @@ module Datepicker
           @calendar_arguments.delete(:class),
           @calendar_arguments.delete(:classes)
         )
-
-        @calendar_arguments[:role] = 'dialog'
-        @calendar_arguments[:aria] =
-          { modal: 'true', label: I18n.t('components.datepicker.aria_label.dialog') }
 
         @calendar_arguments[:data] ||= {}
         @calendar_arguments[:data][:controller] = 'datepicker--v2--calendar'
