@@ -1845,7 +1845,6 @@ en:
         attach_failed: Unable to attach uploaded export file.
         file_too_large: Upload file must be %{max_mb}MB or smaller.
         invalid_file_type: Uploaded file must match %{file_format} format.
-        missing_file: Upload file is required.
     groups:
       share:
         group_not_found: Group with id %{group_id} to share namespace with cannot be found.

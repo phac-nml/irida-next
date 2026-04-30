@@ -1842,11 +1842,13 @@ fr:
         invalid_export_samples: Impossible de créer une exportation en raison des autorisations d’échantillonnage ou d’échantillons introuvables.
         invalid_export_workflow_executions: Impossible de créer une exportation en raison des autorisations d’exécution du flux de travail ou des exécutions de flux de travail introuvables.
         non_completed_workflow_executions: Impossible de créer une exportation en raison des exécutions de flux de travail sélectionnées ayant un état autre que « Terminé ».
+      linelist_create:
+        invalid_signed_blob_id: L’identifiant du blob de téléversement direct n’est pas valide.
+        missing_blob_file: Le fichier de téléversement direct est manquant.
       upload:
         attach_failed: Impossible d’attacher le fichier d’exportation téléversé.
         file_too_large: Le fichier à téléverser doit être de %{max_mb} Mo ou moins.
         invalid_file_type: Le fichier téléversé doit correspondre au format %{file_format}.
-        missing_file: Le fichier à téléverser est requis.
     groups:
       share:
         group_not_found: Le groupe avec l’identifiant %{group_id} avec lequel partager l’espace de noms est introuvable.
