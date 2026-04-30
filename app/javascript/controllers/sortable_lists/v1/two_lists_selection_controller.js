@@ -33,9 +33,11 @@ export default class extends Controller {
   #shiftSelectionOption;
 
   #ariaLiveTranslations;
+  #boundSubmitClickCapture;
 
   connect() {
     this.boundEndShiftSelect = this.#endShiftSelect.bind(this);
+    this.#boundSubmitClickCapture = this.#onSubmitClickCapture.bind(this);
 
     // Get a handle on the available and selected lists
     this.idempotentConnect();
@@ -63,6 +65,19 @@ export default class extends Controller {
       // sets the first element in each list to be tabbable (ie: tabIndex = 0)
       this.#initializeLists();
       this.#checkStates();
+
+      if (this.hasSubmitBtnTarget) {
+        this.submitBtnTarget.removeEventListener(
+          "click",
+          this.#boundSubmitClickCapture,
+          true,
+        );
+        this.submitBtnTarget.addEventListener(
+          "click",
+          this.#boundSubmitClickCapture,
+          true,
+        );
+      }
     }
   }
 
@@ -161,14 +176,23 @@ export default class extends Controller {
     this.templateSelectorTarget.value = matchingTemplate?.value ?? "none";
   }
 
+  #isAriaDisabled(element) {
+    return element?.getAttribute("aria-disabled") === "true";
+  }
+
+  #setAriaDisabled(element, disabled) {
+    if (!element) return;
+    element.setAttribute("aria-disabled", disabled ? "true" : "false");
+  }
+
   #setSubmitButtonDisableState(disableState) {
     if (this.hasSubmitBtnTarget) {
-      this.submitBtnTarget.disabled = disableState;
+      this.#setAriaDisabled(this.submitBtnTarget, disableState);
     }
   }
 
   #setButtonDisableState(button, disableState) {
-    button.disabled = disableState;
+    this.#setAriaDisabled(button, disableState);
   }
 
   #getSelectedOptions(list) {
@@ -307,7 +331,7 @@ export default class extends Controller {
   }
 
   addSelectionByAddButton() {
-    if (!this.addButtonTarget.disabled) {
+    if (!this.#isAriaDisabled(this.addButtonTarget)) {
       this.#performSelection(
         false,
         false,
@@ -323,7 +347,7 @@ export default class extends Controller {
   }
 
   removeSelectionByRemoveButton() {
-    if (!this.removeButtonTarget.disabled) {
+    if (!this.#isAriaDisabled(this.removeButtonTarget)) {
       this.#performSelection(
         false,
         false,
@@ -556,7 +580,7 @@ export default class extends Controller {
 
   // handles up and down buttons
   moveSelection(event) {
-    if (event.target.disabled) return;
+    if (this.#isAriaDisabled(event.target)) return;
 
     const selectedOption = this.#getSelectedOptions(this.selectedList)[0];
     const listOptions = Array.from(this.selectedList.querySelectorAll("li"));
@@ -801,5 +825,12 @@ export default class extends Controller {
         tababbleOptions[i].removeAttribute("data-tabbable");
       }
     }
+  }
+
+  #onSubmitClickCapture(event) {
+    if (!this.hasSubmitBtnTarget) return;
+    if (!this.#isAriaDisabled(this.submitBtnTarget)) return;
+    event.preventDefault();
+    event.stopPropagation();
   }
 }
