@@ -181,7 +181,8 @@
             <% end %>
 
             <div>
-              <%= form.submit t("data_exports.new.submit_button"),
+              <%= form.button t("data_exports.new.submit_button"),
+                          type: :submit,
                           data: data,
                           class: "button button-primary" %>
             </div>

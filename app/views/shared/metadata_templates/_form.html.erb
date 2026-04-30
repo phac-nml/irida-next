@@ -112,7 +112,8 @@
       <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
 
       <div class="mt-4">
-        <%= form.submit submit_button_text,
+        <%= form.button submit_button_text,
+                    type: :submit,
                     data: {
                       turbo_frame: "_top",
                       action:
@@ -120,7 +121,7 @@
                       "sortable-lists--v1--two-lists-selection-target": "submitBtn",
                     },
                     class: "button button-primary",
-                    disabled: true %>
+                    aria: { disabled: @current_template_fields.empty? } %>
       </div>
     </div>
   <% end %>
