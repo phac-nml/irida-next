@@ -132,7 +132,8 @@
             <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
 
             <div>
-              <%= form.submit t("data_exports.new.submit_button"),
+              <%= form.button t("data_exports.new.submit_button"),
+                          type: :submit,
                           data: {
                             turbo_frame: "_top",
                             action:

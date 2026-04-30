@@ -176,23 +176,23 @@ export default class extends Controller {
     this.templateSelectorTarget.value = matchingTemplate?.value ?? "none";
   }
 
-  #isAriaDisabled(element) {
+  #isDisabled(element) {
     return element?.getAttribute("aria-disabled") === "true";
   }
 
-  #setAriaDisabled(element, disabled) {
+  #setDisabled(element, disabled) {
     if (!element) return;
     element.setAttribute("aria-disabled", disabled ? "true" : "false");
   }
 
   #setSubmitButtonDisableState(disableState) {
     if (this.hasSubmitBtnTarget) {
-      this.#setAriaDisabled(this.submitBtnTarget, disableState);
+      this.#setDisabled(this.submitBtnTarget, disableState);
     }
   }
 
   #setButtonDisableState(button, disableState) {
-    this.#setAriaDisabled(button, disableState);
+    this.#setDisabled(button, disableState);
   }
 
   #getSelectedOptions(list) {
@@ -331,7 +331,7 @@ export default class extends Controller {
   }
 
   addSelectionByAddButton() {
-    if (!this.#isAriaDisabled(this.addButtonTarget)) {
+    if (!this.#isDisabled(this.addButtonTarget)) {
       this.#performSelection(
         false,
         false,
@@ -347,7 +347,7 @@ export default class extends Controller {
   }
 
   removeSelectionByRemoveButton() {
-    if (!this.#isAriaDisabled(this.removeButtonTarget)) {
+    if (!this.#isDisabled(this.removeButtonTarget)) {
       this.#performSelection(
         false,
         false,
@@ -580,7 +580,7 @@ export default class extends Controller {
 
   // handles up and down buttons
   moveSelection(event) {
-    if (this.#isAriaDisabled(event.target)) return;
+    if (this.#isDisabled(event.target)) return;
 
     const selectedOption = this.#getSelectedOptions(this.selectedList)[0];
     const listOptions = Array.from(this.selectedList.querySelectorAll("li"));
@@ -829,7 +829,7 @@ export default class extends Controller {
 
   #onSubmitClickCapture(event) {
     if (!this.hasSubmitBtnTarget) return;
-    if (!this.#isAriaDisabled(this.submitBtnTarget)) return;
+    if (!this.#isDisabled(this.submitBtnTarget)) return;
     event.preventDefault();
     event.stopPropagation();
   }
