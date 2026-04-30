@@ -48,7 +48,6 @@ module Datepicker
         @max_date = max_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments
-        @min_year = calculate_min_year
         @months = load_months
         @days_of_the_week = load_days_of_week
         # rubocop:enable Metrics/ParameterLists
@@ -83,10 +82,6 @@ module Datepicker
          I18n.t('components.datepicker.days_of_week.thursday'),
          I18n.t('components.datepicker.days_of_week.friday'),
          I18n.t('components.datepicker.days_of_week.saturday')]
-      end
-
-      def calculate_min_year
-        @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
       end
 
       def setup_ids(id)

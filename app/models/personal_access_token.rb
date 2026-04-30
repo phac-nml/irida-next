@@ -18,8 +18,12 @@ class PersonalAccessToken < ApplicationRecord
   validates :expires_at, on: :create, date: true, if: -> { expires_at_before_type_cast.present? }
   validate :validate_scopes
 
-  validates :expires_at, presence: true, if: -> { Irida::CurrentSettings.current_application_settings.require_personal_access_token_expiry? }
-  validates :expires_at, on: :create, date: true, if: -> { expires_at_before_type_cast.present? }
+  validates :expires_at, presence: true, comparison: {
+    less_than: Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days,
+    greater_than: Time.zone.today + 1
+  }, if: lambda {
+    Irida::CurrentSettings.current_application_settings.require_personal_access_token_expiry?
+  }
 
   scope :active, -> { not_revoked.not_expired }
   scope :not_revoked, -> { where(revoked: [false, nil]) }
