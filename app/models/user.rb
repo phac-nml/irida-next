@@ -131,12 +131,11 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def build_namespace_path
-    format('%<email>s', email:).sub('@', '_at_')
+    format('%<email>s', email:).sub! '@', '_at_'
   end
 
   def ensure_namespace
     return unless human?
-    return unless email.present? && email.match?(Devise.email_regexp)
 
     if namespace
       namespace.path = build_namespace_path
