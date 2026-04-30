@@ -99,6 +99,7 @@ export default class extends Controller {
     this._dismissProgressWindowTimeout ||= null;
     this._pendingUpload ||= null;
     this._lastCompletedPayload ||= null;
+    this._lastUploadPayload ||= null;
     this._progressMsgEl = null;
     this._progressBarEl = null;
     this._progressPctEl = null;
@@ -153,6 +154,7 @@ export default class extends Controller {
       metadataFields,
     };
     this._lastCompletedPayload = null;
+    this._lastUploadPayload = null;
 
     if (this.hasSampleStatusTarget) {
       this.sampleStatusTarget.textContent = this.t(
@@ -303,7 +305,7 @@ export default class extends Controller {
   }
 
   handleWorkerUploadError(payload) {
-    this._lastCompletedPayload = {
+    this._lastCompletedPayload ||= {
       filename: payload.filename,
       content: payload.content,
       format: payload.format,
@@ -333,6 +335,7 @@ export default class extends Controller {
     this.hideUploadLink();
     this.hideUploadActions();
     this.updateProgress(this.saveToServerUploadingMessageValue, 100);
+    this._lastUploadPayload = payload;
 
     this.workerClient.start({
       action: "upload_to_server",
@@ -464,9 +467,39 @@ export default class extends Controller {
   }
 
   async retryUpload() {
-    if (!this._lastCompletedPayload) return;
+    if (
+      !this._lastUploadPayload &&
+      this._lastCompletedPayload?.format === "xlsx"
+    ) {
+      try {
+        const blob = await xlsxRowsToBlob(this._lastCompletedPayload.content);
+        this.handleServerSave({ ...this._lastCompletedPayload, content: blob });
+      } catch (error) {
+        if (error instanceof XlsxLibraryLoadError) {
+          this.updateProgress(
+            this.t(this.xlsxLoadErrorMessageValue),
+            100,
+            true,
+          );
+        } else {
+          this.updateProgress(
+            this.t(this.saveToServerErrorMessageValue, {
+              message: error?.message || "request failed",
+            }),
+            100,
+            true,
+          );
+        }
 
-    this.handleServerSave(this._lastCompletedPayload);
+        this.showUploadActions();
+      }
+      return;
+    }
+
+    const uploadPayload = this._lastUploadPayload || this._lastCompletedPayload;
+    if (!uploadPayload) return;
+
+    this.handleServerSave(uploadPayload);
   }
 
   async downloadLocalFallback() {
@@ -505,6 +538,7 @@ export default class extends Controller {
     dismissProgressWindowState(this);
     this._pendingUpload = null;
     this._lastCompletedPayload = null;
+    this._lastUploadPayload = null;
   }
 
   showProgressWindow(message) {
