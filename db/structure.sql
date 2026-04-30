@@ -799,7 +799,7 @@ CREATE TABLE public.personal_access_tokens (
     user_id uuid NOT NULL,
     integration boolean DEFAULT false NOT NULL,
     integration_host character varying,
-    ip_addresses inet[] DEFAULT '{}'::inet[]
+    last_used_ips inet[] DEFAULT '{}'::inet[]
 );
 
 
@@ -2147,7 +2147,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20260306153207'),
 ('20260223130000'),
 ('20251201162848'),
-('20251029175823'),
 ('20251006195129'),
 ('20250826161932'),
 ('20250716174346'),

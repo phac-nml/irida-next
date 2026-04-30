@@ -3,7 +3,7 @@
 # Graphql Controller
 class GraphqlController < ApplicationController
   include SessionlessAuthentication
-  include WhitelistIpConcern
+  include LastUsedIpConcern
 
   # Unauthenticated users have access to the API for public data
   skip_before_action :authenticate_user!
@@ -24,7 +24,7 @@ class GraphqlController < ApplicationController
   def execute
     variables = prepare_variables(params[:variables])
     operation_name = params[:operationName]
-    whitelist_ip(context[:token], request.remote_ip)
+    update_last_used_ips(context[:token], request.remote_ip)
     result = IridaSchema.execute(query, variables:, context:, operation_name:)
     render json: result
   rescue StandardError => e
