@@ -86,6 +86,18 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
     assert_selector 'a[href="#namespace-select"]', text: 'Namespace required'
   end
 
+  test 'attribute overrides use custom label in generated messages' do
+    user = build_user
+    user.errors.add(:email, :blank)
+
+    entry = FormErrorSummaryEntryBuilder.new(
+      builder: build_form_builder('user', user),
+      attribute_overrides: { email: 'Email address' }
+    ).call.first
+
+    assert_equal "Email address can't be blank", entry.message
+  end
+
   private
 
   def build_form_builder(object_name, object)
