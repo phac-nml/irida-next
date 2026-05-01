@@ -50,6 +50,7 @@ pre-commit:
         - ".github/workflows/*.yml"
         - ".github/workflows/**/*.yml"
         - "test/fixtures/*.yml"
+        - "pnpm*.yaml"
       run: yq -i -S '.' -Y {staged_files}
       stage_fixed: true
 
