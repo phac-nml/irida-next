@@ -798,7 +798,8 @@ CREATE TABLE public.personal_access_tokens (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     user_id uuid NOT NULL,
     integration boolean DEFAULT false NOT NULL,
-    integration_host character varying
+    integration_host character varying,
+    last_used_ips inet[] DEFAULT '{}'::inet[]
 );
 
 
@@ -2141,11 +2142,11 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260416173126'),
 ('20260410170502'),
 ('20260306153207'),
 ('20260223130000'),
 ('20251201162848'),
-('20251029175823'),
 ('20251006195129'),
 ('20250826161932'),
 ('20250716174346'),

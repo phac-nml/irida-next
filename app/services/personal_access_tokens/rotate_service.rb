@@ -46,6 +46,7 @@ module PersonalAccessTokens
         token.token_digest = nil
         token.last_used_at = nil
         token.revoked = false
+        token.last_used_ips = []
       end
     end
   end

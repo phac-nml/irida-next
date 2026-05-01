@@ -1,0 +1,17 @@
+<%= render layout: "mailers/email_template",
+locals: {
+  name: @personal_access_token.user.first_name,
+  url: nil,
+} do %>
+  <tr>
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
+        <%= t(
+          :"mailers.personal_access_token_mailer.new_ip_address_for_token.body_html",
+          token_name: @personal_access_token.name,
+          ip_address: @ip_address
+        ) %>
+      </span>
+    </td>
+  </tr>
+<% end %>
