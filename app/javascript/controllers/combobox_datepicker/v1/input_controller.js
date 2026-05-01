@@ -127,10 +127,14 @@ export default class extends Controller {
       // requery calendar so we can manipulate it later. Must use getElementById as target is outside of this controller's
       // scope, and using something like lastElementChild does not work with turbo-stream (eg: members/group-link tables)
       this.#calendar = document.getElementById(this.calendarIdValue);
-
       if (!this.#calendar) {
         console.error("Failed to find calendar after appending to DOM");
       }
+
+      this.datepickerInputTarget.setAttribute(
+        "aria-controls",
+        this.calendarIdValue,
+      );
     } catch (error) {
       console.error("Error adding calendar template:", error);
     }
