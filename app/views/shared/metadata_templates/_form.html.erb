@@ -6,7 +6,9 @@
   class="font-normal text-slate-500 dark:text-slate-400"
 >
   <%= form_for(@metadata_template, url: template_path, method:, html: { novalidate: true }) do |form| %>
+    <%= form_error_summary(form) %>
     <%= render partial: "shared/form/required_field_legend" %>
+
     <% invalid_name = @metadata_template.errors&.include?(:name) %>
     <% name_hint_id = form.field_id(:name, "hint") %>
     <% name_error_id = invalid_name ? form.field_id(:name, "error") : nil %>
@@ -15,6 +17,9 @@
     <% description_hint_id = form.field_id(:description, "hint") %>
     <% description_error_id = invalid_description ? form.field_id(:description, "error") : nil %>
     <% description_describedby = [description_hint_id, description_error_id].compact.join(" ") %>
+    <% invalid_fields = @metadata_template.errors&.include?(:fields) %>
+    <% fields_error_id = invalid_fields ? form.field_id(:fields, "error") : nil %>
+    <% fields_describedby = [fields_error_id].compact.join(" ") %>
 
     <div class="grid gap-5">
       <section aria-labelledby="metadata-template-details-heading" class="grid gap-4">
@@ -30,14 +35,13 @@
           <%= form.label :name, data: { required: true } %>
 
           <%= form.text_field :name,
-                          required: true,
-                          class: "form-control",
-                          aria: {
-                            describedby: name_describedby,
-                            invalid: invalid_name,
-                            required: true,
-                          },
-                          autofocus: invalid_name %>
+                           required: true,
+                           class: "form-control",
+                           aria: {
+                             describedby: name_describedby,
+                             invalid: invalid_name,
+                             required: true,
+                           } %>
 
           <p id="<%= name_hint_id %>" class="mt-2 text-xs font-medium text-slate-600 dark:text-slate-300">
             <%= t("metadata_templates.form.name_hint") %>
@@ -54,13 +58,12 @@
           <%= form.label :description %>
 
           <%= form.text_area :description,
-                         rows: 3,
-                         class: "form-control",
-                         aria: {
-                           describedby: description_describedby,
-                           invalid: invalid_description,
-                         },
-                         autofocus: invalid_description %>
+                          rows: 3,
+                          class: "form-control",
+                          aria: {
+                            describedby: description_describedby,
+                            invalid: invalid_description,
+                          } %>
 
           <p id="<%= description_hint_id %>" class="mt-2 text-xs font-medium text-slate-600 dark:text-slate-300">
             <%= t("metadata_templates.form.description_hint") %>
@@ -93,21 +96,34 @@
           },
         ) %>
 
-        <%= render SortableListsComponent.new do |sortable_lists| %>
-          <%= sortable_lists.with_list(
-            id: "available-list",
-            title: t("metadata_templates.form.available"),
-            list_items: @available_metadata_fields,
-            group: "metadata_selection",
-          ) %>
+        <div
+          id="<%= form.field_id(:fields) %>"
+          class="outline-hidden"
+          tabindex="-1"
+          aria-describedby="<%= fields_describedby.presence %>"
+        >
+          <%= render SortableListsComponent.new do |sortable_lists| %>
+            <%= sortable_lists.with_list(
+              id: "available-list",
+              title: t("metadata_templates.form.available"),
+              list_items: @available_metadata_fields,
+              group: "metadata_selection",
+            ) %>
 
-          <%= sortable_lists.with_list(
-            id: "selected-list",
-            title: t("metadata_templates.form.selected"),
-            list_items: @current_template_fields,
-            group: "metadata_selection",
-            required: true,
-          ) %>
+            <%= sortable_lists.with_list(
+              id: "selected-list",
+              title: t("metadata_templates.form.selected"),
+              list_items: @current_template_fields,
+              group: "metadata_selection",
+              required: true,
+            ) %>
+          <% end %>
+        </div>
+
+        <% if invalid_fields %>
+          <%= render "shared/form/field_errors",
+          id: fields_error_id,
+          errors: @metadata_template.errors.full_messages_for(:fields) %>
         <% end %>
       </section>
 
