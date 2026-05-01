@@ -15,6 +15,7 @@ class PersonalAccessToken < ApplicationRecord
 
   validates :name, presence: true
   validates :scopes, presence: true
+  validates :expires_at, on: :create, date: true, if: -> { expires_at_before_type_cast.present? }
   validate :validate_scopes
 
   scope :active, -> { not_revoked.not_expired }

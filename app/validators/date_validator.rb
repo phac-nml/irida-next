@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Validator for date inputs. Currently evaluates expires_at for the member and group_link models
+# Validator for date inputs. Currently evaluates expires_at for member, group link, and personal access token models.
 class DateValidator < ActiveModel::EachValidator
   class DateValidatorError < StandardError
   end
