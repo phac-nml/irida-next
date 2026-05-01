@@ -90,6 +90,17 @@ class DateValidatorTest < ActiveSupport::TestCase
                  group_link.errors[:expires_at].first)
   end
 
+  test 'personal access token with cast expires_at date' do
+    personal_access_token = PersonalAccessToken.new(
+      name: 'Rotated token',
+      scopes: %w[api],
+      expires_at: Time.zone.today + 1.day,
+      user: @user
+    )
+
+    assert personal_access_token.valid?
+  end
+
   private
 
   def create_group_member(expires_at_date)

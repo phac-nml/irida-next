@@ -14,7 +14,8 @@ class DateValidator < ActiveModel::EachValidator
     raise DateValidatorError, I18n.t('common.date.errors.invalid_input') if value.nil?
 
     # validate if input matched our expected date input (YYYY-MM-DD)
-    unless expires_at_value.match?(/\A\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\z/)
+    if expires_at_value.is_a?(String) &&
+       !expires_at_value.match?(/\A\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\z/)
       raise DateValidatorError,
             I18n.t('common.date.errors.invalid_format')
     end
