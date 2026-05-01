@@ -4,7 +4,7 @@ module ComboboxDatepicker
   module V1
     # Datepicker Component
     # Renders the date input along with datepicker calendar
-    class Component < ::Component # rubocop:disable Metrics/ClassLength
+    class Component < ::Component
       # Default HTML tag for components main elements.
       TAG_DEFAULT = :div
 
@@ -81,10 +81,6 @@ module ComboboxDatepicker
          I18n.t('components.datepicker.days_of_week.thursday'),
          I18n.t('components.datepicker.days_of_week.friday'),
          I18n.t('components.datepicker.days_of_week.saturday')]
-      end
-
-      def calculate_min_year
-        @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
       end
 
       def setup_ids(id)
