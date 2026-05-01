@@ -46,7 +46,6 @@ module ComboboxDatepicker
         @min_date = min_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments
-        @min_year = calculate_min_year
         @months = load_months
         @days_of_the_week = load_days_of_week
         # rubocop:enable Metrics/ParameterLists
