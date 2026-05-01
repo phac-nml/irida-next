@@ -1269,6 +1269,18 @@ en:
         - All projects and groups you are a member of will be left intact
       show:
         title: Delete account
+    experimental_features:
+      show:
+        description: These features are experimental and may change or be removed. You can enable or disable them for your account at any time.
+        empty_state:
+          description: There are no experimental features available for your account right now.
+          title: No experimental features available
+        title: Experimental Features
+      toggle_label: "%{feature} — enable or disable"
+      update:
+        error: Something went wrong. Please try again.
+        not_eligible: This feature is not available for your account.
+        success: Setting updated
     passwords:
       update:
         forgot: Forgot your password?
@@ -1331,6 +1343,7 @@ en:
     sidebar:
       access_tokens: Access Tokens
       account: Account
+      experimental_features: Experimental Features
       header: User Settings
       password: Password
       preferences: Preferences

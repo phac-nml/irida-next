@@ -5,6 +5,7 @@ resource :profile, only: %i[show update] do
     resource :password, only: %i[edit update]
     resource :account, only: %i[show destroy]
     resource :preferences, only: %i[show update]
+    resource :experimental_features, only: %i[show update]
     resources :personal_access_tokens, only: %i[index create new] do
       member do
         delete :revoke
