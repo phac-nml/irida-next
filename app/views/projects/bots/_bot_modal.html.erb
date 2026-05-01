@@ -11,10 +11,12 @@
 
   <%= form_for(@bot_account, url: namespace_project_bots_path, method: :post, html: { novalidate: true }) do |form| %>
     <%= form.fields_for :user do |user_fields| %>
-      <div class="grid gap-4">
+      <% summary_entries = [] %>
+
+      <% members_fields = capture do %>
         <%= user_fields.fields_for :members do |member_fields| %>
+          <% summary_entries.concat(FormErrorSummaryEntryBuilder.new(builder: member_fields).call) %>
           <%= render partial: "shared/form/required_field_legend" %>
-          <%= form_error_summary(member_fields) %>
 
           <% invalid_access_level =
             @bot_account.user.members[0].errors.include?(:access_level) %>
@@ -53,8 +55,12 @@
             <% end %>
           </div>
         <% end %>
+      <% end %>
 
+      <% personal_access_token_fields = capture do %>
         <%= user_fields.fields_for :personal_access_tokens do |pat_fields| %>
+          <% summary_entries.concat(FormErrorSummaryEntryBuilder.new(builder: pat_fields).call) %>
+
           <div
             class="
               grid gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow dark:border-slate-700
@@ -65,8 +71,6 @@
               <%= t("projects.bots.index.bot_listing.new_bot_modal.token_details") %>
             </p>
 
-            <%= form_error_summary(pat_fields) %>
-
             <%= render partial: "shared/personal_access_tokens/form_fields",
             locals: {
               pat: @bot_account.user.personal_access_tokens[0],
@@ -74,6 +78,13 @@
             } %>
           </div>
         <% end %>
+      <% end %>
+
+      <%= render FormErrorSummaryComponent.new(entries: summary_entries) if summary_entries.any? %>
+
+      <div class="grid gap-4">
+        <%= members_fields %>
+        <%= personal_access_token_fields %>
       </div>
     <% end %>
 
