@@ -31,6 +31,10 @@ module ViewHelper
   end
 
   def datepicker(*, **, &)
+    render(DatepickerComponent.new(*, **), &)
+  end
+
+  def combobox_datepicker(*, **, &)
     render(ComboboxDatepickerComponent.new(*, **), &)
   end
 

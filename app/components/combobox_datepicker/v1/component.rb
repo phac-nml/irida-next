@@ -4,7 +4,7 @@ module ComboboxDatepicker
   module V1
     # Datepicker Component
     # Renders the date input along with datepicker calendar
-    class Component < ::Component
+    class Component < ::Component # rubocop:disable Metrics/ClassLength
       # Default HTML tag for components main elements.
       TAG_DEFAULT = :div
 
@@ -125,7 +125,7 @@ module ComboboxDatepicker
       end
 
       # Configures HTML attributes for the <div> datepicker calendar.
-      def setup_calendar_attributes # rubocop:disable Metrics/MethodLength
+      def setup_calendar_attributes # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         @calendar_arguments[:id] = @calendar_id
         @calendar_arguments[:tag] = TAG_DEFAULT
         @calendar_arguments[:hidden] = true
@@ -144,6 +144,7 @@ module ComboboxDatepicker
         @calendar_arguments[:data]['combobox-datepicker--v1--calendar-combobox-datepicker--v1--input-outlet'] =
           "##{@container_id}"
         @calendar_arguments[:data]['combobox-datepicker--v1--calendar-months-value'] = @months
+        @calendar_arguments[:data]['combobox-datepicker--v1--calendar-locale-value'] = I18n.locale
       end
     end
   end

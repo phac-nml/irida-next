@@ -31,6 +31,7 @@ export default class extends Controller {
 
   static values = {
     months: Array,
+    locale: String,
   };
 
   // today's date attributes for quick access
@@ -49,6 +50,7 @@ export default class extends Controller {
   #autosubmit;
 
   idempotentConnect() {
+    console.log(this.localeValue);
     // set the months dropdown in case we're in the year of the minimum date
     this.setMonths();
     // set the month and year inputs
@@ -223,6 +225,10 @@ export default class extends Controller {
       cell.setAttribute(
         "data-date",
         this.#getFormattedStringDate(year, monthIndex, day),
+      );
+      cell.setAttribute(
+        "aria-label",
+        this.#getDateAriaLabel(year, this.monthsValue[monthIndex], day),
       );
       row.appendChild(fragment);
     };
@@ -757,5 +763,11 @@ export default class extends Controller {
     focusDate(this.calendarTarget, currentDate);
   }
 
-  navigateToSpecificDate(date) {}
+  #getDateAriaLabel(year, month, day) {
+    if (this.localeValue === "en") {
+      return `${month} ${day}, ${year}`;
+    } else if (this.localeValue === "fr") {
+      return `${day} ${month}, ${year}`;
+    }
+  }
 }

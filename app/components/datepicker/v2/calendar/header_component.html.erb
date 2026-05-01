@@ -10,6 +10,7 @@
     "
     data-action="
         click->datepicker--v2--calendar#previousMonth
+        keydown->datepicker--v2--calendar#tabBackToInput
       "
     data-datepicker--v2--calendar-target="backButton"
     aria-label="<%= t("components.datepicker.aria_label.previous_month_button") %>"
@@ -17,7 +18,10 @@
     <%= icon(:arrow_left, color: nil, size: nil, class: "size-6") %>
   </button>
 
-  <div data-datepicker--v2--calendar-target="monthSelectContainer"></div>
+  <div
+    data-datepicker--v2--calendar-target="monthSelectContainer"
+    data-action="keydown->datepicker--v2--calendar#tabBackToInput"
+  ></div>
 
   <div>
     <input
