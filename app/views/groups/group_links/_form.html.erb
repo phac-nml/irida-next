@@ -113,7 +113,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
     <% end %>
 
     <div class="form-field <%= 'invalid' if invalid_expires_at %>">
-      <%= datepicker(
+      <%= combobox_datepicker(
       id: form.field_id(:expires_at),
       label: t("groups.group_links.new.label.access_expiration"),
       input_name: "namespace_group_link[expires_at]",
