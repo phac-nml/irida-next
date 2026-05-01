@@ -782,6 +782,7 @@ en:
             description: Generating a new personal access token for %{bot_account}
             title: New Personal Access Token
           new_bot_modal:
+            access_level: Access Level
             description: This will create a bot user with email format 'inxt_grp_GROUP_PUID_bot_n@iridanext.com', add them as a member to the Group with 'Access level' role, and then create a personal access token for the bot using the details below
             select_access_level: Select access level
             title: New Bot Account
