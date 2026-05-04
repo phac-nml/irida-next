@@ -1,8 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import {
-  FOCUSABLE_ELEMENTS,
-  INPUT_CLASSES,
-} from "controllers/datepicker/constants";
+import { INPUT_CLASSES } from "controllers/datepicker/constants";
 import { replaceStyleClasses } from "controllers/datepicker/utils";
 import FloatingDropdown from "utilities/floating_dropdown";
 
