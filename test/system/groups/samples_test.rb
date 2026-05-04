@@ -684,16 +684,33 @@ module Groups
     end
 
     test 'should not import metadata via invalid file type' do
+      ### SETUP START ###
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
+
       assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
-      assert_no_selector '#available-list'
-      assert_no_selector '#selected-list'
-      assert_button I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button'), disabled: true
+      select 'invalid file extension', from: I18n.t('shared.samples.metadata.file_imports.form_fields.sample_id_column')
+
+      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.available')
+      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.selected')
+      click_button I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      assert_performed_jobs 1
+      assert_no_text I18n.t('shared.progress_bar.in_progress')
+
+      assert_text I18n.t('services.spreadsheet_import.invalid_file_extension')
+      ### VERIFY END ###
     end
 
     test 'should import metadata with ignore empty values' do
