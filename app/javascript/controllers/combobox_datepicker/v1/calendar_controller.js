@@ -10,6 +10,7 @@ import {
   getDateNode,
   getFirstOfMonthNode,
   focusDate,
+  getFormattedStringDate,
 } from "controllers/datepicker/utils";
 
 export default class extends Controller {
@@ -93,7 +94,7 @@ export default class extends Controller {
     this.#minDate = params["minDate"];
     this.#minDateMessage = params["minDateMessage"];
     this.#autosubmit = params["autosubmit"];
-    this.#todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
+    this.#todaysFormattedFullDate = `${getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
     this.idempotentConnect();
   }
 
@@ -223,7 +224,7 @@ export default class extends Controller {
       cell.innerText = day;
       cell.setAttribute(
         "data-date",
-        this.#getFormattedStringDate(year, monthIndex, day),
+        getFormattedStringDate(year, monthIndex, day),
       );
       cell.setAttribute(
         "aria-label",
@@ -322,12 +323,6 @@ export default class extends Controller {
       }
     }
     return { year: year, month: month };
-  }
-
-  #getFormattedStringDate(year, monthIndex, date) {
-    // new Date will parse monthIndex into correct month (month index == 0 will return january (ie: month 01))
-    // ISOString returns YYYY-MM-DDTHH:mm:ss.sssZ, so we split off T as we only want YYYY-MM-DD
-    return new Date(year, monthIndex, date).toISOString().split("T")[0];
   }
 
   #addStylingToDates() {
@@ -598,7 +593,7 @@ export default class extends Controller {
       targetDate = currentDate + 1;
     }
 
-    const targetFullDate = this.#getFormattedStringDate(
+    const targetFullDate = getFormattedStringDate(
       this.#selectedYear,
       this.#selectedMonthIndex,
       targetDate,
@@ -640,7 +635,7 @@ export default class extends Controller {
     }
 
     // target date is the date we'd like to 'end' on after keypress0
-    const targetFullDate = this.#getFormattedStringDate(
+    const targetFullDate = getFormattedStringDate(
       this.#selectedYear,
       this.#selectedMonthIndex,
       targetDate,
