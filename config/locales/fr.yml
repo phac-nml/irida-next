@@ -1962,7 +1962,7 @@ fr:
             title: Télécharger des échantillons de métadonnées
             uploading: Téléchargement
           errors:
-            description: "‘L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :’"
+            description: 'L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes:'
             ok_button: OK
           form_fields:
             available: Disponible
