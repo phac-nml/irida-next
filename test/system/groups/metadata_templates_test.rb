@@ -131,7 +131,8 @@ module Groups
 
       find('input#metadata_template_name').fill_in with: 'Newest template'
 
-      assert_button I18n.t('metadata_templates.new_template_dialog.submit_button'), disabled: true
+      assert_selector 'button[disabled]',
+                      text: I18n.t('metadata_templates.new_template_dialog.submit_button')
     end
 
     test 'cannot create a template with no template name entered' do

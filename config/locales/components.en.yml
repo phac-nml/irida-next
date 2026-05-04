@@ -370,16 +370,17 @@ en:
     sortable_lists:
       v1:
         component:
+          keyboard_instructions: Use Arrow Up and Arrow Down to move through options. Press Space to select or deselect options. Press Enter to add selected options, Delete to remove selected options, Alt plus Arrow Up or Arrow Down to reorder selected options, Shift plus Arrow keys to select a range, and Control plus A to select all options in the current list.
           no_template: No template
         list_component:
           add: Add
-          aria_role_description: "%{list} listbox drag and drop"
           down: Down
           keyboard_shortcuts:
             add: Enter
             down: Alt+ArrowDown
             remove: Delete
             up: Alt+ArrowUp
+          required: Required
           up: Up
     token:
       copied: Copied!
