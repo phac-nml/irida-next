@@ -928,6 +928,17 @@ if Rails.env.development?
         'en' => 'Enable the new data grid for the samples table.',
         'fr' => "Activer la nouvelle grille de données pour le tableau d'échantillons."
       }
+    },
+    'client_linelist_exports' => {
+      'allowlist' => ['user1@email.com'],
+      'name' => {
+        'en' => 'Client Linelist Exports',
+        'fr' => 'Exports de listes de clients'
+      },
+      'description' => {
+        'en' => 'Enable the new client linelist exports feature.',
+        'fr' => "Activer la nouvelle fonctionnalité d'exports de listes de clients."
+      }
     }
   }
   app_setting.update!(
