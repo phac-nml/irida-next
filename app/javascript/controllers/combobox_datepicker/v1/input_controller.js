@@ -69,10 +69,8 @@ export default class extends Controller {
   }
 
   disconnect() {
-    if (this.#floatingDropdown) {
-      this.#floatingDropdown?.destroy();
-      this.#floatingDropdown = null;
-    }
+    this.#floatingDropdown?.destroy();
+    this.#floatingDropdown = null;
 
     if (this.#calendar) {
       this.#calendar.remove();
