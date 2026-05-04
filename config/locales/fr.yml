@@ -784,7 +784,6 @@ fr:
             description: Génération d’un nouveau jeton d’accès personnel pour %{bot_account}
             title: Nouveau jeton d’accès personnel
           new_bot_modal:
-            access_level: Niveau d’accès
             description: Cela créera un utilisateur de bot avec le format de courriel « inxt_grp_GROUP_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au groupe avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             select_access_level: Sélectionnez le niveau d’accès
             title: Nouveau compte de bot

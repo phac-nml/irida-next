@@ -80,7 +80,7 @@
         <% end %>
       <% end %>
 
-      <%= render FormErrorSummaryComponent.new(entries: summary_entries, attribute_overrides: { access_level: t("groups.bots.index.bot_listing.new_bot_modal.access_level") }) if summary_entries.any? %>
+      <%= render FormErrorSummaryComponent.new(entries: summary_entries) if summary_entries.any? %>
 
       <div class="grid gap-4">
         <%= members_fields %>
