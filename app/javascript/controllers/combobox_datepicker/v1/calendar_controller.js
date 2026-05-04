@@ -10,7 +10,6 @@ import {
   getDateNode,
   getFirstOfMonthNode,
   focusDate,
-  getFormattedStringDate,
 } from "controllers/datepicker/utils";
 
 export default class extends Controller {
@@ -94,7 +93,7 @@ export default class extends Controller {
     this.#minDate = params["minDate"];
     this.#minDateMessage = params["minDateMessage"];
     this.#autosubmit = params["autosubmit"];
-    this.#todaysFormattedFullDate = `${getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
+    this.#todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
     this.idempotentConnect();
   }
 
@@ -224,7 +223,7 @@ export default class extends Controller {
       cell.innerText = day;
       cell.setAttribute(
         "data-date",
-        getFormattedStringDate(year, monthIndex, day),
+        this.#getFormattedStringDate(year, monthIndex, day),
       );
       cell.setAttribute(
         "aria-label",
@@ -593,7 +592,7 @@ export default class extends Controller {
       targetDate = currentDate + 1;
     }
 
-    const targetFullDate = getFormattedStringDate(
+    const targetFullDate = this.#getFormattedStringDate(
       this.#selectedYear,
       this.#selectedMonthIndex,
       targetDate,
@@ -635,7 +634,7 @@ export default class extends Controller {
     }
 
     // target date is the date we'd like to 'end' on after keypress0
-    const targetFullDate = getFormattedStringDate(
+    const targetFullDate = this.#getFormattedStringDate(
       this.#selectedYear,
       this.#selectedMonthIndex,
       targetDate,
@@ -761,5 +760,13 @@ export default class extends Controller {
     } else {
       return `${month} ${day}, ${year}`;
     }
+  }
+
+  #getFormattedStringDate(year, monthIndex, day) {
+    const d = new Date(year, monthIndex, day);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${dd}`;
   }
 }

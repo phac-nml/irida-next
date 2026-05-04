@@ -29,11 +29,3 @@ export function replaceStyleClasses(node, classesToRemove, classesToAdd) {
   node.classList.remove(...classesToRemove);
   node.classList.add(...classesToAdd);
 }
-
-export function getFormattedStringDate(year, monthIndex, day) {
-  const d = new Date(year, monthIndex, day);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${dd}`;
-}
