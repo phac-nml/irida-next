@@ -50,7 +50,6 @@ export default class extends Controller {
   #autosubmit;
 
   idempotentConnect() {
-    console.log(this.localeValue);
     // set the months dropdown in case we're in the year of the minimum date
     this.setMonths();
     // set the month and year inputs
@@ -468,7 +467,6 @@ export default class extends Controller {
     this.monthSelectTarget.focus();
   }
 
-  // TODO: Likely need to clean this up and be more inclusive, maybe change year by up or down
   // change year via year input
   changeYear() {
     if (this.yearTarget.value < this.#selectedYear) {
@@ -719,7 +717,6 @@ export default class extends Controller {
         }
       }
     }
-    // TODO: need to verify min date still
     focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
   }
 
@@ -764,10 +761,10 @@ export default class extends Controller {
   }
 
   #getDateAriaLabel(year, month, day) {
-    if (this.localeValue === "en") {
-      return `${month} ${day}, ${year}`;
-    } else if (this.localeValue === "fr") {
+    if (this.localeValue === "fr") {
       return `${day} ${month}, ${year}`;
+    } else {
+      return `${month} ${day}, ${year}`;
     }
   }
 }

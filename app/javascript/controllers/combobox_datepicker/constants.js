@@ -1,7 +1,3 @@
-// used to search DOM for next tabbable element after datepicker (datepicker is not appended as a sibling to the input textbox)
-export const FOCUSABLE_ELEMENTS =
-  'a:not([disabled]), button:not([disabled]), input:not([disabled]):not([type="hidden"]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled])';
-
 export const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 export const CALENDAR_CLASSES = {

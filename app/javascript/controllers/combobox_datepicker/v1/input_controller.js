@@ -42,8 +42,6 @@ export default class extends Controller {
 
   // calendar DOM element once appended
   #calendar;
-  // retrieves next focusable element in DOM after date input
-  #nextFocusableElementAfterInput;
 
   #floatingDropdown;
 
@@ -71,16 +69,18 @@ export default class extends Controller {
 
     // Position the calendar
     this.#initializeDropdown();
-
-    this.#findNextFocusableElement();
   }
 
   disconnect() {
-    this.#floatingDropdown?.destroy();
-    this.#floatingDropdown = null;
+    if (this.#floatingDropdown) {
+      this.#floatingDropdown?.destroy();
+      this.#floatingDropdown = null;
+    }
 
-    this.#calendar.remove();
-    this.#calendar = null;
+    if (this.#calendar) {
+      this.#calendar.remove();
+      this.#calendar = null;
+    }
   }
 
   #initializeDropdown() {
@@ -156,16 +156,6 @@ export default class extends Controller {
     if (this.hasComboboxDatepickerV1CalendarOutlet) {
       this.#shareParamsWithCalendar();
     }
-  }
-
-  // because the calendar is appended as the last element, tab logic needs to be altered as a user would expect after
-  // tabbing through the calendar, we'd focus on the next element after the date input
-  #findNextFocusableElement() {
-    const focusable = Array.from(
-      document.body.querySelectorAll(FOCUSABLE_ELEMENTS),
-    );
-    const index = focusable.indexOf(this.datepickerInputTarget);
-    this.#nextFocusableElementAfterInput = focusable[index + 1];
   }
 
   // append datepicker to dialog if in dialog, otherwise append to body
@@ -267,7 +257,6 @@ export default class extends Controller {
           this.disableInputErrorState();
         }
         this.#setSelectedDate();
-        this.focusNextFocusableElement();
       }
     } else {
       this.#enableInputErrorState(this.invalidDateValue);
@@ -419,9 +408,5 @@ export default class extends Controller {
   // used by datepicker/calendar.js
   focusDatepickerInput() {
     this.datepickerInputTarget.focus();
-  }
-
-  focusNextFocusableElement() {
-    this.#nextFocusableElementAfterInput.focus();
   }
 }
