@@ -20,7 +20,6 @@ en:
       submit: Submit
     date:
       errors:
-        invalid_format: must be in YYYY-MM-DD format (for example, 2026-05-01)
         invalid_input: must be in YYYY-MM-DD format (for example, 2026-05-01)
         invalid_min_date: Date is before minimum date
     labels:
