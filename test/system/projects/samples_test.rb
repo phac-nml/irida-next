@@ -56,12 +56,12 @@ module Projects
 
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_selector '.pathogen-data-grid__table'
-      assert_selector '#samples-table.samples-data-grid.pathogen-data-grid--fill'
-      assert_selector '#samples-table .pathogen-data-grid__scroll'
-      assert_selector 'th.pathogen-data-grid__cell--sticky',
+      assert_selector '#samples-table.samples-data-grid[data-pathogen-grid][data-pathogen-grid-fill]'
+      assert_selector '#samples-table [data-pathogen--data-grid-target~="scrollContainer"]'
+      assert_selector '#samples-table table[role="grid"][data-pathogen--data-grid-target~="grid"]'
+      assert_selector 'th[data-pathogen--data-grid-target~="cell"][data-sticky-cell]',
                       text: /#{Regexp.escape(I18n.t('samples.table_component.puid'))}/i
-      assert_selector 'th.pathogen-data-grid__cell--sticky',
+      assert_selector 'th[data-pathogen--data-grid-target~="cell"][data-sticky-cell]',
                       text: /#{Regexp.escape(I18n.t('samples.table_component.name'))}/i
     ensure
       Flipper.disable(:data_grid_samples_table)
