@@ -32,12 +32,12 @@ class DateValidatorTest < ActiveSupport::TestCase
                  member.errors[:expires_at].first)
   end
 
-  test 'member expires_at without YYYY-MM-DD format' do
+  test 'member expires_at with parseable non-YYYY-MM-DD format' do
     invalid_date_format = (Time.zone.today - 10.days).strftime('%d-%m-%Y')
     member = create_group_member(invalid_date_format)
 
     assert_not member.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_format'),
+    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
                  member.errors[:expires_at].first)
   end
 
@@ -72,12 +72,12 @@ class DateValidatorTest < ActiveSupport::TestCase
                  group_link.errors[:expires_at].first)
   end
 
-  test 'group link expires_at without YYYY-MM-DD format' do
+  test 'group link expires_at with parseable non-YYYY-MM-DD format' do
     invalid_date_format = (Time.zone.today - 10.days).strftime('%d-%m-%Y')
     group_link = create_group_link(invalid_date_format)
 
     assert_not group_link.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_format'),
+    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
                  group_link.errors[:expires_at].first)
   end
 
