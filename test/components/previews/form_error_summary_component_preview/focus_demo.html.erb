@@ -34,4 +34,57 @@
       <li><%= viral_help_text(state: :error) { 'Namespace required' } %></li>
     </ul>
   </div>
+
+  <div class="form-field">
+    <label for="expires_at-input">Expiration date</label>
+
+    <input
+      id="expires_at-input"
+      aria-describedby="expires_at_error"
+      aria-invalid="true"
+      autocomplete="off"
+      class="block w-full"
+      type="text"
+    >
+
+    <ul id="expires_at_error" class="max-w-md list-inside text-sm text-slate-500 dark:text-slate-400">
+      <li><%= viral_help_text(state: :error) { "Expiration date can't be blank" } %></li>
+    </ul>
+  </div>
+
+  <div class="form-field">
+    <fieldset>
+      <legend>Scopes</legend>
+
+      <div class="flex items-center gap-2">
+        <input
+          id="personal_access_token_scopes_api"
+          name="personal_access_token[scopes][]"
+          type="checkbox"
+          value="api"
+          aria-describedby="personal_access_token_scopes_error"
+          aria-invalid="true"
+        >
+
+        <label for="personal_access_token_scopes_api">api</label>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <input
+          id="personal_access_token_scopes_read_api"
+          name="personal_access_token[scopes][]"
+          type="checkbox"
+          value="read_api"
+          aria-describedby="personal_access_token_scopes_error"
+          aria-invalid="true"
+        >
+
+        <label for="personal_access_token_scopes_read_api">read_api</label>
+      </div>
+    </fieldset>
+
+    <ul id="personal_access_token_scopes_error" class="max-w-md list-inside text-sm text-slate-500 dark:text-slate-400">
+      <li><%= viral_help_text(state: :error) { "Scopes can't be blank" } %></li>
+    </ul>
+  </div>
 </div>

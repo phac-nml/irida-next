@@ -286,6 +286,10 @@ input[type="search"] {
     @apply text-red-700 dark:text-red-400;
   }
 
+  &.form-field legend {
+    @apply text-red-700 dark:text-red-400;
+  }
+
   &.form-field select {
     @apply border-red-500 dark:border-red-400;
   }

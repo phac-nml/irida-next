@@ -33,9 +33,10 @@ module PersonalAccessTokens
       token = PersonalAccessToken.create!(
         user: users(:john_doe),
         name: 'Expired but young PAT',
-        scopes: ['api'],
-        expires_at: (@current_date - 10.days).to_date
+        scopes: ['api']
       )
+      # DateValidator forbids past expires_at on create; set in DB for an expired date still after the job cutoff.
+      token.update_columns(expires_at: (@current_date - 10.days).to_date) # rubocop:disable Rails/SkipsModelValidations
 
       assert_no_difference -> { PersonalAccessToken.where(id: token.id).count } do
         PersonalAccessTokens::CleanupJob.perform_now

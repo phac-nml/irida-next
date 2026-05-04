@@ -6,7 +6,10 @@ module FormErrorSummaryHelper
   # When migrating an existing form, remove invalid-only autofocus from the target fields so the
   # summary remains the first focus target after a failed submit.
   def form_error_summary(builder, target_overrides: {}, **system_arguments)
-    entries = FormErrorSummaryEntryBuilder.new(builder:, target_overrides:).call
+    entries = FormErrorSummaryEntryBuilder.new(
+      builder:,
+      target_overrides:
+    ).call
     return if entries.blank?
 
     render FormErrorSummaryComponent.new(entries:, **system_arguments)

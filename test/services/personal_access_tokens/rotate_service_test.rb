@@ -24,6 +24,18 @@ module PersonalAccessTokens
       end
     end
 
+    test 'rotate personal access token preserves cast expires_at date' do
+      personal_access_token = personal_access_tokens(:john_doe_valid_pat)
+
+      assert_instance_of Date, personal_access_token.expires_at
+
+      new_token = PersonalAccessTokens::RotateService.new(@user, personal_access_token).execute
+
+      assert_predicate new_token, :persisted?
+      assert_equal personal_access_token.expires_at, new_token.expires_at
+      assert_empty new_token.errors[:expires_at]
+    end
+
     test 'should not rotate personal access token for another user' do
       user = users(:jane_doe)
       jane_doe_personal_access_token = personal_access_tokens(:jane_doe_valid_pat)

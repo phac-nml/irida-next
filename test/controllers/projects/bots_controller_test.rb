@@ -74,6 +74,30 @@ module Projects
       assert_response :success
     end
 
+    test 'should return expires_at validation errors when creating a bot account with invalid token date' do
+      sign_in users(:john_doe)
+
+      namespace = groups(:group_one)
+      project = projects(:project1)
+
+      post namespace_project_bots_path(namespace, project, format: :turbo_stream),
+           params: { namespace_bot: { user_attributes: {
+             members_attributes: {
+               '0': { access_level: Member::AccessLevel::UPLOADER }
+             },
+             personal_access_tokens_attributes: {
+               '0': {
+                 name: 'newtesttoken',
+                 expires_at: 'not-a-date',
+                 scopes: ['read_api']
+               }
+             }
+           } } }
+
+      assert_response :unprocessable_content
+      assert_includes response.body, I18n.t('common.date.errors.invalid_input')
+    end
+
     test 'should not create a new bot account for a user with incorrect permissions' do
       sign_in users(:ryan_doe)
 

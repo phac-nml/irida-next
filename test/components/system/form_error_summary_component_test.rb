@@ -20,6 +20,16 @@ module System
       end
       assert_selector '#namespace-select', focused: true
 
+      within '[data-controller="form-error-summary"]' do
+        click_link "Expiration date can't be blank"
+      end
+      assert_selector '#expires_at-input', focused: true
+
+      within '[data-controller="form-error-summary"]' do
+        click_link "Scopes can't be blank"
+      end
+      assert_selector '#personal_access_token_scopes_api', focused: true
+
       assert_accessible
     end
   end

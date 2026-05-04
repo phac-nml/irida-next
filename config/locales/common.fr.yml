@@ -20,7 +20,6 @@ fr:
       submit: Envoyer
     date:
       errors:
-        invalid_format: Format de date invalide
         invalid_input: Saisie de date invalide
         invalid_min_date: La date est antérieure à la date minimale
     labels:
