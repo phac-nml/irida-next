@@ -213,6 +213,7 @@ export default class extends Controller {
   handleGlobalKeydown(event) {
     // Escape: close calendar
     if (event.key === "Escape") {
+      event.preventDefault();
       this.hideCalendar();
       this.setInputValue(this.#selectedDate);
       this.datepickerInputTarget.focus();
