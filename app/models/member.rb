@@ -53,7 +53,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
-    def effective_access_level(namespace, user, include_group_links = true) # rubocop:disable Metrics/CyclomaticComplexity,Style/OptionalBooleanParameter,Metrics/PerceivedComplexity
+    def effective_access_level(namespace, user, include_group_links = true) # rubocop:disable Metrics/CyclomaticComplexity,Style/OptionalBooleanParameter,Metrics/PerceivedComplexity,Metrics/AbcSize
       return AccessLevel::OWNER if namespace.parent&.user_namespace? && namespace.parent.owner == user
 
       access_level = Member.for_namespace_and_ancestors(namespace).not_expired
@@ -61,7 +61,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
       access_level = access_level_in_namespace_group_links(user, namespace) if include_group_links && access_level.nil?
 
-      return AccessLevel::GUEST if access_level.zero? && namespace.public?
+      return AccessLevel::GUEST if (access_level.zero? || access_level.nil?) && namespace.public?
 
       access_level.nil? ? AccessLevel::NO_ACCESS : access_level
     end
