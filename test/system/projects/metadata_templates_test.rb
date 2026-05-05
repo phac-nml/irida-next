@@ -204,7 +204,7 @@ module Projects
         find("a[data-form-error-summary-target-id-param='metadata_template_fields']").click
       end
 
-      assert_selector '#metadata_template_fields', focused: true
+      assert_selector '#metadata_template_fields :focus'
     end
 
     test 'cannot create a template with duplicate fields with same ordering in another template' do
