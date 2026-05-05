@@ -715,3 +715,12 @@ a.pill-focus-reset:focus-visible {
     @apply bg-blue-800/80 text-white dark:bg-blue-600/50;
   }
 }
+
+/* datepicker date node specific focus classes to:
+    - set different outline offset to not overlap other date node styling classes
+    - set focus styling after clicking caret arrow (overrides above default focus-visible which doesn't show
+    focus styling
+*/
+td[data-date-within-month-position="inMonth"]:focus {
+  @apply outline-3 -outline-offset-2 outline-black dark:outline-white;
+}

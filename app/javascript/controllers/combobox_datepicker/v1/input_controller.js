@@ -78,9 +78,11 @@ export default class extends Controller {
     }
   }
 
+  // trigger must be datepicker input's parent container to maintain proper hide/show logic between clicking on
+  // the input text box and the caret arrow
   #initializeDropdown() {
     this.#floatingDropdown = new FloatingDropdown({
-      trigger: this.datepickerInputTarget,
+      trigger: this.datepickerInputTarget.parentElement,
       dropdown: this.#calendar,
       distance: 10,
       onShow: () => this.#onShow(),
@@ -175,7 +177,13 @@ export default class extends Controller {
       this.#floatingDropdown.show();
     } else {
       this.hideCalendar();
+      this.datepickerInputTarget.focus();
     }
+  }
+
+  toggleCalendarFromArrow() {
+    this.toggleCalendar();
+    this.comboboxDatepickerV1CalendarOutlet.focusCurrentDate();
   }
 
   handleCalendarFocus(event) {
