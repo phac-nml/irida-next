@@ -13,13 +13,14 @@ class ApplicationSetting < ApplicationRecord
     {
       signup_enabled: true,
       password_authentication_enabled: true,
-      cleanup_inactive_access_tokens_after_days: 30
+      cleanup_inactive_access_tokens_after_days: 30,
+      require_personal_access_token_expiry: false,
+      max_personal_access_token_lifetime_in_days: 365
     }
   end
 
   def self.build_from_defaults(attributes = {})
     final_attributes = defaults.merge(attributes).stringify_keys.slice(*column_names)
-
     new(final_attributes)
   end
 

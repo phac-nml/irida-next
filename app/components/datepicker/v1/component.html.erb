@@ -6,6 +6,10 @@
       <%= render Datepicker::V1::MinDateComponent.new(min_date: @min_date) %>
     <% end %>
 
+    <% unless @max_date.nil? %>
+      <%= render Datepicker::V1::MaxDateComponent.new(max_date: @max_date) %>
+    <% end %>
+
     <%= render Datepicker::V1::InputFieldComponent.new(
       label: @label,
       input_id: @input_id,
@@ -22,8 +26,8 @@
       calendar_arguments: @calendar_arguments,
       days_of_the_week: @days_of_the_week,
       months: @months,
-      min_year: @min_year,
       min_date: @min_date,
+      max_date: @max_date
     ) %>
   <% end %>
 </fieldset>

@@ -16,6 +16,7 @@ export default class extends Controller {
   static outlets = ["datepicker--v1--input"];
   static targets = [
     "backButton",
+    "forwardButton",
     "monthsArray",
     "monthSelect",
     "monthSelectContainer",
@@ -26,6 +27,7 @@ export default class extends Controller {
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
     "clearButton",
+    "maxDateMessage",
     "minDateMessage",
   ];
 
@@ -44,6 +46,8 @@ export default class extends Controller {
   #selectedYear;
   #selectedMonthIndex;
 
+  #maxDate;
+  #maxDateMessage;
   #minDate;
   #minDateMessage;
   #autosubmit;
@@ -56,6 +60,10 @@ export default class extends Controller {
     this.yearTarget.value = this.#selectedYear;
     if (this.hasMinDateMessageTarget) {
       this.minDateMessageTarget.innerText = this.#minDateMessage;
+    }
+
+    if (this.hasMaxDateMessageTarget) {
+      this.maxDateMessageTarget.innerText = this.#maxDateMessage;
     }
     this.#loadCalendar();
   }
@@ -77,6 +85,18 @@ export default class extends Controller {
         this.#selectedMonthIndex = minDateMonthIndex;
       }
     }
+
+    if (this.#maxDate && this.#maxDate.includes(this.#selectedYear)) {
+      const maxDateMonthIndex = new Date(this.#maxDate).getUTCMonth();
+      for (let i = maxDateMonthIndex + 1; i < 12; i++) {
+        monthSelect.lastElementChild.remove();
+      }
+
+      if (this.#selectedMonthIndex > maxDateMonthIndex) {
+        this.#selectedMonthIndex = maxDateMonthIndex;
+      }
+    }
+
     this.monthSelectContainerTarget.appendChild(monthSelect);
   }
 
@@ -89,6 +109,8 @@ export default class extends Controller {
     this.#selectedDate = params["selectedDate"];
     this.#selectedYear = params["selectedYear"];
     this.#selectedMonthIndex = params["selectedMonthIndex"];
+    this.#maxDate = params["maxDate"];
+    this.#maxDateMessage = params["maxDateMessage"];
     this.#minDate = params["minDate"];
     this.#minDateMessage = params["minDateMessage"];
     this.#autosubmit = params["autosubmit"];
@@ -118,6 +140,8 @@ export default class extends Controller {
     this.#setTabIndex();
     // disable month's 'back' button if we're on first allowable month
     this.#setBackButton();
+    // disable month's 'forward' button if we're past allowable month
+    this.#setForwardButton();
   }
 
   #getPreviousMonthsDates() {
@@ -352,6 +376,23 @@ export default class extends Controller {
       }
     }
 
+    // maximum date where dates after will be disabled
+    const maxDate = getDateNode(this.calendarTarget, this.#maxDate);
+
+    if (maxDate) {
+      // get all the date nodes within current calendar, and all dates after the maxDate index will be disabled
+      const allDates = Array.from(
+        this.calendarTarget.querySelectorAll("[data-date]"),
+      );
+      for (let i = allDates.indexOf(maxDate) + 1; i < allDates.length; i++) {
+        this.#replaceDateStyling(
+          allDates[i],
+          CALENDAR_CLASSES["DISABLED_DATE"],
+        );
+        allDates[i].setAttribute("aria-disabled", true);
+      }
+    }
+
     // Keep visual precedence clear: disabled dates should not also look selected/today.
     if (selectedDate && selectedDate.getAttribute("aria-disabled") !== "true") {
       this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
@@ -411,16 +452,44 @@ export default class extends Controller {
   #setBackButton() {
     const backButton = this.backButtonTarget;
     const backArrow = backButton.firstElementChild;
+
     // if minimum date exists in the current selected month (eg: any previous month should be unselectable)
     // we disable the back button so user can't navigate further back
     if (this.#preventPreviousMonthNavigation()) {
       backButton.disabled = true;
-      backArrow.classList.remove(...CALENDAR_CLASSES["BACK_BUTTON_ENABLED"]);
-      backArrow.classList.add(...CALENDAR_CLASSES["BACK_BUTTON_DISABLED"]);
+      backArrow.classList.remove(
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"],
+      );
+      backArrow.classList.add(...CALENDAR_CLASSES["MONTH_NAV_BUTTON_DISABLED"]);
     } else {
       backButton.disabled = false;
-      backArrow.classList.add(...CALENDAR_CLASSES["BACK_BUTTON_ENABLED"]);
-      backArrow.classList.remove(...CALENDAR_CLASSES["BACK_BUTTON_DISABLED"]);
+      backArrow.classList.add(...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"]);
+      backArrow.classList.remove(
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_DISABLED"],
+      );
+    }
+  }
+
+  #setForwardButton() {
+    const forwardButton = this.forwardButtonTarget;
+    const forwardArrow = forwardButton.firstElementChild;
+
+    if (this.#preventNextMonthNavigation()) {
+      forwardButton.disabled = true;
+      forwardArrow.classList.remove(
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"],
+      );
+      forwardArrow.classList.add(
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_DISABLED"],
+      );
+    } else {
+      forwardButton.disabled = false;
+      forwardArrow.classList.add(
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"],
+      );
+      forwardArrow.classList.remove(
+        ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_DISABLED"],
+      );
     }
   }
 
@@ -473,6 +542,21 @@ export default class extends Controller {
         }
       }
     }
+    // if maxDate exists, check if user tried to hard type in a year amount later than maxDate's year
+    if (this.#maxDate) {
+      const maxDate = new Date(this.#maxDate);
+      const maxYear = maxDate.getFullYear();
+      const maxMonth = maxDate.getUTCMonth();
+      if (this.yearTarget.value > maxYear) {
+        this.yearTarget.value = maxYear;
+        // if maxDate was 2027-03-31 and user was on June 2026 and changes year to 2027, since we don't want
+        // June 2027 to be selectable, we want to set the month to March
+        if (this.#selectedMonthIndex > maxMonth) {
+          this.#selectedMonthIndex = maxMonth;
+        }
+      }
+    }
+
     this.#selectedYear = this.yearTarget.value;
     this.idempotentConnect();
   }
@@ -582,9 +666,10 @@ export default class extends Controller {
 
     // if navigating 'left', check if the minimum date is higher than the target date to prevent navigation
     if (
-      direction === "left" &&
-      this.#minDate &&
-      this.#minDate > targetFullDate
+      (direction === "left" &&
+        this.#minDate &&
+        this.#minDate > targetFullDate) ||
+      (direction === "right" && this.#maxDate && targetFullDate > this.#maxDate)
     ) {
       return;
     }
@@ -627,6 +712,15 @@ export default class extends Controller {
       return;
     }
 
+    // if navigating 'down', check if the maximum date is lower than the target date to prevent navigation
+    if (
+      direction === "down" &&
+      this.#maxDate &&
+      targetFullDate > this.#maxDate
+    ) {
+      return;
+    }
+
     // try to retrieve the target date node, and if target week is non-existant (eg: we're going up and we're already
     // currently on the first week), or the dateNode doesn't exist or is not inMonth, change the month based on
     // direction and re-assign dateNode
@@ -659,7 +753,7 @@ export default class extends Controller {
     // get all date nodes that are 'inMonth' and focus the last node
     const allInMonthDatesNodes = Array.from(
       this.calendarTarget.querySelectorAll(
-        '[data-date-within-month-position="inMonth"]',
+        '[data-date-within-month-position="inMonth"]:not([aria-disabled="true"])',
       ),
     );
 
@@ -672,6 +766,8 @@ export default class extends Controller {
   #previousMonthByPageUp() {
     // if we're on the earliest allowed month based on minDate, don't allow us to navigate to the previous month
     if (this.#preventPreviousMonthNavigation()) return;
+
+    if (this.#preventNextMonthNavigation()) return;
     // load previous month onto calendar
     this.previousMonth();
 
@@ -700,6 +796,14 @@ export default class extends Controller {
     if (this.#minDate) {
       const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
       if (minDateNode && verifyDateIsInMonth(minDateNode)) return true;
+    }
+    return false;
+  }
+
+  #preventNextMonthNavigation() {
+    if (this.#maxDate) {
+      const maxDateNode = getDateNode(this.calendarTarget, this.#maxDate);
+      if (maxDateNode && verifyDateIsInMonth(maxDateNode)) return true;
     }
     return false;
   }

@@ -34,14 +34,18 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_equal true, settings.signup_enabled
     assert_equal true, settings.password_authentication_enabled
     assert_equal 30, settings.cleanup_inactive_access_tokens_after_days
+    assert_equal false, settings.require_personal_access_token_expiry
+    assert_equal 365, settings.max_personal_access_token_lifetime_in_days
   end
 
   test 'build_from_defaults allows overriding defaults' do
-    settings = ApplicationSetting.build_from_defaults(signup_enabled: false)
+    settings = ApplicationSetting.build_from_defaults(signup_enabled: false, require_personal_access_token_expiry: true)
     assert settings.new_record?
     assert_equal false, settings.signup_enabled
     assert_equal true, settings.password_authentication_enabled
     assert_equal 30, settings.cleanup_inactive_access_tokens_after_days
+    assert_equal true, settings.require_personal_access_token_expiry
+    assert_equal 365, settings.max_personal_access_token_lifetime_in_days
   end
 
   test 'create_from_defaults creates and saves a new instance with defaults' do
@@ -50,6 +54,8 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_equal true, settings.signup_enabled
     assert_equal true, settings.password_authentication_enabled
     assert_equal 30, settings.cleanup_inactive_access_tokens_after_days
+    assert_equal false, settings.require_personal_access_token_expiry
+    assert_equal 365, settings.max_personal_access_token_lifetime_in_days
   end
 
   test '#signup_enabled? returns the value of signup_enabled' do
@@ -71,5 +77,18 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_equal 30, settings.cleanup_inactive_access_tokens_after_days
     settings.update(cleanup_inactive_access_tokens_after_days: 60)
     assert_equal 60, settings.cleanup_inactive_access_tokens_after_days
+  end
+  test '#require_personal_access_token_expiry? returns the value of require_personal_access_token_expiry' do
+    settings = ApplicationSetting.create_from_defaults
+    assert_not settings.require_personal_access_token_expiry?
+    settings.update(require_personal_access_token_expiry: true)
+    assert settings.require_personal_access_token_expiry?
+  end
+
+  test '#max_personal_access_token_lifetime_in_days returns the value of max_personal_access_token_lifetime_in_days' do
+    settings = ApplicationSetting.create_from_defaults
+    assert_equal 365, settings.max_personal_access_token_lifetime_in_days
+    settings.update(max_personal_access_token_lifetime_in_days: 20)
+    assert_equal 20, settings.max_personal_access_token_lifetime_in_days
   end
 end
