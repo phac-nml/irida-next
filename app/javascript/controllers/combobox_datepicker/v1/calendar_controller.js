@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import {
   DAYS_IN_MONTH,
   CALENDAR_CLASSES,
-} from "controllers/datepicker/constants";
+} from "controllers/combobox_datepicker/constants";
 
 import {
   getDayOfWeek,
@@ -10,7 +10,7 @@ import {
   getDateNode,
   getFirstOfMonthNode,
   focusDate,
-} from "controllers/datepicker/utils";
+} from "controllers/combobox_datepicker/utils";
 
 export default class extends Controller {
   static outlets = ["combobox-datepicker--v1--input"];
@@ -505,21 +505,6 @@ export default class extends Controller {
     }
 
     this.idempotentConnect();
-  }
-
-  // handles Shift+Tab out of calendar into datepicker input
-  tabBackToInput(event) {
-    if (event.key !== "Tab" || !event.shiftKey) return;
-    // if we're on the back button, or on the month select when back button is disabled, tab to the datepicker input
-    if (
-      event.target === this.backButtonTarget ||
-      (event.target === this.monthSelectTarget &&
-        this.backButtonTarget.disabled)
-    ) {
-      event.preventDefault();
-      this.comboboxDatepickerV1InputOutlet.focusDatepickerInput();
-      this.comboboxDatepickerV1InputOutlet.hideCalendar();
-    }
   }
 
   // handles keyboard inputs on the calendar

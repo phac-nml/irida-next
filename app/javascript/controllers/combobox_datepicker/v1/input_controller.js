@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
-import { INPUT_CLASSES } from "controllers/datepicker/constants";
-import { replaceStyleClasses } from "controllers/datepicker/utils";
+import { INPUT_CLASSES } from "controllers/combobox_datepicker/constants";
+import { replaceStyleClasses } from "controllers/combobox_datepicker/utils";
 import FloatingDropdown from "utilities/floating_dropdown";
 
 export default class extends Controller {
@@ -211,8 +211,9 @@ export default class extends Controller {
       return;
     }
 
-    // If we tab off the last datepicker element, we want to force focus onto the next focusable element after
-    // the datepicker input
+    // Tab logic to focus trap tabbing:
+
+    // Tabbing off the last datepicker element will cycle tab back to the first datepicker element
     if (
       event.key === "Tab" &&
       event.target ===
@@ -225,7 +226,7 @@ export default class extends Controller {
         .focus();
       return;
     }
-
+    // Shift-tabbing off the first datepicker element will cycle tab to the last datepicker element
     if (
       event.key === "Tab" &&
       event.shiftKey &&
