@@ -914,4 +914,34 @@ if Rails.env.development?
   DataExport.suppressing_turbo_broadcasts do
     seed_exports
   end
+
+  # Seed default user opt-in features into ApplicationSetting
+  app_setting = ApplicationSetting.current || ApplicationSetting.create_from_defaults
+  default_opt_in_features = {
+    'data_grid_samples_table' => {
+      'allowlist' => 'all',
+      'name' => {
+        'en' => 'Data Grid Samples Table',
+        'fr' => 'Tableau de données des échantillons'
+      },
+      'description' => {
+        'en' => 'Enable the new data grid for the samples table.',
+        'fr' => "Activer la nouvelle grille de données pour le tableau d'échantillons."
+      }
+    },
+    'client_linelist_exports' => {
+      'allowlist' => ['user1@email.com'],
+      'name' => {
+        'en' => 'Client Linelist Exports',
+        'fr' => 'Exports de listes de clients'
+      },
+      'description' => {
+        'en' => 'Enable the new client linelist exports feature.',
+        'fr' => "Activer la nouvelle fonctionnalité d'exports de listes de clients."
+      }
+    }
+  }
+  app_setting.update!(
+    user_opt_in_features: default_opt_in_features.merge(app_setting.user_opt_in_features)
+  )
 end
