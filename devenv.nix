@@ -76,8 +76,9 @@ lib.mkMerge [
     # https://devenv.sh/processes/
     # processes.dev.exec = "${lib.getExe pkgs.watchexec} -n -- ls -la";
     processes.sapporo-service = {
+      ports.http.allocate = 1122;
       exec = ''
-        SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=1122 SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.git.root}/.devenv/sapporo-service/sapporo/run_irida_next.sh poetry run sapporo
+        SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=${toString config.processes.sapporo-service.ports.http.value} SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.git.root}/.devenv/sapporo-service/sapporo/run_irida_next.sh poetry run sapporo
       '';
       cwd = "${config.git.root}/.devenv/sapporo-service/sapporo";
     };
