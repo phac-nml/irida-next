@@ -59,6 +59,13 @@ module Types
     field :pipelines, [Types::PipelineType], null: true, resolver: Resolvers::PipelinesResolver,
                                              description: 'Find Pipelines'
 
+    field :linelist_export_rows,
+          [Types::LinelistSampleExportRowType],
+          null: false,
+          resolver: Resolvers::LinelistSamplesForExportResolver,
+          description: 'Sample rows for linelist export (requires export_data on namespace; ' \
+                       'analyst-level samples only).'
+
     def current_user
       context[:current_user]
     end

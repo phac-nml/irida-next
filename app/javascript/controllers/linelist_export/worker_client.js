@@ -3,12 +3,16 @@ export class LinelistExportWorkerClient {
     resolveWorkerSource,
     onProgress,
     onDone,
+    onServerSaved,
+    onUploadError,
     onError,
     formatUnexpectedError = (detail) => detail,
   }) {
     this.resolveWorkerSource = resolveWorkerSource;
     this.onProgress = onProgress;
     this.onDone = onDone;
+    this.onServerSaved = onServerSaved;
+    this.onUploadError = onUploadError;
     this.onError = onError;
     this.formatUnexpectedError = formatUnexpectedError;
     this.worker = null;
@@ -59,6 +63,16 @@ export class LinelistExportWorkerClient {
 
     if (payload.type === "done") {
       await this.onDone(payload);
+      return;
+    }
+
+    if (payload.type === "server_saved") {
+      this.onServerSaved(payload);
+      return;
+    }
+
+    if (payload.type === "upload_error") {
+      this.onUploadError(payload);
       return;
     }
 

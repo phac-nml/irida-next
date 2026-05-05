@@ -1737,6 +1737,142 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_text I18n.t('services.data_exports.create.non_completed_workflow_executions')
   end
 
+  test 'v2 linelist export dialog toggles save-to-server name field' do
+    Flipper.enable(:client_linelist_exports_v1)
+
+    visit namespace_project_samples_url(@group1, @project1)
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within %(#samples-table) do
+      find("input[type='checkbox'][value='#{@sample30.id}']").click
+    end
+
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_selector 'input#linelist-save-to-server'
+      assert_selector '[data-linelist-export-target="saveToServerNameWrapper"].hidden', visible: :all
+
+      check 'linelist-save-to-server'
+      assert_no_selector '[data-linelist-export-target="saveToServerNameWrapper"].hidden', visible: :all
+
+      uncheck 'linelist-save-to-server'
+      assert_selector '[data-linelist-export-target="saveToServerNameWrapper"].hidden', visible: :all
+    end
+  ensure
+    Flipper.disable(:client_linelist_exports_v1)
+  end
+
+  test 'v2 linelist export save-to-server flow shows link to saved export' do
+    Flipper.enable(:client_linelist_exports_v1)
+
+    visit namespace_project_samples_url(@group1, @project1)
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within %(#samples-table) do
+      find("input[type='checkbox'][value='#{@sample30.id}']").click
+    end
+
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    page.execute_script <<~JS
+      window.__linelistUploadRequests = [];
+      window.__linelistOriginalWorker = window.Worker;
+      window.__linelistOriginalFetch = window.fetch;
+
+      window.Worker = class FakeWorker {
+        async postMessage(message) {
+          if (message?.action === "upload_to_server") {
+            await this.saveToServer(message);
+            return;
+          }
+
+          setTimeout(() => {
+            void this.saveToServer({
+              filename: "linelist-test.csv",
+              format: "csv",
+              content: "SAMPLE PUID\\nINXT_SAM_TEST",
+            });
+          }, 0);
+        }
+
+        async saveToServer(message) {
+          await window.fetch("/-/graphql", { method: "POST" });
+          await window.fetch("/rails/active_storage/direct_uploads/test", { method: "PUT" });
+          await window.fetch("/-/graphql", { method: "POST" });
+
+          if (this.onmessage) {
+            this.onmessage({
+              data: {
+                type: "server_saved",
+                filename: message.filename,
+                format: message.format,
+                content: message.content,
+                serverResponse: {
+                  id: "saved-export-id",
+                  url: "/-/data_exports/saved-export-id"
+                }
+              }
+            });
+          }
+        }
+
+        terminate() {}
+      };
+
+      window.fetch = async function(url, options) {
+        window.__linelistUploadRequests.push({
+          url: String(url),
+          method: options?.method || "",
+        });
+
+        return new Response(
+          "{}",
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      };
+    JS
+
+    within 'dialog[open].dialog--size-lg' do
+      check 'linelist-save-to-server'
+      fill_in I18n.t('data_exports.new.name_label'), with: 'saved from v2 dialog'
+      click_button I18n.t('data_exports.new.submit_button')
+    end
+
+    within '#linelist-export-progress-window' do
+      assert_text I18n.t('data_exports.new_linelist_export_dialog.saved_to_server')
+      assert_link I18n.t('data_exports.new_linelist_export_dialog.view_saved_export'),
+                  href: '/-/data_exports/saved-export-id'
+    end
+
+    assert_equal 3, page.evaluate_script('window.__linelistUploadRequests.length')
+    assert_equal 'POST', page.evaluate_script('window.__linelistUploadRequests[0].method')
+    assert_equal 'PUT', page.evaluate_script('window.__linelistUploadRequests[1].method')
+    assert_equal 'POST', page.evaluate_script('window.__linelistUploadRequests[2].method')
+  ensure
+    page.execute_script <<~JS
+      if (window.__linelistOriginalWorker) {
+        window.Worker = window.__linelistOriginalWorker;
+      }
+
+      if (window.__linelistOriginalFetch) {
+        window.fetch = window.__linelistOriginalFetch;
+      }
+    JS
+    Flipper.disable(:client_linelist_exports_v1)
+  end
+
   test 'can filter by id or name' do
     visit data_exports_path
 

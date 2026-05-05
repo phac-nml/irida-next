@@ -9,6 +9,7 @@ const jsRoot = resolve(
 export default defineConfig({
   resolve: {
     alias: {
+      controllers: resolve(jsRoot, "controllers"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
       "utilities/focus": resolve(jsRoot, "utilities/focus.js"),
@@ -17,6 +18,12 @@ export default defineConfig({
       "utilities/floating_dropdown": resolve(
         jsRoot,
         "utilities/floating_dropdown.js",
+      ),
+      workers: resolve(jsRoot, "workers"),
+      xlsx: resolve(
+        fileURLToPath(
+          new URL("test/javascript/mocks/xlsx.js", import.meta.url),
+        ),
       ),
     },
   },
