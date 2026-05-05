@@ -942,8 +942,6 @@ if Rails.env.development?
     }
   }
   app_setting.update!(
-    user_opt_in_features: default_opt_in_features.merge(
-      app_setting.user_opt_in_features.except('client_linelist_exports')
-    )
+    user_opt_in_features: default_opt_in_features.merge(app_setting.user_opt_in_features)
   )
 end
