@@ -776,7 +776,8 @@ CREATE TABLE public.namespaces (
     parent_id uuid,
     puid character varying NOT NULL,
     attachments_updated_at timestamp(6) without time zone,
-    samples_count integer DEFAULT 0
+    samples_count integer DEFAULT 0,
+    public boolean DEFAULT false NOT NULL
 );
 
 
@@ -925,7 +926,7 @@ CREATE TABLE public.site_banners (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     CONSTRAINT site_banners_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
-    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY (ARRAY[('info'::character varying)::text, ('warning'::character varying)::text, ('danger'::character varying)::text, ('success'::character varying)::text])))
+    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY ((ARRAY['info'::character varying, 'warning'::character varying, 'danger'::character varying, 'success'::character varying])::text[])))
 );
 
 
@@ -2142,6 +2143,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260421182359'),
 ('20260416173126'),
 ('20260410170502'),
 ('20260306153207'),

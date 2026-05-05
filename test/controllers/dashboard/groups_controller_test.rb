@@ -36,7 +36,7 @@ module Dashboard
 
       assert_response :success
       assert_active_sort('q', 'name desc')
-      assert_includes first_treegrid_row_text, groups(:group_z).name
+      assert_includes first_treegrid_row_text, groups(:public_group10).name
     end
 
     test 'should sort groups by name ascending' do
