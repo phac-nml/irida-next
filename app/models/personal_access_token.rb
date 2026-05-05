@@ -20,9 +20,9 @@ class PersonalAccessToken < ApplicationRecord
 
   validates :expires_at, comparison: {
     less_than: -> { Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days },
-    greater_than: -> { Time.zone.today + 1 }
+    greater_than: -> { Time.zone.today }
   }, if: lambda {
-    Irida::CurrentSettings.require_personal_access_token_expiry?
+    (new_record? || expires_at_changed?) && Irida::CurrentSettings.require_personal_access_token_expiry?
   }
 
   scope :active, -> { not_revoked.not_expired }
