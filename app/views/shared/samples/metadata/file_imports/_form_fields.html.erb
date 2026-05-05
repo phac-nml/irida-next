@@ -14,7 +14,7 @@
       dark:bg-slate-800 dark:text-red-400
     "
     aria-hidden="true"
-    data-metadata--file-import-target="error"
+    data-<%= controller %>-target="error"
   >
     <span class="inline shrink-0"><%= icon(:warning_circle, size: :sm, class: "mr-3 stroke-2") %></span>
 
@@ -40,7 +40,7 @@
              # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
              "text/csv,.tsv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
            data: {
-             action: "change->metadata--file-import#readFile",
+             action: "change->#{controller}#readFile",
              "attachment-upload-target": "attachmentsInput",
            },
            aria: {
@@ -71,8 +71,8 @@
                         { prompt: t(".select_sample_id_column") },
                         required: true,
                         data: {
-                          "metadata--file-import-target": "sampleIdColumn",
-                          action: "change->metadata--file-import#changeSampleIDInput",
+                          "#{controller}-target": "sampleIdColumn",
+                          action: "change->#{controller}#changeSampleIDInput",
                         },
                         class:
                           "disabled:bg-slate-50 disabled:text-slate-900 disabled:dark:bg-slate-700 disabled:dark:placeholder-slate-400 disabled:dark:text-white",
@@ -87,7 +87,7 @@
     <%= render SortableLists::V1::ListItemComponent.new(list_item: "NAME_HERE") %>
   </template>
 
-  <div data-metadata--file-import-target="metadataColumns" aria-hidden="true" class="grid hidden gap-4">
+  <div data-<%= controller %>-target="metadataColumns" aria-hidden="true" class="grid hidden gap-4">
     <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100"><%= t(".metadata_columns") %></h2>
 
     <%= render Viral::SortableListsGuidanceComponent.new(
@@ -152,10 +152,10 @@
                         data: {
                           turbo_frame: "_top",
                           action:
-                            "viral--dialog#setClosable click->sortable-lists--v1--two-lists-selection#constructParams click->metadata--file-import#handleSubmit",
+                            "viral--dialog#setClosable click->sortable-lists--v1--two-lists-selection#constructParams click->#{controller}#handleSubmit",
                           "viral--dialog-closable-param": "false",
                           "sortable-lists--v1--two-lists-selection-target": "submitBtn",
-                          "metadata--file-import-target": "submitButton",
+                          "#{controller}-target": "submitButton",
                           "attachment-upload-target": "submitButton",
                         },
                         disabled: true,

@@ -22,7 +22,7 @@
     >
       <%= form_for(:file_import, url: url, method: :post) do |form| %>
         <%= render partial: 'shared/samples/metadata/file_imports/form_fields', locals: {
-        form: form, broadcast_target: broadcast_target, direct_upload: true } %>
+        form: form, broadcast_target: broadcast_target, direct_upload: true, controller: "metadata--file-import" } %>
       <% end %>
     </div>
   <% end %>
