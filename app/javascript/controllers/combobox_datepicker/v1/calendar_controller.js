@@ -418,11 +418,11 @@ export default class extends Controller {
     // if minimum date exists in the current selected month (eg: any previous month should be unselectable)
     // we disable the back button so user can't navigate further back
     if (this.#preventPreviousMonthNavigation()) {
-      backButton.disabled = true;
+      backButton.setAttribute("aria-disabled", "true");
       backArrow.classList.remove(...CALENDAR_CLASSES["BACK_BUTTON_ENABLED"]);
       backArrow.classList.add(...CALENDAR_CLASSES["BACK_BUTTON_DISABLED"]);
     } else {
-      backButton.disabled = false;
+      backButton.setAttribute("aria-disabled", "false");
       backArrow.classList.add(...CALENDAR_CLASSES["BACK_BUTTON_ENABLED"]);
       backArrow.classList.remove(...CALENDAR_CLASSES["BACK_BUTTON_DISABLED"]);
     }
@@ -724,9 +724,7 @@ export default class extends Controller {
 
   // getFirst/LastFocusableElement is used by datepicker/input_controller.js for Tab logic
   getFirstFocusableElement() {
-    return this.backButtonTarget.disabled
-      ? this.monthSelectTarget
-      : this.backButtonTarget;
+    return this.backButtonTarget;
   }
 
   getLastFocusableElement() {

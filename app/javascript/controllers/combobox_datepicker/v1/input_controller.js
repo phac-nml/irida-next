@@ -211,7 +211,6 @@ export default class extends Controller {
 
   // Handle Escape and Tab key actions once calendar is open
   handleGlobalKeydown(event) {
-    console.log("handle global");
     // Escape: close calendar
     if (event.key === "Escape") {
       this.hideCalendar();
