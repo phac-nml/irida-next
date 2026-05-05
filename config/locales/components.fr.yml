@@ -191,6 +191,7 @@ fr:
       aria_label:
         calendar: Calendrier
         clear_selection: Effacer la sélection de date
+        dialog: Choisir une date
         next_month_button: Naviguer au prochain mois
         previous_month_button: Naviguer au mois précédent
         select_month: Sélectionner le mois
