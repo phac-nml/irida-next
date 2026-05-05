@@ -31,6 +31,14 @@
       <% end %>
     <% end %>
 
+    <% table.with_column(t("personal_access_tokens.table.header.last_used_ip")) do |row| %>
+      <% if row[:last_used_ips].empty? %>
+        <%= t("personal_access_tokens.table.never_used") %>
+      <% else %>
+        <%= row[:last_used_ips].last %>
+      <% end %>
+    <% end %>
+
     <% if @revoked_pats %>
       <% table.with_column(t("personal_access_tokens.table.header.revocation_date")) do |row| %>
         <% if row[:revoked] == true %>

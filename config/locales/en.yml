@@ -1246,11 +1246,13 @@ en:
         expires_at: Expiration Date
         integration_host: Integration ID
         last_used_at: Last Used
+        last_used_ip: Last Used IP
         name: Token name
         revocation_date: Revocation Date
         scopes: Scopes
         status: Status
       never: Never
+      never_used: Never used
       revoke: Revoke
       revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Are you sure you want to revoke this personal access token?

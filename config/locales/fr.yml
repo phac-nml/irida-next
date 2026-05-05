@@ -1250,11 +1250,13 @@ fr:
         expires_at: Date d'expiration
         integration_host: Integration ID
         last_used_at: Dernière utilisation
+        last_used_ip: Dernière adresse IP utilisée
         name: Nom du jeton
         revocation_date: Date de révocation
         scopes: Portées
         status: Statut
       never: Jamais
+      never_used: Jamais utilisé
       revoke: Révoquer
       revoke_aria_label: 'Révoquer le jeton d’accès personnel : %{name}'
       revoke_confirmation: Êtes-vous sûr de vouloir révoquer ce jeton d’accès personnel?
