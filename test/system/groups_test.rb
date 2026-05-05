@@ -379,7 +379,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_text I18n.t('groups.destroy.success', group_name: group2.name)
     assert_selector 'h1', text: I18n.t('dashboard.groups.index.title')
-    assert_no_text group2.name
+    assert_no_text group2.name, exact: true
   end
 
   test 'can transfer a group' do
