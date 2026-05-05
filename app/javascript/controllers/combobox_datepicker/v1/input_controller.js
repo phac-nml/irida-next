@@ -211,11 +211,24 @@ export default class extends Controller {
 
   // Handle Escape and Tab key actions once calendar is open
   handleGlobalKeydown(event) {
+    console.log("handle global");
     // Escape: close calendar
     if (event.key === "Escape") {
       this.hideCalendar();
       this.setInputValue(this.#selectedDate);
       this.datepickerInputTarget.focus();
+      return;
+    }
+
+    // Shift-tabbing off the first datepicker element will cycle tab to the last datepicker element
+    if (
+      event.key === "Tab" &&
+      event.shiftKey &&
+      event.target ===
+        this.comboboxDatepickerV1CalendarOutlet.getFirstFocusableElement()
+    ) {
+      event.preventDefault();
+      this.comboboxDatepickerV1CalendarOutlet.getLastFocusableElement().focus();
       return;
     }
 
@@ -234,17 +247,6 @@ export default class extends Controller {
       } else if (event.target === this.datepickerInputTarget) {
         this.hideCalendar();
       }
-      return;
-    }
-    // Shift-tabbing off the first datepicker element will cycle tab to the last datepicker element
-    if (
-      event.key === "Tab" &&
-      event.shiftKey &&
-      event.target ===
-        this.comboboxDatepickerV1CalendarOutlet.getFirstFocusableElement()
-    ) {
-      event.preventDefault();
-      this.comboboxDatepickerV1CalendarOutlet.getLastFocusableElement().focus();
       return;
     }
   }
