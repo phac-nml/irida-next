@@ -231,7 +231,7 @@ module Groups
             assert_selector 'td:nth-child(3)', text: 'read_api, api'
 
             assert_selector 'td:nth-child(4)', text: I18n.l(token.created_at.getlocal.to_date, format: :long)
-            assert_selector 'td:nth-child(6)',
+            assert_selector 'td:nth-child(7)',
                             text: I18n.l(DateTime.parse(token.expires_at.to_s).getlocal.to_date, format: :long)
           end
         end
@@ -276,7 +276,7 @@ module Groups
             assert_selector 'td:nth-child(3)', text: 'read_api, api'
 
             assert_selector 'td:nth-child(4)', text: I18n.l(expired_token.created_at.getlocal.to_date, format: :long)
-            assert_selector 'td:nth-child(7)',
+            assert_selector 'td:nth-child(8)',
                             text: I18n.l(DateTime.parse(expired_token.expires_at.to_s).getlocal.to_date, format: :long)
           end
 
@@ -285,9 +285,9 @@ module Groups
             assert_selector 'td:nth-child(3)', text: 'read_api, api'
 
             assert_selector 'td:nth-child(4)', text: I18n.l(revoked_token.created_at.getlocal.to_date, format: :long)
-            assert_selector 'td:nth-child(6)',
-                            text: I18n.l(DateTime.parse(revoked_token.updated_at.to_s).getlocal.to_date, format: :long)
             assert_selector 'td:nth-child(7)',
+                            text: I18n.l(DateTime.parse(revoked_token.updated_at.to_s).getlocal.to_date, format: :long)
+            assert_selector 'td:nth-child(8)',
                             text: I18n.l(DateTime.parse(revoked_token.expires_at.to_s).getlocal.to_date, format: :long)
           end
         end
