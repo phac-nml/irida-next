@@ -1,0 +1,60 @@
+<% feature_dom_id = "experimental-feature-#{feature[:key]}" %>
+<% checkbox_id = "#{feature_dom_id}-toggle" %>
+<% status_id = "#{feature_dom_id}-status" %>
+
+<div id="<%= feature_dom_id %>" class="flex flex-wrap items-center justify-between gap-4 py-1">
+  <div class="min-w-0 flex-1">
+    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+      <%= feature[:name] %>
+    </p>
+
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+      <%= feature[:description] %>
+    </p>
+  </div>
+
+  <%= form_with url: profile_experimental_features_path,
+                method: :patch,
+                data: {
+                  controller: "experimental-feature-toggle",
+                  experimental_feature_toggle_feature_key_value: feature[:key]
+                } do |f| %>
+    <%= f.hidden_field :feature_key, value: feature[:key] %>
+
+    <label
+      class="
+        relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full focus-within:outline
+        focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-black
+        dark:focus-within:outline-white
+      "
+    >
+      <%= f.check_box :enabled,
+            checked: feature[:enabled],
+            id: checkbox_id,
+            class: "peer absolute inset-0 z-10 h-6 w-11 cursor-pointer opacity-0",
+            tabindex: 0,
+            role: "switch",
+            aria: {
+              label: t('profiles.experimental_features.toggle_label', feature: feature[:name]),
+              describedby: status_id
+            },
+            data: {
+              action: "change->experimental-feature-toggle#toggle",
+              experimental_feature_toggle_target: "checkbox"
+            } %>
+
+      <span
+        class="relative h-6 w-11 rounded-full after:absolute after:top-[2px] after:left-[2px] after:inline-block after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] <%= feature[:enabled] ? 'bg-primary-600 dark:bg-primary-500 after:translate-x-5' : 'bg-slate-200 dark:bg-slate-700' %>"
+        aria-hidden="true"
+        data-experimental-feature-toggle-target="pill"
+      ></span>
+    </label>
+  <% end %>
+
+  <div
+    id="<%= status_id %>"
+    role="status"
+    aria-live="polite"
+    class="mt-1 basis-full text-sm text-red-600 empty:hidden dark:text-red-400"
+  ></div>
+</div>

@@ -5,8 +5,13 @@ require 'application_system_test_case'
 class ProfileTest < ApplicationSystemTestCase
   def setup
     @user = users(:john_doe)
+    @original_user_opt_in_features = current_application_settings.user_opt_in_features.deep_dup
     login_as @user
     @active_token_count = @user.personal_access_tokens.active.count
+  end
+
+  def teardown
+    current_application_settings.update!(user_opt_in_features: @original_user_opt_in_features || {})
   end
 
   test 'is accessible' do
@@ -326,5 +331,27 @@ class ProfileTest < ApplicationSystemTestCase
         assert_text I18n.t(:'profiles.preferences.update.success')
       end
     end
+  end
+
+  test 'can toggle experimental features with keyboard and keep focus' do
+    update_user_opt_in_features(default_user_opt_in_features(allowlist: [@user.email]))
+    Flipper.disable(:data_grid_samples_table)
+    Flipper.disable_actor(:data_grid_samples_table, @user)
+
+    visit profile_experimental_features_path
+
+    toggle_selector = '#experimental-feature-data_grid_samples_table-toggle'
+    toggle = find(toggle_selector, visible: :all)
+    toggle.send_keys(:space)
+
+    assert_selector "#{toggle_selector}:checked", visible: :all
+    assert_equal toggle[:id], evaluate_script('document.activeElement && document.activeElement.id')
+
+    # Verify the Turbo Stream round-trip persisted the toggle
+    visit profile_experimental_features_path
+    assert_selector "#{toggle_selector}:checked", visible: :all
+  ensure
+    Flipper.disable(:data_grid_samples_table)
+    Flipper.disable_actor(:data_grid_samples_table, @user)
   end
 end
