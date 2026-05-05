@@ -1,11 +1,11 @@
 <% linelist_data = {
-  controller:"linelist-import metadata--file-import sortable-lists--v1--two-lists-selection",
+  controller:"linelist-import sortable-lists--v1--two-lists-selection",
   "sortable-lists--v1--two-lists-selection-selected-list-value": "selected-list",
   "sortable-lists--v1--two-lists-selection-available-list-value": "available-list",
   "sortable-lists--v1--two-lists-selection-field-name-value": "file_import[metadata_columns][]",
-  "metadata--file-import-sortable-lists--v1--two-lists-selection-outlet": "#import-metadata-dialog-content",
-  action: "metadata--file-import:sendMetadata->sortable-lists--v1--two-lists-selection#updateMetadataListing",
-  "metadata--file-import-refresh-outlet": "[data-controller='refresh']",
+  "linelist-import-sortable-lists--v1--two-lists-selection-outlet": "#import-metadata-dialog-content",
+  action: "linelist-import:sendMetadata->sortable-lists--v1--two-lists-selection#updateMetadataListing",
+  "linelist-import-refresh-outlet": "[data-controller='refresh']",
   "attachment-upload-uploading-text-value": t('shared.samples.metadata.file_imports.dialog.uploading'),
   "attachment-upload-success-text-value": t('common.upload.uploaded_successfully'),
   "attachment-upload-error-fallback-text-value": t('common.upload.failed')
@@ -23,7 +23,7 @@
         action: "submit->viral--dialog#close submit->linelist-import#submit"
       }) do |form| %>
         <%= render partial: 'shared/samples/metadata/file_imports/form_fields', locals: {
-        form: form, broadcast_target: @broadcast_target } %>
+        form: form, broadcast_target: @broadcast_target, controller: "linelist-import" } %>
       <% end %>
     <% end %>
   <% end %>
