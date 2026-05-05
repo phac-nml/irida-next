@@ -436,6 +436,8 @@ en:
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
         title: Groups
+        treegrid:
+          aria_label: Groups listing
     projects:
       index:
         all: All
@@ -463,6 +465,10 @@ en:
           namespace_name_desc: Name, descending
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
+      treegrid:
+        aria_label:
+          all: All projects listing
+          personal: Personal projects listing
   data_exports:
     create:
       error: An error occurred while trying to create the data export. Please contact your system administrator if this error persists.'
@@ -975,6 +981,10 @@ en:
         label: Group project details navigation
         shared_namespaces: Shared groups and projects
         subgroups_and_projects: Subgroups and projects
+      treegrid:
+        aria_label:
+          shared_namespaces: Shared groups and projects listing
+          subgroups_and_projects: Subgroups and projects listing
     sidebar:
       activity: Activity
       bot_accounts: Bot Accounts

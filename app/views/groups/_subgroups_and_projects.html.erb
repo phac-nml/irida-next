@@ -1,6 +1,6 @@
 <div class="space-y-2">
   <% if @namespaces.length > 0 %>
-    <%= render TreegridComponent.new do |component| %>
+    <%= render TreegridComponent.new(aria: {label: t("groups.show.treegrid.aria_label.subgroups_and_projects")}) do |component| %>
       <% @namespaces.each_with_index do |namespace, namespace_index| %>
         <%= component.with_row(
           tabindex: (namespace_index.zero? ? 0 : -1),
