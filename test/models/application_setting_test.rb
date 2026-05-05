@@ -72,4 +72,81 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     settings.update(cleanup_inactive_access_tokens_after_days: 60)
     assert_equal 60, settings.cleanup_inactive_access_tokens_after_days
   end
+
+  test 'user_opt_in_features accepts valid feature configuration' do
+    settings = ApplicationSetting.build_from_defaults(
+      user_opt_in_features: {
+        'data_grid_samples_table' => {
+          'allowlist' => ['john_doe@email.com'],
+          'name' => { 'en' => 'Data Grid Samples Table' },
+          'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+        }
+      }
+    )
+
+    assert settings.valid?
+  end
+
+  test 'user_opt_in_features accepts all-user allowlist configuration' do
+    settings = ApplicationSetting.build_from_defaults(
+      user_opt_in_features: {
+        'data_grid_samples_table' => {
+          'allowlist' => 'all',
+          'name' => { 'en' => 'Data Grid Samples Table' },
+          'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+        }
+      }
+    )
+
+    assert settings.valid?
+  end
+
+  test 'user_opt_in_features rejects invalid feature key format' do
+    settings = ApplicationSetting.build_from_defaults(
+      user_opt_in_features: {
+        'InvalidKey' => {
+          'allowlist' => 'all',
+          'name' => { 'en' => 'Feature' },
+          'description' => { 'en' => 'Description' }
+        }
+      }
+    )
+
+    assert_not settings.valid?
+    assert settings.errors[:user_opt_in_features].any?
+  end
+
+  test 'user_opt_in_features rejects invalid allowlist format' do
+    settings = ApplicationSetting.build_from_defaults(
+      user_opt_in_features: {
+        'data_grid_samples_table' => {
+          'allowlist' => '',
+          'name' => { 'en' => 'Data Grid Samples Table' },
+          'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+        }
+      }
+    )
+
+    assert_not settings.valid?
+    error_text = settings.errors[:user_opt_in_features].join(' ')
+    assert_includes error_text, '/data_grid_samples_table/allowlist'
+  end
+
+  test 'user_opt_in_features requires english fallback translations' do
+    settings = ApplicationSetting.build_from_defaults(
+      user_opt_in_features: {
+        'data_grid_samples_table' => {
+          'allowlist' => 'all',
+          'name' => { 'fr' => 'Tableau de donnees des echantillons' },
+          'description' => { 'fr' => 'Activer la nouvelle grille.' }
+        }
+      }
+    )
+
+    assert_not settings.valid?
+    error_text = settings.errors[:user_opt_in_features].join(' ')
+    assert_includes error_text, '/data_grid_samples_table/name'
+    assert_includes error_text, '/data_grid_samples_table/description'
+    assert_includes error_text, 'en'
+  end
 end
