@@ -219,19 +219,21 @@ export default class extends Controller {
       return;
     }
 
-    // Tab logic to focus trap tabbing:
-
-    // Tabbing off the last datepicker element will cycle tab back to the first datepicker element
-    if (
-      event.key === "Tab" &&
-      event.target ===
-        this.comboboxDatepickerV1CalendarOutlet.getLastFocusableElement() &&
-      !event.shiftKey
-    ) {
-      event.preventDefault();
-      this.comboboxDatepickerV1CalendarOutlet
-        .getFirstFocusableElement()
-        .focus();
+    if (event.key === "Tab") {
+      // Tabbing off the last datepicker element will cycle tab back to the first datepicker element
+      if (
+        event.target ===
+          this.comboboxDatepickerV1CalendarOutlet.getLastFocusableElement() &&
+        !event.shiftKey
+      ) {
+        event.preventDefault();
+        this.comboboxDatepickerV1CalendarOutlet
+          .getFirstFocusableElement()
+          .focus();
+        // Tabbing from input text box, close calendar, handles tabbing after clicking datepicker input
+      } else if (event.target === this.datepickerInputTarget) {
+        this.hideCalendar();
+      }
       return;
     }
     // Shift-tabbing off the first datepicker element will cycle tab to the last datepicker element
