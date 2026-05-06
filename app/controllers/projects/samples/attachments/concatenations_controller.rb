@@ -28,15 +28,7 @@ module Projects
           if @sample.errors.empty?
             render status: :ok, locals: { type: :success, message: t('.success') }
           else
-            error_msg = if @sample.errors[:basename].any?
-                          t(:'general.form.error_notification')
-                        else
-                          error_message(@sample)
-                        end
-
-            render status: :unprocessable_content, locals: { type: :danger,
-                                                             message: error_msg,
-                                                             concatenation_params: }
+            render status: :unprocessable_content, locals: { concatenation_params: }
 
           end
         end

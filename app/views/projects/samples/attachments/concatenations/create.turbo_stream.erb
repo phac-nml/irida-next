@@ -7,13 +7,9 @@
   },
 ) %>
 
-<% if @sample.errors.any? %>
-  <%= turbo_stream.update "concatenation-alert",
-                      viral_alert(type:, message:, classes: "mb-4") %>
-<% else %>
+<% unless @sample.errors.any? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
-
   <turbo-stream action="refresh"></turbo-stream>
 <% end %>

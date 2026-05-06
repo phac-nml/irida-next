@@ -1,19 +1,5 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
-  <%= turbo_frame_tag("concatenation-alert") %>
-
-  <div
-    class="
-      mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400
-    "
-  >
-    <p class="mb-4"><%= t(".description") %></p>
-    <div
-      class="overflow-auto scrollbar"
-      data-controller="projects--samples--attachments--files"
-      data-projects--samples--attachments--files-target="field"
-    ></div>
-  </div>
 
   <%= form_for(:concatenation, url: namespace_project_sample_attachments_concatenation_path,
     data: {
@@ -22,14 +8,30 @@
       "projects--samples--attachments--selected-attachments-storage-key-value": "files-#{@sample.id}",
       action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear'
     }, method: :post, html: { novalidate: true }) do |form| %>
+    <% summary_entries = FormErrorSummaryEntryBuilder.new(builder: form, errors: @sample.errors).call %>
+
+    <%= render FormErrorSummaryComponent.new(entries: summary_entries, include: [:basename]) %>
+
+    <div class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400">
+      <p class="mb-4"><%= t(".description") %></p>
+
+      <div
+        class="scrollbar overflow-auto"
+        data-controller="projects--samples--attachments--files"
+        data-projects--samples--attachments--files-target="field"
+      ></div>
+    </div>
+
     <div data-projects--samples--attachments--selected-attachments-target="field"></div>
 
     <div class="grid gap-4">
       <%= render partial: "shared/form/required_field_legend" %>
 
       <% invalid_basename = @sample.errors.include?(:basename) %>
-      <div class="form-field <%= 'invalid' if invalid_basename%>">
+
+      <div class="form-field <%= 'invalid' if invalid_basename %>">
         <%= form.label :basename, data: { required: true } %>
+
         <%= form.text_field :basename,
                         required: true,
                         value:
@@ -54,11 +56,7 @@
                           required: true,
                         },
                         class: "form-control" %>
-        <% if invalid_basename %>
-          <%= render "shared/form/field_errors",
-          id: form.field_id(:basename, "error"),
-          errors: @sample.errors[:basename] %>
-        <% end %>
+
         <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
           <%== t(:"projects.samples.attachments.concatenations.create.basename_help") %>
         </span>
@@ -79,6 +77,7 @@
                        },
                        true,
                        false %>
+
         <%= form.label :delete_originals,
                    class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
       </div>
