@@ -450,13 +450,14 @@ export default class extends Controller {
       sourceList.focus();
     }
 
+    const translationKey = selectedOptions.length > 1 ? "multiple" : "single";
     const ariaLiveUpdateString =
       sourceList === this.selectedList
-        ? this.#ariaLiveTranslations["removed"]
-        : this.#ariaLiveTranslations["added"];
+        ? this.#ariaLiveTranslations[`removed_${translationKey}`]
+        : this.#ariaLiveTranslations[`added_${translationKey}`];
 
     this.#updateAriaLive(
-      ariaLiveUpdateString.concat(selectedOptionsText.join(", ")),
+      selectedOptionsText.join(", ").concat(ariaLiveUpdateString),
     );
 
     this.#checkStates();
@@ -601,12 +602,10 @@ export default class extends Controller {
       targetOption,
     );
 
-    const ariaLiveText = this.#ariaLiveTranslations[
-      direction === "up" ? "move_up" : "move_down"
-    ].replace(
-      /OPTION_PLACEHOLDER/g,
-      selectedOption.lastElementChild.textContent,
+    const ariaLiveText = selectedOption.lastElementChild.textContent.concat(
+      this.#ariaLiveTranslations[direction === "up" ? "move_up" : "move_down"],
     );
+
     this.#updateAriaLive(ariaLiveText);
   }
 
