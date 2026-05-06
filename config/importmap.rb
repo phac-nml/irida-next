@@ -29,3 +29,4 @@ pin 'tabbable' # @6.2.0
 pin 'uuid' # @14.0.0
 pin 'debounce' # @3.0.0
 pin 'deepmerge' # @4.3.1
+pin 'lodash' # @4.18.1

@@ -3,6 +3,33 @@ import * as XLSX from "xlsx";
 import { Controller } from "@hotwired/stimulus";
 import { notifyRefreshControllers } from "utilities/refresh";
 
+const DEFAULT_SAMPLE_COLUMN_HEADERS = [
+  "sample_name",
+  "sample name",
+  "sample",
+  "sample_id",
+  "sample id",
+  "sample_puid",
+  "sample puid",
+];
+
+const IGNORE_LIST = [
+  "sample_name",
+  "sample name",
+  "sample",
+  "sample_id",
+  "sample id",
+  "sample_puid",
+  "sample puid",
+  "project id",
+  "project_id",
+  "project_puid",
+  "project puid",
+  "created_at",
+  "updated_at",
+  "last_updated_at",
+  "description",
+];
 export default class extends Controller {
   static outlets = ["sortable-lists--v1--two-lists-selection", "refresh"];
   static targets = [
@@ -12,35 +39,10 @@ export default class extends Controller {
     "error",
   ];
 
-  #defaultSampleColumnHeaders = [
-    "sample_name",
-    "sample name",
-    "sample",
-    "sample_id",
-    "sample id",
-    "sample_puid",
-    "sample puid",
-  ];
-
-  #ignoreList = [
-    "sample_name",
-    "sample name",
-    "sample",
-    "sample_id",
-    "sample id",
-    "sample_puid",
-    "sample puid",
-    "project id",
-    "project_id",
-    "project_puid",
-    "project puid",
-    "created_at",
-    "updated_at",
-    "last_updated_at",
-    "description",
-  ];
-
-  #headers = [];
+  connect() {
+    this.headers = [];
+    this.columns = [];
+  }
 
   changeSampleIDInput(event) {
     const { value } = event.target;
@@ -48,16 +50,16 @@ export default class extends Controller {
       this.#enableDialogState();
       this.#sortableListsConnect();
     } else {
-      this.#resetDialogState();
+      this.resetDialogState();
     }
   }
 
   readFile(event) {
     const { files } = event.target;
 
-    this.#removeSampleIDInputOptions();
-    this.#resetDialogState();
-    this.#disableErrorState();
+    this.removeSampleIDInputOptions();
+    this.resetDialogState();
+    this.disableErrorState();
     if (!files.length) {
       return;
     }
@@ -69,31 +71,31 @@ export default class extends Controller {
       const workbook = XLSX.read(reader.result, { sheetRows: 1 });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
-      this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
-      this.#addSampleIDInputOptions();
+      this.headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
+      this.addSampleIDInputOptions();
     };
   }
 
-  #removeSampleIDInputOptions() {
+  removeSampleIDInputOptions() {
     this.#removeInputOptions(this.sampleIdColumnTarget);
     this.#disableTarget(this.sampleIdColumnTarget);
   }
 
-  #addSampleIDInputOptions() {
-    for (const header of this.#headers) {
+  addSampleIDInputOptions() {
+    for (const header of this.headers) {
       const option = document.createElement("option");
       option.value = header;
       option.text = header;
       this.sampleIdColumnTarget.append(option);
     }
     // lower case to test for case insensitivity
-    const allHeadersToLowerCase = this.#headers.map((header) =>
+    const allHeadersToLowerCase = this.headers.map((header) =>
       header.toLowerCase(),
     );
-    for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
+    for (const sampleColumnHeader of DEFAULT_SAMPLE_COLUMN_HEADERS) {
       const sampleIndex = allHeadersToLowerCase.indexOf(sampleColumnHeader);
       if (sampleIndex > -1) {
-        this.sampleIdColumnTarget.value = this.#headers[sampleIndex];
+        this.sampleIdColumnTarget.value = this.headers[sampleIndex];
         this.#enableDialogState();
         this.#sortableListsConnect();
         break;
@@ -103,20 +105,20 @@ export default class extends Controller {
   }
 
   #addMetadataColumns() {
-    const columns = this.#headers.filter(
+    this.columns = this.headers.filter(
       (header) =>
-        !this.#ignoreList.includes(header.toLowerCase()) &&
+        !IGNORE_LIST.includes(header.toLowerCase()) &&
         header.toLowerCase() != this.sampleIdColumnTarget.value.toLowerCase(),
     );
 
-    if (columns.length > 0) {
+    if (this.columns.length > 0) {
       this.#unhideElement(this.metadataColumnsTarget);
 
       this.dispatch("sendMetadata", {
-        detail: { content: { metadata: columns } },
+        detail: { content: { metadata: this.columns } },
       });
 
-      this.submitButtonTarget.disabled = !columns.length;
+      this.submitButtonTarget.disabled = !this.columns.length;
     } else {
       this.#hideElement(this.metadataColumnsTarget);
       this.#enableErrorState();
@@ -139,7 +141,7 @@ export default class extends Controller {
     target.removeAttribute("aria-disabled");
   }
 
-  #resetDialogState() {
+  resetDialogState() {
     this.#disableTarget(this.submitButtonTarget);
     if (this.hasMetadataColumnsTarget) {
       this.#hideElement(this.metadataColumnsTarget);
@@ -154,7 +156,7 @@ export default class extends Controller {
     }
   }
 
-  #disableErrorState() {
+  disableErrorState() {
     this.#hideElement(this.errorTarget);
   }
 
