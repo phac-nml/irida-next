@@ -24,11 +24,12 @@ module SortableLists
 
       def load_translations
         {
-          added: I18n.t('shared.sortable_lists.aria_live_update.added'),
-          list_order_changed: I18n.t('shared.sortable_lists.aria_live_update.list_order_changed'),
+          added_multiple: I18n.t('shared.sortable_lists.aria_live_update.added_multiple'),
+          added_single: I18n.t('shared.sortable_lists.aria_live_update.added_single'),
           move_down: I18n.t('shared.sortable_lists.aria_live_update.move_down'),
           move_up: I18n.t('shared.sortable_lists.aria_live_update.move_up'),
-          removed: I18n.t('shared.sortable_lists.aria_live_update.removed')
+          removed_multiple: I18n.t('shared.sortable_lists.aria_live_update.removed_multiple'),
+          removed_single: I18n.t('shared.sortable_lists.aria_live_update.removed_single')
         }.to_json
       end
     end
