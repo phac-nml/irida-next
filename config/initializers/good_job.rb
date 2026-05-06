@@ -27,6 +27,12 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
       cron: '0 4 * * *', # Daily, 4 AM
       class: 'PersonalAccessTokens::CleanupJob', # job class as a String, must be an ActiveJob job
       description: 'Permanently deletes expired and revoked personal access tokens.'
+    },
+    workflow_executions_destroy_task: {
+      cron: '0 5 * * *', # Daily, 5 AM
+      class: 'WorkflowExecutionsDestroyJob', # job class as a String, must be an ActiveJob job
+      kwargs: { days_old: cron_cleanup_after_days.to_i }, # number of days old a workflow execution must be for deletion
+      description: 'Permanently deletes workflow executions that have been soft-deleted some time ago.'
     }
   }
 end
