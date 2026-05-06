@@ -321,8 +321,11 @@ module Projects
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
-        within %(turbo-frame[id="concatenation-alert"]) do
-          assert_text I18n.t('services.attachments.concatenation.incorrect_file_types')
+        assert_no_selector 'html[aria-busy="true"]'
+        assert_selector 'dialog[open]'
+        within '#sample-attachments' do
+          assert_selector 'table #attachments-table-body tr', count: 6
+          assert_no_text 'concatenated_file'
         end
       end
 
@@ -345,8 +348,11 @@ module Projects
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
-        within %(turbo-frame[id="concatenation-alert"]) do
-          assert_text I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
+        assert_no_selector 'html[aria-busy="true"]'
+        assert_selector 'dialog[open]'
+        within '#sample-attachments' do
+          assert_selector 'table #attachments-table-body tr', count: 6
+          assert_no_text 'concatenated_file'
         end
       end
 
