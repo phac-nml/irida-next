@@ -35,7 +35,7 @@
       <% if row[:last_used_ips].empty? %>
         <%= t("personal_access_tokens.table.never_used") %>
       <% else %>
-        <%= row[:last_used_ips].last %>
+        <%= row[:last_used_ips].join(", ") %>
       <% end %>
     <% end %>
 
