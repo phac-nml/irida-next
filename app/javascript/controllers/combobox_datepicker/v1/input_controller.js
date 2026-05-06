@@ -129,6 +129,7 @@ export default class extends Controller {
         console.error("Failed to find calendar after appending to DOM");
       }
 
+      // aria-controls set after calendar is added to the DOM
       this.datepickerInputTarget.setAttribute(
         "aria-controls",
         this.calendarIdValue,
@@ -389,7 +390,6 @@ export default class extends Controller {
   // use cases:
   // 1. Add the newly selected date from the datepicker
   // 2. If user changed date via typing but then escapes out (didn't enter/submit), resets to original value
-  // 3. If user entered an invalid date, resets to original value
   setInputValue(date) {
     this.datepickerInputTarget.value = date;
     this.#selectedDate = date;
