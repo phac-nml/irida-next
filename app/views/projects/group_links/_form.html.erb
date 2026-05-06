@@ -132,7 +132,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
       errors: new_group_link.errors[:expires_at] %>
     <% end %>
 
-    <div class="my-4">
+    <div class="flex justify-start gap-1">
       <%= form.submit I18n.t('common.actions.share'),
                   class: "button button-primary",
                   disabled: true,

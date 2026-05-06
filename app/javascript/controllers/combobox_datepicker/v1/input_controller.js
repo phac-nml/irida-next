@@ -85,6 +85,7 @@ export default class extends Controller {
       trigger: this.datepickerInputTarget.parentElement,
       dropdown: this.#calendar,
       distance: 10,
+      autoSize: false,
       onShow: () => this.#onShow(),
       onHide: () => this.#onHide(),
     });

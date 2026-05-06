@@ -114,9 +114,9 @@
       errors: @new_member.errors[:expires_at] %>
     <% end %>
 
-    <div class="my-4">
+    <div class="flex justify-start gap-1">
       <%= form.submit t(:"projects.members.new.add_member_to_project"),
-                  class: "button button-primary mr-1",
+                  class: "button button-primary",
                   disabled: true,
                   data:
                     if Flipper.enabled?(:v2_select2, Current.user)
