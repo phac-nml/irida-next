@@ -673,6 +673,7 @@ export default class extends Controller {
   }
 
   #handleNavigationByPageUp(event) {
+    let nodeToFocus;
     if (event.shiftKey) {
       const targetYear = parseInt(this.yearTarget.value) - 1;
       if (targetYear < this.#selectedYear) {
@@ -684,19 +685,18 @@ export default class extends Controller {
       if (this.#preventPreviousMonthNavigation()) return;
       // load previous month onto calendar
       this.previousMonth();
-
-      // if minDate exists, check if it's date node is present and focus that, else focus 1st of the month
-      if (this.#minDate) {
-        const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
-        // if there's a minimum date and it exists in the calendar, focus that
-        // else focus 1st
-        if (minDateNode && verifyDateIsInMonth(minDateNode)) {
-          focusDate(this.calendarTarget, minDateNode);
-          return;
-        }
+    }
+    if (this.#minDate) {
+      const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
+      // if there's a minimum date and it exists in the calendar, focus that
+      // else focus 1st
+      if (minDateNode && verifyDateIsInMonth(minDateNode)) {
+        nodeToFocus = minDateNode;
+      } else {
+        nodeToFocus = getFirstOfMonthNode(this.calendarTarget);
       }
     }
-    focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
+    focusDate(this.calendarTarget, nodeToFocus);
   }
 
   #handleNavigationByPageDown(event) {
