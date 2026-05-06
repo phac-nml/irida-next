@@ -7,21 +7,25 @@
     <%= t(".namespace.description_html") %>
   </p>
 
-  <div
-    role="alert"
-    class="
+  <%= tag.div(
+    role: "alert",
+    class: "
       mb-2 flex hidden items-center border-l-4 border-red-300 bg-red-50 p-4 text-red-800 dark:border-red-800
       dark:bg-slate-800 dark:text-red-400
-    "
-    aria-hidden="true"
-    data-<%= controller %>-target="error"
-  >
+    ",
+    aria: {
+      hidden: true,
+    },
+    data: {
+      "#{controller}-target": "error",
+    },
+  ) do %>
     <span class="inline shrink-0"><%= icon(:warning_circle, size: :sm, class: "mr-3 stroke-2") %></span>
 
     <div>
       <div class="font-medium whitespace-break-spaces"><%= t(".no_valid_metadata") %></div>
     </div>
-  </div>
+  <% end %>
 
   <%= render partial: "shared/form/required_field_legend" %>
 
@@ -87,7 +91,15 @@
     <%= render SortableLists::V1::ListItemComponent.new(list_item: "NAME_HERE") %>
   </template>
 
-  <div data-<%= controller %>-target="metadataColumns" aria-hidden="true" class="grid hidden gap-4">
+  <%= tag.div(
+    data: {
+      "#{controller}-target": "metadataColumns",
+    },
+    aria: {
+      hidden: true,
+    },
+    class: "grid hidden gap-4",
+  ) do %>
     <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100"><%= t(".metadata_columns") %></h2>
     <% sortable_lists_guidance_id = "metadata-file-import-fields-guidance" %>
 
@@ -120,7 +132,7 @@
                 describedby: "#{sortable_lists_guidance_id}-selected-description",
               ) %>
     <% end %>
-  </div>
+  <% end %>
 
   <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
 
