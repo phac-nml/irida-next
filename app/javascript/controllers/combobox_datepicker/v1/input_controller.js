@@ -173,29 +173,39 @@ export default class extends Controller {
     this.#shareParamsWithCalendar();
   }
 
-  toggleCalendar() {
+  toggleCalendar(event) {
     if (!this.#floatingDropdown.isVisible()) {
       this.#floatingDropdown.show();
+      // if datepicker was opened by clicking the arrow or by ArrowDown, focus calendar date node
+      if (
+        (event.type == "click" &&
+          event.target !== this.datepickerInputTarget) ||
+        event.key === "ArrowDown"
+      ) {
+        this.comboboxDatepickerV1CalendarOutlet.focusCurrentDate();
+      }
     } else {
       this.hideCalendar();
       this.datepickerInputTarget.focus();
     }
   }
 
-  toggleCalendarFromArrow() {
-    this.toggleCalendar();
-    this.comboboxDatepickerV1CalendarOutlet.focusCurrentDate();
-  }
-
   handleCalendarFocus(event) {
     const parentElement = this.#calendar.parentElement;
     if (parentElement.tagName === "DIALOG") {
-      const rect = event.target.getBoundingClientRect();
-
-      if (rect.top < 0 || rect.top + rect.height > parentElement.offsetHeight) {
-        const dialogContents = parentElement.querySelector(".dialog--contents");
-        dialogContents.scrollBy(0, rect.top);
-      }
+      // setTimeout as rect seems to grab positions before floating_dropdown sets the calendar to ideal above/below
+      // position
+      setTimeout(() => {
+        const rect = event.target.getBoundingClientRect();
+        if (
+          rect.top < 0 ||
+          rect.top + rect.height > parentElement.offsetHeight
+        ) {
+          const dialogContents =
+            parentElement.querySelector(".dialog--contents");
+          dialogContents.scrollBy(0, rect.top);
+        }
+      }, 10);
     }
   }
 
@@ -295,8 +305,7 @@ export default class extends Controller {
       event.preventDefault();
       this.directInput(event);
     } else if (event.key === "ArrowDown") {
-      this.toggleCalendar();
-      this.comboboxDatepickerV1CalendarOutlet.focusCurrentDate();
+      this.toggleCalendar(event);
     }
   }
 
