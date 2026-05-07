@@ -97,8 +97,17 @@ export default class extends Controller {
     const itemsToRemove = Array.from(
       this.availableList.querySelectorAll("li"),
     ).filter((li) => !this.#originalAvailableList.includes(li));
+    const activeOption = this.#getActiveListElement(this.availableList);
+    const removesActiveOption = itemsToRemove.includes(activeOption);
 
-    itemsToRemove.forEach((li) => li.remove());
+    itemsToRemove.forEach((li) => {
+      this.#clearActiveOption(li);
+      li.remove();
+    });
+
+    if (removesActiveOption) {
+      this.#updateListAfterMutation(this.availableList);
+    }
   }
 
   #checkButtonStates() {
@@ -842,8 +851,17 @@ export default class extends Controller {
     const cached = this.#activeOptionCache.get(list);
     if (cached?.parentNode === list) return cached;
 
+    if (cached) {
+      this.#clearActiveOption(cached);
+    }
     this.#activeOptionCache.delete(list);
     return null;
+  }
+
+  #clearActiveOption(option) {
+    option.tabIndex = -1;
+    option.removeAttribute("data-active-option");
+    option.removeAttribute("data-tabbable");
   }
 
   #setActiveListElement(list, option) {
@@ -851,9 +869,7 @@ export default class extends Controller {
 
     const previousOption = this.#getActiveListElement(list);
     if (previousOption && previousOption !== option) {
-      previousOption.tabIndex = -1;
-      previousOption.removeAttribute("data-active-option");
-      previousOption.removeAttribute("data-tabbable");
+      this.#clearActiveOption(previousOption);
     }
 
     if (!option) {
