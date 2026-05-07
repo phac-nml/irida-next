@@ -64,6 +64,7 @@ export default class extends Controller {
       // Send data to worker
       this._worker.postMessage({
         graphql_url: this.graphqlUrlValue,
+        csrf_token: this.#csrfToken(),
         group_puid: this.groupPuidValue,
         project_puid: this.projectPuidValue,
         metadata: Object.fromEntries(row),
@@ -93,5 +94,10 @@ export default class extends Controller {
     }
 
     return worker;
+  }
+
+  #csrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.getAttribute("content") : "";
   }
 }
