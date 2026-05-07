@@ -146,7 +146,5 @@ self.onmessage = async (event) => {
       type: "error",
       message: error?.message || "Unexpected error while importing metadata.",
     });
-  } finally {
-    self.close();
   }
 };
