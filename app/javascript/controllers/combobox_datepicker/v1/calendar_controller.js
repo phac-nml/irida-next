@@ -677,13 +677,13 @@ export default class extends Controller {
 
     const nodeToFocus =
       direction === "up"
-        ? this.#verifyMinDate(targetDate)
-        : this.#verifyMaxDate(targetDate);
+        ? this.#verifyMinDateFocus(targetDate)
+        : this.#verifyMaxDateFocus(targetDate);
 
     focusDate(this.calendarTarget, nodeToFocus);
   }
 
-  #verifyMinDate(targetDate) {
+  #verifyMinDateFocus(targetDate) {
     if (this.#minDate) {
       const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
       // if there's a minimum date and it exists in the calendar, and is after targetDate,
@@ -702,7 +702,7 @@ export default class extends Controller {
   }
 
   // TODO: implement maxDate check
-  #verifyMaxDate(targetDate) {
+  #verifyMaxDateFocus(targetDate) {
     return getDateNode(this.calendarTarget, targetDate);
   }
 
