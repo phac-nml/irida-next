@@ -151,8 +151,8 @@ module Groups
       ### VERIFY START ###
       # Turbo replaces the frame; do not assert inside a stale within('#dialog') from before submit.
       within('#bot_modal') do
-        assert_selector '[data-controller="form-error-summary"]'
-        within('[data-controller="form-error-summary"]') do
+        assert_selector '[data-controller="form-error-summary"]', match: :first
+        within(find('[data-controller="form-error-summary"]', match: :first)) do
           assert_text I18n.t(:'general.form.error_summary.title', count: 1)
           assert_text I18n.t(:'general.form.error_notification')
           assert_text I18n.t(:'errors.format',

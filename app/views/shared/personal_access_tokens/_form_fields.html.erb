@@ -1,5 +1,11 @@
 <%# locals: (pat:, form:) -%>
 
+<% first_scope = Irida::Auth.all_available_scopes.first&.to_s %>
+<% target_overrides = {} %>
+<% target_overrides[:scopes] = form.field_id(:scopes, first_scope) if first_scope.present? %>
+
+<%= form_error_summary(form, target_overrides:) %>
+
 <% invalid_token_name = pat.errors.include?(:name) %>
 
 <div class="form-field <%= 'invalid' if invalid_token_name %>">
@@ -8,19 +14,18 @@
   <%= form.text_field :name,
                   required: true,
                   class: "form-control",
-                  aria: {
-                    describedby:
-                      (
-                        if invalid_token_name
-                          form.field_id(:name, "error")
-                        else
-                          nil
-                        end
-                      ),
-                    invalid: invalid_token_name,
-                    required: true,
-                  },
-                  autofocus: invalid_token_name %>
+                   aria: {
+                     describedby:
+                       (
+                         if invalid_token_name
+                           form.field_id(:name, "error")
+                         else
+                           nil
+                         end
+                       ),
+                     invalid: invalid_token_name,
+                     required: true,
+                   } %>
 
   <% if invalid_token_name %>
     <%= render "shared/form/field_errors",

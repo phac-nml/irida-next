@@ -152,12 +152,23 @@ class ProfileTest < ApplicationSystemTestCase
       fill_in 'Token name', with: 'my new token'
       click_button I18n.t(:'profiles.personal_access_tokens.create.submit')
     end
+
+    error_message = I18n.t(:'errors.format',
+                           attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
+                           message: I18n.t(:'errors.messages.blank'))
+
     assert_no_text 'my new token'
     assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
                     count: @active_token_count)
-    assert_text I18n.t(:'errors.format',
-                       attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
-                       message: I18n.t(:'errors.messages.blank'))
+    assert_text error_message
+    assert_selector %(form[action="/-/profile/personal_access_tokens"] [data-controller="form-error-summary"]),
+                    focused: true
+
+    within %(form[action="/-/profile/personal_access_tokens"] [data-controller="form-error-summary"]) do
+      click_link error_message
+    end
+
+    assert_selector %(form[action="/-/profile/personal_access_tokens"] input[type="checkbox"]), focused: true
   end
 
   test 'can revoke personal access tokens' do
