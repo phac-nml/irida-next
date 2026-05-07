@@ -436,6 +436,8 @@ fr:
           updated_at_asc: Plus ancien mis à jour
           updated_at_desc: Mis à jour à
         title: Groupes
+        treegrid:
+          aria_label: Liste des groupes
     projects:
       index:
         all: Tous
@@ -463,6 +465,10 @@ fr:
           namespace_name_desc: Nom, décroissant
           updated_at_asc: Plus ancien mis à jour
           updated_at_desc: Mis à jour à
+      treegrid:
+        aria_label:
+          all: Liste de tous les projets
+          personal: Liste des projets personnels
   data_exports:
     create:
       error: Une erreur est survenue lors de la création de l’exportation des données. Veuillez communiquer avec votre administrateur système si cette erreur persiste.
@@ -977,6 +983,10 @@ fr:
         label: Navigation des détails du projet de groupe
         shared_namespaces: Groupes et projets partagés
         subgroups_and_projects: Sous-groupes et projets
+      treegrid:
+        aria_label:
+          shared_namespaces: Liste des groupes et projets partagés
+          subgroups_and_projects: Liste des sous-groupes et des projets
     sidebar:
       activity: Activité
       bot_accounts: Comptes de bot
