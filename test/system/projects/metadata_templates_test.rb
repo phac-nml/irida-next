@@ -201,10 +201,11 @@ module Projects
       click_button submit_button_text
 
       within '[data-controller="form-error-summary"]' do
-        find("a[data-form-error-summary-target-id-param='metadata_template_fields']").click
+        find("a[data-form-error-summary-target-id-param='selected-list']").click
       end
 
-      assert_selector '#metadata_template_fields :focus'
+      assert_selector 'ul#selected-list:focus'
+      assert_selector "ul#selected-list[aria-describedby='metadata_template_fields_error']"
     end
 
     test 'cannot create a template with duplicate fields with same ordering in another template' do

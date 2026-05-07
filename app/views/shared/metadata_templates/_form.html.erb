@@ -6,7 +6,7 @@
   class="font-normal text-slate-500 dark:text-slate-400"
 >
   <%= form_for(@metadata_template, url: template_path, method:, html: { novalidate: true }) do |form| %>
-    <%= form_error_summary(form) %>
+    <%= form_error_summary(form, target_overrides: { fields: "selected-list" }) %>
     <%= render partial: "shared/form/required_field_legend" %>
 
     <% invalid_name = @metadata_template.errors&.include?(:name) %>
@@ -96,29 +96,23 @@
           },
         ) %>
 
-        <div
-          id="<%= form.field_id(:fields) %>"
-          class="outline-hidden"
-          tabindex="-1"
-          aria-describedby="<%= fields_describedby.presence %>"
-        >
-          <%= render SortableListsComponent.new do |sortable_lists| %>
-            <%= sortable_lists.with_list(
-              id: "available-list",
-              title: t("metadata_templates.form.available"),
-              list_items: @available_metadata_fields,
-              group: "metadata_selection",
-            ) %>
+        <%= render SortableListsComponent.new do |sortable_lists| %>
+          <%= sortable_lists.with_list(
+            id: "available-list",
+            title: t("metadata_templates.form.available"),
+            list_items: @available_metadata_fields,
+            group: "metadata_selection",
+          ) %>
 
-            <%= sortable_lists.with_list(
-              id: "selected-list",
-              title: t("metadata_templates.form.selected"),
-              list_items: @current_template_fields,
-              group: "metadata_selection",
-              required: true,
-            ) %>
-          <% end %>
-        </div>
+          <%= sortable_lists.with_list(
+            id: "selected-list",
+            title: t("metadata_templates.form.selected"),
+            list_items: @current_template_fields,
+            group: "metadata_selection",
+            required: true,
+            describedby: fields_describedby.presence,
+          ) %>
+        <% end %>
 
         <% if invalid_fields %>
           <%= render "shared/form/field_errors",
