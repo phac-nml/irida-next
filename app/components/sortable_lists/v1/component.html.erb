@@ -1,4 +1,4 @@
-<% list_ids = lists.map(&:id).join(' ') %>
+<% list_ids = lists.select(&:interactive).map(&:id).join(' ') %>
 
 <% if title.present? || description.present? %>
   <div>
@@ -12,7 +12,7 @@
   </div>
 <% end %>
 
-<% unless templates.empty? %>
+<% if interactive && templates.any? %>
   <div class="mb-4">
     <label for="template-selector" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
       <%= template_label %>
@@ -37,9 +37,11 @@
   </div>
 <% end %>
 
-<p id="<%= instructions_id %>" class="sr-only">
-  <%= t('components.sortable_lists.v1.component.keyboard_instructions') %>
-</p>
+<% if interactive %>
+  <p id="<%= instructions_id %>" class="sr-only">
+    <%= t('components.sortable_lists.v1.component.keyboard_instructions') %>
+  </p>
+<% end %>
 
 <div class="grid gap-2 max-sm:grid-cols-1 sm:grid-cols-2">
   <% lists.each do |list| %>
@@ -47,17 +49,17 @@
   <% end %>
 </div>
 
-<div
-  class="sr-only"
-  aria-live="polite"
-  data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"
-  data-translations="<%= aria_live_translations %>"
-></div>
-
-<template data-sortable-lists--v1--two-lists-selection-target="checkmarkTemplate">
-  <span class="pointer-events-none"><%= icon(:check, size: :sm, color: :success) %></span>
-</template>
-
-<template data-sortable-lists--v1--two-lists-selection-target="hiddenCheckmarkTemplate">
-  <span aria-hidden="true" class="pointer-events-none mx-2"></span>
-</template>
+<% if interactive %>
+  <div
+    class="sr-only"
+    aria-live="polite"
+    data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"
+    data-translations="<%= aria_live_translations %>"
+  ></div>
+  <template data-sortable-lists--v1--two-lists-selection-target="checkmarkTemplate">
+    <span class="pointer-events-none"><%= icon(:check, size: :sm, color: :success) %></span>
+  </template>
+  <template data-sortable-lists--v1--two-lists-selection-target="hiddenCheckmarkTemplate">
+    <span aria-hidden="true" class="pointer-events-none mx-2"></span>
+  </template>
+<% end %>

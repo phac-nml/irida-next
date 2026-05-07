@@ -5,22 +5,29 @@ module SortableLists
     # This component creates the sortable_lists.
     class Component < ::Component
       attr_reader :title, :description, :templates, :template_label,
-                  :required, :aria_live_translations, :instructions_id
+                  :required, :aria_live_translations, :instructions_id, :interactive
 
-      renders_many :lists, lambda { |id:, title:, **system_arguments|
+      renders_many :lists, lambda { |id:, title:, interactive: nil, **system_arguments|
+        interactive = @interactive if interactive.nil?
         SortableLists::V1::ListComponent.new(id:, title:, required: @required, instructions_id: @instructions_id,
-                                             **system_arguments)
+                                             interactive:, **system_arguments)
       }
 
-      def initialize(title: nil, description: nil, templates: [], template_label: nil, required: false)
+      # rubocop:disable Metrics/ParameterLists
+
+      def initialize(title: nil, description: nil, templates: [], template_label: nil, required: false,
+                     interactive: true)
         @title = title
         @description = description
         @templates = templates
         @template_label = template_label
         @required = required
+        @interactive = interactive
         @instructions_id = "sortable-lists-v1-instructions-#{SecureRandom.hex(6)}"
         @aria_live_translations = load_translations
       end
+
+      # rubocop:enable Metrics/ParameterLists
 
       private
 

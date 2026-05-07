@@ -4,17 +4,19 @@ module SortableLists
   module V1
     # This component creates the individual lists for the sortable_lists component.
     class ListComponent < ::Component
-      attr_reader :id, :title, :list_items, :required, :available_list, :selected_list, :instructions_id
+      attr_reader :id, :title, :list_items, :required, :available_list, :selected_list, :instructions_id, :interactive
 
       # rubocop:disable Metrics/ParameterLists
 
-      def initialize(id: nil, title: nil, list_items: [], required: false, describedby: nil, instructions_id: nil, **system_arguments)
+      def initialize(id: nil, title: nil, list_items: [], required: false, describedby: nil, instructions_id: nil, interactive: true,
+                     **system_arguments)
         @id = id
         @title = title
         @list_items = list_items
         @required = required
         @describedby = describedby
         @instructions_id = instructions_id
+        @interactive = interactive
         @system_arguments = system_arguments
         @system_arguments[:list_classes] =
           class_names('border border-slate-300 rounded-lg block dark:bg-slate-800 dark:border-slate-600 max-h-[225px]
