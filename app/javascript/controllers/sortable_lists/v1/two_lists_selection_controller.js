@@ -82,6 +82,16 @@ export default class extends Controller {
     }
   }
 
+  disconnect() {
+    if (this.hasSubmitBtnTarget) {
+      this.submitBtnTarget.removeEventListener(
+        "click",
+        this.#boundSubmitClickCapture,
+        true,
+      );
+    }
+  }
+
   #cleanupAvailableList() {
     const itemsToRemove = Array.from(
       this.availableList.querySelectorAll("li"),
