@@ -526,8 +526,8 @@ export default class extends Controller {
       ArrowDown: (event) => this.#handleVerticalNavigation(event, "down"),
       Home: (event) => this.#handleWeekNavigation(event, "start"),
       End: (event) => this.#handleWeekNavigation(event, "end"),
-      PageUp: (event) => this.#handleNavigationByPageUp(event),
-      PageDown: (event) => this.#handleNavigationByPageDown(event),
+      PageUp: (event) => this.#handleNavigationByPageKeys(event, "up"),
+      PageDown: (event) => this.#handleNavigationByPageKeys(event, "down"),
     };
     return handlers[key];
   }
@@ -655,44 +655,55 @@ export default class extends Controller {
     focusDate(this.calendarTarget, dateNodeToFocus);
   }
 
-  #handleNavigationByPageUp(event) {
-    let nodeToFocus;
+  #handleNavigationByPageKeys(event, direction) {
+    const currentFocusedDate = event.target.innerText;
     if (event.shiftKey) {
-      const targetYear = parseInt(this.yearTarget.value) - 1;
-      if (targetYear < this.#selectedYear) {
-        this.yearTarget.value = targetYear;
+      if (direction === "up") {
+        this.yearTarget.value = parseInt(this.yearTarget.value) - 1;
         this.previousYear();
-      }
-    } else {
-      // if we're on the earliest allowed month based on minDate, don't allow us to navigate to the previous month
-      if (this.#preventPreviousMonthNavigation()) return;
-      // load previous month onto calendar
-      this.previousMonth();
-    }
-    if (this.#minDate) {
-      const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
-      // if there's a minimum date and it exists in the calendar, focus that
-      // else focus 1st
-      if (minDateNode && verifyDateIsInMonth(minDateNode)) {
-        nodeToFocus = minDateNode;
       } else {
-        nodeToFocus = getFirstOfMonthNode(this.calendarTarget);
-      }
-    }
-    focusDate(this.calendarTarget, nodeToFocus);
-  }
-
-  #handleNavigationByPageDown(event) {
-    if (event.shiftKey) {
-      const targetYear = parseInt(this.yearTarget.value) + 1;
-      if (targetYear > this.#selectedYear) {
-        this.yearTarget.value = targetYear;
+        this.yearTarget.value = parseInt(this.yearTarget.value) + 1;
         this.nextYear();
       }
     } else {
-      this.nextMonth();
+      direction === "up" ? this.previousMonth() : this.nextMonth();
     }
-    focusDate(this.calendarTarget, getFirstOfMonthNode(this.calendarTarget));
+
+    const targetDate = this.#getFormattedStringDate(
+      this.#selectedYear,
+      this.#selectedMonthIndex,
+      currentFocusedDate,
+    );
+
+    const nodeToFocus =
+      direction === "up"
+        ? this.#verifyMinDate(targetDate)
+        : this.#verifyMaxDate(targetDate);
+
+    focusDate(this.calendarTarget, nodeToFocus);
+  }
+
+  #verifyMinDate(targetDate) {
+    if (this.#minDate) {
+      const minDateNode = getDateNode(this.calendarTarget, this.#minDate);
+      // if there's a minimum date and it exists in the calendar, and is after targetDate,
+      // focus minDate,
+      // else focus targetDate
+      if (
+        minDateNode &&
+        verifyDateIsInMonth(minDateNode) &&
+        this.#minDate > targetDate
+      ) {
+        return minDateNode;
+      }
+    }
+
+    return getDateNode(this.calendarTarget, targetDate);
+  }
+
+  // TODO: implement maxDate check
+  #verifyMaxDate(targetDate) {
+    return getDateNode(this.calendarTarget, targetDate);
   }
 
   // check if minDate is currently on calendar, and if so, don't allow navigating to previous month by
