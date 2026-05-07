@@ -382,7 +382,7 @@ en:
     sortable_lists:
       v1:
         component:
-          keyboard_instructions: Use Arrow Up and Arrow Down to move through options. Press Space to select or deselect options. Press Enter to add selected options, Delete to remove selected options, Alt plus Arrow Up or Arrow Down to reorder selected options, Shift plus Arrow keys to select a range, and Control plus A to select all options in the current list.
+          keyboard_instructions: Use Arrow Up and Arrow Down to move through options. Press Space to select or deselect options. Press Shift plus Space to select a range. Press Enter to add selected options, Delete to remove selected options, Alt plus Arrow Up or Arrow Down to reorder selected options, Control plus Shift plus Home or End to select to the start or end, and Control or Command plus A to select or deselect all options in the current list.
           no_template: No template
         list_component:
           add: Add
