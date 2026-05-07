@@ -12,7 +12,9 @@ export default class extends Controller {
 
   connect() {
     super.connect();
+    this._chunksReceived = 0;
     this._hasErrors = false;
+    this._totalChunks = 0;
     this._worker ||= this.#buildWorker();
     this._worksheet = null;
   }
@@ -59,6 +61,7 @@ export default class extends Controller {
     ]);
 
     const rowChunks = _.chunk(rows, ROW_CHUNK_SIZE);
+    this._totalChunks = rowChunks.length;
 
     for (const row of rowChunks) {
       // Send data to worker
@@ -83,11 +86,18 @@ export default class extends Controller {
 
       worker.onerror = (error) => {
         console.error("Worker failed:", error.message);
+        this.#terminateWorker();
       };
 
       // Listen for messages from the worker
       worker.onmessage = (event) => {
+        this._chunksReceived++;
+
         console.log("Main thread received:", event.data);
+
+        if (this._chunksReceived === this._totalChunks) {
+          this.#terminateWorker();
+        }
       };
     } else {
       console.error("Web Workers are not supported in this browser.");
@@ -99,5 +109,12 @@ export default class extends Controller {
   #csrfToken() {
     const meta = document.querySelector('meta[name="csrf-token"]');
     return meta ? meta.getAttribute("content") : "";
+  }
+
+  #terminateWorker() {
+    if (this._worker) {
+      this._worker.terminate();
+      this._worker = null;
+    }
   }
 }
