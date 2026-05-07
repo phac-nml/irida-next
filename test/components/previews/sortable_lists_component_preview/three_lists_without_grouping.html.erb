@@ -1,4 +1,5 @@
-<%= render SortableListsComponent.new(title: 'A title', description: 'These are three standalone lists') do |sortable_lists| %>
+<%= render SortableListsComponent.new(title: 'A title', description: 'These are three standalone lists',
+                                      interactive: false) do |sortable_lists| %>
   <%= sortable_lists.with_list(
     id: "first-list",
     title: "This is a title for List 1",

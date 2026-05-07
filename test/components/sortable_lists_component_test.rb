@@ -80,9 +80,10 @@ class SortableListsComponentTest < ViewComponentTestCase
     render_preview(:three_lists)
 
     assert_selector "[data-controller='sortable-lists--v1--two-lists-selection']"
-    assert_selector 'ul#available-list'
-    assert_selector 'ul#selected-list'
+    assert_selector 'ul#available-list[role="listbox"]'
+    assert_selector 'ul#selected-list[role="listbox"]'
     assert_selector 'ul#review-list li', count: 3
+    assert_no_selector 'ul#review-list[role="listbox"]'
   end
 
   test 'renders standalone three lists preview without sortable controller wiring' do
@@ -92,5 +93,21 @@ class SortableListsComponentTest < ViewComponentTestCase
     assert_selector 'ul#first-list li', count: 4
     assert_selector 'ul#second-list li', count: 3
     assert_selector 'ul#third-list li', count: 3
+    assert_no_selector 'ul[role="listbox"]'
+    assert_no_selector 'button[aria-keyshortcuts]'
+  end
+
+  test 'does not render template selector wiring for noninteractive lists' do
+    component = SortableListsComponent.new(
+      interactive: false,
+      templates: [{ id: 'template-one', name: 'Template one', fields: ['One'] }],
+      template_label: 'Template'
+    )
+    component.with_list(id: 'static-list', title: 'Static', list_items: ['One'])
+
+    render_inline(component)
+
+    assert_no_selector 'select#template-selector'
+    assert_no_selector '[aria-controls=""]', visible: :all
   end
 end
