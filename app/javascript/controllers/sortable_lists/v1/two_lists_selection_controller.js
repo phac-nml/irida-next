@@ -873,7 +873,7 @@ export default class extends Controller {
     }
 
     if (!option) {
-      list.removeAttribute("aria-activedescendant");
+      list.setAttribute("aria-activedescendant", "");
       this.#activeOptionCache.delete(list);
       return;
     }

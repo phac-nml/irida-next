@@ -213,7 +213,7 @@ describe("sortable lists two-lists selection controller", () => {
     application = await startController();
 
     expect(list("available-list")).toHaveAttribute("tabindex", "0");
-    expect(list("available-list")).not.toHaveAttribute("aria-activedescendant");
+    expect(list("available-list")).toHaveAttribute("aria-activedescendant", "");
   });
 
   it("moves focus with arrows and Home/End without changing selection", async () => {
