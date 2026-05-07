@@ -524,8 +524,8 @@ export default class extends Controller {
       ArrowRight: (event) => this.#handleHorizontalNavigation(event, "right"),
       ArrowUp: (event) => this.#handleVerticalNavigation(event, "up"),
       ArrowDown: (event) => this.#handleVerticalNavigation(event, "down"),
-      Home: this.#navigateToStart.bind(this),
-      End: this.#navigateToEnd.bind(this),
+      Home: (event) => this.#handleWeekNavigation(event, "start"),
+      End: (event) => this.#handleWeekNavigation(event, "end"),
       PageUp: (event) => this.#handleNavigationByPageUp(event),
       PageDown: (event) => this.#handleNavigationByPageDown(event),
     };
@@ -641,35 +641,18 @@ export default class extends Controller {
     focusDate(this.calendarTarget, targetDateNode);
   }
 
-  // handles Home keypress
-  #navigateToStart() {
-    // if firstDateNode is disabled, means minDate is on the current calendar, and we can focus that (the first
-    // node we're allowed to navigate to)
-    const firstDateNode = getFirstOfMonthNode(this.calendarTarget);
-
-    if (firstDateNode.getAttribute("aria-disabled")) {
-      focusDate(
-        this.calendarTarget,
-        getDateNode(this.calendarTarget, this.#minDate),
-      );
-    } else {
-      focusDate(this.calendarTarget, firstDateNode);
-    }
-  }
-
-  // handles End keypress
-  #navigateToEnd() {
-    // get all date nodes that are 'inMonth' and focus the last node
-    const allInMonthDatesNodes = Array.from(
-      this.calendarTarget.querySelectorAll(
-        '[data-date-within-month-position="inMonth"]',
-      ),
+  // navigate to start or end of the week by Home and End keys, excluding disabled and outOfMonth dates
+  #handleWeekNavigation(event, direction) {
+    const currentWeekNode = event.target.parentElement;
+    const activeDateNodes = currentWeekNode.querySelectorAll(
+      ':not([aria-disabled="true"]):not([data-date-within-month-position="outOfMonth"]',
     );
 
-    focusDate(
-      this.calendarTarget,
-      allInMonthDatesNodes[allInMonthDatesNodes.length - 1],
-    );
+    const dateNodeToFocus =
+      direction === "start"
+        ? activeDateNodes[0]
+        : activeDateNodes[activeDateNodes.length - 1];
+    focusDate(this.calendarTarget, dateNodeToFocus);
   }
 
   #handleNavigationByPageUp(event) {
