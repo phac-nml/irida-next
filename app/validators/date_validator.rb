@@ -25,6 +25,7 @@ class DateValidator < ActiveModel::EachValidator
   private
 
   def expiration_required?(record)
+    expiration_value = nil
     expiration_value = resolve_value(record, options[:less_than]) if options[:less_than].present?
     expiration_required = expiration_value.present? || false
     return false if expiration_required == false
