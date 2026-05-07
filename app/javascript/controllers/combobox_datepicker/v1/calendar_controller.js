@@ -656,7 +656,7 @@ export default class extends Controller {
   }
 
   #handleNavigationByPageKeys(event, direction) {
-    const currentFocusedDate = event.target.innerText;
+    let dateToFocus = event.target.innerText;
     if (event.shiftKey) {
       if (direction === "up") {
         this.yearTarget.value = parseInt(this.yearTarget.value) - 1;
@@ -665,14 +665,24 @@ export default class extends Controller {
         this.yearTarget.value = parseInt(this.yearTarget.value) + 1;
         this.nextYear();
       }
+      // if we're on Feb 29 and change year, we can default to Feb 28 of the before/after year
+      if (this.#selectedMonthIndex === 1 && parseInt(dateToFocus) === 29) {
+        dateToFocus = 28;
+      }
     } else {
       direction === "up" ? this.previousMonth() : this.nextMonth();
+      // when changing, and we're on a potential 'last of month' date, verify if date exists
+      // eg: focused on Jan 31st, and going to next month, we want to focus Feb 28/29 (leap year) since 31 doesn't
+      // exist
+      if (dateToFocus > 28) {
+        dateToFocus = this.#verifyLastDate(dateToFocus);
+      }
     }
 
     const targetDate = this.#getFormattedStringDate(
       this.#selectedYear,
       this.#selectedMonthIndex,
-      currentFocusedDate,
+      dateToFocus,
     );
 
     const nodeToFocus =
@@ -681,6 +691,16 @@ export default class extends Controller {
         : this.#verifyMaxDateFocus(targetDate);
 
     focusDate(this.calendarTarget, nodeToFocus);
+  }
+
+  #verifyLastDate(date) {
+    if (this.#selectedMonthIndex === 1) {
+      return this.#getFebLastDate(this.#selectedYear);
+    } else {
+      return date > DAYS_IN_MONTH[this.#selectedMonthIndex]
+        ? DAYS_IN_MONTH[this.#selectedMonthIndex]
+        : date;
+    }
   }
 
   #verifyMinDateFocus(targetDate) {
