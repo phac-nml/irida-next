@@ -9,27 +9,21 @@ module Attachments
     class AttachmentConcatenationFilenameError < StandardError
     end
 
-    attr_accessor :attachable, :attachments, :concatenation_params
+    attr_accessor :attachable, :attachments, :concatenation_form
 
-    def initialize(user = nil, attachable = nil, params = {})
+    def initialize(user = nil, attachable = nil, concatenation_form = nil)
       super(user, params)
       @attachable = attachable
-
-      # single-end params: { attachment_ids = {}, basename: basefilename,
-      #                      delete_originals: true OPTIONAL
-      #                      }
-      # paired-end params: { attachment_ids = {{}, {}, ...}, basename: basefilename,
-      #                      delete_originals: true OPTIONAL
-      #                      }
-      @concatenation_params = params
+      @concatenation_form = concatenation_form
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength,Metrics/CyclomaticComplexity
       # authorize if user can update sample
       authorize! attachable.project, to: :update_sample? if attachable.instance_of?(Sample)
 
-      validate_params
-      attachment_ids = concatenation_params[:attachment_ids].values
+      return [] unless concatenation_form.valid?
+
+      attachment_ids = concatenation_form.attachment_ids
       is_paired_end = false
 
       unless attachment_ids.all? { |i| i.is_a?(Integer) || i.is_a?(String) }
@@ -38,7 +32,7 @@ module Attachments
         is_paired_end = true
       end
 
-      attachments = attachable.attachments.where(id: attachment_ids, attachable:).order(:puid)
+      attachments = attachable.attachments.where(id: attachment_ids).order(:puid)
 
       # Checks to make sure the selected attachments to concatenate
       # do in fact belong to the same sample
@@ -49,34 +43,11 @@ module Attachments
 
       validate_and_concatenate(attachments, is_paired_end)
     rescue Attachments::ConcatenationService::AttachmentConcatenationError => e
-      attachable.errors.add(:base, e.message)
-      []
-    rescue Attachments::ConcatenationService::AttachmentConcatenationFilenameError => e
-      attachable.errors.add(:basename, e.message)
+      concatenation_form.errors.add(:attachment_ids, e.message)
       []
     end
 
     private
-
-    # Validates params
-    def validate_params # rubocop:disable Metrics/AbcSize,Naming/PredicateMethod
-      if !concatenation_params.key?(:attachment_ids) || concatenation_params[:attachment_ids].empty?
-        raise AttachmentConcatenationError,
-              I18n.t('services.attachments.concatenation.no_files_selected')
-      end
-
-      if !concatenation_params.key?(:basename) || concatenation_params[:basename].empty?
-        raise AttachmentConcatenationFilenameError,
-              I18n.t('services.attachments.concatenation.filename_missing')
-      end
-
-      if concatenation_params.key?(:basename) && !concatenation_params[:basename].match?(/^[[a-zA-Z0-9_\-.]]*$/)
-        raise AttachmentConcatenationFilenameError,
-              I18n.t('services.attachments.concatenation.incorrect_basename')
-      end
-
-      true
-    end
 
     # Calls the validation, concatenate methods for the file type
     # If the user selects to delete the originals the originals
