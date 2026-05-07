@@ -897,6 +897,8 @@ export default class extends Controller {
     );
   }
 
+  // Capture-phase handler: aria-disabled does not natively prevent form
+  // submission, so we intercept clicks before they reach the form.
   #onSubmitClickCapture(event) {
     if (!this.hasSubmitBtnTarget) return;
     if (!this.#isDisabled(this.submitBtnTarget)) return;
