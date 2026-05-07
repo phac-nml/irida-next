@@ -30,7 +30,11 @@ module SortableLists
       end
 
       def described_by_ids
-        [instructions_id, @describedby, (required ? "#{id}-required" : nil)].compact.join(' ')
+        [instructions_id, @describedby, (aria_required ? "#{id}-required" : nil)].compact.join(' ')
+      end
+
+      def aria_required
+        required && selected_list
       end
 
       private

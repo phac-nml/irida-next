@@ -2,7 +2,7 @@
   <p id="<%= id %>-list-label">
     <%= title %>
 
-    <% if required %>
+    <% if aria_required %>
       <span id="<%= id %>-required" class="sr-only">
         <%= t('components.sortable_lists.v1.list_component.required') %>
       </span>
@@ -15,11 +15,15 @@
   <ul
     id="<%= id %>"
     class="<%= @system_arguments[:list_classes] %>"
-    tabindex="<%= list_items.empty? ? 0 : -1 %>"
+    tabindex="0"
     role="listbox"
+    data-action="
+      focus->sortable-lists--v1--two-lists-selection#handleListFocus
+      keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput
+    "
     aria-labelledby="<%= id %>-list-label"
     aria-describedby="<%= described_by_ids %>"
-    aria-required="<%= required %>"
+    aria-required="<%= aria_required %>"
     aria-multiselectable="true"
   >
     <%= render SortableLists::V1::ListItemComponent.with_collection(list_items) %>
