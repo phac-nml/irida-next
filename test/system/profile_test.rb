@@ -160,9 +160,7 @@ class ProfileTest < ApplicationSystemTestCase
     assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
                     count: @active_token_count)
 
-    assert_text I18n.t(:'errors.format',
-                       attribute: I18n.t(:'activerecord.attributes.personal_access_token.expires_at'),
-                       message: I18n.t(:'errors.messages.blank'))
+    assert_text I18n.t('common.date.errors.invalid_input')
   end
 
   test 'cannot create personal access token without scope selection' do

@@ -283,8 +283,9 @@ module Groups
       login_as users(:user25)
 
       namespace_group_link = namespace_group_links(:namespace_group_link9)
-      NamespaceGroupLink.where(namespace: namespace_group_link.namespace,
-                               group: namespace_group_link.group).update(expires_at: Time.zone.today - 1)
+
+      namespace_group_link.expires_at = Time.zone.today - 1
+      namespace_group_link.save(validate: false)
 
       visit group_url(namespace_group_link.namespace)
 

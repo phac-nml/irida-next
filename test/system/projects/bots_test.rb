@@ -164,7 +164,7 @@ module Projects
     end
 
     test 'can\'t create a new project bot account without missing mandatory expiration date' do
-      Irida::CurrentSettings.current_application_settings.update(require_personal_access_token_expiry: true)
+      ApplicationSetting.current.update(require_personal_access_token_expiry: true)
 
       ### SETUP START ###
       visit namespace_project_bots_path(@namespace, @project2)
@@ -207,9 +207,7 @@ module Projects
         within('[data-controller="form-error-summary"]') do
           assert_text I18n.t(:'general.form.error_summary.title', count: 2)
           assert_text I18n.t(:'general.form.error_notification')
-          assert_text I18n.t(:'errors.format',
-                             attribute: I18n.t(:'activerecord.attributes.personal_access_token.expires_at'),
-                             message: I18n.t(:'errors.messages.blank'))
+          assert_text I18n.t('common.date.errors.invalid_input')
         end
       end
       ### VERIFY END ###

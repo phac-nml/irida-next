@@ -79,7 +79,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
 
     group_member = members(:group_one_member_john_doe)
     group_member.expires_at = 10.days.ago.to_date
-    group_member.save
+    group_member.save(validate: false)
     group = groups(:group_one)
     get group_path(group)
     assert_response :unauthorized
@@ -90,7 +90,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
 
     group_member = members(:group_four_member_david_doe)
     group_member.expires_at = 10.days.ago.to_date
-    group_member.save
+    group_member.save(validate: false)
     group = groups(:david_doe_group_four)
     get group_path(group)
     assert_response :unauthorized

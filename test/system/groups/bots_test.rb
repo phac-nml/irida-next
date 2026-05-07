@@ -207,9 +207,7 @@ module Groups
         within('[data-controller="form-error-summary"]') do
           assert_text I18n.t(:'general.form.error_summary.title', count: 2)
           assert_text I18n.t(:'general.form.error_notification')
-          assert_text I18n.t(:'errors.format',
-                             attribute: I18n.t(:'activerecord.attributes.personal_access_token.expires_at'),
-                             message: I18n.t(:'errors.messages.blank'))
+          assert_text I18n.t('common.date.errors.invalid_input')
         end
       end
       ### VERIFY END ###

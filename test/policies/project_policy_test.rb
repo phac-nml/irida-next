@@ -114,7 +114,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   test 'scope expired memberships' do
     group_member = members(:group_one_member_john_doe)
     group_member.expires_at = 10.days.ago.to_date
-    group_member.save
+    group_member.save(validate: false)
 
     scoped_projects = @policy.apply_scope(Project, type: :relation)
 
@@ -141,7 +141,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     project_member = members(:project_one_member_john_doe)
     project_member.expires_at = 10.days.ago.to_date
-    project_member.save
+    project_member.save(validate: false)
 
     scoped_projects = @policy.apply_scope(Project, type: :relation)
 
@@ -151,7 +151,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     linked_group_member = members(:namespace_group_link8_member1)
     linked_group_member.expires_at = 10.days.ago.to_date
-    linked_group_member.save
+    linked_group_member.save(validate: false)
 
     scoped_projects = @policy.apply_scope(Project, type: :relation)
 
@@ -182,7 +182,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   test 'manageable scope expired memberships' do
     group_member = members(:group_one_member_john_doe)
     group_member.expires_at = 10.days.ago.to_date
-    group_member.save
+    group_member.save(validate: false)
 
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 
@@ -210,7 +210,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     project_member = members(:project_one_member_john_doe)
     project_member.expires_at = 10.days.ago.to_date
-    project_member.save
+    project_member.save(validate: false)
 
     scoped_projects = @policy.apply_scope(Project, type: :relation, name: :manageable)
 

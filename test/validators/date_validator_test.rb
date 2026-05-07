@@ -28,7 +28,7 @@ class DateValidatorTest < ActiveSupport::TestCase
     member = create_group_member(before_expires_at)
 
     assert_not member.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
                  member.errors[:expires_at].first)
   end
 
@@ -37,7 +37,7 @@ class DateValidatorTest < ActiveSupport::TestCase
     member = create_group_member(invalid_date_format)
 
     assert_not member.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
                  member.errors[:expires_at].first)
   end
 
@@ -68,7 +68,7 @@ class DateValidatorTest < ActiveSupport::TestCase
     group_link = create_group_link(before_expires_at)
 
     assert_not group_link.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
                  group_link.errors[:expires_at].first)
   end
 
@@ -77,7 +77,7 @@ class DateValidatorTest < ActiveSupport::TestCase
     group_link = create_group_link(invalid_date_format)
 
     assert_not group_link.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
                  group_link.errors[:expires_at].first)
   end
 

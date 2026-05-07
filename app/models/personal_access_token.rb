@@ -15,15 +15,19 @@ class PersonalAccessToken < ApplicationRecord
 
   validates :name, presence: true
   validates :scopes, presence: true
-  validates :expires_at, on: :create, date: true, if: -> { expires_at_before_type_cast.present? }
   validate :validate_scopes
 
-  validates :expires_at, comparison: {
-    less_than: -> { Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days },
-    greater_than: -> { Time.zone.today }
-  }, if: lambda {
-    (new_record? || expires_at_changed?) && Irida::CurrentSettings.require_personal_access_token_expiry?
-  }
+  validates :expires_at, on: %i[create update], date: {
+    greater_than: lambda {
+      Time.zone.today
+    },
+    less_than: lambda {
+      if Irida::CurrentSettings.require_personal_access_token_expiry?
+        Time.zone.today +
+          Irida::CurrentSettings.max_personal_access_token_lifetime_in_days
+      end
+    }
+  }, if: -> { new_record? || expires_at_changed? }
 
   scope :active, -> { not_revoked.not_expired }
   scope :not_revoked, -> { where(revoked: [false, nil]) }
