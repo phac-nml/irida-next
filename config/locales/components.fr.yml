@@ -264,14 +264,16 @@ fr:
     namespace_row:
       contents_component:
         created_at: Créé le %{date}
+        namespace_link:
+          aria-label: Afficher %{namespace_type} avec le nom %{namespace_name} et l’identifiant unique persistant %{namespace_puid}
         projects:
-          aria-label: Projets
+          aria-label: Afficher les projets pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip: "%{count} projets dans %{namespace_name}"
         samples:
-          aria-label: Échantillons
+          aria-label: Afficher les échantillons pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip: "%{count} échantillons dans %{namespace_name}"
         subnamespaces:
-          aria-label: Sous-groupes
+          aria-label: Afficher les sous-groupes pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip: "%{count} sous-groupes dans %{namespace_name}"
     nextflow:
       email_notification: Vous recevez un avis par courriel lorsque votre analyse est terminée?
