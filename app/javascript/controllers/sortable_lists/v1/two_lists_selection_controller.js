@@ -33,6 +33,7 @@ export default class extends Controller {
   #lastClickedOption;
   #lastSelectedAnchor;
   #typeAheadState = new WeakMap();
+  #activeOptionCache = new WeakMap();
 
   #ariaLiveTranslations;
   #boundSubmitClickCapture;
@@ -838,11 +839,11 @@ export default class extends Controller {
   }
 
   #getActiveListElement(list) {
-    const activeOptionId = list.getAttribute("aria-activedescendant");
-    if (!activeOptionId) return null;
+    const cached = this.#activeOptionCache.get(list);
+    if (cached?.parentNode === list) return cached;
 
-    const activeOption = document.getElementById(activeOptionId);
-    return activeOption?.parentNode === list ? activeOption : null;
+    this.#activeOptionCache.delete(list);
+    return null;
   }
 
   #setActiveListElement(list, option) {
@@ -857,10 +858,12 @@ export default class extends Controller {
 
     if (!option) {
       list.removeAttribute("aria-activedescendant");
+      this.#activeOptionCache.delete(list);
       return;
     }
 
     list.setAttribute("aria-activedescendant", option.id);
+    this.#activeOptionCache.set(list, option);
     option.tabIndex = -1;
     option.setAttribute("data-active-option", "true");
 
