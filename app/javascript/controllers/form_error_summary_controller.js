@@ -61,7 +61,9 @@ export default class extends Controller {
     const target = this.focusableElement(resolved);
     if (!target) return;
 
-    focusWhenVisible(target);
+    // Force the visible focus indicator: pointer-activated links don't otherwise trigger :focus-visible
+    // on the target (e.g. listboxes, divs), so the user wouldn't see where focus landed.
+    focusWhenVisible(target, { focusOptions: { focusVisible: true } });
     target.scrollIntoView({ block: "center", inline: "nearest" });
   }
 }

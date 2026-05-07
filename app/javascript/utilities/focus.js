@@ -32,6 +32,8 @@ export function isVisible(element) {
  * @param {HTMLElement} element - The element to focus
  * @param {Object} options - Configuration options
  * @param {number} options.maxFrames - Maximum animation frames to wait (default: 30, ~500ms at 60fps)
+ * @param {FocusOptions} options.focusOptions - Options forwarded to HTMLElement.focus()
+ *   (e.g. `{ focusVisible: true }` to force the visible focus indicator after a pointer-initiated action).
  * @returns {void}
  *
  * @example
@@ -41,8 +43,15 @@ export function isVisible(element) {
  * @example
  * // Focus with custom timeout
  * focusWhenVisible(dialogCloseButton, { maxFrames: 60 });
+ *
+ * @example
+ * // Force the visible focus indicator (e.g. when activating an error summary link)
+ * focusWhenVisible(target, { focusOptions: { focusVisible: true } });
  */
-export function focusWhenVisible(element, { maxFrames = 30 } = {}) {
+export function focusWhenVisible(
+  element,
+  { maxFrames = 30, focusOptions } = {},
+) {
   // maxFrames = 30 ≈ 500ms at 60fps - prevents infinite loop during CSS transitions
   if (!element) return;
 
@@ -50,7 +59,7 @@ export function focusWhenVisible(element, { maxFrames = 30 } = {}) {
 
   const attempt = () => {
     if (isVisible(element)) {
-      element.focus();
+      element.focus(focusOptions);
       return;
     }
 
