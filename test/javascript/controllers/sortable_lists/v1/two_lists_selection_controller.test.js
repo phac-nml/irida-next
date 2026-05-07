@@ -36,6 +36,7 @@ function renderFixture({
     option("selected-two", "Two"),
     option("selected-three", "Three"),
   ],
+  templateSelector = false,
 } = {}) {
   document.body.innerHTML = `
     <div
@@ -44,6 +45,17 @@ function renderFixture({
       data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
       data-sortable-lists--v1--two-lists-selection-field-name-value="fields[]"
     >
+      ${
+        templateSelector
+          ? `<select
+              data-sortable-lists--v1--two-lists-selection-target="templateSelector"
+              data-action="sortable-lists--v1--two-lists-selection#setTemplate"
+            >
+              <option value="none">None</option>
+              <option value="custom" data-fields='["Template only"]'>Custom</option>
+            </select>`
+          : ""
+      }
       <ul
         id="available-list"
         role="listbox"
@@ -103,6 +115,9 @@ function renderFixture({
       <template data-sortable-lists--v1--two-lists-selection-target="hiddenCheckmarkTemplate">
         <span aria-hidden="true"></span>
       </template>
+      <template data-sortable-lists--v1--two-lists-selection-target="itemTemplate">
+        ${option("template-item", "NAME_HERE")}
+      </template>
     </div>
   `;
 }
@@ -134,6 +149,12 @@ function selectedIds(listbox) {
 
 function optionIds(listbox) {
   return Array.from(listbox.querySelectorAll('[role="option"]')).map(
+    (item) => item.id,
+  );
+}
+
+function activeOptionIds(listbox) {
+  return Array.from(listbox.querySelectorAll("[data-active-option]")).map(
     (item) => item.id,
   );
 }
@@ -313,6 +334,55 @@ describe("sortable lists two-lists selection controller", () => {
     expect(optionIds(selectedList)).not.toContain("available-alpha");
     expect(optionIds(availableList)).toContain("available-alpha");
     expect(document.activeElement).toBe(selectedList);
+  });
+
+  it("clears stale active option state when moving multiple selected items", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    const selectedList = list("selected-list");
+
+    keydown(availableList, "ArrowDown");
+    keydown(availableList, " ");
+    keydown(availableList, "ArrowDown");
+    keydown(availableList, " ");
+    keydown(availableList, "Enter");
+
+    expect(activeOptionIds(availableList)).toEqual(["available-gamma"]);
+    expect(activeOptionIds(selectedList)).toEqual(["available-beta"]);
+  });
+
+  it("clears active descendant when template-only items are removed from the available list", async () => {
+    renderFixture({ templateSelector: true });
+    application = await startController();
+
+    const availableList = list("available-list");
+    const selectedList = list("selected-list");
+    const selector = document.querySelector(
+      '[data-sortable-lists--v1--two-lists-selection-target="templateSelector"]',
+    );
+
+    selector.value = "custom";
+    selector.dispatchEvent(new Event("change", { bubbles: true }));
+
+    const templateOnlyOption = selectedList.querySelector(
+      '[role="option"]:last-child',
+    );
+    expect(templateOnlyOption).toHaveTextContent("Template only");
+
+    keydown(selectedList, "End");
+    keydown(selectedList, " ");
+    keydown(selectedList, "Delete");
+
+    expect(availableList).toHaveAttribute(
+      "aria-activedescendant",
+      "available-alpha",
+    );
+    expect(document.getElementById(activeId(availableList)).parentNode).toBe(
+      availableList,
+    );
+    expect(availableList).not.toHaveTextContent("Template only");
   });
 
   it("reorders one selected item with Alt+Arrow and announces the change", async () => {
