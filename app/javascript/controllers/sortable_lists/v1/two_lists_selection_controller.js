@@ -847,11 +847,13 @@ export default class extends Controller {
 
   #setActiveListElement(list, option) {
     list.tabIndex = 0;
-    list.querySelectorAll('li[role="option"]').forEach((listOption) => {
-      listOption.tabIndex = -1;
-      listOption.removeAttribute("data-active-option");
-      listOption.removeAttribute("data-tabbable");
-    });
+
+    const previousOption = this.#getActiveListElement(list);
+    if (previousOption && previousOption !== option) {
+      previousOption.tabIndex = -1;
+      previousOption.removeAttribute("data-active-option");
+      previousOption.removeAttribute("data-tabbable");
+    }
 
     if (!option) {
       list.removeAttribute("aria-activedescendant");
