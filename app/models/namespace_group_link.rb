@@ -24,9 +24,9 @@ class NamespaceGroupLink < ApplicationRecord
               in: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
             }
 
-  validates :expires_at, on: %i[create update], date: { greater_than: -> { Time.zone.today } }, if: lambda {
-    (new_record? || expires_at_changed?) && expires_at_before_type_cast.present?
-  }
+  validates :expires_at, on: %i[create update], date: { allow_nil: true, greater_than: lambda {
+    Time.zone.today
+  } }, if: -> { (new_record? || expires_at_changed?) && expires_at_before_type_cast.present? }
 
   after_destroy :send_access_revoked_emails
   after_save :send_access_granted_emails, if: :previously_new_record?
