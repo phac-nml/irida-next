@@ -27,6 +27,7 @@ export default class extends Controller {
     "disabledDateTemplate",
     "clearButton",
     "minDateMessage",
+    "headerAriaLive",
   ];
 
   static values = {
@@ -58,6 +59,7 @@ export default class extends Controller {
     if (this.hasMinDateMessageTarget) {
       this.minDateMessageTarget.innerText = this.#minDateMessage;
     }
+    this.headerAriaLiveTarget.innerText = `${this.monthSelectTarget.value} ${this.yearTarget.value}`;
     this.#loadCalendar();
   }
 

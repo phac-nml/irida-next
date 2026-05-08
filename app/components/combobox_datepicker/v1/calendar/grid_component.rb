@@ -5,8 +5,9 @@ module ComboboxDatepicker
     module Calendar
       # Renders the calendar day grid.
       class GridComponent < ::Component
-        def initialize(days_of_the_week:)
+        def initialize(days_of_the_week:, calendar_id:)
           @days_of_the_week = days_of_the_week
+          @calendar_id = calendar_id
         end
       end
     end

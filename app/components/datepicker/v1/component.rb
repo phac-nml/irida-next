@@ -75,13 +75,13 @@ module Datepicker
       end
 
       def load_days_of_week
-        [I18n.t('components.datepicker.days_of_week.sunday'),
-         I18n.t('components.datepicker.days_of_week.monday'),
-         I18n.t('components.datepicker.days_of_week.tuesday'),
-         I18n.t('components.datepicker.days_of_week.wednesday'),
-         I18n.t('components.datepicker.days_of_week.thursday'),
-         I18n.t('components.datepicker.days_of_week.friday'),
-         I18n.t('components.datepicker.days_of_week.saturday')]
+        [I18n.t('components.datepicker.days_of_week_short.sunday'),
+         I18n.t('components.datepicker.days_of_week_short.monday'),
+         I18n.t('components.datepicker.days_of_week_short.tuesday'),
+         I18n.t('components.datepicker.days_of_week_short.wednesday'),
+         I18n.t('components.datepicker.days_of_week_short.thursday'),
+         I18n.t('components.datepicker.days_of_week_short.friday'),
+         I18n.t('components.datepicker.days_of_week_short.saturday')]
       end
 
       def setup_ids(id)

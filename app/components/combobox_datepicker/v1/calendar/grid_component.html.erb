@@ -1,5 +1,10 @@
 <div class="justify-center p-1">
-  <table class="min-w-full table-fixed" role="grid" aria-label="<%= t('components.datepicker.aria_label.calendar') %>">
+  <table
+    class="min-w-full table-fixed"
+    role="grid"
+    aria-label="<%= t('components.datepicker.aria_label.calendar') %>"
+    aria-labelledby="<%= @calendar_id %>-header"
+  >
     <thead class="mb-1">
       <tr>
         <% @days_of_the_week.each do |day| %>
