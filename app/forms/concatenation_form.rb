@@ -17,7 +17,7 @@ class ConcatenationForm
 
   def initialize(attributes = {})
     super
-    self.attachment_ids = attachment_ids.values
+    self.attachment_ids = attachment_ids.values unless attachment_ids.is_a?(Array)
   end
 
   private

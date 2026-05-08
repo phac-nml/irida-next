@@ -2,6 +2,10 @@
 en:
   activemodel:
     attributes:
+      concatenation_form:
+        attachment_ids: Files
+        basename: Base filename
+        delete_originals: Delete original files after concatenation?
       sample/query:
         group: Group
       sample/search_condition:
@@ -18,6 +22,12 @@ en:
         condition: Condition
     errors:
       models:
+        concatenation_form:
+          attributes:
+            attachment_ids:
+              min_length: must have at least %{count} files selected
+            basename:
+              invalid: must contain only letters, digits, '_', '-', and '.'.
         sample/search_condition:
           attributes:
             field:
@@ -1830,13 +1840,10 @@ en:
   services:
     attachments:
       concatenation:
-        filename_missing: Base filename can't be blank.
         incorrect_attachable: All or some of then selected files do not belong to the sample.
-        incorrect_basename: The base filename can contain only letters, digits, '-', '.', and '_'
         incorrect_fastq_file_types: Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files
         incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
         incorrect_file_types: Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.
-        no_files_selected: No files were selected to concatenate. Please select files then try again.
       destroy:
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
         does_not_belong_to_attachable: This attachment does not belong to this sample.

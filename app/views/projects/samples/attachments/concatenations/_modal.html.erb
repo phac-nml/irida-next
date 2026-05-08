@@ -12,20 +12,35 @@
 
     <%= render FormErrorSummaryComponent.new(entries: summary_entries) %>
 
-    <div class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400">
-      <p class="mb-4"><%= t(".description") %></p>
-
-      <div
-        class="scrollbar overflow-auto"
-        data-controller="projects--samples--attachments--files"
-        data-projects--samples--attachments--files-target="field"
-      ></div>
-    </div>
-
-    <div data-projects--samples--attachments--selected-attachments-target="field"></div>
-
     <div class="grid gap-4">
+      <% invalid_attachment_ids = @concatenation_form.errors.include?(:attachment_ids) %>
+
       <%= render partial: "shared/form/required_field_legend" %>
+
+      <div class="form-field" <%= 'invalid' if invalid_attachment_ids %>>
+        <%= form.label :attachment_ids, data: { required: true } %>
+
+        <div
+          class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400"
+          tabindex="0"
+          aria-label="<%= form.field_id(:attachment_ids) %>"
+          <%= "aria-describedby=#{form.field_id(:attachment_ids, "error")}" if invalid_attachment_ids %>
+        >
+          <div
+            class="scrollbar overflow-auto"
+            data-controller="projects--samples--attachments--files"
+            data-projects--samples--attachments--files-target="field"
+          ></div>
+        </div>
+
+        <div data-projects--samples--attachments--selected-attachments-target="field"></div>
+
+        <% if invalid_attachment_ids %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:attachment_ids, "error"),
+          errors: @concatenation_form.errors.full_messages_for(:attachment_ids) %>
+        <% end %>
+      </div>
 
       <% invalid_basename = @concatenation_form.errors.include?(:basename) %>
 
@@ -52,7 +67,7 @@
         <% if invalid_basename %>
           <%= render "shared/form/field_errors",
           id: form.field_id(:basename, "error"),
-          errors: @concatenation_form.errors[:basename] %>
+          errors: @concatenation_form.errors.full_messages_for(:basename) %>
         <% end %>
 
         <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
