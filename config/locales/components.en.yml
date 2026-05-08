@@ -200,7 +200,15 @@ en:
       clear_selection: Clear selection
       date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
       date_selection: Date Selection
-      days_of_week:
+      days_of_week_full:
+        friday: Friday
+        monday: Monday
+        saturday: Saturday
+        sunday: Sunday
+        thursday: Thursday
+        tuesday: Tuesday
+        wednesday: Wednesday
+      days_of_week_short:
         friday: Fri
         monday: Mon
         saturday: Sat

@@ -306,6 +306,7 @@ export default class extends Controller {
       event.preventDefault();
       this.directInput(event);
     } else if (event.key === "ArrowDown") {
+      event.preventDefault();
       this.toggleCalendar(event);
     }
   }

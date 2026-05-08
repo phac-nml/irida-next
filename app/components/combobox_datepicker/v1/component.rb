@@ -4,7 +4,7 @@ module ComboboxDatepicker
   module V1
     # Datepicker Component
     # Renders the date input along with datepicker calendar
-    class Component < ::Component
+    class Component < ::Component # rubocop:disable Metrics/ClassLength
       # Default HTML tag for components main elements.
       TAG_DEFAULT = :div
 
@@ -73,13 +73,20 @@ module ComboboxDatepicker
       end
 
       def load_days_of_week
-        [I18n.t('components.datepicker.days_of_week.sunday'),
-         I18n.t('components.datepicker.days_of_week.monday'),
-         I18n.t('components.datepicker.days_of_week.tuesday'),
-         I18n.t('components.datepicker.days_of_week.wednesday'),
-         I18n.t('components.datepicker.days_of_week.thursday'),
-         I18n.t('components.datepicker.days_of_week.friday'),
-         I18n.t('components.datepicker.days_of_week.saturday')]
+        [[I18n.t('components.datepicker.days_of_week_short.sunday'),
+          I18n.t('components.datepicker.days_of_week_full.sunday')],
+         [I18n.t('components.datepicker.days_of_week_short.monday'),
+          I18n.t('components.datepicker.days_of_week_full.monday')],
+         [I18n.t('components.datepicker.days_of_week_short.tuesday'),
+          I18n.t('components.datepicker.days_of_week_full.tuesday')],
+         [I18n.t('components.datepicker.days_of_week_short.wednesday'),
+          I18n.t('components.datepicker.days_of_week_full.wednesday')],
+         [I18n.t('components.datepicker.days_of_week_short.thursday'),
+          I18n.t('components.datepicker.days_of_week_full.thursday')],
+         [I18n.t('components.datepicker.days_of_week_short.friday'),
+          I18n.t('components.datepicker.days_of_week_full.friday')],
+         [I18n.t('components.datepicker.days_of_week_short.saturday'),
+          I18n.t('components.datepicker.days_of_week_full.saturday')]]
       end
 
       def setup_ids(id)

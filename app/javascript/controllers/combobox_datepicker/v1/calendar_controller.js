@@ -474,7 +474,7 @@ export default class extends Controller {
     // if minDate exists, check if user tried to hard type in a year amount earlier than minDate's year
     if (this.#minDate) {
       const minDate = new Date(this.#minDate);
-      const minYear = minDate.getFullYear();
+      const minYear = minDate.getUTCFullYear();
       const minMonth = minDate.getUTCMonth();
       if (this.yearTarget.value < minYear) {
         this.yearTarget.value = minYear;
@@ -564,6 +564,9 @@ export default class extends Controller {
     if (this.#autosubmit) {
       this.comboboxDatepickerV1InputOutlet.submitDate();
     }
+
+    this.comboboxDatepickerV1InputOutlet.hideCalendar();
+    this.comboboxDatepickerV1InputOutlet.focusDatepickerInput();
   }
 
   // handles ArrowLeft/Right keyboard navigation
@@ -645,7 +648,7 @@ export default class extends Controller {
   #handleWeekNavigation(event, direction) {
     const currentWeekNode = event.target.parentElement;
     const activeDateNodes = currentWeekNode.querySelectorAll(
-      ':not([aria-disabled="true"]):not([data-date-within-month-position="outOfMonth"]',
+      ':not([aria-disabled="true"]):not([data-date-within-month-position="outOfMonth"])',
     );
 
     const dateNodeToFocus =

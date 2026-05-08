@@ -3,8 +3,12 @@
     <thead class="mb-1">
       <tr>
         <% @days_of_the_week.each do |day| %>
-          <th scope="col" class="dow h-6 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
-            <%= day %>
+          <th
+            scope="col"
+            abbr="<%= day[1] %>"
+            class="dow h-6 text-center text-sm font-medium text-slate-500 dark:text-slate-400"
+          >
+            <%= day[0] %>
           </th>
         <% end %>
       </tr>

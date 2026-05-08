@@ -108,7 +108,7 @@ module ComboboxDatepicker
 
             # verify calendar still open and 2026-05-08 selected
             assert_selector '#test_id-calendar'
-            assert_selector 'td[data-date="2026-05-08"][aria-selected="true"]'
+            assert_selector 'td.bg-primary-700[data-date="2026-05-08"][aria-selected="true"]'
             assert_field 'test_input_name', with: '2026-05-08'
 
             # go to 2026-05-09 and select via enter
@@ -118,10 +118,10 @@ module ComboboxDatepicker
             assert_no_selector '#test_id-calendar'
             # reopen calendar and verify 8th is no longer selected and 9th is selected
             find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
-            assert_no_selector 'td[data-date="2026-05-08"][aria-selected="true"]'
+            assert_no_selector 'td.bg-primary-700[data-date="2026-05-08"][aria-selected="true"]'
             # May 8th is focused upon opening
             assert_selector 'td', text: '9', focused: true
-            assert_selector 'td[data-date="2026-05-09"][aria-selected="true"]'
+            assert_selector 'td.bg-primary-700[data-date="2026-05-09"][aria-selected="true"]'
             assert_field 'test_input_name', with: '2026-05-09'
           end
         end
