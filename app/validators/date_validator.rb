@@ -22,9 +22,9 @@ class DateValidator < ActiveModel::EachValidator
   private
 
   def expiration_required?(record)
-    allow_nil = nil
-    allow_nil = resolve_value(record, options[:allow_nil]) if options[:allow_nil].present?
-    return false if allow_nil == true
+    allow_empty = nil
+    allow_empty = resolve_value(record, options[:allow_empty]) if options[:allow_empty].present?
+    return false if allow_empty == true
 
     expiration_value = nil
     expiration_value = resolve_value(record, options[:less_than]) if options[:less_than].present?

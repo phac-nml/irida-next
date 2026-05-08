@@ -24,7 +24,7 @@ class NamespaceGroupLink < ApplicationRecord
               in: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
             }
 
-  validates :expires_at, on: %i[create update], date: { allow_nil: true, greater_than: lambda {
+  validates :expires_at, on: %i[create update], date: { allow_empty: true, greater_than: lambda {
     Time.zone.today
   } }, if: -> { (new_record? || expires_at_changed?) && expires_at_before_type_cast.present? }
 
