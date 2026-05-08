@@ -1,3 +1,5 @@
+import "https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.wasm.js";
+
 const SAMPLE_CHUNK_SIZE = 100;
 const SUPPORTED_FORMATS = new Set(["csv", "xlsx"]);
 
@@ -31,16 +33,6 @@ const escapeCsv = (value) => {
 const toCellValue = (value) => {
   if (value == null) return "";
   return value;
-};
-
-const chunk = (items, size) => {
-  const chunks = [];
-
-  for (let index = 0; index < items.length; index += size) {
-    chunks.push(items.slice(index, index + size));
-  }
-
-  return chunks;
 };
 
 const toSampleGraphqlId = (sampleId, sampleGraphqlIdPrefix) => {
@@ -108,7 +100,11 @@ self.onmessage = async (event) => {
     sample_graphql_id_prefix: sampleGraphqlIdPrefix,
     filename,
     format,
+    map,
   } = event.data || {};
+
+  self.importShim.addImportMap(JSON.parse(map));
+  const collection = await self.importShim("utilities/collection");
 
   const fields = Array.isArray(metadataFields) ? metadataFields : [];
   const ids = Array.isArray(sampleIds) ? sampleIds : [];
@@ -146,7 +142,7 @@ self.onmessage = async (event) => {
 
     const sampleById = new Map();
     let fetched = 0;
-    const idChunks = chunk(sampleGraphqlIds, SAMPLE_CHUNK_SIZE);
+    const idChunks = collection.chunk(sampleGraphqlIds, SAMPLE_CHUNK_SIZE);
 
     for (const idChunk of idChunks) {
       const payload = await postGraphql({
