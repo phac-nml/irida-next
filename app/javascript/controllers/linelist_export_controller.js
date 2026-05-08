@@ -127,6 +127,10 @@ export default class extends Controller {
         this.t(this.preparingRowsMessageValue, { count: totalCount }),
       );
 
+      const importMap = document.querySelector(
+        'script[type="importmap"]',
+      ).textContent;
+
       this.workerClient.start({
         sample_ids: sampleIds,
         metadata_fields: metadataFields,
@@ -137,6 +141,7 @@ export default class extends Controller {
         format,
         filename,
         total_count: totalCount,
+        map: importMap,
       });
     } catch (error) {
       this.updateProgress(
