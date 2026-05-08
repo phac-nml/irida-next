@@ -54,6 +54,7 @@ class SortableListsComponentTest < ViewComponentTestCase
   test 'renders action buttons with controls, shortcuts, and aria disabled state' do
     render_preview(:two_lists)
 
+    assert_selector 'div[role="group"][aria-label]', count: 2
     assert_selector(
       "button[aria-controls~='available-list'][aria-controls~='selected-list'][aria-disabled='true']" \
       "[aria-keyshortcuts='#{I18n.t('components.sortable_lists.v1.list_component.keyboard_shortcuts.add')}']",
