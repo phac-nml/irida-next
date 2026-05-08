@@ -68,7 +68,7 @@ module Attachments
       end
 
       # if option is selected then destroy the original files
-      attachments.each(&:destroy) if concatenation_params[:delete_originals]
+      attachments.each(&:destroy) if concatenation_form.delete_originals
 
       concatenated_attachments
     end
@@ -109,7 +109,7 @@ module Attachments
 
     # Concatenates the single end reads into a single-end file
     def concatenate_single_end_reads(attachments)
-      basename = concatenation_params[:basename]
+      basename = concatenation_form.basename
       zipped_extension = attachments.first.metadata['compression'] == 'gzip' ? '.gz' : ''
 
       files = []
@@ -144,7 +144,7 @@ module Attachments
 
     # Gets the filename in the correct format for illumina paired-end and paired-end files
     def concatenated_paired_end_filenames(attachment_type)
-      basename = concatenation_params[:basename]
+      basename = concatenation_form.basename
 
       fwd_filename = attachment_type == 'illumina_pe' ? "#{basename}_S1_L001_R1_001" : "#{basename}_1"
 
