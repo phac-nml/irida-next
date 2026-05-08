@@ -32,6 +32,7 @@ class DatepickerComponentPreview < ViewComponent::Preview
     datepicker(
       id: 'test_id',
       input_name: 'test_input_name',
+      max_date: Time.zone.today + 365.days,
       min_date: nil,
       selected_date: Time.zone.today + 7.days,
       errors: ['error 1', 'error 2'],

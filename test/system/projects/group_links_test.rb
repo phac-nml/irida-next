@@ -268,7 +268,7 @@ module Projects
       namespace_group_link = namespace_group_links(:namespace_group_link10)
 
       NamespaceGroupLink.where(namespace: [namespace_group_link.namespace, namespace_group_link.namespace.parent],
-                               group: namespace_group_link.group).update(expires_at: Time.zone.today - 1)
+                               group: namespace_group_link.group).update_all(expires_at: Time.zone.today - 1) # rubocop:disable Rails/SkipsModelValidations
 
       visit namespace_project_url(namespace_group_link.namespace.parent,
                                   namespace_group_link.namespace.project)

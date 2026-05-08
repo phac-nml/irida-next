@@ -157,7 +157,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
   test 'scope with expired group member' do
     group_member = members(:group_one_member_john_doe)
     group_member.expires_at = 10.days.ago.to_date
-    group_member.save
+    group_member.save(validate: false)
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
@@ -168,7 +168,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
     linked_group_member = members(:namespace_group_link8_member1)
     linked_group_member.expires_at = 10.days.ago.to_date
-    linked_group_member.save
+    linked_group_member.save(validate: false)
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

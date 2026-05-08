@@ -92,4 +92,28 @@ class PersonalAccessTokenTest < ActiveSupport::TestCase
   test '#find_by_token' do
     assert_equal @valid_pat, PersonalAccessToken.find_by_token('JQ2w5maQc4zgvC8GGMEp') # rubocop:disable Rails/DynamicFindBy
   end
+
+  test '#expires_at cannot be in the past' do
+    min_date = Time.zone.today
+
+    pat = PersonalAccessToken.new(
+      user: users(:john_doe), name: 'New PAT',
+      expires_at: min_date - 1, scopes: ['api']
+    )
+    assert_not pat.valid?
+    assert_includes pat.errors.full_messages, "Expiration Date must be after #{min_date}"
+  end
+
+  test '#expires_at cannot be more than max lifetime in the future' do
+    ApplicationSetting.current.update!(require_personal_access_token_expiry: true)
+    max_date = Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days
+    pat = PersonalAccessToken.new(
+      user: users(:john_doe), name: 'New PAT',
+      expires_at: max_date + 1, scopes: ['api']
+    )
+
+    assert_not pat.valid?
+    assert_includes pat.errors.full_messages,
+                    "Expiration Date must be before #{max_date}"
+  end
 end

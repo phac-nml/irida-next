@@ -21,7 +21,9 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :validate_namespace
   validate :higher_access_level_than_group
 
-  validates :expires_at, on: :create, date: true, if: -> { expires_at_before_type_cast.present? }
+  validates :expires_at, on: %i[create update], date: { allow_empty: true, greater_than: lambda {
+    Time.zone.today
+  } }, if: -> { (new_record? || expires_at_changed?) && expires_at_before_type_cast.present? }
 
   before_destroy :last_namespace_owner_member
 

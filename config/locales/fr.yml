@@ -692,6 +692,9 @@ fr:
       accepted: doit être accepté(e)
       blank: doit être rempli(e)
       confirmation: ne concorde pas avec %{attribute}
+      date_greater_than: doit être après %{date}
+      date_less_than: doit être avant %{date}
+      date_object_required: doit être une date ou un objet datetime
       empty: doit être rempli(e)
       equal_to: doit être égal à %{count}
       even: doit être pair

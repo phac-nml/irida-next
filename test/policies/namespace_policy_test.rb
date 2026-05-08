@@ -11,7 +11,7 @@ class NamespacePolicyTest < ActiveSupport::TestCase
   test 'named scope with expired memberships' do
     group_member = members(:group_four_member_david_doe)
     group_member.expires_at = 10.days.ago.to_date
-    group_member.save
+    group_member.save(validate: false)
 
     scoped_namespaces = @policy.apply_scope(Namespace, type: :relation, name: :manageable)
 

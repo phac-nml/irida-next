@@ -209,6 +209,7 @@ en:
         wednesday: Wed
       errors:
         invalid_date: Invalid date.
+        max_date_error: 'Maximum allowed date: '
         min_date_error: 'Earliest allowed date: '
       months:
         april: April

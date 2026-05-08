@@ -28,7 +28,7 @@ class DateValidatorTest < ActiveSupport::TestCase
     member = create_group_member(before_expires_at)
 
     assert_not member.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
                  member.errors[:expires_at].first)
   end
 
@@ -37,7 +37,7 @@ class DateValidatorTest < ActiveSupport::TestCase
     member = create_group_member(invalid_date_format)
 
     assert_not member.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
                  member.errors[:expires_at].first)
   end
 
@@ -68,7 +68,7 @@ class DateValidatorTest < ActiveSupport::TestCase
     group_link = create_group_link(before_expires_at)
 
     assert_not group_link.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
                  group_link.errors[:expires_at].first)
   end
 
@@ -77,7 +77,7 @@ class DateValidatorTest < ActiveSupport::TestCase
     group_link = create_group_link(invalid_date_format)
 
     assert_not group_link.valid?
-    assert_equal(I18n.t('common.date.errors.invalid_min_date'),
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
                  group_link.errors[:expires_at].first)
   end
 
@@ -91,14 +91,57 @@ class DateValidatorTest < ActiveSupport::TestCase
   end
 
   test 'personal access token with cast expires_at date' do
-    personal_access_token = PersonalAccessToken.new(
-      name: 'Rotated token',
-      scopes: %w[api],
-      expires_at: Time.zone.today + 1.day,
-      user: @user
-    )
+    personal_access_token = create_personal_access_token(Time.zone.today + 1.day)
 
     assert personal_access_token.valid?
+  end
+
+  test 'personal access token with valid expires_at date' do
+    expires_at = (Time.zone.today + 1.day).strftime('%Y-%m-%d')
+    personal_access_token = create_personal_access_token(expires_at)
+
+    assert personal_access_token.valid?
+  end
+
+  test 'personal access token with no expires_at input if expiration is not enabled' do
+    personal_access_token = create_personal_access_token('')
+
+    assert personal_access_token.valid?
+  end
+
+  test 'personal access token with no expires_at input if expiration is enabled' do
+    Irida::CurrentSettings.update!(require_personal_access_token_expiry: true)
+    personal_access_token = create_personal_access_token('')
+
+    assert_not personal_access_token.valid?
+    assert_equal(I18n.t('common.date.errors.invalid_input'), personal_access_token.errors[:expires_at].first)
+  end
+
+  test 'personal access token with valid date format but invalid expires_at date' do
+    expires_at = (Time.zone.today - 10.days).strftime('%Y-%m-%d')
+    personal_access_token = create_personal_access_token(expires_at)
+
+    assert_not personal_access_token.valid?
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
+                 personal_access_token.errors[:expires_at].first)
+  end
+
+  test 'personal access token expires_at with parseable non-YYYY-MM-DD format' do
+    invalid_date_format = (Time.zone.today - 10.days).strftime('%d-%m-%Y')
+    personal_access_token = create_personal_access_token(invalid_date_format)
+
+    assert_not personal_access_token.valid?
+    assert_equal(I18n.t('errors.messages.date_greater_than', date: Time.zone.today.to_date.strftime('%Y-%m-%d')),
+                 personal_access_token.errors[:expires_at].first)
+  end
+
+  test 'personal access token expires_at with invalid input' do
+    invalid_input = 'this_is_an_invalid_input'
+    personal_access_token = create_personal_access_token(invalid_input)
+
+    assert_not personal_access_token.valid?
+    assert_equal(I18n.t('common.date.errors.invalid_input'),
+                 personal_access_token.errors[:expires_at].first)
   end
 
   private
@@ -120,6 +163,15 @@ class DateValidatorTest < ActiveSupport::TestCase
       group_id: @group_to_group_link.id,
       namespace_id: @group.id,
       namespace_type: 'Group'
+    )
+  end
+
+  def create_personal_access_token(expires_at_date)
+    PersonalAccessToken.new(
+      name: 'New token',
+      scopes: %w[api],
+      expires_at: expires_at_date,
+      user: @user
     )
   end
 end

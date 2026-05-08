@@ -19,6 +19,7 @@ module Datepicker
       # @param input_name [String] The name attribute for the date input. This is required.
       # @param label [String] A label for the input (optional).
       # @param input_aria_label [String] Aria label for the input. Necessary for accessibility if no label is passed.
+      # @param max_date [String] A maximum date the user can input.
       # @param min_date [String] A minimum date the user can input.
       # @param selected_date [String] The already selected date if it exists.
       # @param autosubmit [Boolean] Submits the date upon selection if true
@@ -31,7 +32,7 @@ module Datepicker
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
-                     selected_date: nil, autosubmit: false, required: false, errored: false,
+                     max_date: nil, selected_date: nil, autosubmit: false, required: false, errored: false,
                      calendar_arguments: {}, **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'input_name is required' if input_name.blank?
@@ -44,9 +45,9 @@ module Datepicker
         @required = required
         @errored = errored
         @min_date = min_date
+        @max_date = max_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments
-        @min_year = calculate_min_year
         @months = load_months
         @days_of_the_week = load_days_of_week
         # rubocop:enable Metrics/ParameterLists
@@ -83,10 +84,6 @@ module Datepicker
          I18n.t('components.datepicker.days_of_week.saturday')]
       end
 
-      def calculate_min_year
-        @min_date.nil? ? '1' : @min_date.to_s.split('-')[0]
-      end
-
       def setup_ids(id)
         @container_id = "#{id}-datepicker"
         @input_id = "#{id}-input"
@@ -110,6 +107,8 @@ module Datepicker
         @system_arguments[:data]['datepicker--v1--input-autosubmit-value'] = @autosubmit
         @system_arguments[:data]['datepicker--v1--input-invalid-date-value'] =
           I18n.t('components.datepicker.errors.invalid_date')
+        @system_arguments[:data]['datepicker--v1--input-invalid-max-date-value'] =
+          I18n.t('components.datepicker.errors.max_date_error')
         @system_arguments[:data]['datepicker--v1--input-invalid-min-date-value'] =
           I18n.t('components.datepicker.errors.min_date_error')
         @system_arguments[:data]['datepicker--v1--input-calendar-id-value'] = @calendar_id

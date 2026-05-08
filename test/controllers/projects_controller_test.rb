@@ -80,10 +80,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     group_member = members(:group_one_member_john_doe)
     group_member.expires_at = 10.days.ago.to_date
-    group_member.save
+    group_member.save(validate: false)
     project_member = members(:project_one_member_john_doe)
     project_member.expires_at = 10.days.ago.to_date
-    project_member.save
+    project_member.save(validate: false)
     get namespace_project_path(projects(:project1).namespace.parent, projects(:project1))
     assert_response :unauthorized
   end

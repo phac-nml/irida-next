@@ -35,6 +35,11 @@ class GroupMemberTest < ActiveSupport::TestCase
     assert_not @group_member.valid?
   end
 
+  test 'can unset expires_at' do
+    @group_member.expires_at = nil
+    assert @group_member.valid?
+  end
+
   test '#validates access level in range' do
     valid_access_levels = Member::AccessLevel.all_values_with_owner
 
@@ -145,7 +150,7 @@ class GroupMemberTest < ActiveSupport::TestCase
     members = Member.for_namespace_and_ancestors(@group).not_expired
     assert_difference(-> { members.count } => -1) do
       @group_member.expires_at = 10.days.ago.to_date
-      @group_member.save
+      @group_member.save(validate: false)
     end
   end
 end
