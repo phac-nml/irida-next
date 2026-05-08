@@ -26,6 +26,14 @@ module GroupLinks
       end
     end
 
+    test 'update group link expiration to nil' do
+      namespace_group_link = namespace_group_links(:namespace_group_link28)
+      assert_changes -> { namespace_group_link.expires_at }, to: nil do
+        GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
+                                               { expires_at: nil }).execute
+      end
+    end
+
     test 'update group to group share expiration' do
       expiration_date = Date.strptime('2023-08-16', '%Y-%m-%d')
       namespace_group_link = namespace_group_links(:namespace_group_link2)

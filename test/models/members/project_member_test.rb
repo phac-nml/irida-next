@@ -35,6 +35,11 @@ class ProjectMemberTest < ActiveSupport::TestCase
     assert_not @project_member.valid?
   end
 
+  test 'can unset expires_at' do
+    @project_member.expires_at = nil
+    assert @project_member.valid?
+  end
+
   test '#validates access level in range' do
     valid_access_levels = Member::AccessLevel.all_values_with_owner
 
