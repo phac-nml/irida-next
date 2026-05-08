@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
-import _ from "lodash";
 import Controller from "controllers/metadata/file_import_controller";
+import { chunk, pick } from "utilities/collection";
 
 const ROW_CHUNK_SIZE = 2;
 export default class extends Controller {
@@ -57,10 +57,10 @@ export default class extends Controller {
 
     const rows = allRows.map((row) => [
       row[this.sampleIdColumnTarget.value],
-      _.pick(row, this.columns),
+      pick(row, this.columns),
     ]);
 
-    const rowChunks = _.chunk(rows, ROW_CHUNK_SIZE);
+    const rowChunks = chunk(rows, ROW_CHUNK_SIZE);
     this._totalChunks = rowChunks.length;
 
     for (const row of rowChunks) {
