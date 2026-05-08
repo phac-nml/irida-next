@@ -31,6 +31,7 @@
         max-[384px]:py-[0.25rem] sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white
       "
       aria-label="<%= t('components.datepicker.aria_label.select_year') %>"
+      name="year-select"
     >
   </div>
 
@@ -56,6 +57,7 @@
       max-[384px]:pl-[0.6rem] sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white
     "
     aria-label="<%= t('components.datepicker.aria_label.select_month') %>"
+    name="month-select"
   >
     <% @months.each do |month| %>
       <option value="<%= month %>"><%= month %></option>
