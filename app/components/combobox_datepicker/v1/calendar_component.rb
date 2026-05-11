@@ -10,6 +10,7 @@ module ComboboxDatepicker
         @months = months
         @min_date = min_date
         @min_year = calculate_min_year
+        @calendar_id_header = "#{@calendar_arguments[:id]}-header"
       end
 
       private
