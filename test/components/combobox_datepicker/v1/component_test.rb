@@ -16,7 +16,7 @@ module ComboboxDatepicker
             visit('/rails/view_components/combobox_datepicker_component/default')
 
             # open by clicking arrow so date node is focused
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
 
             # verify May is selected and only 8 months exist (Jan-Apr options are not appended due to minDate)
             assert_selector 'select[name="month-select"] option', count: 8
@@ -98,7 +98,7 @@ module ComboboxDatepicker
             visit('/rails/view_components/combobox_datepicker_component/default')
 
             # open by clicking arrow so date node is focused
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
 
             # May 8th is focused upon opening
             assert_selector 'td', text: '8', focused: true
@@ -117,7 +117,7 @@ module ComboboxDatepicker
             # calendar closes
             assert_no_selector '#test_id-calendar'
             # reopen calendar and verify 8th is no longer selected and 9th is selected
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
             assert_no_selector 'td.bg-primary-700[data-date="2026-05-08"][aria-selected="true"]'
             # May 8th is focused upon opening
             assert_selector 'td', text: '9', focused: true
@@ -135,7 +135,7 @@ module ComboboxDatepicker
             visit('/rails/view_components/combobox_datepicker_component/default')
 
             # open by clicking arrow so date node is focused
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
 
             # May 8th is focused upon opening
             assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
@@ -173,7 +173,7 @@ module ComboboxDatepicker
             visit('/rails/view_components/combobox_datepicker_component/default')
 
             # open by clicking arrow so date node is focused
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
 
             # May 8th is focused upon opening
             assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
@@ -192,7 +192,7 @@ module ComboboxDatepicker
             assert_selector 'td[data-date="2026-05-09"]', focused: true
 
             find('#test_id-calendar').send_keys(:down)
-            assert_selector 'td[data-date="2026-05-06"]', focused: true
+            assert_selector 'td[data-date="2026-05-16"]', focused: true
 
             find('#test_id-calendar').send_keys(:left)
             assert_selector 'td[data-date="2026-05-15"]', focused: true
@@ -211,7 +211,7 @@ module ComboboxDatepicker
             visit('/rails/view_components/combobox_datepicker_component/default')
 
             # open by clicking arrow so date node is focused
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
 
             # May 8th is focused upon opening
             assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
@@ -262,7 +262,7 @@ module ComboboxDatepicker
             page.clock.set_fixed_time(test_date)
             visit('/rails/view_components/combobox_datepicker_component/default')
             # open by clicking arrow so date node is focused
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
 
             # May 8th, 2026 is focused upon opening
             assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
@@ -305,7 +305,7 @@ module ComboboxDatepicker
             visit('/rails/view_components/combobox_datepicker_component/default')
 
             # open by clicking arrow so date node is focused
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
 
             # Start on Jan 29, 2027 is focused upon opening
             assert_field 'month-select', with: I18n.t('components.datepicker.months.january')
@@ -347,7 +347,7 @@ module ComboboxDatepicker
             visit('/rails/view_components/combobox_datepicker_component/default')
 
             # open by clicking arrow so date node is focused
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
 
             # Start on May 8, 2026
             assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
@@ -377,7 +377,7 @@ module ComboboxDatepicker
             visit('/rails/view_components/combobox_datepicker_component/default')
 
             # open by clicking arrow so date node is focused
-            find('div[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
 
             # Start on May 8, 2026
             assert_selector 'td[data-date="2026-05-08"]', focused: true
@@ -488,7 +488,7 @@ module ComboboxDatepicker
         end
       end
 
-      def test_clear_selection # rubocop:disable Metrics/AbcSize
+      def test_clear_selection # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         test_date = DateTime.new(2026, 5, 7, 0, 0, 0, '-06:00')
         Timecop.travel(test_date) do
           Capybara.current_session.driver.with_playwright_page do |page|
@@ -506,6 +506,7 @@ module ComboboxDatepicker
 
             find('#test_id-input').click
             click_button I18n.t('components.datepicker.clear_selection')
+            assert_no_selector '#test_id-calendar'
 
             assert_field 'test_input_name', with: ''
           end
