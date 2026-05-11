@@ -3,12 +3,6 @@
 module Attachments
   # Service used to Concatenate Attachments
   class ConcatenationService < BaseService
-    class AttachmentConcatenationError < StandardError
-    end
-
-    class AttachmentConcatenationFilenameError < StandardError
-    end
-
     attr_accessor :attachable, :attachments, :concatenation_form
 
     def initialize(user = nil, concatenation_form = nil)
@@ -24,9 +18,6 @@ module Attachments
       return [] unless concatenation_form.valid?
 
       concatenate(concatenation_form.attachments, concatenation_form.paired_end?)
-    rescue Attachments::ConcatenationService::AttachmentConcatenationError => e
-      concatenation_form.errors.add(:attachment_ids, e.message)
-      []
     end
 
     private
