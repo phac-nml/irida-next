@@ -107,10 +107,10 @@ class ProfileTest < ApplicationSystemTestCase
     PersonalAccessTokens::CreateService.new(@user, valid_params).execute
 
     active_token_count = @user.personal_access_tokens.active.count
-    assert_equal 4, active_token_count
+    assert_equal 5, active_token_count
 
     expiring_token_count = @user.personal_access_tokens.expiring_in_two_weeks.count
-    assert_equal 2, expiring_token_count
+    assert_equal 3, expiring_token_count
 
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
@@ -309,6 +309,21 @@ class ProfileTest < ApplicationSystemTestCase
     within %(tr[id="#{dom_id(token_to_rotate)}"]) do
       assert_no_button I18n.t(:'personal_access_tokens.table.rotate')
     end
+  end
+
+  test 'can view last_used_ip of personal access tokens' do
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    not_used_pat = personal_access_tokens(:john_doe_non_expirable_pat)
+    used_pat = personal_access_tokens(:john_doe_valid_pat_used)
+
+    assert_selector 'div#access-tokens-table'
+    assert_selector "table tbody tr[id='personal_access_token_#{not_used_pat.id}'] td:nth-child(6)",
+                    text: I18n.t('personal_access_tokens.table.never_used')
+
+    assert_selector "table tbody tr[id='personal_access_token_#{used_pat.id}'] td:nth-child(6)",
+                    text: '192.168.1.1'
   end
 
   test 'empty personal access tokens state' do
