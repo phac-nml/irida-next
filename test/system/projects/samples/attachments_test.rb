@@ -343,7 +343,9 @@ module Projects
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
-        assert_text I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
+        assert_text(
+          I18n.t('activemodel.errors.models.concatenation_form.attributes.attachment_ids.mismatching_file_formats')
+        )
       end
 
       test 'user with guest access should not be able to see the concatenate attachment files button' do

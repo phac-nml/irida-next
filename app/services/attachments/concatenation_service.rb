@@ -2,7 +2,7 @@
 
 module Attachments
   # Service used to Concatenate Attachments
-  class ConcatenationService < BaseService # rubocop:disable Metrics/ClassLength
+  class ConcatenationService < BaseService
     class AttachmentConcatenationError < StandardError
     end
 
@@ -37,8 +37,6 @@ module Attachments
     # If the user selects to delete the originals the originals
     # are deleted
     def validate_and_concatenate(attachments, is_paired_end)
-      validate_file_formats(attachments)
-
       concatenated_attachments = []
 
       if is_paired_end
@@ -73,18 +71,6 @@ module Attachments
 
         raise AttachmentConcatenationError,
               I18n.t('services.attachments.concatenation.incorrect_file_types')
-      end
-      true
-    end
-
-    # Validates if the file formats all match for the attachments
-    def validate_file_formats(attachments) # rubocop:disable Naming/PredicateMethod
-      attachments.each do |attachment|
-        next unless (attachment.metadata['compression'] != attachments.first.metadata['compression']) ||
-                    (attachment.metadata['format'] != attachments.first.metadata['format'])
-
-        raise AttachmentConcatenationError,
-              I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
       end
       true
     end

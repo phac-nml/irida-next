@@ -27,6 +27,7 @@ en:
             attachment_ids:
               min_length: must have at least %{count} files selected
               mismatching_attachable: must all belong to the same %{attachable_type}
+              mismatching_file_formats: must all have the same file format and compression
             basename:
               invalid: must contain only letters, digits, '-', '.', and '_'.
         sample/search_condition:
@@ -1840,7 +1841,6 @@ en:
   services:
     attachments:
       concatenation:
-        incorrect_fastq_file_types: Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files
         incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
         incorrect_file_types: Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.
       destroy:

@@ -17,7 +17,8 @@ class ConcatenationForm
   validates :basename, presence: true, format: { with: /\A[a-zA-Z0-9_\-.]+\Z/, allow_blank: true }
   validates :attachment_ids, presence: true, length: { minimum: 2 }
 
-  validate :attachments_belong_to_attachable
+  validate :attachments_belong_to_attachable, if: -> { attachment_ids.any? }
+  validate :attachments_file_formats, if: -> { attachment_ids.any? }
 
   def initialize(attributes = {})
     super
@@ -59,12 +60,19 @@ class ConcatenationForm
   end
 
   def attachments_belong_to_attachable
-    return if attachment_ids.empty? ||
-              Attachment.where(id: flattened_attachment_ids,
+    return if Attachment.where(id: flattened_attachment_ids,
                                attachable_id: attachable_id,
                                attachable_type: attachable_type).count == flattened_attachment_ids.length
 
     errors.add(:attachment_ids, :mismatching_attachable,
                attachable_type: I18n.t("activerecord.models.#{attachable_type.underscore}.one"))
+  end
+
+  def attachments_file_formats
+    return if Attachment.where(id: flattened_attachment_ids)
+                        .group(Attachment.metadata_arel_node('format'),
+                               Attachment.metadata_arel_node('compression')).count.length == 1
+
+    errors.add(:attachment_ids, :mismatching_file_formats)
   end
 end

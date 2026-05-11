@@ -27,6 +27,7 @@ fr:
             attachment_ids:
               min_length: doit sélectionner au moins %{count} fichier(s) à concaténer
               mismatching_attachable: tous les fichiers sélectionnés doivent appartenir au même %{attachable_type}
+              mismatching_file_formats: tous les fichiers sélectionnés doivent avoir le même format et la même compression
             basename:
               invalid: doit contenir uniquement des lettres, chiffres, « - », « . » et « _ »
         sample/search_condition:
@@ -1844,7 +1845,6 @@ fr:
   services:
     attachments:
       concatenation:
-        incorrect_fastq_file_types: Types de fichiers incorrects. Les fichiers '.fastq' ne peuvent être concaténés qu’avec d’autres fichiers '.fastq'. Les fichiers '.fastq.gz' ne peuvent être concaténés qu’avec d’autres fichiers '.fastq.gz'
         incorrect_file_pairs: Jumelage de fichiers incorrect. Le nombre de fichiers en lecture directe et inversée ne correspond pas.
         incorrect_file_types: Les dossiers ne sont pas du même type. Les fichiers jumelés ne peuvent être concaténés qu’avec d’autres fichiers jumelés, et les fichiers uniques ne peuvent être concaténés qu’avec d’autres fichiers uniques.
       destroy:
