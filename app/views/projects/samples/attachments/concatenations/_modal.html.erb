@@ -15,21 +15,21 @@
 
       <%= render partial: "shared/form/required_field_legend" %>
 
-      <div class="form-field" <%= 'invalid' if invalid_attachment_ids %>>
+      <%= tag.div class: class_names("form-field", 'invalid': invalid_attachment_ids) do %>
         <%= form.label :attachment_ids, data: { required: true } %>
 
-        <div
-          class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400"
-          tabindex="0"
-          aria-label="<%= form.field_id(:attachment_ids) %>"
-          <%= "aria-describedby=#{form.field_id(:attachment_ids, "error")}" if invalid_attachment_ids %>
-        >
+        <%= tag.div class: "mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400",
+                    tabindex: 0,
+                    aria: {
+                      label: form.field_id(:attachment_ids),
+                      describedby: (invalid_attachment_ids ? form.field_id(:attachment_ids, "error") : nil)
+                    } do %>
           <div
             class="scrollbar overflow-auto"
             data-controller="projects--samples--attachments--files"
             data-projects--samples--attachments--files-target="field"
           ></div>
-        </div>
+        <% end %>
 
         <div data-projects--samples--attachments--selected-attachments-target="field"></div>
 
@@ -38,11 +38,11 @@
           id: form.field_id(:attachment_ids, "error"),
           errors: @concatenation_form.errors.full_messages_for(:attachment_ids) %>
         <% end %>
-      </div>
+      <% end %>
 
       <% invalid_basename = @concatenation_form.errors.include?(:basename) %>
 
-      <div class="form-field <%= 'invalid' if invalid_basename %>">
+      <%= tag.div class: class_names("form-field", 'invalid': invalid_basename) do %>
         <%= form.label :basename, data: { required: true } %>
 
         <%= form.text_field :basename,
@@ -71,7 +71,7 @@
         <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
           <%== t(:"projects.samples.attachments.concatenations.create.basename_help") %>
         </span>
-      </div>
+      <% end %>
 
       <div class="flex items-center">
         <%= form.check_box :delete_originals %>

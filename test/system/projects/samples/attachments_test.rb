@@ -202,7 +202,7 @@ module Projects
         within('dialog[open]') do
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
-          fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated_file'
+          fill_in I18n.t('activemodel.attributes.concatenation_form.basename'), with: 'concatenated_file'
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
@@ -232,7 +232,7 @@ module Projects
           assert_text 'test_file_rev_2.fastq'
           assert_text 'test_file_fwd_3.fastq'
           assert_text 'test_file_rev_3.fastq'
-          fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated_file'
+          fill_in I18n.t('activemodel.attributes.concatenation_form.basename'), with: 'concatenated_file'
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
@@ -252,8 +252,8 @@ module Projects
         within('dialog[open]') do
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
-          fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated_file'
-          check I18n.t('helpers.label.concatenation.delete_originals')
+          fill_in I18n.t('activemodel.attributes.concatenation_form.basename'), with: 'concatenated_file'
+          check I18n.t('activemodel.attributes.concatenation_form.delete_originals')
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
@@ -283,8 +283,8 @@ module Projects
           assert_text 'test_file_rev_2.fastq'
           assert_text 'test_file_fwd_3.fastq'
           assert_text 'test_file_rev_3.fastq'
-          fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated_file'
-          check I18n.t('helpers.label.concatenation.delete_originals')
+          fill_in I18n.t('activemodel.attributes.concatenation_form.basename'), with: 'concatenated_file'
+          check I18n.t('activemodel.attributes.concatenation_form.delete_originals')
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
@@ -317,13 +317,11 @@ module Projects
           assert_text 'test_file_fwd_3.fastq'
           assert_text 'test_file_rev_3.fastq'
           assert_text 'test_file_D.fastq'
-          fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated_file'
+          fill_in I18n.t('activemodel.attributes.concatenation_form.basename'), with: 'concatenated_file'
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
-        within %(turbo-frame[id="concatenation-alert"]) do
-          assert_text I18n.t('services.attachments.concatenation.incorrect_file_types')
-        end
+        assert_text I18n.t('services.attachments.concatenation.incorrect_file_types')
       end
 
       test 'should not concatenate compressed and uncompressed attachment files' do
@@ -341,13 +339,11 @@ module Projects
         within('dialog[open]') do
           assert_text 'test_file_D.fastq'
           assert_text 'test_file_2.fastq.gz'
-          fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated_file'
+          fill_in I18n.t('activemodel.attributes.concatenation_form.basename'), with: 'concatenated_file'
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
-        within %(turbo-frame[id="concatenation-alert"]) do
-          assert_text I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
-        end
+        assert_text I18n.t('services.attachments.concatenation.incorrect_fastq_file_types')
       end
 
       test 'user with guest access should not be able to see the concatenate attachment files button' do
@@ -379,8 +375,8 @@ module Projects
           assert_text 'test_file_rev_2.fastq'
           assert_text 'test_file_fwd_3.fastq'
           assert_text 'test_file_rev_3.fastq'
-          fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated file'
-          check I18n.t('helpers.label.concatenation.delete_originals')
+          fill_in I18n.t('activemodel.attributes.concatenation_form.basename'), with: 'concatenated file'
+          check I18n.t('activemodel.attributes.concatenation_form.delete_originals')
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           !assert_html5_inputs_valid
         end
@@ -406,11 +402,11 @@ module Projects
           assert_text 'test_file_rev_2.fastq'
           assert_text 'test_file_fwd_3.fastq'
           assert_text 'test_file_rev_3.fastq'
-          fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated file'
-          check I18n.t('helpers.label.concatenation.delete_originals')
+          fill_in I18n.t('activemodel.attributes.concatenation_form.basename'), with: 'concatenated file'
+          check I18n.t('activemodel.attributes.concatenation_form.delete_originals')
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_text I18n.t('general.form.error_notification')
-          fill_in I18n.t('helpers.label.concatenation.basename'), with: 'concatenated_file'
+          fill_in I18n.t('activemodel.attributes.concatenation_form.basename'), with: 'concatenated_file'
           click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
           assert_html5_inputs_valid
         end
