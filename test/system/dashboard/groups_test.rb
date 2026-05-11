@@ -50,6 +50,9 @@ module Dashboard
       subgroup1 = groups(:subgroup1)
       visit dashboard_groups_url
 
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.name_asc'), match: :first
+
       within('div.treegrid-container') do
         assert_text group1.name
         assert_no_text subgroup1.name
@@ -108,6 +111,9 @@ module Dashboard
       group3 = groups(:group_three)
       login_as users(:john_doe)
       visit dashboard_groups_url
+
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.name_asc'), match: :first
 
       within('#groups_tree') do
         within("##{dom_id(group1)}") do
