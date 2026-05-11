@@ -22,7 +22,7 @@ fr:
         condition: Condition
     errors:
       models:
-        concatenation:
+        concatenation_form:
           attributes:
             attachment_ids:
               min_length: doit sélectionner au moins %{count} fichier(s) à concaténer
@@ -1603,7 +1603,6 @@ fr:
             basename_help: Le nom de fichier de base ne peut contenir que des lettres, des chiffres, '-', '.' et '_'
             success: Les dossiers ont été concaténés avec succès.
           modal:
-            description: 'Les fichiers suivants ont été sélectionnés pour être concaténés :'
             submit_button: Concaténer
             title: Concaténer les fichiers
         create:

@@ -1599,7 +1599,6 @@ en:
             basename_help: The base filename can contain only letters, digits, '-', '.', and '_'
             success: Files were successfully concatenated.
           modal:
-            description: 'The following files were selected to be concatenated:'
             submit_button: Concatenate
             title: Concatenate Files
         create:
