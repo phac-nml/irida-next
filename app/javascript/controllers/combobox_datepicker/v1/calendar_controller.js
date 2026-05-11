@@ -234,7 +234,7 @@ export default class extends Controller {
       row.appendChild(fragment);
     };
 
-    let row = document.createElement("tr");
+    let row = this.#createRow();
 
     dates.forEach((day, i) => {
       // 🧩 Classify this index into prev/current/next.
@@ -275,9 +275,16 @@ export default class extends Controller {
       // 📆 Commit the row every 7 cells to form a full week.
       if ((i + 1) % 7 === 0) {
         this.calendarTarget.append(row);
-        row = document.createElement("tr");
+        row = this.#createRow();
       }
     });
+  }
+
+  #createRow() {
+    const row = document.createElement("tr");
+    row.setAttribute("role", "row");
+
+    return row;
   }
 
   // returns date range
