@@ -31,7 +31,9 @@ if ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
   Rails.application.config.after_initialize do
     # start the metrics reporting thread
     send_interval = ENV['OTEL_METRICS_SEND_INTERVAL']&.to_i || 10
-    Irida::MetricsReporter.instance.run(send_interval)
+    always_send_all = ENV['OTEL_METRICS_ALWAYS_SEND']&.casecmp('true')&.zero? || false
+    queue_list = %w[default transactional_messages]
+    Irida::MetricsReporter.instance.run(send_interval, always_send_all, queue_list)
   end
 
   at_exit do

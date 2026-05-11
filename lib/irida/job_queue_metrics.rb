@@ -4,8 +4,13 @@ require 'singleton'
 
 module Irida
   # Functions for creating instruments and updating values on metrics meter
-  class JobQueueMetrics
+  class JobQueueMetrics # rubocop:disable Metrics/ClassLength
     include Singleton
+
+    def init(always_send_all, queue_list)
+      @always_send_all = always_send_all
+      @queue_list = queue_list
+    end
 
     def update_minimum_queue_times
       now = Time.now.utc
@@ -43,6 +48,13 @@ module Irida
 
     private
 
+    def add_queue_defaults(queue_hash)
+      @queue_list.each do |queue_name|
+        queue_hash[queue_name] ||= 0
+      end
+      queue_hash
+    end
+
     def meter
       @meter ||= OpenTelemetry.meter_provider.meter('JOB_QUEUE_METER')
     end
@@ -59,7 +71,10 @@ module Irida
     #  only reporting when the value is different than what was sent previously
     # It also includes a 0 when a value was previously passed but is not reported by GoodJob
     #  This prevents the issue of large counts/latency being shown on metrics graphs when the queue's are actually empty
-    def build_data_to_send(data_map, previous_data_map) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def build_data_to_send(data_map, previous_data_map) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
+      # if the env variable to always send all metrics is set, skip logic and send all data
+      return add_queue_defaults(data_map) if @always_send_all
+
       data_to_send = {}
       keys = (data_map.keys + previous_data_map.keys).uniq
       keys.each do |queue_name|

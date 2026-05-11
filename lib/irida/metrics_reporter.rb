@@ -8,7 +8,7 @@ module Irida
   class MetricsReporter # rubocop:disable Style/Documentation
     include Singleton
 
-    def run(sleep_time)
+    def run(sleep_time, always_send_all, queue_list)
       if running?
         Rails.logger.debug { "TelemetryReporter is already running on process #{@proc_id}" }
         return
@@ -18,7 +18,7 @@ module Irida
         return
       end
 
-      run!(sleep_time)
+      run!(sleep_time, always_send_all, queue_list)
     end
 
     def stop
@@ -36,9 +36,10 @@ module Irida
 
     private
 
-    def run!(sleep_time)
+    def run!(sleep_time, always_send_all, queue_list)
       @proc_id = Process.pid
       @sleep_time = sleep_time
+      Irida::JobQueueMetrics.instance.init(always_send_all, queue_list)
 
       # start the reporting loop
       proc_loop
