@@ -56,6 +56,10 @@ export default class extends Controller {
       this.#setMinDate();
     }
 
+    if (this.hasMaxDateTarget) {
+      this.#setMaxDate();
+    }
+
     this.boundHandleDatepickerInputFocus =
       this.handleDatepickerInputFocus.bind(this);
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
