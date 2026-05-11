@@ -8,9 +8,7 @@
       "projects--samples--attachments--selected-attachments-storage-key-value": "files-#{@sample.id}",
       action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear'
     }, method: :post, html: { novalidate: true }) do |form| %>
-    <% summary_entries = FormErrorSummaryEntryBuilder.new(builder: form, errors: @concatenation_form.errors).call %>
-
-    <%= render FormErrorSummaryComponent.new(entries: summary_entries) %>
+    <%= form_error_summary(form) %>
 
     <div class="grid gap-4">
       <% invalid_attachment_ids = @concatenation_form.errors.include?(:attachment_ids) %>
