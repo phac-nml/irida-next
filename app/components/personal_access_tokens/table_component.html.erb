@@ -31,7 +31,7 @@
       <% end %>
     <% end %>
 
-    <% table.with_column(t("personal_access_tokens.table.header.last_used_ip")) do |row| %>
+    <% table.with_column(t("personal_access_tokens.table.header.last_used_ips")) do |row| %>
       <% if row[:last_used_ips].empty? %>
         <%= t("personal_access_tokens.table.never_used") %>
       <% else %>

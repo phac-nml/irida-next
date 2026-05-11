@@ -1246,7 +1246,7 @@ en:
         expires_at: Expiration Date
         integration_host: Integration ID
         last_used_at: Last Used
-        last_used_ip: Last Used IP
+        last_used_ips: Last Used IPs
         name: Token name
         revocation_date: Revocation Date
         scopes: Scopes

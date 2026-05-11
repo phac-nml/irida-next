@@ -1250,7 +1250,7 @@ fr:
         expires_at: Date d'expiration
         integration_host: Integration ID
         last_used_at: Dernière utilisation
-        last_used_ip: Dernière adresse IP utilisée
+        last_used_ips: Dernières IP utilisées
         name: Nom du jeton
         revocation_date: Date de révocation
         scopes: Portées
