@@ -23,7 +23,7 @@
 
     <%= tag.div id: "import-metadata-dialog-content", data: linelist_data do %>
       <%= form_for(:file_import, url: "#", method: :get, data: {
-        action: "submit->viral--dialog#close"
+        action: "submit-end->viral--dialog#close submit->#{controller}#handleSubmit",
       }) do |form| %>
         <%= render partial: 'shared/samples/metadata/file_imports/form_fields', locals: {
           broadcast_target: @broadcast_target,
