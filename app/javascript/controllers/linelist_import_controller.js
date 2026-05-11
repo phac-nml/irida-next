@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 import Controller from "controllers/metadata/file_import_controller";
-import { chunk, pick } from "utilities/collection";
+import { chunk, omitBy, pick } from "utilities/collection";
 
 const ROW_CHUNK_SIZE = 2;
 export default class extends Controller {
@@ -53,11 +53,24 @@ export default class extends Controller {
     const allRows = XLSX.utils.sheet_to_json(this._worksheet, {
       header: this.headers,
       range: 1,
+      defval: null,
     });
+
+    const selectedMetadataColumns = Array.from(
+      document.querySelectorAll('[name="file_import[metadata_columns][]"]'),
+      (el) => el.value,
+    );
+
+    const ignoreEmptyValues = document.querySelector(
+      '[name="file_import[ignore_empty_values]"]',
+    ).checked;
 
     const rows = allRows.map((row) => [
       row[this.sampleIdColumnTarget.value],
-      pick(row, this.columns),
+      omitBy(
+        pick(row, selectedMetadataColumns),
+        (value) => ignoreEmptyValues && !value,
+      ),
     ]);
 
     const rowChunks = chunk(rows, ROW_CHUNK_SIZE);

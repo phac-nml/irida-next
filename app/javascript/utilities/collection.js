@@ -25,3 +25,17 @@ export function chunk(items, size) {
 export function pick(item, keys) {
   return Object.fromEntries(keys.map((key) => [key, item[key]]));
 }
+
+/**
+ * Builds a new object excluding entries that match the predicate.
+ *
+ * @param {Object} object - The source object.
+ * @param {(value: any, key: string) => boolean} predicate - Returns true for entries to omit.
+ * @returns {Object} An object containing entries that did not match the predicate.
+ */
+
+export function omitBy(object, predicate) {
+  return Object.fromEntries(
+    Object.entries(object).filter(([key, value]) => !predicate(value, key)),
+  );
+}
