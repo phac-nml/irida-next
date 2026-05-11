@@ -20,6 +20,7 @@ class ConcatenationForm
   validate :attachments_belong_to_attachable, if: -> { attachment_ids.any? }
   validate :attachments_file_formats, if: -> { attachment_ids.any? }
   validate :attachments_file_types, if: -> { attachment_ids.any? }
+  validate :attachments_paired_end_counts, if: -> { attachment_ids.any? && paired_end? }
 
   def initialize(attributes = {})
     super
@@ -88,5 +89,11 @@ class ConcatenationForm
     end
 
     errors.add(:attachment_ids, :mismatching_file_types)
+  end
+
+  def attachments_paired_end_counts
+    return if Attachment.where(id: flattened_attachment_ids).group(:puid).count.values.all? { |count| count == 2 }
+
+    errors.add(:attachment_ids, :mismatching_paired_end_counts)
   end
 end

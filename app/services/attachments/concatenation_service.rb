@@ -23,9 +23,7 @@ module Attachments
 
       return [] unless concatenation_form.valid?
 
-      attachments = concatenation_form.attachments
-
-      validate_and_concatenate(attachments, concatenation_form.paired_end?)
+      concatenate(concatenation_form.attachments, concatenation_form.paired_end?)
     rescue Attachments::ConcatenationService::AttachmentConcatenationError => e
       concatenation_form.errors.add(:attachment_ids, e.message)
       []
@@ -36,7 +34,7 @@ module Attachments
     # Calls the validation, concatenate methods for the file type
     # If the user selects to delete the originals the originals
     # are deleted
-    def validate_and_concatenate(attachments, is_paired_end)
+    def concatenate(attachments, is_paired_end)
       concatenated_attachments = if is_paired_end
                                    concatenate_paired_end_reads(attachments)
                                  else
@@ -110,11 +108,6 @@ module Attachments
         elsif attachment.metadata['direction'] == 'reverse'
           reverse_reads << attachment
         end
-      end
-
-      if forward_reads.length != reverse_reads.length
-        raise AttachmentConcatenationError,
-              I18n.t('services.attachments.concatenation.incorrect_file_pairs')
       end
 
       [forward_reads, reverse_reads]

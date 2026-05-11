@@ -29,6 +29,7 @@ en:
               mismatching_attachable: must all belong to the same %{attachable_type}
               mismatching_file_formats: must all have the same file format and compression
               mismatching_file_types: must all have the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.
+              mismatching_paired_end_counts: must all be paired. Forward and reverse read file counts do not match.
             basename:
               invalid: must contain only letters, digits, '-', '.', and '_'.
         sample/search_condition:
@@ -1841,8 +1842,6 @@ en:
         title: Transfer Samples
   services:
     attachments:
-      concatenation:
-        incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
       destroy:
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
         does_not_belong_to_attachable: This attachment does not belong to this sample.
