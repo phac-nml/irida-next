@@ -28,7 +28,7 @@ module Dashboard
       assert_selector 'nav.pagy ul li a[aria-current="page"]', text: '2'
       assert_text I18n.t(:'components.viral.pagy.pagination_component.previous')
       within 'div.treegrid-container' do
-        assert_selector 'div.treegrid-row', count: 6
+        assert_selector 'div.treegrid-row', count: 16
         [*('f'..'a')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
@@ -49,6 +49,9 @@ module Dashboard
       group1 = groups(:group_one)
       subgroup1 = groups(:subgroup1)
       visit dashboard_groups_url
+
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.name_asc'), match: :first
 
       within('div.treegrid-container') do
         assert_text group1.name
@@ -109,6 +112,9 @@ module Dashboard
       login_as users(:john_doe)
       visit dashboard_groups_url
 
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.name_asc'), match: :first
+
       within('#groups_tree') do
         within("##{dom_id(group1)}") do
           assert_text group1.name
@@ -137,6 +143,9 @@ module Dashboard
       group = groups(:group_three)
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
+
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.created_at_asc'), match: :first
 
       assert_equal 4, group.aggregated_samples_count
 
