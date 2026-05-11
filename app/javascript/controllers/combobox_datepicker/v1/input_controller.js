@@ -86,24 +86,29 @@ export default class extends Controller {
       dropdown: this.#calendar,
       distance: 10,
       autoSize: false,
+      manageAria: false,
       onShow: () => this.#onShow(),
       onHide: () => this.#onHide(),
     });
   }
 
   #onShow() {
+    this.#calendar.removeAttribute("hidden");
     document.addEventListener("keydown", this.boundHandleGlobalKeydown);
     this.#calendar.addEventListener("focusin", this.boundHandleCalendarFocus);
     this.#arrowSvg.classList.add("rotate-180");
+    this.datepickerInputTarget.setAttribute("aria-expanded", "true");
   }
 
   #onHide() {
+    this.#calendar.setAttribute("hidden", "");
     document.removeEventListener("keydown", this.boundHandleGlobalKeydown);
     this.#calendar.removeEventListener(
       "focusin",
       this.boundHandleCalendarFocus,
     );
     this.#arrowSvg.classList.remove("rotate-180");
+    this.datepickerInputTarget.setAttribute("aria-expanded", "false");
   }
 
   #setMinDate() {
