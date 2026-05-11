@@ -29,7 +29,7 @@ fr:
               mismatching_attachable: tous les fichiers sélectionnés doivent appartenir au même %{attachable_type}
               mismatching_file_formats: tous les fichiers sélectionnés doivent avoir le même format et la même compression
               mismatching_file_types: tous les fichiers sélectionnés doivent être du même type. Les fichiers jumelés ne peuvent être concaténés qu’avec d’autres fichiers jumelés, et les fichiers uniques ne peuvent être concaténés qu’avec d’autres fichiers uniques.
-              mismatching_pair_end_counts: tous les fichiers sélectionnés doivent être jumelés. Le nombre de fichiers en lecture directe et inversée ne correspond pas.
+              mismatching_paired_end_counts: tous les fichiers sélectionnés doivent être jumelés. Le nombre de fichiers en lecture directe et inversée ne correspond pas.
             basename:
               invalid: doit contenir uniquement des lettres, chiffres, « - », « . » et « _ »
         sample/search_condition:
