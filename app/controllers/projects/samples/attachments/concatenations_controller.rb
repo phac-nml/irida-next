@@ -24,19 +24,15 @@ module Projects
         def create
           authorize! @project, to: :update_sample?
 
-          @concatenation_form = ::ConcatenationForm.new(concatenation_params)
+          @concatenation_form = ::ConcatenationForm.new(concatenation_params.merge(attachable_id: @sample.id,
+                                                                                   attachable_type: @sample.class.name))
 
-          @concatenated_attachments = ::Attachments::ConcatenationService.new(current_user, @sample,
-                                                                              @concatenation_form).execute
+          @concatenated_attachments = ::Attachments::ConcatenationService.new(current_user, @concatenation_form).execute
 
           if @concatenation_form.errors.empty?
             render status: :ok, locals: { type: :success, message: t('.success') }
           else
-            error_msg = t(:'general.form.error_notification')
-
-            render status: :unprocessable_content, locals: { type: :danger,
-                                                             message: error_msg }
-
+            render status: :unprocessable_content
           end
         end
 

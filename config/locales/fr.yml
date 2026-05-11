@@ -26,8 +26,9 @@ fr:
           attributes:
             attachment_ids:
               min_length: doit sélectionner au moins %{count} fichier(s) à concaténer
+              mismatching_attachable: tous les fichiers sélectionnés doivent appartenir au même %{attachable_type}
             basename:
-              invalid: doit contenir uniquement des lettres, chiffres, « _ », « - » et « . »
+              invalid: doit contenir uniquement des lettres, chiffres, « - », « . » et « _ »
         sample/search_condition:
           attributes:
             field:

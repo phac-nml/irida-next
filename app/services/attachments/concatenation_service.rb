@@ -11,37 +11,21 @@ module Attachments
 
     attr_accessor :attachable, :attachments, :concatenation_form
 
-    def initialize(user = nil, attachable = nil, concatenation_form = nil)
-      super(user, params)
-      @attachable = attachable
+    def initialize(user = nil, concatenation_form = nil)
+      super(user)
+      @attachable = concatenation_form&.attachable
       @concatenation_form = concatenation_form
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength,Metrics/CyclomaticComplexity
+    def execute
       # authorize if user can update sample
       authorize! attachable.project, to: :update_sample? if attachable.instance_of?(Sample)
 
       return [] unless concatenation_form.valid?
 
-      attachment_ids = concatenation_form.attachment_ids
-      is_paired_end = false
+      attachments = concatenation_form.attachments
 
-      unless attachment_ids.all? { |i| i.is_a?(Integer) || i.is_a?(String) }
-        # if multi-dimensional array of ids
-        attachment_ids = attachment_ids.flatten
-        is_paired_end = true
-      end
-
-      attachments = attachable.attachments.where(id: attachment_ids).order(:puid)
-
-      # Checks to make sure the selected attachments to concatenate
-      # do in fact belong to the same sample
-      if attachments.length != attachment_ids.length
-        raise AttachmentConcatenationError,
-              I18n.t('services.attachments.concatenation.incorrect_attachable')
-      end
-
-      validate_and_concatenate(attachments, is_paired_end)
+      validate_and_concatenate(attachments, concatenation_form.paired_end?)
     rescue Attachments::ConcatenationService::AttachmentConcatenationError => e
       concatenation_form.errors.add(:attachment_ids, e.message)
       []
@@ -53,8 +37,6 @@ module Attachments
     # If the user selects to delete the originals the originals
     # are deleted
     def validate_and_concatenate(attachments, is_paired_end)
-      return unless attachments.length.positive?
-
       validate_file_formats(attachments)
 
       concatenated_attachments = []
