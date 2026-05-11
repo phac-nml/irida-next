@@ -28,6 +28,7 @@ en:
               min_length: must have at least %{count} files selected
               mismatching_attachable: must all belong to the same %{attachable_type}
               mismatching_file_formats: must all have the same file format and compression
+              mismatching_file_types: must all have the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.
             basename:
               invalid: must contain only letters, digits, '-', '.', and '_'.
         sample/search_condition:
@@ -1842,7 +1843,6 @@ en:
     attachments:
       concatenation:
         incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
-        incorrect_file_types: Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.
       destroy:
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
         does_not_belong_to_attachable: This attachment does not belong to this sample.

@@ -19,6 +19,7 @@ class ConcatenationForm
 
   validate :attachments_belong_to_attachable, if: -> { attachment_ids.any? }
   validate :attachments_file_formats, if: -> { attachment_ids.any? }
+  validate :attachments_file_types, if: -> { attachment_ids.any? }
 
   def initialize(attributes = {})
     super
@@ -74,5 +75,18 @@ class ConcatenationForm
                                Attachment.metadata_arel_node('compression')).count.length == 1
 
     errors.add(:attachment_ids, :mismatching_file_formats)
+  end
+
+  def attachments_file_types
+    attachment_file_types = Attachment.where(id: flattened_attachment_ids)
+                                      .group(Attachment.metadata_arel_node('type'))
+                                      .count.keys
+    if paired_end?
+      return if attachment_file_types.all? { |t| %w[illumina_pe pe].include?(t) }
+    elsif attachment_file_types.length == 1 && attachment_file_types.none? { |t| %w[illumina_pe pe].include?(t) }
+      return
+    end
+
+    errors.add(:attachment_ids, :mismatching_file_types)
   end
 end

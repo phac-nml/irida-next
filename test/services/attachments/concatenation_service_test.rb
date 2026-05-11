@@ -349,8 +349,7 @@ module Attachments
         end
       end
 
-      assert concatenation_form.errors.of_kind?(:attachment_ids,
-                                                I18n.t('services.attachments.concatenation.incorrect_file_types'))
+      assert concatenation_form.errors.of_kind?(:attachment_ids, :mismatching_file_types)
 
       assert_equal sample.reload.attachments_updated_at, prev_timestamp
     end

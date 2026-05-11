@@ -37,42 +37,16 @@ module Attachments
     # If the user selects to delete the originals the originals
     # are deleted
     def validate_and_concatenate(attachments, is_paired_end)
-      concatenated_attachments = []
-
-      if is_paired_end
-        validate_paired_end_files(attachments)
-        concatenated_attachments = concatenate_paired_end_reads(attachments)
-      else
-        validate_single_end_files(attachments)
-        concatenated_attachments = concatenate_single_end_reads(attachments)
-      end
+      concatenated_attachments = if is_paired_end
+                                   concatenate_paired_end_reads(attachments)
+                                 else
+                                   concatenate_single_end_reads(attachments)
+                                 end
 
       # if option is selected then destroy the original files
       attachments.each(&:destroy) if concatenation_form.delete_originals
 
       concatenated_attachments
-    end
-
-    # Validates that the single end files are all the same type
-    def validate_single_end_files(attachments) # rubocop:disable Naming/PredicateMethod
-      attachments.each do |attachment|
-        next unless attachment.metadata.key?('type')
-
-        raise AttachmentConcatenationError,
-              I18n.t('services.attachments.concatenation.incorrect_file_types')
-      end
-      true
-    end
-
-    # Validates that the paired end files are all the same type
-    def validate_paired_end_files(attachments) # rubocop:disable Naming/PredicateMethod
-      attachments.each do |attachment|
-        next if attachment.metadata.key?('type') && %w[illumina_pe pe].include?(attachments.first.metadata['type'])
-
-        raise AttachmentConcatenationError,
-              I18n.t('services.attachments.concatenation.incorrect_file_types')
-      end
-      true
     end
 
     # Concatenates the single end reads into a single-end file
