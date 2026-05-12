@@ -1,8 +1,7 @@
 import * as XLSX from "xlsx";
 import Controller from "controllers/metadata/file_import_controller";
-import { chunk, omitBy, pick } from "utilities/collection";
+import { omitBy, pick } from "utilities/collection";
 
-const ROW_CHUNK_SIZE = 2;
 export default class extends Controller {
   static values = {
     graphqlUrl: String,
@@ -12,9 +11,7 @@ export default class extends Controller {
 
   connect() {
     super.connect();
-    this._chunksReceived = 0;
     this._hasErrors = false;
-    this._totalChunks = 0;
     this._worker ||= this.#buildWorker();
     this._worksheet = null;
   }
@@ -73,19 +70,14 @@ export default class extends Controller {
       ),
     ]);
 
-    const rowChunks = chunk(rows, ROW_CHUNK_SIZE);
-    this._totalChunks = rowChunks.length;
-
-    for (const row of rowChunks) {
-      // Send data to worker
-      this._worker.postMessage({
-        graphql_url: this.graphqlUrlValue,
-        csrf_token: this.#csrfToken(),
-        group_puid: this.groupPuidValue,
-        project_puid: this.projectPuidValue,
-        metadata: Object.fromEntries(row),
-      });
-    }
+    // Send data to worker
+    this._worker.postMessage({
+      csrf_token: this.#csrfToken(),
+      graphql_url: this.graphqlUrlValue,
+      group_puid: this.groupPuidValue,
+      project_puid: this.projectPuidValue,
+      rows: rows,
+    });
   }
 
   #buildWorker() {
@@ -104,11 +96,19 @@ export default class extends Controller {
 
       // Listen for messages from the worker
       worker.onmessage = (event) => {
-        this._chunksReceived++;
+        const payload = event.data || {};
 
-        console.log("Main thread received:", event.data);
+        if (payload.type === "progress") {
+          console.log("Progress: ", payload);
+        }
 
-        if (this._chunksReceived === this._totalChunks) {
+        if (payload.type === "done") {
+          console.log("Complete");
+          this.#terminateWorker();
+        }
+
+        if (payload.type === "error") {
+          console.log("Error: ", payload);
           this.#terminateWorker();
         }
       };
