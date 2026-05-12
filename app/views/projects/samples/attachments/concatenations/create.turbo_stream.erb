@@ -2,18 +2,13 @@
   "sample_modal",
   partial: "modal",
   locals: {
-    open: @sample.errors.any?,
-    concatenation_params: @sample.errors.any? ? concatenation_params : nil,
+    open: @concatenation_form.errors.any?
   },
 ) %>
 
-<% if @sample.errors.any? %>
-  <%= turbo_stream.update "concatenation-alert",
-                      viral_alert(type:, message:, classes: "mb-4") %>
-<% else %>
+<% unless @concatenation_form.errors.any? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
-
   <turbo-stream action="refresh"></turbo-stream>
 <% end %>

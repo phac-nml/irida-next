@@ -34,7 +34,7 @@ module Projects
           post namespace_project_sample_attachments_concatenation_path(@namespace, @project1, @sample1,
                                                                        format: :turbo_stream),
                params: {
-                 concatenation: {
+                 concatenation_form: {
                    basename: 'blah',
                    attachment_ids: { '0' => @attachment1.id, '1' => @attachment2.id }
                  }
