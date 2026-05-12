@@ -11,11 +11,11 @@ module Combobox
           combobox = find("input[role='combobox']")
           assert_equal 'age', combobox.value
           assert_equal 'false', combobox['aria-expanded']
-          assert_no_selector 'button.rotate-180[data-combobox--v1-target="indicatorButton"]'
-          assert_selector 'button[data-combobox--v1-target="indicatorButton"]'
+          assert_no_selector 'svg.caret-down-icon.rotate-180'
+          assert_selector 'svg.caret-down-icon'
           combobox.click
           assert_equal 'true', combobox['aria-expanded']
-          assert_selector 'button.rotate-180[data-combobox--v1-target="indicatorButton"]'
+          assert_selector 'svg.caret-down-icon.rotate-180'
           listbox = find("div[role='listbox']")
           within listbox do
             group = find("div[role='group']")
@@ -29,7 +29,8 @@ module Combobox
           end
           hidden = find("input[type='hidden']", visible: false)
           assert_equal 'metadata.patient_age', hidden.value
-          assert_no_selector 'button.rotate-180[data-combobox--v1-target="indicatorButton"]'
+          assert_no_selector 'svg.caret-down-icon.rotate-180'
+          assert_selector 'svg.caret-down-icon'
         end
       end
 

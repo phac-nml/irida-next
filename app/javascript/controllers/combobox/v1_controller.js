@@ -342,7 +342,7 @@ export default class extends Controller {
     this.listboxTarget.removeAttribute("aria-hidden");
     this.comboboxTarget.setAttribute("aria-expanded", "true");
     if (this.hasIndicatorButtonTarget) {
-      this.indicatorButtonTarget.classList.add("rotate-180");
+      this.indicatorButtonTarget.firstElementChild.classList.add("rotate-180");
     }
   }
 
@@ -351,7 +351,9 @@ export default class extends Controller {
     this.listboxTarget.setAttribute("aria-hidden", "true");
     this.comboboxTarget.setAttribute("aria-expanded", "false");
     if (this.hasIndicatorButtonTarget) {
-      this.indicatorButtonTarget.classList.remove("rotate-180");
+      this.indicatorButtonTarget.firstElementChild.classList.remove(
+        "rotate-180",
+      );
     }
   }
 
