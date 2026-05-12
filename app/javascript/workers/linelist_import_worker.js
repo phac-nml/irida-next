@@ -1,4 +1,10 @@
 const ROW_CHUNK_SIZE = 2;
+const SUPPORTED_MIME_TYPES = [
+  "text/csv",
+  ".tsv",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+];
 
 const buildBulkUpdateSampleMetadataMutation = (namespaceField) => `
   mutation BulkUpdateSampleMetadata($metadata: JSON!, $${namespaceField}: ID!) {
@@ -123,6 +129,7 @@ export const bulkUpdateSampleMetadata = async ({
 self.onmessage = async (event) => {
   const {
     csrf_token: csrfToken,
+    mime_type: mimeType,
     graphql_url: graphqlUrl,
     group_id: groupId,
     group_puid: groupPuid,
@@ -130,6 +137,14 @@ self.onmessage = async (event) => {
     project_puid: projectPuid,
     rows,
   } = event.data || {};
+
+  if (!SUPPORTED_MIME_TYPES.includes(mimeType)) {
+    self.postMessage({
+      type: "error",
+      message: "Unsupported linelist format.",
+    });
+    return;
+  }
 
   try {
     const rowChunks = chunk(rows, ROW_CHUNK_SIZE);
