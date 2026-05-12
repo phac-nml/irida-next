@@ -29,6 +29,7 @@ module Combobox
           end
           hidden = find("input[type='hidden']", visible: false)
           assert_equal 'metadata.patient_age', hidden.value
+          assert_no_selector 'button.rotate-180[data-combobox--v1-target="indicatorButton"]'
         end
       end
 
