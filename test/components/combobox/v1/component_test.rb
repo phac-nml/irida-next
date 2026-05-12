@@ -11,8 +11,11 @@ module Combobox
           combobox = find("input[role='combobox']")
           assert_equal 'age', combobox.value
           assert_equal 'false', combobox['aria-expanded']
+          assert_no_selector 'button.rotate-180[data-combobox--v1-target="indicatorButton"]'
+          assert_selector 'button[data-combobox--v1-target="indicatorButton"]'
           combobox.click
           assert_equal 'true', combobox['aria-expanded']
+          assert_selector 'button.rotate-180[data-combobox--v1-target="indicatorButton"]'
           listbox = find("div[role='listbox']")
           within listbox do
             group = find("div[role='group']")
