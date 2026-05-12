@@ -1,3 +1,5 @@
+const ROW_CHUNK_SIZE = 2;
+
 const buildBulkUpdateSampleMetadataMutation = (namespaceField) => `
   mutation BulkUpdateSampleMetadata($metadata: JSON!, $${namespaceField}: ID!) {
     bulkUpdateSampleMetadata(
@@ -120,31 +122,46 @@ export const bulkUpdateSampleMetadata = async ({
 
 self.onmessage = async (event) => {
   const {
-    graphql_url: graphqlUrl,
     csrf_token: csrfToken,
-    metadata,
+    graphql_url: graphqlUrl,
     group_id: groupId,
     group_puid: groupPuid,
     project_id: projectId,
     project_puid: projectPuid,
+    rows,
   } = event.data || {};
 
   try {
-    const result = await bulkUpdateSampleMetadata({
-      graphqlUrl,
-      csrfToken,
-      metadata,
-      groupId,
-      groupPuid,
-      projectId,
-      projectPuid,
-    });
+    const rowChunks = chunk(rows, ROW_CHUNK_SIZE);
 
-    self.postMessage({ type: "done", result });
+    for (const row of rowChunks) {
+      const metadata = Object.fromEntries(row);
+      const result = await bulkUpdateSampleMetadata({
+        graphqlUrl,
+        csrfToken,
+        metadata,
+        groupId,
+        groupPuid,
+        projectId,
+        projectPuid,
+      });
+      self.postMessage({ type: "progress", result });
+    }
+    self.postMessage({ type: "done" });
   } catch (error) {
     self.postMessage({
       type: "error",
       message: error?.message || "Unexpected error while importing metadata.",
     });
   }
+};
+
+const chunk = (items, size) => {
+  const chunks = [];
+
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+
+  return chunks;
 };
