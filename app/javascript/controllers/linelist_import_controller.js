@@ -12,7 +12,7 @@ export default class extends Controller {
   connect() {
     super.connect();
     this._hasErrors = false;
-    this._worker ||= this.#buildWorker();
+    this._worker = null;
     this._worksheet = null;
   }
 
@@ -42,6 +42,8 @@ export default class extends Controller {
   }
 
   handleSubmit() {
+    this._worker?.terminate();
+    this._worker ||= this.#buildWorker();
     this.#processRows();
     super.handleSubmit();
   }
@@ -81,6 +83,7 @@ export default class extends Controller {
   }
 
   #buildWorker() {
+    console.log("build worker");
     let worker;
 
     if (typeof Worker !== "undefined") {
