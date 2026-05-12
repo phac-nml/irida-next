@@ -11,7 +11,7 @@ export default class extends Controller {
 
   connect() {
     super.connect();
-    this._hasErrors = false;
+    this._filetype = null;
     this._worker = null;
     this._worksheet = null;
   }
@@ -27,8 +27,10 @@ export default class extends Controller {
       return;
     }
 
+    const file = files[0];
+    this._fileType = file.type;
     const reader = new FileReader();
-    reader.readAsArrayBuffer(files[0]);
+    reader.readAsArrayBuffer(file);
 
     reader.onload = () => {
       const workbook = XLSX.read(reader.result);
@@ -45,7 +47,6 @@ export default class extends Controller {
     this._worker?.terminate();
     this._worker ||= this.#buildWorker();
     this.#processRows();
-    super.handleSubmit();
   }
 
   #processRows() {
@@ -75,6 +76,7 @@ export default class extends Controller {
     // Send data to worker
     this._worker.postMessage({
       csrf_token: this.#csrfToken(),
+      mime_type: this._fileType,
       graphql_url: this.graphqlUrlValue,
       group_puid: this.groupPuidValue,
       project_puid: this.projectPuidValue,
@@ -83,7 +85,6 @@ export default class extends Controller {
   }
 
   #buildWorker() {
-    console.log("build worker");
     let worker;
 
     if (typeof Worker !== "undefined") {
