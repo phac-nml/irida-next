@@ -36,14 +36,8 @@ export const CALENDAR_CLASSES = {
     "cursor-pointer",
   ],
   TODAYS_HOVER: ["hover:bg-slate-200", "dark:hover:bg-slate-500"],
-  DISABLED_DATE: [
-    "line-through",
-    "cursor-not-allowed",
-    "text-slate-500",
-    "dark:text-slate-300",
-  ],
-  MONTH_NAV_BUTTON_DISABLED: ["text-slate-400", "dark:text-slate-500"],
-  MONTH_NAV_BUTTON_ENABLED: ["text-slate-900", "dark:text-slate-100"],
+  MONTH_NAV_ARROW_DISABLED: ["text-slate-400", "dark:text-slate-500"],
+  MONTH_NAV_ARROW_ENABLED: ["text-slate-900", "dark:text-slate-100"],
 };
 
 export const INPUT_CLASSES = {
