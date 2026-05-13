@@ -6,22 +6,22 @@ require 'mocha/minitest'
 
 class PipelinesTest < ActiveSupport::TestCase
   setup do
+    @original_mirror_repo_method = Irida::PipelineRepository.method(:mirror_repo)
     @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
     @test_schema_body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json').read
 
-    # Use a closure to capture @test_schema_body for the clone_repo implementation
     schema_body = @test_schema_body
-    clone_repo_impl = lambda do |_uri, _sha, clone_dir|
-      FileUtils.mkdir_p(clone_dir)
-      File.write(File.join(clone_dir, 'nextflow_schema.json'), schema_body)
-
-      # Create assets/schema_input.json
-      FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
-      File.write(File.join(clone_dir, 'assets', 'schema_input.json'), schema_body)
-      nil
+    file_contents_at_impl = lambda do |_sha, _path|
+      schema_body
     end
 
-    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
+    @clone_repo_impl = lambda do |_uri, _repo_dir|
+      Object.new.tap do |repo|
+        repo.define_singleton_method(:file_contents_at, file_contents_at_impl)
+      end
+    end
+
+    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, @clone_repo_impl)
 
     @pipelines = Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines/pipelines.json',
                                       pipeline_schema_file_dir: @pipeline_schema_file_dir)
@@ -29,6 +29,7 @@ class PipelinesTest < ActiveSupport::TestCase
 
   teardown do
     FileUtils.remove_dir(@pipeline_schema_file_dir, true)
+    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, @original_mirror_repo_method)
   end
 
   test 'registers pipelines' do
@@ -72,11 +73,11 @@ class PipelinesTest < ActiveSupport::TestCase
     Rails.logger.expects(:error).with('Pipeline phac-nml/iridanextexample_1.0.2 could not be updated').once
 
     # Override the mock to raise an exception for this test (simulating fetch failure)
-    clone_repo_impl = lambda do |_uri, _sha, _clone_dir|
+    clone_repo_impl = lambda do |_uri, _repo_dir|
       raise Git::Error, 'Failed to clone'
     end
 
-    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
+    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, clone_repo_impl)
 
     pipeline_refresh = Irida::Pipelines.new(
       pipeline_config_file: 'test/config/pipelines_fail_to_get_etag_for_cached_pipeline/pipelines.json',
@@ -86,16 +87,9 @@ class PipelinesTest < ActiveSupport::TestCase
     pl = pipeline_refresh.pipelines['phac-nml/iridanextexample_1.0.2']
     assert_not_nil pl
     assert_not pl.executable
-
+  ensure
     # Restore the original mock
-    clone_repo_impl_default = lambda do |_uri, _sha, clone_dir|
-      FileUtils.mkdir_p(clone_dir)
-      File.write(File.join(clone_dir, 'nextflow_schema.json'), schema_body)
-      FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
-      File.write(File.join(clone_dir, 'assets', 'schema_input.json'), schema_body)
-      nil
-    end
-    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl_default)
+    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, @clone_repo_impl)
   end
 
   test 'raises exception and logs error on git repo not accessible' do
@@ -103,11 +97,11 @@ class PipelinesTest < ActiveSupport::TestCase
     Rails.logger.expects(:error).with('Pipeline phac-nml/iridanextexample_1.0.2 could not be registered').once
 
     # Override the clone_repo to raise a 503 error
-    clone_repo_impl = lambda do |_uri, _sha, _clone_dir|
+    clone_repo_impl = lambda do |_uri, _repo_dir|
       raise Irida::Pipelines::PipelinesInvalidUrlException.new('503', false)
     end
 
-    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
+    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, clone_repo_impl)
 
     pipelines = Irida::Pipelines.new(
       pipeline_config_file: 'test/config/pipelines_fail_to_get_etag_for_cached_pipeline/pipelines.json',
@@ -116,5 +110,8 @@ class PipelinesTest < ActiveSupport::TestCase
 
     # For non-cached, the pipeline should not be registered
     assert_nil pipelines.pipelines['phac-nml/iridanextexample_1.0.2']
+  ensure
+    # Restore the original mock
+    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, @clone_repo_impl)
   end
 end

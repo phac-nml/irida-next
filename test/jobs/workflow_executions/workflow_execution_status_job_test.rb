@@ -10,35 +10,32 @@ module WorkflowExecutions
     include FaradayTestHelpers
     include ActiveJob::Continuation::TestHelper
 
-    def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-      @original_clone_repo_method = Irida::PipelineRepository.method(:clone_repo)
+    def setup # rubocop:disable Metrics/MethodLength
+      @original_mirror_repo_method = Irida::PipelineRepository.method(:mirror_repo)
       @workflow_execution = workflow_executions(:irida_next_example_submitted)
       @workflow_execution.email_notification = true
       @workflow_execution.save!
       @workflow_execution.create_logidze_snapshot!
       @stubs = faraday_test_adapter_stubs
 
-      @test_schema_body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json').read
+      test_schema_body = Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json').read
 
-      # Use a closure to capture @test_schema_body for the clone_repo implementation
-      schema_body = @test_schema_body
-      clone_repo_impl = lambda do |_uri, _sha, clone_dir|
-        FileUtils.mkdir_p(clone_dir)
-        File.write(File.join(clone_dir, 'nextflow_schema.json'), schema_body)
-
-        # Create assets/schema_input.json
-        FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
-        File.write(File.join(clone_dir, 'assets', 'schema_input.json'), schema_body)
-        nil
+      file_contents_at_impl = lambda do |_sha, _path|
+        test_schema_body
+      end
+      clone_repo_impl = lambda do |_uri, _repo_dir|
+        Object.new.tap do |repo|
+          repo.define_singleton_method(:file_contents_at, file_contents_at_impl)
+        end
       end
 
-      Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
+      Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, clone_repo_impl)
     end
 
     def teardown
       # reset connections after each test to clear cache
       Faraday.default_connection = nil
-      Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, @original_clone_repo_method)
+      Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, @original_mirror_repo_method)
     end
 
     test 'successful job execution' do

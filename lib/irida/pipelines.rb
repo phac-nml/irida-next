@@ -30,6 +30,7 @@ module Irida
     def initialize(**params)
       @pipeline_config_file = params.fetch(:pipeline_config_file, 'config/pipelines/pipelines.json')
       @pipeline_schema_file_dir = params.fetch(:pipeline_schema_file_dir, 'private/pipelines')
+      @pipeline_repo_dir = params.fetch(:pipeline_repo_dir, 'private/pipeline_repos')
       @pipelines = {}
 
       register_pipelines
@@ -93,14 +94,11 @@ module Irida
     end
 
     def clone_and_prepare_schema_locations(uri, version)
-      nextflow_schema_location = nil
-      schema_input_location = nil
+      pipeline_repo_dir = pipeline_repo_dir_for(uri)
+      pipeline_repo = PipelineRepository.mirror_repo(uri, pipeline_repo_dir)
 
-      Dir.mktmpdir('irida_pipeline') do |clone_dir|
-        PipelineRepository.clone_repo(uri, version['name'], clone_dir)
-        nextflow_schema_location = copy_schema_file(clone_dir, uri, version, 'nextflow_schema')
-        schema_input_location = copy_schema_file(clone_dir, uri, version, 'schema_input')
-      end
+      nextflow_schema_location = copy_schema_file(pipeline_repo, uri, version, 'nextflow_schema')
+      schema_input_location = copy_schema_file(pipeline_repo, uri, version, 'schema_input')
 
       [nextflow_schema_location, schema_input_location]
     rescue Git::Error => e
@@ -108,8 +106,15 @@ module Irida
       raise PipelinesInvalidUrlException.new('404', previously_fetched), e.message
     end
 
+    def pipeline_repo_dir_for(uri)
+      path = uri.path.sub(%r{\A/}, '')
+      path += '.git' unless path.end_with?('.git')
+
+      Rails.root.join(@pipeline_repo_dir, path)
+    end
+
     def pipeline_schema_files_exist?(uri, version)
-      pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path, version['name'])
+      pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path.sub(%r{\A/}, ''), version['name'])
       File.exist?(File.join(pipeline_schema_files_path, 'nextflow_schema.json')) ||
         File.exist?(File.join(pipeline_schema_files_path, 'assets', 'schema_input.json'))
     end
@@ -126,22 +131,22 @@ module Irida
       data
     end
 
-    def copy_schema_file(clone_dir, uri, version, type)
+    def copy_schema_file(repo, uri, version, type)
       filename = type == 'nextflow_schema' ? "#{type}.json" : "assets/#{type}.json"
-      source_path = File.join(clone_dir, filename)
+      contents = repo.file_contents_at(version['name'], filename)
 
-      pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path, version['name'])
+      pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path.sub(%r{\A/}, ''), version['name'])
       schema_location = Rails.root.join(pipeline_schema_files_path, filename)
 
-      write_schema_file(source_path, schema_location)
+      write_schema_file(contents, schema_location)
       schema_location
     end
 
-    def write_schema_file(source_path, schema_location)
+    def write_schema_file(contents, schema_location)
       dir = File.dirname(schema_location)
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      FileUtils.cp(source_path, schema_location)
+      File.write(schema_location, contents)
     end
   end
 end
