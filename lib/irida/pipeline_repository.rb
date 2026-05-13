@@ -13,7 +13,7 @@ module Irida
 
     def initialize(uri, repo_dir)
       @repo_dir = repo_dir.to_s
-      @repo = if File.directory?(repo_dir)
+      @repo = if git_repo?(repo_dir)
                 Git.bare(repo_dir)
               else
                 Git.clone(uri.to_s, repo_dir, mirror: true)
@@ -32,6 +32,17 @@ module Irida
       else
         object.to_s
       end
+    end
+
+    private
+
+    def git_repo?(path)
+      g = Git.bare(path)
+      g.lib.fsck('--full')
+      true
+    rescue ArgumentError, Git::GitExecuteError
+      FileUtils.rm_rf(path)
+      false
     end
   end
 end
