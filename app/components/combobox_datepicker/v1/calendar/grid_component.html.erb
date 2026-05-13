@@ -1,0 +1,54 @@
+<div class="justify-center p-1">
+  <table
+    class="min-w-full table-fixed"
+    role="grid"
+    aria-label="<%= t('components.datepicker.aria_label.calendar') %>"
+    aria-labelledby="<%= @calendar_id_header %>"
+  >
+    <thead class="mb-1">
+      <tr>
+        <% @days_of_the_week.each do |day| %>
+          <th
+            scope="col"
+            aria-label="<%= day[1] %>"
+            class="dow h-6 text-center text-sm font-medium text-slate-500 dark:text-slate-400"
+          >
+            <%= day[0] %>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody data-combobox-datepicker--v1--calendar-target="calendar"></tbody>
+  </table>
+</div>
+
+<template data-combobox-datepicker--v1--calendar-target="inMonthDateTemplate">
+  <td
+    class="
+      w-8 cursor-pointer rounded-lg border-0 text-center text-sm leading-9 font-semibold text-slate-900
+      hover:bg-slate-100 dark:text-white dark:hover:bg-slate-600
+    "
+    data-date-within-month-position="inMonth"
+    data-action="
+      keydown->combobox-datepicker--v1--calendar#navigateCalendar
+      click->combobox-datepicker--v1--calendar#selectDate
+    "
+    role="gridcell"
+  ></td>
+</template>
+
+<template data-combobox-datepicker--v1--calendar-target="outOfMonthDateTemplate">
+  <td
+    class="
+      w-8 cursor-pointer rounded-lg border-0 text-center text-sm leading-9 font-semibold text-slate-500
+      hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-600
+    "
+    data-date-within-month-position="outOfMonth"
+    data-action="
+      keydown->combobox-datepicker--v1--calendar#navigateCalendar
+      click->combobox-datepicker--v1--calendar#selectDate
+    "
+    role="gridcell"
+  ></td>
+</template>

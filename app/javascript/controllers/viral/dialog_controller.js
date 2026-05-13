@@ -23,6 +23,7 @@ export default class extends Controller {
     this.#focusTrap = createFocusTrap(this.dialogTarget, {
       onActivate: () => this.dialogTarget.classList.add("focus-trap"),
       onDeactivate: () => this.dialogTarget.classList.remove("focus-trap"),
+      escapeDeactivates: false,
     });
 
     if (this.openValue) {
@@ -70,7 +71,8 @@ export default class extends Controller {
   }
 
   handleEsc(event) {
-    if (!this.#closable) event.preventDefault();
+    event.preventDefault();
+    if (this.#closable) this.close();
   }
 
   restoreFocusState() {

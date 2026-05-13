@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-module Datepicker
+module ComboboxDatepicker
   module V1
     # Datepicker Component
     # Renders the date input along with datepicker calendar
-    class Component < ::Component
+    class Component < ::Component # rubocop:disable Metrics/ClassLength
       # Default HTML tag for components main elements.
       TAG_DEFAULT = :div
 
@@ -12,14 +12,13 @@ module Datepicker
       SYSTEM_DEFAULT_CLASSES = 'relative'
 
       # Default CSS classes for the <div> element containing the datepicker.
-      CALENDAR_DEFAULT_CLASSES = 'hidden z-100 active select-none'
+      CALENDAR_DEFAULT_CLASSES = 'z-100 active select-none'
 
       # Initializes a new Datepicker component.
       # @param id [String] A unique identifier that is manipulated to use on multiple component items. This is required.
       # @param input_name [String] The name attribute for the date input. This is required.
       # @param label [String] A label for the input (optional).
       # @param input_aria_label [String] Aria label for the input. Necessary for accessibility if no label is passed.
-      # @param max_date [String] A maximum date the user can input.
       # @param min_date [String] A minimum date the user can input.
       # @param selected_date [String] The already selected date if it exists.
       # @param autosubmit [Boolean] Submits the date upon selection if true
@@ -32,8 +31,8 @@ module Datepicker
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
-                     max_date: nil, selected_date: nil, autosubmit: false, required: false, errored: false,
-                     calendar_arguments: {}, **system_arguments)
+                     selected_date: nil, autosubmit: false, required: false, errored: false,
+                     calendar_arguments: {},  **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'input_name is required' if input_name.blank?
 
@@ -45,7 +44,6 @@ module Datepicker
         @required = required
         @errored = errored
         @min_date = min_date
-        @max_date = max_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments
         @months = load_months
@@ -75,13 +73,20 @@ module Datepicker
       end
 
       def load_days_of_week
-        [I18n.t('components.datepicker.days_of_week_short.sunday'),
-         I18n.t('components.datepicker.days_of_week_short.monday'),
-         I18n.t('components.datepicker.days_of_week_short.tuesday'),
-         I18n.t('components.datepicker.days_of_week_short.wednesday'),
-         I18n.t('components.datepicker.days_of_week_short.thursday'),
-         I18n.t('components.datepicker.days_of_week_short.friday'),
-         I18n.t('components.datepicker.days_of_week_short.saturday')]
+        [[I18n.t('components.datepicker.days_of_week_short.sunday'),
+          I18n.t('components.datepicker.days_of_week_full.sunday')],
+         [I18n.t('components.datepicker.days_of_week_short.monday'),
+          I18n.t('components.datepicker.days_of_week_full.monday')],
+         [I18n.t('components.datepicker.days_of_week_short.tuesday'),
+          I18n.t('components.datepicker.days_of_week_full.tuesday')],
+         [I18n.t('components.datepicker.days_of_week_short.wednesday'),
+          I18n.t('components.datepicker.days_of_week_full.wednesday')],
+         [I18n.t('components.datepicker.days_of_week_short.thursday'),
+          I18n.t('components.datepicker.days_of_week_full.thursday')],
+         [I18n.t('components.datepicker.days_of_week_short.friday'),
+          I18n.t('components.datepicker.days_of_week_full.friday')],
+         [I18n.t('components.datepicker.days_of_week_short.saturday'),
+          I18n.t('components.datepicker.days_of_week_full.saturday')]]
       end
 
       def setup_ids(id)
@@ -101,42 +106,47 @@ module Datepicker
           @system_arguments.delete(:class),
           @system_arguments.delete(:classes)
         )
+
         @system_arguments[:data] ||= {}
-        @system_arguments[:data][:controller] = 'datepicker--v1--input'
-        @system_arguments[:data]['datepicker--v1--input-datepicker--v1--calendar-outlet'] = "##{@calendar_id}"
-        @system_arguments[:data]['datepicker--v1--input-autosubmit-value'] = @autosubmit
-        @system_arguments[:data]['datepicker--v1--input-invalid-date-value'] =
+        @system_arguments[:data][:controller] = 'combobox-datepicker--v1--input'
+        @system_arguments[:data]['combobox-datepicker--v1--input-combobox-datepicker--v1--calendar-outlet'] =
+          "##{@calendar_id}"
+        @system_arguments[:data]['combobox-datepicker--v1--input-autosubmit-value'] = @autosubmit
+        @system_arguments[:data]['combobox-datepicker--v1--input-invalid-date-value'] =
           I18n.t('components.datepicker.errors.invalid_date')
-        @system_arguments[:data]['datepicker--v1--input-invalid-max-date-value'] =
-          I18n.t('components.datepicker.errors.max_date_error')
-        @system_arguments[:data]['datepicker--v1--input-invalid-min-date-value'] =
+        @system_arguments[:data]['combobox-datepicker--v1--input-invalid-min-date-value'] =
           I18n.t('components.datepicker.errors.min_date_error')
-        @system_arguments[:data]['datepicker--v1--input-calendar-id-value'] = @calendar_id
-        @system_arguments[:data]['datepicker--v1--input-date-format-regex-value'] =
+        @system_arguments[:data]['combobox-datepicker--v1--input-calendar-id-value'] = @calendar_id
+        @system_arguments[:data]['combobox-datepicker--v1--input-date-format-regex-value'] =
           I18n.t('components.datepicker.date_format_regex')
-        @system_arguments[:data]['datepicker--v1--input-error-message-id-value'] = @error_id
         return unless @autosubmit
 
         # require the error container DOM ID to point aria-describedby when autosubmit is true for front-end
         # validation
-        @system_arguments[:data]['datepicker--v1--input-error-message-id-value'] = @error_id
+        @system_arguments[:data]['combobox-datepicker--v1--input-error-message-id-value'] = @error_id
       end
 
       # Configures HTML attributes for the <div> datepicker calendar.
-      def setup_calendar_attributes
+      def setup_calendar_attributes # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         @calendar_arguments[:id] = @calendar_id
         @calendar_arguments[:tag] = TAG_DEFAULT
+        @calendar_arguments[:hidden] = true
         @calendar_arguments[:classes] = class_names(
           CALENDAR_DEFAULT_CLASSES,
           @calendar_arguments.delete(:class),
           @calendar_arguments.delete(:classes)
         )
 
+        @calendar_arguments[:role] = 'dialog'
+        @calendar_arguments[:aria] =
+          { modal: 'true', label: I18n.t('components.datepicker.aria_label.dialog') }
+
         @calendar_arguments[:data] ||= {}
-        @calendar_arguments[:data][:controller] = 'datepicker--v1--calendar'
-        @calendar_arguments[:data]['datepicker--v1--calendar-datepicker--v1--input-outlet'] =
+        @calendar_arguments[:data][:controller] = 'combobox-datepicker--v1--calendar'
+        @calendar_arguments[:data]['combobox-datepicker--v1--calendar-combobox-datepicker--v1--input-outlet'] =
           "##{@container_id}"
-        @calendar_arguments[:data]['datepicker--v1--calendar-months-value'] = @months
+        @calendar_arguments[:data]['combobox-datepicker--v1--calendar-months-value'] = @months
+        @calendar_arguments[:data]['combobox-datepicker--v1--calendar-locale-value'] = I18n.locale
       end
     end
   end

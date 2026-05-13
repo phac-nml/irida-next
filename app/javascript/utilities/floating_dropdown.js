@@ -16,6 +16,7 @@ export default class FloatingDropdown {
   #strategy; // Positioning strategy ('absolute' or 'fixed')
   #distance; // Distance in pixels between trigger and dropdown
   #manageAria; // Whether to manage ARIA attributes
+  #autoSize; // Whether to autoSize dropdown based on available space or not
   #visible; // Current visibility state
   #cleanup; // Cleanup function for autoUpdate
   #onShow; // Callback fired when dropdown shows
@@ -33,6 +34,7 @@ export default class FloatingDropdown {
     strategy = "absolute",
     distance = 0,
     manageAria = true,
+    autoSize = true,
     onShow,
     onHide,
   }) {
@@ -42,6 +44,7 @@ export default class FloatingDropdown {
     this.#strategy = strategy;
     this.#distance = distance;
     this.#manageAria = manageAria;
+    this.#autoSize = autoSize;
     this.#visible = false;
     this.#onShow = onShow;
     this.#onHide = onHide;
@@ -107,6 +110,7 @@ export default class FloatingDropdown {
     this.#dropdown = null;
     this.#strategy = null;
     this.#manageAria = null;
+    this.#autoSize = null;
     this.#visible = false;
     this.#cleanup = null;
     this.#onShow = null;
@@ -123,15 +127,19 @@ export default class FloatingDropdown {
         flip(),
         offset(this.#distance),
         shift(),
-        size({
-          apply({ availableWidth, availableHeight, rects, elements }) {
-            Object.assign(elements.floating.style, {
-              maxWidth: `${Math.max(0, availableWidth)}px`,
-              maxHeight: `${Math.max(0, availableHeight)}px`,
-              minWidth: `${rects.reference.width}px`,
-            });
-          },
-        }),
+        ...(this.#autoSize
+          ? [
+              size({
+                apply({ availableWidth, availableHeight, rects, elements }) {
+                  Object.assign(elements.floating.style, {
+                    maxWidth: `${Math.max(0, availableWidth)}px`,
+                    maxHeight: `${Math.max(0, availableHeight)}px`,
+                    minWidth: `${rects.reference.width}px`,
+                  });
+                },
+              }),
+            ]
+          : []),
       ],
     })
       .then(({ x, y }) => {

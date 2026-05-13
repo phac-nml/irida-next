@@ -191,6 +191,7 @@ en:
       aria_label:
         calendar: Calendar
         clear_selection: Clear date selection
+        dialog: Choose date
         next_month_button: Navigate to next month
         previous_month_button: Navigate to previous month
         select_month: Select month
@@ -199,7 +200,15 @@ en:
       clear_selection: Clear selection
       date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
       date_selection: Date Selection
-      days_of_week:
+      days_of_week_full:
+        friday: Friday
+        monday: Monday
+        saturday: Saturday
+        sunday: Sunday
+        thursday: Thursday
+        tuesday: Tuesday
+        wednesday: Wednesday
+      days_of_week_short:
         friday: Fri
         monday: Mon
         saturday: Sat
