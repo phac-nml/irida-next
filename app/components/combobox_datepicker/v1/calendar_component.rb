@@ -12,6 +12,7 @@ module ComboboxDatepicker
         @max_date = max_date
         @min_year = calculate_min_year
         @max_year = calculate_max_year
+        @calendar_id_header = "#{@calendar_arguments[:id]}-header"
       end
 
       def calculate_min_year

@@ -127,7 +127,7 @@ module ComboboxDatepicker
         end
       end
 
-      def test_home_and_end # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def test_home_and_end_with_min_date # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         test_date = DateTime.new(2026, 5, 7, 0, 0, 0, '-06:00')
         Timecop.travel(test_date) do
           Capybara.current_session.driver.with_playwright_page do |page|
@@ -165,7 +165,37 @@ module ComboboxDatepicker
         end
       end
 
-      def test_arrow_keys # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def test_home_and_end_with_max_date # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        test_date = DateTime.new(2026, 5, 7, 0, 0, 0, '-06:00')
+        Timecop.travel(test_date) do
+          Capybara.current_session.driver.with_playwright_page do |page|
+            page.clock.set_fixed_time(test_date)
+            visit('/rails/view_components/combobox_datepicker_component/with_min_date_and_max_date')
+
+            # open by clicking arrow so date node is focused
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+
+            # May 8th is focused upon opening
+            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
+            assert_field 'year-select', with: '2026'
+            assert_selector 'td[data-date="2026-05-08"]', text: '8', focused: true
+
+            # Navigate to May 6, 2027 (max date)
+            find('#test_id-calendar').send_keys(%i[shift page_down])
+            assert_selector 'td[data-date="2027-05-06"]', focused: true
+
+            # Focus May 2 (Sun)
+            find('#test_id-calendar').send_keys(:home)
+            assert_selector 'td[data-date="2027-05-02"]', focused: true
+
+            # Focus May 6 (Thu)
+            find('#test_id-calendar').send_keys(:end)
+            assert_selector 'td[data-date="2027-05-06"]', focused: true
+          end
+        end
+      end
+
+      def test_arrow_keys_with_default_and_min_date # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         test_date = DateTime.new(2026, 5, 7, 0, 0, 0, '-06:00')
         Timecop.travel(test_date) do
           Capybara.current_session.driver.with_playwright_page do |page|
@@ -199,6 +229,36 @@ module ComboboxDatepicker
 
             find('#test_id-calendar').send_keys(:up)
             assert_selector 'td[data-date="2026-05-08"]', focused: true
+          end
+        end
+      end
+
+      def test_arrow_keys_with_max_date # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        test_date = DateTime.new(2026, 5, 7, 0, 0, 0, '-06:00')
+        Timecop.travel(test_date) do
+          Capybara.current_session.driver.with_playwright_page do |page|
+            page.clock.set_fixed_time(test_date)
+            visit('/rails/view_components/combobox_datepicker_component/with_min_date_and_max_date')
+
+            # open by clicking arrow so date node is focused
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+
+            # May 8th is focused upon opening
+            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
+            assert_field 'year-select', with: '2026'
+            assert_selector 'td[data-date="2026-05-08"]', text: '8', focused: true
+
+            # Navigate to max date
+            find('#test_id-calendar').send_keys(%i[shift page_down])
+            assert_selector 'td[data-date="2027-05-06"]', focused: true
+
+            # Can't go right as 7th is disabled
+            find('#test_id-calendar').send_keys(:right)
+            assert_selector 'td[data-date="2027-05-06"]', focused: true
+
+            # Can't go right as 13th is disabled
+            find('#test_id-calendar').send_keys(:down)
+            assert_selector 'td[data-date="2027-05-06"]', focused: true
           end
         end
       end
@@ -365,6 +425,38 @@ module ComboboxDatepicker
             assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
             assert_field 'year-select', with: '2026'
             assert_selector 'td[data-date="2026-05-08"]', focused: true
+          end
+        end
+      end
+
+      def test_page_down_with_and_without_shift_into_disabled_date # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        test_date = DateTime.new(2026, 5, 7, 0, 0, 0, '-06:00')
+        Timecop.travel(test_date) do
+          Capybara.current_session.driver.with_playwright_page do |page|
+            page.clock.set_fixed_time(test_date)
+            visit('/rails/view_components/combobox_datepicker_component/with_min_date_and_max_date')
+
+            # open by clicking arrow so date node is focused
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+
+            # Start on May 8, 2026
+            assert_selector 'td[data-date="2026-05-08"]', focused: true
+            assert_no_selector 'button.next-btn[aria-disabled="true"]'
+
+            # Navigate to May 6, 2027 (May 8 is disabled)
+            find('#test_id-calendar').send_keys(%i[shift page_down])
+            assert_selector 'td[data-date="2027-05-06"]', focused: true
+            assert_selector 'button.next-btn[aria-disabled="true"]'
+
+            # Navigate back to April 13, 2027
+            find('#test_id-calendar').send_keys(:page_up, :down)
+            assert_selector 'td[data-date="2027-04-13"]', focused: true
+            assert_no_selector 'button.next-btn[aria-disabled="true"]'
+
+            # page_down into disabled May 13th, focused forced to maxDate of May 6th
+            find('#test_id-calendar').send_keys(:page_down)
+            assert_selector 'td[data-date="2027-05-06"]', focused: true
+            assert_selector 'button.next-btn[aria-disabled="true"]'
           end
         end
       end
