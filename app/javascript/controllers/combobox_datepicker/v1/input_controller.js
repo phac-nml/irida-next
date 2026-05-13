@@ -10,6 +10,7 @@ export default class extends Controller {
     "datepickerInput",
     "calendarTemplate",
     "minDate",
+    "maxDate",
     "errorContainer",
     "errorMessageTemplate",
     "errorMessage",
@@ -21,6 +22,7 @@ export default class extends Controller {
     autosubmit: Boolean,
     calendarId: String,
     invalidDate: String,
+    invalidMaxDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
     errorMessageId: String,
@@ -42,6 +44,7 @@ export default class extends Controller {
 
   #floatingDropdown;
 
+  #maxDate;
   #minDate;
 
   #arrowSvg;
@@ -49,6 +52,9 @@ export default class extends Controller {
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
+    }
+    if (this.hasMaxDateTarget) {
+      this.#setMaxDate();
     }
 
     this.#arrowSvg = this.inputArrowTarget.firstElementChild;
@@ -115,6 +121,12 @@ export default class extends Controller {
     this.#minDate = this.minDateTarget.firstElementChild.innerText;
     this.invalidMinDateValue = this.invalidMinDateValue.concat(this.#minDate);
     this.minDateTarget.remove();
+  }
+
+  #setMaxDate() {
+    this.#maxDate = this.maxDateTarget.firstElementChild.innerText;
+    this.invalidMaxDateValue = this.invalidMaxDateValue.concat(this.#maxDate);
+    this.maxDateTarget.remove();
   }
 
   #addCalendarTemplate() {
@@ -412,6 +424,8 @@ export default class extends Controller {
       selectedDate: this.#selectedDate,
       selectedYear: this.#selectedYear,
       selectedMonthIndex: this.#selectedMonthIndex,
+      maxDate: this.#maxDate,
+      maxDateMessage: this.invalidMaxDateValue,
       minDate: this.#minDate,
       minDateMessage: this.invalidMinDateValue,
       autosubmit: this.autosubmitValue,
