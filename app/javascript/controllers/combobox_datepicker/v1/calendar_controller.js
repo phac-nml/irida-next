@@ -658,10 +658,18 @@ export default class extends Controller {
 
     // if navigating 'left', check if the minimum date is higher than the target date to prevent navigation
     if (
-      (direction === "left" &&
-        this.#minDate &&
-        this.#minDate > targetFullDate) ||
-      (direction === "right" && this.#maxDate && targetFullDate > this.#maxDate)
+      direction === "left" &&
+      this.#minDate &&
+      this.#minDate > targetFullDate
+    ) {
+      return;
+    }
+
+    // if navigating 'right', check if the max date is lower than the target date to prevent navigation
+    if (
+      direction === "right" &&
+      this.#maxDate &&
+      targetFullDate > this.#maxDate
     ) {
       return;
     }
