@@ -5,8 +5,9 @@ module ComboboxDatepicker
     module Calendar
       # Renders the calendar footer (today / clear buttons).
       class FooterComponent < ::Component
-        def initialize(min_date:)
+        def initialize(min_date:, max_date:)
           @min_date = min_date
+          @max_date = max_date
         end
       end
     end
