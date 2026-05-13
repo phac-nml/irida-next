@@ -487,7 +487,7 @@ export default class extends Controller {
     const forwardArrow = forwardButton.firstElementChild;
 
     if (this.#preventNextMonthNavigation()) {
-      forwardButton.disabled = true;
+      forwardButton.setAttribute("aria-disabled", "true");
       forwardArrow.classList.remove(
         ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"],
       );
@@ -495,7 +495,7 @@ export default class extends Controller {
         ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_DISABLED"],
       );
     } else {
-      forwardButton.disabled = false;
+      forwardButton.setAttribute("aria-disabled", "false");
       forwardArrow.classList.add(
         ...CALENDAR_CLASSES["MONTH_NAV_BUTTON_ENABLED"],
       );
@@ -826,8 +826,20 @@ export default class extends Controller {
     return getDateNode(this.calendarTarget, targetDate);
   }
 
-  // TODO: implement maxDate check
   #verifyMaxDateFocus(targetDate) {
+    if (this.#maxDate) {
+      const maxDateNode = getDateNode(this.calendarTarget, this.#maxDate);
+      // if there's a maximum date and it exists in the calendar, and is before targetDate,
+      // focus maxDate,
+      // else focus targetDate
+      if (
+        maxDateNode &&
+        verifyDateIsInMonth(maxDateNode) &&
+        targetDate > this.#maxDate
+      ) {
+        return maxDateNode;
+      }
+    }
     return getDateNode(this.calendarTarget, targetDate);
   }
 
