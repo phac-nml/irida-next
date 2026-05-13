@@ -240,7 +240,7 @@ GEM
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
-    fx (0.10.2)
+    fx (0.11.0)
       activerecord (>= 7.2)
       railties (>= 7.2)
     git (4.3.2)
