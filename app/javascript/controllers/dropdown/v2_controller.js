@@ -76,7 +76,9 @@ export default class extends Controller {
   }
 
   #onShow() {
-    this.#caret.classList.add("rotate-180");
+    if (this.#caret) {
+      this.#caret.classList.add("rotate-180");
+    }
   }
 
   #onHide() {
@@ -84,7 +86,9 @@ export default class extends Controller {
       menuitem.setAttribute("tabindex", "-1");
     });
     this.triggerTarget.focus();
-    this.#caret.classList.remove("rotate-180");
+    if (this.#caret) {
+      this.#caret.classList.remove("rotate-180");
+    }
   }
 
   onButtonClick(event) {
