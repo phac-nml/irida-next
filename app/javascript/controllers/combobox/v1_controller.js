@@ -59,7 +59,7 @@ export default class extends Controller {
     this.boundOnComboboxFocus = this.#onComboboxFocus.bind(this);
 
     this.#floatingDropdown = new FloatingDropdown({
-      trigger: this.comboboxTarget,
+      trigger: this.comboboxTarget.parentElement,
       dropdown: this.listboxTarget,
       manageAria: false,
       onShow: () => this.#onShow(),
@@ -302,7 +302,10 @@ export default class extends Controller {
         "aria-label",
         this.showOptionsLabelValue,
       );
-      this.indicatorButtonTarget.setAttribute("title", this.showOptionsLabelValue);
+      this.indicatorButtonTarget.setAttribute(
+        "title",
+        this.showOptionsLabelValue,
+      );
     }
 
     if (!this.hasIndicatorClearButtonTarget) return;
@@ -338,12 +341,20 @@ export default class extends Controller {
     this.listboxTarget.style.display = "block";
     this.listboxTarget.removeAttribute("aria-hidden");
     this.comboboxTarget.setAttribute("aria-expanded", "true");
+    if (this.hasIndicatorButtonTarget) {
+      this.indicatorButtonTarget.firstElementChild.classList.add("rotate-180");
+    }
   }
 
   #onHide() {
     this.listboxTarget.style.display = "none";
     this.listboxTarget.setAttribute("aria-hidden", "true");
     this.comboboxTarget.setAttribute("aria-expanded", "false");
+    if (this.hasIndicatorButtonTarget) {
+      this.indicatorButtonTarget.firstElementChild.classList.remove(
+        "rotate-180",
+      );
+    }
   }
 
   // Combobox events
