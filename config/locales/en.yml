@@ -48,6 +48,7 @@ en:
       group:
         description: Description
         name: Group name
+        new_namespace: New namespace
         parent_id: Group URL
         path: Path
       member:
@@ -1862,9 +1863,9 @@ en:
         group_self_reference: Group cannot be shared with itself.
         invalid_namespace_type: Invalid namespace type
       transfer:
-        namespace_empty: The new namespace is empty.
+        namespace_empty: is empty
         namespace_group_exists: A group with the same name/path already exists in the new namespace.
-        same_group_and_namespace: The new namespace must be different from the group.
+        same_group_and_namespace: must be different from the group
     members:
       create:
         role_not_allowed: A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role
