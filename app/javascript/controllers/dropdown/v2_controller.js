@@ -5,9 +5,11 @@ export default class extends Controller {
   static targets = ["trigger", "menu"];
   static values = {
     distance: Number,
+    caret: Boolean,
   };
 
   #floatingDropdown = null;
+  #caret;
 
   initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
@@ -20,6 +22,10 @@ export default class extends Controller {
     this.idempotentConnect();
 
     document.addEventListener("turbo:morph", this.boundOnMorph);
+
+    if (this.caretValue) {
+      this.#caret = this.element.querySelector("svg.caret-down-icon");
+    }
   }
 
   idempotentConnect() {
@@ -27,6 +33,7 @@ export default class extends Controller {
       trigger: this.triggerTarget,
       dropdown: this.menuTarget,
       distance: this.distanceValue,
+      onShow: () => this.#onShow(),
       onHide: () => this.#onHide(),
     });
   }
@@ -68,11 +75,16 @@ export default class extends Controller {
     });
   }
 
+  #onShow() {
+    this.#caret.classList.add("rotate-180");
+  }
+
   #onHide() {
     this.#menuItems(this.menuTarget).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });
     this.triggerTarget.focus();
+    this.#caret.classList.remove("rotate-180");
   }
 
   onButtonClick(event) {
@@ -196,8 +208,9 @@ export default class extends Controller {
         if (event.shiftKey) {
           event.preventDefault();
           this.triggerTarget.focus();
-          this.#floatingDropdown.hide();
         }
+
+        this.#floatingDropdown.hide();
         break;
     }
   }

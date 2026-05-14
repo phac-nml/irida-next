@@ -2,6 +2,7 @@
             data: {
               controller: tooltip? ? "pathogen--tooltip dropdown--v2" : "dropdown--v2",
               "dropdown--v2-distance-value": distance,
+              "dropdown--v2-caret-value": caret
             }) do %>
   <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
     <% if icon_name.present? %>
