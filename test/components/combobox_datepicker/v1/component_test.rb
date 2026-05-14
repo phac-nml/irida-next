@@ -46,30 +46,30 @@ module ComboboxDatepicker
             end
             # 8-9 to 30th are selectable dates and are 'inMonth'
             (8..9).each do |i|
-              assert_selector 'table tbody tr:nth-child(2) table tbody tr td[data-date-within-month-position="inMonth"]', # rubocop:disable Layout/LineLength
+              assert_selector 'table tbody tr:nth-child(2) td[data-date-within-month-position="inMonth"]',
                               text: i.to_s
             end
 
             (10..16).each do |i|
-              assert_selector 'table tbody tr:nth-child(3) table tbody tr td[data-date-within-month-position="inMonth"]', # rubocop:disable Layout/LineLength
+              assert_selector 'table tbody tr:nth-child(3) td[data-date-within-month-position="inMonth"]',
                               text: i.to_s
             end
             (17..23).each do |i|
-              assert_selector 'table tbody tr:nth-child(4) table tbody tr td[data-date-within-month-position="inMonth"]', # rubocop:disable Layout/LineLength
+              assert_selector 'table tbody tr:nth-child(4) td[data-date-within-month-position="inMonth"]',
                               text: i.to_s
             end
 
             (24..30).each do |i|
-              assert_selector 'table tbody tr:nth-child(5) table tbody tr td[data-date-within-month-position="inMonth"]', # rubocop:disable Layout/LineLength
+              assert_selector 'table tbody tr:nth-child(5) td[data-date-within-month-position="inMonth"]',
                               text: i.to_s
             end
 
-            assert_selector 'table tbody tr:last-child table tbody tr td[data-date-within-month-position="inMonth"]',
+            assert_selector 'table tbody tr:last-child td[data-date-within-month-position="inMonth"]',
                             text: '31'
 
             # June 1-6 fill out last week, and are 'outOfMonth'
             (1..6).each do |i|
-              assert_selector 'table tbody tr:last-child table tbody tr td[data-date-within-month-position="outOfMonth"]', # rubocop:disable Layout/LineLength
+              assert_selector 'table tbody tr:last-child td[data-date-within-month-position="outOfMonth"]',
                               text: i.to_s
             end
 
@@ -677,12 +677,12 @@ module ComboboxDatepicker
             assert_selector 'table tbody tr', count: 5
             assert_selector 'table tbody tr td', count: 35
             (28..30).each do |i|
-              assert_selector 'table tbody tr:first-child table tbody tr td[data-date-within-month-position="outOfMonth"]', # rubocop:disable Layout/LineLength
+              assert_selector 'table tbody tr:first-child td[data-date-within-month-position="outOfMonth"]',
                               text: i.to_s
             end
 
             (1..4).each do |i|
-              assert_selector 'table tbody tr:first-child table tbody tr td[data-date-within-month-position="inMonth"]',
+              assert_selector 'table tbody tr:first-child td[data-date-within-month-position="inMonth"]',
                               text: i.to_s
             end
           end
@@ -710,11 +710,11 @@ module ComboboxDatepicker
             assert_selector 'table tbody tr', count: 6
             assert_selector 'table tbody tr td', count: 42
             (25..30).each do |i|
-              assert_selector 'table tbody tr:first-child table tbody tr td[data-date-within-month-position="outOfMonth"]', # rubocop:disable Layout/LineLength
+              assert_selector 'table tbody tr:first-child td[data-date-within-month-position="outOfMonth"]',
                               text: i.to_s
             end
 
-            assert_selector 'table tbody tr:first-child table tbody tr td[data-date-within-month-position="inMonth"]',
+            assert_selector 'table tbody tr:first-child td[data-date-within-month-position="inMonth"]',
                             text: '1'
           end
         end
