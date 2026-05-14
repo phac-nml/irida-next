@@ -48,6 +48,7 @@ fr:
       group:
         description: Description
         name: Nom du groupe
+        new_namespace: Nouvel espace de noms
         parent_id: URL du groupe
         path: Chemin
       member:
@@ -1866,9 +1867,9 @@ fr:
         group_self_reference: Le groupe ne peut pas être partagé avec lui-même.
         invalid_namespace_type: Type d’espace de noms non valide
       transfer:
-        namespace_empty: Le nouvel espace de noms est vide.
+        namespace_empty: est vide
         namespace_group_exists: Un groupe avec le même nom/chemin existe déjà dans le nouvel espace de noms.
-        same_group_and_namespace: Le nouvel espace de noms doit être différent du groupe.
+        same_group_and_namespace: doit être différent du groupe
     members:
       create:
         role_not_allowed: Un responsable ne peut ajouter des membres au %{namespace_type} %{namespace_name} que jusqu’au rôle de responsable
