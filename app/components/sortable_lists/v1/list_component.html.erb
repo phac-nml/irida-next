@@ -19,6 +19,9 @@
     aria-roledescription="<%= t('components.sortable_lists.v1.list_component.aria_role_description', list: title) %>"
     aria-required="<%= required %>"
     aria-multiselectable="true"
+    <% if describedby.present? %>
+      aria-describedby="<%= describedby %>"
+    <% end %>
   >
     <%= render SortableLists::V1::ListItemComponent.with_collection(list_items) %>
   </ul>
