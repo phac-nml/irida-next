@@ -24,6 +24,15 @@ en:
         condition: Condition
     errors:
       models:
+        advanced_search_condition:
+          attributes:
+            field:
+              not_a_metadata: is an invalid metadata field
+              taken: exists within another condition in this group
+            operator:
+              not_a_date_operator: cannot be used on dates
+            value:
+              not_a_date: must be formatted YYYY-MM-DD
         concatenation_form:
           attributes:
             attachment_ids:
@@ -42,14 +51,6 @@ en:
               cannot_be_same_as_old_parent: must be different from the current parent group
               namespace_group_exists: already has a group with the same name/path
               namespace_not_found: does not exist
-        sample/search_condition:
-          attributes:
-            field:
-              not_a_metadata: is an invalid metadata field
-            operator:
-              not_a_date_operator: cannot be used on dates
-            value:
-              not_a_date: must be formatted YYYY-MM-DD
   activerecord:
     attributes:
       attachment:

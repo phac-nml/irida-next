@@ -24,6 +24,15 @@ fr:
         condition: Condition
     errors:
       models:
+        advanced_search_condition:
+          attributes:
+            field:
+              not_a_metadata: est un champ de métadonnées non valide
+              taken: existe déjà dans une autre condition de ce groupe
+            operator:
+              not_a_date_operator: ne peut pas être utilisé sur les dates
+            value:
+              not_a_date: doit être formaté AAAA-MM-JJ
         concatenation_form:
           attributes:
             attachment_ids:
@@ -42,14 +51,6 @@ fr:
               cannot_be_same_as_old_parent: doit être différent du groupe parent actuel
               namespace_group_exists: existe déjà un groupe portant le même nom/chemin
               namespace_not_found: n'existe pas
-        sample/search_condition:
-          attributes:
-            field:
-              not_a_metadata: est un champ de métadonnées non valide
-            operator:
-              not_a_date_operator: ne peut pas être utilisé sur les dates
-            value:
-              not_a_date: doit être formaté AAAA-MM-JJ
   activerecord:
     attributes:
       attachment:
