@@ -3,42 +3,46 @@
 require 'git'
 
 module Irida
-  # Handles Git repository operations for pipeline cloning and verification
+  # Handles Git repository operations for pipeline mirroring and getting file contents at revisions
   class PipelineRepository
-    def self.clone_repo(uri, sha, clone_dir)
-      new(uri, sha).clone(clone_dir)
+    attr_reader :repo, :repo_dir
+
+    def self.mirror_repo(uri, repo_dir)
+      new(uri, repo_dir)
     end
 
-    def initialize(uri, sha)
-      @uri = uri
-      @sha = sha
-      @remote = uri.to_s
+    def initialize(uri, repo_dir)
+      @repo_dir = repo_dir.to_s
+      @repo = if git_repo?(repo_dir)
+                Git.bare(repo_dir)
+              else
+                Git.clone(uri.to_s, repo_dir, mirror: true)
+              end
+      @repo.fetch(prune: true)
     end
 
-    def clone(clone_dir)
-      if sha_exists_on_remote?
-        Git.clone(@remote, clone_dir, depth: 1, branch: @sha)
+    def file_contents_at(sha, path)
+      object = @repo.object("#{sha}:#{path}")
+      return unless object
+
+      if object.respond_to?(:contents)
+        object.contents
+      elsif object.respond_to?(:content)
+        object.content
       else
-        repo = Git.clone(@remote, clone_dir)
-        repo.checkout(@sha)
+        object.to_s
       end
     end
 
     private
 
-    def sha_exists_on_remote?
-      remote_ref_includes?(Git.ls_remote(@remote), @sha)
-    end
-
-    def remote_ref_includes?(refs, query)
-      case refs
-      when Hash
-        refs.any? { |key, value| key.to_s == query || remote_ref_includes?(value, query) }
-      when Array
-        refs.any? { |value| remote_ref_includes?(value, query) }
-      else
-        refs.to_s == query
-      end
+    def git_repo?(path)
+      g = Git.bare(path)
+      g.lib.fsck('--full')
+      true
+    rescue ArgumentError, Git::GitExecuteError
+      FileUtils.rm_rf(path)
+      false
     end
   end
 end

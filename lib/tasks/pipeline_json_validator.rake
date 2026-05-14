@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'git'
+require 'irida/pipeline_repository'
 
 # Rake task to validate pipeline JSON configuration files against a JSON schema
 # USAGE:
@@ -121,27 +122,32 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
 
   # Verify that each pipeline version URL exists and is reachable
   def verify_url_exists_and_reachable(json_data) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    tmpdir = Dir.mktmpdir('pipeline_repos_for_validation')
     progressbar = ProgressBar.create(title: 'Checking URLs', total: json_data.size, format: '%t: |%B| %p%% %e')
     json_data.each_value do |pipeline_hash|
       base_url = pipeline_hash['url']
+      begin
+        refs = Git.ls_remote(base_url)
 
-      pipeline_hash['versions'].each do |version|
-        next unless version.key?('name')
+        pipeline_hash['versions'].each do |version|
+          next unless version.key?('name')
 
-        begin
-          refs = Git.ls_remote(base_url)
-          version_exists = version_exists_in_remote?(refs, version['name'])
+          begin
+            version_exists = version_exists_in_remote?(refs, version['name'])
 
-          # If version not found in remote refs, try cloning and checking
-          version_exists ||= check_version_in_cloned_repo(base_url, version['name'])
+            # If version not found in remote refs, try cloning and checking
+            version_exists ||= check_version_in_cloned_repo(base_url, version['name'], tmpdir)
 
-          @errors << "Version/branch '#{version['name']}' not found in repository: #{base_url}" unless version_exists
-        rescue Git::Error => e
-          @errors << "Repository not accessible at #{base_url}: #{e.message}"
+            @errors << "Version/branch '#{version['name']}' not found in repository: #{base_url}" unless version_exists
+          end
         end
+      rescue Git::Error => e
+        @errors << "Repository not accessible at #{base_url}: #{e.message}"
       end
       progressbar.increment
     end
+  ensure
+    FileUtils.remove_entry tmpdir
   end
 
   # Check if a version/branch exists in the remote references
@@ -156,19 +162,22 @@ namespace :pipeline_json_validator do # rubocop:disable Metrics/BlockLength
     end
   end
 
-  # Check if version exists by cloning the repository and attempting checkout
-  def check_version_in_cloned_repo(base_url, version_name)
-    Dir.mktmpdir('irida_pipeline_validate') do |clone_dir|
-      try_clone_and_checkout(base_url, version_name, clone_dir)
-    end
+  # Check if version exists by mirroring the repository and attempting checkout
+  def check_version_in_cloned_repo(repo_url, version_name, tmpdir)
+    uri = URI.parse(repo_url)
+    path = uri.path.sub(%r{\A/}, '')
+    path += '.git' unless path.end_with?('.git')
+
+    clone_dir = File.join(tmpdir, path)
+    try_mirror_and_checkout(uri, version_name, clone_dir)
   rescue Git::Error
     false
   end
 
   # Attempt to clone and checkout a specific version
-  def try_clone_and_checkout(base_url, version_name, clone_dir)
-    repo = Git.clone(base_url, clone_dir)
-    repo.checkout(version_name)
+  def try_mirror_and_checkout(uri, version_name, clone_dir)
+    pipeline_repo = Irida::PipelineRepository.mirror_repo(uri, clone_dir)
+    pipeline_repo.repo.revparse(version_name)
     true
   rescue Git::Error
     false
