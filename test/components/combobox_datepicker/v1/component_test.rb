@@ -621,6 +621,99 @@ module ComboboxDatepicker
           end
         end
       end
+
+      def test_directly_entering_date # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        test_date = DateTime.new(2026, 5, 7, 0, 0, 0, '-06:00')
+        Timecop.travel(test_date) do
+          Capybara.current_session.driver.with_playwright_page do |page|
+            page.clock.set_fixed_time(test_date)
+            visit('/rails/view_components/combobox_datepicker_component/default')
+
+            # open by clicking arrow so date node is focused
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+
+            # verify May is selected and only 8 months exist (Jan-Apr options are not appended due to minDate)
+            assert_selector 'select[name="month-select"] option', count: 8
+            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
+            assert_field 'year-select', with: '2026'
+
+            find('#test_id-input').fill_in with: '2026-07-07'
+
+            # open by clicking arrow so date node is focused
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+
+            # verify May is selected and only 8 months exist (Jan-Apr options are not appended due to minDate)
+            assert_selector 'td.bg-primary-700[data-date="2026-07-07"][aria-selected="true"]', focused: true
+            assert_field 'month-select', with: I18n.t('components.datepicker.months.july')
+            assert_field 'year-select', with: '2026'
+          end
+        end
+      end
+
+      def test_month_change # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        test_date = DateTime.new(2026, 5, 7, 0, 0, 0, '-06:00')
+        Timecop.travel(test_date) do
+          Capybara.current_session.driver.with_playwright_page do |page|
+            page.clock.set_fixed_time(test_date)
+            visit('/rails/view_components/combobox_datepicker_component/default')
+
+            # open by clicking arrow so date node is focused
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+
+            # verify May is selected and only 8 months exist (Jan-Apr options are not appended due to minDate)
+            assert_selector 'select[name="month-select"] option', count: 8
+            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
+            assert_field 'year-select', with: '2026'
+
+            select I18n.t('components.datepicker.months.july'),
+                   from: 'month-select'
+
+            # verify calendar matches July 2026
+            assert_selector 'table tbody tr', count: 5
+            assert_selector 'table tbody tr td', count: 35
+            (28..30).each do |i|
+              assert_selector 'table tbody tr:first-child td[data-date-within-month-position="outOfMonth"]',
+                              text: i.to_s
+            end
+
+            (1..4).each do |i|
+              assert_selector 'table tbody tr:first-child td[data-date-within-month-position="inMonth"]',
+                              text: i.to_s
+            end
+          end
+        end
+      end
+
+      def test_year_change # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        test_date = DateTime.new(2026, 5, 7, 0, 0, 0, '-06:00')
+        Timecop.travel(test_date) do
+          Capybara.current_session.driver.with_playwright_page do |page|
+            page.clock.set_fixed_time(test_date)
+            visit('/rails/view_components/combobox_datepicker_component/default')
+
+            # open by clicking arrow so date node is focused
+            find('button[data-combobox-datepicker--v1--input-target="inputArrow"]').click
+
+            # verify May is selected and only 8 months exist (Jan-Apr options are not appended due to minDate)
+            assert_selector 'select[name="month-select"] option', count: 8
+            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
+            assert_field 'year-select', with: '2026'
+
+            find('input[name="year-select"]').fill_in with: '2027'
+            find('input[name="year-select"]').send_keys(:enter)
+            # verify calendar matches May 20274
+            assert_selector 'table tbody tr', count: 6
+            assert_selector 'table tbody tr td', count: 42
+            (25..30).each do |i|
+              assert_selector 'table tbody tr:first-child td[data-date-within-month-position="outOfMonth"]',
+                              text: i.to_s
+            end
+
+            assert_selector 'table tbody tr:first-child td[data-date-within-month-position="inMonth"]',
+                            text: '1'
+          end
+        end
+      end
     end
   end
 end
