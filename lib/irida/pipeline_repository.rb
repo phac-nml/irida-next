@@ -3,7 +3,7 @@
 require 'git'
 
 module Irida
-  # Handles Git repository operations for pipeline cloning and verification
+  # Handles Git repository operations for pipeline mirroring and getting file contents at revisions
   class PipelineRepository
     attr_reader :repo, :repo_dir
 

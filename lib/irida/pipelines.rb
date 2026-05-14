@@ -79,7 +79,7 @@ module Irida
 
     def create_pipeline(pipeline_id, entry, version)
       uri = URI.parse(entry['url'])
-      nextflow_schema_location, schema_input_location = clone_and_prepare_schema_locations(uri, version)
+      nextflow_schema_location, schema_input_location = mirror_and_prepare_schema_locations(uri, version)
 
       Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
     rescue PipelinesInvalidUrlException => e
@@ -93,7 +93,7 @@ module Irida
       end
     end
 
-    def clone_and_prepare_schema_locations(uri, version)
+    def mirror_and_prepare_schema_locations(uri, version)
       pipeline_repo_dir = pipeline_repo_dir_for(uri)
       pipeline_repo = PipelineRepository.mirror_repo(uri, pipeline_repo_dir)
 

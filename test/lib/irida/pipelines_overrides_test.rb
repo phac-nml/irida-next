@@ -33,7 +33,7 @@ class PipelinesOverrides < ActiveSupport::TestCase
     end
 
     # Mock mirror_repo to simulate Git operations
-    clone_repo_impl = lambda do |_uri, repo_dir|
+    mirror_repo_impl = lambda do |_uri, repo_dir|
       FileUtils.mkdir_p(repo_dir)
 
       Object.new.tap do |repo|
@@ -41,7 +41,7 @@ class PipelinesOverrides < ActiveSupport::TestCase
       end
     end
 
-    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, clone_repo_impl)
+    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, mirror_repo_impl)
   end
 
   teardown do

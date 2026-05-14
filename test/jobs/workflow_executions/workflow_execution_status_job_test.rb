@@ -23,13 +23,13 @@ module WorkflowExecutions
       file_contents_at_impl = lambda do |_sha, _path|
         test_schema_body
       end
-      clone_repo_impl = lambda do |_uri, _repo_dir|
+      mirror_repo_impl = lambda do |_uri, _repo_dir|
         Object.new.tap do |repo|
           repo.define_singleton_method(:file_contents_at, file_contents_at_impl)
         end
       end
 
-      Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, clone_repo_impl)
+      Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, mirror_repo_impl)
     end
 
     def teardown
