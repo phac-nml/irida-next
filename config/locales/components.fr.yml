@@ -143,7 +143,7 @@ fr:
           not_in: not in (pas dans)
         remove_condition_aria_label: Supprimer la condition
         remove_group_button: Supprimer le groupe
-        rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
+        rules: Une seule condition peut être spécifiée par champ dans un groupe, sauf que vous pouvez spécifier deux conditions si vous utilisez les opérateurs '>=' et '<='. Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
         title: Recherche avancée
     attachments:
       dialogs:
