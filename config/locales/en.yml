@@ -1864,7 +1864,6 @@ en:
         invalid_namespace_type: Invalid namespace type
       transfer:
         namespace_empty: is empty
-        namespace_group_exists: A group with the same name/path already exists in the new namespace.
         same_group_and_namespace: must be different from the group
     members:
       create:

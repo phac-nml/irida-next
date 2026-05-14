@@ -1868,7 +1868,6 @@ fr:
         invalid_namespace_type: Type d’espace de noms non valide
       transfer:
         namespace_empty: est vide
-        namespace_group_exists: Un groupe avec le même nom/chemin existe déjà dans le nouvel espace de noms.
         same_group_and_namespace: doit être différent du groupe
     members:
       create:
