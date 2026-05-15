@@ -127,7 +127,7 @@ module AdvancedSearch
     def validate_uniqueness(unique_field_condition, common_field_conditions)
       return if common_field_conditions.one?
 
-      unique_field_condition.errors.add :operator, :taken
+      unique_field_condition.errors.add :field, :taken
     end
 
     def validate_between(unique_field_condition, common_field_conditions)
@@ -136,7 +136,7 @@ module AdvancedSearch
       return if common_field_conditions.count == 2 &&
                 common_field_conditions.collect(&:operator).sort == BETWEEN_OPERATORS.sort
 
-      unique_field_condition.errors.add :operator, :taken
+      unique_field_condition.errors.add :field, :taken
     end
   end
 end
