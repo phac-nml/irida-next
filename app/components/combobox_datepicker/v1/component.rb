@@ -31,7 +31,7 @@ module ComboboxDatepicker
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
-                     selected_date: nil, autosubmit: false, required: false, errored: false,
+                     max_date: nil, selected_date: nil, autosubmit: false, required: false, errored: false,
                      calendar_arguments: {},  **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'input_name is required' if input_name.blank?
@@ -44,6 +44,7 @@ module ComboboxDatepicker
         @required = required
         @errored = errored
         @min_date = min_date
+        @max_date = max_date
         @system_arguments = system_arguments
         @calendar_arguments = calendar_arguments
         @months = load_months
@@ -116,6 +117,8 @@ module ComboboxDatepicker
           I18n.t('components.datepicker.errors.invalid_date')
         @system_arguments[:data]['combobox-datepicker--v1--input-invalid-min-date-value'] =
           I18n.t('components.datepicker.errors.min_date_error')
+        @system_arguments[:data]['combobox-datepicker--v1--input-invalid-max-date-value'] =
+          I18n.t('components.datepicker.errors.max_date_error')
         @system_arguments[:data]['combobox-datepicker--v1--input-calendar-id-value'] = @calendar_id
         @system_arguments[:data]['combobox-datepicker--v1--input-date-format-regex-value'] =
           I18n.t('components.datepicker.date_format_regex')
