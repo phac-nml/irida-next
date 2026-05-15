@@ -42,6 +42,12 @@ fr:
               not_a_date_operator: ne peut pas être utilisé sur les dates
             value:
               not_a_date: doit être formaté AAAA-MM-JJ
+        transfer_form:
+          attributes:
+            new_namespace_id:
+              blank: est vide
+              namespace_group_exists: existe déjà un groupe portant le même nom/chemin
+              other_than: doit être différent du groupe
   activerecord:
     attributes:
       attachment:
@@ -1868,10 +1874,6 @@ fr:
         group_required: Groupe requis
         group_self_reference: Le groupe ne peut pas être partagé avec lui-même.
         invalid_namespace_type: Type d’espace de noms non valide
-      transfer:
-        namespace_empty: est vide
-        namespace_group_exists: existe déjà un groupe portant le même nom/chemin
-        same_group_and_namespace: doit être différent du groupe
     members:
       create:
         role_not_allowed: Un responsable ne peut ajouter des membres au %{namespace_type} %{namespace_name} que jusqu’au rôle de responsable
