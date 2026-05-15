@@ -14,6 +14,8 @@ fr:
         value: Valeur
       sample/search_group:
         condition: Condition
+      transfer_form:
+        new_namespace_id: Nouvel espace de noms
       workflow_execution/search_condition:
         field: Champ
         operator: Opérateur
@@ -1868,6 +1870,7 @@ fr:
         invalid_namespace_type: Type d’espace de noms non valide
       transfer:
         namespace_empty: est vide
+        namespace_group_exists: existe déjà un groupe portant le même nom/chemin
         same_group_and_namespace: doit être différent du groupe
     members:
       create:
