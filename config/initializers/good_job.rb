@@ -33,6 +33,12 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
       class: 'UnattachedBlobsCleanupJob', # job class as a String, must be an ActiveJob job
       kwargs: { days_old: 1 }, # number of days old blobs must be for deletion
       description: 'Permanently deletes unattached blobs that have been around some time ago.'
+    },
+    workflow_executions_destroy_task: {
+      cron: '0 2 * * *', # Daily, 2 AM
+      class: 'WorkflowExecutionsDestroyJob', # job class as a String, must be an ActiveJob job
+      kwargs: { days_old: cron_cleanup_after_days.to_i }, # number of days old a workflow execution must be for deletion
+      description: 'Permanently deletes workflow executions that have been soft-deleted some time ago.'
     }
   }
 end
