@@ -14,6 +14,8 @@ en:
         value: Value
       sample/search_group:
         condition: Condition
+      transfer_form:
+        new_namespace_id: New namespace
       workflow_execution/search_condition:
         field: Field
         operator: Operator
@@ -1864,6 +1866,7 @@ en:
         invalid_namespace_type: Invalid namespace type
       transfer:
         namespace_empty: is empty
+        namespace_group_exists: already has a group with the same name/path
         same_group_and_namespace: must be different from the group
     members:
       create:
