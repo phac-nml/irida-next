@@ -12,13 +12,13 @@ module Groups
     end
 
     def execute(new_namespace) # rubocop:disable Naming/PredicateMethod
+      return false unless @transfer_form.valid?
+
       # Authorize if user can transfer group
       authorize! @group, to: :transfer?
 
       # Authorize if user can transfer group into namespace
       authorize! new_namespace, to: :transfer_into_namespace?
-
-      return false unless @transfer_form.valid?
 
       old_namespace = @group.parent unless @group.parent.nil?
 

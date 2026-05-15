@@ -42,6 +42,12 @@ en:
               not_a_date_operator: cannot be used on dates
             value:
               not_a_date: must be formatted YYYY-MM-DD
+        transfer_form:
+          attributes:
+            new_namespace_id:
+              blank: is empty
+              namespace_group_exists: already has a group with the same name/path
+              other_than: must be different from the group
   activerecord:
     attributes:
       attachment:
@@ -1864,10 +1870,6 @@ en:
         group_required: Group is required
         group_self_reference: Group cannot be shared with itself.
         invalid_namespace_type: Invalid namespace type
-      transfer:
-        namespace_empty: is empty
-        namespace_group_exists: already has a group with the same name/path
-        same_group_and_namespace: must be different from the group
     members:
       create:
         role_not_allowed: A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role
