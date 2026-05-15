@@ -6,8 +6,13 @@ module Groups
     class TransferError < StandardError
     end
 
-    def execute(new_namespace) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      validate(new_namespace)
+    def initialize(group, user = nil, transfer_form = nil)
+      super(group, user)
+      @transfer_form = transfer_form
+    end
+
+    def execute(new_namespace) # rubocop:disable Naming/PredicateMethod
+      return false unless @transfer_form.valid?
 
       # Authorize if user can transfer group
       authorize! @group, to: :transfer?
@@ -16,11 +21,6 @@ module Groups
       authorize! new_namespace, to: :transfer_into_namespace?
 
       old_namespace = @group.parent unless @group.parent.nil?
-
-      if Group.where(parent_id: new_namespace.id).exists?(['path = ? or name = ?', @group.path,
-                                                           @group.name])
-        raise TransferError, I18n.t('services.groups.transfer.namespace_group_exists')
-      end
 
       group_ancestor_member_user_ids = Member.for_namespace_and_ancestors(@group).not_expired.select(:user_id)
       new_namespace_member_ids = Member.for_namespace_and_ancestors(new_namespace).not_expired
@@ -37,21 +37,9 @@ module Groups
       new_namespace.update_metadata_summary_by_namespace_transfer(@group, old_namespace)
 
       true
-    rescue Groups::TransferService::TransferError => e
-      @group.errors.add(:new_namespace, e.message)
-      false
     end
 
     private
-
-    def validate(new_namespace)
-      raise TransferError, I18n.t('services.groups.transfer.namespace_empty') if new_namespace.blank?
-
-      return unless new_namespace.id == @group.id
-
-      raise TransferError,
-            I18n.t('services.groups.transfer.same_group_and_namespace')
-    end
 
     def create_activities(old_namespace, new_namespace) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       if old_namespace && new_namespace
