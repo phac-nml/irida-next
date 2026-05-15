@@ -13,8 +13,10 @@ module Groups
 
     test 'transfer group into group activity' do
       group2 = groups(:group_two)
+      transfer_form = ::TransferForm.new({ new_namespace_id: @group.id }
+      .merge(group_id: group2.id, group_name: group2.name, group_path: group2.path))
 
-      ::Groups::TransferService.new(group2, @user).execute(@group)
+      ::Groups::TransferService.new(group2, @user, transfer_form).execute(@group)
 
       activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
 
@@ -41,8 +43,10 @@ module Groups
     test 'transfer group from an existing group namespace into group activity' do
       group2 = groups(:group_two)
       subgroup = groups(:subgroup1)
+      transfer_form = ::TransferForm.new({ new_namespace_id: group2.id }
+      .merge(group_id: subgroup.id, group_name: subgroup.name, group_path: subgroup.path))
 
-      ::Groups::TransferService.new(subgroup, @user).execute(group2)
+      ::Groups::TransferService.new(subgroup, @user, transfer_form).execute(group2)
 
       activities = group2.human_readable_activity(group2.retrieve_group_activity).reverse
 
@@ -70,8 +74,10 @@ module Groups
     test 'transfer group from an existing group namespace into group then delete transferred group activity' do
       group2 = groups(:group_two)
       subgroup = groups(:subgroup1)
+      transfer_form = ::TransferForm.new({ new_namespace_id: group2.id }
+      .merge(group_id: subgroup.id, group_name: subgroup.name, group_path: subgroup.path))
 
-      ::Groups::TransferService.new(subgroup, @user).execute(group2)
+      ::Groups::TransferService.new(subgroup, @user, transfer_form).execute(group2)
 
       subgroup.destroy!
 
