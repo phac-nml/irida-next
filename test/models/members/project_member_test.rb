@@ -35,6 +35,11 @@ class ProjectMemberTest < ActiveSupport::TestCase
     assert_not @project_member.valid?
   end
 
+  test 'can unset expires_at' do
+    @project_member.expires_at = nil
+    assert @project_member.valid?
+  end
+
   test '#validates access level in range' do
     valid_access_levels = Member::AccessLevel.all_values_with_owner
 
@@ -146,7 +151,7 @@ class ProjectMemberTest < ActiveSupport::TestCase
     members = Member.for_namespace_and_ancestors(@project.namespace).not_expired
     assert_difference(-> { members.count } => -1) do
       @project_member.expires_at = 10.days.ago.to_date
-      @project_member.save
+      @project_member.save(validate: false)
     end
   end
 end

@@ -15,6 +15,12 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
     assert group_group_link.valid?
   end
 
+  test 'group link expiration can be unset' do
+    namespace_group_link = namespace_group_links(:namespace_group_link28)
+    namespace_group_link.expires_at = nil
+    assert namespace_group_link.valid?
+  end
+
   test 'cannot create multiple group to group links with the same groups' do
     group_group_link = NamespaceGroupLink.new(group_id: @group_to_share.id, namespace_id: @group.id,
                                               group_access_level: Member::AccessLevel::ANALYST)

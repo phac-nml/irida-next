@@ -191,6 +191,7 @@ fr:
       aria_label:
         calendar: Calendrier
         clear_selection: Effacer la sélection de date
+        dialog: Choisir une date
         next_month_button: Naviguer au prochain mois
         previous_month_button: Naviguer au mois précédent
         select_month: Sélectionner le mois
@@ -199,7 +200,15 @@ fr:
       clear_selection: Effacer la sélection
       date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
       date_selection: Sélection de la date
-      days_of_week:
+      days_of_week_full:
+        friday: vendredi
+        monday: lundi
+        saturday: samedi
+        sunday: dimanche
+        thursday: jeudi
+        tuesday: mardi
+        wednesday: mercredi
+      days_of_week_short:
         friday: ven
         monday: lun
         saturday: sam
@@ -209,6 +218,7 @@ fr:
         wednesday: mer
       errors:
         invalid_date: Date non valide
+        max_date_error: 'Date maximale autorisée : '
         min_date_error: 'Date la plus ancienne autorisée : '
       months:
         april: avril
@@ -264,14 +274,16 @@ fr:
     namespace_row:
       contents_component:
         created_at: Créé le %{date}
+        namespace_link:
+          aria-label: Afficher %{namespace_type} avec le nom %{namespace_name} et l’identifiant unique persistant %{namespace_puid}
         projects:
-          aria-label: Projets
+          aria-label: Afficher les projets pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip: "%{count} projets dans %{namespace_name}"
         samples:
-          aria-label: Échantillons
+          aria-label: Afficher les échantillons pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip: "%{count} échantillons dans %{namespace_name}"
         subnamespaces:
-          aria-label: Sous-groupes
+          aria-label: Afficher les sous-groupes pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip: "%{count} sous-groupes dans %{namespace_name}"
     nextflow:
       email_notification: Vous recevez un avis par courriel lorsque votre analyse est terminée?

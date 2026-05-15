@@ -617,3 +617,16 @@ shared_group_sample_actions_guest:
   puid: INXT_GRP_AAAAAAAACW
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
+
+
+<% (1..10).each do |n| %>
+public_group<%= (n) %>:
+  <<: *DEFAULTS
+  name: <%= "Public Group #{n}" %>
+  public: true
+  path: <%= "public-group-#{n}" %>
+  description: <%= "Public Group #{n} description" %>
+  puid: <%= "INXT_GRP_AXATAA#{((n/26).round+66).chr}AA#{((n%26)+65).chr}" %>
+  samples_count: 0
+  updated_at: <%= (n + 1).days.ago %>
+<% end %>

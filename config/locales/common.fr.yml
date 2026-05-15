@@ -21,7 +21,6 @@ fr:
     date:
       errors:
         invalid_input: Saisie de date invalide
-        invalid_min_date: La date est antérieure à la date minimale
     labels:
       access_level: Niveau d’accès
       actions: Mesures

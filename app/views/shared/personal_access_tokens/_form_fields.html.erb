@@ -1,5 +1,11 @@
 <%# locals: (pat:, form:) -%>
 
+<% first_scope = Irida::Auth.all_available_scopes.first&.to_s %>
+<% target_overrides = {} %>
+<% target_overrides[:scopes] = form.field_id(:scopes, first_scope) if first_scope.present? %>
+
+<%= form_error_summary(form, target_overrides:) %>
+
 <% invalid_token_name = pat.errors.include?(:name) %>
 
 <div class="form-field <%= 'invalid' if invalid_token_name %>">
@@ -8,19 +14,18 @@
   <%= form.text_field :name,
                   required: true,
                   class: "form-control",
-                  aria: {
-                    describedby:
-                      (
-                        if invalid_token_name
-                          form.field_id(:name, "error")
-                        else
-                          nil
-                        end
-                      ),
-                    invalid: invalid_token_name,
-                    required: true,
-                  },
-                  autofocus: invalid_token_name %>
+                   aria: {
+                     describedby:
+                       (
+                         if invalid_token_name
+                           form.field_id(:name, "error")
+                         else
+                           nil
+                         end
+                       ),
+                     invalid: invalid_token_name,
+                     required: true,
+                   } %>
 
   <% if invalid_token_name %>
     <%= render "shared/form/field_errors",
@@ -41,8 +46,9 @@
     input_name: form.field_name(:expires_at),
     label: t("activerecord.attributes.personal_access_token.expires_at"),
     selected_date: pat[:expires_at],
-    required: false,
-    errored: invalid_expires_at
+    required: Irida::CurrentSettings.require_personal_access_token_expiry?,
+    errored: invalid_expires_at,
+    max_date: Irida::CurrentSettings.require_personal_access_token_expiry? ? Time.zone.today + Irida::CurrentSettings.max_personal_access_token_lifetime_in_days : nil
   ) %>
 
   <% if invalid_expires_at %>

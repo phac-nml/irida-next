@@ -34,6 +34,10 @@ module ViewHelper
     render(DatepickerComponent.new(*, **), &)
   end
 
+  def combobox_datepicker(*, **, &)
+    render(ComboboxDatepickerComponent.new(*, **), &)
+  end
+
   def viral_icon_source(name)
     path = if Rails.configuration.auth_config[name]
              Rails.root.join(

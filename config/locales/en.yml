@@ -2,6 +2,10 @@
 en:
   activemodel:
     attributes:
+      concatenation_form:
+        attachment_ids: Files
+        basename: Base filename
+        delete_originals: Delete original files after concatenation?
       sample/query:
         group: Group
       sample/search_condition:
@@ -18,6 +22,16 @@ en:
         condition: Condition
     errors:
       models:
+        concatenation_form:
+          attributes:
+            attachment_ids:
+              min_length: must have at least %{count} files selected
+              mismatching_attachable: must all belong to the same %{attachable_type}
+              mismatching_file_formats: must all have the same file format and compression
+              mismatching_file_types: must all have the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.
+              mismatching_paired_end_counts: must all be paired. Forward and reverse read file counts do not match.
+            basename:
+              invalid: must contain only letters, digits, '-', '.', and '_'.
         sample/search_condition:
           attributes:
             field:
@@ -436,6 +450,8 @@ en:
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
         title: Groups
+        treegrid:
+          aria_label: Groups listing
     projects:
       index:
         all: All
@@ -463,6 +479,10 @@ en:
           namespace_name_desc: Name, descending
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
+      treegrid:
+        aria_label:
+          all: All projects listing
+          personal: Personal projects listing
   data_exports:
     create:
       error: An error occurred while trying to create the data export. Please contact your system administrator if this error persists.'
@@ -684,6 +704,9 @@ en:
       accepted: must be accepted
       blank: can't be blank
       confirmation: doesn't match %{attribute}
+      date_greater_than: must be after %{date}
+      date_less_than: must be before %{date}
+      date_object_required: must be a date or datetime object
       empty: can't be empty
       equal_to: must be equal to %{count}
       even: must be even
@@ -975,6 +998,10 @@ en:
         label: Group project details navigation
         shared_namespaces: Shared groups and projects
         subgroups_and_projects: Subgroups and projects
+      treegrid:
+        aria_label:
+          shared_namespaces: Shared groups and projects listing
+          subgroups_and_projects: Subgroups and projects listing
     sidebar:
       activity: Activity
       bot_accounts: Bot Accounts
@@ -1246,11 +1273,13 @@ en:
         expires_at: Expiration Date
         integration_host: Integration ID
         last_used_at: Last Used
+        last_used_ips: Last Used IPs
         name: Token name
         revocation_date: Revocation Date
         scopes: Scopes
         status: Status
       never: Never
+      never_used: Never used
       revoke: Revoke
       revoke_aria_label: 'Revoke personal access token: %{name}'
       revoke_confirmation: Are you sure you want to revoke this personal access token?
@@ -1579,7 +1608,6 @@ en:
             basename_help: The base filename can contain only letters, digits, '-', '.', and '_'
             success: Files were successfully concatenated.
           modal:
-            description: 'The following files were selected to be concatenated:'
             submit_button: Concatenate
             title: Concatenate Files
         create:
@@ -1819,14 +1847,6 @@ en:
         title: Transfer Samples
   services:
     attachments:
-      concatenation:
-        filename_missing: Base filename can't be blank.
-        incorrect_attachable: All or some of then selected files do not belong to the sample.
-        incorrect_basename: The base filename can contain only letters, digits, '-', '.', and '_'
-        incorrect_fastq_file_types: Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files
-        incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
-        incorrect_file_types: Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.
-        no_files_selected: No files were selected to concatenate. Please select files then try again.
       destroy:
         associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
         does_not_belong_to_attachable: This attachment does not belong to this sample.

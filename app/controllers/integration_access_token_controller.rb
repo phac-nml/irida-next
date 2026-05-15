@@ -58,7 +58,7 @@ class IntegrationAccessTokenController < ApplicationController
     {
       name: SecureRandom.uuid.to_s,
       scopes: ['api'],
-      expires_at: token_lifespan.days.from_now,
+      expires_at: token_lifespan.days.from_now.to_date,
       integration: true,
       integration_host: caller_identifier
     }

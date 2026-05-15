@@ -6,7 +6,7 @@ require 'mocha/minitest'
 
 class PipelinesOverrides < ActiveSupport::TestCase
   setup do
-    @original_clone_repo_method = Irida::PipelineRepository.method(:clone_repo)
+    @original_mirror_repo_method = Irida::PipelineRepository.method(:mirror_repo)
     @pipeline_schema_file_dir = "#{ActiveStorage::Blob.service.root}/pipelines"
 
     # Read in schema file to json
@@ -16,29 +16,37 @@ class PipelinesOverrides < ActiveSupport::TestCase
       'test/fixtures/files/nextflow/samplesheet_schema_fastmatch.json'
     ).read
 
-    # Mock clone_repo to simulate Git operations
-    clone_repo_impl = lambda do |_uri, sha, clone_dir|
-      FileUtils.mkdir_p(clone_dir)
+    file_contents_at_impl = lambda do |sha, path|
       if ['2.0.2', '2.0.1', '2.0.0'].include?(sha)
         # iridanextexample
-        File.write(File.join(clone_dir, 'nextflow_schema.json'), body)
-        FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
-        File.write(File.join(clone_dir, 'assets', 'schema_input.json'), body)
+        body
       elsif ['0.4.1', '0.4.0'].include?(sha)
         # fastmatchirida
-        File.write(File.join(clone_dir, 'nextflow_schema.json'), nextflow_fastmatch_body)
-        FileUtils.mkdir_p(File.join(clone_dir, 'assets'))
-        File.write(File.join(clone_dir, 'assets', 'schema_input.json'), nextflow_samplesheet_fastmatch_body)
+        if path == 'nextflow_schema.json'
+          nextflow_fastmatch_body
+        elsif path == 'assets/schema_input.json'
+          nextflow_samplesheet_fastmatch_body
+        else
+          ''
+        end
       end
-      nil
     end
 
-    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, clone_repo_impl)
+    # Mock mirror_repo to simulate Git operations
+    mirror_repo_impl = lambda do |_uri, repo_dir|
+      FileUtils.mkdir_p(repo_dir)
+
+      Object.new.tap do |repo|
+        repo.define_singleton_method(:file_contents_at, file_contents_at_impl)
+      end
+    end
+
+    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, mirror_repo_impl)
   end
 
   teardown do
     FileUtils.remove_dir(@pipeline_schema_file_dir, true)
-    Irida::PipelineRepository.singleton_class.send(:define_method, :clone_repo, @original_clone_repo_method)
+    Irida::PipelineRepository.singleton_class.send(:define_method, :mirror_repo, @original_mirror_repo_method)
   end
 
   test 'pipelines with overrides' do

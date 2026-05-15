@@ -1,0 +1,15 @@
+# frozen_string_literal: true
+
+module ComboboxDatepicker
+  module V1
+    module Calendar
+      # Renders the calendar day grid.
+      class GridComponent < ::Component
+        def initialize(days_of_the_week:, calendar_id_header:)
+          @days_of_the_week = days_of_the_week
+          @calendar_id_header = calendar_id_header
+        end
+      end
+    end
+  end
+end

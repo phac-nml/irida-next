@@ -11,7 +11,7 @@ class NamespacePolicyTest < ActiveSupport::TestCase
   test 'named scope with expired memberships' do
     group_member = members(:group_four_member_david_doe)
     group_member.expires_at = 10.days.ago.to_date
-    group_member.save
+    group_member.save(validate: false)
 
     scoped_namespaces = @policy.apply_scope(Namespace, type: :relation, name: :manageable)
 
@@ -70,9 +70,9 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     policy = NamespacePolicy.new(user:)
     scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
 
-    # John Doe has manageable access to 29 namespaces
-    # (1 user namespace and 27 group namespaces)
-    assert_equal 32, scoped_namespaces.count
+    # John Doe has manageable access to 33 namespaces
+    # (1 user namespace and 32 group namespaces)
+    assert_equal 33, scoped_namespaces.count
 
     assert_not scoped_namespaces.include?(namespace_group_link.namespace)
 
@@ -85,9 +85,9 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
 
     # John Doe has manageable access to 30 namespaces (1 user namespace,
-    # 29 group namespaces, and 1 group namespace via a namespace
+    # 32 group namespaces, and 1 group namespace via a namespace
     # group link)
-    assert_equal 33, scoped_namespaces.count
+    assert_equal 34, scoped_namespaces.count
 
     assert scoped_namespaces.include?(namespace_group_link.namespace)
   end

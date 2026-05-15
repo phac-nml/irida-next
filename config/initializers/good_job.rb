@@ -28,6 +28,12 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
       class: 'PersonalAccessTokens::CleanupJob', # job class as a String, must be an ActiveJob job
       description: 'Permanently deletes expired and revoked personal access tokens.'
     },
+    unattached_blobs_cleanup_task: {
+      cron: '0 2 * * *', # Daily, 2 AM
+      class: 'UnattachedBlobsCleanupJob', # job class as a String, must be an ActiveJob job
+      kwargs: { days_old: 1 }, # number of days old blobs must be for deletion
+      description: 'Permanently deletes unattached blobs that have been around some time ago.'
+    },
     workflow_executions_destroy_task: {
       cron: '0 2 * * *', # Daily, 2 AM
       class: 'WorkflowExecutionsDestroyJob', # job class as a String, must be an ActiveJob job

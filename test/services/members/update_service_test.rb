@@ -60,6 +60,14 @@ module Members
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
 
+    test 'update group member expiration to nil' do
+      valid_params = { user: @group_member.user, expires_at: nil }
+
+      assert_changes -> { @group_member.expires_at }, to: nil do
+        Members::UpdateService.new(@group_member, @group, @user, valid_params).execute
+      end
+    end
+
     test 'update group member to OWNER role when the current user only has the Maintainer role' do
       group_member = members(:group_one_member_ryan_doe)
       valid_params = { user: group_member.user, access_level: Member::AccessLevel::OWNER }
@@ -133,6 +141,14 @@ module Members
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
       assert_equal :update_member?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+    end
+
+    test 'update project member expiration to nil' do
+      valid_params = { user: @project_member.user, expires_at: nil }
+
+      assert_changes -> { @project_member.expires_at }, to: nil do
+        Members::UpdateService.new(@project_member, @project_namespace, @user, valid_params).execute
+      end
     end
 
     test 'update project member to OWNER role when the current user only has the Maintainer role' do

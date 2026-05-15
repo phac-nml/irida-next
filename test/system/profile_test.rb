@@ -107,10 +107,10 @@ class ProfileTest < ApplicationSystemTestCase
     PersonalAccessTokens::CreateService.new(@user, valid_params).execute
 
     active_token_count = @user.personal_access_tokens.active.count
-    assert_equal 4, active_token_count
+    assert_equal 5, active_token_count
 
     expiring_token_count = @user.personal_access_tokens.expiring_in_two_weeks.count
-    assert_equal 2, expiring_token_count
+    assert_equal 3, expiring_token_count
 
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
@@ -142,6 +142,27 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text I18n.t('profiles.personal_access_tokens.create.success', name: 'my new token')
   end
 
+  test 'cannot create personal access token without expiration date if require_personal_access_token_expiry is set' do
+    Irida::CurrentSettings.current_application_settings.update(require_personal_access_token_expiry: true)
+
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    click_button I18n.t(:'profiles.personal_access_tokens.index.add_new_token')
+
+    within %(form[action="/-/profile/personal_access_tokens"]) do
+      fill_in 'Token name', with: 'my new token'
+      check 'api', allow_label_click: true
+      click_button I18n.t(:'profiles.personal_access_tokens.create.submit')
+    end
+
+    assert_no_text 'my new token'
+    assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
+                    count: @active_token_count)
+
+    assert_text I18n.t('common.date.errors.invalid_input')
+  end
+
   test 'cannot create personal access token without scope selection' do
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.access_tokens')
@@ -152,12 +173,23 @@ class ProfileTest < ApplicationSystemTestCase
       fill_in 'Token name', with: 'my new token'
       click_button I18n.t(:'profiles.personal_access_tokens.create.submit')
     end
+
+    error_message = I18n.t(:'errors.format',
+                           attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
+                           message: I18n.t(:'errors.messages.blank'))
+
     assert_no_text 'my new token'
     assert_selector(:xpath, "//span[contains(@class, 'token-status')]",
                     count: @active_token_count)
-    assert_text I18n.t(:'errors.format',
-                       attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
-                       message: I18n.t(:'errors.messages.blank'))
+    assert_text error_message
+    assert_selector %(form[action="/-/profile/personal_access_tokens"] [data-controller="form-error-summary"]),
+                    focused: true
+
+    within %(form[action="/-/profile/personal_access_tokens"] [data-controller="form-error-summary"]) do
+      click_link error_message
+    end
+
+    assert_selector %(form[action="/-/profile/personal_access_tokens"] input[type="checkbox"]), focused: true
   end
 
   test 'can revoke personal access tokens' do
@@ -277,6 +309,21 @@ class ProfileTest < ApplicationSystemTestCase
     within %(tr[id="#{dom_id(token_to_rotate)}"]) do
       assert_no_button I18n.t(:'personal_access_tokens.table.rotate')
     end
+  end
+
+  test 'can view last_used_ip of personal access tokens' do
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    not_used_pat = personal_access_tokens(:john_doe_non_expirable_pat)
+    used_pat = personal_access_tokens(:john_doe_valid_pat_used)
+
+    assert_selector 'div#access-tokens-table'
+    assert_selector "table tbody tr[id='personal_access_token_#{not_used_pat.id}'] td:nth-child(6)",
+                    text: I18n.t('personal_access_tokens.table.never_used')
+
+    assert_selector "table tbody tr[id='personal_access_token_#{used_pat.id}'] td:nth-child(6)",
+                    text: '192.168.1.1'
   end
 
   test 'empty personal access tokens state' do

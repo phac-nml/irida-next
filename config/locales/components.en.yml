@@ -191,6 +191,7 @@ en:
       aria_label:
         calendar: Calendar
         clear_selection: Clear date selection
+        dialog: Choose date
         next_month_button: Navigate to next month
         previous_month_button: Navigate to previous month
         select_month: Select month
@@ -199,7 +200,15 @@ en:
       clear_selection: Clear selection
       date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
       date_selection: Date Selection
-      days_of_week:
+      days_of_week_full:
+        friday: Friday
+        monday: Monday
+        saturday: Saturday
+        sunday: Sunday
+        thursday: Thursday
+        tuesday: Tuesday
+        wednesday: Wednesday
+      days_of_week_short:
         friday: Fri
         monday: Mon
         saturday: Sat
@@ -209,6 +218,7 @@ en:
         wednesday: Wed
       errors:
         invalid_date: Invalid date.
+        max_date_error: 'Maximum allowed date: '
         min_date_error: 'Earliest allowed date: '
       months:
         april: April
@@ -264,14 +274,16 @@ en:
     namespace_row:
       contents_component:
         created_at: Created %{date}
+        namespace_link:
+          aria-label: View %{namespace_type} with name %{namespace_name} and persistent unique identifier %{namespace_puid}
         projects:
-          aria-label: Projects
+          aria-label: View projects for %{namespace_type} with persistent unique identifier %{namespace_puid}
           tooltip: "%{count} projects in %{namespace_name}"
         samples:
-          aria-label: Samples
+          aria-label: View samples for %{namespace_type} with persistent unique identifier %{namespace_puid}
           tooltip: "%{count} samples in %{namespace_name}"
         subnamespaces:
-          aria-label: Subgroups
+          aria-label: View subgroups for %{namespace_type} with persistent unique identifier %{namespace_puid}
           tooltip: "%{count} subgroups in %{namespace_name}"
     nextflow:
       email_notification: Receive an email notification when your analysis has completed?

@@ -29,7 +29,10 @@ module Dashboard
       click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_selector '.treegrid-row', count: 20
 
-      click_link @project.human_name
+      click_link I18n.t(:'components.namespace_row.contents_component.namespace_link.aria-label',
+                        namespace_type: @project.namespace.model_name.human.downcase,
+                        namespace_name: @project.namespace.name,
+                        namespace_puid: @project.namespace.puid)
       assert_current_path(namespace_project_path(@project.parent, @project))
       assert_selector 'h1', text: @project.name
     end
@@ -50,7 +53,10 @@ module Dashboard
       click_on I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_selector '.treegrid-row', count: 20
 
-      click_link @project.human_name
+      click_link I18n.t(:'components.namespace_row.contents_component.namespace_link.aria-label',
+                        namespace_type: @project.namespace.model_name.human.downcase,
+                        namespace_name: @project.namespace.name,
+                        namespace_puid: @project.namespace.puid)
       assert_current_path(namespace_project_path(@project.parent, @project))
       assert_selector 'h1', text: @project.name
     end

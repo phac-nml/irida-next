@@ -45,7 +45,7 @@ gem 'bootsnap', require: false
 gem 'thruster', require: false
 
 # Use devise for auth
-gem 'devise', '~> 5.0.3'
+gem 'devise', '~> 5.0.4'
 
 # Use CORS for specifying safe urls for integrations that request access tokens
 gem 'rack-cors'
@@ -64,7 +64,7 @@ gem 'faraday-net_http_persistent', '~> 2.1'
 gem 'openssl', '~> 4.0'
 
 gem 'heroicon-rails', '>= 0.2.9'
-gem 'pathogen_view_components', github: 'phac-nml/pathogen-view-components', tag: 'v1.0.0'
+gem 'pathogen_view_components', github: 'phac-nml/pathogen-view-components', tag: 'v1.1.3'
 gem 'reactionview', '~> 0.3.0'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
@@ -109,7 +109,7 @@ gem 'activerecord_json_validator', '~> 3.1.0'
 gem 'active_storage_validations'
 gem 'aws-sdk-s3', require: false
 gem 'azure-blob', github: 'phac-nml/azure-blob', branch: 'put-blob-from-url_single_and_multiple', require: false
-gem 'google-cloud-storage', '~> 1.59', require: false
+gem 'google-cloud-storage', '~> 1.60', require: false
 
 # job queueing
 gem 'good_job', '~> 4.18.2'

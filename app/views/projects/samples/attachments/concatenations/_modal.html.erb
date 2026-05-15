@@ -1,45 +1,52 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
-  <%= turbo_frame_tag("concatenation-alert") %>
 
-  <div
-    class="
-      mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400
-    "
-  >
-    <p class="mb-4"><%= t(".description") %></p>
-    <div
-      class="overflow-auto scrollbar"
-      data-controller="projects--samples--attachments--files"
-      data-projects--samples--attachments--files-target="field"
-    ></div>
-  </div>
-
-  <%= form_for(:concatenation, url: namespace_project_sample_attachments_concatenation_path,
+  <%= form_with(model: @concatenation_form, url: namespace_project_sample_attachments_concatenation_path,
     data: {
       controller: "projects--samples--attachments--selected-attachments",
-      'projects--samples--attachments--selected-attachments-field-name-value':"concatenation[attachment_ids]",
+      'projects--samples--attachments--selected-attachments-field-name-value':"concatenation_form[attachment_ids]",
       "projects--samples--attachments--selected-attachments-storage-key-value": "files-#{@sample.id}",
       action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear'
     }, method: :post, html: { novalidate: true }) do |form| %>
-    <div data-projects--samples--attachments--selected-attachments-target="field"></div>
+    <%= form_error_summary(form) %>
 
     <div class="grid gap-4">
+      <% invalid_attachment_ids = @concatenation_form.errors.include?(:attachment_ids) %>
+
       <%= render partial: "shared/form/required_field_legend" %>
 
-      <% invalid_basename = @sample.errors.include?(:basename) %>
-      <div class="form-field <%= 'invalid' if invalid_basename%>">
+      <%= tag.div class: class_names("form-field", 'invalid': invalid_attachment_ids) do %>
+        <%= form.label :attachment_ids, data: { required: true } %>
+
+        <%= tag.div class: "mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400",
+                    tabindex: 0,
+                    aria: {
+                      label: form.field_id(:attachment_ids),
+                      describedby: (invalid_attachment_ids ? form.field_id(:attachment_ids, "error") : nil)
+                    } do %>
+          <div
+            class="scrollbar overflow-auto"
+            data-controller="projects--samples--attachments--files"
+            data-projects--samples--attachments--files-target="field"
+          ></div>
+        <% end %>
+
+        <div data-projects--samples--attachments--selected-attachments-target="field"></div>
+
+        <% if invalid_attachment_ids %>
+          <%= render "shared/form/field_errors",
+          id: form.field_id(:attachment_ids, "error"),
+          errors: @concatenation_form.errors.full_messages_for(:attachment_ids) %>
+        <% end %>
+      <% end %>
+
+      <% invalid_basename = @concatenation_form.errors.include?(:basename) %>
+
+      <%= tag.div class: class_names("form-field", 'invalid': invalid_basename) do %>
         <%= form.label :basename, data: { required: true } %>
+
         <%= form.text_field :basename,
                         required: true,
-                        value:
-                          (
-                            if concatenation_params.nil?
-                              ""
-                            else
-                              concatenation_params[:basename]
-                            end
-                          ),
                         pattern: /^[[a-zA-Z0-9_\-\.]]*$/,
                         title:
                           t(
@@ -54,31 +61,21 @@
                           required: true,
                         },
                         class: "form-control" %>
+
         <% if invalid_basename %>
           <%= render "shared/form/field_errors",
           id: form.field_id(:basename, "error"),
-          errors: @sample.errors[:basename] %>
+          errors: @concatenation_form.errors.full_messages_for(:basename) %>
         <% end %>
+
         <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
           <%== t(:"projects.samples.attachments.concatenations.create.basename_help") %>
         </span>
-      </div>
+      <% end %>
 
       <div class="flex items-center">
-        <%= form.check_box :delete_originals,
-                       {
-                         checked:
-                           (
-                             if !concatenation_params.nil? &&
-                                  concatenation_params[:delete_originals]
-                               true
-                             else
-                               false
-                             end
-                           ),
-                       },
-                       true,
-                       false %>
+        <%= form.check_box :delete_originals %>
+
         <%= form.label :delete_originals,
                    class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
       </div>
