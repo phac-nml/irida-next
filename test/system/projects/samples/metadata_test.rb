@@ -817,10 +817,10 @@ module Projects
         fill_in 'sample_value_2', with: '     value 4 '
         click_on I18n.t('projects.samples.metadata.form.submit_button')
 
+        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
+
         assert_text I18n.t('projects.samples.metadata.fields.create.multi_success',
                            keys: ['metadata field 3', 'metadata field 4'].join(', '))
-
-        assert_no_selector 'h1.dialog--title', text: I18n.t('projects.samples.metadata.new_metadata_modal.title')
 
         assert_selector 'table tbody tr', count: 4
         assert_selector 'table tbody tr:nth-child(3) td:nth-child(2)', text: 'metadata field 3'
