@@ -212,7 +212,7 @@ module AdvancedSearch
 
       assert_not record.valid?
       second = record.groups.first.conditions.last
-      assert second.errors.added?(:operator, :taken)
+      assert second.errors.added?(:field, :taken)
 
       record2 = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [
@@ -233,7 +233,7 @@ module AdvancedSearch
 
       assert_not record3.valid?
       third = record3.groups.first.conditions.last
-      assert third.errors.added?(:operator, :taken)
+      assert third.errors.added?(:field, :taken)
     end
   end
 end

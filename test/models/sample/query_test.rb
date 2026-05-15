@@ -103,7 +103,7 @@ class QueryTest < ActiveSupport::TestCase
     assert_not query.valid?
     assert query.errors.added? :groups, :invalid
     assert query.groups[0].errors.added? :conditions, :invalid
-    assert query.groups[0].conditions[1].errors.added? :operator, :taken
+    assert query.groups[0].conditions[1].errors.added? :field, :taken
   end
 
   test 'invalid advanced query with non unique fields using between operator' do
@@ -120,7 +120,7 @@ class QueryTest < ActiveSupport::TestCase
     assert_not query.valid?
     assert query.errors.added? :groups, :invalid
     assert query.groups[0].errors.added? :conditions, :invalid
-    assert query.groups[0].conditions[1].errors.added? :operator, :taken
+    assert query.groups[0].conditions[1].errors.added? :field, :taken
   end
 
   test 'valid advanced query with non unique fields using between operator' do
