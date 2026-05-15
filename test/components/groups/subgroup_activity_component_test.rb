@@ -82,7 +82,9 @@ module Groups
 
     test 'create subgroup and then transfer to another parent group activity' do
       group2 = groups(:group_two)
-      ::Groups::TransferService.new(@subgroup, @user).execute(group2)
+      transfer_form = ::TransferForm.new({ new_namespace_id: group2.id }
+      .merge(group_id: @subgroup.id, group_name: @subgroup.name, group_path: @subgroup.path))
+      ::Groups::TransferService.new(@subgroup, @user, transfer_form).execute(group2)
 
       activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
 
