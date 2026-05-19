@@ -24,7 +24,7 @@ module Projects
                                              format: :turbo_stream, group_links_q: { s: 'group_name desc' })
       assert_response :success
       assert_sort_state(1, 'descending')
-      group_names = Nokogiri::HTML(response.body).css('table tbody tr td:first-child').map { |node| node.text.squish }
+      group_names = Nokogiri::HTML(response.body).css('table tbody tr td:first-child').map { |node| node.text.squish } # rubocop:disable Rails/ResponseParsedBody
       assert_equal group_link14.group.name, group_names.first
       assert_equal group_link2.group.name, group_names.last
 
@@ -32,7 +32,7 @@ module Projects
                                              format: :turbo_stream, group_links_q: { s: 'group_access_level asc' })
       assert_response :success
       assert_sort_state(4, 'ascending')
-      group_names = Nokogiri::HTML(response.body).css('table tbody tr td:first-child').map { |node| node.text.squish }
+      group_names = Nokogiri::HTML(response.body).css('table tbody tr td:first-child').map { |node| node.text.squish } # rubocop:disable Rails/ResponseParsedBody
       assert_equal group_link5.group.name, group_names.first
       assert_equal group_link14.group.name, group_names.last
 

@@ -192,13 +192,13 @@ module WorkflowExecutions
     private
 
     def parsed_v2_files_payload
-      doc = Nokogiri::HTML(response.body)
+      doc = Nokogiri::HTML(response.body) # rubocop:disable Rails/ResponseParsedBody
 
       JSON.parse(doc.at_css('[data-payload-type="files"]')['data-files'])
     end
 
     def parsed_v1_files_payload
-      doc = Nokogiri::HTML(response.body)
+      doc = Nokogiri::HTML(response.body) # rubocop:disable Rails/ResponseParsedBody
 
       JSON.parse(doc.at_css('[data-controller="nextflow--v1--file"]')['data-nextflow--v1--file-files-value'])
     end
