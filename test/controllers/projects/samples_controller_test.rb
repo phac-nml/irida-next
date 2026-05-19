@@ -356,6 +356,428 @@ module Projects
       assert_response :success
     end
 
+    test 'POST query_v2 returns 404 when advanced_search_v2 flag is off' do
+      Flipper.disable(:advanced_search_v2)
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: '{"combinator":"and","nodes":[]}' },
+           as: :turbo_stream
+      assert_response :not_found
+    end
+
+    test 'POST query_v2 returns 200 when advanced_search_v2 flag is on with valid query' do
+      Flipper.enable(:advanced_search_v2)
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: '{"combinator":"and","nodes":[]}' },
+           as: :turbo_stream
+      assert_response :ok
+    end
+
+    test 'POST query_v2 defaults blank pagination params safely' do
+      Flipper.enable(:advanced_search_v2)
+      query_json = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: @sample1.name
+          }
+        ]
+      }.to_json
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: query_json, page: '', limit: '' },
+           as: :turbo_stream
+
+      assert_response :ok
+      assert_equal query_json, persisted_v2_query
+      assert_equal 2, search_state_version
+    end
+
+    test 'POST query_v2 returns 406 for HTML without mutating persisted V2 state' do
+      Flipper.enable(:advanced_search_v2)
+      persisted_query = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: @sample1.name
+          }
+        ]
+      }.to_json
+      rejected_query = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: samples(:sample2).name
+          }
+        ]
+      }.to_json
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: persisted_query },
+           as: :turbo_stream
+      assert_response :ok
+      assert_equal persisted_query, persisted_v2_query
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: rejected_query }
+      assert_response :not_acceptable
+      assert_equal persisted_query, persisted_v2_query
+    end
+
+    test 'GET index rehydrates persisted query_v2 results when advanced_search_v2 flag is on' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :ok
+
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+
+      table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
+      assert_includes table_text, @sample1.name
+      assert_not_includes table_text, sample2.name
+    end
+
+    test 'GET index defaults blank pagination params safely for persisted query_v2' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :ok
+
+      get namespace_project_samples_url(@namespace, @project), params: { page: '', limit: '' }
+      assert_response :success
+
+      table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
+      assert_includes table_text, @sample1.name
+      assert_not_includes table_text, sample2.name
+    end
+
+    test 'POST query_v2 activates V2 state so the next GET index keeps V2 results' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+
+      get namespace_project_samples_url(@namespace, @project),
+          params: { q: { name_or_puid_cont: sample2.name } }
+      assert_response :success
+      assert_equal sample2.name, session["samples_#{@project.id}_search_params"]['name_or_puid_cont']
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :ok
+      assert_equal sample2.name, session["samples_#{@project.id}_search_params"]['name_or_puid_cont']
+      assert_equal 2, search_state_version
+
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+
+      table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
+      assert_includes table_text, @sample1.name
+      assert_not_includes table_text, sample2.name
+    end
+
+    test 'GET select uses persisted query_v2 result set when advanced_search_v2 flag is on' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :ok
+
+      get select_namespace_project_samples_url(@namespace, @project),
+          params: { select: 'on', timestamp: 1.day.from_now.iso8601 }
+      assert_response :success
+
+      assert_equal [@sample1.id], rendered_selected_sample_ids
+      assert_not_includes rendered_selected_sample_ids, sample2.id
+    end
+
+    test 'POST query_v2 returns 422 for invalid json' do
+      Flipper.enable(:advanced_search_v2)
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: '{bad json' },
+           as: :turbo_stream
+      assert_response :unprocessable_content
+    end
+
+    test 'POST query_v2 returns 422 for nested form payloads' do
+      Flipper.enable(:advanced_search_v2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: []
+             }
+           },
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_nil persisted_v2_query
+    end
+
+    test 'POST query_v2 returns 422 for blank payload' do
+      Flipper.enable(:advanced_search_v2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: '' },
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_nil persisted_v2_query
+    end
+
+    test 'POST query_v2 returns 422 for object-valued condition payloads' do
+      Flipper.enable(:advanced_search_v2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: { bad: 'value' }
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_nil persisted_v2_query
+    end
+
+    test 'POST query_v2 returns 422 for non-string condition fields' do
+      Flipper.enable(:advanced_search_v2)
+
+      [
+        ['name'],
+        { name: 'sample' }
+      ].each do |field|
+        post query_namespace_project_samples_path(@namespace, @project),
+             params: {
+               query_v2: {
+                 combinator: 'and',
+                 nodes: [
+                   {
+                     type: 'condition',
+                     field:,
+                     operator: 'equals',
+                     value: @sample1.name
+                   }
+                 ]
+               }.to_json
+             },
+             as: :turbo_stream
+
+        assert_response :unprocessable_content
+        assert_nil persisted_v2_query
+      end
+    end
+
+    test 'POST query_v2 clears persisted state for invalid parseable trees' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :ok
+      assert_not_nil persisted_v2_query
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'and',
+               nodes: [
+                 {
+                   type: 'condition',
+                   field: 'not_a_field',
+                   operator: 'equals',
+                   value: @sample1.name
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+      assert_response :unprocessable_content
+      assert_nil persisted_v2_query
+
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+
+      table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
+      assert_includes table_text, @sample1.name
+      assert_includes table_text, sample2.name
+    end
+
+    test 'POST query_v2 clears persisted state when results execution fails' do
+      Flipper.enable(:advanced_search_v2)
+      query_json = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: @sample1.name
+          }
+        ]
+      }.to_json
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: query_json },
+           as: :turbo_stream
+      assert_response :ok
+      assert_equal query_json, persisted_v2_query
+
+      Sample::V2::Query.any_instance.stubs(:results).raises(ArgumentError)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: query_json },
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_nil persisted_v2_query
+    end
+
+    test 'POST query_v2 returns 422 for empty nested subgroups' do
+      Flipper.enable(:advanced_search_v2)
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: {
+             query_v2: {
+               combinator: 'or',
+               nodes: [
+                 {
+                   type: 'group',
+                   combinator: 'or',
+                   nodes: []
+                 },
+                 {
+                   type: 'condition',
+                   field: 'name',
+                   operator: 'equals',
+                   value: '__definitely_missing__'
+                 }
+               ]
+             }.to_json
+           },
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_nil persisted_v2_query
+    end
+
+    test 'POST query_v2 returns 422 for payloads larger than persistence limit' do
+      Flipper.enable(:advanced_search_v2)
+      sample2 = samples(:sample2)
+      oversized_query = {
+        combinator: 'and',
+        nodes: [
+          {
+            type: 'condition',
+            field: 'name',
+            operator: 'equals',
+            value: 'a' * Projects::SamplesController::MAX_QUERY_V2_SIZE
+          }
+        ]
+      }.to_json
+
+      assert_operator oversized_query.bytesize, :>, Projects::SamplesController::MAX_QUERY_V2_SIZE
+
+      post query_namespace_project_samples_path(@namespace, @project),
+           params: { query_v2: oversized_query },
+           as: :turbo_stream
+      assert_response :unprocessable_content
+      assert_nil persisted_v2_query
+
+      get namespace_project_samples_url(@namespace, @project)
+      assert_response :success
+
+      table_text = Nokogiri::HTML(response.body).at_css('#samples-table')&.text.to_s
+      assert_includes table_text, @sample1.name
+      assert_includes table_text, sample2.name
+    end
+
     private
 
     def rendered_sample_puids
@@ -366,6 +788,23 @@ module Projects
     def rendered_search_field_value
       doc = Nokogiri::HTML(response.body)
       doc.at_css('input[data-test-selector="search-field-input"]')['value']
+    end
+
+    def search_state
+      session["samples_#{@project.id}_search_state"]
+    end
+
+    def persisted_v2_query
+      search_state&.dig('query_v2') || search_state&.dig(:query_v2)
+    end
+
+    def search_state_version
+      search_state&.dig('version') || search_state&.dig(:version)
+    end
+
+    def rendered_selected_sample_ids
+      doc = Nokogiri::HTML(response.body)
+      JSON.parse(doc.at_css('[data-controller="table-selection"]')['data-table-selection-ids-value'])
     end
   end
 end

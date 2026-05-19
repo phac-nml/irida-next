@@ -7,6 +7,8 @@ module Projects
     include Storable
     include SampleAttachment
 
+    MAX_QUERY_V2_SIZE = 10_000 # bytes
+
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
     before_action :query, only: %i[index search select]
@@ -17,10 +19,9 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+      load_index_results
       @samples = @samples.includes(project: { namespace: :parent })
       @has_samples = @project.samples.size.positive?
-      @results_message = results_message
     end
 
     def search
@@ -33,6 +34,21 @@ module Projects
           end
         end
       end
+    end
+
+    def query_v2
+      return not_found unless Flipper.enabled?(:advanced_search_v2)
+
+      authorize! @project, to: :sample_listing?
+      return invalid_v2_query_response if query_v2_too_large?(params[:query_v2])
+
+      @v2_query = v2_search_service.build_query(raw_json: params[:query_v2],
+                                                sort: params[:sort] || 'updated_at desc')
+      return invalid_v2_query_response unless @v2_query.valid?
+
+      respond_to_v2_query
+    rescue AdvancedSearch::V2::Serializer::ParseError
+      invalid_v2_query_response
     end
 
     def show
@@ -91,7 +107,7 @@ module Projects
 
       return if params[:select].blank?
 
-      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params[:timestamp].to_datetime).pluck(:id)
+      @sample_ids = selection_scope.reorder(nil).where(updated_at: ..params[:timestamp].to_datetime).pluck(:id)
     end
 
     private
@@ -197,6 +213,47 @@ module Projects
       :"#{controller_name}_#{@project.id}_search_params"
     end
 
+    def search_state_key
+      :"#{controller_name}_#{@project.id}_search_state"
+    end
+
+    def persist_v2_query(raw_json)
+      return if raw_json.blank?
+
+      v2_search_service.store_v2_query(raw_json)
+    end
+
+    def load_index_results
+      v2_query = v2_search_service.persisted_v2_query_for_listing
+      if v2_query && (v2_results = v2_search_service.execute_v2_query(v2_query))
+        @pagy, @samples = v2_results
+        @results_message = nil
+      else
+        @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+        @results_message = results_message
+      end
+    end
+
+    def selection_scope
+      v2_search_service.selection_scope(fallback_scope: @query.results)
+    end
+
+    def respond_to_v2_query
+      respond_to do |format|
+        format.turbo_stream do
+          if (v2_results = v2_search_service.execute_v2_query(@v2_query))
+            @pagy, @samples = v2_results
+            @samples = @samples.includes(project: { namespace: :parent })
+            persist_v2_query(params[:query_v2])
+            render :query_v2, status: :ok
+          else
+            head :unprocessable_content
+          end
+        end
+        format.html { head :not_acceptable }
+      end
+    end
+
     def query
       authorize! @project, to: :sample_listing?
 
@@ -241,17 +298,54 @@ module Projects
     end
 
     def search_params
-      updated_params = update_store(search_key,
-                                    params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access
-      updated_params.slice!('name_or_puid_cont', 'name_or_puid_in', 'groups_attributes',
-                            'metadata_template', 'sort')
+      updated_params = sanitized_search_params
+      service = v2_search_service(search_params: updated_params)
+      service.activate_v1_search! if service.request_v1_filters_present?
 
-      if !updated_params.key?(:sort) ||
-         (updated_params[:metadata_template] == 'none' && updated_params['sort']&.match?(/metadata_/))
+      if reset_sort?(updated_params)
         updated_params['sort'] = 'updated_at desc'
         update_store(search_key, updated_params)
       end
       updated_params
+    end
+
+    def clear_persisted_v2_query
+      v2_search_service.clear_persisted_v2_query
+    end
+
+    def invalid_v2_query_response
+      clear_persisted_v2_query
+      head :unprocessable_content
+    end
+
+    def query_v2_too_large?(raw_json)
+      raw_json.present? && raw_json.to_s.bytesize > MAX_QUERY_V2_SIZE
+    end
+
+    def sanitized_search_params
+      update_store(search_key,
+                   params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access.tap do |updated_params|
+        updated_params.slice!('name_or_puid_cont', 'name_or_puid_in', 'groups_attributes',
+                              'metadata_template', 'sort')
+      end
+    end
+
+    def reset_sort?(search_params)
+      !search_params.key?(:sort) ||
+        (search_params[:metadata_template] == 'none' && search_params['sort']&.match?(/metadata_/))
+    end
+
+    def v2_search_service(search_params: @search_params || {})
+      ::Samples::V2::SearchService.new(
+        project: @project,
+        session:,
+        params:,
+        context: {
+          action_name:,
+          search_params:,
+          search_state_key:
+        }
+      )
     end
 
     def page_title

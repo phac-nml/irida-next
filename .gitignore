@@ -83,3 +83,6 @@ devenv.local.nix
 
 # pre-commit
 .pre-commit-config.yaml
+
+# Local planning/agent state
+.planning/
