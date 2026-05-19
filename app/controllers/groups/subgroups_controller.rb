@@ -2,7 +2,7 @@
 
 module Groups
   # Controller actions for group subgroups and projects
-  class SubgroupsController < ApplicationController
+  class SubgroupsController < Groups::ApplicationController
     before_action :group, only: %i[index]
 
     def index
@@ -13,17 +13,13 @@ module Groups
     private
 
     def render_subgroup
-      @group = Group.find(params[:parent_id])
+      @group = Group.find(params.expect(:parent_id))
       @children = namespace_children
       @level = params[:level].to_i
       @posinset = params[:posinset].to_i
       @setsize = params[:setsize].to_i
       @tabindex = params[:tabindex].to_i
       render :subgroup
-    end
-
-    def group
-      @group ||= Group.find_by_full_path(request.params[:group_id] || request.params[:id]) # rubocop:disable Rails/DynamicFindBy
     end
 
     def namespace_children

@@ -37,8 +37,7 @@ module Groups
     end
 
     def group_link_namespace
-      @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
-      @group
+      group
     end
   end
 end

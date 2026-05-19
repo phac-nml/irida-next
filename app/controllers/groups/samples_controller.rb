@@ -39,7 +39,7 @@ module Groups
 
       return if params[:select].blank?
 
-      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params[:timestamp].to_datetime).pluck(:id)
+      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime).pluck(:id)
     end
 
     private
@@ -141,12 +141,15 @@ module Groups
     end
 
     def search_params
-      updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
-      updated_params.slice!('name_or_puid_cont', 'name_or_puid_in', 'groups_attributes', 'metadata_template', 'sort')
+      updated_params = update_store(
+        search_key,
+        params.fetch(:q, {})
+              .permit(:name_or_puid_cont, :name_or_puid_in, :metadata_template, :sort, groups_attributes: {})
+      ).with_indifferent_access
 
-      if !updated_params.key?('sort') ||
-         (updated_params[:metadata_template] == 'none' && updated_params['sort']&.match?(/metadata_/))
-        updated_params['sort'] = 'updated_at desc'
+      if !updated_params.key?(:sort) ||
+         (updated_params[:metadata_template] == 'none' && updated_params[:sort]&.match?(/metadata_/))
+        updated_params[:sort] = 'updated_at desc'
         update_store(search_key, updated_params)
       end
       updated_params

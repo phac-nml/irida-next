@@ -150,11 +150,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def parent_group
-    @group = Group.find(params[:parent_id]) if params[:parent_id]
-  end
-
-  def group
-    @group ||= Group.find_by_full_path(request.params[:group_id] || request.params[:id]) # rubocop:disable Rails/DynamicFindBy
+    @group = Group.find_by(params.fetch(:parent_id, nil))
   end
 
   def group_params
