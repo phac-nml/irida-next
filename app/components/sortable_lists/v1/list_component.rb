@@ -8,8 +8,16 @@ module SortableLists
 
       # rubocop:disable Metrics/ParameterLists
 
-      def initialize(id: nil, title: nil, list_items: [], required: false, describedby: nil, instructions_id: nil, interactive: true,
-                     **system_arguments)
+      def initialize(
+        id: nil,
+        title: nil,
+        list_items: [],
+        required: false,
+        describedby: nil,
+        instructions_id: nil,
+        interactive: true,
+        **system_arguments
+      )
         @id = id
         @title = title
         @list_items = list_items
