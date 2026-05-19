@@ -13,7 +13,7 @@ module Projects
     private
 
     def project
-      path = [params[:namespace_id], params[:project_id]].join('/')
+      path = [params.expect(:namespace_id), params.expect(:project_id)].join('/')
       if defined?(@project)
         @project
       else
