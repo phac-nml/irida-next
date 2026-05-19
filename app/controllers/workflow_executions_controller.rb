@@ -25,7 +25,7 @@ class WorkflowExecutionsController < ApplicationController
   private
 
   def workflow_execution
-    @workflow_execution = WorkflowExecution.find_by!(id: params[:id], submitter: current_user)
+    @workflow_execution = WorkflowExecution.find_by!(id: params.expect(:id), submitter: current_user)
   end
 
   def load_workflows
