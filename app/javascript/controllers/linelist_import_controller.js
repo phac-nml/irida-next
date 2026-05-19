@@ -42,7 +42,9 @@ export default class extends Controller {
     };
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
+    event.stopPropagation();
     this._worker?.terminate();
     this._worker ||= this.#buildWorker();
     this.#processRows();
