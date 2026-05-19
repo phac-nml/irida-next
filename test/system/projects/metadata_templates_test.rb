@@ -196,7 +196,7 @@ module Projects
 
       find('input#metadata_template_name').fill_in with: 'Template with missing fields'
       submit_button_text = I18n.t('metadata_templates.new_template_dialog.submit_button')
-      submit_button = find("input[type='submit'][value='#{submit_button_text}']", visible: :all)
+      submit_button = find("button[type='submit']", text: submit_button_text, visible: :all)
       execute_script("arguments[0].removeAttribute('disabled')", submit_button)
       click_button submit_button_text
 
@@ -205,7 +205,7 @@ module Projects
       end
 
       assert_selector 'ul#selected-list:focus'
-      assert_selector "ul#selected-list[aria-describedby='metadata_template_fields_error']"
+      assert_selector "ul#selected-list[aria-describedby*='metadata_template_fields_error']"
     end
 
     test 'cannot create a template with duplicate fields with same ordering in another template' do
