@@ -32,7 +32,7 @@ class ComboboxDatepickerComponentPreview < ViewComponent::Preview
     combobox_datepicker(
       id: 'test_id',
       input_name: 'test_input_name',
-      max_date: 365.days.from.now
+      max_date: 365.days.from_now
     )
   end
 end
