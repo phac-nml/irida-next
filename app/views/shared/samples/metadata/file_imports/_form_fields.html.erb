@@ -7,21 +7,25 @@
     <%= t(".namespace.description_html") %>
   </p>
 
-  <div
-    role="alert"
-    class="
+  <%= tag.div(
+    role: "alert",
+    class: "
       mb-2 flex hidden items-center border-l-4 border-red-300 bg-red-50 p-4 text-red-800 dark:border-red-800
       dark:bg-slate-800 dark:text-red-400
-    "
-    aria-hidden="true"
-    data-metadata--file-import-target="error"
-  >
+    ",
+    aria: {
+      hidden: true,
+    },
+    data: {
+      "#{controller}-target": "error",
+    },
+  ) do %>
     <span class="inline shrink-0"><%= icon(:warning_circle, size: :sm, class: "mr-3 stroke-2") %></span>
 
     <div>
       <div class="font-medium whitespace-break-spaces"><%= t(".no_valid_metadata") %></div>
     </div>
-  </div>
+  <% end %>
 
   <%= render partial: "shared/form/required_field_legend" %>
 
@@ -40,7 +44,7 @@
              # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
              "text/csv,.tsv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
            data: {
-             action: "change->metadata--file-import#readFile",
+             action: "change->#{controller}#readFile",
              "attachment-upload-target": "attachmentsInput",
            },
            aria: {
@@ -71,8 +75,8 @@
                         { prompt: t(".select_sample_id_column") },
                         required: true,
                         data: {
-                          "metadata--file-import-target": "sampleIdColumn",
-                          action: "change->metadata--file-import#changeSampleIDInput",
+                          "#{controller}-target": "sampleIdColumn",
+                          action: "change->#{controller}#changeSampleIDInput",
                         },
                         class:
                           "disabled:bg-slate-50 disabled:text-slate-900 disabled:dark:bg-slate-700 disabled:dark:placeholder-slate-400 disabled:dark:text-white",
@@ -87,7 +91,15 @@
     <%= render SortableLists::V1::ListItemComponent.new(list_item: "NAME_HERE") %>
   </template>
 
-  <div data-metadata--file-import-target="metadataColumns" aria-hidden="true" class="grid hidden gap-4">
+  <%= tag.div(
+    data: {
+      "#{controller}-target": "metadataColumns",
+    },
+    aria: {
+      hidden: true,
+    },
+    class: "grid hidden gap-4",
+  ) do %>
     <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100"><%= t(".metadata_columns") %></h2>
 
     <%= render Viral::SortableListsGuidanceComponent.new(
@@ -118,7 +130,7 @@
                 required: true,
               ) %>
     <% end %>
-  </div>
+  <% end %>
 
   <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
 
@@ -152,10 +164,10 @@
                         data: {
                           turbo_frame: "_top",
                           action:
-                            "viral--dialog#setClosable click->sortable-lists--v1--two-lists-selection#constructParams click->metadata--file-import#handleSubmit",
+                            "viral--dialog#setClosable click->sortable-lists--v1--two-lists-selection#constructParams click->#{controller}#handleSubmit",
                           "viral--dialog-closable-param": "false",
                           "sortable-lists--v1--two-lists-selection-target": "submitBtn",
-                          "metadata--file-import-target": "submitButton",
+                          "#{controller}-target": "submitButton",
                           "attachment-upload-target": "submitButton",
                         },
                         disabled: true,

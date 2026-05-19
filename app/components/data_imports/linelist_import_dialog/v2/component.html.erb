@@ -1,14 +1,17 @@
 <% linelist_data = {
-  controller:"linelist-import metadata--file-import sortable-lists--v1--two-lists-selection",
+  controller:"linelist-import sortable-lists--v1--two-lists-selection",
   "sortable-lists--v1--two-lists-selection-selected-list-value": "selected-list",
   "sortable-lists--v1--two-lists-selection-available-list-value": "available-list",
   "sortable-lists--v1--two-lists-selection-field-name-value": "file_import[metadata_columns][]",
-  "metadata--file-import-sortable-lists--v1--two-lists-selection-outlet": "#import-metadata-dialog-content",
-  action: "metadata--file-import:sendMetadata->sortable-lists--v1--two-lists-selection#updateMetadataListing",
-  "metadata--file-import-refresh-outlet": "[data-controller='refresh']",
+  "linelist-import-sortable-lists--v1--two-lists-selection-outlet": "#import-metadata-dialog-content",
+  action: "linelist-import:sendMetadata->sortable-lists--v1--two-lists-selection#updateMetadataListing",
+  "linelist-import-refresh-outlet": "[data-controller='refresh']",
   "attachment-upload-uploading-text-value": t('shared.samples.metadata.file_imports.dialog.uploading'),
   "attachment-upload-success-text-value": t('common.upload.uploaded_successfully'),
-  "attachment-upload-error-fallback-text-value": t('common.upload.failed')
+  "attachment-upload-error-fallback-text-value": t('common.upload.failed'),
+  "linelist-import-graphql-url-value": graphql_url,
+  "linelist-import-project-puid-value": @project&.puid,
+  "linelist-import-group-puid-value": @group&.puid,
 } %>
 
 <%= viral_dialog(open: true, size: :large) do |dialog| %>
@@ -20,10 +23,12 @@
 
     <%= tag.div id: "import-metadata-dialog-content", data: linelist_data do %>
       <%= form_for(:file_import, url: "#", method: :get, data: {
-        action: "submit->viral--dialog#close submit->linelist-import#submit"
+        action: "submit-end->viral--dialog#close",
       }) do |form| %>
         <%= render partial: 'shared/samples/metadata/file_imports/form_fields', locals: {
-        form: form, broadcast_target: @broadcast_target } %>
+          broadcast_target: @broadcast_target,
+          controller: "linelist-import",
+          form: form } %>
       <% end %>
     <% end %>
   <% end %>
