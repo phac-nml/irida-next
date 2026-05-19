@@ -150,7 +150,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def parent_group
-    @group = Group.find_by(params.fetch(:parent_id, nil))
+    return unless params.key?(:parent_id)
+
+    @group = Group.find(params.expect(:parent_id))
   end
 
   def group_params
