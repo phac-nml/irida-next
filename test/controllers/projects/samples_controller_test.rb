@@ -180,15 +180,13 @@ module Projects
     test 'should handle metadata template none' do
       get namespace_project_samples_path(@namespace, @project), params: { q: { metadata_template: 'none' } }
       assert_response :success
-      doc = Nokogiri::HTML(response.body)
-      assert doc.at_css('turbo-frame[src*="metadata_template=none"]')
+      assert response.parsed_body.at_css('turbo-frame[src*="metadata_template=none"]')
     end
 
     test 'should handle metadata template all' do
       get namespace_project_samples_path(@namespace, @project), params: { q: { metadata_template: 'all' } }
       assert_response :success
-      doc = Nokogiri::HTML(response.body)
-      assert doc.at_css('turbo-frame[src*="metadata_template=all"]')
+      assert response.parsed_body.at_css('turbo-frame[src*="metadata_template=all"]')
     end
 
     test 'should apply default sort and support sorting project samples' do
@@ -359,13 +357,11 @@ module Projects
     private
 
     def rendered_sample_puids
-      doc = Nokogiri::HTML(response.body)
-      doc.css('#samples-table table tbody tr th:first-child').map { |node| node.text.strip }
+      response.parsed_body.css('#samples-table table tbody tr th:first-child').map { |node| node.text.strip }
     end
 
     def rendered_search_field_value
-      doc = Nokogiri::HTML(response.body)
-      doc.at_css('input[data-test-selector="search-field-input"]')['value']
+      response.parsed_body.at_css('input[data-test-selector="search-field-input"]')['value']
     end
   end
 end

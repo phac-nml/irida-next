@@ -20,11 +20,6 @@ module Groups
       @authorize_object = group
     end
 
-    def group
-      @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
-      @group
-    end
-
     protected
 
     def context_crumbs

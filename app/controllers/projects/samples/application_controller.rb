@@ -9,7 +9,7 @@ module Projects
       private
 
       def sample
-        @sample = @project.samples.find_by(id: params[:sample_id]) || not_found
+        @sample = @project.samples.find(params.expect(:sample_id))
       end
     end
   end

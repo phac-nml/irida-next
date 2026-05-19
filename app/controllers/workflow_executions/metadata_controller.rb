@@ -9,13 +9,13 @@ module WorkflowExecutions
     def fields # rubocop:disable Metrics/AbcSize
       authorize! @namespace, to: :update_samplesheet_data?
       if Flipper.enabled?(:v2_samplesheet, current_user)
-        @sample_ids = params[:sample_ids].split(',')
-        @metadata_fields = JSON.parse(params[:metadata_fields])
+        @sample_ids = params.expect(:sample_ids).split(',')
+        @metadata_fields = JSON.parse(params.expect(:metadata_fields))
         @headers = @metadata_fields.keys.to_json
       else
-        @samples = Sample.where(id: params[:sample_ids])
-        @header = params[:header]
-        @field = params[:field]
+        @samples = Sample.where(id: params.expect(sample_ids: []))
+        @header = params.expect(:header)
+        @field = params.expect(:field)
       end
       @metadata = generate_metadata_for_samplesheet.to_json
       render status: :ok
@@ -24,7 +24,7 @@ module WorkflowExecutions
     private
 
     def namespace
-      @namespace = Namespace.find(params[:namespace_id])
+      @namespace = Namespace.find(params.expect(:namespace_id))
     end
 
     # TODO: when feature flag :v2_samplesheet is retired, move fetch_metadata_with_feature_flag logic

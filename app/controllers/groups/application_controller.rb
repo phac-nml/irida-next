@@ -5,11 +5,16 @@ module Groups
   class ApplicationController < ApplicationController
     include BreadcrumbNavigation
 
+    before_action :group
     before_action :layout_fixed
 
     layout 'groups'
 
     private
+
+    def group
+      @group ||= Group.find_by_full_path(params[:group_id] || params[:id]) # rubocop:disable Rails/DynamicFindBy
+    end
 
     def layout_fixed
       @fixed = true

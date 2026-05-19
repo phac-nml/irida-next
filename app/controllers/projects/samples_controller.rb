@@ -17,7 +17,7 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+      @pagy, @samples = @query.results(limit: params.fetch(:limit, 20), page: params.fetch(:page, 1))
       @samples = @samples.includes(project: { namespace: :parent })
       @has_samples = @project.samples.size.positive?
       @results_message = results_message
@@ -45,7 +45,7 @@ module Projects
     def view_history_version
       authorize! @sample.project, to: :view_history?
 
-      @log_data = @sample.log_data_with_changes(params[:version])
+      @log_data = @sample.log_data_with_changes(params.expect(:version))
       respond_to do |format|
         format.turbo_stream do
           render status: :ok
@@ -91,17 +91,17 @@ module Projects
 
       return if params[:select].blank?
 
-      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params[:timestamp].to_datetime).pluck(:id)
+      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime).pluck(:id)
     end
 
     private
 
     def valid_tab?
-      !params.key?(:tab) || params[:tab].in?(%w[files metadata history])
+      !params.key?(:tab) || params.expect(:tab).in?(%w[files metadata history])
     end
 
     def set_tab_variables
-      @tab = params[:tab] || 'files'
+      @tab = params.fetch(:tab, 'files')
       @tab_index = case @tab
                    when 'metadata'
                      1
@@ -241,14 +241,15 @@ module Projects
     end
 
     def search_params
-      updated_params = update_store(search_key,
-                                    params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access
-      updated_params.slice!('name_or_puid_cont', 'name_or_puid_in', 'groups_attributes',
-                            'metadata_template', 'sort')
+      updated_params = update_store(
+        search_key,
+        params.fetch(:q, {})
+              .permit(:name_or_puid_cont, :name_or_puid_in, :metadata_template, :sort, groups_attributes: {})
+      ).with_indifferent_access
 
       if !updated_params.key?(:sort) ||
-         (updated_params[:metadata_template] == 'none' && updated_params['sort']&.match?(/metadata_/))
-        updated_params['sort'] = 'updated_at desc'
+         (updated_params[:metadata_template] == 'none' && updated_params[:sort]&.match?(/metadata_/))
+        updated_params[:sort] = 'updated_at desc'
         update_store(search_key, updated_params)
       end
       updated_params

@@ -79,7 +79,7 @@ module WorkflowExecutions
       if params[:attachment_id] == 'no_attachment'
         add_attachment_to_params(nil, property)
       else
-        attachment = Attachment.find(params[:attachment_id])
+        attachment = Attachment.find(params.expect(:attachment_id))
         add_attachment_to_params(attachment, property)
 
         return unless %w[fastq_1 fastq_2].include?(property)

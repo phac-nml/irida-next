@@ -18,8 +18,7 @@ module Groups
     protected
 
     def namespace
-      @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
-      @namespace = @group
+      @namespace ||= group
     end
 
     def context_crumbs
