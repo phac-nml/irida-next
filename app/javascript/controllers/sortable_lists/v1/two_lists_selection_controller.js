@@ -299,6 +299,10 @@ export default class extends Controller {
     this.#ensureActiveListElement(event.target);
   }
 
+  handleListBlur(event) {
+    this.#clearActiveListElement(event.target);
+  }
+
   handleKeyboardInput(event) {
     const list = event.target;
     if (!this.#isListbox(list)) return;
@@ -831,7 +835,9 @@ export default class extends Controller {
 
   #initializeList(list) {
     list.tabIndex = 0;
-    this.#ensureActiveListElement(list);
+    if (!list.firstElementChild) {
+      list.setAttribute("aria-activedescendant", "");
+    }
   }
 
   #ensureActiveListElement(list) {
@@ -859,14 +865,17 @@ export default class extends Controller {
   }
 
   #clearActiveOption(option) {
-    option.tabIndex = -1;
     option.removeAttribute("data-active-option");
-    option.removeAttribute("data-tabbable");
+  }
+
+  #clearActiveListElement(list) {
+    const currentOption = this.#getActiveListElement(list);
+    if (currentOption) {
+      this.#clearActiveOption(currentOption);
+    }
   }
 
   #setActiveListElement(list, option) {
-    list.tabIndex = 0;
-
     const previousOption = this.#getActiveListElement(list);
     if (previousOption && previousOption !== option) {
       this.#clearActiveOption(previousOption);
@@ -880,7 +889,6 @@ export default class extends Controller {
 
     list.setAttribute("aria-activedescendant", option.id);
     this.#activeOptionCache.set(list, option);
-    option.tabIndex = -1;
     option.setAttribute("data-active-option", "true");
 
     if (typeof option.scrollIntoView === "function") {
@@ -897,6 +905,10 @@ export default class extends Controller {
   }
 
   #updateListAfterMutation(list, preferredOption = null) {
+    if (document.activeElement !== list) {
+      return;
+    }
+
     if (!list.firstElementChild) {
       this.#setActiveListElement(list, null);
       return;
@@ -904,10 +916,7 @@ export default class extends Controller {
 
     if (preferredOption?.parentNode === list) {
       this.#setActiveListElement(list, preferredOption);
-      return;
     }
-
-    this.#ensureActiveListElement(list);
   }
 
   #isListbox(element) {

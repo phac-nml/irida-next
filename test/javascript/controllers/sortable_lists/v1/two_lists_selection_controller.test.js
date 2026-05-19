@@ -64,7 +64,7 @@ function renderFixture({
         aria-describedby="instructions"
         aria-required="false"
         aria-multiselectable="true"
-        data-action="focus->sortable-lists--v1--two-lists-selection#handleListFocus keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput"
+        data-action="focus->sortable-lists--v1--two-lists-selection#handleListFocus blur->sortable-lists--v1--two-lists-selection#handleListBlur keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput"
       >${available.join("")}</ul>
       <button
         type="button"
@@ -81,7 +81,7 @@ function renderFixture({
         aria-describedby="instructions selected-list-required"
         aria-required="true"
         aria-multiselectable="true"
-        data-action="focus->sortable-lists--v1--two-lists-selection#handleListFocus keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput"
+        data-action="focus->sortable-lists--v1--two-lists-selection#handleListFocus blur->sortable-lists--v1--two-lists-selection#handleListBlur keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput"
       >${selected.join("")}</ul>
       <button
         type="button"
@@ -181,7 +181,7 @@ describe("sortable lists two-lists selection controller", () => {
     vi.useRealTimers();
   });
 
-  it("sets each listbox as the tab stop and initializes active descendants", async () => {
+  it("sets each listbox as the tab stop without an active descendant until focus", async () => {
     renderFixture({
       selected: [
         option("selected-one", "One"),
@@ -193,18 +193,26 @@ describe("sortable lists two-lists selection controller", () => {
     application = await startController();
 
     expect(list("available-list")).toHaveAttribute("tabindex", "0");
-    expect(list("available-list")).toHaveAttribute(
-      "aria-activedescendant",
-      "available-alpha",
-    );
-    expect(list("selected-list")).toHaveAttribute(
-      "aria-activedescendant",
-      "selected-two",
-    );
-    expect(document.getElementById("available-alpha")).toHaveAttribute(
-      "tabindex",
-      "-1",
-    );
+    expect(list("available-list")).not.toHaveAttribute("aria-activedescendant");
+    expect(list("selected-list")).not.toHaveAttribute("aria-activedescendant");
+
+    list("available-list").focus();
+    expect(activeId(list("available-list"))).toBe("available-alpha");
+
+    list("selected-list").focus();
+    expect(activeId(list("selected-list"))).toBe("selected-two");
+  });
+
+  it("clears active option styling when a listbox loses focus", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    expect(activeOptionIds(availableList)).toEqual(["available-alpha"]);
+
+    availableList.blur();
+    expect(activeOptionIds(availableList)).toEqual([]);
   });
 
   it("keeps an empty listbox focusable without a stale active descendant", async () => {
@@ -221,6 +229,7 @@ describe("sortable lists two-lists selection controller", () => {
     application = await startController();
 
     const availableList = list("available-list");
+    availableList.focus();
 
     keydown(availableList, "ArrowDown");
     expect(activeId(availableList)).toBe("available-beta");
@@ -236,6 +245,7 @@ describe("sortable lists two-lists selection controller", () => {
     application = await startController();
 
     const availableList = list("available-list");
+    availableList.focus();
 
     keydown(availableList, " ");
     expect(selectedIds(availableList)).toEqual(["available-alpha"]);
@@ -271,6 +281,7 @@ describe("sortable lists two-lists selection controller", () => {
     application = await startController();
 
     const availableList = list("available-list");
+    availableList.focus();
 
     keydown(availableList, "End");
     keydown(availableList, "Home", { ctrlKey: true, shiftKey: true });
@@ -298,6 +309,7 @@ describe("sortable lists two-lists selection controller", () => {
     application = await startController();
 
     const availableList = list("available-list");
+    availableList.focus();
 
     keydown(availableList, "g");
     expect(activeId(availableList)).toBe("available-gamma");
@@ -316,6 +328,7 @@ describe("sortable lists two-lists selection controller", () => {
 
     const availableList = list("available-list");
     const selectedList = list("selected-list");
+    availableList.focus();
 
     keydown(availableList, " ");
     keydown(availableList, "Enter");
@@ -328,6 +341,7 @@ describe("sortable lists two-lists selection controller", () => {
     expect(activeId(availableList)).toBe("available-beta");
     expect(document.activeElement).toBe(availableList);
 
+    selectedList.focus();
     keydown(selectedList, "End");
     keydown(selectedList, " ");
     keydown(selectedList, "Delete");
@@ -342,6 +356,7 @@ describe("sortable lists two-lists selection controller", () => {
 
     const availableList = list("available-list");
     const selectedList = list("selected-list");
+    availableList.focus();
 
     keydown(availableList, "ArrowDown");
     keydown(availableList, " ");
@@ -350,7 +365,15 @@ describe("sortable lists two-lists selection controller", () => {
     keydown(availableList, "Enter");
 
     expect(activeOptionIds(availableList)).toEqual(["available-gamma"]);
-    expect(activeOptionIds(selectedList)).toEqual(["available-beta"]);
+    expect(selectedList.querySelector("#available-beta")).not.toHaveAttribute(
+      "data-active-option",
+    );
+    expect(selectedList.querySelector("#available-alpine")).not.toHaveAttribute(
+      "data-active-option",
+    );
+
+    selectedList.focus();
+    expect(activeOptionIds(selectedList)).toHaveLength(1);
   });
 
   it("clears active descendant when template-only items are removed from the available list", async () => {
@@ -371,10 +394,12 @@ describe("sortable lists two-lists selection controller", () => {
     );
     expect(templateOnlyOption).toHaveTextContent("Template only");
 
+    selectedList.focus();
     keydown(selectedList, "End");
     keydown(selectedList, " ");
     keydown(selectedList, "Delete");
 
+    availableList.focus();
     expect(availableList).toHaveAttribute(
       "aria-activedescendant",
       "available-alpha",
@@ -397,6 +422,7 @@ describe("sortable lists two-lists selection controller", () => {
     application = await startController();
 
     const selectedList = list("selected-list");
+    selectedList.focus();
 
     keydown(selectedList, "ArrowUp", { altKey: true });
 
