@@ -13,7 +13,7 @@ module WorkflowExecutions
         @metadata_fields = JSON.parse(params.expect(:metadata_fields))
         @headers = @metadata_fields.keys.to_json
       else
-        @samples = Sample.where(id: params.expect(:sample_ids))
+        @samples = Sample.where(id: params.expect(sample_ids: []))
         @header = params.expect(:header)
         @field = params.expect(:field)
       end
