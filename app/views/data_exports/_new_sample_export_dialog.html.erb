@@ -99,14 +99,12 @@
           <%= sortable_lists.with_list(
             id: "available-list",
             title: t(".available"),
-            group: "format_selection",
           ) %>
 
           <%= sortable_lists.with_list(
             id: "selected-list",
             title: t(".selected"),
             list_items: formats,
-            group: "format_selection",
             required: true,
           ) %>
         <% end %>
@@ -134,7 +132,8 @@
             <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
 
             <div>
-              <%= form.submit t("data_exports.new.submit_button"),
+              <%= form.button t("data_exports.new.submit_button"),
+                          type: :submit,
                           data: {
                             turbo_frame: "_top",
                             action:

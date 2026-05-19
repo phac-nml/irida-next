@@ -1,17 +1,22 @@
 <li
-  data-action="
-    click->sortable-lists--v1--two-lists-selection#handleClick
-    keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput
-  "
-  role="option"
-  tabindex="-1"
-  aria-selected="false"
   id="<%= @id %>"
+  <% if interactive %>
+    data-action="
+      click->sortable-lists--v1--two-lists-selection#handleClick
+    "
+    role="option"
+    tabindex="-1"
+    aria-selected="false"
+  <% end %>
   class="
-    flex w-full border-b border-slate-200 px-4 py-2 focus:bg-primary-400 focus-visible:-outline-offset-2!
-    dark:border-slate-600 focus:dark:bg-primary-600 focus:dark:hover:bg-primary-700
-  "
+      relative flex w-full border-b border-slate-200 px-4 py-2 focus:bg-primary-400 focus-visible:z-10
+      focus-visible:outline-3 focus-visible:-outline-offset-2 focus-visible:outline-slate-700
+      data-[active-option=true]:bg-slate-100 data-[active-option=true]:outline-2
+      data-[active-option=true]:-outline-offset-2 data-[active-option=true]:outline-slate-700 dark:border-slate-600
+      focus:dark:bg-slate-600 focus:dark:hover:bg-slate-700 dark:focus-visible:outline-slate-300
+      data-[active-option=true]:dark:bg-slate-600 data-[active-option=true]:dark:outline-slate-300
+    "
 >
   <span aria-hidden="true" class="pointer-events-none mx-2"></span>
-  <span class="pointer-events-none"><%= list_item %></span>
+  <span class="pointer-events-none ml-2"><%= list_item %></span>
 </li>

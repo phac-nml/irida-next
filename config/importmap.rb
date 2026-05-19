@@ -23,7 +23,6 @@ pin_all_from 'app/javascript/controllers', under: 'controllers'
 pin_all_from 'app/javascript/workers', under: 'workers'
 pin 'xlsx', to: 'https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs'
 pin_all_from 'app/javascript/utilities', under: 'utilities'
-pin 'sortablejs' # @1.15.2
 pin 'local-time' # @3.0.2
 pin 'focus-trap' # @7.6.5
 pin 'tabbable' # @6.2.0

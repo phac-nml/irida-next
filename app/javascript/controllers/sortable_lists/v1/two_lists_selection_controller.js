@@ -25,22 +25,21 @@ export default class extends Controller {
 
   static ARIA_SELECTED_TRUE = "true";
   static ARIA_SELECTED_FALSE = "false";
-  static ARIA_DISABLED_TRUE = "true";
-  static ARIA_DISABLED_FALSE = "false";
   static ARIA_REQUIRED_TRUE = "true";
+  static TYPE_AHEAD_TIMEOUT = 500;
 
   #originalAvailableList;
 
   #lastClickedOption;
-  #shiftSelectionOption;
+  #lastSelectedAnchor;
+  #typeAheadState = new WeakMap();
+  #activeOptionCache = new WeakMap();
 
   #ariaLiveTranslations;
-
-  #savedOptionsState;
+  #boundSubmitClickCapture;
 
   connect() {
-    // this.DnDListener = this.#updateAriaByDnD.bind(this);
-    this.boundEndShiftSelect = this.#endShiftSelect.bind(this);
+    this.#boundSubmitClickCapture = this.#onSubmitClickCapture.bind(this);
 
     // Get a handle on the available and selected lists
     this.idempotentConnect();
@@ -58,10 +57,6 @@ export default class extends Controller {
     }
 
     if (this.availableList && this.selectedList) {
-      // Temporarily disabled drag and drop functionality
-      // this.selectedList.addEventListener("drop", this.DnDListener);
-      // this.availableList.addEventListener("drop", this.DnDListener);
-
       // Get a handle on the original available list
       this.#originalAvailableList = [
         ...this.availableList.querySelectorAll("li"),
@@ -72,138 +67,47 @@ export default class extends Controller {
       // sets the first element in each list to be tabbable (ie: tabIndex = 0)
       this.#initializeLists();
       this.#checkStates();
+
+      if (this.hasSubmitBtnTarget) {
+        this.submitBtnTarget.removeEventListener(
+          "click",
+          this.#boundSubmitClickCapture,
+          true,
+        );
+        this.submitBtnTarget.addEventListener(
+          "click",
+          this.#boundSubmitClickCapture,
+          true,
+        );
+      }
     }
   }
 
-  // Temporarily disabled - drag and drop functionality removed
-  // #updateAriaByDnD() {
-  //   let ariaLiveParams;
-  //   // get the current list options to compare with the lists' previous states
-  //   let currentAvailableOptions = this.#extractOptionsIntoArray(
-  //     document.getElementById(this.availableListValue),
-  //   );
-  //   let currentSelectedOptions = this.#extractOptionsIntoArray(
-  //     document.getElementById(this.selectedListValue),
-  //   );
-
-  //   // if length is equal, means only ordering could have changed
-  //   if (
-  //     currentSelectedOptions.length ===
-  //     this.#savedOptionsState["selected"].length
-  //   ) {
-  //     ariaLiveParams = this.#verifyDnDOrderChange(
-  //       currentSelectedOptions,
-  //       currentAvailableOptions,
-  //     );
-
-  //     // lengths are not equal, therefore an option was added/removed
-  //   } else {
-  //     ariaLiveParams = this.#verifyDnDAddOrRemoveChange(
-  //       currentSelectedOptions,
-  //       currentAvailableOptions,
-  //     );
-  //   }
-
-  //   if (ariaLiveParams) {
-  //     // update aria-live text
-  //     const ariaLiveText = this.#generateAriaLiveText(ariaLiveParams);
-  //     this.#updateAriaLive(ariaLiveText);
-
-  //     // option was moved between lists; remove selected attributes (checkmark)
-  //     if (ariaLiveParams.hasOwnProperty("movedOption")) {
-  //       const movedOption = ariaLiveParams.movedOption;
-  //       const movedOptionElement = this.#getOptionNode(movedOption);
-
-  //       if (movedOptionElement.getAttribute("aria-selected") === "true") {
-  //         this.#removeSelectedAttributes(movedOptionElement);
-  //       }
-  //     }
-  //   }
-  //   this.#checkStates();
-  // }
-
-  // Temporarily disabled - drag and drop functionality removed
-  // #verifyDnDOrderChange(currentSelectedOptions, currentAvailableOptions) {
-  //   let params;
-  //   // stringify options arrays and verify any differences. If a difference exists, ordering has been changed
-  //   if (
-  //     // check selected list
-  //     JSON.stringify(currentSelectedOptions) !==
-  //     JSON.stringify(this.#savedOptionsState["selected"])
-  //   ) {
-  //     params = {
-  //       action: "list_order_changed",
-  //       listName: this.selectedListValue,
-  //       options: currentSelectedOptions,
-  //     };
-  //   } else if (
-  //     // check available list
-  //     JSON.stringify(currentAvailableOptions) !==
-  //     JSON.stringify(this.#savedOptionsState["available"])
-  //   ) {
-  //     params = {
-  //       action: "list_order_changed",
-  //       listName: this.availableListValue,
-  //       options: currentAvailableOptions,
-  //     };
-  //   }
-  //   return params;
-  // }
-
-  // Temporarily disabled - drag and drop functionality removed
-  // #verifyDnDAddOrRemoveChange(currentSelectedOptions, currentAvailableOptions) {
-  //   let movedOption;
-  //   let params;
-  //   if (
-  //     // option was added to selected list
-  //     currentSelectedOptions.length > this.#savedOptionsState["selected"].length
-  //   ) {
-  //     movedOption = this.#verifyOptionsDifference(
-  //       currentSelectedOptions,
-  //       this.#savedOptionsState["selected"],
-  //     );
-  //     params = {
-  //       action: "added",
-  //       movedOption: movedOption,
-  //     };
-  //   } else if (
-  //     // option was added (removed) to available list
-  //     currentAvailableOptions.length >
-  //     this.#savedOptionsState["available"].length
-  //   ) {
-  //     movedOption = this.#verifyOptionsDifference(
-  //       currentAvailableOptions,
-  //       this.#savedOptionsState["available"],
-  //     );
-  //     params = {
-  //       action: "removed",
-  //       movedOption: movedOption,
-  //     };
-  //   }
-  //   // fix tabindexing after option moved via drag and drop
-  //   this.#updateListAttributes(this.#getOptionNode(params.movedOption));
-  //   return params;
-  // }
-
-  // Temporarily disabled - drag and drop functionality removed
-  // #generateAriaLiveText(params) {
-  //   const action = params["action"];
-  //   let ariaLiveString = this.#ariaLiveTranslations[action];
-  //   if (action === "list_order_changed") {
-  //     return ariaLiveString
-  //       .replace(/LIST_PLACEHOLDER/g, params["listName"])
-  //       .concat(params["options"].join(", "));
-  //   } else {
-  //     return ariaLiveString.concat(params["movedOption"]);
-  //   }
-  // }
+  disconnect() {
+    if (this.hasSubmitBtnTarget) {
+      this.submitBtnTarget.removeEventListener(
+        "click",
+        this.#boundSubmitClickCapture,
+        true,
+      );
+    }
+  }
 
   #cleanupAvailableList() {
     const itemsToRemove = Array.from(
       this.availableList.querySelectorAll("li"),
     ).filter((li) => !this.#originalAvailableList.includes(li));
+    const activeOption = this.#getActiveListElement(this.availableList);
+    const removesActiveOption = itemsToRemove.includes(activeOption);
 
-    itemsToRemove.forEach((li) => li.remove());
+    itemsToRemove.forEach((li) => {
+      this.#clearActiveOption(li);
+      li.remove();
+    });
+
+    if (removesActiveOption) {
+      this.#updateListAfterMutation(this.availableList);
+    }
   }
 
   #checkButtonStates() {
@@ -293,6 +197,15 @@ export default class extends Controller {
     this.templateSelectorTarget.value = matchingTemplate?.value ?? "none";
   }
 
+  #isDisabled(element) {
+    return element?.getAttribute("aria-disabled") === "true";
+  }
+
+  #setDisabled(element, disabled) {
+    if (!element) return;
+    element.setAttribute("aria-disabled", disabled ? "true" : "false");
+  }
+
   #setSubmitButtonDisableState(disableState) {
     if (this.hasSubmitBtnTarget) {
       this.submitBtnTarget.disabled = disableState;
@@ -300,14 +213,7 @@ export default class extends Controller {
   }
 
   #setButtonDisableState(button, disableState) {
-    if (disableState) {
-      button.setAttribute("aria-disabled", this.constructor.ARIA_DISABLED_TRUE);
-    } else {
-      button.setAttribute(
-        "aria-disabled",
-        this.constructor.ARIA_DISABLED_FALSE,
-      );
-    }
+    this.#setDisabled(button, disableState);
   }
 
   #getSelectedOptions(list) {
@@ -322,12 +228,6 @@ export default class extends Controller {
         createHiddenInput(this.fieldNameValue, li.lastElementChild.textContent),
       ),
     );
-  }
-
-  disconnect() {
-    // Temporarily disabled drag and drop functionality
-    // this.selectedList.removeEventListener("drop", this.DnDListener);
-    // this.availableList.removeEventListener("drop", this.DnDListener);
   }
 
   /**
@@ -391,48 +291,79 @@ export default class extends Controller {
   }
 
   #reinitializeLists() {
-    this.#removeTabIndexFromList(this.availableList);
-    this.#removeTabIndexFromList(this.selectedList);
     this.#initializeLists();
     this.#checkButtonStates();
-    this.#saveListStates();
+  }
+
+  handleListFocus(event) {
+    this.#ensureActiveListElement(event.target);
+  }
+
+  handleListBlur(event) {
+    this.#clearActiveListElement(event.target);
   }
 
   handleKeyboardInput(event) {
-    const handler = this.#getKeyboardHandler(event.key);
+    const list = event.target;
+    if (!this.#isListbox(list)) return;
+
+    const handler = this.#getKeyboardHandler(event);
     if (handler) {
-      if (event.key !== "Tab") event.preventDefault();
-      handler.call(this, event);
+      event.preventDefault();
+      handler.call(this, event, list);
+      this.#checkStates();
+    } else if (this.#isPrintableCharacter(event)) {
+      event.preventDefault();
+      this.#handleTypeAhead(event, list);
       this.#checkStates();
     }
   }
 
-  #getKeyboardHandler(key) {
+  #getKeyboardHandler(event) {
     const handlers = {
       " ": this.handleSelection.bind(this),
       Enter: this.#addSelectionByListInput.bind(this),
       Delete: this.#removeSelectionByListInput.bind(this),
-      ArrowUp: (event) => this.#handleVerticalNavigation(event, "up", "single"),
-      ArrowDown: (event) =>
-        this.#handleVerticalNavigation(event, "down", "single"),
-      Home: (event) => this.#handleVerticalNavigation(event, "up", "fullList"),
-      End: (event) => this.#handleVerticalNavigation(event, "down", "fullList"),
-      a: (event) => this.#selectAll(event),
+      ArrowUp: (event, list) =>
+        this.#handleVerticalNavigation(event, list, "up", "single"),
+      ArrowDown: (event, list) =>
+        this.#handleVerticalNavigation(event, list, "down", "single"),
+      Home: (event, list) =>
+        this.#handleVerticalNavigation(event, list, "up", "fullList"),
+      End: (event, list) =>
+        this.#handleVerticalNavigation(event, list, "down", "fullList"),
     };
-    return handlers[key];
+    if (event.key.toLowerCase() === "a" && (event.ctrlKey || event.metaKey)) {
+      return (event, list) => this.#selectAll(event, list);
+    }
+    return handlers[event.key];
   }
 
-  handleSelection(event) {
-    const option = event.target;
+  #isPrintableCharacter(event) {
+    return (
+      event.key.length === 1 &&
+      !event.altKey &&
+      !event.ctrlKey &&
+      !event.metaKey
+    );
+  }
 
-    this.#selectOrUnselectOption(option);
-    this.#updateListAttributes(option);
+  handleSelection(event, list = event.target) {
+    const option = this.#ensureActiveListElement(list);
+    if (!option) return;
+
+    if (event.shiftKey) {
+      this.#selectRangeFromAnchorToOption(list, option);
+    } else {
+      this.#selectOrUnselectOption(option);
+    }
   }
 
   #selectOrUnselectOption(option) {
     const selected = option.getAttribute("aria-selected");
     if (selected === this.constructor.ARIA_SELECTED_FALSE) {
       this.#addSelectedAttributes(option);
+      this.#lastSelectedAnchor = option;
     } else {
       this.#removeSelectedAttributes(option);
     }
@@ -447,16 +378,26 @@ export default class extends Controller {
     }
   }
 
-  #addSelectionByListInput(event) {
-    if (event.target.parentNode != this.availableList) return;
+  #selectRangeFromAnchorToOption(list, option) {
+    const listOptions = Array.from(list.querySelectorAll("li"));
+    const anchor =
+      this.#lastSelectedAnchor?.parentNode === list
+        ? this.#lastSelectedAnchor
+        : option;
+    const anchorIndex = listOptions.indexOf(anchor);
+    const optionIndex = listOptions.indexOf(option);
+
+    this.#selectOptionRange(anchorIndex, optionIndex, listOptions);
+    this.#lastSelectedAnchor = anchor;
+  }
+
+  #addSelectionByListInput(_event, list) {
+    if (list != this.availableList) return;
     this.#performSelection(true, true, this.availableList, this.selectedList);
   }
 
   addSelectionByAddButton() {
-    if (
-      this.addButtonTarget.getAttribute("aria-disabled") ===
-      this.constructor.ARIA_DISABLED_FALSE
-    ) {
+    if (!this.#isDisabled(this.addButtonTarget)) {
       this.#performSelection(
         false,
         false,
@@ -466,16 +407,13 @@ export default class extends Controller {
     }
   }
 
-  #removeSelectionByListInput(event) {
-    if (event.target.parentNode != this.selectedList) return;
+  #removeSelectionByListInput(_event, list) {
+    if (list != this.selectedList) return;
     this.#performSelection(true, true, this.selectedList, this.availableList);
   }
 
   removeSelectionByRemoveButton() {
-    if (
-      this.removeButtonTarget.getAttribute("aria-disabled") ===
-      this.constructor.ARIA_DISABLED_FALSE
-    ) {
+    if (!this.#isDisabled(this.removeButtonTarget)) {
       this.#performSelection(
         false,
         false,
@@ -497,25 +435,19 @@ export default class extends Controller {
     const selectedOptions = this.#getSelectedOptions(sourceList);
 
     const selectedOptionsText = [];
-    if (selectedOptions.length > 0) {
-      for (let i = 0; i < selectedOptions.length; i++) {
-        selectedOptionsText.push(
-          selectedOptions[i].lastElementChild.textContent,
-        );
-        this.#removeSelectedAttributes(selectedOptions[i]);
-        targetList.appendChild(selectedOptions[i]);
-      }
+    if (selectedOptions.length === 0) return;
 
-      // if action is keydown but not from within the list (ie: keydown on add/remove btn), focus first list element
-      // if it exists, or focus the list
-      if (focusTarget) {
-        focusTarget.focus();
-      } else if (isKeyDown && !isFromList) {
-        sourceList.firstElementChild
-          ? sourceList.firstElementChild.focus()
-          : sourceList.focus();
-      }
-      this.#updateListAttributes(selectedOptions[0]);
+    for (let i = 0; i < selectedOptions.length; i++) {
+      selectedOptionsText.push(selectedOptions[i].lastElementChild.textContent);
+      this.#removeSelectedAttributes(selectedOptions[i]);
+      targetList.appendChild(selectedOptions[i]);
+    }
+
+    this.#updateListAfterMutation(sourceList, focusTarget);
+    this.#updateListAfterMutation(targetList, selectedOptions[0]);
+
+    if (isKeyDown) {
+      sourceList.focus();
     }
 
     const ariaLiveUpdateString =
@@ -531,7 +463,8 @@ export default class extends Controller {
   }
 
   #getFocusTargetAfterSelection(list) {
-    const currentFocusedElement = document.activeElement;
+    const currentFocusedElement = this.#getActiveListElement(list);
+    if (!currentFocusedElement) return null;
 
     // if current focus element is a selected element, find next unselected
     // else if current focus element not selected, just return as we will keep the current focus
@@ -567,14 +500,25 @@ export default class extends Controller {
           if (!nextUnselected) break;
         }
       }
-      // if no unselected options found, change focus to list
-      return list;
+      return null;
     }
+    return currentFocusedElement;
   }
 
   // handles going up and down list via keyboard (ArrowUp, ArrowDown, Home, End)
-  #handleVerticalNavigation(event, direction, navigateSize) {
-    const currentList = event.target.parentNode;
+  #handleVerticalNavigation(event, currentList, direction, navigateSize) {
+    const currentOption = this.#ensureActiveListElement(currentList);
+    if (!currentOption) return;
+
+    if (event.ctrlKey && event.shiftKey && navigateSize === "fullList") {
+      const listOptions = Array.from(currentList.querySelectorAll("li"));
+      const currentIndex = listOptions.indexOf(currentOption);
+      const endpointIndex = direction === "up" ? 0 : listOptions.length - 1;
+      this.#selectOptionRange(currentIndex, endpointIndex, listOptions);
+      this.#lastSelectedAnchor = currentOption;
+      return;
+    }
+
     const selectedOptionNodeList = this.#getSelectedOptions(currentList);
 
     // check if user is moving an option up and down list, or just navigating
@@ -590,7 +534,7 @@ export default class extends Controller {
       selectedOptionNodeList.length === 1 &&
       (event.key === "ArrowUp" || event.key === "ArrowDown") &&
       event.altKey &&
-      event.target.getAttribute("aria-selected") ===
+      currentOption.getAttribute("aria-selected") ===
         this.constructor.ARIA_SELECTED_TRUE
     ) {
       selectedOption = selectedOptionNodeList[0];
@@ -602,8 +546,8 @@ export default class extends Controller {
     const targetOption =
       navigateSize === "single"
         ? direction === "up"
-          ? event.target.previousElementSibling
-          : event.target.nextElementSibling
+          ? currentOption.previousElementSibling
+          : currentOption.nextElementSibling
         : direction === "up"
           ? currentList.firstElementChild
           : currentList.lastElementChild;
@@ -612,6 +556,7 @@ export default class extends Controller {
       targetOption,
       selectedOption,
       event,
+      currentList,
     );
   }
 
@@ -625,21 +570,25 @@ export default class extends Controller {
   // direction: up/down
   // targetOption: the option user is navigating towards (ie: if going up 1 stop from option 2, target option is option 1)
   // selectedOption: option that user is moving up/down list, is null if user is just navigating
-  #navigateListHorizontally(direction, targetOption, selectedOption, event) {
+  #navigateListHorizontally(
+    direction,
+    targetOption,
+    selectedOption,
+    event,
+    currentList,
+  ) {
     // return if no target option (eg: keyboard ArrowUp when already on the top option)
     if (!targetOption) return;
     // user is moving an option up/down list
     if (selectedOption) {
       this.#moveOptionHorizontally(selectedOption, targetOption, direction);
+      this.#setActiveListElement(currentList, selectedOption);
     } else {
-      const currentList = event.target.parentNode;
       //  user is selecting items by Shift+ArrowUp/Down
       if (event.shiftKey) {
-        this.#selectMultipleOptions(event.target, currentList, direction);
+        this.#selectOrUnselectOption(targetOption);
       }
-      this.#removeTabIndexFromList(currentList);
       this.#setActiveListElement(currentList, targetOption);
-      targetOption.focus();
     }
 
     this.#checkStates();
@@ -661,58 +610,9 @@ export default class extends Controller {
     this.#updateAriaLive(ariaLiveText);
   }
 
-  #selectMultipleOptions(target, list, direction) {
-    // get list, unselect all the options in preparation to re-select options
-    this.#unselectListOptions(list);
-    // set the list into 'select' mode, where we set which option is the shift selection is based around
-    // and add a listener to the list for when the user releases shift and we can stop the shift-select
-    if (!list.hasAttribute("shift-select")) {
-      this.#shiftSelectionOption = target;
-      this.#setListForShiftKeyboardSelection(list);
-    }
-    // get index of target option, and add/remove an index point based on direction
-    // as the event.target is 'behind' by an index
-    // eg: we're on option 2 (index 1), and push Shift+ArrowDown, event.target index will return 2 (where we want
-    // index 3), so we add 1 based on ArrowDown
-    const listOptions = Array.from(list.querySelectorAll("li"));
-    let navigatedSelectionIndex = listOptions.indexOf(target);
-    direction === "up" ? navigatedSelectionIndex-- : navigatedSelectionIndex++;
-
-    // index of selection where shift select is centered around
-    const startingSelectionIndex = listOptions.indexOf(
-      this.#shiftSelectionOption,
-    );
-    // make selections based on indexes
-    this.#selectOptionRange(
-      startingSelectionIndex,
-      navigatedSelectionIndex,
-      listOptions,
-    );
-  }
-
-  // user is shift selecting items by keyboard, we add a listener for when shift is keyup'd
-  #setListForShiftKeyboardSelection(list) {
-    list.setAttribute("shift-select", "enabled");
-    list.addEventListener("keyup", this.boundEndShiftSelect);
-  }
-
-  // remove shift select attributes upon shift keyup
-  #endShiftSelect(event) {
-    if (event.key == "Shift") {
-      const list = event.target.parentNode;
-      list.removeAttribute("shift-select");
-      list.removeEventListener("keyup", this.boundEndShiftSelect);
-      this.#shiftSelectionOption = null;
-    }
-  }
-
   // handles up and down buttons
   moveSelection(event) {
-    if (
-      event.target.getAttribute("aria-disabled") ===
-      this.constructor.ARIA_DISABLED_TRUE
-    )
-      return;
+    if (this.#isDisabled(event.target)) return;
 
     const selectedOption = this.#getSelectedOptions(this.selectedList)[0];
     const listOptions = Array.from(this.selectedList.querySelectorAll("li"));
@@ -737,19 +637,23 @@ export default class extends Controller {
       targetOption,
       selectedOption,
       event,
+      this.selectedList,
     );
   }
 
   // handles normal click and shift click events
   handleClick(event) {
-    const option = event.target;
+    const option = event.target.closest('li[role="option"]');
+    if (!option || !this.#isListbox(option.parentNode)) return;
+
     if (event.shiftKey) {
       this.#handleShiftClick(option);
     } else {
       this.#lastClickedOption = option;
       this.#selectOrUnselectOption(option);
     }
-    this.#updateListAttributes(option);
+    this.#setActiveListElement(option.parentNode, option);
+    option.parentNode.focus();
     this.#checkButtonStates();
   }
 
@@ -779,12 +683,11 @@ export default class extends Controller {
       }
       this.#lastClickedOption = listOptions[0];
     }
+    this.#lastSelectedAnchor = this.#lastClickedOption;
   }
 
-  #selectAll(event) {
-    event.preventDefault();
-    if (!event.ctrlKey) return;
-    const listNode = event.target.parentNode;
+  #selectAll(event, listNode = event.target) {
+    if (!event.ctrlKey && !event.metaKey) return;
     const allOptions = listNode.querySelectorAll("li");
     const unselectedOptions = listNode.querySelectorAll(
       `li[aria-selected="${this.constructor.ARIA_SELECTED_FALSE}"]`,
@@ -802,6 +705,43 @@ export default class extends Controller {
           this.#addSelectedAttributes(allOptions[i]);
         }
       }
+      this.#lastSelectedAnchor = allOptions[0];
+    }
+  }
+
+  #handleTypeAhead(event, list) {
+    const state = this.#typeAheadState.get(list) ?? {
+      search: "",
+      timeout: null,
+    };
+
+    clearTimeout(state.timeout);
+    state.search = `${state.search}${event.key}`.toLowerCase();
+    state.timeout = setTimeout(() => {
+      state.search = "";
+    }, this.constructor.TYPE_AHEAD_TIMEOUT);
+    this.#typeAheadState.set(list, state);
+
+    this.#focusNextMatchingOption(list, state.search);
+  }
+
+  #focusNextMatchingOption(list, search) {
+    const options = Array.from(list.querySelectorAll("li"));
+    const currentOption = this.#getActiveListElement(list);
+    const currentIndex = options.indexOf(currentOption);
+    const orderedOptions = [
+      ...options.slice(currentIndex + 1),
+      ...options.slice(0, currentIndex + 1),
+    ];
+    const matchingOption = orderedOptions.find((option) =>
+      option.lastElementChild.textContent
+        .trim()
+        .toLowerCase()
+        .startsWith(search),
+    );
+
+    if (matchingOption) {
+      this.#setActiveListElement(list, matchingOption);
     }
   }
 
@@ -882,42 +822,6 @@ export default class extends Controller {
     list.append(template);
   }
 
-  // updates and retains the options lists to compare for aria-live updating
-  #saveListStates() {
-    this.#savedOptionsState = {};
-
-    this.#savedOptionsState["available"] = this.#extractOptionsIntoArray(
-      this.availableList,
-    );
-    this.#savedOptionsState["selected"] = this.#extractOptionsIntoArray(
-      this.selectedList,
-    );
-  }
-
-  // turns <ul> DOM element and returns an array of its list
-  // eg: receives <ul><li>OPTION1</li><li>OPTION2</li></ul> and returns ['OPTION1', 'OPTION2']
-  #extractOptionsIntoArray(list) {
-    return Array.from(
-      list.querySelectorAll("li"),
-      (option) => option.lastElementChild.textContent,
-    );
-  }
-
-  // finds the difference between two lists. This is specifically used for the drag and drop listener, so only one
-  // option difference at most will be found
-  // eg: receives [1, 2, 3] and [1, 2, 3, 4] and returns 4
-  // Temporarily disabled - drag and drop functionality removed
-  // #verifyOptionsDifference(listOne, listTwo) {
-  //   let difference = listOne.filter((x) => !listTwo.includes(x));
-  //   return difference[0];
-  // }
-
-  // Temporarily disabled - drag and drop functionality removed
-  // receives OPTION_NAME and returns <li id="OPTION_NAME">OPTION_NAME</li>
-  // #getOptionNode(option) {
-  //   return document.getElementById(this.#validateId(option));
-  // }
-
   #updateAriaLive(updateString) {
     if (this.hasAriaLiveUpdateTarget) {
       announce(updateString, { element: this.ariaLiveUpdateTarget });
@@ -925,24 +829,74 @@ export default class extends Controller {
   }
 
   #initializeLists() {
-    const availableListFirstOption = this.availableList.firstElementChild;
-    const selectedListFirstOption = this.selectedList.firstElementChild;
-    if (availableListFirstOption) {
-      this.#setActiveListElement(this.availableList, availableListFirstOption);
+    this.#initializeList(this.availableList);
+    this.#initializeList(this.selectedList);
+  }
+
+  #initializeList(list) {
+    list.tabIndex = 0;
+    if (!list.firstElementChild) {
+      list.setAttribute("aria-activedescendant", "");
     }
-    if (selectedListFirstOption) {
-      this.#setActiveListElement(this.selectedList, selectedListFirstOption);
+  }
+
+  #ensureActiveListElement(list) {
+    const currentOption = this.#getActiveListElement(list);
+    if (currentOption) {
+      this.#setActiveListElement(list, currentOption);
+      return currentOption;
+    }
+
+    const selectedOption = this.#getSelectedOptions(list)[0];
+    const option = selectedOption ?? list.firstElementChild;
+    this.#setActiveListElement(list, option);
+    return option;
+  }
+
+  #getActiveListElement(list) {
+    const cached = this.#activeOptionCache.get(list);
+    if (cached?.parentNode === list) return cached;
+
+    if (cached) {
+      this.#clearActiveOption(cached);
+    }
+    this.#activeOptionCache.delete(list);
+    return null;
+  }
+
+  #clearActiveOption(option) {
+    option.removeAttribute("data-active-option");
+  }
+
+  #clearActiveListElement(list) {
+    const currentOption = this.#getActiveListElement(list);
+    if (currentOption) {
+      this.#clearActiveOption(currentOption);
     }
   }
 
   #setActiveListElement(list, option) {
-    option.tabIndex = 0;
-    option.setAttribute("data-tabbable", "true");
+    const previousOption = this.#getActiveListElement(list);
+    if (previousOption && previousOption !== option) {
+      this.#clearActiveOption(previousOption);
+    }
+
+    if (!option) {
+      list.setAttribute("aria-activedescendant", "");
+      this.#activeOptionCache.delete(list);
+      return;
+    }
+
     list.setAttribute("aria-activedescendant", option.id);
+    this.#activeOptionCache.set(list, option);
+    option.setAttribute("data-active-option", "true");
+
+    if (typeof option.scrollIntoView === "function") {
+      option.scrollIntoView({ block: "nearest" });
+    }
   }
 
   #checkStates() {
-    this.#saveListStates();
     this.#checkButtonStates();
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
@@ -950,43 +904,35 @@ export default class extends Controller {
     }
   }
 
-  // Handles 2 things:
-  // 1. ensures that each list contains only 1 option that is tabbable. important for refreshing after
-  // options have been moved between lists
-  // 2. Updates active option
-  #updateListAttributes(currentOption) {
-    const targetList = currentOption.parentNode;
-    this.#removeTabIndexFromList(targetList);
-
-    if (targetList === this.selectedList) {
-      this.#verifyListHasTabIndex(this.availableList);
-    } else {
-      this.#verifyListHasTabIndex(this.selectedList);
+  #updateListAfterMutation(list, preferredOption = null) {
+    if (document.activeElement !== list) {
+      return;
     }
-    this.#setActiveListElement(targetList, currentOption);
-  }
 
-  #verifyListHasTabIndex(list) {
-    const firstChild = list.firstElementChild;
-    // if no options within list, remove aria-activedescendant from list
-    if (!firstChild) {
-      list.removeAttribute("aria-activedescendant");
-      // else if list doesn't contain a tabbable option (eg: previous tabbable option moved to other list), set first
-      // option to tabbable/active
-    } else if (!list.querySelector('[data-tabbable="true"]')) {
-      this.#setActiveListElement(list, firstChild);
+    if (!list.firstElementChild) {
+      this.#setActiveListElement(list, null);
+      return;
+    }
+
+    if (preferredOption?.parentNode === list) {
+      this.#setActiveListElement(list, preferredOption);
     }
   }
 
-  // remove tabindex from options within list
-  #removeTabIndexFromList(list) {
-    const tababbleOptions = list.querySelectorAll('[data-tabbable="true"]');
+  #isListbox(element) {
+    return (
+      element === this.availableList ||
+      element === this.selectedList ||
+      element?.getAttribute("role") === "listbox"
+    );
+  }
 
-    if (tababbleOptions) {
-      for (let i = 0; i < tababbleOptions.length; i++) {
-        tababbleOptions[i].tabIndex = "-1";
-        tababbleOptions[i].removeAttribute("data-tabbable");
-      }
-    }
+  // Capture-phase handler: aria-disabled does not natively prevent form
+  // submission, so we intercept clicks before they reach the form.
+  #onSubmitClickCapture(event) {
+    if (!this.hasSubmitBtnTarget) return;
+    if (!this.#isDisabled(this.submitBtnTarget)) return;
+    event.preventDefault();
+    event.stopPropagation();
   }
 }
