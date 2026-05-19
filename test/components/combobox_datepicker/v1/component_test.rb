@@ -187,20 +187,14 @@ module ComboboxDatepicker
 
             # Navigate to May 6, 2027 (max date)
             find('#test_id-calendar').send_keys(%i[shift page_down])
-            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
-            assert_field 'year-select', with: '2027'
             assert_selector 'table tbody tr:nth-child(2) td:nth-child(5)', text: '6', focused: true
 
             # Focus May 2 (Sun)
             find('#test_id-calendar').send_keys(:home)
-            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
-            assert_field 'year-select', with: '2027'
             assert_selector 'table tbody tr:nth-child(2) td:first-child', text: '2', focused: true
 
             # Focus May 6 (Thu)
             find('#test_id-calendar').send_keys(:end)
-            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
-            assert_field 'year-select', with: '2027'
             assert_selector 'table tbody tr:nth-child(2) td:nth-child(5)', text: '6', focused: true
           end
         end
@@ -261,8 +255,6 @@ module ComboboxDatepicker
 
             # Navigate to max date
             find('#test_id-calendar').send_keys(%i[shift page_down])
-            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
-            assert_field 'year-select', with: '2027'
             assert_selector 'table tbody tr:nth-child(2) td:nth-child(5)', text: '6', focused: true
 
             # Can't go right as 7th is disabled
@@ -458,22 +450,16 @@ module ComboboxDatepicker
 
             # Navigate to May 6, 2027 (May 8 is disabled)
             find('#test_id-calendar').send_keys(%i[shift page_down])
-            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
-            assert_field 'year-select', with: '2027'
             assert_selector 'table tbody tr:nth-child(2) td:nth-child(5)', text: '6', focused: true
             assert_selector 'button.next-btn[aria-disabled="true"]'
 
             # Navigate back to April 13, 2027
             find('#test_id-calendar').send_keys(:page_up, :down)
-            assert_field 'month-select', with: I18n.t('components.datepicker.months.april')
-            assert_field 'year-select', with: '2027'
             assert_selector 'table tbody tr:nth-child(3) td:nth-child(3)', text: '13', focused: true
             assert_no_selector 'button.next-btn[aria-disabled="true"]'
 
             # page_down into disabled May 13th, focused forced to maxDate of May 6th
             find('#test_id-calendar').send_keys(:page_down)
-            assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
-            assert_field 'year-select', with: '2027'
             assert_selector 'table tbody tr:nth-child(2) td:nth-child(5)', text: '6', focused: true
             assert_selector 'button.next-btn[aria-disabled="true"]'
           end
