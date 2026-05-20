@@ -54,6 +54,13 @@ module Profiles
         eligible_config?(feature_key.to_s, feature_config)
       end
 
+      def manageable_feature?(feature_key)
+        normalized_feature_key = feature_key.to_s
+        feature_config = user_opt_in_features[normalized_feature_key]
+
+        feature_available?(normalized_feature_key) && feature_config.present?
+      end
+
       private
 
       attr_reader :settings
