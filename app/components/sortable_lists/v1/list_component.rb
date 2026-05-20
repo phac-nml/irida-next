@@ -4,19 +4,27 @@ module SortableLists
   module V1
     # This component creates the individual lists for the sortable_lists component.
     class ListComponent < ::Component
-      attr_reader :id, :group, :title, :list_items, :required, :describedby, :available_list, :selected_list
+      attr_reader :id, :title, :list_items, :required, :available_list, :selected_list, :instructions_id, :interactive
 
       # rubocop:disable Metrics/ParameterLists
 
-      # If creating multiple lists to utilize the same list values, assign them the same group.
-      def initialize(id: nil, group: nil, title: nil, list_items: [], required: false, describedby: nil,
-                     **system_arguments)
+      def initialize(
+        id: nil,
+        title: nil,
+        list_items: [],
+        required: false,
+        describedby: nil,
+        instructions_id: nil,
+        interactive: true,
+        **system_arguments
+      )
         @id = id
-        @group = group
         @title = title
         @list_items = list_items
         @required = required
         @describedby = describedby
+        @instructions_id = instructions_id
+        @interactive = interactive
         @system_arguments = system_arguments
         @system_arguments[:list_classes] =
           class_names('border border-slate-300 rounded-lg block dark:bg-slate-800 dark:border-slate-600 max-h-[225px]
@@ -25,6 +33,28 @@ module SortableLists
           class_names('text-slate-900 dark:text-white grow block mb-1 text-sm font-medium')
         @available_list = id.include?('available')
         @selected_list = id.include?('selected')
+      end
+
+      def add_remove_controls
+        [id, counterpart_list_id].compact.join(' ')
+      end
+
+      def described_by_ids
+        [instructions_id, @describedby, (aria_required ? "#{id}-required" : nil)].compact.join(' ')
+      end
+
+      def aria_required
+        required && selected_list
+      end
+
+      private
+
+      def counterpart_list_id
+        if available_list && id.match?(/available/i)
+          id.sub(/available/i, 'selected')
+        elsif selected_list && id.match?(/selected/i)
+          id.sub(/selected/i, 'available')
+        end
       end
 
       # rubocop:enable Metrics/ParameterLists
