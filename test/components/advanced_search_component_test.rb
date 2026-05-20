@@ -252,9 +252,22 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
       assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
       within 'dialog' do
+        assert_no_selector 'legend',
+                           text: I18n.t('components.advanced_search_component.v1.group', index: '3')
         click_button I18n.t(:'components.advanced_search_component.v1.add_group_button')
 
+        assert_selector 'legend',
+                        text: I18n.t('components.advanced_search_component.v1.group', index: '1')
+
+        assert_selector 'legend',
+                        text: I18n.t('components.advanced_search_component.v1.group', index: '2')
+
+        assert_selector 'legend',
+                        text: I18n.t('components.advanced_search_component.v1.group', index: '3')
+
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']").last do
+          assert_no_selector 'legend',
+                             text: I18n.t('components.advanced_search_component.v1.condition', index: '2')
           click_button I18n.t(:'components.advanced_search_component.v1.add_condition_button')
           assert_selector :xpath,
                           "//*[@name='q[groups_attributes][2][conditions_attributes][0][field]']",
@@ -262,6 +275,12 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_selector :xpath,
                           "//*[@name='q[groups_attributes][2][conditions_attributes][1][field]']",
                           visible: :all
+
+          assert_selector 'legend',
+                          text: I18n.t('components.advanced_search_component.v1.condition', index: '1')
+
+          assert_selector 'legend',
+                          text: I18n.t('components.advanced_search_component.v1.condition', index: '2')
 
           within all("fieldset[data-advanced-search--v1-target='conditionsContainer']").first do
             find("button[data-action='advanced-search--v1#removeCondition']").click
@@ -273,7 +292,26 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_no_selector :xpath,
                              "//*[@name='q[groups_attributes][2][conditions_attributes][1][field]']",
                              visible: :all
+
+          assert_selector 'legend',
+                          text: I18n.t('components.advanced_search_component.v1.condition', index: '1')
+
+          assert_no_selector 'legend',
+                             text: I18n.t('components.advanced_search_component.v1.condition', index: '2')
         end
+
+        within all("fieldset[data-advanced-search--v1-target='groupsContainer']").first do
+          click_button I18n.t('components.advanced_search_component.v1.remove_group_button')
+        end
+
+        assert_selector 'legend',
+                        text: I18n.t('components.advanced_search_component.v1.group', index: '1')
+
+        assert_selector 'legend',
+                        text: I18n.t('components.advanced_search_component.v1.group', index: '2')
+
+        assert_no_selector 'legend',
+                           text: I18n.t('components.advanced_search_component.v1.group', index: '3')
       end
     end
   end
