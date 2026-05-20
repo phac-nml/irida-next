@@ -244,8 +244,9 @@ module Projects
       updated_params = update_store(
         search_key,
         params.fetch(:q, {})
-              .permit(:name_or_puid_cont, :name_or_puid_in, :metadata_template, :sort, groups_attributes: {})
-      ).with_indifferent_access
+              .permit(:name_or_puid_cont, :metadata_template, :sort, groups_attributes: {}),
+        permitted_keys: %i[name_or_puid_cont metadata_template sort groups_attributes]
+      )
 
       if !updated_params.key?(:sort) ||
          (updated_params[:metadata_template] == 'none' && updated_params[:sort]&.match?(/metadata_/))
