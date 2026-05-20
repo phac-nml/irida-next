@@ -34,11 +34,10 @@ module Profiles
         end
       end
 
+      # Toggles the Flipper actor gate. Call only after OptInForm validation (or equivalent checks).
       def toggle(feature_key, enabled)
         normalized_feature_key = feature_key.to_s
         feature_config = user_opt_in_features[normalized_feature_key]
-
-        return ineligible_result unless eligible_config?(normalized_feature_key, feature_config)
 
         update_actor_gate(normalized_feature_key, enabled)
 
@@ -109,10 +108,6 @@ module Profiles
 
       def success_result(feature_key, feature_config)
         Result.new(success: true, feature: feature_payload(feature_key, feature_config))
-      end
-
-      def ineligible_result
-        Result.new(success: false, error: :not_eligible)
       end
 
       def flipper_error_result(feature_key, feature_config)

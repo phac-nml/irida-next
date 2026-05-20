@@ -100,30 +100,6 @@ module Profiles
         end
       end
 
-      test 'toggle rejects ineligible feature without mutating actor gate' do
-        config = user_opt_in_feature_config(allowlist: [users(:jane_doe).email])
-
-        with_user_opt_in_features(config) do
-          result = OptInService.new(@user).toggle(:data_grid_samples_table, true)
-
-          assert_not result.success?
-          assert_equal :not_eligible, result.error
-          assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
-        end
-      end
-
-      test 'toggle rejects unknown feature without mutating actor gate' do
-        config = user_opt_in_feature_config(feature_key: :unknown_experiment, allowlist: 'all')
-
-        with_user_opt_in_features(config) do
-          result = OptInService.new(@user).toggle(:unknown_experiment, true)
-
-          assert_not result.success?
-          assert_equal :not_eligible, result.error
-          assert_not Flipper.exist?(:unknown_experiment)
-        end
-      end
-
       test 'toggle catches and logs flipper errors' do
         Flipper.expects(:enable_actor).raises(Flipper::Error, 'adapter failed')
         Rails.logger.expects(:error).with(regexp_matches(/adapter failed/))
