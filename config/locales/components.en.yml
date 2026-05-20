@@ -265,9 +265,6 @@ en:
       sidebar:
         collapsed_announcement: Sidebar collapsed
         expanded_announcement: Sidebar expanded
-    list_filter:
-      apply: Apply filter
-      title: Filter by sample names or Id
     list_input:
       clear: Remove all tags
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers

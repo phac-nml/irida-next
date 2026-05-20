@@ -14,7 +14,7 @@ export default class AdvancedSearchController extends Controller {
     "submitError",
     "valueTemplate",
   ];
-  static outlets = ["list-filter"];
+  static outlets = ["list-input"];
   static values = {
     confirmCloseText: String,
     enumFields: Object,

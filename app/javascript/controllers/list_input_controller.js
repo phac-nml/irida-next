@@ -19,8 +19,8 @@ export default class extends Controller {
 
     this.filtersValue
       .filter(Boolean)
-      .forEach((sample) =>
-        this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget),
+      .forEach((value) =>
+        this.tagsTarget.insertBefore(this.#formatTag(value), this.inputTarget),
       );
 
     this.#updateCount();
@@ -48,9 +48,9 @@ export default class extends Controller {
   handlePaste(event) {
     event.preventDefault();
     const data = (event.clipboardData || window.clipboardData).getData("text");
-    const items = this.#getNamesAndPUID(data);
-    for (const item of items) {
-      this.tagsTarget.insertBefore(this.#formatTag(item), event.target);
+    const values = this.#getValues(data);
+    for (const value of values) {
+      this.tagsTarget.insertBefore(this.#formatTag(value), event.target);
     }
     this.#clearAndFocus();
   }
@@ -103,7 +103,7 @@ export default class extends Controller {
     this.inputTarget.value = text;
   }
 
-  #getNamesAndPUID(value) {
+  #getValues(value) {
     return value
       .split(/\r?\n|,/)
       .map((t) => t.trim())
@@ -115,12 +115,12 @@ export default class extends Controller {
     this.inputTarget.focus();
   }
 
-  #formatTag(item) {
+  #formatTag(value) {
     const clone = this.templateTarget.content.cloneNode(true);
     const input = clone.querySelector("input");
 
-    clone.querySelector(".label").textContent = item;
-    input.value = item;
+    clone.querySelector(".label").textContent = value;
+    input.value = value;
 
     return clone;
   }
@@ -128,7 +128,7 @@ export default class extends Controller {
   #updateCount() {
     if (this.hasCountTarget) {
       const count = this.filtersValue.filter(
-        (sample) => sample.length > 0,
+        (value) => value.length > 0,
       ).length;
       this.countTarget.innerText = count;
       this.countTarget.classList.toggle("hidden", count === 0);

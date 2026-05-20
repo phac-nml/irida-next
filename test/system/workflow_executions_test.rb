@@ -1343,7 +1343,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   def set_advanced_search_multi_select_values(selector, values)
     return apply_select_values(find(selector, visible: :visible), values) if has_selector?(selector, visible: :visible)
     return apply_select_values(find(selector, visible: :all), values) if has_selector?(selector, visible: :all)
-    return apply_list_filter_values(values) if has_selector?("div[data-controller='list-filter']", visible: :visible)
+    return apply_list_filter_values(values) if has_selector?("div[data-controller='list-input']", visible: :visible)
 
     apply_hidden_input_values(values)
   end
@@ -1359,14 +1359,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   def apply_list_filter_values(values) # rubocop:disable Metrics/MethodLength
-    list_filter = find("div[data-controller='list-filter']", visible: :visible)
+    list_filter = find("div[data-controller='list-input']", visible: :visible)
 
     page.execute_script(<<~JS, list_filter)
       const element = arguments[0];
       const values = #{values.to_json};
-      const template = element.querySelector("template[data-list-filter-target='template']");
-      const tags = element.querySelector("[data-list-filter-target='tags']");
-      const input = element.querySelector("[data-list-filter-target='input']");
+      const template = element.querySelector("template[data-list-input-target='template']");
+      const tags = element.querySelector("[data-list-input-target='tags']");
+      const input = element.querySelector("[data-list-input-target='input']");
 
       if (!template || !tags || !input) { return; }
 
