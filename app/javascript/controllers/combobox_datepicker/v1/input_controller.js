@@ -158,7 +158,7 @@ export default class extends Controller {
 
   #setSelectedDate() {
     this.#selectedDate = this.datepickerInputTarget.value;
-    if (this.#selectedDate) {
+    if (this.#selectedDate && this.#validateSelectedDate()) {
       const fullSelectedDate = new Date(this.#selectedDate);
       this.#selectedYear = fullSelectedDate.getUTCFullYear();
       // Sometimes an issue where selecting the 1st will display the previous month with the 1st as an
@@ -172,6 +172,25 @@ export default class extends Controller {
     if (this.hasComboboxDatepickerV1CalendarOutlet) {
       this.#shareParamsWithCalendar();
     }
+  }
+
+  // validates the date within the input; prevents re-rendering incorrect calendar if an invalid date was entered
+  // and submitted to the backend
+  #validateSelectedDate() {
+    if (this.#minDate) {
+      if (this.#minDate > this.#selectedDate) {
+        this.#selectedDate = null;
+        return false;
+      }
+    }
+
+    if (this.#maxDate) {
+      if (this.#selectedDate > this.#maxDate) {
+        this.#selectedDate = null;
+        return false;
+      }
+    }
+    return true;
   }
 
   // append datepicker to dialog if in dialog, otherwise append to body
