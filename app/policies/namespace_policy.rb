@@ -14,14 +14,14 @@ class NamespacePolicy < ApplicationPolicy
                                                ).select(:id),
       linked_namespaces: relation.where(id: NamespaceGroupLink.where(
         group: user.groups.where(id: user.members.not_expired.joins(:namespace)
-                                     .where(
-                                       access_level: Member::AccessLevel.manageable, namespace: { type: Group.sti_name }
-                                     )
-                                     .select(:namespace_id)).self_and_descendants,
+                                         .where(
+                                           access_level: Member::AccessLevel.manageable, namespace: { type: Group.sti_name }
+                                         )
+                                         .select(:namespace_id)).self_and_descendants,
         group_access_level: Member::AccessLevel.manageable,
         namespace_type: Group.sti_name
       ).not_expired.select(:namespace_id)).self_and_descendants.where.not(type: Namespaces::ProjectNamespace.sti_name)
-                         .select(:id)
+                                 .select(:id)
     ).where(
       Arel.sql(
         'namespaces.id in (select * from personal_namespaces)
