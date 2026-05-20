@@ -177,19 +177,13 @@ export default class extends Controller {
   // validates the date within the input; prevents re-rendering incorrect calendar if an invalid date was entered
   // and submitted to the backend
   #validateSelectedDate() {
-    if (this.#minDate) {
-      if (this.#minDate > this.#selectedDate) {
-        this.#selectedDate = null;
-        return false;
-      }
+    if (
+      (this.#minDate && this.#minDate > this.#selectedDate) ||
+      (this.#maxDate && this.#selectedDate > this.#maxDate)
+    ) {
+      return false;
     }
 
-    if (this.#maxDate) {
-      if (this.#selectedDate > this.#maxDate) {
-        this.#selectedDate = null;
-        return false;
-      }
-    }
     return true;
   }
 
