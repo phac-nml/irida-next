@@ -63,7 +63,7 @@ module Profiles
 
     def revoke
       authorize! @user
-      @personal_access_token = current_user.personal_access_tokens.find(params[:id])
+      @personal_access_token = current_user.personal_access_tokens.find(params.expect(:id))
 
       @personal_access_token.revoke!
       respond_to do |format|
@@ -74,7 +74,7 @@ module Profiles
     end
 
     def rotate
-      personal_access_token = current_user.personal_access_tokens.find(params[:id])
+      personal_access_token = current_user.personal_access_tokens.find(params.expect(:id))
 
       @personal_access_token = PersonalAccessTokens::RotateService.new(current_user, personal_access_token).execute
 

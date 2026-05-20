@@ -15,9 +15,9 @@
   <% if %w[in not_in].include?(@condition.operator) %>
     <% if @options.nil? %>
       <div
-        data-controller="list-filter"
-        data-list-filter-filters-value="<%= ERB::Util.json_escape(@condition.value.present? ? @condition.value.to_json : '[]') %>"
-        class="list-filter"
+        data-controller="list-input"
+        data-list-input-filters-value="<%= ERB::Util.json_escape(@condition.value.present? ? @condition.value.to_json : '[]') %>"
+        class="list-input"
       >
         <%= render ListInputComponent.new(
           list_input_form_name: @conditions_form.field_name(:value, multiple: true),

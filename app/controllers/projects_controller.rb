@@ -5,6 +5,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   include BreadcrumbNavigation
 
   layout :resolve_layout
+  before_action :project, except: %i[index new create]
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
   before_action :current_page
   before_action :edit_view_authorizations, only: %i[edit]
@@ -24,7 +25,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def new
     @project = Project.new
-    @project.build_namespace(parent_id: params[:namespace_id] || current_user.namespace.id)
+    @project.build_namespace(parent_id: params.fetch(:namespace_id, current_user.namespace.id))
 
     authorize! @project
   end
@@ -118,8 +119,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def project_params
-    params
-      .expect(project: project_params_attributes)
+    params.expect(project: project_params_attributes)
   end
 
   def namespace_attributes
@@ -137,15 +137,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     ]
   end
 
-  def project
-    return unless params[:project_id]
-    return @project if defined?(@project)
-
-    path = [params[:namespace_id], params[:project_id]].join('/')
-    @project = Project.includes({ namespace: [{ parent: :route }, :route] })
-                      .find_by(namespace_id: Namespaces::ProjectNamespace.find_by_full_path(path).id) # rubocop:disable Rails/DynamicFindBy
-  end
-
   def authorized_namespaces
     @authorized_namespaces = authorized_scope(Namespace, type: :relation, as: :manageable)
     return unless @project
@@ -154,8 +145,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   end
 
   def new_namespace
-    id = params.require(:new_namespace_id)
-    Namespace.find_by(id:)
+    Namespace.find_by(id: params.expect(:new_namespace_id))
   end
 
   def resolve_layout
@@ -186,16 +176,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   protected
 
-  def namespace
-    return unless params[:project_id]
-
-    path = [params[:namespace_id], params[:project_id]].join('/')
-    @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
-    @namespace = @project.namespace
-
-    authorized_namespaces
-  end
-
   def current_page
     @current_page = case action_name
                     when 'show'
@@ -220,7 +200,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
              when 'new'
                title = t(:'projects.new.title')
                if params[:group_id]
-                 group = Namespace.find(params[:group_id])
+                 group = Namespace.find(params.expect(:group_id))
                  title += " · #{t(:'activerecord.models.group.one')}: #{group.name} (#{group.puid})"
                end
                title

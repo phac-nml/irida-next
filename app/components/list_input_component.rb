@@ -20,11 +20,11 @@ class ListInputComponent < Component
       args[:aria][:label] = t(:'components.list_input.description')
       args[:data] ||= {}
       args[:data][:action] = '
-        keydown->list-filter#handleInput
-        paste->list-filter#handlePaste
-        turbo:morph-element->list-filter#idempotentConnect
+        keydown->list-input#handleInput
+        paste->list-input#handlePaste
+        turbo:morph-element->list-input#idempotentConnect
       '
-      args[:data][:'list-filter-target'] = 'input'
+      args[:data][:'list-input-target'] = 'input'
     end
   end
 end

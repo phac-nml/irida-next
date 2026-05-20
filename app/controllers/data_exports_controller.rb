@@ -128,7 +128,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def data_export
-    @data_export = DataExport.find(params[:id])
+    @data_export = DataExport.find(params.expect(:id))
   end
 
   def data_exports
@@ -142,7 +142,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def namespace
     return unless params[:export_type] == 'linelist'
 
-    @namespace = Namespace.find(params[:namespace_id])
+    @namespace = Namespace.find(params.expect(:namespace_id))
   end
 
   def current_page
@@ -194,7 +194,10 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     local = { open: true,
               analysis_type: params['analysis_type'],
               namespace_id: %w[group project].include?(params['analysis_type']) ? params[:namespace_id] : nil }
-    local[:workflow_execution] = WorkflowExecution.find(params[:workflow_execution_id]) if params[:single_workflow]
+    if params[:single_workflow]
+      local[:workflow_execution] =
+        WorkflowExecution.find(params.expect(:workflow_execution_id))
+    end
     local
   end
 

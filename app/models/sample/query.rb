@@ -8,7 +8,6 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
   allowed_sort_columns :name, :puid, :created_at, :updated_at, :attachments_updated_at, 'namespaces.puid'
 
   attribute :name_or_puid_cont, :string
-  attribute :name_or_puid_in, default: -> { [] }
   attribute :project_ids, default: -> { [] }
   attribute :groups, default: lambda {
     [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
@@ -36,8 +35,7 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
 
   def ransack_params
     {
-      name_or_puid_cont: name_or_puid_cont,
-      name_or_puid_in: name_or_puid_in
+      name_or_puid_cont: name_or_puid_cont
     }.compact
   end
 end

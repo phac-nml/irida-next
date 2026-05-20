@@ -184,7 +184,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     @current_metadata_template_id = if default_values.include?(params[:metadata_template])
                                       params[:metadata_template]
                                     else
-                                      MetadataTemplate.find(params[:metadata_template]).id
+                                      MetadataTemplate.find(params.expect(:metadata_template)).id
                                     end
   end
 

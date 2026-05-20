@@ -20,8 +20,8 @@ module Projects
                                                  partial: 'update_metadata_modal',
                                                  locals: {
                                                    open: true,
-                                                   key: params[:key],
-                                                   value: params[:value]
+                                                   key: params.expect(:key),
+                                                   value: params.expect(:value)
                                                  }), status: :ok
       end
 

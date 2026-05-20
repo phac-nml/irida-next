@@ -23,7 +23,7 @@ module Projects
     def new
       authorize! @namespace, to: :create_automated_workflow_executions?
 
-      @workflow = if params[:pipeline_id].present? && params[:workflow_version].present?
+      @workflow = if params.key?(:pipeline_id) && params.key?(:workflow_version)
                     Irida::Pipelines.instance.find_pipeline_by(params[:pipeline_id],
                                                                params[:workflow_version])
                   end
@@ -127,8 +127,6 @@ module Projects
     protected
 
     def namespace
-      path = [params[:namespace_id], params[:project_id]].join('/')
-      @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
       @namespace = @project.namespace
     end
 

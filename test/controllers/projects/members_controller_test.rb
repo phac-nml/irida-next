@@ -52,7 +52,7 @@ module Projects
                                                              members_q: { s: 'access_level asc' })
       assert_response :success
       assert_sort_state(2, 'ascending')
-      member_emails = Nokogiri::HTML(response.body).css('#members-table-body tr td:first-child').filter_map do |node|
+      member_emails = Nokogiri::HTML(response.body).css('#members-table-body tr td:first-child').filter_map do |node| # rubocop:disable Rails/ResponseParsedBody
         node.text[/[A-Za-z0-9_.+-]+@[A-Za-z0-9\-.]+/]
       end
       assert_equal project_member_ryan.user.email, member_emails.first
@@ -62,7 +62,7 @@ module Projects
                                                              members_q: { s: 'access_level desc' })
       assert_response :success
       assert_sort_state(2, 'descending')
-      member_emails = Nokogiri::HTML(response.body).css('#members-table-body tr td:first-child').filter_map do |node|
+      member_emails = Nokogiri::HTML(response.body).css('#members-table-body tr td:first-child').filter_map do |node| # rubocop:disable Rails/ResponseParsedBody
         node.text[/[A-Za-z0-9_.+-]+@[A-Za-z0-9\-.]+/]
       end
       assert_includes owner_emails, member_emails.first

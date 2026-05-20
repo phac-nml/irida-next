@@ -15,7 +15,7 @@ module Groups
     private
 
     def member
-      @member = Member.find_by(id: request.params[:id], namespace_id: member_namespace.id) || not_found
+      @member = Member.find_by(id: params.expect(:id), namespace_id: member_namespace.id) || not_found
     end
 
     def namespace
@@ -40,8 +40,7 @@ module Groups
     end
 
     def member_namespace
-      @group ||= Group.find_by_full_path(request.params[:group_id]) # rubocop:disable Rails/DynamicFindBy
-      @group
+      group
     end
 
     def current_page

@@ -16,9 +16,10 @@ module Storable
   # If no value exists under the search_key, initializes it as an empty hash before merging.
   # @param search_key [Symbol, String] the key under which the value is stored in the session.
   # @param value [Hash] the value to merge with the existing value in the session.
-  def update_store(search_key, value)
-    session[search_key] = (session[search_key] || {}).merge(value)
-    session[search_key].reject! { |_, val| val.blank? || val == [''] }
+  def update_store(search_key, value, reject_blank: true, permitted_keys: nil)
+    session[search_key] = (session[search_key] || {}).merge(value).with_indifferent_access
+    session[search_key].reject! { |_, val| val.blank? || val == [''] } if reject_blank
+    session[search_key].slice!(*permitted_keys) if permitted_keys.is_a?(Array) && permitted_keys.any?
     get_store(search_key)
   end
 

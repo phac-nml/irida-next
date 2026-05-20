@@ -54,8 +54,7 @@ module Groups
     test 'should handle metadata template none' do
       get group_samples_path(@group, params: { q: { metadata_template: 'none' } })
       assert_response :success
-      doc = Nokogiri::HTML(response.body)
-      assert doc.at_css('turbo-frame[src*="metadata_template=none"]')
+      assert response.parsed_body.at_css('turbo-frame[src*="metadata_template=none"]')
 
       w3c_validate 'Group Samples Page'
     end
@@ -63,8 +62,7 @@ module Groups
     test 'should handle metadata template all' do
       get group_samples_path(@group, params: { q: { metadata_template: 'all' } })
       assert_response :success
-      doc = Nokogiri::HTML(response.body)
-      assert doc.at_css('turbo-frame[src*="metadata_template=all"]')
+      assert response.parsed_body.at_css('turbo-frame[src*="metadata_template=all"]')
 
       w3c_validate 'Group Samples Page'
     end
@@ -73,8 +71,7 @@ module Groups
       template = metadata_templates(:valid_group_metadata_template)
       get group_samples_path(@group, params: { q: { metadata_template: template.id } })
       assert_response :success
-      doc = Nokogiri::HTML(response.body)
-      assert doc.at_css("turbo-frame[src*=\"metadata_template=#{template.id}\"]")
+      assert response.parsed_body.at_css("turbo-frame[src*=\"metadata_template=#{template.id}\"]")
 
       w3c_validate 'Group Samples Page'
     end
@@ -247,13 +244,11 @@ module Groups
     private
 
     def rendered_project_puids
-      doc = Nokogiri::HTML(response.body)
-      doc.css('#samples-table table tbody tr td:nth-child(3)').map { |node| node.text.strip }
+      response.parsed_body.css('#samples-table table tbody tr td:nth-child(3)').map { |node| node.text.strip }
     end
 
     def rendered_sample_puids
-      doc = Nokogiri::HTML(response.body)
-      doc.css('#samples-table table tbody tr th:first-child').map { |node| node.text.strip }
+      response.parsed_body.css('#samples-table table tbody tr th:first-child').map { |node| node.text.strip }
     end
   end
 end

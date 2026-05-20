@@ -38,7 +38,7 @@ module Dashboard
     end
 
     def expand_group
-      @group = Group.find(params[:parent_id])
+      @group = Group.find(params.expect(:parent_id))
       @level = params[:level].to_i
       @posinset = params[:posinset].to_i
       @setsize = params[:setsize].to_i

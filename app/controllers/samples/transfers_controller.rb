@@ -44,7 +44,7 @@ module Samples
     end
 
     def namespace
-      @namespace = Namespace.find(params[:namespace_id])
+      @namespace = Namespace.find(params.expect(:namespace_id))
     end
   end
 end

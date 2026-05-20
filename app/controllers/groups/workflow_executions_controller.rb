@@ -30,10 +30,6 @@ module Groups
       }
     end
 
-    def group
-      @group ||= Group.find_by_full_path(request.params[:group_id] || request.params[:id]) # rubocop:disable Rails/DynamicFindBy
-    end
-
     def namespace
       @namespace = group
     end
