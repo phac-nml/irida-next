@@ -394,13 +394,10 @@ export default class extends Controller {
       selectedDate.setAttribute("aria-selected", "true");
     }
 
-    // don't need to add 'today' styling if today == selectedDate
-    if (
-      today &&
-      selectedDate != today &&
-      today.getAttribute("aria-disabled") !== "true"
-    ) {
-      this.#replaceDateStyling(today, CALENDAR_CLASSES["TODAYS_DATE"]);
+    // today's date is present but is not selected, add the 'dot' styling to indicate today's date
+    if (today && selectedDate !== today) {
+      today.classList.add(...CALENDAR_CLASSES["TODAYS_DATE"]);
+      today.setAttribute("aria-current", "true");
     }
   }
 
