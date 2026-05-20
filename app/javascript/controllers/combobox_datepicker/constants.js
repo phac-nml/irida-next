@@ -3,7 +3,7 @@ export const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 export const CALENDAR_CLASSES = {
   SELECTED_DATE: [
     "bg-primary-700",
-    "text-white",
+    "!text-white",
     "hover:bg-primary-800",
     "dark:text-white",
     "dark:bg-primary-600",
