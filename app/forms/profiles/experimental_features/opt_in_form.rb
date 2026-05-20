@@ -8,10 +8,13 @@ module Profiles
       include ActiveModel::Attributes
       include ActiveModel::Validations
 
+      ENABLED_VALUES = [true, false, 'true', 'false', '1', '0', 1, 0].freeze
+
       attribute :feature_key, :string
       attribute :enabled, :boolean
 
       validates :feature_key, presence: true, format: { with: /\A[a-zA-Z0-9_]+\z/ }
+      validate :enabled_must_be_boolean_value
       validate :feature_must_be_eligible
 
       attr_reader :user, :settings, :result
@@ -24,6 +27,11 @@ module Profiles
         @user = user
         @settings = settings
         super(**attributes)
+      end
+
+      def enabled=(value)
+        @enabled_input = value
+        super
       end
 
       def save # rubocop:disable Naming/PredicateMethod -- ActiveRecord-style form API
@@ -42,8 +50,20 @@ module Profiles
         @opt_in_service ||= OptInService.new(user, settings:)
       end
 
+      def enabled_must_be_boolean_value
+        return if ENABLED_VALUES.include?(@enabled_input)
+
+        errors.add(:enabled, :inclusion)
+      end
+
       def feature_must_be_eligible
         return if feature_key.blank?
+
+        unless opt_in_service.manageable_feature?(feature_key)
+          errors.add(:feature_key, :invalid)
+          return
+        end
+
         return if opt_in_service.eligible?(feature_key)
 
         errors.add(:feature_key, :not_eligible)

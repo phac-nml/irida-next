@@ -32,6 +32,16 @@ module Profiles
         end
       end
 
+      test 'save is invalid when enabled is not a boolean-like value' do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          form = build_form(feature_key: 'data_grid_samples_table', enabled: 'yes')
+
+          assert_not form.save
+          assert_includes form.errors.details[:enabled].pluck(:error), :inclusion
+          assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
+        end
+      end
+
       test 'save is invalid when user is not on allowlist' do
         config = user_opt_in_feature_config(allowlist: [users(:jane_doe).email])
 
@@ -51,7 +61,7 @@ module Profiles
           form = build_form(feature_key: 'unknown_experiment', enabled: true)
 
           assert_not form.save
-          assert_includes form.errors.details[:feature_key].pluck(:error), :not_eligible
+          assert_includes form.errors.details[:feature_key].pluck(:error), :invalid
           assert_not Flipper.exist?(:unknown_experiment)
         end
       end
