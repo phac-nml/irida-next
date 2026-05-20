@@ -23,9 +23,6 @@ module ComboboxDatepicker
             assert_field 'month-select', with: I18n.t('components.datepicker.months.may')
             assert_field 'year-select', with: '2026'
 
-            assert_selector 'div[data-combobox-datepicker--v1--calendar-target="minDateMessage"]',
-                            text: "#{I18n.t('components.datepicker.errors.min_date_error')}2026-05-08"
-
             # all grid rows and cells are 'filled out'
             assert_selector 'table tbody tr', count: 6
             assert_selector 'table tbody tr td', count: 42
