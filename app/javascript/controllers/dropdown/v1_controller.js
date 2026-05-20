@@ -22,7 +22,7 @@ export default class extends Controller {
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
     if (this.caretValue) {
-      this.#caret = this.element.querySelector("svg.caret-down-icon");
+      this.#caret = this.element.querySelector("svg");
     }
   }
 

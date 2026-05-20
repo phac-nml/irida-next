@@ -24,7 +24,7 @@ export default class extends Controller {
     document.addEventListener("turbo:morph", this.boundOnMorph);
 
     if (this.caretValue) {
-      this.#caret = this.element.querySelector("svg.caret-down-icon");
+      this.#caret = this.element.querySelector("svg");
     }
   }
 
