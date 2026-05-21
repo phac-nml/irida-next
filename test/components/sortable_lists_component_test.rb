@@ -36,6 +36,32 @@ class SortableListsComponentTest < ViewComponentTestCase
     assert_no_selector 'li[role="option"] a, li[role="option"] button, li[role="option"] input'
   end
 
+  test 'renders contextual list labels and describedby references' do
+    component = SortableListsComponent.new(required: true)
+    component.with_list(
+      id: 'available-list',
+      title: 'Not imported',
+      list_items: ['One'],
+      describedby: 'metadata-guidance-available-description'
+    )
+    component.with_list(
+      id: 'selected-list',
+      title: 'Will be imported',
+      list_items: ['Two'],
+      required: true,
+      describedby: 'metadata-guidance-selected-description metadata_fields_error'
+    )
+
+    render_inline(component)
+
+    assert_selector '#available-list-list-label', text: 'Not imported'
+    assert_selector '#selected-list-list-label', text: 'Will be imported'
+    assert_selector 'ul#available-list[aria-describedby*="metadata-guidance-available-description"]'
+    assert_selector 'ul#selected-list[aria-describedby*="metadata-guidance-selected-description"]'
+    assert_selector 'ul#selected-list[aria-describedby*="metadata_fields_error"]'
+    assert_selector 'ul#selected-list[aria-describedby*="selected-list-required"]'
+  end
+
   test 'renders required state only on the selected listbox' do
     component = SortableListsComponent.new(required: true)
     component.with_list(id: 'available-list', title: 'Available', list_items: ['One'])
