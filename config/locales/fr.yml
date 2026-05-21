@@ -7,7 +7,7 @@ fr:
         basename: Nom de base du fichier de concaténation
         delete_originals: Supprimer les fichiers originaux après la concaténation?
       groups/transfer_form:
-        new_namespace_id: Nouveau groupe parent
+        new_parent_id: Nouveau groupe parent
       sample/query:
         group: Groupe
       sample/search_condition:
@@ -36,7 +36,7 @@ fr:
               invalid: doit contenir uniquement des lettres, chiffres, « - », « . » et « _ »
         groups/transfer_form:
           attributes:
-            new_namespace_id:
+            new_parent_id:
               blank: est vide
               namespace_group_exists: existe déjà un groupe portant le même nom/chemin
               other_than: doit être différent du groupe
@@ -872,7 +872,7 @@ fr:
           descriptions:
           - Transférer le groupe à un autre groupe parent
           empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
-          new_namespace_id: Choisissez un groupe parent
+          new_parent_id: Choisissez un groupe parent
           no_available_namespaces: Vous n’avez accès à aucun espace de noms de destination pour transférer ce groupe
           points:
           - Soyez prudent. Changer le parent d’un groupe peut avoir des effets secondaires involontaires.

@@ -7,13 +7,13 @@ if Flipper.enabled?(:v2_select2, Current.user)
   end) do |form| %>
   <%= render partial: "shared/form/required_field_legend" %>
 
-  <% invalid_new_namespace_id = @transfer_form.errors.include?(:new_namespace_id) %>
+  <% invalid_new_parent_id = @transfer_form.errors.include?(:new_parent_id) %>
 
-  <div class="form-field <%= 'invalid' if invalid_new_namespace_id %>">
+  <div class="form-field <%= 'invalid' if invalid_new_parent_id %>">
     <%= form_error_summary(form) %>
 
-    <%= form.label :new_namespace_id,
-               t("groups.edit.advanced.transfer.new_namespace_id"),
+    <%= form.label :new_parent_id,
+               t("groups.edit.advanced.transfer.new_parent_id"),
                class:
                  "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
                data: {
@@ -32,7 +32,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
         autocomplete="off"
       >
     <% else %>
-      <%= render Select2Component.new(form:, name: :new_namespace_id, id: form.field_id(:new_namespace_id), placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
+      <%= render Select2Component.new(form:, name: :new_parent_id, id: form.field_id(:new_parent_id), placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
@@ -53,10 +53,10 @@ if Flipper.enabled?(:v2_select2, Current.user)
       <% end %>
     <% end %>
 
-    <% if invalid_new_namespace_id %>
+    <% if invalid_new_parent_id %>
       <%= render "shared/form/field_errors",
-              id: form.field_id(:new_namespace_id, "error"),
-              errors: @transfer_form.errors.full_messages_for(:new_namespace_id) %>
+              id: form.field_id(:new_parent_id, "error"),
+              errors: @transfer_form.errors.full_messages_for(:new_parent_id) %>
     <% end %>
   </div>
 
