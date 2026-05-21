@@ -388,9 +388,8 @@ export default class AdvancedSearchController extends Controller {
     const legend = Array.from(container.children).find(
       (child) => child.tagName === "LEGEND",
     );
-    const legendTemplate =
-      container.dataset["advancedSearch--V1LegendTemplate"];
 
+    const legendTemplate = container.dataset["advancedSearch-V1LegendTemplate"];
     if (!legend || !legendTemplate) {
       return;
     }
