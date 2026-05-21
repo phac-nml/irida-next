@@ -6,6 +6,8 @@ en:
         attachment_ids: Files
         basename: Base filename
         delete_originals: Delete original files after concatenation?
+      groups/transfer_form:
+        new_namespace_id: New namespace
       sample/query:
         group: Group
       sample/search_condition:
@@ -14,8 +16,6 @@ en:
         value: Value
       sample/search_group:
         condition: Condition
-      transfer_form:
-        new_namespace_id: New namespace
       workflow_execution/search_condition:
         field: Field
         operator: Operator
@@ -34,6 +34,12 @@ en:
               mismatching_paired_end_counts: must all be paired. Forward and reverse read file counts do not match.
             basename:
               invalid: must contain only letters, digits, '-', '.', and '_'.
+        groups/transfer_form:
+          attributes:
+            new_namespace_id:
+              blank: is empty
+              namespace_group_exists: already has a group with the same name/path
+              other_than: must be different from the group
         sample/search_condition:
           attributes:
             field:
@@ -42,12 +48,6 @@ en:
               not_a_date_operator: cannot be used on dates
             value:
               not_a_date: must be formatted YYYY-MM-DD
-        transfer_form:
-          attributes:
-            new_namespace_id:
-              blank: is empty
-              namespace_group_exists: already has a group with the same name/path
-              other_than: must be different from the group
   activerecord:
     attributes:
       attachment:

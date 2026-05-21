@@ -56,7 +56,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @subgroups_count = @group.self_and_descendants_of_type([Group.sti_name]).size - 1
     @projects_count = @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).size
     @samples_count = @group.samples_count
-    @transfer_form = ::TransferForm.new
+    @transfer_form = ::Groups::TransferForm.new
   end
 
   def create
@@ -118,8 +118,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def transfer # rubocop:disable Metrics/AbcSize
-    @transfer_form = ::TransferForm.new(group_transfer_params.merge(group_id: @group.id, group_name: @group.name,
-                                                                    group_path: @group.path))
+    @transfer_form = ::Groups::TransferForm.new(group_transfer_params.merge(group_id: @group.id,
+                                                                            group_name: @group.name,
+                                                                            group_path: @group.path))
     new_namespace ||= Namespace.find_by(id: @transfer_form.new_namespace_id)
     respond_to do |format|
       if Groups::TransferService.new(@group, current_user, @transfer_form).execute(new_namespace)
@@ -163,7 +164,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def group_transfer_params
-    params.expect(transfer_form: [:new_namespace_id])
+    params.expect(groups_transfer_form: [:new_namespace_id])
   end
 
   def authorized_namespaces

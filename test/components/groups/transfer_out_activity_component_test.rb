@@ -14,7 +14,7 @@ module Groups
 
     test 'transfer subgroup to another group activity' do
       group2 = groups(:group_two)
-      transfer_form = ::TransferForm.new({ new_namespace_id: group2.id }
+      transfer_form = ::Groups::TransferForm.new({ new_namespace_id: group2.id }
       .merge(group_id: @subgroup.id, group_name: @subgroup.name, group_path: @subgroup.path))
       ::Groups::TransferService.new(@subgroup, @user, transfer_form).execute(group2)
 

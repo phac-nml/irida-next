@@ -17,7 +17,7 @@ module Groups
 
     test 'transfer group with permission' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
-      transfer_form = ::TransferForm.new({ new_namespace_id: new_namespace.id }
+      transfer_form = ::Groups::TransferForm.new({ new_namespace_id: new_namespace.id }
       .merge(group_id: @group.id, group_name: @group.name, group_path: @group.path))
       assert_changes -> { @group.parent }, to: new_namespace do
         Groups::TransferService.new(@group, @john_doe, transfer_form).execute(new_namespace)
@@ -27,14 +27,14 @@ module Groups
     end
 
     test 'transfer group without specifying new namespace' do
-      transfer_form = ::TransferForm.new({ new_namespace_id: '' }
+      transfer_form = ::Groups::TransferForm.new({ new_namespace_id: '' }
       .merge(group_id: @group.id, group_name: @group.name, group_path: @group.path))
       assert_not Groups::TransferService.new(@group, @john_doe, transfer_form).execute(nil)
       assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'transfer group to same group' do
-      transfer_form = ::TransferForm.new({ new_namespace_id: @group.id }
+      transfer_form = ::Groups::TransferForm.new({ new_namespace_id: @group.id }
       .merge(group_id: @group.id, group_name: @group.name, group_path: @group.path))
       assert_not Groups::TransferService.new(@group, @john_doe, transfer_form).execute(@group)
       assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
@@ -42,7 +42,7 @@ module Groups
 
     test 'transfer group to namespace containing group' do
       subgroup_one = groups(:subgroup1)
-      transfer_form = ::TransferForm.new({ new_namespace_id: @group.id }
+      transfer_form = ::Groups::TransferForm.new({ new_namespace_id: @group.id }
       .merge(group_id: subgroup_one.id, group_name: subgroup_one.name, group_path: subgroup_one.path))
 
       assert_not Groups::TransferService.new(subgroup_one, @john_doe, transfer_form).execute(@group)
@@ -51,7 +51,7 @@ module Groups
 
     test 'transfer group without group permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
-      transfer_form = ::TransferForm.new({ new_namespace_id: new_namespace.id }
+      transfer_form = ::Groups::TransferForm.new({ new_namespace_id: new_namespace.id }
       .merge(group_id: @group.id, group_name: @group.name, group_path: @group.path))
       exception = assert_raises(ActionPolicy::Unauthorized) do
         Groups::TransferService.new(@group, @jane_doe, transfer_form).execute(new_namespace)
@@ -67,7 +67,7 @@ module Groups
 
     test 'transfer group without target namespace permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
-      transfer_form = ::TransferForm.new({ new_namespace_id: new_namespace.id }
+      transfer_form = ::Groups::TransferForm.new({ new_namespace_id: new_namespace.id }
       .merge(group_id: @group.id, group_name: @group.name, group_path: @group.path))
       assert_raises(ActionPolicy::Unauthorized) do
         Groups::TransferService.new(@group, @john_doe, transfer_form).execute(new_namespace)
@@ -77,7 +77,7 @@ module Groups
 
     test 'authorize allowed to transfer group with permission' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
-      transfer_form = ::TransferForm.new({ new_namespace_id: new_namespace.id }
+      transfer_form = ::Groups::TransferForm.new({ new_namespace_id: new_namespace.id }
       .merge(group_id: @group.id, group_name: @group.name, group_path: @group.path))
       assert_authorized_to(:transfer?, @group,
                            with: GroupPolicy,
@@ -90,7 +90,7 @@ module Groups
 
     test 'authorize allowed to transfer group into namespace' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
-      transfer_form = ::TransferForm.new({ new_namespace_id: new_namespace.id }
+      transfer_form = ::Groups::TransferForm.new({ new_namespace_id: new_namespace.id }
       .merge(group_id: @group.id, group_name: @group.name, group_path: @group.path))
       assert_authorized_to(:transfer_into_namespace?, new_namespace,
                            with: Namespaces::UserNamespacePolicy,
@@ -113,7 +113,7 @@ module Groups
 
       assert_no_changes -> { @group12.reload.metadata_summary } do
         assert_no_changes -> { @subgroup12aa.reload.metadata_summary } do
-          transfer_form = ::TransferForm.new({ new_namespace_id: @subgroup12b.id }
+          transfer_form = ::Groups::TransferForm.new({ new_namespace_id: @subgroup12b.id }
           .merge(group_id: @subgroup12aa.id, group_name: @subgroup12aa.name, group_path: @subgroup12aa.path))
           Groups::TransferService.new(@subgroup12aa, @john_doe, transfer_form).execute(@subgroup12b)
         end
@@ -126,7 +126,7 @@ module Groups
       assert_no_changes -> { @group12.reload.metadata_summary } do
         assert_no_changes -> { @subgroup12aa.reload.metadata_summary } do
           assert_no_changes -> { @subgroup12b.reload.metadata_summary } do
-            transfer_form = ::TransferForm.new({ new_namespace_id: @subgroup12a.id }
+            transfer_form = ::Groups::TransferForm.new({ new_namespace_id: @subgroup12a.id }
             .merge(group_id: @subgroup12b.id, group_name: @subgroup12b.name, group_path: @subgroup12b.path))
             Groups::TransferService.new(@subgroup12b, @john_doe, transfer_form).execute(@subgroup12a)
           end
@@ -148,7 +148,7 @@ module Groups
 
       assert_no_changes -> { @group12.reload.samples_count } do
         assert_no_changes -> { @subgroup12aa.reload.samples_count } do
-          transfer_form = ::TransferForm.new({ new_namespace_id: @subgroup12b.id }
+          transfer_form = ::Groups::TransferForm.new({ new_namespace_id: @subgroup12b.id }
           .merge(group_id: @subgroup12aa.id, group_name: @subgroup12aa.name, group_path: @subgroup12aa.path))
           Groups::TransferService.new(@subgroup12aa, @john_doe, transfer_form).execute(@subgroup12b)
         end
@@ -161,7 +161,7 @@ module Groups
       assert_no_changes -> { @group12.reload.samples_count } do
         assert_no_changes -> { @subgroup12aa.reload.samples_count } do
           assert_no_changes -> { @subgroup12b.reload.samples_count } do
-            transfer_form = ::TransferForm.new({ new_namespace_id: @subgroup12a.id }
+            transfer_form = ::Groups::TransferForm.new({ new_namespace_id: @subgroup12a.id }
             .merge(group_id: @subgroup12b.id, group_name: @subgroup12b.name, group_path: @subgroup12b.path))
             Groups::TransferService.new(@subgroup12b, @john_doe, transfer_form).execute(@subgroup12a)
           end

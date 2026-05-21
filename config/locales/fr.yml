@@ -6,6 +6,8 @@ fr:
         attachment_ids: Fichiers
         basename: Nom de base du fichier de concaténation
         delete_originals: Supprimer les fichiers originaux après la concaténation?
+      groups/transfer_form:
+        new_namespace_id: Nouvel espace de noms
       sample/query:
         group: Groupe
       sample/search_condition:
@@ -14,8 +16,6 @@ fr:
         value: Valeur
       sample/search_group:
         condition: Condition
-      transfer_form:
-        new_namespace_id: Nouvel espace de noms
       workflow_execution/search_condition:
         field: Champ
         operator: Opérateur
@@ -34,6 +34,12 @@ fr:
               mismatching_paired_end_counts: tous les fichiers sélectionnés doivent être jumelés. Le nombre de fichiers en lecture directe et inversée ne correspond pas.
             basename:
               invalid: doit contenir uniquement des lettres, chiffres, « - », « . » et « _ »
+        groups/transfer_form:
+          attributes:
+            new_namespace_id:
+              blank: est vide
+              namespace_group_exists: existe déjà un groupe portant le même nom/chemin
+              other_than: doit être différent du groupe
         sample/search_condition:
           attributes:
             field:
@@ -42,12 +48,6 @@ fr:
               not_a_date_operator: ne peut pas être utilisé sur les dates
             value:
               not_a_date: doit être formaté AAAA-MM-JJ
-        transfer_form:
-          attributes:
-            new_namespace_id:
-              blank: est vide
-              namespace_group_exists: existe déjà un groupe portant le même nom/chemin
-              other_than: doit être différent du groupe
   activerecord:
     attributes:
       attachment:
