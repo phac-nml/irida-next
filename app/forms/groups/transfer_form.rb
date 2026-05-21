@@ -16,7 +16,7 @@ module Groups
     validates :new_namespace_id, comparison: { other_than: :group_id }, if: lambda {
       new_namespace_id.present? && group_id.present?
     }
-    validate :group_exists_in_namespace, if: lambda {
+    validate :group_does_not_conflict_with_existing_group, if: lambda {
       new_namespace_id.present? && group_name.present? && group_path.present?
     }
 
@@ -26,7 +26,7 @@ module Groups
 
     private
 
-    def group_exists_in_namespace
+    def group_does_not_conflict_with_existing_group
       return unless Group.where(parent_id: new_namespace_id).exists?(['path = ? or name = ?', group_path, group_name])
 
       errors.add(:new_namespace_id, :namespace_group_exists)
