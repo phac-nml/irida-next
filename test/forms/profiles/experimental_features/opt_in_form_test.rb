@@ -69,6 +69,22 @@ module Profiles
         end
       end
 
+      test 'exposes feature symbol for valid opt in' do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          form = build_form(feature_key: 'data_grid_samples_table', enabled: true)
+
+          assert_predicate form, :valid?
+          assert_equal :data_grid_samples_table, form.feature
+        end
+      end
+
+      test 'exposes boolean enabled state' do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          assert_predicate build_form(feature_key: 'data_grid_samples_table', enabled: '1'), :enabled?
+          assert_not_predicate build_form(feature_key: 'data_grid_samples_table', enabled: '0'), :enabled?
+        end
+      end
+
       test 'matches allowlist emails case-insensitively' do
         config = user_opt_in_feature_config(allowlist: [@user.email.upcase])
 

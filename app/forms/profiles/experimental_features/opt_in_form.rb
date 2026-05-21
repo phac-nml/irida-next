@@ -34,6 +34,14 @@ module Profiles
         super
       end
 
+      def feature
+        feature_key.to_sym
+      end
+
+      def enabled?
+        enabled
+      end
+
       private
 
       def enabled_must_be_boolean_value
