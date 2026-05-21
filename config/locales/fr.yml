@@ -7,7 +7,7 @@ fr:
         basename: Nom de base du fichier de concaténation
         delete_originals: Supprimer les fichiers originaux après la concaténation?
       groups/transfer_form:
-        new_namespace_id: Nouvel espace de noms
+        new_namespace_id: Nouveau groupe parent
       sample/query:
         group: Groupe
       sample/search_condition:
