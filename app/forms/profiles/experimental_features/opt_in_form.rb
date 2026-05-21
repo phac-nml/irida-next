@@ -17,7 +17,7 @@ module Profiles
       validate :enabled_must_be_boolean_value
       validate :feature_must_be_eligible
 
-      attr_reader :user, :settings, :result
+      attr_reader :user, :settings
 
       def self.model_name
         ActiveModel::Name.new(self, nil, 'OptInForm')
@@ -34,21 +34,7 @@ module Profiles
         super
       end
 
-      def save # rubocop:disable Naming/PredicateMethod -- ActiveRecord-style form API
-        return false unless valid?
-
-        @result = opt_in_service.toggle(feature_key, enabled)
-        return true if @result.success?
-
-        errors.add(:base, :flipper_error) if @result.error == :flipper_error
-        false
-      end
-
       private
-
-      def opt_in_service
-        @opt_in_service ||= OptInService.new(user, settings:)
-      end
 
       def enabled_must_be_boolean_value
         return if ENABLED_VALUES.include?(@enabled_input)
@@ -59,14 +45,35 @@ module Profiles
       def feature_must_be_eligible
         return if feature_key.blank?
 
-        unless opt_in_service.manageable_feature?(feature_key)
+        unless manageable_feature?
           errors.add(:feature_key, :invalid)
           return
         end
 
-        return if opt_in_service.eligible?(feature_key)
+        return if eligible_user?
 
         errors.add(:feature_key, :not_eligible)
+      end
+
+      def manageable_feature?
+        feature_available? && feature_config.present?
+      end
+
+      def eligible_user?
+        return false if feature_config.blank?
+
+        allowlist = feature_config['allowlist']
+        return true if allowlist == 'all'
+
+        Array(allowlist).any? { |email| email.casecmp?(user.email) }
+      end
+
+      def feature_available?
+        FLIPPER_FEATURE_CONFIG['features'].key?(feature_key)
+      end
+
+      def feature_config
+        @feature_config ||= (settings.user_opt_in_features || {})[feature_key]
       end
     end
   end

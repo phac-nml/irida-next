@@ -74,57 +74,54 @@ module Profiles
         end
       end
 
-      test 'toggle enables actor gate for eligible feature' do
+      test 'execute enables actor gate for a valid form' do
         with_user_opt_in_features(user_opt_in_feature_config) do
-          result = OptInService.new(@user).toggle(:data_grid_samples_table, true)
+          form = build_form(feature_key: 'data_grid_samples_table', enabled: true)
 
-          assert result.success?
-          assert_nil result.error
+          assert OptInService.new(@user, form).execute
           assert_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
-          assert result.feature[:enabled]
         end
       ensure
         Flipper.disable_actor(:data_grid_samples_table, @user)
       end
 
-      test 'toggle disables actor gate for eligible feature' do
+      test 'execute disables actor gate for a valid form' do
         Flipper.enable_actor(:data_grid_samples_table, @user)
 
         with_user_opt_in_features(user_opt_in_feature_config) do
-          result = OptInService.new(@user).toggle('data_grid_samples_table', false)
+          form = build_form(feature_key: 'data_grid_samples_table', enabled: false)
 
-          assert result.success?
-          assert_nil result.error
+          assert OptInService.new(@user, form).execute
           assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
-          assert_not result.feature[:enabled]
         end
       end
 
-      test 'toggle catches and logs flipper errors' do
+      test 'execute returns false when the form is invalid' do
+        form = mock('opt_in_form')
+        form.expects(:valid?).returns(false)
+        Flipper.expects(:enable_actor).never
+        Flipper.expects(:disable_actor).never
+
+        assert_not OptInService.new(@user, form).execute
+      end
+
+      test 'execute adds flipper_error when toggle fails' do
         Flipper.expects(:enable_actor).raises(Flipper::Error, 'adapter failed')
         Rails.logger.expects(:error).with(regexp_matches(/adapter failed/))
 
         with_user_opt_in_features(user_opt_in_feature_config) do
-          result = OptInService.new(@user).toggle(:data_grid_samples_table, true)
+          form = build_form(feature_key: 'data_grid_samples_table', enabled: true)
 
-          assert_not result.success?
-          assert_equal :flipper_error, result.error
+          assert_not OptInService.new(@user, form).execute
+          assert_includes form.errors.details[:base].pluck(:error), :flipper_error
           assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
         end
       end
 
-      test 'eligible? returns true only for available features allowlisted for user' do
-        config = user_opt_in_feature_config.merge(
-          user_opt_in_feature_config(feature_key: :v2_datepicker, allowlist: [users(:jane_doe).email])
-        )
+      private
 
-        with_user_opt_in_features(config) do
-          service = OptInService.new(@user)
-
-          assert service.eligible?(:data_grid_samples_table)
-          assert_not service.eligible?(:v2_datepicker)
-          assert_not service.eligible?(:unknown_experiment)
-        end
+      def build_form(**attributes)
+        OptInForm.new(user: @user, **attributes)
       end
     end
   end
