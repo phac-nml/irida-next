@@ -14,7 +14,7 @@ module Groups
     test 'transfer group into group activity' do
       group2 = groups(:group_two)
       transfer_form = ::Groups::TransferForm.new({ new_parent_id: @group.id }
-      .merge(group_id: group2.id, group_name: group2.name, group_path: group2.path))
+      .merge(group: group2))
 
       ::Groups::TransferService.new(group2, @user, transfer_form).execute
 
@@ -44,7 +44,7 @@ module Groups
       group2 = groups(:group_two)
       subgroup = groups(:subgroup1)
       transfer_form = ::Groups::TransferForm.new({ new_parent_id: group2.id }
-      .merge(group_id: subgroup.id, group_name: subgroup.name, group_path: subgroup.path))
+      .merge(group: subgroup))
 
       ::Groups::TransferService.new(subgroup, @user, transfer_form).execute
 
@@ -75,7 +75,7 @@ module Groups
       group2 = groups(:group_two)
       subgroup = groups(:subgroup1)
       transfer_form = ::Groups::TransferForm.new({ new_parent_id: group2.id }
-      .merge(group_id: subgroup.id, group_name: subgroup.name, group_path: subgroup.path))
+      .merge(group: subgroup))
 
       ::Groups::TransferService.new(subgroup, @user, transfer_form).execute
 

@@ -8,15 +8,18 @@ module Groups
     include ActiveModel::Validations::Callbacks
 
     attribute :new_parent_id, :string
-    attribute :group_id, :string
-    attribute :group_name, :string
-    attribute :group_path, :string
+    attribute :group
 
     validates :new_parent_id, presence: true
     validate :new_parent_exists, if: -> { new_parent_id.present? }
-    validates :new_parent_id, comparison: { other_than: :group_id }, if: lambda {
-      new_parent_id.present? && group_id.present?
-    }
+    validates :new_parent_id, comparison: { other_than: :old_parent_id, message: :cannot_be_same_as_old_parent },
+                              if: lambda {
+                                new_parent_id.present? && old_parent_id.present?
+                              }
+    validates :new_parent_id, comparison: { other_than: :group_id, message: :cannot_be_same_as_group },
+                              if: lambda {
+                                new_parent_id.present? && group_id.present?
+                              }
     validate :group_does_not_conflict_with_existing_group, if: lambda {
       new_parent_id.present? && group_name.present? && group_path.present?
     }
@@ -28,6 +31,16 @@ module Groups
     def new_parent
       Namespace.find_by(id: new_parent_id)
     end
+
+    def old_parent_id
+      group.parent_id
+    end
+
+    delegate :id, to: :group, prefix: true
+
+    delegate :name, to: :group, prefix: true
+
+    delegate :path, to: :group, prefix: true
 
     private
 

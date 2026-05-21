@@ -118,9 +118,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def transfer
-    @transfer_form = ::Groups::TransferForm.new(group_transfer_params.merge(group_id: @group.id,
-                                                                            group_name: @group.name,
-                                                                            group_path: @group.path))
+    @transfer_form = ::Groups::TransferForm.new(group_transfer_params.merge(group: @group))
     respond_to do |format|
       if Groups::TransferService.new(@group, current_user, @transfer_form).execute
         flash[:success] = t('.success')

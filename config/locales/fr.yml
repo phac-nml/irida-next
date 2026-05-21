@@ -38,9 +38,10 @@ fr:
           attributes:
             new_parent_id:
               blank: est vide
+              cannot_be_same_as_group: doit être différent du groupe
+              cannot_be_same_as_old_parent: doit être différent du groupe parent actuel
               namespace_group_exists: existe déjà un groupe portant le même nom/chemin
               namespace_not_found: n'existe pas
-              other_than: doit être différent du groupe
         sample/search_condition:
           attributes:
             field:
