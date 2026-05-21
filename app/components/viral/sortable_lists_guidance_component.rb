@@ -9,16 +9,27 @@ module Viral
   # @param keyboard_help [String] keyboard shortcut help
   # @param available [Hash] keys: title, description, icon (default: :plus)
   # @param selected [Hash] keys: title, description, icon (default: :list_bullets)
+  # @param id_prefix [String] stable ID prefix used by aria-describedby references
   class SortableListsGuidanceComponent < Viral::Component
     attr_reader :title, :instructions, :keyboard_help, :available, :selected, :id_prefix
 
-    def initialize(title:, instructions:, keyboard_help:, available:, selected:)
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(title:, instructions:, keyboard_help:, available:, selected:, id_prefix: nil)
       @title = title
       @instructions = instructions
       @keyboard_help = keyboard_help
       @available = { icon: :plus }.merge(available)
       @selected = { icon: :list_bullets }.merge(selected)
-      @id_prefix = "sortable-lists-guidance-#{SecureRandom.hex(4)}"
+      @id_prefix = id_prefix || "sortable-lists-guidance-#{SecureRandom.hex(4)}"
+    end
+    # rubocop:enable Metrics/ParameterLists
+
+    def available_description_id
+      "#{id_prefix}-available-description"
+    end
+
+    def selected_description_id
+      "#{id_prefix}-selected-description"
     end
   end
 end
