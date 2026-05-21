@@ -12,17 +12,7 @@ module Groups
 
     validates :new_parent_id, presence: true
     validate :new_parent_exists, if: -> { new_parent_id.present? }
-    validates :new_parent_id, comparison: { other_than: :old_parent_id, message: :cannot_be_same_as_old_parent },
-                              if: lambda {
-                                new_parent_id.present? && old_parent_id.present?
-                              }
-    validates :new_parent_id, comparison: { other_than: :group_id, message: :cannot_be_same_as_group },
-                              if: lambda {
-                                new_parent_id.present? && group_id.present?
-                              }
-    validate :group_does_not_conflict_with_existing_group, if: lambda {
-      new_parent_id.present? && group_name.present? && group_path.present?
-    }
+    validate :group_does_not_conflict_with_existing_group, if: -> { new_parent_id.present? && group.present? }
 
     def initialize(attributes = {})
       super
@@ -51,6 +41,16 @@ module Groups
     end
 
     def group_does_not_conflict_with_existing_group
+      if new_parent_id == old_parent_id
+        errors.add(:new_parent_id, :cannot_be_same_as_old_parent)
+        return
+      end
+
+      if new_parent_id == group_id
+        errors.add(:new_parent_id, :cannot_be_same_as_group)
+        return
+      end
+
       return unless Group.where(parent_id: new_parent_id).exists?(['path = ? or name = ?', group_path, group_name])
 
       errors.add(:new_parent_id, :namespace_group_exists)
