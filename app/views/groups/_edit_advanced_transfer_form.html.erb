@@ -10,9 +10,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
   <% invalid_new_namespace_id = @transfer_form.errors.include?(:new_namespace_id) %>
 
   <div class="form-field <%= 'invalid' if invalid_new_namespace_id %>">
-    <% form_id = "transfer_namespace_id_input" %>
-
-    <%= form_error_summary(form, target_overrides: { new_namespace_id: form_id }) %>
+    <%= form_error_summary(form) %>
 
     <%= form.label :new_namespace_id,
                t("groups.edit.advanced.transfer.new_namespace_id"),
@@ -20,8 +18,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
                  "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
                data: {
                  required: true,
-               },
-               for: form_id %>
+               } %>
 
     <% if @authorized_namespaces.empty? %>
       <input
@@ -35,7 +32,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
         autocomplete="off"
       >
     <% else %>
-      <%= render Select2Component.new(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
+      <%= render Select2Component.new(form:, name: :new_namespace_id, id: form.field_id(:new_namespace_id), placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
