@@ -39,6 +39,7 @@ fr:
             new_parent_id:
               blank: est vide
               namespace_group_exists: existe déjà un groupe portant le même nom/chemin
+              namespace_not_found: n'existe pas
               other_than: doit être différent du groupe
         sample/search_condition:
           attributes:

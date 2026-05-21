@@ -117,13 +117,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     end
   end
 
-  def transfer # rubocop:disable Metrics/AbcSize
+  def transfer
     @transfer_form = ::Groups::TransferForm.new(group_transfer_params.merge(group_id: @group.id,
                                                                             group_name: @group.name,
                                                                             group_path: @group.path))
-    new_namespace ||= Namespace.find_by(id: @transfer_form.new_parent_id)
     respond_to do |format|
-      if Groups::TransferService.new(@group, current_user, @transfer_form).execute(new_namespace)
+      if Groups::TransferService.new(@group, current_user, @transfer_form).execute
         flash[:success] = t('.success')
         format.turbo_stream { redirect_to edit_group_path(@group) }
       else
