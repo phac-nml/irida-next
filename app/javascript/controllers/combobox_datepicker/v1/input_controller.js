@@ -10,6 +10,7 @@ export default class extends Controller {
     "datepickerInput",
     "calendarTemplate",
     "minDate",
+    "maxDate",
     "errorContainer",
     "errorMessageTemplate",
     "errorMessage",
@@ -21,6 +22,7 @@ export default class extends Controller {
     autosubmit: Boolean,
     calendarId: String,
     invalidDate: String,
+    invalidMaxDate: String,
     invalidMinDate: String,
     dateFormatRegex: String,
     errorMessageId: String,
@@ -42,6 +44,7 @@ export default class extends Controller {
 
   #floatingDropdown;
 
+  #maxDate;
   #minDate;
 
   #arrowSvg;
@@ -49,6 +52,9 @@ export default class extends Controller {
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
+    }
+    if (this.hasMaxDateTarget) {
+      this.#setMaxDate();
     }
 
     this.#arrowSvg = this.inputArrowTarget.firstElementChild;
@@ -117,6 +123,12 @@ export default class extends Controller {
     this.minDateTarget.remove();
   }
 
+  #setMaxDate() {
+    this.#maxDate = this.maxDateTarget.firstElementChild.innerText;
+    this.invalidMaxDateValue = this.invalidMaxDateValue.concat(this.#maxDate);
+    this.maxDateTarget.remove();
+  }
+
   #addCalendarTemplate() {
     try {
       // Don't add calendar if already exists
@@ -146,7 +158,7 @@ export default class extends Controller {
 
   #setSelectedDate() {
     this.#selectedDate = this.datepickerInputTarget.value;
-    if (this.#selectedDate) {
+    if (this.#selectedDate && this.#validateSelectedDate()) {
       const fullSelectedDate = new Date(this.#selectedDate);
       this.#selectedYear = fullSelectedDate.getUTCFullYear();
       // Sometimes an issue where selecting the 1st will display the previous month with the 1st as an
@@ -160,6 +172,19 @@ export default class extends Controller {
     if (this.hasComboboxDatepickerV1CalendarOutlet) {
       this.#shareParamsWithCalendar();
     }
+  }
+
+  // validates the date within the input; prevents re-rendering incorrect calendar if an invalid date was entered
+  // and submitted to the backend
+  #validateSelectedDate() {
+    if (
+      (this.#minDate && this.#minDate > this.#selectedDate) ||
+      (this.#maxDate && this.#selectedDate > this.#maxDate)
+    ) {
+      return false;
+    }
+
+    return true;
   }
 
   // append datepicker to dialog if in dialog, otherwise append to body
@@ -412,6 +437,8 @@ export default class extends Controller {
       selectedDate: this.#selectedDate,
       selectedYear: this.#selectedYear,
       selectedMonthIndex: this.#selectedMonthIndex,
+      maxDate: this.#maxDate,
+      maxDateMessage: this.invalidMaxDateValue,
       minDate: this.#minDate,
       minDateMessage: this.invalidMinDateValue,
       autosubmit: this.autosubmitValue,

@@ -27,4 +27,12 @@ class ComboboxDatepickerComponentPreview < ViewComponent::Preview
       selected_date: Time.zone.today + 7.days
     )
   end
+
+  def with_min_date_and_max_date
+    combobox_datepicker(
+      id: 'test_id',
+      input_name: 'test_input_name',
+      max_date: 364.days.from_now
+    )
+  end
 end

@@ -26,14 +26,16 @@
 <template data-combobox-datepicker--v1--calendar-target="inMonthDateTemplate">
   <td
     class="
-      w-8 cursor-pointer rounded-lg border-0 text-center text-sm leading-9 font-semibold text-slate-900
-      hover:bg-slate-100 dark:text-white dark:hover:bg-slate-600
+      relative w-8 rounded-lg border-0 text-center text-sm leading-9 font-semibold not-aria-disabled:cursor-pointer
+      not-aria-disabled:text-slate-900 not-aria-disabled:hover:bg-slate-100 aria-disabled:cursor-not-allowed
+      aria-disabled:text-slate-500 aria-disabled:line-through not-aria-disabled:dark:text-white
+      not-aria-disabled:dark:hover:bg-slate-600 aria-disabled:dark:text-slate-300
     "
     data-date-within-month-position="inMonth"
     data-action="
-      keydown->combobox-datepicker--v1--calendar#navigateCalendar
-      click->combobox-datepicker--v1--calendar#selectDate
-    "
+    keydown->combobox-datepicker--v1--calendar#navigateCalendar
+    click->combobox-datepicker--v1--calendar#selectDate
+  "
     role="gridcell"
   ></td>
 </template>
@@ -41,14 +43,16 @@
 <template data-combobox-datepicker--v1--calendar-target="outOfMonthDateTemplate">
   <td
     class="
-      w-8 cursor-pointer rounded-lg border-0 text-center text-sm leading-9 font-semibold text-slate-500
-      hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-600
+      relative w-8 rounded-lg border-0 text-center text-sm leading-9 font-semibold not-aria-disabled:cursor-pointer
+      not-aria-disabled:text-slate-500 not-aria-disabled:hover:bg-slate-100 aria-disabled:cursor-not-allowed
+      aria-disabled:text-slate-500 aria-disabled:line-through not-aria-disabled:dark:text-slate-300
+      not-aria-disabled:dark:hover:bg-slate-600 aria-disabled:dark:text-slate-300
     "
     data-date-within-month-position="outOfMonth"
     data-action="
-      keydown->combobox-datepicker--v1--calendar#navigateCalendar
-      click->combobox-datepicker--v1--calendar#selectDate
-    "
+    keydown->combobox-datepicker--v1--calendar#navigateCalendar
+    click->combobox-datepicker--v1--calendar#selectDate
+  "
     role="gridcell"
   ></td>
 </template>

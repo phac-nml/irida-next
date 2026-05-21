@@ -5,8 +5,9 @@ module ComboboxDatepicker
     module Calendar
       # Renders the calendar header (month select and year input).
       class HeaderComponent < ::Component
-        def initialize(min_year:, months:, calendar_id_header:)
+        def initialize(min_year:, max_year:, months:, calendar_id_header:)
           @min_year = min_year
+          @max_year = max_year
           @months = months
           @calendar_id_header = calendar_id_header
         end
