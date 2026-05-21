@@ -698,8 +698,8 @@ module Groups
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
       select 'invalid file extension', from: I18n.t('shared.samples.metadata.file_imports.form_fields.sample_id_column')
 
-      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.selected_list_title')
       click_button I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
       ### ACTIONS END ###
 

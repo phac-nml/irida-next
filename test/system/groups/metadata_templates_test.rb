@@ -83,8 +83,8 @@ module Groups
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
       assert_text I18n.t('metadata_templates.form.metadata')
 
-      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
@@ -123,8 +123,8 @@ module Groups
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
       assert_text I18n.t('metadata_templates.form.metadata')
 
-      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
@@ -150,8 +150,8 @@ module Groups
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
       assert_text I18n.t('metadata_templates.form.metadata')
 
-      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
@@ -186,8 +186,8 @@ module Groups
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
       assert_text I18n.t('metadata_templates.form.metadata')
 
-      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
@@ -227,8 +227,8 @@ module Groups
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
       assert_text I18n.t('metadata_templates.form.metadata')
 
-      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: group.metadata_fields.count
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
@@ -280,8 +280,8 @@ module Groups
 
       assert_text I18n.t('metadata_templates.form.metadata')
 
-      available_label_id = find('p', text: I18n.t(:'metadata_templates.form.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'metadata_templates.form.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li",
                       count: group.metadata_fields.count - metadata_template.fields.count
