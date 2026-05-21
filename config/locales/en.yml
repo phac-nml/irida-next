@@ -541,7 +541,6 @@ en:
         zero: Workflow Executions (0 selected)
       title: Analysis Export
     new_linelist_export_dialog:
-      available: Available
       available_description: Metadata fields that will not be included in the export.
       available_list_title: Not in export
       close_progress: Close export progress
@@ -556,7 +555,6 @@ en:
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...
       preparing_rows: Preparing %{count} rows
-      selected: Selected
       selected_count: 'Selected samples: %{count}'
       selected_description: Metadata fields included in the export. Reorder this list to control column order.
       selected_list_title: In export
@@ -566,7 +564,6 @@ en:
       xlsx: ".xlsx"
       xlsx_load_error: Unable to load the XLSX export library. Please retry or export as CSV.
     new_sample_export_dialog:
-      available: Available
       available_description: File formats not included in this export. By default, all formats are included.
       available_list_title: Not in export
       fields_instructions: Select file formats to restrict which files are included in the export. Move formats to the selected list to include only those formats.
@@ -574,7 +571,6 @@ en:
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       samples: Samples
       select_formats: Select File Formats
-      selected: Selected
       selected_description: File formats included in the export. Only files matching these formats will be exported.
       selected_list_title: In export
       title: Sample Export
@@ -1162,7 +1158,6 @@ en:
     edit_template_dialog:
       title: Edit Metadata Template
     form:
-      available: Available
       available_description: Fields not currently included in this template. Move fields to the selected list to make them available in this template.
       available_list_title: Not currently in template
       description_hint: Optional. Describe when this template should be used.
@@ -1173,7 +1168,6 @@ en:
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       metadata: Metadata fields
       name_hint: Required. Choose a descriptive template name.
-      selected: Selected
       selected_description: Fields included in this template. Reorder this list to control display order. At least one field is required.
       selected_list_title: Currently in template
     new_template_dialog:
@@ -1981,7 +1975,6 @@ en:
             description: 'The sample metadata import completed with the following errors:'
             ok_button: OK
           form_fields:
-            available: Available
             available_description: Metadata columns from your file that will not be imported into sample metadata.
             available_list_title: Not imported
             description: Importing a metadata spreadsheet allows multiple metadata fields to multiple samples be added, updated or removed at once.
@@ -1999,7 +1992,6 @@ en:
             no_valid_metadata: The uploaded spreadsheet contains no viable metadata
             sample_id_column: Sample Identifier Column
             select_sample_id_column: Select a Sample Identifier Column
-            selected: Selected
             selected_description: Metadata columns that will be imported into sample metadata.
             selected_list_title: Will be imported
             submit_button: Import Metadata
@@ -2020,7 +2012,6 @@ en:
         tooltip: Metadata display settings
       spreadsheet_imports:
         dialog:
-          available: Available
           available_description: Metadata fields from your file that will not be imported into sample metadata.
           available_list_title: Not imported
           description: Importing a sample spreadsheet allows multiple samples with or without metadata fields to be added at once.
@@ -2045,7 +2036,6 @@ en:
           select_sample_description_column: Select a Sample Description Column
           select_sample_name_column: Select a Sample Name Column
           select_static_project: Select Static Project
-          selected: Selected
           selected_description: Metadata fields that will be imported into sample metadata.
           selected_list_title: Will be imported
           static_project: Static Project
