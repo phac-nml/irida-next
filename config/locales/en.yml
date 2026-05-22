@@ -58,7 +58,6 @@ en:
       group:
         description: Description
         name: Group name
-        new_namespace: New namespace
         parent_id: Group URL
         path: Path
       member:

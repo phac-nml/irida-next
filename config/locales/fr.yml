@@ -58,7 +58,6 @@ fr:
       group:
         description: Description
         name: Nom du groupe
-        new_namespace: Nouvel espace de noms
         parent_id: URL du groupe
         path: Chemin
       member:
