@@ -8,7 +8,7 @@ module Groups
       @transfer_form = transfer_form
     end
 
-    def execute # rubocop:disable Naming/PredicateMethod, Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize
       return false unless @transfer_form.valid?
 
       new_namespace ||= @transfer_form.new_parent
@@ -34,8 +34,6 @@ module Groups
       update_samples_count(old_namespace, new_namespace)
 
       new_namespace.update_metadata_summary_by_namespace_transfer(@group, old_namespace)
-
-      true
     end
 
     private
