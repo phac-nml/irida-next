@@ -6,8 +6,6 @@ en:
         attachment_ids: Files
         basename: Base filename
         delete_originals: Delete original files after concatenation?
-      groups/transfer_form:
-        new_parent_id: New parent group
       sample/query:
         group: Group
       sample/search_condition:
