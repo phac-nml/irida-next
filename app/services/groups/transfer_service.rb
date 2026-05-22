@@ -3,9 +3,6 @@
 module Groups
   # Service used to Transfer Groups
   class TransferService < BaseGroupService
-    class TransferError < StandardError
-    end
-
     def initialize(group, user = nil, transfer_form = nil)
       super(group, user)
       @transfer_form = transfer_form
