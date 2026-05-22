@@ -1777,7 +1777,7 @@ fr:
       samples: Échantillons
       workflow_executions: Exécutions de flux de travail
     transfer:
-      success: Réussite
+      success: Le projet %{project_name} a été transféré avec succès
     update:
       success: Le projet %{project_name} a été mis à jour avec succès
     workflow_executions:

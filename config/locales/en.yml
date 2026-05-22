@@ -1773,7 +1773,7 @@ en:
       samples: Samples
       workflow_executions: Workflow Executions
     transfer:
-      success: Success
+      success: Project %{project_name} was successfully transferred
     update:
       success: Project %{project_name} was successfully updated
     workflow_executions:
