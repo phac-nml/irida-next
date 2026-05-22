@@ -221,7 +221,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     old_namespace = groups(:group_one)
 
     post namespace_project_transfer_path(old_namespace, project),
-         params: { new_namespace_id: namespace.id }, as: :turbo_stream
+         params: { projects_transfer_form: { new_namespace_id: namespace.id } }, as: :turbo_stream
 
     assert_response :redirect
   end
@@ -231,8 +231,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:project1)
     old_namespace = groups(:group_one)
     post namespace_project_transfer_path(old_namespace, project),
-         params: { new_namespace_id: groups(:david_doe_group_four).id },
-         as: :turbo_stream
+         params: { projects_transfer_form: { new_namespace_id: groups(:david_doe_group_four).id } }, as: :turbo_stream
 
     assert_response :unauthorized
   end

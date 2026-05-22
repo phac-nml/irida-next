@@ -55,6 +55,21 @@ fr:
               cannot_be_same_as_old_parent: doit être différent du groupe parent actuel
               namespace_group_exists: existe déjà un groupe portant le même nom/chemin
               namespace_not_found: n'existe pas
+        projects/transfer_form:
+          attributes:
+            new_namespace_id:
+              blank: est vide
+              cannot_be_same: doit être différent de l'espace de noms actuel
+              not_found: n'existe pas
+              project_exists: a déjà un projet avec le même nom/chemin
+        sample/search_condition:
+          attributes:
+            field:
+              not_a_metadata: est un champ de métadonnées non valide
+            operator:
+              not_a_date_operator: ne peut pas être utilisé sur les dates
+            value:
+              not_a_date: doit être formaté AAAA-MM-JJ
   activerecord:
     attributes:
       attachment:
@@ -1886,10 +1901,6 @@ fr:
     projects:
       create:
         namespace_required: Espace de noms requis
-      transfer:
-        namespace_empty: Espace de noms vide
-        namespace_project_exists: Un projet portant le même nom ou le même chemin existe déjà dans l’espace de noms cible.
-        project_in_namespace: Projet dans l’espace de noms
     samples:
       batch_import:
         duplicate_sample_name: Nom de l’échantillon en double sur l’index '%{index}'
