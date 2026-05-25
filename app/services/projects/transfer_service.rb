@@ -8,7 +8,7 @@ module Projects
       @transfer_form = transfer_form
     end
 
-    def execute
+    def execute # rubocop:disable Naming/PredicateMethod
       return false unless @transfer_form.valid?
 
       @new_namespace = @transfer_form.new_namespace
@@ -25,6 +25,8 @@ module Projects
       @new_namespace.update_metadata_summary_by_namespace_transfer(@project.namespace, @old_namespace)
 
       update_samples_count
+
+      true
     end
 
     private
