@@ -36,7 +36,7 @@ module Projects
         return
       end
 
-      return unless Namespaces::ProjectNamespace.where(parent_id: new_namespace.id)
+      return unless Namespaces::ProjectNamespace.where(parent_id: new_namespace_id)
                                                 .exists?(['path = ? or name = ?', project.path, project.name])
 
       errors.add(:new_namespace_id, :project_exists)
