@@ -451,7 +451,7 @@ fr:
         no_groups_description: Vous n’avez actuellement aucun groupe.
         no_groups_title: Aucun groupe
         search:
-          placeholder: Rechercher par PUID ou nom
+          placeholder: Rechercher des groupes
         sorting:
           created_at_asc: Plus ancien créé
           created_at_desc: Dernier créé
@@ -471,7 +471,7 @@ fr:
         pagy_item: Projets
         personal: Personnel
         search:
-          placeholder: Rechercher par PUID ou nom
+          placeholder: Rechercher des projets
         sorting:
           created_at_asc: Plus ancien créé
           created_at_desc: Dernier créé
@@ -510,7 +510,7 @@ fr:
       no_data_exports: Aucune exportation de données
       no_data_exports_message: Vous n’avez actuellement aucune exportation de données.
       search:
-        placeholder: Rechercher par ID ou nom
+        placeholder: Rechercher des exportations de données
       table_header:
         action: Mesure
         expires_at: Expire
@@ -977,7 +977,7 @@ fr:
       table_filter:
         loading: Chargement des résultats de recherche...
         search:
-          placeholder: Rechercher par nom ou PUID
+          placeholder: Rechercher des échantillons
     shared_namespaces:
       pagy:
         item: Groupes et projets partagés
@@ -993,7 +993,7 @@ fr:
         title: Information sur le groupe
       screen_reader_context: 'Tableau de bord du groupe : %{group_name}'
       search:
-        placeholder: Rechercher par nom ou PUID
+        placeholder: Rechercher des sous-groupes et des projets
       shared_namespaces:
         no_shared:
           description: Les groupes et les projets peuvent être partagés avec d’autres groupes par l’intermédiaire de leur page de membres.
@@ -1393,7 +1393,7 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          placeholder: Rechercher par PUID ou nom de fichier
+          placeholder: Rechercher des fichiers
         subtitle: Ce sont les fichiers qui appartiennent au projet %{project_name}
         title: Fichiers
         upload_files: Télécharger des fichiers
@@ -1643,7 +1643,7 @@ fr:
             no_permission_description: Vous n’avez pas la permission de télécharger des dossiers dans cet échantillon.
             title: Aucun fichier n’a été téléchargé
           search:
-            placeholder: Rechercher par PUID ou nom de fichier
+            placeholder: Rechercher des fichiers
       create:
         success: L’échantillon a été créé avec succès.
       edit:
@@ -1742,7 +1742,7 @@ fr:
       table_filter:
         loading: Recherche en cours...
         search:
-          placeholder: Rechercher par nom ou PUID
+          placeholder: Rechercher des échantillons
       update:
         success: L’échantillon a été mis à jour avec succès.
     sidebar:
@@ -2105,7 +2105,7 @@ fr:
         title: Échec de la création de l'exécution du flux de travail
       index:
         search:
-          placeholder: Rechercher par ID ou nom
+          placeholder: Rechercher des exécutions de flux de travail
         title: Exécutions de flux de travail
       list_workflow_execution:
         id: 'ID :'
@@ -2180,7 +2180,7 @@ fr:
         description: Il n’y a aucun fichier associé à cette exécution du flux de travail.
         title: Aucun fichier
       search:
-        placeholder: Rechercher par PUID ou nom de fichier
+        placeholder: Rechercher des fichiers
     samples:
       empty: Aucun échantillon n’a pu être trouvé pour cette exécution de flux de travail
     show:
