@@ -12,7 +12,7 @@ module Groups
 
     validates :new_parent_id, presence: true
     validate :new_parent_exists, if: -> { new_parent_id.present? }
-    validate :group_does_not_conflict_with_existing_group, if: -> { new_parent_id.present? && group.present? }
+    validate :group_does_not_conflict_with_new_parent, if: -> { new_parent_id.present? && group.present? }
 
     def initialize(attributes = {})
       super
@@ -40,7 +40,7 @@ module Groups
       errors.add(:new_parent_id, :namespace_not_found)
     end
 
-    def group_does_not_conflict_with_existing_group
+    def group_does_not_conflict_with_new_parent
       if new_parent_id == old_parent_id
         errors.add(:new_parent_id, :cannot_be_same_as_old_parent)
         return
