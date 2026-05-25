@@ -793,8 +793,8 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          placeholder: Rechercher par PUID ou nom de fichier
-        subtitle: Ce sont les fichiers qui appartiennent au groupe %{group_name}
+          placeholder: Rechercher des fichiers
+        subtitle: Affichage des fichiers qui appartiennent au groupe avec l’identifiant unique persistant (PUID) %{puid}.
         title: Fichiers
         upload_files: Télécharger des fichiers
       table:
@@ -1394,7 +1394,7 @@ fr:
       index:
         search:
           placeholder: Rechercher des fichiers
-        subtitle: Ce sont les fichiers qui appartiennent au projet %{project_name}
+        subtitle: Affichage des fichiers qui appartiennent au projet avec l’identifiant unique persistant (PUID) %{puid}.
         title: Fichiers
         upload_files: Télécharger des fichiers
       table:

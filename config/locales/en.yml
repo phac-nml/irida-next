@@ -791,8 +791,8 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          placeholder: Search by PUID or Filename
-        subtitle: These are the files that belong to Group %{group_name}
+          placeholder: Search files
+        subtitle: View files that belong to group with persistent unique identifier (PUID) %{puid}.
         title: Files
         upload_files: Upload Files
       table:
@@ -1390,7 +1390,7 @@ en:
       index:
         search:
           placeholder: Search files
-        subtitle: These are the files that belong to Project %{project_name}
+        subtitle: Viewing files that belong to project with persistent unique identifier (PUID) %{puid}.
         title: Files
         upload_files: Upload Files
       table:
