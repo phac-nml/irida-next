@@ -1655,6 +1655,7 @@ en:
         refresh_notice:
           message: Samples table is out of date. Please refresh to view latest changes.
         select_all_tooltip: Select all samples in this project
+        subtitle: Viewing samples that belong to project with persistent unique identifier (PUID) %{puid}.
         title: Samples
         workflows:
           button_sr: Launch workflow
