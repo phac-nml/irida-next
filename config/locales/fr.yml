@@ -1980,7 +1980,7 @@ fr:
             ok_button: OK
           form_fields:
             available_description: Colonnes de métadonnées de votre fichier qui ne seront pas importées dans les métadonnées d’échantillon.
-            available_list_title: Non importé
+            available_list_title: Métadonnées disponibles
             description: L’importation d’une feuille de calcul de métadonnées permet d’ajouter, de mettre à jour ou de supprimer plusieurs champs de métadonnées dans plusieurs échantillons à la fois.
             fields_instructions: Sélectionnez les colonnes de métadonnées à importer en les déplaçant vers la liste sélectionnée. L’ordre de la liste sélectionnée détermine l’ordre d’importation.
             fields_instructions_title: Fonctionnement des listes
@@ -1997,7 +1997,7 @@ fr:
             sample_id_column: Colonne identificateur de l’échantillon
             select_sample_id_column: Sélectionner une colonne identificateur de l’échantillon
             selected_description: Colonnes de métadonnées qui seront importées dans les métadonnées d’échantillon.
-            selected_list_title: Sera importé
+            selected_list_title: Métadonnées sélectionnées
             submit_button: Importer des métadonnées
           success:
             description: Les métadonnées ont été importées avec succès!
@@ -2017,7 +2017,7 @@ fr:
       spreadsheet_imports:
         dialog:
           available_description: Champs de métadonnées de votre fichier qui ne seront pas importés dans les métadonnées d’échantillon.
-          available_list_title: Non importé
+          available_list_title: Métadonnées disponibles
           description: Importer un tableur d’échantillons permet d’ajouter plusieurs échantillons, avec ou sans champs de métadonnées, en même temps.
           fields_instructions: Sélectionnez les champs de métadonnées à importer en les déplaçant vers la liste sélectionnée. L’ordre de la liste sélectionnée détermine l’ordre d’importation.
           fields_instructions_title: Fonctionnement des listes
@@ -2041,7 +2041,7 @@ fr:
           select_sample_name_column: Sélectionner une colonne de nom d’échantillon
           select_static_project: Sélectionner un projet statique
           selected_description: Champs de métadonnées qui seront importés dans les métadonnées d'échantillon.
-          selected_list_title: Sera importé
+          selected_list_title: Métadonnées sélectionnées
           static_project: Projet statique
           static_project_description: Attribue chaque échantillon au projet statique si la colonne d’identifiant du projet n’est pas attribuée, ou si la colonne d’identifiant du projet est attribuée mais que la valeur du projet dans le tableur est vide ou non valide.
           static_project_empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
