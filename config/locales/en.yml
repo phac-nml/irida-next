@@ -542,7 +542,7 @@ en:
       title: Analysis Export
     new_linelist_export_dialog:
       available_description: Metadata fields that will not be included in the export.
-      available_list_title: Not in export
+      available_list_title: Available metadata
       close_progress: Close export progress
       created_records: Created %{current} of %{total} records
       csv: ".csv"
@@ -557,7 +557,7 @@ en:
       preparing_rows: Preparing %{count} rows
       selected_count: 'Selected samples: %{count}'
       selected_description: Metadata fields included in the export. Reorder this list to control column order.
-      selected_list_title: In export
+      selected_list_title: Selected metadata
       start_error: 'Unable to start export: %{message}'
       title: Linelist Export
       unexpected_error: 'Unexpected error while generating export: %{message}'
@@ -565,14 +565,14 @@ en:
       xlsx_load_error: Unable to load the XLSX export library. Please retry or export as CSV.
     new_sample_export_dialog:
       available_description: File formats not included in this export. By default, all formats are included.
-      available_list_title: Not in export
+      available_list_title: Available metadata
       fields_instructions: Select file formats to restrict which files are included in the export. Move formats to the selected list to include only those formats.
       fields_instructions_title: How the lists work
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       samples: Samples
       select_formats: Select File Formats
       selected_description: File formats included in the export. Only files matching these formats will be exported.
-      selected_list_title: In export
+      selected_list_title: Selected metadata
       title: Sample Export
     new_single_analysis_export_dialog:
       single_selection: Workflow Executions (1 selected)
