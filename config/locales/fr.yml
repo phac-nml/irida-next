@@ -967,7 +967,7 @@ fr:
         refresh_notice:
           message: Le tableau des échantillons est obsolète. Veuillez actualiser pour voir les dernières modifications.
         select_all_tooltip: Sélectionner tous les échantillons de ce groupe
-        subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
+        subtitle: Affichage des échantillons qui appartiennent au groupe avec l’identifiant unique persistant (PUID) %{puid}.
         title: Échantillons
         workflows:
           button_sr: Lancer le flux de travail
