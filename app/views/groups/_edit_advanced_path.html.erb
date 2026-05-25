@@ -4,7 +4,7 @@
   <% card.with_section do %>
     <%= form_with(model: @group, url: group_path, method: :patch, html: { novalidate: true }) do |form| %>
       <div class="grid gap-4">
-        <%= form_error_summary(form) %>
+        <%= form_error_summary(form,  include: %i[path]) %>
 
         <p class="text-slate-600 dark:text-slate-400">
           <%= t(:"groups.edit.advanced.path.description") %>
