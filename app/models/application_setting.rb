@@ -36,7 +36,48 @@ class ApplicationSetting < ApplicationRecord
     signup_enabled? && password_authentication_enabled?
   end
 
+  def eligible_user_opt_in_features(user)
+    (user_opt_in_features || {}).filter_map do |feature_key, feature_config|
+      next unless flipper_feature_available?(feature_key)
+      next unless user_eligible_for_opt_in_feature?(feature_config, user)
+
+      user_opt_in_feature_payload(feature_key, feature_config, user)
+    end
+  end
+
   private
+
+  def flipper_feature_available?(feature_key)
+    return false if feature_key.blank?
+
+    FLIPPER_FEATURE_CONFIG['features'].key?(feature_key)
+  end
+
+  def user_eligible_for_opt_in_feature?(feature_config, user)
+    return false if feature_config.blank?
+
+    allowlist = feature_config['allowlist']
+    return true if allowlist == 'all'
+
+    Array(allowlist).any? { |email| email.casecmp?(user.email) }
+  end
+
+  def user_opt_in_feature_payload(feature_key, feature_config, user)
+    {
+      key: feature_key.to_sym,
+      name: localized_opt_in_feature_value(feature_config['name']),
+      description: localized_opt_in_feature_value(feature_config['description']),
+      enabled: user_opted_in_to_feature?(feature_key, user)
+    }
+  end
+
+  def localized_opt_in_feature_value(translations)
+    translations[I18n.locale.to_s].presence || translations['en']
+  end
+
+  def user_opted_in_to_feature?(feature_key, user)
+    Flipper[feature_key.to_sym].actors_value.include?(user.flipper_id)
+  end
 
   def only_one_instance
     return unless ApplicationSetting.count >= 1

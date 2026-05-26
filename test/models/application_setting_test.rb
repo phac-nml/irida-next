@@ -169,4 +169,68 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     settings.update(max_personal_access_token_lifetime_in_days: 20)
     assert_equal 20, settings.max_personal_access_token_lifetime_in_days
   end
+
+  test 'eligible_user_opt_in_features returns features with all-user allowlist' do
+    user = users(:john_doe)
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: user_opt_in_feature_config)
+
+    features = settings.eligible_user_opt_in_features(user)
+
+    assert_equal [:data_grid_samples_table], features.pluck(:key)
+    assert_equal 'Data Grid Samples Table', features.first[:name]
+    assert_equal 'Enable the new data grid for the samples table.', features.first[:description]
+    assert_not features.first[:enabled]
+  end
+
+  test 'eligible_user_opt_in_features uses case-insensitive email allowlist matching' do
+    user = users(:john_doe)
+    config = user_opt_in_feature_config(allowlist: [user.email.upcase])
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: config)
+
+    features = settings.eligible_user_opt_in_features(user)
+
+    assert_equal [:data_grid_samples_table], features.pluck(:key)
+  end
+
+  test 'eligible_user_opt_in_features excludes users missing from email allowlist' do
+    user = users(:john_doe)
+    config = user_opt_in_feature_config(allowlist: [users(:jane_doe).email])
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: config)
+
+    assert_empty settings.eligible_user_opt_in_features(user)
+  end
+
+  test 'eligible_user_opt_in_features excludes feature keys missing from flipper feature config' do
+    user = users(:john_doe)
+    config = user_opt_in_feature_config(feature_key: :unknown_experiment, allowlist: 'all')
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: config)
+
+    assert_empty settings.eligible_user_opt_in_features(user)
+  end
+
+  test 'eligible_user_opt_in_features reports actor-specific enabled state' do
+    user = users(:john_doe)
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: user_opt_in_feature_config)
+
+    Flipper.enable_actor(:data_grid_samples_table, user)
+
+    feature = settings.eligible_user_opt_in_features(user).first
+
+    assert feature[:enabled]
+  ensure
+    Flipper.disable_actor(:data_grid_samples_table, user)
+  end
+
+  test 'eligible_user_opt_in_features localizes feature metadata with english fallback' do
+    user = users(:john_doe)
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: user_opt_in_feature_config)
+
+    I18n.with_locale(:fr) do
+      feature = settings.eligible_user_opt_in_features(user).first
+
+      assert_equal 'Tableau de donnees des echantillons', feature[:name]
+      assert_equal "Activer la nouvelle grille de donnees pour le tableau d'echantillons.",
+                   feature[:description]
+    end
+  end
 end
