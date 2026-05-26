@@ -11,12 +11,14 @@
   </div>
 
   <%= form_with(model: workflow_execution, url: workflow_execution_path, method: :patch, class: "grid gap-4") do |form| %>
+    <%= render partial: "shared/form/required_field_legend" %>
+
     <%= form_error_summary(form) %>
 
     <% invalid_name = @workflow_execution.errors.include?(:name) %>
 
     <div class="form-field <%= 'invalid' if invalid_name %>">
-      <%= form.label :name %>
+      <%= form.label :name, data: { required: true } %>
 
       <%= form.text_field :name,
                       autofocus: true,
