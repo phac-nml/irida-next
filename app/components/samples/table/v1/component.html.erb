@@ -127,10 +127,9 @@
                       </span>
                     <% elsif column == :name %>
                       <%= link_to(
-                    sample_path(sample),
-                    data: { turbo: false },
-                    class: "text-slate-700 dark:text-slate-300 font-sans font-semibold underline hover:decoration-2"
-                  ) do %>
+                        sample_path(sample),
+                        class: "text-slate-700 dark:text-slate-300 font-sans font-semibold underline hover:decoration-2"
+                      ) do %>
                         <%= highlight(
                           sample[column],
                           defined?(@search_params[:name_or_puid_cont]) &&
@@ -142,9 +141,6 @@
                     <% elsif column == "namespaces.puid" %>
                       <%= link_to sample.project.puid,
                       namespace_project_samples_path(sample.project.namespace.parent, sample.project),
-                      data: {
-                        turbo: false,
-                      },
                       class: "font-semibold underline hover:decoration-2" %>
                     <% elsif column == :created_at %>
                       <%= helpers.local_date(sample[column], :long) %>

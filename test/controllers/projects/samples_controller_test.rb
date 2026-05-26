@@ -151,6 +151,15 @@ module Projects
       assert_response :unprocessable_content
     end
 
+    test 'should not update a sample with wrong parameters via turbo stream' do
+      patch namespace_project_sample_url(@namespace, @project, @sample1),
+            params: { sample: { description: @sample1.description, name: '?',
+                                project_id: @sample1.project_id } },
+            as: :turbo_stream
+
+      assert_response :unprocessable_content
+    end
+
     test 'show sample history listing' do
       @sample1.create_logidze_snapshot!
 

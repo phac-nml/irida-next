@@ -131,9 +131,6 @@
                     <% if column == :id %>
                       <%= link_to(
                     individual_path(workflow_execution),
-                    data: {
-                      turbo: false,
-                    },
                     class: "text-slate-900 dark:text-slate-100 font-mono underline hover:decoration-2",
                   ) do %>
                         <%= highlight(
