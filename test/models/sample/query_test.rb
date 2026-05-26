@@ -40,8 +40,8 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :groups, :invalid
-    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.errors.added? :base, :invalid
+    assert query.groups[0].errors.added? :base, :invalid
     assert query.groups[0].conditions[1].errors.added? :field, :blank
     assert query.groups[0].conditions[1].errors.added? :operator, :blank
     assert query.groups[0].conditions[1].errors.added? :value, :blank
@@ -57,8 +57,8 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :groups, :invalid
-    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.errors.added? :base, :invalid
+    assert query.groups[0].errors.added? :base, :invalid
     assert query.groups[0].conditions[0].errors.added? :value, :not_a_date
   end
 
@@ -101,8 +101,8 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :groups, :invalid
-    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.errors.added? :base, :invalid
+    assert query.groups[0].errors.added? :base, :invalid
     assert query.groups[0].conditions[1].errors.added? :field, :taken
   end
 
@@ -118,8 +118,8 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :groups, :invalid
-    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.errors.added? :base, :invalid
+    assert query.groups[0].errors.added? :base, :invalid
     assert query.groups[0].conditions[1].errors.added? :field, :taken
   end
 
@@ -148,8 +148,8 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :groups, :invalid
-    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.errors.added? :base, :invalid
+    assert query.groups[0].errors.added? :base, :invalid
     assert query.groups[0].conditions[0].errors.added? :value, :not_a_number
   end
 
@@ -164,8 +164,8 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert_not query.valid?
-    assert query.errors.added? :groups, :invalid
-    assert query.groups[0].errors.added? :conditions, :invalid
+    assert query.errors.added? :base, :invalid
+    assert query.groups[0].errors.added? :base, :invalid
     assert query.groups[0].conditions[0].errors.added? :operator, :not_a_date_operator
   end
 

@@ -105,7 +105,7 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
     ).call.first
 
     assert_equal nested_attribute.to_sym, entry.attribute
-    assert_equal 'user_members_0_email', entry.target_id
+    assert_equal 'user_members_attributes_0_email', entry.target_id
   end
 
   test 'override path uses validation attributes and raw target ids' do
