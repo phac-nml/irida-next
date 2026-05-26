@@ -72,6 +72,10 @@ export default class extends Controller {
 
   handleEsc(event) {
     event.preventDefault();
+
+    if (!(event instanceof KeyboardEvent)) {
+      return;
+    }
     if (this.#closable) this.close();
   }
 
