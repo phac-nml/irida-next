@@ -11,7 +11,7 @@ module Groups
     def execute # rubocop:disable Metrics/AbcSize, Naming/PredicateMethod
       return false unless @transfer_form.valid?
 
-      new_namespace ||= @transfer_form.new_parent
+      new_namespace = @transfer_form.new_parent
 
       # Authorize if user can transfer group
       authorize! @group, to: :transfer?
