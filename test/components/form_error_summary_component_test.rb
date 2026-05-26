@@ -94,6 +94,20 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
     assert_equal 'project_namespace_attributes_path', entry.target_id
   end
 
+  test 'entry builder derives indexed nested target ids' do
+    user = build_user
+    nested_attribute = 'members_attributes[0].email'
+    user.errors.add(nested_attribute, 'is invalid')
+
+    entry = FormErrorSummaryEntryBuilder.new(
+      builder: build_form_builder('user', user),
+      attribute_overrides: { nested_attribute => 'Email address' }
+    ).call.first
+
+    assert_equal nested_attribute.to_sym, entry.attribute
+    assert_equal 'user_members_0_email', entry.target_id
+  end
+
   test 'override path uses validation attributes and raw target ids' do
     namespace = Namespaces::ProjectNamespace.new
     namespace.errors.add(:namespace, 'required')

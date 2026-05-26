@@ -8,6 +8,10 @@ en:
         delete_originals: Delete original files after concatenation?
       groups/transfer_form:
         new_parent_id: Parent group
+      groups_attributes/conditions_attributes:
+        field: Group %{group_index} Condition %{condition_index} Field
+        operator: Group %{group_index} Condition %{condition_index} Operator
+        value: Group %{group_index} Condition %{condition_index} Value
       sample/query:
         group: Group
       sample/search_condition:
