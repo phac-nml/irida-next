@@ -67,6 +67,11 @@ export default class extends Controller {
       type: String,
       default: "Created %{current} of %{total} records",
     },
+    leaveWarningMessage: {
+      type: String,
+      default:
+        "An export is in progress. Leaving this page will cancel the export.",
+    },
   };
 
   connect() {
@@ -78,6 +83,7 @@ export default class extends Controller {
     this._progressMsgEl = null;
     this._progressBarEl = null;
     this._progressPctEl = null;
+    this._beforeUnloadHandler ||= null;
     this.progressWindowDismissed ??= false;
     this.updateSelectedCount();
   }
@@ -127,6 +133,8 @@ export default class extends Controller {
         this.t(this.preparingRowsMessageValue, { count: totalCount }),
       );
 
+      this.bindBeforeUnload();
+
       this.workerClient.start({
         sample_ids: sampleIds,
         metadata_fields: metadataFields,
@@ -152,6 +160,24 @@ export default class extends Controller {
 
   terminateWorker() {
     this.workerClient?.stop();
+    this.unbindBeforeUnload();
+  }
+
+  bindBeforeUnload() {
+    if (this._beforeUnloadHandler) return;
+    this._beforeUnloadHandler = (event) => {
+      const message = this.t(this.leaveWarningMessageValue);
+      event.preventDefault();
+      event.returnValue = message;
+      return message;
+    };
+    window.addEventListener("beforeunload", this._beforeUnloadHandler);
+  }
+
+  unbindBeforeUnload() {
+    if (!this._beforeUnloadHandler) return;
+    window.removeEventListener("beforeunload", this._beforeUnloadHandler);
+    this._beforeUnloadHandler = null;
   }
 
   buildWorkerClient() {

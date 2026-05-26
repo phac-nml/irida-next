@@ -575,6 +575,7 @@ fr:
       fields_instructions_title: Fonctionnement des listes
       format: Format
       keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
+      leave_warning: Une exportation est en cours. Quitter cette page annulera l’exportation.
       metadata: Métadonnées
       no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
