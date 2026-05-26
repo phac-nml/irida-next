@@ -990,11 +990,11 @@ module Projects
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
 
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 3
@@ -1063,11 +1063,11 @@ module Projects
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
 
       assert_field I18n.t(:'shared.samples.metadata.file_imports.form_fields.sample_id_column')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 5
@@ -1139,11 +1139,11 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 5
@@ -1250,8 +1250,8 @@ module Projects
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
 
       select 'invalid file extension', from: I18n.t('shared.samples.metadata.file_imports.form_fields.sample_id_column')
-      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t('shared.samples.metadata.file_imports.form_fields.selected_list_title')
       click_button I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
       ### ACTIONS END ###
 
@@ -1289,11 +1289,11 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
-      assert_selector 'p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_selector 'p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_selector 'p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_selector 'p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 3
@@ -1347,11 +1347,11 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 3
@@ -1404,11 +1404,11 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_whitespaces.csv')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 4
@@ -1467,11 +1467,11 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 4
@@ -1508,11 +1508,11 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 3
@@ -1585,11 +1585,11 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 3
@@ -1650,11 +1650,11 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 2
@@ -1720,11 +1720,11 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_ignored_headers.csv')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available')
-      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.available_list_title')
+      assert_text I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 3
@@ -1871,11 +1871,11 @@ module Projects
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.spreadsheet_imports.dialog.title')
       attach_file('spreadsheet_import[file]',
                   Rails.root.join('test/fixtures/files/batch_sample_import/project/valid_with_whitespaces.csv'))
-      assert_text I18n.t(:'shared.samples.spreadsheet_imports.dialog.available')
-      assert_text I18n.t(:'shared.samples.spreadsheet_imports.dialog.selected')
+      assert_text I18n.t(:'shared.samples.spreadsheet_imports.dialog.available_list_title')
+      assert_text I18n.t(:'shared.samples.spreadsheet_imports.dialog.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.spreadsheet_imports.dialog.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.spreadsheet_imports.dialog.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 3
@@ -2027,11 +2027,11 @@ module Projects
       # metadata sortable lists no longer hidden
       assert_selector 'dialog div', text: I18n.t('shared.samples.spreadsheet_imports.dialog.metadata')
 
-      assert_text I18n.t(:'shared.samples.spreadsheet_imports.dialog.available')
-      assert_text I18n.t(:'shared.samples.spreadsheet_imports.dialog.selected')
+      assert_text I18n.t(:'shared.samples.spreadsheet_imports.dialog.available_list_title')
+      assert_text I18n.t(:'shared.samples.spreadsheet_imports.dialog.selected_list_title')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.spreadsheet_imports.dialog.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.spreadsheet_imports.dialog.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 2
@@ -2111,8 +2111,8 @@ module Projects
       # metadata sortable lists renders now that description header is available
       assert_selector 'dialog div', text: I18n.t('shared.samples.spreadsheet_imports.dialog.metadata')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.metadata.file_imports.form_fields.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", text: 'description'
@@ -2144,8 +2144,8 @@ module Projects
                   Rails.root.join('test/fixtures/files/batch_sample_import/project/with_metadata_valid.csv'))
       assert_selector 'dialog div', text: I18n.t('shared.samples.spreadsheet_imports.dialog.metadata')
 
-      available_label_id = find('p', text: I18n.t(:'shared.samples.spreadsheet_imports.dialog.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'shared.samples.spreadsheet_imports.dialog.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: 0
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 2
@@ -3610,8 +3610,8 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'data_exports.new_linelist_export_dialog.title')
 
-      available_label_id = find('p', text: I18n.t(:'data_exports.new_linelist_export_dialog.available'))[:id]
-      selected_label_id = find('p', text: I18n.t(:'data_exports.new_linelist_export_dialog.selected'))[:id]
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
 
       assert_selector "ul[aria-labelledby='#{available_label_id}'] li", count: @project.namespace.metadata_fields.count
       assert_selector "ul[aria-labelledby='#{selected_label_id}'] li", count: 0

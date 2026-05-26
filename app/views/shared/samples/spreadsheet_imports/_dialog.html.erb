@@ -222,10 +222,13 @@
               <%= t("shared.samples.spreadsheet_imports.dialog.metadata") %>
             </h2>
 
+            <% sortable_lists_guidance_id = "sample-spreadsheet-import-fields-guidance" %>
+
             <%= render Viral::SortableListsGuidanceComponent.new(
               title: t("shared.samples.spreadsheet_imports.dialog.fields_instructions_title"),
               instructions: t("shared.samples.spreadsheet_imports.dialog.fields_instructions"),
               keyboard_help: t("shared.samples.spreadsheet_imports.dialog.keyboard_help"),
+              id_prefix: sortable_lists_guidance_id,
               available: {
                 title: t("shared.samples.spreadsheet_imports.dialog.available_list_title"),
                 description: t("shared.samples.spreadsheet_imports.dialog.available_description"),
@@ -239,12 +242,14 @@
             <%= render SortableListsComponent.new do |sortable_lists| %>
               <%= sortable_lists.with_list(
                 id: "available-list",
-                title: t("shared.samples.spreadsheet_imports.dialog.available"),
+                title: t("shared.samples.spreadsheet_imports.dialog.available_list_title"),
+                describedby: "#{sortable_lists_guidance_id}-available-description",
               ) %>
 
               <%= sortable_lists.with_list(
                 id: "selected-list",
-                title: t("shared.samples.spreadsheet_imports.dialog.selected"),
+                title: t("shared.samples.spreadsheet_imports.dialog.selected_list_title"),
+                describedby: "#{sortable_lists_guidance_id}-selected-description",
               ) %>
             <% end %>
           </div>

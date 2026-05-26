@@ -943,8 +943,8 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       assert_text I18n.t('data_exports.new_linelist_export_dialog.metadata')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.fields_instructions')
-      assert_text I18n.t('data_exports.new_linelist_export_dialog.available')
-      assert_text I18n.t('data_exports.new_linelist_export_dialog.selected')
+      assert_text I18n.t('data_exports.new_linelist_export_dialog.available_list_title')
+      assert_text I18n.t('data_exports.new_linelist_export_dialog.selected_list_title')
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('common.actions.remove')
       assert_selector 'button[aria-disabled="true"]',

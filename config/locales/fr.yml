@@ -541,9 +541,8 @@ fr:
         zero: Exécutions de flux de travail (0 sélectionné)
       title: Analyser les exportations
     new_linelist_export_dialog:
-      available: Disponible
       available_description: Champs de métadonnées qui ne seront pas inclus dans l’exportation.
-      available_list_title: Non inclus dans l’exportation
+      available_list_title: Métadonnées disponibles
       close_progress: Fermer la progression de l’exportation
       created_records: Créé %{current} sur %{total} enregistrements
       csv: ".csv"
@@ -556,27 +555,24 @@ fr:
       no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
       preparing_rows: Préparation de %{count} lignes
-      selected: Sélectionné
       selected_count: 'Échantillons sélectionnés : %{count}'
       selected_description: Champs de métadonnées inclus dans l’exportation. Réorganisez cette liste pour contrôler l’ordre des colonnes.
-      selected_list_title: Inclus dans l’exportation
+      selected_list_title: Métadonnées sélectionnées
       start_error: 'Impossible de démarrer l’exportation : %{message}'
       title: Exportation de liste détaillée
       unexpected_error: 'Erreur inattendue lors de la génération de l’exportation : %{message}'
       xlsx: ".xlsx"
       xlsx_load_error: Impossible de charger la bibliothèque d’exportation XLSX. Veuillez réessayer ou exporter en CSV.
     new_sample_export_dialog:
-      available: Disponible
       available_description: Formats de fichiers non inclus dans cette exportation. Par défaut, tous les formats sont inclus.
-      available_list_title: Non inclus dans l’exportation
+      available_list_title: Formats de fichiers disponibles
       fields_instructions: Sélectionnez les formats de fichiers à inclure dans l’exportation. Déplacez les formats vers la liste sélectionnée pour n’inclure que ces formats.
       fields_instructions_title: Fonctionnement des listes
       keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       samples: Échantillons
       select_formats: Sélectionner les formats de fichiers
-      selected: Sélectionné
       selected_description: Formats de fichiers inclus dans l’exportation. Seuls les fichiers correspondant à ces formats seront exportés.
-      selected_list_title: Inclus dans l’exportation
+      selected_list_title: Formats de fichiers sélectionnés
       title: Exportation d’échantillons
     new_single_analysis_export_dialog:
       single_selection: Exécutions de flux de travail (1 sélectionné)
@@ -1166,7 +1162,6 @@ fr:
     edit_template_dialog:
       title: Modifier le modèle de métadonnées
     form:
-      available: Disponible
       available_description: Champs qui ne sont pas encore inclus dans ce modèle. Déplacez les champs vers la liste sélectionnée pour les rendre disponibles dans ce modèle.
       available_list_title: Non inclus dans le modèle
       description_hint: Facultatif. Décrivez quand ce modèle devrait être utilisé.
@@ -1177,7 +1172,6 @@ fr:
       keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       metadata: Champs de métadonnées
       name_hint: Requis. Choisissez un nom de modèle descriptif.
-      selected: Sélectionné
       selected_description: Champs inclus dans ce modèle. Réorganisez cette liste pour contrôler l’ordre d’affichage. Au moins un champ est requis.
       selected_list_title: Inclus dans le modèle
     new_template_dialog:
@@ -1985,9 +1979,8 @@ fr:
             description: 'L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes:'
             ok_button: OK
           form_fields:
-            available: Disponible
             available_description: Colonnes de métadonnées de votre fichier qui ne seront pas importées dans les métadonnées d’échantillon.
-            available_list_title: Non importé
+            available_list_title: Métadonnées disponibles
             description: L’importation d’une feuille de calcul de métadonnées permet d’ajouter, de mettre à jour ou de supprimer plusieurs champs de métadonnées dans plusieurs échantillons à la fois.
             fields_instructions: Sélectionnez les colonnes de métadonnées à importer en les déplaçant vers la liste sélectionnée. L’ordre de la liste sélectionnée détermine l’ordre d’importation.
             fields_instructions_title: Fonctionnement des listes
@@ -2003,9 +1996,8 @@ fr:
             no_valid_metadata: Le chiffrier téléchargé ne contient aucune métadonnée viable.
             sample_id_column: Colonne identificateur de l’échantillon
             select_sample_id_column: Sélectionner une colonne identificateur de l’échantillon
-            selected: Sélectionné
             selected_description: Colonnes de métadonnées qui seront importées dans les métadonnées d’échantillon.
-            selected_list_title: Sera importé
+            selected_list_title: Métadonnées sélectionnées
             submit_button: Importer des métadonnées
           success:
             description: Les métadonnées ont été importées avec succès!
@@ -2024,9 +2016,8 @@ fr:
         tooltip: Paramètres d’affichage des métadonnées
       spreadsheet_imports:
         dialog:
-          available: Disponible
           available_description: Champs de métadonnées de votre fichier qui ne seront pas importés dans les métadonnées d’échantillon.
-          available_list_title: Non importé
+          available_list_title: Métadonnées disponibles
           description: Importer un tableur d’échantillons permet d’ajouter plusieurs échantillons, avec ou sans champs de métadonnées, en même temps.
           fields_instructions: Sélectionnez les champs de métadonnées à importer en les déplaçant vers la liste sélectionnée. L’ordre de la liste sélectionnée détermine l’ordre d’importation.
           fields_instructions_title: Fonctionnement des listes
@@ -2049,9 +2040,8 @@ fr:
           select_sample_description_column: Sélectionner une colonne de description de l’échantillon
           select_sample_name_column: Sélectionner une colonne de nom d’échantillon
           select_static_project: Sélectionner un projet statique
-          selected: Sélectionné
           selected_description: Champs de métadonnées qui seront importés dans les métadonnées d'échantillon.
-          selected_list_title: Sera importé
+          selected_list_title: Métadonnées sélectionnées
           static_project: Projet statique
           static_project_description: Attribue chaque échantillon au projet statique si la colonne d’identifiant du projet n’est pas attribuée, ou si la colonne d’identifiant du projet est attribuée mais que la valeur du projet dans le tableur est vide ou non valide.
           static_project_empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
