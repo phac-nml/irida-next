@@ -792,7 +792,7 @@ en:
       index:
         search:
           placeholder: Search files
-        subtitle: View files that belong to group with persistent unique identifier (PUID) %{puid}.
+        subtitle: Viewing files for group with persistent unique identifier (PUID) %{puid}.
         title: Files
         upload_files: Upload Files
       table:
@@ -965,7 +965,7 @@ en:
         refresh_notice:
           message: Samples table is out of date. Please refresh to view latest changes.
         select_all_tooltip: Select all samples in this group
-        subtitle: Viewing samples that belong to group with persistent unique identifier (PUID) %{puid}.
+        subtitle: Viewing samples for group with persistent unique identifier (PUID) %{puid}.
         title: Samples
         workflows:
           button_sr: Launch workflow
@@ -1390,7 +1390,7 @@ en:
       index:
         search:
           placeholder: Search files
-        subtitle: Viewing files that belong to project with persistent unique identifier (PUID) %{puid}.
+        subtitle: Viewing files for project with persistent unique identifier (PUID) %{puid}.
         title: Files
         upload_files: Upload Files
       table:
@@ -1655,7 +1655,7 @@ en:
         refresh_notice:
           message: Samples table is out of date. Please refresh to view latest changes.
         select_all_tooltip: Select all samples in this project
-        subtitle: Viewing samples that belong to project with persistent unique identifier (PUID) %{puid}.
+        subtitle: Viewing samples for project with persistent unique identifier (PUID) %{puid}.
         title: Samples
         workflows:
           button_sr: Launch workflow

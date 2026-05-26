@@ -794,7 +794,7 @@ fr:
       index:
         search:
           placeholder: Rechercher des fichiers
-        subtitle: Affichage des fichiers qui appartiennent au groupe avec l’identifiant unique persistant (PUID) %{puid}.
+        subtitle: Affichage des fichiers pour le groupe avec l’identifiant unique persistant (PUID) %{puid}.
         title: Fichiers
         upload_files: Télécharger des fichiers
       table:
@@ -967,7 +967,7 @@ fr:
         refresh_notice:
           message: Le tableau des échantillons est obsolète. Veuillez actualiser pour voir les dernières modifications.
         select_all_tooltip: Sélectionner tous les échantillons de ce groupe
-        subtitle: Affichage des échantillons qui appartiennent au groupe avec l’identifiant unique persistant (PUID) %{puid}.
+        subtitle: Affichage des échantillons pour le groupe avec l’identifiant unique persistant (PUID) %{puid}.
         title: Échantillons
         workflows:
           button_sr: Lancer le flux de travail
@@ -1394,7 +1394,7 @@ fr:
       index:
         search:
           placeholder: Rechercher des fichiers
-        subtitle: Affichage des fichiers qui appartiennent au projet avec l’identifiant unique persistant (PUID) %{puid}.
+        subtitle: Affichage des fichiers pour le projet avec l’identifiant unique persistant (PUID) %{puid}.
         title: Fichiers
         upload_files: Télécharger des fichiers
       table:
@@ -1659,7 +1659,7 @@ fr:
         refresh_notice:
           message: Le tableau des échantillons est obsolète. Veuillez actualiser pour voir les dernières modifications.
         select_all_tooltip: Sélectionner tous les échantillons de ce projet
-        subtitle: Affichage des échantillons qui appartiennent au projet avec l’identifiant unique persistant (PUID) %{puid}.
+        subtitle: Affichage des échantillons pour le projet avec l’identifiant unique persistant (PUID) %{puid}.
         title: Échantillons
         workflows:
           button_sr: Lancer le flux de travail
