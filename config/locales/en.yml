@@ -565,14 +565,14 @@ en:
       xlsx_load_error: Unable to load the XLSX export library. Please retry or export as CSV.
     new_sample_export_dialog:
       available_description: File formats not included in this export. By default, all formats are included.
-      available_list_title: Available metadata
+      available_list_title: Available file formats
       fields_instructions: Select file formats to restrict which files are included in the export. Move formats to the selected list to include only those formats.
       fields_instructions_title: How the lists work
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       samples: Samples
       select_formats: Select File Formats
       selected_description: File formats included in the export. Only files matching these formats will be exported.
-      selected_list_title: Selected metadata
+      selected_list_title: Selected file formats
       title: Sample Export
     new_single_analysis_export_dialog:
       single_selection: Workflow Executions (1 selected)

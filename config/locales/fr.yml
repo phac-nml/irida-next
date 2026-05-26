@@ -565,14 +565,14 @@ fr:
       xlsx_load_error: Impossible de charger la bibliothèque d’exportation XLSX. Veuillez réessayer ou exporter en CSV.
     new_sample_export_dialog:
       available_description: Formats de fichiers non inclus dans cette exportation. Par défaut, tous les formats sont inclus.
-      available_list_title: Métadonnées disponibles
+      available_list_title: Formats de fichiers disponibles
       fields_instructions: Sélectionnez les formats de fichiers à inclure dans l’exportation. Déplacez les formats vers la liste sélectionnée pour n’inclure que ces formats.
       fields_instructions_title: Fonctionnement des listes
       keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       samples: Échantillons
       select_formats: Sélectionner les formats de fichiers
       selected_description: Formats de fichiers inclus dans l’exportation. Seuls les fichiers correspondant à ces formats seront exportés.
-      selected_list_title: Métadonnées sélectionnées
+      selected_list_title: Formats de fichiers sélectionnés
       title: Exportation d’échantillons
     new_single_analysis_export_dialog:
       single_selection: Exécutions de flux de travail (1 sélectionné)
