@@ -51,10 +51,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def edit
     authorize! @group
+
     @authorized_namespaces -= [@group]
     @subgroups_count = @group.self_and_descendants_of_type([Group.sti_name]).size - 1
     @projects_count = @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).size
     @samples_count = @group.samples_count
+    @transfer_form = ::Groups::TransferForm.new
   end
 
   def create
@@ -115,16 +117,15 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     end
   end
 
-  def transfer # rubocop:disable Metrics/AbcSize
-    new_namespace ||= Namespace.find_by(id: params.require(:new_namespace_id))
+  def transfer
+    @transfer_form = ::Groups::TransferForm.new(group_transfer_params.merge(group: @group))
     respond_to do |format|
-      if Groups::TransferService.new(@group, current_user).execute(new_namespace)
+      if Groups::TransferService.new(@group, current_user, @transfer_form).execute
         flash[:success] = t('.success')
         format.turbo_stream { redirect_to edit_group_path(@group) }
       else
-        @error = @group.errors.messages.values.flatten.first
         format.turbo_stream do
-          render status: :unprocessable_content, locals: { confirm_value: @group.path, error: @error }
+          render status: :unprocessable_content, locals: { confirm_value: @group.path }
         end
       end
     end
@@ -157,6 +158,10 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def group_params
     params.expect(group: %i[name path description parent_id])
+  end
+
+  def group_transfer_params
+    params.expect(groups_transfer_form: [:new_parent_id])
   end
 
   def authorized_namespaces

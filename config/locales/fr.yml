@@ -6,6 +6,8 @@ fr:
         attachment_ids: Fichiers
         basename: Nom de base du fichier de concaténation
         delete_originals: Supprimer les fichiers originaux après la concaténation?
+      groups/transfer_form:
+        new_parent_id: Groupe parent
       sample/query:
         group: Groupe
       sample/search_condition:
@@ -32,6 +34,14 @@ fr:
               mismatching_paired_end_counts: tous les fichiers sélectionnés doivent être jumelés. Le nombre de fichiers en lecture directe et inversée ne correspond pas.
             basename:
               invalid: doit contenir uniquement des lettres, chiffres, « - », « . » et « _ »
+        groups/transfer_form:
+          attributes:
+            new_parent_id:
+              blank: est vide
+              cannot_be_same_as_group: doit être différent du groupe
+              cannot_be_same_as_old_parent: doit être différent du groupe parent actuel
+              namespace_group_exists: existe déjà un groupe portant le même nom/chemin
+              namespace_not_found: n'existe pas
         sample/search_condition:
           attributes:
             field:
@@ -859,7 +869,7 @@ fr:
           descriptions:
           - Transférer le groupe à un autre groupe parent
           empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
-          new_namespace_id: Choisissez un groupe parent
+          new_parent_id: Choisissez un groupe parent
           no_available_namespaces: Vous n’avez accès à aucun espace de noms de destination pour transférer ce groupe
           points:
           - Soyez prudent. Changer le parent d’un groupe peut avoir des effets secondaires involontaires.
@@ -1859,10 +1869,6 @@ fr:
         group_required: Groupe requis
         group_self_reference: Le groupe ne peut pas être partagé avec lui-même.
         invalid_namespace_type: Type d’espace de noms non valide
-      transfer:
-        namespace_empty: Le nouvel espace de noms est vide.
-        namespace_group_exists: Un groupe avec le même nom/chemin existe déjà dans le nouvel espace de noms.
-        same_group_and_namespace: Le nouvel espace de noms doit être différent du groupe.
     members:
       create:
         role_not_allowed: Un responsable ne peut ajouter des membres au %{namespace_type} %{namespace_name} que jusqu’au rôle de responsable

@@ -160,7 +160,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     new_namespace = groups(:group_two)
 
     put group_transfer_path(@group),
-        params: { new_namespace_id: new_namespace.id }, as: :turbo_stream
+        params: { groups_transfer_form: { new_parent_id: new_namespace.id } }, as: :turbo_stream
 
     assert_response :redirect
   end
@@ -169,7 +169,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:john_doe)
 
     put group_transfer_path(@group),
-        params: { new_namespace_id: 'asdfasd' }, as: :turbo_stream
+        params: { groups_transfer_form: { new_parent_id: '' } }, as: :turbo_stream
 
     assert_response :unprocessable_content
   end
@@ -179,7 +179,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     new_namespace = groups(:group_two)
 
     put group_transfer_path(@group),
-        params: { new_namespace_id: new_namespace.id }, as: :turbo_stream
+        params: { groups_transfer_form: { new_parent_id: new_namespace.id } }, as: :turbo_stream
 
     assert_response :unauthorized
   end

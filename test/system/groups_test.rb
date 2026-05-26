@@ -393,7 +393,7 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
     within %(form[action="/group-1/transfer"]) do
       assert_selector 'input[type=submit]:disabled'
-      find_field(I18n.t('groups.edit.advanced.transfer.new_namespace_id')).click
+      find_field(I18n.t('groups.edit.advanced.transfer.new_parent_id')).click
       find("li[data-label='#{group3.name}']").click
       assert_selector 'input[type=submit]:not(:disabled)'
       click_on I18n.t('groups.edit.advanced.transfer.submit')
@@ -417,8 +417,8 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
     within %(form[action="/group-1/transfer"]) do
-      find_field(I18n.t('groups.edit.advanced.transfer.new_namespace_id')).click
-      fill_in I18n.t('groups.edit.advanced.transfer.new_namespace_id'), with: 'invalid project name or puid'
+      find_field(I18n.t('groups.edit.advanced.transfer.new_parent_id')).click
+      fill_in I18n.t('groups.edit.advanced.transfer.new_parent_id'), with: 'invalid project name or puid'
       assert_text I18n.t(:'groups.edit.advanced.transfer.empty_state')
     end
   end
