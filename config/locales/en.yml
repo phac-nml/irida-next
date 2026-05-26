@@ -12,6 +12,8 @@ en:
         field: Group %{group_index} Condition %{condition_index} Field
         operator: Group %{group_index} Condition %{condition_index} Operator
         value: Group %{group_index} Condition %{condition_index} Value
+      projects/transfer_form:
+        new_namespace_id: New namespace
       sample/query:
         group: Group
       sample/search_condition:

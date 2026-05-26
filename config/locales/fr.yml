@@ -12,6 +12,8 @@ fr:
         field: Groupe %{group_index} Condition %{condition_index} Champ
         operator: Groupe %{group_index} Condition %{condition_index} Opérateur
         value: Groupe %{group_index} Condition %{condition_index} Valeur
+      projects/transfer_form:
+        new_namespace_id: Nouvel espace de noms
       sample/query:
         group: Groupe
       sample/search_condition:
