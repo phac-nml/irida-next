@@ -1,4 +1,5 @@
-<%= form_error_summary(form, target_overrides: { parent_id: "namespace-select" }, include: %i[name description]) %>
+<%= form_error_summary(form, target_overrides: { parent_id: "namespace-select" },
+include: %i[name description] + (group.new_record? ? [:path] : [])) %>
 
 <%= render partial: "shared/form/required_field_legend" %>
 
