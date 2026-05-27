@@ -14,10 +14,9 @@ class BaseSampleService < BaseService
 
   private
 
-  def authorize_new_project(new_project_id, auth_method)
+  def authorize_new_project(new_project, auth_method)
     # Authorize user against new project authorization method
-    @new_project = Project.find_by(id: new_project_id)
-    authorize! @new_project, to: auth_method
+    authorize! new_project, to: auth_method
   end
 
   def validate(sample_ids, action_type, new_project_id = nil) # rubocop:disable Metrics/CyclomaticComplexity
