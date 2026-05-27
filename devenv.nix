@@ -49,6 +49,7 @@ lib.mkMerge [
       file
       yq
       playwright-test
+      gh
     ];
 
     # https://devenv.sh/languages/
