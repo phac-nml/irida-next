@@ -30,7 +30,7 @@ fr:
           at_first_aria_label: Vous êtes sur la première page.
           at_last_aria_label: Vous êtes sur la dernière page.
           next: Suivant
-          next_aria_label: Passer à la prochaine page.
+          next_aria_label: Passer à la page suivant
           previous: Précédent
           previous_aria_label: Aller à la page précédente.
         sample_clone:

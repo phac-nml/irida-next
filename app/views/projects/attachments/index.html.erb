@@ -5,7 +5,7 @@
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(
     title: t(".title"),
-    subtitle: t(".subtitle", project_name: @project.name),
+    subtitle: t(".subtitle", puid: @project.puid),
   ) do |component| %>
     <%= component.with_buttons do %>
       <% if @allowed_to[:create_attachment] %>
@@ -21,9 +21,9 @@
     <% end %>
   <% end %>
 
-  <div class="flex flex-col gap-2 mt-2">
+  <div class="mt-2 flex flex-col gap-2">
     <% if @has_attachments %>
-      <div class="flex justify-end mb-2">
+      <div class="mb-2 flex justify-end">
         <%= render SearchComponent.new(
           query: @q,
           search_attribute: :puid_or_file_blob_filename_cont,
@@ -38,6 +38,7 @@
         <% end %>
       </div>
     <% end %>
+
     <%= render partial: "table",
     locals: {
       attachments: @attachments,

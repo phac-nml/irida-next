@@ -456,7 +456,7 @@ en:
         no_groups_description: You currently have no groups.
         no_groups_title: No groups
         search:
-          placeholder: Search by PUID or name
+          placeholder: Search groups
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -476,7 +476,7 @@ en:
         pagy_item: Projects
         personal: Personal
         search:
-          placeholder: Search by PUID or name
+          placeholder: Search projects
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -515,7 +515,7 @@ en:
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
       search:
-        placeholder: Search by ID or name
+        placeholder: Search data exports
       table_header:
         action: Action
         expires_at: Expires
@@ -796,8 +796,8 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          placeholder: Search by PUID or Filename
-        subtitle: These are the files that belong to Group %{group_name}
+          placeholder: Search files
+        subtitle: Viewing files for group with persistent unique identifier (PUID) %{puid}.
         title: Files
         upload_files: Upload Files
       table:
@@ -970,7 +970,7 @@ en:
         refresh_notice:
           message: Samples table is out of date. Please refresh to view latest changes.
         select_all_tooltip: Select all samples in this group
-        subtitle: These are the samples in %{namespace_type} %{namespace_name}
+        subtitle: Viewing samples for group with persistent unique identifier (PUID) %{puid}.
         title: Samples
         workflows:
           button_sr: Launch workflow
@@ -980,7 +980,7 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Search by name or PUID
+          placeholder: Search samples
     shared_namespaces:
       pagy:
         item: Shared groups and projects
@@ -996,7 +996,7 @@ en:
         title: Group Information
       screen_reader_context: 'Dashboard for group: %{group_name}'
       search:
-        placeholder: Search by PUID or name
+        placeholder: Search subgroups and projects
       shared_namespaces:
         no_shared:
           description: Groups and projects can be shared with other groups through their members page.
@@ -1394,8 +1394,8 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          placeholder: Search by PUID or Filename
-        subtitle: These are the files that belong to Project %{project_name}
+          placeholder: Search files
+        subtitle: Viewing files for project with persistent unique identifier (PUID) %{puid}.
         title: Files
         upload_files: Upload Files
       table:
@@ -1644,7 +1644,7 @@ en:
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
           search:
-            placeholder: Search by PUID or Filename
+            placeholder: Search files
       create:
         success: Sample was successfully created.
       edit:
@@ -1660,6 +1660,7 @@ en:
         refresh_notice:
           message: Samples table is out of date. Please refresh to view latest changes.
         select_all_tooltip: Select all samples in this project
+        subtitle: Viewing samples for project with persistent unique identifier (PUID) %{puid}.
         title: Samples
         workflows:
           button_sr: Launch workflow
@@ -1742,7 +1743,7 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Search by name or PUID
+          placeholder: Search samples
       update:
         success: Sample was successfully updated.
     sidebar:
@@ -2105,7 +2106,7 @@ en:
         title: Workflow Execution Create Failure
       index:
         search:
-          placeholder: Search by ID or name
+          placeholder: Search workflow executions
         title: Workflow Executions
       list_workflow_execution:
         id: 'ID:'
@@ -2180,7 +2181,7 @@ en:
         description: There are no files associated with this workflow execution.
         title: No Files
       search:
-        placeholder: Search by PUID or filename
+        placeholder: Search files
     samples:
       empty: No samples could be found for this workflow execution
     show:
