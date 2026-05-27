@@ -29,9 +29,7 @@
                                  "data-action": "change->advanced-search--v1#handleFieldChange",
                                  "aria-label": field_label,
                                  "aria-invalid": invalid_field,
-                                 "aria-describedby":
-                                   conditions_form.field_id(:field, "error"),
-                                 autofocus: invalid_field,
+                                 "aria-describedby": conditions_form.field_id(:field, "error")
                                } %>
       <% else %>
         <%= render ComboboxComponent.new(
@@ -44,9 +42,8 @@
           aria: {
             label: field_label,
             invalid: invalid_field,
-            describedby: conditions_form.field_id(:field, "error"),
+            describedby: conditions_form.field_id(:field, "error")
           },
-          autofocus: invalid_field,
         ) %>
       <% end %>
 
@@ -71,8 +68,7 @@
                                "aria-label": operator_label,
                                "aria-invalid": invalid_operator,
                                "aria-describedby":
-                                 conditions_form.field_id(:operator, "error"),
-                               autofocus: invalid_operator,
+                                 conditions_form.field_id(:operator, "error")
                              } %>
 
       <%= render "shared/form/field_errors",
