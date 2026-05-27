@@ -32,7 +32,7 @@ module Samples
     # @raise [BaseSampleService::BaseError] on validation or authorization failures
     def execute(new_project_id, sample_ids, broadcast_target = nil)
       new_project = Project.find_by(id: new_project_id)
-      authorize_transfer(new_project, sample_ids)
+      authorize_transfer(new_project.id, sample_ids)
 
       transfer(new_project, sample_ids, broadcast_target)
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
