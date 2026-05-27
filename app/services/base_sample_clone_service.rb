@@ -12,7 +12,7 @@ class BaseSampleCloneService < BaseSampleService
 
     @new_project = Project.find_by(id: new_project_id)
 
-    authorize_new_project(@new_project, :clone_sample_into_project?)
+    authorize_new_project(@new_project.id, :clone_sample_into_project?)
     ActiveRecord::Base.transaction do
       clone_samples(sample_ids, broadcast_target)
     end
