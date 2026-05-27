@@ -1,16 +1,14 @@
 <%= render Viral::BaseComponent.new(tag: 'div', **system_arguments, data: {
   controller: "token",
-  "token-item-value": value,
-  "token-show-mask-button-value": t(:'components.token.show'),
-  "token-hide-mask-button-value": t(:'components.token.hide') }) do %>
+  "token-item-value": value }) do %>
   <div class="relative mr-2 grow">
     <input
       type="text"
       autocomplete="off"
       data-token-target="input"
       class="
-        w-full rounded-lg border border-slate-300 bg-slate-50 font-mono text-sm text-slate-900 dark:border-slate-600
-        dark:bg-slate-700 dark:text-white dark:placeholder-slate-400
+        w-full rounded-lg border border-slate-300 bg-slate-50 pr-11 font-mono text-sm text-slate-900
+        dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400
       "
       value="<%= '*' * value.length %>"
       readonly
@@ -20,13 +18,25 @@
     <button
       type="button"
       data-token-target="maskButton"
-      class="absolute inset-y-0 right-0 bottom-0 rounded-r-lg p-2"
+      class="
+        pointer-events-auto absolute inset-y-0 right-0 flex w-11 cursor-pointer items-center justify-center
+        rounded-r-lg border border-l-0 border-slate-300 bg-slate-50 shadow-[inset_1px_0_0_0_var(--color-slate-300)]
+        transition-[color,box-shadow] hover:bg-slate-100 focus-visible:outline focus-visible:outline-2
+        focus-visible:outline-offset-2 focus-visible:outline-neutral-600 aria-pressed:bg-slate-200
+        aria-pressed:shadow-[inset_1px_0_0_0_var(--color-slate-300),inset_0_2px_4px_0_rgb(0_0_0/0.06)]
+        dark:border-slate-600 dark:bg-slate-700 dark:shadow-[inset_1px_0_0_0_var(--color-slate-600)]
+        dark:hover:bg-slate-600 dark:focus-visible:outline-neutral-300 dark:aria-pressed:bg-slate-600
+        dark:aria-pressed:shadow-[inset_1px_0_0_0_var(--color-slate-600),inset_0_2px_4px_0_rgb(0_0_0/0.2)]
+      "
       data-action="click->token#toggleVisibility"
       aria-label="<%= t(:'components.token.toggle_visible') %>"
+      aria-pressed="false"
     >
-      <span data-token-target="hide"><%= icon(:eye, color: :subdued, size: :sm, class: "cursor-pointer") %></span>
+      <span data-token-target="hide" aria-hidden="true">
+        <%= icon(:eye, color: :subdued, size: :sm, class: "cursor-pointer") %>
+      </span>
 
-      <span data-token-target="view" class="flex hidden items-center">
+      <span data-token-target="view" class="flex hidden items-center" aria-hidden="true">
         <%= icon(:eye_slash, color: :subdued, size: :sm, class: "cursor-pointer") %>
       </span>
     </button>

@@ -12,12 +12,11 @@ export default class extends Controller {
   ];
   static values = {
     item: String,
-    hideMaskButton: String,
-    showMaskButton: String,
   };
 
   connect() {
     this.visible = false;
+    this.maskButtonTarget.setAttribute("aria-pressed", "false");
     this.element.setAttribute("data-controller-connected", "true");
   }
 
@@ -36,10 +35,6 @@ export default class extends Controller {
     if (this.visible) {
       this.hideTarget.classList.remove("hidden");
       this.viewTarget.classList.add("hidden");
-      this.maskButtonTarget.setAttribute(
-        "aria-label",
-        this.hideMaskButtonValue,
-      );
       this.inputTarget.value = Array.prototype.join.call(
         { length: this.itemValue.length },
         "*",
@@ -47,13 +42,13 @@ export default class extends Controller {
     } else {
       this.hideTarget.classList.add("hidden");
       this.viewTarget.classList.remove("hidden");
-      this.maskButtonTarget.setAttribute(
-        "aria-label",
-        this.showMaskButtonValue,
-      );
       this.inputTarget.value = this.itemValue;
     }
     this.visible = !this.visible;
+    this.maskButtonTarget.setAttribute(
+      "aria-pressed",
+      this.visible ? "true" : "false",
+    );
   }
 
   removeTokenPanel() {
