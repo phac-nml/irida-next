@@ -394,7 +394,7 @@ fr:
     token:
       copied: Copié!
       copy: Copier dans le presse-papiers
-      toggle_visible: Basculer la visibilité
+      toggle_visible: Afficher le jeton
     treegrid:
       row:
         collapse: Développer

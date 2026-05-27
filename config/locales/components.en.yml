@@ -394,7 +394,7 @@ en:
     token:
       copied: Copied!
       copy: Copy to clipboard
-      toggle_visible: Toggle visibility
+      toggle_visible: Show token
     treegrid:
       row:
         collapse: Collapse
