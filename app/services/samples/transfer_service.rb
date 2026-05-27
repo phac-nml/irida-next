@@ -31,6 +31,26 @@ module Samples
     # @return [Array<Integer>] IDs of successfully transferred samples
     # @raise [BaseSampleService::BaseError] on validation or authorization failures
     def execute(new_project_id, sample_ids, broadcast_target = nil)
+      new_project = Project.find_by(id: new_project_id)
+      authorize_transfer(new_project, sample_ids)
+
+      transfer(new_project, sample_ids, broadcast_target)
+    rescue BaseSampleService::BaseError, TransferService::TransferError => e
+      @namespace.errors.add(:base, e.message)
+      []
+    end
+
+    def graphql_execute(new_project_id, sample_ids)
+      new_project = Project.find_by(id: new_project_id)
+      authorize_transfer(new_project, sample_ids)
+
+      transfer(new_project, sample_ids, nil)
+    rescue BaseSampleService::BaseError, TransferService::TransferError => e
+      @namespace.errors.add(:base, e.message)
+      []
+    end
+
+    def authorize_transfer(new_project, sample_ids)
       # Authorize if user can transfer samples from the current project
       if @namespace.group_namespace?
         authorize! @namespace, to: :transfer_sample?
@@ -38,18 +58,13 @@ module Samples
         authorize! @namespace.project, to: :transfer_sample?
       end
 
-      validate(sample_ids, 'transfer', new_project_id)
+      validate(sample_ids, 'transfer', new_project.id)
 
-      authorize_new_project(new_project_id, :transfer_sample_into_project?)
+      authorize_new_project(new_project.id, :transfer_sample_into_project?)
 
-      if Member.effective_access_level(@namespace, current_user) == Member::AccessLevel::MAINTAINER
-        validate_maintainer_sample_transfer
+      if Member.effective_access_level(@namespace, current_user) == Member::AccessLevel::MAINTAINER # rubocop:disable Style/GuardClause
+        validate_maintainer_sample_transfer(new_project)
       end
-
-      transfer(@new_project, sample_ids, broadcast_target)
-    rescue BaseSampleService::BaseError, TransferService::TransferError => e
-      @namespace.errors.add(:base, e.message)
-      []
     end
 
     # Validate that a maintainer can transfer samples between projects.
@@ -59,14 +74,14 @@ module Samples
     # their allowed scope to prevent privilege escalation.
     #
     # @raise [TransferError] if source and target projects have no common ancestor
-    def validate_maintainer_sample_transfer
+    def validate_maintainer_sample_transfer(new_project)
       project_parent_and_ancestors = if @namespace.group_namespace?
                                        @namespace.self_and_ancestor_ids
                                      else
                                        @namespace.parent.self_and_ancestor_ids
                                      end
 
-      new_project_parent_and_ancestors = @new_project.namespace.parent.self_and_ancestor_ids
+      new_project_parent_and_ancestors = new_project.namespace.parent.self_and_ancestor_ids
 
       return if project_parent_and_ancestors.intersect?(new_project_parent_and_ancestors)
 
