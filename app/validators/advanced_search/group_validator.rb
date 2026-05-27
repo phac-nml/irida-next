@@ -77,8 +77,8 @@ module AdvancedSearch
 
     def validate_fields(group)
       group.conditions.each_with_index do |condition, condition_index|
-        validate_key(condition)
         validate_blank_field(condition)
+        validate_field(condition) if condition.field.present?
         validate_date_and_numeric_field(condition)
 
         validate_unique_condition(group, condition, condition_index)
@@ -91,7 +91,7 @@ module AdvancedSearch
       group.errors.add :base, :invalid
     end
 
-    def validate_key(condition)
+    def validate_field(condition)
       return if allowed_fields.include?(condition.field) || METADATA_FIELD_PATTERN.match?(condition.field)
 
       condition.errors.add :field, :not_a_metadata
