@@ -49,6 +49,8 @@
         <%= t("components.advanced_search_component.v1.rules") %>
       </p>
 
+      <%= helpers.form_error_summary(@form) %>
+
       <div class="mb-4"><%= render partial: "shared/form/required_field_legend" %></div>
 
       <div class="hidden" data-advanced-search--v1-target="submitError">

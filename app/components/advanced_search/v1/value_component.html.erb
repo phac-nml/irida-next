@@ -35,8 +35,7 @@
                                    multiple: true,
                                    "aria-label": value_label,
                                    "aria-invalid": invalid_value,
-                                   "aria-describedby": @conditions_form.field_id(:value, "error"),
-                                   autofocus: invalid_value
+                                   "aria-describedby": @conditions_form.field_id(:value, "error")
                                  } %>
     <% end %>
   <% elsif @options.nil? %>
@@ -44,8 +43,7 @@
                                 "aria-label": value_label,
                                 "aria-invalid": invalid_value,
                                 "aria-describedby":
-                                  @conditions_form.field_id(:value, "error"),
-                                autofocus: invalid_value %>
+                                  @conditions_form.field_id(:value, "error") %>
   <% else %>
     <%= @conditions_form.select :value,
                                options_for_select(@options, selected_values.first),
@@ -53,8 +51,7 @@
                                {
                                  "aria-label": value_label,
                                  "aria-invalid": invalid_value,
-                                 "aria-describedby": @conditions_form.field_id(:value, "error"),
-                                 autofocus: invalid_value
+                                 "aria-describedby": @conditions_form.field_id(:value, "error")
                                } %>
   <% end %>
 

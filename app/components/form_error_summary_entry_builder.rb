@@ -2,6 +2,22 @@
 
 # Builds one linked summary entry per invalid form attribute.
 class FormErrorSummaryEntryBuilder
+  NESTED_ATTRIBUTE_PATH_SEGMENT = '[a-z][a-z0-9_]*_attributes'
+  NESTED_ATTRIBUTE_PATH_SEGMENT_WITH_INDEX = "#{NESTED_ATTRIBUTE_PATH_SEGMENT}\\[\\d+\\]".freeze
+  FIELD_ID_ATTRIBUTE_PATH_REGEXP = /
+    \A
+    (?:
+      #{NESTED_ATTRIBUTE_PATH_SEGMENT_WITH_INDEX}
+      (?:\.(?:#{NESTED_ATTRIBUTE_PATH_SEGMENT_WITH_INDEX}|#{NESTED_ATTRIBUTE_PATH_SEGMENT}))*
+      (?:\.[a-z][a-z0-9_]*)?
+    |
+      #{NESTED_ATTRIBUTE_PATH_SEGMENT}
+      (?:\.(?:#{NESTED_ATTRIBUTE_PATH_SEGMENT_WITH_INDEX}|#{NESTED_ATTRIBUTE_PATH_SEGMENT}))+
+      (?:\.[a-z][a-z0-9_]*)?
+    )
+    \z
+  /x
+
   Entry = Data.define(:attribute, :message, :target_id) do
     def href
       "##{target_id}"
@@ -50,7 +66,21 @@ class FormErrorSummaryEntryBuilder
 
   def target_id_for(attribute)
     target_overrides.fetch(attribute.to_s) do
-      builder.field_id(attribute)
+      builder.field_id(*field_id_parts_for(attribute))
+    end
+  end
+
+  def field_id_parts_for(attribute)
+    attribute_string = attribute.to_s
+
+    return [attribute_string] unless FIELD_ID_ATTRIBUTE_PATH_REGEXP.match?(attribute_string)
+
+    attribute_string.split('.').flat_map do |segment|
+      if (match = segment.match(/\A([a-z][a-z0-9_]*_attributes)\[(\d+)\]\z/))
+        [match[1], match[2]]
+      else
+        [segment]
+      end
     end
   end
 end

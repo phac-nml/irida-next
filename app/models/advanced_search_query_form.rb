@@ -56,6 +56,28 @@ class AdvancedSearchQueryForm
     self.model_class_attribute = model_class
   end
 
+  def self.human_attribute_name(attribute, options = {})
+    # Match attributes of the form: groups[GROUP_INDEX].conditions[CONDITION_INDEX].ATTRIBUTE
+    # where GROUP_INDEX and CONDITION_INDEX are 0-based integers and ATTRIBUTE contains no dots
+    if attribute.is_a?(String)
+      m = attribute.match(/\Agroups_attributes\[(\d+)\]\.conditions_attributes\[(\d+)\]\.([^.]+)\z/)
+      if m
+        group_idx = m[1].to_i
+        condition_idx = m[2].to_i
+        attr_name = "groups_attributes.conditions_attributes.#{m[3]}"
+
+        # Ensure we don't mutate the passed options and add 1 to convert to 1-based indices
+        options = options ? options.dup : {}
+        options[:group_index] = group_idx + 1
+        options[:condition_index] = condition_idx + 1
+
+        return super(attr_name, options)
+      end
+    end
+
+    super
+  end
+
   def initialize(...)
     super
 

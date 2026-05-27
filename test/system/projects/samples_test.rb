@@ -3220,7 +3220,7 @@ module Projects
         end
       end
       click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
-      assert_text I18n.t(:'errors.messages.taken')
+      assert_text I18n.t(:'activemodel.errors.models.advanced_search_condition.attributes.field.taken')
       ### actions and VERIFY END ###
     end
 

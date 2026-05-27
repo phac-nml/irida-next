@@ -68,14 +68,14 @@ module AdvancedSearch
       record = DummyRecord.new(groups: [])
 
       assert_not record.valid?
-      assert record.errors.added?(:groups, :invalid)
+      assert record.errors.added?(:base, :invalid)
     end
 
     test 'rejects structurally empty search with groups but no conditions' do
       record = DummyRecord.new(groups: [DummyGroup.new(conditions: [])])
 
       assert_not record.valid?
-      assert record.errors.added?(:groups, :invalid)
+      assert record.errors.added?(:base, :invalid)
     end
 
     test 'rejects invalid field names and bubbles up group/record errors' do
@@ -84,12 +84,11 @@ module AdvancedSearch
       )
 
       assert_not record.valid?
-      assert record.errors.added?(:groups, :invalid)
+      assert record.errors.added?(:base, :invalid)
 
       group = record.groups.first
       condition = group.conditions.first
 
-      assert group.errors.added?(:conditions, :invalid)
       assert condition.errors.added?(:field, :not_a_metadata)
     end
 
@@ -212,7 +211,7 @@ module AdvancedSearch
 
       assert_not record.valid?
       second = record.groups.first.conditions.last
-      assert second.errors.added?(:operator, :taken)
+      assert second.errors.added?(:field, :taken)
 
       record2 = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [
@@ -233,7 +232,7 @@ module AdvancedSearch
 
       assert_not record3.valid?
       third = record3.groups.first.conditions.last
-      assert third.errors.added?(:operator, :taken)
+      assert third.errors.added?(:field, :taken)
     end
   end
 end

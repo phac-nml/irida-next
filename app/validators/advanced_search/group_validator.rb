@@ -6,15 +6,17 @@ module AdvancedSearch
   # Subclasses must implement:
   # - allowed_fields
   # - date_fields
-  class GroupValidator < ActiveModel::Validator
+  class GroupValidator < ActiveModel::Validator # rubocop:disable Metrics/ClassLength
     METADATA_FIELD_PATTERN = /^metadata\..+$/
     DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in].freeze
     BETWEEN_OPERATORS = %w[>= <=].freeze
     EXISTS_OPERATORS = %w[exists not_exists].freeze
+    GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
+      'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
 
-    def validate(record)
+    def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       if structurally_empty_search?(record)
-        record.errors.add :groups, :invalid
+        record.errors.add :base, :invalid
         return
       end
 
@@ -26,7 +28,27 @@ module AdvancedSearch
 
       return unless record.groups.any? { |group| group.errors.any? }
 
-      record.errors.add :groups, :invalid
+      record.groups.each_with_index do |group, group_index|
+        next unless group.errors.any?
+
+        group.conditions.each_with_index do |condition, condition_index|
+          next unless condition.errors.any?
+
+          condition.errors.each do |error|
+            next if error.attribute.eql? :base
+
+            record.errors.add format(
+              GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT,
+              group_index: group_index,
+              condition_index: condition_index,
+              attribute: error.attribute
+            ).to_sym,
+                              error.message
+          end
+        end
+      end
+
+      record.errors.add :base, :invalid
     end
 
     private
@@ -55,19 +77,21 @@ module AdvancedSearch
 
     def validate_fields(group)
       group.conditions.each_with_index do |condition, condition_index|
-        validate_key(condition)
         validate_blank_field(condition)
+        validate_field(condition) if condition.field.present?
         validate_date_and_numeric_field(condition)
 
         validate_unique_condition(group, condition, condition_index)
+
+        next unless condition.errors.any?
       end
 
       return unless group.conditions.any? { |condition| condition.errors.any? }
 
-      group.errors.add :conditions, :invalid
+      group.errors.add :base, :invalid
     end
 
-    def validate_key(condition)
+    def validate_field(condition)
       return if allowed_fields.include?(condition.field) || METADATA_FIELD_PATTERN.match?(condition.field)
 
       condition.errors.add :field, :not_a_metadata
@@ -118,16 +142,12 @@ module AdvancedSearch
       else
         validate_uniqueness(condition, common_field_conditions)
       end
-
-      return unless condition.errors.any?
-
-      group.errors.add :conditions, :invalid
     end
 
     def validate_uniqueness(unique_field_condition, common_field_conditions)
       return if common_field_conditions.one?
 
-      unique_field_condition.errors.add :operator, :taken
+      unique_field_condition.errors.add :field, :taken
     end
 
     def validate_between(unique_field_condition, common_field_conditions)
@@ -136,7 +156,7 @@ module AdvancedSearch
       return if common_field_conditions.count == 2 &&
                 common_field_conditions.collect(&:operator).sort == BETWEEN_OPERATORS.sort
 
-      unique_field_condition.errors.add :operator, :taken
+      unique_field_condition.errors.add :field, :taken
     end
   end
 end
