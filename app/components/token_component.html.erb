@@ -1,8 +1,6 @@
 <%= render Viral::BaseComponent.new(tag: 'div', **system_arguments, data: {
   controller: "token",
-  "token-item-value": value,
-  "token-show-mask-button-value": t(:'components.token.show'),
-  "token-hide-mask-button-value": t(:'components.token.hide') }) do %>
+  "token-item-value": value }) do %>
   <div class="relative mr-2 grow">
     <input
       type="text"
@@ -20,13 +18,19 @@
     <button
       type="button"
       data-token-target="maskButton"
-      class="absolute inset-y-0 right-0 bottom-0 rounded-r-lg p-2"
+      class="
+        absolute inset-y-0 right-0 bottom-0 rounded-r-lg p-2 focus-visible:outline focus-visible:outline-2
+        focus-visible:outline-offset-2 focus-visible:outline-neutral-600 dark:focus-visible:outline-neutral-300
+      "
       data-action="click->token#toggleVisibility"
       aria-label="<%= t(:'components.token.toggle_visible') %>"
+      aria-pressed="false"
     >
-      <span data-token-target="hide"><%= icon(:eye, color: :subdued, size: :sm, class: "cursor-pointer") %></span>
+      <span data-token-target="hide" aria-hidden="true">
+        <%= icon(:eye, color: :subdued, size: :sm, class: "cursor-pointer") %>
+      </span>
 
-      <span data-token-target="view" class="flex hidden items-center">
+      <span data-token-target="view" class="flex hidden items-center" aria-hidden="true">
         <%= icon(:eye_slash, color: :subdued, size: :sm, class: "cursor-pointer") %>
       </span>
     </button>
