@@ -7,8 +7,19 @@ module MetadataTemplates
       class Component < ::Component
         attr_reader :url
 
-        def initialize(url:)
+        def initialize(url:, toolbar_item: false)
           @url = url
+          @toolbar_item = toolbar_item
+        end
+
+        def dropdown_system_arguments
+          return {} unless @toolbar_item
+
+          {
+            data: {
+              'pathogen--toolbar-target': 'item'
+            }
+          }
         end
       end
     end

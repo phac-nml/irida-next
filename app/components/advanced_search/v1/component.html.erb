@@ -20,6 +20,9 @@
           type="button"
           class="<%= class_names("button button-default w-full focus-visible:z-10", { "rounded-e-none border-e-0": @status }) %>"
           data-viral--dialog-target="trigger"
+          <% if @toolbar_item %>
+            data-pathogen--toolbar-target="item"
+          <% end %>
           data-action="advanced-search--v1#renderSearch viral--dialog#open"
           aria-label="<%= t("components.advanced_search_component.v1.title") %>"
         >
@@ -32,6 +35,9 @@
             class="button rounded-s-none button-default"
             data-action="advanced-search--v1#clearForm filters#submit"
             aria-label="<%= t("components.advanced_search_component.v1.clear_aria_label") %>"
+            <% if @toolbar_item %>
+              tabindex="-1"
+            <% end %>
           >
             <%= icon(:x, size: :sm) %>
           </button>
