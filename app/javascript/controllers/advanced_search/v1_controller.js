@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class AdvancedSearchController extends Controller {
   static targets = [
+    "emptySearchTemplate",
     "conditionsContainer",
     "conditionTemplate",
     "groupsContainer",
@@ -11,7 +12,6 @@ export default class AdvancedSearchController extends Controller {
     "searchGroupsContainer",
     "searchGroupsTemplate",
     "selectValueTemplate",
-    "submitError",
     "valueTemplate",
   ];
   static outlets = ["list-input"];
@@ -31,32 +31,38 @@ export default class AdvancedSearchController extends Controller {
     "fieldset[data-advanced-search--v1-target='conditionsContainer']";
 
   connect() {
+    this.renderSearchIfOpen();
+    this.boundOnMorph = this.onMorph.bind(this);
+
+    document.addEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  renderSearchIfOpen() {
     if (this.openValue) {
       this.renderSearch();
     }
   }
 
   renderSearch() {
-    this.searchGroupsContainerTarget.innerHTML =
-      this.searchGroupsTemplateTarget.innerHTML;
-    this.clearSubmitError();
+    if (this.searchGroupsTemplateTarget.innerHTML.trim() === "") {
+      this.searchGroupsContainerTarget.innerHTML = "";
+      this.addGroup();
+    } else {
+      this.searchGroupsContainerTarget.innerHTML =
+        this.searchGroupsTemplateTarget.innerHTML;
+    }
+  }
+
+  onMorph() {
+    this.renderSearchIfOpen();
   }
 
   clear() {
     this.searchGroupsContainerTarget.innerHTML = "";
-    this.clearSubmitError();
-  }
-
-  submit(event) {
-    if (this.#hasAtLeastOneCompleteCondition()) {
-      this.clearSubmitError();
-      return;
-    }
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    this.#showSubmitError();
-    this.#focusFirstConditionField();
   }
 
   close(event) {
@@ -69,7 +75,7 @@ export default class AdvancedSearchController extends Controller {
       event.preventDefault();
       event.stopImmediatePropagation();
     } else if (!this.#dirty()) {
-      this.clear();
+      return;
     } else if (window.confirm(this.confirmCloseTextValue)) {
       this.clear();
     } else {
@@ -81,7 +87,6 @@ export default class AdvancedSearchController extends Controller {
   addCondition(event) {
     const group = event.currentTarget.closest(this.#groupSelector);
     this.#addConditionToGroup(group);
-    this.clearSubmitError();
   }
 
   removeCondition(event) {
@@ -105,8 +110,6 @@ export default class AdvancedSearchController extends Controller {
       const focusIndex = Math.min(removedIndex, remainingConditions.length - 1);
       this.#focusConditionInput(remainingConditions[focusIndex]);
     }
-
-    this.clearSubmitError();
   }
 
   addGroup() {
@@ -122,19 +125,16 @@ export default class AdvancedSearchController extends Controller {
     const group = this.#groupElements().at(-1);
     this.#addConditionToGroup(group);
     this.#toggleRemoveGroupButtons();
-    this.clearSubmitError();
   }
 
   removeGroup(event) {
     if (this.#groupElements().length <= 1) {
-      this.clearSubmitError();
       return;
     }
 
     const group = event.currentTarget.closest(this.#groupSelector);
 
     if (!group) {
-      this.clearSubmitError();
       return;
     }
 
@@ -150,14 +150,12 @@ export default class AdvancedSearchController extends Controller {
       remainingGroups[Math.min(removedIndex, remainingGroups.length - 1)];
     const focusCondition = this.#conditionElements(focusGroup)[0];
     this.#focusConditionInput(focusCondition);
-
-    this.clearSubmitError();
   }
 
   clearForm() {
     this.clear();
-    this.addGroup();
-    this.clearSubmitError();
+    this.searchGroupsContainerTarget.innerHTML =
+      this.emptySearchTemplateTarget.innerHTML;
   }
 
   handleOperatorChange(event) {
@@ -166,7 +164,6 @@ export default class AdvancedSearchController extends Controller {
     const group = condition?.closest(this.#groupSelector);
 
     if (!condition || !group) {
-      this.clearSubmitError();
       return;
     }
 
@@ -175,7 +172,6 @@ export default class AdvancedSearchController extends Controller {
     const conditionIndex = this.#conditionElements(group).indexOf(condition);
 
     if (!value || groupIndex < 0 || conditionIndex < 0) {
-      this.clearSubmitError();
       return;
     }
 
@@ -212,20 +208,16 @@ export default class AdvancedSearchController extends Controller {
           .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
       }
     }
-
-    this.clearSubmitError();
   }
 
   handleFieldChange(event) {
     const condition = event.target.closest(this.#conditionSelector);
     if (!condition) {
-      this.clearSubmitError();
       return;
     }
 
     const operator = condition.querySelector("[name$='[operator]']");
     if (!operator) {
-      this.clearSubmitError();
       return;
     }
 
@@ -236,7 +228,6 @@ export default class AdvancedSearchController extends Controller {
 
     const previousField = condition.dataset.advancedSearchSelectedField || "";
     if (previousField === selectedField) {
-      this.clearSubmitError();
       return;
     }
 
@@ -248,14 +239,6 @@ export default class AdvancedSearchController extends Controller {
       this.#clearValueInputs(value);
       value.classList.add(...this.#hiddenClasses);
     }
-  }
-
-  clearSubmitError() {
-    if (!this.hasSubmitErrorTarget) {
-      return;
-    }
-
-    this.submitErrorTarget.classList.add("hidden");
   }
 
   #addConditionToGroup(group) {
@@ -428,49 +411,6 @@ export default class AdvancedSearchController extends Controller {
     }
 
     condition.querySelector("input:not([type='hidden'])")?.focus();
-  }
-
-  #hasAtLeastOneCompleteCondition() {
-    return this.conditionsContainerTargets.some((condition) =>
-      this.#isConditionComplete(condition),
-    );
-  }
-
-  #isConditionComplete(condition) {
-    const field = condition.querySelector("[name$='[field]']")?.value?.trim();
-    const operator = condition
-      .querySelector("[name$='[operator]']")
-      ?.value?.trim();
-
-    if (!field || !operator) {
-      return false;
-    }
-
-    if (["exists", "not_exists"].includes(operator)) {
-      return true;
-    }
-
-    if (["in", "not_in"].includes(operator)) {
-      const values = condition.querySelectorAll("[name$='[value][]']");
-
-      return Array.from(values).some((input) => input.value.trim() !== "");
-    }
-
-    const value = condition.querySelector("[name$='[value]']")?.value?.trim();
-
-    return Boolean(value);
-  }
-
-  #showSubmitError() {
-    if (!this.hasSubmitErrorTarget) {
-      return;
-    }
-
-    this.submitErrorTarget.classList.remove("hidden");
-  }
-
-  #focusFirstConditionField() {
-    this.#focusConditionInput(this.conditionsContainerTargets[0]);
   }
 
   #selectedConditionField(condition) {
