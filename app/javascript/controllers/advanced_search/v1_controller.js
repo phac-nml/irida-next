@@ -75,7 +75,7 @@ export default class AdvancedSearchController extends Controller {
       event.preventDefault();
       event.stopImmediatePropagation();
     } else if (!this.#dirty()) {
-      return;
+      this.clear();
     } else if (window.confirm(this.confirmCloseTextValue)) {
       this.clear();
     } else {
