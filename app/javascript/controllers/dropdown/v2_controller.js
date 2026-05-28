@@ -1,6 +1,17 @@
 import { Controller } from "@hotwired/stimulus";
 import FloatingDropdown from "utilities/floating_dropdown";
 
+const MENU_NAV_KEYS = new Set([
+  "ArrowUp",
+  "ArrowDown",
+  "Home",
+  "End",
+  "Escape",
+  "Enter",
+  " ",
+  "Tab",
+]);
+
 export default class extends Controller {
   static targets = ["trigger", "menu", "caret"];
   static values = {
@@ -8,11 +19,12 @@ export default class extends Controller {
   };
 
   #floatingDropdown = null;
+  #documentMenuKeyDownBound = false;
 
   initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
     this.boundOnButtonClick = this.onButtonClick.bind(this);
-    this.boundOnMenuItemKeyDown = this.onMenuItemKeyDown.bind(this);
+    this.boundOnMenuKeyDown = this.onMenuKeyDown.bind(this);
     this.boundOnMorph = this.onMorph.bind(this);
   }
 
@@ -33,6 +45,7 @@ export default class extends Controller {
   }
 
   disconnect() {
+    this.#unbindDocumentMenuKeyDown();
     this.#floatingDropdown?.destroy();
     this.#floatingDropdown = null;
 
@@ -45,14 +58,9 @@ export default class extends Controller {
 
   menuTargetConnected(element) {
     element.setAttribute("aria-hidden", "true");
-    element.addEventListener("keydown", this.boundOnMenuItemKeyDown);
     this.#menuItems(element).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });
-  }
-
-  menuTargetDisconnected(element) {
-    element.removeEventListener("keydown", this.boundOnMenuItemKeyDown);
   }
 
   triggerTargetConnected(element) {
@@ -70,12 +78,16 @@ export default class extends Controller {
   }
 
   #onShow() {
+    this.#bindDocumentMenuKeyDown();
+
     if (this.hasCaretTarget) {
       this.caretTarget.classList.add("rotate-180");
     }
   }
 
   #onHide() {
+    this.#unbindDocumentMenuKeyDown();
+
     this.#menuItems(this.menuTarget).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });
@@ -97,6 +109,10 @@ export default class extends Controller {
   }
 
   onButtonKeyDown(event) {
+    if (this.#isMenuOpen()) {
+      return;
+    }
+
     switch (event.key) {
       case "Enter":
       case " ":
@@ -109,6 +125,54 @@ export default class extends Controller {
         this.#openMenuAndFocusMenuItem(-1);
         break;
     }
+  }
+
+  onMenuKeyDown(event) {
+    if (!this.#isMenuOpen() || !this.#eventInDropdown(event.target)) {
+      return;
+    }
+
+    if (!MENU_NAV_KEYS.has(event.key)) {
+      return;
+    }
+
+    const menuItems = this.#menuItems(this.menuTarget);
+    const currentIndex = menuItems.indexOf(document.activeElement);
+    this.#focusByKey(event, menuItems, currentIndex);
+  }
+
+  #bindDocumentMenuKeyDown() {
+    if (this.#documentMenuKeyDownBound) {
+      return;
+    }
+
+    this.#documentMenuKeyDownBound = true;
+    document.addEventListener("keydown", this.boundOnMenuKeyDown, {
+      capture: true,
+    });
+  }
+
+  #unbindDocumentMenuKeyDown() {
+    if (!this.#documentMenuKeyDownBound) {
+      return;
+    }
+
+    this.#documentMenuKeyDownBound = false;
+    document.removeEventListener("keydown", this.boundOnMenuKeyDown, {
+      capture: true,
+    });
+  }
+
+  #eventInDropdown(target) {
+    if (!(target instanceof Node)) {
+      return false;
+    }
+
+    return (
+      this.triggerTarget === target ||
+      this.triggerTarget.contains(target) ||
+      this.menuTarget.contains(target)
+    );
   }
 
   #openMenuAndFocusMenuItem(index) {
@@ -129,27 +193,32 @@ export default class extends Controller {
         { once: true },
       );
       this.#floatingDropdown.show();
-      this.#focusMenuItem(this.menuTarget);
     } else {
       this.#floatingDropdown.show();
       this.#focusMenuItem(menuItems.at(index));
     }
   }
 
-  onMenuItemKeyDown(event) {
-    const menuItems = this.#menuItems(this.menuTarget);
-    const currentIndex = menuItems.indexOf(document.activeElement);
-    this.#focusByKey(event, menuItems, currentIndex);
-  }
-
   #focusByKey(event, menuItems, currentIndex) {
+    if (menuItems.length === 0) {
+      return;
+    }
+
+    event.stopImmediatePropagation();
+
+    const activeItem = currentIndex >= 0 ? menuItems[currentIndex] : null;
+
     switch (event.key) {
       case "Enter":
       case " ":
+        if (!activeItem) {
+          return;
+        }
+
         event.preventDefault();
-        if (menuItems[currentIndex].nodeName === "LI") {
+        if (activeItem.nodeName === "LI") {
           // find first clickable target
-          const clickableTarget = menuItems[currentIndex].querySelector(
+          const clickableTarget = activeItem.querySelector(
             'a, button, input[type="submit"]',
           );
           // fire click or close dropdown
@@ -159,7 +228,7 @@ export default class extends Controller {
             this.#floatingDropdown.hide();
           }
         } else {
-          menuItems[currentIndex].click();
+          activeItem.click();
         }
         return document.addEventListener(
           "turbo:morph",
@@ -174,33 +243,33 @@ export default class extends Controller {
         break;
       case "ArrowUp": {
         event.preventDefault();
-        let prevIndex = menuItems.length - 1;
-        if (currentIndex > 0) {
-          prevIndex = Math.max(0, currentIndex - 1);
-        }
-        menuItems[currentIndex].tabIndex = "-1";
-        this.#focusMenuItem(menuItems.at(prevIndex));
+        const prevIndex =
+          activeItem === null || currentIndex <= 0
+            ? menuItems.length - 1
+            : currentIndex - 1;
+        this.#clearMenuItemTabIndex(activeItem);
+        this.#focusMenuItem(menuItems[prevIndex]);
         break;
       }
       case "ArrowDown": {
         event.preventDefault();
-        let nextIndex = 0;
-        if (currentIndex < menuItems.length - 1) {
-          nextIndex = Math.min(menuItems.length - 1, currentIndex + 1);
-        }
-        menuItems[currentIndex].tabIndex = "-1";
-        this.#focusMenuItem(menuItems.at(nextIndex));
+        const nextIndex =
+          activeItem === null || currentIndex >= menuItems.length - 1
+            ? 0
+            : currentIndex + 1;
+        this.#clearMenuItemTabIndex(activeItem);
+        this.#focusMenuItem(menuItems[nextIndex]);
         break;
       }
       case "Home":
         event.preventDefault();
-        menuItems[currentIndex].tabIndex = "-1";
-        this.#focusMenuItem(menuItems.at(0));
+        this.#clearMenuItemTabIndex(activeItem);
+        this.#focusMenuItem(menuItems[0]);
         break;
       case "End":
         event.preventDefault();
-        menuItems[currentIndex].tabIndex = "-1";
-        this.#focusMenuItem(menuItems.at(-1));
+        this.#clearMenuItemTabIndex(activeItem);
+        this.#focusMenuItem(menuItems[menuItems.length - 1]);
         break;
       case "Tab":
         if (event.shiftKey) {
@@ -213,9 +282,34 @@ export default class extends Controller {
     }
   }
 
+  #clearMenuItemTabIndex(menuItem) {
+    if (menuItem) {
+      menuItem.tabIndex = "-1";
+    }
+  }
+
   #focusMenuItem(menuItem) {
+    if (!menuItem) {
+      return;
+    }
+
     menuItem.tabIndex = "0";
-    menuItem.focus();
+    menuItem.focus({ focusVisible: true });
+  }
+
+  #isMenuOpen() {
+    if (this.#floatingDropdown?.isVisible()) {
+      return true;
+    }
+
+    if (this.triggerTarget?.getAttribute("aria-expanded") === "true") {
+      return true;
+    }
+
+    const menu = this.menuTarget;
+    return Boolean(
+      menu && !menu.hidden && menu.getAttribute("aria-hidden") !== "true",
+    );
   }
 
   #menuItems(menu) {
