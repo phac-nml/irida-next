@@ -6,20 +6,83 @@
 <%= turbo_frame_tag "file_selector_dialog" %>
 
 <div class="fixed-table-component">
-  <%= render Viral::PageHeaderComponent.new(title: t('.title'),
-  subtitle: t(".subtitle", puid: @project.puid)) do |component| %>
-    <% component.with_buttons do %>
-      <% if @allowed_to[:submit_workflow] && @has_samples && @pipelines_enabled %>
-        <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @project.namespace.id }, method: :get,
-        data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
-                  class: "button button-default action-button cursor-pointer w-full" do %>
-          <%= icon(:rocket_launch, size: :sm) %>
-          <span class="ml-2"><%= t(:".workflows.button_sr") %></span>
+  <%= render Viral::PageHeaderComponent.new(
+    title: t('.title'),
+    subtitle: t(".subtitle", puid: @project.puid),
+  ) %>
+
+  <%= render RefreshNoticeComponent.new(
+    streamable: @project,
+    stream_name: :samples,
+    message: t(".refresh_notice.message"),
+  ) %>
+
+  <% show_selection_buttons = @has_samples && (
+       @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] ||
+         @allowed_to[:transfer_sample] || @allowed_to[:export_data]
+     ) %>
+
+  <% show_launch_workflow_button = @allowed_to[:submit_workflow] && @has_samples && @pipelines_enabled %>
+  <% show_toolbar = show_selection_buttons || @render_sample_actions || @has_samples || show_launch_workflow_button %>
+
+  <% if show_toolbar %>
+    <%= render Pathogen::Toolbar.new(
+      label: t("shared.samples.actions_dropdown.label"),
+      controls: "samples-table",
+      class: "mb-4 w-full flex-wrap gap-2",
+    ) do %>
+      <% if show_selection_buttons %>
+        <%= form_with(
+              url: select_namespace_project_samples_url,
+              method: :get,
+              id: "select-all-form",
+              class: "max-sm:w-full",
+              data: { turbo_frame: "selected" },
+            ) do |f| %>
+          <input type="hidden" name="select" value="on">
+          <%= render "shared/samples/timestamp_input" %>
+
+          <button
+            type="submit"
+            id="select-all-button"
+            class="button w-full button-default"
+            title="<%= t('.select_all_tooltip') %>"
+            aria-label="<%= t('.select_all_tooltip') %>"
+            data-pathogen--toolbar-target="item"
+          >
+            <%= t("common.controls.select_all") %>
+          </button>
+        <% end %>
+        <%= form_with(
+              url: select_namespace_project_samples_url,
+              method: :get,
+              id: "deselect-all-form",
+              class: "max-sm:w-full",
+              data: { turbo_frame: "selected" },
+            ) do |f| %>
+          <button
+            type="submit"
+            id="deselect-all-button"
+            class="button w-full button-default"
+            title="<%= t('.deselect_all_tooltip') %>"
+            aria-label="<%= t('.deselect_all_tooltip') %>"
+            data-pathogen--toolbar-target="item"
+          >
+            <%= t("common.controls.deselect_all") %>
+          </button>
         <% end %>
       <% end %>
 
       <% if @render_sample_actions %>
-        <%= render DropdownComponent.new(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, classes: "font-normal button button-default") do |dropdown| %>
+        <%= render DropdownComponent.new(label: t("shared.samples.actions_dropdown.label"),
+        aria: { label: t('shared.samples.actions_dropdown.label') },
+        caret: true,
+        classes: "font-normal button button-default",
+        system_arguments: {
+          data: {
+            'pathogen--toolbar-target': 'item',
+          },
+        }) do |dropdown| %>
           <% if @allowed_to[:create_sample] %>
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.new_sample"),
@@ -159,65 +222,45 @@
           <% end %>
         <% end %>
       <% end %>
-    <% end %>
-  <% end %>
 
-  <%= render RefreshNoticeComponent.new(
-    streamable: @project,
-    stream_name: :samples,
-    message: t(".refresh_notice.message"),
-  ) %>
-
-  <% if @has_samples %>
-    <div class="mb-4 flex flex-wrap gap-2">
-      <% if @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] || @allowed_to[:transfer_sample] || @allowed_to[:export_data] %>
-        <%= form_with(
-              url: select_namespace_project_samples_url,
-              method: :get,
-              id: "select-all-form",
-              class: "max-sm:grow",
-              data: { turbo_frame: "selected" },
-            ) do |f| %>
-          <input type="hidden" name="select" value="on">
-          <%= render "shared/samples/timestamp_input" %>
-
-          <%= f.submit t("common.controls.select_all"),
-                   id: "select-all-button",
-                   class: "button button-default w-full",
-                   title: t(".select_all_tooltip"),
-                   aria: {
-                     label: t(".select_all_tooltip"),
-                   } %>
-        <% end %>
-        <%= form_with(
-                    url: select_namespace_project_samples_url,
-                    method: :get,
-                    id: "deselect-all-form",
-                    class: "max-sm:grow",
-                    data: { turbo_frame: "selected" },
-                  ) do |f| %>
-          <%= f.submit t("common.controls.deselect_all"),
-                   id: "deselect-all-button",
-                   class: "button button-default w-full",
-                   title: t(".deselect_all_tooltip"),
-                   aria: {
-                     label: t(".deselect_all_tooltip"),
-                   } %>
-        <% end %>
+      <% if @has_samples %>
+        <div id="table-filter" role="presentation" class="contents">
+          <%= render partial: "table_filter", locals: { toolbar_item: true } %>
+        </div>
+        <%= render MetadataTemplates::DropdownComponent.new(
+          url:
+            list_namespace_project_metadata_templates_url(
+              @project.namespace.parent, @project, metadata_template: @metadata_template[:id],
+              limit: @pagy&.limit, page: @pagy&.page
+            ),
+          toolbar_item: true,
+        ) %>
       <% end %>
 
-      <div class="max-sm:hidden sm:grow" role="presentation"></div>
+      <% if show_launch_workflow_button %>
+        <%= form_with(
+              url: pipeline_selection_workflow_executions_submissions_path,
+              method: :get,
+              class: "ml-auto max-sm:w-full",
+              data: {
+                turbo_stream: true,
+              },
+            ) do %>
+          <%= hidden_field_tag :namespace_id, @project.namespace.id %>
 
-      <div id="table-filter" role="presentation" class="contents"><%= render partial: "table_filter" %></div>
-
-      <%= render MetadataTemplates::DropdownComponent.new(
-      url:
-        list_namespace_project_metadata_templates_url(
-          @project.namespace.parent, @project, metadata_template: @metadata_template[:id],
-          limit: @pagy&.limit, page: @pagy&.page
-        )
-      ) %>
-    </div>
+          <button
+            type="submit"
+            class="action-button button w-full cursor-pointer button-default"
+            data-controller="action-button"
+            data-action-button-required-value="1"
+            data-pathogen--toolbar-target="item"
+          >
+            <%= icon(:rocket_launch, size: :sm) %>
+            <span class="ml-2"><%= t(:".workflows.button_sr") %></span>
+          </button>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
 
   <%= render partial: "table",
