@@ -27,14 +27,15 @@
       <%= form.label :name, data: { required: true } %>
 
       <%= form.text_field :name,
-                      autofocus: true,
                       value: @workflow_execution.name,
                       placeholder:
                         t("groups.workflow_executions.edit_dialog.name_placeholder") %>
 
-      <%= render "shared/form/field_errors",
+      <% if invalid_name %>
+        <%= render "shared/form/field_errors",
               id: form.field_id(:name, "error"),
               errors: @workflow_execution.errors.full_messages_for(:name) %>
+      <% end %>
     </div>
 
     <div class="mt-4">
