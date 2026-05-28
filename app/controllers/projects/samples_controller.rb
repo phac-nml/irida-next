@@ -244,7 +244,7 @@ module Projects
       updated_params = update_store(
         search_key,
         params.fetch(:q, {})
-              .permit(:name_or_puid_cont, :metadata_template, :sort, groups_attributes: {}),
+              .permit(:name_or_puid_cont, :metadata_template, :sort, :groups_attributes, groups_attributes: {}),
         permitted_keys: %i[name_or_puid_cont metadata_template sort groups_attributes]
       )
 
