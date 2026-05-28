@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static outlets = ["advanced-search", "advanced-search--v1", "selection"];
   static targets = ["input", "clearButton", "submitButton"];
+  static values = { toolbarItem: Boolean };
 
   /**
    * 🎯 Initialize controller
@@ -10,7 +11,9 @@ export default class extends Controller {
    * Sets up any initial state or event listeners
    */
   connect() {
-    // Controller connected
+    if (this.toolbarItemValue) {
+      this.#syncToolbar();
+    }
   }
 
   /**
@@ -124,6 +127,7 @@ export default class extends Controller {
       this.submitButtonTarget.classList.remove("hidden");
     if (this.hasClearButtonTarget)
       this.clearButtonTarget.classList.add("hidden");
+    this.#syncToolbar();
   }
 
   showClearHideSubmit() {
@@ -131,6 +135,7 @@ export default class extends Controller {
       this.clearButtonTarget.classList.remove("hidden");
     if (this.hasSubmitButtonTarget)
       this.submitButtonTarget.classList.add("hidden");
+    this.#syncToolbar();
   }
 
   /**
@@ -145,6 +150,10 @@ export default class extends Controller {
    * Prevents background page refresh from clearing inputTarget during interaction.
    */
   onFocusin(event) {
+    if (this.toolbarItemValue) {
+      return;
+    }
+
     if (!this.element.contains(event.relatedTarget)) {
       this.inputTarget.setAttribute("data-turbo-permanent", "");
     }
@@ -154,16 +163,31 @@ export default class extends Controller {
    * Remove data-turbo-permanent attribute from inputTarget on focusin
    */
   onFocusout(event) {
+    if (this.toolbarItemValue) {
+      return;
+    }
+
     if (!this.element.contains(event.relatedTarget)) {
       this.inputTarget.removeAttribute("data-turbo-permanent");
     }
   }
 
-  beforeSubmit(event) {
+  beforeSubmit(_event) {
+    if (this.hasInputTarget) {
+      this.inputTarget.removeAttribute("data-turbo-permanent");
+    }
     if (this.hasAdvancedSearchV1Outlet) {
       this.advancedSearchV1Outlet.renderSearch();
     } else if (this.hasAdvancedSearchOutlet) {
       this.advancedSearchOutlet.renderSearch();
     }
+  }
+
+  #syncToolbar() {
+    this.element
+      .closest('[data-controller~="pathogen--toolbar"]')
+      ?.dispatchEvent(
+        new CustomEvent("pathogen--toolbar:sync", { bubbles: true }),
+      );
   }
 }
