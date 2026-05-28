@@ -2901,29 +2901,24 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
-      within '#samples-table table tbody' do
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample30)}']"
-      end
+      assert_selector '#samples-table table tbody tr', count: 20
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample30)}']"
       ### SETUP END ###
 
       ### ACTIONS START ###
       click_button I18n.t(:'components.advanced_search_component.v1.title')
       assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
       click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
-      assert_selector "div[data-advanced-search--v1-target='submitError']",
-                      text: I18n.t(:'components.advanced_search_component.v1.minimum_condition_error')
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-        assert_selector "tr[id='#{dom_id(@sample1)}']"
-        assert_selector "tr[id='#{dom_id(@sample2)}']"
-        assert_selector "tr[id='#{dom_id(@sample30)}']"
-      end
+      assert_text I18n.t(:'general.form.error_summary.title', count: 3)
+      assert_selector '#samples-table table tbody tr', count: 20
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
+      assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample30)}']"
       ### VERIFY END ###
     end
 

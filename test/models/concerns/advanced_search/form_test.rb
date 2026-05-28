@@ -12,12 +12,12 @@ module AdvancedSearch
     test 'advanced_query? returns false when groups are empty' do
       query = Sample::Query.new(
         project_ids: [@project.id],
-        groups: [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
+        groups: []
       )
       assert_not query.advanced_query?
     end
 
-    test 'advanced_query? returns true when groups have non-empty conditions' do
+    test 'advanced_query? returns true when groups are present' do
       query = Sample::Query.new(
         project_ids: [@project.id],
         groups: [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: 'name', operator: '=',
