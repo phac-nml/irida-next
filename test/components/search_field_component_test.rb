@@ -584,6 +584,24 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     assert_selector 'button[data-search-field-target="submitButton"][class*="hover:bg-slate-100"]', count: 1
   end
 
+  test 'registers the input and action buttons as toolbar items when toolbar_item is true' do
+    render_inline SearchFieldComponent.new(
+      label: @label,
+      placeholder: @placeholder,
+      form: @mock_form,
+      field_name: @field_name,
+      value: 'sample',
+      toolbar_item: true
+    )
+
+    assert_selector 'input[data-pathogen--toolbar-target="item"][tabindex="-1"]', count: 1
+    assert_selector 'button[data-pathogen--toolbar-target="item"][tabindex="-1"]', count: 2
+    assert_selector 'button[data-search-field-target="clearButton"][data-pathogen--toolbar-target="item"]', count: 1
+    assert_selector 'button[data-search-field-target="submitButton"][data-pathogen--toolbar-target="item"]', count: 1
+    assert_selector 'button[data-search-field-target="submitButton"].hidden', count: 1
+    assert_selector 'div[data-search-field-toolbar-item-value="true"]', count: 1
+  end
+
   # Transition Effects Tests
   test 'has transition effects for buttons' do
     render_inline SearchFieldComponent.new(

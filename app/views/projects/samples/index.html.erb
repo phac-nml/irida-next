@@ -49,6 +49,7 @@
             title="<%= t('.select_all_tooltip') %>"
             aria-label="<%= t('.select_all_tooltip') %>"
             data-pathogen--toolbar-target="item"
+            tabindex="-1"
           >
             <%= t("common.controls.select_all") %>
           </button>
@@ -67,6 +68,7 @@
             title="<%= t('.deselect_all_tooltip') %>"
             aria-label="<%= t('.deselect_all_tooltip') %>"
             data-pathogen--toolbar-target="item"
+            tabindex="-1"
           >
             <%= t("common.controls.deselect_all") %>
           </button>
@@ -79,6 +81,7 @@
         caret: true,
         classes: "font-normal button button-default",
         system_arguments: {
+          tabindex: -1,
           data: {
             'pathogen--toolbar-target': 'item',
           },
@@ -254,6 +257,7 @@
             data-controller="action-button"
             data-action-button-required-value="1"
             data-pathogen--toolbar-target="item"
+            tabindex="-1"
           >
             <%= icon(:rocket_launch, size: :sm) %>
             <span class="ml-2"><%= t(:".workflows.button_sr") %></span>

@@ -16,6 +16,7 @@ module MetadataTemplates
           return {} unless @toolbar_item
 
           {
+            tabindex: -1,
             data: {
               'pathogen--toolbar-target': 'item'
             }
