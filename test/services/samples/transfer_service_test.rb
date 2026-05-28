@@ -77,6 +77,10 @@ module Samples
 
     test 'transfer project samples without specifying details' do
       assert_empty Samples::TransferService.new(@current_project.namespace, @john_doe).execute(nil, nil)
+
+      assert @current_project.namespace.errors.full_messages.include?(
+        I18n.t('services.samples.transfer.invalid_new_project')
+      )
     end
 
     test 'transfer project samples to existing project' do
@@ -349,6 +353,10 @@ module Samples
 
     test 'transfer group samples without specifying details' do
       assert_empty Samples::TransferService.new(@group, @john_doe).execute(nil, nil)
+
+      assert @group.errors.full_messages.include?(
+        I18n.t('services.samples.transfer.invalid_new_project')
+      )
     end
 
     test 'transfer group samples to existing project' do
