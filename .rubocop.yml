@@ -5,6 +5,10 @@ plugins:
 Rails:
   Enabled: true
 
+Rails/Present:
+  Exclude:
+    - Gemfile
+
 AllCops:
   Exclude:
     - "vendor/**/*"

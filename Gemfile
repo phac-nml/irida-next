@@ -64,7 +64,7 @@ gem 'faraday-net_http_persistent', '~> 2.1'
 gem 'openssl', '~> 4.0'
 
 gem 'heroicon-rails', '>= 0.2.9'
-pathogen_view_components_path = ENV['PATHOGEN_VIEW_COMPONENTS_PATH']
+pathogen_view_components_path = ENV.fetch('PATHOGEN_VIEW_COMPONENTS_PATH', nil)
 if pathogen_view_components_path && !pathogen_view_components_path.empty?
   gem 'pathogen_view_components', path: pathogen_view_components_path
 else
