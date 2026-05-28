@@ -20,6 +20,7 @@ export default class AdvancedSearchController extends Controller {
     enumFields: Object,
     enumOperations: Object,
     standardOperations: Object,
+    hasErrors: Boolean,
     open: Boolean,
     status: Boolean,
   };
@@ -66,6 +67,13 @@ export default class AdvancedSearchController extends Controller {
   }
 
   close(event) {
+    if (this.hasErrorsValue) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.#focusFirstInvalidField();
+      return;
+    }
+
     if (!this.statusValue) {
       this.renderSearch();
       return;
@@ -411,6 +419,14 @@ export default class AdvancedSearchController extends Controller {
     }
 
     condition.querySelector("input:not([type='hidden'])")?.focus();
+  }
+
+  #focusFirstInvalidField() {
+    const invalidField = Array.from(
+      this.element.querySelectorAll("[aria-invalid='true']"),
+    ).find((field) => !field.disabled && field.offsetParent !== null);
+
+    invalidField?.focus();
   }
 
   #selectedConditionField(condition) {
