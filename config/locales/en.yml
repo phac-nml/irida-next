@@ -761,6 +761,7 @@ en:
         one: "%{count} error prohibited this %{model} from being saved"
         other: "%{count} errors prohibited this %{model} from being saved"
   general:
+    accessibility: Accessibility Statement
     default_sidebar:
       aria_label: Main sidebar
       data_exports: Data Exports
@@ -769,6 +770,7 @@ en:
       projects: Projects
       title: Your work
       workflows: Workflow Executions
+    documentation: Documentation
     form:
       error_notification: 'Please review the following problems:'
       error_summary:

@@ -763,6 +763,7 @@ fr:
         one: 'Impossible d''enregistrer ce(tte) %{model} : %{count} erreur'
         other: 'Impossible d''enregistrer ce(tte) %{model} : %{count} erreurs'
   general:
+    accessibility: Déclaration d'accessibilité
     default_sidebar:
       aria_label: Encadré principal
       data_exports: Exportations de données
@@ -771,6 +772,7 @@ fr:
       projects: Projets
       title: Votre travail
       workflows: Exécutions de flux de travail
+    documentation: Documentation
     form:
       error_notification: 'Veuillez examiner les problèmes suivants :'
       error_summary:

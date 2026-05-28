@@ -204,6 +204,21 @@
       </div>
     </div>
 
+    <%= render DropdownComponent.new(label: t('general.help'), icon: :question, icon_size: :md) do |dropdown| %>
+      <%= dropdown.with_item(
+        label: t(:"general.accessibility"),
+        url: accessibility_path,
+      ) %>
+
+      <%= dropdown.with_item(
+        label: t(:"general.documentation"),
+        url: "https://phac-nml.github.io/irida-next/docs/intro",
+        target: "_blank",
+        rel: "noopener noreferrer",
+        aria: { label: "#{t('general.documentation')} - #{t('general.opens_in_new_tab')}" }
+      ) %>
+    <% end %>
+
     <div class="border-t border-slate-200 p-2 dark:border-slate-800">
       <a
         href="https://phac-nml.github.io/irida-next/docs/intro"
