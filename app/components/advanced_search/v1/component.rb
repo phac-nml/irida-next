@@ -7,15 +7,17 @@ module AdvancedSearch
       # @param sample_fields [Array] @deprecated Use fields: instead
       # @param metadata_fields [Array] @deprecated Use fields: instead
       # rubocop:disable Metrics/ParameterLists
-      def initialize(form:, search:, fields: nil, sample_fields: [], metadata_fields: [], open: false, status: true)
+      def initialize(form:, search:, fields: nil, sample_fields: [], metadata_fields: [], open: false, status: true,
+                     search_group_class: nil, search_condition_class: nil, toolbar_item: false)
         @form = form
         @search = search
         @fields = normalized_fields(fields:, sample_fields:, metadata_fields:)
         @operations = operation_options
         @open = open
         @status = status
-        @search_group_class = @search.search_group_class
-        @search_condition_class = @search.search_group_class.condition_class
+        @toolbar_item = toolbar_item
+        @search_group_class = search_group_class || @search.search_group_class
+        @search_condition_class = search_condition_class || @search_group_class.condition_class
       end
       # rubocop:enable Metrics/ParameterLists
 

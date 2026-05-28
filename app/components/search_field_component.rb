@@ -2,12 +2,24 @@
 
 # Component for rendering a search field with a submit button
 class SearchFieldComponent < Component
-  def initialize(label:, placeholder:, form:, field_name:, value: nil, include_advanced_search_outlet: false, **system_arguments) # rubocop:disable Metrics/ParameterLists,Metrics/MethodLength,Layout/LineLength
+  # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength
+  def initialize(
+    label:,
+    placeholder:,
+    form:,
+    field_name:,
+    value: nil,
+    include_advanced_search_outlet: false,
+    toolbar_item: false,
+    **system_arguments
+  )
+    # rubocop:enable Metrics/ParameterLists, Metrics/MethodLength
     @label = label
     @placeholder = placeholder
     @form = form
     @field_name = field_name
     @value = value
+    @toolbar_item = toolbar_item
     @system_arguments = system_arguments
     @system_arguments[:classes] = class_names(
       @system_arguments[:classes],
