@@ -3,10 +3,12 @@ import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import SortableListsController from "../../../../../app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js";
 
 const translations = JSON.stringify({
-  added: "Added: ",
-  removed: "Removed: ",
-  move_up: "Moved OPTION_PLACEHOLDER up",
-  move_down: "Moved OPTION_PLACEHOLDER down",
+  move_down: "ITEMS_PLACEHOLDER was moved down LIST_PLACEHOLDER.",
+  move_up: "ITEMS_PLACEHOLDER was moved up LIST_PLACEHOLDER.",
+  moved_list_multiple:
+    "The following items were moved to LIST_PLACEHOLDER: ITEMS_PLACEHOLDER",
+  moved_list_single:
+    "The following item was moved to LIST_PLACEHOLDER: ITEMS_PLACEHOLDER",
 });
 
 function option(id, text, selected = false) {
@@ -65,7 +67,8 @@ function renderFixture({
         aria-required="false"
         aria-multiselectable="true"
         data-action="focus->sortable-lists--v1--two-lists-selection#handleListFocus blur->sortable-lists--v1--two-lists-selection#handleListBlur keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput"
-      >${available.join("")}</ul>
+        data-title="Available list"
+        >${available.join("")}</ul>
       <button
         type="button"
         aria-disabled="true"
@@ -82,7 +85,8 @@ function renderFixture({
         aria-required="true"
         aria-multiselectable="true"
         data-action="focus->sortable-lists--v1--two-lists-selection#handleListFocus blur->sortable-lists--v1--two-lists-selection#handleListBlur keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput"
-      >${selected.join("")}</ul>
+        data-title="Selected list"
+        >${selected.join("")}</ul>
       <button
         type="button"
         aria-disabled="true"
@@ -437,6 +441,6 @@ describe("sortable lists two-lists selection controller", () => {
       document.querySelector(
         '[data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"]',
       ),
-    ).toHaveTextContent("Moved Two up");
+    ).toHaveTextContent("Two was moved up Selected list.");
   });
 });
