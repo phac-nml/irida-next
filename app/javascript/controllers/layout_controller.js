@@ -21,6 +21,28 @@ export default class extends Controller {
   };
 
   connect() {
+    this.initializeSidebar();
+
+    this.announcementsEnabled = true;
+
+    this.boundOnMorph = this.onMorph.bind(this);
+
+    document.addEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  disconnect() {
+    this.contentTarget.removeEventListener(
+      "click",
+      this.boundHandleSidebarOverlayClick,
+    );
+    document.removeEventListener("turbo:morph", this.boundOnMorph);
+  }
+
+  onMorph() {
+    this.initializeSidebar();
+  }
+
+  initializeSidebar() {
     // Need to determine the previous state
     if (localStorage.getItem("layout") === "collapsed") {
       this.announcementsEnabled = false;
@@ -29,15 +51,6 @@ export default class extends Controller {
 
     this.#setExpandedState(
       !this.layoutContainerTarget.classList.contains("collapsed"),
-    );
-
-    this.announcementsEnabled = true;
-  }
-
-  disconnect() {
-    this.contentTarget.removeEventListener(
-      "click",
-      this.boundHandleSidebarOverlayClick,
     );
   }
 
