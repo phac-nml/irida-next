@@ -7,7 +7,6 @@ export default class extends Controller {
     trigger: String,
     skidding: Number,
     distance: Number,
-    caret: Boolean,
   };
 
   initialize() {

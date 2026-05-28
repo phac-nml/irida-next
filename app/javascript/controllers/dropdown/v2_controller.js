@@ -5,7 +5,6 @@ export default class extends Controller {
   static targets = ["trigger", "menu", "caret"];
   static values = {
     distance: Number,
-    caret: Boolean,
   };
 
   #floatingDropdown = null;
