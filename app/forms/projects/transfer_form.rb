@@ -31,7 +31,7 @@ module Projects
     end
 
     def project_does_not_conflict_with_new_namespace
-      if new_namespace_id == project.namespace.parent_id
+      if new_namespace_id.to_s == project.namespace.parent_id.to_s
         errors.add(:new_namespace_id, :cannot_be_same)
         return
       end

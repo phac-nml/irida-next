@@ -233,7 +233,7 @@ module Projects
         assert_no_changes -> { @subgroup12aa.reload.samples_count } do
           assert_no_changes -> { john_doe_project.reload.samples.size } do
             transfer_form = ::Projects::TransferForm.new({ new_namespace_id: @subgroup12b.id }
-            .merge(project: @project31))
+            .merge(project: john_doe_project))
 
             Projects::TransferService.new(john_doe_project, @john_doe, transfer_form).execute
           end

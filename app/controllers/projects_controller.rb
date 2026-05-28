@@ -87,14 +87,12 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def transfer
     @transfer_form = ::Projects::TransferForm.new(project_transfer_params.merge(project: @project))
-    if Projects::TransferService.new(@project, current_user, @transfer_form).execute
-      flash[:success] = t('.success', project_name: @project.name)
-      respond_to do |format|
+    respond_to do |format|
+      if Projects::TransferService.new(@project, current_user, @transfer_form).execute
+        flash[:success] = t('.success', project_name: @project.name)
         format.turbo_stream { redirect_to namespace_project_path(@project.namespace.parent, @project) }
-      end
-    else
-      respond_to do |format|
-        format.turbo_stream
+      else
+        render status: :unprocessable_content
       end
     end
   end
