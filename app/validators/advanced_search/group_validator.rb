@@ -15,12 +15,12 @@ module AdvancedSearch
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
 
     def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+      return if empty_search?(record)
+
       if structurally_empty_search?(record)
         record.errors.add :base, :invalid
         return
       end
-
-      return if empty_search?(record)
 
       record.groups.each do |group|
         validate_fields(group)
@@ -62,7 +62,7 @@ module AdvancedSearch
     end
 
     def empty_search?(record)
-      return true if record.groups.length == 1 && record.groups[0].empty?
+      return true if record.groups.empty?
 
       false
     end

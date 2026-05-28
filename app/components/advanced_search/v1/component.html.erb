@@ -2,7 +2,6 @@
   id: "advanced-search",
   data: {
     controller: "advanced-search--v1",
-    action: "input->advanced-search--v1#clearSubmitError change->advanced-search--v1#clearSubmitError",
     "advanced-search--v1-open-value": @open,
     "advanced-search--v1-status-value": @status,
     "advanced-search--v1-confirm-close-text-value": t("components.advanced_search_component.v1.confirm_close_text"),
@@ -52,14 +51,6 @@
       <%= helpers.form_error_summary(@form) %>
 
       <div class="mb-4"><%= render partial: "shared/form/required_field_legend" %></div>
-
-      <div class="hidden" data-advanced-search--v1-target="submitError">
-        <%= render Viral::AlertComponent.new(
-          type: :danger,
-          message: t("components.advanced_search_component.v1.minimum_condition_error"),
-          dismissible: false,
-        ) %>
-      </div>
 
       <div class="space-y-4" data-advanced-search--v1-target="searchGroupsContainer"></div>
 
@@ -181,5 +172,9 @@
       fields: @fields,
       operations: @operations,
     ) %>
+  </template>
+
+  <template data-advanced-search--v1-target="emptySearchTemplate">
+    <%= @form.hidden_field :groups_attributes, value: '' %>
   </template>
 <% end %>

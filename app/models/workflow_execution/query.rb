@@ -14,15 +14,15 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
   attribute :name_or_id_cont, :string
   attribute :name_or_id_in, default: -> { [] }
   attribute :namespace_ids, default: -> { [] }
-  attribute :groups, default: lambda {
-    [WorkflowExecution::SearchGroup.new(
-      conditions: [WorkflowExecution::SearchCondition.new(field: '', operator: '', value: '')]
-    )]
-  }
+  attribute :groups, default: -> { [] }
 
   query_for WorkflowExecution
   filter_by :namespace_id, ids: :namespace_ids
   validates_with WorkflowExecution::AdvancedSearchGroupValidator
+
+  def search_group_class
+    WorkflowExecution::SearchGroup
+  end
 
   private
 
