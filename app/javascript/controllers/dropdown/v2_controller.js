@@ -2,14 +2,13 @@ import { Controller } from "@hotwired/stimulus";
 import FloatingDropdown from "utilities/floating_dropdown";
 
 export default class extends Controller {
-  static targets = ["trigger", "menu"];
+  static targets = ["trigger", "menu", "caret"];
   static values = {
     distance: Number,
     caret: Boolean,
   };
 
   #floatingDropdown = null;
-  #caret;
 
   initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
@@ -22,10 +21,6 @@ export default class extends Controller {
     this.idempotentConnect();
 
     document.addEventListener("turbo:morph", this.boundOnMorph);
-
-    if (this.caretValue) {
-      this.#caret = this.element.querySelector("svg");
-    }
   }
 
   idempotentConnect() {
@@ -76,8 +71,8 @@ export default class extends Controller {
   }
 
   #onShow() {
-    if (this.#caret) {
-      this.#caret.classList.add("rotate-180");
+    if (this.hasCaretTarget) {
+      this.caretTarget.classList.add("rotate-180");
     }
   }
 
@@ -86,8 +81,8 @@ export default class extends Controller {
       menuitem.setAttribute("tabindex", "-1");
     });
     this.triggerTarget.focus();
-    if (this.#caret) {
-      this.#caret.classList.remove("rotate-180");
+    if (this.hasCaretTarget) {
+      this.caretTarget.classList.remove("rotate-180");
     }
   }
 

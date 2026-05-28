@@ -24,7 +24,9 @@
     <% end %>
 
     <% if caret %>
-      <%= icon(:caret_down, size: :sm, class: "ml-2 flex-none") %>
+      <span data-dropdown--v2-target="caret" class="ml-2 inline-flex flex-none">
+        <%= icon(:caret_down, size: :sm) %>
+      </span>
     <% end %>
   <% end %>
 
