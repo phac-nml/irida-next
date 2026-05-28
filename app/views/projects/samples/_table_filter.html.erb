@@ -1,4 +1,5 @@
 <div role="status" class="sr-only"><%= @results_message %></div>
+<% toolbar_item = local_assigns.fetch(:toolbar_item, false) %>
 
 <%= form_with model: @query, html: { role: "search" }, scope: :q, url: search_namespace_project_samples_url, method: :post, data: {
   turbo_action: 'replace',
@@ -14,6 +15,7 @@
       form: f,
       field_name: :name_or_puid_cont,
       value: @search_params[:name_or_puid_cont],
+      toolbar_item: toolbar_item,
       data: {
         "search-field-selection-outlet": "#samples-table",
       },
@@ -30,6 +32,7 @@
       fields: @advanced_search_fields,
       open: @query.errors.any?,
       status: @query.advanced_query?,
+      toolbar_item: toolbar_item,
     ) %>
 
     <%= f.submit hidden: true %>
