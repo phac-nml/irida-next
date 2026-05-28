@@ -22,6 +22,7 @@
           data-viral--dialog-target="trigger"
           <% if @toolbar_item %>
             data-pathogen--toolbar-target="item"
+            tabindex="-1"
           <% end %>
           data-action="advanced-search--v1#renderSearch viral--dialog#open"
           aria-label="<%= t("components.advanced_search_component.v1.title") %>"
