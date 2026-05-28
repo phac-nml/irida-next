@@ -29,10 +29,12 @@ module Samples
     # @param broadcast_target [String, nil] optional Turbo broadcast target for progress updates
     #
     # @return [Array<Integer>] IDs of successfully transferred samples
-    # @raise [BaseSampleService::BaseError] on validation or authorization failures
+    # @raise [TransferService::TransferError] on validation or authorization failures
     def execute(new_project_id, sample_ids, broadcast_target = nil)
       new_project = Project.find_by(id: new_project_id)
-      authorize_transfer(new_project_id, sample_ids)
+      raise TransferError, I18n.t('services.samples.transfer.invalid_new_project') if new_project.nil?
+
+      authorize_transfer(new_project, sample_ids)
 
       transfer(new_project, sample_ids, broadcast_target)
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
@@ -42,7 +44,9 @@ module Samples
 
     def graphql_execute(new_project_id, sample_ids)
       new_project = Project.find_by(id: new_project_id)
-      authorize_transfer(new_project_id, sample_ids)
+      raise TransferError, I18n.t('services.samples.transfer.invalid_new_project') if new_project.nil?
+
+      authorize_transfer(new_project, sample_ids)
 
       transfer(new_project, sample_ids, nil)
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
@@ -60,7 +64,7 @@ module Samples
 
       validate(sample_ids, 'transfer', new_project.id)
 
-      authorize_new_project(new_project.id, :transfer_sample_into_project?)
+      authorize_new_project(new_project, :transfer_sample_into_project?)
 
       if Member.effective_access_level(@namespace, current_user) == Member::AccessLevel::MAINTAINER # rubocop:disable Style/GuardClause
         validate_maintainer_sample_transfer(new_project)

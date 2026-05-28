@@ -2007,6 +2007,7 @@ fr:
       transfer:
         empty_new_project_id: Le projet de destination n’a pas été sélectionné.
         empty_sample_ids: Les identifiants de l’échantillon sont vides.
+        invalid_new_project: Le projet de destination sélectionné est invalide.
         maintainer_transfer_not_allowed: Un responsable ne peut transférer des échantillons qu’à d’autres projets dans la même hiérarchie avec un ancêtre commun
         same_project: Les échantillons existent déjà dans le projet. Veuillez sélectionner un autre projet.
         sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
