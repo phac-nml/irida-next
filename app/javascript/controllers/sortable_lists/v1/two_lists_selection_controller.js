@@ -38,6 +38,9 @@ export default class extends Controller {
   #ariaLiveTranslations;
   #boundSubmitClickCapture;
 
+  #availableListName;
+  #selectedListName;
+
   connect() {
     this.#boundSubmitClickCapture = this.#onSubmitClickCapture.bind(this);
 
@@ -48,6 +51,9 @@ export default class extends Controller {
   idempotentConnect() {
     this.availableList = document.getElementById(this.availableListValue);
     this.selectedList = document.getElementById(this.selectedListValue);
+
+    this.#availableListName = this.availableList.getAttribute("data-title");
+    this.#selectedListName = this.selectedList.getAttribute("data-title");
 
     // check if aria-live exists as it's added after file selection in import metadata (can't be done in connect())
     if (!this.#ariaLiveTranslations && this.hasAriaLiveUpdateTarget) {
@@ -451,13 +457,15 @@ export default class extends Controller {
     }
 
     const translationKey = selectedOptions.length > 1 ? "multiple" : "single";
-    const ariaLiveUpdateString =
+    const listName =
       sourceList === this.selectedList
-        ? this.#ariaLiveTranslations[`removed_${translationKey}`]
-        : this.#ariaLiveTranslations[`added_${translationKey}`];
+        ? this.#availableListName
+        : this.#selectedListName;
 
     this.#updateAriaLive(
-      selectedOptionsText.join(", ").concat(ariaLiveUpdateString),
+      `moved_list_${translationKey}`,
+      listName,
+      selectedOptionsText.join(", "),
     );
 
     this.#checkStates();
@@ -596,17 +604,21 @@ export default class extends Controller {
   }
 
   #moveOptionHorizontally(selectedOption, targetOption, direction) {
+    const listName =
+      selectedOption.parentElement === this.selectedList
+        ? this.#selectedListName
+        : this.#availableListName;
     targetOption.remove();
     selectedOption.insertAdjacentElement(
       direction === "up" ? "afterend" : "beforebegin",
       targetOption,
     );
 
-    const ariaLiveText = selectedOption.lastElementChild.textContent.concat(
-      this.#ariaLiveTranslations[direction === "up" ? "move_up" : "move_down"],
+    this.#updateAriaLive(
+      direction === "up" ? "move_up" : "move_down",
+      listName,
+      selectedOption.lastElementChild.textContent,
     );
-
-    this.#updateAriaLive(ariaLiveText);
   }
 
   // handles up and down buttons
@@ -821,8 +833,12 @@ export default class extends Controller {
     list.append(template);
   }
 
-  #updateAriaLive(updateString) {
+  #updateAriaLive(translationKey, list, items) {
     if (this.hasAriaLiveUpdateTarget) {
+      const updateString = this.#ariaLiveTranslations[translationKey]
+        .replace(/LIST_PLACEHOLDER/g, list)
+        .replace(/ITEMS_PLACEHOLDER/g, items);
+
       announce(updateString, { element: this.ariaLiveUpdateTarget });
     }
   }

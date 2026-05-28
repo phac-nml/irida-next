@@ -2078,12 +2078,10 @@ fr:
         success: Réussite
     sortable_lists:
       aria_live_update:
-        added_multiple: " ont été déplacées vers la liste sélectionnée."
-        added_single: " ont été déplacées vers la liste sélectionnée."
-        move_down: " ont été déplacées plus bas dans la liste sélectionnée."
-        move_up: " ont été déplacées vers le haut de la liste de sélection."
-        removed_multiple: " ont été déplacées vers la liste des produits disponibles."
-        removed_single: " ont été déplacées vers la liste des produits disponibles."
+        move_down: ITEMS_PLACEHOLDER ont été déplacées plus bas dans LIST_PLACEHOLDER.
+        move_up: ITEMS_PLACEHOLDER nt été déplacées vers le haut de LIST_PLACEHOLDER.
+        moved_list_multiple: 'Les éléments suivants ont été déplacés vers LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
+        moved_list_single: 'L''élément suivant a été déplacé vers LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
     workflow_executions:
       actions_dropdown:
         cancel_workflow_executions: Annuler les exécutions de flux de travail

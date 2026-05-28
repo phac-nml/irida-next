@@ -2074,12 +2074,10 @@ en:
         success: Success
     sortable_lists:
       aria_live_update:
-        added_multiple: " were moved to the selected list."
-        added_single: " was moved to the selected list"
-        move_down: " was moved down the selected list."
-        move_up: " was moved up the selected list."
-        removed_multiple: " were moved to the available list."
-        removed_single: " was moved to the available list."
+        move_down: ITEMS_PLACEHOLDER was moved down LIST_PLACEHOLDER.
+        move_up: ITEMS_PLACEHOLDER was moved up LIST_PLACEHOLDER.
+        moved_list_multiple: 'The following items were moved to LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
+        moved_list_single: 'The following item was moved to LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
     workflow_executions:
       actions_dropdown:
         cancel_workflow_executions: Cancel workflow executions

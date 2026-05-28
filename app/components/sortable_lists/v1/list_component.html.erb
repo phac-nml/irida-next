@@ -27,6 +27,7 @@
       aria-describedby="<%= described_by_ids %>"
       aria-required="<%= aria_required %>"
       aria-multiselectable="true"
+      data-title="<%= title %>"
     <% end %>
   >
     <%= render SortableLists::V1::ListItemComponent.with_collection(list_items, interactive:) %>
