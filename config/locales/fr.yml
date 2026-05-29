@@ -1042,7 +1042,7 @@ fr:
     workflow_executions:
       edit_dialog:
         description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
-        name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
+        name_placeholder: Entrez le nom d’exécution du flux de travail
         submit_button: Envoyer
         title: Modifier l’exécution du flux de travail
       index:
@@ -1768,7 +1768,7 @@ fr:
     workflow_executions:
       edit_dialog:
         description: Vous modifiez l’exécution automatisée du flux de travail '%{workflow_execution_id}'
-        name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
+        name_placeholder: Entrez le nom d’exécution du flux de travail
         submit_button: Envoyer
         title: Modifier l’exécution automatisée du flux de travail
       index:
@@ -2160,7 +2160,7 @@ fr:
       error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
     edit_dialog:
       description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
-      name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
+      name_placeholder: Entrez le nom d’exécution du flux de travail
       shared_with_namespace:
         group: Partager les résultats avec les membres du groupe?
         project: Partager les résultats avec les membres du projet?

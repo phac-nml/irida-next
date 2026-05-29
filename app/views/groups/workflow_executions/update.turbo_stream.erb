@@ -4,18 +4,15 @@
   <% end %>
 <% end %>
 
-<% if @workflow_execution.errors.empty? %>
-  <%= turbo_stream.update "edit_dialog",
+<%= turbo_stream.update "edit_dialog",
                       partial: "edit_dialog",
                       locals: {
                         open: @workflow_execution.errors.any?,
                         workflow_execution: @workflow_execution,
                       } %>
 
+<% if @workflow_execution.errors.empty? %>
   <%= turbo_stream.replace "workflow_execution_summary" do %>
     <%= render partial: "workflow_executions/summary" %>
   <% end %>
-<% else %>
-  <%= turbo_stream.update "edit_workflow_execution_error_alert",
-                      viral_alert(type:, message:, classes: "mb-4") %>
 <% end %>

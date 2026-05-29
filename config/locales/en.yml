@@ -1040,7 +1040,7 @@ en:
     workflow_executions:
       edit_dialog:
         description: You are editing workflow execution '%{workflow_execution_id}'
-        name_placeholder: Enter workflow execution name (optional)
+        name_placeholder: Enter workflow execution name
         submit_button: Submit
         title: Edit workflow execution
       index:
@@ -1764,7 +1764,7 @@ en:
     workflow_executions:
       edit_dialog:
         description: You are editing automated workflow execution '%{workflow_execution_id}'
-        name_placeholder: Enter workflow execution name (optional)
+        name_placeholder: Enter workflow execution name
         submit_button: Submit
         title: Edit automated workflow execution
       index:
@@ -2156,7 +2156,7 @@ en:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
       description: You are editing workflow execution '%{workflow_execution_id}'
-      name_placeholder: Enter workflow execution name (optional)
+      name_placeholder: Enter workflow execution name
       shared_with_namespace:
         group: Share results with group members?
         project: Share results with project members?

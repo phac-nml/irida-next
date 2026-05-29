@@ -6,6 +6,7 @@
         workflow_execution_id: @workflow_execution.id,
       ),
   ) %>
+
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">
       <%= t(
@@ -15,30 +16,33 @@
     </p>
   </div>
 
-  <div class="mb-4">
-    <%= turbo_frame_tag("edit_workflow_execution_error_alert") %>
-  </div>
-
   <%= form_with(model: workflow_execution, url: namespace_project_workflow_execution_path, method: :patch, class: "grid gap-4") do |form| %>
-    <div class="form-field">
-      <%= form.label :name %>
+    <%= render partial: "shared/form/required_field_legend" %>
+
+    <%= form_error_summary(form) %>
+
+    <% invalid_name = @workflow_execution.errors.include?(:name) %>
+
+    <div class="form-field <%= 'invalid' if invalid_name %>">
+      <%= form.label :name, data: { required: true } %>
+
       <%= form.text_field :name,
-                      autofocus: true,
                       value: @workflow_execution.name,
                       placeholder:
                         t("projects.workflow_executions.edit_dialog.name_placeholder") %>
 
+      <% if invalid_name %>
+        <%= render "shared/form/field_errors",
+              id: form.field_id(:name, "error"),
+              errors: @workflow_execution.errors.full_messages_for(:name) %>
+      <% end %>
     </div>
 
     <div class="mt-4">
       <%= form.submit t("projects.workflow_executions.edit_dialog.submit_button"),
                   class: "button button-primary" %>
 
-      <button
-        type="button"
-        class="button button-default"
-        data-action="click->viral--dialog#close"
-      >
+      <button type="button" class="button button-default" data-action="click->viral--dialog#close">
         <%= t('common.actions.cancel') %>
       </button>
     </div>
