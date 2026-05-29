@@ -18,9 +18,9 @@ export default defineConfig({
         jsRoot,
         "utilities/floating_dropdown.js",
       ),
-      "utilities/sentence_constructor": resolve(
+      "utilities/word_connector": resolve(
         jsRoot,
-        "utilities/sentence_constructor.js",
+        "utilities/word_connector.js",
       ),
     },
   },

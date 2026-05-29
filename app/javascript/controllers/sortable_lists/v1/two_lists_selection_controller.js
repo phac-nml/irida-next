@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import { createHiddenInput } from "utilities/form";
 import { announce } from "utilities/live_region";
-import SentenceConstructor from "utilities/sentence_constructor";
+import WordConnector from "utilities/word_connector";
 
 export default class extends Controller {
   static targets = [
@@ -42,7 +42,7 @@ export default class extends Controller {
   #availableListName;
   #selectedListName;
 
-  #sentenceConstructor = null;
+  #wordConnector = null;
 
   connect() {
     this.#boundSubmitClickCapture = this.#onSubmitClickCapture.bind(this);
@@ -53,7 +53,7 @@ export default class extends Controller {
         this.ariaLiveUpdateTarget.getAttribute("data-translations"),
       );
 
-      this.#sentenceConstructor = new SentenceConstructor({
+      this.#wordConnector = new WordConnector({
         wordsConnector: this.#ariaLiveTranslations["words_connector"],
         twoWordsConnector: this.#ariaLiveTranslations["two_words_connector"],
         lastWordConnector: this.#ariaLiveTranslations["last_word_connector"],
@@ -842,8 +842,8 @@ export default class extends Controller {
   }
 
   #updateAriaLive(translationKey, list, items) {
-    if (this.hasAriaLiveUpdateTarget && this.#sentenceConstructor) {
-      const connectedItems = this.#sentenceConstructor.createSentence(items);
+    if (this.hasAriaLiveUpdateTarget && this.#wordConnector) {
+      const connectedItems = this.#wordConnector.connectWords(items);
       const updateString = this.#ariaLiveTranslations[translationKey]
         .replace(/LIST_PLACEHOLDER/g, list)
         .replace(/ITEMS_PLACEHOLDER/g, connectedItems);

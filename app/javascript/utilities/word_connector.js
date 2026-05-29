@@ -1,4 +1,4 @@
-export default class SentenceConstructor {
+export default class WordConnector {
   // Private Fields
 
   #wordsConnector; // connector for 3 or more words, eg: ", "
@@ -17,7 +17,7 @@ export default class SentenceConstructor {
   }
 
   // connect words based on array size
-  createSentence(words) {
+  connectWords(words) {
     if (Array.isArray(words)) {
       switch (words.length) {
         case 0:
