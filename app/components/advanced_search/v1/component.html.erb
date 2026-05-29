@@ -1,6 +1,7 @@
 <%= tag.div(
   id: "advanced-search",
   data: {
+    action: "viral--dialog:close->advanced-search--v1#close",
     controller: "advanced-search--v1",
     "advanced-search--v1-open-value": @open,
     "advanced-search--v1-status-value": @status,
@@ -12,7 +13,7 @@
     "advanced-search--v1-standard-operations-value": json_escape_data(operation_options),
   },
 ) do %>
-  <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search--v1#close"}, data: { action: "keydown.esc->advanced-search--v1#close"}) do |dialog| %>
+  <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>
     <% dialog.with_trigger do %>
       <div class="flex w-full grow flex-row rounded-lg" role="group">
         <button
