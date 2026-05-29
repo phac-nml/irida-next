@@ -36,6 +36,10 @@ module Combobox
         @selected_option[:value].present?
       end
 
+      def combobox_disabled?
+        @combobox_arguments[:disabled] == true
+      end
+
       def selected_option(options)
         fragment = Nokogiri::HTML.fragment(options)
         fragment.search('option').each do |option|
@@ -76,6 +80,7 @@ module Combobox
           listbox_group_option['id'] = "#{@listbox_id}_option#{option_index}"
           listbox_group_option['role'] = 'option'
           listbox_group_option['data-value'] = option['value']
+          listbox_group_option['aria-disabled'] = 'true' if option.key?('disabled')
           listbox_group_option.content = option.text
           option.replace(listbox_group_option)
         end

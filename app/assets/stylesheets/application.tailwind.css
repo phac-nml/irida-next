@@ -684,6 +684,10 @@ a.pill-focus-reset:focus-visible {
     @apply border-red-700 text-red-900 dark:border-red-600 dark:text-red-400;
   }
 
+  input:disabled {
+    @apply cursor-not-allowed bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-300;
+  }
+
   input:focus-visible {
     @apply outline-3 outline-offset-2 outline-black outline-solid dark:outline-white;
     box-shadow: none !important;
@@ -710,9 +714,17 @@ a.pill-focus-reset:focus-visible {
     @apply m-0 block cursor-pointer px-2.5 py-[3px];
   }
 
+  [role="option"][aria-disabled="true"] {
+    @apply cursor-not-allowed text-slate-500 dark:text-slate-300;
+  }
+
   [role="option"][aria-selected="true"],
-  [role="option"]:hover {
+  [role="option"]:not([aria-disabled="true"]):hover {
     @apply bg-blue-800/80 text-white dark:bg-blue-600/50;
+  }
+
+  button:disabled {
+    @apply cursor-not-allowed text-slate-500 dark:text-slate-400;
   }
 }
 
