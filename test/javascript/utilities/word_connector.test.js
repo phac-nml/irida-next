@@ -2,38 +2,25 @@ import { describe, it, expect } from "vitest";
 import WordConnector from "../../../app/javascript/utilities/word_connector.js";
 
 describe("word_connector", () => {
+  const wordConnector = new WordConnector({
+    wordsConnector: ", ",
+    twoWordsConnector: " and ",
+    lastWordConnector: ", and ",
+  });
   describe("connectWords", () => {
     it("one word", () => {
-      const wordConnector = new WordConnector({
-        wordsConnector: ", ",
-        twoWordsConnector: " and ",
-        lastWordConnector: ", and ",
-      });
-
       const connectedWords = wordConnector.connectWords(["word1"]);
 
       expect(connectedWords).toBe("word1");
     });
 
     it("two words", () => {
-      const wordConnector = new WordConnector({
-        wordsConnector: ", ",
-        twoWordsConnector: " and ",
-        lastWordConnector: ", and ",
-      });
-
       const connectedWords = wordConnector.connectWords(["word1", "word2"]);
 
       expect(connectedWords).toBe("word1 and word2");
     });
 
     it("three words", () => {
-      const wordConnector = new WordConnector({
-        wordsConnector: ", ",
-        twoWordsConnector: " and ",
-        lastWordConnector: ", and ",
-      });
-
       const connectedWords = wordConnector.connectWords([
         "word1",
         "word2",
@@ -44,12 +31,6 @@ describe("word_connector", () => {
     });
 
     it("four words", () => {
-      const wordConnector = new WordConnector({
-        wordsConnector: ", ",
-        twoWordsConnector: " and ",
-        lastWordConnector: ", and ",
-      });
-
       const connectedWords = wordConnector.connectWords([
         "word1",
         "word2",
@@ -61,12 +42,6 @@ describe("word_connector", () => {
     });
 
     it("string", () => {
-      const wordConnector = new WordConnector({
-        wordsConnector: ", ",
-        twoWordsConnector: " and ",
-        lastWordConnector: ", and ",
-      });
-
       const connectedWords = wordConnector.connectWords("word1, word2, word3");
 
       expect(connectedWords).toBe("word1, word2, word3");
