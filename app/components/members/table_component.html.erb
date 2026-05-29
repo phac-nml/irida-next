@@ -119,15 +119,13 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
             <td class="px-6 py-4">
               <% if (member.user != @current_user && @abilities[:update_member] &&
      member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-                <%= form_with(model: member, url: select_member_path(member), method: :patch) do |form| %>
-                  <%= combobox_datepicker(
-                    id: "member-#{member.id}-expiration",
-                    input_name: "member[expires_at]",
-                    selected_date: member.expires_at,
-                    autosubmit: true,
-                    input_aria_label: t("members.table_component.aria_labels.expires_at"),
-                  ) %>
-                <% end %>
+                <turbo-frame id="<%= "member-#{member.id}-expiration" %>">
+                  <%= render partial: expiration,
+                  locals: {
+                    namespace: @namespace,
+                    member:,
+                  } %>
+                </turbo-frame>
               <% elsif !member.expires_at.nil? %>
                 <%= helpers.local_date(member.expires_at, :long) %>
               <% end %>

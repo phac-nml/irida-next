@@ -8,3 +8,10 @@
                       member:,
                       access_levels: @access_levels,
                     } %>
+
+<%= turbo_stream.update "member-#{member.id}-expiration",
+                    partial: "groups/members/expiration",
+                    locals: {
+                      namespace: @namespace,
+                      member:,
+                    } %>

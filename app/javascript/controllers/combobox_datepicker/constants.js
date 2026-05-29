@@ -43,10 +43,3 @@ export const CALENDAR_CLASSES = {
   MONTH_NAV_ARROW_DISABLED: ["text-slate-400", "dark:text-slate-500"],
   MONTH_NAV_ARROW_ENABLED: ["text-slate-900", "dark:text-slate-100"],
 };
-
-export const INPUT_CLASSES = {
-  LABEL_ERROR: ["text-red-700", "dark:text-red-400"],
-  LABEL_DEFAULT: ["text-slate-900", "dark:text-white"],
-  INPUT_ERROR: ["!border-red-500", "!dark:border-red-400"],
-  INPUT_DEFAULT: ["border-slate-300", "dark:border-slate-600"],
-};

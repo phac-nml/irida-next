@@ -71,6 +71,14 @@ module Members
       end
     end
 
+    def expiration
+      if @namespace.group_namespace?
+        'groups/members/expiration'
+      else
+        'projects/members/expiration'
+      end
+    end
+
     private
 
     def columns

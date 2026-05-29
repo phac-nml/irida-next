@@ -66,27 +66,3 @@
     </button>
   </div>
 </div>
-
-<% if @autosubmit %>
-  <ul
-    data-combobox-datepicker--v1--input-target="errorContainer"
-    class="hidden max-w-md list-inside text-sm text-slate-500 dark:text-slate-400"
-    aria-hidden="true"
-    id="<%= @error_id %>"
-  ></ul>
-  <div class="sr-only" aria-live="polite" data-combobox-datepicker--v1--input-target="ariaLive"></div>
-  <template data-combobox-datepicker--v1--input-target="errorMessageTemplate">
-    <li>
-      <span class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
-        <%= icon(:x_circle, size: :sm,
-      color: :danger,
-      class: "mr-1.5",
-      aria: {
-        hidden: true
-      }) %>
-
-        <span class="grow" data-combobox-datepicker--v1--input-target="errorMessage"></span>
-      </span>
-    </li>
-  </template>
-<% end %>

@@ -27,8 +27,6 @@ export default class extends Controller {
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
     "clearButton",
-    "maxDateMessage",
-    "minDateMessage",
     "headerAriaLive",
   ];
 
@@ -49,9 +47,7 @@ export default class extends Controller {
   #selectedMonthIndex;
 
   #maxDate;
-  #maxDateMessage;
   #minDate;
-  #minDateMessage;
   #autosubmit;
 
   idempotentConnect() {
@@ -60,13 +56,6 @@ export default class extends Controller {
     // set the month and year inputs
     this.monthSelectTarget.value = this.monthsValue[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
-    if (this.hasMinDateMessageTarget) {
-      this.minDateMessageTarget.innerText = this.#minDateMessage;
-    }
-
-    if (this.hasMaxDateMessageTarget) {
-      this.maxDateMessageTarget.innerText = this.#maxDateMessage;
-    }
     this.headerAriaLiveTarget.innerText = `${this.monthSelectTarget.value} ${this.yearTarget.value}`;
     this.#loadCalendar();
   }
@@ -113,9 +102,7 @@ export default class extends Controller {
     this.#selectedYear = params["selectedYear"];
     this.#selectedMonthIndex = params["selectedMonthIndex"];
     this.#minDate = params["minDate"];
-    this.#minDateMessage = params["minDateMessage"];
     this.#maxDate = params["maxDate"];
-    this.#maxDateMessage = params["maxDateMessage"];
     this.#autosubmit = params["autosubmit"];
     this.#todaysFormattedFullDate = `${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}`;
     this.idempotentConnect();
@@ -612,8 +599,6 @@ export default class extends Controller {
     // submit upon click/keyboard interaction if autosubmit is true (ie: on member/group tables)
     if (this.#autosubmit) {
       this.comboboxDatepickerV1InputOutlet.submitDate();
-    } else {
-      this.comboboxDatepickerV1InputOutlet.disableInputErrorState();
     }
 
     if (event.key === " ") {
