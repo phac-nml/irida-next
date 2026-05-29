@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import { createHiddenInput } from "utilities/form";
 import { announce } from "utilities/live_region";
+import SentenceConstructor from "utilities/sentence_constructor";
 
 export default class extends Controller {
   static targets = [
@@ -41,9 +42,23 @@ export default class extends Controller {
   #availableListName;
   #selectedListName;
 
+  #sentenceConstructor = null;
+
   connect() {
     this.#boundSubmitClickCapture = this.#onSubmitClickCapture.bind(this);
 
+    // check if aria-live exists as it's added after file selection in import metadata (can't be done in connect())
+    if (!this.#ariaLiveTranslations && this.hasAriaLiveUpdateTarget) {
+      this.#ariaLiveTranslations = JSON.parse(
+        this.ariaLiveUpdateTarget.getAttribute("data-translations"),
+      );
+
+      this.#sentenceConstructor = new SentenceConstructor({
+        wordsConnector: this.#ariaLiveTranslations["words_connector"],
+        twoWordsConnector: this.#ariaLiveTranslations["two_words_connector"],
+        lastWordConnector: this.#ariaLiveTranslations["last_words_connector"],
+      });
+    }
     // Get a handle on the available and selected lists
     this.idempotentConnect();
   }
@@ -54,13 +69,6 @@ export default class extends Controller {
 
     this.#availableListName = this.availableList.getAttribute("data-title");
     this.#selectedListName = this.selectedList.getAttribute("data-title");
-
-    // check if aria-live exists as it's added after file selection in import metadata (can't be done in connect())
-    if (!this.#ariaLiveTranslations && this.hasAriaLiveUpdateTarget) {
-      this.#ariaLiveTranslations = JSON.parse(
-        this.ariaLiveUpdateTarget.getAttribute("data-translations"),
-      );
-    }
 
     if (this.availableList && this.selectedList) {
       // Get a handle on the original available list
@@ -465,7 +473,7 @@ export default class extends Controller {
     this.#updateAriaLive(
       `moved_list_${translationKey}`,
       listName,
-      selectedOptionsText.join(", "),
+      selectedOptionsText,
     );
 
     this.#checkStates();
@@ -834,10 +842,11 @@ export default class extends Controller {
   }
 
   #updateAriaLive(translationKey, list, items) {
-    if (this.hasAriaLiveUpdateTarget) {
+    if (this.hasAriaLiveUpdateTarget && this.#sentenceConstructor) {
+      const connectedItems = this.#sentenceConstructor.createSentence(items);
       const updateString = this.#ariaLiveTranslations[translationKey]
         .replace(/LIST_PLACEHOLDER/g, list)
-        .replace(/ITEMS_PLACEHOLDER/g, items);
+        .replace(/ITEMS_PLACEHOLDER/g, connectedItems);
 
       announce(updateString, { element: this.ariaLiveUpdateTarget });
     }

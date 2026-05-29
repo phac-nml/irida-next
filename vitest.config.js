@@ -18,6 +18,10 @@ export default defineConfig({
         jsRoot,
         "utilities/floating_dropdown.js",
       ),
+      "utilities/sentence_constructor": resolve(
+        jsRoot,
+        "utilities/sentence_constructor.js",
+      ),
     },
   },
   test: {
