@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import WordConnector from "../../../app/javascript/utilities/word_connector.js";
 
 describe("word_connector", () => {
