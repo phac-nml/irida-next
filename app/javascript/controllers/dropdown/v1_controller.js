@@ -1,16 +1,13 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["trigger", "menu"];
+  static targets = ["trigger", "menu", "caret"];
   static values = {
     position: String,
     trigger: String,
     skidding: Number,
     distance: Number,
-    caret: Boolean,
   };
-
-  #caret;
 
   initialize() {
     this.boundOnButtonKeyDown = this.onButtonKeyDown.bind(this);
@@ -21,9 +18,6 @@ export default class extends Controller {
 
   connect() {
     this.element.setAttribute("data-controller-connected", "true");
-    if (this.caretValue) {
-      this.#caret = this.element.querySelector("svg.caret-down-icon");
-    }
   }
 
   menuTargetConnected(element) {
@@ -53,8 +47,8 @@ export default class extends Controller {
         this.triggerTarget.setAttribute("aria-expanded", "true");
         this.menuTarget.setAttribute("aria-hidden", "false");
         this.menuTarget.removeAttribute("hidden");
-        if (this.#caret) {
-          this.#caret.classList.add("rotate-180");
+        if (this.hasCaretTarget) {
+          this.caretTarget.classList.add("rotate-180");
         }
       },
       onHide: () => {
@@ -64,8 +58,8 @@ export default class extends Controller {
         this.#menuItems(element).forEach((menuitem) => {
           menuitem.setAttribute("tabindex", "-1");
         });
-        if (this.#caret) {
-          this.#caret.classList.remove("rotate-180");
+        if (this.hasCaretTarget) {
+          this.caretTarget.classList.remove("rotate-180");
         }
       },
     });

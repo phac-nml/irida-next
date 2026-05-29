@@ -3,7 +3,6 @@
   data-controller="dropdown--v1<%= tooltip? ? ' pathogen--tooltip' : '' %>"
   data-dropdown--v1-skidding-value="<%= skidding %>"
   data-dropdown--v1-distance-value="<%= distance %>"
-  data-dropdown--v1-caret-value="<%= caret %>"
 >
   <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
     <% if icon_name.present? %>
@@ -25,7 +24,9 @@
     <% end %>
 
     <% if caret %>
-      <%= icon(:caret_down, size: :sm, class: "ml-2 flex-none") %>
+      <span data-dropdown--v1-target="caret" class="ml-2 inline-flex flex-none">
+        <%= icon(:caret_down, size: :sm) %>
+      </span>
     <% end %>
   <% end %>
 
