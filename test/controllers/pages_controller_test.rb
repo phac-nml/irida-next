@@ -3,7 +3,10 @@
 require 'test_helper'
 
 class PagesControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+  test 'should get accessibility' do
+    sign_in users(:john_doe)
+
+    get accessibility_path
+    assert_response :success
+  end
 end
