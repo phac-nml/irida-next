@@ -42,7 +42,7 @@ export default class extends Controller {
       this.#blankValues["spreadsheet_import_project_puid_column"] =
         this.selectProjectValue;
       this.staticProjectInput = document.getElementById(
-        "static-project-select-hidden",
+        "spreadsheet_import_static_project_id",
       );
     }
   }
