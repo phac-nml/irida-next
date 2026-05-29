@@ -64,14 +64,6 @@ fr:
               cannot_be_same: doit être différent de l'espace de noms actuel
               not_found: n'existe pas
               project_exists: a déjà un projet avec le même nom/chemin
-        sample/search_condition:
-          attributes:
-            field:
-              not_a_metadata: est un champ de métadonnées non valide
-            operator:
-              not_a_date_operator: ne peut pas être utilisé sur les dates
-            value:
-              not_a_date: doit être formaté AAAA-MM-JJ
   activerecord:
     attributes:
       attachment:

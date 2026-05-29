@@ -64,14 +64,6 @@ en:
               cannot_be_same: must be different from the current namespace
               not_found: does not exist
               project_exists: already has a project with the same name/path
-        sample/search_condition:
-          attributes:
-            field:
-              not_a_metadata: is an invalid metadata field
-            operator:
-              not_a_date_operator: cannot be used on dates
-            value:
-              not_a_date: must be formatted YYYY-MM-DD
   activerecord:
     attributes:
       attachment:
