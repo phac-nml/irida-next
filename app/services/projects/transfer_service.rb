@@ -3,20 +3,16 @@
 module Projects
   # Service used to Transfer Projects
   class TransferService < BaseProjectService
-    class TransferError < StandardError
+    def initialize(project, user = nil, transfer_form = nil)
+      super(project, user)
+      @transfer_form = transfer_form
     end
-    attr_reader :new_namespace, :old_namespace
 
-    def execute(new_namespace) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      @new_namespace = new_namespace
+    def execute # rubocop:disable Naming/PredicateMethod
+      return false unless @transfer_form.valid?
+
+      @new_namespace = @transfer_form.new_namespace
       @old_namespace = @project.parent
-
-      raise TransferError, I18n.t('services.projects.transfer.namespace_empty') if @new_namespace.blank?
-
-      if @new_namespace.id == project.namespace.parent_id
-        raise TransferError,
-              I18n.t('services.projects.transfer.project_in_namespace')
-      end
 
       # Authorize if user can transfer project
       authorize! @project, to: :transfer?
@@ -31,24 +27,16 @@ module Projects
       update_samples_count
 
       true
-    rescue Projects::TransferService::TransferError => e
-      project.errors.add(:new_namespace, e.message)
-      false
     end
 
     private
 
-    def transfer(project) # rubocop:disable Metrics/AbcSize
-      if Namespaces::ProjectNamespace.where(parent_id: new_namespace.id).exists?(['path = ? or name = ?',
-                                                                                  project.path, project.name])
-        raise TransferError, I18n.t('services.projects.transfer.namespace_project_exists')
-      end
-
+    def transfer(project)
       project_ancestor_member_user_ids = Member.for_namespace_and_ancestors(project.namespace).select(:user_id)
-      new_namespace_member_ids = Member.for_namespace_and_ancestors(new_namespace)
+      new_namespace_member_ids = Member.for_namespace_and_ancestors(@new_namespace)
                                        .where(user_id: project_ancestor_member_user_ids).select(&:id)
 
-      project.namespace.update(parent_id: new_namespace.id)
+      project.namespace.update(parent_id: @new_namespace.id)
 
       create_activities(project)
 

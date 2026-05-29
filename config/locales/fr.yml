@@ -12,6 +12,8 @@ fr:
         field: Groupe %{group_index} Condition %{condition_index} Champ
         operator: Groupe %{group_index} Condition %{condition_index} Opérateur
         value: Groupe %{group_index} Condition %{condition_index} Valeur
+      projects/transfer_form:
+        new_namespace_id: Nouvel espace de noms
       sample/query:
         group: Groupe
       sample/search_condition:
@@ -55,6 +57,13 @@ fr:
               cannot_be_same_as_old_parent: doit être différent du groupe parent actuel
               namespace_group_exists: existe déjà un groupe portant le même nom/chemin
               namespace_not_found: n'existe pas
+        projects/transfer_form:
+          attributes:
+            new_namespace_id:
+              blank: est vide
+              cannot_be_same: doit être différent de l'espace de noms actuel
+              not_found: n'existe pas
+              project_exists: a déjà un projet avec le même nom/chemin
   activerecord:
     attributes:
       attachment:
@@ -1762,7 +1771,7 @@ fr:
       samples: Échantillons
       workflow_executions: Exécutions de flux de travail
     transfer:
-      success: Réussite
+      success: Le projet %{project_name} a été transféré avec succès
     update:
       success: Le projet %{project_name} a été mis à jour avec succès
     workflow_executions:
@@ -1886,10 +1895,6 @@ fr:
     projects:
       create:
         namespace_required: Espace de noms requis
-      transfer:
-        namespace_empty: Espace de noms vide
-        namespace_project_exists: Un projet portant le même nom ou le même chemin existe déjà dans l’espace de noms cible.
-        project_in_namespace: Projet dans l’espace de noms
     samples:
       batch_import:
         duplicate_sample_name: Nom de l’échantillon en double sur l’index '%{index}'

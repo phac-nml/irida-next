@@ -12,6 +12,8 @@ en:
         field: Group %{group_index} Condition %{condition_index} Field
         operator: Group %{group_index} Condition %{condition_index} Operator
         value: Group %{group_index} Condition %{condition_index} Value
+      projects/transfer_form:
+        new_namespace_id: New namespace
       sample/query:
         group: Group
       sample/search_condition:
@@ -55,6 +57,13 @@ en:
               cannot_be_same_as_old_parent: must be different from the current parent group
               namespace_group_exists: already has a group with the same name/path
               namespace_not_found: does not exist
+        projects/transfer_form:
+          attributes:
+            new_namespace_id:
+              blank: is empty
+              cannot_be_same: must be different from the current namespace
+              not_found: does not exist
+              project_exists: already has a project with the same name/path
   activerecord:
     attributes:
       attachment:
@@ -1758,7 +1767,7 @@ en:
       samples: Samples
       workflow_executions: Workflow Executions
     transfer:
-      success: Success
+      success: Project %{project_name} was successfully transferred
     update:
       success: Project %{project_name} was successfully updated
     workflow_executions:
@@ -1882,10 +1891,6 @@ en:
     projects:
       create:
         namespace_required: Namespace required
-      transfer:
-        namespace_empty: Namespace empty
-        namespace_project_exists: Project with the same name or path already exists in the target namespace.
-        project_in_namespace: Project in namespace
     samples:
       batch_import:
         duplicate_sample_name: Duplicate sample name on index '%{index}'

@@ -51,7 +51,7 @@ module Projects
         click_on I18n.t('common.controls.confirm')
       end
 
-      assert_text I18n.t(:'services.projects.transfer.namespace_project_exists', project_name: project2.name)
+      assert_text I18n.t(:'activemodel.errors.models.projects/transfer_form.attributes.new_namespace_id.project_exists')
     end
   end
 end

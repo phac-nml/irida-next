@@ -1,4 +1,4 @@
-<%= form_with(url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
+<%= form_with(model: @transfer_form, url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
               data:
               if Flipper.enabled?(:v2_select2, Current.user)
                 { turbo_confirm: "", controller: "select2--v2" }
@@ -7,11 +7,12 @@
               end) do |form| %>
   <div class="mb-2"><%= render partial: "shared/form/required_field_legend" %></div>
 
-  <div class="form-field">
-    <% form_id = "transfer-form-select2" %>
+  <% invalid_new_namespace_id = @transfer_form.errors.include?(:new_namespace_id) %>
+
+  <div class="form-field <%= 'invalid' if invalid_new_namespace_id %>">
+    <%= form_error_summary(form) %>
 
     <%= form.label :new_namespace_id, t(:"projects.edit.advanced.transfer.new_namespace_id"),
-                   for: form_id,
                    class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
                    data: { required: true } %>
 
@@ -27,7 +28,7 @@
         autocomplete="off"
       >
     <% else %>
-      <%= render Select2Component.new(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
+      <%= render Select2Component.new(form:, name: :new_namespace_id, id: form.field_id(:new_namespace_id), placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
@@ -48,8 +49,10 @@
       <% end %>
     <% end %>
 
-    <% if @error.present? %>
-      <p class="text-sm text-red-500 dark:text-red-400"><%= @error %></p>
+    <% if invalid_new_namespace_id %>
+      <%= render "shared/form/field_errors",
+              id: form.field_id(:new_namespace_id, "error"),
+              errors: @transfer_form.errors.full_messages_for(:new_namespace_id) %>
     <% end %>
   </div>
 

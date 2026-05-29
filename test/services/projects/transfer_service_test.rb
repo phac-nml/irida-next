@@ -18,31 +18,35 @@ module Projects
 
     test 'transfer project with permission' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: new_namespace.id }.merge(project: @project))
 
       assert_changes -> { @project.namespace.parent }, to: new_namespace do
-        Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
+        Projects::TransferService.new(@project, @john_doe, transfer_form).execute
       end
 
       assert_enqueued_with(job: UpdateMembershipsJob)
     end
 
     test 'transfer project without specifying new namespace' do
-      assert_not Projects::TransferService.new(@project, @john_doe).execute(nil)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: nil }.merge(project: @project))
+      assert_not Projects::TransferService.new(@project, @john_doe, transfer_form).execute
       assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'transfer project to namespace containing project' do
       group_one = groups(:group_one)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: group_one.id }.merge(project: @project))
 
-      assert_not Projects::TransferService.new(@project, @john_doe).execute(group_one)
+      assert_not Projects::TransferService.new(@project, @john_doe, transfer_form).execute
       assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'transfer project without project permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: new_namespace.id }.merge(project: @project))
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Projects::TransferService.new(@project, @jane_doe).execute(new_namespace)
+        Projects::TransferService.new(@project, @jane_doe, transfer_form).execute
       end
 
       assert_equal ProjectPolicy, exception.policy
@@ -56,9 +60,10 @@ module Projects
 
     test 'transfer project without target namespace permission' do
       new_namespace = namespaces_user_namespaces(:jane_doe_namespace)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: new_namespace.id }.merge(project: @project))
 
       assert_raises(ActionPolicy::Unauthorized) do
-        Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
+        Projects::TransferService.new(@project, @john_doe, transfer_form).execute
       end
 
       assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
@@ -67,31 +72,32 @@ module Projects
     test 'transfer project to namespace containing project with same name' do
       project = projects(:john_doe_project2)
       group_one = groups(:group_one)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: group_one.id }.merge(project: project))
 
-      assert_not Projects::TransferService.new(project, @john_doe).execute(group_one)
+      assert_not Projects::TransferService.new(project, @john_doe, transfer_form).execute
       assert_no_enqueued_jobs(except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'authorize allowed to transfer project with permission' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: new_namespace.id }.merge(project: @project))
 
       assert_authorized_to(:transfer?, @project,
                            with: ProjectPolicy,
                            context: { user: @john_doe }) do
-        Projects::TransferService.new(@project,
-                                      @john_doe).execute(new_namespace)
+        Projects::TransferService.new(@project, @john_doe, transfer_form).execute
       end
       assert_enqueued_with(job: UpdateMembershipsJob)
     end
 
     test 'authorize allowed to transfer to namespace' do
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: new_namespace.id }.merge(project: @project))
 
       assert_authorized_to(:transfer_into_namespace?, new_namespace,
                            with: Namespaces::UserNamespacePolicy,
                            context: { user: @john_doe }) do
-        Projects::TransferService.new(@project,
-                                      @john_doe).execute(new_namespace)
+        Projects::TransferService.new(@project, @john_doe, transfer_form).execute
       end
       assert_enqueued_with(job: UpdateMembershipsJob)
     end
@@ -101,12 +107,13 @@ module Projects
       project_namespace.create_logidze_snapshot!
 
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: new_namespace.id }.merge(project: @project))
 
       assert_equal 1, project_namespace.log_data.version
       assert_equal 1, project_namespace.log_data.size
 
       assert_changes -> { project_namespace.parent }, to: new_namespace do
-        Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
+        Projects::TransferService.new(@project, @john_doe, transfer_form).execute
       end
 
       project_namespace.create_logidze_snapshot!
@@ -126,12 +133,13 @@ module Projects
       project_namespace.create_logidze_snapshot!
 
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: new_namespace.id }.merge(project: @project))
 
       assert_equal 1, project_namespace.log_data.version
       assert_equal 1, project_namespace.log_data.size
 
       assert_changes -> { project_namespace.parent }, to: new_namespace do
-        Projects::TransferService.new(@project, @john_doe).execute(new_namespace)
+        Projects::TransferService.new(@project, @john_doe, transfer_form).execute
       end
 
       project_namespace.create_logidze_snapshot!
@@ -163,7 +171,9 @@ module Projects
 
       assert_no_changes -> { @group12.reload.metadata_summary } do
         assert_no_changes -> { @project31.namespace.reload.metadata_summary } do
-          Projects::TransferService.new(@project31, @john_doe).execute(@subgroup12b)
+          transfer_form = ::Projects::TransferForm.new({ new_namespace_id: @subgroup12b.id }.merge(project: @project31))
+
+          Projects::TransferService.new(@project31, @john_doe, transfer_form).execute
         end
       end
 
@@ -176,8 +186,9 @@ module Projects
       @project31 = projects(:project31)
 
       new_namespace = namespaces_user_namespaces(:john_doe_namespace)
+      transfer_form = ::Projects::TransferForm.new({ new_namespace_id: new_namespace.id }.merge(project: @project31))
 
-      Projects::TransferService.new(@project31, @john_doe).execute(new_namespace)
+      Projects::TransferService.new(@project31, @john_doe, transfer_form).execute
 
       new_namespace.reload
       assert_equal({}, new_namespace.metadata_summary)
@@ -195,7 +206,9 @@ module Projects
 
       assert_no_changes -> { @group12.reload.samples_count } do
         assert_no_changes -> { @project31.reload.samples.size } do
-          Projects::TransferService.new(@project31, @john_doe).execute(@subgroup12b)
+          transfer_form = ::Projects::TransferForm.new({ new_namespace_id: @subgroup12b.id }.merge(project: @project31))
+
+          Projects::TransferService.new(@project31, @john_doe, transfer_form).execute
         end
       end
 
@@ -219,7 +232,10 @@ module Projects
       assert_no_changes -> { @subgroup12a.reload.samples_count } do
         assert_no_changes -> { @subgroup12aa.reload.samples_count } do
           assert_no_changes -> { john_doe_project.reload.samples.size } do
-            Projects::TransferService.new(john_doe_project, @john_doe).execute(@subgroup12b)
+            transfer_form = ::Projects::TransferForm.new({ new_namespace_id: @subgroup12b.id }
+            .merge(project: john_doe_project))
+
+            Projects::TransferService.new(john_doe_project, @john_doe, transfer_form).execute
           end
         end
       end
@@ -242,7 +258,10 @@ module Projects
 
       assert_no_changes -> { @subgroup12b.reload.samples_count } do
         assert_no_changes -> { @project31.reload.samples.size } do
-          Projects::TransferService.new(@project31, @john_doe).execute(john_doe_namespace)
+          transfer_form = ::Projects::TransferForm.new({ new_namespace_id: john_doe_namespace.id }
+          .merge(project: @project31))
+
+          Projects::TransferService.new(@project31, @john_doe, transfer_form).execute
         end
       end
 

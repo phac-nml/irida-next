@@ -34,6 +34,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     authorize! @project
     @samples_count = @project.samples.size
     @automated_workflows_count = WorkflowExecution.where(submitter: @project.namespace.automation_bot).size
+    @transfer_form = ::Projects::TransferForm.new
   end
 
   def create
@@ -84,16 +85,16 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def transfer # rubocop:disable Metrics/AbcSize
-    if Projects::TransferService.new(@project, current_user).execute(new_namespace)
-      flash[:success] = t('.success', project_name: @project.name)
-      respond_to do |format|
+  def transfer
+    @transfer_form = ::Projects::TransferForm.new(project_transfer_params.merge(project: @project))
+    respond_to do |format|
+      if Projects::TransferService.new(@project, current_user, @transfer_form).execute
+        flash[:success] = t('.success', project_name: @project.name)
         format.turbo_stream { redirect_to namespace_project_path(@project.namespace.parent, @project) }
-      end
-    else
-      @error = @project.errors.messages.values.flatten.first
-      respond_to do |format|
-        format.turbo_stream
+      else
+        format.turbo_stream do
+          render status: :unprocessable_content
+        end
       end
     end
   end
@@ -122,6 +123,10 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     params.expect(project: project_params_attributes)
   end
 
+  def project_transfer_params
+    params.expect(projects_transfer_form: [:new_namespace_id])
+  end
+
   def namespace_attributes
     %i[
       name
@@ -142,10 +147,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     return unless @project
 
     @authorized_namespaces = @authorized_namespaces.where.not(id: @project.namespace.parent.id)
-  end
-
-  def new_namespace
-    Namespace.find_by(id: params.expect(:new_namespace_id))
   end
 
   def resolve_layout
