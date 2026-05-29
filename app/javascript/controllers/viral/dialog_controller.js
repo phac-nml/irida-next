@@ -8,7 +8,7 @@ export default class extends Controller {
   static values = { open: Boolean };
   #focusTrap = null;
   #trigger = null;
-  #closable = true;
+  #closable = false;
 
   triggerTargetConnected() {
     this.#trigger = this.triggerTarget;
@@ -17,6 +17,11 @@ export default class extends Controller {
   closeButtonTargetConnected() {
     // set initial closable state based on presence of close button
     this.#closable = !this.closeButtonTarget.hasAttribute("hidden");
+  }
+
+  closeButtonTargetDisconnected() {
+    // set initial closable state based on presence of close button
+    this.#closable = false;
   }
 
   connect() {
@@ -78,13 +83,21 @@ export default class extends Controller {
     }
   }
 
+  handleClose() {
+    const event = this.dispatch("close", { cancelable: true });
+    if (event.defaultPrevented) {
+      return;
+    }
+    this.close();
+  }
+
   handleEsc(event) {
     event.preventDefault();
 
     if (!(event instanceof KeyboardEvent)) {
       return;
     }
-    if (this.#closable) this.close();
+    if (this.#closable) this.handleClose();
   }
 
   restoreFocusState() {

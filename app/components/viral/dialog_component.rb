@@ -36,9 +36,6 @@ module Viral
         @system_arguments[:classes],
         'dialog--contents'
       )
-
-      @system_arguments[:data] ||= {}
-      @system_arguments[:data].merge!({ action: 'keydown.esc->viral--dialog#handleEsc' })
     end
 
     def render_footer?

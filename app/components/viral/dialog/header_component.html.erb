@@ -6,7 +6,7 @@
     type: "button",
     hidden: !@closable,
     data: {
-      action: [system_arguments[:close_action], "click->viral--dialog#close"].compact.join(" "),
+      action: [system_arguments[:close_action], "click->viral--dialog#handleClose"].compact.join(" "),
       "viral--dialog-target": "closeButton"
     },
     aria: { label: t(:"components.dialog.close") }
