@@ -38,7 +38,7 @@ module SortableLists
           moved_list_multiple: I18n.t('shared.sortable_lists.aria_live_update.moved_list_multiple'),
           moved_list_single: I18n.t('shared.sortable_lists.aria_live_update.moved_list_single'),
           words_connector: I18n.t('support.array.words_connector'),
-          last_words_connector: I18n.t('support.array.last_word_connector'),
+          last_word_connector: I18n.t('support.array.last_word_connector'),
           two_words_connector: I18n.t('support.array.two_words_connector')
         }.to_json
       end

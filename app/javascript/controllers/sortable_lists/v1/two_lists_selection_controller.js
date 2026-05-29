@@ -56,7 +56,7 @@ export default class extends Controller {
       this.#sentenceConstructor = new SentenceConstructor({
         wordsConnector: this.#ariaLiveTranslations["words_connector"],
         twoWordsConnector: this.#ariaLiveTranslations["two_words_connector"],
-        lastWordConnector: this.#ariaLiveTranslations["last_words_connector"],
+        lastWordConnector: this.#ariaLiveTranslations["last_word_connector"],
       });
     }
     // Get a handle on the available and selected lists
