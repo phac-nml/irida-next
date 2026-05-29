@@ -9,9 +9,9 @@ module AdvancedSearch
     extend ActiveSupport::Concern
 
     # Determines if advanced query is active based on non-empty groups.
-    # @return [Boolean] true if groups contain non-empty conditions
+    # @return [Boolean] true if groups is presnt
     def advanced_query?
-      groups.present? && groups.any? { |group| !group.empty? }
+      groups.present? && !groups.empty?
     end
 
     # Parses nested form attributes into SearchGroup and SearchCondition objects.

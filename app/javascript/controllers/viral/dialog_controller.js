@@ -8,7 +8,7 @@ export default class extends Controller {
   static values = { open: Boolean };
   #focusTrap = null;
   #trigger = null;
-  #closable = true;
+  #closable = false;
 
   triggerTargetConnected() {
     this.#trigger = this.triggerTarget;
@@ -19,13 +19,12 @@ export default class extends Controller {
     this.#closable = !this.closeButtonTarget.hasAttribute("hidden");
   }
 
-  connect() {
-    this.#focusTrap = createFocusTrap(this.dialogTarget, {
-      onActivate: () => this.dialogTarget.classList.add("focus-trap"),
-      onDeactivate: () => this.dialogTarget.classList.remove("focus-trap"),
-      escapeDeactivates: false,
-    });
+  closeButtonTargetDisconnected() {
+    // set initial closable state based on presence of close button
+    this.#closable = false;
+  }
 
+  connect() {
     if (this.openValue) {
       this.open();
     } else {
@@ -36,7 +35,9 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.#focusTrap.deactivate();
+    if (this.#focusTrap !== null) {
+      this.#focusTrap.deactivate();
+    }
     if (this.openValue) {
       this.close();
       if (this.#trigger) {
@@ -44,6 +45,18 @@ export default class extends Controller {
         // (this is so that turbo page loads that replace the open dialog with a closed one will refocus the trigger)
         savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
       }
+    }
+  }
+
+  openValueChanged(value, previousValue) {
+    if (value === previousValue) {
+      return;
+    }
+
+    if (value) {
+      this.open();
+    } else {
+      this.close();
     }
   }
 
@@ -55,13 +68,13 @@ export default class extends Controller {
       savedDialogStates.set(this.dialogTarget.id, { refocusTrigger: true });
     }
     this.dialogTarget.showModal();
-    this.#focusTrap.activate();
+    this.#getOrInitializeFocusTrap().activate();
   }
 
   close() {
     this.element.removeAttribute("data-turbo-permanent");
     this.openValue = false;
-    this.#focusTrap.deactivate();
+    this.#getOrInitializeFocusTrap().deactivate();
     this.dialogTarget.close();
     if (this.#trigger) {
       // close will refocus the trigger so we don't need to save it to refocus on next connect
@@ -70,13 +83,21 @@ export default class extends Controller {
     }
   }
 
+  handleClose() {
+    const event = this.dispatch("close", { cancelable: true });
+    if (event.defaultPrevented) {
+      return;
+    }
+    this.close();
+  }
+
   handleEsc(event) {
     event.preventDefault();
 
     if (!(event instanceof KeyboardEvent)) {
       return;
     }
-    if (this.#closable) this.close();
+    if (this.#closable) this.handleClose();
   }
 
   restoreFocusState() {
@@ -99,5 +120,16 @@ export default class extends Controller {
       this.#closable = false;
       this.closeButtonTarget.setAttribute("hidden", "true");
     }
+  }
+
+  #getOrInitializeFocusTrap() {
+    if (this.#focusTrap === null) {
+      this.#focusTrap = createFocusTrap(this.dialogTarget, {
+        onActivate: () => this.dialogTarget.classList.add("focus-trap"),
+        onDeactivate: () => this.dialogTarget.classList.remove("focus-trap"),
+        escapeDeactivates: false,
+      });
+    }
+    return this.#focusTrap;
   }
 }

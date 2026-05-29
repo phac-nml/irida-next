@@ -5,10 +5,7 @@ require 'test_helper'
 class QueryTest < ActiveSupport::TestCase
   test 'valid query' do
     search_params = { sort: 'updated_at desc',
-                      groups_attributes: { '0': {
-                        conditions_attributes:
-                       { '0': { field: '', operator: '', value: '' } }
-                      } },
+                      groups_attributes: {},
                       name_or_puid_cont: 'Project 1 Sample 1',
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
@@ -44,7 +41,6 @@ class QueryTest < ActiveSupport::TestCase
     assert query.groups[0].errors.added? :base, :invalid
     assert query.groups[0].conditions[1].errors.added? :field, :blank
     assert query.groups[0].conditions[1].errors.added? :operator, :blank
-    assert query.groups[0].conditions[1].errors.added? :value, :blank
   end
 
   test 'invalid advanced query with invalid date' do

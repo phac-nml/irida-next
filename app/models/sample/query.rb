@@ -9,13 +9,15 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
 
   attribute :name_or_puid_cont, :string
   attribute :project_ids, default: -> { [] }
-  attribute :groups, default: lambda {
-    [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
-  }
+  attribute :groups, default: -> { [] }
 
   query_for Sample
   filter_by :project_id, ids: :project_ids
   validates_with Sample::AdvancedSearchGroupValidator
+
+  def search_group_class
+    Sample::SearchGroup
+  end
 
   private
 

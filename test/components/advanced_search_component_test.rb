@@ -155,31 +155,6 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'apply filter requires at least one complete condition' do
-    visit('rails/view_components/advanced_search_component/empty')
-    within 'div[data-controller-connected="true"]' do
-      click_button I18n.t(:'components.advanced_search_component.v1.title')
-
-      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-      within 'dialog' do
-        click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
-        assert_selector "div[data-advanced-search--v1-target='submitError']",
-                        text: I18n.t(:'components.advanced_search_component.v1.minimum_condition_error')
-
-        within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
-          within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
-            find("input[id$='field']").fill_in with: 'name'
-            find("select[name$='[operator]']").find("option[value='=']").select_option
-            find("input[name$='[value]']").fill_in with: 'Sample 1'
-          end
-        end
-
-        assert_no_selector "div[data-advanced-search--v1-target='submitError']",
-                           text: I18n.t(:'components.advanced_search_component.v1.minimum_condition_error')
-      end
-    end
-  end
-
   test 'workflow preview renders model-specific fields without sample coupling' do
     visit('rails/view_components/advanced_search_component/workflow')
     within 'div[data-controller-connected="true"]' do

@@ -1,10 +1,11 @@
 <%= tag.div(
   id: "advanced-search",
   data: {
+    action: "viral--dialog:close->advanced-search--v1#close",
     controller: "advanced-search--v1",
-    action: "input->advanced-search--v1#clearSubmitError change->advanced-search--v1#clearSubmitError",
     "advanced-search--v1-open-value": @open,
     "advanced-search--v1-status-value": @status,
+    "advanced-search--v1-has-errors-value": @search.errors.any?,
     "advanced-search--v1-confirm-close-text-value": t("components.advanced_search_component.v1.confirm_close_text"),
     "advanced-search--v1-list-input-outlet": ".list-input",
     "advanced-search--v1-enum-fields-value": json_escape_data(@fields.fetch(:enum_fields, {})),
@@ -12,7 +13,7 @@
     "advanced-search--v1-standard-operations-value": json_escape_data(operation_options),
   },
 ) do %>
-  <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search--v1#close"}, data: { action: "keydown.esc->advanced-search--v1#close"}) do |dialog| %>
+  <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>
     <% dialog.with_trigger do %>
       <div class="flex w-full grow flex-row rounded-lg" role="group">
         <button
@@ -53,14 +54,6 @@
 
       <div class="mb-4"><%= render partial: "shared/form/required_field_legend" %></div>
 
-      <div class="hidden" data-advanced-search--v1-target="submitError">
-        <%= render Viral::AlertComponent.new(
-          type: :danger,
-          message: t("components.advanced_search_component.v1.minimum_condition_error"),
-          dismissible: false,
-        ) %>
-      </div>
-
       <div class="space-y-4" data-advanced-search--v1-target="searchGroupsContainer"></div>
 
       <div class="flex justify-end space-x-2">
@@ -85,7 +78,7 @@
     </div>
 
     <% dialog.with_primary_action(
-      "data-action": "advanced-search--v1#submit viral--dialog#close filters#submit",
+      "data-action": "viral--dialog#close filters#submit",
     ) { t("components.advanced_search_component.v1.apply_filter_button") } %>
 
     <% dialog.with_secondary_action do %>
@@ -181,5 +174,9 @@
       fields: @fields,
       operations: @operations,
     ) %>
+  </template>
+
+  <template data-advanced-search--v1-target="emptySearchTemplate">
+    <%= @form.hidden_field :groups_attributes, value: '' %>
   </template>
 <% end %>

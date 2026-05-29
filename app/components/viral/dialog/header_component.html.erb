@@ -1,4 +1,4 @@
-<%= render Viral::BaseComponent.new(tag: "div", **system_arguments.except(:close_action)) do %>
+<%= render Viral::BaseComponent.new(tag: "div", **system_arguments) do %>
   <h1 class="dialog--title"><%= title %></h1>
 
   <%= tag.button(
@@ -6,7 +6,7 @@
     type: "button",
     hidden: !@closable,
     data: {
-      action: [system_arguments[:close_action], "click->viral--dialog#close"].compact.join(" "),
+      action: "click->viral--dialog#handleClose",
       "viral--dialog-target": "closeButton"
     },
     aria: { label: t(:"components.dialog.close") }

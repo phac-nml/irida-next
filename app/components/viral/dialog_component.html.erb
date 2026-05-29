@@ -7,7 +7,7 @@
   <% end %>
 
   <div class="contents">
-    <%= render Viral::BaseComponent.new(tag: :dialog, classes: ["overflow-visible", @dialog_size], data: { 'viral--dialog-target': 'dialog'}) do %>
+    <%= render Viral::BaseComponent.new(tag: :dialog, classes: ["overflow-visible", @dialog_size], data: { 'viral--dialog-target': 'dialog', action: 'keydown.esc->viral--dialog#handleEsc' }) do %>
       <%= render Viral::BaseComponent.new(tag: :div, id: id, **system_arguments) do %>
         <% if header.present? %>
           <%= header %>

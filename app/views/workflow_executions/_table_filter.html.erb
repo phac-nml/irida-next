@@ -20,7 +20,7 @@
 
 <% if workflow_advanced_search_enabled %>
   <div role="status" class="sr-only"><%= @results_message %></div>
-  <%= form_with model: search, html: { role: "search" }, scope: :q, url:, method: :get, data: base_form_data,
+  <%= form_with model: @query, html: { role: "search" }, scope: :q, url:, method: :get, data: base_form_data,
                 class: search_form_class do |form| %>
     <% if query.present? && !query.sorts.empty? %>
       <%= hidden_field_tag "q[s]", "#{query.sorts.first.name} #{query.sorts.first.dir}" %>
@@ -35,7 +35,7 @@
       field_name: :name_or_id_cont,
       label: t("common.controls.search"),
       placeholder: t("shared.workflow_executions.index.search.placeholder"),
-      value: search.name_or_id_cont,
+      value: @query.name_or_id_cont,
       include_advanced_search_outlet: true,
       **search_field_arguments,
     ) %>
@@ -43,10 +43,10 @@
     <div class="max-sm:mt-2 sm:shrink-0">
       <%= render AdvancedSearchComponent.new(
         form: form,
-        search: search,
+        search: @query,
         fields: workflow_advanced_search_fields,
-        open: search.errors.any?,
-        status: search.advanced_query?,
+        open: @query.errors.any?,
+        status: @query.advanced_query?,
       ) %>
     </div>
   <% end %>

@@ -115,6 +115,10 @@ class AdvancedSearchQueryForm
     raise NotImplementedError, "Define model_class or call query_for in #{self.class.name}"
   end
 
+  def search_group_class
+    raise NotImplementedError, "Define search_group_class in #{self.class.name}"
+  end
+
   def search_scope
     scope || model_class
   end

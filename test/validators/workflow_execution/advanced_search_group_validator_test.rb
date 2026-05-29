@@ -64,12 +64,10 @@ class WorkflowExecution::AdvancedSearchGroupValidatorTest < ActiveSupport::TestC
     assert query.valid?
   end
 
-  test 'allows empty search with single empty group' do
+  test 'allows empty search with empty groups' do
     query = WorkflowExecution::Query.new(
       namespace_ids: [@namespace.id],
-      groups: [WorkflowExecution::SearchGroup.new(
-        conditions: [WorkflowExecution::SearchCondition.new(field: '', operator: '', value: '')]
-      )]
+      groups: []
     )
     assert query.valid?
   end
