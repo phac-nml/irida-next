@@ -56,16 +56,16 @@ module AdvancedSearch
       end
     end
 
-    test 'allows empty search with single empty group' do
-      record = DummyRecord.new(
-        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: '', operator: '', value: '')])]
-      )
+    test 'allows structurally empty search with no groups' do
+      record = DummyRecord.new(groups: [])
 
       assert record.valid?
     end
 
-    test 'rejects structurally empty search with no groups' do
-      record = DummyRecord.new(groups: [])
+    test 'rejects empty search with single empty group' do
+      record = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: '', operator: '', value: '')])]
+      )
 
       assert_not record.valid?
       assert record.errors.added?(:base, :invalid)
@@ -101,12 +101,6 @@ module AdvancedSearch
     end
 
     test 'validates blank field/operator/value for non-exists operators' do
-      record = DummyRecord.new(
-        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: '', operator: '', value: '')])]
-      )
-
-      assert record.valid?, 'single empty group is treated as empty search'
-
       record2 = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name', operator: '=', value: '')])]
       )

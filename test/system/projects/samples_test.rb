@@ -2901,7 +2901,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 20
+      assert_selector '#samples-table table tbody tr', count: 3
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample30)}']"
@@ -2914,8 +2914,8 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t(:'general.form.error_summary.title', count: 3)
-      assert_selector '#samples-table table tbody tr', count: 20
+      assert_text I18n.t(:'general.form.error_summary.title', count: 2)
+      assert_selector '#samples-table table tbody tr', count: 3
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample30)}']"

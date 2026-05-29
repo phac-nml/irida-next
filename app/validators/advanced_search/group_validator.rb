@@ -97,13 +97,15 @@ module AdvancedSearch
       condition.errors.add :field, :not_a_metadata
     end
 
-    def validate_blank_field(condition)
+    def validate_blank_field(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
       condition.errors.add :field, :blank if condition.field.blank?
 
       condition.errors.add :operator, :blank if condition.operator.blank?
 
-      return unless (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) ||
+      return unless condition.operator.present? && (
+        (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) ||
                     (EXISTS_OPERATORS.exclude?(condition.operator) && condition.value.blank?)
+      )
 
       condition.errors.add :value, :blank
     end
