@@ -92,7 +92,9 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         flash[:success] = t('.success', project_name: @project.name)
         format.turbo_stream { redirect_to namespace_project_path(@project.namespace.parent, @project) }
       else
-        render status: :unprocessable_content
+        format.turbo_stream do
+          render status: :unprocessable_content
+        end
       end
     end
   end
