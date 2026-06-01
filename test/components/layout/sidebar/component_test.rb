@@ -121,7 +121,7 @@ module Layout
           sidebar.with_header(label: 'Header')
         end
 
-        assert_selector('a[aria-label="Help - Opens in new tab"]', text: 'Help')
+        assert_selector('a[aria-label="Documentation - Opens in new tab"]', text: 'Documentation', visible: :hidden)
       end
 
       test 'navbar buttons have tooltips instead of title attributes' do
@@ -163,7 +163,7 @@ module Layout
         assert_selector("[role='tooltip'][id='#{tooltip_id}']", text: new_label)
 
         # Should still have dropdown--v1 functionality
-        assert_selector('button[data-dropdown--v1-target="trigger"]', count: 3) # goto, new, profile
+        assert_selector('button[data-dropdown--v1-target="trigger"]', count: 4) # goto, new, profile
       end
 
       test 'profile dropdown has tooltip integration' do
@@ -185,7 +185,7 @@ module Layout
         assert_selector("[role='tooltip'][id='#{tooltip_id}']", text: profile_label)
 
         # Should still have dropdown--v1 functionality
-        assert_selector('button[data-dropdown--v1-target="trigger"]', count: 3) # goto, new, profile
+        assert_selector('button[data-dropdown--v1-target="trigger"]', count: 4) # goto, new, profile
       end
 
       test 'tooltip IDs are unique across navbar buttons' do
