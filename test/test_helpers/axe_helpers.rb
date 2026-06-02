@@ -6,7 +6,7 @@ module AxeHelpers
     Violation = Data.define(:id, :impact, :tags, :description, :help, :help_url)
     ExclusionRule = Data.define(:id, :selector)
 
-    WCAG_AA_RUN_TAGS = %w[wcag2a wcag2aa wcag21a wcag21aa wcag22aa].freeze
+    WCAG_AA_RUN_TAGS = %w[wcag2a wcag2aa wcag21a wcag22a wcag21aa wcag22aa].freeze
 
     AXE_COMMAND = <<~COMMAND.freeze
       axe.run({ runOnly: { type: 'tag', values: #{WCAG_AA_RUN_TAGS.to_json} }, elementRef: true })
