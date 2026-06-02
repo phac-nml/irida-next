@@ -114,7 +114,9 @@ export default class extends Controller {
         twoWordsConnector: this.#ariaLiveTranslations["two_words_connector"],
         lastWordConnector: this.#ariaLiveTranslations["last_word_connector"],
       });
+      return true;
     }
+    return false;
   }
 
   #cleanupAvailableList() {
@@ -853,7 +855,7 @@ export default class extends Controller {
   }
 
   #updateAriaLive(translationKey, list, items, position = null) {
-    this.#ensureAriaLiveReady();
+    if (!this.#ensureAriaLiveReady()) return;
     let updateString;
     const connectedItems = this.#wordConnector.connectWords(items);
     if (["move_up", "move_down"].includes(translationKey)) {
