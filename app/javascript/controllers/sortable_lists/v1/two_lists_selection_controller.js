@@ -47,7 +47,6 @@ export default class extends Controller {
   connect() {
     this.#boundSubmitClickCapture = this.#onSubmitClickCapture.bind(this);
 
-    this.#ensureAriaLiveReady();
     // Get a handle on the available and selected lists
     this.idempotentConnect();
   }
