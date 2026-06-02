@@ -6,7 +6,12 @@ module AxeHelpers
     Violation = Data.define(:id, :impact, :tags, :description, :help, :help_url)
     ExclusionRule = Data.define(:id, :selector)
 
-    WCAG_AA_RUN_TAGS = %w[wcag2a wcag2aa wcag21a wcag22a wcag21aa wcag22aa].freeze
+    # ViewComponent preview pages are not full app layouts (no document h1).
+    COMPONENT_PREVIEW_EXCLUSIONS = [
+      ExclusionRule.new(id: 'page-has-heading-one', selector: nil)
+    ].freeze
+
+    WCAG_AA_RUN_TAGS = %w[wcag2a wcag2aa wcag21a wcag22a wcag21aa wcag22aa best-practice].freeze
 
     AXE_COMMAND = <<~COMMAND.freeze
       axe.run({ runOnly: { type: 'tag', values: #{WCAG_AA_RUN_TAGS.to_json} }, elementRef: true })
@@ -49,11 +54,15 @@ module AxeHelpers
     # Remove any exclusions from the results
     def remove_exclusions(json)
       json.reject do |item|
-        @exclusions.any? do |exclusion|
-          exclusion.id == item['id'] && item['nodes'].any? do |node|
-            html_matches_selector?(node['html'], exclusion.selector)
-          end
-        end
+        @exclusions.any? { |exclusion| excluded_violation?(item, exclusion) }
+      end
+    end
+
+    def excluded_violation?(item, exclusion)
+      return false unless exclusion.id == item['id']
+
+      exclusion.selector.nil? || item['nodes'].any? do |node|
+        html_matches_selector?(node['html'], exclusion.selector)
       end
     end
 
@@ -83,13 +92,17 @@ module AxeHelpers
     end
   end
 
-  def assert_accessible
-    actual = AxeResults.new(page)
+  def assert_accessible(exclusions: nil)
+    actual = AxeResults.new(page, exclusions: axe_exclusions(exclusions))
 
     assert actual.violations.empty?, <<~MSG
       Expected no axe violations, found #{actual.violations.count}
       #{actual.violations.join("\n\n")}
     MSG
+  end
+
+  def assert_component_accessible
+    assert_accessible(exclusions: AxeResults::COMPONENT_PREVIEW_EXCLUSIONS)
   end
 
   # Capybara Overrides to run accessibility checks when UI changes.
@@ -105,5 +118,17 @@ module AxeHelpers
 
     assert_accessible
     w3c_validate content: html
+  end
+
+  private
+
+  def axe_exclusions(explicit_exclusions)
+    return explicit_exclusions unless explicit_exclusions.nil?
+
+    component_preview_page? ? AxeResults::COMPONENT_PREVIEW_EXCLUSIONS : []
+  end
+
+  def component_preview_page?
+    current_path.include?('rails/view_components')
   end
 end
