@@ -2079,7 +2079,7 @@ fr:
     sortable_lists:
       aria_live_update:
         move_down: ITEM_PLACEHOLDER a été déplacé vers le bas à la position POSITION_PLACEHOLDER dans LIST_PLACEHOLDER.
-        move_up: ITEM_PLACEHOLDER a été déplacé vers la haut à la position POSITION_PLACEHOLDER dans LIST_PLACEHOLDER.
+        move_up: ITEM_PLACEHOLDER a été déplacé vers le haut à la position POSITION_PLACEHOLDER dans LIST_PLACEHOLDER.
         moved_list_multiple: 'Les éléments suivants ont été déplacés vers LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
         moved_list_single: 'L''élément suivant a été déplacé vers LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
     workflow_executions:
