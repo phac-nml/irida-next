@@ -23,7 +23,6 @@
     value="<%= @selected_date %>"
     data-combobox-datepicker--v1--input-target="datepickerInput"
     data-action="
-      change->combobox-datepicker--v1--input#directInput
       keydown->combobox-datepicker--v1--input#handleEnterDirectInput
       click->combobox-datepicker--v1--input#toggleCalendar
     "
@@ -66,3 +65,43 @@
     </button>
   </div>
 </div>
+
+<template data-combobox-datepicker--v1--input-target="confirmDialogTemplate">
+  <%= viral_dialog(open: false) do |dialog| %>
+    <% dialog.with_header(
+            title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
+          ) %>
+
+    <p class="text-base leading-8 text-wrap text-slate-900 dark:text-white">
+      <span data-message-type="wov" class="hidden">
+        <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
+              ) %>
+      </span>
+
+      <span data-message-type="woov" class="hidden">
+        <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
+              ) %>
+      </span>
+
+      <span data-message-type="wonv" class="hidden">
+        <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
+              ) %>
+      </span>
+    </p>
+
+    <% dialog.with_secondary_action do %>
+      <%= viral_button(value: "confirm", state: :primary) do
+              t("shared.samples.metadata.editing_field_cell.dialog.confirm_button")
+            end %>
+
+      <%= viral_button(value: "cancel", state: :default) do
+              t("shared.samples.metadata.editing_field_cell.dialog.discard_button")
+            end %>
+    <% end %>
+  <% end %>
+</template>
+
+<div data-combobox-datepicker--v1--input-target="confirmDialogContainer"></div>

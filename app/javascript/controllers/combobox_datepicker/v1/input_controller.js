@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import FloatingDropdown from "utilities/floating_dropdown";
+import { focusWhenVisible } from "utilities/focus";
 
 export default class extends Controller {
   static outlets = ["combobox-datepicker--v1--calendar"];
@@ -10,6 +11,8 @@ export default class extends Controller {
     "minDate",
     "maxDate",
     "inputArrow",
+    "confirmDialogTemplate",
+    "confirmDialogContainer",
   ];
 
   static values = {
@@ -39,6 +42,10 @@ export default class extends Controller {
 
   #arrowSvg;
 
+  initialize() {
+    this.boundBlur = this.blur.bind(this);
+  }
+
   connect() {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
@@ -51,6 +58,7 @@ export default class extends Controller {
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
+    this.datepickerInputTarget.addEventListener("blur", this.boundBlur);
     this.idempotentConnect();
   }
 
@@ -300,6 +308,67 @@ export default class extends Controller {
       event.preventDefault();
       this.toggleCalendar(event);
     }
+  }
+
+  async blur(event) {
+    if (this.datepickerInputTarget.value == this.#selectedDate) return;
+
+    event.preventDefault();
+
+    await this.confirmDirectInput();
+  }
+
+  async confirmDirectInput() {
+    const confirmDialog = this.confirmDialogTemplateTarget.innerHTML
+      .replace(/ORIGINAL_VALUE/g, this.#selectedDate)
+      .replace(/NEW_VALUE/g, this.datepickerInputTarget.value);
+    this.confirmDialogContainerTarget.innerHTML = confirmDialog;
+
+    const dialog =
+      this.confirmDialogContainerTarget.getElementsByTagName("dialog")[0];
+    let messageType = "wov";
+
+    if (this.datepickerInputTarget.value === "") {
+      messageType = "wonv";
+    } else if (this.#selectedDate === "") {
+      messageType = "woov";
+    }
+    dialog
+      .querySelector(`[data-message-type="${messageType}"]`)
+      .classList.remove("hidden");
+
+    dialog.showModal();
+
+    // Focus the cancel button for accessibility
+    const cancelButton = dialog.querySelector('button[value="cancel"]');
+    if (cancelButton) {
+      focusWhenVisible(cancelButton);
+    }
+
+    // Handle dialog actions
+    dialog.addEventListener(
+      "click",
+      (e) => {
+        if (e.target.tagName !== "BUTTON") return;
+        console.log(e.target.value);
+        e.target.value === "confirm" ? this.submitDate() : this.#resetInput();
+        dialog.close();
+      },
+      { once: true },
+    );
+
+    // Handle dialog close
+    dialog.addEventListener(
+      "close",
+      () => {
+        this.#resetInput();
+      },
+      { once: true },
+    );
+  }
+
+  #resetInput() {
+    this.datepickerInputTarget.value = this.#selectedDate;
   }
 
   // submits the selected date
