@@ -47,18 +47,7 @@ export default class extends Controller {
   connect() {
     this.#boundSubmitClickCapture = this.#onSubmitClickCapture.bind(this);
 
-    // check if aria-live exists as it's added after file selection in import metadata (can't be done in connect())
-    if (!this.#ariaLiveTranslations && this.hasAriaLiveUpdateTarget) {
-      this.#ariaLiveTranslations = JSON.parse(
-        this.ariaLiveUpdateTarget.getAttribute("data-translations"),
-      );
-
-      this.#wordConnector = new WordConnector({
-        wordsConnector: this.#ariaLiveTranslations["words_connector"],
-        twoWordsConnector: this.#ariaLiveTranslations["two_words_connector"],
-        lastWordConnector: this.#ariaLiveTranslations["last_word_connector"],
-      });
-    }
+    this.#ensureAriaLiveReady();
     // Get a handle on the available and selected lists
     this.idempotentConnect();
   }
@@ -67,8 +56,10 @@ export default class extends Controller {
     this.availableList = document.getElementById(this.availableListValue);
     this.selectedList = document.getElementById(this.selectedListValue);
 
-    this.#availableListName = this.availableList.getAttribute("data-title");
-    this.#selectedListName = this.selectedList.getAttribute("data-title");
+    this.#availableListName =
+      this.availableList?.getAttribute("data-title") || "";
+    this.#selectedListName =
+      this.selectedList?.getAttribute("data-title") || "";
 
     if (this.availableList && this.selectedList) {
       // Get a handle on the original available list
@@ -104,6 +95,25 @@ export default class extends Controller {
         this.#boundSubmitClickCapture,
         true,
       );
+    }
+  }
+
+  #ensureAriaLiveReady() {
+    // check if aria-live exists as it's added after file selection in import metadata (can't be done in connect())
+    if (
+      !this.#ariaLiveTranslations &&
+      this.hasAriaLiveUpdateTarget &&
+      !this.#wordConnector
+    ) {
+      this.#ariaLiveTranslations = JSON.parse(
+        this.ariaLiveUpdateTarget.getAttribute("data-translations"),
+      );
+
+      this.#wordConnector = new WordConnector({
+        wordsConnector: this.#ariaLiveTranslations["words_connector"],
+        twoWordsConnector: this.#ariaLiveTranslations["two_words_connector"],
+        lastWordConnector: this.#ariaLiveTranslations["last_word_connector"],
+      });
     }
   }
 
@@ -842,14 +852,13 @@ export default class extends Controller {
   }
 
   #updateAriaLive(translationKey, list, items) {
-    if (this.hasAriaLiveUpdateTarget && this.#wordConnector) {
-      const connectedItems = this.#wordConnector.connectWords(items);
-      const updateString = this.#ariaLiveTranslations[translationKey]
-        .replace(/LIST_PLACEHOLDER/g, list)
-        .replace(/ITEMS_PLACEHOLDER/g, connectedItems);
+    this.#ensureAriaLiveReady();
+    const connectedItems = this.#wordConnector.connectWords(items);
+    const updateString = this.#ariaLiveTranslations[translationKey]
+      .replace(/LIST_PLACEHOLDER/g, list)
+      .replace(/ITEMS_PLACEHOLDER/g, connectedItems);
 
-      announce(updateString, { element: this.ariaLiveUpdateTarget });
-    }
+    announce(updateString, { element: this.ariaLiveUpdateTarget });
   }
 
   #initializeLists() {
