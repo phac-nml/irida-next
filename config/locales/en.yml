@@ -2074,8 +2074,8 @@ en:
         success: Success
     sortable_lists:
       aria_live_update:
-        move_down: ITEMS_PLACEHOLDER was moved down LIST_PLACEHOLDER.
-        move_up: ITEMS_PLACEHOLDER was moved up LIST_PLACEHOLDER.
+        move_down: ITEM_PLACEHOLDER was moved down to position POSITION_PLACEHOLDER in LIST_PLACEHOLDER.
+        move_up: ITEM_PLACEHOLDER was moved up to position POSITION_PLACEHOLDER in LIST_PLACEHOLDER.
         moved_list_multiple: 'The following items were moved to LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
         moved_list_single: 'The following item was moved to LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
     workflow_executions:

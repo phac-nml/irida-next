@@ -484,6 +484,7 @@ export default class extends Controller {
       `moved_list_${translationKey}`,
       listName,
       selectedOptionsText,
+      null,
     );
 
     this.#checkStates();
@@ -622,8 +623,9 @@ export default class extends Controller {
   }
 
   #moveOptionHorizontally(selectedOption, targetOption, direction) {
+    const list = selectedOption.parentElement;
     const listName =
-      selectedOption.parentElement === this.selectedList
+      list === this.selectedList
         ? this.#selectedListName
         : this.#availableListName;
     targetOption.remove();
@@ -632,10 +634,18 @@ export default class extends Controller {
       targetOption,
     );
 
+    const listItems = Array.from(list.querySelectorAll("li"));
+    const selectedOptionText = selectedOption.lastElementChild.textContent;
+    const position =
+      listItems.findIndex(
+        (item) => item.innerText.trim() === selectedOptionText,
+      ) + 1;
+
     this.#updateAriaLive(
       direction === "up" ? "move_up" : "move_down",
       listName,
       selectedOption.lastElementChild.textContent,
+      position,
     );
   }
 
@@ -851,12 +861,21 @@ export default class extends Controller {
     list.append(template);
   }
 
-  #updateAriaLive(translationKey, list, items) {
+  #updateAriaLive(translationKey, list, items, position) {
     this.#ensureAriaLiveReady();
+    let updateString;
     const connectedItems = this.#wordConnector.connectWords(items);
-    const updateString = this.#ariaLiveTranslations[translationKey]
-      .replace(/LIST_PLACEHOLDER/g, list)
-      .replace(/ITEMS_PLACEHOLDER/g, connectedItems);
+    if (["move_up", "move_down"].includes(translationKey)) {
+      updateString = this.#ariaLiveTranslations[translationKey]
+        .replace(/LIST_PLACEHOLDER/g, list)
+        .replace(/ITEM_PLACEHOLDER/g, connectedItems)
+        .replace(/POSITION_PLACEHOLDER/g, position);
+    } else {
+      // handles moved_list_single/multiple
+      updateString = this.#ariaLiveTranslations[translationKey]
+        .replace(/LIST_PLACEHOLDER/g, list)
+        .replace(/ITEMS_PLACEHOLDER/g, connectedItems);
+    }
 
     announce(updateString, { element: this.ariaLiveUpdateTarget });
   }
