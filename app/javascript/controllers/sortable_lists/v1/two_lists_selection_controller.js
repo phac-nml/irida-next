@@ -624,10 +624,6 @@ export default class extends Controller {
 
   #moveOptionHorizontally(selectedOption, targetOption, direction) {
     const list = selectedOption.parentElement;
-    const listName =
-      list === this.selectedList
-        ? this.#selectedListName
-        : this.#availableListName;
     targetOption.remove();
     selectedOption.insertAdjacentElement(
       direction === "up" ? "afterend" : "beforebegin",
@@ -635,15 +631,11 @@ export default class extends Controller {
     );
 
     const listItems = Array.from(list.querySelectorAll("li"));
-    const selectedOptionText = selectedOption.lastElementChild.textContent;
-    const position =
-      listItems.findIndex(
-        (item) => item.innerText.trim() === selectedOptionText,
-      ) + 1;
+    const position = listItems.indexOf(selectedOption) + 1;
 
     this.#updateAriaLive(
       direction === "up" ? "move_up" : "move_down",
-      listName,
+      this.#selectedListName,
       selectedOption.lastElementChild.textContent,
       position,
     );
