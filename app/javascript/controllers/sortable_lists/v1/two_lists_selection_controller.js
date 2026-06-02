@@ -484,7 +484,6 @@ export default class extends Controller {
       `moved_list_${translationKey}`,
       listName,
       selectedOptionsText,
-      null,
     );
 
     this.#checkStates();
@@ -853,7 +852,7 @@ export default class extends Controller {
     list.append(template);
   }
 
-  #updateAriaLive(translationKey, list, items, position) {
+  #updateAriaLive(translationKey, list, items, position = null) {
     this.#ensureAriaLiveReady();
     let updateString;
     const connectedItems = this.#wordConnector.connectWords(items);
