@@ -3,8 +3,10 @@ import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import SortableListsController from "../../../../../app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js";
 
 const translations = JSON.stringify({
-  move_down: "ITEMS_PLACEHOLDER was moved down LIST_PLACEHOLDER.",
-  move_up: "ITEMS_PLACEHOLDER was moved up LIST_PLACEHOLDER.",
+  move_down:
+    "ITEM_PLACEHOLDER was moved down to position POSITION_PLACEHOLDER in LIST_PLACEHOLDER.",
+  move_up:
+    "ITEM_PLACEHOLDER was moved up to position POSITION_PLACEHOLDER in LIST_PLACEHOLDER.",
   moved_list_multiple:
     "The following items were moved to LIST_PLACEHOLDER: ITEMS_PLACEHOLDER",
   moved_list_single:
@@ -441,6 +443,6 @@ describe("sortable lists two-lists selection controller", () => {
       document.querySelector(
         '[data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"]',
       ),
-    ).toHaveTextContent("Two was moved up Selected list.");
+    ).toHaveTextContent("Two was moved up to position 1 in Selected list.");
   });
 });
