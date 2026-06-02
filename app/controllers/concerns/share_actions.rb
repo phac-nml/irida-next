@@ -88,7 +88,8 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def update # rubocop:disable Metrics/MethodLength
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    @group_links = load_namespace_group_links # require all group_links to update turbo frames of each group_link
     @updated = GroupLinks::GroupLinkUpdateService.new(current_user, @namespace_group_link, group_link_params).execute
     updated_param = if group_link_params[:group_access_level].nil?
                       t('concerns.share_actions.update.params.expiration_date')
@@ -111,7 +112,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
         format.turbo_stream do
           render status: :unprocessable_content,
                  locals: { namespace_group_link: @namespace_group_link, type: 'alert',
-                           message: t('concerns.share_actions.update.error') }
+                           message: error_message(@namespace_group_link) }
         end
       end
     end

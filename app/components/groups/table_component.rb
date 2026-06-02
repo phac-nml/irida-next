@@ -60,5 +60,13 @@ module Groups
     def columns
       %i[group_name namespace_name updated_at group_access_level expires_at]
     end
+
+    def expiration
+      if @namespace.group_namespace?
+        'groups/group_links/expiration'
+      else
+        'projects/group_links/expiration'
+      end
+    end
   end
 end

@@ -1,3 +1,15 @@
 <%= turbo_stream.append "flashes" do %>
   <%= viral_flash(type:, data: message) %>
 <% end %>
+
+<% @group_links.each do |project_group_link| %>
+  <%# overwrite project_group_link namespace_group_link member to access namespace_group_link.errors %>
+  <% project_group_link = namespace_group_link if project_group_link == namespace_group_link %>
+
+  <%= turbo_stream.update "group-link-#{project_group_link.id}-expiration",
+                    partial: "projects/group_links/expiration",
+                    locals: {
+                      namespace: @namespace,
+                      namespace_group_link: project_group_link,
+                    } %>
+<% end %>

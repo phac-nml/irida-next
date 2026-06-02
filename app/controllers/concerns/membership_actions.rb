@@ -96,6 +96,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   end
 
   def update # rubocop:disable Metrics/MethodLength
+    @members = load_members # require all members to update turbo frames of each member
     updated = Members::UpdateService.new(@member, @namespace, current_user, member_params).execute
     respond_to do |format|
       if updated

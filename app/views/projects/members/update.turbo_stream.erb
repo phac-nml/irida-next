@@ -9,9 +9,14 @@
                       access_levels: @access_levels,
                     } %>
 
-<%= turbo_stream.update "member-#{member.id}-expiration",
+<% @members.each do |project_member| %>
+  <%# overwrite project_member with member to access member.errors %>
+  <% project_member = member if project_member == member %>
+
+  <%= turbo_stream.update "member-#{project_member.id}-expiration",
                     partial: "projects/members/expiration",
                     locals: {
                       namespace: @namespace,
-                      member:,
+                      member: project_member,
                     } %>
+<% end %>
