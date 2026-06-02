@@ -153,8 +153,8 @@ export default class extends Controller {
   }
 
   #setSelectedDate() {
-    this.#selectedDate = this.datepickerInputTarget.value;
-    if (this.#selectedDate && this.#validateSelectedDate()) {
+    if (this.#validateInputValue(this.datepickerInputTarget.value)) {
+      this.#selectedDate = this.datepickerInputTarget.value;
       const fullSelectedDate = new Date(this.#selectedDate);
       this.#selectedYear = fullSelectedDate.getUTCFullYear();
       // Sometimes an issue where selecting the 1st will display the previous month with the 1st as an
@@ -162,6 +162,7 @@ export default class extends Controller {
       // using UTCMonth alleviates the issue
       this.#selectedMonthIndex = fullSelectedDate.getUTCMonth();
     } else {
+      this.#selectedDate = "";
       this.#selectedYear = this.#todaysYear;
       this.#selectedMonthIndex = this.#todaysMonthIndex;
     }
@@ -172,10 +173,11 @@ export default class extends Controller {
 
   // validates the date within the input; prevents re-rendering incorrect calendar if an invalid date was entered
   // and submitted to the backend
-  #validateSelectedDate() {
+  #validateInputValue(date) {
     if (
-      (this.#minDate && this.#minDate > this.#selectedDate) ||
-      (this.#maxDate && this.#selectedDate > this.#maxDate)
+      isNaN(Date.parse(date)) ||
+      (this.#minDate && this.#minDate > date) ||
+      (this.#maxDate && date > this.#maxDate)
     ) {
       return false;
     }
