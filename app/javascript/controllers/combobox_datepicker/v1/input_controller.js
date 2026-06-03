@@ -58,7 +58,9 @@ export default class extends Controller {
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
-    this.datepickerInputTarget.addEventListener("blur", this.boundBlur);
+    if (this.autosubmitValue) {
+      this.datepickerInputTarget.addEventListener("blur", this.boundBlur);
+    }
     this.idempotentConnect();
   }
 
