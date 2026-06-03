@@ -15,12 +15,34 @@ module AxeHelpers
       end
     end
 
-    ViolationNode = Data.define(:target, :failure_messages) do
+    ViolationNode = Data.define(:target, :html, :checks) do
       def to_s(index = nil)
         prefix = index ? "#{index}. " : ''
         lines = ["#{prefix}Target: #{AxeResults.format_target(target)}"]
-        failure_messages.each { |message| lines << "   - #{message}" }
+        lines << "   HTML: #{html}" unless html.to_s.empty?
+        checks.each { |check| lines << AxeResults.indent(check.to_s, 3) }
         lines.join("\n")
+      end
+    end
+
+    Check = Data.define(:message, :data, :related_nodes) do
+      def to_s
+        lines = ["- #{message}"]
+        lines << "  Data: #{AxeResults.format_data(data)}" unless data.nil?
+        if related_nodes.any?
+          lines << '  Related nodes:'
+          related_nodes.each { |node| lines << AxeResults.indent(node.to_s, 4) }
+        end
+        lines.join("\n")
+      end
+    end
+
+    RelatedNode = Data.define(:target, :html) do
+      def to_s
+        [
+          "Target: #{AxeResults.format_target(target)}",
+          ("HTML: #{html}" unless html.to_s.empty?)
+        ].compact.join("\n")
       end
     end
     ExclusionRule = Data.define(:id, :selector)
@@ -61,22 +83,46 @@ module AxeHelpers
         text.lines.map { |line| "#{padding}#{line}" }.join
       end
 
+      def format_data(data)
+        case data
+        when Hash
+          data.map { |key, value| "#{key}=#{format_data(value)}" }.join(', ')
+        when Array
+          data.map { |value| format_data(value) }.join(', ')
+        else
+          data.to_s
+        end
+      end
+
       def build_violation_node(node_json)
         ViolationNode.new(
           target: node_json['target'],
-          failure_messages: failure_messages(node_json)
+          html: node_json['html'],
+          checks: failure_checks(node_json)
         )
       end
 
-      def failure_messages(node_json)
+      def failure_checks(node_json)
         %w[any all none].flat_map do |check_type|
           Array(node_json[check_type]).filter_map do |check|
             result = check['result']
-            next check['message'] if result.nil?
+            next build_check(check) if result.nil?
 
-            check['message'] if result != 'passed'
+            build_check(check) if result != 'passed'
           end
         end.compact.uniq
+      end
+
+      def build_check(check_json)
+        Check.new(
+          message: check_json['message'],
+          data: check_json['data'],
+          related_nodes: Array(check_json['relatedNodes']).map { |node| build_related_node(node) }
+        )
+      end
+
+      def build_related_node(node_json)
+        RelatedNode.new(target: node_json['target'], html: node_json['html'])
       end
     end
 
