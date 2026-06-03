@@ -84,7 +84,8 @@
     "samp",
     "samplesheet",
     "sendfile",
-    "tailwindcss"
+    "tailwindcss",
+    "xact"
   ],
   "git.autoRepositoryDetection": false,
   "files.exclude": {

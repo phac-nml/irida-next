@@ -35,7 +35,7 @@ class BaseSampleService < BaseService
   end
 
   # Filter the samples that the user has permissions to modify/copy
-  def filter_sample_ids(sample_ids, action_type, access_level = Member::AccessLevel::MAINTAINER) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def filter_sample_ids(sample_ids, action_type, append_namespace_errors = true, access_level = Member::AccessLevel::MAINTAINER) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Layout/LineLength,Style/OptionalBooleanParameter
     samples = authorized_scope(Sample, type: :relation, as: :namespace_samples,
                                        scope_options: { namespace: @namespace,
                                                         minimum_access_level: access_level })
@@ -59,15 +59,17 @@ class BaseSampleService < BaseService
 
     # We only need to show an unauthorized messages for sample ids that belong to projects in the
     # group since a user can have different access levels
-    if unauthorized_sample_ids.any? && @namespace.group_namespace?
-      @namespace.errors.add(:samples,
-                            I18n.t("services.samples.#{action_type}.unauthorized",
-                                   sample_ids: unauthorized_sample_ids.join(', ')))
-    end
-    if invalid_ids.any?
-      @namespace.errors.add(:samples,
-                            I18n.t("services.samples.#{action_type}.samples_not_found",
-                                   sample_ids: invalid_ids.join(', ')))
+    if append_namespace_errors
+      if unauthorized_sample_ids.any? && @namespace.group_namespace?
+        @namespace.errors.add(:samples,
+                              I18n.t("services.samples.#{action_type}.unauthorized",
+                                     sample_ids: unauthorized_sample_ids.join(', ')))
+      end
+      if invalid_ids.any?
+        @namespace.errors.add(:samples,
+                              I18n.t("services.samples.#{action_type}.samples_not_found",
+                                     sample_ids: invalid_ids.join(', ')))
+      end
     end
     samples
   end

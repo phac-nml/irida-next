@@ -30,25 +30,62 @@ module Samples
     #
     # @return [Array<Integer>] IDs of successfully transferred samples
     # @raise [TransferService::TransferError] on validation or authorization failures
-    def execute(new_project_id, sample_ids, broadcast_target = nil)
+    def execute(new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity
+      # working memory and pre check
       new_project = Project.find_by(id: new_project_id)
       raise TransferError, I18n.t('services.samples.transfer.invalid_new_project') if new_project.nil?
 
+      # authorization check (could be done even on job retry?)
       authorize_transfer(new_project, sample_ids)
 
-      transfer(new_project, sample_ids, broadcast_target)
-    rescue BaseSampleService::BaseError, TransferService::TransferError => e
-      @namespace.errors.add(:base, e.message)
-      []
-    end
+      # working memory, no database changes
+      transferrable_samples = filter_sample_ids(sample_ids, 'transfer', false)
+      project_sample_ids_to_transfer = organize_samples_by_project(transferrable_samples)
 
-    def graphql_execute(new_project_id, sample_ids)
-      new_project = Project.find_by(id: new_project_id)
-      raise TransferError, I18n.t('services.samples.transfer.invalid_new_project') if new_project.nil?
+      update_progress_bar(5, 100, broadcast_target)
 
-      authorize_transfer(new_project, sample_ids)
+      # database transactions
+      perform_transfer_with_lock(
+        new_project, project_sample_ids_to_transfer
+      )
 
-      transfer(new_project, sample_ids, nil)
+      # build working memory for previous transaction
+      # Retrieve ids of transferred samples (delegated to helper for clarity)
+      transferred_project_sample_ids = build_transferred_project_sample_ids(
+        project_sample_ids_to_transfer,
+        new_project,
+        transferrable_samples
+      )
+
+      update_progress_bar(95, 100, broadcast_target)
+
+      # TODO: move to final namespace error collecting step
+      # Add errors for samples that could not be transferred due to name conflicts
+      add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, new_project)
+      # add_transfer_conflict_errors(project_sample_ids_to_transfer, my_test_list, new_project)
+
+      untransferred_sample_ids = sample_ids - transferred_project_sample_ids.values.flatten
+
+      # TODO: early return is not good, refactor this.
+      # If no samples were transferred, return an empty array
+      if transferred_project_sample_ids.empty? || transferred_project_sample_ids.values.all?(&:empty?)
+        filter_sample_ids(untransferred_sample_ids, 'transfer', true) unless untransferred_sample_ids.empty? # TODO: move to better spot
+        return []
+      end
+
+      # TODO: needs cursor.
+      # level 1: each transferred_project_sample_ids.
+      update_metadata_summary_counts(transferred_project_sample_ids, new_project)
+      update_samples_count_and_create_activities(transferred_project_sample_ids, new_project)
+
+      update_progress_bar(100, 100, broadcast_target)
+
+      # final step of getting all the namespace errors together
+      filter_sample_ids(untransferred_sample_ids, 'transfer', true) unless untransferred_sample_ids.empty?
+      # TODO: add other name space errors here
+
+      # return result of job
+      transferred_project_sample_ids.values.flatten
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
       @namespace.errors.add(:base, e.message)
       []
@@ -132,7 +169,7 @@ module Samples
     # @param new_project [Project] the target project
     def update_metadata_summary_counts(transferred_project_sample_ids, new_project)
       transferred_project_sample_ids.each do |old_project_id, sample_ids|
-        old_project = Project.find(old_project_id)
+        old_project = Project.find(old_project_id) # TODO: cursor here
 
         # Build metadata summary payload for transferred samples
         metadata_payload = build_metadata_payload_from_samples(sample_ids)
@@ -140,8 +177,11 @@ module Samples
         old_namespaces = namespaces_for_transfer(old_project.namespace)
         new_namespaces = namespaces_for_transfer(new_project.namespace)
 
-        old_project.namespace.update_metadata_summary_by_sample_transfer(metadata_payload, old_namespaces,
-                                                                         new_namespaces)
+        ActiveRecord::Base.transaction do
+          old_project.namespace.update_metadata_summary_by_sample_transfer(
+            metadata_payload, old_namespaces, new_namespaces
+          )
+        end
       end
     end
 
@@ -158,42 +198,6 @@ module Samples
         metadata_payload[sample.key] = sample.count
       end
       metadata_payload
-    end
-
-    # Orchestrate the full transfer process: lock, move samples, and update metadata.
-    #
-    # Handles the core workflow of transferring samples from multiple source projects
-    # to a single target project. Uses advisory locking to prevent race conditions.
-    # Detects and excludes samples with name conflicts in the target project.
-    #
-    # @param new_project [Project] the target project
-    # @param sample_ids [Array<Integer>] initial list of sample IDs to transfer
-    # @param broadcast_target [String, nil] optional broadcast target for progress updates
-    #
-    # @return [Array<Integer>] IDs of successfully transferred samples
-    def transfer(new_project, sample_ids, broadcast_target, _transfer_uuid = SecureRandom.uuid)
-      transferrable_samples = filter_sample_ids(sample_ids, 'transfer')
-      project_sample_ids_to_transfer = organize_samples_by_project(transferrable_samples)
-
-      update_progress_bar(5, 100, broadcast_target)
-
-      transferred_project_sample_ids = perform_transfer_with_lock(new_project, project_sample_ids_to_transfer,
-                                                                  transferrable_samples)
-
-      update_progress_bar(95, 100, broadcast_target)
-
-      # Add errors for samples that could not be transferred due to name conflicts
-      add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, new_project)
-
-      # If no samples were transferred, return an empty array
-      return [] if transferred_project_sample_ids.empty? || transferred_project_sample_ids.values.all?(&:empty?)
-
-      update_metadata_summary_counts(transferred_project_sample_ids, new_project)
-      update_samples_count_and_create_activities(transferred_project_sample_ids, new_project)
-
-      update_progress_bar(100, 100, broadcast_target)
-
-      transferred_project_sample_ids.values.flatten
     end
 
     # Organize samples by their source project.
@@ -219,11 +223,7 @@ module Samples
     #
     # @param new_project [Project] the target project
     # @param project_sample_ids_to_transfer [Hash{Integer => Array<Integer>}] samples to transfer
-    # @param transferrable_samples [ActiveRecord::Relation] samples to organize
-    # @return [Hash{Integer => Array<Integer>}] mapping from source project ID to array of transferred sample IDs
-    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer, transferrable_samples) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-      num_transferred_samples_by_project = {}
-      transferred_project_sample_ids = {}
+    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       conflicting_samples = Arel::Table.new(Sample.table_name, as: 'conflicting_samples')
 
       Sample.transaction do
@@ -232,7 +232,7 @@ module Samples
 
         project_sample_ids_to_transfer.each do |project_id, sample_ids|
           # Transfer samples that do not have name conflicts in the target project
-          num_transferred = Sample.where(id: sample_ids, project_id: project_id).where.not(
+          Sample.where(id: sample_ids, project_id: project_id).where.not(
             id: Sample.joins(Sample.arel_table.create_join(conflicting_samples,
                                                            Arel::Nodes::On.new(
                                                              conflicting_samples[:name].eq(Sample.arel_table[:name])
@@ -242,18 +242,23 @@ module Samples
                              ))
                       .where(id: sample_ids).select(:id)
           ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
-
-          num_transferred_samples_by_project[project_id] = num_transferred
         end
+      end
+    end
 
-        # Retrieve ids of transferred samples (delegated to helper for clarity)
-        transferred_project_sample_ids = build_transferred_project_sample_ids(project_sample_ids_to_transfer,
-                                                                              num_transferred_samples_by_project,
-                                                                              new_project,
-                                                                              transferrable_samples)
+    # Finds the results of the sample transfer.
+    # This function has been separated from the perform_transfer_with_lock to allow for idempotent
+    # retrieval of transfer results in the case of job retries without re-executing the transfer logic.
+    def build_num_transferred_samples_by_project(project_sample_ids_to_transfer, new_project)
+      num_transferred_samples_by_project = {}
+      project_sample_ids_to_transfer.each do |project_id, sample_ids|
+        # Transfer samples that do not have name conflicts in the target project
+        num_transferred = Sample.where(id: sample_ids, project_id: new_project.id).count
+
+        num_transferred_samples_by_project[project_id] = num_transferred
       end
 
-      transferred_project_sample_ids
+      num_transferred_samples_by_project
     end
 
     # Build a mapping of project_id => transferred sample ids for the given
@@ -266,9 +271,12 @@ module Samples
     # @param transferrable_samples [ActiveRecord::Relation]
     # @return [Hash{Integer => Array<Integer>}]
     def build_transferred_project_sample_ids(project_sample_ids_to_transfer,
-                                             num_transferred_samples_by_project,
                                              new_project,
                                              transferrable_samples)
+      num_transferred_samples_by_project = build_num_transferred_samples_by_project(
+        project_sample_ids_to_transfer, new_project
+      )
+
       project_sample_ids_to_transfer.each_with_object({}) do |(project_id, sample_ids), acc|
         acc[project_id] = if num_transferred_samples_by_project[project_id].to_i.zero?
                             []
