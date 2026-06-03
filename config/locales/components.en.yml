@@ -197,7 +197,6 @@ en:
         select_year: Select year
         show_today: Show today
       clear_selection: Clear selection
-      date_format_regex: "^\\d{4}-\\d{2}-\\d{2}$"
       date_selection: Date Selection
       days_of_week_full:
         friday: Friday

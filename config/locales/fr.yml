@@ -434,7 +434,6 @@ fr:
         error: Il y a eu une erreur lors de la dissociation du groupe au groupe
         success: Dissociation réussie du groupe %{namespace_name} au groupe %{group_name}
       update:
-        error: Une erreur s’est produite lors de la mise à jour du lien du groupe d’espaces de noms
         params:
           expiration_date: date d'expiration
           group_access_level: Niveau d’accès du groupe

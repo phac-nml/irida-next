@@ -10,7 +10,7 @@
                     } %>
 
 <% @members.each do |group_member| %>
-  <%= turbo_stream.update "member-#{member.id}-expiration",
+  <%= turbo_stream.update "member-#{group_member.id}-expiration",
                     partial: "groups/members/expiration",
                     locals: {
                       namespace: @namespace,

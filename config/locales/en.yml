@@ -434,7 +434,6 @@ en:
         error: There was an error unlinking group from group
         success: Successfully unlinked group %{namespace_name} from group %{group_name}
       update:
-        error: There was an error updating the namespace group link
         params:
           expiration_date: expiration date
           group_access_level: group access level
