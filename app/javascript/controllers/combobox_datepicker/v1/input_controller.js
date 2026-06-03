@@ -294,7 +294,10 @@ export default class extends Controller {
   // handles validating user directly typing in a date
   directInput(event) {
     event.preventDefault();
-    if (this.autosubmitValue) {
+    if (
+      this.autosubmitValue &&
+      this.datepickerInputTarget.value !== this.#selectedDate
+    ) {
       this.submitDate();
     } else {
       this.#setSelectedDate();
