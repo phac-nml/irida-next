@@ -296,8 +296,9 @@ export default class extends Controller {
     event.preventDefault();
     if (this.autosubmitValue) {
       this.submitDate();
+    } else {
+      this.#setSelectedDate();
     }
-    this.#setSelectedDate();
     this.hideCalendar();
   }
 
@@ -352,7 +353,6 @@ export default class extends Controller {
       "click",
       (e) => {
         if (e.target.tagName !== "BUTTON") return;
-        console.log(e.target.value);
         e.target.value === "confirm" ? this.submitDate() : this.#resetInput();
         dialog.close();
       },

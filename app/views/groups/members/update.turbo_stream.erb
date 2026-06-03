@@ -10,13 +10,11 @@
                     } %>
 
 <% @members.each do |group_member| %>
-  <%# overwrite group_member with member to access member.errors %>
-  <% group_member = member if group_member == member %>
-
-  <%= turbo_stream.update "member-#{group_member.id}-expiration",
+  <%= turbo_stream.update "member-#{member.id}-expiration",
                     partial: "groups/members/expiration",
                     locals: {
                       namespace: @namespace,
                       member: group_member,
+                      error: group_member == member && member.errors.include?(:expires_at) ? member.errors[:expires_at] : nil
                     } %>
 <% end %>

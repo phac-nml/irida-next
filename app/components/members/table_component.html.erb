@@ -124,6 +124,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                   locals: {
                     namespace: @namespace,
                     member:,
+                    error: nil
                   } %>
                 </turbo-frame>
               <% elsif !member.expires_at.nil? %>

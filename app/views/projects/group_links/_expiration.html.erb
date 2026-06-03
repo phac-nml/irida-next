@@ -1,13 +1,18 @@
-<% invalid_expires_at = namespace_group_link.errors.include?(:expires_at) %>
-
-<div class="form-field <%= 'invalid' if invalid_expires_at %>">
-  <%= form_with( model: namespace_group_link, url: namespace_project_group_link_path(namespace.parent, namespace.project, namespace_group_link), method: :patch) do |form| %>
+<div class="form-field <%= 'invalid' unless error.nil? %>">
+  <%= form_with(model: namespace_group_link, url: namespace_project_group_link_path(namespace.parent, namespace.project, namespace_group_link), method: :patch) do |form| %>
     <%= combobox_datepicker(
                     id: "invited-group-#{namespace_group_link.group.id}-expiration",
                     input_name: "namespace_group_link[expires_at]",
                     selected_date: namespace_group_link.expires_at,
                     autosubmit: true,
                     input_aria_label: t("groups.group_links.index.aria_labels.expires_at"),
+                    errored: error.present?
                   ) %>
+  <% end %>
+
+  <% unless error.nil? %>
+    <%= render "shared/form/field_errors",
+      id: "invited-group-#{namespace_group_link.group.id}-expiration_error",
+      errors: error %>
   <% end %>
 </div>

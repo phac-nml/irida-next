@@ -3,13 +3,11 @@
 <% end %>
 
 <% @group_links.each do |group_group_link| %>
-  <%# overwrite group_group_link with namespace_group_link to access namespace_group_link.errors %>
-  <% group_group_link = namespace_group_link if group_group_link == namespace_group_link %>
-
   <%= turbo_stream.update "group-link-#{group_group_link.id}-expiration",
                     partial: "groups/group_links/expiration",
                     locals: {
                       namespace: @namespace,
                       namespace_group_link: group_group_link,
+                      error: group_group_link == namespace_group_link && namespace_group_link.errors.include?(:expires_at) ? namespace_group_link.errors[:expires_at] : nil
                     } %>
 <% end %>
