@@ -6,36 +6,6 @@ lib.mkMerge [
     env.PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright.passthru.browsers}";
     env.PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS="true";
 
-    # TODO: remove when pipelines are confirmed to work with 25.10.2
-    overlays = [
-      (final: super: {
-        # Override the 'nextflow' package to use a newer version
-        nextflow = super.nextflow.overrideAttrs (oldAttrs: {
-          version = "24.10.3";
-          src = super.fetchFromGitHub {
-            owner = "nextflow-io";
-            repo = "nextflow";
-            rev = "6183fdf9dbd9114f5ee86d11bc5e69cbd06501a6";
-            hash = "sha256-/5DhBtsoChHpYFlSo0PsrN5yHPn2LNSqKaczlYLuGa8=";
-          };
-          mitmCache = super.gradle.fetchDeps {
-            pname = "nextflow";
-            data = ./nextflow-deps.json;
-          };
-          postPatch = ''
-            # Nextflow invokes the constant "/bin/bash" (not as a shebang) at
-            # several locations so we fix that globally. However, when running inside
-            # a container, we actually *want* "/bin/bash". Thus the global fix needs
-            # to be reverted for this specific use case.
-            substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
-              --replace-fail "['/bin/bash'," "['${super.bash}/bin/bash'," \
-              --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
-                        launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
-          '';
-        });
-      })
-    ];
-
     # https://devenv.sh/packages/
     packages = with pkgs; [
       pkg-config
