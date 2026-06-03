@@ -3,7 +3,26 @@
 module AxeHelpers
   # Ruby class to wrap the JSON results payload
   class AxeResults
-    Violation = Data.define(:id, :impact, :tags, :description, :help, :help_url)
+    Violation = Data.define(:id, :impact, :tags, :description, :help, :help_url, :nodes) do
+      def to_s
+        [
+          "#{id} #{impact}",
+          help,
+          "Help: #{help_url}",
+          'Affected nodes:',
+          *nodes.each_with_index.map { |node, index| AxeResults.indent(node.to_s(index + 1), 2) }
+        ].join("\n")
+      end
+    end
+
+    ViolationNode = Data.define(:target, :failure_messages) do
+      def to_s(index = nil)
+        prefix = index ? "#{index}. " : ''
+        lines = ["#{prefix}Target: #{AxeResults.format_target(target)}"]
+        failure_messages.each { |message| lines << "   - #{message}" }
+        lines.join("\n")
+      end
+    end
     ExclusionRule = Data.define(:id, :selector)
 
     # ViewComponent preview pages are not full app layouts (no document h1).
@@ -14,7 +33,7 @@ module AxeHelpers
     WCAG_AA_RUN_TAGS = %w[wcag2a wcag2aa wcag21a wcag22a wcag21aa wcag22aa best-practice].freeze
 
     AXE_COMMAND = <<~COMMAND.freeze
-      axe.run({ runOnly: { type: 'tag', values: #{WCAG_AA_RUN_TAGS.to_json} }, elementRef: true })
+      axe.run({ runOnly: { type: 'tag', values: #{WCAG_AA_RUN_TAGS.to_json} } })
     COMMAND
 
     AXE_JS = <<~JS.freeze
@@ -22,6 +41,44 @@ module AxeHelpers
 
       #{AXE_COMMAND}.then(results => console.log(JSON.stringify({ testRunner: results.testRunner, violations: results.violations })));
     JS
+
+    class << self
+      def format_target(target)
+        case target
+        when Array
+          if target.first.is_a?(Array)
+            target.first.join(' >> ')
+          else
+            target.join(' > ')
+          end
+        else
+          target.to_s
+        end
+      end
+
+      def indent(text, spaces)
+        padding = ' ' * spaces
+        text.lines.map { |line| "#{padding}#{line}" }.join
+      end
+
+      def build_violation_node(node_json)
+        ViolationNode.new(
+          target: node_json['target'],
+          failure_messages: failure_messages(node_json)
+        )
+      end
+
+      def failure_messages(node_json)
+        %w[any all none].flat_map do |check_type|
+          Array(node_json[check_type]).filter_map do |check|
+            result = check['result']
+            next check['message'] if result.nil?
+
+            check['message'] if result != 'passed'
+          end
+        end.compact.uniq
+      end
+    end
 
     def initialize(page, exclusions: [])
       unless page.driver.is_a?(Capybara::Playwright::Driver)
@@ -42,7 +99,8 @@ module AxeHelpers
             tags: json['tags'],
             description: json['description'],
             help: json['help'],
-            help_url: json['helpUrl']
+            help_url: json['helpUrl'],
+            nodes: json['nodes'].map { |node| self.class.build_violation_node(node) }
           )
         end
     end
