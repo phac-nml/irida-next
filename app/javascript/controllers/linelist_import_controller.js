@@ -58,11 +58,11 @@ export default class extends Controller {
     });
 
     const selectedMetadataColumns = Array.from(
-      document.querySelectorAll('[name="file_import[metadata_columns][]"]'),
+      this.element.querySelectorAll('[name="file_import[metadata_columns][]"]'),
       (el) => el.value,
     );
 
-    const ignoreEmptyValues = document.querySelector(
+    const ignoreEmptyValues = this.element.querySelector(
       '[name="file_import[ignore_empty_values]"]',
     ).checked;
 
