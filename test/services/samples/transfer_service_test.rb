@@ -565,13 +565,9 @@ module Samples
       project_sample_ids_to_transfer = {
         @current_project.id => [@sample1.id, @sample2.id]
       }
-      num_transferred_samples_by_project = {
-        @current_project.id => 0
-      }
 
       result = service.build_transferred_project_sample_ids(
         project_sample_ids_to_transfer,
-        num_transferred_samples_by_project,
         @new_project,
         Sample.where(id: [@sample1.id, @sample2.id])
       )
