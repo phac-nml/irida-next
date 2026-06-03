@@ -43,6 +43,29 @@ describe("collection", () => {
     it("returns an empty object when no keys are requested", () => {
       expect(pick({ id: 1 }, [])).toEqual({});
     });
+
+    it("returns an empty object when item is null", () => {
+      expect(pick(null, ["id", "name"])).toEqual({});
+    });
+
+    it("returns an empty object when item is undefined", () => {
+      expect(pick(undefined, ["id", "name"])).toEqual({});
+    });
+
+    it("returns an empty object when none of the requested keys exist", () => {
+      expect(
+        pick({ id: 1, name: "Alice", role: "admin" }, ["does_not_exist"]),
+      ).toEqual({});
+    });
+
+    it("returns a new object and does not mutate the original object", () => {
+      const input = { id: 1, name: "Alice", role: "admin" };
+      const result = pick(input, ["name"]);
+
+      expect(result).toEqual({ name: "Alice" });
+      expect(result).not.toBe(input);
+      expect(input).toEqual({ id: 1, name: "Alice", role: "admin" });
+    });
   });
 
   describe("omitBy", () => {
