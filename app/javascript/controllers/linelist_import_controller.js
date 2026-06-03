@@ -11,7 +11,7 @@ export default class extends Controller {
 
   connect() {
     super.connect();
-    this._filetype = null;
+    this._fileType = null;
     this._worksheet = null;
   }
 
