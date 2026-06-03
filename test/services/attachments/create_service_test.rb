@@ -88,6 +88,108 @@ module Attachments
       assert_equal @sample.id, activity.parameters[:sample_id]
     end
 
+    test 'create attachments pairs illumina pe files separately when suffixes differ' do
+      filenames = [
+        'samplename_S1_L001_R1_001.instrument_a.fastq.gz',
+        'samplename_S1_L001_R2_001.instrument_a.fastq.gz',
+        'samplename_S1_L001_R1_001.instrument_b.fastq.gz',
+        'samplename_S1_L001_R2_001.instrument_b.fastq.gz'
+      ]
+      blobs = filenames.map.with_index do |filename, index|
+        ActiveStorage::Blob.create_and_upload!(
+          io: StringIO.new("fastq content #{index}"),
+          filename: filename,
+          content_type: 'application/octet-stream'
+        )
+      end
+
+      assert_difference -> { Attachment.count } => 4 do
+        Attachments::CreateService.new(@user, @sample, { files: blobs }).execute
+      end
+
+      created_attachments = Attachment.last(4)
+      paired_attachments = created_attachments.select { |attachment| attachment.metadata['type'] == 'illumina_pe' }
+
+      assert_equal 4, paired_attachments.size
+
+      instrument_a_attachments = paired_attachments.select do |attachment|
+        attachment.filename.to_s.include?('.instrument_a.')
+      end
+      instrument_b_attachments = paired_attachments.select do |attachment|
+        attachment.filename.to_s.include?('.instrument_b.')
+      end
+
+      assert_equal 2, instrument_a_attachments.size
+      assert_equal 2, instrument_b_attachments.size
+
+      instrument_a_forward = instrument_a_attachments.find do |attachment|
+        attachment.metadata['direction'] == 'forward'
+      end
+      instrument_a_reverse = instrument_a_attachments.find do |attachment|
+        attachment.metadata['direction'] == 'reverse'
+      end
+      instrument_b_forward = instrument_b_attachments.find do |attachment|
+        attachment.metadata['direction'] == 'forward'
+      end
+      instrument_b_reverse = instrument_b_attachments.find do |attachment|
+        attachment.metadata['direction'] == 'reverse'
+      end
+
+      assert_equal instrument_a_reverse.id, instrument_a_forward.metadata['associated_attachment_id']
+      assert_equal instrument_b_reverse.id, instrument_b_forward.metadata['associated_attachment_id']
+    end
+
+    test 'create attachments pairs pe files separately when suffixes differ' do
+      filenames = [
+        'samplename_R1.instrument_a.fastq.gz',
+        'samplename_R2.instrument_a.fastq.gz',
+        'samplename_R1.instrument_b.fastq.gz',
+        'samplename_R2.instrument_b.fastq.gz'
+      ]
+      blobs = filenames.map.with_index do |filename, index|
+        ActiveStorage::Blob.create_and_upload!(
+          io: StringIO.new("fastq content #{index}"),
+          filename: filename,
+          content_type: 'application/octet-stream'
+        )
+      end
+
+      assert_difference -> { Attachment.count } => 4 do
+        Attachments::CreateService.new(@user, @sample, { files: blobs }).execute
+      end
+
+      created_attachments = Attachment.last(4)
+      paired_attachments = created_attachments.select { |attachment| attachment.metadata['type'] == 'pe' }
+
+      assert_equal 4, paired_attachments.size
+
+      instrument_a_attachments = paired_attachments.select do |attachment|
+        attachment.filename.to_s.include?('.instrument_a.')
+      end
+      instrument_b_attachments = paired_attachments.select do |attachment|
+        attachment.filename.to_s.include?('.instrument_b.')
+      end
+
+      assert_equal 2, instrument_a_attachments.size
+      assert_equal 2, instrument_b_attachments.size
+
+      instrument_a_forward = instrument_a_attachments.find do |attachment|
+        attachment.metadata['direction'] == 'forward'
+      end
+      instrument_a_reverse = instrument_a_attachments.find do |attachment|
+        attachment.metadata['direction'] == 'reverse'
+      end
+      instrument_b_forward = instrument_b_attachments.find do |attachment|
+        attachment.metadata['direction'] == 'forward'
+      end
+      instrument_b_reverse = instrument_b_attachments.find do |attachment|
+        attachment.metadata['direction'] == 'reverse'
+      end
+
+      assert_equal instrument_a_reverse.id, instrument_a_forward.metadata['associated_attachment_id']
+      assert_equal instrument_b_reverse.id, instrument_b_forward.metadata['associated_attachment_id']
+    end
+
     test 'create attachments with valid paired end forward and reverse fastq filenames' do
       paired_blobs_list = [
         [active_storage_blobs(:attachmentK_file_test_file_fastq_blob),

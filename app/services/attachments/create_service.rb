@@ -105,15 +105,18 @@ module Attachments
       # identify illumina pe attachments based on illumina fastq filename convention
       # https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/NamingConvention_FASTQ-files-swBS.htm
       attachments.each do |att|
-        unless /^(?<sample_name>.+_[^_]+(?:_L[0-9]{3})?)_R(?<region>[1-2])_(?<set>[0-9]{3})\./ =~ att.filename.to_s
-          next
-        end
+        illumina_regex = /^(?<sample_name>.+_[^_]+(?:_L[0-9]{3})?)_R(?<region>[1-2])_(?<set>[0-9]{3})\.(?<suffix>.+)$/
+        match = illumina_regex.match(att.filename.to_s)
 
-        case region
+        next unless match
+
+        pair_key = "#{match[:sample_name]}_#{match[:set]}_#{match[:suffix]}"
+
+        case match[:region]
         when '1'
-          illumina_pe["#{sample_name}_#{set}"]['forward'] = att
+          illumina_pe[pair_key]['forward'] = att
         when '2'
-          illumina_pe["#{sample_name}_#{set}"]['reverse'] = att
+          illumina_pe[pair_key]['reverse'] = att
         end
       end
 
@@ -127,25 +130,25 @@ module Attachments
 
       # identify pe attachments based on fastq filename convention
       attachments.each do |att|
-        next unless /^(?<sample_name>.+_)(?<region>R?[1-2]|[FfRr])\./ =~ att.filename.to_s
+        next unless /^(?<sample_name>.+_)(?<region>R?[1-2]|[FfRr])\.(?<suffix>.+)$/ =~ att.filename.to_s
 
         case region
         when '1'
-          pe["#{sample_name}_1-2"]['forward'] = att
+          pe["#{sample_name}_1-2_#{suffix}"]['forward'] = att
         when 'R1'
-          pe["#{sample_name}_R1-R2"]['forward'] = att
+          pe["#{sample_name}_R1-R2_#{suffix}"]['forward'] = att
         when 'F'
-          pe["#{sample_name}_F-R"]['forward'] = att
+          pe["#{sample_name}_F-R_#{suffix}"]['forward'] = att
         when 'f'
-          pe["#{sample_name}_f-r"]['forward'] = att
+          pe["#{sample_name}_f-r_#{suffix}"]['forward'] = att
         when '2'
-          pe["#{sample_name}_1-2"]['reverse'] = att
+          pe["#{sample_name}_1-2_#{suffix}"]['reverse'] = att
         when 'R2'
-          pe["#{sample_name}_R1-R2"]['reverse'] = att
+          pe["#{sample_name}_R1-R2_#{suffix}"]['reverse'] = att
         when 'R'
-          pe["#{sample_name}_F-R"]['reverse'] = att
+          pe["#{sample_name}_F-R_#{suffix}"]['reverse'] = att
         when 'r'
-          pe["#{sample_name}_f-r"]['reverse'] = att
+          pe["#{sample_name}_f-r_#{suffix}"]['reverse'] = att
         end
       end
 
