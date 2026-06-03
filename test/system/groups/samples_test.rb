@@ -1109,9 +1109,9 @@ module Groups
 
       assert_no_selector 'dialog[open]'
       assert_no_selector 'dialog button',
-                         text: I18n.t('shared.editable_field.confirm_button')
+                         text: I18n.t('shared.editable_field.confirmation_dialog.confirm_button')
       assert_no_selector 'dialog button',
-                         text: I18n.t('shared.editable_field.discard_button')
+                         text: I18n.t('shared.editable_field.confirmation_dialog.discard_button')
       ### VERIFY END ###
     end
 

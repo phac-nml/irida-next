@@ -3307,9 +3307,9 @@ module Projects
 
       assert_no_selector 'dialog[open]'
       assert_no_selector 'dialog button',
-                         text: I18n.t('shared.editable_field.confirm_button')
+                         text: I18n.t('shared.editable_field.confirmation_dialog.confirm_button')
       assert_no_selector 'dialog button',
-                         text: I18n.t('shared.editable_field.discard_button')
+                         text: I18n.t('shared.editable_field.confirmation_dialog.discard_button')
       ### VERIFY END ###
     end
 
@@ -3401,10 +3401,10 @@ module Projects
       find('body').click
 
       assert_selector 'dialog[open]'
-      assert_selector 'dialog button', text: I18n.t('shared.editable_field.confirm_button')
-      assert_selector 'dialog button', text: I18n.t('shared.editable_field.discard_button')
+      assert_selector 'dialog button', text: I18n.t('shared.editable_field.confirmation_dialog.confirm_button')
+      assert_selector 'dialog button', text: I18n.t('shared.editable_field.confirmation_dialog.discard_button')
 
-      click_button I18n.t('shared.editable_field.confirm_button')
+      click_button I18n.t('shared.editable_field.confirmation_dialog.confirm_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -3446,10 +3446,10 @@ module Projects
       find('body').click
 
       assert_selector 'dialog[open]'
-      assert_selector 'dialog button', text: I18n.t('shared.editable_field.confirm_button')
-      assert_selector 'dialog button', text: I18n.t('shared.editable_field.discard_button')
+      assert_selector 'dialog button', text: I18n.t('shared.editable_field.confirmation_dialog.confirm_button')
+      assert_selector 'dialog button', text: I18n.t('shared.editable_field.confirmation_dialog.discard_button')
 
-      click_button I18n.t('shared.editable_field.discard_button')
+      click_button I18n.t('shared.editable_field.confirmation_dialog.discard_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -3547,10 +3547,10 @@ module Projects
       find('body').click
 
       assert_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
-      assert_selector 'dialog button', text: I18n.t('shared.editable_field.confirm_button')
-      assert_selector 'dialog button', text: I18n.t('shared.editable_field.discard_button')
+      assert_selector 'dialog button', text: I18n.t('shared.editable_field.confirmation_dialog.confirm_button')
+      assert_selector 'dialog button', text: I18n.t('shared.editable_field.confirmation_dialog.discard_button')
 
-      click_button I18n.t('shared.editable_field.confirm_button')
+      click_button I18n.t('shared.editable_field.confirmation_dialog.confirm_button')
 
       assert_no_selector 'h1.dialog--title', text: I18n.t('components.confirmation.title')
       assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
