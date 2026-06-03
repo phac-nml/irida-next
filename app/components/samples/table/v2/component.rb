@@ -124,7 +124,6 @@ module Samples
         def render_name_column(_column, sample)
           helpers.link_to(
             helpers.sample_path(sample),
-            data: { turbo: false },
             class: 'pathogen-data-grid__link pathogen-data-grid__link--sample'
           ) do
             helpers.highlight(
@@ -141,7 +140,6 @@ module Samples
           helpers.link_to(
             sample.project.puid,
             helpers.namespace_project_samples_path(sample.project.namespace.parent, sample.project),
-            data: { turbo: false },
             class: 'pathogen-data-grid__link pathogen-data-grid__link--project'
           )
         end

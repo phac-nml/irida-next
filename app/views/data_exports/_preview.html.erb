@@ -21,7 +21,7 @@
                   <%= link_to project["name"],
                   redirect_data_export_path(identifier: project["name"]),
                   data: {
-                    turbo: false,
+                    turbo_frame: "_top",
                   },
                   class: "underline hover:decoration-2 text-sm" %>
                 </span>
@@ -37,7 +37,7 @@
                         <%= link_to sample["name"],
                         redirect_data_export_path(identifier: sample["name"]),
                         data: {
-                          turbo: false,
+                          turbo_frame: "_top",
                         },
                         class: "underline hover:decoration-2 text-sm" %>
                       </span>
@@ -79,7 +79,7 @@
                   <%= link_to workflow_execution_id["name"],
                   redirect_data_export_path(identifier: workflow_execution_id["name"]),
                   data: {
-                    turbo: false,
+                    turbo_frame: "_top",
                   },
                   class: "underline hover:decoration-2 text-sm" %>
                 </span>
@@ -95,7 +95,7 @@
                           <%= link_to child["name"],
                           redirect_data_export_path(identifier: child["name"]),
                           data: {
-                            turbo: false,
+                            turbo_frame: "_top",
                           },
                           class: "underline hover:decoration-2 text-sm" %>
                         </span>

@@ -59,7 +59,7 @@
               <%= link_to namespace.name,
               @namespace_path,
               data: {
-                turbo: false,
+                turbo_frame: "_top",
               },
               class: "underline hover:decoration-2" %>
               <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>

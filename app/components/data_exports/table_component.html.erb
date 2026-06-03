@@ -2,19 +2,11 @@
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <table
-        class="
-          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-          whitespace-nowrap
-        "
+        class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
         data-controller="table"
         data-action="focusin->table#handleCellFocus"
       >
-        <thead
-          class="
-            sticky top-0 z-10 text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-            dark:text-slate-300
-          "
-        >
+        <thead class="sticky top-0 z-10 bg-slate-50 text-xs text-slate-700 uppercase dark:bg-slate-700 dark:text-slate-300">
           <tr>
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
@@ -34,6 +26,7 @@
                 ) %>
               <% end %>
             <% end %>
+
             <%= render_cell(
               tag: 'th',
               scope: 'col',
@@ -43,54 +36,51 @@
             <% end %>
           </tr>
         </thead>
-        <tbody
-          class="
-            overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
-            dark:divide-slate-700
-          "
-        >
+
+        <tbody class="divide-y divide-slate-200 overflow-y-auto bg-white dark:divide-slate-700 dark:bg-slate-800">
           <% @data_exports.each do |data_export| %>
             <%= render Viral::BaseComponent.new(**row_arguments(data_export)) do %>
               <td class="px-3 py-3">
                 <%= link_to data_export.id,
                 data_export_path(data_export),
-                data: {
-                  turbo: false,
-                },
                 class:
                   "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" %>
               </td>
+
               <td class="px-3 py-3">
                 <% unless data_export.name.nil? %>
                   <%= link_to data_export.name,
                   data_export_path(data_export),
-                  data: {
-                    turbo: false,
-                  },
                   class:
                     "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" %>
                 <% end %>
               </td>
+
               <td class="px-3 py-3">
                 <%= t(:"data_exports.types.#{data_export.export_type}") %>
               </td>
+
               <td class="px-3 py-3">
                 <% status_text = t("common.statuses.#{data_export.status}").upcase %>
+
                 <% if data_export.status == 'ready' %>
                   <%= viral_pill(text: status_text, color: :green) %>
                 <% else %>
                   <%= viral_pill(text: status_text, color: :slate) %>
                 <% end %>
               </td>
+
               <td class="px-3 py-3">
                 <%= helpers.local_date(data_export.created_at, :long) %>
               </td>
+
               <td class="px-3 py-3">
                 <% unless data_export.expires_at.nil? %>
                   <%= helpers.local_date(data_export.expires_at, :long) %>
                 <% end %>
               </td>
-              <td class="px-3 py-3 space-x-2">
+
+              <td class="space-x-2 px-3 py-3">
                 <% if data_export.status == 'ready' %>
                   <%= button_to t('common.actions.download'),
                   rails_blob_path(data_export.file),
@@ -110,6 +100,7 @@
                   class:
                     "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                 <% end %>
+
                 <%= button_to t('common.actions.delete'),
                 data_export_path(data_export),
                 data: {
@@ -140,6 +131,7 @@
         </tbody>
       </table>
     <% end %>
+
     <%= render Viral::Pagy::FullComponent.new(
       @pagy,
       item: t("data_exports.index.limit.item"),

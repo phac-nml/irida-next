@@ -29,7 +29,7 @@ module NamespaceRow
     }.freeze
 
     EMPTY_ARRAY = [].freeze
-    NON_TURBO_LINK_DATA = { turbo: false }.freeze
+    TOP_FRAME_LINK_DATA = { turbo_frame: '_top' }.freeze
 
     def avatar_icon
       if @namespace.group_namespace?
@@ -48,8 +48,8 @@ module NamespaceRow
       (BASE_COUNT_PILL_CLASSES + variant_classes).join(' ')
     end
 
-    def non_turbo_link_data
-      NON_TURBO_LINK_DATA.dup
+    def top_frame_link_data
+      TOP_FRAME_LINK_DATA.dup
     end
   end
 end
