@@ -18,6 +18,10 @@ export default defineConfig({
         jsRoot,
         "utilities/floating_dropdown.js",
       ),
+      "utilities/word_connector": resolve(
+        jsRoot,
+        "utilities/word_connector.js",
+      ),
     },
   },
   test: {

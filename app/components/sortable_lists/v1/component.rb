@@ -33,10 +33,13 @@ module SortableLists
 
       def load_translations
         {
-          added: I18n.t('shared.sortable_lists.aria_live_update.added'),
           move_down: I18n.t('shared.sortable_lists.aria_live_update.move_down'),
           move_up: I18n.t('shared.sortable_lists.aria_live_update.move_up'),
-          removed: I18n.t('shared.sortable_lists.aria_live_update.removed')
+          moved_list_multiple: I18n.t('shared.sortable_lists.aria_live_update.moved_list_multiple'),
+          moved_list_single: I18n.t('shared.sortable_lists.aria_live_update.moved_list_single'),
+          words_connector: I18n.t('support.array.words_connector'),
+          last_word_connector: I18n.t('support.array.last_word_connector'),
+          two_words_connector: I18n.t('support.array.two_words_connector')
         }.to_json
       end
     end

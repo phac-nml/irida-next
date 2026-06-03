@@ -2078,10 +2078,10 @@ fr:
         success: Réussite
     sortable_lists:
       aria_live_update:
-        added: 'Les options suivantes ont été ajoutées : '
-        move_down: L’option OPTION_PLACEHOLDER a été déplacée vers le bas.
-        move_up: L’option OPTION_PLACEHOLDER a été déplacée vers le haut.
-        removed: 'Les options suivantes ont été retirées : '
+        move_down: ITEM_PLACEHOLDER a été déplacé vers le bas à la position POSITION_PLACEHOLDER dans LIST_PLACEHOLDER.
+        move_up: ITEM_PLACEHOLDER a été déplacé vers le haut à la position POSITION_PLACEHOLDER dans LIST_PLACEHOLDER.
+        moved_list_multiple: 'Les éléments suivants ont été déplacés vers LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
+        moved_list_single: 'L''élément suivant a été déplacé vers LIST_PLACEHOLDER: ITEMS_PLACEHOLDER'
     workflow_executions:
       actions_dropdown:
         cancel_workflow_executions: Annuler les exécutions de flux de travail
