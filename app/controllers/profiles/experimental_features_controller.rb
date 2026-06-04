@@ -53,10 +53,10 @@ module Profiles
     end
 
     def status_message_for(form)
-      return t('.error') if form_error?(form, :base, :flipper_error)
-      return t('.not_eligible') if form_error?(form, :feature_key, :not_eligible)
+      return t(:'profiles.experimental_features.update.error') if form_error?(form, :base, :flipper_error)
+      return t(:'profiles.experimental_features.update.not_eligible') if form_error?(form, :feature_key, :not_eligible)
 
-      t('.validation_error')
+      t(:'profiles.experimental_features.update.validation_error')
     end
 
     def form_error?(form, field, error_key)
@@ -67,7 +67,7 @@ module Profiles
       respond_to do |format|
         format.turbo_stream { head :unprocessable_content }
         format.html do
-          flash[:error] = t('.validation_error')
+          flash[:error] = t(:'profiles.experimental_features.update.validation_error')
           redirect_back_or_to profile_experimental_features_path
         end
       end
