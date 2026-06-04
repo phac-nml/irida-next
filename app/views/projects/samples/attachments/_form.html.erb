@@ -8,6 +8,7 @@
     data-attachment-upload-uploading-text-value="<%= t('components.attachments.dialogs.new_attachment_component.uploading') %>"
     data-attachment-upload-success-text-value="<%= t('common.upload.uploaded_successfully') %>"
     data-attachment-upload-error-fallback-text-value="<%= t('common.upload.failed') %>"
+    data-attachment-upload-fastq-pairing-patterns-value="<%= attachment_upload_fastq_pairing_data_attributes[:attachment_upload_fastq_pairing_patterns_value].to_json %>"
   >
     <%= viral_alert(
       message: t("common.upload.upload_failed_retry"),

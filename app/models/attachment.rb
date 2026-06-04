@@ -18,6 +18,26 @@ class Attachment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     'unknown' => nil
   }.freeze
 
+  FASTQ_PAIRING_FILENAME_REGEX = {
+    'illumina_pe' => /^(?<sample_name>.+_[^_]+(?:_L[0-9]{3})?)_R(?<region>[1-2])_(?<set>[0-9]{3})\.(?<suffix>.+)$/,
+    'pe' => /^(?<sample_name>.+_)(?<region>R?[1-2]|[FfRr])\.(?<suffix>.+)$/
+  }.freeze
+
+  FASTQ_PAIRING_TYPES = %w[illumina_pe pe].freeze
+
+  FASTQ_PE_REGION_PAIRING = {
+    '1' => { direction: 'forward', pair_key_suffix: '1-2' },
+    '2' => { direction: 'reverse', pair_key_suffix: '1-2' },
+    'R1' => { direction: 'forward', pair_key_suffix: 'R1-R2' },
+    'R2' => { direction: 'reverse', pair_key_suffix: 'R1-R2' },
+    'F' => { direction: 'forward', pair_key_suffix: 'F-R' },
+    'R' => { direction: 'reverse', pair_key_suffix: 'F-R' },
+    'f' => { direction: 'forward', pair_key_suffix: 'f-r' },
+    'r' => { direction: 'reverse', pair_key_suffix: 'f-r' }
+  }.freeze
+
+  FastqPairingInfo = Data.define(:type, :direction, :pair_key)
+
   PREVIEWABLE_TYPES = {
     'image' => :image,
     'text' => :text,
@@ -91,6 +111,44 @@ class Attachment < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def self.icon
     :file_text
+  end
+
+  def self.fastq_pairing_filename_patterns
+    FASTQ_PAIRING_FILENAME_REGEX.transform_values(&:source)
+  end
+
+  def self.fastq_illumina_pe_pairing_info(filename)
+    match = FASTQ_PAIRING_FILENAME_REGEX['illumina_pe'].match(filename.to_s)
+    return unless match
+
+    FastqPairingInfo.new(
+      type: 'illumina_pe',
+      direction: match[:region] == '1' ? 'forward' : 'reverse',
+      pair_key: "#{match[:sample_name]}_#{match[:set]}_#{match[:suffix]}"
+    )
+  end
+
+  def self.fastq_pe_pairing_info(filename)
+    match = FASTQ_PAIRING_FILENAME_REGEX['pe'].match(filename.to_s)
+    return unless match
+
+    config = FASTQ_PE_REGION_PAIRING[match[:region]]
+    return unless config
+
+    FastqPairingInfo.new(
+      type: 'pe',
+      direction: config[:direction],
+      pair_key: "#{match[:sample_name]}_#{config[:pair_key_suffix]}_#{match[:suffix]}"
+    )
+  end
+
+  def self.fastq_pairing_info(filename, type:)
+    case type
+    when 'illumina_pe'
+      fastq_illumina_pe_pairing_info(filename)
+    when 'pe'
+      fastq_pe_pairing_info(filename)
+    end
   end
 
   def self.metadata_arel_node(key)
