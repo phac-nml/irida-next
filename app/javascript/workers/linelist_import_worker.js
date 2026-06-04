@@ -1,7 +1,7 @@
 const ROW_CHUNK_SIZE = 2;
 const SUPPORTED_MIME_TYPES = [
   "text/csv",
-  ".tsv",
+  "text/tab-separated-values",
   "application/vnd.ms-excel",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 ];
