@@ -575,7 +575,6 @@ en:
       fields_instructions_title: How the lists work
       format: Format
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
-      leave_warning: An export is in progress. Leaving this page will cancel the export.
       metadata: Metadata
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...

@@ -23,6 +23,43 @@ import {
   resolveLinelistExportWorkerSource,
 } from "controllers/linelist_export/worker_client";
 
+let activeExports = 0;
+let beforeUnloadHandler = null;
+
+function bindExportBeforeUnload() {
+  if (beforeUnloadHandler) return;
+
+  beforeUnloadHandler = (event) => {
+    if (activeExports <= 0) return;
+
+    event.preventDefault();
+    event.returnValue = "";
+    return "";
+  };
+
+  window.addEventListener("beforeunload", beforeUnloadHandler);
+}
+
+function unbindExportBeforeUnload() {
+  if (!beforeUnloadHandler) return;
+
+  window.removeEventListener("beforeunload", beforeUnloadHandler);
+  beforeUnloadHandler = null;
+}
+
+function startExportBeforeUnloadGuard() {
+  activeExports += 1;
+  bindExportBeforeUnload();
+}
+
+function stopExportBeforeUnloadGuard() {
+  activeExports = Math.max(activeExports - 1, 0);
+
+  if (activeExports === 0) {
+    unbindExportBeforeUnload();
+  }
+}
+
 export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
   static values = {
@@ -67,11 +104,6 @@ export default class extends Controller {
       type: String,
       default: "Created %{current} of %{total} records",
     },
-    leaveWarningMessage: {
-      type: String,
-      default:
-        "An export is in progress. Leaving this page will cancel the export.",
-    },
   };
 
   connect() {
@@ -83,7 +115,6 @@ export default class extends Controller {
     this._progressMsgEl = null;
     this._progressBarEl = null;
     this._progressPctEl = null;
-    this._beforeUnloadHandler ||= null;
     this.progressWindowDismissed ??= false;
     this.updateSelectedCount();
   }
@@ -133,7 +164,7 @@ export default class extends Controller {
         this.t(this.preparingRowsMessageValue, { count: totalCount }),
       );
 
-      this.bindBeforeUnload();
+      startExportBeforeUnloadGuard();
 
       this.workerClient.start({
         sample_ids: sampleIds,
@@ -160,24 +191,7 @@ export default class extends Controller {
 
   terminateWorker() {
     this.workerClient?.stop();
-    this.unbindBeforeUnload();
-  }
-
-  bindBeforeUnload() {
-    if (this._beforeUnloadHandler) return;
-    this._beforeUnloadHandler = (event) => {
-      const message = this.t(this.leaveWarningMessageValue);
-      event.preventDefault();
-      event.returnValue = message;
-      return message;
-    };
-    window.addEventListener("beforeunload", this._beforeUnloadHandler);
-  }
-
-  unbindBeforeUnload() {
-    if (!this._beforeUnloadHandler) return;
-    window.removeEventListener("beforeunload", this._beforeUnloadHandler);
-    this._beforeUnloadHandler = null;
+    stopExportBeforeUnloadGuard();
   }
 
   buildWorkerClient() {
