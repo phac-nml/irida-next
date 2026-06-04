@@ -1,6 +1,5 @@
-<%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type:, data: message) %>
-<% end %>
+<%= turbo_stream.update "member-update-alert",
+                    viral_alert(type:, message:, classes: "mb-4") %>
 
 <% @group_links.each do |project_group_link| %>
   <%= turbo_stream.update "group-link-#{project_group_link.id}-expiration",
