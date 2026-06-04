@@ -1,0 +1,9 @@
+<% if feature.present? %>
+  <%= turbo_stream.replace "experimental-feature-#{feature[:key]}" do %>
+    <%= render "feature_row",
+          feature: feature,
+          user: user,
+          status_message: status_message,
+          status_variant: status_variant %>
+  <% end %>
+<% end %>

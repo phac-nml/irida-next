@@ -1326,6 +1326,23 @@ fr:
         - Tous les projets et groupes dont vous êtes membre seront laissés intacts
       show:
         title: Supprimer le compte
+    experimental_features:
+      show:
+        description: Ces fonctionnalités sont expérimentales et peuvent changer ou être retirées.
+        empty_state:
+          description: Aucune fonctionnalité expérimentale n’est disponible pour votre compte en ce moment.
+          title: Aucune fonctionnalité expérimentale disponible
+        legend: Contrôles des fonctionnalités expérimentales
+        title: Fonctionnalités expérimentales
+      toggle_state:
+        'off': Désactivé
+        'on': Activé
+      update:
+        error: Une erreur est survenue. Veuillez réessayer.
+        not_eligible: Cette fonctionnalité n’est pas disponible pour votre compte.
+        saving: Enregistrement...
+        success: Enregistré
+        validation_error: Le paramètre de fonctionnalité n’a pas pu être mis à jour. Veuillez actualiser la page et réessayer.
     passwords:
       update:
         forgot: Vous avez oublié votre mot de passe?
@@ -1388,6 +1405,7 @@ fr:
     sidebar:
       access_tokens: Jetons d’accès
       account: Compte
+      experimental_features: Fonctionnalités expérimentales
       header: Paramètres de l’utilisateur
       password: Mot de passe
       preferences: Préférences
