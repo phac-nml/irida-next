@@ -1,2 +1,196 @@
-<h1>Pages#accessibility_statement</h1>
-<p>FRENCH Find me in app/views/pages/accessibility_statement.fr.html.erb</p>
+<% external_link_classes = "min-w-0 font-semibold wrap-anywhere underline hover:decoration-2 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:rounded-sm dark:text-white" %>
+
+<div class="mx-auto max-w-7xl space-y-12">
+  <%= pathogen_typography_preset(:article) do |group| %>
+    <%= group.with_heading { "Déclaration d'accessibilité pour IRIDA Next" } %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Notre engagement envers l'accessibilité" } %>
+
+    <%= pathogen_text { "IRIDA Next s'engage à garantir que notre application est accessible à tous les utilisateurs, y compris ceux ayant
+      un handicap. Nous nous engageons à fournir une expérience utilisateur inclusive et conforme aux
+      normes d'accessibilité établies." } %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Normes d'accessibilité et conformité" } %>
+
+    <%= pathogen_text do %>
+      IRIDA Next s'efforce de respecter les
+      <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener noreferrer" class="<%= external_link_classes %>">Directives pour l'accessibilité des contenus Web (WCAG) 2.1<span class="sr-only"> (s'ouvre dans un nouvel onglet)</span></a>
+      au niveau AA. Cela comprend:
+    <% end %>
+
+    <%= pathogen_list do |list| %>
+      <%= list.with_item do %>
+        <strong>Perceptible</strong>: Les informations et les éléments de l'interface utilisateur doivent être présentés
+        de manière perceptible à tous les utilisateurs
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Utilisable</strong>: Les éléments de l'interface utilisateur et la navigation doivent être utilisables
+        par plusieurs méthodes
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Compréhensible</strong>: Les informations et le fonctionnement de l'interface utilisateur doivent être
+        compréhensibles
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Robuste</strong>: Le contenu doit être compatible avec les technologies d'assistance actuelles et
+        futures
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Fonctionnalités accessibles" } %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Navigation et structure" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Le balisage HTML sémantique assure une structure correcte du document" } %>
+        <%= list.with_item { "Hiérarchie logique des titres (H1 à H6) pour la navigation par lecteur d'écran" } %>
+        <%= list.with_item { "Liens de navigation rapide pour contourner le contenu répétitif" } %>
+        <%= list.with_item { "Navigation accessible au clavier dans toute l'application" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Éléments interactifs" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Tous les éléments interactifs (boutons, liens, contrôles de formulaire) sont accessibles au clavier" } %>
+        <%= list.with_item { "Indicateurs de focus visibles pour la navigation au clavier" } %>
+        <%= list.with_item { "Étiquettes et rôles ARIA appropriés pour les composants personnalisés" } %>
+        <%= list.with_item { "Étiquettes de formulaire clairement associées aux champs de saisie" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Accessibilité visuelle" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Rapports de contraste des couleurs suffisants (conformes aux WCAG AA)" } %>
+        <%= list.with_item { "Le texte peut être redimensionné sans perte de fonctionnalité" } %>
+        <%= list.with_item { "Pas de dépendance à la couleur seule pour transmettre l'information" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Support des technologies d'assistance" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Compatible avec les lecteurs d'écran (NVDA et JAWS)" } %>
+        <%= list.with_item { "Balisage sémantique approprié et attributs ARIA" } %>
+        <%= list.with_item { "Texte alternatif pour les images et le contenu visuel" } %>
+        <%= list.with_item { "Tableaux de données accessibles avec des associations d'en-têtes appropriées" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Navigation au clavier" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Fonctionnalité complète disponible via le clavier" } %>
+        <%= list.with_item { "Ordre logique des tabulations dans les éléments interactifs" } %>
+        <%= list.with_item { "Fonctionnalité de la touche Échap pour fermer les boîtes de dialogue" } %>
+        <%= list.with_item { "Raccourcis clavier appropriés pour les widgets" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Mouvement et animation" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Pas de contenu clignotant ou scintillant" } %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Limitations et alternatives" } %>
+
+    <%= pathogen_text do %>
+      Malgré nos meilleurs efforts pour assurer l'accessibilité d'IRIDA Next, il peut y avoir quelques limitations.
+      Ci-dessous vous trouverez une description des limitations connues et des solutions potentielles. Veuillez nous
+      contacter si vous observez un problème non répertorié ci-dessous. Les limitations actuellement connues incluent :
+    <% end %>
+
+    <%= pathogen_list do |list| %>
+      <%= list.with_item do %>
+        <strong>Fichiers des utilisateurs et/ou pipelines</strong>: Les images téléchargées peuvent ne pas avoir
+        d'alternatives textuelles, car nous n'avons pas le contrôle de ce que les utilisateurs/pipelines produisent. En
+        règle générale, les pipelines produisent également des fichiers texte qui représentent le même contenu que les
+        fichiers image.
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Comment signaler les problèmes d'accessibilité" } %>
+
+    <%= pathogen_text do %>
+      Nous prenons l'accessibilité au sérieux et accueillons les commentaires pour nous aider à nous améliorer. Si vous
+      rencontrez un obstacle à l'accessibilité, veuillez le signaler en :
+    <% end %>
+
+    <%= pathogen_list(ordered: true) do |list| %>
+      <%= list.with_item do %>
+        <strong>Créer un problème GitHub</strong>: Ouvrez un problème sur notre
+        <a href="https://github.com/phac-nml/irida-next/issues" target="_blank" rel="noopener noreferrer" class="<%= external_link_classes %>">dépôt GitHub<span class="sr-only"> (s'ouvre dans un nouvel onglet)</span></a>
+        avec:
+        <%= pathogen_list do |list| %>
+          <%= list.with_item { "Une description claire de l'obstacle à l'accessibilité" } %>
+          <%= list.with_item { "Le navigateur et la technologie d'assistance utilisée (le cas échéant)" } %>
+          <%= list.with_item { "Étapes pour reproduire le problème" } %>
+          <%= list.with_item { "Captures d'écran ou sortie du lecteur d'écran si possible" } %>
+          <%= list.with_item { "Numéros de critères WCAG pertinents" } %>
+        <% end %>
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Email</strong>: Contactez l'
+        <a href="mailto:gsp-psg@phac-aspc.gc.ca" class="<%= external_link_classes %>">équipe GSP<span class="sr-only"> (ouvre le client de messagerie par défaut)</span></a>.
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Processus d'amélioration de l'accessibilité" } %>
+
+    <%= pathogen_list do |list| %>
+      <%= list.with_item do %>
+        <strong>Audits réguliers</strong>: Audits de l'accessibilité périodiques utilisant des outils automatisés et des
+        tests manuels
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Test du lecteur d'écran</strong>: Tests avec NVDA et JAWS
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Test de navigation au clavier</strong>: Vérification de la navigation au clavier seul
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Vérification du contraste des couleurs</strong>: Conformité aux exigences de contraste WCAG AA
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Retours d'utilisateurs</strong>: Intégration des commentaires d'utilisateurs en situation de handicap
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Informations de version" } %>
+
+    <%= pathogen_text do %>
+      <strong>Dernière mise à jour</strong>: 2 juin 2026
+    <% end %>
+  <% end %>
+</div>
