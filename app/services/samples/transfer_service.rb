@@ -30,7 +30,7 @@ module Samples
     #
     # @return [Array<Integer>] IDs of successfully transferred samples
     # @raise [TransferService::TransferError] on validation or authorization failures
-    def execute(new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity
+    def execute(new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       # working memory and pre check
       new_project = Project.find_by(id: new_project_id)
       raise TransferError, I18n.t('services.samples.transfer.invalid_new_project') if new_project.nil?
@@ -59,33 +59,26 @@ module Samples
 
       update_progress_bar(95, 100, broadcast_target)
 
-      # TODO: move to final namespace error collecting step
-      # Add errors for samples that could not be transferred due to name conflicts
-      add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, new_project)
-      # add_transfer_conflict_errors(project_sample_ids_to_transfer, my_test_list, new_project)
-
-      untransferred_sample_ids = sample_ids - transferred_project_sample_ids.values.flatten
-
-      # TODO: early return is not good, refactor this.
-      # If no samples were transferred, return an empty array
-      if transferred_project_sample_ids.empty? || transferred_project_sample_ids.values.all?(&:empty?)
-        filter_sample_ids(untransferred_sample_ids, 'transfer', true) unless untransferred_sample_ids.empty? # TODO: move to better spot
-        return []
+      # TODO: needs cursor: each transferred_project_sample_ids.
+      unless transferred_project_sample_ids.empty?
+        update_metadata_summary_counts(transferred_project_sample_ids, new_project)
+        update_samples_count_and_create_activities(transferred_project_sample_ids, new_project)
       end
-
-      # TODO: needs cursor.
-      # level 1: each transferred_project_sample_ids.
-      update_metadata_summary_counts(transferred_project_sample_ids, new_project)
-      update_samples_count_and_create_activities(transferred_project_sample_ids, new_project)
 
       update_progress_bar(100, 100, broadcast_target)
 
+      # Add errors for samples that could not be transferred due to name conflicts
+      add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, new_project)
       # final step of getting all the namespace errors together
+      untransferred_sample_ids = sample_ids - transferred_project_sample_ids.values.flatten
       filter_sample_ids(untransferred_sample_ids, 'transfer', true) unless untransferred_sample_ids.empty?
-      # TODO: add other name space errors here
 
       # return result of job
-      transferred_project_sample_ids.values.flatten
+      if transferred_project_sample_ids.empty? || transferred_project_sample_ids.values.all?(&:empty?)
+        []
+      else
+        transferred_project_sample_ids.values.flatten
+      end
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
       @namespace.errors.add(:base, e.message)
       []
