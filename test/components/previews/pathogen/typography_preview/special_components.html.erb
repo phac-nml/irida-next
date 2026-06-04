@@ -26,12 +26,11 @@
           <%= group.with_metadata(variant: :muted) { "3 samples processed" } %>
         <% end %>
 
-        <%= pathogen_code_block(language: "erb", class: "mt-6") do %>
-          <%= pathogen_heading_group(level: 2) do |group| %>
-            <%= group.with_eyebrow { "Category" } %>
-            <%= group.with_heading { "Title" } %>
-            <%= group.with_metadata { "Metadata" } %>
-          <% end %>
+        <%= pathogen_code_block(language: "erb", class: "mt-6") do %><%%= pathogen_heading_group(level: 2) do |group| %>
+  <%%= group.with_eyebrow { "Category" } %>
+  <%%= group.with_heading { "Title" } %>
+  <%%= group.with_metadata { "Metadata" } %>
+<%% end %>
         <% end %>
       </div>
     </div>
@@ -46,12 +45,10 @@
         <%= pathogen_text { "Section content goes here. The Section component validates heading hierarchy in development mode." } %>
       <% end %>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-6") do %>
-        <%= pathogen_section(level: 2, spacing: :spacious) do |section| %>
-          <%= section.with_heading { "Features" } %>
-
-          <p>Section content...</p>
-        <% end %>
+      <%= pathogen_code_block(language: "erb", class: "mt-6") do %><%%= pathogen_section(level: 2, spacing: :spacious) do |section| %>
+  <%%= section.with_heading { "Features" } %>
+  <p>Section content...</p>
+<%% end %>
       <% end %>
     </div>
 
@@ -71,9 +68,10 @@
 
         <div>
           <%= pathogen_heading(level: 4, class: "mb-3") { "Code Block" } %>
-
           <%= pathogen_code_block(language: "ruby") do %>
-            def example puts "Hello, World!" end
+def example
+  puts "Hello, World!"
+end
           <% end %>
         </div>
       </div>
@@ -86,7 +84,6 @@
       <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
         <div>
           <%= pathogen_heading(level: 4, class: "mb-3") { "Unordered List" } %>
-
           <%= pathogen_list do |list| %>
             <%= list.with_item { "Sample management" } %>
             <%= list.with_item { "Workflow execution" } %>
@@ -97,7 +94,6 @@
 
         <div>
           <%= pathogen_heading(level: 4, class: "mb-3") { "Ordered List" } %>
-
           <%= pathogen_list(ordered: true) do |list| %>
             <%= list.with_item { "Upload samples" } %>
             <%= list.with_item { "Select workflow" } %>
@@ -107,17 +103,16 @@
         </div>
       </div>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-6") do %>
-        <%= pathogen_list do |list| %>
-          <%= list.with_item { "Item 1" } %>
-          <%= list.with_item { "Item 2" } %>
-          <%= list.with_item { "Item 3" } %>
-        <% end %>
+      <%= pathogen_code_block(language: "erb", class: "mt-6") do %><%%= pathogen_list do |list| %>
+  <%%= list.with_item { "Item 1" } %>
+  <%%= list.with_item { "Item 2" } %>
+  <%%= list.with_item { "Item 3" } %>
+<%% end %>
 
-        <%= pathogen_list(ordered: true) do |list| %>
-          <%= list.with_item { "Step 1" } %>
-          <%= list.with_item { "Step 2" } %>
-        <% end %>
+<%%= pathogen_list(ordered: true) do |list| %>
+  <%%= list.with_item { "Step 1" } %>
+  <%%= list.with_item { "Step 2" } %>
+<%% end %>
       <% end %>
     </div>
 
@@ -131,7 +126,6 @@
         <%= pathogen_lead(class: "mb-6") { "Follow these steps to set up IRIDA Next in your environment." } %>
 
         <%= pathogen_heading(level: 4, class: "mb-3") { "Prerequisites" } %>
-
         <%= pathogen_list do |list| %>
           <%= list.with_item { "Ruby 3.4.4 or higher" } %>
           <%= list.with_item { "PostgreSQL 14 or higher" } %>
@@ -139,7 +133,6 @@
         <% end %>
 
         <%= pathogen_heading(level: 4, class: "mb-3 mt-6") { "Installation Steps" } %>
-
         <%= pathogen_list(ordered: true) do |list| %>
           <%= list.with_item { "Clone the repository" } %>
           <%= list.with_item { "Install dependencies with bundle install" } %>

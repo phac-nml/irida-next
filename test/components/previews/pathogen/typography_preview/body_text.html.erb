@@ -53,12 +53,10 @@
     <!-- Color Variants -->
     <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
       <%= pathogen_heading(level: 2, class: "mb-6") { "Color Variants" } %>
-
       <div class="space-y-4">
         <%= pathogen_text(variant: :default) { "Default variant - Primary text color for maximum readability" } %>
         <%= pathogen_text(variant: :muted) { "Muted variant - Secondary text color for less emphasis" } %>
         <%= pathogen_text(variant: :subdued) { "Subdued variant - Medium contrast for subtle information" } %>
-
         <div class="rounded-lg bg-slate-900 p-4 dark:bg-slate-50">
           <%= pathogen_text(variant: :inverse) { "Inverse variant - Light text for dark backgrounds" } %>
         </div>
@@ -79,26 +77,19 @@
     </div>
 
     <!-- Usage Example -->
-    <div
-      class="
-        rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 p-8 dark:from-primary-900/20
-        dark:to-primary-800/20
-      "
-    >
+    <div class="rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 p-8 dark:from-primary-900/20 dark:to-primary-800/20">
       <%= pathogen_heading(level: 3, class: "mb-4") { "Usage Example" } %>
+      <%= pathogen_code_block(language: "erb") do %><%%= pathogen_lead do %>
+  Introductory paragraph
+<%% end %>
 
-      <%= pathogen_code_block(language: "erb") do %>
-        <%= pathogen_lead do %>
-          Introductory paragraph
-        <% end %>
+<%%= pathogen_text(responsive: true) do %>
+  Body paragraph
+<%% end %>
 
-        <%= pathogen_text(responsive: true) do %>
-          Body paragraph
-        <% end %>
-
-        <%= pathogen_callout(variant: :muted) do %>
-          Pull quote or callout
-        <% end %>
+<%%= pathogen_callout(variant: :muted) do %>
+  Pull quote or callout
+<%% end %>
       <% end %>
     </div>
   </div>

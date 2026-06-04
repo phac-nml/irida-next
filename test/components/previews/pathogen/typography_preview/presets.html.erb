@@ -15,22 +15,18 @@
         <%= pathogen_heading(level: 4, class: "mb-2") { "Article" } %>
         <%= pathogen_supporting(variant: :muted) { "h1, responsive" } %>
       </div>
-
       <div class="rounded-xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
         <%= pathogen_heading(level: 4, class: "mb-2") { "Card" } %>
         <%= pathogen_supporting(variant: :muted) { "h3, compact" } %>
       </div>
-
       <div class="rounded-xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
         <%= pathogen_heading(level: 4, class: "mb-2") { "Section" } %>
         <%= pathogen_supporting(variant: :muted) { "h2, responsive" } %>
       </div>
-
       <div class="rounded-xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
         <%= pathogen_heading(level: 4, class: "mb-2") { "Dialog" } %>
         <%= pathogen_supporting(variant: :muted) { "h2, compact" } %>
       </div>
-
       <div class="rounded-xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
         <%= pathogen_heading(level: 4, class: "mb-2") { "Form" } %>
         <%= pathogen_supporting(variant: :muted) { "h3, compact" } %>
@@ -48,12 +44,11 @@
         <%= group.with_metadata { "Published January 15, 2024 · 8 min read · Bioinformatics Team" } %>
       <% end %>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %>
-        <%= pathogen_typography_preset(:article) do |group| %>
-          <%= group.with_eyebrow { "Category" } %>
-          <%= group.with_heading { "Article Title" } %>
-          <%= group.with_metadata { "Date · Read time" } %>
-        <% end %>
+      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:article) do |group| %>
+  <%%= group.with_eyebrow { "Category" } %>
+  <%%= group.with_heading { "Article Title" } %>
+  <%%= group.with_metadata { "Date · Read time" } %>
+<%% end %>
       <% end %>
     </div>
 
@@ -87,11 +82,10 @@
         </div>
       </div>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %>
-        <%= pathogen_typography_preset(:card) do |group| %>
-          <%= group.with_heading { "Card Title" } %>
-          <%= group.with_metadata { "Metadata" } %>
-        <% end %>
+      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:card) do |group| %>
+  <%%= group.with_heading { "Card Title" } %>
+  <%%= group.with_metadata { "Metadata" } %>
+<%% end %>
       <% end %>
     </div>
 
@@ -107,11 +101,10 @@
 
       <%= pathogen_text(class: "mt-4") { "List of recent activities and changes in your workspace." } %>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %>
-        <%= pathogen_typography_preset(:section) do |group| %>
-          <%= group.with_heading { "Section Title" } %>
-          <%= group.with_metadata { "Updated time" } %>
-        <% end %>
+      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:section) do |group| %>
+  <%%= group.with_heading { "Section Title" } %>
+  <%%= group.with_metadata { "Updated time" } %>
+<%% end %>
       <% end %>
     </div>
 
@@ -120,12 +113,7 @@
       <%= pathogen_heading(level: 2, class: "mb-6") { "Dialog Preset" } %>
       <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Modal dialogs and compact headers" } %>
 
-      <div
-        class="
-          mx-auto max-w-md rounded-lg border border-slate-200 bg-slate-50 p-6 shadow-lg dark:border-slate-700
-          dark:bg-slate-900
-        "
-      >
+      <div class="mx-auto max-w-md rounded-lg border border-slate-200 bg-slate-50 p-6 shadow-lg dark:border-slate-700 dark:bg-slate-900">
         <%= pathogen_typography_preset(:dialog) do |group| %>
           <%= group.with_heading { "Confirm Deletion" } %>
         <% end %>
@@ -134,22 +122,13 @@
 
         <div class="mt-6 flex gap-3">
           <button class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white">Delete</button>
-
-          <button
-            class="
-              rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700
-              dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300
-            "
-          >
-            Cancel
-          </button>
+          <button class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">Cancel</button>
         </div>
       </div>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %>
-        <%= pathogen_typography_preset(:dialog) do |group| %>
-          <%= group.with_heading { "Dialog Title" } %>
-        <% end %>
+      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:dialog) do |group| %>
+  <%%= group.with_heading { "Dialog Title" } %>
+<%% end %>
       <% end %>
     </div>
 
@@ -167,41 +146,24 @@
         <div class="mt-4 space-y-4">
           <div>
             <label class="mb-1 block text-sm font-medium">Sample Name *</label>
-
-            <input
-              type="text"
-              class="block w-full rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700"
-              placeholder="Enter sample name"
-            >
+            <input type="text" class="block w-full rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700" placeholder="Enter sample name">
           </div>
-
           <div>
             <label class="mb-1 block text-sm font-medium">Description</label>
-
-            <textarea
-              class="block w-full rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700"
-              rows="3"
-              placeholder="Optional description"
-            ></textarea>
+            <textarea class="block w-full rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700" rows="3" placeholder="Optional description"></textarea>
           </div>
         </div>
       </div>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %>
-        <%= pathogen_typography_preset(:form_section) do |group| %>
-          <%= group.with_heading { "Form Section" } %>
-          <%= group.with_metadata { "Helper text" } %>
-        <% end %>
+      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:form_section) do |group| %>
+  <%%= group.with_heading { "Form Section" } %>
+  <%%= group.with_metadata { "Helper text" } %>
+<%% end %>
       <% end %>
     </div>
 
     <!-- Custom Overrides -->
-    <div
-      class="
-        rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 p-8 dark:from-primary-900/20
-        dark:to-primary-800/20
-      "
-    >
+    <div class="rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 p-8 dark:from-primary-900/20 dark:to-primary-800/20">
       <%= pathogen_heading(level: 2, class: "mb-6") { "Custom Overrides" } %>
       <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Customize any preset by passing override options" } %>
 
@@ -210,10 +172,12 @@
         <%= group.with_metadata { "Using card preset with custom variant and spacing" } %>
       <% end %>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %>
-        <%= pathogen_typography_preset(:card, heading_variant: :subdued, spacing: :spacious) do |group| %>
-          <%= group.with_heading { "Title" } %>
-        <% end %>
+      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:card,
+  heading_variant: :subdued,
+  spacing: :spacious
+) do |group| %>
+  <%%= group.with_heading { "Title" } %>
+<%% end %>
       <% end %>
     </div>
   </div>
