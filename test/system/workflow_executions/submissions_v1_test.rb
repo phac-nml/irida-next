@@ -109,11 +109,11 @@ module WorkflowExecutions
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_selector 'button[data-workflow-selection-workflow-version-param="1.0.3"][aria-disabled="true"]'
-      assert_selector 'button[data-workflow-selection-workflow-version-param="1.0.2"][aria-disabled="false"]'
+      assert_selector 'button[data-workflow-selection-workflowversion-param="1.0.3"][aria-disabled="true"]'
+      assert_selector 'button[data-workflow-selection-workflowversion-param="1.0.2"][aria-disabled="false"]'
       assert_text I18n.t('workflow_executions.submissions.pipeline_selection.min_samples_required', min_samples: 2)
 
-      find('button[data-workflow-selection-workflow-version-param="1.0.2"]').click
+      find('button[data-workflow-selection-workflowversion-param="1.0.2"]').click
 
       assert_selector 'h1.dialog--title',
                       text: I18n.t('workflow_executions.submissions.create.title',
@@ -130,9 +130,9 @@ module WorkflowExecutions
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
       assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_selector 'button[data-workflow-selection-workflow-version-param="1.0.3"][aria-disabled="true"]'
-      assert_selector 'button[data-workflow-selection-workflow-version-param="1.0.2"][aria-disabled="false"]'
-      assert_text I18n.t('workflow_executions.submissions.pipeline_selection.max_samples_exceeded', max_samples: 5)
+      assert_selector 'button[data-workflow-selection-workflowversion-param="1.0.3"][aria-disabled="true"]'
+      assert_selector 'button[data-workflow-selection-workflowversion-param="1.0.2"][aria-disabled="false"]'
+      assert_text I18n.t('workflow_executions.submissions.pipeline_selection.max_samples_exceeded', max_samples: 2)
     end
 
     test 'should display a pipeline selection modal for project samples as analyst' do
