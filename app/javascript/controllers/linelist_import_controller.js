@@ -70,7 +70,7 @@ export default class extends Controller {
       row[this.sampleIdColumnTarget.value],
       omitBy(
         pick(row, selectedMetadataColumns),
-        (value) => ignoreEmptyValues && !value,
+        (value) => ignoreEmptyValues && value == null,
       ),
     ]);
 
