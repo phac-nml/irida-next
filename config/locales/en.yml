@@ -935,10 +935,14 @@ en:
     members:
       access_level:
         aria_label: Access Level
+      edit:
+        description: You are updating member %{member} in group %{name}
+        title: Update Member
       index:
         actions:
           leave_group_aria_label: Leave group
           remove_aria_label: 'Remove group member: %{member}'
+          update_aria_label: Update group member
         add: Add New Member
         empty_state:
           description: There are no members that have been delegated access to this group
@@ -953,6 +957,7 @@ en:
           groups: Groups
           members: Members
         title: Members
+        update: Update
       member_listing:
         search:
           placeholder: Search by username
@@ -1578,10 +1583,14 @@ en:
     members:
       access_level:
         aria_label: Access Level
+      edit:
+        description: You are updating member %{member} in project %{name}
+        title: Update Member
       index:
         actions:
           leave_project_aria_label: Leave project
           remove_aria_label: 'Remove project member: %{member}'
+          update_aria_label: Update project member
         add: Add New Member
         empty_state:
           description: There are no members that have been delegated access to this project
@@ -1596,6 +1605,7 @@ en:
           groups: Groups
           members: Members
         title: Members
+        update: Update
       member_listing:
         search:
           placeholder: Search by username

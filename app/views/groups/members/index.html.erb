@@ -1,6 +1,7 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
 <%= turbo_frame_tag "member-update-alert" %>
+<%= turbo_frame_tag "edit_dialog" %>
 
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <% component.with_buttons do %>
@@ -13,6 +14,7 @@
         } %>
       <% end %>
     <% end %>
+
     <% if @allowed_to[:create_member] %>
       <%= turbo_frame_tag "new_member_dialog" do %>
         <%= render partial: "create_modal", locals: { open: false, tab: @tab } %>
@@ -47,6 +49,7 @@
         refresh: "morph" do %>
         <%= render partial: "shared/loading/table" %>
       <% end %>
+
       <%= turbo_frame_tag "members_pagination", loading: :lazy, refresh: "morph" %>
     <% end %>
 
@@ -57,6 +60,7 @@
         refresh: "morph" do %>
         <%= render partial: "shared/loading/table" %>
       <% end %>
+
       <%= turbo_frame_tag "invited_groups_pagination", loading: :lazy, refresh: "morph" %>
     <% end %>
   <% end %>

@@ -6,7 +6,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   included do
     before_action proc { namespace }
-    before_action proc { member }, only: %i[destroy update]
+    before_action proc { member }, only: %i[destroy update edit]
     before_action proc { available_users }, only: %i[new create]
     before_action proc { access_levels }
     before_action proc { context_crumbs }, only: %i[index new]
@@ -95,19 +95,29 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
+  def edit
+    # TODO: add authorize
+    respond_to do |format|
+      format.turbo_stream do
+        render status: :ok
+      end
+    end
+  end
+
   def update # rubocop:disable Metrics/MethodLength
     updated = Members::UpdateService.new(@member, @namespace, current_user, member_params).execute
     respond_to do |format|
       if updated
         format.turbo_stream do
-          render status: :ok, locals: { member: @member, access_levels: @access_levels, type: 'success',
+          render status: :ok, locals: { member: @member, access_levels: @access_levels, namespace: @namespace,
+                                        type: 'success',
                                         message: t('concerns.membership_actions.update.success',
                                                    user_email: @member.user.email) }
         end
       else
         format.turbo_stream do
           render status: :bad_request,
-                 locals: { member: @member, type: 'alert',
+                 locals: { member: @member, type: 'alert', namespace: @namespace,
                            message: error_message(@member) }
         end
       end
