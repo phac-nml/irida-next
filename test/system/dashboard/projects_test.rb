@@ -84,9 +84,9 @@ module Dashboard
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
       click_button I18n.t('common.controls.search')
 
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 12, count: 12,
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 13, count: 13,
                                                                                       locale: @user.locale))
-      assert_selector '.treegrid-row', count: 12
+      assert_selector '.treegrid-row', count: 13
       assert_no_selector 'a',
                          exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
       assert_no_selector 'a',
@@ -156,7 +156,7 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
 
-      assert_selector '.treegrid-row', count: 1
+      assert_selector '.treegrid-row', count: 2
       assert_text projects(:john_doe_project2).human_name
     end
 
