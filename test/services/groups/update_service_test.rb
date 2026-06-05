@@ -107,5 +107,34 @@ module Groups
       assert_equal 'Group 1', @group.name
       assert_equal 'group-1', @group.path
     end
+
+    test 'update group to public updates descendant groups to public' do
+      group = groups(:group_one)
+      subgroup = groups(:subgroup1)
+
+      assert_not group.public?
+      assert_not subgroup.public?
+
+      valid_params = { public: true }
+
+      assert_changes -> { [group.reload.public, subgroup.reload.public] }, to: [true, true] do
+        Groups::UpdateService.new(group, @user, valid_params).execute
+      end
+    end
+
+    test 'update group to private updates descendant groups to private' do
+      group = groups(:public_group1)
+      subgroup = groups(:public_group1_subgroup1)
+
+      assert group.public?
+      assert subgroup.public?
+
+      valid_params = { public: false }
+
+      Groups::UpdateService.new(group, @user, valid_params).execute
+
+      assert_not group.reload.public?
+      assert_not subgroup.reload.public?
+    end
   end
 end

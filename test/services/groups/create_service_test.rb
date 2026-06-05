@@ -97,5 +97,13 @@ module Groups
       assert_equal 'new-group1-name', group.at(version: 1).name
       assert_equal 'new-group1-path', group.at(version: 1).path
     end
+
+    test 'create public group' do
+      valid_params = { name: 'new-public-group', path: 'new-public-group', public: true }
+
+      group = Groups::CreateService.new(@user, valid_params).execute
+
+      assert group.public?
+    end
   end
 end

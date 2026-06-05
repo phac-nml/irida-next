@@ -13,6 +13,8 @@ module Groups
     def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! group.parent, to: :create_subgroup? if params[:parent_id].present?
 
+      group.public = true if params[:parent_id].present? && group.parent.public?
+
       group.save
 
       if group.persisted?

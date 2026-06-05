@@ -36,7 +36,13 @@ module Projects
       new_namespace_member_ids = Member.for_namespace_and_ancestors(@new_namespace)
                                        .where(user_id: project_ancestor_member_user_ids).select(&:id)
 
-      project.namespace.update(parent_id: @new_namespace.id)
+      update_params = { parent_id: @new_namespace.id }
+      if @new_namespace.group_namespace? && @new_namespace.public? && !project.namespace.public?
+        update_params[:public] =
+          true
+      end
+
+      project.namespace.update(update_params)
 
       create_activities(project)
 
