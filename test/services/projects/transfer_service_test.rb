@@ -283,5 +283,20 @@ module Projects
 
       assert @project.namespace.public?
     end
+
+    test 'transfer project from public namespace to private group namespace' do
+      private_group_namespace = groups(:group_one)
+      public_subgroup1_project1 = projects(:subgroup1Project1)
+      transfer_form = ::Projects::TransferForm.new(
+        { new_namespace_id: private_group_namespace.id }.merge(project: public_subgroup1_project1)
+      )
+      assert public_subgroup1_project1.namespace.public?
+
+      assert_changes -> { public_subgroup1_project1.namespace.parent }, to: private_group_namespace do
+        Projects::TransferService.new(public_subgroup1_project1, @john_doe, transfer_form).execute
+      end
+
+      assert_not public_subgroup1_project1.namespace.public?
+    end
   end
 end

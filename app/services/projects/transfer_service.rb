@@ -36,13 +36,9 @@ module Projects
       new_namespace_member_ids = Member.for_namespace_and_ancestors(@new_namespace)
                                        .where(user_id: project_ancestor_member_user_ids).select(&:id)
 
-      update_params = { parent_id: @new_namespace.id }
-      if @new_namespace.group_namespace? && @new_namespace.public? && !project.namespace.public?
-        update_params[:public] =
-          true
-      end
+      parameters = update_params(project)
 
-      project.namespace.update(update_params)
+      project.namespace.update(parameters)
 
       create_activities(project)
 
@@ -84,6 +80,18 @@ module Projects
                                        new_namespace: @new_namespace.puid,
                                        action: 'project_namespace_transfer'
                                      }
+    end
+
+    def update_params(project)
+      update_params = { parent_id: @new_namespace.id }
+
+      if @new_namespace.group_namespace? && @new_namespace.public? && !project.namespace.public?
+        update_params[:public] = true
+      elsif @new_namespace.group_namespace? && !@new_namespace.public? && project.namespace.public?
+        update_params[:public] = false
+      end
+
+      update_params
     end
 
     def update_samples_count
