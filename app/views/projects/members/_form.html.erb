@@ -9,12 +9,12 @@
     { controller: "select2--v1" }
   end, method: :post,  html: { novalidate: true }) do |form| %>
   <% form_id = "add-user-select2" %>
-  <% expires_at_input_id = "#{form.field_id(:expires_at)}-input" %>
+  <% expires_at_id = "add-user-expires-at" %>
 
   <div class="grid gap-4">
     <%= form_error_summary(
       form,
-      target_overrides: { user: form_id, user_id: form_id, expires_at: expires_at_input_id }
+      target_overrides: { user: form_id, user_id: form_id, expires_at: "#{expires_at_id}-input" }
     ) %>
 
     <%= render partial: "shared/form/required_field_legend" %>
@@ -95,13 +95,13 @@
 
     <% invalid_expires_at = @new_member.errors.include?(:expires_at) %>
 
-    <% if invalid_expires_at %>
-      <% error_container_id = form.field_id(:expires_at, "error") %>
-    <% end %>
-
+    <!--
+  id requires manual naming override (rather than using default form name)
+  as to not have id collision with update member's datepicker
+-->
     <div class="form-field <%= 'invalid' if invalid_expires_at %>">
       <%= combobox_datepicker(
-        id: form.field_id(:expires_at),
+        id: expires_at_id,
         input_name: "member[expires_at]",
         label: t("activerecord.attributes.member.expires_at"),
         errored: invalid_expires_at
@@ -110,7 +110,7 @@
 
     <% if invalid_expires_at %>
       <%= render "shared/form/field_errors",
-      id: error_container_id,
+      id: "#{expires_at_id}_error",
       errors: @new_member.errors[:expires_at] %>
     <% end %>
 

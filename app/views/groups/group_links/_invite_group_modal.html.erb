@@ -1,10 +1,12 @@
 <%= viral_dialog(id: 'new-group-link-dialog', open: open) do |dialog| %>
   <% dialog.with_trigger do %>
-    <button class="button button-default w-full" data-action="viral--dialog#open">
+    <button class="button w-full button-default" data-action="viral--dialog#open">
       <%= I18n.t("groups.members.index.invite_group") %>
     </button>
   <% end %>
+
   <% dialog.with_header(title: I18n.t("groups.group_links.new.title")) %>
+
   <% if defined?(new_group_link) && new_group_link&.invalid? %>
     <%= render partial: "form", locals: { new_group_link: new_group_link } %>
   <% else %>
