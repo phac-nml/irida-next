@@ -35,9 +35,9 @@ describe("collection", () => {
       expect(result).toEqual({ name: "Alice", role: "admin" });
     });
 
-    it("includes missing keys with undefined values", () => {
+    it("omits missing keys from the result", () => {
       const result = pick({ id: 1 }, ["id", "name"]);
-      expect(result).toEqual({ id: 1, name: undefined });
+      expect(result).toEqual({ id: 1 });
     });
 
     it("returns an empty object when no keys are requested", () => {
