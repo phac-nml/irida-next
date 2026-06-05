@@ -67,7 +67,7 @@ module Groups
       visit group_samples_url(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.samples.index.title')
-      assert_selector '#samples-table.samples-data-grid[data-pathogen-grid][data-pathogen-grid-fill]'
+      assert_selector '#samples-table.samples-data-grid.pvc-data-grid.pvc-data-grid--fill'
       assert_selector '#samples-table [data-pathogen--data-grid-target~="scrollContainer"]'
       assert_selector '#samples-table table[role="grid"][data-pathogen--data-grid-target~="grid"]'
       assert_selector 'th[data-pathogen--data-grid-target~="cell"][data-sticky-cell]',
