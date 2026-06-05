@@ -22,6 +22,7 @@ import {
   LinelistExportWorkerClient,
   resolveLinelistExportWorkerSource,
 } from "controllers/linelist_export/worker_client";
+import { closeDialog } from "utilities/dialog";
 
 export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
@@ -90,7 +91,7 @@ export default class extends Controller {
   submit(event) {
     event.preventDefault();
     event.stopPropagation();
-    this.closeDialog();
+    closeDialog(this.element, this.application);
     this.startExport();
   }
 
@@ -218,31 +219,6 @@ export default class extends Controller {
 
   async download(filename, content, format = "csv") {
     await downloadExport(filename, content, format);
-  }
-
-  closeDialog() {
-    const dialogHost = this.element.closest(
-      '[data-controller~="viral--dialog"]',
-    );
-    if (!dialogHost) return;
-
-    const dialogController =
-      this.application.getControllerForElementAndIdentifier(
-        dialogHost,
-        "viral--dialog",
-      );
-
-    if (dialogController?.close) {
-      dialogController.close();
-      return;
-    }
-
-    const dialogElement = dialogHost.querySelector(
-      "[data-viral--dialog-target='dialog']",
-    );
-    if (dialogElement?.close) {
-      dialogElement.close();
-    }
   }
 
   selectedMetadataFields() {

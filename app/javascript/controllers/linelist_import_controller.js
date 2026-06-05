@@ -1,6 +1,7 @@
 import * as XLSX from "xlsx";
 import Controller from "controllers/metadata/file_import_controller";
 import { omitBy, pick } from "utilities/collection";
+import { closeDialog } from "utilities/dialog";
 
 export default class extends Controller {
   static values = {
@@ -47,6 +48,7 @@ export default class extends Controller {
     event.stopPropagation();
     this._worker?.terminate();
     this._worker ||= this.#buildWorker();
+    closeDialog(this.element, this.application);
     this.#processRows();
   }
 
