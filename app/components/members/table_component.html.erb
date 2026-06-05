@@ -31,7 +31,7 @@
           <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: "px-6 py-3 text-right"
+              classes: "px-6 py-3"
             ) do %>
             <%= t(".action") %>
           <% end %>
@@ -111,29 +111,31 @@
             </td>
 
             <% if (@current_user == member.user || @abilities[:destroy_member]) && !member_source.key?(:inherited_namespace_path) %>
-              <td class="flex justify-start space-x-2 px-6 py-4">
-                <% if (member.user != @current_user && @abilities[:update_member] &&
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-2">
+                  <% if (member.user != @current_user && @abilities[:update_member] &&
 member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-                  <%= render partial: update_member,
+                    <%= render partial: update_member,
                   locals: {
                     namespace: @namespace,
                     member:,
                   } %>
-                <% end %>
+                  <% end %>
 
-                <% if @current_user == member.user %>
-                  <%= render partial: current_user_is_member,
+                  <% if @current_user == member.user %>
+                    <%= render partial: current_user_is_member,
                   locals: {
                     namespace: @namespace,
                     member:,
                   } %>
-                <% else %>
-                  <%= render partial: current_user_is_not_member,
+                  <% else %>
+                    <%= render partial: current_user_is_not_member,
                   locals: {
                     namespace: @namespace,
                     member:,
                   } %>
-                <% end %>
+                  <% end %>
+                </div>
               </td>
             <% end %>
           <% end %>
