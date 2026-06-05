@@ -104,7 +104,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def update # rubocop:disable Metrics/MethodLength
+  def update
     updated = Members::UpdateService.new(@member, @namespace, current_user, member_params).execute
     respond_to do |format|
       if updated
@@ -116,9 +116,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
         end
       else
         format.turbo_stream do
-          render status: :bad_request,
-                 locals: { member: @member, type: 'alert', namespace: @namespace,
-                           message: error_message(@member) }
+          render status: :bad_request
         end
       end
     end

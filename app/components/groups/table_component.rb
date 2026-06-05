@@ -55,6 +55,14 @@ module Groups
       end
     end
 
+    def update_group_link
+      if @namespace.group_namespace?
+        'groups/group_links/update'
+      else
+        'projects/group_links/update'
+      end
+    end
+
     private
 
     def columns

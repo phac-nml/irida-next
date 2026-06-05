@@ -898,9 +898,13 @@ en:
         title: General Settings
       title: General Settings
     group_links:
+      edit:
+        description: Update sharing this group with group %{name}
+        title: Update Group Share
       index:
         actions:
           unlink_aria_label: 'Unlink namespace from group: %{member}'
+          update_aria_label: Update shared group link with group %{group_name}
         aria_labels:
           expires_at: Group access expiration
         empty_state:
@@ -908,6 +912,7 @@ en:
           title: No groups
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
+        update: Update
       invited_groups:
         search:
           placeholder: Search by group name
@@ -1537,6 +1542,9 @@ en:
         title: General Settings
       title: General Settings
     group_links:
+      edit:
+        description: Update sharing this project with group %{name}
+        title: Update Project Share
       index:
         access_level:
           level_0: No Access
@@ -1547,6 +1555,7 @@ en:
           level_50: Owner
         actions:
           unlink_aria_label: 'Unlink namespace from group: %{member}'
+          update_aria_label: Update shared project link with group %{group_name}
         aria_labels:
           group_access_level: Group Access Level
         empty_state:
@@ -1555,6 +1564,7 @@ en:
         inherited_from: Inherited from
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
+        update: Update
       invited_groups:
         search:
           placeholder: Search by group name

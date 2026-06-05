@@ -1,3 +1,12 @@
-<%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type:, data: message) %>
+<% unless @namespace_group_link.errors.any? %>
+  <%= turbo_stream.update "member-update-alert",
+                    viral_alert(type:, message:, classes: "mb-4") %>
 <% end %>
+
+<%= turbo_stream.update "edit_dialog",
+                      partial: "edit_modal",
+                      locals: {
+                        open: @namespace_group_link.errors.any?,
+                        namespace_group_link: @namespace_group_link,
+                        namespace: @namespace
+                      } %>

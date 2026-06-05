@@ -7,7 +7,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   included do
     before_action proc { namespace }
     before_action proc { access_levels }
-    before_action proc { namespace_group_link }, only: %i[destroy update]
+    before_action proc { namespace_group_link }, only: %i[destroy update edit]
     before_action proc { tab }, only: %i[index new create]
     before_action proc { namespace_linkable_groups }, only: %i[new create]
     before_action :view_authorizations, only: %i[index]
@@ -88,6 +88,15 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
+  def edit
+    # TODO: add authorize
+    respond_to do |format|
+      format.turbo_stream do
+        render status: :ok
+      end
+    end
+  end
+
   def update # rubocop:disable Metrics/MethodLength
     @updated = GroupLinks::GroupLinkUpdateService.new(current_user, @namespace_group_link, group_link_params).execute
     updated_param = if group_link_params[:group_access_level].nil?
@@ -109,9 +118,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
         end
       else
         format.turbo_stream do
-          render status: :unprocessable_content,
-                 locals: { namespace_group_link: @namespace_group_link, type: 'alert',
-                           message: t('concerns.share_actions.update.error') }
+          render status: :unprocessable_content
         end
       end
     end
