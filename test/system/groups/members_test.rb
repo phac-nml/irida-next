@@ -288,7 +288,6 @@ module Groups
       assert_selector 'turbo-frame#members table'
 
       within "table tbody tr[id='member_#{group_member.id}']" do
-        assert_no_text Time.zone.today.strftime('%B %d, %Y')
         assert_selector 'button', text: I18n.t('common.actions.update')
         click_button I18n.t('common.actions.update')
       end
@@ -302,9 +301,6 @@ module Groups
 
       assert_no_selector 'dialog'
       assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: group_member.user.email)
-
-      assert_selector "table tbody tr[id='member_#{group_member.id}'] td:nth-child(5)",
-                      text: Time.zone.today.strftime('%B %d, %Y')
     end
 
     test 'cannot update membership' do

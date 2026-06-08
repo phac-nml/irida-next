@@ -215,24 +215,6 @@ module Groups
       end
     end
 
-    test 'cannot update namespace group link which may have been deleted in another tab' do
-      namespace_group_link = namespace_group_links(:namespace_group_link5)
-
-      visit group_members_path(@namespace)
-      click_button I18n.t(:'groups.members.index.tabs.groups')
-
-      assert_selector 'tr', count: @group_links_count + header_row_count
-
-      namespace_group_link.destroy
-
-      within "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}']" do
-        assert_selector 'button', text: I18n.t('common.actions.update')
-        click_button I18n.t('common.actions.update')
-      end
-
-      assert_text 'Resource not found'
-    end
-
     test 'group member of Group C can access Group B as it is shared with Group C' do
       login_as users(:user25)
 

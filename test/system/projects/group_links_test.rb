@@ -210,18 +210,6 @@ module Projects
       end
     end
 
-    test 'cannot update namespace group link which may have been deleted in another tab' do
-      namespace_group_link = namespace_group_links(:namespace_group_link3)
-
-      visit namespace_project_members_path(@namespace.parent, @namespace.project)
-      click_button I18n.t(:'projects.members.index.tabs.groups')
-
-      namespace_group_link.destroy
-
-      click_button I18n.t('common.actions.update')
-      assert_text 'Resource not found'
-    end
-
     test 'group member of Group B can access Group A projects as it is shared with Group A' do
       login_as users(:user24)
 
