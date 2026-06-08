@@ -434,9 +434,6 @@ fr:
         error: Il y a eu une erreur lors de la dissociation du groupe au groupe
         success: Dissociation réussie du groupe %{namespace_name} au groupe %{group_name}
       update:
-        params:
-          expiration_date: date d'expiration
-          group_access_level: Niveau d’accès du groupe
         success: Mise à jour réussie du groupe %{namespace_name} avec le groupe %{group_name} lié
     workflow_execution_actions:
       cancel:
