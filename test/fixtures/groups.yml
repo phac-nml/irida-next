@@ -635,7 +635,7 @@ public_group1_subgroup1:
   <<: *DEFAULTS
   name: "Public Subgroup 1"
   public: true
-  path: <%= "subgroup-1" %>
+  path: <%= "public-group-1-subgroup-1" %>
   description: <%= "Public Subgroup 1 description" %>
   puid: <%= "INXT_GRP_AXATAA#{((11/26).round+66).chr}AA#{((11%26)+65).chr}" %>
   parent_id: <%= ActiveRecord::FixtureSet.identify(:public_group1, :uuid) %>

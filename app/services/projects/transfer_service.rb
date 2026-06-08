@@ -83,15 +83,15 @@ module Projects
     end
 
     def update_params(project)
-      update_params = { parent_id: @new_namespace.id }
+      params = { parent_id: @new_namespace.id }
 
       if @new_namespace.group_namespace? && @new_namespace.public? && !project.namespace.public?
-        update_params[:public] = true
+        params[:public] = true
       elsif @new_namespace.group_namespace? && !@new_namespace.public? && project.namespace.public?
-        update_params[:public] = false
+        params[:public] = false
       end
 
-      update_params
+      params
     end
 
     def update_samples_count

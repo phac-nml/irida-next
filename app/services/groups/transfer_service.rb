@@ -8,7 +8,7 @@ module Groups
       @transfer_form = transfer_form
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Naming/PredicateMethod,Metrics/MethodLength
+    def execute # rubocop:disable Metrics/AbcSize,Naming/PredicateMethod
       return false unless @transfer_form.valid?
 
       new_namespace = @transfer_form.new_parent
@@ -25,10 +25,9 @@ module Groups
       new_namespace_member_ids = Member.for_namespace_and_ancestors(new_namespace).not_expired
                                        .where(user_id: group_ancestor_member_user_ids).select(&:id)
 
-      update_params = { parent_id: new_namespace.id }
-      update_params[:public] = true if new_namespace.public? && !@group.public?
+      parameters = update_params(new_namespace)
 
-      @group.update(update_params)
+      @group.update(parameters)
 
       create_activities(old_namespace, new_namespace)
 
@@ -42,6 +41,15 @@ module Groups
     end
 
     private
+
+    def update_params(new_namespace)
+      params = { parent_id: new_namespace.id }
+
+      params[:public] = true if new_namespace.public? && !@group.public?
+      params[:public] = false if !new_namespace.public? && @group.public?
+
+      params
+    end
 
     def create_activities(old_namespace, new_namespace) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       if old_namespace && new_namespace

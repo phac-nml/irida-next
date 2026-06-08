@@ -694,7 +694,7 @@ project_chunked_samples_namespace:
 
 public_subgroup1_project1_namespace:
   <<: *DEFAULTS
-  name: Public Subgroup 1 Project 1
+  name: Public Group 1 Subgroup 1 Project 1
   path: public-subgroup-1-project-1
   description: Project Subgroup 1 Project 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:public_group1, :uuid) %>

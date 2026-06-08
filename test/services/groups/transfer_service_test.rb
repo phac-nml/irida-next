@@ -180,7 +180,7 @@ module Groups
 
     test 'transfer public group to private parent group' do
       new_parent_group = groups(:group_one)
-      public_subgroup = groups(:public_subgroup1)
+      public_subgroup = groups(:public_group1_subgroup1)
       assert public_subgroup.public?
       assert_not new_parent_group.public?
 
