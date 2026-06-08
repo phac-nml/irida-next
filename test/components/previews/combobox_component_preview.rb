@@ -3,7 +3,44 @@
 class ComboboxComponentPreview < ViewComponent::Preview
   include ActionView::Helpers::FormOptionsHelper
 
-  def default # rubocop:disable Metrics/MethodLength
+  def default
+    render_with_template(locals: default_locals)
+  end
+
+  def with_disabled_options
+    render_with_template(
+      template: 'combobox_component_preview/default',
+      locals: default_locals(
+        label: 'Field with disabled options',
+        options: options_for_select(
+          [['Enabled option', 'enabled-option'], ['Disabled option', 'disabled-option']],
+          { disabled: ['disabled-option'] }
+        )
+      )
+    )
+  end
+
+  def disabled
+    render_with_template(
+      template: 'combobox_component_preview/default',
+      locals: default_locals(
+        label: 'Disabled combobox',
+        combobox_arguments: { disabled: true }
+      )
+    )
+  end
+
+  private
+
+  def default_locals(label: 'Metadata field', options: grouped_metadata_options, combobox_arguments: {})
+    {
+      label: label,
+      options: options,
+      combobox_arguments: combobox_arguments
+    }
+  end
+
+  def grouped_metadata_options
     sample_fields = %w[name puid created_at updated_at attachments_updated_at]
     metadata_fields = { 'Metadata fields': [['age', 'metadata.age'],
                                             ['country', 'metadata.country'],
@@ -17,12 +54,8 @@ class ComboboxComponentPreview < ViewComponent::Preview
                                             ['patient_sex', 'metadata.patient_sex'],
                                             ['wgs_id', 'metadata.wgs_id']] }
 
-    options = options_for_select(sample_fields).concat(
+    options_for_select(sample_fields).concat(
       grouped_options_for_select(metadata_fields, selected_key = 'metadata.age') # rubocop:disable Lint/UselessAssignment
     )
-
-    render_with_template(locals: {
-                           options: options
-                         })
   end
 end

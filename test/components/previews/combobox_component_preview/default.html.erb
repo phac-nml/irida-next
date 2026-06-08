@@ -1,9 +1,10 @@
 <%= form_with(url: "#") do |form| %>
-  <label for="<%= form.field_id(:field) %>">Metadata field</label>
+  <label for="<%= form.field_id(:field) %>"><%= label %></label>
 
   <%= render ComboboxComponent.new(
     form: form,
     field: :field,
     options: options,
+    **combobox_arguments
   ) %>
 <% end %>

@@ -47,15 +47,23 @@ module Combobox
         assert_selector 'button[data-combobox--v1-target="indicatorButton"][disabled]'
       end
 
-      test 'preview renders' do
-        ViewComponent::TestCase.instance_method(:render_preview).bind_call(
-          self,
-          :default,
-          from: ComboboxComponentPreview,
-          params: {}
-        )
+      test 'default preview renders' do
+        render_combobox_preview(:default)
 
         assert_selector 'input[role="combobox"]'
+      end
+
+      test 'with_disabled_options preview renders aria-disabled options' do
+        render_combobox_preview(:with_disabled_options)
+
+        assert_selector '[role="option"][data-value="disabled-option"][aria-disabled="true"]'
+      end
+
+      test 'disabled preview renders disabled combobox' do
+        render_combobox_preview(:disabled)
+
+        assert_selector 'input[role="combobox"][disabled]'
+        assert_selector 'button[data-combobox--v1-target="indicatorButton"][disabled]'
       end
 
       private
@@ -85,6 +93,15 @@ module Combobox
         options_for_select(
           [['Enabled option', 'enabled-option'], ['Disabled option', 'disabled-option']],
           { disabled: ['disabled-option'] }
+        )
+      end
+
+      def render_combobox_preview(name)
+        ViewComponent::TestCase.instance_method(:render_preview).bind_call(
+          self,
+          name,
+          from: ComboboxComponentPreview,
+          params: {}
         )
       end
     end
