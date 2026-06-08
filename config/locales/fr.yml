@@ -152,6 +152,10 @@ fr:
               missing_file_format: Doit contenir un format pour les exportations de listes de lignes
               missing_ids: Ne contient pas d’identifiants à exporter.
               missing_namespace_id: Doit avoir un identifiant d’espace de noms
+        group:
+          attributes:
+            public:
+              invalid: Le sous-groupe doit avoir le même paramètre public que son groupe parent
         member:
           attributes:
             access_level:
@@ -189,6 +193,14 @@ fr:
               taken: L’espace de noms a déjà été partagé avec ce groupe
             namespace_type:
               inclusion: Ne peut être qu’un groupe ou un projet
+        namespaces/project_namespace:
+          attributes:
+            public:
+              invalid: Un espace de noms de projet ne peut être public que si son espace de noms de groupe parent est public
+        namespaces/user_namespace:
+          attributes:
+            public:
+              invalid: Un espace de noms utilisateur ne peut pas être public
         personal_access_tokens:
           rotate:
             only_active: Seuls les jetons actifs peuvent être remis en rotation

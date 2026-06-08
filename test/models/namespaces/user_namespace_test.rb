@@ -74,4 +74,11 @@ class UserNamespaceTest < ActiveSupport::TestCase
   test 'model_prefix' do
     assert_equal 'USR', Namespaces::UserNamespace.model_prefix
   end
+
+  test 'invalid with namespace public' do
+    @user_namespace.public = true
+    @user_namespace.save
+
+    assert_not_nil @user_namespace.errors[:public]
+  end
 end

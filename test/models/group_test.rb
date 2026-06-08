@@ -22,6 +22,29 @@ class GroupTest < ActiveSupport::TestCase
     assert_not_nil @group.errors[:parent_id]
   end
 
+  test 'valid if namespace is public and parent is nil' do
+    @group.public = true
+    assert @group.save
+    assert_empty @group.errors[:public]
+  end
+
+  test 'valid with namespace public if parent is public' do
+    @group.public = true
+    @group.save
+
+    @subgroup_one.public = true
+    @subgroup_one.save
+
+    assert_empty @subgroup_one.errors[:public]
+  end
+
+  test 'invalid with namespace public if parent is private' do
+    @subgroup_one.public = true
+    @subgroup_one.save
+
+    assert_not_nil @subgroup_one.errors[:public]
+  end
+
   test 'invalid if more than 9 ancestors' do
     @subgroup = Group.new(name: 'Subgroup 10', path: 'subgroup-10', parent_id: groups(:subgroup9).id, owner: @user)
     assert_not @subgroup.valid?, 'subgroup is invalid with more than 9 ancestors'

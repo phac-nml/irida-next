@@ -94,7 +94,7 @@ module Namespaces
     def validate_public_namespace_type
       return true if parent.group_namespace? && parent.public?
 
-      errors.add(:base, 'A project namespace can only be public if its parent group namespace is public')
+      errors.add(:public, I18n.t('activerecord.errors.models.namespaces/project_namespace.attributes.public.invalid'))
       throw(:abort)
     end
   end

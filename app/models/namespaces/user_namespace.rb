@@ -19,7 +19,7 @@ module Namespaces
     end
 
     def validate_public_namespace_type
-      errors.add(:base, 'User namespaces cannot be public')
+      errors.add(:public, I18n.t('activerecord.errors.models.namespaces/user_namespace.attributes.public.invalid'))
       throw(:abort)
     end
   end
