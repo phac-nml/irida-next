@@ -75,7 +75,6 @@ export default class extends Controller {
   }
 
   disconnect() {
-    console.log("disconnect");
     this.#floatingDropdown?.destroy();
     this.#floatingDropdown = null;
 

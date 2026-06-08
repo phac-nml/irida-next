@@ -53,7 +53,7 @@
         <% end %>
 
         <p id="<%= form.field_id(:access_level, "hint") %>" class="field-hint">
-          <%= t("groups.members.new.access_level_hint") %>
+          <%= t("projects.members.new.access_level_hint") %>
         </p>
       </div>
 
@@ -79,7 +79,7 @@
       <% end %>
 
       <div class="flex justify-start gap-1">
-        <%= form.submit t(:"groups.members.new.add_member_to_group"),
+        <%= form.submit t(:"common.actions.update"),
                   class: "button button-primary",
                   disabled: false %>
 

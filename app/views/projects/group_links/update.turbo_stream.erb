@@ -2,6 +2,7 @@
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
+  <turbo-stream action="refresh"></turbo-stream>
 <% end %>
 
 <%= turbo_stream.update "edit_dialog",
@@ -11,5 +12,3 @@
                         namespace_group_link: @namespace_group_link,
                         namespace: @namespace
                       } %>
-
-<turbo-stream action="refresh"></turbo-stream>
