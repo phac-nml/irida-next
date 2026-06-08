@@ -912,7 +912,6 @@ en:
           title: No groups
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
-        update: Update
       invited_groups:
         search:
           placeholder: Search by group name
@@ -962,7 +961,6 @@ en:
           groups: Groups
           members: Members
         title: Members
-        update: Update
       member_listing:
         search:
           placeholder: Search by username
@@ -1564,7 +1562,6 @@ en:
         inherited_from: Inherited from
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
-        update: Update
       invited_groups:
         search:
           placeholder: Search by group name
@@ -1615,7 +1612,6 @@ en:
           groups: Groups
           members: Members
         title: Members
-        update: Update
       member_listing:
         search:
           placeholder: Search by username

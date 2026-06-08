@@ -900,6 +900,9 @@ fr:
         title: Paramètres généraux
       title: Paramètres généraux
     group_links:
+      edit:
+        description: Mise à jour du partage de ce groupe avec le groupe %{name}
+        title: Mettre à jour le partage de groupe
       index:
         actions:
           unlink_aria_label: 'Dissocier l’espace de noms du groupe : %{member}'
@@ -937,6 +940,9 @@ fr:
     members:
       access_level:
         aria_label: Niveau d’accès
+      edit:
+        description: Vous mettez à jour le membre %{member} dans le groupe %{name}
+        title: Mettre à jour le membre
       index:
         actions:
           leave_group_aria_label: Bouton Quitter le groupe
@@ -1536,6 +1542,9 @@ fr:
         title: Paramètres généraux
       title: Paramètres généraux
     group_links:
+      edit:
+        description: Mise à jour du partage de ce projet avec le groupe %{name}
+        title: Mettre à jour le partage de projet
       index:
         access_level:
           level_0: Pas d’accès
@@ -1582,6 +1591,9 @@ fr:
     members:
       access_level:
         aria_label: Niveau d’accès
+      edit:
+        description: Vous mettez à jour le membre %{member} dans le projet %{name}
+        title: Mettre à jour le membre
       index:
         actions:
           leave_project_aria_label: Laisser le lien du projet

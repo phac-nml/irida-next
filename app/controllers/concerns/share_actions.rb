@@ -89,7 +89,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   end
 
   def edit
-    # TODO: add authorize
+    authorize! @namespace_group_link.namespace, to: :update_namespace_with_group_link?
     respond_to do |format|
       format.turbo_stream do
         render status: :ok

@@ -105,7 +105,7 @@
             </td>
 
             <td class="px-6 py-4">
-              <% if !member.expires_at.nil? %>
+              <% unless member.expires_at.nil? %>
                 <%= helpers.local_date(member.expires_at, :long) %>
               <% end %>
             </td>

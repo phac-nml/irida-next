@@ -96,7 +96,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   end
 
   def edit
-    # TODO: add authorize
+    authorize! @namespace, to: :update_member?
     respond_to do |format|
       format.turbo_stream do
         render status: :ok
