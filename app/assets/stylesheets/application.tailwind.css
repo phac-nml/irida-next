@@ -715,10 +715,10 @@ a.pill-focus-reset:focus-visible {
   }
 
   [role="option"][aria-disabled="true"] {
-    @apply cursor-not-allowed text-slate-500 dark:text-slate-300;
+    @apply pointer-events-none cursor-not-allowed bg-slate-100 text-slate-400 opacity-70 dark:bg-slate-700/50 dark:text-slate-500;
   }
 
-  [role="option"][aria-selected="true"],
+  [role="option"][aria-selected="true"]:not([aria-disabled="true"]),
   [role="option"]:not([aria-disabled="true"]):hover {
     @apply bg-blue-800/80 text-white dark:bg-blue-600/50;
   }
