@@ -106,6 +106,22 @@ module Combobox
         end
       end
 
+      def test_disabled_option_is_not_selectable
+        visit('/rails/view_components/combobox_component/with_disabled_options')
+        within "div[data-controller='combobox--v1']" do
+          combobox = find("input[role='combobox']")
+          combobox.click
+
+          find("div[role='option'][data-value='disabled-option']").click
+          assert_empty combobox.value
+          assert_empty find("input[type='hidden']", visible: false).value
+
+          find("div[role='option'][data-value='enabled-option']").click
+          assert_equal 'Enabled option', combobox.value
+          assert_equal 'enabled-option', find("input[type='hidden']", visible: false).value
+        end
+      end
+
       def test_escape_key
         visit('/rails/view_components/combobox_component/default')
         within "div[data-controller='combobox--v1']" do
