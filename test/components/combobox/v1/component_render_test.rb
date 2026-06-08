@@ -82,10 +82,10 @@ module Combobox
       end
 
       def options_with_disabled
-        <<~HTML
-          <option value="enabled-option">Enabled option</option>
-          <option value="disabled-option" disabled="disabled">Disabled option</option>
-        HTML
+        options_for_select(
+          [['Enabled option', 'enabled-option'], ['Disabled option', 'disabled-option']],
+          { disabled: ['disabled-option'] }
+        )
       end
     end
   end
