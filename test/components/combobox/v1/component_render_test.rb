@@ -39,10 +39,10 @@ module Combobox
         assert_selector 'button[data-combobox--v1-target="indicatorButton"][tabindex="-1"]'
       end
 
-      test 'disables combobox input and indicator buttons when disabled is true' do
+      test 'renders combobox input with aria-disabled and indicator buttons disabled when disabled is true' do
         render_component(disabled: true)
 
-        assert_selector 'input[role="combobox"][disabled]'
+        assert_selector 'input[role="combobox"][aria-disabled="true"]:not([disabled])'
         assert_selector 'button[data-combobox--v1-target="indicatorClearButton"][disabled]'
         assert_selector 'button[data-combobox--v1-target="indicatorButton"][disabled]'
       end
@@ -62,7 +62,7 @@ module Combobox
       test 'disabled preview renders disabled combobox' do
         render_combobox_preview(:disabled)
 
-        assert_selector 'input[role="combobox"][disabled]'
+        assert_selector 'input[role="combobox"][aria-disabled="true"]:not([disabled])'
         assert_selector 'button[data-combobox--v1-target="indicatorButton"][disabled]'
       end
 

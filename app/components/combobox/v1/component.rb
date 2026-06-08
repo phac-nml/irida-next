@@ -24,6 +24,7 @@ module Combobox
           args[:value] = @selected_option[:name]
           args[:role] = 'combobox'
           args[:aria] ||= {}
+          args[:aria][:disabled] = 'true' if args.delete(:disabled) == true
           args[:aria][:autocomplete] = 'list'
           args[:aria][:expanded] = 'false'
           args[:aria][:controls] = @listbox_id
