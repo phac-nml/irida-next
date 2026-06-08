@@ -595,6 +595,7 @@ export default class extends Controller {
       End: (event) => this.#handleWeekNavigation(event, "end"),
       PageUp: (event) => this.#handleNavigationByPageKeys(event, "up"),
       PageDown: (event) => this.#handleNavigationByPageKeys(event, "down"),
+      Escape: (event) => this.#closeCalendar(event),
     };
     return handlers[key];
   }
@@ -619,8 +620,7 @@ export default class extends Controller {
     if (event.key === " ") {
       this.focusCurrentDate();
     } else {
-      this.comboboxDatepickerV1InputOutlet.hideCalendar();
-      this.comboboxDatepickerV1InputOutlet.focusDatepickerInput();
+      this.#hideCalendar();
     }
   }
 
@@ -632,8 +632,15 @@ export default class extends Controller {
       this.comboboxDatepickerV1InputOutlet.submitDate();
     }
 
-    this.comboboxDatepickerV1InputOutlet.hideCalendar();
-    this.comboboxDatepickerV1InputOutlet.focusDatepickerInput();
+    this.#hideCalendar();
+  }
+
+  #closeCalendar(event) {
+    event.stopPropagation(); // avoids dialog escape logic
+
+    if (this.calendarTarget.contains(event.target)) {
+      this.#hideCalendar();
+    }
   }
 
   // handles ArrowLeft/Right keyboard navigation
@@ -864,5 +871,10 @@ export default class extends Controller {
     const m = String(d.getMonth() + 1).padStart(2, "0");
     const dd = String(d.getDate()).padStart(2, "0");
     return `${y}-${m}-${dd}`;
+  }
+
+  #hideCalendar() {
+    this.comboboxDatepickerV1InputOutlet.hideCalendar();
+    this.comboboxDatepickerV1InputOutlet.focusDatepickerInput();
   }
 }

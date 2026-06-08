@@ -218,7 +218,7 @@ export default class extends Controller {
       }
     } else {
       this.hideCalendar();
-      this.datepickerInputTarget.focus();
+      this.focusDatepickerInput();
     }
   }
 
@@ -259,7 +259,7 @@ export default class extends Controller {
       event.preventDefault();
       this.hideCalendar();
       this.setInputValue(this.#selectedDate);
-      this.datepickerInputTarget.focus();
+      this.focusDatepickerInput();
       return;
     }
 
@@ -457,7 +457,7 @@ export default class extends Controller {
     );
   }
 
-  // used by datepicker/calendar.js
+  // used by combobox_datepicker/calendar_controller.js and input_controller.js
   focusDatepickerInput() {
     this.datepickerInputTarget.focus();
   }
