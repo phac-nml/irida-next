@@ -3,11 +3,59 @@
 module AxeHelpers
   # Ruby class to wrap the JSON results payload
   class AxeResults
-    Violation = Data.define(:id, :impact, :tags, :description, :help, :help_url)
+    Violation = Data.define(:id, :impact, :tags, :description, :help, :help_url, :nodes) do
+      def to_s
+        [
+          "#{id} #{impact}",
+          help,
+          "Help: #{help_url}",
+          'Affected nodes:',
+          *nodes.each_with_index.map { |node, index| AxeResults.indent(node.to_s(index + 1), 2) }
+        ].join("\n")
+      end
+    end
+
+    ViolationNode = Data.define(:target, :html, :checks) do
+      def to_s(index = nil)
+        prefix = index ? "#{index}. " : ''
+        lines = ["#{prefix}Target: #{AxeResults.format_target(target)}"]
+        lines << "   HTML: #{html}" unless html.to_s.empty?
+        checks.each { |check| lines << AxeResults.indent(check.to_s, 3) }
+        lines.join("\n")
+      end
+    end
+
+    Check = Data.define(:message, :data, :related_nodes) do
+      def to_s
+        lines = ["- #{message}"]
+        lines << "  Data: #{AxeResults.format_data(data)}" unless data.nil?
+        if related_nodes.any?
+          lines << '  Related nodes:'
+          related_nodes.each { |node| lines << AxeResults.indent(node.to_s, 4) }
+        end
+        lines.join("\n")
+      end
+    end
+
+    RelatedNode = Data.define(:target, :html) do
+      def to_s
+        [
+          "Target: #{AxeResults.format_target(target)}",
+          ("HTML: #{html}" unless html.to_s.empty?)
+        ].compact.join("\n")
+      end
+    end
     ExclusionRule = Data.define(:id, :selector)
 
-    AXE_COMMAND = <<~COMMAND
-      axe.run({ runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] }, elementRef: true })
+    # ViewComponent preview pages are not full app layouts (no document h1).
+    COMPONENT_PREVIEW_EXCLUSIONS = [
+      ExclusionRule.new(id: 'page-has-heading-one', selector: nil)
+    ].freeze
+
+    WCAG_AA_RUN_TAGS = %w[wcag2a wcag2aa wcag21a wcag22a wcag21aa wcag22aa best-practice].freeze
+
+    AXE_COMMAND = <<~COMMAND.freeze
+      axe.run({ runOnly: { type: 'tag', values: #{WCAG_AA_RUN_TAGS.to_json} } })
     COMMAND
 
     AXE_JS = <<~JS.freeze
@@ -15,6 +63,68 @@ module AxeHelpers
 
       #{AXE_COMMAND}.then(results => console.log(JSON.stringify({ testRunner: results.testRunner, violations: results.violations })));
     JS
+
+    class << self
+      def format_target(target)
+        case target
+        when Array
+          if target.first.is_a?(Array)
+            target.first.join(' >> ')
+          else
+            target.join(' > ')
+          end
+        else
+          target.to_s
+        end
+      end
+
+      def indent(text, spaces)
+        padding = ' ' * spaces
+        text.lines.map { |line| "#{padding}#{line}" }.join
+      end
+
+      def format_data(data)
+        case data
+        when Hash
+          data.map { |key, value| "#{key}=#{format_data(value)}" }.join(', ')
+        when Array
+          data.map { |value| format_data(value) }.join(', ')
+        else
+          data.to_s
+        end
+      end
+
+      def build_violation_node(node_json)
+        ViolationNode.new(
+          target: node_json['target'],
+          html: node_json['html'],
+          checks: failure_checks(node_json)
+        )
+      end
+
+      def failure_checks(node_json)
+        %w[any all none].flat_map do |check_type|
+          Array(node_json[check_type]).filter_map do |check|
+            result = check['result']
+            next build_check(check) if result.nil?
+
+            build_check(check) if result != 'passed'
+          end
+        end.compact.uniq
+      end
+
+      def build_check(check_json)
+        Check.new(
+          message: check_json['message'],
+          data: check_json['data'],
+          related_nodes: Array(check_json['relatedNodes']).map { |node| build_related_node(node) }
+        )
+      end
+
+      def build_related_node(node_json)
+        RelatedNode.new(target: node_json['target'], html: node_json['html'])
+      end
+    end
 
     def initialize(page, exclusions: [])
       unless page.driver.is_a?(Capybara::Playwright::Driver)
@@ -35,7 +145,8 @@ module AxeHelpers
             tags: json['tags'],
             description: json['description'],
             help: json['help'],
-            help_url: json['helpUrl']
+            help_url: json['helpUrl'],
+            nodes: json['nodes'].map { |node| self.class.build_violation_node(node) }
           )
         end
     end
@@ -47,11 +158,15 @@ module AxeHelpers
     # Remove any exclusions from the results
     def remove_exclusions(json)
       json.reject do |item|
-        @exclusions.any? do |exclusion|
-          exclusion.id == item['id'] && item['nodes'].any? do |node|
-            html_matches_selector?(node['html'], exclusion.selector)
-          end
-        end
+        @exclusions.any? { |exclusion| excluded_violation?(item, exclusion) }
+      end
+    end
+
+    def excluded_violation?(item, exclusion)
+      return false unless exclusion.id == item['id']
+
+      exclusion.selector.nil? || item['nodes'].any? do |node|
+        html_matches_selector?(node['html'], exclusion.selector)
       end
     end
 
@@ -81,13 +196,17 @@ module AxeHelpers
     end
   end
 
-  def assert_accessible
-    actual = AxeResults.new(page)
+  def assert_accessible(exclusions: nil)
+    actual = AxeResults.new(page, exclusions: axe_exclusions(exclusions))
 
     assert actual.violations.empty?, <<~MSG
       Expected no axe violations, found #{actual.violations.count}
       #{actual.violations.join("\n\n")}
     MSG
+  end
+
+  def assert_component_accessible
+    assert_accessible(exclusions: AxeResults::COMPONENT_PREVIEW_EXCLUSIONS)
   end
 
   # Capybara Overrides to run accessibility checks when UI changes.
@@ -103,5 +222,17 @@ module AxeHelpers
 
     assert_accessible
     w3c_validate content: html
+  end
+
+  private
+
+  def axe_exclusions(explicit_exclusions)
+    return explicit_exclusions unless explicit_exclusions.nil?
+
+    component_preview_page? ? AxeResults::COMPONENT_PREVIEW_EXCLUSIONS : []
+  end
+
+  def component_preview_page?
+    current_path.include?('rails/view_components')
   end
 end

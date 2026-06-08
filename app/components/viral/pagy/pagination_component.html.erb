@@ -43,7 +43,7 @@
         <% elsif item.is_a?(String) %>
           <%= tag.a(
             item,
-            href: "javascript:void(0);",
+            href: @pagy.page_url(item.to_i),
             aria: { current: "page" },
             class:
               "flex items-center relative focus-visible:z-10 justify-center px-4 h-11 ms-0 leading-tight border border-primary-600 bg-primary-600 text-white dark:border-primary-600 dark:text-white font-medium text-sm cursor-default",
@@ -100,7 +100,7 @@
 
     <%# Page dropdown %>
     <%= tag.select(
-      class: "bg-white border border-slate-300 dark:border-slate-600 text-slate-900 text-sm px-2 py-2 dark:bg-slate-700 dark:text-white flex-1 min-w-0 pr-8 focus:z-10 relative border-l-0 border-r-0",
+      class: "bg-white border border-slate-300 dark:border-slate-600 text-slate-900 text-sm pl-2 pr-4.5 py-2 dark:bg-slate-700 dark:text-white flex-1 min-w-0 pr-8 focus:z-10 relative border-l-0 border-r-0",
       aria: {
         label: t("components.viral.pagy.pagination_component.select_page_aria_label"),
       },

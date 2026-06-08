@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pagy/classes/request'
 require 'test_helper'
 require 'devise/test/controller_helpers'
 require 'test_helpers/markup_validation_helpers'
