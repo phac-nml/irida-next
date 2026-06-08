@@ -434,11 +434,10 @@ en:
         error: There was an error unlinking group from group
         success: Successfully unlinked group %{namespace_name} from group %{group_name}
       update:
-        error: There was an error updating the namespace group link
         params:
           expiration_date: expiration date
           group_access_level: group access level
-        success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
+        success: Successfully updated group %{namespace_name} with group %{group_name} link
     workflow_execution_actions:
       cancel:
         error: Could not cancel workflow %{workflow_name}
@@ -905,8 +904,6 @@ en:
         actions:
           unlink_aria_label: 'Unlink namespace from group: %{member}'
           update_aria_label: Update shared group link with group %{group_name}
-        aria_labels:
-          expires_at: Group access expiration
         empty_state:
           description: There are no groups that have been delegated access to this group
           title: No groups
@@ -937,8 +934,6 @@ en:
       index:
         title: History
     members:
-      access_level:
-        aria_label: Access Level
       edit:
         description: You are updating member %{member} in group %{name}
         title: Update Member
@@ -1177,8 +1172,6 @@ en:
     table_component:
       access_level: Access Level
       action: Action
-      aria_labels:
-        expires_at: Member expiration
       created_at: Access Granted
       created_by: "%{timestamp} by"
       expires_at: Expiration
@@ -1554,8 +1547,6 @@ en:
         actions:
           unlink_aria_label: 'Unlink namespace from group: %{member}'
           update_aria_label: Update shared project link with group %{group_name}
-        aria_labels:
-          group_access_level: Group Access Level
         empty_state:
           description: There are no groups that have been delegated access to this project
           title: No groups
@@ -1588,8 +1579,6 @@ en:
         project_restored: Project was restored by %{user}
         project_transferred: Project was transferred by %{user}
     members:
-      access_level:
-        aria_label: Access Level
       edit:
         description: You are updating member %{member} in project %{name}
         title: Update Member

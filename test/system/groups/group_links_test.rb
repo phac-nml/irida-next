@@ -145,26 +145,26 @@ module Groups
 
         assert_selector 'tr', count: @group_links_count + header_row_count
 
-        find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
-                                                                                         'option[2]').select_option
+        within "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}']" do
+          assert_selector 'td:nth-child(4)', text: I18n.t('activerecord.models.member.access_level.guest')
+          assert_selector 'button', text: I18n.t('common.actions.update')
+          click_button I18n.t('common.actions.update')
+        end
 
+        within 'dialog' do
+          find('#namespace_group_link_group_access_level').find(:xpath, 'option[4]').select_option
+          click_button I18n.t('common.actions.update')
+        end
+
+        assert_no_selector 'dialog'
         assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
-                           group_name: namespace_group_link.group.human_name,
-                           param_name: 'group access level')
-      end
-    end
+                           group_name: namespace_group_link.group.human_name)
 
-    test 'cannot update namespace group links group access level' do
-      login_as users(:ryan_doe)
-
-      visit group_members_path(@namespace)
-      click_button I18n.t(:'groups.members.index.tabs.groups')
-
-      assert_selector 'tr', count: @group_links_count + header_row_count
-
-      within('table') do
-        assert_selector 'select', count: 0
+        assert_no_selector "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}'] td:nth-child(4)",
+                           text: I18n.t('activerecord.models.member.access_level.guest')
+        assert_selector "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}'] td:nth-child(4)",
+                        text: I18n.t('activerecord.models.member.access_level.analyst')
       end
     end
 
@@ -178,17 +178,31 @@ module Groups
 
         assert_selector 'tr', count: @group_links_count + header_row_count
 
-        find("#invited-group-#{namespace_group_link.group.id}-expiration-input").click.set(expiry_date)
-                                                                                .send_keys(:return)
+        within "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}']" do
+          assert_no_text (Time.zone.today + 6).strftime('%B %d, %Y')
+          assert_selector 'button', text: I18n.t('common.actions.update')
+          click_button I18n.t('common.actions.update')
+        end
+
+        within 'dialog' do
+          find('#namespace_group_link_expires_at-input').click
+          find('#namespace_group_link_expires_at-input').set(expiry_date)
+          find('#namespace_group_link_expires_at-input').send_keys(:return)
+          click_button I18n.t('common.actions.update')
+        end
+
+        assert_no_selector 'dialog'
 
         assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
-                           group_name: namespace_group_link.group.human_name,
-                           param_name: 'expiration')
+                           group_name: namespace_group_link.group.human_name)
+
+        assert_selector "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}'] td:nth-child(5)",
+                        text: (Time.zone.today + 6).strftime('%B %d, %Y')
       end
     end
 
-    test 'cannot update namespace group links expiration' do
+    test 'cannot update namespace group link' do
       login_as users(:ryan_doe)
 
       visit group_members_path(@namespace)
@@ -197,13 +211,12 @@ module Groups
       assert_selector 'tr', count: @group_links_count + header_row_count
 
       within('table') do
-        assert_selector 'input.datepicker-input', count: 0
+        assert_no_selector 'button', text: I18n.t('common.actions.update')
       end
     end
 
     test 'cannot update namespace group link which may have been deleted in another tab' do
       namespace_group_link = namespace_group_links(:namespace_group_link5)
-      expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
 
       visit group_members_path(@namespace)
       click_button I18n.t(:'groups.members.index.tabs.groups')
@@ -212,8 +225,10 @@ module Groups
 
       namespace_group_link.destroy
 
-      find("#invited-group-#{namespace_group_link.group.id}-expiration-input").click.set(expiry_date)
-                                                                              .send_keys(:return)
+      within "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}']" do
+        assert_selector 'button', text: I18n.t('common.actions.update')
+        click_button I18n.t('common.actions.update')
+      end
 
       assert_text 'Resource not found'
     end

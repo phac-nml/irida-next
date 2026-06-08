@@ -298,12 +298,24 @@ module Projects
 
         assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-        assert_selector "#member-#{project_member.id}-access-level-select", wait: 10
-        find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
-
-        within %(turbo-frame[id="member-update-alert"]) do
-          assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
+        within "table tbody tr[id='member_#{project_member.id}']" do
+          assert_selector 'td:nth-child(2)', text: I18n.t('activerecord.models.member.access_level.guest')
+          assert_selector 'button', text: I18n.t('common.actions.update')
+          click_button I18n.t('common.actions.update')
         end
+
+        within 'dialog' do
+          find('#member_access_level').find(:xpath, 'option[4]').select_option
+          click_button I18n.t('common.actions.update')
+        end
+
+        assert_no_selector 'dialog'
+        assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
+
+        assert_no_selector "table tbody tr[id='member_#{project_member.id}'] td:nth-child(2)",
+                           text: I18n.t('activerecord.models.member.access_level.guest')
+        assert_selector "table tbody tr[id='member_#{project_member.id}'] td:nth-child(2)",
+                        text: I18n.t('activerecord.models.member.access_level.analyst')
       end
     end
 
@@ -316,14 +328,22 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
+      within "table tbody tr[id='member_#{project_member.id}']" do
+        assert_selector 'button', text: I18n.t('common.actions.update')
+        click_button I18n.t('common.actions.update')
+      end
 
-      within %(turbo-frame[id="member-update-alert"]) do
+      within 'dialog' do
+        find('#member_access_level').find(:xpath, 'option[2]').select_option
+        click_button I18n.t('common.actions.update')
+
         assert_text I18n.t('activerecord.errors.models.member.attributes.access_level.invalid',
                            user: project_member.user.email,
                            access_level: Member::AccessLevel.human_access(Member::AccessLevel::OWNER),
                            group_name: 'Group 5')
       end
+
+      assert_no_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
     end
 
     test 'can see the list of namespace group links' do
@@ -362,16 +382,31 @@ module Projects
       visit namespace_project_members_path(namespace, project)
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
-      find("#member-#{project_member.id}-expiration-input").click
-      find("#member-#{project_member.id}-expiration-input").set(expiry_date)
-      find("#member-#{project_member.id}-expiration-input").send_keys(:return)
 
-      within %(turbo-frame[id="member-update-alert"]) do
-        assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
+      # Wait for the members turbo frame to load (since it's in a tab)
+      assert_selector 'turbo-frame#members table'
+
+      within "table tbody tr[id='member_#{project_member.id}']" do
+        assert_no_text Time.zone.today.strftime('%B %d, %Y')
+        assert_selector 'button', text: I18n.t('common.actions.update')
+        click_button I18n.t('common.actions.update')
       end
+
+      within 'dialog' do
+        find('#member_expires_at-input').click
+        find('#member_expires_at-input').set(expiry_date)
+        find('#member_expires_at-input').send_keys(:return)
+        click_button I18n.t('common.actions.update')
+      end
+
+      assert_no_selector 'dialog'
+      assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
+
+      assert_selector "table tbody tr[id='member_#{project_member.id}'] td:nth-child(5)",
+                      text: Time.zone.today.strftime('%B %d, %Y')
     end
 
-    test 'cannot update member expiration' do
+    test 'cannot update membership' do
       login_as users(:ryan_doe)
 
       visit namespace_project_members_path(@namespace, @project)
@@ -379,7 +414,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
       within('table') do
-        assert_selector 'input.datepicker-input', count: 0
+        assert_no_selector 'button', text: I18n.t('common.actions.update')
       end
     end
 

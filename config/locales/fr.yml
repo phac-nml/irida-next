@@ -434,11 +434,10 @@ fr:
         error: Il y a eu une erreur lors de la dissociation du groupe au groupe
         success: Dissociation réussie du groupe %{namespace_name} au groupe %{group_name}
       update:
-        error: Une erreur s’est produite lors de la mise à jour du lien du groupe d’espaces de noms
         params:
           expiration_date: date d'expiration
           group_access_level: Niveau d’accès du groupe
-        success: Mise à jour réussie du groupe %{namespace_name} avec le groupe %{group_name} lié %{param_name}
+        success: Mise à jour réussie du groupe %{namespace_name} avec le groupe %{group_name} lié
     workflow_execution_actions:
       cancel:
         error: Impossible d’annuler le flux de travail %{workflow_name}
@@ -906,8 +905,7 @@ fr:
       index:
         actions:
           unlink_aria_label: 'Dissocier l’espace de noms du groupe : %{member}'
-        aria_labels:
-          expires_at: Expiration de l’accès du groupe
+          update_aria_label: Mettre à jour le lien du groupe partagé avec le groupe %{group_name}
         empty_state:
           description: Aucun groupe n'a reçu d'accès délégué à ce groupe
           title: Aucun groupe
@@ -938,8 +936,6 @@ fr:
       index:
         title: Historique
     members:
-      access_level:
-        aria_label: Niveau d’accès
       edit:
         description: Vous mettez à jour le membre %{member} dans le groupe %{name}
         title: Mettre à jour le membre
@@ -947,6 +943,7 @@ fr:
         actions:
           leave_group_aria_label: Bouton Quitter le groupe
           remove_aria_label: 'Supprimer le membre du groupe : %{member}'
+          update_aria_label: Mettre à jour un membre du groupe
         add: Ajouter un nouveau membre
         empty_state:
           description: Aucun members n'a reçu d'accès délégué à ce groupe
@@ -1179,8 +1176,6 @@ fr:
     table_component:
       access_level: Niveau d'accès
       action: Mesure
-      aria_labels:
-        expires_at: Expiration des membres
       created_at: Accès accordé
       created_by: "%{timestamp} par"
       expires_at: Expiration
@@ -1555,8 +1550,7 @@ fr:
           level_50: Propriétaire
         actions:
           unlink_aria_label: 'Dissocier l’espace de noms du groupe : %{member}'
-        aria_labels:
-          group_access_level: Niveau d’accès du groupe
+          update_aria_label: Mettre à jour le lien du projet partagé avec le groupe %{group_name}
         empty_state:
           description: Aucun groupe n'a reçu d'accès délégué à ce projet
           title: Aucun groupe
@@ -1589,8 +1583,6 @@ fr:
         project_restored: Le projet a été restauré par %{user}
         project_transferred: Le projet a été transféré par %{user}
     members:
-      access_level:
-        aria_label: Niveau d’accès
       edit:
         description: Vous mettez à jour le membre %{member} dans le projet %{name}
         title: Mettre à jour le membre
@@ -1598,6 +1590,7 @@ fr:
         actions:
           leave_project_aria_label: Laisser le lien du projet
           remove_aria_label: 'Supprimer le lien du membre du projet : %{member}'
+          update_aria_label: Mettre à jour le membre du projet
         add: Ajouter un nouveau membre
         empty_state:
           description: Aucun members n'a reçu d'accès délégué à ce projet
