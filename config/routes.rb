@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'dashboard#index'
 
+  # Static pages
+  get :accessibility, to: 'pages#accessibility_statement'
+
   # Begin of the /-/ scope.
   # Use this scope for all new global routes.
   scope path: '-' do

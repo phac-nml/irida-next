@@ -13,10 +13,11 @@ module Irida
       404.html
       422.html
       500.html
-      apple-touch-icon-precomposed.png
-      apple-touch-icon.png
+      accessibility
       activities
       api
+      apple-touch-icon-precomposed.png
+      apple-touch-icon.png
       assets
       console
       dashboard

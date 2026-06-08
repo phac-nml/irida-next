@@ -18,7 +18,7 @@
     <% end %>
 
     <% if label.present? %>
-      <%= tag.span(class: class_names("grow truncate text-center md:text-left", styles[:label])) do %>
+      <%= tag.span(class: class_names("truncate", styles[:label])) do %>
         <%= label %>
       <% end %>
     <% end %>

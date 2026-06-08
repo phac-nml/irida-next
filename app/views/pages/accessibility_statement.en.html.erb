@@ -1,0 +1,191 @@
+<% external_link_classes = "min-w-0 font-semibold wrap-anywhere underline hover:decoration-2 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:rounded-sm dark:text-white" %>
+
+<div class="mx-auto max-w-7xl space-y-12">
+  <%= pathogen_typography_preset(:article) do |group| %>
+    <%= group.with_heading { "Accessibility Statement for IRIDA Next" } %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Our Commitment to Accessibility" } %>
+
+    <%= pathogen_text { "IRIDA Next is committed to ensuring that our application is accessible to all users, including those with
+      disabilities. We are dedicated to providing a user experience that is inclusive and compliant with established
+      accessibility standards." } %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Accessibility Standards and Conformance" } %>
+
+    <%= pathogen_text do %>
+      IRIDA Next strives to meet the
+      <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener noreferrer" class="<%= external_link_classes %>">Web Content Accessibility Guidelines (WCAG) 2.1<span class="sr-only"> (opens in a new tab)</span></a>
+      Level AA standard. This includes:
+    <% end %>
+
+    <%= pathogen_list do |list| %>
+      <%= list.with_item do %>
+        <strong>Perceivable</strong>: Information and user interface components must be presented in ways that are
+        perceivable to all users
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Operable</strong>: User interface components and navigation must be operable through multiple methods
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Understandable</strong>: Information and user interface operation must be understandable
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Robust</strong>: Content must be compatible with current and future assistive technologies
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Accessible Features" } %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Navigation and Structure" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Semantic HTML markup ensures proper document structure" } %>
+        <%= list.with_item { "Logical heading hierarchy (H1 through H6) for screen reader navigation" } %>
+        <%= list.with_item { "Skip navigation links to bypass repetitive content" } %>
+        <%= list.with_item { "Keyboard-accessible navigation throughout the application" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Interactive Elements" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "All interactive elements (buttons, links, form controls) are keyboard accessible" } %>
+        <%= list.with_item { "Clear focus indicators for keyboard navigation" } %>
+        <%= list.with_item { "Proper ARIA labels and roles for custom components" } %>
+        <%= list.with_item { "Form labels clearly associated with input fields" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Visual Accessibility" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Sufficient color contrast ratios (WCAG AA compliant)" } %>
+        <%= list.with_item { "Text is resizable without loss of functionality" } %>
+        <%= list.with_item { "No reliance on color alone to convey information" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Assistive Technology Support" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Compatible with screen readers (NVDA and JAWS)" } %>
+        <%= list.with_item { "Proper semantic markup and ARIA attributes" } %>
+        <%= list.with_item { "Alternative text for images and visual content" } %>
+        <%= list.with_item { "Accessible data tables with proper header associations" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Keyboard Navigation" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "Full functionality available via keyboard" } %>
+        <%= list.with_item { "Logical tab order through interactive elements" } %>
+        <%= list.with_item { "Escape key functionality for closing dialogs" } %>
+        <%= list.with_item { "Proper keyboard shortcuts for widgets" } %>
+      <% end %>
+    <% end %>
+
+    <%= pathogen_section(level: 3) do |section| %>
+      <% section.with_heading { "Motion and Animation" } %>
+
+      <%= pathogen_list do |list| %>
+        <%= list.with_item { "No flashing or blinking content" } %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Limitations and Alternatives" } %>
+
+    <%= pathogen_text do %>
+      Despite our best efforts to ensure accessibility of IRIDA Next, there may be some limitations. Below is a
+      description of known limitations and potential solutions. Please contact us if you observe an issue not listed
+      below. Currently known limitations include:
+    <% end %>
+
+    <%= pathogen_list do |list| %>
+      <%= list.with_item do %>
+        <strong>Files from users and/or pipelines</strong>: Uploaded images may not have text alternatives, because we
+        do not have control of what the users/pipelines produce. Typically pipelines will also produce text based files
+        which would represent the same content as image files.
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "How to Report Accessibility Issues" } %>
+
+    <%= pathogen_text do %>
+      We take accessibility seriously and welcome feedback to help us improve. If you encounter an accessibility
+      barrier, please report it by:
+    <% end %>
+
+    <%= pathogen_list(ordered: true) do |list| %>
+      <%= list.with_item do %>
+        <strong>Creating a GitHub Issue</strong>: Open an issue on our
+        <a href="https://github.com/phac-nml/irida-next/issues" target="_blank" rel="noopener noreferrer" class="<%= external_link_classes %>">GitHub repository<span class="sr-only"> (opens in a new tab)</span></a>
+        with:
+        <%= pathogen_list do |list| %>
+          <%= list.with_item { "A clear description of the accessibility barrier" } %>
+          <%= list.with_item { "The browser and assistive technology used (if applicable)" } %>
+          <%= list.with_item { "Steps to reproduce the issue" } %>
+          <%= list.with_item { "Screenshots or screen reader output if possible" } %>
+          <%= list.with_item { "Relevant WCAG criterion numbers" } %>
+        <% end %>
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Email</strong>: Contact the
+        <a href="mailto:gsp-psg@phac-aspc.gc.ca" class="<%= external_link_classes %>">GSP team<span class="sr-only"> (opens default email client)</span></a>.
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Accessibility Improvement Process" } %>
+
+    <%= pathogen_list do |list| %>
+      <%= list.with_item do %>
+        <strong>Regular Audits</strong>: Periodic accessibility audits using automated tools and manual testing
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Screen Reader Testing</strong>: Testing with NVDA and JAWS
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Keyboard Navigation Testing</strong>: Verification of keyboard-only navigation
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>Color Contrast Verification</strong>: Compliance with WCAG AA contrast requirements
+      <% end %>
+
+      <%= list.with_item do %>
+        <strong>User Feedback</strong>: Incorporation of feedback from users with disabilities
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= pathogen_section(level: 2) do |section| %>
+    <% section.with_heading { "Version Information" } %>
+
+    <%= pathogen_text do %>
+      <strong>Last Updated</strong>: June 2, 2026
+    <% end %>
+  <% end %>
+</div>

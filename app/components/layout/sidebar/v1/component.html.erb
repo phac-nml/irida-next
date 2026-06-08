@@ -130,7 +130,6 @@
               disabled:dark:border-slate-700 disabled:dark:bg-slate-800 disabled:dark:text-slate-400
             ",
             dropdown: "z-20 divide-y divide-slate-100 dark:bg-slate-700",
-            label: "md:text-center!"
           },
         ) do |dropdown| %>
           <% dropdown.with_custom_item do %>
@@ -205,19 +204,20 @@
     </div>
 
     <div class="border-t border-slate-200 p-2 dark:border-slate-800">
-      <a
-        href="https://phac-nml.github.io/irida-next/docs/intro"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="
-          flex min-h-[44px] w-full items-center justify-center rounded-lg px-4 py-2 text-sm font-medium
-          text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700
-        "
-        aria-label="<%= t('general.help') %> - <%= t('general.opens_in_new_tab') %>"
-      >
-        <%= icon :question, class: "mr-2" %>
-        <%= t("general.help") %>
-      </a>
+      <%= render DropdownComponent.new(label: t('general.help'), icon: :question, icon_size: :md) do |dropdown| %>
+        <%= dropdown.with_item(
+        label: t(:"general.accessibility"),
+        url: accessibility_path,
+      ) %>
+
+        <%= dropdown.with_item(
+        label: t(:"general.documentation"),
+        url: "https://phac-nml.github.io/irida-next/docs/intro",
+        target: "_blank",
+        rel: "noopener noreferrer",
+        aria: { label: "#{t('general.documentation')} - #{t('general.opens_in_new_tab')}" }
+      ) %>
+      <% end %>
     </div>
   </div>
 </nav>
