@@ -1,6 +1,7 @@
 <% unless @namespace_group_link.errors.any? %>
-  <%= turbo_stream.update "member-update-alert",
-                    viral_alert(type:, message:, classes: "mb-4") %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
 <% end %>
 
 <%= turbo_stream.update "edit_dialog",
@@ -10,3 +11,5 @@
                         namespace_group_link: @namespace_group_link,
                         namespace: @namespace
                       } %>
+
+<turbo-stream action="refresh"></turbo-stream>
