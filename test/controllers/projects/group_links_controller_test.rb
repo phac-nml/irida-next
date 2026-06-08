@@ -6,9 +6,13 @@ module Projects
   class GroupLinksControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
 
-    test 'should apply default sort and support sorting project group links' do
+    setup do
       sign_in users(:john_doe)
 
+      @namespace_group_link_one = namespace_group_links(:namespace_group_link1)
+    end
+
+    test 'should apply default sort and support sorting project group links' do
       project_namespace = namespaces_project_namespaces(:project25_namespace)
       project = projects(:project25)
       group_link2 = namespace_group_links(:namespace_group_link2)
@@ -43,7 +47,6 @@ module Projects
     end
 
     test 'should share project namespace with group' do
-      sign_in users(:john_doe)
       group = groups(:group_one)
       project = projects(:project22)
       project_namespace = project.namespace
@@ -58,7 +61,6 @@ module Projects
     end
 
     test 'should not share project with group as group doesn\'t exist' do
-      sign_in users(:john_doe)
       group_id = 1
       project_namespace = namespaces_project_namespaces(:project1_namespace)
 
@@ -86,7 +88,6 @@ module Projects
     end
 
     test 'project namespace already shared with group' do
-      sign_in users(:john_doe)
       group = groups(:group_one)
       project_namespace = namespaces_project_namespaces(:project1_namespace)
 
@@ -108,22 +109,17 @@ module Projects
     end
 
     test 'unshare project' do
-      sign_in users(:john_doe)
-      namespace_group_link = namespace_group_links(:namespace_group_link1)
-
-      project_namespace = namespace_group_link.namespace
+      project_namespace = @namespace_group_link_one.namespace
 
       delete namespace_project_group_link_path(project_namespace.parent,
                                                project_namespace.project,
-                                               namespace_group_link,
+                                               @namespace_group_link_one,
                                                format: :turbo_stream)
 
       assert_response :ok
     end
 
     test 'unshare project when link doesn\'t exist' do
-      sign_in users(:john_doe)
-
       project_namespace = namespaces_project_namespaces(:project23_namespace)
 
       delete namespace_project_group_link_path(project_namespace.parent,
@@ -136,27 +132,21 @@ module Projects
 
     test 'should not unshare project with group as user doesn\'t have correct permissions' do
       sign_in users(:ryan_doe)
-      namespace_group_link = namespace_group_links(:namespace_group_link1)
-
-      project_namespace = namespace_group_link.namespace
+      project_namespace = @namespace_group_link_one.namespace
 
       delete namespace_project_group_link_path(project_namespace.parent,
                                                project_namespace.project,
-                                               namespace_group_link)
+                                               @namespace_group_link_one)
 
       assert_response :unauthorized
     end
 
     test 'should update namespace group share' do
-      sign_in users(:john_doe)
-
-      namespace_group_link = namespace_group_links(:namespace_group_link1)
-
-      project_namespace = namespace_group_link.namespace
+      project_namespace = @namespace_group_link_one.namespace
 
       patch namespace_project_group_link_path(project_namespace.parent,
                                               project_namespace.project,
-                                              namespace_group_link,
+                                              @namespace_group_link_one,
                                               params: {
                                                 namespace_group_link: {
                                                   group_access_level: Member::AccessLevel::GUEST
@@ -167,15 +157,11 @@ module Projects
     end
 
     test 'should not update namespace group share due to invalid params' do
-      sign_in users(:john_doe)
-
-      namespace_group_link = namespace_group_links(:namespace_group_link1)
-
-      project_namespace = namespace_group_link.namespace
+      project_namespace = @namespace_group_link_one.namespace
 
       patch namespace_project_group_link_path(project_namespace.parent,
                                               project_namespace.project,
-                                              namespace_group_link,
+                                              @namespace_group_link_one,
                                               params: {
                                                 namespace_group_link: {
                                                   group_access_level: -1
@@ -188,18 +174,38 @@ module Projects
     test 'should not update namespace group share due to incorrect permissions' do
       sign_in users(:ryan_doe)
 
-      namespace_group_link = namespace_group_links(:namespace_group_link1)
-
-      project_namespace = namespace_group_link.namespace
+      project_namespace = @namespace_group_link_one.namespace
 
       patch namespace_project_group_link_path(project_namespace.parent,
                                               project_namespace.project,
-                                              namespace_group_link,
+                                              @namespace_group_link_one,
                                               params: {
                                                 namespace_group_link: {
                                                   group_access_level: Member::AccessLevel::GUEST
                                                 }
                                               })
+      assert_response :unauthorized
+    end
+
+    test 'access edit group link' do
+      project_namespace = @namespace_group_link_one.namespace
+
+      get edit_namespace_project_group_link_path(project_namespace.parent, project_namespace.project,
+                                                 @namespace_group_link_one,
+                                                 format: :turbo_stream)
+
+      assert_response :success
+    end
+
+    test 'cannot access edit group link' do
+      sign_in users(:ryan_doe)
+
+      project_namespace = @namespace_group_link_one.namespace
+
+      get edit_namespace_project_group_link_path(project_namespace.parent, project_namespace.project,
+                                                 @namespace_group_link_one,
+                                                 format: :turbo_stream)
+
       assert_response :unauthorized
     end
   end

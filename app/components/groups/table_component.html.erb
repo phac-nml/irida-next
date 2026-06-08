@@ -69,7 +69,9 @@
             </td>
 
             <td class="px-6 py-4">
-              <%= helpers.local_date(namespace_group_link.expires_at, :long) %>
+              <% unless namespace_group_link.expires_at.nil? %>
+                <%= helpers.local_date(namespace_group_link.expires_at, :long) %>
+              <% end %>
             </td>
 
             <td class="px-6 py-4">
