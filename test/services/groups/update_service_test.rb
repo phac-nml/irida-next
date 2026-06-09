@@ -107,5 +107,42 @@ module Groups
       assert_equal 'Group 1', @group.name
       assert_equal 'group-1', @group.path
     end
+
+    test 'update top level group to public' do
+      valid_params = { public: true }
+
+      group_descendants = @group.self_and_descendants_of_type([Group.sti_name, Namespaces::ProjectNamespace.sti_name])
+
+      group_descendants.each do |descendant|
+        assert_not descendant.public, "Expected #{descendant.name} to be public"
+      end
+
+      Groups::UpdateService.new(@group, @user, valid_params).execute
+
+      assert @group.public
+
+      group_descendants.each do |descendant|
+        assert descendant.reload.public, "Expected #{descendant.name} to be public"
+      end
+    end
+
+    test 'update top level group to private' do
+      valid_params = { public: false }
+      group = groups(:public_group1)
+
+      group_descendants = group.self_and_descendants_of_type([Group.sti_name, Namespaces::ProjectNamespace.sti_name])
+
+      group_descendants.each do |descendant|
+        assert descendant.public, "Expected #{descendant.name} to be public"
+      end
+
+      Groups::UpdateService.new(group, @user, valid_params).execute
+
+      assert_not group.public
+
+      group_descendants.each do |descendant|
+        assert_not descendant.reload.public, "Expected #{descendant.name} to be private"
+      end
+    end
   end
 end

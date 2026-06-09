@@ -15,9 +15,9 @@ module Groups
 
       if updated
         if group.parent.nil?
-          if params[:public].present? && params[:public] == true
+          if params.key?(:public) && params[:public] == true
             update_descendants_to_public
-          elsif params[:public].present? && params[:public] == false
+          elsif params.key?(:public) && params[:public] == false
             update_descendants_to_private
           end
         end
