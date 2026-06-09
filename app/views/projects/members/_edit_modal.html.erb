@@ -8,7 +8,7 @@
   </div>
 
   <%= form_with(model: @member, url: namespace_project_member_path(@namespace.parent, @namespace.project, @member), method: :patch, html: { novalidate: true }) do |form| %>
-    <% form_id = "group-edit-member" %>
+    <% form_id = "project-edit-member" %>
     <% expires_at_input_id = "#{form.field_id(:expires_at)}-input" %>
 
     <div class="grid gap-4">

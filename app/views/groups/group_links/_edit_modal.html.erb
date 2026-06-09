@@ -12,7 +12,7 @@
 
   <%= form_with(model: @namespace_group_link, url: group_group_link_path(@namespace, @namespace_group_link, tab: @tab), method: :patch,
 html: { novalidate: true }) do |form| %>
-    <% form_id = "share_group_id_input" %>
+    <% form_id = "update-group-group-link" %>
     <% expires_at_input_id = "#{form.field_id(:expires_at)}-input" %>
 
     <div class="grid gap-4">
