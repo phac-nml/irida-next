@@ -70,13 +70,13 @@
         input_name: "member[expires_at]",
         selected_date: @member.expires_at
       ) %>
-      </div>
 
-      <% if invalid_expires_at %>
-        <%= render "shared/form/field_errors",
+        <% if invalid_expires_at %>
+          <%= render "shared/form/field_errors",
       id: error_container_id,
       errors: @member.errors[:expires_at] %>
-      <% end %>
+        <% end %>
+      </div>
 
       <div class="flex justify-start gap-1">
         <%= form.submit t(:"common.actions.update"),

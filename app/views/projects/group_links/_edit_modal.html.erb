@@ -85,13 +85,13 @@ html: { novalidate: true }) do |form| %>
         errored: invalid_expires_at,
         selected_date: @namespace_group_link.expires_at
       ) %>
-      </div>
 
-      <% if invalid_expires_at %>
-        <%= render "shared/form/field_errors",
+        <% if invalid_expires_at %>
+          <%= render "shared/form/field_errors",
       id: error_container_id,
       errors: @namespace_group_link.errors[:expires_at] %>
-      <% end %>
+        <% end %>
+      </div>
 
       <div class="flex justify-start gap-1">
         <%= form.submit I18n.t('common.actions.update'),
