@@ -84,10 +84,6 @@ describe("experimental feature toggle controller", () => {
     switchControl().checked = true;
     switchControl().dispatchEvent(new Event("change", { bubbles: true }));
 
-    expect(
-      document.getElementById("experimental-feature-data_grid_samples_table"),
-    ).toHaveAttribute("aria-busy", "true");
-    expect(switchControl()).toHaveAttribute("aria-disabled", "true");
     expect(status()).toHaveTextContent("Saving...");
     expect(announcer()).toHaveTextContent("Saving...");
     expect(
@@ -173,10 +169,6 @@ describe("experimental feature toggle controller", () => {
       }),
     );
 
-    expect(
-      document.getElementById("experimental-feature-data_grid_samples_table"),
-    ).not.toHaveAttribute("aria-busy");
-    expect(switchControl()).not.toHaveAttribute("aria-disabled");
     expect(switchControl().checked).toBe(false);
     expect(status()).toHaveTextContent(
       "The feature setting could not be updated. Please refresh the page and try again.",
@@ -209,10 +201,6 @@ describe("experimental feature toggle controller", () => {
       }),
     );
 
-    expect(
-      document.getElementById("experimental-feature-data_grid_samples_table"),
-    ).toHaveAttribute("aria-busy", "true");
-    expect(switchControl()).toHaveAttribute("aria-disabled", "true");
     expect(switchControl().checked).toBe(true);
     expect(status()).toHaveTextContent("Saving...");
   });

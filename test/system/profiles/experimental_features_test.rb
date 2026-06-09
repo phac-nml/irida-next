@@ -27,8 +27,6 @@ module Profiles
           find("label.group[for='experimental-feature-data_grid_samples_table-switch']").click
         end
 
-        assert_selector '#experimental-feature-data_grid_samples_table[aria-busy="true"]'
-        assert_selector '#experimental-feature-data_grid_samples_table-switch[aria-disabled="true"]', visible: :all
         assert_selector '#experimental-feature-data_grid_samples_table-status',
                         text: I18n.t('profiles.experimental_features.update.saving')
 

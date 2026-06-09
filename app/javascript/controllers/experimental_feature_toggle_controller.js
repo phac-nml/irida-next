@@ -35,8 +35,6 @@ export default class extends Controller {
 
     this.pending = true;
     this.lastSubmittedChecked = this.switchTarget.checked;
-    this.element.setAttribute("aria-busy", "true");
-    this.switchTarget.setAttribute("aria-disabled", "true");
     this.statusTarget.textContent = this.savingTextValue;
     this.announce(this.savingTextValue);
     sessionStorage.setItem(this.sessionStorageKey(), this.switchTarget.id);
@@ -62,8 +60,6 @@ export default class extends Controller {
     if (!this.pending) return;
 
     this.pending = false;
-    this.element.removeAttribute("aria-busy");
-    this.switchTarget.removeAttribute("aria-disabled");
 
     if (this.lastSubmittedChecked !== undefined) {
       this.switchTarget.checked = !this.lastSubmittedChecked;
