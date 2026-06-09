@@ -21,6 +21,7 @@ en:
     date:
       errors:
         invalid_input: must be in YYYY-MM-DD format (for example, 2026-05-01)
+      format_regex: "\\A\\d{4}-\\d{2}-\\d{2}\\z"
     labels:
       access_level: Access Level
       actions: Actions

@@ -31,6 +31,16 @@ class PersonalAccessToken < ApplicationRecord
     }
   }, if: -> { new_record? || expires_at_changed? }
 
+  # separate from above validates :expires_at to capture invalid format for new entries
+  validates :expires_at,
+            format: {
+              with: Regexp.new(I18n.t('common.date.format_regex')),
+              message: I18n.t('common.date.errors.invalid_input')
+            },
+            if: lambda {
+              expires_at_before_type_cast.present?
+            }
+
   scope :active, -> { not_revoked.not_expired }
   scope :not_revoked, -> { where(revoked: [false, nil]) }
   scope :revoked, -> { where(revoked: true) }

@@ -20,7 +20,8 @@ fr:
       submit: Envoyer
     date:
       errors:
-        invalid_input: Saisie de date invalide
+        invalid_input: doit être au format JJ-MM-AAAA (par exemple, 31-01-2026)
+      format_regex: "\\A\\d{2}-\\d{2}-\\d{4}\\z"
     labels:
       access_level: Niveau d’accès
       actions: Mesures

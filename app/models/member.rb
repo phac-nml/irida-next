@@ -27,6 +27,15 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                          if: lambda {
                            (new_record? || expires_at_changed?) && expires_at_before_type_cast.present?
                          }
+  # separate from above validates :expires_at to capture invalid format for new entries
+  validates :expires_at,
+            format: {
+              with: Regexp.new(I18n.t('common.date.format_regex')),
+              message: I18n.t('common.date.errors.invalid_input')
+            },
+            if: lambda {
+              expires_at_before_type_cast.present?
+            }
 
   before_destroy :last_namespace_owner_member
 
