@@ -35,6 +35,8 @@ export default class extends Controller {
   #maxDate;
   #minDate;
 
+  #arrowSvg;
+
   initialize() {
     this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
     this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
@@ -48,6 +50,7 @@ export default class extends Controller {
       this.#setMaxDate();
     }
 
+    this.#arrowSvg = this.inputArrowTarget.firstElementChild;
     this.idempotentConnect();
   }
 
@@ -89,7 +92,7 @@ export default class extends Controller {
     this.#calendar.removeAttribute("hidden");
     document.addEventListener("keydown", this.boundHandleGlobalKeydown);
     this.#calendar.addEventListener("focusin", this.boundHandleCalendarFocus);
-    this.inputArrowTarget.classList.add("rotate-180");
+    this.#arrowSvg.classList.add("rotate-180");
     this.datepickerInputTarget.setAttribute("aria-expanded", "true");
   }
 
@@ -100,7 +103,7 @@ export default class extends Controller {
       "focusin",
       this.boundHandleCalendarFocus,
     );
-    this.inputArrowTarget.classList.remove("rotate-180");
+    this.#arrowSvg.classList.remove("rotate-180");
     this.datepickerInputTarget.setAttribute("aria-expanded", "false");
   }
 
