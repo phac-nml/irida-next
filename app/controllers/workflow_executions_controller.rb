@@ -33,7 +33,7 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def workflow_execution_params
-    params.require(:workflow_execution).permit(workflow_execution_params_attributes) # rubocop:disable Rails/StrongParametersExpect
+    params.require(:workflow_execution).permit(workflow_execution_params_attributes)
   end
 
   def workflow_execution_update_params
