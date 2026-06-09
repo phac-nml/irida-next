@@ -684,7 +684,7 @@ a.pill-focus-reset:focus-visible {
     @apply border-red-700 text-red-900 dark:border-red-600 dark:text-red-400;
   }
 
-  input:disabled {
+  input[aria-disabled="true"] {
     @apply cursor-not-allowed bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-300;
   }
 
