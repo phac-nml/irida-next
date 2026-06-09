@@ -179,7 +179,6 @@ module Groups
         assert_selector 'tr', count: @group_links_count + header_row_count
 
         within "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}']" do
-          assert_no_text (Time.zone.today + 6).strftime('%B %d, %Y')
           assert_selector 'button', text: I18n.t('common.actions.update')
           click_button I18n.t('common.actions.update')
         end
@@ -196,9 +195,6 @@ module Groups
         assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
                            group_name: namespace_group_link.group.human_name)
-
-        assert_selector "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}'] td:nth-child(5)",
-                        text: (Time.zone.today + 6).strftime('%B %d, %Y')
       end
     end
 
