@@ -48,8 +48,11 @@ export default class AdvancedSearchController extends Controller {
     }
   }
 
-  renderSearch() {
-    if (this.searchGroupsTemplateTarget.innerHTML.trim() === "") {
+  renderSearch(addGroupIfEmpty = true) {
+    if (
+      addGroupIfEmpty === true &&
+      this.searchGroupsTemplateTarget.innerHTML.trim() === ""
+    ) {
       this.searchGroupsContainerTarget.innerHTML = "";
       this.addGroup();
     } else {
