@@ -90,6 +90,78 @@ module Profiles
 
       assert_response :unprocessable_content
       assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
+      assert_includes response.body, 'turbo-stream action="replace"'
+      assert_includes response.body, I18n.t('profiles.experimental_features.update.not_eligible')
+    end
+
+    test 'turbo_stream update returns validation error for invalid enabled value' do
+      sign_in @user
+      Flipper.expects(:enable_actor).never
+
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        patch profile_experimental_features_path(format: :turbo_stream),
+              params: { opt_in_form: { feature_key: 'data_grid_samples_table', enabled: 'yes' } }
+      end
+
+      assert_response :unprocessable_content
+      assert_includes response.body, 'turbo-stream action="replace"'
+      assert_includes response.body, I18n.t('profiles.experimental_features.update.validation_error')
+    end
+
+    test 'turbo_stream update returns empty response for unknown feature key' do
+      sign_in @user
+      Flipper.expects(:enable_actor).never
+
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        patch profile_experimental_features_path(format: :turbo_stream),
+              params: { opt_in_form: { feature_key: 'unknown_feature', enabled: '1' } }
+      end
+
+      assert_response :unprocessable_content
+      assert_not_includes response.body, 'turbo-stream'
+    end
+
+    test 'turbo_stream update returns validation error when params are incomplete' do
+      sign_in @user
+
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        patch profile_experimental_features_path(format: :turbo_stream),
+              params: { opt_in_form: { feature_key: 'data_grid_samples_table' } }
+      end
+
+      assert_response :unprocessable_content
+      assert_includes response.body, 'turbo-stream action="replace"'
+      assert_includes response.body, I18n.t('profiles.experimental_features.update.validation_error')
+    end
+
+    test 'turbo_stream update returns flipper error message when toggle fails' do
+      sign_in @user
+      Flipper.expects(:enable_actor).raises(Flipper::Error, 'adapter failed')
+      Rails.logger.expects(:error).with(regexp_matches(/adapter failed/))
+
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        patch profile_experimental_features_path(format: :turbo_stream),
+              params: { opt_in_form: { feature_key: 'data_grid_samples_table', enabled: '1' } }
+      end
+
+      assert_response :unprocessable_content
+      assert_includes response.body, 'turbo-stream action="replace"'
+      assert_includes response.body, I18n.t('profiles.experimental_features.update.error')
+    ensure
+      Flipper.disable_actor(:data_grid_samples_table, @user)
+    end
+
+    test 'turbo_stream update includes success message when enabled' do
+      sign_in @user
+
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        patch profile_experimental_features_path(format: :turbo_stream),
+              params: { opt_in_form: { feature_key: 'data_grid_samples_table', enabled: '1' } }
+
+        assert_includes response.body, I18n.t('profiles.experimental_features.update.success')
+      end
+    ensure
+      Flipper.disable_actor(:data_grid_samples_table, @user)
     end
 
     test 'should redirect unauthenticated users on update' do

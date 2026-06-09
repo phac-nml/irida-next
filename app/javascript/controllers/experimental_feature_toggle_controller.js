@@ -5,6 +5,7 @@ export default class extends Controller {
   static values = {
     savingText: String,
     successText: String,
+    validationErrorText: String,
     featureKey: String,
     clearDelay: Number,
     minimumSavingMs: Number,
@@ -12,9 +13,18 @@ export default class extends Controller {
 
   connect() {
     this.pending = false;
+    this.boundOnSubmitEnd = this.onSubmitEnd.bind(this);
+    this.formTarget.addEventListener("turbo:submit-end", this.boundOnSubmitEnd);
     this.restoreFocus();
     this.announceCurrentStatus();
     this.clearSuccessAfterDelay();
+  }
+
+  disconnect() {
+    this.formTarget.removeEventListener(
+      "turbo:submit-end",
+      this.boundOnSubmitEnd,
+    );
   }
 
   submit() {
@@ -37,6 +47,35 @@ export default class extends Controller {
     window.setTimeout(() => {
       this.formTarget.requestSubmit();
     }, minimumSavingMs);
+  }
+
+  onSubmitEnd(event) {
+    if (event.detail.success) return;
+
+    const responseHtml = event.detail.fetchResponse?.responseHTML;
+    if (responseHtml?.includes("turbo-stream")) return;
+
+    this.resetPendingState();
+  }
+
+  resetPendingState() {
+    if (!this.pending) return;
+
+    this.pending = false;
+    this.element.removeAttribute("aria-busy");
+    this.switchTarget.removeAttribute("aria-disabled");
+
+    if (this.lastSubmittedChecked !== undefined) {
+      this.switchTarget.checked = !this.lastSubmittedChecked;
+    }
+
+    if (this.statusTarget.textContent.trim() === this.savingTextValue) {
+      const errorMessage = this.hasValidationErrorTextValue
+        ? this.validationErrorTextValue
+        : "";
+      this.statusTarget.textContent = errorMessage;
+      if (errorMessage) this.announce(errorMessage);
+    }
   }
 
   sessionStorageKey() {

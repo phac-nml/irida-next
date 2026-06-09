@@ -18,6 +18,7 @@ function renderFixture({
       data-controller="experimental-feature-toggle"
       data-experimental-feature-toggle-saving-text-value="Saving..."
       data-experimental-feature-toggle-success-text-value="Saved"
+      data-experimental-feature-toggle-validation-error-text-value="The feature setting could not be updated. Please refresh the page and try again."
       data-experimental-feature-toggle-feature-key-value="${featureKey}"
       data-experimental-feature-toggle-minimum-saving-ms-value="900"
       data-experimental-feature-toggle-clear-delay-value="3000"
@@ -149,5 +150,70 @@ describe("experimental feature toggle controller", () => {
     vi.advanceTimersByTime(3000);
 
     expect(status()).toHaveTextContent("");
+  });
+
+  it("recovers pending state when turbo submit fails without a stream response", async () => {
+    vi.useFakeTimers();
+    renderFixture();
+    application = await startController();
+    const form = document.querySelector("form");
+    form.requestSubmit = vi.fn();
+
+    switchControl().checked = true;
+    switchControl().dispatchEvent(new Event("change", { bubbles: true }));
+    vi.advanceTimersByTime(900);
+
+    form.dispatchEvent(
+      new CustomEvent("turbo:submit-end", {
+        bubbles: true,
+        detail: {
+          success: false,
+          fetchResponse: { responseHTML: "" },
+        },
+      }),
+    );
+
+    expect(
+      document.getElementById("experimental-feature-data_grid_samples_table"),
+    ).not.toHaveAttribute("aria-busy");
+    expect(switchControl()).not.toHaveAttribute("aria-disabled");
+    expect(switchControl().checked).toBe(false);
+    expect(status()).toHaveTextContent(
+      "The feature setting could not be updated. Please refresh the page and try again.",
+    );
+    expect(announcer()).toHaveTextContent(
+      "The feature setting could not be updated. Please refresh the page and try again.",
+    );
+  });
+
+  it("does not reset pending state when turbo submit returns a stream response", async () => {
+    vi.useFakeTimers();
+    renderFixture();
+    application = await startController();
+    const form = document.querySelector("form");
+    form.requestSubmit = vi.fn();
+
+    switchControl().checked = true;
+    switchControl().dispatchEvent(new Event("change", { bubbles: true }));
+    vi.advanceTimersByTime(900);
+
+    form.dispatchEvent(
+      new CustomEvent("turbo:submit-end", {
+        bubbles: true,
+        detail: {
+          success: false,
+          fetchResponse: {
+            responseHTML: '<turbo-stream action="replace"></turbo-stream>',
+          },
+        },
+      }),
+    );
+
+    expect(
+      document.getElementById("experimental-feature-data_grid_samples_table"),
+    ).toHaveAttribute("aria-busy", "true");
+    expect(switchControl()).toHaveAttribute("aria-disabled", "true");
+    expect(switchControl().checked).toBe(true);
+    expect(status()).toHaveTextContent("Saving...");
   });
 });

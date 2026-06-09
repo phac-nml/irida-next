@@ -45,21 +45,7 @@ module Profiles
       end
 
       def feature_payload(feature_key)
-        return nil unless FLIPPER_FEATURE_CONFIG['features'].key?(feature_key)
-
-        feature_config = (settings.user_opt_in_features || {})[feature_key]
-        return nil if feature_config.blank?
-
-        {
-          key: feature_key.to_sym,
-          name: localized_value(feature_config['name']),
-          description: localized_value(feature_config['description']),
-          enabled: Flipper[feature_key.to_sym].actors_value.include?(current_user.flipper_id)
-        }
-      end
-
-      def localized_value(translations)
-        translations[I18n.locale.to_s].presence || translations['en']
+        settings.opt_in_feature_payload(feature_key, current_user)
       end
 
       def update_actor_gate

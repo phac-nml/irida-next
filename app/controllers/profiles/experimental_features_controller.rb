@@ -21,14 +21,13 @@ module Profiles
 
       respond_to do |format|
         format.turbo_stream do
-          render :update,
-                 status: updated ? :ok : :unprocessable_content,
-                 locals: {
-                   feature: feature,
-                   user: @user,
-                   status_message: status_message,
-                   status_variant: status_variant
-                 }
+          render_feature_update(
+            feature: feature,
+            feature_key: form.feature_key,
+            status_message: status_message,
+            status_variant: status_variant,
+            http_status: updated ? :ok : :unprocessable_content
+          )
         end
         format.html do
           flash[updated ? :success : :error] = status_message
@@ -63,14 +62,45 @@ module Profiles
       form.errors.details[field].any? { |error| error[:error] == error_key }
     end
 
-    def respond_invalid_submission
+    def respond_invalid_submission # rubocop:disable Metrics/MethodLength
+      feature_key = params.dig(:opt_in_form, :feature_key)
+
       respond_to do |format|
-        format.turbo_stream { head :unprocessable_content }
+        format.turbo_stream do
+          render_feature_update(
+            feature: nil,
+            feature_key: feature_key,
+            status_message: t(:'profiles.experimental_features.update.validation_error'),
+            status_variant: :error,
+            http_status: :unprocessable_content
+          )
+        end
         format.html do
           flash[:error] = t(:'profiles.experimental_features.update.validation_error')
           redirect_back_or_to profile_experimental_features_path
         end
       end
+    end
+
+    def render_feature_update(feature:, feature_key:, status_message:, status_variant:, http_status:)
+      display_feature = feature.presence || application_settings.opt_in_feature_payload(feature_key, @user)
+
+      if display_feature.present?
+        render :update,
+               status: http_status,
+               locals: {
+                 feature: display_feature,
+                 user: @user,
+                 status_message: status_message,
+                 status_variant: status_variant
+               }
+      else
+        head http_status
+      end
+    end
+
+    def application_settings
+      Irida::CurrentSettings.current_application_settings
     end
 
     def current_page
