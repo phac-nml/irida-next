@@ -723,8 +723,32 @@ a.pill-focus-reset:focus-visible {
     @apply bg-blue-800/80 text-white dark:bg-blue-600/50;
   }
 
+  [data-combobox--v1-target="indicatorClearButton"] {
+    @apply border-y border-slate-300 shadow-[inset_1px_0_0_0_var(--color-slate-300)] dark:border-slate-600 dark:shadow-[inset_1px_0_0_0_var(--color-slate-600)];
+  }
+
+  [data-combobox--v1-target="indicatorButton"] {
+    @apply border border-l-0 border-slate-300 dark:border-slate-600;
+  }
+
+  input[aria-invalid="true"]
+    ~ div
+    [data-combobox--v1-target="indicatorClearButton"] {
+    @apply border-y-red-700 shadow-[inset_1px_0_0_0_var(--color-red-700)] dark:border-y-red-600 dark:shadow-[inset_1px_0_0_0_var(--color-red-600)];
+  }
+
+  input[aria-invalid="true"]
+    ~ div
+    [data-combobox--v1-target="indicatorButton"] {
+    @apply border-red-700 dark:border-red-600;
+  }
+
   button:disabled {
     @apply cursor-not-allowed text-slate-500 dark:text-slate-400;
+  }
+
+  button:disabled:hover {
+    @apply bg-transparent;
   }
 }
 
