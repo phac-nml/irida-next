@@ -397,30 +397,4 @@ class GroupTest < ActiveSupport::TestCase
       assert_equal current_samples_count, expected_samples_count
     end
   end
-
-  test 'update group to public updates descendants to public' do
-    group = groups(:group_one)
-    subgroup = groups(:subgroup1)
-
-    assert_not group.public?
-    assert_not subgroup.public?
-
-    group.update(public: true)
-
-    assert group.reload.public?
-    assert subgroup.reload.public?
-  end
-
-  test 'update group to private updates descendants to private' do
-    group = groups(:public_group1)
-    subgroup = groups(:public_group1_subgroup1)
-
-    assert group.public?
-    assert subgroup.public?
-
-    group.update(public: false)
-
-    assert_not group.reload.public?
-    assert_not subgroup.reload.public?
-  end
 end

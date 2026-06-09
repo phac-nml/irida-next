@@ -8,7 +8,7 @@ module Groups
       @transfer_form = transfer_form
     end
 
-    def execute # rubocop:disable Metrics/AbcSize,Naming/PredicateMethod
+    def execute # rubocop:disable Metrics/AbcSize,Naming/PredicateMethod,Metrics/MethodLength
       return false unless @transfer_form.valid?
 
       new_namespace = @transfer_form.new_parent
@@ -28,6 +28,12 @@ module Groups
       parameters = update_params(new_namespace)
 
       @group.update(parameters)
+
+      if parameters[:public] == true
+        update_descendants_to_public
+      elsif parameters[:public] == false
+        update_descendants_to_private
+      end
 
       create_activities(old_namespace, new_namespace)
 

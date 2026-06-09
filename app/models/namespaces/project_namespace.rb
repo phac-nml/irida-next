@@ -42,7 +42,7 @@ module Namespaces
     has_many :automated_workflow_executions, foreign_key: :namespace_id, inverse_of: :project_namespace,
                                              class_name: 'AutomatedWorkflowExecution', dependent: :destroy
 
-    before_save :validate_public_namespace_type, if: -> { public_changed? }
+    validate :validate_public_namespace_type, if: -> { public_changed? }
 
     def self.sti_name
       'Project'

@@ -62,9 +62,7 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
   has_many :shared_projects, through: :shared_project_namespaces, class_name: 'Project', source: :project
   has_many :shared_with_groups, through: :shared_with_group_links, source: :group
 
-  before_save :validate_public_namespace_type, if: -> { public_changed? }
-  after_save :update_descendants_to_public, if: -> { public? && saved_change_to_public? }
-  after_save :update_descendants_to_private, if: -> { !public? && saved_change_to_public? }
+  validate :validate_public_namespace_type, if: -> { public_changed? || parent_id_changed? }
 
   def self.sti_name
     'Group'
@@ -158,42 +156,6 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     end
 
     add_to_samples_count(namespaces_to_update, transferred_samples_count)
-  end
-
-  def update_descendants_to_public
-    descendants_to_update = self_and_descendants_of_type(
-      [Group.sti_name,
-       Namespaces::ProjectNamespace.sti_name]
-    ).where(public: false)
-
-    descendants_to_update.each do |descendant|
-      next if descendant.public == true
-
-      descendant.update(public: true)
-
-      key = descendant.is_a?(Group) ? 'group.update' : 'namespaces_project_namespace.update'
-
-      descendant.create_activity key: key,
-                                 owner: Current.user
-    end
-  end
-
-  def update_descendants_to_private
-    descendants_to_update = self_and_descendants_of_type(
-      [Group.sti_name,
-       Namespaces::ProjectNamespace.sti_name]
-    ).where(public: true)
-
-    descendants_to_update.each do |descendant|
-      next if descendant.public == false
-
-      descendant.update(public: false)
-
-      key = descendant.is_a?(Group) ? 'group.update' : 'namespaces_project_namespace.update'
-
-      descendant.create_activity key: key,
-                                 owner: Current.user
-    end
   end
 
   def validate_public_namespace_type
