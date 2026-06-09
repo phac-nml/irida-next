@@ -111,6 +111,8 @@ module ComboboxDatepicker
         @system_arguments[:data]['combobox-datepicker--v1--input-combobox-datepicker--v1--calendar-outlet'] =
           "##{@calendar_id}"
         @system_arguments[:data]['combobox-datepicker--v1--input-calendar-id-value'] = @calendar_id
+        @system_arguments[:data]['combobox-datepicker--v1--input-date-format-regex-value'] =
+          I18n.t('components.datepicker.date_format_regex')
       end
 
       # Configures HTML attributes for the <div> datepicker calendar.

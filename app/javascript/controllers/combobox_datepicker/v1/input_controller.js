@@ -13,6 +13,7 @@ export default class extends Controller {
 
   static values = {
     calendarId: String,
+    dateFormatRegex: String,
   };
 
   // today's date attributes for quick access
@@ -142,7 +143,10 @@ export default class extends Controller {
 
   #setSelectedDate() {
     this.#selectedDate = this.datepickerInputTarget.value;
-    if (this.#selectedDate && this.#validateSelectedDate()) {
+    if (
+      this.#selectedDate &&
+      this.#validateDateWithinBounds(this.#selectedDate)
+    ) {
       const fullSelectedDate = new Date(this.#selectedDate);
       this.#selectedYear = fullSelectedDate.getUTCFullYear();
       // Sometimes an issue where selecting the 1st will display the previous month with the 1st as an
@@ -158,17 +162,17 @@ export default class extends Controller {
     }
   }
 
-  // validates the date within the input; prevents re-rendering incorrect calendar if an invalid date was entered
-  // and submitted to the backend
-  #validateSelectedDate() {
-    if (
-      (this.#minDate && this.#minDate > this.#selectedDate) ||
-      (this.#maxDate && this.#selectedDate > this.#maxDate)
-    ) {
-      return false;
+  #validateDateWithinBounds(date) {
+    let withinBounds = true;
+    if (this.#minDate && this.#minDate > date) {
+      withinBounds = false;
     }
 
-    return true;
+    if (this.#maxDate && date > this.#maxDate) {
+      withinBounds = false;
+    }
+
+    return withinBounds;
   }
 
   // append datepicker to dialog if in dialog, otherwise append to body
@@ -277,11 +281,42 @@ export default class extends Controller {
     }
   }
 
+  handleInputChange(event) {
+    event.preventDefault();
+    const dateInput = event.target.value;
+    if (
+      this.#validateDateInput(dateInput) &&
+      this.#validateDateWithinBounds(dateInput)
+    ) {
+      this.#setSelectedDate();
+    }
+    this.hideCalendar();
+  }
+
+  // validates both the date format (expected YYYY-MM-DD) and if a real date was entered
+  #validateDateInput(dateInput) {
+    let year, month, day;
+    if (dateInput.match(this.dateFormatRegexValue)) {
+      [year, month, day] = dateInput.split("-").map(Number);
+      month--;
+      const date = new Date(year, month, day);
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month &&
+        date.getDate() === day
+      );
+    }
+    return false;
+  }
+
   // without event.preventDefault() on Enter, form is submitted
   handleKeyboardInput(event) {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       this.toggleCalendar(event);
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      this.handleInputChange(event);
     }
   }
 
