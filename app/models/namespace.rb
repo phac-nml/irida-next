@@ -2,13 +2,13 @@
 
 # Namespace base class
 class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  include FileSelector
+  include HasPuid
+  include Routable
   include TrackActivity
 
   has_logidze
   acts_as_paranoid
-
-  include HasPuid
-  include Routable
 
   MAX_ANCESTORS = 10
 

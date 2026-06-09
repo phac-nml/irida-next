@@ -62,7 +62,7 @@ module WorkflowExecutions
       case file_selector_params[:attachable_type]
       when Sample.sti_name
         @attachable = Sample.find(attachable_id)
-      when Namespaces::ProjectNamespace.sti_name
+      when Namespaces::ProjectNamespace.sti_name, Namespaces::GroupNamespace.sti_name
         @attachable = Namespace.find(attachable_id)
       end
     end
