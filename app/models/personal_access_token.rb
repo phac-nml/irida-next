@@ -18,6 +18,7 @@ class PersonalAccessToken < ApplicationRecord
   validate :validate_scopes
 
   validates :expires_at, on: %i[create update], date: {
+    allow_empty: !Irida::CurrentSettings.require_personal_access_token_expiry?,
     greater_than: lambda {
       Time.zone.today
     },
