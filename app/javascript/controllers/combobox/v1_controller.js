@@ -4,6 +4,7 @@ import { announce } from "utilities/live_region";
 import {
   isPrintableCharacter,
   isOptionDisabled,
+  isComboboxDisabled,
   getLowercaseContent,
   highlightOption,
   setActiveDescendant,
@@ -55,6 +56,7 @@ export default class extends Controller {
     this.boundOnBackgroundMouseDown = this.#onBackgroundMouseDown.bind(this);
     this.boundOnComboboxKeyDown = this.#onComboboxKeyDown.bind(this);
     this.boundOnComboboxKeyUp = this.#onComboboxKeyUp.bind(this);
+    this.boundOnComboboxBeforeInput = this.#onComboboxBeforeInput.bind(this);
     this.boundOnComboboxClick = this.#onComboboxClick.bind(this);
     this.boundOnOptionClick = this.#onOptionClick.bind(this);
     this.boundOnComboboxFocus = this.#onComboboxFocus.bind(this);
@@ -384,6 +386,13 @@ export default class extends Controller {
   // Combobox events
 
   #onComboboxKeyDown(event) {
+    if (this.#comboboxDisabled()) {
+      if (event.key !== "Tab" && !event.key.startsWith("Arrow")) {
+        event.preventDefault();
+      }
+      return;
+    }
+
     let flag = false;
     const altKey = event.altKey;
 
@@ -478,6 +487,10 @@ export default class extends Controller {
   }
 
   #onComboboxKeyUp(event) {
+    if (this.#comboboxDisabled()) {
+      return;
+    }
+
     let flag = false;
     const char = event.key;
 
@@ -520,15 +533,33 @@ export default class extends Controller {
     }
   }
 
+  #onComboboxBeforeInput(event) {
+    if (this.#comboboxDisabled()) {
+      event.preventDefault();
+    }
+  }
+
   #onComboboxClick() {
+    if (this.#comboboxDisabled()) {
+      return;
+    }
+
     this.#floatingDropdown.toggle();
   }
 
   #onComboboxFocus() {
+    if (this.#comboboxDisabled()) {
+      return;
+    }
+
     this.#filterOptions();
   }
 
   #onBackgroundMouseDown(event) {
+    if (this.#comboboxDisabled()) {
+      return;
+    }
+
     if (
       !this.comboboxTarget.contains(event.target) &&
       !this.listboxTarget.contains(event.target) &&
@@ -545,11 +576,19 @@ export default class extends Controller {
   }
 
   onIndicatorMouseDown(event) {
+    if (this.#comboboxDisabled()) {
+      return;
+    }
+
     event.preventDefault();
     this.#clearShouldKeepOpen = this.#floatingDropdown.isVisible();
   }
 
   onIndicatorClick(event) {
+    if (this.#comboboxDisabled()) {
+      return;
+    }
+
     event.preventDefault();
     event.stopPropagation();
 
@@ -558,6 +597,10 @@ export default class extends Controller {
   }
 
   onClearClick(event) {
+    if (this.#comboboxDisabled()) {
+      return;
+    }
+
     event.preventDefault();
     event.stopPropagation();
 
@@ -568,6 +611,10 @@ export default class extends Controller {
   // Listbox Option events
 
   #onOptionClick(event) {
+    if (this.#comboboxDisabled()) {
+      return;
+    }
+
     const option = event.target.closest('[role="option"]');
     if (option && !isOptionDisabled(option)) {
       this.#setValue(option);
@@ -590,9 +637,14 @@ export default class extends Controller {
 
   // Event handlers
 
+  #comboboxDisabled() {
+    return isComboboxDisabled(this.comboboxTarget);
+  }
+
   #addComboboxEventListeners(combobox) {
     combobox.addEventListener("keydown", this.boundOnComboboxKeyDown);
     combobox.addEventListener("keyup", this.boundOnComboboxKeyUp);
+    combobox.addEventListener("beforeinput", this.boundOnComboboxBeforeInput);
     combobox.addEventListener("click", this.boundOnComboboxClick);
     combobox.addEventListener("focus", this.boundOnComboboxFocus);
   }
@@ -600,6 +652,10 @@ export default class extends Controller {
   #removeComboboxEventListeners(combobox) {
     combobox.removeEventListener("keydown", this.boundOnComboboxKeyDown);
     combobox.removeEventListener("keyup", this.boundOnComboboxKeyUp);
+    combobox.removeEventListener(
+      "beforeinput",
+      this.boundOnComboboxBeforeInput,
+    );
     combobox.removeEventListener("click", this.boundOnComboboxClick);
     combobox.removeEventListener("focus", this.boundOnComboboxFocus);
   }
