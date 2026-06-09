@@ -16,14 +16,17 @@ module Combobox
 
       private
 
-      def combobox_arguments # rubocop:disable Metrics/AbcSize
+      def combobox_arguments # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         { tag: 'input' }.deep_merge(@combobox_arguments).tap do |args|
           args[:autocomplete] = 'off'
           args[:id] = @combobox_id
           args[:type] = 'text'
           args[:value] = @selected_option[:name]
           args[:role] = 'combobox'
+          disabled = args.delete(:disabled) == true
           args[:aria] ||= {}
+          args[:aria][:disabled] = 'true' if disabled
+          args[:readonly] = true if disabled
           args[:aria][:autocomplete] = 'list'
           args[:aria][:expanded] = 'false'
           args[:aria][:controls] = @listbox_id
@@ -34,6 +37,10 @@ module Combobox
 
       def selection_present?
         @selected_option[:value].present?
+      end
+
+      def combobox_disabled?
+        @combobox_arguments[:disabled] == true
       end
 
       def selected_option(options)
@@ -76,6 +83,7 @@ module Combobox
           listbox_group_option['id'] = "#{@listbox_id}_option#{option_index}"
           listbox_group_option['role'] = 'option'
           listbox_group_option['data-value'] = option['value']
+          listbox_group_option['aria-disabled'] = 'true' if option.key?('disabled')
           listbox_group_option.content = option.text
           option.replace(listbox_group_option)
         end

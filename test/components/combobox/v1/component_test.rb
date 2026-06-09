@@ -106,6 +106,22 @@ module Combobox
         end
       end
 
+      def test_disabled_option_is_not_selectable
+        visit('/rails/view_components/combobox_component/with_disabled_options')
+        within "div[data-controller='combobox--v1']" do
+          combobox = find("input[role='combobox']")
+          combobox.click
+
+          assert_selector "div[role='option'][data-value='disabled-option'][aria-disabled='true']"
+          assert_empty combobox.value
+          assert_empty find("input[type='hidden']", visible: false).value
+
+          find("div[role='option'][data-value='enabled-option']").click
+          assert_equal 'Enabled option', combobox.value
+          assert_equal 'enabled-option', find("input[type='hidden']", visible: false).value
+        end
+      end
+
       def test_escape_key
         visit('/rails/view_components/combobox_component/default')
         within "div[data-controller='combobox--v1']" do
@@ -119,6 +135,47 @@ module Combobox
           assert_empty combobox.value
           hidden = find("input[type='hidden']", visible: false)
           assert_empty hidden.value
+        end
+      end
+
+      def test_disabled_combobox_does_not_open_or_change # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        visit('/rails/view_components/combobox_component/disabled')
+        within "div[data-controller='combobox--v1']" do
+          combobox = find("input[role='combobox']")
+          hidden = find("input[type='hidden']", visible: false)
+
+          assert_equal 'age', combobox.value
+          assert_equal 'metadata.age', hidden.value
+          assert_equal 'true', combobox['aria-disabled']
+          assert_equal 'readonly', combobox['readonly']
+
+          beforeinput_prevented = page.evaluate_script(<<~JS)
+            (() => {
+              const combobox = document.querySelector('input[role="combobox"]');
+              return !combobox.dispatchEvent(new InputEvent('beforeinput', {
+                bubbles: true,
+                cancelable: true,
+                data: 'country',
+                inputType: 'insertText',
+              }));
+            })();
+          JS
+          assert beforeinput_prevented
+
+          page.execute_script(<<~JS)
+            const combobox = document.querySelector('input[role="combobox"]');
+            combobox.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            combobox.dispatchEvent(
+              new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true })
+            );
+            combobox.dispatchEvent(new KeyboardEvent('keyup', { key: 'c', bubbles: true }));
+            combobox.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+          JS
+
+          assert_equal 'age', combobox.value
+          assert_equal 'metadata.age', hidden.value
+          assert_equal 'false', combobox['aria-expanded']
+          assert_selector "div[role='listbox']", visible: false
         end
       end
     end

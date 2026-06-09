@@ -2,6 +2,14 @@ export function isPrintableCharacter(str) {
   return str.length === 1 && str.match(/\S| /);
 }
 
+export function isOptionDisabled(option) {
+  return option?.getAttribute("aria-disabled") === "true";
+}
+
+export function isComboboxDisabled(combobox) {
+  return combobox?.getAttribute("aria-disabled") === "true";
+}
+
 export function getLowercaseContent(node) {
   return node.textContent.toLowerCase();
 }
