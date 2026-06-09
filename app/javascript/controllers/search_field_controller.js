@@ -161,7 +161,7 @@ export default class extends Controller {
 
   beforeSubmit(event) {
     if (this.hasAdvancedSearchV1Outlet) {
-      this.advancedSearchV1Outlet.renderSearch(false);
+      this.advancedSearchV1Outlet.renderExistingSearch();
     }
   }
 }
