@@ -1,31 +1,18 @@
 import { Controller } from "@hotwired/stimulus";
-import { INPUT_CLASSES } from "controllers/combobox_datepicker/constants";
-import { replaceStyleClasses } from "controllers/combobox_datepicker/utils";
 import FloatingDropdown from "utilities/floating_dropdown";
 
 export default class extends Controller {
   static outlets = ["combobox-datepicker--v1--calendar"];
   static targets = [
-    "datepickerLabel",
     "datepickerInput",
     "calendarTemplate",
     "minDate",
     "maxDate",
-    "errorContainer",
-    "errorMessageTemplate",
-    "errorMessage",
-    "ariaLive",
     "inputArrow",
   ];
 
   static values = {
-    autosubmit: Boolean,
     calendarId: String,
-    invalidDate: String,
-    invalidMaxDate: String,
-    invalidMinDate: String,
-    dateFormatRegex: String,
-    errorMessageId: String,
   };
 
   // today's date attributes for quick access
@@ -47,7 +34,10 @@ export default class extends Controller {
   #maxDate;
   #minDate;
 
-  #arrowSvg;
+  initialize() {
+    this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
+    this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
+  }
 
   connect() {
     if (this.hasMinDateTarget) {
@@ -56,10 +46,6 @@ export default class extends Controller {
     if (this.hasMaxDateTarget) {
       this.#setMaxDate();
     }
-
-    this.#arrowSvg = this.inputArrowTarget.firstElementChild;
-    this.boundHandleCalendarFocus = this.handleCalendarFocus.bind(this);
-    this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
 
     this.idempotentConnect();
   }
@@ -102,7 +88,7 @@ export default class extends Controller {
     this.#calendar.removeAttribute("hidden");
     document.addEventListener("keydown", this.boundHandleGlobalKeydown);
     this.#calendar.addEventListener("focusin", this.boundHandleCalendarFocus);
-    this.#arrowSvg.classList.add("rotate-180");
+    this.inputArrowTarget.classList.add("rotate-180");
     this.datepickerInputTarget.setAttribute("aria-expanded", "true");
   }
 
@@ -113,19 +99,17 @@ export default class extends Controller {
       "focusin",
       this.boundHandleCalendarFocus,
     );
-    this.#arrowSvg.classList.remove("rotate-180");
+    this.inputArrowTarget.classList.remove("rotate-180");
     this.datepickerInputTarget.setAttribute("aria-expanded", "false");
   }
 
   #setMinDate() {
     this.#minDate = this.minDateTarget.firstElementChild.innerText;
-    this.invalidMinDateValue = this.invalidMinDateValue.concat(this.#minDate);
     this.minDateTarget.remove();
   }
 
   #setMaxDate() {
     this.#maxDate = this.maxDateTarget.firstElementChild.innerText;
-    this.invalidMaxDateValue = this.invalidMaxDateValue.concat(this.#maxDate);
     this.maxDateTarget.remove();
   }
 
@@ -293,126 +277,16 @@ export default class extends Controller {
     }
   }
 
-  // handles validating user directly typing in a date
-  directInput(event) {
-    event.preventDefault();
-    const dateInput = event.target.value;
-    if (this.#validateDateInput(dateInput)) {
-      if (this.#minDate && this.#minDate > dateInput) {
-        this.#enableInputErrorState(this.invalidMinDateValue);
-      } else {
-        if (this.autosubmitValue) {
-          this.submitDate();
-        } else {
-          this.disableInputErrorState();
-        }
-        this.#setSelectedDate();
-      }
-    } else {
-      this.#enableInputErrorState(this.invalidDateValue);
-    }
-    this.hideCalendar();
-  }
-
-  // validates both the date format (expected YYYY-MM-DD) and if a real date was entered
-  #validateDateInput(dateInput) {
-    let year, month, day;
-    if (dateInput.match(this.dateFormatRegexValue)) {
-      [year, month, day] = dateInput.split("-").map(Number);
-      month--;
-      const date = new Date(year, month, day);
-      return (
-        date.getFullYear() === year &&
-        date.getMonth() === month &&
-        date.getDate() === day
-      );
-    }
-    return false;
-  }
-
   // without event.preventDefault() on Enter, form is submitted
-  handleEnterDirectInput(event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      this.directInput(event);
-    } else if (event.key === "ArrowDown") {
+  handleKeyboardInput(event) {
+    if (event.key === "ArrowDown") {
       event.preventDefault();
       this.toggleCalendar(event);
     }
   }
 
-  // adds error message if invalid date or a date prior to minDate was entered
-  #enableInputErrorState(message) {
-    if (this.autosubmitValue) {
-      this.errorContainerTarget.innerHTML = "";
-      this.datepickerInputTarget.setAttribute("aria-invalid", "true");
-      this.datepickerInputTarget.setAttribute(
-        "aria-describedby",
-        this.errorMessageIdValue,
-      );
-      this.#toggleErrorState(true);
-      const errorMessage =
-        this.errorMessageTemplateTarget.content.cloneNode(true);
-      this.errorContainerTarget.appendChild(errorMessage);
-      this.errorMessageTarget.innerText = message;
-
-      this.ariaLiveTarget.innerText = message;
-
-      if (this.errorContainerTarget.classList.contains("hidden")) {
-        this.errorContainerTarget.classList.remove("hidden");
-        this.errorContainerTarget.setAttribute("aria-hidden", false);
-      }
-    }
-  }
-
-  // disables the error state once a valid date is entered/selected
-  disableInputErrorState() {
-    if (this.autosubmitValue) {
-      this.errorContainerTarget.innerHTML = "";
-      this.datepickerInputTarget.removeAttribute("aria-invalid");
-      this.datepickerInputTarget.removeAttribute("aria-describedby");
-      if (!this.errorContainerTarget.classList.contains("hidden")) {
-        this.errorContainerTarget.classList.add("hidden");
-        this.errorContainerTarget.setAttribute("aria-hidden", true);
-      }
-
-      this.#toggleErrorState(false);
-    }
-  }
-
-  #toggleErrorState(erroring) {
-    if (erroring) {
-      replaceStyleClasses(
-        this.datepickerInputTarget,
-        INPUT_CLASSES["INPUT_DEFAULT"],
-        INPUT_CLASSES["INPUT_ERROR"],
-      );
-      if (this.hasDatepickerLabelTarget) {
-        replaceStyleClasses(
-          this.datepickerLabelTarget,
-          INPUT_CLASSES["LABEL_DEFAULT"],
-          INPUT_CLASSES["LABEL_ERROR"],
-        );
-      }
-    } else {
-      replaceStyleClasses(
-        this.datepickerInputTarget,
-        INPUT_CLASSES["INPUT_ERROR"],
-        INPUT_CLASSES["INPUT_DEFAULT"],
-      );
-      if (this.hasDatepickerLabelTarget) {
-        replaceStyleClasses(
-          this.datepickerLabelTarget,
-          INPUT_CLASSES["LABEL_ERROR"],
-          INPUT_CLASSES["LABEL_DEFAULT"],
-        );
-      }
-    }
-  }
-
   // submits the selected date
   submitDate() {
-    this.disableInputErrorState();
     this.element.closest("form").requestSubmit();
     this.#setSelectedDate();
   }
@@ -438,10 +312,7 @@ export default class extends Controller {
       selectedYear: this.#selectedYear,
       selectedMonthIndex: this.#selectedMonthIndex,
       maxDate: this.#maxDate,
-      maxDateMessage: this.invalidMaxDateValue,
       minDate: this.#minDate,
-      minDateMessage: this.invalidMinDateValue,
-      autosubmit: this.autosubmitValue,
     };
     this.comboboxDatepickerV1CalendarOutlet.shareParamsWithCalendarByInput(
       sharedVariables,

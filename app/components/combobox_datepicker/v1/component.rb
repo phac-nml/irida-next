@@ -4,7 +4,7 @@ module ComboboxDatepicker
   module V1
     # Datepicker Component
     # Renders the date input along with datepicker calendar
-    class Component < ::Component # rubocop:disable Metrics/ClassLength
+    class Component < ::Component
       # Default HTML tag for components main elements.
       TAG_DEFAULT = :div
 
@@ -21,7 +21,6 @@ module ComboboxDatepicker
       # @param input_aria_label [String] Aria label for the input. Necessary for accessibility if no label is passed.
       # @param min_date [String] A minimum date the user can input.
       # @param selected_date [String] The already selected date if it exists.
-      # @param autosubmit [Boolean] Submits the date upon selection if true
       # @param required [Boolean] Sets aria-required="true" on input_field_component if true
       # @param errored [Boolean] Initializes the datepicker in an error state if true (determined by backend validation)
       # @param calendar_arguments [Hash] HTML attributes for the datepicker
@@ -31,7 +30,7 @@ module ComboboxDatepicker
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(id:, input_name:, label: nil, input_aria_label: nil, min_date: 1.day.from_now, # rubocop:disable Metrics/MethodLength
-                     max_date: nil, selected_date: nil, autosubmit: false, required: false, errored: false,
+                     max_date: nil, selected_date: nil, required: false, errored: false,
                      calendar_arguments: {},  **system_arguments)
         raise ArgumentError, 'id is required' if id.blank?
         raise ArgumentError, 'input_name is required' if input_name.blank?
@@ -40,7 +39,6 @@ module ComboboxDatepicker
         @input_name = input_name
         @input_aria_label = input_aria_label
         @selected_date = selected_date
-        @autosubmit = autosubmit
         @required = required
         @errored = errored
         @min_date = min_date
@@ -98,7 +96,7 @@ module ComboboxDatepicker
       end
 
       # Configures HTML attributes for the main <div> container.
-      def setup_container_attributes # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def setup_container_attributes
         @system_arguments[:id] = @container_id
         @system_arguments[:tag] = TAG_DEFAULT
 
@@ -112,21 +110,7 @@ module ComboboxDatepicker
         @system_arguments[:data][:controller] = 'combobox-datepicker--v1--input'
         @system_arguments[:data]['combobox-datepicker--v1--input-combobox-datepicker--v1--calendar-outlet'] =
           "##{@calendar_id}"
-        @system_arguments[:data]['combobox-datepicker--v1--input-autosubmit-value'] = @autosubmit
-        @system_arguments[:data]['combobox-datepicker--v1--input-invalid-date-value'] =
-          I18n.t('components.datepicker.errors.invalid_date')
-        @system_arguments[:data]['combobox-datepicker--v1--input-invalid-min-date-value'] =
-          I18n.t('components.datepicker.errors.min_date_error')
-        @system_arguments[:data]['combobox-datepicker--v1--input-invalid-max-date-value'] =
-          I18n.t('components.datepicker.errors.max_date_error')
         @system_arguments[:data]['combobox-datepicker--v1--input-calendar-id-value'] = @calendar_id
-        @system_arguments[:data]['combobox-datepicker--v1--input-date-format-regex-value'] =
-          I18n.t('components.datepicker.date_format_regex')
-        return unless @autosubmit
-
-        # require the error container DOM ID to point aria-describedby when autosubmit is true for front-end
-        # validation
-        @system_arguments[:data]['combobox-datepicker--v1--input-error-message-id-value'] = @error_id
       end
 
       # Configures HTML attributes for the <div> datepicker calendar.

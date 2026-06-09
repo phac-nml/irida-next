@@ -1,9 +1,5 @@
 <% if @label %>
-  <label
-    data-combobox-datepicker--v1--input-target="datepickerLabel"
-    for="<%= @input_id %>"
-    class="mb-2 block w-fit text-sm font-medium text-slate-900 dark:text-white"
-  >
+  <label for="<%= @input_id %>" class="mb-2 block w-fit text-sm font-medium text-slate-900 dark:text-white">
     <%= @label %>
 
     <% if @required %>
@@ -23,8 +19,7 @@
     value="<%= @selected_date %>"
     data-combobox-datepicker--v1--input-target="datepickerInput"
     data-action="
-      change->combobox-datepicker--v1--input#directInput
-      keydown->combobox-datepicker--v1--input#handleEnterDirectInput
+      keydown->combobox-datepicker--v1--input#handleKeyboardInput
       click->combobox-datepicker--v1--input#toggleCalendar
     "
     type="text"
@@ -52,7 +47,6 @@
 
   <div class="absolute inset-y-0 right-0 z-10 flex items-center">
     <button
-      data-combobox-datepicker--v1--input-target="inputArrow"
       data-action="click->combobox-datepicker--v1--input#toggleCalendar"
       class="
         flex h-full w-10 cursor-pointer items-center justify-center rounded-r-lg text-slate-500 transition-colors
@@ -62,31 +56,9 @@
       type="button"
       aria-label="<%= I18n.t("components.datepicker.aria_label.dialog") %>"
     >
-      <%= icon(:caret_down, color: :subdued, size: :sm) %>
+      <div data-combobox-datepicker--v1--input-target="inputArrow">
+        <%= icon(:caret_down, color: :subdued, size: :sm) %>
+      </div>
     </button>
   </div>
 </div>
-
-<% if @autosubmit %>
-  <ul
-    data-combobox-datepicker--v1--input-target="errorContainer"
-    class="hidden max-w-md list-inside text-sm text-slate-500 dark:text-slate-400"
-    aria-hidden="true"
-    id="<%= @error_id %>"
-  ></ul>
-  <div class="sr-only" aria-live="polite" data-combobox-datepicker--v1--input-target="ariaLive"></div>
-  <template data-combobox-datepicker--v1--input-target="errorMessageTemplate">
-    <li>
-      <span class="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
-        <%= icon(:x_circle, size: :sm,
-      color: :danger,
-      class: "mr-1.5",
-      aria: {
-        hidden: true
-      }) %>
-
-        <span class="grow" data-combobox-datepicker--v1--input-target="errorMessage"></span>
-      </span>
-    </li>
-  </template>
-<% end %>
