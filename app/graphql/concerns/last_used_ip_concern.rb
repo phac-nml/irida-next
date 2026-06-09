@@ -14,6 +14,9 @@ module LastUsedIpConcern # rubocop:disable GraphQL/ObjectDescription
     ip_address = IPAddr.new(ip_address)
     last_used_ips_limit = 5
 
+    # don't track ip addresses from private ranges
+    return if ip_address.private?
+
     if last_used_ip_addresses.empty?
       personal_access_token.update(last_used_ips: [ip_address])
     else
