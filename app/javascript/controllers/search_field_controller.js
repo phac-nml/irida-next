@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static outlets = ["advanced-search", "advanced-search--v1", "selection"];
+  static outlets = ["advanced-search--v1", "selection"];
   static targets = ["input", "clearButton", "submitButton"];
 
   /**
@@ -161,9 +161,7 @@ export default class extends Controller {
 
   beforeSubmit(event) {
     if (this.hasAdvancedSearchV1Outlet) {
-      this.advancedSearchV1Outlet.renderSearch();
-    } else if (this.hasAdvancedSearchOutlet) {
-      this.advancedSearchOutlet.renderSearch();
+      this.advancedSearchV1Outlet.renderExistingSearch();
     }
   }
 }

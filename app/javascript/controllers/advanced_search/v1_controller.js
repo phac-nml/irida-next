@@ -53,9 +53,13 @@ export default class AdvancedSearchController extends Controller {
       this.searchGroupsContainerTarget.innerHTML = "";
       this.addGroup();
     } else {
-      this.searchGroupsContainerTarget.innerHTML =
-        this.searchGroupsTemplateTarget.innerHTML;
+      this.renderExistingSearch();
     }
+  }
+
+  renderExistingSearch() {
+    this.searchGroupsContainerTarget.innerHTML =
+      this.searchGroupsTemplateTarget.innerHTML;
   }
 
   onMorph() {
