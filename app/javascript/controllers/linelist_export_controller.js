@@ -23,6 +23,43 @@ import {
   resolveLinelistExportWorkerSource,
 } from "controllers/linelist_export/worker_client";
 
+let activeExports = 0;
+let beforeUnloadHandler = null;
+
+function bindExportBeforeUnload() {
+  if (beforeUnloadHandler) return;
+
+  beforeUnloadHandler = (event) => {
+    if (activeExports <= 0) return;
+
+    event.preventDefault();
+    event.returnValue = "";
+    return "";
+  };
+
+  window.addEventListener("beforeunload", beforeUnloadHandler);
+}
+
+function unbindExportBeforeUnload() {
+  if (!beforeUnloadHandler) return;
+
+  window.removeEventListener("beforeunload", beforeUnloadHandler);
+  beforeUnloadHandler = null;
+}
+
+function startExportBeforeUnloadGuard() {
+  activeExports += 1;
+  bindExportBeforeUnload();
+}
+
+function stopExportBeforeUnloadGuard() {
+  activeExports = Math.max(activeExports - 1, 0);
+
+  if (activeExports === 0) {
+    unbindExportBeforeUnload();
+  }
+}
+
 export default class extends Controller {
   static targets = ["sampleStatus", "progressTemplate"];
   static values = {
@@ -127,6 +164,8 @@ export default class extends Controller {
         this.t(this.preparingRowsMessageValue, { count: totalCount }),
       );
 
+      startExportBeforeUnloadGuard();
+
       this.workerClient.start({
         sample_ids: sampleIds,
         metadata_fields: metadataFields,
@@ -152,6 +191,7 @@ export default class extends Controller {
 
   terminateWorker() {
     this.workerClient?.stop();
+    stopExportBeforeUnloadGuard();
   }
 
   buildWorkerClient() {
