@@ -142,11 +142,8 @@ export default class extends Controller {
   }
 
   #setSelectedDate() {
-    this.#selectedDate = this.datepickerInputTarget.value;
-    if (
-      this.#selectedDate &&
-      this.#validateDateWithinBounds(this.#selectedDate)
-    ) {
+    if (this.#validateDateWithinBounds(this.datepickerInputTarget.value)) {
+      this.#selectedDate = this.datepickerInputTarget.value;
       const fullSelectedDate = new Date(this.#selectedDate);
       this.#selectedYear = fullSelectedDate.getUTCFullYear();
       // Sometimes an issue where selecting the 1st will display the previous month with the 1st as an
@@ -154,6 +151,7 @@ export default class extends Controller {
       // using UTCMonth alleviates the issue
       this.#selectedMonthIndex = fullSelectedDate.getUTCMonth();
     } else {
+      this.#selectedDate = "";
       this.#selectedYear = this.#todaysYear;
       this.#selectedMonthIndex = this.#todaysMonthIndex;
     }

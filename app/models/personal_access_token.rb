@@ -25,6 +25,8 @@ class PersonalAccessToken < ApplicationRecord
       if Irida::CurrentSettings.require_personal_access_token_expiry?
         Time.zone.today +
           Irida::CurrentSettings.max_personal_access_token_lifetime_in_days
+      else
+        Time.zone.local(9999, 12, 31, 0, 0, 0)
       end
     }
   }, if: -> { new_record? || expires_at_changed? }
