@@ -510,7 +510,7 @@ GEM
       racc
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-linux)
-    playwright-ruby-client (1.59.1)
+    playwright-ruby-client (1.60.0)
       base64
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
@@ -821,7 +821,7 @@ DEPENDENCIES
   paranoia
   pathogen_view_components!
   pg
-  playwright-ruby-client (= 1.59.1)
+  playwright-ruby-client (= 1.60.0)
   propshaft
   public_activity
   puma (~> 8.0)
