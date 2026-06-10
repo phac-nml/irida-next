@@ -55,11 +55,11 @@ module Groups
       end
     end
 
-    def update_group_link
+    def edit_group_link
       if @namespace.group_namespace?
-        'groups/group_links/update'
+        'groups/group_links/edit'
       else
-        'projects/group_links/update'
+        'projects/group_links/edit'
       end
     end
 

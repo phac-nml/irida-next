@@ -897,12 +897,12 @@ fr:
       title: Paramètres généraux
     group_links:
       edit:
-        description: Mise à jour du partage de ce groupe avec le groupe %{name}
+        description: Modifier le lien du groupe partagé avec le groupe %{group_name}
         title: Mettre à jour le partage de groupe
       index:
         actions:
+          edit_aria_label: Mettre à jour le lien du groupe partagé avec le groupe %{group_name}
           unlink_aria_label: 'Dissocier l’espace de noms du groupe : %{member}'
-          update_aria_label: Mettre à jour le lien du groupe partagé avec le groupe %{group_name}
         empty_state:
           description: Aucun groupe n'a reçu d'accès délégué à ce groupe
           title: Aucun groupe
@@ -934,13 +934,13 @@ fr:
         title: Historique
     members:
       edit:
-        description: Vous mettez à jour le membre %{member} dans le groupe %{name}
-        title: Mettre à jour le membre
+        description: Vous modifiez le membre %{member} dans le groupe %{name}
+        title: Modifier un membre
       index:
         actions:
+          edit_aria_label: Modifier un membre du groupe
           leave_group_aria_label: Bouton Quitter le groupe
           remove_aria_label: 'Supprimer le membre du groupe : %{member}'
-          update_aria_label: Mettre à jour un membre du groupe
         add: Ajouter un nouveau membre
         empty_state:
           description: Aucun members n'a reçu d'accès délégué à ce groupe
@@ -1535,8 +1535,8 @@ fr:
       title: Paramètres généraux
     group_links:
       edit:
-        description: Mise à jour du partage de ce projet avec le groupe %{name}
-        title: Mettre à jour le partage de projet
+        description: Modifier le partage de ce projet avec le groupe %{name}
+        title: Modifier le partage de projet
       index:
         access_level:
           level_0: Pas d’accès
@@ -1546,8 +1546,8 @@ fr:
           level_40: Responsable
           level_50: Propriétaire
         actions:
+          edit_aria_label: Modifier le lien du projet partagé avec le groupe %{group_name}
           unlink_aria_label: 'Dissocier l’espace de noms du groupe : %{member}'
-          update_aria_label: Mettre à jour le lien du projet partagé avec le groupe %{group_name}
         empty_state:
           description: Aucun groupe n'a reçu d'accès délégué à ce projet
           title: Aucun groupe
@@ -1585,9 +1585,9 @@ fr:
         title: Mettre à jour le membre
       index:
         actions:
+          edit_aria_label: Mettre à jour le membre du projet
           leave_project_aria_label: Laisser le lien du projet
           remove_aria_label: 'Supprimer le lien du membre du projet : %{member}'
-          update_aria_label: Mettre à jour le membre du projet
         add: Ajouter un nouveau membre
         empty_state:
           description: Aucun members n'a reçu d'accès délégué à ce projet

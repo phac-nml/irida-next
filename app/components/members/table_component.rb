@@ -55,11 +55,11 @@ module Members
       end
     end
 
-    def update_member
+    def edit_member
       if @namespace.group_namespace?
-        'groups/members/update'
+        'groups/members/edit'
       else
-        'projects/members/update'
+        'projects/members/edit'
       end
     end
 

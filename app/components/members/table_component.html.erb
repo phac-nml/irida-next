@@ -115,7 +115,7 @@
                 <div class="flex items-center gap-2">
                   <% if (member.user != @current_user && @abilities[:update_member] &&
 member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-                    <%= render partial: update_member,
+                    <%= render partial: edit_member,
                   locals: {
                     namespace: @namespace,
                     member:,

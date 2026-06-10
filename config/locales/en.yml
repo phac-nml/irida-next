@@ -895,12 +895,12 @@ en:
       title: General Settings
     group_links:
       edit:
-        description: Update sharing this group with group %{name}
-        title: Update Group Share
+        description: Edit sharing this group with group %{name}
+        title: Edit Group Share
       index:
         actions:
+          edit_aria_label: Edit shared group link with group %{group_name}
           unlink_aria_label: 'Unlink namespace from group: %{member}'
-          update_aria_label: Update shared group link with group %{group_name}
         empty_state:
           description: There are no groups that have been delegated access to this group
           title: No groups
@@ -932,13 +932,13 @@ en:
         title: History
     members:
       edit:
-        description: You are updating member %{member} in group %{name}
-        title: Update Member
+        description: You are editing member %{member} in group %{name}
+        title: Edit Member
       index:
         actions:
+          edit_aria_label: Edit group member
           leave_group_aria_label: Leave group
           remove_aria_label: 'Remove group member: %{member}'
-          update_aria_label: Update group member
         add: Add New Member
         empty_state:
           description: There are no members that have been delegated access to this group
@@ -1531,8 +1531,8 @@ en:
       title: General Settings
     group_links:
       edit:
-        description: Update sharing this project with group %{name}
-        title: Update Project Share
+        description: Edit sharing this project with group %{name}
+        title: Edit Project Share
       index:
         access_level:
           level_0: No Access
@@ -1542,8 +1542,8 @@ en:
           level_40: Maintainer
           level_50: Owner
         actions:
+          edit_aria_label: Edit shared project link with group %{group_name}
           unlink_aria_label: 'Unlink namespace from group: %{member}'
-          update_aria_label: Update shared project link with group %{group_name}
         empty_state:
           description: There are no groups that have been delegated access to this project
           title: No groups
@@ -1577,13 +1577,13 @@ en:
         project_transferred: Project was transferred by %{user}
     members:
       edit:
-        description: You are updating member %{member} in project %{name}
-        title: Update Member
+        description: You are editing member %{member} in project %{name}
+        title: Edit Member
       index:
         actions:
+          edit_aria_label: Edit project member
           leave_project_aria_label: Leave project
           remove_aria_label: 'Remove project member: %{member}'
-          update_aria_label: Update project member
         add: Add New Member
         empty_state:
           description: There are no members that have been delegated access to this project

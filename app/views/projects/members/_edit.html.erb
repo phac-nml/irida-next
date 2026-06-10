@@ -1,11 +1,11 @@
-<%= button_to t(:"common.actions.update"),
+<%= button_to t(:"common.actions.edit"),
 edit_namespace_project_member_path(namespace.parent, namespace.project, member),
 data: {
   turbo_stream: true,
 },
 method: :get,
 aria: {
-  label: t(:"projects.members.index.actions.update_aria_label"),
+  label: t(:"projects.members.index.actions.edit_aria_label"),
 },
 class:
   "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
