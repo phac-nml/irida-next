@@ -117,7 +117,7 @@ module Combobox
         visit('/rails/view_components/combobox_component/default')
         within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
-          combobox.click.send_keys(:home)
+          combobox.click.send_keys(:escape, :home)
           cursor_position = page.evaluate_script("document.getElementById('field').selectionStart")
           assert_equal 0, cursor_position
 
