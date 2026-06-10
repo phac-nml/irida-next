@@ -68,7 +68,8 @@
         id: form.field_id(:expires_at),
         label: t("activerecord.attributes.member.expires_at"),
         input_name: "member[expires_at]",
-        selected_date: @member.expires_at
+        selected_date: @member.expires_at,
+        errored: invalid_expires_at
       ) %>
 
         <% if invalid_expires_at %>

@@ -16,7 +16,6 @@ export const CALENDAR_CLASSES = {
     "not-aria-disabled:text-slate-900",
     "not-aria-disabled:hover:bg-slate-100",
     "not-aria-disabled:cursor-pointer",
-    "not-aria-disabled:text-slate-900",
     "not-aria-disabled:hover:bg-slate-100",
     "aria-disabled:cursor-not-allowed",
     "aria-disabled:text-slate-500",

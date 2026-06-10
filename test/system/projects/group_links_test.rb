@@ -289,5 +289,28 @@ module Projects
       assert_selector 'table tbody tr', count: 1
       assert_selector "table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
     end
+
+    test 'cannot update namespace group link which may have been deleted in another tab' do
+      namespace_group_link = namespace_group_links(:namespace_group_link3)
+      expiry_date = (Time.zone.today + 7).strftime('%Y-%m-%d')
+
+      visit namespace_project_members_path(@namespace.parent, @namespace.project)
+      click_button I18n.t(:'projects.members.index.tabs.groups')
+
+      within "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}']" do
+        click_button I18n.t('common.actions.update')
+      end
+
+      within 'dialog' do
+        assert_selector 'h1', text: I18n.t(:'projects.group_links.edit.title')
+
+        namespace_group_link.destroy
+
+        find('#namespace_group_link_expires_at-input').set(expiry_date)
+        click_button I18n.t('common.actions.update')
+      end
+
+      assert_text 'Resource not found'
+    end
   end
 end
