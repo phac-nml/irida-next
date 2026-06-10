@@ -51,6 +51,7 @@ gem 'devise', '~> 5.0.4'
 gem 'rack-cors'
 
 # Use OmniAuth auth
+gem 'oauth2', '>= 2.0.22'
 gem 'omniauth'
 gem 'omniauth-entra-id'
 gem 'omniauth-rails_csrf_protection'
