@@ -55,6 +55,7 @@ gem 'omniauth'
 gem 'omniauth-entra-id'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
+gem 'oauth2', '>= 2.0.22'
 
 # API Integrations
 gem 'faraday', '~> 2.14'
