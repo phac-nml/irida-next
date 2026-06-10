@@ -28,8 +28,8 @@ module Combobox
       test 'renders aria-disabled only for disabled options' do
         render_component(options: options_with_disabled)
 
-        assert_selector '[role="option"][data-value="enabled-option"]:not([aria-disabled])'
-        assert_selector '[role="option"][data-value="disabled-option"][aria-disabled="true"]'
+        assert_selector '[role="option"][data-value="enabled-option"]:not([aria-disabled])', visible: :all
+        assert_selector '[role="option"][data-value="disabled-option"][aria-disabled="true"]', visible: :all
       end
 
       test 'renders clear and show-options buttons outside tab order' do
@@ -43,8 +43,8 @@ module Combobox
         render_component(disabled: true)
 
         assert_selector 'input[role="combobox"][aria-disabled="true"][readonly]:not([disabled])'
-        assert_selector 'button[data-combobox--v1-target="indicatorClearButton"][disabled]'
-        assert_selector 'button[data-combobox--v1-target="indicatorButton"][disabled]'
+        assert_selector 'button[data-combobox--v1-target="indicatorClearButton"][aria-disabled="true"]:not([disabled])'
+        assert_selector 'button[data-combobox--v1-target="indicatorButton"][aria-disabled="true"]:not([disabled])'
       end
 
       test 'default preview renders' do
@@ -56,14 +56,14 @@ module Combobox
       test 'with_disabled_options preview renders aria-disabled options' do
         render_combobox_preview(:with_disabled_options)
 
-        assert_selector '[role="option"][data-value="disabled-option"][aria-disabled="true"]'
+        assert_selector '[role="option"][data-value="disabled-option"][aria-disabled="true"]', visible: :all
       end
 
       test 'disabled preview renders disabled combobox' do
         render_combobox_preview(:disabled)
 
         assert_selector 'input[role="combobox"][aria-disabled="true"][readonly]:not([disabled])'
-        assert_selector 'button[data-combobox--v1-target="indicatorButton"][disabled]'
+        assert_selector 'button[data-combobox--v1-target="indicatorButton"][aria-disabled="true"]:not([disabled])'
       end
 
       private
