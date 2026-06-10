@@ -21,8 +21,10 @@ import FloatingDropdown from "utilities/floating_dropdown";
 export default class extends Controller {
   static targets = [
     "combobox",
+    "popup",
     "listbox",
     "hidden",
+    "noResults",
     "ariaLiveUpdate",
     "indicatorButton",
     "indicatorClearButton",
@@ -43,6 +45,7 @@ export default class extends Controller {
   #firstOption;
   #lastOption;
   #clearShouldKeepOpen;
+  #popupView = "options";
 
   connect() {
     this.#filter = this.comboboxTarget.value;
@@ -63,7 +66,7 @@ export default class extends Controller {
 
     this.#floatingDropdown = new FloatingDropdown({
       trigger: this.comboboxTarget.parentElement,
-      dropdown: this.listboxTarget,
+      dropdown: this.popupTarget,
       manageAria: false,
       onShow: () => this.#onShow(),
       onHide: () => this.#onHide(),
@@ -135,19 +138,27 @@ export default class extends Controller {
       });
   }
 
-  #renderNoResults() {
-    const noResultsOption = document.createElement("div");
-    noResultsOption.setAttribute("role", "option");
-    noResultsOption.setAttribute("aria-disabled", "true");
-    noResultsOption.setAttribute("aria-selected", "false");
-    noResultsOption.className =
-      "px-3 py-2 text-sm text-slate-500 dark:text-slate-300";
-    const noResultsMessage =
-      this.hasNoResultsTextValue && this.noResultsTextValue
-        ? this.noResultsTextValue
-        : "No results found";
-    noResultsOption.textContent = noResultsMessage;
-    this.listboxTarget.appendChild(noResultsOption);
+  #noResultsMessage() {
+    return this.hasNoResultsTextValue && this.noResultsTextValue
+      ? this.noResultsTextValue
+      : "No results found";
+  }
+
+  #syncPopupView() {
+    const showingNoResults = this.#popupView === "noResults";
+
+    this.listboxTarget.hidden = showingNoResults;
+    this.noResultsTarget.hidden = !showingNoResults;
+
+    if (showingNoResults) {
+      this.noResultsTarget.textContent = this.#noResultsMessage();
+    } else {
+      this.noResultsTarget.textContent = "";
+    }
+
+    if (this.#floatingDropdown.isVisible()) {
+      this.listboxTarget.style.display = showingNoResults ? "none" : "block";
+    }
   }
 
   #announceNumberOfResults() {
@@ -177,6 +188,7 @@ export default class extends Controller {
     const filter = this.#filter.toLowerCase();
     this.#filteredOptions = [];
     this.listboxTarget.innerHTML = "";
+    this.#popupView = "options";
 
     this.#allOptions.forEach((allOption) => {
       let flag = false;
@@ -215,8 +227,9 @@ export default class extends Controller {
 
     const option = this.#populateCurrentFirstLastOptions();
     if (option === null) {
-      this.#renderNoResults();
+      this.#popupView = "noResults";
     }
+    this.#syncPopupView();
     if (this.#floatingDropdown.isVisible()) {
       this.#announceNumberOfResults();
     }
@@ -364,8 +377,9 @@ export default class extends Controller {
   }
 
   #onShow() {
-    this.listboxTarget.style.display = "block";
-    this.listboxTarget.removeAttribute("aria-hidden");
+    this.popupTarget.style.display = "block";
+    this.popupTarget.removeAttribute("aria-hidden");
+    this.#syncPopupView();
     this.comboboxTarget.setAttribute("aria-expanded", "true");
     if (this.hasIndicatorButtonTarget) {
       this.indicatorButtonTarget.firstElementChild.classList.add("rotate-180");
@@ -373,8 +387,9 @@ export default class extends Controller {
   }
 
   #onHide() {
+    this.popupTarget.style.display = "none";
+    this.popupTarget.setAttribute("aria-hidden", "true");
     this.listboxTarget.style.display = "none";
-    this.listboxTarget.setAttribute("aria-hidden", "true");
     this.comboboxTarget.setAttribute("aria-expanded", "false");
     if (this.hasIndicatorButtonTarget) {
       this.indicatorButtonTarget.firstElementChild.classList.remove(
@@ -387,7 +402,7 @@ export default class extends Controller {
 
   #onComboboxKeyDown(event) {
     if (this.#comboboxDisabled()) {
-      if (event.key !== "Tab" && !event.key.startsWith("Arrow")) {
+      if (event.key !== "Tab") {
         event.preventDefault();
       }
       return;
@@ -465,14 +480,17 @@ export default class extends Controller {
         break;
       }
       case "Home": {
-        this.comboboxTarget.setSelectionRange(0, 0);
-        flag = true;
+        if (this.#floatingDropdown.isVisible()) {
+          this.#setOption(this.#firstOption);
+          flag = true;
+        }
         break;
       }
       case "End": {
-        const length = this.comboboxTarget.value.length;
-        this.comboboxTarget.setSelectionRange(length, length);
-        flag = true;
+        if (this.#floatingDropdown.isVisible()) {
+          this.#setOption(this.#lastOption);
+          flag = true;
+        }
         break;
       }
       default: {
@@ -512,8 +530,9 @@ export default class extends Controller {
       case "ArrowLeft":
       case "Right":
       case "ArrowRight":
-      case "Home":
-      case "End":
+        if (this.#floatingDropdown.isVisible()) {
+          return;
+        }
         this.#setOption(null);
         flag = true;
         break;

@@ -22,7 +22,7 @@
     <button
       type="button"
       class="
-        h-full w-8 cursor-pointer items-center justify-center text-slate-500 transition-colors focus-visible:outline-3 enabled:hover:bg-slate-100 dark:text-slate-300 dark:enabled:hover:bg-slate-700
+        h-full w-8 items-center justify-center text-slate-500 transition-colors not-aria-disabled:cursor-pointer not-aria-disabled:hover:bg-slate-100 focus-visible:outline-3 aria-disabled:cursor-not-allowed dark:text-slate-300 dark:not-aria-disabled:hover:bg-slate-700
         <%= selection_present? ? 'flex' : 'hidden' %>
       "
       data-combobox--v1-target="indicatorClearButton"
@@ -30,7 +30,7 @@
       aria-label="<%= t('combobox_component.clear_selection') %>"
       title="<%= t('combobox_component.clear_selection') %>"
       tabindex="-1"
-      <%= "disabled" if combobox_disabled? %>
+      aria-disabled="<%= combobox_disabled? %>"
     >
       <%= icon(:x, size: :sm, color: :subdued) %>
     </button>
@@ -38,28 +38,38 @@
     <button
       type="button"
       class="
-        flex h-full w-10 cursor-pointer items-center justify-center rounded-r-lg text-slate-500 transition-colors
-        focus-visible:outline-3 enabled:hover:bg-slate-100 dark:text-slate-300 dark:enabled:hover:bg-slate-700
+        flex h-full w-10 items-center justify-center rounded-r-lg text-slate-500 transition-colors
+        not-aria-disabled:cursor-pointer not-aria-disabled:hover:bg-slate-100 focus-visible:outline-3
+        aria-disabled:cursor-not-allowed dark:text-slate-300 dark:not-aria-disabled:hover:bg-slate-700
       "
       data-combobox--v1-target="indicatorButton"
       data-action="mousedown->combobox--v1#onIndicatorMouseDown click->combobox--v1#onIndicatorClick"
       aria-label="<%= t('combobox_component.show_options') %>"
       title="<%= t('combobox_component.show_options') %>"
       tabindex="-1"
-      <%= "disabled" if combobox_disabled? %>
+      aria-disabled="<%= combobox_disabled? %>"
     >
       <%= icon(:caret_down, size: :sm, color: :subdued) %>
     </button>
   </div>
 
-  <%= tag.div(
-    id: @listbox_id,
-    role: "listbox",
-    "aria-label": combobox_arguments[:aria][:label],
-    "data-combobox--v1-target": "listbox",
-  ) do %>
-    <%= @listbox_options %>
-  <% end %>
+  <div data-combobox--v1-target="popup" aria-hidden="true" style="display: none;">
+    <%= tag.div(
+      id: @listbox_id,
+      role: "listbox",
+      "aria-label": combobox_arguments[:aria][:label],
+      "data-combobox--v1-target": "listbox",
+    ) do %>
+      <%= @listbox_options %>
+    <% end %>
+
+    <div
+      role="status"
+      hidden
+      class="px-3 py-2 text-sm text-slate-500 dark:text-slate-300"
+      data-combobox--v1-target="noResults"
+    ></div>
+  </div>
 
   <div class="sr-only" aria-live="polite" data-combobox--v1-target="ariaLiveUpdate"></div>
 <% end %>

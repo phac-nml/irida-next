@@ -727,6 +727,11 @@ a.pill-focus-reset:focus-visible {
     @apply border-y border-slate-300 shadow-[inset_1px_0_0_0_var(--color-slate-300)] dark:border-slate-600 dark:shadow-[inset_1px_0_0_0_var(--color-slate-600)];
   }
 
+  [data-combobox--v1-target="indicatorClearButton"][aria-disabled="true"],
+  [data-combobox--v1-target="indicatorButton"][aria-disabled="true"] {
+    @apply pointer-events-none text-slate-500 dark:text-slate-400;
+  }
+
   [data-combobox--v1-target="indicatorButton"] {
     @apply border border-l-0 border-slate-300 dark:border-slate-600;
   }
