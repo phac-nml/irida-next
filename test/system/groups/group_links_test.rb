@@ -147,13 +147,13 @@ module Groups
 
         within "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}']" do
           assert_selector 'td:nth-child(4)', text: I18n.t('activerecord.models.member.access_level.guest')
-          assert_selector 'button', text: I18n.t('common.actions.update')
-          click_button I18n.t('common.actions.update')
+          assert_selector 'button', text: I18n.t('common.actions.edit')
+          click_button I18n.t('common.actions.edit')
         end
 
         within 'dialog' do
           find('#namespace_group_link_group_access_level').find(:xpath, 'option[4]').select_option
-          click_button I18n.t('common.actions.update')
+          click_button I18n.t('common.actions.edit')
         end
 
         assert_no_selector 'dialog'
@@ -179,15 +179,15 @@ module Groups
         assert_selector 'tr', count: @group_links_count + header_row_count
 
         within "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}']" do
-          assert_selector 'button', text: I18n.t('common.actions.update')
-          click_button I18n.t('common.actions.update')
+          assert_selector 'button', text: I18n.t('common.actions.edit')
+          click_button I18n.t('common.actions.edit')
         end
 
         within 'dialog' do
           find('#namespace_group_link_expires_at-input').click
           find('#namespace_group_link_expires_at-input').set(expiry_date)
           find('#namespace_group_link_expires_at-input').send_keys(:return)
-          click_button I18n.t('common.actions.update')
+          click_button I18n.t('common.actions.edit')
         end
 
         assert_no_selector 'dialog'
@@ -207,7 +207,7 @@ module Groups
       assert_selector 'tr', count: @group_links_count + header_row_count
 
       within('table') do
-        assert_no_selector 'button', text: I18n.t('common.actions.update')
+        assert_no_selector 'button', text: I18n.t('common.actions.edit')
       end
     end
 
@@ -313,7 +313,7 @@ module Groups
       assert_selector 'tr', count: @group_links_count + header_row_count
 
       within "table tbody tr[id='namespace_group_link_#{namespace_group_link.id}']" do
-        click_button I18n.t('common.actions.update')
+        click_button I18n.t('common.actions.edit')
       end
 
       within 'dialog' do
@@ -322,7 +322,7 @@ module Groups
         namespace_group_link.destroy
 
         find('#namespace_group_link_expires_at-input').set(expiry_date)
-        click_button I18n.t('common.actions.update')
+        click_button I18n.t('common.actions.edit')
       end
 
       assert_text 'Resource not found'

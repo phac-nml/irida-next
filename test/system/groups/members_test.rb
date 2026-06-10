@@ -208,13 +208,13 @@ module Groups
 
         within "table tbody tr[id='member_#{group_member.id}']" do
           assert_selector 'td:nth-child(2)', text: I18n.t('activerecord.models.member.access_level.guest')
-          assert_selector 'button', text: I18n.t('common.actions.update')
-          click_button I18n.t('common.actions.update')
+          assert_selector 'button', text: I18n.t('common.actions.edit')
+          click_button I18n.t('common.actions.edit')
         end
 
         within 'dialog' do
           find('#member_access_level').find(:xpath, 'option[4]').select_option
-          click_button I18n.t('common.actions.update')
+          click_button I18n.t('common.actions.edit')
         end
 
         assert_no_selector 'dialog'
@@ -236,13 +236,13 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
       within "table tbody tr[id='member_#{group_member.id}']" do
-        assert_selector 'button', text: I18n.t('common.actions.update')
-        click_button I18n.t('common.actions.update')
+        assert_selector 'button', text: I18n.t('common.actions.edit')
+        click_button I18n.t('common.actions.edit')
       end
 
       within 'dialog' do
         find('#member_access_level').find(:xpath, 'option[2]').select_option
-        click_button I18n.t('common.actions.update')
+        click_button I18n.t('common.actions.edit')
 
         assert_text I18n.t('activerecord.errors.models.member.attributes.access_level.invalid',
                            user: group_member.user.email,
@@ -288,15 +288,15 @@ module Groups
       assert_selector 'turbo-frame#members table'
 
       within "table tbody tr[id='member_#{group_member.id}']" do
-        assert_selector 'button', text: I18n.t('common.actions.update')
-        click_button I18n.t('common.actions.update')
+        assert_selector 'button', text: I18n.t('common.actions.edit')
+        click_button I18n.t('common.actions.edit')
       end
 
       within 'dialog' do
         find('#member_expires_at-input').click
         find('#member_expires_at-input').set(expiry_date)
         find('#member_expires_at-input').send_keys(:return)
-        click_button I18n.t('common.actions.update')
+        click_button I18n.t('common.actions.edit')
       end
 
       assert_no_selector 'dialog'
@@ -311,7 +311,7 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
       within "table tbody tr[id='member_#{group_member.id}']" do
-        assert_no_selector 'button', text: I18n.t('common.actions.update')
+        assert_no_selector 'button', text: I18n.t('common.actions.edit')
       end
     end
 
