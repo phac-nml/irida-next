@@ -897,7 +897,7 @@ fr:
       title: Paramètres généraux
     group_links:
       edit:
-        description: Modifier le lien du groupe partagé avec le groupe %{group_name}
+        description: Modifier le partage de ce groupe avec le groupe %{name}
         title: Mettre à jour le partage de groupe
       index:
         actions:
