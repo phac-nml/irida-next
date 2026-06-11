@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'faker'
 
 class LastUsedIpConcernTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
@@ -14,7 +15,7 @@ class LastUsedIpConcernTest < ActionDispatch::IntegrationTest
   test 'update_last_used_ips adds new IP address to personal access token and sends email' do
     user = users(:john_doe)
 
-    ip_address = '192.168.1.1'
+    ip_address = Faker::Internet.public_ip_v4_address
 
     # Ensure the personal access token starts with no IP addresses
     assert_empty @personal_access_token.last_used_ips
@@ -48,7 +49,7 @@ class LastUsedIpConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'update_last_used_ips does not add IP address if it is already in the list of last used ips' do
-    ip_address = '192.168.1.1'
+    ip_address = Faker::Internet.public_ip_v4_address
     ip_addresses = @personal_access_token.last_used_ips
     ip_addresses << ip_address
     @personal_access_token.update(last_used_ips: ip_addresses)
@@ -68,7 +69,7 @@ class LastUsedIpConcernTest < ActionDispatch::IntegrationTest
   test 'update_last_used_ips returns early if personal access token is an integration token' do
     @personal_access_token.update(integration: true)
     post api_graphql_path, params: { query: '{ __schema }' },
-                           headers: { Authorization: @authorization_header, 'REMOTE_ADDR' => '192.168.1.1' }
+                           headers: { Authorization: @authorization_header, 'REMOTE_ADDR' => Faker::Internet.public_ip_v4_address }
 
     assert_enqueued_emails 0
     assert_empty @personal_access_token.reload.last_used_ips
@@ -86,20 +87,19 @@ class LastUsedIpConcernTest < ActionDispatch::IntegrationTest
 
   test 'update_last_used_ips returns early if personal access token is nil' do
     post api_graphql_path, params: { query: '{ __schema }' },
-                           headers: { Authorization: @authorization_header, 'REMOTE_ADDR' => '192.168.1.1' }
+                           headers: { Authorization: @authorization_header, 'REMOTE_ADDR' => Faker::Internet.public_ip_v4_address }
 
     assert_enqueued_emails 0
     assert_response :success
   end
 
   test 'update_last_used_ips only keeps track of the last 5 used ips' do
-    ip_addresses = [IPAddr.new('192.2.2.0'), IPAddr.new('192.2.2.1'), IPAddr.new('192.2.2.2'), IPAddr.new('192.2.2.3'),
-                    IPAddr.new('192.2.2.4')]
+    ip_addresses = Array.new(5) { Faker::Internet.public_ip_v4_address }
 
     @personal_access_token.update(last_used_ips: ip_addresses)
 
-    first_ip_address = '192.2.2.0'
-    new_ip_address = '192.2.2.5'
+    first_ip_address = ip_addresses.first
+    new_ip_address = Faker::Internet.public_ip_v4_address
 
     assert_equal 5, @personal_access_token.last_used_ips.length
 
@@ -114,5 +114,21 @@ class LastUsedIpConcernTest < ActionDispatch::IntegrationTest
     assert_includes @personal_access_token.reload.last_used_ips, new_ip_address
 
     assert_not_includes @personal_access_token.reload.last_used_ips, first_ip_address
+  end
+
+  test 'update_last_used_ips does not add IP address if it is in private ranges' do
+    ip_address = Faker::Internet.private_ip_v4_address
+
+    assert IPAddr.new(ip_address).private?, 'IP address should be private'
+    assert_not_includes @personal_access_token.reload.last_used_ips, ip_address
+
+    post api_graphql_path, params: { query: '{ __schema }' },
+                           headers: { Authorization: @authorization_header, 'REMOTE_ADDR' => ip_address }
+    assert_response :success
+
+    count = @personal_access_token.reload.last_used_ips.count { |ip| ip == ip_address }
+    assert_equal 0, count, 'IP address should not be added if in private range'
+
+    assert_enqueued_emails 0
   end
 end
