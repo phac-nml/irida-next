@@ -7,16 +7,17 @@ module Profiles
 
     def show
       authorize! @user, to: :read?
-      @eligible_features = service.eligible_features
+      @eligible_features = Profiles::ExperimentalFeatures::OptInService.new(@user).eligible_features
     end
 
     def update # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! @user, to: :update?
 
-      form = build_form
-      updated = Profiles::ExperimentalFeatures::OptInService.new(@user, form).execute
-      feature = service.feature(form.feature_key, include_ineligible: !updated)
-      status_message = updated ? t('.success') : status_message_for(form)
+      form = Profiles::ExperimentalFeatures::OptInForm.new(user: @user, **opt_in_form_params)
+      opt_in_service = Profiles::ExperimentalFeatures::OptInService.new(@user, form)
+      updated = opt_in_service.execute
+      feature = opt_in_service.feature(form.feature_key, include_ineligible: !updated)
+      status_message = updated ? t('.success') : error_message_for(form)
       status_variant = updated ? :success : :error
 
       respond_to do |format|
@@ -40,18 +41,11 @@ module Profiles
 
     private
 
-    def service
-      @service ||= Profiles::ExperimentalFeatures::OptInService.new(@user)
+    def opt_in_form_params
+      params.expect(opt_in_form: %i[feature_key enabled])
     end
 
-    def build_form
-      Profiles::ExperimentalFeatures::OptInForm.new(
-        user: @user,
-        **params.expect(opt_in_form: %i[feature_key enabled])
-      )
-    end
-
-    def status_message_for(form)
+    def error_message_for(form)
       return t(:'profiles.experimental_features.update.error') if form_error?(form, :base, :flipper_error)
       return t(:'profiles.experimental_features.update.not_eligible') if form_error?(form, :feature_key, :not_eligible)
 
@@ -83,7 +77,7 @@ module Profiles
     end
 
     def render_feature_update(feature:, feature_key:, status_message:, status_variant:, http_status:)
-      display_feature = feature.presence || application_settings.opt_in_feature_payload(feature_key, @user)
+      display_feature = feature.presence || Irida::CurrentSettings.opt_in_feature_payload(feature_key, @user)
 
       if display_feature.present?
         render :update,
@@ -97,10 +91,6 @@ module Profiles
       else
         head http_status
       end
-    end
-
-    def application_settings
-      Irida::CurrentSettings.current_application_settings
     end
 
     def current_page
