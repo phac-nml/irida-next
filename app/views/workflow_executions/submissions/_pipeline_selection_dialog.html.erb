@@ -38,8 +38,8 @@
               data-workflow-selection-max-samples-configured="<%= max_samples_configured %>"
               data-workflow-selection-min-samples="<%= workflow.minimum_samples if min_samples_configured %>"
               data-workflow-selection-max-samples="<%= workflow.maximum_samples if max_samples_configured %>"
-              data-workflow-selection-min-samples-message="<%= t('workflow_executions.submissions.pipeline_selection.min_samples_required', min_samples: workflow.minimum_samples) %>"
-              data-workflow-selection-max-samples-message="<%= t('workflow_executions.submissions.pipeline_selection.max_samples_exceeded', max_samples: workflow.maximum_samples) %>"
+              data-workflow-selection-min-samples-message="<%= t('shared.workflow_executions.sample_limits.min_samples_required', min_samples: workflow.minimum_samples) %>"
+              data-workflow-selection-max-samples-message="<%= t('shared.workflow_executions.sample_limits.max_samples_exceeded', max_samples: workflow.maximum_samples) %>"
               data-action="click->workflow-selection#selectWorkflow"
             >
               <span class="mr-2 shrink-0">

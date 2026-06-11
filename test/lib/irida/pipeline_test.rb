@@ -424,6 +424,39 @@ class PipelinesTest < ActiveSupport::TestCase
     assert pipeline.min_samples_limit_configured?
   end
 
+  test 'min samples limit configured at entry level' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      settings: {
+        min_samples: 3
+      }
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert pipeline.min_samples_limit_configured?
+  end
+
+  test 'max samples limit configured at version level' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3', 'settings' => {
+                                     'max_samples' => 5
+                                   } },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert pipeline.max_samples_limit_configured?
+  end
+
   test 'max samples limit configured at entry level' do
     entry = {
       url: 'https://github.com/phac-nml/iridanextexample',
