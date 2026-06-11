@@ -15,6 +15,7 @@ module WorkflowExecutions
     end
 
     def create
+      @attachment = @attachments_params[:files]&.first
       respond_to do |format|
         format.turbo_stream do
           render status: :ok, locals: { file_selector_params: }
@@ -62,18 +63,14 @@ module WorkflowExecutions
       case file_selector_params[:attachable_type]
       when Sample.sti_name
         @attachable = Sample.find(attachable_id)
-      when Namespaces::ProjectNamespace.sti_name, Namespaces::GroupNamespace.sti_name
+      when Namespaces::ProjectNamespace.sti_name, Group.sti_name
         @attachable = Namespace.find(attachable_id)
       end
     end
 
-    def attachments # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def attachments
       @attachments_params = { files: [] }
-      if Flipper.enabled?(:v2_samplesheet, current_user)
-        @attachments_params[:attachable_id] = file_selector_params[:attachable_id]
-      else
-        @attachments_params[:index] = file_selector_params[:index]
-      end
+      @attachments_params[:attachable_id] = file_selector_params[:attachable_id]
 
       property = file_selector_params['property']
       if params[:attachment_id] == 'no_attachment'

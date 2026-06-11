@@ -143,7 +143,7 @@
                         <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
                       <% end %>
                     <% end %>
-                    <% if property[:format] == 'path' %>
+                    <% if property[:format] == 'path' || property[:format] == 'file-path' %>
                       <div
                         class="
                           flex flex-col rounded-lg border border-slate-300 bg-slate-300 @md:flex-row
@@ -160,11 +160,13 @@
                         </span>
 
                         <a
+                          id="<%= fields.field_id("#{name}_link") %>"
                           href="<%= new_workflow_executions_file_selector_path(
                             file_selector: {
+                              property: name,
                               namespace_type: @namespace_type,
                               attachable_id: @namespace_id,
-                              attachable_type: Namespaces::ProjectNamespace.sti_name,
+                              attachable_type: @namespace_type,
                               selected_id: nil,
                               namespace_id: @namespace_id,
                             }
@@ -175,6 +177,8 @@
                             dark:text-white dark:placeholder-slate-400
                           "
                         ></a>
+
+                        <%= fields.hidden_field name, required: property[:required] %>
                       </div>
                     <% else %>
                       <%= form_input(fields, name, property, property[:required], instance) %>

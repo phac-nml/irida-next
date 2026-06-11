@@ -10,16 +10,10 @@
   data-nextflow--v1--samplesheet-automated-workflow-value="<%= @samples.empty? %>"
   data-nextflow--v1--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
   data-action="
-    nextflow--v1--file:sendFileData->nextflow--v1--samplesheet#updateFileData
     nextflow--v1--metadata:sendMetadata->nextflow--v1--samplesheet#updateMetadata
   "
 >
-  <h1
-    class="
-      mb-4 text-2xl leading-none font-extrabold tracking-tight text-slate-900 md:text-5xl lg:text-4xl
-      dark:text-white
-    "
-  >
+  <h1 class="mb-4 text-2xl leading-none font-extrabold tracking-tight text-slate-900 md:text-5xl lg:text-4xl dark:text-white">
     <%= @workflow.name %>
   </h1>
 
@@ -122,7 +116,46 @@
                         <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
                       <% end %>
                     <% end %>
-                    <%= form_input(fields, name, property, property[:required], instance) %>
+                    <% if property[:format] == 'path' || property[:format] == 'file-path' %>
+                      <div
+                        class="
+                          flex flex-col rounded-lg border border-slate-300 bg-slate-300 @md:flex-row
+                          dark:border-slate-600 dark:bg-slate-600
+                        "
+                      >
+                        <span
+                          class="
+                            inline-flex items-center rounded-t-lg px-3 py-2 font-mono text-sm text-slate-900
+                            @md:rounded-l-lg @md:rounded-tr-none dark:text-slate-300
+                          "
+                        >
+                          <%= format_name_as_arg(name) %>
+                        </span>
+
+                        <a
+                          id="<%= fields.field_id("#{name}_link") %>"
+                          href="<%= new_workflow_executions_file_selector_path(
+                            file_selector: {
+                              property: name,
+                              namespace_type: @namespace_type,
+                              attachable_id: @namespace_id,
+                              attachable_type: @namespace_type,
+                              selected_id: nil,
+                              namespace_id: @namespace_id,
+                            }
+                          ) %>"
+                          class="
+                            block w-full min-w-0 flex-1 rounded-b-lg border-none bg-slate-50 p-2.5 text-sm
+                            text-slate-900 focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700
+                            dark:text-white dark:placeholder-slate-400
+                          "
+                        ></a>
+
+                        <%= fields.hidden_field name, required: property[:required] %>
+                      </div>
+                    <% else %>
+                      <%= form_input(fields, name, property, property[:required], instance) %>
+                    <% end %>
                   <% else %>
                     <% value =
                       (
