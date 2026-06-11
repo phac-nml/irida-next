@@ -37,6 +37,7 @@ require 'test_helpers/dashboard_sorting_helper'
 require 'test_helpers/sorting_test_helper'
 require 'test_helpers/w3c_validation_helpers'
 require 'test_helpers/user_opt_in_features_test_helper'
+require 'test_helpers/ip_test_helpers'
 require 'turbo/broadcastable/test_helper'
 require 'minitest/retry'
 
@@ -70,6 +71,7 @@ module ActiveSupport
     include ActionPolicy::TestHelper
     include ArrayHelpers
     include WorkflowExecutionAdvancedSearchHelper
+    include IPTestHelpers
     include ActiveJob::TestHelper
     include ActionMailer::TestHelper
     include Turbo::Broadcastable::TestHelper
