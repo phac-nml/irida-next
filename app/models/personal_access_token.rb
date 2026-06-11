@@ -29,7 +29,7 @@ class PersonalAccessToken < ApplicationRecord
         Time.zone.local(9999, 12, 31, 0, 0, 0)
       end
     }
-  }, if: -> { new_record? || expires_at_changed? }
+  }, if: -> { new_record? || expires_at_before_type_cast.present? }
 
   scope :active, -> { not_revoked.not_expired }
   scope :not_revoked, -> { where(revoked: [false, nil]) }

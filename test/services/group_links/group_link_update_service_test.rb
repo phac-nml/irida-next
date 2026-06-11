@@ -137,5 +137,19 @@ module GroupLinks
       assert_equal Member::AccessLevel::MAINTAINER, project_group_link.at(version: 1).group_access_level
       assert_equal Member::AccessLevel::GUEST, project_group_link.at(version: 2).group_access_level
     end
+
+    test 'update group link that had no expires_at with invalid expires_at input' do
+      namespace_group_link = namespace_group_links(:namespace_group_link2)
+
+      assert_nil namespace_group_link.expires_at
+      GroupLinks::GroupLinkUpdateService.new(@user, namespace_group_link,
+                                             { expires_at: 'invalid_input' }).execute
+
+      assert_nil namespace_group_link.expires_at
+
+      assert namespace_group_link.errors[:expires_at].include?(
+        I18n.t('common.date.errors.invalid_input')
+      )
+    end
   end
 end

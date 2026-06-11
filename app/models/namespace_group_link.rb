@@ -28,17 +28,7 @@ class NamespaceGroupLink < ApplicationRecord
     Time.zone.today
   }, less_than: -> { Time.zone.local(9999, 12, 31, 0, 0, 0) } },
                          if: lambda {
-                           (new_record? || expires_at_changed?) && expires_at_before_type_cast.present?
-                         }
-
-  # separate from above validates :expires_at to capture invalid format for new entries
-  validates :expires_at, on: %i[create update],
-                         format: {
-                           with: Regexp.new(I18n.t('common.date.format_regex')),
-                           message: I18n.t('common.date.errors.invalid_input')
-                         },
-                         if: lambda {
-                           expires_at_before_type_cast.present?
+                           new_record? || expires_at_before_type_cast.present?
                          }
 
   after_destroy :send_access_revoked_emails
