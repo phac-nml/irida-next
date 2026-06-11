@@ -95,8 +95,7 @@ module Namespaces
       return true if parent.group_namespace? && parent.public?
       return true if (parent.user_namespace? || parent.group_namespace?) && !public?
 
-      errors.add(:public, I18n.t('activerecord.errors.models.namespaces/project_namespace.attributes.public.invalid'))
-      throw(:abort)
+      errors.add(:public, :invalid)
     end
   end
 end

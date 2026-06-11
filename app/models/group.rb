@@ -162,7 +162,6 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     return true if parent.nil?
     return true if parent.public == public
 
-    errors.add(:public, I18n.t('activerecord.errors.models.group.attributes.public.invalid'))
-    throw(:abort)
+    errors.add(:public, :invalid)
   end
 end
