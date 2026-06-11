@@ -40,15 +40,14 @@ class ComboboxComponentPreview < ViewComponent::Preview
   def disabled_options_preview_options
     options_for_select(
       [
+        ['First disabled option', 'first-disabled-option'],
         ['First enabled option', 'first-enabled-option'],
-        ['Disabled option', 'disabled-option'],
         ['Second enabled option', 'second-enabled-option'],
-        ['Another disabled option', 'another-disabled-option'],
+        ['Second disabled option', 'second-disabled-option'],
         ['Enabled option', 'enabled-option'],
-        ['Last disabled option', 'last-disabled-option'],
-        ['Third enabled option', 'third-enabled-option']
+        ['Last disabled option', 'last-disabled-option']
       ],
-      { disabled: %w[disabled-option another-disabled-option last-disabled-option] }
+      { disabled: %w[first-disabled-option second-disabled-option last-disabled-option] }
     )
   end
 
