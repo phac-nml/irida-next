@@ -122,6 +122,7 @@ export default class FloatingDropdown {
   // Recalculate and apply dropdown position using Floating UI
   update() {
     computePosition(this.#trigger, this.#dropdown, {
+      strategy: this.#strategy,
       placement: "bottom",
       middleware: [
         flip(),
@@ -132,6 +133,7 @@ export default class FloatingDropdown {
               size({
                 apply({ availableWidth, availableHeight, rects, elements }) {
                   Object.assign(elements.floating.style, {
+                    width: `${rects.reference.width}px`,
                     maxWidth: `${Math.max(0, availableWidth)}px`,
                     maxHeight: `${Math.max(0, availableHeight)}px`,
                     minWidth: `${rects.reference.width}px`,
@@ -156,6 +158,7 @@ export default class FloatingDropdown {
           position: this.#strategy,
           left: `${triggerRect.left}px`,
           top: `${triggerRect.bottom}px`,
+          width: `${triggerRect.width}px`,
         });
       });
   }
