@@ -163,6 +163,7 @@
                           id="<%= fields.field_id("#{name}_link") %>"
                           href="<%= new_workflow_executions_file_selector_path(
                             file_selector: {
+                              pattern: ".*",
                               property: name,
                               namespace_type: @namespace_type,
                               attachable_id: @namespace_id,
@@ -176,6 +177,7 @@
                             text-slate-900 focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700
                             dark:text-white dark:placeholder-slate-400
                           "
+                          aria-label="<%= t("components.nextflow.select_file_for", property: name) %>"
                         ></a>
 
                         <%= fields.hidden_field name, required: property[:required] %>

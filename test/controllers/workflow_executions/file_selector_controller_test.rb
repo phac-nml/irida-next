@@ -56,7 +56,7 @@ module WorkflowExecutions
 
       assert_response :ok
 
-      payload = parsed_v2_files_payload
+      payload = parsed_files_payload
 
       assert_equal samples(:sample43).id, payload['attachable_id']
       assert_equal 2, payload['files'].length
@@ -78,9 +78,8 @@ module WorkflowExecutions
 
       assert_response :ok
 
-      payload = parsed_v1_files_payload
+      payload = parsed_files_payload
 
-      assert_equal '0', payload['index']
       assert_equal 2, payload['files'].length
       assert_equal 'fastq_1', payload['files'][0]['property']
       assert_equal attachment.id, payload['files'][0]['id']
@@ -99,7 +98,7 @@ module WorkflowExecutions
 
       assert_response :ok
 
-      payload = parsed_v2_files_payload
+      payload = parsed_files_payload
 
       assert_equal 1, payload['files'].length
       assert_equal 'fastq_1', payload['files'][0]['property']
@@ -191,16 +190,10 @@ module WorkflowExecutions
 
     private
 
-    def parsed_v2_files_payload
+    def parsed_files_payload
       doc = Nokogiri::HTML(response.body) # rubocop:disable Rails/ResponseParsedBody
 
       JSON.parse(doc.at_css('[data-payload-type="files"]')['data-files'])
-    end
-
-    def parsed_v1_files_payload
-      doc = Nokogiri::HTML(response.body) # rubocop:disable Rails/ResponseParsedBody
-
-      JSON.parse(doc.at_css('[data-controller="nextflow--v1--file"]')['data-nextflow--v1--file-files-value'])
     end
   end
 end
