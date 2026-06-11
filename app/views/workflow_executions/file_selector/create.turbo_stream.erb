@@ -7,12 +7,21 @@
 
 <% if file_selector_params[:attachable_type] == Sample.sti_name %>
   <%= turbo_stream.append "samplesheet-payload-container" do %>
-    <div
-      hidden
-      data-files="<%= @attachments_params.to_json %>"
-      data-nextflow--v2--samplesheet-target="dataPayload"
-      data-payload-type="files"
-    ></div>
+    <% if Flipper.enabled?(:v2_samplesheet, current_user) %>
+      <div
+        hidden
+        data-files="<%= @attachments_params.to_json %>"
+        data-nextflow--v2--samplesheet-target="dataPayload"
+        data-payload-type="files"
+      ></div>
+    <% else %>
+      <div
+        hidden
+        data-controller="nextflow--v1--file"
+        data-nextflow--v1--file-files-value="<%= @attachments_params.to_json %>"
+        data-nextflow--v1--samplesheet-target="dataPayload"
+      ></div>
+    <% end %>
   <% end %>
 <% else %>
   <% property = file_selector_params[:property].to_s %>

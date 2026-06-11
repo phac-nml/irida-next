@@ -68,9 +68,13 @@ module WorkflowExecutions
       end
     end
 
-    def attachments
+    def attachments # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       @attachments_params = { files: [] }
-      @attachments_params[:attachable_id] = file_selector_params[:attachable_id]
+      if Flipper.enabled?(:v2_samplesheet, current_user)
+        @attachments_params[:attachable_id] = file_selector_params[:attachable_id]
+      else
+        @attachments_params[:index] = file_selector_params[:index]
+      end
 
       property = file_selector_params['property']
       if params[:attachment_id] == 'no_attachment'

@@ -10,6 +10,7 @@
   data-nextflow--v1--samplesheet-automated-workflow-value="<%= @samples.empty? %>"
   data-nextflow--v1--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
   data-action="
+    nextflow--v1--file:sendFileData->nextflow--v1--samplesheet#updateFileData
     nextflow--v1--metadata:sendMetadata->nextflow--v1--samplesheet#updateMetadata
   "
 >
