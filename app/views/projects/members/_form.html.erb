@@ -106,13 +106,13 @@
         label: t("activerecord.attributes.member.expires_at"),
         errored: invalid_expires_at
       ) %>
-    </div>
 
-    <% if invalid_expires_at %>
-      <%= render "shared/form/field_errors",
+      <% if invalid_expires_at %>
+        <%= render "shared/form/field_errors",
       id: "#{expires_at_id}_error",
       errors: @new_member.errors[:expires_at] %>
-    <% end %>
+      <% end %>
+    </div>
 
     <div class="flex justify-start gap-1">
       <%= form.submit t(:"projects.members.new.add_member_to_project"),

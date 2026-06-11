@@ -119,13 +119,13 @@ if Flipper.enabled?(:v2_select2, Current.user)
       input_name: "namespace_group_link[expires_at]",
       errored: invalid_expires_at
     ) %>
-    </div>
 
-    <% if invalid_expires_at %>
-      <%= render "shared/form/field_errors",
+      <% if invalid_expires_at %>
+        <%= render "shared/form/field_errors",
       id: "#{expires_at_id}_error",
       errors: new_group_link.errors[:expires_at] %>
-    <% end %>
+      <% end %>
+    </div>
 
     <div class="flex justify-start gap-1">
       <%= form.submit I18n.t('common.actions.share'),
