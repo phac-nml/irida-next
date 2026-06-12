@@ -143,7 +143,7 @@ module Combobox
           combobox = find("input[role='combobox']")
           combobox.click
 
-          assert_selector "div[role='option'][data-value='disabled-option'][aria-disabled='true']"
+          assert_selector "div[role='option'][data-value='second-disabled-option'][aria-disabled='true']"
           assert_empty combobox.value
           assert_empty find("input[type='hidden']", visible: false).value
 
