@@ -79,7 +79,7 @@ class ProjectsQueryRansackTest < ActiveSupport::TestCase
     assert_nil result['errors'], 'should work and have no errors.'
     data = result['data']['projects']['nodes']
 
-    assert_equal 12, data.count # Project 1, Project 10, Project 11, etc
+    assert_equal 13, data.count # Project 1, Project 10, Project 11, etc
     assert_equal projects(:namespace_group_link_group_one_project1).puid, data[0]['puid']
     assert_equal projects(:project1).puid, data[1]['puid']
     assert_equal projects(:project10).puid, data[2]['puid']

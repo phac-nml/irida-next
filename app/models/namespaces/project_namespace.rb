@@ -42,6 +42,8 @@ module Namespaces
     has_many :automated_workflow_executions, foreign_key: :namespace_id, inverse_of: :project_namespace,
                                              class_name: 'AutomatedWorkflowExecution', dependent: :destroy
 
+    validate :validate_public_namespace_type, if: -> { public_changed? }
+
     def self.sti_name
       'Project'
     end
@@ -87,6 +89,13 @@ module Namespaces
         trackable_id: id,
         trackable_type: 'Namespace'
       )
+    end
+
+    def validate_public_namespace_type
+      return true if parent.group_namespace? && parent.public?
+      return true if (parent.user_namespace? || parent.group_namespace?) && !public?
+
+      errors.add(:public, :invalid)
     end
   end
 end

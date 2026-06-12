@@ -12,6 +12,13 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert @project_namespace.valid?
   end
 
+  test 'invalid with namespace public if parent is private' do
+    @project_namespace.public = true
+    @project_namespace.save
+
+    assert_not_nil @project_namespace.errors[:public]
+  end
+
   test '#ancestors' do
     assert_equal [], @project_namespace.ancestors
   end

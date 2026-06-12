@@ -98,7 +98,9 @@ module Dashboard
       assert_select '#groups_tree', count: 1
     end
 
-    test 'should display empty state when user has no projects' do
+    test 'should display empty state when user has no projects and no public projects' do
+      Namespaces::ProjectNamespace.where(public: true).destroy_all
+
       # Create a user with no project access
       user_without_projects = User.create!(
         email: 'no_projects@test.com',
@@ -134,7 +136,8 @@ module Dashboard
 
       assert_response :success
       assert_active_sort('all_projects_q', 'namespace_name desc')
-      assert_includes first_treegrid_row_text, projects(:projectHotel).human_name
+
+      assert_includes first_treegrid_row_text, projects(:subgroup1Project1).human_name
     end
 
     test 'should sort projects by updated_at ascending' do
@@ -173,7 +176,8 @@ module Dashboard
 
       assert_response :success
       assert_active_sort('all_projects_q', 'namespace_name desc')
-      assert_includes first_treegrid_row_text, projects(:project19).human_name
+
+      assert_includes first_treegrid_row_text, projects(:subgroup1Project1).human_name
     end
 
     test 'should apply sort with filters for personal projects query' do

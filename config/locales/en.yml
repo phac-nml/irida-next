@@ -152,6 +152,10 @@ en:
               missing_file_format: must contain a format for linelist exports
               missing_ids: does not contain any ids to export.
               missing_namespace_id: must have a namespace id
+        group:
+          attributes:
+            public:
+              invalid: Subgroup must have the same public setting as its parent group
         member:
           attributes:
             access_level:
@@ -189,6 +193,14 @@ en:
               taken: The namespace has already been shared with this group
             namespace_type:
               inclusion: can only be Group or Project
+        namespaces/project_namespace:
+          attributes:
+            public:
+              invalid: A project namespace can only be public if its parent group namespace is public
+        namespaces/user_namespace:
+          attributes:
+            public:
+              invalid: A user namespace cannot be public
         personal_access_tokens:
           rotate:
             only_active: Only active tokens can be rotated

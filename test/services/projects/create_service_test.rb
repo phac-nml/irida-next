@@ -120,5 +120,14 @@ module Projects
       assert_equal 'proj1', project_namespace.at(version: 1).name
       assert_equal 'proj1', project_namespace.at(version: 1).path
     end
+
+    test 'create project with public parent namespace' do
+      public_group_namespace = groups(:public_group1)
+      valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: public_group_namespace.id } }
+
+      project = Projects::CreateService.new(@user, valid_params).execute
+
+      assert project.namespace.public?
+    end
   end
 end

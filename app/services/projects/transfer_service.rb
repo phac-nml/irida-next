@@ -36,7 +36,9 @@ module Projects
       new_namespace_member_ids = Member.for_namespace_and_ancestors(@new_namespace)
                                        .where(user_id: project_ancestor_member_user_ids).select(&:id)
 
-      project.namespace.update(parent_id: @new_namespace.id)
+      parameters = update_params(project)
+
+      project.namespace.update(parameters)
 
       create_activities(project)
 
@@ -78,6 +80,19 @@ module Projects
                                        new_namespace: @new_namespace.puid,
                                        action: 'project_namespace_transfer'
                                      }
+    end
+
+    def update_params(project) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      params = { parent_id: @new_namespace.id }
+
+      if @new_namespace.group_namespace? && @new_namespace.public? && !project.namespace.public?
+        params[:public] = true
+      elsif (@new_namespace.user_namespace? || (@new_namespace.group_namespace? && !@new_namespace.public?)) &&
+            project.namespace.public?
+        params[:public] = false
+      end
+
+      params
     end
 
     def update_samples_count

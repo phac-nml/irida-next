@@ -166,5 +166,28 @@ module Groups
 
       assert_equal(4, @subgroup12a.reload.samples_count)
     end
+
+    test 'transfer private group to public parent group' do
+      new_parent_group = groups(:public_group1)
+      assert_not @subgroup12a.public?
+      assert new_parent_group.public?
+
+      transfer_form = ::Groups::TransferForm.new({ new_parent_id: new_parent_group.id }.merge(group: @subgroup12a))
+      Groups::TransferService.new(@subgroup12a, @john_doe, transfer_form).execute
+
+      assert @subgroup12a.reload.public?
+    end
+
+    test 'transfer public group to private parent group' do
+      new_parent_group = groups(:group_one)
+      public_subgroup = groups(:public_group1_subgroup1)
+      assert public_subgroup.public?
+      assert_not new_parent_group.public?
+
+      transfer_form = ::Groups::TransferForm.new({ new_parent_id: new_parent_group.id }.merge(group: public_subgroup))
+      Groups::TransferService.new(public_subgroup, @john_doe, transfer_form).execute
+
+      assert_not public_subgroup.reload.public?
+    end
   end
 end

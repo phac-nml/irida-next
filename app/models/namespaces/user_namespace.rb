@@ -8,12 +8,18 @@ module Namespaces
                where(type: Namespaces::ProjectNamespace.sti_name)
              }, class_name: 'Namespace', foreign_key: :parent_id, inverse_of: :parent, dependent: :destroy
 
+    validate :validate_public_namespace_type, if: -> { public_changed? }
+
     def self.sti_name
       'User'
     end
 
     def self.model_prefix
       'USR'
+    end
+
+    def validate_public_namespace_type
+      errors.add(:public, :invalid)
     end
   end
 end

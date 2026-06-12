@@ -220,14 +220,16 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         ).select(:id),
         direct_linked_project_namespaces: Namespaces::ProjectNamespace.where(id: NamespaceGroupLink.where(
           group: Group.where(id: user.members.not_expired.joins(:namespace).select(:namespace_id)).self_and_descendants
-        ).not_expired.select(:namespace_id)).select(:id)
+        ).not_expired.select(:namespace_id)).select(:id),
+        public_project_namespaces: Namespaces::ProjectNamespace.where(public: true).select(:id)
       ).where(
         Arel.sql(
           'projects.namespace_id in (select id from personal_project_namespaces)
         or projects.namespace_id in (select namespace_id from direct_project_namespaces)
         or projects.namespace_id in (select id from group_project_namespaces)
         or projects.namespace_id in (select id from group_linked_project_namespaces)
-        or projects.namespace_id in (select id from direct_linked_project_namespaces)'
+        or projects.namespace_id in (select id from direct_linked_project_namespaces)
+        or projects.namespace_id in (select id from public_project_namespaces)'
         )
       ).include_route
   end

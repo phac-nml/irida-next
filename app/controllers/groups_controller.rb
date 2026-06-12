@@ -157,7 +157,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def group_params
-    params.expect(group: %i[name path description parent_id])
+    params.expect(group: %i[name path description parent_id public])
   end
 
   def group_transfer_params

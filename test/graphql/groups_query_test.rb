@@ -74,7 +74,9 @@ class GroupsQueryTest < ActiveSupport::TestCase
     public_groups_without_membership = Group.where(public: true)
                                             .where.not(id: @user.members.not_expired.select(:namespace_id))
 
-    groups_count = groups.count + public_groups_without_membership.count
+    unique_groups = groups.or(public_groups_without_membership)
+
+    groups_count = unique_groups.count
 
     result = IridaSchema.execute(GROUPS_QUERY, context: { current_user: @user },
                                                variables: { first: 20 })

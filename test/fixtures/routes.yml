@@ -811,3 +811,13 @@ public_group_<%= n %>_route:
   path: public-group-<%= n %>
   source: public_group<%= n %> (Namespace)
 <% end %>
+
+public_group1_subgroup1_route:
+  name: Public Group 1 Subgroup 1
+  path: public-group-1/subgroup-1
+  source: public_group1_subgroup1 (Namespace)
+
+public_group1_subgroup1_project1_route:
+  name: Public Group 1 Subgroup 1 Project 1
+  path: public-group-1/subgroup-1/project-1
+  source: public_subgroup1_project1_namespace (Namespace)

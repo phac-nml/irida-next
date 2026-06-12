@@ -62,6 +62,8 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
   has_many :shared_projects, through: :shared_project_namespaces, class_name: 'Project', source: :project
   has_many :shared_with_groups, through: :shared_with_group_links, source: :group
 
+  validate :validate_public_namespace_type, if: -> { public_changed? || parent_id_changed? }
+
   def self.sti_name
     'Group'
   end
@@ -154,5 +156,12 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     end
 
     add_to_samples_count(namespaces_to_update, transferred_samples_count)
+  end
+
+  def validate_public_namespace_type
+    return true if parent.nil?
+    return true if parent.public == public
+
+    errors.add(:public, :invalid)
   end
 end

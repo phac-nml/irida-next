@@ -2,19 +2,26 @@
 
 module Groups
   # Service used to Update Groups
-  class UpdateService < BaseService
+  class UpdateService < BaseGroupService
     attr_accessor :group
 
     def initialize(group, user = nil, params = {})
-      super(user, params.except(:group, :group_id))
-      @group = group
+      super
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       authorize! @group, to: :update?
       updated = group.update(params)
 
       if updated
+        if group.parent.nil?
+          if params.key?(:public) && params[:public] == true
+            update_descendants_to_public
+          elsif params.key?(:public) && params[:public] == false
+            update_descendants_to_private
+          end
+        end
+
         @group.create_activity key: 'group.update',
                                owner: current_user
       end
