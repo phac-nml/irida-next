@@ -897,7 +897,8 @@ fr:
       title: Paramètres généraux
     group_links:
       edit:
-        description: Modifier le partage de ce groupe avec le groupe %{name}
+        description: Mettre à jour les paramètres de partage de ce groupe avec le groupe %{name}
+        submit: Sauvegarder les modifications
         title: Mettre à jour le partage de groupe
       index:
         actions:
@@ -934,13 +935,14 @@ fr:
         title: Historique
     members:
       edit:
-        description: Vous modifiez le membre %{member} dans le groupe %{name}
+        description: Mettre à jour les paramètres d'appartenance au groupe pour l'utilisateur %{member}
+        submit: Sauvegarder les modifications
         title: Modifier un membre
       index:
         actions:
-          edit_aria_label: Modifier un membre du groupe
+          edit_aria_label: 'Modifier un membre du groupe: %{member}'
           leave_group_aria_label: Bouton Quitter le groupe
-          remove_aria_label: 'Supprimer le membre du groupe : %{member}'
+          remove_aria_label: 'Supprimer le membre du groupe: %{member}'
         add: Ajouter un nouveau membre
         empty_state:
           description: Aucun members n'a reçu d'accès délégué à ce groupe
@@ -1535,7 +1537,8 @@ fr:
       title: Paramètres généraux
     group_links:
       edit:
-        description: Modifier le partage de ce projet avec le groupe %{name}
+        description: Mettre à jour les paramètres de partage de ce projet avec le groupe %{name}
+        submit: Sauvegarder les modifications
         title: Modifier le partage de projet
       index:
         access_level:
@@ -1581,13 +1584,14 @@ fr:
         project_transferred: Le projet a été transféré par %{user}
     members:
       edit:
-        description: Vous mettez à jour le membre %{member} dans le projet %{name}
+        description: Mettre à jour les paramètres d'appartenance au projet pour l'utilisateur %{member}
+        submit: Sauvegarder les modifications
         title: Mettre à jour le membre
       index:
         actions:
-          edit_aria_label: Mettre à jour le membre du projet
+          edit_aria_label: 'Mettre à jour le membre du projet: %{member}'
           leave_project_aria_label: Laisser le lien du projet
-          remove_aria_label: 'Supprimer le lien du membre du projet : %{member}'
+          remove_aria_label: 'Supprimer le lien du membre du projet: %{member}'
         add: Ajouter un nouveau membre
         empty_state:
           description: Aucun members n'a reçu d'accès délégué à ce projet

@@ -895,7 +895,8 @@ en:
       title: General Settings
     group_links:
       edit:
-        description: Edit sharing this group with group %{name}
+        description: Update settings for sharing this group with group %{name}
+        submit: Save changes
         title: Edit Group Share
       index:
         actions:
@@ -932,11 +933,12 @@ en:
         title: History
     members:
       edit:
-        description: You are editing member %{member} in group %{name}
+        description: Update group membership settings for user %{member}
+        submit: Save changes
         title: Edit Member
       index:
         actions:
-          edit_aria_label: Edit group member
+          edit_aria_label: 'Edit group member: %{member}'
           leave_group_aria_label: Leave group
           remove_aria_label: 'Remove group member: %{member}'
         add: Add New Member
@@ -1531,7 +1533,8 @@ en:
       title: General Settings
     group_links:
       edit:
-        description: Edit sharing this project with group %{name}
+        description: Update settings for sharing this project with group %{name}
+        submit: Save changes
         title: Edit Project Share
       index:
         access_level:
@@ -1577,11 +1580,12 @@ en:
         project_transferred: Project was transferred by %{user}
     members:
       edit:
-        description: You are editing member %{member} in project %{name}
+        description: Update project membership settings for user %{member}
+        submit: Save changes
         title: Edit Member
       index:
         actions:
-          edit_aria_label: Edit project member
+          edit_aria_label: 'Edit project member: %{member}'
           leave_project_aria_label: Leave project
           remove_aria_label: 'Remove project member: %{member}'
         add: Add New Member

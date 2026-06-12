@@ -3,7 +3,7 @@
 
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">
-      <%= I18n.t("groups.members.edit.description", member: @member.user.email, name: @namespace.human_name) %>
+      <%= I18n.t("groups.members.edit.description", member: @member.user.email) %>
     </p>
   </div>
 
@@ -80,7 +80,7 @@
       </div>
 
       <div class="flex justify-start gap-1">
-        <%= form.submit t(:"common.actions.edit"),
+        <%= form.submit t(:"groups.members.edit.submit"),
                   class: "button button-primary",
                   disabled: false %>
 

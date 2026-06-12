@@ -5,7 +5,8 @@ data: {
 },
 method: :get,
 aria: {
-  label: t(:"projects.members.index.actions.edit_aria_label"),
+  label: t(:"projects.members.index.actions.edit_aria_label",
+      member: member.user.email),
 },
 class:
   "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
