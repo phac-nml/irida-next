@@ -2,17 +2,32 @@ import * as XLSX from "xlsx";
 import Controller from "controllers/metadata/file_import_controller";
 import { omitBy, pick } from "utilities/collection";
 import { closeDialog } from "utilities/dialog";
+import { t } from "utilities/message_formatter";
+import {
+  clearProgressWindowDismissTimeout,
+  dismissProgressWindow,
+  scheduleProgressWindowDismiss,
+  showProgressWindow,
+  updateProgressWindow,
+} from "utilities/progress_window";
 
 export default class extends Controller {
+  static targets = ["progressTemplate"];
   static values = {
     graphqlUrl: String,
     groupPuid: String,
     projectPuid: String,
+    importedRecordsMessage: {
+      type: String,
+      default: "Imported %{current} of %{total} records",
+    },
   };
 
   connect() {
     super.connect();
     this._fileType = null;
+    this._exportId ||= null;
+    this._progressWindowOpenedAt ||= null;
     this._worksheet = null;
   }
 
@@ -49,6 +64,9 @@ export default class extends Controller {
     this._worker?.terminate();
     this._worker ||= this.#buildWorker();
     closeDialog(this.element, this.application);
+    this._exportId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    this._progressWindowOpenedAt = null;
+    showProgressWindow(this, "Importing samples...");
     this.#processRows();
   }
 
@@ -107,6 +125,8 @@ export default class extends Controller {
 
         if (payload.type === "progress") {
           console.log("Progress: ", payload);
+          this.onProgress(payload);
+          return;
         }
 
         if (payload.type === "done") {
@@ -124,6 +144,14 @@ export default class extends Controller {
     }
 
     return worker;
+  }
+
+  onProgress(payload) {
+    const message = t(this.importedRecordsMessageValue, {
+      current: payload.current,
+      total: payload.total,
+    });
+    updateProgressWindow(message, payload.percentage);
   }
 
   #csrfToken() {

@@ -9,7 +9,8 @@ import {
   scheduleProgressWindowDismiss as scheduleProgressWindowDismissState,
   showProgressWindow as showProgressWindowState,
   updateProgressWindow,
-} from "controllers/linelist_export/progress_window";
+} from "utilities/progress_window";
+import { t } from "utilities/message_formatter";
 import {
   csrfToken as csrfTokenFromDocument,
   selectedFormat as selectedFormatFromForm,
@@ -142,7 +143,7 @@ export default class extends Controller {
     const selectedCount = sampleIds.length;
 
     if (!selectedCount) {
-      this.updateProgress(this.t(this.noSelectionErrorMessageValue), 100, true);
+      this.updateProgress(t(this.noSelectionErrorMessageValue), 100, true);
       return;
     }
 
@@ -154,7 +155,7 @@ export default class extends Controller {
     this.progressWindowDismissed = false;
 
     if (this.hasSampleStatusTarget) {
-      this.sampleStatusTarget.textContent = this.t(
+      this.sampleStatusTarget.textContent = t(
         this.preparingExportMessageValue,
         { count: totalCount },
       );
@@ -162,7 +163,7 @@ export default class extends Controller {
 
     try {
       this.showProgressWindow(
-        this.t(this.preparingRowsMessageValue, { count: totalCount }),
+        t(this.preparingRowsMessageValue, { count: totalCount }),
       );
 
       startExportBeforeUnloadGuard();
@@ -180,7 +181,7 @@ export default class extends Controller {
       });
     } catch (error) {
       this.updateProgress(
-        this.t(this.startErrorMessageValue, {
+        t(this.startErrorMessageValue, {
           message: error?.message || "unknown error",
         }),
         100,
@@ -212,7 +213,7 @@ export default class extends Controller {
   }
 
   handleWorkerProgress(payload) {
-    const message = this.t(this.createdRecordsMessageValue, {
+    const message = t(this.createdRecordsMessageValue, {
       current: payload.current,
       total: payload.total,
     });
@@ -224,7 +225,7 @@ export default class extends Controller {
       await this.download(payload.filename, payload.content, payload.format);
     } catch (error) {
       if (error instanceof XlsxLibraryLoadError) {
-        this.handleWorkerError(this.t(this.xlsxLoadErrorMessageValue));
+        this.handleWorkerError(t(this.xlsxLoadErrorMessageValue));
         return;
       }
 
@@ -233,7 +234,7 @@ export default class extends Controller {
     }
 
     this.updateProgress(
-      this.t(this.downloadStartedMessageValue, {
+      t(this.downloadStartedMessageValue, {
         filename: payload.filename,
       }),
       100,
@@ -248,7 +249,7 @@ export default class extends Controller {
   }
 
   formatUnexpectedError(detail) {
-    return this.t(this.unexpectedErrorMessageValue, {
+    return t(this.unexpectedErrorMessageValue, {
       message: detail,
     }).replace(/:\s*$/, "");
   }
@@ -296,10 +297,9 @@ export default class extends Controller {
   updateSelectedCount() {
     const selected = this.selectedSampleIds().length;
     if (this.hasSampleStatusTarget) {
-      this.sampleStatusTarget.textContent = this.t(
-        this.selectedCountMessageValue,
-        { count: selected },
-      );
+      this.sampleStatusTarget.textContent = t(this.selectedCountMessageValue, {
+        count: selected,
+      });
     }
   }
 
@@ -317,12 +317,5 @@ export default class extends Controller {
 
   clearProgressWindowDismissTimeout() {
     clearProgressWindowDismissTimeoutState(this);
-  }
-
-  t(template, vars = {}) {
-    return Object.entries(vars).reduce(
-      (str, [key, val]) => str.replaceAll(`%{${key}}`, val),
-      template,
-    );
   }
 }

@@ -627,6 +627,13 @@ en:
       analysis: ANALYSIS
       linelist: LINELIST
       sample: SAMPLE
+  data_imports:
+    linelist_import_dialog:
+      v2:
+        component:
+          close_progress: Close progress
+          imported_records: Imported records
+          importing_linelist: Importing linelist
   date:
     abbr_day_names:
     - Sun
