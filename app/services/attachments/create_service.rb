@@ -105,48 +105,26 @@ module Attachments
       # identify illumina pe attachments based on illumina fastq filename convention
       # https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/NamingConvention_FASTQ-files-swBS.htm
       attachments.each do |att|
-        unless /^(?<sample_name>.+_[^_]+(?:_L[0-9]{3})?)_R(?<region>[1-2])_(?<set>[0-9]{3})\./ =~ att.filename.to_s
-          next
-        end
+        pairing_info = Attachment.fastq_illumina_pe_pairing_info(att.filename.to_s)
+        next unless pairing_info
 
-        case region
-        when '1'
-          illumina_pe["#{sample_name}_#{set}"]['forward'] = att
-        when '2'
-          illumina_pe["#{sample_name}_#{set}"]['reverse'] = att
-        end
+        illumina_pe[pairing_info.pair_key][pairing_info.direction] = att
       end
 
       # assign metadata to detected illumina pe files that contain fwd and rev
       assign_metadata(illumina_pe, 'illumina_pe')
     end
 
-    def identify_paired_end_files(attachments) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
+    def identify_paired_end_files(attachments)
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
       pe = Hash.new { |h, k| h[k] = {} }
 
       # identify pe attachments based on fastq filename convention
       attachments.each do |att|
-        next unless /^(?<sample_name>.+_)(?<region>R?[1-2]|[FfRr])\./ =~ att.filename.to_s
+        pairing_info = Attachment.fastq_pe_pairing_info(att.filename.to_s)
+        next unless pairing_info
 
-        case region
-        when '1'
-          pe["#{sample_name}_1-2"]['forward'] = att
-        when 'R1'
-          pe["#{sample_name}_R1-R2"]['forward'] = att
-        when 'F'
-          pe["#{sample_name}_F-R"]['forward'] = att
-        when 'f'
-          pe["#{sample_name}_f-r"]['forward'] = att
-        when '2'
-          pe["#{sample_name}_1-2"]['reverse'] = att
-        when 'R2'
-          pe["#{sample_name}_R1-R2"]['reverse'] = att
-        when 'R'
-          pe["#{sample_name}_F-R"]['reverse'] = att
-        when 'r'
-          pe["#{sample_name}_f-r"]['reverse'] = att
-        end
+        pe[pairing_info.pair_key][pairing_info.direction] = att
       end
 
       # assign metadata to detected pe files that contain fwd and rev

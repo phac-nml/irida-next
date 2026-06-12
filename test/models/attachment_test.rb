@@ -274,6 +274,80 @@ class AttachmentTest < ActiveSupport::TestCase
     assert_not unknown_attachment.fastq?
   end
 
+  test '.fastq_pairing_filename_patterns returns pattern sources' do
+    patterns = Attachment.fastq_pairing_filename_patterns
+
+    assert_equal Attachment::FASTQ_PAIRING_TYPES, patterns.keys
+    assert_equal Attachment::FASTQ_PAIRING_FILENAME_REGEX['illumina_pe'].source, patterns['illumina_pe']
+    assert_equal Attachment::FASTQ_PAIRING_FILENAME_REGEX['pe'].source, patterns['pe']
+  end
+
+  test '.fastq_illumina_pe_pairing_info returns pairing details' do
+    test_cases = [
+      {
+        filename: 'TestSample_S1_L001_R1_001.fastq',
+        direction: 'forward',
+        pair_key: 'TestSample_S1_L001_001_fastq'
+      },
+      {
+        filename: 'TestSample_S1_L001_R2_001.fastq',
+        direction: 'reverse',
+        pair_key: 'TestSample_S1_L001_001_fastq'
+      },
+      {
+        filename: 'TestSample_S1_R1_001.fastq',
+        direction: 'forward',
+        pair_key: 'TestSample_S1_001_fastq'
+      },
+      {
+        filename: 'samplename_S1_L001_R2_001.instrument_b.fastq.gz',
+        direction: 'reverse',
+        pair_key: 'samplename_S1_L001_001_instrument_b.fastq.gz'
+      }
+    ]
+
+    test_cases.each do |test_case|
+      pairing_info = Attachment.fastq_illumina_pe_pairing_info(test_case[:filename])
+
+      assert_equal 'illumina_pe', pairing_info.type
+      assert_equal test_case[:direction], pairing_info.direction
+      assert_equal test_case[:pair_key], pairing_info.pair_key
+    end
+  end
+
+  test '.fastq_pe_pairing_info returns pairing details' do
+    test_cases = [
+      { filename: 'file_1.fastq', direction: 'forward', pair_key: 'file__1-2_fastq' },
+      { filename: 'file_2.fastq', direction: 'reverse', pair_key: 'file__1-2_fastq' },
+      { filename: 'seq_R1.fastq', direction: 'forward', pair_key: 'seq__R1-R2_fastq' },
+      { filename: 'seq_R2.fastq', direction: 'reverse', pair_key: 'seq__R1-R2_fastq' },
+      { filename: 'samp_F.fastq', direction: 'forward', pair_key: 'samp__F-R_fastq' },
+      { filename: 'samp_R.fastq', direction: 'reverse', pair_key: 'samp__F-R_fastq' },
+      { filename: 'germ_f.fastq', direction: 'forward', pair_key: 'germ__f-r_fastq' },
+      { filename: 'germ_r.fastq', direction: 'reverse', pair_key: 'germ__f-r_fastq' },
+      {
+        filename: 'samplename_R1.instrument_a.fastq.gz',
+        direction: 'forward',
+        pair_key: 'samplename__R1-R2_instrument_a.fastq.gz'
+      }
+    ]
+
+    test_cases.each do |test_case|
+      pairing_info = Attachment.fastq_pe_pairing_info(test_case[:filename])
+
+      assert_equal 'pe', pairing_info.type
+      assert_equal test_case[:direction], pairing_info.direction
+      assert_equal test_case[:pair_key], pairing_info.pair_key
+    end
+  end
+
+  test '.fastq_pairing_info returns nil for non-matching filename' do
+    assert_nil Attachment.fastq_illumina_pe_pairing_info('not_fastq_name.txt')
+    assert_nil Attachment.fastq_pe_pairing_info('sample.fastq.gz')
+    assert_nil Attachment.fastq_pairing_info('sample.fastq.gz', type: 'illumina_pe')
+    assert_nil Attachment.fastq_pairing_info('sample.fastq.gz', type: 'pe')
+  end
+
   test 'associated_attachment' do
     attachment_fwd = attachments(:attachmentPEFWD1)
     attachment_rev = attachments(:attachmentPEREV1)
