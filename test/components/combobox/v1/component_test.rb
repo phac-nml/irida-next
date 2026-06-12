@@ -5,7 +5,7 @@ require 'application_system_test_case'
 module Combobox
   module V1
     class ComponentTest < ApplicationSystemTestCase
-      def test_accessibility_states
+      def test_accessibility_states # rubocop:disable Metrics/MethodLength
         visit('/rails/view_components/combobox_component/default')
         within "div[data-controller='combobox--v1']" do
           assert_accessible
@@ -16,6 +16,9 @@ module Combobox
 
           combobox.send_keys('this does not exist')
           assert_selector "div[role='status']", text: I18n.t('combobox_component.no_results_text')
+          assert_accessible
+
+          combobox.send_keys(:escape, 'patient', :enter)
           assert_accessible
         end
 

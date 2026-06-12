@@ -1,10 +1,13 @@
 <%= form_with(url: "#") do |form| %>
-  <label for="<%= form.field_id(:field) %>"><%= label %></label>
+  <label id="<%= form.field_id(:field, :label) %>" for="<%= form.field_id(:field) %>"><%= label %></label>
 
   <%= render ComboboxComponent.new(
     form: form,
     field: :field,
     options: options,
+    aria: {
+      labelledby: form.field_id(:field, :label),
+    },
     **combobox_arguments
   ) %>
 <% end %>

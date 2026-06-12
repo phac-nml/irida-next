@@ -32,6 +32,17 @@ module Combobox
         assert_selector '[role="option"][data-value="disabled-option"][aria-disabled="true"]', visible: :all
       end
 
+      test 'labels listbox with aria-labelledby when labelledby is passed' do
+        render_component(
+          aria: {
+            labelledby: 'field-label'
+          }
+        )
+
+        assert_selector 'div[role="listbox"][aria-labelledby="field-label"]', visible: :all
+        assert_no_selector 'div[role="listbox"][aria-label]', visible: :all
+      end
+
       test 'renders clear and show-options buttons outside tab order' do
         render_component
 

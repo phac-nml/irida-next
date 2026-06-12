@@ -196,6 +196,27 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     end
   end
 
+  test 'field combobox passes axe in collapsed, open, filtered, and selected states' do
+    visit('rails/view_components/advanced_search_component/default')
+    within 'div[data-controller-connected="true"]' do
+      open_advanced_search_dialog
+
+      within 'dialog' do
+        within first("div[data-controller='combobox--v1']") do
+          combobox = find("input[role='combobox']")
+          assert_no_selector 'input[role="combobox"][aria-label]'
+          assert_selector 'input[role="combobox"][aria-required="true"]'
+          assert_selector "div[role='listbox'][aria-labelledby]", visible: :all
+
+          assert_combobox_passes_axe_in_required_states(
+            combobox: combobox,
+            filter_text: I18n.t('samples.table_component.puid')
+          )
+        end
+      end
+    end
+  end
+
   test 'workflow preview keeps enum operators available with native field selects' do
     Flipper.disable(:advanced_search_with_auto_complete)
 

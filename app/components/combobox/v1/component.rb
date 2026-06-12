@@ -12,6 +12,7 @@ module Combobox
         @listbox_options = create_listbox(options)
         @selected_option = selected_option(options)
         @combobox_arguments = combobox_arguments
+        @listbox_labelledby = combobox_arguments.dig(:aria, :labelledby)
       end
 
       private
@@ -27,6 +28,7 @@ module Combobox
           args[:aria] ||= {}
           args[:aria][:disabled] = 'true' if disabled
           args[:readonly] = true if disabled
+          args[:aria].delete(:labelledby)
           args[:aria][:autocomplete] = 'list'
           args[:aria][:expanded] = 'false'
           args[:aria][:controls] = @listbox_id
@@ -41,6 +43,14 @@ module Combobox
 
       def combobox_disabled?
         @combobox_arguments[:disabled] == true
+      end
+
+      def listbox_aria_attributes
+        attrs = {}
+        attrs[:'aria-labelledby'] = @listbox_labelledby if @listbox_labelledby.present?
+        label = combobox_arguments.dig(:aria, :label)
+        attrs[:'aria-label'] = label if label.present? && @listbox_labelledby.blank?
+        attrs
       end
 
       def selected_option(options)

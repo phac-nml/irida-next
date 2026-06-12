@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'test_helpers/advanced_search_combobox_test_helper'
 require 'test_helpers/axe_helpers'
 require 'test_helpers/better_rails_system_tests'
 require 'test_helpers/capybara_setup'
@@ -12,6 +13,7 @@ require 'action_dispatch/system_test_case'
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :irida_next_playwright
 
+  include AdvancedSearchComboboxTestHelper
   include AxeHelpers
   include BetterRailsSystemTests
   include HTML5Helpers
