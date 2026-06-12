@@ -57,6 +57,48 @@ module Profiles
         end
       end
 
+      test 'eligible_features returns configured eligible payloads' do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          feature = OptInService.new(@user).eligible_features.first
+
+          assert_equal :data_grid_samples_table, feature[:key]
+          assert_equal 'Data Grid Samples Table', feature[:name]
+          assert_equal 'Enable the new data grid for the samples table.', feature[:description]
+          assert_equal false, feature[:enabled]
+        end
+      end
+
+      test 'feature returns nil for unknown feature key' do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          feature = OptInService.new(@user).feature('unknown_feature')
+
+          assert_nil feature
+        end
+      end
+
+      test 'feature returns nil for ineligible user by default' do
+        config = user_opt_in_feature_config(allowlist: [users(:jane_doe).email])
+
+        with_user_opt_in_features(config) do
+          feature = OptInService.new(@user).feature('data_grid_samples_table')
+
+          assert_nil feature
+        end
+      end
+
+      test 'feature returns payload for configured ineligible feature when include_ineligible is true' do
+        config = user_opt_in_feature_config(allowlist: [users(:jane_doe).email])
+
+        with_user_opt_in_features(config) do
+          feature = OptInService.new(@user).feature('data_grid_samples_table', include_ineligible: true)
+
+          assert_equal :data_grid_samples_table, feature[:key]
+          assert_equal 'Data Grid Samples Table', feature[:name]
+          assert_equal 'Enable the new data grid for the samples table.', feature[:description]
+          assert_equal false, feature[:enabled]
+        end
+      end
+
       private
 
       def build_form(**attributes)

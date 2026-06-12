@@ -12,6 +12,21 @@ module Profiles
         @opt_in_form = opt_in_form
       end
 
+      def eligible_features
+        settings.eligible_user_opt_in_features(current_user)
+      end
+
+      def feature(feature_key, include_ineligible: false)
+        normalized_feature_key = feature_key.to_s
+        return nil if normalized_feature_key.blank?
+
+        feature = eligible_features.find { |item| item[:key] == normalized_feature_key.to_sym }
+        return feature if feature.present?
+        return nil unless include_ineligible
+
+        feature_payload(normalized_feature_key)
+      end
+
       def execute
         return false unless opt_in_form&.valid?
 
@@ -24,6 +39,14 @@ module Profiles
       end
 
       private
+
+      def settings
+        @settings ||= Irida::CurrentSettings.current_application_settings
+      end
+
+      def feature_payload(feature_key)
+        settings.opt_in_feature_payload(feature_key, current_user)
+      end
 
       def update_actor_gate
         if opt_in_form.enabled?

@@ -233,4 +233,23 @@ class ApplicationSettingTest < ActiveSupport::TestCase
                    feature[:description]
     end
   end
+
+  test 'opt_in_feature_payload returns configured feature metadata regardless of allowlist' do
+    user = users(:john_doe)
+    config = user_opt_in_feature_config(allowlist: [users(:jane_doe).email])
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: config)
+
+    feature = settings.opt_in_feature_payload(:data_grid_samples_table, user)
+
+    assert_equal :data_grid_samples_table, feature[:key]
+    assert_equal 'Data Grid Samples Table', feature[:name]
+    assert_equal false, feature[:enabled]
+  end
+
+  test 'opt_in_feature_payload returns nil for unknown feature key' do
+    user = users(:john_doe)
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: user_opt_in_feature_config)
+
+    assert_nil settings.opt_in_feature_payload(:unknown_feature, user)
+  end
 end

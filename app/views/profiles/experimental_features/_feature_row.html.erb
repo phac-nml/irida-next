@@ -1,0 +1,67 @@
+<% feature_key = feature[:key] %>
+<% form = Profiles::ExperimentalFeatures::OptInForm.new(user: user, feature_key: feature_key, enabled: feature[:enabled]) %>
+<% switch_id = "experimental-feature-#{feature_key}-switch" %>
+<% label_id = "experimental-feature-#{feature_key}-label" %>
+<% description_id = "experimental-feature-#{feature_key}-description" %>
+<% status_id = "experimental-feature-#{feature_key}-status" %>
+<% status_variant = local_assigns[:status_variant] %>
+
+<% status_classes = {
+  success: "text-green-700 dark:text-green-400",
+  error: "text-red-600 dark:text-red-400"
+}.fetch(status_variant, "text-slate-500 dark:text-slate-400") %>
+
+<div
+  id="experimental-feature-<%= feature_key %>"
+  class="flex flex-col gap-2 py-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
+  data-controller="experimental-feature-toggle"
+  data-experimental-feature-toggle-saving-text-value="<%= t("profiles.experimental_features.update.saving") %>"
+  data-experimental-feature-toggle-success-text-value="<%= t("profiles.experimental_features.update.success") %>"
+  data-experimental-feature-toggle-validation-error-text-value="<%= t("profiles.experimental_features.update.validation_error") %>"
+  data-experimental-feature-toggle-feature-key-value="<%= feature_key %>"
+  data-experimental-feature-toggle-minimum-saving-ms-value="900"
+  data-experimental-feature-toggle-clear-delay-value="3000"
+>
+  <div class="min-w-0 flex-1">
+    <%= label_tag switch_id, feature[:name], id: label_id, class: "cursor-pointer text-sm font-semibold text-slate-800 dark:text-white" %>
+
+    <p id="<%= description_id %>" class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+      <%= feature[:description] %>
+    </p>
+  </div>
+
+  <div class="pt-0.5 sm:shrink-0">
+    <%= form_with model: form,
+                  url: profile_experimental_features_path,
+                  method: :patch,
+                  data: { "experimental-feature-toggle-target": "form" } do |f| %>
+      <%= f.hidden_field :feature_key %>
+
+      <div class="flex items-center justify-end gap-2">
+        <p
+          id="<%= status_id %>"
+          class="max-w-56 text-right text-sm break-words <%= status_classes %>"
+          data-experimental-feature-toggle-target="status"
+        >
+          <%= local_assigns[:status_message] %>
+        </p>
+
+        <%# Pathogen::Form::Switch renders the internal .pathogen-switch-track element. %>
+        <%= f.switch :enabled,
+            id: switch_id,
+            state_text: {
+              on: t("profiles.experimental_features.toggle_state.on"),
+              off: t("profiles.experimental_features.toggle_state.off")
+            },
+            aria: {
+              labelledby: label_id,
+              describedby: description_id
+            },
+            data: {
+              action: "change->experimental-feature-toggle#submit",
+              "experimental-feature-toggle-target": "switch"
+            } %>
+      </div>
+    <% end %>
+  </div>
+</div>
