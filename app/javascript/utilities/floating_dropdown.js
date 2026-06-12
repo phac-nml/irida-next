@@ -122,6 +122,7 @@ export default class FloatingDropdown {
   // Recalculate and apply dropdown position using Floating UI
   update() {
     computePosition(this.#trigger, this.#dropdown, {
+      strategy: this.#strategy,
       placement: "bottom",
       middleware: [
         flip(),

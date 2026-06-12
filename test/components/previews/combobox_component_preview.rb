@@ -12,10 +12,7 @@ class ComboboxComponentPreview < ViewComponent::Preview
       template: 'combobox_component_preview/default',
       locals: default_locals(
         label: 'Field with disabled options',
-        options: options_for_select(
-          [['Enabled option', 'enabled-option'], ['Disabled option', 'disabled-option']],
-          { disabled: ['disabled-option'] }
-        )
+        options: disabled_options_preview_options
       )
     )
   end
@@ -38,6 +35,20 @@ class ComboboxComponentPreview < ViewComponent::Preview
       options: options,
       combobox_arguments: combobox_arguments
     }
+  end
+
+  def disabled_options_preview_options
+    options_for_select(
+      [
+        ['First disabled option', 'first-disabled-option'],
+        ['First enabled option', 'first-enabled-option'],
+        ['Second enabled option', 'second-enabled-option'],
+        ['Second disabled option', 'second-disabled-option'],
+        ['Enabled option', 'enabled-option'],
+        ['Last disabled option', 'last-disabled-option']
+      ],
+      { disabled: %w[first-disabled-option second-disabled-option last-disabled-option] }
+    )
   end
 
   def grouped_metadata_options

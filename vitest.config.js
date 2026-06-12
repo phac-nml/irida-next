@@ -9,6 +9,8 @@ const jsRoot = resolve(
 export default defineConfig({
   resolve: {
     alias: {
+      controllers: resolve(jsRoot, "controllers"),
+      debounce: resolve("vendor/javascript/debounce.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
       "utilities/focus": resolve(jsRoot, "utilities/focus.js"),

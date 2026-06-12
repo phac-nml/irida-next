@@ -5,6 +5,26 @@ require 'application_system_test_case'
 module Combobox
   module V1
     class ComponentTest < ApplicationSystemTestCase
+      def test_accessibility_states
+        visit('/rails/view_components/combobox_component/default')
+        within "div[data-controller='combobox--v1']" do
+          assert_accessible
+
+          combobox = find("input[role='combobox']")
+          combobox.click
+          assert_accessible
+
+          combobox.send_keys('this does not exist')
+          assert_selector "div[role='status']", text: I18n.t('combobox_component.no_results_text')
+          assert_accessible
+        end
+
+        visit('/rails/view_components/combobox_component/disabled')
+        within "div[data-controller='combobox--v1']" do
+          assert_accessible
+        end
+      end
+
       def test_default # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         visit('/rails/view_components/combobox_component/default')
         within "div[data-controller='combobox--v1']" do
@@ -39,7 +59,7 @@ module Combobox
         within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
           combobox.send_keys('this does not exist')
-          assert_selector "div[role='option']", text: I18n.t('combobox_component.no_results_text')
+          assert_selector "div[role='status']", text: I18n.t('combobox_component.no_results_text')
         end
       end
 
@@ -93,16 +113,27 @@ module Combobox
         end
       end
 
-      def test_home_and_end_keys
+      def test_home_and_end_keys # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         visit('/rails/view_components/combobox_component/default')
         within "div[data-controller='combobox--v1']" do
           combobox = find("input[role='combobox']")
-          combobox.click.send_keys(:home)
+          combobox.click.send_keys(:escape, :home)
           cursor_position = page.evaluate_script("document.getElementById('field').selectionStart")
           assert_equal 0, cursor_position
+
           combobox.send_keys(:end)
           cursor_position = page.evaluate_script("document.getElementById('field').selectionStart")
           assert_equal 3, cursor_position
+
+          combobox.send_keys(%i[alt down])
+          combobox.send_keys(:end)
+          options = all("div[role='option']")
+          last_option = options.last
+          assert_equal last_option[:id], combobox['aria-activedescendant']
+
+          combobox.send_keys(:home)
+          first_option = options.first
+          assert_equal first_option[:id], combobox['aria-activedescendant']
         end
       end
 
@@ -112,7 +143,7 @@ module Combobox
           combobox = find("input[role='combobox']")
           combobox.click
 
-          assert_selector "div[role='option'][data-value='disabled-option'][aria-disabled='true']"
+          assert_selector "div[role='option'][data-value='second-disabled-option'][aria-disabled='true']"
           assert_empty combobox.value
           assert_empty find("input[type='hidden']", visible: false).value
 
