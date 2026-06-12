@@ -898,7 +898,6 @@ fr:
     group_links:
       edit:
         description: Mettre à jour les paramètres de partage de ce groupe avec le groupe %{name}
-        submit: Sauvegarder les modifications
         title: Mettre à jour le partage de groupe
       index:
         actions:
@@ -936,7 +935,6 @@ fr:
     members:
       edit:
         description: Mettre à jour les paramètres d'appartenance au groupe pour l'utilisateur %{member}
-        submit: Sauvegarder les modifications
         title: Modifier un membre
       index:
         actions:
@@ -1538,7 +1536,6 @@ fr:
     group_links:
       edit:
         description: Mettre à jour les paramètres de partage de ce projet avec le groupe %{name}
-        submit: Sauvegarder les modifications
         title: Modifier le partage de projet
       index:
         access_level:
@@ -1585,7 +1582,6 @@ fr:
     members:
       edit:
         description: Mettre à jour les paramètres d'appartenance au projet pour l'utilisateur %{member}
-        submit: Sauvegarder les modifications
         title: Mettre à jour le membre
       index:
         actions:

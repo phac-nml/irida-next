@@ -151,7 +151,7 @@ module Projects
 
         within 'dialog' do
           find('#namespace_group_link_group_access_level').find(:xpath, 'option[2]').select_option
-          click_button I18n.t('common.actions.edit')
+          click_button I18n.t('common.actions.save')
         end
 
         assert_no_selector 'dialog'
@@ -183,7 +183,7 @@ module Projects
           find('#namespace_group_link_expires_at-input').click
           find('#namespace_group_link_expires_at-input').set(expiry_date)
           find('#namespace_group_link_expires_at-input').send_keys(:return)
-          click_button I18n.t('common.actions.edit')
+          click_button I18n.t('common.actions.save')
         end
 
         assert_no_selector 'dialog'
@@ -307,7 +307,7 @@ module Projects
         namespace_group_link.destroy
 
         find('#namespace_group_link_expires_at-input').set(expiry_date)
-        click_button I18n.t('common.actions.edit')
+        click_button I18n.t('common.actions.save')
       end
 
       assert_text 'Resource not found'

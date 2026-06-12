@@ -896,7 +896,6 @@ en:
     group_links:
       edit:
         description: Update settings for sharing this group with group %{name}
-        submit: Save changes
         title: Edit Group Share
       index:
         actions:
@@ -934,7 +933,6 @@ en:
     members:
       edit:
         description: Update group membership settings for user %{member}
-        submit: Save changes
         title: Edit Member
       index:
         actions:
@@ -1534,7 +1532,6 @@ en:
     group_links:
       edit:
         description: Update settings for sharing this project with group %{name}
-        submit: Save changes
         title: Edit Project Share
       index:
         access_level:
@@ -1581,7 +1578,6 @@ en:
     members:
       edit:
         description: Update project membership settings for user %{member}
-        submit: Save changes
         title: Edit Member
       index:
         actions:

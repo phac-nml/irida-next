@@ -214,7 +214,7 @@ module Groups
 
         within 'dialog' do
           find('#member_access_level').find(:xpath, 'option[4]').select_option
-          click_button I18n.t('common.actions.edit')
+          click_button I18n.t('common.actions.save')
         end
 
         assert_no_selector 'dialog'
@@ -242,7 +242,7 @@ module Groups
 
       within 'dialog' do
         find('#member_access_level').find(:xpath, 'option[2]').select_option
-        click_button I18n.t('common.actions.edit')
+        click_button I18n.t('common.actions.save')
 
         assert_text I18n.t('activerecord.errors.models.member.attributes.access_level.invalid',
                            user: group_member.user.email,
@@ -296,7 +296,7 @@ module Groups
         find('#member_expires_at-input').click
         find('#member_expires_at-input').set(expiry_date)
         find('#member_expires_at-input').send_keys(:return)
-        click_button I18n.t('common.actions.edit')
+        click_button I18n.t('common.actions.save')
       end
 
       assert_no_selector 'dialog'
