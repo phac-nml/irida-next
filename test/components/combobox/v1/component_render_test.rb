@@ -56,7 +56,7 @@ module Combobox
       test 'with_disabled_options preview renders aria-disabled options' do
         render_combobox_preview(:with_disabled_options)
 
-        assert_selector '[role="option"][data-value="disabled-option"][aria-disabled="true"]', visible: :all
+        assert_selector '[role="option"][data-value="second-disabled-option"][aria-disabled="true"]', visible: :all
       end
 
       test 'disabled preview renders disabled combobox' do
