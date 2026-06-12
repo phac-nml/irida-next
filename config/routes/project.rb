@@ -17,7 +17,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       match :activity, via: %i[get post]
       get :edit
       post :transfer
-      resources :members, only: %i[create destroy index new update]
+      resources :members, only: %i[create destroy index new update edit]
       resources :attachments, only: %i[create destroy index new] do
         get :new_destroy
       end
@@ -56,7 +56,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         end
       end
 
-      resources :group_links, only: %i[create destroy update index new]
+      resources :group_links, only: %i[create destroy update index new edit]
       resources :metadata_templates do
         collection do
           get :list

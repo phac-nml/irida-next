@@ -321,5 +321,21 @@ module Members
 
       assert_equal Member::AccessLevel::MAINTAINER, @project_member.access_level
     end
+
+    test 'update group member who had no expires_at with invalid expires_at input' do
+      group_member = members(:group_five_member_michelle_doe)
+      group = groups(:group_five)
+      valid_params = { user: group_member.user, expires_at: 'invalid_entry' }
+
+      assert_nil group_member.expires_at
+
+      Members::UpdateService.new(group_member, group, @user, valid_params).execute
+
+      assert_nil group_member.expires_at
+
+      assert group_member.errors[:expires_at].include?(
+        I18n.t('common.date.errors.invalid_input')
+      )
+    end
   end
 end

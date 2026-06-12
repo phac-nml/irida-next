@@ -1,10 +1,14 @@
-<%= turbo_stream.update "member-update-alert",
-                    viral_alert(type:, message:, classes: "mb-4") %>
+<% unless @member.errors.any? %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+  <turbo-stream action="refresh"></turbo-stream>
+<% end %>
 
-<%= turbo_stream.update "member-#{member.id}-access-level",
-                    partial: "groups/members/access_level",
-                    locals: {
-                      namespace: @namespace,
-                      member:,
-                      access_levels: @access_levels,
-                    } %>
+<%= turbo_stream.update "edit_dialog",
+                      partial: "edit_modal",
+                      locals: {
+                        open: @member.errors.any?,
+                        member: @member,
+                        namespace: @namespace
+                      } %>

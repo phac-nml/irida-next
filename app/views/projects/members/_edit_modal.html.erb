@@ -1,0 +1,93 @@
+<%= viral_dialog(id: 'edit-member-dialog', open: open) do |dialog| %>
+  <% dialog.with_header(title: t(:"projects.members.edit.title")) %>
+
+  <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+    <p class="dark:text-slate-400">
+      <%= I18n.t("projects.members.edit.description", member: @member.user.email) %>
+    </p>
+  </div>
+
+  <%= form_with(model: @member, url: namespace_project_member_path(@namespace.parent, @namespace.project, @member), method: :patch, html: { novalidate: true }) do |form| %>
+    <% form_id = "project-edit-member" %>
+    <% expires_at_input_id = "#{form.field_id(:expires_at)}-input" %>
+
+    <div class="grid gap-4">
+      <%= form_error_summary(
+      form,
+      target_overrides: { user: form_id, user_id: form_id, expires_at: expires_at_input_id }
+    ) %>
+
+      <%= render partial: "shared/form/required_field_legend" %>
+
+      <% invalid_access_level = @member.errors.include?(:access_level) %>
+
+      <div class="form-field <%= 'invalid' if invalid_access_level %>">
+        <%= form.label :access_level, data: { required: true } %>
+
+        <%= form.select :access_level,
+                  @access_levels,
+                  {},
+                  {
+                    required: true,
+                    aria: {
+                      describedby: [
+                        (
+                          if invalid_access_level
+                            form.field_id(:access_level, "error")
+                          else
+                            nil
+                          end
+                        ),
+                        form.field_id(:access_level, "hint"),
+                      ].join(" "),
+                      invalid: invalid_access_level,
+                      required: true,
+                    },
+                    value: @member.access_level,
+                  } %>
+
+        <% if invalid_access_level %>
+          <%= render "shared/form/field_errors",
+        id: form.field_id(:access_level, "error"),
+        errors: @member.errors.full_messages_for(:access_level) %>
+        <% end %>
+
+        <p id="<%= form.field_id(:access_level, "hint") %>" class="field-hint">
+          <%= t("projects.members.new.access_level_hint") %>
+        </p>
+      </div>
+
+      <% invalid_expires_at = @member.errors.include?(:expires_at) %>
+
+      <% if invalid_expires_at %>
+        <% error_container_id = form.field_id(:expires_at, "error") %>
+      <% end %>
+
+      <div class="form-field <%= 'invalid' if invalid_expires_at %>">
+        <%= combobox_datepicker(
+        id: form.field_id(:expires_at),
+        label: t("activerecord.attributes.member.expires_at"),
+        input_name: "member[expires_at]",
+        selected_date: @member.expires_at,
+        errored: invalid_expires_at
+      ) %>
+
+        <% if invalid_expires_at %>
+          <%= render "shared/form/field_errors",
+      id: error_container_id,
+      errors: @member.errors[:expires_at] %>
+        <% end %>
+      </div>
+
+      <div class="flex justify-start gap-1">
+        <%= form.submit t(:"common.actions.save"),
+                  class: "button button-primary",
+                  disabled: false %>
+
+        <button type="button" class="button button-default" data-action="click->viral--dialog#close">
+          <%= t('common.actions.cancel') %>
+        </button>
+      </div>
+    </div>
+  <% end %>
+<% end %>

@@ -39,24 +39,8 @@ module Members
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
-    def select_member_path(member)
-      if @namespace.type == 'Group'
-        group_member_path(@namespace, member)
-      else
-        namespace_project_member_path(@namespace.parent, @namespace.project, member)
-      end
-    end
-
-    def access_level
-      if @namespace.type == 'Group'
-        'groups/members/access_level'
-      else
-        'projects/members/access_level'
-      end
-    end
-
     def current_user_is_member
-      if @namespace.type == 'Group'
+      if @namespace.group_namespace?
         'groups/members/current_user_is_member'
       else
         'projects/members/current_user_is_member'
@@ -64,10 +48,18 @@ module Members
     end
 
     def current_user_is_not_member
-      if @namespace.type == 'Group'
+      if @namespace.group_namespace?
         'groups/members/current_user_is_not_member'
       else
         'projects/members/current_user_is_not_member'
+      end
+    end
+
+    def edit_member
+      if @namespace.group_namespace?
+        'groups/members/edit'
+      else
+        'projects/members/edit'
       end
     end
 

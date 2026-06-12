@@ -446,11 +446,7 @@ en:
         error: There was an error unlinking group from group
         success: Successfully unlinked group %{namespace_name} from group %{group_name}
       update:
-        error: There was an error updating the namespace group link
-        params:
-          expiration_date: expiration date
-          group_access_level: group access level
-        success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
+        success: Successfully updated group %{namespace_name} with group %{group_name} link
     workflow_execution_actions:
       cancel:
         error: Could not cancel workflow %{workflow_name}
@@ -910,11 +906,13 @@ en:
         title: General Settings
       title: General Settings
     group_links:
+      edit:
+        description: Update settings for sharing this group with group %{name}
+        title: Edit Group Share
       index:
         actions:
+          edit_aria_label: Edit shared group link with group %{group_name}
           unlink_aria_label: 'Unlink namespace from group: %{member}'
-        aria_labels:
-          expires_at: Group access expiration
         empty_state:
           description: There are no groups that have been delegated access to this group
           title: No groups
@@ -945,10 +943,12 @@ en:
       index:
         title: History
     members:
-      access_level:
-        aria_label: Access Level
+      edit:
+        description: Update group membership settings for user %{member}
+        title: Edit Member
       index:
         actions:
+          edit_aria_label: 'Edit group member: %{member}'
           leave_group_aria_label: Leave group
           remove_aria_label: 'Remove group member: %{member}'
         add: Add New Member
@@ -1181,8 +1181,6 @@ en:
     table_component:
       access_level: Access Level
       action: Action
-      aria_labels:
-        expires_at: Member expiration
       created_at: Access Granted
       created_by: "%{timestamp} by"
       expires_at: Expiration
@@ -1544,6 +1542,9 @@ en:
         title: General Settings
       title: General Settings
     group_links:
+      edit:
+        description: Update settings for sharing this project with group %{name}
+        title: Edit Project Share
       index:
         access_level:
           level_0: No Access
@@ -1553,9 +1554,8 @@ en:
           level_40: Maintainer
           level_50: Owner
         actions:
+          edit_aria_label: Edit shared project link with group %{group_name}
           unlink_aria_label: 'Unlink namespace from group: %{member}'
-        aria_labels:
-          group_access_level: Group Access Level
         empty_state:
           description: There are no groups that have been delegated access to this project
           title: No groups
@@ -1588,10 +1588,12 @@ en:
         project_restored: Project was restored by %{user}
         project_transferred: Project was transferred by %{user}
     members:
-      access_level:
-        aria_label: Access Level
+      edit:
+        description: Update project membership settings for user %{member}
+        title: Edit Member
       index:
         actions:
+          edit_aria_label: 'Edit project member: %{member}'
           leave_project_aria_label: Leave project
           remove_aria_label: 'Remove project member: %{member}'
         add: Add New Member

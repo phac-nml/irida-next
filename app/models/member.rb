@@ -23,7 +23,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :expires_at, on: %i[create update], date: { allow_empty: true, greater_than: lambda {
     Time.zone.today
-  } }, if: -> { (new_record? || expires_at_changed?) && expires_at_before_type_cast.present? }
+  }, less_than: -> { Time.zone.local(9999, 12, 31, 0, 0, 0) } },
+                         if: lambda {
+                           new_record? || expires_at_before_type_cast.present?
+                         }
 
   before_destroy :last_namespace_owner_member
 

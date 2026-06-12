@@ -215,10 +215,6 @@ fr:
         thursday: jeu
         tuesday: mar
         wednesday: mer
-      errors:
-        invalid_date: Date non valide
-        max_date_error: 'Date maximale autorisée : '
-        min_date_error: 'Date la plus ancienne autorisée : '
       months:
         april: avril
         august: août

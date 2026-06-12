@@ -1,0 +1,11 @@
+<%= button_to t(:"common.actions.edit"),
+edit_namespace_project_group_link_path(namespace.parent, namespace.project, namespace_group_link),
+data: {
+  turbo_stream: true,
+},
+method: :get,
+aria: {
+  label: t(:"projects.group_links.index.actions.edit_aria_label", group_name: namespace_group_link.group.name),
+},
+class:
+  "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>

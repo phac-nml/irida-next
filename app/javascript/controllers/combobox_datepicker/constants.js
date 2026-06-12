@@ -13,18 +13,26 @@ export const CALENDAR_CLASSES = {
     "cursor-pointer",
   ],
   IN_MONTH: [
-    "text-slate-900",
-    "hover:bg-slate-100",
-    "dark:hover:bg-slate-600",
-    "dark:text-white",
-    "cursor-pointer",
+    "not-aria-disabled:text-slate-900",
+    "not-aria-disabled:hover:bg-slate-100",
+    "not-aria-disabled:cursor-pointer",
+    "aria-disabled:cursor-not-allowed",
+    "aria-disabled:text-slate-500",
+    "aria-disabled:line-through",
+    "not-aria-disabled:dark:text-white",
+    "not-aria-disabled:dark:hover:bg-slate-600",
+    "aria-disabled:dark:text-slate-300",
   ],
   OUT_OF_MONTH: [
-    "hover:bg-slate-100",
-    "dark:hover:bg-slate-600",
-    "text-slate-500",
-    "dark:text-slate-300",
-    "cursor-pointer",
+    "not-aria-disabled:cursor-pointer",
+    "not-aria-disabled:text-slate-500",
+    "not-aria-disabled:hover:bg-slate-100",
+    "aria-disabled:cursor-not-allowed",
+    "aria-disabled:text-slate-500",
+    "aria-disabled:line-through",
+    "not-aria-disabled:dark:text-slate-300",
+    "not-aria-disabled:dark:hover:bg-slate-600",
+    "aria-disabled:dark:text-slate-300",
   ],
   TODAYS_DATE: [
     "after:absolute",
@@ -42,11 +50,4 @@ export const CALENDAR_CLASSES = {
   TODAYS_HOVER: ["hover:bg-slate-200", "dark:hover:bg-slate-500"],
   MONTH_NAV_ARROW_DISABLED: ["text-slate-400", "dark:text-slate-500"],
   MONTH_NAV_ARROW_ENABLED: ["text-slate-900", "dark:text-slate-100"],
-};
-
-export const INPUT_CLASSES = {
-  LABEL_ERROR: ["text-red-700", "dark:text-red-400"],
-  LABEL_DEFAULT: ["text-slate-900", "dark:text-white"],
-  INPUT_ERROR: ["!border-red-500", "!dark:border-red-400"],
-  INPUT_DEFAULT: ["border-slate-300", "dark:border-slate-600"],
 };

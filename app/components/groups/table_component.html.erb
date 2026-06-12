@@ -62,49 +62,30 @@
 
             <td class="px-6 py-4">
               <div class="form-field">
-                <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-                  <%= form_with(model: namespace_group_link, url: select_group_link_path(namespace_group_link), method: :patch) do |form| %>
-                    <%= form.select(
-                      :group_access_level,
-                      @access_levels,
-                      { selected: namespace_group_link.group_access_level },
-                      {
-                        id: "invited-group-#{namespace_group_link.group.id}-access-level-select",
-                        onchange: "this.form.requestSubmit();",
-                        "aria-label":
-                          t(:"projects.group_links.index.aria_labels.group_access_level"),
-                      },
-                    ) %>
-
-                    <input type="hidden" name="format" value="turbo_stream">
-                  <% end %>
-                <% else %>
-                  <%= t(
+                <%= t(
                     :"projects.group_links.index.access_level.level_#{namespace_group_link.group_access_level}",
                   ) %>
-                <% end %>
               </div>
             </td>
 
             <td class="px-6 py-4">
-              <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-                <%= form_with( model: namespace_group_link, url: select_group_link_path(namespace_group_link), method: :patch) do |form| %>
-                  <%= combobox_datepicker(
-                    id: "invited-group-#{namespace_group_link.group.id}-expiration",
-                    input_name: "namespace_group_link[expires_at]",
-                    selected_date: namespace_group_link.expires_at,
-                    autosubmit: true,
-                    input_aria_label: t("groups.group_links.index.aria_labels.expires_at"),
-                  ) %>
-                <% end %>
-              <% elsif !namespace_group_link.expires_at.nil? %>
+              <% unless namespace_group_link.expires_at.nil? %>
                 <%= helpers.local_date(namespace_group_link.expires_at, :long) %>
               <% end %>
             </td>
 
-            <td class="space-x-2 px-6 py-4">
-              <% if @abilities[:unlink_group] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-                <%= button_to t(
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-2">
+                <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+                  <%= render partial: edit_group_link,
+                  locals: {
+                    namespace: @namespace,
+                    namespace_group_link:,
+                  } %>
+                <% end %>
+
+                <% if @abilities[:unlink_group] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
+                  <%= button_to t(
                   :"#{namespace_group_link.namespace.type.pluralize.downcase}.group_links.index.unlink",
                 ),
                 select_group_link_path(namespace_group_link),
@@ -131,7 +112,8 @@
                 },
                 class:
                   "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
-              <% end %>
+                <% end %>
+              </div>
             </td>
           <% end %>
         <% end %>

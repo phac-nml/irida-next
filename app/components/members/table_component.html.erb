@@ -31,7 +31,7 @@
           <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: "px-6 py-3 text-right"
+              classes: "px-6 py-3"
             ) do %>
             <%= t(".action") %>
           <% end %>
@@ -71,19 +71,7 @@
             </td>
 
             <td class="p-3">
-              <% if (member.user != @current_user && @abilities[:update_member] &&
-member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-                <turbo-frame id="<%= "member-#{member.id}-access-level" %>">
-                  <%= render partial: access_level,
-                  locals: {
-                    namespace: @namespace,
-                    member: member,
-                    access_levels: @access_levels,
-                  } %>
-                </turbo-frame>
-              <% else %>
-                <%= t("members.access_levels.level_#{member.access_level}") %>
-              <% end %>
+              <%= t("members.access_levels.level_#{member.access_level}") %>
             </td>
 
             <td class="p-3">
@@ -117,37 +105,37 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
             </td>
 
             <td class="px-6 py-4">
-              <% if (member.user != @current_user && @abilities[:update_member] &&
-     member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
-                <%= form_with(model: member, url: select_member_path(member), method: :patch) do |form| %>
-                  <%= combobox_datepicker(
-                    id: "member-#{member.id}-expiration",
-                    input_name: "member[expires_at]",
-                    selected_date: member.expires_at,
-                    autosubmit: true,
-                    input_aria_label: t("members.table_component.aria_labels.expires_at"),
-                  ) %>
-                <% end %>
-              <% elsif !member.expires_at.nil? %>
+              <% unless member.expires_at.nil? %>
                 <%= helpers.local_date(member.expires_at, :long) %>
               <% end %>
             </td>
 
             <% if (@current_user == member.user || @abilities[:destroy_member]) && !member_source.key?(:inherited_namespace_path) %>
-              <td class="z-10 space-x-2 p-3 text-right dark:bg-slate-800">
-                <% if @current_user == member.user %>
-                  <%= render partial: current_user_is_member,
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-2">
+                  <% if (member.user != @current_user && @abilities[:update_member] &&
+member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
+                    <%= render partial: edit_member,
                   locals: {
                     namespace: @namespace,
                     member:,
                   } %>
-                <% else %>
-                  <%= render partial: current_user_is_not_member,
+                  <% end %>
+
+                  <% if @current_user == member.user %>
+                    <%= render partial: current_user_is_member,
                   locals: {
                     namespace: @namespace,
                     member:,
                   } %>
-                <% end %>
+                  <% else %>
+                    <%= render partial: current_user_is_not_member,
+                  locals: {
+                    namespace: @namespace,
+                    member:,
+                  } %>
+                  <% end %>
+                </div>
               </td>
             <% end %>
           <% end %>

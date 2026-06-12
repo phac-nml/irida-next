@@ -21,10 +21,12 @@ class PersonalAccessToken < ApplicationRecord
     greater_than: lambda {
       Time.zone.today
     },
-    less_than: lambda {
+    less_than: lambda { |record|
       if Irida::CurrentSettings.require_personal_access_token_expiry?
         Time.zone.today +
           Irida::CurrentSettings.max_personal_access_token_lifetime_in_days
+      elsif record.expires_at.present?
+        Time.zone.local(9999, 12, 31, 0, 0, 0)
       end
     }
   }, if: -> { new_record? || expires_at_changed? }
