@@ -227,6 +227,17 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_selector 'h2', text: I18n.t(:'projects.edit.advanced.title')
   end
 
+  test 'cannot update visibility of a project' do
+    group = groups(:group_one)
+    project = projects(:project1)
+    visit namespace_project_url(group, project)
+
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
+
+    assert_no_selector 'button', text: I18n.t('groups.edit.advanced.change_visibility.submit')
+  end
+
   test 'cannot access edit project' do
     login_as users(:david_doe)
 
