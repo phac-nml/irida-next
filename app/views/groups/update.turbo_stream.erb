@@ -8,7 +8,6 @@
   <%= turbo_stream.update "namespace_name" do %>
     <%= @group.name %>
   <% end %>
-
   <%= turbo_stream.update "breadcrumb" do %>
     <%= render Layout::BreadcrumbComponent.new(links: @context_crumbs) %>
   <% end %>
@@ -23,6 +22,12 @@
 
 <%= turbo_stream.update "group_path_form",
                     partial: "edit_advanced_path",
+                    locals: {
+                      group: @group,
+                    } %>
+
+<%= turbo_stream.update "group_change_visibility_form",
+                    partial: "edit_change_visibility",
                     locals: {
                       group: @group,
                     } %>

@@ -863,6 +863,26 @@ en:
       success: Group %{group_name} was deleted
     edit:
       advanced:
+        change_visibility:
+          confirm:
+            points_html:
+            - To prevent accidental actions we ask you to confirm your intention.
+            - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
+            private:
+              warning_html: You are going to change the visibility of <strong>%{group_name}</strong> to <strong>private</strong>. Once you confirm, all subgroups and projects under this group will only be accessible by explicit membership.
+            public:
+              warning_html: You are going to change the visibility of <strong>%{group_name}</strong> to <strong>public</strong>. Once you confirm, all subgroups and projects under this group will also be publicly visible to all users of the application.
+          description:
+            private: This group is currently private
+            public: This group is currently public
+          private:
+            points_html:
+            - Changing a group to private will change all descendants (groups and projects) to private. Only users with explicit membership will be able to access.
+          public:
+            points_html:
+            - Changing a group to public will change of all descendants (groups and projects) to public. All users with and without explicit membership will be able to access.
+          submit: Change visibility
+          title: Change group visibility
         delete:
           confirm:
             points_html:
@@ -897,6 +917,8 @@ en:
           - Be careful. Changing a group's parent can have unintended side effects.
           - You can only transfer groups where you have sufficient permissions.
           - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
+          - If the parent group is public, this group and all its descendants will be set to public.
+          - If the parent group is private, this group and all its descendants will be set to private
           select_group: Select Group
           submit: Transfer group
           title: Transfer group

@@ -4,6 +4,7 @@
 
     <%= viral_card do |card| %>
       <% card.with_header(title: t(:"groups.edit.details.subtitle")) %>
+
       <% card.with_section do %>
         <%= turbo_frame_tag("group_name_and_description_form") do %>
           <%= render partial: "edit_name_and_description_form",
@@ -25,6 +26,12 @@
 
     <% if @allowed_to[:transfer] %>
       <%= render "edit_advanced_transfer", group: @group %>
+    <% end %>
+
+    <% if @group.parent.nil? && @allowed_to[:change_visibility] %>
+      <%= turbo_frame_tag("group_change_visibility_form") do %>
+        <%= render "edit_change_visibility", group: @group %>
+      <% end %>
     <% end %>
 
     <% if @allowed_to[:destroy] %>
