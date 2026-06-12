@@ -6,7 +6,7 @@
   <% field_name =
     Flipper.enabled?(:v2_samplesheet, current_user) ? "sample_count" : "sample_ids[]" %>
 
-  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": field_name, "workflow-selection-feature-flag-value": Flipper.enabled?(:v2_samplesheet, current_user).to_s}) do %>
+  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": field_name, "workflow-selection-feature-flag-value": Flipper.enabled?(:v2_samplesheet, current_user).to_s, "workflow-selection-unavailable-label-value": t("workflow_executions.submissions.pipeline_selection.unavailable") }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
       <%= form.hidden_field :pipeline_id,
                         data: {
@@ -22,6 +22,9 @@
 
       <ul class="space-y-2">
         <% workflows.each do |key, workflow| %>
+          <% min_samples_configured = workflow.min_samples_limit_configured? %>
+          <% max_samples_configured = workflow.max_samples_limit_configured? %>
+
           <li>
             <button
               type="button"
@@ -31,6 +34,12 @@
               data-workflow-selection-workflowName-param="<%= workflow.name %>"
               data-workflow-selection-workflowVersion-param="<%= workflow.version %>"
               data-workflow-selection-namespaceId-param="<%= @namespace_id %>"
+              data-workflow-selection-min-samples-configured="<%= min_samples_configured %>"
+              data-workflow-selection-max-samples-configured="<%= max_samples_configured %>"
+              data-workflow-selection-min-samples="<%= workflow.minimum_samples if min_samples_configured %>"
+              data-workflow-selection-max-samples="<%= workflow.maximum_samples if max_samples_configured %>"
+              data-workflow-selection-min-samples-message="<%= t('shared.workflow_executions.sample_limits.min_samples_required', min_samples: workflow.minimum_samples) %>"
+              data-workflow-selection-max-samples-message="<%= t('shared.workflow_executions.sample_limits.max_samples_exceeded', max_samples: workflow.maximum_samples) %>"
               data-action="click->workflow-selection#selectWorkflow"
             >
               <span class="mr-2 shrink-0">
@@ -51,6 +60,14 @@
                 <span class="text-sm font-normal text-wrap text-slate-500 dark:text-slate-400">
                   <%= workflow.description %>
                 </span>
+
+                <span
+                  class="
+                    mt-2 block hidden w-fit rounded-md bg-red-100 px-2 py-1 text-sm font-medium text-red-700
+                    dark:bg-red-900/40 dark:text-red-300
+                  "
+                  data-workflow-selection-limit-message
+                ></span>
               </span>
             </button>
           </li>

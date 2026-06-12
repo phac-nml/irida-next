@@ -18,6 +18,8 @@ module Irida
 
     def initialize(pipeline_id, entry, version, schema_loc, schema_input_loc, unknown: false) # rubocop:disable Metrics/MethodLength,Metrics/ParameterLists,Metrics/AbcSize
       @pipeline_id = pipeline_id
+      @entry = entry
+      @version_entry = version
       @name = entry['name']
       @description = entry['description']
       @type = 'NFL'
@@ -131,6 +133,14 @@ module Irida
       @settings.fetch('max_samples', -1).to_i
     end
 
+    def min_samples_limit_configured?
+      settings_key_configured?('min_samples')
+    end
+
+    def max_samples_limit_configured?
+      settings_key_configured?('max_samples')
+    end
+
     def maximum_run_time(sample_count = 0)
       max_run_time = @settings.fetch('max_runtime', nil)
 
@@ -233,6 +243,10 @@ module Irida
         )
 
       settings
+    end
+
+    def settings_key_configured?(key)
+      @entry['settings']&.key?(key) || @version_entry['settings']&.key?(key)
     end
 
     def samplesheet_schema_overrides_for_entry(entry, version)

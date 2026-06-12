@@ -99,6 +99,42 @@ module WorkflowExecutions
       assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
     end
 
+    test 'pipeline selection marks workflow versions outside configured minimum sample limits unavailable' do
+      user = users(:john_doe)
+      login_as user
+
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+
+      check "checkbox_sample_#{@sample43.id}"
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_selector 'button[data-workflow-selection-workflowversion-param="1.0.3"][aria-disabled="true"]'
+      assert_selector 'button[data-workflow-selection-workflowversion-param="1.0.2"][aria-disabled="false"]'
+      assert_text I18n.t('shared.workflow_executions.sample_limits.min_samples_required', min_samples: 2)
+
+      find('button[data-workflow-selection-workflowversion-param="1.0.2"]').click
+
+      assert_selector 'h1.dialog--title',
+                      text: I18n.t('workflow_executions.submissions.create.title',
+                                   workflow: 'phac-nml/iridanextexample')
+    end
+
+    test 'pipeline selection marks workflow versions outside configured maximum sample limits unavailable' do
+      user = users(:john_doe)
+      login_as user
+
+      visit namespace_project_samples_url(@group1, @project2)
+
+      click_button I18n.t('common.controls.select_all')
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+      assert_selector 'button[data-workflow-selection-workflowversion-param="1.0.3"][aria-disabled="true"]'
+      assert_selector 'button[data-workflow-selection-workflowversion-param="1.0.2"][aria-disabled="false"]'
+      assert_text I18n.t('shared.workflow_executions.sample_limits.max_samples_exceeded', max_samples: 2)
+    end
+
     test 'should display a pipeline selection modal for project samples as analyst' do
       user = users(:james_doe)
       login_as user

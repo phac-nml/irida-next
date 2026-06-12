@@ -5,7 +5,11 @@
     "description": "IRIDA Next Example Pipeline",
     "versions": [
       {
-        "name": "1.0.3"
+        "name": "1.0.3",
+        "settings": {
+          "min_samples": 2,
+          "max_samples": 5
+        }
       },
       {
         "name": "1.0.2",

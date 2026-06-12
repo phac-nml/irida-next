@@ -114,7 +114,7 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
 
     assert_not_empty errors, 'should have errors which prevented creation of workflow execution.'
     assert(errors.any? do |e|
-      e['message'] == I18n.t('services.workflow_executions.create.min_samples_required',
+      e['message'] == I18n.t('shared.workflow_executions.sample_limits.min_samples_required',
                              min_samples: 2)
     end)
   end
@@ -171,7 +171,7 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
 
     assert_not_empty errors, 'should have errors which prevented creation of workflow execution.'
     assert(errors.any? do |e|
-      e['message'] == I18n.t('services.workflow_executions.create.max_samples_exceeded',
+      e['message'] == I18n.t('shared.workflow_executions.sample_limits.max_samples_exceeded',
                              max_samples: 2)
     end)
   end

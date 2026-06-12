@@ -15,6 +15,7 @@ export default class extends Controller {
   static values = {
     fieldName: String,
     featureFlag: { type: Boolean },
+    unavailableLabel: String,
   };
 
   #sampleCount;
@@ -32,9 +33,10 @@ export default class extends Controller {
 
     document.addEventListener("turbo:submit-end", preventEscapeListener);
 
-    if (this.featureFlagValue) {
-      this.#sampleCount = this.selectionOutlet.getStoredItemsCount();
-    }
+    this.#sampleCount = this.hasSelectionOutlet
+      ? this.selectionOutlet.getStoredItemsCount()
+      : 0;
+    this.updateWorkflowAvailability();
   }
 
   disconnect() {
@@ -74,7 +76,12 @@ export default class extends Controller {
     document.addEventListener("keydown", preventEscapeListener, true);
   }
 
-  selectWorkflow({ params }) {
+  selectWorkflow(event) {
+    if (event.currentTarget.getAttribute("aria-disabled") === "true") {
+      return;
+    }
+
+    const { params } = event;
     this.preventClosingDialog();
     this.pipelineIdTarget.value = params.pipelineid;
     this.workflowVersionTarget.value = params.workflowversion;
@@ -116,6 +123,124 @@ export default class extends Controller {
       );
     }
     this.formTarget.requestSubmit();
+  }
+
+  updateWorkflowAvailability() {
+    const workflowsByState = [];
+
+    this.workflowTargets.forEach((workflow) => {
+      const disabledMessage = this.disabledMessage(workflow);
+      const isDisabled = disabledMessage.length > 0;
+      const limitMessage = workflow.querySelector(
+        "[data-workflow-selection-limit-message]",
+      );
+
+      this.setDisabledState(workflow, isDisabled);
+
+      if (limitMessage) {
+        limitMessage.classList.toggle("hidden", !isDisabled);
+        limitMessage.textContent = disabledMessage;
+      }
+
+      workflowsByState.push({ workflow, isDisabled });
+    });
+
+    this.reorderWorkflows(workflowsByState);
+  }
+
+  disabledMessage(workflow) {
+    const minSamplesConfigured =
+      workflow.dataset.workflowSelectionMinSamplesConfigured === "true";
+    const maxSamplesConfigured =
+      workflow.dataset.workflowSelectionMaxSamplesConfigured === "true";
+    const minimumSamples = Number.parseInt(
+      workflow.dataset.workflowSelectionMinSamples ?? "0",
+      10,
+    );
+    const maximumSamples = Number.parseInt(
+      workflow.dataset.workflowSelectionMaxSamples ?? "-1",
+      10,
+    );
+
+    if (minSamplesConfigured && this.#sampleCount < minimumSamples) {
+      return workflow.dataset.workflowSelectionMinSamplesMessage;
+    }
+
+    if (
+      maxSamplesConfigured &&
+      maximumSamples > 0 &&
+      this.#sampleCount > maximumSamples
+    ) {
+      return workflow.dataset.workflowSelectionMaxSamplesMessage;
+    }
+
+    return "";
+  }
+
+  setDisabledState(workflow, disabled) {
+    workflow.setAttribute("aria-disabled", disabled.toString());
+  }
+
+  reorderWorkflows(workflowsByState) {
+    if (workflowsByState.length === 0) {
+      return;
+    }
+
+    const list = workflowsByState[0].workflow.closest("ul");
+    if (!list) {
+      return;
+    }
+
+    const enabledRows = [];
+    const disabledRows = [];
+
+    workflowsByState.forEach(({ workflow, isDisabled }) => {
+      const row = workflow.closest("li");
+      if (!row) {
+        return;
+      }
+
+      if (isDisabled) {
+        disabledRows.push(row);
+      } else {
+        enabledRows.push(row);
+      }
+    });
+
+    list
+      .querySelectorAll("[data-workflow-selection-divider]")
+      .forEach((divider) => divider.remove());
+
+    enabledRows.forEach((row) => list.appendChild(row));
+
+    if (disabledRows.length > 0) {
+      list.appendChild(this.createUnavailableDivider());
+      disabledRows.forEach((row) => list.appendChild(row));
+    }
+  }
+
+  createUnavailableDivider() {
+    const divider = document.createElement("li");
+    divider.dataset.workflowSelectionDivider = "true";
+    divider.className = "pt-2";
+
+    const container = document.createElement("div");
+    container.className =
+      "flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400";
+
+    const leadingRule = document.createElement("span");
+    leadingRule.className = "h-px flex-1 bg-slate-200 dark:bg-slate-700";
+
+    const label = document.createElement("span");
+    label.textContent = this.unavailableLabelValue;
+
+    const trailingRule = document.createElement("span");
+    trailingRule.className = "h-px flex-1 bg-slate-200 dark:bg-slate-700";
+
+    container.append(leadingRule, label, trailingRule);
+    divider.appendChild(container);
+
+    return divider;
   }
 
   #toJson(formData) {

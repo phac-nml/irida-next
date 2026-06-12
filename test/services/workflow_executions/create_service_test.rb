@@ -98,7 +98,7 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
 
       assert @workflow_execution.errors[:base].include?(
-        I18n.t('services.workflow_executions.create.min_samples_required',
+        I18n.t('shared.workflow_executions.sample_limits.min_samples_required',
                min_samples: @workflow_execution.workflow.minimum_samples)
       )
     end
@@ -144,7 +144,7 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params1).execute
 
       assert @workflow_execution.errors[:base].include?(
-        I18n.t('services.workflow_executions.create.max_samples_exceeded',
+        I18n.t('shared.workflow_executions.sample_limits.max_samples_exceeded',
                max_samples: @workflow_execution.workflow.maximum_samples)
       )
     end
