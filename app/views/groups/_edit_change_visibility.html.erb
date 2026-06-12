@@ -45,10 +45,10 @@
 
     <div class="mt-4 grid gap-4">
       <%= button_to t("groups.edit.advanced.change_visibility.submit"),
-      @group,
+      group_path,
+      method: :patch,
       params: { group: { public: !@group.public}},
       data: {
-        method: :patch,
         turbo_confirm: "",
         turbo_content: ".confirm-change-visibility",
         confirm_value: @group.path,

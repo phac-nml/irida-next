@@ -9,17 +9,19 @@ module Groups
       super
     end
 
-    def execute # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    def execute # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Metrics/MethodLength
       authorize! @group, to: :update? unless params.key?(:public)
-      authorize! @group, to: :change_visibility? if (params.to_unsafe_h.size == 1) && params.key?(:public)
+      authorize! @group, to: :change_visibility? if params.key?(:public)
 
       updated = group.update(params)
 
       if updated
-        if group.parent.nil?
-          if params.key?(:public) && params[:public] == 'true'
+        if group.parent.nil? && params.key?(:public)
+          public_param_normalized = params[:public].to_s
+
+          if public_param_normalized == 'true'
             update_descendants_to_public
-          elsif params.key?(:public) && params[:public] == 'false'
+          elsif public_param_normalized == 'false'
             update_descendants_to_private
           end
         end
