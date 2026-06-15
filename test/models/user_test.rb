@@ -118,4 +118,21 @@ class UserTest < ActiveSupport::TestCase
   test 'full_name should combine the users first and last names' do
     assert_equal "#{@user.first_name} #{@user.last_name}", @user.full_name
   end
+
+  test 'avatar_initials combines first letters of first and last names' do
+    assert_equal 'JD', @user.avatar_initials
+  end
+
+  test 'avatar_initials with first name only' do
+    @user.last_name = ''
+
+    assert_equal 'J', @user.avatar_initials
+  end
+
+  test 'avatar_initials with blank names' do
+    @user.first_name = ''
+    @user.last_name = ''
+
+    assert_equal '', @user.avatar_initials
+  end
 end

@@ -1,0 +1,8 @@
+<% user = User.new(first_name: "Josh", last_name: "Adam", email: "josh.adam@example.com") %>
+
+<div class="flex items-end gap-4">
+  <%= render UserAvatarComponent.new(user: user, size: :xs) %>
+  <%= render UserAvatarComponent.new(user: user, size: :small) %>
+  <%= render UserAvatarComponent.new(user: user, size: :medium) %>
+  <%= render UserAvatarComponent.new(user: user, size: :large) %>
+</div>

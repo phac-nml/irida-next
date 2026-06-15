@@ -120,6 +120,10 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     "#{first_name} #{last_name}"
   end
 
+  def avatar_initials
+    [first_name, last_name].map { |name| name.to_s.strip.first&.upcase }.compact.join
+  end
+
   private
 
   def build_namespace_name
