@@ -3,11 +3,11 @@
     "devenv": {
       "locked": {
         "dir": "src/modules",
-        "lastModified": 1780459148,
-        "narHash": "sha256-oIpiel88r8zV/WqTFwcGAjWXKOASHNzq7wjXQ6ORTvg=",
+        "lastModified": 1781456191,
+        "narHash": "sha256-aZb6/djq1Msd1oi9L2BEHx7rnRRJEtvWUy2A59zaZVQ=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "493ed7ef062ba3972c06e60970fe5ebe014f5c33",
+        "rev": "48a93d1fd74ca3fb4f3f64e942cfcb19a1d9f7e0",
         "type": "github"
       },
       "original": {
@@ -20,11 +20,11 @@
     "flake-compat": {
       "flake": false,
       "locked": {
-        "lastModified": 1747046372,
-        "narHash": "sha256-CIVLLkVgvHYbgI2UpXvIIBJ12HWgX+fjA8Xf8PUmqCY=",
+        "lastModified": 1767039857,
+        "narHash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns=",
         "owner": "edolstra",
         "repo": "flake-compat",
-        "rev": "9100a0f413b0c601e0533d1d94ffd501ce2e7885",
+        "rev": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
         "type": "github"
       },
       "original": {
@@ -79,11 +79,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780482956,
-        "narHash": "sha256-MOm2av5eQrX78Zki1RdG2xDgtx5M+cEtq9bMbkvJXr4=",
+        "lastModified": 1781519518,
+        "narHash": "sha256-5f9Yix1MUsjX+pgsJNNvfoaOUwQEp+MaDttVMLU+bcg=",
         "owner": "bobvanderlinden",
         "repo": "nixpkgs-ruby",
-        "rev": "f40500672aedbf8d32a0f6938d80dba67bba863a",
+        "rev": "b217e4bf517b5437d2ffab5faa4432f1f8a0b26f",
         "type": "github"
       },
       "original": {
@@ -109,11 +109,28 @@
         "type": "github"
       }
     },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1781359544,
+        "narHash": "sha256-iUuzKQcyXvopYDDzFpMK5eQKP3WIJExYny2kJtbgUcE=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "9f11f828c213641c2369a9f1fa31fe31557e3156",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "devenv": "devenv",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-ruby": "nixpkgs-ruby"
+        "nixpkgs-ruby": "nixpkgs-ruby",
+        "nixpkgs-unstable": "nixpkgs-unstable"
       }
     },
     "systems": {
