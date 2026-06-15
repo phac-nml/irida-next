@@ -11,6 +11,9 @@ lib.mkMerge [
         playwright-test = (import inputs.nixpkgs-unstable {
           system = prev.stdenv.system;
         }).playwright-test;
+        playwright = (import inputs.nixpkgs-unstable {
+          system = prev.stdenv.system;
+        }).playwright;
       })
     ];
 
