@@ -1,0 +1,42 @@
+<% sizes = [
+  [:xs, "24 × 24 px", "Sidebar triggers, compact lists"],
+  [:small, "32 × 32 px", "Namespace rows, navigation items"],
+  [:medium, "48 × 48 px", "Default — member lists, cards"],
+  [:large, "64 × 64 px", "Page headers, group detail"],
+] %>
+
+<div class="max-w-3xl space-y-6">
+  <header class="border-b border-neutral-200 pb-5 dark:border-neutral-700">
+    <%= pathogen_heading_group(level: 1) do |group| %>
+      <%= group.with_heading { "Size scale" } %>
+      <%= group.with_metadata { "Four fixed sizes. Typography scales with the avatar footprint." } %>
+    <% end %>
+  </header>
+
+  <div
+    class="
+      divide-y divide-neutral-200 rounded-md border border-neutral-200 bg-white dark:divide-neutral-700
+      dark:border-neutral-700 dark:bg-neutral-900
+    "
+  >
+    <% sizes.each do |size, dimensions, usage| %>
+      <div class="grid items-center gap-4 px-5 py-4 sm:grid-cols-[4rem_minmax(0,1fr)_minmax(0,2fr)]">
+        <div class="flex items-center justify-center">
+          <%= render AvatarComponent.new(
+            label: user_label,
+            initials: user_initials,
+            colour_seed: user_colour_seed,
+            size: size,
+          ) %>
+        </div>
+
+        <div class="space-y-1">
+          <%= pathogen_code { ":#{size}" } %>
+          <%= pathogen_supporting(variant: :muted) { dimensions } %>
+        </div>
+
+        <%= pathogen_supporting(variant: :muted) { usage } %>
+      </div>
+    <% end %>
+  </div>
+</div>

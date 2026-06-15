@@ -1,0 +1,93 @@
+<div class="max-w-3xl space-y-6">
+  <header class="border-b border-neutral-200 pb-5 dark:border-neutral-700">
+    <%= pathogen_heading_group(level: 1) do |group| %>
+      <%= group.with_heading { "Accessibility" } %>
+
+      <%= group.with_metadata do %>
+        Choose the pattern that matches whether the avatar is the only label for its subject.
+      <% end %>
+    <% end %>
+  </header>
+
+  <section class="space-y-6">
+    <article
+      class="
+        flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-700
+        dark:bg-neutral-900
+      "
+    >
+      <div class="space-y-2 border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
+        <%= pathogen_heading(level: 3) { "Standalone image" } %>
+
+        <%= pathogen_supporting(variant: :muted) do %>
+          Default. Renders <%= pathogen_code { 'role="img"' } %> with <%= pathogen_code { "aria-label" } %> from
+          <%= pathogen_code { "label" } %>.
+        <% end %>
+      </div>
+
+      <div class="flex items-center gap-4 px-5 py-8">
+        <%= render AvatarComponent.new(
+          label: user_label,
+          initials: user_initials,
+          colour_seed: user_colour_seed,
+          size: :small,
+        ) %>
+
+        <%= pathogen_code(class: "block") { "AvatarComponent.new(label: ..., initials: ...)" } %>
+      </div>
+    </article>
+
+    <article
+      class="
+        flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-700
+        dark:bg-neutral-900
+      "
+    >
+      <div class="space-y-2 border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
+        <%= pathogen_heading(level: 3) { "Decorative" } %>
+
+        <%= pathogen_supporting(variant: :muted) do %>
+          Use when adjacent text or a parent control already names the subject. Sets
+          <%= pathogen_code { 'aria-hidden="true"' } %> and omits <%= pathogen_code { 'role="img"' } %>.
+        <% end %>
+      </div>
+
+      <div class="flex items-center gap-3 px-5 py-8">
+        <%= render AvatarComponent.new(
+          label: user_label,
+          initials: user_initials,
+          colour_seed: user_colour_seed,
+          size: :xs,
+          decorative: true,
+        ) %>
+
+        <%= pathogen_text { user_label } %>
+      </div>
+    </article>
+
+    <article
+      class="
+        flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-700
+        dark:bg-neutral-900
+      "
+    >
+      <div class="space-y-2 border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
+        <%= pathogen_heading(level: 3) { "Linked" } %>
+
+        <%= pathogen_supporting(variant: :muted) do %>
+          With <%= pathogen_code { "url" } %>, the avatar renders as a link. The anchor carries
+          <%= pathogen_code { "aria-label" } %>; do not add <%= pathogen_code { 'role="img"' } %>.
+        <% end %>
+      </div>
+
+      <div class="px-5 py-8">
+        <%= render AvatarComponent.new(
+          label: namespace_label,
+          colour_seed: namespace_colour_seed,
+          url: '#',
+          size: :small,
+        ) %>
+      </div>
+    </article>
+  </section>
+</div>

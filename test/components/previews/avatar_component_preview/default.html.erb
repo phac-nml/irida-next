@@ -1,0 +1,204 @@
+<div class="max-w-4xl space-y-6">
+  <header class="border-b border-neutral-200 pb-5 dark:border-neutral-700">
+    <%= pathogen_heading_group(level: 1) do |group| %>
+      <%= group.with_eyebrow { "IRIDA component" } %>
+      <%= group.with_heading { "Avatar" } %>
+
+      <%= group.with_metadata do %>
+        Displays initials on a deterministic coloured background. Pass display strings at the call site — the component
+        does not accept domain models such as <%= pathogen_code { "User" } %>.
+      <% end %>
+    <% end %>
+  </header>
+
+  <section class="grid gap-6 md:grid-cols-2">
+    <article
+      class="
+        flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-700
+        dark:bg-neutral-900
+      "
+    >
+      <div class="space-y-2 border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
+        <%= pathogen_heading(level: 3) { "User member" } %>
+
+        <%= pathogen_supporting(variant: :muted) do %>
+          Pass <%= pathogen_code { "initials" } %> explicitly when the label is a full name.
+        <% end %>
+      </div>
+
+      <div class="flex items-start gap-6 px-5 py-8">
+        <%= render AvatarComponent.new(
+          label: user_label,
+          initials: user_initials,
+          colour_seed: user_colour_seed,
+        ) %>
+
+        <dl class="flex min-w-0 flex-col gap-5">
+          <div class="space-y-1">
+            <dt>
+              <%= pathogen_supporting(class: "font-semibold") { "Label" } %>
+            </dt>
+
+            <dd class="min-w-0 truncate">
+              <%= pathogen_supporting(variant: :muted) { user_label } %>
+            </dd>
+          </div>
+
+          <div class="space-y-1">
+            <dt>
+              <%= pathogen_supporting(class: "font-semibold") { "Initials" } %>
+            </dt>
+
+            <dd>
+              <%= pathogen_code { user_initials } %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </article>
+
+    <article
+      class="
+        flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-700
+        dark:bg-neutral-900
+      "
+    >
+      <div class="space-y-2 border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
+        <%= pathogen_heading(level: 3) { "Namespace or group" } %>
+
+        <%= pathogen_supporting(variant: :muted) do %>
+          A <%= pathogen_code { "colour_seed" } %> keeps the hue stable when the display name changes.
+        <% end %>
+      </div>
+
+      <div class="flex items-start gap-6 px-5 py-8">
+        <%= render AvatarComponent.new(
+          label: namespace_label,
+          colour_seed: namespace_colour_seed,
+          size: :small,
+        ) %>
+
+        <dl class="flex min-w-0 flex-col gap-5">
+          <div class="space-y-1">
+            <dt>
+              <%= pathogen_supporting(class: "font-semibold") { "Label" } %>
+            </dt>
+
+            <dd class="min-w-0 truncate">
+              <%= pathogen_supporting(variant: :muted) { namespace_label } %>
+            </dd>
+          </div>
+
+          <div class="space-y-1">
+            <dt>
+              <%= pathogen_supporting(class: "font-semibold") { "Initials" } %>
+            </dt>
+
+            <dd>
+              <%= pathogen_code { "S" } %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section class="rounded-md border border-neutral-200 bg-neutral-50 p-5 dark:border-neutral-700 dark:bg-neutral-900/50">
+    <div class="space-y-2">
+      <%= pathogen_heading(level: 2) { "Parameters" } %>
+
+      <%= pathogen_supporting(variant: :muted) do %>
+        Required and optional arguments for <%= pathogen_code { "AvatarComponent.new" } %>.
+      <% end %>
+    </div>
+
+    <div class="mt-5 overflow-x-auto">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b border-neutral-200 dark:border-neutral-700">
+            <th class="py-3 pr-4">
+              <%= pathogen_supporting(class: "font-semibold") { "Parameter" } %>
+            </th>
+
+            <th class="py-3 pr-4">
+              <%= pathogen_supporting(class: "font-semibold") { "Required" } %>
+            </th>
+
+            <th class="py-3">
+              <%= pathogen_supporting(class: "font-semibold") { "Notes" } %>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr class="border-b border-neutral-200 dark:border-neutral-700">
+            <td class="py-3 pr-4 align-top"><%= pathogen_code { "label" } %></td>
+            <td class="py-3 pr-4 align-top"><%= pathogen_supporting { "Yes" } %></td>
+
+            <td class="py-3 align-top">
+              <%= pathogen_supporting(variant: :muted) do %>
+                Accessible name unless <%= pathogen_code { "decorative: true" } %>.
+              <% end %>
+            </td>
+          </tr>
+
+          <tr class="border-b border-neutral-200 dark:border-neutral-700">
+            <td class="py-3 pr-4 align-top"><%= pathogen_code { "initials" } %></td>
+            <td class="py-3 pr-4 align-top"><%= pathogen_supporting { "No" } %></td>
+
+            <td class="py-3 align-top">
+              <%= pathogen_supporting(variant: :muted) do %>
+                Defaults to the first character of <%= pathogen_code { "label" } %>.
+              <% end %>
+            </td>
+          </tr>
+
+          <tr class="border-b border-neutral-200 dark:border-neutral-700">
+            <td class="py-3 pr-4 align-top"><%= pathogen_code { "colour_seed" } %></td>
+            <td class="py-3 pr-4 align-top"><%= pathogen_supporting { "No" } %></td>
+
+            <td class="py-3 align-top">
+              <%= pathogen_supporting(variant: :muted) do %>
+                Defaults to <%= pathogen_code { "label" } %>. Use a stable id-based seed for entities.
+              <% end %>
+            </td>
+          </tr>
+
+          <tr class="border-b border-neutral-200 dark:border-neutral-700">
+            <td class="py-3 pr-4 align-top"><%= pathogen_code { "size" } %></td>
+            <td class="py-3 pr-4 align-top"><%= pathogen_supporting { "No" } %></td>
+
+            <td class="py-3 align-top">
+              <%= pathogen_supporting(variant: :muted) do %>
+                <%= pathogen_code { ":xs" } %>, <%= pathogen_code { ":small" } %>, <%= pathogen_code { ":medium" } %>
+                (default), <%= pathogen_code { ":large" } %>.
+              <% end %>
+            </td>
+          </tr>
+
+          <tr class="border-b border-neutral-200 dark:border-neutral-700">
+            <td class="py-3 pr-4 align-top"><%= pathogen_code { "url" } %></td>
+            <td class="py-3 pr-4 align-top"><%= pathogen_supporting { "No" } %></td>
+
+            <td class="py-3 align-top">
+              <%= pathogen_supporting(variant: :muted) do %>
+                Renders an <%= pathogen_code { "<a>" } %> instead of <%= pathogen_code { "<span>" } %>.
+              <% end %>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="py-3 pr-4 align-top"><%= pathogen_code { "decorative" } %></td>
+            <td class="py-3 pr-4 align-top"><%= pathogen_supporting { "No" } %></td>
+
+            <td class="py-3 align-top">
+              <%= pathogen_supporting(variant: :muted) do %>
+                Sets <%= pathogen_code { 'aria-hidden="true"' } %> when a visible label exists nearby.
+              <% end %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

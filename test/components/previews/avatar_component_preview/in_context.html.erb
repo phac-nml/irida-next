@@ -1,0 +1,123 @@
+<div class="max-w-4xl space-y-6">
+  <header class="border-b border-neutral-200 pb-5 dark:border-neutral-700">
+    <%= pathogen_heading_group(level: 1) do |group| %>
+      <%= group.with_heading { "In context" } %>
+      <%= group.with_metadata { "Common placements across IRIDA. Each example mirrors a real call site." } %>
+    <% end %>
+  </header>
+
+  <section class="grid gap-6 lg:grid-cols-2">
+    <article
+      class="
+        flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-700
+        dark:bg-neutral-900
+      "
+    >
+      <div class="space-y-2 border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
+        <%= pathogen_typography_preset(:card) do |group| %>
+          <%= group.with_heading { "Account menu trigger" } %>
+
+          <%= group.with_metadata do %>
+            Decorative <%= pathogen_code { ":xs" } %> avatar — the dropdown label carries the accessible name.
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="flex items-center justify-between gap-4 px-5 py-8">
+        <%= pathogen_supporting(variant: :muted) { "Signed in as #{user_label}" } %>
+
+        <button
+          type="button"
+          class="rounded-sm border border-neutral-200 p-1 dark:border-neutral-700"
+          aria-label="Account menu"
+        >
+          <%= render AvatarComponent.new(
+            label: user_label,
+            initials: user_initials,
+            colour_seed: user_colour_seed,
+            size: :xs,
+            decorative: true,
+          ) %>
+        </button>
+      </div>
+    </article>
+
+    <article
+      class="
+        flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-700
+        dark:bg-neutral-900
+      "
+    >
+      <div class="space-y-2 border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
+        <%= pathogen_typography_preset(:card) do |group| %>
+          <%= group.with_heading { "Sidebar namespace item" } %>
+          <%= group.with_metadata { "Small avatar beside a namespace link. Seed includes the path for colour stability." } %>
+        <% end %>
+      </div>
+
+      <div class="flex items-center gap-3 px-5 py-8">
+        <%= render AvatarComponent.new(
+          label: namespace_label,
+          colour_seed: "#{namespace_label}-/groups/strep-outbreak-2021",
+          size: :xs,
+        ) %>
+
+        <%= pathogen_text(class: "font-medium") { namespace_label } %>
+      </div>
+    </article>
+
+    <article
+      class="
+        flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-700
+        dark:bg-neutral-900
+      "
+    >
+      <div class="space-y-2 border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
+        <%= pathogen_typography_preset(:card) do |group| %>
+          <%= group.with_heading { "Namespace row" } %>
+          <%= group.with_metadata { "Compact avatar in a searchable list row." } %>
+        <% end %>
+      </div>
+
+      <div class="flex items-center gap-3 px-5 py-8">
+        <%= render AvatarComponent.new(
+          label: namespace_label,
+          colour_seed: namespace_colour_seed,
+          size: :small,
+        ) %>
+
+        <div class="min-w-0 space-y-1">
+          <%= pathogen_text(class: "truncate font-semibold") { namespace_label } %>
+          <%= pathogen_supporting(variant: :muted) { "INXT-GRP-0042" } %>
+        </div>
+      </div>
+    </article>
+
+    <article
+      class="
+        flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-700
+        dark:bg-neutral-900
+      "
+    >
+      <div class="space-y-2 border-b border-neutral-200 px-5 py-4 dark:border-neutral-700">
+        <%= pathogen_typography_preset(:card) do |group| %>
+          <%= group.with_heading { "Group page header" } %>
+          <%= group.with_metadata { "Large avatar in a page header icon slot." } %>
+        <% end %>
+      </div>
+
+      <div class="flex items-center gap-4 px-5 py-8">
+        <%= render AvatarComponent.new(
+          label: namespace_label,
+          colour_seed: namespace_colour_seed,
+          size: :large,
+        ) %>
+
+        <div class="space-y-1">
+          <%= pathogen_heading(level: 3) { namespace_label } %>
+          <%= pathogen_supporting(variant: :muted) { "INXT-GRP-0042" } %>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>
