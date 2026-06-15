@@ -42,9 +42,7 @@ export default class AdvancedSearchController extends Controller {
       return;
     }
 
-    if (this.openValue) {
-      closeDialog(this.#dialogHost(), this.application);
-    }
+    closeDialog(this.#dialogHost(), this.application);
   }
 
   #hiddenClasses = ["invisible", "@max-xl:hidden"];
@@ -199,7 +197,9 @@ export default class AdvancedSearchController extends Controller {
   }
 
   markApplyFilter() {
-    this.#dialogHost()?.setAttribute("data-preserve-open-on-disconnect", "");
+    const dialogHost = this.#dialogHost();
+    dialogHost?.removeAttribute("data-turbo-permanent");
+    dialogHost?.setAttribute("data-preserve-open-on-disconnect", "");
     sessionStorage.setItem("advancedSearch:applyFilter", "1");
   }
 

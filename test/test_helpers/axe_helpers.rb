@@ -54,15 +54,28 @@ module AxeHelpers
 
     WCAG_AA_RUN_TAGS = %w[wcag2a wcag2aa wcag21a wcag22a wcag21aa wcag22aa best-practice].freeze
 
-    AXE_COMMAND = <<~COMMAND.freeze
-      axe.run({ runOnly: { type: 'tag', values: #{WCAG_AA_RUN_TAGS.to_json} } })
-    COMMAND
+    AXE_CORE_JS = Rails.root.join('node_modules/axe-core/axe.js').read.freeze
 
-    AXE_JS = <<~JS.freeze
-      #{Rails.root.join('node_modules/axe-core/axe.js').read}
+    def self.axe_command(context_selector: nil)
+      context =
+        if context_selector
+          "document.querySelector(#{context_selector.to_json})"
+        else
+          'document'
+        end
 
-      #{AXE_COMMAND}.then(results => console.log(JSON.stringify({ testRunner: results.testRunner, violations: results.violations })));
-    JS
+      <<~COMMAND
+        axe.run(#{context} || document, { runOnly: { type: 'tag', values: #{WCAG_AA_RUN_TAGS.to_json} } })
+      COMMAND
+    end
+
+    def self.axe_js(context_selector: nil)
+      <<~JS
+        #{AXE_CORE_JS}
+
+        #{axe_command(context_selector:)}.then(results => console.log(JSON.stringify({ testRunner: results.testRunner, violations: results.violations })));
+      JS
+    end
 
     class << self
       def format_target(target)
@@ -126,7 +139,7 @@ module AxeHelpers
       end
     end
 
-    def initialize(page, exclusions: [])
+    def initialize(page, exclusions: [], context_selector: nil)
       unless page.driver.is_a?(Capybara::Playwright::Driver)
         raise ArgumentError,
               'make sure to use the playwright driver with this matcher'
@@ -134,6 +147,7 @@ module AxeHelpers
 
       @page = page
       @exclusions = exclusions
+      @context_selector = context_selector
     end
 
     def violations
@@ -182,7 +196,7 @@ module AxeHelpers
             page.driver.with_playwright_page do |playwright_page|
               playwright_page.expect_console_message(
                 predicate: method(:console_message_contains_axe_results?)
-              ) { playwright_page.add_script_tag(content: AXE_JS) }
+              ) { playwright_page.add_script_tag(content: self.class.axe_js(context_selector: @context_selector)) }
             end
           JSON.parse(axe_results_console_message.text)
         end
@@ -196,8 +210,8 @@ module AxeHelpers
     end
   end
 
-  def assert_accessible(exclusions: nil)
-    actual = AxeResults.new(page, exclusions: axe_exclusions(exclusions))
+  def assert_accessible(exclusions: nil, within: nil)
+    actual = AxeResults.new(page, exclusions: axe_exclusions(exclusions), context_selector: within)
 
     assert actual.violations.empty?, <<~MSG
       Expected no axe violations, found #{actual.violations.count}

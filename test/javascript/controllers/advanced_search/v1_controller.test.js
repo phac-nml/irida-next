@@ -65,11 +65,49 @@ describe("advanced search v1 controller", () => {
     expect(sessionStorage.getItem("advancedSearch:applyFilter")).toBeNull();
   });
 
+  it("closes the dialog host after a successful pending apply when open is false", async () => {
+    renderFixture({ open: false });
+    application = await startController();
+
+    const dialogHost = document.querySelector(
+      '[data-controller="viral--dialog"]',
+    );
+
+    expect(closeDialogMock).toHaveBeenCalledWith(dialogHost, application);
+    expect(sessionStorage.getItem("advancedSearch:applyFilter")).toBeNull();
+  });
+
   it("keeps the dialog open when a pending apply returns errors", async () => {
     renderFixture({ hasErrors: true });
     application = await startController();
 
     expect(closeDialogMock).not.toHaveBeenCalled();
     expect(sessionStorage.getItem("advancedSearch:applyFilter")).toBeNull();
+  });
+
+  it("removes turbo-permanent before submitting an apply filter", async () => {
+    sessionStorage.removeItem("advancedSearch:applyFilter");
+    renderFixture();
+    const dialogHost = document.querySelector(
+      '[data-controller="viral--dialog"]',
+    );
+    dialogHost?.setAttribute("data-turbo-permanent", "");
+
+    application = await startController();
+
+    const controller = application.getControllerForElementAndIdentifier(
+      document.getElementById("advanced-search"),
+      "advanced-search--v1",
+    );
+
+    expect(dialogHost?.hasAttribute("data-turbo-permanent")).toBe(true);
+
+    controller.markApplyFilter();
+
+    expect(dialogHost?.hasAttribute("data-turbo-permanent")).toBe(false);
+    expect(dialogHost?.hasAttribute("data-preserve-open-on-disconnect")).toBe(
+      true,
+    );
+    expect(sessionStorage.getItem("advancedSearch:applyFilter")).toBe("1");
   });
 });

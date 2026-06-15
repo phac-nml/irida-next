@@ -14,7 +14,7 @@ module AdvancedSearch
     end
 
     test 'group samples field combobox passes axe and updates operator options' do
-      visit group_samples_url(groups(:group_one))
+      visit_for_advanced_search_combobox_test group_samples_url(groups(:group_one))
       open_advanced_search_dialog
 
       within_first_field_combobox do
@@ -37,7 +37,7 @@ module AdvancedSearch
     end
 
     test 'group samples invalid field combobox passes axe' do
-      visit group_samples_url(groups(:group_one))
+      visit_for_advanced_search_combobox_test group_samples_url(groups(:group_one))
       open_advanced_search_dialog
       assert_invalid_field_combobox_passes_axe
     end
@@ -45,7 +45,7 @@ module AdvancedSearch
     test 'workflow executions field combobox passes axe and updates operator options' do
       Flipper.enable(:workflow_execution_advanced_search)
 
-      visit workflow_executions_path
+      visit_for_advanced_search_combobox_test workflow_executions_path
       open_advanced_search_dialog
 
       within_first_field_combobox do
@@ -72,7 +72,7 @@ module AdvancedSearch
     test 'advanced search uses native field select when autocomplete flag is disabled' do
       Flipper.disable(:advanced_search_with_auto_complete, @user)
 
-      visit group_samples_url(groups(:group_one))
+      visit_for_advanced_search_combobox_test group_samples_url(groups(:group_one))
       open_advanced_search_dialog
 
       within 'dialog' do
