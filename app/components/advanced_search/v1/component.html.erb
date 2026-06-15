@@ -1,7 +1,7 @@
 <%= tag.div(
   id: "advanced-search",
   data: {
-    action: "viral--dialog:close->advanced-search--v1#close",
+    action: "viral--dialog:close->advanced-search--v1#close turbo:morph-element->advanced-search--v1#completeApplyFilter",
     controller: "advanced-search--v1",
     "advanced-search--v1-open-value": @open,
     "advanced-search--v1-status-value": @status,
@@ -78,7 +78,7 @@
     </div>
 
     <% dialog.with_primary_action(
-      "data-action": "viral--dialog#close filters#submit",
+      "data-action": "advanced-search--v1#markApplyFilter filters#submit",
     ) { t("components.advanced_search_component.v1.apply_filter_button") } %>
 
     <% dialog.with_secondary_action do %>

@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { closeDialog } from "utilities/dialog";
 
 export default class AdvancedSearchController extends Controller {
   static targets = [
@@ -25,6 +26,27 @@ export default class AdvancedSearchController extends Controller {
     status: Boolean,
   };
 
+  #dialogHost() {
+    return this.element.querySelector('[data-controller~="viral--dialog"]');
+  }
+
+  #completeApplyFilterIfNeeded() {
+    if (sessionStorage.getItem("advancedSearch:applyFilter") !== "1") {
+      return;
+    }
+
+    sessionStorage.removeItem("advancedSearch:applyFilter");
+
+    if (this.hasErrorsValue) {
+      this.#focusFirstInvalidField();
+      return;
+    }
+
+    if (this.openValue) {
+      closeDialog(this.element, this.application);
+    }
+  }
+
   #hiddenClasses = ["invisible", "@max-xl:hidden"];
   #groupSelector =
     "fieldset[data-advanced-search--v1-target='groupsContainer']";
@@ -36,6 +58,7 @@ export default class AdvancedSearchController extends Controller {
     this.boundOnMorph = this.onMorph.bind(this);
 
     document.addEventListener("turbo:morph", this.boundOnMorph);
+    this.#completeApplyFilterIfNeeded();
   }
 
   disconnect() {
@@ -64,6 +87,7 @@ export default class AdvancedSearchController extends Controller {
 
   onMorph() {
     this.renderSearchIfOpen();
+    this.#completeApplyFilterIfNeeded();
   }
 
   clear() {
@@ -168,6 +192,15 @@ export default class AdvancedSearchController extends Controller {
     this.clear();
     this.searchGroupsContainerTarget.innerHTML =
       this.emptySearchTemplateTarget.innerHTML;
+  }
+
+  completeApplyFilter() {
+    this.#completeApplyFilterIfNeeded();
+  }
+
+  markApplyFilter() {
+    this.#dialogHost()?.setAttribute("data-preserve-open-on-disconnect", "");
+    sessionStorage.setItem("advancedSearch:applyFilter", "1");
   }
 
   handleOperatorChange(event) {
@@ -426,11 +459,13 @@ export default class AdvancedSearchController extends Controller {
   }
 
   #focusFirstInvalidField() {
-    const invalidField = Array.from(
-      this.element.querySelectorAll("[aria-invalid='true']"),
-    ).find((field) => !field.disabled && field.offsetParent !== null);
+    requestAnimationFrame(() => {
+      const invalidField = Array.from(
+        this.element.querySelectorAll("[aria-invalid='true']"),
+      ).find((field) => !field.disabled && field.offsetParent !== null);
 
-    invalidField?.focus();
+      invalidField?.focus();
+    });
   }
 
   #selectedConditionField(condition) {
