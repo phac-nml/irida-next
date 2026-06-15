@@ -19,7 +19,7 @@
     ) do %>
       <% if avatar %>
         <span class="rounded-lg bg-white">
-          <%= viral_avatar(name: label, colour_string: "#{label}-#{url}", size: :xs) %>
+          <%= render AvatarComponent.new(label: label, colour_seed: "#{label}-#{url}", size: :xs) %>
         </span>
       <% else %>
         <%= create_icon %>

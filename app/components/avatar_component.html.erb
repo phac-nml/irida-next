@@ -1,4 +1,4 @@
-<%= tag.span(**system_arguments) do %>
+<%= content_tag(tag_name, **system_arguments) do %>
   <% if initials.present? %>
     <span class="pointer-events-none <%= font_styles %>"><%= initials %></span>
   <% end %>

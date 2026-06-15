@@ -4,7 +4,6 @@
 module ViewHelper
   VIRAL_HELPERS = {
     alert: 'Viral::AlertComponent',
-    avatar: 'Viral::AvatarComponent',
     button: 'Viral::ButtonComponent',
     card: 'Viral::CardComponent',
     dialog: 'Viral::DialogComponent',

@@ -103,7 +103,13 @@
           <%= render DropdownComponent.new(**account_dropdown_options, **(user ? { compact_trigger: true } : { icon: User.icon })) do |dropdown| %>
             <% if user %>
               <%= dropdown.with_trigger do %>
-                <%= render UserAvatarComponent.new(user: user, size: :xs, decorative: true) %>
+                <%= render AvatarComponent.new(
+                  label: user.full_name.presence || user.email,
+                  initials: user.avatar_initials,
+                  colour_seed: "#{user.id}-#{user.email}",
+                  size: :xs,
+                  decorative: true,
+                ) %>
               <% end %>
             <% end %>
 
