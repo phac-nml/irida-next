@@ -225,6 +225,30 @@ module Layout
         assert profile_dropdown['data-pathogen--tooltip-target'] == 'trigger',
                'Profile dropdown should have pathogen--tooltip-target'
       end
+
+      test 'renders user avatar in account dropdown when user is provided' do
+        user = users(:john_doe)
+
+        render_inline(Layout::SidebarComponent.new(user: user)) do |sidebar|
+          sidebar.with_header(label: 'Header')
+        end
+
+        profile_label = I18n.t('general.navbar.account_dropdown.label')
+        profile_button = page.find("button[aria-label='#{profile_label}']")
+
+        assert profile_button.has_selector?('.avatar', text: 'JD')
+      end
+
+      test 'falls back to user icon in account dropdown without user' do
+        render_inline(Layout::SidebarComponent.new) do |sidebar|
+          sidebar.with_header(label: 'Header')
+        end
+
+        profile_label = I18n.t('general.navbar.account_dropdown.label')
+        profile_button = page.find("button[aria-label='#{profile_label}']")
+
+        assert profile_button.has_selector?('svg.user-circle-icon')
+      end
     end
   end
 end

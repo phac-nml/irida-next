@@ -44,6 +44,22 @@ module Dropdown
       end
     end
 
+    test 'renders custom trigger content when compact_trigger is enabled' do
+      Flipper.disable(:v2_dropdown)
+      render_inline DropdownComponent.new(
+        compact_trigger: true,
+        aria: { label: 'Account menu' }
+      ) do |dropdown|
+        dropdown.with_trigger do
+          '<span class="avatar">AB</span>'.html_safe
+        end
+        dropdown.with_item(label: 'Profile', url: '#')
+      end
+
+      assert_selector 'button[aria-label="Account menu"] span.avatar', text: 'AB'
+      assert_no_selector 'svg'
+    end
+
     private
 
     def render_component(version: nil)

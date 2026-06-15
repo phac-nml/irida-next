@@ -1,10 +1,13 @@
 <!DOCTYPE html>
+
 <html class="light" lang="<%= locale %>">
   <%= render "layouts/partials/head" %>
+
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: @fixed) do |layout| %>
-      <% layout.with_sidebar(pipelines_enabled: @pipelines_enabled) do |navigation| %>
+      <% layout.with_sidebar(user: current_user, pipelines_enabled: @pipelines_enabled) do |navigation| %>
         <%= navigation.with_header(label: t("groups.sidebar.label"), item: @group) %>
+
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: group_path(@group),
@@ -12,12 +15,14 @@
             label: @group.name,
             selected: @current_page == t("common.labels.details"),
           ) %>
+
           <%= render section.with_item(
             url: group_samples_path(@group),
             icon: Sample.icon,
             label: t(:"groups.sidebar.samples"),
             selected: @current_page == t(:"groups.sidebar.samples"),
           ) %>
+
           <% if allowed_to?(:view_attachments?, @group) %>
             <%= render section.with_item(
               url: group_attachments_path(@group),
@@ -26,18 +31,21 @@
               selected: @current_page == t(:"groups.sidebar.files"),
             ) %>
           <% end %>
+
           <%= render section.with_item(
             url: group_members_path(@group),
             icon: Member.icon,
             label: t(:"groups.sidebar.members"),
             selected: @current_page == t(:"groups.sidebar.members"),
           ) %>
+
           <%= render section.with_item(
             url: group_activity_path(@group),
             icon: :list_bullets,
             label: t(:"groups.sidebar.activity"),
             selected: @current_page == t(:"groups.sidebar.activity"),
           ) %>
+
           <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
             <%= render section.with_item(
               url: group_workflow_executions_path(@group),
@@ -46,6 +54,7 @@
               selected: @current_page == t(:"groups.sidebar.workflow_executions"),
             ) %>
           <% end %>
+
           <% if allowed_to?(:update?, @group) %>
             <%= render section.with_multi_level_menu(
               title: t('common.labels.settings'),
@@ -63,16 +72,19 @@
                 label: t("common.labels.general"),
                 selected: @current_page == t("common.labels.general"),
               ) %>
+
               <% multi_level_menu.with_menu_item(
                 url: group_bots_path(@group),
                 label: t(:"groups.sidebar.bot_accounts"),
                 selected: @current_page == t(:"groups.sidebar.bot_accounts"),
               ) %>
+
               <% multi_level_menu.with_menu_item(
                 url: group_history_path(@group),
                 label: t(:"groups.sidebar.history"),
                 selected: @current_page == t(:"groups.sidebar.history"),
               ) %>
+
               <% multi_level_menu.with_menu_item(
                 url: group_metadata_templates_path(@group),
                 label: t(:"groups.sidebar.metadata_templates"),
@@ -81,8 +93,11 @@
             <% end %>
           <% end %>
         <% end %>
+
         <%= layout.with_breadcrumb(links: @context_crumbs) %>
+
         <% layout.with_language_selection %>
+
         <% layout.with_body do %>
           <%= yield %>
         <% end %>

@@ -5,6 +5,7 @@ module Dropdown
   # Contains shared logic for handling dropdown configuration, system arguments, and tooltip wiring.
   # rubocop:disable Metrics/ClassLength
   class BaseComponent < ::Component
+    renders_one :trigger
     renders_many :items, types: {
       default: { renders: Dropdown::ItemComponent, as: :item },
       custom: {
@@ -13,7 +14,7 @@ module Dropdown
       }
     }
     # Public: Expose key dropdown configuration
-    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip_text, :styles, :prefix,
+    attr_reader :distance, :label, :icon_name, :caret, :skidding, :tooltip_text, :styles, :prefix,
                 :trigger_id, :icon_size
 
     TRIGGER_DEFAULT = :click
@@ -59,6 +60,7 @@ module Dropdown
       @icon_size = @params[:icon_size]
       @caret = @params[:caret]
       @skidding = @params[:skidding] || 0
+      @compact_trigger = @params[:compact_trigger]
     end
 
     def assign_tooltip_inputs
@@ -138,9 +140,9 @@ module Dropdown
       end
     end
 
-    # 🖼️ Add icon styles if icon is present
+    # 🖼️ Add compact trigger styles when an icon or custom trigger is present
     def add_icon_styles
-      return if @icon_name.blank?
+      return if @icon_name.blank? && !@compact_trigger
 
       @system_arguments.merge!(system_arguments_for_icon)
     end
@@ -195,6 +197,7 @@ module Dropdown
 
     # ⚠️ Raise if icon-only button is missing aria-label
     def ensure_icon_only_has_aria_label
+      return if @compact_trigger
       return unless @icon_name.present? && @label.blank? && @system_arguments['aria-label'].blank?
 
       raise ArgumentError, "Icon-only buttons must have an aria-label, icon: #{@icon_name}"

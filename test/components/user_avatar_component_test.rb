@@ -45,4 +45,12 @@ class UserAvatarComponentTest < ViewComponentTestCase
     assert_selector('span.avatar[role="img"]')
     assert_no_text('JD')
   end
+
+  test 'renders decorative avatar without img role' do
+    render_inline(UserAvatarComponent.new(user: @user, decorative: true))
+
+    assert_selector('span.avatar[aria-hidden="true"]')
+    assert_no_selector('span[role="img"]')
+    assert_text('JD')
+  end
 end

@@ -5,7 +5,9 @@
   data-dropdown--v1-distance-value="<%= distance %>"
 >
   <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
-    <% if icon_name.present? %>
+    <% if trigger? %>
+      <%= trigger %>
+    <% elsif icon_name.present? %>
       <%= icon(
         icon_name,
         size: icon_size,

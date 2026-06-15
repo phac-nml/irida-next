@@ -23,6 +23,10 @@ module Layout
         #   @return [Boolean] whether the sidebar should start collapsed (default: false)
         attr_reader :collapsed_by_default
 
+        # @!attribute [r] user
+        #   @return [User, nil] the signed-in user for account menu avatar rendering
+        attr_reader :user
+
         renders_one :header, Sidebar::HeaderComponent
         renders_many :sections, Sidebar::SectionComponent
         renders_many :items, Sidebar::ItemComponent
@@ -31,10 +35,12 @@ module Layout
         #
         # @param pipelines_enabled [Boolean] whether pipelines are enabled in the application
         # @param collapsed_by_default [Boolean] whether the sidebar should start collapsed (default: false)
+        # @param user [User, nil] the signed-in user for account menu avatar rendering
         # @param system_arguments [Hash] additional HTML attributes to be included in the root element
-        def initialize(pipelines_enabled: true, collapsed_by_default: false, **system_arguments)
+        def initialize(pipelines_enabled: true, collapsed_by_default: false, user: nil, **system_arguments)
           @pipelines_enabled = pipelines_enabled
           @collapsed_by_default = collapsed_by_default
+          @user = user
           @system_arguments = system_arguments
           @system_arguments[:data] ||= {}
         end
