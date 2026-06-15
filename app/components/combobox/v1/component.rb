@@ -4,7 +4,7 @@ module Combobox
   module V1
     # Component for rendering a drop down that filters dynamically
     class Component < ::Component
-      def initialize(form:, field:, options:, **combobox_arguments)
+      def initialize(form:, field:, options:, listbox_aria: nil, **combobox_arguments)
         @combobox_id = form.field_id(field)
         @listbox_id = "#{form.field_id(field)}_listbox"
         @form = form
@@ -12,7 +12,7 @@ module Combobox
         @listbox_options = create_listbox(options)
         @selected_option = selected_option(options)
         @combobox_arguments = combobox_arguments
-        @listbox_labelledby = combobox_arguments.dig(:aria, :labelledby)
+        @listbox_aria = listbox_aria
       end
 
       private
@@ -28,7 +28,6 @@ module Combobox
           args[:aria] ||= {}
           args[:aria][:disabled] = 'true' if disabled
           args[:readonly] = true if disabled
-          args[:aria].delete(:labelledby)
           args[:aria][:autocomplete] = 'list'
           args[:aria][:expanded] = 'false'
           args[:aria][:controls] = @listbox_id
@@ -46,11 +45,10 @@ module Combobox
       end
 
       def listbox_aria_attributes
-        attrs = {}
-        attrs[:'aria-labelledby'] = @listbox_labelledby if @listbox_labelledby.present?
-        label = combobox_arguments.dig(:aria, :label)
-        attrs[:'aria-label'] = label if label.present? && @listbox_labelledby.blank?
-        attrs
+        return @listbox_aria if @listbox_aria.present?
+
+        label = @combobox_arguments.dig(:aria, :label)
+        label.present? ? { label: } : {}
       end
 
       def selected_option(options)

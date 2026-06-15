@@ -57,7 +57,7 @@
     <%= tag.div(
       id: @listbox_id,
       role: "listbox",
-      **listbox_aria_attributes,
+      aria: listbox_aria_attributes,
       "data-combobox--v1-target": "listbox",
     ) do %>
       <%= @listbox_options %>

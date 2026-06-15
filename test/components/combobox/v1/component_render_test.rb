@@ -32,13 +32,17 @@ module Combobox
         assert_selector '[role="option"][data-value="disabled-option"][aria-disabled="true"]', visible: :all
       end
 
-      test 'labels listbox with aria-labelledby when labelledby is passed' do
+      test 'passes through input aria-labelledby and labels listbox explicitly' do
         render_component(
           aria: {
+            labelledby: 'field-label'
+          },
+          listbox_aria: {
             labelledby: 'field-label'
           }
         )
 
+        assert_selector 'input[role="combobox"][aria-labelledby="field-label"]'
         assert_selector 'div[role="listbox"][aria-labelledby="field-label"]', visible: :all
         assert_no_selector 'div[role="listbox"][aria-label]', visible: :all
       end
