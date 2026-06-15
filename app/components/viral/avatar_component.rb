@@ -3,15 +3,9 @@
 module Viral
   # Avatar component to display on items first letter
   class AvatarComponent < Viral::Component
-    attr_reader :initials, :size, :font_styles, :url
+    include AvatarStyling
 
-    SIZE_DEFAULT = :medium
-    SIZE_MAPPINGS = {
-      xs: 'w-6 h-6 rounded-sm',
-      small: 'w-8 h-8',
-      medium: 'w-12 h-12',
-      large: 'w-16 h-16'
-    }.freeze
+    attr_reader :initials, :size, :font_styles, :url
 
     def initialize(name: nil, colour_string: nil, url: nil, size: SIZE_DEFAULT, **system_arguments)
       @name = name
@@ -25,12 +19,6 @@ module Viral
                        size == :medium ? 'text-2xl font-semibold' : 'text-4xl font-bold'
                      end
       @system_arguments = system_arguments
-    end
-
-    def generate_hsla_colour(name)
-      h = (Digest::MD5.hexdigest name).to_i(16) % 360
-      { border: "hsla(#{h}, 100%, var(--tw-avatar-border-lightness), var(--tw-avatar-bg-alpha))",
-        background: "hsla(#{h}, 100%, var(--tw-avatar-bg-lightness), var(--tw-avatar-bg-alpha))" }
     end
 
     def system_arguments
