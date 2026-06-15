@@ -12,6 +12,7 @@ export default defineConfig({
       controllers: resolve(jsRoot, "controllers"),
       debounce: resolve("vendor/javascript/debounce.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
+      "utilities/dialog": resolve(jsRoot, "utilities/dialog.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
       "utilities/focus": resolve(jsRoot, "utilities/focus.js"),
       "utilities/refresh": resolve(jsRoot, "utilities/refresh.js"),

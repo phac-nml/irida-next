@@ -43,7 +43,7 @@ export default class AdvancedSearchController extends Controller {
     }
 
     if (this.openValue) {
-      closeDialog(this.element, this.application);
+      closeDialog(this.#dialogHost(), this.application);
     }
   }
 
