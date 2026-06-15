@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require 'application_system_test_case'
+require 'test_helpers/advanced_search_combobox_test_helper'
 
 class AdvancedSearchComponentTest < ApplicationSystemTestCase
+  include AdvancedSearchComboboxTestHelper
+
   def setup
     Flipper.enable(:advanced_search_with_auto_complete)
   end

@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require 'application_system_test_case'
+require 'test_helpers/advanced_search_combobox_test_helper'
 
 module AdvancedSearch
   class ComboboxAccessibilityTest < ApplicationSystemTestCase
+    include AdvancedSearchComboboxTestHelper
+
     setup do
       @user = users(:john_doe)
       login_as @user

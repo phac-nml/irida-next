@@ -28,8 +28,11 @@ module AdvancedSearchComboboxTestHelper
   def assert_invalid_field_combobox_passes_axe
     click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
 
-    within_first_field_combobox do
+    within page.find('dialog') do
       assert_selector 'input[role="combobox"][aria-invalid="true"]'
+    end
+
+    within_first_field_combobox do
       assert_accessible
     end
   end
