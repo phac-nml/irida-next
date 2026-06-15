@@ -6,4 +6,6 @@ inputs:
       nixpkgs:
         follows: nixpkgs
     url: github:bobvanderlinden/nixpkgs-ruby
+  nixpkgs-unstable:
+    url: github:nixos/nixpkgs/nixpkgs-unstable
 strictPorts: true

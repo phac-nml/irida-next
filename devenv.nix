@@ -6,6 +6,17 @@ lib.mkMerge [
     env.PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright.passthru.browsers}";
     env.PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS="true";
 
+    overlays = [
+      (final: prev: {
+        playwright-test = (import inputs.nixpkgs-unstable {
+          system = prev.stdenv.system;
+        }).playwright-test;
+        playwright = (import inputs.nixpkgs-unstable {
+          system = prev.stdenv.system;
+        }).playwright;
+      })
+    ];
+
     # https://devenv.sh/packages/
     packages = with pkgs; [
       pkg-config
