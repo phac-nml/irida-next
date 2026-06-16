@@ -39,5 +39,15 @@
         "name": "0.4.2"
       }
     ]
+  },
+  "phac-nml/snvphylnfc": {
+    "url": "https://github.com/phac-nml/snvphylnfc",
+    "name": "phac-nml/snvphylnfc",
+    "description": "SNVPhyl nf-core pipeline",
+    "versions": [
+      {
+        "name": "2.4.0"
+      }
+    ]
   }
 }

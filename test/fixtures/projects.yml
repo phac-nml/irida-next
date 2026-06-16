@@ -395,3 +395,8 @@ subgroup1Project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:public_subgroup1_project1_namespace, :uuid) %>
   samples_count: 0
+
+snvphyl_project:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_project_namespace, :uuid) %>
+  samples_count: 2
