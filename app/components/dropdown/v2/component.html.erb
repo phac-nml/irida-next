@@ -3,7 +3,14 @@
               controller: tooltip? ? "pathogen--tooltip dropdown--v2" : "dropdown--v2",
               "dropdown--v2-distance-value": distance,
             }) do %>
-  <%= render Pathogen::Button.new(tone: :neutral, emphasis: :outline, text: label.presence, **system_arguments) do |button| %>
+  <%= render Pathogen::Button.new(
+    tone:,
+    emphasis:,
+    size:,
+    icon_only: label.blank? && !caret && prefix.blank?,
+    text: label.presence,
+    **system_arguments
+  ) do |button| %>
     <% if icon_name.present? %>
       <% button.with_leading_visual do %>
         <%= icon(
