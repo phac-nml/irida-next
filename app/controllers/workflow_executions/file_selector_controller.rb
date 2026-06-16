@@ -95,13 +95,11 @@ module WorkflowExecutions
                                        { filename: attachment.file.filename.to_s,
                                          global_id: attachment.to_global_id,
                                          id: attachment.id,
-                                         path: ActiveStorage::Blob.service.path_for(attachment.file.key),
                                          property: }
                                      else
                                        { filename: '',
                                          global_id: '',
                                          id: '',
-                                         path: '',
                                          property: }
                                      end
     end
