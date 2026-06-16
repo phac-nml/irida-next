@@ -137,9 +137,8 @@
                           id="<%= fields.field_id("#{name}_link") %>"
                           href="<%= new_workflow_executions_file_selector_path(
                             file_selector: {
-                              pattern: ".*",
+                              pattern: property[:pattern] || ".*",
                               property: name,
-                              namespace_type: @namespace_type,
                               attachable_id: @namespace_id,
                               attachable_type: @namespace_type,
                               selected_id: nil,

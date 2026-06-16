@@ -37,7 +37,7 @@
   <% end %>
   <%= turbo_stream.replace input_target_id do %>
     <%= hidden_field_tag "workflow_execution[workflow_params][#{property}]",
-      @attachment[:global_id],
+      @attachment[:path],
       id: input_target_id %>
   <% end %>
 <% end %>
