@@ -4,7 +4,14 @@
   data-dropdown--v1-skidding-value="<%= skidding %>"
   data-dropdown--v1-distance-value="<%= distance %>"
 >
-  <%= render Pathogen::Button.new(tone: :neutral, emphasis: :outline, text: label.presence, **system_arguments) do |button| %>
+  <%= render Pathogen::Button.new(
+    tone:,
+    emphasis:,
+    size:,
+    icon_only: label.blank? && !caret && prefix.blank?,
+    text: label.presence,
+    **system_arguments
+  ) do |button| %>
     <% if icon_name.present? %>
       <% button.with_leading_visual do %>
         <%= icon(
