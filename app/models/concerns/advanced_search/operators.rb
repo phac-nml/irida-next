@@ -5,10 +5,17 @@ module AdvancedSearch
   module Operators
     extend ActiveSupport::Concern
 
-    include AdvancedSearch::Operators::EqualityOperators
-    include AdvancedSearch::Operators::SetOperators
-    include AdvancedSearch::Operators::ComparisonOperators
-    include AdvancedSearch::Operators::PatternOperators
+    if Flipper.enabled?('test')
+      include AdvancedSearch::Operators::EqualityOperators
+      include AdvancedSearch::Operators::SetOperators
+      include AdvancedSearch::Operators::ComparisonOperators
+      include AdvancedSearch::Operators::PatternOperators
+    else
+      include AdvancedSearch::Operators::V2::EqualityOperators
+      include AdvancedSearch::Operators::V2::SetOperators
+      include AdvancedSearch::Operators::V2::ComparisonOperators
+      include AdvancedSearch::Operators::V2::PatternOperators
+    end
 
     included do
       class_attribute :enum_metadata_fields, instance_accessor: false, default: [].freeze
