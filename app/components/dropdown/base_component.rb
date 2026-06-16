@@ -132,7 +132,7 @@ module Dropdown
       return if @label.blank?
 
       if @styles[:button].present?
-        @system_arguments[:classes] = @styles[:button]
+        @system_arguments[:class] = @styles[:button]
       else
         @system_arguments.merge!(system_arguments_for_button)
       end
@@ -225,7 +225,7 @@ module Dropdown
         data: data,
         tag: :button,
         type: :button,
-        classes: 'cursor-pointer px-4 py-2 w-full',
+        class: 'cursor-pointer w-full',
         'aria-expanded': false,
         'aria-haspopup': true,
         'aria-controls': @dd_id
@@ -241,10 +241,7 @@ module Dropdown
       return { classes: @styles[:button] } if @styles[:button].present?
 
       {
-        classes: class_names(
-          'button button-default',
-          system_arguments[:classes]
-        )
+        class: system_arguments[:class]
       }
     end
 
@@ -253,7 +250,7 @@ module Dropdown
       return { classes: @styles[:button] } if @styles[:button].present?
 
       {
-        classes: class_names('dropdown--icon', @system_arguments[:classes])
+        class: class_names('dropdown--icon', @system_arguments[:class])
       }
     end
 
