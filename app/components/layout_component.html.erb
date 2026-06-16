@@ -58,7 +58,13 @@
           <% expand_tooltip_id = Pathogen::Tooltip.generate_id(base_name: "layout-expand") %>
 
           <div data-controller="pathogen--tooltip">
-            <%= tag.button(
+            <%= render Pathogen::Button.new(
+              type: :button,
+              icon_only: true,
+              tone: :neutral,
+              emphasis: :ghost,
+              size: :small,
+              text: t(:'general.navbar.toggle_sidebar'),
               data: {
                 action: "click->layout#expand:capture",
                 layout_target: "expandButton",
@@ -66,13 +72,14 @@
               },
               aria: {
                 describedby: expand_tooltip_id,
-                label: t(:'general.navbar.toggle_sidebar'),
                 controls: "sidebar",
                 expanded: "true"
               },
-              class: "text-slate-500 navbar-button cursor-pointer"
-            ) do %>
-              <%= icon :sidebar %>
+              class: "navbar-button"
+            ) do |button| %>
+              <% button.with_leading_visual do %>
+                <%= icon :sidebar %>
+              <% end %>
             <% end %>
 
             <%= render Pathogen::Tooltip.new(
