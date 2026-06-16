@@ -135,6 +135,7 @@ module Layout
           "button[aria-label='#{collapse_label}'][data-pathogen--tooltip-target='trigger']"
         )
         assert_not collapse_button['title'], 'Collapse button should not have title attribute'
+        assert_includes collapse_button[:class], 'border-transparent'
 
         # Collapse button should have aria-describedby pointing to tooltip
         tooltip_id = collapse_button['aria-describedby']
@@ -154,6 +155,8 @@ module Layout
         new_button = page.find(
           "button[aria-label='#{new_label}'][data-pathogen--tooltip-target='trigger']"
         )
+
+        assert_includes new_button[:class], 'border-transparent'
 
         # Should have aria-describedby pointing to tooltip
         tooltip_id = new_button['aria-describedby']
@@ -176,6 +179,8 @@ module Layout
         profile_button = page.find(
           "button[aria-label='#{profile_label}'][data-pathogen--tooltip-target='trigger']"
         )
+
+        assert_includes profile_button[:class], 'border-transparent'
 
         # Should have aria-describedby pointing to tooltip
         tooltip_id = profile_button['aria-describedby']
