@@ -110,14 +110,14 @@
               <% else %>
                 <div>
                   <% if property[:type] != 'boolean' %>
-                    <%= fields.label name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
-                      <%= property[:description] %>
-
-                      <% if property[:required] %>
-                        <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
-                      <% end %>
-                    <% end %>
                     <% if property[:format] == 'path' || property[:format] == 'file-path' %>
+                      <p class="mb-2 block text-sm font-medium text-slate-900 dark:text-white">
+                        <%= property[:description] %>
+
+                        <% if property[:required] %>
+                          <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
+                        <% end %>
+                      </p>
                       <div
                         class="
                           flex flex-col rounded-lg border border-slate-300 bg-slate-300 @md:flex-row
@@ -156,6 +156,13 @@
                         <%= fields.hidden_field name, required: property[:required] %>
                       </div>
                     <% else %>
+                      <%= fields.label name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
+                        <%= property[:description] %>
+
+                        <% if property[:required] %>
+                          <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
+                        <% end %>
+                      <% end %>
                       <%= form_input(fields, name, property, property[:required], instance) %>
                     <% end %>
                   <% else %>
