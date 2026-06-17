@@ -40,24 +40,24 @@ module AdvancedSearch
       def condition_in_v1(scope, node, value, metadata_field:, field_name:)
         # Use case-insensitive matching for metadata fields (both enum and non-enum)
         if metadata_field
-          scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).in(downcase_values(value)))
+          scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).in(downcase_values_v1(value)))
         elsif field_name == 'name'
-          scope.where(node.lower.in(downcase_values(value)))
+          scope.where(node.lower.in(downcase_values_v1(value)))
         else
           # Exact matching for regular fields
-          scope.where(node.in(compact_values(value)))
+          scope.where(node.in(compact_values_v1(value)))
         end
       end
 
       def condition_not_in_v1(scope, node, value, metadata_field:, field_name:)
         # Use case-insensitive matching for metadata fields (both enum and non-enum)
         if metadata_field
-          condition_not_in_metadata(scope, node, value)
+          condition_not_in_metadata_v1(scope, node, value)
         elsif field_name == 'name'
-          scope.where(node.lower.not_in(downcase_values(value)))
+          scope.where(node.lower.not_in(downcase_values_v1(value)))
         else
           # Exact matching for regular fields
-          scope.where(node.not_in(compact_values(value)))
+          scope.where(node.not_in(compact_values_v1(value)))
         end
       end
 
@@ -65,11 +65,11 @@ module AdvancedSearch
         lower_function = Arel::Nodes::NamedFunction.new('LOWER', [node])
         # Include NULL metadata values in negative set operations: NULL is not in the provided set.
         # This maintains consistency with condition_not_equals, where "not X" includes records without the field.
-        scope.where(node.eq(nil).or(lower_function.not_in(downcase_values(value))))
+        scope.where(node.eq(nil).or(lower_function.not_in(downcase_values_v1(value))))
       end
 
       def downcase_values_v1(value)
-        compact_values(value).map { |v| v.to_s.downcase }
+        compact_values_v1(value).map { |v| v.to_s.downcase }
       end
 
       def compact_values_v1(value)

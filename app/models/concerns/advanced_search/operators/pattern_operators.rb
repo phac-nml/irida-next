@@ -50,13 +50,13 @@ module AdvancedSearch
       ##############################
 
       def condition_contains_v1(scope, node, value, model_class: nil, field_name: nil)
-        search_node = model_class && field_name ? cast_to_text_if_uuid(node, model_class, field_name) : node
-        scope.where(search_node.matches("%#{escape_like_wildcards(value)}%"))
+        search_node = model_class && field_name ? cast_to_text_if_uuid_v1(node, model_class, field_name) : node
+        scope.where(search_node.matches("%#{escape_like_wildcards_v1(value)}%"))
       end
 
       def condition_not_contains_v1(scope, node, value, model_class: nil, field_name: nil)
-        search_node = model_class && field_name ? cast_to_text_if_uuid(node, model_class, field_name) : node
-        scope.where(node.eq(nil).or(search_node.does_not_match("%#{escape_like_wildcards(value)}%")))
+        search_node = model_class && field_name ? cast_to_text_if_uuid_v1(node, model_class, field_name) : node
+        scope.where(node.eq(nil).or(search_node.does_not_match("%#{escape_like_wildcards_v1(value)}%")))
       end
 
       def condition_exists_v1(scope, node)

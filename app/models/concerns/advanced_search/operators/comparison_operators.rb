@@ -64,7 +64,7 @@ module AdvancedSearch
       end
 
       def condition_date_comparison_v1(scope, node, value, comparison_method)
-        return scope.none unless valid_date_format?(value)
+        return scope.none unless valid_date_format_v1?(value)
 
         scope
           .where(node.matches_regexp('^\\d{4}(-\\d{2}){0,2}$'))
