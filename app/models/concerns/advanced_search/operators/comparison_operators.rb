@@ -54,8 +54,8 @@ module AdvancedSearch
         value.to_s.match?(/\A-?\d+(\.\d+)?\z/)
       end
 
-      ########################
-      #
+      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
+
       def condition_less_than_or_equal_v1(scope, node, value, metadata_field:, metadata_key:)
         return scope.where(node.lteq(value)) unless metadata_field
 
@@ -114,6 +114,8 @@ module AdvancedSearch
       def valid_numeric_format_v1?(value)
         value.to_s.match?(/\A-?\d+(\.\d+)?\z/)
       end
+
+      ### END feature flag :advanced_search_metadata_operators ###
     end
   end
 end

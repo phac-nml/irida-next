@@ -47,8 +47,8 @@ module AdvancedSearch
         Array(value).compact_blank
       end
 
-      ###################################
-      #
+      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
+
       def condition_in_v1(scope, node, value, metadata_field:, field_name:)
         # Use case-insensitive matching for metadata fields (both enum and non-enum)
         if metadata_field
@@ -87,6 +87,8 @@ module AdvancedSearch
       def compact_values_v1(value)
         Array(value).compact_blank
       end
+
+      ### END feature flag :advanced_search_metadata_operators ###
     end
   end
 end

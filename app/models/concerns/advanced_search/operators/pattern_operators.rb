@@ -47,7 +47,7 @@ module AdvancedSearch
         value.to_s.gsub(/[\\%_]/) { |char| "\\#{char}" }
       end
 
-      ##############################
+      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
       def condition_contains_v1(scope, node, value, model_class: nil, field_name: nil)
         search_node = model_class && field_name ? cast_to_text_if_uuid_v1(node, model_class, field_name) : node
@@ -87,6 +87,7 @@ module AdvancedSearch
       def escape_like_wildcards_v1(value)
         value.to_s.gsub(/[\\%_]/) { |char| "\\#{char}" }
       end
+      ### END feature flag :advanced_search_metadata_operators ###
     end
   end
 end

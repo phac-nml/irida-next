@@ -153,7 +153,7 @@ module AdvancedSearch
       condition_greater_than_or_equal(scope, node, value)
     end
 
-    ##############################
+    ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
     def apply_less_than_or_equal_v1(scope, node, value, field:, metadata_field:)
       metadata_key = field.delete_prefix('metadata.')
@@ -180,5 +180,7 @@ module AdvancedSearch
     def apply_not_in_operator_v1(scope, node, value, metadata_field:, field_name:)
       condition_not_in_v1(scope, node, value, metadata_field:, field_name:)
     end
+
+    ### END feature flag :advanced_search_metadata_operators ###
   end
 end

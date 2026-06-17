@@ -67,7 +67,7 @@ module AdvancedSearch
         value.to_s.downcase
       end
 
-      ###################################################
+      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
       def condition_equals_v1(scope, node, value, metadata_field:, field_name:)
         # Use pattern matching only for non-enum metadata fields and name field
@@ -108,6 +108,8 @@ module AdvancedSearch
       def normalize_case_insensitive_value_v1(value)
         value.to_s.downcase
       end
+
+      ### END feature flag :advanced_search_metadata_operators ###
     end
   end
 end

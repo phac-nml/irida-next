@@ -100,7 +100,7 @@ module AdvancedSearch
         assert result.none?
       end
 
-      ##########################################
+      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
       # condition_less_than_or_equal tests
       test 'condition_less_than_or_equal_v1 uses lteq for regular fields' do
@@ -207,6 +207,8 @@ module AdvancedSearch
         assert_includes sql, 'CAST'
         assert_includes sql, 'DOUBLE PRECISION'
       end
+
+      ### END feature flag :advanced_search_metadata_operators ###
     end
   end
 end

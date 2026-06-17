@@ -107,7 +107,7 @@ module AdvancedSearch
         assert_not_includes sql, 'NOT ILIKE'
       end
 
-      ###################################
+      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
       # condition_equals tests
       test 'condition_equals_v1 uses exact match for regular fields' do
@@ -194,6 +194,8 @@ module AdvancedSearch
         assert_includes sql, 'IS NULL'
         assert_not_includes sql, 'NOT ILIKE'
       end
+
+      ### END feature flag :advanced_search_metadata_operators ###
     end
   end
 end
