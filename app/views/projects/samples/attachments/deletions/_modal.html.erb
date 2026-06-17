@@ -2,14 +2,11 @@
   <% dialog.with_header(title: t(".title")) %>
   <%= turbo_frame_tag("deletion-alert") %>
 
-  <div
-    class="
-      mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible
-    "
-  >
+  <div class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400">
     <p class="mb-4"><%= t(".description") %></p>
+
     <div
-      class="overflow-auto scrollbar"
+      class="scrollbar overflow-auto"
       data-controller="projects--samples--attachments--files"
       data-projects--samples--attachments--files-target="field"
     ></div>
@@ -22,11 +19,10 @@
       'projects--samples--attachments--selected-attachments-storage-key-value': "files-#{@sample.id}",
       action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear'
     }, method: :delete) do |form| %>
-
     <div data-projects--samples--attachments--selected-attachments-target="field"></div>
 
     <div>
-      <%= form.submit t('common.actions.delete'), class: "button button-destructive" %>
+      <%= form.submit t('common.actions.delete'), tone: :danger, emphasis: :solid %>
     </div>
   <% end %>
 <% end %>

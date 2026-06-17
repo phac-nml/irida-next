@@ -20,7 +20,9 @@
 
       <div class="flex">
         <%= form.submit t(:"groups.new_subgroup.submit"),
-                    class: "button button-primary mr-2" %>
+                      tone: :primary,
+                      emphasis: :solid,
+                      class: "mr-2" %>
 
         <%= link_to t('common.actions.cancel'),
         group_path(@group),

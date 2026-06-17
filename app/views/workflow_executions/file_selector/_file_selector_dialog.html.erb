@@ -1,7 +1,8 @@
 <%= viral_dialog(open: open, id: "file_selector_form_dialog", size: :extra_large) do |dialog| %>
   <% dialog.with_header(title: t(".select_file")) %>
+
   <% if @listing_attachments.empty? %>
-    <div class="mb-2 empty_state_message">
+    <div class="empty_state_message mb-2">
       <%= viral_empty(
         title: t(".empty.title"),
         description: t(".empty.description"),
@@ -10,54 +11,47 @@
     </div>
   <% else %>
     <%= form_with id: 'file_selector_form', url: workflow_executions_file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
-      <input type="hidden" name="format" value="turbo_stream"/>
-      <div class="flex flex-col min-h-0 mb-2 table-container shrink">
-        <div class="overflow-auto scrollbar">
+      <input type="hidden" name="format" value="turbo_stream">
+
+      <div class="table-container mb-2 flex min-h-0 shrink flex-col">
+        <div class="scrollbar overflow-auto">
           <fieldset>
             <legend class="sr-only"><%= t(".select_file") %></legend>
-            <table
-              class='
-                w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-                whitespace-nowrap
-              '
-            >
+
+            <table class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400">
               <thead
-                class='
-                  sticky top-0 z-10 text-xs uppercase border text-slate-700 bg-slate-50
-                  dark:bg-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700
-                '
+                class="
+                  sticky top-0 z-10 border border-slate-200 bg-slate-50 text-xs text-slate-700 uppercase
+                  dark:border-slate-700 dark:bg-slate-700 dark:text-slate-300
+                "
               >
                 <tr>
-                  <th scope="col" class="pr-3 pl-10.5 py-3 bg-slate-50 dark:bg-slate-700">
+                  <th scope="col" class="bg-slate-50 py-3 pr-3 pl-10.5 dark:bg-slate-700">
                     <%= t(".headers.filename") %>
                   </th>
+
                   <th scope="col" class="p-3">
                     <%= t(".headers.format") %>
                   </th>
+
                   <th scope="col" class="p-3">
                     <%= t(".headers.type") %>
                   </th>
+
                   <th scope="col" class="p-3">
                     <%= t(".headers.size") %>
                   </th>
+
                   <th scope="col" class="p-3">
                     <%= t(".headers.created_at") %>
                   </th>
                 </tr>
               </thead>
-              <tbody
-                class='
-                  overflow-y-auto bg-white border dark:bg-slate-800 border-slate-200
-                  dark:border-slate-700
-                '
-              >
+
+              <tbody class="overflow-y-auto border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
                 <% @listing_attachments.each do |attachment| %>
-                  <tr
-                    class="
-                      bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
-                    "
-                  >
-                    <td class="p-3 bg-white dark:bg-slate-800">
+                  <tr class="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+                    <td class="bg-white p-3 dark:bg-slate-800">
                       <%= form.radio_button "attachment_id",
                                         attachment[:id],
                                         label: attachment[:filename],
@@ -65,25 +59,34 @@
                                           file_selector_params["selected_id"] &&
                                             file_selector_params["selected_id"] == attachment[:id] %>
                     </td>
-                    <td class="p-3"><%= viral_pill(
+
+                    <td class="p-3">
+                      <%= viral_pill(
                         text: attachment[:metadata]["format"],
                         color: find_pill_color_for_attachment(attachment, "format"),
-                      ) %></td>
-                    <td class="p-3"><%= viral_pill(
+                      ) %>
+                    </td>
+
+                    <td class="p-3">
+                      <%= viral_pill(
                         text: attachment[:metadata]["type"],
                         color: find_pill_color_for_attachment(attachment, "type"),
-                      ) %></td>
+                      ) %>
+                    </td>
+
                     <td class="p-3">
                       <%= number_to_human_size(attachment[:byte_size]) %>
                     </td>
+
                     <td class="p-3">
                       <%= local_time_ago(attachment[:created_at]) %>
                     </td>
                   </tr>
                 <% end %>
+
                 <% unless file_selector_params["required_properties"].present? && file_selector_params["required_properties"].include?(file_selector_params["property"]) %>
-                  <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
-                    <td class="p-3 bg-white dark:bg-slate-800">
+                  <tr class="border-b bg-white dark:border-slate-700 dark:bg-slate-800">
+                    <td class="bg-white p-3 dark:bg-slate-800">
                       <%= form.radio_button "attachment_id",
                                         "no_attachment",
                                         label: t(".no_file"),
@@ -96,11 +99,11 @@
           </fieldset>
         </div>
       </div>
+
       <% unless @listing_attachments.empty? %>
         <%= form.submit t(".submit_button"),
-                    class:
-                      "inline-flex items-center justify-center text-sm border cursor-pointer sm:w-auto text-white bg-primary-700 hover:bg-primary-800 rounded-lg px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
-
+                    tone: :primary,
+                    emphasis: :solid %>
       <% end %>
     <% end %>
   <% end %>
