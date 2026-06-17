@@ -16,7 +16,7 @@
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
           <div class="flex space-x-2">
-            <%= form.submit tone: :primary, emphasis: :solid %>
+            <%= form.submit tone: :primary %>
 
             <%= link_to t('common.actions.cancel'),
             namespace_project_samples_path,
