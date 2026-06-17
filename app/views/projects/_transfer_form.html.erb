@@ -58,7 +58,8 @@
 
   <div>
     <%= form.submit t(:"projects.edit.advanced.transfer.submit"),
-                class: "button button-destructive",
+                tone: :danger,
+                emphasis: :outline,
                 disabled: "disabled",
                 data:
                 if Flipper.enabled?(:v2_select2, Current.user)

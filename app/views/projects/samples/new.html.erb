@@ -15,8 +15,8 @@
         <div class="grid gap-4">
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
-          <div class="flex">
-            <%= form.submit class: "button button-primary mr-2" %>
+          <div class="flex space-x-2">
+            <%= form.submit tone: :primary, emphasis: :solid %>
 
             <%= link_to t('common.actions.cancel'),
             namespace_project_samples_path,

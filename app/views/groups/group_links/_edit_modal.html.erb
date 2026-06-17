@@ -95,7 +95,8 @@ html: { novalidate: true }) do |form| %>
 
       <div class="flex justify-start gap-1">
         <%= form.submit I18n.t('common.actions.save'),
-                  class: "button button-primary",
+                    tone: :primary,
+                    emphasis: :solid,
                   disabled: false %>
 
         <button type="button" class="button button-default" data-action="click->viral--dialog#close">
