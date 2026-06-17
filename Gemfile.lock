@@ -486,7 +486,7 @@ GEM
       opentelemetry-registry (~> 0.1)
     opentelemetry-metrics-api (0.6.0)
       opentelemetry-api (~> 1.0)
-    opentelemetry-metrics-sdk (0.14.0)
+    opentelemetry-metrics-sdk (0.15.0)
       opentelemetry-api (~> 1.1)
       opentelemetry-metrics-api (~> 0.2)
       opentelemetry-sdk (~> 1.2)
@@ -498,7 +498,7 @@ GEM
       opentelemetry-common (~> 0.20)
       opentelemetry-registry (~> 0.2)
       opentelemetry-semantic_conventions
-    opentelemetry-semantic_conventions (1.39.0)
+    opentelemetry-semantic_conventions (1.41.0)
       opentelemetry-api (~> 1.0)
     orm_adapter (0.5.0)
     os (1.1.4)
