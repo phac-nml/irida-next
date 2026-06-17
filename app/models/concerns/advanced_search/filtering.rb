@@ -26,11 +26,11 @@ module AdvancedSearch
       feature_flag_enabled = Flipper.enabled?(:advanced_search_metadata_operators)
 
       if metadata_field && feature_flag_enabled
-        if operator.starts_with?('TEXT_')
+        if operator.starts_with?('text_')
           apply_metadata_text_operator(scope, node, value, operator, model_class:, field_name:)
-        elsif operator.starts_with?('NUMERIC_')
+        elsif operator.starts_with?('numeric_')
           apply_metadata_numeric_operator(scope, node, value, operator, field_name:)
-        elsif operator.starts_with?('DATE_')
+        elsif operator.starts_with?('date_')
           apply_metadata_date_operator(scope, node, value, operator, field_name:)
         else
           apply_metadata_exists_operator(scope, node, operator)
@@ -98,51 +98,50 @@ module AdvancedSearch
 
     def apply_metadata_exists_operator(scope, node, operator)
       case operator
-      when 'EXISTS'
+      when 'exists'
         condition_exists(scope, node)
-      when 'NOT_EXISTS'
+      when 'not_exists'
         scope.where(node.eq(nil))
       end
     end
 
     def apply_metadata_text_operator(scope, node, value, operator, model_class:, field_name:) # rubocop:disable Metrics/ParameterLists
       case operator
-      when 'TEXT_EQUALS'
+      when 'text_equals'
         metadata_condition_equals(scope, node, value, field_name:)
-      when 'TEXT_NOT_EQUALS'
+      when 'text_not_equals'
         metadata_condition_not_equals(scope, node, value, field_name:)
-      when 'TEXT_CONTAINS'
+      when 'text_contains'
         condition_contains(scope, node, value, model_class:, field_name:)
-      when 'TEXT_NOT_CONTAINS'
+      when 'text_not_contains'
         condition_not_contains(scope, node, value, model_class:, field_name:)
-      when 'TEXT_IN'
+      when 'text_in'
         metadata_condition_in(scope, node, value)
-      when 'TEXT_NOT_IN'
+      when 'text_not_in'
         metadata_condition_not_in(scope, node, value)
       end
     end
 
     def apply_metadata_numeric_operator(scope, node, value, operator, field_name:)
       case operator
-      when 'NUMERIC_EQUALS'
+      when 'numeric_equals'
         metadata_condition_equals(scope, node, value, field_name:)
-      when 'NUMERIC_NOT_EQUALS'
+      when 'numeric_not_equals'
         metadata_condition_not_equals(scope, node, value, field_name:)
-      when 'NUMERIC_LESS_THAN_EQUALS', 'NUMERIC_GREATER_THAN_EQUALS'
+      when 'numeric_less_than_equals', 'numeric_greater_than_equals'
         metadata_condition_numeric_comparison(scope, node, value,
-                                              operator == 'NUMERIC_LESS_THAN_EQUALS' ? :lteq : :gteq)
+                                              operator == 'numeric_less_than_equals' ? :lteq : :gteq)
       end
     end
 
     def apply_metadata_date_operator(scope, node, value, operator, field_name:)
       case operator
-      when 'DATE_EQUALS'
+      when 'date_equals'
         metadata_condition_equals(scope, node, value, field_name:)
-      when 'DATE_NOT_EQUALS'
+      when 'date_not_equals'
         metadata_condition_not_equals(scope, node, value, field_name:)
-      when 'DATE_LESS_THAN_EQUALS', 'DATE_GREATER_THAN_EQUALS'
-
-        metadata_condition_date_comparison(scope, node, value, operator == 'DATE_LESS_THAN_EQUALS' ? :lteq : :gteq)
+      when 'date_less_than_equals', 'date_greater_than_equals'
+        metadata_condition_date_comparison(scope, node, value, operator == 'date_less_than_equals' ? :lteq : :gteq)
       end
     end
 
