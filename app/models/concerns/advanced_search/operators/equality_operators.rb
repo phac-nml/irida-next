@@ -14,7 +14,7 @@ module AdvancedSearch
           equals_pattern_match(scope, node, value)
         else
           # Exact match for regular fields
-          equals(scope, node, value)
+          scope.where(node.eq(value))
         end
       end
 
@@ -24,7 +24,6 @@ module AdvancedSearch
           normalized_value = normalize_case_insensitive_value(value)
           scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).eq(normalized_value))
         else
-          # TODO: possibly need to match ints with floats and vice versa
           equals_pattern_match(scope, node, value)
         end
       end
@@ -58,10 +57,6 @@ module AdvancedSearch
 
       def equals_pattern_match(scope, node, value)
         scope.where(node.matches(value))
-      end
-
-      def equals(scope, node, value)
-        scope.where(node.eq(value))
       end
 
       def not_equals_pattern_match(scope, node, value)

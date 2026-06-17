@@ -11,11 +11,6 @@ module AdvancedSearch
 
       private
 
-      # TODO: still necessary?
-      # def date_metadata_field?(metadata_key)
-      #   metadata_key.end_with?(DATE_FIELD_SUFFIX)
-      # end
-
       def metadata_condition_date_comparison(scope, node, value, comparison_method)
         return scope.none unless valid_date_format?(value)
 
