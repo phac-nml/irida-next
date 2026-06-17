@@ -116,7 +116,8 @@
 
     <div class="flex justify-start gap-1">
       <%= form.submit t(:"projects.members.new.add_member_to_project"),
-                  class: "button button-primary",
+                    tone: :primary,
+                    emphasis: :solid,
                   disabled: true,
                   data:
                     if Flipper.enabled?(:v2_select2, Current.user)

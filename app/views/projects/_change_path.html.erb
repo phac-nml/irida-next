@@ -14,7 +14,6 @@
           <%= render partial: "shared/form/required_field_legend" %>
 
           <% invalid_path = @project.namespace.errors.include?(:path) %>
-
           <div class="form-field <%= 'invalid' if invalid_path %>">
             <div class="@container">
               <%= builder.label :path, data: { required: true } %>
@@ -72,7 +71,9 @@
                         data: {
                           turbo_frame: "_top",
                         },
-                        class: "button button-destructive inline-block" %>
+                        tone: :danger,
+                        emphasis: :outline,
+                        class: "inline-block" %>
           </div>
         </div>
       <% end %>

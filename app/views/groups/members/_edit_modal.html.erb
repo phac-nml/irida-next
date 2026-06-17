@@ -81,7 +81,8 @@
 
       <div class="flex justify-start gap-1">
         <%= form.submit t(:"common.actions.save"),
-                  class: "button button-primary",
+                    tone: :primary,
+                    emphasis: :solid,
                   disabled: false %>
 
         <button type="button" class="button button-default" data-action="click->viral--dialog#close">
