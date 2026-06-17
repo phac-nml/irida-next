@@ -22,9 +22,9 @@ module AdvancedSearch
       value = normalize_condition_value(condition)
       metadata_field = field_name.starts_with?('metadata.')
       operator = condition.operator
-      placeholder = false
+      feature_flag_enabled = Flipper.enabled?(:advanced_search_metadata_operators)
 
-      if metadata_field && placeholder
+      if metadata_field && feature_flag_enabled
         if operator.starts_with?('TEXT_')
           apply_metadata_text_operator(scope, node, value, operator, model_class:, field_name:)
         elsif operator.starts_with?('NUMERIC_')
@@ -34,7 +34,7 @@ module AdvancedSearch
         else
           apply_metadata_exists_operator(scope, node, operator)
         end
-      elsif placeholder
+      elsif feature_flag_enabled
         case condition.operator
         when '='
           condition_equals(scope, node, value, field_name:)
@@ -45,9 +45,9 @@ module AdvancedSearch
         when 'not_in'
           condition_not_in(scope, node, value, field_name:)
         when '<='
-          scope.where(node.lteq(value))
+          apply_less_than_or_equal(scope, node, value)
         when '>='
-          scope.where(node.gteq(value))
+          apply_greater_than_or_equal(scope, node, value)
         when 'contains'
           condition_contains(scope, node, value, model_class:, field_name:)
         when 'not_contains'
@@ -115,13 +115,9 @@ module AdvancedSearch
       when 'TEXT_NOT_CONTAINS'
         condition_not_contains(scope, node, value, model_class:, field_name:)
       when 'TEXT_IN'
-        scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).in(downcase_values(value)))
+        metadata_condition_in(scope, node, value)
       when 'TEXT_NOT_IN'
-        lower_function = Arel::Nodes::NamedFunction.new('LOWER', [node])
-        # Include NULL metadata values in negative set operations: NULL is not in the provided set.
-        # This maintains consistency with metadata_condition_not_equals, where "not X" includes records without the
-        # field.
-        scope.where(node.eq(nil).or(lower_function.not_in(downcase_values(value))))
+        metadata_condition_not_in(scope, node, value)
       end
     end
 
@@ -132,8 +128,6 @@ module AdvancedSearch
       when 'NUMERIC_NOT_EQUALS'
         metadata_condition_not_equals(scope, node, value, field_name:)
       when 'NUMERIC_LESS_THAN_EQUALS', 'NUMERIC_GREATER_THAN_EQUALS'
-        return scope.none unless valid_numeric_format?(value)
-
         metadata_condition_numeric_comparison(scope, node, value,
                                               operator == 'NUMERIC_LESS_THAN_EQUALS' ? :lteq : :gteq)
       end
@@ -146,21 +140,17 @@ module AdvancedSearch
       when 'DATE_NOT_EQUALS'
         metadata_condition_not_equals(scope, node, value, field_name:)
       when 'DATE_LESS_THAN_EQUALS', 'DATE_GREATER_THAN_EQUALS'
-        return scope.none unless valid_date_format?(value)
 
         metadata_condition_date_comparison(scope, node, value, operator == 'DATE_LESS_THAN_EQUALS' ? :lteq : :gteq)
       end
     end
 
-    def valid_date_format?(value)
-      Date.iso8601(value.to_s)
-      true
-    rescue ArgumentError
-      false
+    def apply_less_than_or_equal(scope, node, value)
+      condition_less_than_or_equal(scope, node, value)
     end
 
-    def valid_numeric_format?(value)
-      value.to_s.match?(/\A-?\d+(\.\d+)?\z/)
+    def apply_greater_than_or_equal(scope, node, value)
+      condition_greater_than_or_equal(scope, node, value)
     end
 
     ##############################

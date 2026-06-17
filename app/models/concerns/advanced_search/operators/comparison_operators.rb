@@ -7,7 +7,6 @@ module AdvancedSearch
       extend ActiveSupport::Concern
 
       # Suffix convention for date-type metadata fields
-      # TODO: still necessary?
       DATE_FIELD_SUFFIX = '_date'
 
       private
@@ -18,6 +17,8 @@ module AdvancedSearch
       # end
 
       def metadata_condition_date_comparison(scope, node, value, comparison_method)
+        return scope.none unless valid_date_format?(value)
+
         scope
           .where(node.matches_regexp('^\\d{4}(-\\d{2}){0,2}$'))
           .where(
@@ -28,6 +29,8 @@ module AdvancedSearch
       end
 
       def metadata_condition_numeric_comparison(scope, node, value, comparison_method)
+        return scope.none unless valid_numeric_format?(value)
+
         scope
           .where(node.matches_regexp('^-?\\d+(\\.\\d+)?$'))
           .where(
@@ -35,6 +38,25 @@ module AdvancedSearch
               'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
             ).public_send(comparison_method, value)
           )
+      end
+
+      def condition_less_than_or_equal(scope, node, value)
+        scope.where(node.lteq(value))
+      end
+
+      def condition_greater_than_or_equal(scope, node, value)
+        scope.where(node.gteq(value))
+      end
+
+      def valid_date_format?(value)
+        Date.iso8601(value.to_s)
+        true
+      rescue ArgumentError
+        false
+      end
+
+      def valid_numeric_format?(value)
+        value.to_s.match?(/\A-?\d+(\.\d+)?\z/)
       end
 
       ########################

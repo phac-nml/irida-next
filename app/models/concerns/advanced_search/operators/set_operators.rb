@@ -18,6 +18,10 @@ module AdvancedSearch
         end
       end
 
+      def metadata_condition_in(scope, node, value)
+        scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).in(downcase_values(value)))
+      end
+
       def condition_not_in(scope, node, value, field_name:)
         if field_name == 'name'
           scope.where(node.lower.not_in(downcase_values(value)))
@@ -25,6 +29,14 @@ module AdvancedSearch
           # Exact matching for regular fields
           scope.where(node.not_in(compact_values(value)))
         end
+      end
+
+      def metadata_condition_not_in(scope, node, value)
+        lower_function = Arel::Nodes::NamedFunction.new('LOWER', [node])
+        # Include NULL metadata values in negative set operations: NULL is not in the provided set.
+        # This maintains consistency with metadata_condition_not_equals, where "not X" includes records without the
+        # field.
+        scope.where(node.eq(nil).or(lower_function.not_in(downcase_values(value))))
       end
 
       def downcase_values(value)
