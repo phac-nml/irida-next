@@ -19,66 +19,66 @@ module AdvancedSearch
 
       # escape_like_wildcards tests
       test 'escape_like_wildcards escapes percent sign' do
-        assert_equal '\\%test', @test_instance.send(:escape_like_wildcards, '%test')
+        assert_equal '\\%test', @test_instance.send(:escape_like_wildcards_v1, '%test')
       end
 
       test 'escape_like_wildcards escapes underscore' do
-        assert_equal '\\_test', @test_instance.send(:escape_like_wildcards, '_test')
+        assert_equal '\\_test', @test_instance.send(:escape_like_wildcards_v1, '_test')
       end
 
       test 'escape_like_wildcards escapes backslash' do
-        assert_equal '\\\\test', @test_instance.send(:escape_like_wildcards, '\\test')
+        assert_equal '\\\\test', @test_instance.send(:escape_like_wildcards_v1, '\\test')
       end
 
       test 'escape_like_wildcards escapes multiple special characters' do
-        assert_equal '\\%\\_\\\\', @test_instance.send(:escape_like_wildcards, '%_\\')
+        assert_equal '\\%\\_\\\\', @test_instance.send(:escape_like_wildcards_v1, '%_\\')
       end
 
       test 'escape_like_wildcards returns string unchanged if no special characters' do
         # NOTE: underscore IS a special character in SQL LIKE, so it gets escaped
-        assert_equal 'normalstring', @test_instance.send(:escape_like_wildcards, 'normalstring')
+        assert_equal 'normalstring', @test_instance.send(:escape_like_wildcards_v1, 'normalstring')
       end
 
       # uuid_column? tests
       test 'uuid_column? returns true for uuid column' do
-        assert @test_instance.send(:uuid_column?, WorkflowExecution, 'id')
+        assert @test_instance.send(:uuid_column_v1?, WorkflowExecution, 'id')
       end
 
       test 'uuid_column? returns false for non-uuid column' do
-        assert_not @test_instance.send(:uuid_column?, WorkflowExecution, 'name')
+        assert_not @test_instance.send(:uuid_column_v1?, WorkflowExecution, 'name')
       end
 
       test 'uuid_column? returns false for non-existent column' do
-        assert_not @test_instance.send(:uuid_column?, WorkflowExecution, 'nonexistent')
+        assert_not @test_instance.send(:uuid_column_v1?, WorkflowExecution, 'nonexistent')
       end
 
       # cast_to_text_if_uuid tests
       test 'cast_to_text_if_uuid returns original node for non-uuid column' do
-        result = @test_instance.send(:cast_to_text_if_uuid, @node, WorkflowExecution, 'name')
+        result = @test_instance.send(:cast_to_text_if_uuid_v1, @node, WorkflowExecution, 'name')
         assert_equal @node, result
       end
 
       test 'cast_to_text_if_uuid returns cast function for uuid column' do
-        result = @test_instance.send(:cast_to_text_if_uuid, @uuid_node, WorkflowExecution, 'id')
+        result = @test_instance.send(:cast_to_text_if_uuid_v1, @uuid_node, WorkflowExecution, 'id')
         assert_instance_of Arel::Nodes::NamedFunction, result
         assert_equal 'CAST', result.name
       end
 
       # condition_contains tests
       test 'condition_contains creates ILIKE query with wildcards' do
-        result = @test_instance.send(:condition_contains, @scope, @node, 'test')
+        result = @test_instance.send(:condition_contains_v1, @scope, @node, 'test')
         sql = result.to_sql
         assert_includes sql, "ILIKE '%test%'"
       end
 
       test 'condition_contains escapes special characters in value' do
-        result = @test_instance.send(:condition_contains, @scope, @node, '%test%')
+        result = @test_instance.send(:condition_contains_v1, @scope, @node, '%test%')
         sql = result.to_sql
         assert_includes sql, "ILIKE '%\\%test\\%%'"
       end
 
       test 'condition_contains casts uuid column to text' do
-        result = @test_instance.send(:condition_contains, @scope, @uuid_node, 'abc',
+        result = @test_instance.send(:condition_contains_v1, @scope, @uuid_node, 'abc',
                                      model_class: WorkflowExecution, field_name: 'id')
         sql = result.to_sql
         assert_includes sql, 'CAST'
@@ -87,28 +87,28 @@ module AdvancedSearch
 
       # condition_not_contains tests
       test 'condition_not_contains creates NOT ILIKE query with null check' do
-        result = @test_instance.send(:condition_not_contains, @scope, @node, 'test')
+        result = @test_instance.send(:condition_not_contains_v1, @scope, @node, 'test')
         sql = result.to_sql
         assert_includes sql, 'NOT ILIKE'
         assert_includes sql, 'IS NULL'
       end
 
       test 'condition_not_contains escapes special characters in value' do
-        result = @test_instance.send(:condition_not_contains, @scope, @node, '%test%')
+        result = @test_instance.send(:condition_not_contains_v1, @scope, @node, '%test%')
         sql = result.to_sql
         assert_includes sql, "NOT ILIKE '%\\%test\\%%'"
       end
 
       # condition_exists tests
       test 'condition_exists creates IS NOT NULL query' do
-        result = @test_instance.send(:condition_exists, @scope, @node)
+        result = @test_instance.send(:condition_exists_v1, @scope, @node)
         sql = result.to_sql
         assert_includes sql, 'IS NOT NULL'
       end
 
       # condition_not_exists tests
       test 'condition_not_exists creates IS NULL query' do
-        result = @test_instance.send(:condition_not_exists, @scope, @node)
+        result = @test_instance.send(:condition_not_exists_v1, @scope, @node)
         sql = result.to_sql
         assert_includes sql, 'IS NULL'
       end
