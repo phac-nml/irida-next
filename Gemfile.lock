@@ -478,9 +478,9 @@ GEM
       opentelemetry-metrics-sdk (~> 0.5)
       opentelemetry-sdk (~> 1.2)
       opentelemetry-semantic_conventions
-    opentelemetry-instrumentation-active_job (0.12.0)
+    opentelemetry-instrumentation-active_job (0.13.0)
       opentelemetry-instrumentation-base (~> 0.25)
-    opentelemetry-instrumentation-base (0.26.0)
+    opentelemetry-instrumentation-base (0.26.1)
       opentelemetry-api (~> 1.7)
       opentelemetry-common (~> 0.21)
       opentelemetry-registry (~> 0.1)
