@@ -21,6 +21,7 @@ module AdvancedSearch
       node = build_arel_node(field_name, model_class)
       value = normalize_condition_value(condition)
       metadata_field = field_name.starts_with?('metadata.')
+      operator = condition.operator
       placeholder = false
 
       if metadata_field && placeholder
@@ -33,7 +34,7 @@ module AdvancedSearch
         else
           apply_metadata_exists_operator(scope, node, operator)
         end
-      else
+      elsif placeholder
         case condition.operator
         when '='
           condition_equals(scope, node, value, field_name:)
@@ -55,6 +56,31 @@ module AdvancedSearch
           condition_exists(scope, node)
         when 'not_exists'
           condition_not_exists(scope, node)
+        else
+          scope
+        end
+      else
+        case operator
+        when '='
+          apply_equals_operator_v1(scope, node, value, metadata_field:, field_name:)
+        when 'in'
+          apply_in_operator_v1(scope, node, value, metadata_field:, field_name:)
+        when '!='
+          apply_not_equals_operator_v1(scope, node, value, metadata_field:, field_name:)
+        when 'not_in'
+          apply_not_in_operator_v1(scope, node, value, metadata_field:, field_name:)
+        when '<='
+          apply_less_than_or_equal_v1(scope, node, value, field: field_name, metadata_field:)
+        when '>='
+          apply_greater_than_or_equal_v1(scope, node, value, field: field_name, metadata_field:)
+        when 'contains'
+          condition_contains_v1(scope, node, value, model_class:, field_name:)
+        when 'not_contains'
+          condition_not_contains_v1(scope, node, value, model_class:, field_name:)
+        when 'exists'
+          condition_exists_v1(scope, node)
+        when 'not_exists'
+          condition_not_exists_v1(scope, node)
         else
           scope
         end
@@ -135,6 +161,34 @@ module AdvancedSearch
 
     def valid_numeric_format?(value)
       value.to_s.match?(/\A-?\d+(\.\d+)?\z/)
+    end
+
+    ##############################
+
+    def apply_less_than_or_equal_v1(scope, node, value, field:, metadata_field:)
+      metadata_key = field.delete_prefix('metadata.')
+      condition_less_than_or_equal_v1(scope, node, value, metadata_field:, metadata_key:)
+    end
+
+    def apply_greater_than_or_equal_v1(scope, node, value, field:, metadata_field:)
+      metadata_key = field.delete_prefix('metadata.')
+      condition_greater_than_or_equal_v1(scope, node, value, metadata_field:, metadata_key:)
+    end
+
+    def apply_equals_operator_v1(scope, node, value, metadata_field:, field_name:)
+      condition_equals_v1(scope, node, value, metadata_field:, field_name:)
+    end
+
+    def apply_in_operator_v1(scope, node, value, metadata_field:, field_name:)
+      condition_in_v1(scope, node, value, metadata_field:, field_name:)
+    end
+
+    def apply_not_equals_operator_v1(scope, node, value, metadata_field:, field_name:)
+      condition_not_equals_v1(scope, node, value, metadata_field:, field_name:)
+    end
+
+    def apply_not_in_operator_v1(scope, node, value, metadata_field:, field_name:)
+      condition_not_in_v1(scope, node, value, metadata_field:, field_name:)
     end
   end
 end
