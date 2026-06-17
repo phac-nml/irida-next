@@ -1,4 +1,7 @@
 features:
+  advanced_search_metadata_operators:
+    description: "Enable metadata specific operators"
+    enable_in_development: false
   advanced_search_with_auto_complete:
     description: "Enable auto-complete suggestions for the field dropdown within the\
       \ advanced search dialog."

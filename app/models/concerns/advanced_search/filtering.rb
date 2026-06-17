@@ -35,7 +35,7 @@ module AdvancedSearch
           apply_metadata_exists_operator(scope, node, operator)
         end
       elsif feature_flag_enabled
-        case condition.operator
+        case operator
         when '='
           condition_equals(scope, node, value, field_name:)
         when 'in'
