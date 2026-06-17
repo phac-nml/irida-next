@@ -24,7 +24,8 @@ if Flipper.enabled?(:v2_select2, Current.user)
   <% end %>
 
   <%= form.submit "Submit",
-              class: "button button-primary",
+              tone: :primary,
+              emphasis: :solid,
               disabled: true,
               data:
               if Flipper.enabled?(:v2_select2, Current.user)

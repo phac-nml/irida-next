@@ -129,7 +129,8 @@ if Flipper.enabled?(:v2_select2, Current.user)
 
     <div class="flex justify-start gap-1">
       <%= form.submit I18n.t('common.actions.share'),
-                  class: "button button-primary",
+                    tone: :primary,
+                    emphasis: :solid,
                   disabled: true,
                   data:
                     if Flipper.enabled?(:v2_select2, Current.user)
