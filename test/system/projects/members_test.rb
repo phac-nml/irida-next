@@ -256,9 +256,8 @@ module Projects
       assert_selector 'turbo-frame#members table'
       within('turbo-frame#new_member_dialog') do
         assert_selector '[data-controller="viral--dialog"][data-controller-connected="true"]'
+        click_button I18n.t(:'projects.members.index.add')
       end
-
-      click_button I18n.t(:'projects.members.index.add')
 
       assert_selector 'dialog[open]', visible: true
 
