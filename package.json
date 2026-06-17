@@ -18,7 +18,7 @@
     "playwright": "1.60.0",
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   },
   "scripts": {
     "herb:format": "herb-format",
