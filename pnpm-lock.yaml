@@ -15,18 +15,18 @@ importers:
         specifier: ^3.1.2
         version: 3.1.2(rollup@4.62.0)
       tailwindcss:
-        specifier: 4.3.0
-        version: 4.3.0
+        specifier: 4.3.1
+        version: 4.3.1
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.5.0(jiti@2.7.0))
       '@herb-tools/formatter':
         specifier: ^0.10.1
-        version: 0.10.1(tailwindcss@4.3.0)
+        version: 0.10.1(tailwindcss@4.3.1)
       '@herb-tools/linter':
         specifier: ^0.10.1
-        version: 0.10.1(tailwindcss@4.3.0)
+        version: 0.10.1(tailwindcss@4.3.1)
       '@hotwired/stimulus':
         specifier: ^3.2.2
         version: 3.2.2
@@ -1542,9 +1542,6 @@ packages:
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
-  tailwindcss@4.3.0:
-    resolution: {integrity: sha512-y6nxMGB1nMW9R6k96e5gdIFzcfL/gTJRNaqGes1YvkLnPVXzWgbqFF2yLC0T8G774n24cx3Pe8XrKoniCOAH+Q==}
-
   tailwindcss@4.3.1:
     resolution: {integrity: sha512-hk+TB1m+K8CYNrP6rjQaq/Y+4Zylwpa87mLYBKCunwnnQ9p+fHb7kmSfGqyEJoxF/O6CDyABWVFEafNSYKll+Q==}
 
@@ -1913,12 +1910,12 @@ snapshots:
 
   '@herb-tools/core@0.10.1': {}
 
-  '@herb-tools/formatter@0.10.1(tailwindcss@4.3.0)':
+  '@herb-tools/formatter@0.10.1(tailwindcss@4.3.1)':
     dependencies:
       '@herb-tools/config': 0.10.1
       '@herb-tools/core': 0.10.1
       '@herb-tools/printer': 0.10.1
-      '@herb-tools/rewriter': 0.10.1(tailwindcss@4.3.0)
+      '@herb-tools/rewriter': 0.10.1(tailwindcss@4.3.1)
       tinyglobby: 0.2.16
     transitivePeerDependencies:
       - tailwindcss
@@ -1928,14 +1925,14 @@ snapshots:
       '@herb-tools/core': 0.10.1
       '@herb-tools/node-wasm': 0.10.1
 
-  '@herb-tools/linter@0.10.1(tailwindcss@4.3.0)':
+  '@herb-tools/linter@0.10.1(tailwindcss@4.3.1)':
     dependencies:
       '@herb-tools/config': 0.10.1
       '@herb-tools/core': 0.10.1
       '@herb-tools/highlighter': 0.10.1
       '@herb-tools/node-wasm': 0.10.1
       '@herb-tools/printer': 0.10.1
-      '@herb-tools/rewriter': 0.10.1(tailwindcss@4.3.0)
+      '@herb-tools/rewriter': 0.10.1(tailwindcss@4.3.1)
       picomatch: 4.0.4
       tinyglobby: 0.2.16
     transitivePeerDependencies:
@@ -1950,22 +1947,22 @@ snapshots:
       '@herb-tools/core': 0.10.1
       tinyglobby: 0.2.16
 
-  '@herb-tools/rewriter@0.10.1(tailwindcss@4.3.0)':
+  '@herb-tools/rewriter@0.10.1(tailwindcss@4.3.1)':
     dependencies:
       '@herb-tools/core': 0.10.1
-      '@herb-tools/tailwind-class-sorter': 0.10.1(tailwindcss@4.3.0)
+      '@herb-tools/tailwind-class-sorter': 0.10.1(tailwindcss@4.3.1)
       tinyglobby: 0.2.16
     transitivePeerDependencies:
       - tailwindcss
 
-  '@herb-tools/tailwind-class-sorter@0.10.1(tailwindcss@4.3.0)':
+  '@herb-tools/tailwind-class-sorter@0.10.1(tailwindcss@4.3.1)':
     dependencies:
       clear-module: 4.1.2
       escalade: 3.2.0
       jiti: 2.7.0
       postcss: 8.5.12
       postcss-import: 16.1.1(postcss@8.5.12)
-      tailwindcss: 4.3.0
+      tailwindcss: 4.3.1
 
   '@hotwired/stimulus@3.2.2': {}
 
@@ -2953,8 +2950,6 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   symbol-tree@3.2.4: {}
-
-  tailwindcss@4.3.0: {}
 
   tailwindcss@4.3.1: {}
 
