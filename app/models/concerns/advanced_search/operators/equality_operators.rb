@@ -8,6 +8,7 @@ module AdvancedSearch
 
       private
 
+      ### TODO: This file contains both new and old logic dependent on feature flag :advanced_search_metadata_operators
       def condition_equals(scope, node, value, field_name:)
         # Use pattern matching only for non-enum metadata fields and name field
         if field_name == 'name'
@@ -67,7 +68,7 @@ module AdvancedSearch
         value.to_s.downcase
       end
 
-      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
+      ### TODO: V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
       def condition_equals_v1(scope, node, value, metadata_field:, field_name:)
         # Use pattern matching only for non-enum metadata fields and name field

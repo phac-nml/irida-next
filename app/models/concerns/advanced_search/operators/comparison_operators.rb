@@ -6,6 +6,8 @@ module AdvancedSearch
     module ComparisonOperators
       extend ActiveSupport::Concern
 
+      ### TODO: This file contains both new and old logic dependent on feature flag :advanced_search_metadata_operators
+
       # Suffix convention for date-type metadata fields
       DATE_FIELD_SUFFIX = '_date'
 
@@ -54,7 +56,7 @@ module AdvancedSearch
         value.to_s.match?(/\A-?\d+(\.\d+)?\z/)
       end
 
-      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
+      ### TODO: V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
       def condition_less_than_or_equal_v1(scope, node, value, metadata_field:, metadata_key:)
         return scope.where(node.lteq(value)) unless metadata_field

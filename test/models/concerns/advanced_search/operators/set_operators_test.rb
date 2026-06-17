@@ -146,7 +146,7 @@ module AdvancedSearch
         assert_includes sql, '"workflow_executions"."state" NOT IN'
       end
 
-      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
+      ### TODO: V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
       # downcase_values tests
       test 'downcase_values_v1 downcases all string values' do

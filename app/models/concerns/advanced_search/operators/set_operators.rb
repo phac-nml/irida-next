@@ -8,6 +8,7 @@ module AdvancedSearch
 
       private
 
+      ### TODO: This file contains both new and old logic dependent on feature flag :advanced_search_metadata_operators
       def condition_in(scope, node, value, field_name:)
         # Use case-insensitive matching for metadata fields (both enum and non-enum)
         if field_name == 'name'
@@ -47,7 +48,7 @@ module AdvancedSearch
         Array(value).compact_blank
       end
 
-      ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
+      ### TODO: V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
       def condition_in_v1(scope, node, value, metadata_field:, field_name:)
         # Use case-insensitive matching for metadata fields (both enum and non-enum)

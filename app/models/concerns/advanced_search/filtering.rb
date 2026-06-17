@@ -16,6 +16,7 @@ module AdvancedSearch
 
     private
 
+    ### TODO: This file contains both new and old logic dependent on feature flag :advanced_search_metadata_operators
     def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       field_name = normalize_condition_field(condition)
       node = build_arel_node(field_name, model_class)
@@ -153,7 +154,7 @@ module AdvancedSearch
       condition_greater_than_or_equal(scope, node, value)
     end
 
-    ### V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
+    ### TODO: V1 methods block below, remove when feature flag :advanced_search_metadata_operators is deleted ###
 
     def apply_less_than_or_equal_v1(scope, node, value, field:, metadata_field:)
       metadata_key = field.delete_prefix('metadata.')
