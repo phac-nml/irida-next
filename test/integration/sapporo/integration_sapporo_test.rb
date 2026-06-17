@@ -71,7 +71,7 @@ class IntegrationSapporoTest < ActionDispatch::IntegrationTest
     sample2_attachment_rev = attachments(:snvphyl_sample2_attachment_rev)
 
     workflow_params = { reference_sample_id: '',
-                        refgenome: '',
+                        refgenome: sample1_attachment_ref.to_global_id,
                         metadata_1_header: 'metadata_1',
                         metadata_2_header: 'metadata_2',
                         metadata_3_header: 'metadata_3',
@@ -106,7 +106,7 @@ class IntegrationSapporoTest < ActionDispatch::IntegrationTest
           sample_name: sample1.name,
           fastq_1: sample1_attachment_fwd.to_global_id, # rubocop:disable Naming/VariableNumber
           fastq_2: sample1_attachment_rev.to_global_id, # rubocop:disable Naming/VariableNumber
-          reference_assembly: sample1_attachment_ref.to_global_id
+          reference_assembly: ''
         }.merge(sample1.metadata)
       },
       '1': {

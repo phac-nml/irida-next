@@ -565,3 +565,24 @@ snvphyl_sample2_attachment_rev:
     }
   attachable: snvphyl_sample2 (Sample)
   puid: INXT_ATT_ABAAAAAABN
+
+snvphyl_project_attachment_ref:
+  metadata:
+    {
+      "type": "assembly",
+      "format": "fasta",
+      "compression": "gzip",
+    }
+  attachable: snvphyl_project_namespace (Namespace)
+  puid: INXT_ATT_ABAAAAAABO
+
+snvphyl_group_attachment_ref:
+  metadata:
+    {
+      "type": "assembly",
+      "format": "fasta",
+      "compression": "gzip",
+    }
+  attachable: snvphyl_group (Namespace)
+  puid: INXT_ATT_ABAAAAAABP
+

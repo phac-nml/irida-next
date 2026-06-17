@@ -153,3 +153,5 @@ snvphyl_sample1_attachment_rev_blob: <%= ActiveStorage::FixtureSet.blob filename
 snvphyl_sample1_attachment_ref_blob: <%= ActiveStorage::FixtureSet.blob filename: "reference.fasta.gz", service_name: "test" %>
 snvphyl_sample2_attachment_fwd_blob: <%= ActiveStorage::FixtureSet.blob filename: "b_1.fastq.gz", service_name: "test" %>
 snvphyl_sample2_attachment_rev_blob: <%= ActiveStorage::FixtureSet.blob filename: "b_2.fastq.gz", service_name: "test" %>
+snvphyl_project_attachment_ref_blob: <%= ActiveStorage::FixtureSet.blob filename: "reference.fasta.gz", service_name: "test" %>
+snvphyl_group_attachment_ref_blob: <%= ActiveStorage::FixtureSet.blob filename: "reference.fasta.gz", service_name: "test" %>
