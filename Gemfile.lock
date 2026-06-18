@@ -486,7 +486,7 @@ GEM
       opentelemetry-registry (~> 0.1)
     opentelemetry-metrics-api (0.6.0)
       opentelemetry-api (~> 1.0)
-    opentelemetry-metrics-sdk (0.14.0)
+    opentelemetry-metrics-sdk (0.15.0)
       opentelemetry-api (~> 1.1)
       opentelemetry-metrics-api (~> 0.2)
       opentelemetry-sdk (~> 1.2)
