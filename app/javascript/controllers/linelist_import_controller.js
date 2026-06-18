@@ -26,7 +26,7 @@ export default class extends Controller {
   connect() {
     super.connect();
     this._fileType = null;
-    this._exportId ||= null;
+    this._operationId ||= null;
     this._progressWindowOpenedAt ||= null;
     this._worksheet = null;
   }
@@ -64,7 +64,7 @@ export default class extends Controller {
     this._worker?.terminate();
     this._worker ||= this.#buildWorker();
     closeDialog(this.element, this.application);
-    this._exportId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this._progressWindowOpenedAt = null;
     showProgressWindow(this, "Importing samples...");
     this.#processRows();

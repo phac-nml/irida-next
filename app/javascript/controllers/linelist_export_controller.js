@@ -111,7 +111,7 @@ export default class extends Controller {
   connect() {
     // Preserve in-flight export state if Stimulus reconnects this controller.
     this.workerClient ||= this.buildWorkerClient();
-    this._exportId ||= null;
+    this._operationId ||= null;
     this._progressWindowOpenedAt ||= null;
     this._dismissProgressWindowTimeout ||= null;
     this._progressMsgEl = null;
@@ -150,7 +150,7 @@ export default class extends Controller {
     const filename = `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}.${format}`;
     const totalCount = selectedCount;
     this.clearProgressWindowDismissTimeout();
-    this._exportId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this._progressWindowOpenedAt = null;
     this.progressWindowDismissed = false;
 

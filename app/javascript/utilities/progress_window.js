@@ -71,9 +71,9 @@ export function clearProgressWindowDismissTimeout(controller) {
 export function dismissProgressWindow(controller) {
   clearProgressWindowDismissTimeout(controller);
 
-  if (controller._exportId) {
+  if (controller._operationId) {
     const card = document.getElementById(
-      `${controller.identifier}-card-${controller._exportId}`,
+      `${controller.identifier}-card-${controller._operationId}`,
     );
     if (card) card.remove();
   }
@@ -84,7 +84,7 @@ export function dismissProgressWindow(controller) {
   if (container && container.children.length === 0) container.remove();
 
   controller.progressWindowDismissed = true;
-  controller._exportId = null;
+  controller._operationId = null;
   controller._progressWindowOpenedAt = null;
   controller._progressMsgEl = null;
   controller._progressBarEl = null;
@@ -92,9 +92,9 @@ export function dismissProgressWindow(controller) {
 }
 
 function ensureExportCard(controller) {
-  if (!controller._exportId) return null;
+  if (!controller._operationId) return null;
 
-  const cardId = `${controller.identifier}-card-${controller._exportId}`;
+  const cardId = `${controller.identifier}-card-${controller._operationId}`;
   let card = document.getElementById(cardId);
 
   if (!card) {
