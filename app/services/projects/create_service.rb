@@ -35,8 +35,10 @@ module Projects
       # We want to authorize that the user can create a project in the parent namespace
       authorize! project.namespace.parent, to: :create?
 
-      project.namespace.public = true if project.namespace.parent.group_namespace? && project.namespace.parent.public?
-      project.namespace.save
+      if Flipper.enabled?(:global_groups, current_user)
+        project.namespace.public = true if project.namespace.parent.group_namespace? && project.namespace.parent.public?
+        project.namespace.save
+      end
 
       project.save
 

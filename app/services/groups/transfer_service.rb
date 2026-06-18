@@ -29,10 +29,12 @@ module Groups
 
       @group.update(parameters)
 
-      if parameters[:public] == true
-        update_descendants_to_public
-      elsif parameters[:public] == false
-        update_descendants_to_private
+      if Flipper.enabled?(:global_groups, current_user)
+        if parameters[:public] == true
+          update_descendants_to_public
+        elsif parameters[:public] == false
+          update_descendants_to_private
+        end
       end
 
       create_activities(old_namespace, new_namespace)
@@ -51,8 +53,10 @@ module Groups
     def update_params(new_namespace)
       params = { parent_id: new_namespace.id }
 
-      params[:public] = true if new_namespace.public? && !@group.public?
-      params[:public] = false if !new_namespace.public? && @group.public?
+      if Flipper.enabled?(:global_groups, current_user)
+        params[:public] = true if new_namespace.public? && !@group.public?
+        params[:public] = false if !new_namespace.public? && @group.public?
+      end
 
       params
     end

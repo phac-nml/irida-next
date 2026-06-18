@@ -28,9 +28,11 @@
       <%= render "edit_advanced_transfer", group: @group %>
     <% end %>
 
-    <% if @group.parent.nil? && @allowed_to[:change_visibility] %>
-      <%= turbo_frame_tag("group_change_visibility_form") do %>
-        <%= render "edit_change_visibility", group: @group %>
+    <% if Flipper.enabled?(:global_groups, current_user) %>
+      <% if @group.parent.nil? && @allowed_to[:change_visibility] %>
+        <%= turbo_frame_tag("group_change_visibility_form") do %>
+          <%= render "edit_change_visibility", group: @group %>
+        <% end %>
       <% end %>
     <% end %>
 

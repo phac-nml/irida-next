@@ -16,7 +16,7 @@ module Groups
       updated = group.update(params)
 
       if updated
-        if group.parent.nil? && params.key?(:public)
+        if Flipper.enabled?(:global_groups, current_user) && group.parent.nil? && params.key?(:public)
           public_param_normalized = params[:public].to_s
 
           if public_param_normalized == 'true'

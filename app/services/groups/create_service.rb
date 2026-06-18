@@ -13,7 +13,9 @@ module Groups
     def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! group.parent, to: :create_subgroup? if params[:parent_id].present?
 
-      group.public = true if params[:parent_id].present? && group.parent.public?
+      if Flipper.enabled?(:global_groups, current_user) && params[:parent_id].present? && group.parent.public?
+        group.public = true
+      end
 
       group.save
 

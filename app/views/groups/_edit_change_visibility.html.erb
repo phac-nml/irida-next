@@ -47,11 +47,11 @@
       <%= button_to t("groups.edit.advanced.change_visibility.submit"),
       group_path,
       method: :patch,
-      params: { group: { public: !@group.public}},
+      params: { group: { public: !group.public}},
       data: {
         turbo_confirm: "",
         turbo_content: ".confirm-change-visibility",
-        confirm_value: @group.path,
+        confirm_value: group.path,
       },
       class: "button button-primary inline-block" %>
     </div>
