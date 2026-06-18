@@ -31,10 +31,10 @@
     "lint:fix": "eslint . --fix",
     "build:css:application": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
     "build:css:admin": "node scripts/build-activeadmin-source.mjs && pnpx @tailwindcss/cli -i ./app/assets/stylesheets/active_admin.tailwind.css -o ./app/assets/builds/active_admin.css --minify",
-    "build:css": "pnpm run --stream --parallel \"/^build:css:.*/\"",
+    "build:css": "pnpm run --filter . --stream --parallel \"/^build:css:.*/\"",
     "dev:css:application": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify --watch",
     "dev:css:admin": "node scripts/build-activeadmin-source.mjs && pnpx @tailwindcss/cli -i ./app/assets/stylesheets/active_admin.tailwind.css -o ./app/assets/builds/active_admin.css --minify --watch",
-    "dev:css": "pnpm run --stream --parallel \"/^dev:css:.*/\"",
+    "dev:css": "pnpm run --filter . --stream --parallel \"/^dev:css:.*/\"",
     "test:js": "vitest run",
     "test:js:watch": "vitest"
   },
