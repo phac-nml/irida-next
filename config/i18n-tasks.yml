@@ -30,9 +30,10 @@ data:
   # Locale files to write new keys to, based on a list of key pattern => file rules. Matched from top to bottom:
   # `i18n-tasks normalize -p` will force move the keys according to these rules
   write:
+    - ["action_policy.*", "config/locales/action_policy.%{locale}.yml"]
+    - ["active_admin.*", "config/locales/active_admin.%{locale}.yml"]
     - ["devise.*", "config/locales/devise.%{locale}.yml"]
     - ["components.*", "config/locales/components.%{locale}.yml"]
-    - ["action_policy.*", "config/locales/action_policy.%{locale}.yml"]
     - ["local_time.*", "config/locales/local_time.%{locale}.yml"]
     - ["common.*", "config/locales/common.%{locale}.yml"]
     # - ["{*}.{*}.{*_component}.:", 'app/components/\1/\2/\3.%{locale}.yml']
