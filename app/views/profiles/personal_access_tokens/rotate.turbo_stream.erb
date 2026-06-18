@@ -17,6 +17,6 @@
   <% end %>
 <% else %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type: :error, data: message) %>
+    <%= pathogen_toast(type: :error, message: message) %>
   <% end %>
 <% end %>

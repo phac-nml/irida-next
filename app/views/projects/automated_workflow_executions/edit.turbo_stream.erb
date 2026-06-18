@@ -1,6 +1,6 @@
 <% if @automated_workflow_execution.disabled %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
+    <%= pathogen_toast(type:, message: message) %>
   <% end %>
 <% else %>
   <%= turbo_stream.update(

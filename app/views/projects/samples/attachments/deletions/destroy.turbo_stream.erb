@@ -2,17 +2,16 @@
 
 <% unless message.nil? %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
+    <%= pathogen_toast(type:, message: message) %>
   <% end %>
 <% end %>
 
 <% unless not_deleted_attachments.nil? %>
   <% not_deleted_attachments.each do |attachment| %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(
+      <%= pathogen_toast(
         type: :error,
-        data:
-          t(
+        message:           t(
             ".error",
             filename: attachment.file.filename,
             errors: error_message(attachment),

@@ -1,12 +1,12 @@
 <% if defined?(messages) %>
   <% messages.each do |message| %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(type: message[:type], data: message[:message]) %>
+      <%= pathogen_toast(type: message[:type], message: message[:message]) %>
     <% end %>
   <% end %>
 <% else %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
+    <%= pathogen_toast(type:, message: message) %>
   <% end %>
 <% end %>
 

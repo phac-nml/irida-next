@@ -15,10 +15,9 @@
                         new_group_link: @created_namespace_group_link,
                         tab: @tab,
                       } %>
-
   <% if @created_namespace_group_link.errors.none? %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(type:, data: message) %>
+      <%= pathogen_toast(type:, message: message) %>
     <% end %>
   <% end %>
 <% end %>

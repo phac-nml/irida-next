@@ -14,9 +14,9 @@
                        } %>
   <%= turbo_stream.update "new-token-form", "" %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(
+    <%= pathogen_toast(
       type: :success,
-      data: t(".success", name: new_personal_access_token.name),
+      message: t(".success", name: new_personal_access_token.name),
     ) %>
   <% end %>
 <% end %>

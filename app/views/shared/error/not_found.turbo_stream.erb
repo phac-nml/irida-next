@@ -1,5 +1,5 @@
 <%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type: "alert", data: message) %>
+  <%= pathogen_toast(type: "alert", message: message) %>
 <% end %>
 
 <%= turbo_stream.append "personal-access-token-revoke-errors",

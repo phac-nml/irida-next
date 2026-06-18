@@ -8,9 +8,8 @@
 
 <% if @new_member.persisted? %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
+    <%= pathogen_toast(type:, message: message) %>
   <% end %>
-
   <%= turbo_stream.replace "members" do %>
     <%= turbo_frame_tag "members", src: group_members_path(@group, format: :turbo_stream) do %>
       <%= render partial: "shared/loading/table" %>

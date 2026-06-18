@@ -1,5 +1,5 @@
 <%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type: :success, data: message) %>
+  <%= pathogen_toast(type: :success, message: message) %>
 <% end %>
 
 <%= turbo_stream.replace "token-information-component" do %>

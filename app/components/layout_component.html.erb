@@ -103,11 +103,11 @@
 
       <%= render ConfirmationComponent.new %>
 
-      <div id="flashes" class="fixed top-5 right-6 z-50 flex flex-col">
+      <%= pathogen_toaster(list_id: "flashes") do %>
         <% flash.each do |key, value| %>
-          <%= viral_flash(type: key, data: value) %>
+          <%= pathogen_toast(type: key, message: value) %>
         <% end %>
-      </div>
+      <% end %>
 
       <span
         class="sr-only"

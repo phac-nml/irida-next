@@ -1,18 +1,16 @@
 <% attachments&.each do |attachment| %>
   <% if attachment.persisted? %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(
+      <%= pathogen_toast(
         type: :success,
-        data: t(".success", filename: attachment.file.filename),
+        message: t(".success", filename: attachment.file.filename),
       ) %>
     <% end %>
-
   <% else %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(
+      <%= pathogen_toast(
         type: :error,
-        data:
-          t(
+        message:           t(
             ".failure",
             filename: attachment.file.filename,
             errors: attachment.errors.full_messages.join("."),
@@ -21,6 +19,7 @@
     <% end %>
   <% end %>
 <% end %>
+
 <%= turbo_stream.update "sample_modal",
                     partial: "new_attachment_modal",
                     locals: {

@@ -7,7 +7,7 @@
 
 <% if @personal_access_token.persisted? %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
+    <%= pathogen_toast(type:, message: message) %>
   <% end %>
   <%= turbo_stream.replace "access-token-section",
                        partial: "projects/bots/access_token_section",
