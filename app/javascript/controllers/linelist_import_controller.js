@@ -12,7 +12,7 @@ import {
 } from "utilities/progress_window";
 
 export default class extends Controller {
-  static targets = ["progressTemplate"];
+  static targets = ["alertTemplate", "dialogTemplate", "progressTemplate"];
   static values = {
     graphqlUrl: String,
     groupPuid: String,
@@ -20,6 +20,14 @@ export default class extends Controller {
     importedRecordsMessage: {
       type: String,
       default: "Imported %{current} of %{total} records",
+    },
+    successMessage: {
+      type: String,
+      default: "The metadata was imported successfully!",
+    },
+    errorMessage: {
+      type: String,
+      default: "Unexpected error while importing metadata: %{message}",
     },
   };
 
@@ -126,17 +134,16 @@ export default class extends Controller {
         if (payload.type === "progress") {
           console.log("Progress: ", payload);
           this.onProgress(payload);
-          return;
         }
 
         if (payload.type === "done") {
-          console.log("Complete");
-          this.#terminateWorker();
+          console.log("Complete: ", payload);
+          this.onDone();
         }
 
         if (payload.type === "error") {
           console.log("Error: ", payload);
-          this.#terminateWorker();
+          this.onError(payload);
         }
       };
     } else {
@@ -146,12 +153,39 @@ export default class extends Controller {
     return worker;
   }
 
+  #errorMessage(error) {
+    const clone = this.alertTemplateTarget.content.cloneNode(true);
+    return clone.firstElementChild.outerHTML.replace(/PLACEHOLDER/g, error);
+  }
+
   onProgress(payload) {
     const message = t(this.importedRecordsMessageValue, {
       current: payload.current,
       total: payload.total,
     });
-    updateProgressWindow(message, payload.percentage);
+    const dialog = this.dialogTemplateTarget.content.cloneNode(true);
+
+    payload.result.errors.forEach((error) => {
+      const errorMessage = this.#errorMessage(error.message);
+      const errorMessageList = dialog.querySelector("#error-messages");
+      if (errorMessageList) {
+        errorMessageList.insertAdjacentHTML("beforeend", errorMessage);
+      }
+    });
+    document.body.appendChild(dialog);
+    updateProgressWindow(this, message, payload.percentage);
+  }
+
+  onDone() {
+    const message = t(this.successMessageValue);
+    updateProgressWindow(this, message, 100);
+    this.#terminateWorker();
+  }
+
+  onError(payload) {
+    const message = t(this.errorMessageValue, { message: payload.message });
+    updateProgressWindow(this, message, 100, true);
+    this.#terminateWorker();
   }
 
   #csrfToken() {
