@@ -440,35 +440,16 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.active_admin_comments (
-    id bigint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     namespace character varying,
     body text,
     resource_type character varying,
-    resource_id bigint,
+    resource_id uuid,
     author_type character varying,
-    author_id bigint,
+    author_id uuid,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-
-
---
--- Name: active_admin_comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.active_admin_comments_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: active_admin_comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.active_admin_comments_id_seq OWNED BY public.active_admin_comments.id;
 
 
 --
@@ -1045,13 +1026,6 @@ CREATE TABLE public.workflow_executions (
     shared_with_namespace boolean DEFAULT false NOT NULL,
     log_data jsonb
 );
-
-
---
--- Name: active_admin_comments id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.active_admin_comments ALTER COLUMN id SET DEFAULT nextval('public.active_admin_comments_id_seq'::regclass);
 
 
 --
