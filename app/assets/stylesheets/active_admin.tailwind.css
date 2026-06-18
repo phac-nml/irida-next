@@ -1,0 +1,8 @@
+@import "tailwindcss" source(none);
+@import "./activeadmin-source.generated.css";
+@source "../../admin/**/*.{arb,erb,html,rb}";
+
+@plugin "@activeadmin/activeadmin/plugin";
+@plugin "flowbite/plugin";
+
+@custom-variant dark (&:where(.dark, .dark *));

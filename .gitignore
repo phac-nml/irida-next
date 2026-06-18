@@ -83,3 +83,4 @@ devenv.local.nix
 
 # pre-commit
 .pre-commit-config.yaml
+app/assets/stylesheets/activeadmin-source.generated.css
