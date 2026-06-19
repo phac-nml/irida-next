@@ -44,6 +44,9 @@ gem 'bootsnap', require: false
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem 'thruster', require: false
 
+# User ActiveAdmin for admin interface
+gem 'activeadmin', '~> 4.0.0.beta22'
+
 # Use devise for auth
 gem 'devise', '~> 5.0.4'
 

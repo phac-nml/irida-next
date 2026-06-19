@@ -5,6 +5,7 @@ scope '-' do
     authenticate :user, ->(user) { user.system? } do
       mount GoodJob::Engine => 'good_job'
       mount Flipper::UI.app(Flipper) => 'flipper'
+      ActiveAdmin.routes(self)
     end
   end
 end

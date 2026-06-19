@@ -47,7 +47,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   accepts_nested_attributes_for :members
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[first_name last_name email]
+    %w[first_name last_name email created_at]
   end
 
   def self.ransackable_associations(_auth_object = nil)
@@ -110,10 +110,6 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     clean_up_passwords
     result
-  end
-
-  def to_param
-    full_path
   end
 
   def username

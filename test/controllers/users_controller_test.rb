@@ -8,7 +8,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'should show the user' do
     sign_in users(:john_doe)
 
-    get user_path(users(:john_doe))
+    get user_path(users(:john_doe).namespace.path)
     assert_response :success
 
     w3c_validate 'User Profile Page'
@@ -17,7 +17,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'should not show the user' do
     sign_in users(:john_doe)
 
-    get user_path(users(:james_doe))
+    get user_path(users(:james_doe).namespace.path)
     assert_response :unauthorized
   end
 end

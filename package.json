@@ -29,12 +29,17 @@
     "format:changed": "prettier --write",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build:css": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
-    "dev:css": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify --watch",
+    "build:css:application": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
+    "build:css:admin": "node scripts/build-activeadmin-source.mjs && pnpx @tailwindcss/cli -i ./app/assets/stylesheets/active_admin.tailwind.css -o ./app/assets/builds/active_admin.css --minify",
+    "build:css": "pnpm run --filter . --stream --parallel \"/^build:css:.*/\"",
+    "dev:css:application": "pnpx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify --watch",
+    "dev:css:admin": "node scripts/build-activeadmin-source.mjs && pnpx @tailwindcss/cli -i ./app/assets/stylesheets/active_admin.tailwind.css -o ./app/assets/builds/active_admin.css --minify --watch",
+    "dev:css": "pnpm run --filter . --stream --parallel \"/^dev:css:.*/\"",
     "test:js": "vitest run",
     "test:js:watch": "vitest"
   },
   "dependencies": {
+    "@activeadmin/activeadmin": "4.0.0-beta22",
     "@tailwindcss/cli": "4.3.1",
     "flowbite": "^3.1.2",
     "tailwindcss": "4.3.1"

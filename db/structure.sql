@@ -436,6 +436,23 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: active_admin_comments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.active_admin_comments (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    namespace character varying,
+    body text,
+    resource_type character varying,
+    resource_id uuid,
+    author_type character varying,
+    author_id uuid,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
 -- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1047,6 +1064,14 @@ ALTER TABLE ONLY public.site_banners ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: active_admin_comments active_admin_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_admin_comments
+    ADD CONSTRAINT active_admin_comments_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: active_storage_attachments active_storage_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1275,6 +1300,27 @@ ALTER TABLE ONLY public.workflow_executions
 --
 
 CREATE UNIQUE INDEX idx_on_activity_id_extended_detail_id_f24c369286 ON public.activity_extended_details USING btree (activity_id, extended_detail_id);
+
+
+--
+-- Name: index_active_admin_comments_on_author; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_admin_comments_on_author ON public.active_admin_comments USING btree (author_type, author_id);
+
+
+--
+-- Name: index_active_admin_comments_on_namespace; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_admin_comments_on_namespace ON public.active_admin_comments USING btree (namespace);
+
+
+--
+-- Name: index_active_admin_comments_on_resource; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_admin_comments_on_resource ON public.active_admin_comments USING btree (resource_type, resource_id);
 
 
 --
@@ -2146,6 +2192,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260616131525'),
 ('20260424121251'),
 ('20260421182359'),
 ('20260416173126'),
