@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import Controller from "controllers/metadata/file_import_controller";
 import { omitBy, pick } from "utilities/collection";
-import { closeDialog, ensureDialog } from "utilities/dialog";
+import { closeDialog, ensureDialog, openDialog } from "utilities/dialog";
 import { ensureFlash } from "utilities/flash";
 import { t } from "utilities/message_formatter";
 import {
@@ -136,17 +136,14 @@ export default class extends Controller {
         const payload = event.data || {};
 
         if (payload.type === "progress") {
-          console.log("Progress: ", payload);
           this.#onProgress(payload);
         }
 
         if (payload.type === "done") {
-          console.log("Complete: ", payload);
           this.#onDone();
         }
 
         if (payload.type === "error") {
-          console.log("Error: ", payload);
           this.#onError(payload);
         }
       };
@@ -168,27 +165,37 @@ export default class extends Controller {
       total: payload.total,
     });
 
-    if (payload.result.overallStatus === "successful with errors") {
+    if (payload.result?.overallStatus === "successful") {
+      if (payload.current === payload.total) {
+        ensureFlash(this);
+      }
+    } else if (payload.result?.overallStatus === "successful with errors") {
       const dialog = ensureDialog(this);
       if (dialog) {
-        payload.result.errors.forEach((error) => {
+        payload.result?.errors.forEach((error) => {
           const errorMessage = this.#errorMessage(error.message);
           const errorMessageList = dialog.querySelector("#error-messages");
           if (errorMessageList) {
             errorMessageList.insertAdjacentHTML("beforeend", errorMessage);
           }
         });
+        if (payload.current === payload.total) {
+          openDialog(dialog, this.application);
+        }
       }
     }
 
-    updateProgressWindow(this, message, payload.percentage);
+    updateProgressWindow(
+      this,
+      message,
+      (payload.current / payload.total) * 100,
+    );
   }
 
   #onDone() {
     const message = t(this.importCompleteMessageValue);
     updateProgressWindow(this, message, 100);
     scheduleProgressWindowDismiss(this);
-    ensureFlash(this);
     this.#terminateWorker();
   }
 
