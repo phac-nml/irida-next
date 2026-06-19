@@ -5,6 +5,13 @@ DEFAULTS: &DEFAULTS
   locale: en
   user_type: human
 
+system_user:
+  <<: *DEFAULTS
+  email: system@localhost
+  first_name: System
+  last_name: User
+  system: true
+
 john_doe:
   <<: *DEFAULTS
   email: john.doe@localhost
