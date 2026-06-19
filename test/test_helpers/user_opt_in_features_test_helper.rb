@@ -15,15 +15,7 @@ module UserOptInFeaturesTestHelper
   def user_opt_in_feature_config(feature_key: :data_grid_samples_table, allowlist: 'all')
     {
       feature_key.to_s => {
-        'allowlist' => allowlist,
-        'name' => {
-          'en' => 'Data Grid Samples Table',
-          'fr' => 'Tableau de donnees des echantillons'
-        },
-        'description' => {
-          'en' => 'Enable the new data grid for the samples table.',
-          'fr' => "Activer la nouvelle grille de donnees pour le tableau d'echantillons."
-        }
+        'allowlist' => allowlist
       }
     }
   end
