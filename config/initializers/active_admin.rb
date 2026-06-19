@@ -156,17 +156,6 @@ ActiveAdmin.setup do |config|
   # Active Admin resources and pages from here.
   #
   # config.before_action :do_something_awesome
-  config.before_action do
-    if params[:controller].to_s.start_with?('admin/')
-      ActiveRecord::Base.descendants.each do |model|
-        model.class_eval do
-          def to_param
-            id&.to_s
-          end
-        end
-      end
-    end
-  end
 
   # == Attribute Filters
   #

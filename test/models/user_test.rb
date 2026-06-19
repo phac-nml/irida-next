@@ -45,10 +45,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'john.doe', @user.username
   end
 
-  test 'to_param' do
-    assert_equal 'john.doe_at_localhost', @user.to_param
-  end
-
   test 'ensure_namespace with valid user with namespace' do
     assert_equal 'john.doe@localhost', @user.send(:ensure_namespace)
   end

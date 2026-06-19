@@ -112,10 +112,6 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     result
   end
 
-  def to_param
-    full_path
-  end
-
   def username
     email.rpartition('@').first
   end
