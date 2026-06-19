@@ -7,7 +7,7 @@ export function updateProgressWindow(
   if (controller.progressWindowDismissed) return;
 
   const percent = Math.min(Math.max(percentage, 0), 100);
-  ensureExportCard(controller);
+  ensureCard(controller);
 
   if (controller._progressMsgEl) {
     controller._progressMsgEl.textContent = message;
@@ -91,14 +91,14 @@ export function dismissProgressWindow(controller) {
   controller._progressPctEl = null;
 }
 
-function ensureExportCard(controller) {
+function ensureCard(controller) {
   if (!controller._operationId) return null;
 
   const cardId = `${controller.identifier}-card-${controller._operationId}`;
   let card = document.getElementById(cardId);
 
   if (!card) {
-    card = createExportCard(controller, cardId);
+    card = createCard(controller, cardId);
   } else if (!controller._progressMsgEl) {
     // Recover refs after Turbo reconnect
     controller._progressMsgEl = card.querySelector(
@@ -130,7 +130,7 @@ function ensureProgressContainer(controller) {
   return container;
 }
 
-function createExportCard(controller, cardId) {
+function createCard(controller, cardId) {
   const container = ensureProgressContainer(controller);
   const card = document.createElement("div");
   card.id = cardId;

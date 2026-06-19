@@ -147,6 +147,7 @@ self.onmessage = async (event) => {
   }
 
   try {
+    let importedCount = 0;
     const rowChunks = chunk(rows, ROW_CHUNK_SIZE);
 
     for (const row of rowChunks) {
@@ -160,7 +161,14 @@ self.onmessage = async (event) => {
         projectId,
         projectPuid,
       });
-      self.postMessage({ type: "progress", result });
+      importedCount += row.length;
+
+      self.postMessage({
+        type: "progress",
+        current: importedCount,
+        total: rows.length,
+        result,
+      });
     }
     self.postMessage({ type: "done" });
   } catch (error) {

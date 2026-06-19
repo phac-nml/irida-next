@@ -1,18 +1,22 @@
 import * as XLSX from "xlsx";
 import Controller from "controllers/metadata/file_import_controller";
 import { omitBy, pick } from "utilities/collection";
-import { closeDialog } from "utilities/dialog";
+import { closeDialog, ensureDialog } from "utilities/dialog";
+import { ensureFlash } from "utilities/flash";
 import { t } from "utilities/message_formatter";
 import {
-  clearProgressWindowDismissTimeout,
-  dismissProgressWindow,
   scheduleProgressWindowDismiss,
   showProgressWindow,
   updateProgressWindow,
 } from "utilities/progress_window";
 
 export default class extends Controller {
-  static targets = ["alertTemplate", "dialogTemplate", "progressTemplate"];
+  static targets = [
+    "alertTemplate",
+    "dialogTemplate",
+    "flashTemplate",
+    "progressTemplate",
+  ];
   static values = {
     graphqlUrl: String,
     groupPuid: String,
@@ -21,9 +25,9 @@ export default class extends Controller {
       type: String,
       default: "Imported %{current} of %{total} records",
     },
-    successMessage: {
+    importCompleteMessage: {
       type: String,
-      default: "The metadata was imported successfully!",
+      default: "The metadata import is complete.",
     },
     errorMessage: {
       type: String,
@@ -133,17 +137,17 @@ export default class extends Controller {
 
         if (payload.type === "progress") {
           console.log("Progress: ", payload);
-          this.onProgress(payload);
+          this.#onProgress(payload);
         }
 
         if (payload.type === "done") {
           console.log("Complete: ", payload);
-          this.onDone();
+          this.#onDone();
         }
 
         if (payload.type === "error") {
           console.log("Error: ", payload);
-          this.onError(payload);
+          this.#onError(payload);
         }
       };
     } else {
@@ -158,31 +162,37 @@ export default class extends Controller {
     return clone.firstElementChild.outerHTML.replace(/PLACEHOLDER/g, error);
   }
 
-  onProgress(payload) {
+  #onProgress(payload) {
     const message = t(this.importedRecordsMessageValue, {
       current: payload.current,
       total: payload.total,
     });
-    const dialog = this.dialogTemplateTarget.content.cloneNode(true);
 
-    payload.result.errors.forEach((error) => {
-      const errorMessage = this.#errorMessage(error.message);
-      const errorMessageList = dialog.querySelector("#error-messages");
-      if (errorMessageList) {
-        errorMessageList.insertAdjacentHTML("beforeend", errorMessage);
+    if (payload.result.overallStatus === "successful with errors") {
+      const dialog = ensureDialog(this);
+      if (dialog) {
+        payload.result.errors.forEach((error) => {
+          const errorMessage = this.#errorMessage(error.message);
+          const errorMessageList = dialog.querySelector("#error-messages");
+          if (errorMessageList) {
+            errorMessageList.insertAdjacentHTML("beforeend", errorMessage);
+          }
+        });
       }
-    });
-    document.body.appendChild(dialog);
+    }
+
     updateProgressWindow(this, message, payload.percentage);
   }
 
-  onDone() {
-    const message = t(this.successMessageValue);
+  #onDone() {
+    const message = t(this.importCompleteMessageValue);
     updateProgressWindow(this, message, 100);
+    scheduleProgressWindowDismiss(this);
+    ensureFlash(this);
     this.#terminateWorker();
   }
 
-  onError(payload) {
+  #onError(payload) {
     const message = t(this.errorMessageValue, { message: payload.message });
     updateProgressWindow(this, message, 100, true);
     this.#terminateWorker();

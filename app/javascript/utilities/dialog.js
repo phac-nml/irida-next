@@ -27,3 +27,22 @@ export function closeDialog(element, application) {
     dialogElement.close();
   }
 }
+
+export function ensureDialog(controller) {
+  if (!controller._operationId) return null;
+  const dialogId = `${controller.identifier}-dialog-${controller._operationId}`;
+
+  let dialog = document.getElementById(dialogId);
+  if (!dialog) {
+    dialog = createDialog(controller, dialogId);
+  }
+
+  return dialog;
+}
+
+function createDialog(controller, dialogId) {
+  const dialog = controller.dialogTemplateTarget.content.cloneNode(true);
+  dialog.firstElementChild.id = dialogId;
+  document.body.appendChild(dialog);
+  return dialog;
+}
