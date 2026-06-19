@@ -77,7 +77,7 @@ module Profiles
       end
 
       def feature_available?
-        FLIPPER_FEATURE_CONFIG['features'].key?(feature_key)
+        Irida::ExperimentalFeatureCatalog.available?(feature_key)
       end
 
       def feature_config
