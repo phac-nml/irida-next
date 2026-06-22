@@ -150,18 +150,14 @@
                           dark:border-slate-600 dark:bg-slate-600
                         "
                       >
-                        <span
-                          class="
-                            inline-flex items-center rounded-t-lg px-3 py-2 font-mono text-sm text-slate-900
-                            @md:rounded-l-lg @md:rounded-tr-none dark:text-slate-300
-                          "
-                        >
-                          <%= format_name_as_arg(name) %>
-                        </span>
+                        <span class="
+                          inline-flex items-center rounded-t-lg px-3 py-2 font-mono text-sm text-slate-900
+                          @md:rounded-l-lg @md:rounded-tr-none dark:text-slate-300
+                        "><%= format_name_as_arg(name) %></span>
 
-                        <a
-                          id="<%= fields.field_id("#{name}_link") %>"
-                          href="<%= new_workflow_executions_file_selector_path(
+                        <%= pathogen_link(
+                          id: fields.field_id("#{name}_link"),
+                          href: new_workflow_executions_file_selector_path(
                             file_selector: {
                               pattern: property[:pattern] || ".*",
                               property: name,
@@ -170,15 +166,14 @@
                               selected_id: nil,
                               namespace_id: @namespace_id,
                             }
-                          ) %>"
-                          class="
+                          ),
+                          class: "
                             block w-full min-w-0 flex-1 rounded-b-lg border-none bg-slate-50 p-2.5 text-sm
                             text-slate-900 focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700
                             dark:text-white dark:placeholder-slate-400
-                          "
-                          aria-label="<%= t("components.nextflow.select_file_for", property: name) %>"
-                        ></a>
-
+                          ",
+                          aria: { label: t("components.nextflow.select_file_for", property: name) }
+                        ) %>>
                         <%= fields.hidden_field name, required: property[:required] %>
                       </div>
                     <% else %>
