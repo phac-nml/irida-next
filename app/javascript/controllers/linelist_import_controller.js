@@ -21,13 +21,21 @@ export default class extends Controller {
     graphqlUrl: String,
     groupPuid: String,
     projectPuid: String,
+    minimumVisibleDurationMs: {
+      type: Number,
+      default: 3500,
+    },
+    importStartedMessage: {
+      type: String,
+      default: "Starting metadata import...",
+    },
     importedRecordsMessage: {
       type: String,
       default: "Imported %{current} of %{total} records",
     },
     importCompleteMessage: {
       type: String,
-      default: "The metadata import is complete.",
+      default: "The metadata import is complete",
     },
     errorMessage: {
       type: String,
@@ -78,7 +86,7 @@ export default class extends Controller {
     closeDialog(this.element, this.application);
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this._progressWindowOpenedAt = null;
-    showProgressWindow(this, "Importing samples...");
+    showProgressWindow(this, t(this.importStartedMessageValue));
     this.#processRows();
   }
 

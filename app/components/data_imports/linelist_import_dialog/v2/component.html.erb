@@ -12,6 +12,10 @@
   "linelist-import-graphql-url-value": graphql_url,
   "linelist-import-project-puid-value": @project&.puid,
   "linelist-import-group-puid-value": @group&.puid,
+  "linelist-import-import-started-message-value": t(".import_started_message"),
+  "linelist-import-imported-records-message-value": t(".imported_records_message"),
+  "linelist-import-import-complete-message-value": t(".import_complete_message"),
+  "linelist-import-error-message-value": t(".error_message"),
 } %>
 
 <%= viral_dialog(open: true, size: :large) do |dialog| %>
@@ -104,7 +108,7 @@
                 aria-valuemin="0"
                 aria-valuemax="100"
                 aria-valuenow="0"
-                aria-label="<%= t('.imported_records', current: 0, total: 0) %>"
+                aria-label="<%= t('.imported_records_message', current: 0, total: 0) %>"
                 class="
                   absolute inset-y-0 left-0 rounded-full bg-primary-600 transition-all duration-300 ease-out
                   dark:bg-primary-500
