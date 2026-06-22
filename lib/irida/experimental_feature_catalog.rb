@@ -27,7 +27,7 @@ module Irida
       end
 
       def descriptions(locale: I18n.locale)
-        entries(locale: locale).to_h { |feature| [feature[:key], feature[:description]] }
+        feature_config.transform_values { |config| localized_value(config['description'], locale) }
       end
 
       private

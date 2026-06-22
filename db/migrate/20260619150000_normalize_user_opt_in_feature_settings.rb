@@ -26,6 +26,9 @@ class NormalizeUserOptInFeatureSettings < ActiveRecord::Migration[8.1]
 
   private
 
+  # Stricter than the runtime catalog (which falls back to English): before dropping the
+  # stored copy we require complete English and French replacements in config/features.yml
+  # so no display text is lost.
   def ensure_localized_catalog_entry!(feature_catalog, feature_key)
     config = feature_catalog[feature_key]
     return if localized_copy?(config&.fetch('name', nil)) && localized_copy?(config&.fetch('description', nil))

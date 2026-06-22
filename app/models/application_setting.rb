@@ -41,7 +41,7 @@ class ApplicationSetting < ApplicationRecord
       next unless flipper_feature_available?(feature_key)
       next unless user_eligible_for_opt_in_feature?(feature_config, user)
 
-      user_opt_in_feature_payload(feature_key, feature_config, user)
+      user_opt_in_feature_payload(feature_key, user)
     end
   end
 
@@ -52,7 +52,7 @@ class ApplicationSetting < ApplicationRecord
     feature_config = (user_opt_in_features || {})[normalized_feature_key]
     return nil if feature_config.blank?
 
-    user_opt_in_feature_payload(normalized_feature_key, feature_config, user)
+    user_opt_in_feature_payload(normalized_feature_key, user)
   end
 
   private
@@ -72,7 +72,7 @@ class ApplicationSetting < ApplicationRecord
     Array(allowlist).any? { |email| email.casecmp?(user.email) }
   end
 
-  def user_opt_in_feature_payload(feature_key, _feature_config, user)
+  def user_opt_in_feature_payload(feature_key, user)
     catalog_feature = Irida::ExperimentalFeatureCatalog.fetch(feature_key)
 
     {
