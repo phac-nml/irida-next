@@ -128,6 +128,7 @@ module WorkflowExecutions
       input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
 
       assert_equal attachment.filename.to_s, link.text
+      assert_equal 'autofocus', link['autofocus']
       assert_equal attachment.to_global_id.to_s, input['value']
     end
 
@@ -151,6 +152,7 @@ module WorkflowExecutions
       input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
 
       assert_equal attachment.filename.to_s, link.text
+      assert_equal 'autofocus', link['autofocus']
       assert_equal attachment.to_global_id.to_s, input['value']
     end
 
@@ -175,6 +177,7 @@ module WorkflowExecutions
       input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
 
       assert_equal attachment.filename.to_s, link.text
+      assert_equal 'autofocus', link['autofocus']
       assert_equal attachment.to_global_id.to_s, input['value']
     end
 
@@ -198,6 +201,7 @@ module WorkflowExecutions
       input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
 
       assert_equal attachment.filename.to_s, link.text
+      assert_equal 'autofocus', link['autofocus']
       assert_equal attachment.to_global_id.to_s, input['value']
     end
 
