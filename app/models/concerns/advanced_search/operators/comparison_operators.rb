@@ -12,30 +12,32 @@ module AdvancedSearch
       private
 
       def condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-        return scope.where(node.lteq(value)) unless metadata_field
-
-        if date_metadata_field?(metadata_key)
-          condition_date_comparison(scope, node, value, :lteq)
-        else
-          condition_numeric_comparison(scope, node, value, :lteq)
+        unless Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field
+          if date_metadata_field?(metadata_key)
+            metadata_condition_date_comparison(scope, node, value, :lteq)
+          else
+            metadata_condition_numeric_comparison(scope, node, value, :lteq)
+          end
         end
+        scope.where(node.lteq(value))
       end
 
       def condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-        return scope.where(node.gteq(value)) unless metadata_field
-
-        if date_metadata_field?(metadata_key)
-          condition_date_comparison(scope, node, value, :gteq)
-        else
-          condition_numeric_comparison(scope, node, value, :gteq)
+        unless Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field
+          if date_metadata_field?(metadata_key)
+            metadata_condition_date_comparison(scope, node, value, :gteq)
+          else
+            metadata_condition_numeric_comparison(scope, node, value, :gteq)
+          end
         end
+        scope.where(node.gteq(value))
       end
 
       def date_metadata_field?(metadata_key)
         metadata_key.end_with?(DATE_FIELD_SUFFIX)
       end
 
-      def condition_date_comparison(scope, node, value, comparison_method)
+      def metadata_condition_date_comparison(scope, node, value, comparison_method)
         return scope.none unless valid_date_format?(value)
 
         scope
@@ -47,7 +49,7 @@ module AdvancedSearch
           )
       end
 
-      def condition_numeric_comparison(scope, node, value, comparison_method)
+      def metadata_condition_numeric_comparison(scope, node, value, comparison_method)
         return scope.none unless valid_numeric_format?(value)
 
         scope
