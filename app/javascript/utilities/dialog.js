@@ -37,6 +37,7 @@ export function closeDialog(element, application) {
  */
 export function openDialog(element, application) {
   const dialogHost = element.closest('[data-controller~="viral--dialog"]');
+
   if (!dialogHost) return;
 
   const dialogController = application.getControllerForElementAndIdentifier(
@@ -49,13 +50,7 @@ export function openDialog(element, application) {
     return;
   }
 
-  const dialogElement = dialogHost.querySelector(
-    "[data-viral--dialog-target='dialog']",
-  );
-
-  if (dialogElement?.close) {
-    dialogElement.close();
-  }
+  element.setAttribute("data-viral--dialog-open-value", "true");
 }
 
 export function ensureDialog(controller) {
@@ -74,5 +69,5 @@ function createDialog(controller, dialogId) {
   const dialog = controller.dialogTemplateTarget.content.cloneNode(true);
   dialog.firstElementChild.id = dialogId;
   document.body.appendChild(dialog);
-  return dialog;
+  return document.getElementById(dialogId);
 }

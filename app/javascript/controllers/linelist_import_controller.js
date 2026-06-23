@@ -177,7 +177,10 @@ export default class extends Controller {
       if (payload.current === payload.total) {
         ensureFlash(this);
       }
-    } else if (payload.result?.overallStatus === "successful with errors") {
+    } else if (
+      payload.result?.overallStatus === "unsuccessful" ||
+      payload.result?.overallStatus === "successful with errors"
+    ) {
       const dialog = ensureDialog(this);
       if (dialog) {
         payload.result?.errors.forEach((error) => {

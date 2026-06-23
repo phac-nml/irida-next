@@ -1,4 +1,4 @@
-const ROW_CHUNK_SIZE = 2;
+const ROW_CHUNK_SIZE = 100;
 const SUPPORTED_MIME_TYPES = [
   "text/csv",
   "text/tab-separated-values",
