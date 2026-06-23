@@ -797,7 +797,8 @@ CREATE TABLE public.namespaces (
     puid character varying NOT NULL,
     attachments_updated_at timestamp(6) without time zone,
     samples_count integer DEFAULT 0,
-    public boolean DEFAULT false NOT NULL
+    public boolean DEFAULT false NOT NULL,
+    archived_at timestamp(6) without time zone
 );
 
 
@@ -2194,6 +2195,7 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20260619150000'),
 ('20260616131525'),
+('20260615152555'),
 ('20260424121251'),
 ('20260421182359'),
 ('20260416173126'),

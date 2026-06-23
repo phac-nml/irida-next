@@ -4,6 +4,10 @@
 module Namespaces
   # Policy for authorization under project_namespace
   class ProjectNamespacePolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
+    pre_check :check_project_archived,
+              except: %i[member_listing? view_bot_accounts? view_bot_personal_access_tokens?
+                         view_automated_workflow_executions? view_workflow_executions? view_metadata_templates?]
+
     def effective_access_level
       @access_level ||= Member::AccessLevel::OWNER if record.parent&.user_namespace? && record.parent&.owner == user
 
@@ -238,6 +242,12 @@ module Namespaces
 
       details[:name] = record.name
       false
+    end
+
+    private
+
+    def check_project_archived
+      deny! if record.archived_at.present?
     end
   end
 end
