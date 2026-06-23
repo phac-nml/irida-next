@@ -12,23 +12,19 @@ module AdvancedSearch
       private
 
       def condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-        unless Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field
-          if date_metadata_field?(metadata_key)
-            metadata_condition_date_comparison(scope, node, value, :lteq)
-          else
-            metadata_condition_numeric_comparison(scope, node, value, :lteq)
-          end
+        if !Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field
+          return metadata_condition_date_comparison(scope, node, value, :lteq) if date_metadata_field?(metadata_key)
+
+          return metadata_condition_numeric_comparison(scope, node, value, :lteq)
         end
         scope.where(node.lteq(value))
       end
 
       def condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-        unless Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field
-          if date_metadata_field?(metadata_key)
-            metadata_condition_date_comparison(scope, node, value, :gteq)
-          else
-            metadata_condition_numeric_comparison(scope, node, value, :gteq)
-          end
+        if !Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field
+          return metadata_condition_date_comparison(scope, node, value, :gteq) if date_metadata_field?(metadata_key)
+
+          return metadata_condition_numeric_comparison(scope, node, value, :gteq)
         end
         scope.where(node.gteq(value))
       end
