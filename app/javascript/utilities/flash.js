@@ -15,5 +15,5 @@ function createFlash(controller, flashId) {
   flash.firstElementChild.id = flashId;
   const flashes = document.getElementById("flashes");
   flashes.appendChild(flash);
-  return flashes.getElementById(flashId);
+  return flash;
 }
