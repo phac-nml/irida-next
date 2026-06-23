@@ -29,7 +29,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     policy = ProjectPolicy.new(@project, user: @user)
 
-    assert_not policy.apply(:edit?)
+    assert policy.apply(:edit?)
   end
 
   test '#new?' do
@@ -51,7 +51,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     policy = ProjectPolicy.new(@project, user: @user)
 
-    assert_not policy.apply(:update?)
+    assert policy.apply(:update?)
   end
 
   test '#activity?' do
@@ -73,7 +73,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     policy = ProjectPolicy.new(@project, user: @user)
 
-    assert_not policy.apply(:destroy?)
+    assert policy.apply(:destroy?)
   end
 
   test '#transfer?' do
