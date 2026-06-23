@@ -7,11 +7,12 @@ module Viral
     test 'renders default' do
       render_preview(:default)
 
-      assert_selector 'nav.pagy.nav'
+      assert_selector 'nav.pagy.nav[aria-live="polite"]'
       assert_selector 'li span.cursor-not-allowed', text: I18n.t('components.viral.pagy.pagination_component.previous')
       assert_selector 'li > a', text: I18n.t('components.viral.pagy.pagination_component.next')
       assert_selector 'li a[aria-current="page"]', text: '1', count: 1
       assert_selector 'li > a:not([aria-disabled="true"])', count: 6
+      assert_no_selector 'a[aria-current="page"][autofocus]'
     end
 
     test 'does not render when only one page' do
@@ -29,6 +30,13 @@ module Viral
       assert_selector 'li a[aria-current="page"]', text: '5', count: 1
       assert_selector 'li > a:not([aria-disabled="true"])', count: 7
       assert_selector 'li span.cursor-default', text: '...', count: 2
+    end
+
+    test 'renders autofocus when enabled' do
+      render_preview(:autofocus)
+
+      assert_selector 'li a[aria-current="page"][autofocus]', text: '5', count: 1
+      assert_no_selector 'select[autofocus]'
     end
   end
 end

@@ -18,4 +18,10 @@ class ViralPagyPaginationComponentPreview < ViewComponent::Preview
                             request: Pagy::Request.new(request: { base_url: 'localhost:3000', path: '/', params: {} }))
     render(Viral::Pagy::PaginationComponent.new(pagy))
   end
+
+  def autofocus
+    pagy = Pagy::Offset.new(count: 1000, page: 5,
+                            request: Pagy::Request.new(request: { base_url: 'localhost:3000', path: '/', params: {} }))
+    render(Viral::Pagy::PaginationComponent.new(pagy, autofocus_link: true))
+  end
 end
