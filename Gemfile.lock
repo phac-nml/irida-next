@@ -323,7 +323,7 @@ GEM
       signet (>= 0.16, < 2.a)
     graphiql-rails (1.10.5)
       railties
-    graphql (2.6.3)
+    graphql (2.6.4)
       base64
       fiber-storage
       logger
