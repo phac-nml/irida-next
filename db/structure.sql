@@ -797,7 +797,8 @@ CREATE TABLE public.namespaces (
     puid character varying NOT NULL,
     attachments_updated_at timestamp(6) without time zone,
     samples_count integer DEFAULT 0,
-    public boolean DEFAULT false NOT NULL
+    public boolean DEFAULT false NOT NULL,
+    archived_at timestamp(6) without time zone
 );
 
 
@@ -946,7 +947,7 @@ CREATE TABLE public.site_banners (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     CONSTRAINT site_banners_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
-    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY (ARRAY[('info'::character varying)::text, ('warning'::character varying)::text, ('danger'::character varying)::text, ('success'::character varying)::text])))
+    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY ((ARRAY['info'::character varying, 'warning'::character varying, 'danger'::character varying, 'success'::character varying])::text[])))
 );
 
 
@@ -2194,6 +2195,7 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20260619150000'),
 ('20260616131525'),
+('20260615152555'),
 ('20260424121251'),
 ('20260421182359'),
 ('20260416173126'),
