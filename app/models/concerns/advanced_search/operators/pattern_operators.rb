@@ -18,14 +18,6 @@ module AdvancedSearch
         scope.where(node.eq(nil).or(search_node.does_not_match("%#{escape_like_wildcards(value)}%")))
       end
 
-      def condition_exists(scope, node)
-        scope.where(node.not_eq(nil))
-      end
-
-      def condition_not_exists(scope, node)
-        scope.where(node.eq(nil))
-      end
-
       # Cast UUID column to text for text-based operations
       def cast_to_text_if_uuid(node, model_class, field_name)
         return node unless uuid_column?(model_class, field_name)
