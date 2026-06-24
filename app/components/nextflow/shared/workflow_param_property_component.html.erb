@@ -23,26 +23,25 @@
           <%= format_name_as_arg(name) %>
         </span>
 
-        <%= pathogen_link(
-          id: fields.field_id("#{name}_link"),
-          href: new_workflow_executions_file_selector_path(
-            file_selector: {
-              pattern: property[:pattern] || ".*",
-              property: name,
-              attachable_id: namespace_id,
-              attachable_type: namespace_type,
-              selected_id: nil,
-              namespace_id: namespace_id,
-            }
-          ),
-          data: { turbo_frame: "_top" },
-          class: "
-            block w-full min-w-0 flex-1 rounded-b-lg border-none bg-slate-50 p-2.5 text-sm
-            text-slate-900 focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700
-            dark:text-white dark:placeholder-slate-400
-          ",
-          aria: { label: t("components.nextflow.select_file_for", property: name) }
-        ) %>
+        <a
+          id="<%= fields.field_id("#{name}_link") %>"
+          href="<%= new_workflow_executions_file_selector_path(
+                            file_selector: {
+                              pattern: property[:pattern] || ".*",
+                              property: name,
+                              attachable_id: @namespace_id,
+                              attachable_type: @namespace_type,
+                              selected_id: nil,
+                              namespace_id: @namespace_id,
+                            }
+                          ) %>"
+          class="
+            block w-full min-w-0 flex-1 rounded-b-lg border-none bg-slate-50 p-2.5 text-sm text-slate-900
+            focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700 dark:text-white
+            dark:placeholder-slate-400
+          "
+          aria-label="<%= t("components.nextflow.select_file_for", property: name) %>"
+        ></a>
 
         <%= fields.hidden_field name, required: property[:required] %>
       </div>
