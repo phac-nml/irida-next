@@ -3,7 +3,7 @@
 # Policy for projects authorization
 class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   pre_check :check_project_archived,
-            except: %i[activity? edit? update? destroy? view_history? new? read? sample_listing? read_sample?
+            except: %i[activity? destroy? view_history? new? read? sample_listing? read_sample?
                        view_attachments?]
 
   def effective_access_level # rubocop:disable Metrics/CyclomaticComplexity
