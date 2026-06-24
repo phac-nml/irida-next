@@ -27,8 +27,8 @@ en:
           title: Imported Samples
         pagination:
           aria_label: Pagination
-          at_first_aria_label: You are on the first page
-          at_last_aria_label: You are on the last page
+          at_first_aria_label: Previous, you are on the first page
+          at_last_aria_label: Next, you are on the last page
           next: Next
           next_aria_label: Go to next page
           previous: Previous

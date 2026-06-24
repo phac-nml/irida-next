@@ -27,12 +27,12 @@ fr:
           title: Échantillons importés
         pagination:
           aria_label: Pagination
-          at_first_aria_label: Vous êtes sur la première page.
-          at_last_aria_label: Vous êtes sur la dernière page.
+          at_first_aria_label: Précédent, vous êtes sur la première page
+          at_last_aria_label: Suivant, vous êtes sur la dernière page
           next: Suivant
-          next_aria_label: Passer à la page suivant
+          next_aria_label: Suivant, passer à la page suivante
           previous: Précédent
-          previous_aria_label: Aller à la page précédente.
+          previous_aria_label: Précédent, aller à la page précédente
         sample_clone:
           copied_from: Copiés de
           copied_to: Copiés à
@@ -424,10 +424,10 @@ fr:
           current_page_aria_label: Page actuelle %{number}
           item_aria_label: Aller à la page %{number}
           next: Suivant
-          next_aria_label: Passer à la prochaine page.
+          next_aria_label: Suivant, passer à la page suivante
           page_number: Page %{number}
           previous: Précédent
-          previous_aria_label: Aller à la page précédente.
+          previous_aria_label: Précédent, aller à la page précédente
           select_page_aria_label: Sélectionner la page
     workflow_executions:
       table_component:
