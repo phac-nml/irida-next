@@ -41,7 +41,9 @@
             dark:placeholder-slate-400
           "
           aria-label="<%= t("components.nextflow.select_file_for", property: name) %>"
-        ></a>
+        >
+          <%= t('components.nextflow.no_selected_file') %>
+        </a>
 
         <%= fields.hidden_field name, required: property[:required] %>
       </div>

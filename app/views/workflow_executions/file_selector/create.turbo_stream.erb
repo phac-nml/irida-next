@@ -28,7 +28,7 @@
   <% link_target_id = "workflow_execution_workflow_params_#{property}_link" %>
   <% input_target_id = "workflow_execution_workflow_params_#{property}" %>
   <%= turbo_stream.replace link_target_id, method: :morph do %>
-    <%= link_to @attachment[:filename],
+    <%= link_to @attachment[:filename].presence || t('components.nextflow.no_selected_file'),
       new_workflow_executions_file_selector_path(
         file_selector: file_selector_params.merge(selected_id: @attachment[:id])
       ),
