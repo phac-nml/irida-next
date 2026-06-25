@@ -183,4 +183,14 @@
   <template data-advanced-search--v1-target="emptySearchTemplate">
     <%= @form.hidden_field :groups_attributes, value: '' %>
   </template>
+
+  <template data-advanced-search--v1-target="metadataOperators">
+    <%= operation_options['metadata'].each do |optgroup, values| %>
+      <optgroup label="<%= optgroup %>">
+        <%= values.each do |text, value| %>
+          <option value="<%= value %>"><%= text %></option>
+        <% end %>
+      </optgroup>
+    <% end %>
+  </template>
 <% end %>
