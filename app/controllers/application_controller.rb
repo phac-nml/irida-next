@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   around_action :set_current_user
   around_action :use_logidze_responsible, only: %i[create destroy update transfer] # rubocop:disable Rails/LexicallyScopedActionFilter
   around_action :switch_locale
+  before_action :set_pagy_locale
 
   helper IconHelper
   helper_method :error_message
@@ -84,5 +85,9 @@ class ApplicationController < ActionController::Base
   # Rescues from Pagy::RangeError by redirecting to the first page
   def redirect_to_first_page
     redirect_to url_for(page: 1, limit: params[:limit] || 20)
+  end
+
+  def set_pagy_locale
+    Pagy::I18n.locale = params[:locale] || I18n.locale
   end
 end

@@ -1,6 +1,9 @@
 <%= tag.nav(
   class: "pagy nav flex-none",
-  aria: { label: t("components.viral.pagy.pagination_component.aria_label") },
+  aria: {
+    label: t("components.viral.pagy.pagination_component.aria_label"),
+    live: "polite",
+  },
 ) do %>
   <%# Large screen layout with numbered buttons %>
   <%= tag.ul(class: "@max-lg:hidden @lg:inline-flex h-11 -space-x-px text-base") do %>
@@ -44,6 +47,7 @@
           <%= tag.a(
             item,
             href: @pagy.page_url(item.to_i),
+            autofocus: @autofocus_link,
             aria: { current: "page" },
             class:
               "flex items-center relative focus-visible:z-10 justify-center px-4 h-11 ms-0 leading-tight border border-primary-600 bg-primary-600 text-white dark:border-primary-600 dark:text-white font-medium text-sm cursor-default",
