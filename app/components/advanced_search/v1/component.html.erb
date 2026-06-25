@@ -10,7 +10,8 @@
     "advanced-search--v1-list-input-outlet": ".list-input",
     "advanced-search--v1-enum-fields-value": json_escape_data(@fields.fetch(:enum_fields, {})),
     "advanced-search--v1-enum-operations-value": json_escape_data(enum_operation_options),
-    "advanced-search--v1-standard-operations-value": json_escape_data(operation_options),
+    "advanced-search--v1-operations-value": json_escape_data(operation_options),
+    "advanced-search--v1-metadata-operations-enabled-value": Flipper.enabled?(:advanced_search_metadata_operators),
   },
 ) do %>
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>
@@ -178,5 +179,15 @@
 
   <template data-advanced-search--v1-target="emptySearchTemplate">
     <%= @form.hidden_field :groups_attributes, value: '' %>
+  </template>
+
+  <template data-advanced-search--v1-target="metadataOperators">
+    <%= operation_options['metadata'].each do |optgroup, values| %>
+      <optgroup label="<%= optgroup %>">
+        <%= values.each do |text, value| %>
+          <option value="<%= value %>"><%= text %></option>
+        <% end %>
+      </optgroup>
+    <% end %>
   </template>
 <% end %>
