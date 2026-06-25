@@ -234,7 +234,7 @@ module Samples
     def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer, transferrable_samples, transfer_job_id) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       conflicting_samples = Arel::Table.new(Sample.table_name, as: 'conflicting_samples')
 
-      Logidze.with_meta({transfer_job_id:}) do
+      Logidze.with_meta({ transfer_job_id: }) do
         lock_id = Zlib.crc32("project_#{new_project.puid}_samples_lock").to_i
         Sample.connection.execute("SELECT pg_advisory_xact_lock(#{lock_id})")
 
@@ -305,7 +305,7 @@ module Samples
           # target project and prevented the transfer.
           @namespace.errors.add(
             :samples, I18n.t('services.samples.transfer.sample_exists', sample_name: sample.name,
-            sample_puid: sample.puid)
+                                                                        sample_puid: sample.puid)
           )
         end
       end
