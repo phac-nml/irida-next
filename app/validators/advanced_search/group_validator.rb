@@ -143,8 +143,9 @@ module AdvancedSearch
       end
     end
 
-    def date_field?(field)
-      date_fields.include?(field) || field.end_with?('_date')
+    def date_field?(field, operator)
+      date_fields.include?(field) || field.end_with?('_date') ||
+        (Flipper.enabled?(:advanced_search_metadata_operators) && METADATA_DATE_OPERATORS.include?(operator))
     end
 
     def validate_date_field_condition(condition)
