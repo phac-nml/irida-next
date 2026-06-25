@@ -9,3 +9,5 @@ en:
       enable: Enable
       enable_confirm: Enable this site banner?
       enabled: Site banner enabled.
+      message_for: Message (%{locale_code})
+      messages_fieldset: Messages
