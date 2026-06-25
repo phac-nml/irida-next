@@ -14,6 +14,14 @@ class SiteBanner < ApplicationRecord
   scope :enabled, -> { where(enabled: true) }
   attribute :enabled, :boolean, default: true
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[created_at enabled id messages style updated_at]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[]
+  end
+
   validates :singleton_guard, inclusion: { in: [SINGLETON_GUARD] }
   validate :all_locale_messages_present, if: :enabled?
 
