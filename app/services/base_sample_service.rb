@@ -12,7 +12,7 @@ class BaseSampleService < BaseService
     @namespace = namespace
   end
 
-  private
+  # private # TODO: see if we can make this private again
 
   def authorize_new_project(new_project, auth_method)
     # Authorize user against new project authorization method
