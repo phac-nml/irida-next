@@ -13,6 +13,7 @@ export default class AdvancedSearchController extends Controller {
     "searchGroupsTemplate",
     "selectValueTemplate",
     "valueTemplate",
+    "metadataOperators",
   ];
   static outlets = ["list-input"];
   static values = {
@@ -23,6 +24,7 @@ export default class AdvancedSearchController extends Controller {
     hasErrors: Boolean,
     open: Boolean,
     status: Boolean,
+    metadataOperationsEnabled: Boolean,
   };
 
   #hiddenClasses = ["invisible", "@max-xl:hidden"];
@@ -32,6 +34,7 @@ export default class AdvancedSearchController extends Controller {
     "fieldset[data-advanced-search--v1-target='conditionsContainer']";
 
   connect() {
+    console.log("connect");
     this.renderSearchIfOpen();
     this.boundOnMorph = this.onMorph.bind(this);
 
@@ -58,6 +61,7 @@ export default class AdvancedSearchController extends Controller {
   }
 
   renderExistingSearch() {
+    console.log(this.searchGroupsTemplateTarget);
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
   }
