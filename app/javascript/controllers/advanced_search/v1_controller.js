@@ -13,16 +13,18 @@ export default class AdvancedSearchController extends Controller {
     "searchGroupsTemplate",
     "selectValueTemplate",
     "valueTemplate",
+    "metadataOperators",
   ];
   static outlets = ["list-input"];
   static values = {
     confirmCloseText: String,
     enumFields: Object,
     enumOperations: Object,
-    standardOperations: Object,
+    operations: Object,
     hasErrors: Boolean,
     open: Boolean,
     status: Boolean,
+    metadataOperationsEnabled: Boolean,
   };
 
   #hiddenClasses = ["invisible", "@max-xl:hidden"];
@@ -32,6 +34,7 @@ export default class AdvancedSearchController extends Controller {
     "fieldset[data-advanced-search--v1-target='conditionsContainer']";
 
   connect() {
+    console.log("connect");
     this.renderSearchIfOpen();
     this.boundOnMorph = this.onMorph.bind(this);
 
@@ -58,6 +61,7 @@ export default class AdvancedSearchController extends Controller {
   }
 
   renderExistingSearch() {
+    console.log(this.searchGroupsTemplateTarget);
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
   }
@@ -304,12 +308,7 @@ export default class AdvancedSearchController extends Controller {
     if (!operator) {
       return;
     }
-
     const enumConfig = this.enumFieldsValue[selectedField];
-    const operations =
-      selectedField && this.#enumHasValues(enumConfig)
-        ? this.enumOperationsValue
-        : this.standardOperationsValue;
 
     operator.innerHTML = "";
 
@@ -318,14 +317,40 @@ export default class AdvancedSearchController extends Controller {
     blankOption.text = "";
     operator.appendChild(blankOption);
 
-    Object.entries(operations).forEach(([label, value]) => {
+    if (selectedField && this.#enumHasValues(enumConfig)) {
+      this.#createOperatorOptions(this.enumOperationsValue, operator);
+    } else if (
+      selectedField.startsWith("metadata.") &&
+      this.metadataOperationsEnabledValue
+    ) {
+      this.#createMetadataOperatorOptions(
+        this.operationsValue["metadata"],
+        operator,
+      );
+    } else {
+      this.#createOperatorOptions(this.operationsValue["standard"], operator);
+    }
+
+    operator.value = "";
+  }
+
+  #createMetadataOperatorOptions(options, operator) {
+    Object.entries(options).forEach(([optgroup, values]) => {
+      const optGroup = document.createElement("optgroup");
+      optGroup.label = optgroup;
+      operator.appendChild(optGroup);
+
+      this.#createOperatorOptions(values, optGroup);
+    });
+  }
+
+  #createOperatorOptions(options, parentNode) {
+    Object.entries(options).forEach(([label, value]) => {
       const option = document.createElement("option");
       option.value = value;
       option.text = label;
-      operator.appendChild(option);
+      parentNode.appendChild(option);
     });
-
-    operator.value = "";
   }
 
   #reindexGroup(group, groupIndex) {

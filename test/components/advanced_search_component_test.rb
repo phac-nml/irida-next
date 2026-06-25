@@ -40,16 +40,16 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         end
 
         within first("select[name$='[operator]']") do
-          assert_text I18n.t('components.advanced_search_component.v1.operation.equals')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.not_equals')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.less_than')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.greater_than')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.contains')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.does_not_contain')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.exists')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.not_exists')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.in')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.not_in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.less_than')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.greater_than')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.contains')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.does_not_contain')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_in')
         end
 
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
