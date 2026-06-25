@@ -2,3 +2,10 @@
 en:
   active_admin:
     dashboard: Dashboard
+    site_banners:
+      disable: Disable
+      disable_confirm: Disable this site banner?
+      disabled: Site banner disabled.
+      enable: Enable
+      enable_confirm: Enable this site banner?
+      enabled: Site banner enabled.
