@@ -5,6 +5,9 @@ module Samples
   class CreateService < BaseService
     attr_accessor :project, :sample
 
+    class CreateError < StandardError
+    end
+
     def initialize(user = nil, project = nil, params = {})
       super(user, params)
       @project = project
@@ -12,7 +15,9 @@ module Samples
       @sample = Sample.new(params.merge(project_id: project&.id).except(:include_activity))
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+      validate_project_not_archived
+
       authorize! @project, to: :create_sample? unless @project.nil?
 
       if sample.save
@@ -32,10 +37,22 @@ module Samples
       end
 
       sample
+    rescue Samples::CreateService::CreateError => e
+      @project.namespace.errors.add(:base, e.message)
+      sample
     end
 
     def update_samples_count
       @project.parent.update_samples_count_by_addition_services
+    end
+
+    private
+
+    def validate_project_not_archived
+      return if @project.namespace.archived_at.blank?
+
+      raise CreateError,
+            I18n.t('services.samples.create.project_read_only')
     end
   end
 end

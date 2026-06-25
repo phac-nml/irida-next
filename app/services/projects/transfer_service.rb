@@ -3,13 +3,18 @@
 module Projects
   # Service used to Transfer Projects
   class TransferService < BaseProjectService
+    class ProjectTransferError < StandardError
+    end
+
     def initialize(project, user = nil, transfer_form = nil)
       super(project, user)
       @transfer_form = transfer_form
     end
 
-    def execute # rubocop:disable Naming/PredicateMethod
+    def execute
       return false unless @transfer_form.valid?
+
+      validate_project_not_archived
 
       @new_namespace = @transfer_form.new_namespace
       @old_namespace = @project.parent
@@ -27,6 +32,9 @@ module Projects
       update_samples_count
 
       true
+    rescue Projects::TransferService::ProjectTransferError => e
+      @project.errors.add(:base, e.message)
+      false
     end
 
     private
@@ -103,6 +111,13 @@ module Projects
       elsif @new_namespace.type == 'Group'
         @new_namespace.update_samples_count_by_addition_services(transferred_samples_count)
       end
+    end
+
+    def validate_project_not_archived
+      return if @project.namespace.archived_at.blank?
+
+      raise ProjectTransferError,
+            I18n.t('services.projects.transfer.project_read_only')
     end
   end
 end

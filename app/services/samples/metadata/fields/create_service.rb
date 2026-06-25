@@ -19,6 +19,8 @@ module Samples
         end
 
         def execute
+          validate_project_not_archived
+
           authorize! @project, to: :update_sample?
 
           validate_sample_in_project
@@ -38,6 +40,13 @@ module Samples
         end
 
         private
+
+        def validate_project_not_archived
+          return if @project.namespace.archived_at.blank?
+
+          raise SampleMetadataFieldsCreateError,
+                I18n.t('services.projects.samples.metadata.create.project_read_only')
+        end
 
         def validate_sample_in_project
           return unless @project.id != @sample.project.id

@@ -5,6 +5,9 @@ module Attachments
   class ConcatenationService < BaseService
     attr_accessor :attachable, :attachments, :concatenation_form
 
+    class AttachmentsConcatenationError < StandardError
+    end
+
     def initialize(user = nil, concatenation_form = nil)
       super(user)
       @attachable = concatenation_form&.attachable
@@ -12,15 +15,27 @@ module Attachments
     end
 
     def execute
+      validate_project_not_archived
       # authorize if user can update sample
       authorize! attachable.project, to: :update_sample? if attachable.instance_of?(Sample)
 
       return [] unless concatenation_form.valid?
 
       concatenate(concatenation_form.attachments, concatenation_form.paired_end?)
+    rescue Attachments::ConcatenationService::AttachmentsConcatenationError => e
+      concatenation_form.errors.add(:base, e.message)
     end
 
     private
+
+    def validate_project_not_archived
+      unless (@attachable.instance_of?(Sample) && @attachable.project.namespace.archived_at.present?) ||
+             (@attachable.instance_of?(Namespaces::ProjectNamespace) && @attachable.archived_at.present?)
+        return
+      end
+
+      raise AttachmentsConcatenationError, I18n.t('services.attachments.concatenate.project_read_only')
+    end
 
     # Calls the validation, concatenate methods for the file type
     # If the user selects to delete the originals the originals

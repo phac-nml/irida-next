@@ -5,12 +5,22 @@ class BaseSampleCloneService < BaseSampleService
   class CloneError < StandardError
   end
 
+  class SourceProjectError < StandardError
+  end
+
+  class TargetProjectError < StandardError
+  end
+
   def execute(new_project_id, sample_ids, broadcast_target = nil)
+    validate_project_not_archived(@namespace, 'source') if @namespace.instance_of?(Namespaces::ProjectNamespace)
+
     authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :clone_sample?
 
     validate(sample_ids, 'clone', new_project_id)
 
     @new_project = Project.find_by(id: new_project_id)
+
+    validate_project_not_archived(@new_project.namespace, 'target')
 
     authorize_new_project(new_project_id, :clone_sample_into_project?)
     ActiveRecord::Base.transaction do
@@ -22,6 +32,13 @@ class BaseSampleCloneService < BaseSampleService
   end
 
   private
+
+  def validate_project_not_archived(namespace, type)
+    return if namespace.archived_at.blank?
+
+    raise CloneError,
+          I18n.t("services.projects.samples.clone.#{type}.project_read_only")
+  end
 
   def clone_sample(sample)
     clone = sample.dup

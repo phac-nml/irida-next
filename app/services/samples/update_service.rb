@@ -5,12 +5,17 @@ module Samples
   class UpdateService < BaseService
     attr_accessor :sample
 
+    class UpdateError < StandardError
+    end
+
     def initialize(sample, user = nil, params = {})
       super(user, params.except(:sample, :id))
       @sample = sample
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+      validate_project_not_archived
+
       authorize! sample.project, to: :update_sample?
 
       sample_updated = sample.update(params)
@@ -27,6 +32,18 @@ module Samples
       end
 
       sample_updated
+    rescue Samples::CreateService::CreateError => e
+      @sample.project.namespace.errors.add(:base, e.message)
+      false
+    end
+
+    private
+
+    def validate_project_not_archived
+      return if @sample.project.namespace.archived_at.blank?
+
+      raise UpdateError,
+            I18n.t('services.samples.update.project_read_only')
     end
   end
 end

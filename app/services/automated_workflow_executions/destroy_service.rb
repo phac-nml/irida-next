@@ -5,12 +5,17 @@ module AutomatedWorkflowExecutions
   class DestroyService < BaseService
     attr_accessor :automated_workflow_execution
 
+    class AutomatedWorkflowExecutionsDestroyError < StandardError
+    end
+
     def initialize(automated_workflow_execution, user = nil, params = {})
       super(user, params)
       @automated_workflow_execution = automated_workflow_execution
     end
 
     def execute
+      validate_project_not_archived
+
       authorize! @automated_workflow_execution.namespace, to: :destroy_automated_workflow_executions?
 
       @automated_workflow_execution.destroy
@@ -23,6 +28,19 @@ module AutomatedWorkflowExecutions
                                                                 workflow_id: @automated_workflow_execution.id,
                                                                 automated: true
                                                               }
+    rescue AutomatedWorkflowExecutions::DestroyService::AutomatedWorkflowExecutionsDestroyError => e
+      @automated_workflow_execution.errors.add(:base, e.message)
+      @automated_workflow_execution
+    end
+
+    private
+
+    def validate_project_not_archived
+      return unless @automated_workflow_execution.namespace.instance_of?(Namespaces::ProjectNamespace) &&
+                    @automated_workflow_execution.namespace.archived_at.present?
+
+      raise AutomatedWorkflowExecutionsDestroyError,
+            I18n.t('services.automated_workflow_executions.destroy.project_read_only')
     end
   end
 end

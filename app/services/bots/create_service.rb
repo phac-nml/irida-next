@@ -5,6 +5,9 @@ module Bots
   class CreateService < BaseService
     attr_accessor :namespace, :bot_user_account
 
+    class BotsCreateError < StandardError
+    end
+
     def initialize(user = nil, namespace = nil, bot_type = nil, params = {}) # rubocop:disable Metrics/ParameterLists
       super(user, params)
       @namespace = namespace
@@ -16,15 +19,30 @@ module Bots
       bot_text = is_automation_bot ? 'automation_bot' : "bot_#{format('%03d', current_count + 1)}"
 
       set_default_params(bot_text, bot_type, current_count)
+      @namespace_bot = NamespaceBot.new(params.merge(namespace: namespace))
     end
 
     def execute
+      validate_project_not_archived
+
       authorize! namespace, to: :create_bot_accounts?
 
-      NamespaceBot.create(params)
+      @namespace_bot.save
+      @namespace_bot
+    rescue Bots::CreateService::BotsCreateError => e
+      @namespace_bot.errors.add(:base, e.message)
+      @namespace_bot
     end
 
     private
+
+    def validate_project_not_archived
+      return unless @namespace.instance_of?(Namespaces::ProjectNamespace) &&
+                    @namespace.archived_at.present?
+
+      raise BotsCreateError,
+            I18n.t('services.bots.create.project_read_only')
+    end
 
     def set_default_params(bot_text, bot_type, current_count) # rubocop:disable Metrics/AbcSize
       @params[:namespace] = namespace

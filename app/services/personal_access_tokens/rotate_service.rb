@@ -17,6 +17,8 @@ module PersonalAccessTokens
     end
 
     def execute
+      validate_project_not_archived
+
       authorize! @existing_personal_access_token.user, to: :rotate_personal_access_token? if bot_user.nil?
       authorize! namespace, to: :rotate_bot_personal_access_token? unless bot_user.nil?
 
@@ -34,6 +36,14 @@ module PersonalAccessTokens
     end
 
     private
+
+    def validate_project_not_archived
+      return unless @namespace.instance_of?(Namespaces::ProjectNamespace) &&
+                    @namespace.archived_at.present?
+
+      raise RotateError,
+            I18n.t('services.personal_access_tokens.rotate.project_read_only')
+    end
 
     def validate_existing_token
       return if @existing_personal_access_token.active?

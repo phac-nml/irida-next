@@ -22,6 +22,8 @@ module GroupLinks
         raise NamespaceGroupLinkError, I18n.t('services.groups.share.invalid_namespace_type')
       end
 
+      validate_project_not_archived
+
       authorize! namespace, to: :link_namespace_with_group?
 
       if group_id == namespace.id
@@ -49,6 +51,14 @@ module GroupLinks
     end
 
     private
+
+    def validate_project_not_archived
+      return unless @namespace_group_link.namespace.instance_of?(Namespaces::ProjectNamespace) &&
+                    @namespace_group_link.namespace.archived_at.present?
+
+      raise NamespaceGroupLinkError,
+            I18n.t('services.namespace_group_links.group_link.project_read_only')
+    end
 
     def create_activities # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       namespace_key = if namespace.group_namespace?

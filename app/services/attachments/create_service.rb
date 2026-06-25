@@ -5,6 +5,9 @@ module Attachments
   class CreateService < BaseService # rubocop:disable Metrics/ClassLength
     attr_accessor :attachable, :attachments, :pe_attachments
 
+    class AttachmentsCreateError < StandardError
+    end
+
     def initialize(user = nil, attachable = nil, params = {})
       super(user, params)
 
@@ -28,6 +31,7 @@ module Attachments
     end
 
     def execute # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity,Metrics/MethodLength
+      validate_project_not_archived
       attachable_authorization
 
       ActiveRecord::Base.transaction do
@@ -53,9 +57,21 @@ module Attachments
       end
 
       @attachments
+    rescue Attachments::CreateService::AttachmentsCreateError => e
+      @attachable.errors.add(:base, e.message)
+      @attachments
     end
 
     private
+
+    def validate_project_not_archived
+      unless (@attachable.instance_of?(Sample) && @attachable.project.namespace.archived_at.present?) ||
+             (@attachable.instance_of?(Namespaces::ProjectNamespace) && @attachable.archived_at.present?)
+        return
+      end
+
+      raise AttachmentsCreateError, I18n.t('services.attachments.create.project_read_only')
+    end
 
     def create_activities # rubocop:disable Metrics/MethodLength
       if @attachable.instance_of?(Sample)

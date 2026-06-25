@@ -15,6 +15,8 @@ module Members
     end
 
     def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+      validate_project_not_archived
+
       authorize! @namespace, to: :create_member? unless namespace.parent.nil? && namespace.owner == current_user
 
       if member.namespace.owner != current_user &&
@@ -52,6 +54,14 @@ module Members
     end
 
     private
+
+    def validate_project_not_archived
+      return unless @member.namespace.instance_of?(Namespaces::ProjectNamespace) &&
+                    @member.namespace.archived_at.present?
+
+      raise MemberCreateError,
+            I18n.t('services.members.create.project_read_only')
+    end
 
     def send_emails
       MemberMailer.access_granted_user_email(member, namespace).deliver_later

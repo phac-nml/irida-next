@@ -5,12 +5,17 @@ module GroupLinks
   class GroupLinkUpdateService < BaseService
     attr_accessor :namespace_group_link
 
+    class NamespaceGroupLinkUpdateError < StandardError
+    end
+
     def initialize(user, namespace_group_link, params)
       super(user, params)
       @namespace_group_link = namespace_group_link
     end
 
     def execute
+      validate_project_not_archived
+
       authorize! @namespace_group_link.namespace, to: :update_namespace_with_group_link?
 
       updated = @namespace_group_link.update(params)
@@ -18,9 +23,20 @@ module GroupLinks
       create_activities if updated
 
       updated
+    rescue GroupLinks::GroupLinkUpdateService::NamespaceGroupLinkUpdateError => e
+      @namespace_group_link.errors.add(:base, e.message)
+      false
     end
 
     private
+
+    def validate_project_not_archived
+      return unless @namespace_group_link.namespace.instance_of?(Namespaces::ProjectNamespace) &&
+                    @namespace_group_link.namespace.archived_at.present?
+
+      raise NamespaceGroupLinkUpdateError,
+            I18n.t('services.namespace_group_links.group_link_update.project_read_only')
+    end
 
     def create_activities # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       namespace_key = if namespace_group_link.namespace.group_namespace?

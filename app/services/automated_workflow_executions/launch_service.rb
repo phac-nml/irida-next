@@ -3,7 +3,7 @@
 module AutomatedWorkflowExecutions
   # Service used to Launch an AutomatedWorkflowExecution
   class LaunchService < BaseService
-    class LaunchError < StandardError
+    class AutomatedWorkflowExecutionsLaunchError < StandardError
     end
     attr_accessor :automated_workflow_execution, :sample, :pe_attachment_pair, :workflow
 
@@ -18,12 +18,25 @@ module AutomatedWorkflowExecutions
     def execute
       return false unless @workflow.automatable?
 
+      validate_project_not_archived
+
       authorize! @automated_workflow_execution.namespace, to: :submit_workflow?
 
       WorkflowExecutions::CreateService.new(@current_user, workflow_execution_params).execute
+    rescue AutomatedWorkflowExecutions::LaunchService::AutomatedWorkflowExecutionsLaunchError => e
+      @automated_workflow_execution.errors.add(:base, e.message)
+      @automated_workflow_execution
     end
 
     private
+
+    def validate_project_not_archived
+      return unless @automated_workflow_execution.namespace.instance_of?(Namespaces::ProjectNamespace) &&
+                    @automated_workflow_execution.namespace.archived_at.present?
+
+      raise AutomatedWorkflowExecutionsLaunchError,
+            I18n.t('services.automated_workflow_executions.launch.project_read_only')
+    end
 
     def workflow_execution_params # rubocop:disable Metrics/MethodLength
       {

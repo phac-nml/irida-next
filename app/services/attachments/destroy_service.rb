@@ -46,6 +46,15 @@ module Attachments
 
     private
 
+    def validate_project_not_archived
+      unless (@attachable.instance_of?(Sample) && @attachable.project.namespace.archived_at.present?) ||
+             (@attachable.instance_of?(Namespaces::ProjectNamespace) && @attachable.archived_at.present?)
+        return
+      end
+
+      raise AttachmentsDestroyError, I18n.t('services.attachments.destroy.project_read_only')
+    end
+
     def attachable_authorization
       if @attachable.instance_of?(Namespaces::ProjectNamespace)
         authorize! @attachable.project, to: :destroy_attachment?

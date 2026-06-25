@@ -3,14 +3,27 @@
 module WorkflowExecutions
   # Service used to delete a WorkflowExecution
   class DestroyService < BaseWorkflowExecutionService
+    class DestroyError < StandardError
+    end
+
     def execute
       @workflow_execution.nil? ? destroy_multiple : destroy_single
+    rescue WorkflowExecutions::DestroyService::DestroyError => e
+      if @workflow_execution.nil?
+        @namespace.errors.add(:base, e.message)
+        0
+      else
+        @workflow_execution.namespace.errors.add(:base, e.message)
+        @workflow_execution
+      end
     end
 
     private
 
     def destroy_single
       return unless @workflow_execution.deletable?
+
+      validate_project_not_archived(@workflow_execution.namespace) if @workflow_execution.namespace.project_namespace?
 
       authorize! @workflow_execution, to: :destroy?
 
@@ -23,6 +36,8 @@ module WorkflowExecutions
     end
 
     def destroy_multiple
+      validate_project_not_archived(@namespace) if @namespace.project_namespace?
+
       authorize! @namespace, to: :destroy_workflow_executions? unless @namespace.nil?
 
       workflow_executions_scope = query_workflow_executions
@@ -57,6 +72,13 @@ module WorkflowExecutions
                                               }
       activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
                                                activity_type: 'workflow_execution_destroy')
+    end
+
+    def validate_project_not_archived(namespace)
+      return if namespace.archived_at.blank?
+
+      raise DestroyError,
+            I18n.t('services.workflow_executions.destroy.project_read_only')
     end
   end
 end

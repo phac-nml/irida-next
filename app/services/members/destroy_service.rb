@@ -14,6 +14,8 @@ module Members
     end
 
     def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      validate_project_not_archived
+
       if current_user != member.user
         authorize! @namespace, to: :destroy_member?
 
@@ -37,6 +39,14 @@ module Members
     end
 
     private
+
+    def validate_project_not_archived
+      return unless @member.namespace.instance_of?(Namespaces::ProjectNamespace) &&
+                    @member.namespace.archived_at.present?
+
+      raise MemberDestroyError,
+            I18n.t('services.members.destroy.project_read_only')
+    end
 
     def send_emails
       return if Member.effective_access_level(namespace,

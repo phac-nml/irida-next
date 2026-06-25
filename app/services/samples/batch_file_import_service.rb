@@ -17,6 +17,8 @@ module Samples
     end
 
     def execute(broadcast_target = nil)
+      validate_project_not_archived if @namespace.instance_of?(Namespaces::ProjectNamespace)
+
       begin
         authorize! @namespace, to: :import_samples_and_metadata?
         validate_file
@@ -88,6 +90,13 @@ module Samples
     end
 
     private
+
+    def validate_project_not_archived
+      return if @namespace.archived_at.blank?
+
+      raise FileImportError,
+            I18n.t('services.samples.batch_file_import.project_read_only')
+    end
 
     def should_update_progress?(index, total_sample_count, num_samples_for_update)
       index == total_sample_count || (index % num_samples_for_update).zero?

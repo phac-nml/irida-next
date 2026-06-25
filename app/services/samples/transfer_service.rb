@@ -30,7 +30,9 @@ module Samples
     #
     # @return [Array<Integer>] IDs of successfully transferred samples
     # @raise [BaseSampleService::BaseError] on validation or authorization failures
-    def execute(new_project_id, sample_ids, broadcast_target = nil)
+    def execute(new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/MethodLength
+      validate_project_not_archived(@namespace, 'source') if @namespace.project_namespace?
+
       # Authorize if user can transfer samples from the current project
       if @namespace.group_namespace?
         authorize! @namespace, to: :transfer_sample?
@@ -41,6 +43,8 @@ module Samples
       validate(sample_ids, 'transfer', new_project_id)
 
       authorize_new_project(new_project_id, :transfer_sample_into_project?)
+
+      validate_project_not_archived(@new_project.namespace, 'target')
 
       if Member.effective_access_level(@namespace, current_user) == Member::AccessLevel::MAINTAINER
         validate_maintainer_sample_transfer
@@ -451,6 +455,15 @@ module Samples
 
       activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
                                                activity_type: 'group_sample_transfer')
+    end
+
+    private
+
+    def validate_project_not_archived(namespace, type)
+      return if namespace.archived_at.blank?
+
+      raise TransferError,
+            I18n.t("services.projects.samples.transfer.#{type}.project_read_only")
     end
   end
 end

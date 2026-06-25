@@ -5,6 +5,9 @@ module WorkflowExecutions
   class CreateService < BaseService # rubocop:disable Metrics/ClassLength
     attr_accessor :workflow, :samplesheet_properties
 
+    class CreateError < StandardError
+    end
+
     def initialize(user = nil, params = {})
       super
       @workflow = Irida::Pipelines.instance.find_pipeline_by(params[:metadata][:pipeline_id],
@@ -39,11 +42,16 @@ module WorkflowExecutions
       queue_preparation_job
 
       @workflow_execution
+    rescue WorkflowExecutions::CreateService::CreateError => e
+      @workflow_execution.namespace.errors.add(:base, e.message)
+      @workflow_execution
     end
 
     def initialize_workflow_execution
       autoset_params if @workflow
       @workflow_execution = WorkflowExecution.new(params.except(:samples_workflow_executions_attributes))
+
+      validate_project_not_archived(@workflow_execution.namespace)
 
       authorize! @workflow_execution.namespace, to: :submit_workflow?
 
@@ -280,6 +288,15 @@ module WorkflowExecutions
         :base,
         I18n.t("validators.workflow_execution_samplesheet_params_validator.#{error_key}", **error_options)
       )
+    end
+
+    private
+
+    def validate_project_not_archived(namespace)
+      return if namespace.archived_at.blank?
+
+      raise CreateError,
+            I18n.t('services.workflow_executions.create.project_read_only')
     end
   end
 end

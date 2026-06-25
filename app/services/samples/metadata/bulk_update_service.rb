@@ -6,6 +6,9 @@ module Samples
     class BulkUpdateService < BaseSampleMetadataUpdateService # rubocop:disable Metrics/ClassLength
       attr_accessor :namespace, :metadata_payload, :metadata_fields, :metadata_summary_data
 
+      class MetadataBulkUpdateError < StandardError
+      end
+
       def initialize(namespace, metadata_payload, metadata_fields, user = nil, params = {})
         super(user, params)
         @namespace = namespace
@@ -17,6 +20,8 @@ module Samples
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+        validate_project_not_archived if @namespace.instance_of?(Namespaces::ProjectNamespace)
+
         authorize! @namespace, to: :update_sample_metadata?
         activity_data = {}
         unsuccessful_updates = { not_updated: {}, unchanged: {}, not_found: {} }
@@ -72,9 +77,19 @@ module Samples
 
         create_activities_and_update_metadata_summary(activity_data) unless activity_data.empty?
         full_metadata_changes
+      rescue Samples::Metadata::BulkUpdateService::MetadataBulkUpdateError => e
+        @namespace.errors.add(:base, e.message)
+        {}
       end
 
       private
+
+      def validate_project_not_archived
+        return if @namespace.archived_at.blank?
+
+        raise MetadataBulkUpdateError,
+              I18n.t('services.samples.metadata.bulk_update.project_read_only')
+      end
 
       # occurs in this service as file import service requires unsanitized version for proper spreadsheet reading
       def sanitize_metadata_fields(metadata_fields)

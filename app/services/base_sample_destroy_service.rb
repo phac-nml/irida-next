@@ -4,6 +4,9 @@
 class BaseSampleDestroyService < BaseService
   attr_accessor :sample, :sample_ids, :namespace
 
+  class ProjectSampleDestroyError < StandardError
+  end
+
   def initialize(namespace, user = nil, params = {})
     super(user, params)
     @namespace = namespace
@@ -12,12 +15,24 @@ class BaseSampleDestroyService < BaseService
   end
 
   def execute
+    validate_project_not_archived if @namespace.instance_of?(Namespaces::ProjectNamespace)
+
     authorize! (namespace.group_namespace? ? namespace : namespace.project), to: :destroy_sample?
 
     destroy_samples
+  rescue BaseSampleDestroyService::ProjectSampleDestroyError => e
+    @namespace.errors.add(:base, e.message)
+    false
   end
 
   private
+
+  def validate_project_not_archived
+    return if @namespace.archived_at.blank?
+
+    raise ProjectSampleDestroyError,
+          I18n.t('services.projects.samples.destroy.project_read_only')
+  end
 
   def update_metadata_summary(sample)
     sample.project.namespace.update_metadata_summary_by_sample_deletion(sample)

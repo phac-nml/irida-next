@@ -5,6 +5,9 @@ module GroupLinks
   class GroupUnlinkService < BaseService
     attr_accessor :namespace_group_link
 
+    class NamespaceGroupUnlinkError < StandardError
+    end
+
     def initialize(user, namespace_group_link, params = {})
       super(user, params)
       @namespace_group_link = namespace_group_link
@@ -13,6 +16,8 @@ module GroupLinks
     def execute
       return if namespace_group_link.nil?
 
+      validate_project_not_archived
+
       authorize! namespace_group_link.namespace, to: :unlink_namespace_with_group?
 
       namespace_group_link.destroy
@@ -20,9 +25,20 @@ module GroupLinks
       return unless namespace_group_link.deleted?
 
       create_activities
+    rescue GroupLinks::GroupUnlinkService::NamespaceGroupUnlinkError => e
+      @namespace_group_link.errors.add(:base, e.message)
+      @namespace_group_link
     end
 
     private
+
+    def validate_project_not_archived
+      return unless @namespace_group_link.namespace.instance_of?(Namespaces::ProjectNamespace) &&
+                    @namespace_group_link.namespace.archived_at.present?
+
+      raise NamespaceGroupUnlinkError,
+            I18n.t('services.namespace_group_links.group_unlink.project_read_only')
+    end
 
     def create_activities # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       namespace_key = if namespace_group_link.namespace.group_namespace?
