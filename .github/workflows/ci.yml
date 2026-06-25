@@ -69,7 +69,7 @@ jobs:
         run: pnpm install
 
       - name: Prepare RuboCop cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         env:
           DEPENDENCIES_HASH: ${{ hashFiles('.ruby-version', '**/.rubocop.yml', '**/.rubocop_todo.yml', 'Gemfile.lock') }}
         with:
@@ -225,7 +225,7 @@ jobs:
 
       - name: Cache Playwright Chromium browser
         id: playwright-cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           key: playwright-browsers-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           path: ~/.cache/ms-playwright
