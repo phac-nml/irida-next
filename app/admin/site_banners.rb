@@ -14,7 +14,7 @@ ActiveAdmin.register SiteBanner do # rubocop:disable Metrics/BlockLength
     column :enabled
     column :style
     I18n.available_locales.each do |locale|
-      column "Message (#{locale})" do |site_banner|
+      column I18n.t('active_admin.site_banners.message_for', locale_code: locale) do |site_banner|
         truncate(site_banner.messages[locale.to_s].to_s, length: 80)
       end
     end
@@ -41,7 +41,7 @@ ActiveAdmin.register SiteBanner do # rubocop:disable Metrics/BlockLength
       row :enabled
       row :style
       I18n.available_locales.each do |locale|
-        row "Message (#{locale})" do |site_banner|
+        row I18n.t('active_admin.site_banners.message_for', locale_code: locale) do |site_banner|
           site_banner.messages[locale.to_s]
         end
       end
@@ -58,11 +58,12 @@ ActiveAdmin.register SiteBanner do # rubocop:disable Metrics/BlockLength
       f.input :style, as: :select, collection: SiteBanner.styles.keys
     end
 
-    f.inputs 'Messages' do
+    f.inputs I18n.t('active_admin.site_banners.messages_fieldset') do
       I18n.available_locales.each do |locale|
         f.input :messages,
                 as: :text,
-                label: "Message (#{locale})",
+                label: I18n.t('active_admin.site_banners.message_for', locale_code: locale),
+                wrapper_html: { id: "site_banner_message_#{locale}_input" },
                 input_html: {
                   id: "site_banner_message_#{locale}",
                   name: "site_banner[messages][#{locale}]",
