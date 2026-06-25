@@ -15,7 +15,7 @@ class SiteBanner < ApplicationRecord
   attribute :enabled, :boolean, default: true
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[created_at enabled id messages style updated_at]
+    %w[created_at enabled id style updated_at]
   end
 
   def self.ransackable_associations(_auth_object = nil)
