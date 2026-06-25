@@ -9,3 +9,5 @@ fr:
       enable: Activer
       enable_confirm: Activer cette bannière du site?
       enabled: Bannière du site activée.
+      message_for: Message (%{locale_code})
+      messages_fieldset: Messages
