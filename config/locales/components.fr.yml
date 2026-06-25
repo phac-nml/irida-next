@@ -296,7 +296,6 @@ fr:
         page_selection:
           aria_label: Sélecteur de page de pagination
         previous: Précédent
-      select_file_for: Sélectionnez le fichier pour %{property}
       shared_with:
         group: Partager les résultats avec les membres du groupe?
         project: Partager les résultats avec les membres du projet?

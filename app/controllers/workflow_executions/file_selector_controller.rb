@@ -33,6 +33,7 @@ module WorkflowExecutions
         :selected_id,
         :pattern,
         :namespace_id,
+        :help_text,
         { required_properties: [] }
       ]
       expected_params.push(:index) unless Flipper.enabled?(:v2_samplesheet, current_user)

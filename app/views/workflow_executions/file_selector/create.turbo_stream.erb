@@ -25,21 +25,28 @@
   <% end %>
 <% else %>
   <% property = file_selector_params[:property].to_s %>
-  <% link_target_id = "workflow_execution_workflow_params_#{property}_link" %>
-  <% input_target_id = "workflow_execution_workflow_params_#{property}" %>
-  <%= turbo_stream.replace link_target_id, method: :morph do %>
+  <% input_id = "workflow_execution_workflow_params_#{property}" %>
+  <% link_id = "workflow_execution_workflow_params_#{property}_link" %>
+  <% legend_id = "workflow_execution_workflow_params_#{property}_legend" %>
+  <% describedby_ids = ["workflow_execution_workflow_params_#{property}_prefix"] %>
+  <% describedby_ids << "workflow_execution_workflow_params_#{property}_help" if file_selector_params[:help_text].present? %>
+  <%= turbo_stream.replace link_id, method: :morph do %>
     <%= link_to @attachment[:filename].presence || t('components.nextflow.no_selected_file'),
       new_workflow_executions_file_selector_path(
         file_selector: file_selector_params.merge(selected_id: @attachment[:id])
       ),
       data: { turbo_frame: "_top" },
-      id: link_target_id,
+      id: link_id,
+      aria: {
+        labelledby: legend_id,
+        describedby: describedby_ids.join(" ")
+      },
       autofocus: true,
       class: "block w-full min-w-0 flex-1 rounded-b-lg border-none bg-slate-50 p-2.5 text-sm text-slate-900 focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700 dark:text-white dark:placeholder-slate-400" %>
   <% end %>
-  <%= turbo_stream.replace input_target_id do %>
+  <%= turbo_stream.replace input_id do %>
     <%= hidden_field_tag "workflow_execution[workflow_params][#{property}]",
       @attachment[:global_id],
-      id: input_target_id %>
+      id: input_id %>
   <% end %>
 <% end %>
