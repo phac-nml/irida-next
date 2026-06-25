@@ -13,7 +13,6 @@ export default class AdvancedSearchController extends Controller {
     "searchGroupsTemplate",
     "selectValueTemplate",
     "valueTemplate",
-    "metadataOperators",
   ];
   static outlets = ["list-input"];
   static values = {
