@@ -119,6 +119,35 @@ module Admin
       assert banner.reload.enabled?
     end
 
+    test 'enabling a site banner disables the previously enabled one' do
+      previously_enabled = SiteBanner.create!(
+        style: :info,
+        messages: localized_messages('Old notice')
+      )
+      banner = SiteBanner.create!(
+        enabled: false,
+        style: :warning,
+        messages: localized_messages('New notice')
+      )
+
+      patch enable_admin_site_banner_path(banner)
+
+      assert_redirected_to admin_site_banner_path(banner)
+      assert banner.reload.enabled?
+      assert_not previously_enabled.reload.enabled?
+    end
+
+    test 'enabling a site banner with missing messages shows an error' do
+      incomplete = I18n.available_locales.first(1).index_with { |_locale| 'Only one locale' }
+      banner = SiteBanner.create!(enabled: false, style: :info, messages: incomplete)
+
+      patch enable_admin_site_banner_path(banner)
+
+      assert_redirected_to admin_site_banner_path(banner)
+      assert_not banner.reload.enabled?
+      assert flash[:alert].present?
+    end
+
     test 'system user can delete a site banner' do
       banner = SiteBanner.create!(
         enabled: false,
