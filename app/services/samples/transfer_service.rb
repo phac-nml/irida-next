@@ -30,12 +30,13 @@ module Samples
     #
     # @return [Array<Integer>] IDs of successfully transferred samples
     # @raise [TransferService::TransferError] on validation or authorization failures
-    def execute(new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    def execute(new_project_id, sample_ids, broadcast_target = nil, transfer_job_id = SecureRandom.uuid) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       # working memory and pre check
       new_project = Project.find_by(id: new_project_id)
+      # raises error, early exit
       raise TransferError, I18n.t('services.samples.transfer.invalid_new_project') if new_project.nil?
 
-      # authorization check (could be done even on job retry?)
+      # raises error, early exit
       authorize_transfer(new_project, sample_ids)
 
       # working memory, no database changes
@@ -46,7 +47,7 @@ module Samples
 
       # database transactions
       perform_transfer_with_lock(
-        new_project, project_sample_ids_to_transfer
+        new_project, project_sample_ids_to_transfer, transfer_job_id
       )
 
       # build working memory for previous transaction
@@ -178,6 +179,20 @@ module Samples
       end
     end
 
+    def update_metadata_summary_counts_new(sample_ids, old_project, new_project)
+      # Build metadata summary payload for transferred samples
+      metadata_payload = build_metadata_payload_from_samples(sample_ids)
+
+      old_namespaces = namespaces_for_transfer(old_project.namespace)
+      new_namespaces = namespaces_for_transfer(new_project.namespace)
+
+      ActiveRecord::Base.transaction do
+        old_project.namespace.update_metadata_summary_by_sample_transfer(
+          metadata_payload, old_namespaces, new_namespaces
+        )
+      end
+    end
+
     # Extract metadata keys and counts from a set of samples.
     #
     # @param sample_ids [Array<Integer>] IDs of samples to analyze
@@ -216,16 +231,16 @@ module Samples
     #
     # @param new_project [Project] the target project
     # @param project_sample_ids_to_transfer [Hash{Integer => Array<Integer>}] samples to transfer
-    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer, transferrable_samples, transfer_job_id) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       conflicting_samples = Arel::Table.new(Sample.table_name, as: 'conflicting_samples')
 
-      Sample.transaction do
+      Logidze.with_meta({transfer_job_id:}) do
         lock_id = Zlib.crc32("project_#{new_project.puid}_samples_lock").to_i
         Sample.connection.execute("SELECT pg_advisory_xact_lock(#{lock_id})")
 
         project_sample_ids_to_transfer.each do |project_id, sample_ids|
           # Transfer samples that do not have name conflicts in the target project
-          Sample.where(id: sample_ids, project_id: project_id).where.not(
+          transferred_sample_id_count = Sample.where(id: sample_ids, project_id: project_id).where.not(
             id: Sample.joins(Sample.arel_table.create_join(conflicting_samples,
                                                            Arel::Nodes::On.new(
                                                              conflicting_samples[:name].eq(Sample.arel_table[:name])
@@ -235,8 +250,73 @@ module Samples
                              ))
                       .where(id: sample_ids).select(:id)
           ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
+
+          old_project = Project.find(project_id)
+
+          transferred_sample_ids = if transferred_sample_id_count.to_i.zero?
+                                     []
+                                   else
+                                     Sample.where(id: sample_ids, project_id: new_project.id)
+                                           .where.not(id:
+                                              transferrable_samples.where(project_id: project_id).pluck(:id)).pluck(:id)
+                                   end
+          unless transferred_sample_ids.empty?
+            update_metadata_summary_counts_new(transferred_sample_ids, old_project, new_project)
+            update_samples_count_and_create_activities_new(transferred_sample_ids, old_project, new_project)
+          end
         end
       end
+    end
+
+    def add_transfer_errors(sample_ids, new_project_id, transfer_job_id) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      transferred_sample_ids = Sample.with_log_data.where(
+        id: sample_ids, project_id: new_project_id
+      ).where(
+        "log_data -> 'h' -> 0 -> 'm' ->> 'transfer_job_id' = '#{transfer_job_id}'"
+      ).pluck(:id)
+
+      # TODO: optimize this query, something like this
+      # transferred_sample_ids2 = Sample.with_log_data.where(
+      #   "id IN (?) AND project_id = ? AND log_data -> 'h' -> 0 -> 'm' ->> 'transfer_job_id' = ?",
+      #   sample_ids, new_project_id, transfer_job_id
+      # ).pluck(:id)
+
+      untransferred_sample_ids = sample_ids - transferred_sample_ids
+      return if untransferred_sample_ids.empty?
+
+      filtered_samples = filter_sample_ids(untransferred_sample_ids, 'transfer', true)
+      # filtered_sample_ids are samples that should have transferred based on authorization / sample id validity.
+      # All that is left in this list are transfer conflict errors
+      return if filtered_samples.empty?
+
+      # missing_ids = []
+      filtered_samples.each do |sample|
+        if sample.project_id == new_project_id
+          # The attempted transfer targeted the same project the sample
+          # already lives in: report as a target-project duplicate.
+          @namespace.errors.add(
+            :samples, I18n.t('services.samples.transfer.target_project_duplicate', sample_name: sample.name)
+          )
+        # with new flow this should not be possible
+        # elsif sample.project_id != old_project_id#todo what this?
+        #   missing_ids << sample.id
+        else
+          # Generic conflict: a sample with the same name exists in the
+          # target project and prevented the transfer.
+          @namespace.errors.add(
+            :samples, I18n.t('services.samples.transfer.sample_exists', sample_name: sample.name,
+            sample_puid: sample.puid)
+          )
+        end
+      end
+
+      # with new flow this shouldn't be possible
+      # # If we detected any missing ids, add a single error listing them so the
+      # # caller can present a concise message to the user.
+      # return if missing_ids.empty?
+
+      # @namespace.errors.add(:samples, I18n.t('services.samples.transfer.samples_not_found',
+      #                                        sample_ids: missing_ids.join(', ')))
     end
 
     # Finds the results of the sample transfer.
@@ -374,6 +454,25 @@ module Samples
         # Broadcast refreshes to old project and parent namespaces
         old_project.broadcast_refresh_later_to_samples_table
       end
+
+      new_project.broadcast_refresh_later_to_samples_table
+
+      create_group_activity(group_activity_data) if @namespace.group_namespace? && group_activity_data.any?
+    end
+
+    def update_samples_count_and_create_activities_new(sample_ids, old_project, new_project)
+      return if sample_ids.empty?
+
+      group_activity_data = []
+
+      data = fetch_transferred_sample_data(sample_ids)
+
+      update_samples_count(old_project, new_project, sample_ids.size)
+
+      process_project_transfer_activity(old_project, new_project, data, group_activity_data)
+
+      # Broadcast refreshes to old project and parent namespaces
+      old_project.broadcast_refresh_later_to_samples_table
 
       new_project.broadcast_refresh_later_to_samples_table
 
