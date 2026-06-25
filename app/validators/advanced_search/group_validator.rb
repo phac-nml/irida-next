@@ -13,7 +13,9 @@ module AdvancedSearch
     EXISTS_OPERATORS = %w[exists not_exists].freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
-
+    METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals].freeze
+    METADATA_NUMERIC_OPERATORS = %w[numeric_equals numeric_greater_than_equals numeric_less_than_equals
+                                    numeric_not_equals].freeze
     def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       return if empty_search?(record)
 
@@ -111,15 +113,18 @@ module AdvancedSearch
     end
 
     def validate_date_and_numeric_field(condition)
-      if date_field?(condition.field)
+      operator = condition.operator
+      if date_field?(condition.field, operator)
         validate_date_field_condition(condition)
-      elsif BETWEEN_OPERATORS.include?(condition.operator)
+      elsif BETWEEN_OPERATORS.include?(operator) ||
+            (Flipper.enabled?(:advanced_search_metadata_operators) && METADATA_NUMERIC_OPERATORS.include?(operator))
         condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
       end
     end
 
-    def date_field?(field)
-      date_fields.include?(field) || field.end_with?('_date')
+    def date_field?(field, operator)
+      date_fields.include?(field) || field.end_with?('_date') ||
+        (Flipper.enabled?(:advanced_search_metadata_operators) && METADATA_DATE_OPERATORS.include?(operator))
     end
 
     def validate_date_field_condition(condition)
