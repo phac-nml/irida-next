@@ -209,6 +209,10 @@ fr:
         personal_access_tokens:
           rotate:
             only_active: Seuls les jetons actifs peuvent être remis en rotation
+        site_banner:
+          attributes:
+            messages:
+              missing_locale_message: doit inclure un message pour %{locale_code}
         user:
           attributes:
             password:

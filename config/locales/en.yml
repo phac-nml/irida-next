@@ -209,6 +209,10 @@ en:
         personal_access_tokens:
           rotate:
             only_active: Only active tokens can be rotated
+        site_banner:
+          attributes:
+            messages:
+              missing_locale_message: must include a message for %{locale_code}
         user:
           attributes:
             password:
