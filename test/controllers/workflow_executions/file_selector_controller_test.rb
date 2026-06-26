@@ -238,6 +238,17 @@ module WorkflowExecutions
       assert_response :ok
     end
 
+    test 'new file selection with attachable outside authorized namespace responds not found' do
+      Flipper.enable(:v2_samplesheet)
+
+      get new_workflow_executions_file_selector_path(
+        file_selector: @expected_fastq_params.merge(attachable_id: samples(:sample1).id),
+        format: :turbo_stream
+      )
+
+      assert_response :not_found
+    end
+
     test 'create file selection with other params with feature flag' do
       Flipper.enable(:v2_samplesheet)
       attachment = attachments(:attachment1)
@@ -262,6 +273,18 @@ module WorkflowExecutions
       )
 
       assert_response :ok
+    end
+
+    test 'create file selection with attachment outside attachable responds not found' do
+      Flipper.enable(:v2_samplesheet)
+
+      post workflow_executions_file_selector_index_path(
+        file_selector: @expected_fastq_params,
+        attachment_id: attachments(:attachment1).id,
+        format: :turbo_stream
+      )
+
+      assert_response :not_found
     end
 
     test 'unauthorized new file selection with feature flag' do

@@ -63,9 +63,15 @@ module WorkflowExecutions
       attachable_id = file_selector_params[:attachable_id]
       case file_selector_params[:attachable_type]
       when Sample.sti_name
-        @attachable = Sample.find(attachable_id)
+        @attachable = Sample.joins(:project)
+                            .where(projects: { namespace_id: authorized_namespace_ids })
+                            .find(attachable_id)
       when Namespaces::ProjectNamespace.sti_name, Group.sti_name
-        @attachable = Namespace.find(attachable_id)
+        @attachable = Namespace.where(id: authorized_namespace_ids)
+                               .where(type: file_selector_params[:attachable_type])
+                               .find(attachable_id)
+      else
+        raise ActiveRecord::RecordNotFound
       end
     end
 
@@ -81,7 +87,7 @@ module WorkflowExecutions
       if params[:attachment_id] == 'no_attachment'
         add_attachment_to_params(nil, property)
       else
-        attachment = Attachment.find(params.expect(:attachment_id))
+        attachment = @attachable.attachments.find(params.expect(:attachment_id))
         add_attachment_to_params(attachment, property)
 
         return unless %w[fastq_1 fastq_2].include?(property)
@@ -103,6 +109,10 @@ module WorkflowExecutions
                                          id: '',
                                          property: }
                                      end
+    end
+
+    def authorized_namespace_ids
+      Namespace.where(id: @namespace.id).self_and_descendant_ids
     end
   end
 end
