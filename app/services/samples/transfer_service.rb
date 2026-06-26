@@ -231,55 +231,52 @@ module Samples
     #
     # @param new_project [Project] the target project
     # @param project_sample_ids_to_transfer [Hash{Integer => Array<Integer>}] samples to transfer
-    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer, transferrable_samples, transfer_job_id) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer, transfer_job_id) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       conflicting_samples = Arel::Table.new(Sample.table_name, as: 'conflicting_samples')
 
-      Logidze.with_meta({ transfer_job_id: }) do
+      # Logidze.with_meta({ transfer_job_id: }) do
+      Sample.transaction do
         lock_id = Zlib.crc32("project_#{new_project.puid}_samples_lock").to_i
         Sample.connection.execute("SELECT pg_advisory_xact_lock(#{lock_id})")
 
         project_sample_ids_to_transfer.each do |project_id, sample_ids|
           # Transfer samples that do not have name conflicts in the target project
-          transferred_sample_id_count = Sample.where(id: sample_ids, project_id: project_id).where.not(
-            id: Sample.joins(Sample.arel_table.create_join(conflicting_samples,
-                                                           Arel::Nodes::On.new(
-                                                             conflicting_samples[:name].eq(Sample.arel_table[:name])
-                                                           ), Arel::Nodes::OuterJoin))
-                      .where(conflicting_samples[:project_id].eq(new_project.id).and(
-                               conflicting_samples[:deleted_at].eq(nil)
-                             ))
-                      .where(id: sample_ids).select(:id)
-          ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
 
-          old_project = Project.find(project_id)
-
-          transferred_sample_ids = if transferred_sample_id_count.to_i.zero?
-                                     []
-                                   else
-                                     Sample.where(id: sample_ids, project_id: new_project.id)
-                                           .where.not(id:
-                                              transferrable_samples.where(project_id: project_id).pluck(:id)).pluck(:id)
-                                   end
-          unless transferred_sample_ids.empty?
-            update_metadata_summary_counts_new(transferred_sample_ids, old_project, new_project)
-            update_samples_count_and_create_activities_new(transferred_sample_ids, old_project, new_project)
+          Logidze.with_meta({ transfer_job_id:, previous_project_id: project_id }) do
+            Sample.where(id: sample_ids, project_id: project_id).where.not(
+              id: Sample.joins(Sample.arel_table.create_join(conflicting_samples,
+                                                             Arel::Nodes::On.new(
+                                                               conflicting_samples[:name].eq(Sample.arel_table[:name])
+                                                             ), Arel::Nodes::OuterJoin))
+                        .where(conflicting_samples[:project_id].eq(new_project.id).and(
+                                 conflicting_samples[:deleted_at].eq(nil)
+                               ))
+                        .where(id: sample_ids).select(:id)
+            ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
           end
         end
       end
     end
 
-    def add_transfer_errors(sample_ids, new_project_id, transfer_job_id) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-      transferred_sample_ids = Sample.with_log_data.where(
+    def find_transferred_samples_with_log_data(sample_ids, new_project_id, transfer_job_id)
+      Sample.with_log_data.where(
         id: sample_ids, project_id: new_project_id
       ).where(
-        "log_data -> 'h' -> 0 -> 'm' ->> 'transfer_job_id' = '#{transfer_job_id}'"
-      ).pluck(:id)
+        "log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = '#{transfer_job_id}'"
+        # "log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", transfer_job_id
+      )
 
       # TODO: optimize this query, something like this
       # transferred_sample_ids2 = Sample.with_log_data.where(
-      #   "id IN (?) AND project_id = ? AND log_data -> 'h' -> 0 -> 'm' ->> 'transfer_job_id' = ?",
+      #   "id IN (?) AND project_id = ? AND log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?",
       #   sample_ids, new_project_id, transfer_job_id
-      # ).pluck(:id)
+      # )
+    end
+
+    def add_transfer_errors(sample_ids, new_project_id, transfer_job_id) # rubocop:disable Metrics/MethodLength
+      transferred_sample_ids = find_transferred_samples_with_log_data(
+        sample_ids, new_project_id, transfer_job_id
+      ).pluck(:id)
 
       untransferred_sample_ids = sample_ids - transferred_sample_ids
       return if untransferred_sample_ids.empty?
@@ -289,7 +286,6 @@ module Samples
       # All that is left in this list are transfer conflict errors
       return if filtered_samples.empty?
 
-      # missing_ids = []
       filtered_samples.each do |sample|
         if sample.project_id == new_project_id
           # The attempted transfer targeted the same project the sample
@@ -297,9 +293,6 @@ module Samples
           @namespace.errors.add(
             :samples, I18n.t('services.samples.transfer.target_project_duplicate', sample_name: sample.name)
           )
-        # with new flow this should not be possible
-        # elsif sample.project_id != old_project_id#todo what this?
-        #   missing_ids << sample.id
         else
           # Generic conflict: a sample with the same name exists in the
           # target project and prevented the transfer.
@@ -309,14 +302,6 @@ module Samples
           )
         end
       end
-
-      # with new flow this shouldn't be possible
-      # # If we detected any missing ids, add a single error listing them so the
-      # # caller can present a concise message to the user.
-      # return if missing_ids.empty?
-
-      # @namespace.errors.add(:samples, I18n.t('services.samples.transfer.samples_not_found',
-      #                                        sample_ids: missing_ids.join(', ')))
     end
 
     # Finds the results of the sample transfer.
