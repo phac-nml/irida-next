@@ -14,7 +14,7 @@ Rails.application.reloader.to_prepare do # rubocop:disable Metrics/BlockLength
     config.confirm_disable = true
     config.confirm_fully_enable = true
     config.descriptions_source = lambda do |_keys|
-      FLIPPER_FEATURE_CONFIG['features'].transform_values { |value| value['description'] }
+      Irida::ExperimentalFeatureCatalog.descriptions
     end
   end
 

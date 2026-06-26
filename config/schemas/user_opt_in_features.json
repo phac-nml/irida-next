@@ -4,7 +4,7 @@
   "patternProperties": {
     "^[a-z0-9_]+$": {
       "type": "object",
-      "required": ["allowlist", "name", "description"],
+      "required": ["allowlist"],
       "properties": {
         "allowlist": {
           "oneOf": [
@@ -14,22 +14,6 @@
               "items": { "type": "string", "minLength": 1 }
             }
           ]
-        },
-        "name": {
-          "type": "object",
-          "required": ["en"],
-          "properties": {
-            "en": { "type": "string", "minLength": 1 }
-          },
-          "additionalProperties": { "type": "string" }
-        },
-        "description": {
-          "type": "object",
-          "required": ["en"],
-          "properties": {
-            "en": { "type": "string", "minLength": 1 }
-          },
-          "additionalProperties": { "type": "string" }
         }
       },
       "additionalProperties": false

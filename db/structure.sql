@@ -2192,6 +2192,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260619150000'),
 ('20260616131525'),
 ('20260424121251'),
 ('20260421182359'),

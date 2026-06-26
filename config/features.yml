@@ -1,53 +1,136 @@
 features:
   advanced_search_with_auto_complete:
-    description: "Enable auto-complete suggestions for the field dropdown within the\
-      \ advanced search dialog."
+    admin_manageable: true
+    description:
+      en: "Enable auto-complete suggestions for the field dropdown within the advanced\
+        \ search dialog."
+      fr: "Activer les suggestions de saisie semi-automatique dans la liste des champs\
+        \ de la recherche avancée."
     enable_in_development: true
+    name:
+      en: "Advanced Search Autocomplete"
+      fr: "Saisie semi-automatique de la recherche avancée"
   cancel_multiple_workflows:
-    description: "Allow users to select and cancel multiple workflow executions at\
-      \ once."
+    admin_manageable: true
+    description:
+      en: "Allow users to select and cancel multiple workflow executions at once."
+      fr: "Permettre aux utilisateurs de sélectionner et d'annuler plusieurs exécutions\
+        \ de flux de travail à la fois."
     enable_in_development: true
+    name:
+      en: "Cancel Multiple Workflows"
+      fr: "Annulation de plusieurs flux de travail"
   client_linelist_exports_v1:
-    description: "Enable the experimental client side linelist export."
+    admin_manageable: true
+    description:
+      en: "Enable the experimental client side linelist export."
+      fr: "Activer l'exportation expérimentale de listes linéaires côté client."
     enable_in_development: false
+    name:
+      en: "Client-Side Linelist Exports"
+      fr: "Exportations de listes linéaires côté client"
   client_linelist_imports_v1:
-    description: "Enable the experimental client side linelist import."
+    admin_manageable: true
+    description:
+      en: "Enable the experimental client side linelist import."
+      fr: "Activer l'importation expérimentale de listes linéaires côté client."
     enable_in_development: false
+    name:
+      en: "Client-Side Linelist Imports"
+      fr: "Importations de listes linéaires côté client"
   compose_with_retry:
     description: "Exponentially backoff and retry failed compose operations. This\
       \ is intended to mitigate transient errors in the compose process."
     enable_in_development: true
   data_grid_samples_table:
-    description: "Enable the new data grid for the samples table."
+    admin_manageable: true
+    description:
+      en: "Enable the new data grid for the samples table."
+      fr: "Activer la nouvelle grille de données pour le tableau des échantillons."
     enable_in_development: false
+    name:
+      en: "Data Grid Samples Table"
+      fr: "Tableau de données des échantillons"
   integration_access_token_generation:
     description: "Allow users to generate access tokens for API access."
     enable_in_development: true
   sample_attachments_searching:
-    description: "Enable searching within the sample attachments table."
+    admin_manageable: true
+    description:
+      en: "Enable searching within the sample attachments table."
+      fr: "Activer la recherche dans le tableau des pièces jointes d'échantillons."
     enable_in_development: true
+    name:
+      en: "Sample Attachment Search"
+      fr: "Recherche de pièces jointes d'échantillons"
   samples_refresh_notice:
-    description: "Show a notice on the samples table when samples table is out of\
-      \ date due to additions, deletions, or updates."
+    admin_manageable: true
+    description:
+      en: "Show a notice on the samples table when samples table is out of date due\
+        \ to additions, deletions, or updates."
+      fr: "Afficher un avis lorsque le tableau des échantillons n'est plus à jour\
+        \ après un ajout, une suppression ou une modification."
     enable_in_development: true
+    name:
+      en: "Samples Refresh Notice"
+      fr: "Avis d'actualisation des échantillons"
   v2_dropdown:
-    description: "Enable the new v2 dropdown component in the UI."
+    admin_manageable: true
+    description:
+      en: "Enable the new v2 dropdown component in the UI."
+      fr: "Activer le nouveau composant de liste déroulante version 2 dans l'interface."
     enable_in_development: true
+    name:
+      en: "Version 2 Dropdown"
+      fr: "Liste déroulante version 2"
   v2_prefixed_select2:
-    description: "Enable the new v2 prefixed select2 component in the UI."
+    admin_manageable: true
+    description:
+      en: "Enable the new v2 prefixed select2 component in the UI."
+      fr: "Activer le nouveau composant de sélection préfixé version 2 dans l'interface."
+    name:
+      en: "Version 2 Prefixed Select"
+      fr: "Sélecteur préfixé version 2"
   v2_samplesheet:
-    description: "Enable the new v2 nextflow samplesheet display and submission process."
+    admin_manageable: true
+    description:
+      en: "Enable the new v2 nextflow samplesheet display and submission process."
+      fr: "Activer le nouvel affichage et le nouveau processus de soumission de la\
+        \ feuille d'échantillons Nextflow version 2."
     enable_in_development: true
+    name:
+      en: "Version 2 Samplesheet"
+      fr: "Feuille d'échantillons version 2"
   v2_select2:
-    description: "Enable the new v2 select2 component in the UI."
+    admin_manageable: true
+    description:
+      en: "Enable the new v2 select2 component in the UI."
+      fr: "Activer le nouveau composant de sélection version 2 dans l'interface."
     enable_in_development: true
+    name:
+      en: "Version 2 Select"
+      fr: "Sélecteur version 2"
   wes_extended_metadata:
     description: "Include additional metadata in WES submission, such as namespaceId\
       \ and samplesCount."
     enable_in_development: true
   workflow_execution_advanced_search:
-    description: "Enable the advanced search dialog for workflow executions."
+    admin_manageable: true
+    description:
+      en: "Enable the advanced search dialog for workflow executions."
+      fr: "Activer la boîte de dialogue de recherche avancée pour les exécutions de\
+        \ flux de travail."
     enable_in_development: true
+    name:
+      en: "Workflow Execution Advanced Search"
+      fr: "Recherche avancée des exécutions de flux de travail"
   workflow_execution_attachments_searching:
-    description: "Enable searching within the workflow execution attachments table."
+    admin_manageable: true
+    description:
+      en: "Enable searching within the workflow execution attachments table."
+      fr: "Activer la recherche dans le tableau des pièces jointes des exécutions\
+        \ de flux de travail."
     enable_in_development: true
+    name:
+      en: "Workflow Execution Attachment Search"
+      fr: "Recherche de pièces jointes des exécutions de flux de travail"

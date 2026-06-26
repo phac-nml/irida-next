@@ -41,7 +41,7 @@ class ApplicationSetting < ApplicationRecord
       next unless flipper_feature_available?(feature_key)
       next unless user_eligible_for_opt_in_feature?(feature_config, user)
 
-      user_opt_in_feature_payload(feature_key, feature_config, user)
+      user_opt_in_feature_payload(feature_key, user)
     end
   end
 
@@ -52,7 +52,7 @@ class ApplicationSetting < ApplicationRecord
     feature_config = (user_opt_in_features || {})[normalized_feature_key]
     return nil if feature_config.blank?
 
-    user_opt_in_feature_payload(normalized_feature_key, feature_config, user)
+    user_opt_in_feature_payload(normalized_feature_key, user)
   end
 
   private
@@ -60,7 +60,7 @@ class ApplicationSetting < ApplicationRecord
   def flipper_feature_available?(feature_key)
     return false if feature_key.blank?
 
-    FLIPPER_FEATURE_CONFIG['features'].key?(feature_key)
+    Irida::ExperimentalFeatureCatalog.available?(feature_key)
   end
 
   def user_eligible_for_opt_in_feature?(feature_config, user)
@@ -72,17 +72,15 @@ class ApplicationSetting < ApplicationRecord
     Array(allowlist).any? { |email| email.casecmp?(user.email) }
   end
 
-  def user_opt_in_feature_payload(feature_key, feature_config, user)
+  def user_opt_in_feature_payload(feature_key, user)
+    catalog_feature = Irida::ExperimentalFeatureCatalog.fetch(feature_key)
+
     {
       key: feature_key.to_sym,
-      name: localized_opt_in_feature_value(feature_config['name']),
-      description: localized_opt_in_feature_value(feature_config['description']),
+      name: catalog_feature[:name],
+      description: catalog_feature[:description],
       enabled: user_opted_in_to_feature?(feature_key, user)
     }
-  end
-
-  def localized_opt_in_feature_value(translations)
-    translations[I18n.locale.to_s].presence || translations['en']
   end
 
   def user_opted_in_to_feature?(feature_key, user)

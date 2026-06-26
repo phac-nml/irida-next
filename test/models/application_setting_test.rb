@@ -83,9 +83,7 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     settings = ApplicationSetting.build_from_defaults(
       user_opt_in_features: {
         'data_grid_samples_table' => {
-          'allowlist' => ['john_doe@email.com'],
-          'name' => { 'en' => 'Data Grid Samples Table' },
-          'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+          'allowlist' => ['john_doe@email.com']
         }
       }
     )
@@ -97,9 +95,7 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     settings = ApplicationSetting.build_from_defaults(
       user_opt_in_features: {
         'data_grid_samples_table' => {
-          'allowlist' => 'all',
-          'name' => { 'en' => 'Data Grid Samples Table' },
-          'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+          'allowlist' => 'all'
         }
       }
     )
@@ -111,9 +107,7 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     settings = ApplicationSetting.build_from_defaults(
       user_opt_in_features: {
         'InvalidKey' => {
-          'allowlist' => 'all',
-          'name' => { 'en' => 'Feature' },
-          'description' => { 'en' => 'Description' }
+          'allowlist' => 'all'
         }
       }
     )
@@ -126,9 +120,7 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     settings = ApplicationSetting.build_from_defaults(
       user_opt_in_features: {
         'data_grid_samples_table' => {
-          'allowlist' => '',
-          'name' => { 'en' => 'Data Grid Samples Table' },
-          'description' => { 'en' => 'Enable the new data grid for the samples table.' }
+          'allowlist' => ''
         }
       }
     )
@@ -138,13 +130,12 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_includes error_text, '/data_grid_samples_table/allowlist'
   end
 
-  test 'user_opt_in_features requires english fallback translations' do
+  test 'user_opt_in_features rejects display copy stored with eligibility' do
     settings = ApplicationSetting.build_from_defaults(
       user_opt_in_features: {
         'data_grid_samples_table' => {
           'allowlist' => 'all',
-          'name' => { 'fr' => 'Tableau de donnees des echantillons' },
-          'description' => { 'fr' => 'Activer la nouvelle grille.' }
+          'name' => { 'en' => 'Data Grid Samples Table' }
         }
       }
     )
@@ -152,8 +143,6 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_not settings.valid?
     error_text = settings.errors[:user_opt_in_features].join(' ')
     assert_includes error_text, '/data_grid_samples_table/name'
-    assert_includes error_text, '/data_grid_samples_table/description'
-    assert_includes error_text, 'en'
   end
 
   test '#require_personal_access_token_expiry? returns the value of require_personal_access_token_expiry' do
@@ -228,8 +217,8 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     I18n.with_locale(:fr) do
       feature = settings.eligible_user_opt_in_features(user).first
 
-      assert_equal 'Tableau de donnees des echantillons', feature[:name]
-      assert_equal "Activer la nouvelle grille de donnees pour le tableau d'echantillons.",
+      assert_equal 'Tableau de données des échantillons', feature[:name]
+      assert_equal 'Activer la nouvelle grille de données pour le tableau des échantillons.',
                    feature[:description]
     end
   end
