@@ -15,8 +15,8 @@ module SystemFeatureFlags
 
     private
 
-    def system_actor?(actor)
-      actor&.system?
+    def system_user?(user)
+      user&.system?
     end
 
     def success(change:, feature_key:, entry: nil)
@@ -40,10 +40,10 @@ module SystemFeatureFlags
     end
 
     # rubocop:disable Metrics/ParameterLists
-    def create_change!(feature_key:, actor:, action:, old_global_state:, new_global_state:, old_opt_in_state:,
+    def create_change!(feature_key:, user:, action:, old_global_state:, new_global_state:, old_opt_in_state:,
                        new_opt_in_state:, cleared_gate_summary:)
       SystemFeatureFlagChange.create!(
-        administrator: actor,
+        administrator: user,
         feature_key: feature_key,
         action: action,
         old_global_state: old_global_state,
