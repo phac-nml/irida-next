@@ -61,9 +61,13 @@ module Samples
       update_progress_bar(95, 100, broadcast_target)
 
       # TODO: needs cursor: each transferred_project_sample_ids.
-      unless transferred_project_sample_ids.empty?
-        update_metadata_summary_counts(transferred_project_sample_ids, new_project)
-        update_samples_count_and_create_activities(transferred_project_sample_ids, new_project)
+      transferred_project_sample_ids.each do |previous_project_id, sample_ids|
+        update_samples_count_and_create_activities(
+          sample_ids, Project.find(previous_project_id), new_project
+        )
+        update_metadata_summary_counts(
+          sample_ids, Project.find(previous_project_id), new_project
+        )
       end
 
       update_progress_bar(100, 100, broadcast_target)
@@ -154,32 +158,14 @@ module Samples
 
     # Update metadata summaries for all namespaces affected by the transfer.
     #
-    # For each source project, collects the metadata keys and counts from samples
+    # For source project, collects the metadata keys and counts from samples
     # being transferred, then updates both the source and target namespace hierarchies
     # to reflect the transfer.
     #
-    # @param transferred_project_sample_ids [Hash{Integer => Array<Integer>}]
-    #        mapping from source project ID to array of sample IDs transferred
+    # @param sample_ids [Array<Integer>] IDs of samples that were transferred
+    # @param old_project [Project] the source project
     # @param new_project [Project] the target project
-    def update_metadata_summary_counts(transferred_project_sample_ids, new_project)
-      transferred_project_sample_ids.each do |old_project_id, sample_ids|
-        old_project = Project.find(old_project_id) # TODO: cursor here
-
-        # Build metadata summary payload for transferred samples
-        metadata_payload = build_metadata_payload_from_samples(sample_ids)
-
-        old_namespaces = namespaces_for_transfer(old_project.namespace)
-        new_namespaces = namespaces_for_transfer(new_project.namespace)
-
-        ActiveRecord::Base.transaction do
-          old_project.namespace.update_metadata_summary_by_sample_transfer(
-            metadata_payload, old_namespaces, new_namespaces
-          )
-        end
-      end
-    end
-
-    def update_metadata_summary_counts_new(sample_ids, old_project, new_project)
+    def update_metadata_summary_counts(sample_ids, old_project, new_project)
       # Build metadata summary payload for transferred samples
       metadata_payload = build_metadata_payload_from_samples(sample_ids)
 
@@ -262,8 +248,7 @@ module Samples
       Sample.with_log_data.where(
         id: sample_ids, project_id: new_project_id
       ).where(
-        "log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = '#{transfer_job_id}'"
-        # "log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", transfer_job_id
+        "log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", transfer_job_id
       )
 
       # TODO: optimize this query, something like this
@@ -271,6 +256,17 @@ module Samples
       #   "id IN (?) AND project_id = ? AND log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?",
       #   sample_ids, new_project_id, transfer_job_id
       # )
+    end
+
+    def find_transferred_samples_with_log_data_group_by_project(sample_ids, new_project_id, transfer_job_id)
+      transferred_samples = Sample.with_log_data
+                                  .select("samples.*, log_data -> 'h' -> -1 -> 'm' ->> 'previous_project_id' AS previous_project_id") # rubocop:disable Layout/LineLength
+                                  .where(id: sample_ids, project_id: new_project_id)
+                                  .where("log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", transfer_job_id)
+
+      return [] if transferred_samples.empty?
+
+      transferred_samples.group_by(&:previous_project_id)
     end
 
     def add_transfer_errors(sample_ids, new_project_id, transfer_job_id) # rubocop:disable Metrics/MethodLength
@@ -420,32 +416,10 @@ module Samples
     # documenting the transfer for both source and target projects. Aggregates
     # group-level activities when applicable.
     #
-    # @param transferred_project_sample_ids [Hash{Integer => Array<Integer>}]
-    #        mapping from source project ID to sample IDs successfully transferred
+    # @param sample_ids [Array<Integer>] IDs of samples that were transferred
+    # @param old_project [Project] the source project
     # @param new_project [Project] the target project
-    def update_samples_count_and_create_activities(transferred_project_sample_ids, new_project)
-      group_activity_data = []
-
-      transferred_project_sample_ids.each do |old_project_id, sample_ids|
-        next if sample_ids.empty?
-
-        old_project = Project.find(old_project_id)
-        data = fetch_transferred_sample_data(sample_ids)
-
-        update_samples_count(old_project, new_project, sample_ids.size)
-
-        process_project_transfer_activity(old_project, new_project, data, group_activity_data)
-
-        # Broadcast refreshes to old project and parent namespaces
-        old_project.broadcast_refresh_later_to_samples_table
-      end
-
-      new_project.broadcast_refresh_later_to_samples_table
-
-      create_group_activity(group_activity_data) if @namespace.group_namespace? && group_activity_data.any?
-    end
-
-    def update_samples_count_and_create_activities_new(sample_ids, old_project, new_project)
+    def update_samples_count_and_create_activities(sample_ids, old_project, new_project)
       return if sample_ids.empty?
 
       group_activity_data = []
