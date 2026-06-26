@@ -14,11 +14,22 @@ module SystemFeatureFlags
       with_user_opt_in_features(user_opt_in_feature_config) do
         result = ChangeActorOptIn.call(feature_key: :data_grid_samples_table, enabled: true, actor: @user)
 
-        assert_equal :success, result
+        assert result.success?
         assert_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
       end
     ensure
       Flipper.disable_actor(:data_grid_samples_table, @user)
+    end
+
+    test 'disables actor gate when user is eligible and opt-in is available' do
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        Flipper.enable_actor(:data_grid_samples_table, @user)
+
+        result = ChangeActorOptIn.call(feature_key: :data_grid_samples_table, enabled: false, actor: @user)
+
+        assert result.success?
+        assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
+      end
     end
 
     test 'returns not_eligible when user is not in feature allowlist' do
@@ -27,7 +38,8 @@ module SystemFeatureFlags
       with_user_opt_in_features(config) do
         result = ChangeActorOptIn.call(feature_key: :data_grid_samples_table, enabled: true, actor: @user)
 
-        assert_equal :not_eligible, result
+        assert result.failure?
+        assert_equal :not_eligible, result.error
         assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
       end
     end
@@ -36,7 +48,8 @@ module SystemFeatureFlags
       with_user_opt_in_features({}) do
         result = ChangeActorOptIn.call(feature_key: :data_grid_samples_table, enabled: true, actor: @user)
 
-        assert_equal :not_eligible, result
+        assert result.failure?
+        assert_equal :not_eligible, result.error
         assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
       end
     end
@@ -76,7 +89,7 @@ module SystemFeatureFlags
         2.times { start << true }
         [user_thread, admin_thread].each(&:join)
 
-        assert_includes %i[success not_eligible], user_result
+        assert user_result.success? || user_result.error == :not_eligible
         assert admin_result.success?
         assert_nil settings.reload.user_opt_in_features['data_grid_samples_table']
         assert_equal 'off', Catalog.opt_in_state(:data_grid_samples_table)
