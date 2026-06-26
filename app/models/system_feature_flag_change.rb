@@ -14,8 +14,7 @@ class SystemFeatureFlagChange < ApplicationRecord
 
   belongs_to :administrator, class_name: 'User'
 
-  validates :feature_key, :action, :old_global_state, :new_global_state, :old_opt_in_state, :new_opt_in_state,
-            :environment, presence: true
+  validates :feature_key, :environment, presence: true
   validates :action, inclusion: { in: ACTIONS }
   validates :old_global_state, :new_global_state, inclusion: { in: GLOBAL_STATES }
   validates :old_opt_in_state, :new_opt_in_state, inclusion: { in: OPT_IN_STATES }

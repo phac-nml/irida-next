@@ -22,16 +22,20 @@ module SystemFeatureFlags
       @actor = actor
     end
 
-    def call # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def call # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       return failure(:unauthorized, feature_key:) unless system_actor?(actor)
       return failure(:invalid_feature, feature_key:) unless Catalog.admin_manageable?(feature_key)
       return failure(:invalid_target_state, feature_key:) unless TARGET_STATES.include?(target_state)
 
-      old_global_state = Catalog.global_state(feature_key)
-      old_opt_in_state = Catalog.opt_in_state(feature_key)
-      return no_op_result(old_global_state, old_opt_in_state) if old_global_state == target_state
+      # Pre-lock optimization: skip lock if already in target state.
+      # May be stale under concurrency; the in-lock re-check guarantees correctness.
+      return no_op_result if Catalog.global_state(feature_key) == target_state
 
       change = with_feature_lock(feature_key:) do
+        old_global_state = Catalog.global_state(feature_key)
+        old_opt_in_state = Catalog.opt_in_state(feature_key)
+        next if old_global_state == target_state
+
         @feature_state_before_mutation = snapshot_feature_state(feature_key)
         cleared_gate_summary = Catalog.conditional_gate_summary(feature_key)
         apply_target_state!
@@ -48,8 +52,12 @@ module SystemFeatureFlags
         )
       end
 
+      return no_op_result if change.nil?
+
       success(change:, feature_key:)
     rescue ActiveRecord::ActiveRecordError, Flipper::Error => e
+      # Defensive: transaction rollback restores DB state, but this ensures
+      # Flipper's in-memory cache is consistent with the database.
       restore_feature_state!(feature_key, @feature_state_before_mutation) unless @feature_state_before_mutation.nil?
       log_mutation_failure('Unable to change global experimental feature state', e)
       failure(:mutation_failed, feature_key:)
@@ -59,9 +67,8 @@ module SystemFeatureFlags
 
     attr_reader :feature_key, :target_state, :actor
 
-    def no_op_result(old_global_state, old_opt_in_state)
-      entry = Catalog.fetch(feature_key)&.merge(global_state: old_global_state, opt_in_state: old_opt_in_state)
-      no_op(feature_key:, entry:)
+    def no_op_result
+      no_op(feature_key:)
     end
 
     def apply_target_state!
