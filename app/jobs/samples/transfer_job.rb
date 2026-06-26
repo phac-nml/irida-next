@@ -2,7 +2,7 @@
 
 module Samples
   # Job used to transfer samples
-  class TransferJob < ApplicationJob
+  class TransferJob < ApplicationJob # rubocop:disable Metrics/ClassLength
     include ActiveJob::Continuable
     include WithResponsible
 
@@ -60,20 +60,14 @@ module Samples
     def update_metadata_step
       return if @authorization_error
 
-      transferred_samples = Sample.with_log_data
-                                  .select("samples.*, log_data -> 'h' -> -1 -> 'm' ->> 'previous_project_id' AS previous_project_id") # rubocop:disable Layout/LineLength
-                                  .where(id: @sample_ids, project_id: @new_project_id)
-                                  # .where("log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", job_id)
-                                  .where("log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = '#{job_id}'")
-
-      return if transferred_samples.empty?
-
-      grouped_samples = transferred_samples.group_by(&:previous_project_id)
+      grouped_samples = @service.find_transferred_samples_with_log_data_group_by_project(
+        @sample_ids, @new_project_id, job_id
+      )
 
       # TODO: needs cursor:
 
       grouped_samples.each do |previous_project_id, samples|
-        @service.update_metadata_summary_counts_new(
+        @service.update_metadata_summary_counts(
           samples.map(&:id), Project.find(previous_project_id), @new_project
         )
       end
@@ -82,19 +76,14 @@ module Samples
     def update_counts_and_activities_step
       return if @authorization_error
 
-      transferred_samples = Sample.with_log_data
-                                  .select("samples.*, log_data -> 'h' -> -1 -> 'm' ->> 'previous_project_id' AS previous_project_id") # rubocop:disable Layout/LineLength
-                                  .where(id: @sample_ids, project_id: @new_project_id)
-                                  .where("log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", job_id)
-
-      return if transferred_samples.empty?
-
-      grouped_samples = transferred_samples.group_by(&:previous_project_id)
+      grouped_samples = @service.find_transferred_samples_with_log_data_group_by_project(
+        @sample_ids, @new_project_id, job_id
+      )
 
       # TODO: needs cursor:
 
       grouped_samples.each do |previous_project_id, samples|
-        @service.update_samples_count_and_create_activities_new(
+        @service.update_samples_count_and_create_activities(
           samples.map(&:id), Project.find(previous_project_id), @new_project
         )
       end
