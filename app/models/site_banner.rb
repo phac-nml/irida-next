@@ -26,7 +26,7 @@ class SiteBanner < ApplicationRecord
   validate :all_locale_messages_present, if: :enabled?
 
   before_validation :set_singleton_guard
-  before_save :disable_other_enabled_notifications, if: :enabled?
+  before_save :disable_other_enabled_banners, if: :enabled?
 
   def self.current
     enabled.order(updated_at: :desc, id: :desc).first
@@ -46,14 +46,16 @@ class SiteBanner < ApplicationRecord
     missing = I18n.available_locales.select { |locale| messages[locale.to_s].blank? }
     return if missing.empty?
 
-    missing.each { |locale| errors.add(:messages, "must include a message for #{locale}") }
+    missing.each { |locale| errors.add(:messages, :missing_locale_message, locale_code: locale) }
   end
 
   def set_singleton_guard
     self.singleton_guard = SINGLETON_GUARD
   end
 
-  def disable_other_enabled_notifications
+  def disable_other_enabled_banners
+    # Serialize banner enable transitions so the unique partial index is not hit under concurrent writes.
+    self.class.connection.execute("LOCK TABLE #{self.class.quoted_table_name} IN SHARE ROW EXCLUSIVE MODE")
     self.class.enabled.where.not(id: id).update_all(enabled: false, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
   end
 end

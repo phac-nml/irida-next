@@ -21,17 +21,8 @@ ActiveAdmin.register SiteBanner do # rubocop:disable Metrics/BlockLength
     column :created_at
     column :updated_at
     actions do |site_banner|
-      if site_banner.enabled?
-        item I18n.t('active_admin.site_banners.disable'),
-             disable_admin_site_banner_path(site_banner),
-             method: :patch,
-             data: { confirm: I18n.t('active_admin.site_banners.disable_confirm') }
-      else
-        item I18n.t('active_admin.site_banners.enable'),
-             enable_admin_site_banner_path(site_banner),
-             method: :patch,
-             data: { confirm: I18n.t('active_admin.site_banners.enable_confirm') }
-      end
+      action = toggle_action_for(site_banner)
+      item action[:label], action[:path], method: :patch, data: { confirm: action[:confirm] }
     end
   end
 
@@ -91,18 +82,42 @@ ActiveAdmin.register SiteBanner do # rubocop:disable Metrics/BlockLength
   end
 
   action_item :disable, only: :show, if: proc { resource.enabled? } do
-    link_to I18n.t('active_admin.site_banners.disable'),
-            disable_admin_site_banner_path(resource),
+    action = toggle_action_for(resource)
+
+    link_to action[:label],
+            action[:path],
             class: 'action-item-button',
             method: :patch,
-            data: { confirm: I18n.t('active_admin.site_banners.disable_confirm') }
+            data: { confirm: action[:confirm] }
   end
 
   action_item :enable, only: :show, if: proc { !resource.enabled? } do
-    link_to I18n.t('active_admin.site_banners.enable'),
-            enable_admin_site_banner_path(resource),
+    action = toggle_action_for(resource)
+
+    link_to action[:label],
+            action[:path],
             class: 'action-item-button',
             method: :patch,
-            data: { confirm: I18n.t('active_admin.site_banners.enable_confirm') }
+            data: { confirm: action[:confirm] }
+  end
+
+  controller do
+    helper_method :toggle_action_for
+
+    def toggle_action_for(site_banner)
+      if site_banner.enabled?
+        {
+          label: I18n.t('active_admin.site_banners.disable'),
+          path: disable_admin_site_banner_path(site_banner),
+          confirm: I18n.t('active_admin.site_banners.disable_confirm')
+        }
+      else
+        {
+          label: I18n.t('active_admin.site_banners.enable'),
+          path: enable_admin_site_banner_path(site_banner),
+          confirm: I18n.t('active_admin.site_banners.enable_confirm')
+        }
+      end
+    end
   end
 end
