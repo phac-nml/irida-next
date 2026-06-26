@@ -66,6 +66,10 @@ module SystemFeatureFlags
 
     def lock_flipper_records!(feature_key)
       Flipper::Adapters::ActiveRecord::Feature.lock.find_or_create_by!(key: feature_key)
+    rescue ActiveRecord::RecordNotUnique
+      # Concurrent insert race: another transaction created the row first.
+      retry
+    ensure
       Flipper::Adapters::ActiveRecord::Gate.lock.where(feature_key: feature_key).load
     end
 
@@ -82,6 +86,8 @@ module SystemFeatureFlags
       }
     end
 
+    # Defensive restore: transaction rollback already reverts DB state, but this
+    # ensures Flipper's in-memory feature cache is consistent with the database.
     def restore_feature_state!(feature_key, state) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       feature = Flipper[feature_key.to_sym]
       feature.clear

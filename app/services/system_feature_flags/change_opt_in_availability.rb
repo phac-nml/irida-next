@@ -27,12 +27,16 @@ module SystemFeatureFlags
       return failure(:invalid_availability, feature_key:) unless [true, false].include?(available)
       return failure(:globally_enabled, feature_key:) if Catalog.global_state(feature_key) == 'enabled'
 
-      old_global_state = Catalog.global_state(feature_key)
-      old_opt_in_state = Catalog.opt_in_state(feature_key)
-      return no_op(feature_key:) if no_op?(old_opt_in_state)
+      # Pre-lock optimization: skip lock if nothing would change.
+      # May be stale under concurrency; the in-lock re-check guarantees correctness.
+      return no_op(feature_key:) if no_op?(Catalog.opt_in_state(feature_key))
 
       change = with_feature_lock(feature_key:, settings:) do
-        abort_mutation!(:globally_enabled) if Catalog.global_state(feature_key) == 'enabled'
+        old_global_state = Catalog.global_state(feature_key)
+        abort_mutation!(:globally_enabled) if old_global_state == 'enabled'
+
+        old_opt_in_state = Catalog.opt_in_state(feature_key)
+        next if no_op?(old_opt_in_state)
 
         @previous_opt_in_features = settings.user_opt_in_features.deep_dup
         @feature_state_before_mutation = snapshot_feature_state(feature_key)
@@ -51,6 +55,8 @@ module SystemFeatureFlags
         )
       end
 
+      return no_op(feature_key:) if change.nil?
+
       success(change:, feature_key:)
     rescue AbortMutation => e
       failure(e.error, feature_key:)
@@ -64,15 +70,20 @@ module SystemFeatureFlags
 
     attr_reader :feature_key, :available, :actor
 
-    def no_op?(old_opt_in_state)
-      return old_opt_in_state != 'off' if available
-
-      old_opt_in_state == 'off'
+    # No-op when the requested change matches the current state:
+    # - available=true is a no-op if opt-in is already configured (state != 'off')
+    # - available=false is a no-op if opt-in is already disabled (state == 'off')
+    def no_op?(current_opt_in_state)
+      if available
+        current_opt_in_state != 'off'
+      else
+        current_opt_in_state == 'off'
+      end
     end
 
     def enable_opt_in
       features = settings.user_opt_in_features.deep_dup || {}
-      features[feature_key] ||= { 'allowlist' => 'all' }
+      features[feature_key] = { 'allowlist' => 'all' }
       settings.update!(user_opt_in_features: features)
     end
 
@@ -81,6 +92,8 @@ module SystemFeatureFlags
       features.delete(feature_key)
       settings.update!(user_opt_in_features: features)
 
+      # Revoke actor gates via Flipper API to stay consistent with adapter
+      # internals (memoization, instrumentation). One query per actor.
       feature = Flipper[feature_key.to_sym]
       feature.actors_value.each do |flipper_actor_id|
         feature.disable_actor(Flipper::Actor.new(flipper_actor_id))
