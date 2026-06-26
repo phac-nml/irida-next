@@ -10,12 +10,12 @@ module SystemFeatureFlags
       Flipper.disable(:data_grid_samples_table)
     end
 
-    test 'rejects non-system actors without mutation' do
-      result = ChangeGlobalState.call(
+    test 'rejects non-system users without mutation' do
+      result = ChangeGlobalState.new(
         feature_key: :data_grid_samples_table,
         target_state: :enabled,
-        actor: @user
-      )
+        user: @user
+      ).execute
 
       assert result.failure?
       assert_equal :unauthorized, result.error
@@ -24,11 +24,11 @@ module SystemFeatureFlags
     end
 
     test 'rejects non-admin-manageable feature keys' do
-      result = ChangeGlobalState.call(
+      result = ChangeGlobalState.new(
         feature_key: :compose_with_retry,
         target_state: :enabled,
-        actor: @administrator
-      )
+        user: @administrator
+      ).execute
 
       assert result.failure?
       assert_equal :invalid_feature, result.error
@@ -36,11 +36,11 @@ module SystemFeatureFlags
     end
 
     test 'rejects invalid target states' do
-      result = ChangeGlobalState.call(
+      result = ChangeGlobalState.new(
         feature_key: :data_grid_samples_table,
         target_state: :conditional,
-        actor: @administrator
-      )
+        user: @administrator
+      ).execute
 
       assert result.failure?
       assert_equal :invalid_target_state, result.error
@@ -51,11 +51,11 @@ module SystemFeatureFlags
     test 'enables global state and audits cleared conditional gates' do
       Flipper.enable_actor(:data_grid_samples_table, @user)
 
-      result = ChangeGlobalState.call(
+      result = ChangeGlobalState.new(
         feature_key: :data_grid_samples_table,
         target_state: :enabled,
-        actor: @administrator
-      )
+        user: @administrator
+      ).execute
 
       assert result.success?
       assert_equal 'enabled', Catalog.global_state(:data_grid_samples_table)
@@ -71,11 +71,11 @@ module SystemFeatureFlags
     test 'disables global state and audits the transition' do
       Flipper.enable(:data_grid_samples_table)
 
-      result = ChangeGlobalState.call(
+      result = ChangeGlobalState.new(
         feature_key: :data_grid_samples_table,
         target_state: :disabled,
-        actor: @administrator
-      )
+        user: @administrator
+      ).execute
 
       assert result.success?
       assert_equal 'disabled', Catalog.global_state(:data_grid_samples_table)
@@ -89,11 +89,11 @@ module SystemFeatureFlags
     test 'returns no-op without audit when already in target state' do
       Flipper.enable(:data_grid_samples_table)
 
-      result = ChangeGlobalState.call(
+      result = ChangeGlobalState.new(
         feature_key: :data_grid_samples_table,
         target_state: :enabled,
-        actor: @administrator
-      )
+        user: @administrator
+      ).execute
 
       assert result.no_op?
       assert_equal 0, SystemFeatureFlagChange.count
@@ -102,11 +102,11 @@ module SystemFeatureFlags
     test 'rolls back flipper change when audit write fails' do
       SystemFeatureFlagChange.stubs(:create!).raises(ActiveRecord::RecordInvalid)
 
-      result = ChangeGlobalState.call(
+      result = ChangeGlobalState.new(
         feature_key: :data_grid_samples_table,
         target_state: :enabled,
-        actor: @administrator
-      )
+        user: @administrator
+      ).execute
 
       assert result.failure?
       assert_equal :mutation_failed, result.error

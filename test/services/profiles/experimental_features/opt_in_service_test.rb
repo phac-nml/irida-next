@@ -38,7 +38,7 @@ module Profiles
       test 'execute returns false when the form is invalid' do
         form = mock('opt_in_form')
         form.expects(:valid?).returns(false)
-        SystemFeatureFlags::ChangeActorOptIn.expects(:call).never
+        SystemFeatureFlags::ChangeUserOptIn.expects(:new).never
 
         assert_not OptInService.new(@user, form).execute
       end
@@ -49,7 +49,9 @@ module Profiles
           not_eligible_result = SystemFeatureFlags::Result.new(
             status: :failure, change: nil, entry: nil, error: :not_eligible
           )
-          SystemFeatureFlags::ChangeActorOptIn.stubs(:call).returns(not_eligible_result)
+          mock_service = mock('change_user_opt_in')
+          mock_service.stubs(:execute).returns(not_eligible_result)
+          SystemFeatureFlags::ChangeUserOptIn.stubs(:new).returns(mock_service)
 
           assert_not OptInService.new(@user, form).execute
           assert_includes form.errors.details[:feature_key].pluck(:error), :not_eligible

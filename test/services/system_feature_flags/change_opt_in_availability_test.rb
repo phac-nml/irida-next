@@ -12,11 +12,11 @@ module SystemFeatureFlags
 
     test 'enables all-user opt-in availability when no entry exists' do
       with_user_opt_in_features({}) do |settings|
-        result = ChangeOptInAvailability.call(
+        result = ChangeOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: true,
-          actor: @administrator
-        )
+          user: @administrator
+        ).execute
 
         assert result.success?
         assert_equal 'all_users', Catalog.opt_in_state(:data_grid_samples_table)
@@ -31,11 +31,11 @@ module SystemFeatureFlags
       config = user_opt_in_feature_config(allowlist: [@user.email])
 
       with_user_opt_in_features(config) do |settings|
-        result = ChangeOptInAvailability.call(
+        result = ChangeOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: true,
-          actor: @administrator
-        )
+          user: @administrator
+        ).execute
 
         assert result.no_op?
         assert_equal [@user.email], settings.reload.user_opt_in_features.dig('data_grid_samples_table', 'allowlist')
@@ -48,11 +48,11 @@ module SystemFeatureFlags
         Flipper.enable_actor(:data_grid_samples_table, @user)
         Flipper.enable_percentage_of_time(:data_grid_samples_table, 10)
 
-        result = ChangeOptInAvailability.call(
+        result = ChangeOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: false,
-          actor: @administrator
-        )
+          user: @administrator
+        ).execute
 
         assert result.success?
         assert_nil settings.reload.user_opt_in_features['data_grid_samples_table']
@@ -66,11 +66,11 @@ module SystemFeatureFlags
       with_user_opt_in_features({}) do
         Flipper.enable(:data_grid_samples_table)
 
-        result = ChangeOptInAvailability.call(
+        result = ChangeOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: true,
-          actor: @administrator
-        )
+          user: @administrator
+        ).execute
 
         assert result.failure?
         assert_equal :globally_enabled, result.error
@@ -83,11 +83,11 @@ module SystemFeatureFlags
         Flipper.enable_actor(:data_grid_samples_table, @user)
         SystemFeatureFlagChange.stubs(:create!).raises(ActiveRecord::RecordInvalid)
 
-        result = ChangeOptInAvailability.call(
+        result = ChangeOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: false,
-          actor: @administrator
-        )
+          user: @administrator
+        ).execute
 
         assert result.failure?
         assert_equal :mutation_failed, result.error

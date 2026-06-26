@@ -9,21 +9,15 @@ module SystemFeatureFlags
       'disabled' => 'disable_global'
     }.freeze
 
-    class << self
-      def call(feature_key:, target_state:, actor:)
-        new(feature_key:, target_state:, actor:).call
-      end
-    end
-
-    def initialize(feature_key:, target_state:, actor:)
+    def initialize(feature_key:, target_state:, user:)
       super()
       @feature_key = feature_key.to_s
       @target_state = target_state.to_s
-      @actor = actor
+      @user = user
     end
 
-    def call # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-      return failure(:unauthorized, feature_key:) unless system_actor?(actor)
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+      return failure(:unauthorized, feature_key:) unless system_user?(user)
       return failure(:invalid_feature, feature_key:) unless Catalog.admin_manageable?(feature_key)
       return failure(:invalid_target_state, feature_key:) unless TARGET_STATES.include?(target_state)
 
@@ -41,7 +35,7 @@ module SystemFeatureFlags
         apply_target_state!
 
         create_change!(
-          actor:,
+          user:,
           feature_key:,
           action: ACTION_BY_TARGET_STATE.fetch(target_state),
           old_global_state:,
@@ -65,7 +59,7 @@ module SystemFeatureFlags
 
     private
 
-    attr_reader :feature_key, :target_state, :actor
+    attr_reader :feature_key, :target_state, :user
 
     def no_op_result
       no_op(feature_key:)
