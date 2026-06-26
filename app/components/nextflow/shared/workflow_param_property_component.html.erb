@@ -1,9 +1,10 @@
 <div>
+  <% help_text_id = fields.field_id(name, "help") %>
+
   <% if property[:type] != "boolean" %>
     <% if property[:format] == "path" || property[:format] == "file-path" %>
       <% legend_id = fields.field_id(name, "legend") %>
       <% prefix_id = fields.field_id(name, "prefix") %>
-      <% help_text_id = fields.field_id(name, "help") %>
       <% describedby_ids = [prefix_id] %>
       <% describedby_ids << help_text_id if property[:help_text].present? %>
       <fieldset class="m-0 border-0 p-0">
