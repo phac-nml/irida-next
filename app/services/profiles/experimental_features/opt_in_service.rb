@@ -30,7 +30,7 @@ module Profiles
       def execute
         return false unless opt_in_form&.valid?
 
-        result = update_actor_gate
+        result = update_user_opt_in
         return true if result.success?
 
         opt_in_form.errors.add(:feature_key, :not_eligible) if result.error == :not_eligible
@@ -51,12 +51,12 @@ module Profiles
         settings.opt_in_feature_payload(feature_key, current_user)
       end
 
-      def update_actor_gate
-        SystemFeatureFlags::ChangeActorOptIn.call(
+      def update_user_opt_in
+        SystemFeatureFlags::ChangeUserOptIn.new(
           feature_key: opt_in_form.feature,
           enabled: opt_in_form.enabled?,
-          actor: current_user
-        )
+          user: current_user
+        ).execute
       end
     end
   end

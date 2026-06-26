@@ -8,21 +8,15 @@ module SystemFeatureFlags
       false => 'disable_opt_in'
     }.freeze
 
-    class << self
-      def call(feature_key:, available:, actor:)
-        new(feature_key:, available:, actor:).call
-      end
-    end
-
-    def initialize(feature_key:, available:, actor:)
+    def initialize(feature_key:, available:, user:)
       super()
       @feature_key = feature_key.to_s
       @available = available
-      @actor = actor
+      @user = user
     end
 
-    def call # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-      return failure(:unauthorized, feature_key:) unless system_actor?(actor)
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+      return failure(:unauthorized, feature_key:) unless system_user?(user)
       return failure(:invalid_feature, feature_key:) unless Catalog.admin_manageable?(feature_key)
       return failure(:invalid_availability, feature_key:) unless [true, false].include?(available)
       return failure(:globally_enabled, feature_key:) if Catalog.global_state(feature_key) == 'enabled'
@@ -44,7 +38,7 @@ module SystemFeatureFlags
         available ? enable_opt_in : disable_opt_in
 
         create_change!(
-          actor:,
+          user:,
           feature_key:,
           action: AVAILABILITY_ACTIONS.fetch(available),
           old_global_state:,
@@ -68,7 +62,7 @@ module SystemFeatureFlags
 
     private
 
-    attr_reader :feature_key, :available, :actor
+    attr_reader :feature_key, :available, :user
 
     # No-op when the requested change matches the current state:
     # - available=true is a no-op if opt-in is already configured (state != 'off')
