@@ -38,6 +38,7 @@
                             file_selector: {
                               pattern: property[:pattern] || ".*",
                               property: name,
+                              required: property[:required],
                               attachable_id: @namespace_id,
                               attachable_type: @namespace_type,
                               selected_id: nil,

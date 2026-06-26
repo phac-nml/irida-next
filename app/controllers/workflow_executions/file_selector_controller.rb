@@ -30,6 +30,7 @@ module WorkflowExecutions
         :attachable_id,
         :attachable_type,
         :property,
+        :required,
         :selected_id,
         :pattern,
         :namespace_id,

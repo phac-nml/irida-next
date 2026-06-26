@@ -2196,6 +2196,7 @@ fr:
       delete_aria_label: 'Supprimer l’exécution du flux de travail : %{name}'
     create:
       error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
+      required_workflow_param_blank: Le paramètre de flux de travail '%{property}' est obligatoire et ne peut pas être vide
     edit_dialog:
       description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
       name_placeholder: Entrez le nom d’exécution du flux de travail
