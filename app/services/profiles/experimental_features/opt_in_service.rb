@@ -30,8 +30,11 @@ module Profiles
       def execute
         return false unless opt_in_form&.valid?
 
-        update_actor_gate
-        true
+        result = update_actor_gate
+        return true if result == :success
+
+        opt_in_form.errors.add(:feature_key, :not_eligible) if result == :not_eligible
+        false
       rescue Flipper::Error => e
         Rails.logger.error("Unable to update experimental feature opt-in: #{e.message}")
         opt_in_form.errors.add(:base, :flipper_error)
@@ -49,11 +52,11 @@ module Profiles
       end
 
       def update_actor_gate
-        if opt_in_form.enabled?
-          Flipper.enable_actor(opt_in_form.feature, current_user)
-        else
-          Flipper.disable_actor(opt_in_form.feature, current_user)
-        end
+        SystemFeatureFlags::ChangeActorOptIn.call(
+          feature_key: opt_in_form.feature,
+          enabled: opt_in_form.enabled?,
+          actor: current_user
+        )
       end
     end
   end

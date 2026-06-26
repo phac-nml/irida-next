@@ -45,11 +45,31 @@ class ApplicationSetting < ApplicationRecord
     end
   end
 
+  def opt_in_config(feature_key)
+    (user_opt_in_features || {})[feature_key.to_s]
+  end
+
+  def opt_in_state(feature_key)
+    allowlist = opt_in_config(feature_key)&.fetch('allowlist', nil)
+
+    return 'all_users' if allowlist == 'all'
+    return 'allowlist' if Array(allowlist).present?
+
+    'off'
+  end
+
+  def opt_in_feature_eligible_for_user?(feature_key, user)
+    normalized_feature_key = feature_key.to_s
+    return false unless flipper_feature_available?(normalized_feature_key)
+
+    user_eligible_for_opt_in_feature?(opt_in_config(normalized_feature_key), user)
+  end
+
   def opt_in_feature_payload(feature_key, user)
     normalized_feature_key = feature_key.to_s
     return nil unless flipper_feature_available?(normalized_feature_key)
 
-    feature_config = (user_opt_in_features || {})[normalized_feature_key]
+    feature_config = opt_in_config(normalized_feature_key)
     return nil if feature_config.blank?
 
     user_opt_in_feature_payload(normalized_feature_key, user)
