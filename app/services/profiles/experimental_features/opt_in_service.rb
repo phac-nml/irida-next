@@ -31,9 +31,9 @@ module Profiles
         return false unless opt_in_form&.valid?
 
         result = update_actor_gate
-        return true if result == :success
+        return true if result.success?
 
-        opt_in_form.errors.add(:feature_key, :not_eligible) if result == :not_eligible
+        opt_in_form.errors.add(:feature_key, :not_eligible) if result.error == :not_eligible
         false
       rescue Flipper::Error => e
         Rails.logger.error("Unable to update experimental feature opt-in: #{e.message}")
