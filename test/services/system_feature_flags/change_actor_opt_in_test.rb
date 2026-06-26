@@ -1,0 +1,89 @@
+# frozen_string_literal: true
+
+require 'test_helper'
+
+module SystemFeatureFlags
+  class ChangeActorOptInTest < ActiveSupport::TestCase
+    setup do
+      @user = users(:john_doe)
+      Flipper.disable(:data_grid_samples_table)
+      Flipper.disable_actor(:data_grid_samples_table, @user)
+    end
+
+    test 'enables actor gate when user is eligible and opt-in is available' do
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        result = ChangeActorOptIn.call(feature_key: :data_grid_samples_table, enabled: true, actor: @user)
+
+        assert_equal :success, result
+        assert_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
+      end
+    ensure
+      Flipper.disable_actor(:data_grid_samples_table, @user)
+    end
+
+    test 'returns not_eligible when user is not in feature allowlist' do
+      config = user_opt_in_feature_config(allowlist: [users(:jane_doe).email])
+
+      with_user_opt_in_features(config) do
+        result = ChangeActorOptIn.call(feature_key: :data_grid_samples_table, enabled: true, actor: @user)
+
+        assert_equal :not_eligible, result
+        assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
+      end
+    end
+
+    test 'returns not_eligible when opt-in availability has been disabled' do
+      with_user_opt_in_features({}) do
+        result = ChangeActorOptIn.call(feature_key: :data_grid_samples_table, enabled: true, actor: @user)
+
+        assert_equal :not_eligible, result
+        assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
+      end
+    end
+
+    test 'racing admin disable and user opt-in keeps actor gate revoked' do
+      with_user_opt_in_features(user_opt_in_feature_config) do |settings|
+        ready = Queue.new
+        start = Queue.new
+        user_result = nil
+        admin_result = nil
+
+        user_thread = Thread.new do
+          ActiveRecord::Base.connection_pool.with_connection do
+            ready << :user
+            start.pop
+            user_result = ChangeActorOptIn.call(
+              feature_key: :data_grid_samples_table,
+              enabled: true,
+              actor: @user
+            )
+          end
+        end
+
+        admin_thread = Thread.new do
+          ActiveRecord::Base.connection_pool.with_connection do
+            ready << :admin
+            start.pop
+            admin_result = ChangeOptInAvailability.call(
+              feature_key: :data_grid_samples_table,
+              available: false,
+              actor: users(:system_user)
+            )
+          end
+        end
+
+        2.times { ready.pop }
+        2.times { start << true }
+        [user_thread, admin_thread].each(&:join)
+
+        assert_includes %i[success not_eligible], user_result
+        assert admin_result.success?
+        assert_nil settings.reload.user_opt_in_features['data_grid_samples_table']
+        assert_equal 'off', Catalog.opt_in_state(:data_grid_samples_table)
+        assert_empty Flipper[:data_grid_samples_table].actors_value
+      end
+    ensure
+      Flipper.disable_actor(:data_grid_samples_table, @user)
+    end
+  end
+end
