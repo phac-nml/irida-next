@@ -13,7 +13,7 @@ module Samples
       @sample2 = samples(:sample2)
     end
 
-    test 'cloning samples while authorized results in a broadcasted success message and log data with correct responsible id' do # rubocop:disable Layout/LineLength
+    test 'transfer samples while authorized results in a broadcasted success message and log data with correct responsible id' do # rubocop:disable Layout/LineLength
       broadcast_target = SecureRandom.uuid
       sample_ids = [@sample1.id, @sample2.id]
 

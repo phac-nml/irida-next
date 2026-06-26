@@ -9,7 +9,7 @@ module Samples
     queue_as :default
     queue_with_priority 15
 
-    def perform(namespace, current_user, new_project_id, sample_ids, broadcast_target = nil)
+    def perform(namespace, current_user, new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/MethodLength
       @namespace = namespace
       @current_user = current_user
       @new_project_id = new_project_id
@@ -24,8 +24,8 @@ module Samples
 
       step :transfer_step
       @service.update_progress_bar(95, 100, broadcast_target)
-      # step :update_metadata_step
-      # step :update_counts_and_activities_step
+      step :update_metadata_step
+      step :update_counts_and_activities_step
       @service.update_progress_bar(100, 100, broadcast_target)
       step :collect_errors_and_broadcast_to_turbo_stream_step
 
@@ -53,45 +53,52 @@ module Samples
 
       # database transactions
       @service.perform_transfer_with_lock(
-        @new_project, project_sample_ids_to_transfer, transferrable_samples, job_id
+        @new_project, project_sample_ids_to_transfer, job_id
       )
     end
 
-    # def update_metadata_step
-    #   return if @authorization_error
+    def update_metadata_step
+      return if @authorization_error
 
-    #   transferrable_samples = @service.filter_sample_ids(@sample_ids, 'transfer', false)
-    #   project_sample_ids_to_transfer = @service.organize_samples_by_project(transferrable_samples)
+      transferred_samples = Sample.with_log_data
+                                  .select("samples.*, log_data -> 'h' -> -1 -> 'm' ->> 'previous_project_id' AS previous_project_id") # rubocop:disable Layout/LineLength
+                                  .where(id: @sample_ids, project_id: @new_project_id)
+                                  # .where("log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", job_id)
+                                  .where("log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = '#{job_id}'")
 
-    #   transferred_project_sample_ids = @service.build_transferred_project_sample_ids(
-    #     project_sample_ids_to_transfer,
-    #     @new_project,
-    #     transferrable_samples
-    #   )
+      return if transferred_samples.empty?
 
-    #   # TODO: needs cursor: each transferred_project_sample_ids.
-    #   unless transferred_project_sample_ids.empty?
-    #     @service.update_metadata_summary_counts(transferred_project_sample_ids, @new_project)
-    #   end
-    # end
+      grouped_samples = transferred_samples.group_by(&:previous_project_id)
 
-    # def update_counts_and_activities_step
-    #   return if @authorization_error
+      # TODO: needs cursor:
 
-    #   transferrable_samples = @service.filter_sample_ids(@sample_ids, 'transfer', false)
-    #   project_sample_ids_to_transfer = @service.organize_samples_by_project(transferrable_samples)
+      grouped_samples.each do |previous_project_id, samples|
+        @service.update_metadata_summary_counts_new(
+          samples.map(&:id), Project.find(previous_project_id), @new_project
+        )
+      end
+    end
 
-    #   transferred_project_sample_ids = @service.build_transferred_project_sample_ids(
-    #     project_sample_ids_to_transfer,
-    #     @new_project,
-    #     transferrable_samples
-    #   )
+    def update_counts_and_activities_step
+      return if @authorization_error
 
-    #   # TODO: needs cursor: each transferred_project_sample_ids.
-    #   unless transferred_project_sample_ids.empty?
-    #     @service.update_samples_count_and_create_activities(transferred_project_sample_ids, @new_project)
-    #   end
-    # end
+      transferred_samples = Sample.with_log_data
+                                  .select("samples.*, log_data -> 'h' -> -1 -> 'm' ->> 'previous_project_id' AS previous_project_id") # rubocop:disable Layout/LineLength
+                                  .where(id: @sample_ids, project_id: @new_project_id)
+                                  .where("log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", job_id)
+
+      return if transferred_samples.empty?
+
+      grouped_samples = transferred_samples.group_by(&:previous_project_id)
+
+      # TODO: needs cursor:
+
+      grouped_samples.each do |previous_project_id, samples|
+        @service.update_samples_count_and_create_activities_new(
+          samples.map(&:id), Project.find(previous_project_id), @new_project
+        )
+      end
+    end
 
     def collect_errors_and_broadcast_to_turbo_stream_step # rubocop:disable Metrics/MethodLength
       @service.add_transfer_errors(@sample_ids, @new_project_id, job_id) unless @authorization_error
@@ -136,18 +143,9 @@ module Samples
     def return_data
       return [] if @authorization_error
 
-      transferrable_samples = @service.filter_sample_ids(@sample_ids, 'transfer', false)
-      project_sample_ids_to_transfer = @service.organize_samples_by_project(transferrable_samples)
-
-      transferred_project_sample_ids = @service.build_transferred_project_sample_ids(
-        project_sample_ids_to_transfer,
-        @new_project,
-        transferrable_samples
-      )
-
-      return [] if transferred_project_sample_ids.empty? || transferred_project_sample_ids.values.all?(&:empty?)
-
-      transferred_project_sample_ids.values.flatten
+      @service.find_transferred_samples_with_log_data(
+        @sample_ids, @new_project_id, @transfer_job_id
+      ).pluck(:id)
     end
   end
 end
