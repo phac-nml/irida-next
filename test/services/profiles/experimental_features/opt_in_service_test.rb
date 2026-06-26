@@ -46,7 +46,10 @@ module Profiles
       test 'execute adds not_eligible when actor mutation is rejected by runtime guard' do
         with_user_opt_in_features(user_opt_in_feature_config) do
           form = build_form(feature_key: 'data_grid_samples_table', enabled: true)
-          SystemFeatureFlags::ChangeActorOptIn.stubs(:call).returns(:not_eligible)
+          not_eligible_result = SystemFeatureFlags::Result.new(
+            status: :failure, change: nil, entry: nil, error: :not_eligible
+          )
+          SystemFeatureFlags::ChangeActorOptIn.stubs(:call).returns(not_eligible_result)
 
           assert_not OptInService.new(@user, form).execute
           assert_includes form.errors.details[:feature_key].pluck(:error), :not_eligible
