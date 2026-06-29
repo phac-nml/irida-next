@@ -633,7 +633,7 @@ module Samples
       samples = Sample.where(id: [@sample1.id, @sample2.id])
 
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      organized = service.organize_samples_by_project(samples) # TODO: remove?
+      organized = service.organize_samples_by_project(samples)
 
       # Verify grouping by project_id
       assert_includes organized.keys, @current_project.id
@@ -726,7 +726,7 @@ module Samples
       assert(error_messages.any? { |msg| msg.include?(expected) })
     end
 
-    test 'add_transfer_errors adds sample_exists when valid sample transfer attempted but failed do to generic conflict' do
+    test 'add_transfer_errors adds sample_exists when valid sample transfer attempted but failed do to generic conflict' do # rubocop:disable Layout/LineLength
       # Edge case: attempting to transfer a sample to a project that already has a sample with that name
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
       service.add_transfer_errors([@sample1.id], [], @new_project.id)
