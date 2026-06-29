@@ -78,10 +78,9 @@ module Mutations
         next
       end
 
-      samples = Samples::TransferService.new(
-        project.namespace, current_user
-        # ).graphql_execute(new_project_id, sample_ids.compact) # TODO: we may need to do the execution separately as not part of a job for the mutation. # rubocop:disable Layout/LineLength
-      ).execute(new_project_id, sample_ids.compact)
+      samples = Samples::TransferJob.perform_now(
+        project.namespace, current_user, new_project_id, sample_ids.compact
+      )
 
       if samples.empty? # rubocop:disable Style/ConditionalAssignment
         samples = nil

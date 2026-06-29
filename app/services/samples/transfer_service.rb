@@ -19,6 +19,8 @@ module Samples
     class TransferError < StandardError
     end
 
+    LATEST_META = "log_data -> 'h' -> -1 -> 'm'"
+
     # Execute the sample transfer workflow.
     #
     # Performs authorization checks, validation, and orchestrates the transfer process.
@@ -248,21 +250,18 @@ module Samples
       Sample.with_log_data.where(
         id: sample_ids, project_id: new_project_id
       ).where(
-        "log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", transfer_job_id
+        "#{LATEST_META} ->> 'transfer_job_id' = ?", transfer_job_id
       )
-
-      # TODO: optimize this query, something like this
-      # transferred_sample_ids2 = Sample.with_log_data.where(
-      #   "id IN (?) AND project_id = ? AND log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?",
-      #   sample_ids, new_project_id, transfer_job_id
-      # )
     end
 
     def find_transferred_samples_with_log_data_group_by_project(sample_ids, new_project_id, transfer_job_id)
-      transferred_samples = Sample.with_log_data
-                                  .select("samples.*, log_data -> 'h' -> -1 -> 'm' ->> 'previous_project_id' AS previous_project_id") # rubocop:disable Layout/LineLength
-                                  .where(id: sample_ids, project_id: new_project_id)
-                                  .where("log_data -> 'h' -> -1 -> 'm' ->> 'transfer_job_id' = ?", transfer_job_id)
+      transferred_samples = Sample.with_log_data.select(
+        "samples.*, #{LATEST_META} ->> 'previous_project_id' AS previous_project_id"
+      ).where(
+        id: sample_ids, project_id: new_project_id
+      ).where(
+        "#{LATEST_META} ->> 'transfer_job_id' = ?", transfer_job_id
+      )
 
       return [] if transferred_samples.empty?
 
