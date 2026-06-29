@@ -21,7 +21,7 @@ Dès que vous avez du code à réviser, faites **réviser** le code par un révi
 
 Faire **fusionner** votre pull request nécessite également un mainteneur. S'il nécessite plus d'une approbation, le dernier mainteneur à réviser et approuver le fusionne.
 
-### Liste de vérification d'acceptation
+### Liste de vérification d'acceptation {#acceptance-checklist}
 
 Cette liste de vérification encourage les auteurs, les réviseurs et les mainteneurs des pull requests (PR) à confirmer que les changements ont été analysés pour les risques à fort impact sur la qualité, les performances, la fiabilité, la sécurité, l'observabilité et la maintenabilité.
 
@@ -66,7 +66,7 @@ L'utilisation de listes de vérification améliore la qualité en génie logicie
 - Envisagez des discussions individuelles ou des appels vidéo s'il y a trop de commentaires « Je n'ai pas compris » ou « Solution alternative : ». Publiez un commentaire de suivi résumant la discussion individuelle.
 - Si vous posez une question à une personne spécifique, commencez toujours le commentaire en la mentionnant.
 
-### Faire réviser votre pull request
+### Faire réviser votre pull request {#having-your-pull-request-reviewed}
 
 Veuillez garder à l'esprit que la révision de code est un processus qui peut prendre plusieurs itérations, et les réviseurs peuvent repérer des choses plus tard qu'ils n'ont peut-être pas vues la première fois.
 

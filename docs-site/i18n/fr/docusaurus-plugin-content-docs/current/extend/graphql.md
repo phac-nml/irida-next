@@ -162,7 +162,7 @@ query {
 </tr>
 </table>
 
-## Authentification avec les jetons d'accès personnels
+## Authentification avec les jetons d'accès personnels {#authentication-with-personal-access-tokens}
 
 Pour utiliser l'API GraphQL avec [l'un des clients GraphQL](https://graphql.org/code/#graphql-clients), vous devrez générer un jeton d'accès personnel.
 

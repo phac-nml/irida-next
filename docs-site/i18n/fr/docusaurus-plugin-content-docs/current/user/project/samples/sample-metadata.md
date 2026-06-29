@@ -54,7 +54,7 @@ Prérequis :
 
 Une boîte de dialogue apparaîtra où vous pourrez mettre à jour les métadonnées.
 
-## En savoir plus sur l'importation de métadonnées
+## En savoir plus sur l'importation de métadonnées {#learn-about-importing-metadata}
 
 L'importation de métadonnées vous permet d'ajouter plusieurs champs de métadonnées à plusieurs échantillons en une seule fois. Cela nécessite une feuille de calcul au format .csv, .tsv, .xls ou .xlsx.
 

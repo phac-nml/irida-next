@@ -6,7 +6,7 @@ title: Travailler avec les exécutions de flux de travail
 
 Apprenez à utiliser les exécutions de flux de travail dans IRIDA Next
 
-## Voir les exécutions de flux de travail utilisateur
+## Voir les exécutions de flux de travail utilisateur {#view-user-workflow-executions}
 
 Il existe deux façons de naviguer et de voir vos exécutions de flux de travail utilisateur :
 
@@ -15,7 +15,7 @@ Il existe deux façons de naviguer et de voir vos exécutions de flux de travail
 
 Cette page répertorie toutes vos exécutions de flux de travail.
 
-## Voir les exécutions de flux de travail automatisées
+## Voir les exécutions de flux de travail automatisées {#view-automated-workflow-executions}
 
 Prérequis :
 

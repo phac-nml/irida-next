@@ -6,7 +6,7 @@ title: Gérer les projets
 
 La plupart du travail effectué dans IRIDA Next est effectué dans un projet.
 
-## Voir les projets auxquels vous avez accès
+## Voir les projets auxquels vous avez accès {#view-projects-you-have-access-to}
 
 Pour voir les projets personnels, les projets dont vous êtes membre ou l'accès fourni via le partage avec un groupe dont vous êtes membre :
 
