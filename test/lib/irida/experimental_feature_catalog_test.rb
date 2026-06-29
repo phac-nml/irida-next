@@ -13,6 +13,7 @@ module Irida
         client_linelist_exports_v1
         client_linelist_imports_v1
         data_grid_samples_table
+        global_groups
         sample_attachments_searching
         samples_refresh_notice
         v2_dropdown
