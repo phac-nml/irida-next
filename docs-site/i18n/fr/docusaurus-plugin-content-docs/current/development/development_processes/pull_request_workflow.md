@@ -19,7 +19,7 @@ Vivez selon _des itérations plus petites_. Veuillez garder la quantité de chan
 
 Les petites PR qui sont plus facilement révisées conduisent à une qualité de code plus élevée, ce qui est plus important pour IRIDA Next qu'avoir un journal de commits minimal. Plus une PR est petite, plus elle sera probablement fusionnée rapidement. Après cela, vous pouvez envoyer plus de PR pour améliorer et étendre la fonctionnalité. Le document [Comment obtenir des révisions de PR plus rapides](https://github.com/kubernetes/kubernetes/blob/release-1.5/docs/devel/faster_reviews.md) de l'équipe Kubernetes a également d'excellents points à ce sujet.
 
-## Critères d'acceptation de contribution
+## Critères d'acceptation de contribution {#contribution-acceptance-criteria}
 
 Pour vous assurer que votre pull request peut être approuvée, veuillez vous assurer qu'elle répond aux critères d'acceptation de contribution ci-dessous :
 
