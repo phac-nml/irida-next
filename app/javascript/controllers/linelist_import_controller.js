@@ -162,9 +162,23 @@ export default class extends Controller {
     return worker;
   }
 
-  #errorMessage(error) {
+  #errorMessageNode(error) {
     const clone = this.alertTemplateTarget.content.cloneNode(true);
-    return clone.firstElementChild.outerHTML.replace(/PLACEHOLDER/g, error);
+    const walker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
+    let currentNode = walker.nextNode();
+
+    while (currentNode) {
+      if (currentNode.textContent?.includes("PLACEHOLDER")) {
+        currentNode.textContent = currentNode.textContent.replaceAll(
+          "PLACEHOLDER",
+          error,
+        );
+      }
+
+      currentNode = walker.nextNode();
+    }
+
+    return clone.firstElementChild;
   }
 
   #onProgress(payload) {
@@ -184,10 +198,10 @@ export default class extends Controller {
       const dialog = ensureDialog(this);
       if (dialog) {
         payload.result?.errors.forEach((error) => {
-          const errorMessage = this.#errorMessage(error.message);
+          const errorMessage = this.#errorMessageNode(error.message);
           const errorMessageList = dialog.querySelector("#error-messages");
-          if (errorMessageList) {
-            errorMessageList.insertAdjacentHTML("beforeend", errorMessage);
+          if (errorMessageList && errorMessage) {
+            errorMessageList.append(errorMessage);
           }
         });
         if (payload.current === payload.total) {
