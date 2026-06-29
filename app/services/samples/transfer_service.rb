@@ -21,76 +21,6 @@ module Samples
 
     LATEST_META = "log_data -> 'h' -> -1 -> 'm'"
 
-    # Execute the sample transfer workflow.
-    #
-    # Performs authorization checks, validation, and orchestrates the transfer process.
-    # For maintainers, also validates that source and target projects share a common ancestor.
-    #
-    # @param new_project_id [Integer] the ID of the target project
-    # @param sample_ids [Array<Integer>] IDs of samples to transfer
-    # @param broadcast_target [String, nil] optional Turbo broadcast target for progress updates
-    #
-    # @return [Array<Integer>] IDs of successfully transferred samples
-    # @raise [TransferService::TransferError] on validation or authorization failures
-    def execute(new_project_id, sample_ids, broadcast_target = nil, transfer_job_id = SecureRandom.uuid) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-      # working memory and pre check
-      new_project = Project.find_by(id: new_project_id)
-      # raises error, early exit
-      raise TransferError, I18n.t('services.samples.transfer.invalid_new_project') if new_project.nil?
-
-      # raises error, early exit
-      authorize_transfer(new_project, sample_ids)
-
-      # working memory, no database changes
-      transferrable_samples = filter_sample_ids(sample_ids, 'transfer', false)
-      project_sample_ids_to_transfer = organize_samples_by_project(transferrable_samples)
-
-      update_progress_bar(5, 100, broadcast_target)
-
-      # database transactions
-      perform_transfer_with_lock(
-        new_project, project_sample_ids_to_transfer, transfer_job_id
-      )
-
-      # build working memory for previous transaction
-      # Retrieve ids of transferred samples (delegated to helper for clarity)
-      transferred_project_sample_ids = build_transferred_project_sample_ids(
-        project_sample_ids_to_transfer,
-        new_project,
-        transferrable_samples
-      )
-
-      update_progress_bar(95, 100, broadcast_target)
-
-      # TODO: needs cursor: each transferred_project_sample_ids.
-      transferred_project_sample_ids.each do |previous_project_id, sample_ids|
-        update_samples_count_and_create_activities(
-          sample_ids, Project.find(previous_project_id), new_project
-        )
-        update_metadata_summary_counts(
-          sample_ids, Project.find(previous_project_id), new_project
-        )
-      end
-
-      update_progress_bar(100, 100, broadcast_target)
-
-      # Add errors for samples that could not be transferred due to name conflicts
-      add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, new_project)
-      # final step of getting all the namespace errors together
-      untransferred_sample_ids = sample_ids - transferred_project_sample_ids.values.flatten
-      filter_sample_ids(untransferred_sample_ids, 'transfer', true) unless untransferred_sample_ids.empty?
-
-      # return result of job
-      if transferred_project_sample_ids.empty? || transferred_project_sample_ids.values.all?(&:empty?)
-        []
-      else
-        transferred_project_sample_ids.values.flatten
-      end
-    rescue BaseSampleService::BaseError, TransferService::TransferError => e
-      @namespace.errors.add(:base, e.message)
-      []
-    end
-
     def authorize_transfer(new_project, sample_ids)
       # Authorize if user can transfer samples from the current project
       if @namespace.group_namespace?
@@ -299,48 +229,6 @@ module Samples
       end
     end
 
-    # Finds the results of the sample transfer.
-    # This function has been separated from the perform_transfer_with_lock to allow for idempotent
-    # retrieval of transfer results in the case of job retries without re-executing the transfer logic.
-    def build_num_transferred_samples_by_project(project_sample_ids_to_transfer, new_project)
-      num_transferred_samples_by_project = {}
-      project_sample_ids_to_transfer.each do |project_id, sample_ids|
-        # Transfer samples that do not have name conflicts in the target project
-        num_transferred = Sample.where(id: sample_ids, project_id: new_project.id).count
-
-        num_transferred_samples_by_project[project_id] = num_transferred
-      end
-
-      num_transferred_samples_by_project
-    end
-
-    # Build a mapping of project_id => transferred sample ids for the given
-    # set of projects. If no samples were transferred for a project we return
-    # an empty array for that project id.
-    #
-    # @param project_sample_ids_to_transfer [Hash{Integer => Array<Integer>}]
-    # @param num_transferred_samples_by_project [Hash{Integer => Integer}]
-    # @param new_project [Project]
-    # @param transferrable_samples [ActiveRecord::Relation]
-    # @return [Hash{Integer => Array<Integer>}]
-    def build_transferred_project_sample_ids(project_sample_ids_to_transfer,
-                                             new_project,
-                                             transferrable_samples)
-      num_transferred_samples_by_project = build_num_transferred_samples_by_project(
-        project_sample_ids_to_transfer, new_project
-      )
-
-      project_sample_ids_to_transfer.each_with_object({}) do |(project_id, sample_ids), acc|
-        acc[project_id] = if num_transferred_samples_by_project[project_id].to_i.zero?
-                            []
-                          else
-                            Sample.where(id: sample_ids, project_id: new_project.id)
-                                  .where.not(id:
-                                    transferrable_samples.where(project_id: project_id).pluck(:id)).pluck(:id)
-                          end
-      end
-    end
-
     # Inspect samples that were attempted for transfer and record any errors
     # on the service namespace for samples that could not be moved.
     #
@@ -423,7 +311,7 @@ module Samples
 
       group_activity_data = []
 
-      data = fetch_transferred_sample_data(sample_ids)
+      data = fetch_transferred_sample_data(sample_ids) # TODO: can this be optimized
 
       update_samples_count(old_project, new_project, sample_ids.size)
 

@@ -643,22 +643,6 @@ module Samples
       assert_includes organized[@current_project.id], @sample2.id
     end
 
-    test 'build_transferred_project_sample_ids returns empty when no samples transferred' do
-      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-
-      project_sample_ids_to_transfer = {
-        @current_project.id => [@sample1.id, @sample2.id]
-      }
-
-      result = service.build_transferred_project_sample_ids( # TODO: remove?
-        project_sample_ids_to_transfer,
-        @new_project,
-        Sample.where(id: [@sample1.id, @sample2.id])
-      )
-
-      assert_empty result[@current_project.id]
-    end
-
     test 'build_metadata_payload_from_samples extracts metadata keys and counts' do
       # Create samples with specific metadata for this test
       sample_a = Sample.create!(name: "metadata_test_#{SecureRandom.hex}", project: @current_project,
