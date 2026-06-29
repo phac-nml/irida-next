@@ -14,8 +14,6 @@ class BaseService
     @params = params.dup
   end
 
-  # private # TODO: see if we can make this private again
-
   def update_progress_bar(current_count, total_count, broadcast_target)
     return unless broadcast_target.present? && total_count.to_i.positive?
 
@@ -27,6 +25,8 @@ class BaseService
                                                locals: { percentage:, dom_id: },
                                                target: dom_id
   end
+
+  private
 
   def strip_whitespaces(string)
     string.gsub(/\s+/, ' ').strip
