@@ -53,7 +53,7 @@ module Samples
 
       # TODO: need cursor
       @service.perform_transfer_with_lock(
-        @new_project, project_sample_ids_to_transfer, job_id
+        @new_project, project_sample_ids_to_transfer, job_id, step
       )
     end
 

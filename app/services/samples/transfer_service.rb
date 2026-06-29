@@ -149,18 +149,16 @@ module Samples
     #
     # @param new_project [Project] the target project
     # @param project_sample_ids_to_transfer [Hash{Integer => Array<Integer>}] samples to transfer
-    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer, transfer_job_id) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer, transfer_job_id, step) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       conflicting_samples = Arel::Table.new(Sample.table_name, as: 'conflicting_samples')
 
-      # Logidze.with_meta({ transfer_job_id: }) do
-      Sample.transaction do
-        lock_id = Zlib.crc32("project_#{new_project.puid}_samples_lock").to_i
-        Sample.connection.execute("SELECT pg_advisory_xact_lock(#{lock_id})")
-
-        project_sample_ids_to_transfer.each do |project_id, sample_ids|
-          # Transfer samples that do not have name conflicts in the target project
+      project_sample_ids_to_transfer.sort[step.cursor..].each do |project_id, sample_ids|
+        Sample.transaction do
+          lock_id = Zlib.crc32("project_#{new_project.puid}_samples_lock").to_i
+          Sample.connection.execute("SELECT pg_advisory_xact_lock(#{lock_id})")
 
           Logidze.with_meta({ transfer_job_id:, previous_project_id: project_id }) do
+            # Transfer samples that do not have name conflicts in the target project
             Sample.where(id: sample_ids, project_id: project_id).where.not(
               id: Sample.joins(Sample.arel_table.create_join(conflicting_samples,
                                                              Arel::Nodes::On.new(
@@ -173,6 +171,8 @@ module Samples
             ).update_all(project_id: new_project.id, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
           end
         end
+
+        step.advance!
       end
     end
 
