@@ -62,7 +62,7 @@ module Samples
 
       grouped_transferred_samples.sort[step.cursor..]&.each do |previous_project_id, samples|
         @service.update_metadata_summary_counts(
-          samples.map(&:id), Project.find(previous_project_id), @new_project
+          samples.map(&:id), projects_by_id[previous_project_id], @new_project
         )
 
         step.advance!
@@ -74,7 +74,7 @@ module Samples
 
       grouped_transferred_samples.sort[step.cursor..]&.each do |previous_project_id, samples|
         @service.update_samples_count_and_create_activities(
-          samples, Project.find(previous_project_id), @new_project
+          samples, projects_by_id[previous_project_id], @new_project
         )
 
         step.advance!
@@ -137,6 +137,10 @@ module Samples
       return [] if grouped_transferred_samples.empty?
 
       grouped_transferred_samples.values.flatten.map(&:id)
+    end
+
+    def projects_by_id
+      @projects_by_id ||= Project.where(id: grouped_transferred_samples.keys).index_by(&:id)
     end
   end
 end
