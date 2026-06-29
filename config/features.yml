@@ -2,11 +2,9 @@ features:
   advanced_search_with_auto_complete:
     admin_manageable: true
     description:
-      en:
-        "Enable auto-complete suggestions for the field dropdown within the advanced\
+      en: "Enable auto-complete suggestions for the field dropdown within the advanced\
         \ search dialog."
-      fr:
-        "Activer les suggestions de saisie semi-automatique dans la liste des champs\
+      fr: "Activer les suggestions de saisie semi-automatique dans la liste des champs\
         \ de la recherche avancée."
     enable_in_development: true
     name:
@@ -16,8 +14,7 @@ features:
     admin_manageable: true
     description:
       en: "Allow users to select and cancel multiple workflow executions at once."
-      fr:
-        "Permettre aux utilisateurs de sélectionner et d'annuler plusieurs exécutions\
+      fr: "Permettre aux utilisateurs de sélectionner et d'annuler plusieurs exécutions\
         \ de flux de travail à la fois."
     enable_in_development: true
     name:
@@ -42,8 +39,7 @@ features:
       en: "Client-Side Linelist Imports"
       fr: "Importations de listes linéaires côté client"
   compose_with_retry:
-    description:
-      "Exponentially backoff and retry failed compose operations. This\
+    description: "Exponentially backoff and retry failed compose operations. This\
       \ is intended to mitigate transient errors in the compose process."
     enable_in_development: true
   data_grid_samples_table:
@@ -55,6 +51,16 @@ features:
     name:
       en: "Data Grid Samples Table"
       fr: "Tableau de données des échantillons"
+  global_groups:
+    admin_manageable: true
+    description:
+      en: "Enable groups to be marked as public so that all users have access"
+      fr: "Permettre de marquer les groupes comme publics afin que tous les utilisateurs\
+        \ y aient accès"
+    enable_in_development: true
+    name:
+      en: "Global groups"
+      fr: "Groupes globaux"
   integration_access_token_generation:
     description: "Allow users to generate access tokens for API access."
     enable_in_development: true
@@ -70,11 +76,9 @@ features:
   samples_refresh_notice:
     admin_manageable: true
     description:
-      en:
-        "Show a notice on the samples table when samples table is out of date due\
+      en: "Show a notice on the samples table when samples table is out of date due\
         \ to additions, deletions, or updates."
-      fr:
-        "Afficher un avis lorsque le tableau des échantillons n'est plus à jour\
+      fr: "Afficher un avis lorsque le tableau des échantillons n'est plus à jour\
         \ après un ajout, une suppression ou une modification."
     enable_in_development: true
     name:
@@ -101,8 +105,7 @@ features:
     admin_manageable: true
     description:
       en: "Enable the new v2 nextflow samplesheet display and submission process."
-      fr:
-        "Activer le nouvel affichage et le nouveau processus de soumission de la\
+      fr: "Activer le nouvel affichage et le nouveau processus de soumission de la\
         \ feuille d'échantillons Nextflow version 2."
     enable_in_development: true
     name:
@@ -118,16 +121,14 @@ features:
       en: "Version 2 Select"
       fr: "Sélecteur version 2"
   wes_extended_metadata:
-    description:
-      "Include additional metadata in WES submission, such as namespaceId\
+    description: "Include additional metadata in WES submission, such as namespaceId\
       \ and samplesCount."
     enable_in_development: true
   workflow_execution_advanced_search:
     admin_manageable: true
     description:
       en: "Enable the advanced search dialog for workflow executions."
-      fr:
-        "Activer la boîte de dialogue de recherche avancée pour les exécutions de\
+      fr: "Activer la boîte de dialogue de recherche avancée pour les exécutions de\
         \ flux de travail."
     enable_in_development: true
     name:
@@ -137,8 +138,7 @@ features:
     admin_manageable: true
     description:
       en: "Enable searching within the workflow execution attachments table."
-      fr:
-        "Activer la recherche dans le tableau des pièces jointes des exécutions\
+      fr: "Activer la recherche dans le tableau des pièces jointes des exécutions\
         \ de flux de travail."
     enable_in_development: true
     name:
