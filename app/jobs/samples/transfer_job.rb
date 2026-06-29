@@ -22,10 +22,10 @@ module Samples
       pre_transfer_check
       @service.update_progress_bar(5, 100, broadcast_target)
 
-      step :transfer_step
+      step :transfer_step, start: 0
       @service.update_progress_bar(95, 100, broadcast_target)
-      step :update_metadata_step
-      step :update_counts_and_activities_step
+      step :update_metadata_step, start: 0
+      step :update_counts_and_activities_step, start: 0
       @service.update_progress_bar(100, 100, broadcast_target)
       step :collect_errors_and_broadcast_to_turbo_stream_step
 
@@ -45,7 +45,7 @@ module Samples
       @authorization_error = true
     end
 
-    def transfer_step
+    def transfer_step(step)
       return if @authorization_error
 
       transferrable_samples = @service.filter_sample_ids(@sample_ids, 'transfer', false)
@@ -57,25 +57,27 @@ module Samples
       )
     end
 
-    def update_metadata_step
+    def update_metadata_step(step)
       return if @authorization_error
 
-      # TODO: needs cursor:
-      grouped_transferred_samples.each do |previous_project_id, samples|
+      grouped_transferred_samples.sort[step.cursor..]&.each do |previous_project_id, samples|
         @service.update_metadata_summary_counts(
           samples.map(&:id), Project.find(previous_project_id), @new_project
         )
+
+        step.advance!
       end
     end
 
-    def update_counts_and_activities_step
+    def update_counts_and_activities_step(step)
       return if @authorization_error
 
-      # TODO: needs cursor:
-      grouped_transferred_samples.each do |previous_project_id, samples|
+      grouped_transferred_samples.sort[step.cursor..]&.each do |previous_project_id, samples|
         @service.update_samples_count_and_create_activities(
           samples, Project.find(previous_project_id), @new_project
         )
+
+        step.advance!
       end
     end
 
