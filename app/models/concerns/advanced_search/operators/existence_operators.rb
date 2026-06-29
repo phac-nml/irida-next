@@ -2,7 +2,7 @@
 
 module AdvancedSearch
   module Operators
-    # Methods for pattern matching search conditions (CONTAINS, NOT CONTAINS, EXISTS)
+    # Methods for existence search conditions (exists, not_exists)
     module ExistenceOperators
       extend ActiveSupport::Concern
 

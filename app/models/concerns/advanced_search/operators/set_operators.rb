@@ -2,7 +2,7 @@
 
 module AdvancedSearch
   module Operators
-    # Methods for set-based search conditions (IN, NOT IN)
+    # Methods for set-based search conditions (in, not_in, text_in, text_not_in)
     module SetOperators
       extend ActiveSupport::Concern
 
