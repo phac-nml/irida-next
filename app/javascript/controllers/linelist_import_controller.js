@@ -81,8 +81,8 @@ export default class extends Controller {
   handleSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
-    this._worker?.terminate();
-    this._worker ||= this.#buildWorker();
+    this.#terminateWorker();
+    this._worker = this.#buildWorker();
     closeDialog(this.element, this.application);
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this._progressWindowOpenedAt = null;
