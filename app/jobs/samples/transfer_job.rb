@@ -51,7 +51,7 @@ module Samples
       transferrable_samples = @service.filter_sample_ids(@sample_ids, 'transfer', false)
       project_sample_ids_to_transfer = @service.organize_samples_by_project(transferrable_samples)
 
-      # database transactions
+      # TODO: need cursor
       @service.perform_transfer_with_lock(
         @new_project, project_sample_ids_to_transfer, job_id
       )
@@ -60,13 +60,8 @@ module Samples
     def update_metadata_step
       return if @authorization_error
 
-      grouped_samples = @service.find_transferred_samples_with_log_data_group_by_project(
-        @sample_ids, @new_project_id, job_id
-      )
-
       # TODO: needs cursor:
-
-      grouped_samples.each do |previous_project_id, samples|
+      grouped_transferred_samples.each do |previous_project_id, samples|
         @service.update_metadata_summary_counts(
           samples.map(&:id), Project.find(previous_project_id), @new_project
         )
@@ -76,21 +71,16 @@ module Samples
     def update_counts_and_activities_step
       return if @authorization_error
 
-      grouped_samples = @service.find_transferred_samples_with_log_data_group_by_project(
-        @sample_ids, @new_project_id, job_id
-      )
-
       # TODO: needs cursor:
-
-      grouped_samples.each do |previous_project_id, samples|
+      grouped_transferred_samples.each do |previous_project_id, samples|
         @service.update_samples_count_and_create_activities(
-          samples.map(&:id), Project.find(previous_project_id), @new_project
+          samples, Project.find(previous_project_id), @new_project
         )
       end
     end
 
     def collect_errors_and_broadcast_to_turbo_stream_step # rubocop:disable Metrics/MethodLength
-      @service.add_transfer_errors(@sample_ids, @new_project_id, job_id) unless @authorization_error
+      @service.add_transfer_errors(@sample_ids, transferred_sample_ids, @new_project_id) unless @authorization_error
 
       if @namespace.errors.empty?
         Turbo::StreamsChannel.broadcast_replace_to(
@@ -132,9 +122,19 @@ module Samples
     def return_data
       return [] if @authorization_error
 
-      @service.find_transferred_samples_with_log_data(
+      transferred_sample_ids
+    end
+
+    def grouped_transferred_samples
+      @grouped_transferred_samples ||= @service.find_transferred_samples_with_log_data_group_by_project(
         @sample_ids, @new_project_id, job_id
-      ).pluck(:id)
+      )
+    end
+
+    def transferred_sample_ids
+      return [] if grouped_transferred_samples.empty?
+
+      grouped_transferred_samples.values.flatten.map(&:id)
     end
   end
 end

@@ -176,14 +176,6 @@ module Samples
       end
     end
 
-    def find_transferred_samples_with_log_data(sample_ids, new_project_id, transfer_job_id)
-      Sample.with_log_data.where(
-        id: sample_ids, project_id: new_project_id
-      ).where(
-        "#{LATEST_META} ->> 'transfer_job_id' = ?", transfer_job_id
-      )
-    end
-
     def find_transferred_samples_with_log_data_group_by_project(sample_ids, new_project_id, transfer_job_id)
       transferred_samples = Sample.with_log_data.select(
         "samples.*, #{LATEST_META} ->> 'previous_project_id' AS previous_project_id"
@@ -213,17 +205,13 @@ module Samples
     # The errors are added to `@namespace.errors` so callers can surface them
     # to the user.
     #
-    # @param sample_ids [Array<Integer>] the IDs of samples that were attempted for transfer
+    # @param all_sample_ids [Array<Integer>] the IDs of samples that were attempted for transfer
+    # @param transferred_sample_ids [Array<Integer>] the IDs of samples that were successfully transferred
     # @param new_project_id [Integer] the target project receiving samples
-    # @param transfer_job_id [Integer] the ID of the transfer job
     #
     # @return [void] side-effects by adding messages to `@namespace.errors`
-    def add_transfer_errors(sample_ids, new_project_id, transfer_job_id) # rubocop:disable Metrics/MethodLength
-      transferred_sample_ids = find_transferred_samples_with_log_data(
-        sample_ids, new_project_id, transfer_job_id
-      ).pluck(:id)
-
-      untransferred_sample_ids = sample_ids - transferred_sample_ids
+    def add_transfer_errors(all_sample_ids, transferred_sample_ids, new_project_id) # rubocop:disable Metrics/MethodLength
+      untransferred_sample_ids = all_sample_ids - transferred_sample_ids
       return if untransferred_sample_ids.empty?
 
       filtered_samples = filter_sample_ids(untransferred_sample_ids, 'transfer', true)
@@ -258,32 +246,26 @@ module Samples
     # @param sample_ids [Array<Integer>] IDs of samples that were transferred
     # @param old_project [Project] the source project
     # @param new_project [Project] the target project
-    def update_samples_count_and_create_activities(sample_ids, old_project, new_project)
-      return if sample_ids.empty?
+    def update_samples_count_and_create_activities(samples, old_project, new_project)
+      return if samples.empty?
 
       group_activity_data = []
 
-      data = fetch_transferred_sample_data(sample_ids) # TODO: can this be optimized
-
-      update_samples_count(old_project, new_project, sample_ids.size)
-
-      process_project_transfer_activity(old_project, new_project, data, group_activity_data)
-
-      # Broadcast refreshes to old project and parent namespaces
-      old_project.broadcast_refresh_later_to_samples_table
-
-      new_project.broadcast_refresh_later_to_samples_table
-
-      create_group_activity(group_activity_data) if @namespace.group_namespace? && group_activity_data.any?
-    end
-
-    # Fetch name and puid data for transferred samples.
-    #
-    # @param sample_ids [Array<Integer>] IDs of samples to fetch
-    # @return [Array<Hash>] array of hashes with :sample_name and :sample_puid keys
-    def fetch_transferred_sample_data(sample_ids)
-      Sample.where(id: sample_ids).pluck(:name, :puid).map do |name, puid|
+      data = samples.pluck(:name, :puid).map do |name, puid|
         { sample_name: name, sample_puid: puid }
+      end
+
+      ActiveRecord::Base.transaction do
+        update_samples_count(old_project, new_project, data.size)
+
+        process_project_transfer_activity(old_project, new_project, data, group_activity_data)
+
+        # Broadcast refreshes to old project and parent namespaces
+        old_project.broadcast_refresh_later_to_samples_table
+
+        new_project.broadcast_refresh_later_to_samples_table
+
+        create_group_activity(group_activity_data) if @namespace.group_namespace? && group_activity_data.any?
       end
     end
 
