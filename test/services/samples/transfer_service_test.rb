@@ -676,7 +676,7 @@ module Samples
       duplicate = Sample.create!(name: @sample1.name, project: @new_project)
 
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_errors([@sample1.id], @new_project.id, 'not_a_real_id')
+      service.add_transfer_errors([@sample1.id], [], @new_project.id)
 
       # Should have conflict error
       error_messages = @current_project.namespace.errors.full_messages
@@ -690,7 +690,7 @@ module Samples
       conflict = Sample.create!(name: @sample1.name, project: @new_project, puid: SecureRandom.hex)
 
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_errors([@sample1.id], @new_project.id, 'not_a_real_id')
+      service.add_transfer_errors([@sample1.id], [], @new_project.id)
 
       # Expect a sample_exists error mentioning the sample name and puid
       error_messages = @current_project.namespace.errors.full_messages
@@ -707,7 +707,7 @@ module Samples
 
       # Attempt to transfer it from @current_project (wrong source)
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_errors([other_sample.id], @new_project.id, 'not_a_real_id')
+      service.add_transfer_errors([other_sample.id], [], @new_project.id)
 
       error_messages = @current_project.namespace.errors.full_messages
       expected = I18n.t('services.samples.transfer.samples_not_found', sample_ids: other_sample.id.to_s)
@@ -719,7 +719,7 @@ module Samples
     test 'add_transfer_errors adds target_project_duplicate when sample transfer attempted from target project' do
       # Edge case: attempting to transfer a sample that already lives in the target project
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_errors([@sample1.id], @sample1.project_id, 'not_a_real_id')
+      service.add_transfer_errors([@sample1.id], [], @sample1.project_id)
 
       error_messages = @current_project.namespace.errors.full_messages
       expected = I18n.t('services.samples.transfer.target_project_duplicate', sample_name: @sample1.name)
@@ -729,7 +729,7 @@ module Samples
     test 'add_transfer_errors adds sample_exists when valid sample transfer attempted but failed do to generic conflict' do
       # Edge case: attempting to transfer a sample to a project that already has a sample with that name
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_errors([@sample1.id], @new_project.id, 'not_a_real_id')
+      service.add_transfer_errors([@sample1.id], [], @new_project.id)
 
       error_messages = @current_project.namespace.errors.full_messages
       expected = I18n.t('services.samples.transfer.sample_exists', sample_name: @sample1.name, sample_puid: @sample1.puid) # rubocop:disable Layout/LineLength
@@ -743,7 +743,7 @@ module Samples
 
       # Attempt to transfer both from @current_project (wrong source for both)
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_errors([missing_sample1.id, missing_sample2.id], @new_project.id, 'not_a_real_id')
+      service.add_transfer_errors([missing_sample1.id, missing_sample2.id], [], @new_project.id)
 
       # Both missing ids should be consolidated into a single error message
       error_messages = @current_project.namespace.errors.full_messages
