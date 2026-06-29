@@ -36,7 +36,7 @@
       new_workflow_executions_file_selector_path(
         file_selector: file_selector_params.merge(selected_id: @attachment[:id])
       ),
-      data: { turbo_frame: "_top" },
+      data: { turbo_stream: true },
       id: link_id,
       aria: {
         labelledby: legend_id,
