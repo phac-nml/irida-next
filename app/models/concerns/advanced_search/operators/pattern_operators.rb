@@ -2,7 +2,7 @@
 
 module AdvancedSearch
   module Operators
-    # Methods for pattern matching search conditions (CONTAINS, NOT CONTAINS, EXISTS)
+    # Methods for pattern matching search conditions (contains, not_contains, text_contains, text_not_contains)
     module PatternOperators
       extend ActiveSupport::Concern
 
