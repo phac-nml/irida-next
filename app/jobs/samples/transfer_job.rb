@@ -133,7 +133,7 @@ module Samples
       return [] if @authorization_error
 
       @service.find_transferred_samples_with_log_data(
-        @sample_ids, @new_project_id, @transfer_job_id
+        @sample_ids, @new_project_id, job_id
       ).pluck(:id)
     end
   end
