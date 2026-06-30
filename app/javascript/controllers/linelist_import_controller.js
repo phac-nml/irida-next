@@ -88,10 +88,10 @@ export default class extends Controller {
     this._worker = this.#buildWorker();
     closeDialog(this.element, this.application);
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    clearProgressWindowDismissTimeout(this);
+    this.progressWindowDismissed = false;
     this._progressWindowOpenedAt = null;
     showProgressWindow(this, t(this.importStartedMessageValue));
-    this.progressWindowDismissed = false;
-    clearProgressWindowDismissTimeout(this);
     this.#processRows();
   }
 
