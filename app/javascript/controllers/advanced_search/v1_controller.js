@@ -33,7 +33,6 @@ export default class AdvancedSearchController extends Controller {
     "fieldset[data-advanced-search--v1-target='conditionsContainer']";
 
   connect() {
-    console.log("connect");
     this.renderSearchIfOpen();
     this.boundOnMorph = this.onMorph.bind(this);
 
@@ -60,7 +59,6 @@ export default class AdvancedSearchController extends Controller {
   }
 
   renderExistingSearch() {
-    console.log(this.searchGroupsTemplateTarget);
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
   }
