@@ -13,12 +13,12 @@ class BaseGroupService < BaseService
     descendants_to_update = @group.self_and_descendants_of_type(
       [Group.sti_name,
        Namespaces::ProjectNamespace.sti_name]
-    ).where(public: false).order(type: :asc)
+    ).where(public: false).sort_by { |ns| ns.full_path.length }
 
     descendants_to_update.each do |descendant|
       next if descendant.public == true
 
-      descendant.update!(public: true)
+      descendant.update(public: true)
 
       key = descendant.is_a?(Group) ? 'group.update' : 'namespaces_project_namespace.update'
 
@@ -31,12 +31,12 @@ class BaseGroupService < BaseService
     descendants_to_update = @group.self_and_descendants_of_type(
       [Group.sti_name,
        Namespaces::ProjectNamespace.sti_name]
-    ).where(public: true).order(type: :asc)
+    ).where(public: true).sort_by { |ns| ns.full_path.length }
 
     descendants_to_update.each do |descendant|
       next if descendant.public == false
 
-      descendant.update(public: false)
+      descendant.update!(public: false)
 
       key = descendant.is_a?(Group) ? 'group.update' : 'namespaces_project_namespace.update'
 
