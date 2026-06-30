@@ -13,12 +13,11 @@ module Groups
       authorize! @group, to: :update? unless params.key?(:public)
       authorize! @group, to: :change_visibility? if params.key?(:public)
 
-      updated = group.update(params)
+      ActiveRecord::Base.transaction do
+        updated = group.update(params)
 
-      if updated
-        if Flipper.enabled?(:global_groups, current_user) && group.parent.nil? && params.key?(:public)
+        if updated && Flipper.enabled?(:global_groups, current_user) && group.parent.nil? && params.key?(:public)
           public_param_normalized = params[:public].to_s
-
           if public_param_normalized == 'true'
             update_descendants_to_public
           elsif public_param_normalized == 'false'
@@ -29,9 +28,10 @@ module Groups
         @group.create_activity key: 'group.update',
                                owner: current_user
 
+        return updated
       end
 
-      updated
+      false
     end
   end
 end
