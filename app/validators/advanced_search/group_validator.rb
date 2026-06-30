@@ -97,7 +97,7 @@ module AdvancedSearch
     def validate_blank_field(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
       if condition.field.blank?
         condition.errors.add :field, :blank
-        # return # TODO: add return in UI PR
+        return
       end
 
       condition.errors.add :operator, :blank if condition.operator.blank?
