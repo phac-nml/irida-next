@@ -93,14 +93,11 @@ module AdvancedSearch
       group.errors.add :base, :invalid
     end
 
-    def validate_field(condition)
-      return if allowed_fields.include?(condition.field) || METADATA_FIELD_PATTERN.match?(condition.field)
-
-      condition.errors.add :field, :not_a_metadata
-    end
-
     def validate_blank_field(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
-      condition.errors.add :field, :blank if condition.field.blank?
+      if condition.field.blank?
+        condition.errors.add :field, :blank
+        return
+      end
 
       condition.errors.add :operator, :blank if condition.operator.blank?
 
@@ -112,11 +109,36 @@ module AdvancedSearch
       condition.errors.add :value, :blank
     end
 
+    def validate_field(condition)
+      return if allowed_fields.include?(condition.field) || METADATA_FIELD_PATTERN.match?(condition.field)
+
+      condition.errors.add :field, :not_a_metadata
+    end
+
     def validate_date_and_numeric_field(condition)
+      if Flipper.enabled?(:advanced_search_metadata_operators)
+        validate_metadata_date_and_numeric_fields(condition)
+      else
+        validate_standard_date_and_numeric_fields(condition)
+      end
+    end
+
+    def validate_metadata_date_and_numeric_fields(condition)
+      return unless METADATA_DATE_OPERATORS.include?(condition.operator) ||
+                    METADATA_NUMERIC_OPERATORS.include?(condition.operator)
+
+      if METADATA_DATE_OPERATORS.include?(condition.operator)
+        validate_date(condition)
+      else
+        validate_numeric(condition)
+      end
+    end
+
+    def validate_standard_date_and_numeric_fields(condition)
       if date_field?(condition.field)
         validate_date_field_condition(condition)
       elsif BETWEEN_OPERATORS.include?(condition.operator)
-        condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
+        validate_numeric(condition)
       end
     end
 
@@ -128,12 +150,18 @@ module AdvancedSearch
       if DATE_OPERATOR_DISALLOWED.include?(condition.operator)
         condition.errors.add :operator, :not_a_date_operator
       elsif EXISTS_OPERATORS.exclude?(condition.operator)
-        begin
-          DateTime.strptime(condition.value, '%Y-%m-%d')
-        rescue StandardError
-          condition.errors.add :value, :not_a_date
-        end
+        validate_date(condition)
       end
+    end
+
+    def validate_numeric(condition)
+      condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
+    end
+
+    def validate_date(condition)
+      DateTime.strptime(condition.value, '%Y-%m-%d')
+    rescue StandardError
+      condition.errors.add :value, :not_a_date
     end
 
     def validate_unique_condition(group, condition, condition_index)
@@ -143,7 +171,7 @@ module AdvancedSearch
 
       if BETWEEN_OPERATORS.include?(condition.operator)
         validate_between(condition, common_field_conditions)
-      else
+      elsif condition.field.present?
         validate_uniqueness(condition, common_field_conditions)
       end
     end
