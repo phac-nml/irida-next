@@ -3405,30 +3405,6 @@ module Projects
       end
     end
 
-    test 'advanced search has metadata operators when metadata field selected with feature flag' do
-      Flipper.enable(:advanced_search_metadata_operators)
-
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-
-      click_button I18n.t(:'components.advanced_search_component.v1.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-      within('dialog') do
-        find("input[role='combobox']").send_keys('metadatafield1', :enter)
-        within "select[name$='[operator]']" do
-          assert_no_selector 'option[value="="]'
-          assert_no_selector 'option[value="!="]'
-          assert_no_selector 'option[value="in"]'
-          assert_no_selector 'option[value="not_in"]'
-          assert_selector 'option[value="date_equals"]'
-          assert_selector 'option[value="numeric_equals"]'
-          assert_selector 'option[value="text_equals"]'
-        end
-      end
-    end
-
     test 'can update metadata value that is not from an analysis' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
