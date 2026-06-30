@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'test_helper'
 module Samples
   class TransferServiceTest < ActiveSupport::TestCase
+    include ActiveJob::Continuation::TestHelper
+
     def setup # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
@@ -158,6 +161,42 @@ module Samples
                    exception.result.message
     end
 
+    test 'samples transfer with interrupt' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal(2, @project31.samples.count)
+      assert_equal(1, @project29.samples.count)
+      assert_equal(1, @project30.samples.count)
+
+      Samples::TransferJob.perform_later(
+        @group12,
+        @john_doe,
+        @project29.id,
+        [@sample33.id, @sample34.id, @sample35.id]
+      )
+
+      assert_no_changes -> { @group12.reload.samples_count } do
+        interrupt_job_during_step(Samples::TransferJob, :transfer_step, cursor: 1) do
+          perform_enqueued_jobs(only: Samples::TransferJob)
+        end
+      end
+
+      # verify only some samples transferred
+      assert_equal(0, @project31.samples.count)
+      assert_equal(3, @project29.samples.count)
+      assert_equal(1, @project30.samples.count)
+
+      # continue the job queue
+      perform_enqueued_jobs(only: Samples::TransferJob)
+
+      # verify all the counts updated
+      assert_equal(0, @project31.samples.count)
+      assert_equal(4, @project29.samples.count)
+      assert_equal(0, @project30.samples.count)
+    end
+
     test 'metadata summary updates after sample transfer' do
       # Reference group/projects descendants tree:
       # group12 < subgroup12b (project30 > sample 33)
@@ -167,8 +206,7 @@ module Samples
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
-      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 },
-                   @group12.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
       assert_no_changes -> { @group12.reload.metadata_summary } do
         Samples::TransferJob.perform_now(
@@ -192,6 +230,51 @@ module Samples
           @sample_transfer_params2[:sample_ids]
         )
       end
+
+      assert_equal({}, @project30.namespace.reload.metadata_summary)
+      assert_equal({}, @project31.namespace.reload.metadata_summary)
+      assert_equal({}, @subgroup12b.reload.metadata_summary)
+      assert_equal({}, @subgroup12aa.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.reload.metadata_summary)
+    end
+
+    test 'metadata summary updates after sample transfer with interrupt' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+      Samples::TransferJob.perform_later(
+        @group12,
+        @john_doe,
+        @project29.id,
+        [@sample33.id, @sample34.id, @sample35.id]
+      )
+
+      assert_no_changes -> { @group12.reload.metadata_summary } do
+        interrupt_job_during_step(Samples::TransferJob, :update_metadata_step, cursor: 1) do
+          perform_enqueued_jobs(only: Samples::TransferJob)
+        end
+      end
+
+      # verify transfer step occurred
+      assert_equal(0, @project31.samples.count) # actual
+      assert_equal(4, @project29.samples.count) # actual
+      assert_equal(0, @project30.samples.count) # actual
+
+      assert_equal({}, @project31.namespace.reload.metadata_summary) # updated
+      assert_equal({}, @subgroup12aa.reload.metadata_summary) # updated
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.reload.metadata_summary) # not updated
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.reload.metadata_summary) # not updated
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary) # remains unchanged
+
+      # continue the job queue
+      perform_enqueued_jobs(only: Samples::TransferJob)
 
       assert_equal({}, @project30.namespace.reload.metadata_summary)
       assert_equal({}, @project31.namespace.reload.metadata_summary)
@@ -235,6 +318,51 @@ module Samples
       assert_equal(0, @subgroup12aa.reload.samples_count)
       assert_equal(4, @subgroup12a.reload.samples_count)
       assert_equal(0, @subgroup12b.reload.samples_count)
+    end
+
+    test 'samples count updates after sample transfer interrupt' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal(2, @subgroup12aa.samples_count)
+      assert_equal(3, @subgroup12a.samples_count)
+      assert_equal(1, @subgroup12b.samples_count)
+      assert_equal(4, @group12.samples_count)
+
+      Samples::TransferJob.perform_later(
+        @group12,
+        @john_doe,
+        @project29.id,
+        [@sample33.id, @sample34.id, @sample35.id]
+      )
+
+      assert_no_changes -> { @group12.reload.samples_count } do
+        interrupt_job_during_step(Samples::TransferJob, :update_counts_and_activities_step, cursor: 1) do
+          perform_enqueued_jobs(only: Samples::TransferJob)
+        end
+      end
+
+      # verify only some of the counts updated
+      assert_equal(0, @subgroup12aa.reload.samples_count) # updated correctly
+      assert_equal(0, @project31.samples.count) # actual
+      assert_equal(3, @subgroup12a.reload.samples_count) # not updated
+      assert_equal(4, @project29.samples.count) # actual
+      assert_equal(1, @subgroup12b.reload.samples_count) # not updated
+      assert_equal(0, @project30.samples.count) # actual
+
+      # continue the job queue
+      perform_enqueued_jobs(only: Samples::TransferJob)
+
+      # verify all the counts updated
+      assert_equal(0, @subgroup12aa.reload.samples_count)
+      assert_equal(0, @project31.samples.count) # actual
+
+      assert_equal(4, @subgroup12a.reload.samples_count)
+      assert_equal(4, @project29.samples.count) # actual
+
+      assert_equal(0, @subgroup12b.reload.samples_count)
+      assert_equal(0, @project30.samples.count) # actual
     end
 
     test 'samples count updates after a sample transfer from a user namespace' do
@@ -771,6 +899,48 @@ module Samples
       assert_equal 4, turbo_streams.size
       # first 3 turbo streams are for progress bar updates
       turbo_streams.take(3).each do |ts|
+        assert_equal 'replace', ts['action']
+        assert_equal "#{broadcast_target}-progress-bar", ts['target']
+      end
+      # last turbo stream is the success message
+      assert_equal 'replace', turbo_streams.last['action']
+      assert_equal 'transfer_samples_dialog_content', turbo_streams.last['target']
+      assert_includes turbo_streams.last.to_html, I18n.t('samples.transfers.create.success')
+    end
+
+    test 'authorized results in a broadcasted success message and log dat with interrupt' do
+      broadcast_target = SecureRandom.uuid
+      sample_ids = [@sample1.id, @sample2.id]
+
+      Samples::TransferJob.perform_later(@current_project.namespace, @john_doe, @new_project.id, sample_ids,
+                                         broadcast_target)
+
+      assert_difference -> { @new_project.reload.samples.count } => 2 do
+        interrupt_job_after_step(Samples::TransferJob, :update_counts_and_activities_step) do
+          perform_enqueued_jobs(only: Samples::TransferJob)
+        end
+      end
+
+      turbo_streams = capture_turbo_stream_broadcasts broadcast_target
+
+      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample1.name).reload_log_data.responsible_id
+      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample2.name).reload_log_data.responsible_id
+      assert_equal 3, turbo_streams.size # only get the first 3 from the status updates
+
+      # first 3 turbo streams are for progress bar updates
+      turbo_streams.take(3).each do |ts|
+        assert_equal 'replace', ts['action']
+        assert_equal "#{broadcast_target}-progress-bar", ts['target']
+      end
+
+      # resume job
+      perform_enqueued_jobs(only: Samples::TransferJob)
+
+      turbo_streams = capture_turbo_stream_broadcasts broadcast_target
+      assert_equal 7, turbo_streams.size # on retry all 4 broadcasts occur, plus the 3 from the first run
+
+      # first 6 turbo streams are for progress bar updates
+      turbo_streams.take(6).each do |ts|
         assert_equal 'replace', ts['action']
         assert_equal "#{broadcast_target}-progress-bar", ts['target']
       end
