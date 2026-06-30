@@ -1,6 +1,3 @@
-const PROGRESS_WINDOW_ID = "linelist-export-progress-window";
-const DISMISS_SELECTOR = '[data-linelist-export-dismiss="true"]';
-
 export function updateProgressWindow(
   controller,
   message,
@@ -10,7 +7,7 @@ export function updateProgressWindow(
   if (controller.progressWindowDismissed) return;
 
   const percent = Math.min(Math.max(percentage, 0), 100);
-  ensureExportCard(controller);
+  ensureCard(controller);
 
   if (controller._progressMsgEl) {
     controller._progressMsgEl.textContent = message;
@@ -74,53 +71,56 @@ export function clearProgressWindowDismissTimeout(controller) {
 export function dismissProgressWindow(controller) {
   clearProgressWindowDismissTimeout(controller);
 
-  if (controller._exportId) {
+  if (controller._operationId) {
     const card = document.getElementById(
-      `linelist-export-card-${controller._exportId}`,
+      `${controller.identifier}-card-${controller._operationId}`,
     );
     if (card) card.remove();
   }
 
-  const container = document.getElementById(PROGRESS_WINDOW_ID);
+  const container = document.getElementById(
+    `${controller.identifier}-progress-window`,
+  );
   if (container && container.children.length === 0) container.remove();
 
   controller.progressWindowDismissed = true;
-  controller._exportId = null;
   controller._progressWindowOpenedAt = null;
   controller._progressMsgEl = null;
   controller._progressBarEl = null;
   controller._progressPctEl = null;
 }
 
-function ensureExportCard(controller) {
-  if (!controller._exportId) return null;
+function ensureCard(controller) {
+  if (!controller._operationId) return null;
 
-  const cardId = `linelist-export-card-${controller._exportId}`;
+  const cardId = `${controller.identifier}-card-${controller._operationId}`;
   let card = document.getElementById(cardId);
 
   if (!card) {
-    card = createExportCard(controller, cardId);
+    card = createCard(controller, cardId);
   } else if (!controller._progressMsgEl) {
     // Recover refs after Turbo reconnect
     controller._progressMsgEl = card.querySelector(
-      "[data-linelist-export-progress-message]",
+      `[data-${controller.identifier}-progress-message]`,
     );
     controller._progressBarEl = card.querySelector(
-      "[data-linelist-export-progress-bar]",
+      `[data-${controller.identifier}-progress-bar]`,
     );
     controller._progressPctEl = card.querySelector(
-      "[data-linelist-export-progress-percent]",
+      `[data-${controller.identifier}-progress-percent]`,
     );
   }
 
   return card;
 }
 
-function ensureProgressContainer() {
-  let container = document.getElementById(PROGRESS_WINDOW_ID);
+function ensureProgressContainer(controller) {
+  let container = document.getElementById(
+    `${controller.identifier}-progress-window`,
+  );
   if (!container) {
     container = document.createElement("div");
-    container.id = PROGRESS_WINDOW_ID;
+    container.id = `${controller.identifier}-progress-window`;
     container.className = "fixed bottom-5 right-5 z-50 w-80 space-y-2";
     container.setAttribute("data-turbo-permanent", "");
     document.body.appendChild(container);
@@ -129,25 +129,30 @@ function ensureProgressContainer() {
   return container;
 }
 
-function createExportCard(controller, cardId) {
-  const container = ensureProgressContainer();
+function createCard(controller, cardId) {
+  const container = ensureProgressContainer(controller);
   const card = document.createElement("div");
   card.id = cardId;
   card.addEventListener("click", (event) => {
-    if (!event?.target?.closest?.(DISMISS_SELECTOR)) return;
+    if (
+      !event?.target?.closest?.(
+        `[data-${controller.identifier}-dismiss="true"]`,
+      )
+    )
+      return;
     dismissProgressWindow(controller);
   });
 
   if (controller.hasProgressTemplateTarget) {
     const clone = controller.progressTemplateTarget.content.cloneNode(true);
     controller._progressMsgEl = clone.querySelector(
-      "[data-linelist-export-progress-message]",
+      `[data-${controller.identifier}-progress-message]`,
     );
     controller._progressBarEl = clone.querySelector(
-      "[data-linelist-export-progress-bar]",
+      `[data-${controller.identifier}-progress-bar]`,
     );
     controller._progressPctEl = clone.querySelector(
-      "[data-linelist-export-progress-percent]",
+      `[data-${controller.identifier}-progress-percent]`,
     );
     card.appendChild(clone);
   }

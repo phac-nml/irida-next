@@ -627,6 +627,16 @@ fr:
       analysis: ANALYSE
       linelist: LISTE DÉTAILLÉE
       sample: ÉCHANTILLON
+  data_imports:
+    linelist_import_dialog:
+      v2:
+        component:
+          close_progress: Fermeture de la progression
+          error_message: 'Erreur inattendue lors de l''importation des métadonnées : %{message}'
+          import_complete_message: L'importation des métadonnées est terminée
+          import_started_message: Démarrage de l'importation des métadonnées...
+          imported_records_message: "%{current} enregistrements sur %{total} importés"
+          importing_linelist: Importation de la liste de lignes
   date:
     abbr_day_names:
     - dim

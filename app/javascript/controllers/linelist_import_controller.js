@@ -1,18 +1,56 @@
 import * as XLSX from "xlsx";
 import Controller from "controllers/metadata/file_import_controller";
 import { omitBy, pick } from "utilities/collection";
-import { closeDialog } from "utilities/dialog";
+import { closeDialog, ensureDialog, openDialog } from "utilities/dialog";
+import { ensureFlash } from "utilities/flash";
+import { t } from "utilities/message_formatter";
+import {
+  clearProgressWindowDismissTimeout,
+  scheduleProgressWindowDismiss,
+  showProgressWindow,
+  updateProgressWindow,
+} from "utilities/progress_window";
 
 export default class extends Controller {
+  static targets = [
+    "alertTemplate",
+    "dialogTemplate",
+    "flashTemplate",
+    "progressTemplate",
+  ];
   static values = {
     graphqlUrl: String,
     groupPuid: String,
     projectPuid: String,
+    minimumVisibleDurationMs: {
+      type: Number,
+      default: 3500,
+    },
+    importStartedMessage: {
+      type: String,
+      default: "Starting metadata import...",
+    },
+    importedRecordsMessage: {
+      type: String,
+      default: "Imported %{current} of %{total} records",
+    },
+    importCompleteMessage: {
+      type: String,
+      default: "The metadata import is complete",
+    },
+    errorMessage: {
+      type: String,
+      default: "Unexpected error while importing metadata: %{message}",
+    },
   };
 
   connect() {
     super.connect();
     this._fileType = null;
+    this._operationId ||= null;
+    this._progressWindowOpenedAt ||= null;
+    this._dismissProgressWindowTimeout ||= null;
+    this.progressWindowDismissed ??= false;
     this._worksheet = null;
   }
 
@@ -46,9 +84,14 @@ export default class extends Controller {
   handleSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
-    this._worker?.terminate();
-    this._worker ||= this.#buildWorker();
+    this.#terminateWorker();
+    this._worker = this.#buildWorker();
     closeDialog(this.element, this.application);
+    this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    clearProgressWindowDismissTimeout(this);
+    this.progressWindowDismissed = false;
+    this._progressWindowOpenedAt = null;
+    showProgressWindow(this, t(this.importStartedMessageValue));
     this.#processRows();
   }
 
@@ -106,17 +149,15 @@ export default class extends Controller {
         const payload = event.data || {};
 
         if (payload.type === "progress") {
-          console.log("Progress: ", payload);
+          this.#onProgress(payload);
         }
 
         if (payload.type === "done") {
-          console.log("Complete");
-          this.#terminateWorker();
+          this.#onDone();
         }
 
         if (payload.type === "error") {
-          console.log("Error: ", payload);
-          this.#terminateWorker();
+          this.#onError(payload);
         }
       };
     } else {
@@ -124,6 +165,74 @@ export default class extends Controller {
     }
 
     return worker;
+  }
+
+  #errorMessageNode(error) {
+    const clone = this.alertTemplateTarget.content.cloneNode(true);
+    const walker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
+    let currentNode = walker.nextNode();
+
+    while (currentNode) {
+      if (currentNode.textContent?.includes("PLACEHOLDER")) {
+        currentNode.textContent = currentNode.textContent.replaceAll(
+          "PLACEHOLDER",
+          error,
+        );
+      }
+
+      currentNode = walker.nextNode();
+    }
+
+    return clone.firstElementChild;
+  }
+
+  #onProgress(payload) {
+    const message = t(this.importedRecordsMessageValue, {
+      current: payload.current,
+      total: payload.total,
+    });
+
+    if (payload.result?.overallStatus === "successful") {
+      if (payload.current === payload.total) {
+        ensureFlash(this);
+      }
+    } else if (
+      payload.result?.overallStatus === "unsuccessful" ||
+      payload.result?.overallStatus === "successful with errors"
+    ) {
+      const dialog = ensureDialog(this);
+      if (dialog) {
+        payload.result?.errors.forEach((error) => {
+          const errorMessage = this.#errorMessageNode(error.message);
+          const errorMessageList = dialog.querySelector("#error-messages");
+          if (errorMessageList && errorMessage) {
+            errorMessageList.append(errorMessage);
+          }
+        });
+        if (payload.current === payload.total) {
+          openDialog(dialog, this.application);
+        }
+      }
+    }
+
+    updateProgressWindow(
+      this,
+      message,
+      (payload.current / payload.total) * 100,
+    );
+  }
+
+  #onDone() {
+    const message = t(this.importCompleteMessageValue);
+    updateProgressWindow(this, message, 100);
+    scheduleProgressWindowDismiss(this);
+    this.#terminateWorker();
+  }
+
+  #onError(payload) {
+    const message = t(this.errorMessageValue, { message: payload.message });
+    updateProgressWindow(this, message, 100, true);
+    this.#terminateWorker();
   }
 
   #csrfToken() {

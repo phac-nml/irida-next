@@ -627,6 +627,16 @@ en:
       analysis: ANALYSIS
       linelist: LINELIST
       sample: SAMPLE
+  data_imports:
+    linelist_import_dialog:
+      v2:
+        component:
+          close_progress: Close progress
+          error_message: 'Unexpected error while importing metadata: %{message}'
+          import_complete_message: The metadata import is complete
+          import_started_message: Starting metadata import...
+          imported_records_message: Imported %{current} of %{total} records
+          importing_linelist: Importing linelist
   date:
     abbr_day_names:
     - Sun
