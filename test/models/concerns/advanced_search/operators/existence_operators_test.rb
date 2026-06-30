@@ -14,7 +14,6 @@ module AdvancedSearch
         @test_instance = TestClass.new
         @scope = WorkflowExecution.all
         @node = WorkflowExecution.arel_table[:name]
-        @uuid_node = WorkflowExecution.arel_table[:id]
       end
 
       # condition_exists tests
