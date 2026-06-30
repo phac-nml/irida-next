@@ -641,3 +641,15 @@ public_group1_subgroup1:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:public_group1, :uuid) %>
   samples_count: 0
   updated_at: <%= 1.days.ago %>
+
+snvphyl_group:
+  <<: *DEFAULTS
+  name: SNVPhyl Group
+  path: snvphyl-group
+  description: SNVPhyl Group description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
+  metadata_summary: { "metadata_1": 2, "metadata_2": 2, "metadata_3": 2, "metadata_4": 2, "metadata_5": 2,
+                      "metadata_6": 2, "metadata_7": 2, "metadata_8": 2 }
+  puid: INXT_GRP_AAAAAAAACX
+  attachments_updated_at: <%= 2.hours.ago %>
+  samples_count: 2

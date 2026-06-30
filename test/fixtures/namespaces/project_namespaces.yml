@@ -701,3 +701,14 @@ public_subgroup1_project1_namespace:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_PRJ_AAAAAAAACY
   public: true
+
+snvphyl_project_namespace:
+  <<: *DEFAULTS
+  name: SNVPhyl Project
+  path: snvphyl-project
+  description: SNVPhyl Project description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_group, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
+  metadata_summary: { "metadata_1": 2, "metadata_2": 2, "metadata_3": 2, "metadata_4": 2, "metadata_5": 2,
+                      "metadata_6": 2, "metadata_7": 2, "metadata_8": 2 }
+  puid: INXT_PRJ_AAAAAAAACZ

@@ -27,6 +27,7 @@ module WorkflowExecutions
       return @workflow_execution unless @workflow_execution.valid?
 
       assign_workflow_params
+      validate_required_workflow_params
 
       # Check if required number of samples (min/max) is set for pipeline and set error to
       # non persisted workflow execution object if selected samples exceeds/doesn't meet this requirement
@@ -55,6 +56,25 @@ module WorkflowExecutions
       return unless params.key?(:workflow_params)
 
       @workflow_execution.workflow_params = sanitized_workflow_params
+    end
+
+    def validate_required_workflow_params
+      return if workflow.nil?
+
+      workflow.workflow_params.each_value do |definition|
+        definition[:properties].each do |name, property|
+          next unless %w[path file-path].include?(property[:format])
+          next unless property[:required]
+
+          value = @workflow_execution.workflow_params[name.to_s]
+          next if value.present?
+
+          @workflow_execution.errors.add(
+            :base,
+            I18n.t('workflow_executions.create.required_workflow_param_blank', property: name)
+          )
+        end
+      end
     end
 
     def persist_workflow_execution

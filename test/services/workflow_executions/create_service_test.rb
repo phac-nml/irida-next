@@ -611,5 +611,108 @@ module WorkflowExecutions
         WorkflowExecutions::CreateService.new(@user, workflow_params).execute
       end
     end
+
+    test 'validate_required_workflow_params adds error when required path param is blank' do
+      service = WorkflowExecutions::CreateService.new(@user, {
+                                                        metadata: {
+                                                          pipeline_id: 'phac-nml/iridanextexample',
+                                                          workflow_version: '1.0.2'
+                                                        },
+                                                        namespace_id: @project.namespace.id,
+                                                        submitter_id: @user.id,
+                                                        samples_workflow_executions_attributes: @samples_workflow_executions_attributes # rubocop:disable Layout/LineLength
+                                                      })
+
+      fake_workflow = Struct.new(:workflow_params).new(
+        {
+          input_output_options: {
+            properties: {
+              input: {
+                required: true,
+                format: 'path'
+              }
+            }
+          }
+        }
+      )
+
+      workflow_execution = WorkflowExecution.new(workflow_params: { 'input' => '' })
+
+      service.workflow = fake_workflow
+      service.instance_variable_set(:@workflow_execution, workflow_execution)
+
+      service.validate_required_workflow_params
+
+      assert_includes workflow_execution.errors[:base],
+                      I18n.t('workflow_executions.create.required_workflow_param_blank', property: :input)
+    end
+
+    test 'validate_required_workflow_params does not add error when required path param is present' do
+      service = WorkflowExecutions::CreateService.new(@user, {
+                                                        metadata: {
+                                                          pipeline_id: 'phac-nml/iridanextexample',
+                                                          workflow_version: '1.0.2'
+                                                        },
+                                                        namespace_id: @project.namespace.id,
+                                                        submitter_id: @user.id,
+                                                        samples_workflow_executions_attributes: @samples_workflow_executions_attributes # rubocop:disable Layout/LineLength
+                                                      })
+
+      fake_workflow = Struct.new(:workflow_params).new(
+        {
+          input_output_options: {
+            properties: {
+              input: {
+                required: true,
+                format: 'file-path'
+              }
+            }
+          }
+        }
+      )
+
+      workflow_execution = WorkflowExecution.new(workflow_params: { 'input' => 'gid://app/Attachment/1' })
+
+      service.workflow = fake_workflow
+      service.instance_variable_set(:@workflow_execution, workflow_execution)
+
+      service.validate_required_workflow_params
+
+      assert_empty workflow_execution.errors[:base]
+    end
+
+    test 'validate_required_workflow_params ignores non path params' do
+      service = WorkflowExecutions::CreateService.new(@user, {
+                                                        metadata: {
+                                                          pipeline_id: 'phac-nml/iridanextexample',
+                                                          workflow_version: '1.0.2'
+                                                        },
+                                                        namespace_id: @project.namespace.id,
+                                                        submitter_id: @user.id,
+                                                        samples_workflow_executions_attributes: @samples_workflow_executions_attributes # rubocop:disable Layout/LineLength
+                                                      })
+
+      fake_workflow = Struct.new(:workflow_params).new(
+        {
+          input_output_options: {
+            properties: {
+              project_name: {
+                required: true,
+                format: nil
+              }
+            }
+          }
+        }
+      )
+
+      workflow_execution = WorkflowExecution.new(workflow_params: { 'project_name' => '' })
+
+      service.workflow = fake_workflow
+      service.instance_variable_set(:@workflow_execution, workflow_execution)
+
+      service.validate_required_workflow_params
+
+      assert_empty workflow_execution.errors[:base]
+    end
   end
 end

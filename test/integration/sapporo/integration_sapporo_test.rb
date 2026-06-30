@@ -51,6 +51,114 @@ class IntegrationSapporoTest < ActionDispatch::IntegrationTest
     assert @workflow_execution.cleaned?
   end
 
+  test 'integration sapporo snvphylnfc end to end' do
+    # Before starting test, check if Sapporo Integration is running.
+    begin
+      ga4gh_client = Integrations::Ga4ghWesApi::V1::Client.new
+      ga4gh_client.service_info
+    rescue Integrations::ApiExceptions::ConnectionError
+      skip 'Sapporo server is not running'
+    end
+
+    user = users(:snvphyl_user)
+    project = projects(:snvphyl_project)
+    sample1 = samples(:snvphyl_sample1)
+    sample1_attachment_fwd = attachments(:snvphyl_sample1_attachment_fwd)
+    sample1_attachment_rev = attachments(:snvphyl_sample1_attachment_rev)
+    sample1_attachment_ref = attachments(:snvphyl_sample1_attachment_ref)
+    sample2 = samples(:snvphyl_sample2)
+    sample2_attachment_fwd = attachments(:snvphyl_sample2_attachment_fwd)
+    sample2_attachment_rev = attachments(:snvphyl_sample2_attachment_rev)
+
+    workflow_params = { reference_sample_id: '',
+                        refgenome: sample1_attachment_ref.to_global_id,
+                        metadata_1_header: 'metadata_1',
+                        metadata_2_header: 'metadata_2',
+                        metadata_3_header: 'metadata_3',
+                        metadata_4_header: 'metadata_4',
+                        metadata_5_header: 'metadata_5',
+                        metadata_6_header: 'metadata_6',
+                        metadata_7_header: 'metadata_7',
+                        metadata_8_header: 'metadata_8',
+                        metadata_9_header: 'metadata_9',
+                        metadata_10_header: 'metadata_10',
+                        metadata_11_header: 'metadata_11',
+                        metadata_12_header: 'metadata_12',
+                        metadata_13_header: 'metadata_13',
+                        metadata_14_header: 'metadata_14',
+                        metadata_15_header: 'metadata_15',
+                        metadata_16_header: 'metadata_16',
+                        min_coverage_depth: 15,
+                        min_mapping_percent_cov: 80,
+                        min_mean_mapping_quality: 30,
+                        window_size: 500,
+                        density_threshold: 2,
+                        snv_abundance_ratio: 0.75,
+                        min_repeat_length: 150,
+                        min_repeat_pid: 90,
+                        skip_density_filter: false }
+
+    samples_workflow_executions_attributes = {
+      '0': {
+        sample_id: sample1.id,
+        samplesheet_params: {
+          sample: sample1.puid,
+          sample_name: sample1.name,
+          fastq_1: sample1_attachment_fwd.to_global_id, # rubocop:disable Naming/VariableNumber
+          fastq_2: sample1_attachment_rev.to_global_id, # rubocop:disable Naming/VariableNumber
+          reference_assembly: ''
+        }.merge(sample1.metadata)
+      },
+      '1': {
+        sample_id: sample2.id,
+        samplesheet_params: {
+          sample: sample2.puid,
+          sample_name: sample2.name,
+          fastq_1: sample2_attachment_fwd.to_global_id, # rubocop:disable Naming/VariableNumber
+          fastq_2: sample2_attachment_rev.to_global_id, # rubocop:disable Naming/VariableNumber
+          reference_assembly: ''
+        }.merge(sample2.metadata)
+      }
+    }
+
+    workflow_execution_params = {
+      metadata: {
+        pipeline_id: 'phac-nml/snvphylnfc',
+        workflow_version: '2.4.0'
+      },
+      submitter_id: user.id,
+      namespace_id: project.namespace.id,
+      workflow_params: workflow_params,
+      samples_workflow_executions_attributes: samples_workflow_executions_attributes,
+      name: 'SNVPhyl Workflow End To End'
+    }
+
+    workflow_execution = WorkflowExecutions::CreateService.new(user, workflow_execution_params).execute
+
+    assert_equal 'initial', workflow_execution.state
+    assert_not workflow_execution.cleaned?
+
+    perform_enqueued_jobs(only: WorkflowExecutionPreparationJob)
+    assert_equal 'prepared', workflow_execution.reload.state
+
+    perform_enqueued_jobs(only: WorkflowExecutionSubmissionJob)
+    assert_equal 'submitted', workflow_execution.reload.state
+
+    # keep performing status jobs until we reach completing state
+    perform_enqueued_jobs(only: WorkflowExecutionStatusJob) while enqueued_jobs.any? do |job|
+      job['job_class'] == WorkflowExecutionStatusJob.name
+    end
+    assert_equal 'completing', workflow_execution.reload.state
+
+    perform_enqueued_jobs(only: WorkflowExecutionCompletionJob)
+    assert_equal 'completed', workflow_execution.reload.state
+
+    perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
+
+    assert_equal 'completed', workflow_execution.reload.state
+    assert workflow_execution.cleaned?
+  end
+
   test 'workflow execution metadata sends to WES' do
     # Before starting test, check if Sapporo Integration is running.
     begin

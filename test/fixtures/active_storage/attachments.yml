@@ -332,3 +332,38 @@ group16_attachment_csv:
   name: file
   record: group16AttachmentCSV (Attachment)
   blob: attachment_csv_blob
+
+snvphyl_sample1_attachment_fwd_file:
+  name: file
+  record: snvphyl_sample1_attachment_fwd (Attachment)
+  blob: snvphyl_sample1_attachment_fwd_blob
+
+snvphyl_sample1_attachment_rev_file:
+  name: file
+  record: snvphyl_sample1_attachment_rev (Attachment)
+  blob: snvphyl_sample1_attachment_rev_blob
+
+snvphyl_sample1_attachment_ref_file:
+  name: file
+  record: snvphyl_sample1_attachment_ref (Attachment)
+  blob: snvphyl_sample1_attachment_ref_blob
+
+snvphyl_sample2_attachment_fwd_file:
+  name: file
+  record: snvphyl_sample2_attachment_fwd (Attachment)
+  blob: snvphyl_sample2_attachment_fwd_blob
+
+snvphyl_sample2_attachment_rev_file:
+  name: file
+  record: snvphyl_sample2_attachment_rev (Attachment)
+  blob: snvphyl_sample2_attachment_rev_blob
+
+snvphyl_project_attachment_ref_file:
+  name: file
+  record: snvphyl_project_attachment_ref (Attachment)
+  blob: snvphyl_project_attachment_ref_blob
+
+snvphyl_group_attachment_ref_file:
+  name: file
+  record: snvphyl_group_attachment_ref (Attachment)
+  blob: snvphyl_group_attachment_ref_blob

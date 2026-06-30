@@ -821,3 +821,13 @@ public_group1_subgroup1_project1_route:
   name: Public Group 1 Subgroup 1 Project 1
   path: public-group-1/subgroup-1/project-1
   source: public_subgroup1_project1_namespace (Namespace)
+
+snvphyl_group_route:
+  name: SNVPhyl Group
+  path: snvphyl-group
+  source: snvphyl_group (Namespace)
+
+snvphyl_project_route:
+  name: SNVPhyl Group / SNVPhyl Project
+  path: snvphyl-group/snvphyl-project
+  source: snvphyl_project_namespace (Namespace)

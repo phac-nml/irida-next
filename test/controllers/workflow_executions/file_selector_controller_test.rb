@@ -9,25 +9,44 @@ module WorkflowExecutions
     # TODO: refactor this file when feature flag v2_samplesheet is retired
     setup do
       sign_in users(:john_doe)
+
       @expected_fastq_params = {
-        'attachable_id' => samples(:sample43).id,
-        'attachable_type' => 'Sample',
-        'index' => 0,
-        'selected_id' => nil,
-        'property' => 'fastq_1',
-        'required_properties' => %w[sample fastq_1],
-        'pattern' => '^\S+\.f(ast)?q(\.gz)?$',
-        'namespace_id' => projects(:project37).namespace.id
+        attachable_id: samples(:sample43).id,
+        attachable_type: 'Sample',
+        index: 0,
+        selected_id: nil,
+        property: 'fastq_1',
+        required_properties: %w[sample fastq_1],
+        pattern: '^\S+\.f(ast)?q(\.gz)?$',
+        namespace_id: projects(:project37).namespace.id
       }
 
       @expected_other_params = {
-        'attachable_id' => samples(:sample1).id,
-        'attachable_type' => 'Sample',
-        'index' => 1,
-        'selected_id' => attachments(:attachment2).id,
-        'property' => 'input',
-        'required_properties' => nil,
-        'namespace_id' => projects(:project1).namespace.id
+        attachable_id: samples(:sample1).id,
+        attachable_type: 'Sample',
+        index: 1,
+        selected_id: attachments(:attachment2).id,
+        property: 'input',
+        required_properties: nil,
+        namespace_id: projects(:project1).namespace.id
+      }
+
+      @project_ref_params = {
+        attachable_id: projects(:snvphyl_project).namespace.id,
+        attachable_type: Namespaces::ProjectNamespace.sti_name,
+        selected_id: '',
+        property: 'refgenome',
+        pattern: '^\\S+\\.f(ast)?a(\\.gz)?$',
+        namespace_id: projects(:snvphyl_project).namespace.id
+      }
+
+      @group_ref_params = {
+        attachable_id: groups(:snvphyl_group).id,
+        attachable_type: Group.sti_name,
+        selected_id: '',
+        property: 'refgenome',
+        pattern: '^\\S+\\.f(ast)?a(\\.gz)?$',
+        namespace_id: groups(:snvphyl_group).id
       }
     end
     test 'new file selection with fastq params with feature flag' do
@@ -88,6 +107,104 @@ module WorkflowExecutions
       assert_equal attachments(:attachmentPEREV43).id, payload['files'][1]['id']
     end
 
+    test 'create project file selection with fastq params with feature flag' do
+      Flipper.enable(:v2_samplesheet)
+      sign_in users(:snvphyl_user)
+      attachment = attachments(:snvphyl_project_attachment_ref)
+
+      post workflow_executions_file_selector_index_path(
+        file_selector: @project_ref_params,
+        attachment_id: attachment.id,
+        format: :turbo_stream
+      )
+
+      assert_response :ok
+
+      property = @project_ref_params[:property]
+      link_target_id = "workflow_execution_workflow_params_#{property}_link"
+      input_target_id = "workflow_execution_workflow_params_#{property}"
+      doc = Nokogiri::HTML(response.parsed_body)
+      link = doc.at_css("turbo-stream[target=\"#{link_target_id}\"] template a")
+      input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
+
+      assert_equal attachment.filename.to_s, link.text
+      assert_equal 'autofocus', link['autofocus']
+      assert_equal attachment.to_global_id.to_s, input['value']
+    end
+
+    test 'create project file selection with fastq params without feature flag' do
+      sign_in users(:snvphyl_user)
+      attachment = attachments(:snvphyl_project_attachment_ref)
+
+      post workflow_executions_file_selector_index_path(
+        file_selector: @project_ref_params,
+        attachment_id: attachment.id,
+        format: :turbo_stream
+      )
+
+      assert_response :ok
+
+      property = @project_ref_params[:property]
+      link_target_id = "workflow_execution_workflow_params_#{property}_link"
+      input_target_id = "workflow_execution_workflow_params_#{property}"
+      doc = Nokogiri::HTML(response.parsed_body)
+      link = doc.at_css("turbo-stream[target=\"#{link_target_id}\"] template a")
+      input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
+
+      assert_equal attachment.filename.to_s, link.text
+      assert_equal 'autofocus', link['autofocus']
+      assert_equal attachment.to_global_id.to_s, input['value']
+    end
+
+    test 'create group file selection with fastq params with feature flag' do
+      Flipper.enable(:v2_samplesheet)
+      sign_in users(:snvphyl_user)
+      attachment = attachments(:snvphyl_group_attachment_ref)
+
+      post workflow_executions_file_selector_index_path(
+        file_selector: @group_ref_params,
+        attachment_id: attachment.id,
+        format: :turbo_stream
+      )
+
+      assert_response :ok
+
+      property = @group_ref_params[:property]
+      link_target_id = "workflow_execution_workflow_params_#{property}_link"
+      input_target_id = "workflow_execution_workflow_params_#{property}"
+      doc = Nokogiri::HTML(response.parsed_body)
+      link = doc.at_css("turbo-stream[target=\"#{link_target_id}\"] template a")
+      input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
+
+      assert_equal attachment.filename.to_s, link.text
+      assert_equal 'autofocus', link['autofocus']
+      assert_equal attachment.to_global_id.to_s, input['value']
+    end
+
+    test 'create group file selection with fastq params without feature flag' do
+      sign_in users(:snvphyl_user)
+      attachment = attachments(:snvphyl_group_attachment_ref)
+
+      post workflow_executions_file_selector_index_path(
+        file_selector: @group_ref_params,
+        attachment_id: attachment.id,
+        format: :turbo_stream
+      )
+
+      assert_response :ok
+
+      property = @group_ref_params[:property]
+      link_target_id = "workflow_execution_workflow_params_#{property}_link"
+      input_target_id = "workflow_execution_workflow_params_#{property}"
+      doc = Nokogiri::HTML(response.parsed_body)
+      link = doc.at_css("turbo-stream[target=\"#{link_target_id}\"] template a")
+      input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
+
+      assert_equal attachment.filename.to_s, link.text
+      assert_equal 'autofocus', link['autofocus']
+      assert_equal attachment.to_global_id.to_s, input['value']
+    end
+
     test 'create file selection with no attachment keeps empty payload for selected property' do
       Flipper.enable(:v2_samplesheet)
 
@@ -121,6 +238,17 @@ module WorkflowExecutions
       assert_response :ok
     end
 
+    test 'new file selection with attachable outside authorized namespace responds not found' do
+      Flipper.enable(:v2_samplesheet)
+
+      get new_workflow_executions_file_selector_path(
+        file_selector: @expected_fastq_params.merge(attachable_id: samples(:sample1).id),
+        format: :turbo_stream
+      )
+
+      assert_response :not_found
+    end
+
     test 'create file selection with other params with feature flag' do
       Flipper.enable(:v2_samplesheet)
       attachment = attachments(:attachment1)
@@ -145,6 +273,18 @@ module WorkflowExecutions
       )
 
       assert_response :ok
+    end
+
+    test 'create file selection with attachment outside attachable responds not found' do
+      Flipper.enable(:v2_samplesheet)
+
+      post workflow_executions_file_selector_index_path(
+        file_selector: @expected_fastq_params,
+        attachment_id: attachments(:attachment1).id,
+        format: :turbo_stream
+      )
+
+      assert_response :not_found
     end
 
     test 'unauthorized new file selection with feature flag' do

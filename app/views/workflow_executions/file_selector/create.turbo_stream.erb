@@ -5,20 +5,50 @@
                       file_selector_params:,
                     } %>
 
-<%= turbo_stream.append "samplesheet-payload-container" do %>
-  <% if Flipper.enabled?(:v2_samplesheet, current_user) %>
-    <div
-      hidden
-      data-files="<%= @attachments_params.to_json %>"
-      data-nextflow--v2--samplesheet-target="dataPayload"
-      data-payload-type="files"
-    ></div>
-  <% else %>
-    <div
-      hidden
-      data-controller="nextflow--v1--file"
-      data-nextflow--v1--file-files-value="<%= @attachments_params.to_json %>"
-      data-nextflow--v1--samplesheet-target="dataPayload"
-    ></div>
+<% if file_selector_params[:attachable_type] == Sample.sti_name %>
+  <%= turbo_stream.append "samplesheet-payload-container" do %>
+    <% if Flipper.enabled?(:v2_samplesheet, current_user) %>
+      <div
+        hidden
+        data-files="<%= @attachments_params.to_json %>"
+        data-nextflow--v2--samplesheet-target="dataPayload"
+        data-payload-type="files"
+      ></div>
+    <% else %>
+      <div
+        hidden
+        data-controller="nextflow--v1--file"
+        data-nextflow--v1--file-files-value="<%= @attachments_params.to_json %>"
+        data-nextflow--v1--samplesheet-target="dataPayload"
+      ></div>
+    <% end %>
+  <% end %>
+<% else %>
+  <% property = file_selector_params[:property].to_s %>
+  <% required = file_selector_params[:required].to_s %>
+  <% input_id = "workflow_execution_workflow_params_#{property}" %>
+  <% link_id = "workflow_execution_workflow_params_#{property}_link" %>
+  <% legend_id = "workflow_execution_workflow_params_#{property}_legend" %>
+  <% describedby_ids = ["workflow_execution_workflow_params_#{property}_prefix"] %>
+  <% describedby_ids << "workflow_execution_workflow_params_#{property}_help" if file_selector_params[:help_text].present? %>
+  <%= turbo_stream.replace link_id, method: :morph do %>
+    <%= link_to @attachment[:filename].presence || t('components.nextflow.no_selected_file'),
+      new_workflow_executions_file_selector_path(
+        file_selector: file_selector_params.merge(selected_id: @attachment[:id])
+      ),
+      data: { turbo_stream: true },
+      id: link_id,
+      aria: {
+        labelledby: legend_id,
+        describedby: describedby_ids.join(" ")
+      },
+      autofocus: true,
+      class: "block w-full min-w-0 flex-1 rounded-b-lg border-none bg-slate-50 p-2.5 text-sm text-slate-900 focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700 dark:text-white dark:placeholder-slate-400" %>
+  <% end %>
+  <%= turbo_stream.replace input_id do %>
+    <%= hidden_field_tag "workflow_execution[workflow_params][#{property}]",
+      @attachment[:global_id],
+      id: input_id,
+      required: required %>
   <% end %>
 <% end %>

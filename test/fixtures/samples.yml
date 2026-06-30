@@ -671,3 +671,85 @@ sample_preparation_test_3:
   created_at: <%= 3.week.ago %>
   updated_at: <%= 3.hours.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
+
+snvphyl_sample1:
+  name: SNVPhyl Sample 1
+  description: SNVPhyl Sample 1 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_project, :uuid) %>
+  puid: INXT_SAM_AAAAAAAAEA
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+  metadata: { 'metadata_1': '1.1',
+              'metadata_2': '2.1',
+              'metadata_3': '3.1',
+              'metadata_4': '4.1',
+              'metadata_5': '5.1',
+              'metadata_6': '6.1',
+              'metadata_7': '7.1',
+              'metadata_8': '8.1' }
+  metadata_provenance: { 'metadata_1': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_2': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_3': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_4': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_5': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_6': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_7': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_8': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> } }
+
+snvphyl_sample2:
+  name: SNVPhyl Sample 2
+  description: SNVPhyl Sample 2 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_project, :uuid) %>
+  puid: INXT_SAM_AAAAAAAAEB
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+  metadata: { 'metadata_1': '1.1',
+              'metadata_2': '2.2',
+              'metadata_3': '3.2',
+              'metadata_4': '4.2',
+              'metadata_5': '5.2',
+              'metadata_6': '6.2',
+              'metadata_7': '7.1',
+              'metadata_8': '8.2' }
+  metadata_provenance: { 'metadata_1': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_2': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_3': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_4': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_5': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_6': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_7': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> },
+                         'metadata_8': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
+                                         'source': 'user',
+                                         'updated_at': <%= 1.day.ago.to_datetime %> } }

@@ -268,3 +268,9 @@ chunked_samples_doe:
   email: <%= "chunked.samples.doe@localhost" %>
   first_name: ChunkedSamples
   last_name: Doe
+
+snvphyl_user:
+  <<: *DEFAULTS
+  email: <%= "snvphyl.user@localhost" %>
+  first_name: SNVPhyl
+  last_name: User

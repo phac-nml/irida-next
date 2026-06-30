@@ -279,6 +279,7 @@ fr:
           tooltip: "%{count} sous-groupes dans %{namespace_name}"
     nextflow:
       email_notification: Vous recevez un avis par courriel lorsque votre analyse est terminée?
+      no_selected_file: Aucun fichier sélectionné
       required: Obligatoire
       samplesheet:
         file_cell_component:

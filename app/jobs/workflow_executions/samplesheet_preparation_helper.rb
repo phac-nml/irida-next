@@ -5,7 +5,7 @@ require 'tempfile'
 
 module WorkflowExecutions
   # functions to simplify steps in WorkflowExecutionPreparationJob for building the samplesheet and copying attachments
-  module SamplesheetPreparationHelper
+  module SamplesheetPreparationHelper # rubocop:disable Metrics/ModuleLength
     include BlobHelper
 
     def execute_copy_step(workflow_execution, step2d) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
@@ -28,6 +28,8 @@ module WorkflowExecutions
 
         step2d.set! [index_x + 1, 0] # increment outer loop
       end
+
+      copy_workflow_execution_attachments(workflow_execution)
     end
 
     def execute_processing_step(workflow_execution) # rubocop:disable Metrics/MethodLength
@@ -64,6 +66,18 @@ module WorkflowExecutions
     end
 
     private
+
+    def copy_workflow_execution_attachments(workflow_execution)
+      workflow_execution.workflow_params.each do |key, value|
+        gid = GlobalID.parse(value)
+        next unless gid && gid.model_class == Attachment
+
+        attachment = GlobalID.find(gid)
+        attachment_key = generate_attachment_key(attachment, workflow_execution.blob_run_directory)
+        blob = compose_blob_with_custom_key(attachment.file, attachment_key)
+        workflow_execution.workflow_params[key] = blob_key_to_service_path(blob.key)
+      end
+    end
 
     def map_attachment_list(sample_workflow_execution)
       parse_attachments_from_samplesheet(sample_workflow_execution.samplesheet_params).map do |_key, value|

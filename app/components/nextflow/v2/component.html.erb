@@ -16,12 +16,7 @@
     data-nextflow--v2--samplesheet-selection-outlet="#samples-table"
   <% end %>
 >
-  <h1
-    class="
-      mb-4 text-2xl leading-none font-extrabold tracking-tight text-slate-900 md:text-5xl lg:text-4xl
-      dark:text-white
-    "
-  >
+  <h1 class="mb-4 text-2xl leading-none font-extrabold tracking-tight text-slate-900 md:text-5xl lg:text-4xl dark:text-white">
     <%= @workflow.name %>
   </h1>
 
@@ -139,46 +134,14 @@
                   </div>
                 <% end %>
               <% else %>
-                <div>
-                  <% if property[:type] != 'boolean' %>
-                    <%= fields.label name, :class => "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
-                      <%= property[:description] %>
-
-                      <% if property[:required] %>
-                        <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
-                      <% end %>
-                    <% end %>
-                    <%= form_input(fields, name, property, property[:required], instance) %>
-                  <% else %>
-                    <% value =
-                      (
-                        if instance.present?
-                          instance["workflow_params"][name.to_s]
-                        else
-                          property[:default]
-                        end
-                      ) %>
-                    <%= viral_prefixed_boolean(form: fields, name:, value: ActiveModel::Type::Boolean.new.cast(value)) do |input| %>
-                      <%= input.with_prefix do %>
-                        <%= format_name_as_arg(name) %>
-                      <% end %>
-
-                      <%= input.with_legend(classes: 'block mb-2 text-sm font-medium text-slate-900 dark:text-white') do %>
-                        <%= property[:description] %>
-
-                        <% if property[:required] %>
-                          <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
-                        <% end %>
-                      <% end %>
-                    <% end %>
-                  <% end %>
-
-                  <% if property[:help_text].present? %>
-                    <%= viral_help_text do %>
-                      <%= property[:help_text] %>
-                    <% end %>
-                  <% end %>
-                </div>
+                <%= render Nextflow::Shared::WorkflowParamPropertyComponent.new(
+                  fields:,
+                  name:,
+                  property:,
+                  instance:,
+                  namespace_id: @namespace_id,
+                  namespace_type: @namespace_type,
+                ) %>
               <% end %>
             <% end %>
           </div>

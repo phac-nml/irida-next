@@ -718,3 +718,10 @@ public_group_one_member_john_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:public_group1, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
+
+snvphyl_group_member_snvphyl_user:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_group, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
