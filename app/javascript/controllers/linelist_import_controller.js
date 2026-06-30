@@ -5,6 +5,7 @@ import { closeDialog, ensureDialog, openDialog } from "utilities/dialog";
 import { ensureFlash } from "utilities/flash";
 import { t } from "utilities/message_formatter";
 import {
+  clearProgressWindowDismissTimeout,
   scheduleProgressWindowDismiss,
   showProgressWindow,
   updateProgressWindow,
@@ -48,6 +49,8 @@ export default class extends Controller {
     this._fileType = null;
     this._operationId ||= null;
     this._progressWindowOpenedAt ||= null;
+    this._dismissProgressWindowTimeout ||= null;
+    this.progressWindowDismissed ??= false;
     this._worksheet = null;
   }
 
@@ -87,6 +90,8 @@ export default class extends Controller {
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this._progressWindowOpenedAt = null;
     showProgressWindow(this, t(this.importStartedMessageValue));
+    this.progressWindowDismissed = false;
+    clearProgressWindowDismissTimeout(this);
     this.#processRows();
   }
 

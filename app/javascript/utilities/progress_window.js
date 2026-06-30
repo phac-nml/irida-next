@@ -84,7 +84,6 @@ export function dismissProgressWindow(controller) {
   if (container && container.children.length === 0) container.remove();
 
   controller.progressWindowDismissed = true;
-  controller._operationId = null;
   controller._progressWindowOpenedAt = null;
   controller._progressMsgEl = null;
   controller._progressBarEl = null;
