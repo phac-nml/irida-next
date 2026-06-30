@@ -9,7 +9,11 @@ module AdvancedSearch
   class GroupValidator < ActiveModel::Validator # rubocop:disable Metrics/ClassLength
     METADATA_FIELD_PATTERN = /^metadata\..+$/
     DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in].freeze
-    BETWEEN_OPERATORS = %w[>= <=].freeze
+    ALL_BETWEEN_OPERATORS = %w[>= <= date_greater_than_equals date_less_than_equals numeric_greater_than_equals
+                               numeric_less_than_equals].freeze
+    STANDARD_BETWEEN_OPERATORS = %w[>= <=].freeze
+    DATE_BETWEEN_OPERATORS = %w[date_greater_than_equals date_less_than_equals].freeze
+    NUMERIC_BETWEEN_OPERATORS = %w[numeric_greater_than_equals numeric_less_than_equals].freeze
     EXISTS_OPERATORS = %w[exists not_exists].freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
@@ -137,7 +141,7 @@ module AdvancedSearch
     def validate_standard_date_and_numeric_fields(condition)
       if date_field?(condition.field)
         validate_date_field_condition(condition)
-      elsif BETWEEN_OPERATORS.include?(condition.operator)
+      elsif STANDARD_BETWEEN_OPERATORS.include?(condition.operator)
         validate_numeric(condition)
       end
     end
@@ -169,7 +173,7 @@ module AdvancedSearch
         group_condition.field == condition.field
       end
 
-      if BETWEEN_OPERATORS.include?(condition.operator)
+      if ALL_BETWEEN_OPERATORS.include?(condition.operator)
         validate_between(condition, common_field_conditions)
       elsif condition.field.present?
         validate_uniqueness(condition, common_field_conditions)
@@ -185,9 +189,15 @@ module AdvancedSearch
     def validate_between(unique_field_condition, common_field_conditions)
       return if common_field_conditions.one?
 
-      return if common_field_conditions.count == 2 &&
-                common_field_conditions.collect(&:operator).sort == BETWEEN_OPERATORS.sort
+      if common_field_conditions.count == 2
+        operators =  common_field_conditions.collect(&:operator).sort
 
+        if operators == STANDARD_BETWEEN_OPERATORS.sort ||
+           operators == DATE_BETWEEN_OPERATORS.sort ||
+           operators == NUMERIC_BETWEEN_OPERATORS.sort
+          return
+        end
+      end
       unique_field_condition.errors.add :field, :taken
     end
   end
