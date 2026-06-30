@@ -51,7 +51,6 @@ module Samples
       transferrable_samples = @service.filter_sample_ids(@sample_ids, 'transfer', false)
       project_sample_ids_to_transfer = @service.organize_samples_by_project(transferrable_samples)
 
-      # TODO: need cursor
       @service.perform_transfer_with_lock(
         @new_project, project_sample_ids_to_transfer, job_id, step
       )
