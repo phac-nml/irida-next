@@ -38,7 +38,6 @@ module Samples
       @new_project = Project.find_by(id: @new_project_id)
       raise TransferService::TransferError, I18n.t('services.samples.transfer.invalid_new_project') if @new_project.nil?
 
-      # authorization check (could be done even on job retry?)
       @service.authorize_transfer(@new_project, @sample_ids)
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
       @namespace.errors.add(:base, e.message)
