@@ -33,7 +33,6 @@ export default class AdvancedSearchController extends Controller {
     "fieldset[data-advanced-search--v1-target='conditionsContainer']";
 
   connect() {
-    console.log("connect");
     this.renderSearchIfOpen();
     this.boundOnMorph = this.onMorph.bind(this);
 
@@ -60,7 +59,6 @@ export default class AdvancedSearchController extends Controller {
   }
 
   renderExistingSearch() {
-    console.log(this.searchGroupsTemplateTarget);
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
   }
@@ -309,6 +307,14 @@ export default class AdvancedSearchController extends Controller {
     }
     const enumConfig = this.enumFieldsValue[selectedField];
 
+    const parentContainer = operator.closest(".form-field");
+    if (selectedField) {
+      parentContainer.classList.remove(...this.#hiddenClasses);
+    } else {
+      parentContainer.classList.add(...this.#hiddenClasses);
+      return;
+    }
+
     operator.innerHTML = "";
 
     const blankOption = document.createElement("option");
@@ -316,7 +322,7 @@ export default class AdvancedSearchController extends Controller {
     blankOption.text = "";
     operator.appendChild(blankOption);
 
-    if (selectedField && this.#enumHasValues(enumConfig)) {
+    if (this.#enumHasValues(enumConfig)) {
       this.#createOperatorOptions(this.enumOperationsValue, operator);
     } else if (
       selectedField.startsWith("metadata.") &&
