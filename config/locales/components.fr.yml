@@ -139,13 +139,13 @@ fr:
             operations:
               date:
                 date_equals: la date est égale à
-                date_greater_than_equals: date supérieure ou égale à
-                date_less_than_equals: date inférieure ou égale à
+                date_greater_than_equals: date supérieure ou égale
+                date_less_than_equals: date inférieure ou égale
                 date_not_equals: date différente de
               numeric:
                 numeric_equals: égal à une valeur numérique
-                numeric_greater_than_equals: numérique supérieur ou égal à
-                numeric_less_than_equals: numérique inférieur ou égal à
+                numeric_greater_than_equals: numérique supérieur ou égal
+                numeric_less_than_equals: numérique inférieur ou égal
                 numeric_not_equals: différent (numérique)
               text:
                 text_contains: le texte contient
@@ -167,7 +167,9 @@ fr:
             not_in: not in (pas dans)
         remove_condition_aria_label: Supprimer la condition
         remove_group_button: Supprimer le groupe
-        rules: Une seule condition peut être spécifiée par champ dans un groupe, sauf que vous pouvez spécifier deux conditions si vous utilisez les opérateurs '>=' et '<='. Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
+        rules:
+          metadata_operators: Une seule condition peut être spécifiée par champ dans un groupe, sauf si vous utilisez les opérateurs d'intervalle ('>=' et '<=', « date supérieure ou égale » et « date inférieure ou égale », ou « numérique supérieure ou égale » et « numérique inférieure ou égale »). Pour filtrer par plage de dates, la valeur doit respecter le format « AAAA-MM-JJ ».
+          standard_operators: Une seule condition peut être spécifiée par champ dans un groupe, sauf que vous pouvez spécifier deux conditions si vous utilisez les opérateurs '>=' et '<='. Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
         title: Recherche avancée
     attachments:
       dialogs:
