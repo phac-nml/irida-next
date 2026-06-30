@@ -48,7 +48,11 @@
       </p>
 
       <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-        <%= t("components.advanced_search_component.v1.rules") %>
+        <% if Flipper.enabled?(:advanced_search_metadata_operators) %>
+          <%= t("components.advanced_search_component.v1.rules.metadata_operators") %>
+        <% else %>
+          <%= t("components.advanced_search_component.v1.rules.standard_operators") %>
+        <% end %>
       </p>
 
       <%= helpers.form_error_summary(@form) %>

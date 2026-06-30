@@ -167,7 +167,9 @@ en:
             not_in: not in
         remove_condition_aria_label: Remove condition
         remove_group_button: Remove group
-        rules: Only one condition can be specified per field within a group, with the exception that you can specify two conditions if using the '>=' and '<=' operators. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field must end with '_date'.
+        rules:
+          metadata_operators: Only one condition can be specified per field within a group, with the exception that you can specify two conditions if using the between operators ('>=' and '<=', 'date greater than equals' and 'date less than equals', or 'numeric greater than equals' and 'numeric less than equals'). To filter by date range, the value should be of the format 'YYYY-MM-DD'.
+          standard_operators: Only one condition can be specified per field within a group, with the exception that you can specify two conditions if using the '>=' and '<=' operators. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field must end with '_date'.
         title: Advanced search
     attachments:
       dialogs:
