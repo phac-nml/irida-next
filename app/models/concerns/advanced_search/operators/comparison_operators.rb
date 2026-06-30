@@ -15,20 +15,20 @@ module AdvancedSearch
       def condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
         return scope.where(node.lteq(value)) unless metadata_field
 
-        if date_metadata_field?(metadata_key)
-          metadata_condition_date_comparison(scope, node, value, :lteq)
-        else
-          metadata_condition_numeric_comparison(scope, node, value, :lteq)
-        end
+        perform_metadata_comparison(scope, node, value, :lteq, metadata_key)
       end
 
       def condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
         return scope.where(node.gteq(value)) unless metadata_field
 
+        perform_metadata_comparison(scope, node, value, :gteq, metadata_key)
+      end
+
+      def perform_metadata_comparison(scope, node, value, comparison_method, metadata_key)
         if date_metadata_field?(metadata_key)
-          metadata_condition_date_comparison(scope, node, value, :gteq)
+          metadata_condition_date_comparison(scope, node, value, comparison_method)
         else
-          metadata_condition_numeric_comparison(scope, node, value, :gteq)
+          metadata_condition_numeric_comparison(scope, node, value, comparison_method)
         end
       end
 
