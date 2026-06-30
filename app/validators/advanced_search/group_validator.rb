@@ -113,18 +113,15 @@ module AdvancedSearch
     end
 
     def validate_date_and_numeric_field(condition)
-      operator = condition.operator
-      if date_field?(condition.field, operator)
+      if date_field?(condition.field)
         validate_date_field_condition(condition)
-      elsif BETWEEN_OPERATORS.include?(operator) ||
-            (Flipper.enabled?(:advanced_search_metadata_operators) && METADATA_NUMERIC_OPERATORS.include?(operator))
+      elsif BETWEEN_OPERATORS.include?(condition.operator)
         condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
       end
     end
 
-    def date_field?(field, operator)
-      date_fields.include?(field) || field.end_with?('_date') ||
-        (Flipper.enabled?(:advanced_search_metadata_operators) && METADATA_DATE_OPERATORS.include?(operator))
+    def date_field?(field)
+      date_fields.include?(field) || field.end_with?('_date')
     end
 
     def validate_date_field_condition(condition)
