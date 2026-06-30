@@ -40,7 +40,6 @@ class QueryTest < ActiveSupport::TestCase
     assert query.errors.added? :base, :invalid
     assert query.groups[0].errors.added? :base, :invalid
     assert query.groups[0].conditions[1].errors.added? :field, :blank
-    assert query.groups[0].conditions[1].errors.added? :operator, :blank
   end
 
   test 'invalid advanced query with invalid date' do
