@@ -53,7 +53,7 @@ module AdvancedSearch
         metadata_condition_numeric_comparison(scope, node, value,
                                               operator == 'numeric_less_than_equals' ? :lteq : :gteq)
       when 'date_less_than_equals', 'date_greater_than_equals'
-        metadata_condition_date_comparison(scope, node, value, operator == 'numeric_less_than_equals' ? :lteq : :gteq)
+        metadata_condition_date_comparison(scope, node, value, operator == 'date_less_than_equals' ? :lteq : :gteq)
       when '<='
         condition_less_than_or_equal(scope, node, value, metadata_field:,
                                                          metadata_key: delete_metadata_prefix(field_name))
