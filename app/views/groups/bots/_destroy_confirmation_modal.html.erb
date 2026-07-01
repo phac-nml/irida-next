@@ -17,6 +17,7 @@
           ) do |form| %>
       <%= form.submit t("bots.destroy_confirmation.submit_button"),
                   tone: :danger,
+                  emphasis: :solid,
                   data: {
                     action: "click->token#removeTokenPanel",
                   } %>

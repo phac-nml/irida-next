@@ -9,18 +9,15 @@
         form: f,
       } %>
 
-      <div class="my-2">
-        <%= f.submit t("profiles.personal_access_tokens.create.submit"),
-                 tone: :primary %>
+      <div class="my-2 flex gap-2">
+        <%= render "shared/pathogen/secondary_button",
+                   data: {
+                     action: "personal-access-tokens#removeAddNewTokenForm",
+                     "personal-access-tokens-target": "cancel-button",
+                   } %>
 
-        <button
-          type="button"
-          class="button button-default"
-          data-action="personal-access-tokens#removeAddNewTokenForm"
-          data-personal-access-tokens-target="cancel-button"
-        >
-          <%= t('common.actions.cancel') %>
-        </button>
+        <%= f.submit t("profiles.personal_access_tokens.create.submit"),
+                 tone: :primary, emphasis: :solid %>
       </div>
     </div>
   <% end %>
