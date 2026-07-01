@@ -133,6 +133,8 @@ if Flipper.enabled?(:v2_select2, Current.user)
     </div>
 
     <div class="flex justify-start gap-1">
+      <%= render "shared/pathogen/secondary_button", data: { action: "click->viral--dialog#close" } %>
+
       <%= form.submit I18n.t('common.actions.share'),
                     tone: :primary,
                     emphasis: :solid,
@@ -143,10 +145,6 @@ if Flipper.enabled?(:v2_select2, Current.user)
                     else
                       { "select2--v1-target": "submitButton" }
                     end %>
-
-      <button type="button" class="button button-default" data-action="click->viral--dialog#close">
-        <%= t('common.actions.cancel') %>
-      </button>
     </div>
   </div>
 <% end %>

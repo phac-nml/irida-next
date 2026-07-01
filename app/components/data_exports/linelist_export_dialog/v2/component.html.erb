@@ -108,7 +108,7 @@
 
       <%= form_with(url: "#", method: :get, data: { action: "submit->linelist-export#submit" }) do |form| %>
         <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
-        <%= form.submit t("data_exports.new.submit_button"), tone: :primary %>
+        <%= form.submit t("data_exports.new.submit_button"), tone: :primary, emphasis: :solid %>
       <% end %>
 
       <p
