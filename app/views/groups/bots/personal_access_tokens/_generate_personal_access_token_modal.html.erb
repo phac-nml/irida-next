@@ -26,12 +26,9 @@
       } %>
     </div>
 
-    <div class="mt-4">
-      <%= form.submit t('common.controls.submit'), tone: :primary %>
-
-      <button type="button" class="button button-default" data-action="click->viral--dialog#close">
-        <%= t('common.actions.cancel') %>
-      </button>
+    <div class="mt-4 flex gap-2">
+      <%= render "shared/pathogen/secondary_button", data: { action: "click->viral--dialog#close" } %>
+      <%= form.submit t('common.controls.submit'), tone: :primary, emphasis: :solid %>
     </div>
   <% end %>
 <% end %>
