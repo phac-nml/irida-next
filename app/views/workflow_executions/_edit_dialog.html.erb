@@ -43,14 +43,12 @@
                  class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
     </div>
 
-    <div class="mt-4 space-x-2">
+    <div class="mt-4 flex gap-2">
+      <%= render "shared/pathogen/secondary_button", data: { action: "click->viral--dialog#close" } %>
+
       <%= form.submit t("workflow_executions.edit_dialog.submit_button"),
                   tone: :primary,
                   emphasis: :solid %>
-
-      <button type="button" class="button button-default" data-action="click->viral--dialog#close">
-        <%= t("common.actions.cancel") %>
-      </button>
     </div>
   <% end %>
 <% end %>
