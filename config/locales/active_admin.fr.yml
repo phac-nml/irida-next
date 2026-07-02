@@ -2,3 +2,12 @@
 fr:
   active_admin:
     dashboard: Tableau de bord
+    site_banners:
+      disable: Désactiver
+      disable_confirm: Désactiver cette bannière du site?
+      disabled: Bannière du site désactivée.
+      enable: Activer
+      enable_confirm: Activer cette bannière du site?
+      enabled: Bannière du site activée.
+      message_for: Message (%{locale_code})
+      messages_fieldset: Messages
