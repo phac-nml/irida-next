@@ -8,7 +8,7 @@
       <% active_count = row.user.personal_access_tokens.active.count %>
 
       <% if active_count.positive? %>
-        <%= button_to active_count,
+        <%= detached_button_to active_count,
         bot_tokens_path(row),
         data: {
           turbo_stream: true,
@@ -28,7 +28,7 @@
       <% inactive_count = row.user.personal_access_tokens.inactive.count %>
 
       <% if inactive_count.positive? %>
-        <%= button_to inactive_count,
+        <%= detached_button_to inactive_count,
         bot_inactive_tokens_path(row),
         data: {
           turbo_stream: true,
@@ -66,7 +66,7 @@
         classes: "flex justify-start"
       ) do |row| %>
       <% if @abilities[:generate_token] %>
-        <%= button_to t("bots.index.table.actions.generate_new_token"),
+        <%= detached_button_to t("bots.index.table.actions.generate_new_token"),
         new_token_path(row),
         data: {
           turbo_stream: true,
@@ -84,7 +84,7 @@
       <% end %>
 
       <% if @abilities[:destroy_bot] %>
-        <%= button_to t('common.actions.delete'),
+        <%= detached_button_to t('common.actions.delete'),
         destroy_path(row),
         data: {
           turbo_stream: true,

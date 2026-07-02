@@ -40,7 +40,7 @@
     <p class="text-slate-600 dark:text-slate-400"><%= t(:"projects.edit.advanced.destroy.description") %></p>
 
     <div class="mt-4">
-      <%= button_to t(:"projects.edit.advanced.destroy.submit"),
+      <%= detached_button_to t(:"projects.edit.advanced.destroy.submit"),
       namespace_project_path,
       method: :delete,
       data: {

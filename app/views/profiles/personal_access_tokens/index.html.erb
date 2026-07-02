@@ -5,7 +5,7 @@
   subtitle: t("profiles.personal_access_tokens.index.subtitle"),
 ) do |component| %>
   <%= component.with_buttons do %>
-    <%= button_to(
+    <%= detached_button_to(
           t("profiles.personal_access_tokens.index.add_new_token"),
           new_profile_personal_access_token_path,
           data: { "turbo-stream": true},

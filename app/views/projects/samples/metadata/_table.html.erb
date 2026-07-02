@@ -5,7 +5,7 @@
     <% if @allowed_to[:update_sample] %>
       <div class="mb-2 flex flex-col sm:flex-row-reverse">
         <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-          <%= button_to t(".add_metadata"),
+          <%= detached_button_to t(".add_metadata"),
           new_namespace_project_sample_metadata_path(
             @project.namespace.parent,
             @project,
@@ -16,9 +16,9 @@
             turbo_frame: "sample_modal",
             turbo_stream: true,
           },
-          class: "button button-default w-full" %>
+          class: "button button-default max-sm:grow" %>
 
-          <%= button_to t(".delete_metadata_button"),
+          <%= detached_button_to t(".delete_metadata_button"),
           new_namespace_project_sample_metadata_deletion_path(
             @project.namespace.parent,
             @project,
@@ -31,7 +31,7 @@
             controller: "action-button",
             action_button_required_value: 1,
           },
-          class: "button button-default action-button w-full" %>
+          class: "button button-default action-button max-sm:grow" %>
         </div>
       </div>
     <% end %>
@@ -94,7 +94,7 @@
               <% if @allowed_to[:update_sample] %>
                 <td class="flex justify-start space-x-2 px-6 py-4">
                   <% unless metadata[:source_type] == 'analysis' %>
-                    <%= button_to t("common.actions.update"),
+                    <%= detached_button_to t("common.actions.update"),
                     edit_namespace_project_sample_metadata_path(
                       @project.namespace.parent,
                       @project,
@@ -109,7 +109,7 @@
                       "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
                   <% end %>
 
-                  <%= button_to t("common.actions.delete"),
+                  <%= detached_button_to t("common.actions.delete"),
                   namespace_project_sample_metadata_path(
                     @project.namespace.parent,
                     @project,

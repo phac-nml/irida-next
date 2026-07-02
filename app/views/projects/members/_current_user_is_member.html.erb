@@ -1,4 +1,4 @@
-<%= button_to t(:"projects.members.index.leave_project"),
+<%= detached_button_to t(:"projects.members.index.leave_project"),
 namespace_project_member_path(namespace.parent, namespace.project, member),
 data: {
   turbo_method: :delete,

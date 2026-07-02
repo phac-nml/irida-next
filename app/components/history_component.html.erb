@@ -14,7 +14,7 @@
 
       <% unless @url.nil? %>
         <div class="flex items-center justify-start">
-          <%= button_to @url,
+          <%= detached_button_to @url,
             params: {
               version: changes[:version],
             },

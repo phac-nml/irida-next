@@ -38,7 +38,7 @@
           </button>
         <% end %>
 
-        <%= button_to rails_blob_path(@attachment.file),
+        <%= detached_button_to rails_blob_path(@attachment.file),
         params: {
           disposition: :attachment,
         },

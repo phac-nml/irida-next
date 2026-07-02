@@ -10,9 +10,20 @@
   subtitle: t(".subtitle", puid: @project.puid)) do |component| %>
     <% component.with_buttons do %>
       <% if @allowed_to[:submit_workflow] && @has_samples && @pipelines_enabled %>
-        <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @project.namespace.id }, method: :get,
-        data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
-                  class: "button button-default action-button cursor-pointer w-full" do %>
+        <%= form_with(
+              url: pipeline_selection_workflow_executions_submissions_path,
+              method: :get,
+              id: "submit-project-samples-workflow-form",
+              class: "hidden",
+            ) do %>
+          <input type="hidden" name="namespace_id" value="<%= @project.namespace.id %>">
+        <% end %>
+        <%= button_tag(
+              type: "submit",
+              form: "submit-project-samples-workflow-form",
+              data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
+              class: "button button-default action-button cursor-pointer max-sm:grow",
+            ) do %>
           <%= icon(:rocket_launch, size: :sm) %>
           <span class="ml-2"><%= t(:".workflows.button_sr") %></span>
         <% end %>
@@ -175,35 +186,38 @@
               url: select_namespace_project_samples_url,
               method: :get,
               id: "select-all-form",
-              class: "max-sm:grow",
+              class: "hidden",
               data: { turbo_frame: "selected" },
-            ) do |f| %>
+            ) do %>
           <input type="hidden" name="select" value="on">
           <%= render "shared/samples/timestamp_input" %>
-
-          <%= f.submit t("common.controls.select_all"),
-                   id: "select-all-button",
-                   class: "button button-default w-full",
-                   title: t(".select_all_tooltip"),
-                   aria: {
-                     label: t(".select_all_tooltip"),
-                   } %>
         <% end %>
+        <%= button_tag t("common.controls.select_all"),
+                 id: "select-all-button",
+                 type: "submit",
+                 form: "select-all-form",
+                 class: "button button-default max-sm:grow",
+                 title: t(".select_all_tooltip"),
+                 aria: {
+                   label: t(".select_all_tooltip"),
+                 } %>
         <%= form_with(
                     url: select_namespace_project_samples_url,
                     method: :get,
                     id: "deselect-all-form",
-                    class: "max-sm:grow",
+                    class: "hidden",
                     data: { turbo_frame: "selected" },
-                  ) do |f| %>
-          <%= f.submit t("common.controls.deselect_all"),
-                   id: "deselect-all-button",
-                   class: "button button-default w-full",
-                   title: t(".deselect_all_tooltip"),
-                   aria: {
-                     label: t(".deselect_all_tooltip"),
-                   } %>
+                  ) do %>
         <% end %>
+        <%= button_tag t("common.controls.deselect_all"),
+                 id: "deselect-all-button",
+                 type: "submit",
+                 form: "deselect-all-form",
+                 class: "button button-default max-sm:grow",
+                 title: t(".deselect_all_tooltip"),
+                 aria: {
+                   label: t(".deselect_all_tooltip"),
+                 } %>
       <% end %>
 
       <div class="max-sm:hidden sm:grow" role="presentation"></div>
