@@ -16,7 +16,7 @@
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
           <div class="flex gap-2">
-            <%= render "shared/pathogen/secondary_button", href: namespace_project_samples_path %>
+            <%= render "shared/pathogen/cancel_button", href: namespace_project_samples_path %>
             <%= form.submit tone: :primary, emphasis: :solid %>
           </div>
         </div>

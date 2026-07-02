@@ -5,13 +5,13 @@
     text: label,
   }
   button_options[:class] = local_assigns[:class] if local_assigns[:class].present?
+  button_options[:data] = local_assigns[:data] if local_assigns[:data].present?
 
   if local_assigns[:href].present?
     button_options[:tag] = :a
     button_options[:href] = local_assigns[:href]
   else
     button_options[:type] = local_assigns.fetch(:type, :button)
-    button_options[:data] = local_assigns[:data] if local_assigns[:data].present?
   end %>
 
 <%= render Pathogen::Button.new(**button_options) %>
