@@ -258,10 +258,10 @@ module AdvancedSearch
 
       record1 = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [
-                                  DummyCondition.new(field: 'created_at', operator: 'date_less_than_equals',
+                                  DummyCondition.new(field: 'metadata.date_of_birth', operator: 'date_less_than_equals',
                                                      value: '2024-01-01'),
-                                  DummyCondition.new(field: 'created_at', operator: 'date_greater_than_equals',
-                                                     value: '2024-12-31')
+                                  DummyCondition.new(field: 'metadata.date_of_birth',
+                                                     operator: 'date_greater_than_equals', value: '2024-12-31')
                                 ])]
       )
 
@@ -269,9 +269,9 @@ module AdvancedSearch
 
       record2 = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [
-                                  DummyCondition.new(field: 'created_at', operator: 'numeric_less_than_equals',
+                                  DummyCondition.new(field: 'metadata.age', operator: 'numeric_less_than_equals',
                                                      value: '1'),
-                                  DummyCondition.new(field: 'created_at', operator: 'numeric_greater_than_equals',
+                                  DummyCondition.new(field: 'metadata.age', operator: 'numeric_greater_than_equals',
                                                      value: '100')
                                 ])]
       )
