@@ -4,6 +4,7 @@
 class Component < ViewComponent::Base
   attr_reader :system_arguments
 
+  include ApplicationHelper
   include ViewHelper
   include ClassNameHelper
   include JsonHelper

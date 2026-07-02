@@ -44,7 +44,7 @@
     <p class="text-slate-600 dark:text-slate-400"><%= t(:"groups.edit.advanced.delete.description") %></p>
 
     <div class="mt-4">
-      <%= button_to t(:"groups.edit.advanced.delete.submit"),
+      <%= detached_button_to t(:"groups.edit.advanced.delete.submit"),
       @group,
       method: :delete,
       data: {

@@ -9,14 +9,14 @@
   ) do |component| %>
     <%= component.with_buttons do %>
       <% if @allowed_to[:create_attachment] %>
-        <%= button_to t(".upload_files"),
+        <%= detached_button_to t(".upload_files"),
         new_namespace_project_attachment_path(id: @project.id),
         data: {
           turbo_frame: "attachment_modal",
           turbo_stream: true,
         },
         method: :get,
-        class: "button button-default w-full" %>
+        class: "button button-default max-sm:grow" %>
       <% end %>
     <% end %>
   <% end %>

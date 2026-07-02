@@ -7,7 +7,7 @@
 
   <div id="next_link">
     <% if @pagy.next.present? %>
-      <%= button_to t(:"components.activity.load_more"),
+      <%= detached_button_to t(:"components.activity.load_more"),
       @pagy.page_url(:next),
       class: "button button-default" %>
     <% end %>

@@ -28,13 +28,13 @@ module Activities
     end
 
     def more_details_button(dialog_type, descriptive_text)
-      button_to t(:'components.activity.more_details'),
-                activity_path(@activity[:id]),
-                params: { dialog_type: dialog_type },
-                data: { turbo_stream: true },
-                method: :get,
-                class: more_details_button_classes,
-                title: descriptive_text
+      detached_button_to t(:'components.activity.more_details'),
+                         activity_path(@activity[:id]),
+                         params: { dialog_type: dialog_type },
+                         data: { turbo_stream: true },
+                         method: :get,
+                         class: more_details_button_classes,
+                         title: descriptive_text
     end
   end
 end

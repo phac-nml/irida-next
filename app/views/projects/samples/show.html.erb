@@ -4,8 +4,9 @@
 
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, id: @sample.puid, subtitle: @sample.description) do |component| %>
   <%= viral_pill(text: @sample.puid, color: :blue) %>
+
   <% component.with_buttons do %>
-    <div class="flex flex-col @lg:flex-row @lg:space-x-2 space-y-2">
+    <div class="flex flex-col space-y-2 @lg:flex-row @lg:space-x-2">
       <% if @allowed_to[:update_sample] %>
         <%= link_to(
           t("projects.samples.show.edit_button"),
@@ -13,8 +14,9 @@
           class: "button button-default w-full",
         ) %>
       <% end %>
+
       <% if @allowed_to[:destroy_sample] %>
-        <%= button_to(
+        <%= detached_button_to(
           t('common.actions.remove'),
           new_samples_deletions_path,
           params: {
@@ -45,11 +47,13 @@
       label: t(:"projects.samples.show.tabs.files"),
       selected: @tab == "files"
     ) %>
+
     <% tabs.with_tab(
       id: "metadata-tab",
       label: t(:"projects.samples.show.tabs.metadata"),
       selected: @tab == "metadata"
     ) %>
+
     <% tabs.with_tab(
       id: "history-tab",
       label: t(:"projects.samples.show.tabs.history"),

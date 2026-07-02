@@ -14,7 +14,7 @@
   </li>
 <% elsif disableable %>
   <li role="none">
-    <%= button_to url, method: :get, params: params, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", role: "menuitem", **system_arguments do %>
+    <%= detached_button_to url, method: :get, params: params, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", role: "menuitem", **system_arguments do %>
       <% if icon_name.present? %>
         <span class="mr-2 grow-0">
           <% unless icon_name == :blank %>

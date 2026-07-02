@@ -72,27 +72,32 @@
               url: select_workflow_executions_url,
               method: :get,
               id: "select-all-form",
-              class: "max-sm:grow",
+          class: "hidden",
               data: { turbo_frame: "selected" },
-                  ) do |f| %>
+            ) do %>
       <input type="hidden" name="select" value="on">
-
-      <%= f.submit t("common.controls.select_all"),
-               id: "select-all-button",
-               class: "button button-default w-full" %>
     <% end %>
+
+    <%= button_tag t("common.controls.select_all"),
+         id: "select-all-button",
+         type: "submit",
+         form: "select-all-form",
+         class: "button button-default max-sm:grow" %>
 
     <%= form_with(
               url: select_workflow_executions_url,
               method: :get,
               id: "deselect-all-form",
-              class: "max-sm:grow",
+          class: "hidden",
               data: { turbo_frame: "selected" },
-                  ) do |f| %>
-      <%= f.submit t("common.controls.deselect_all"),
-               id: "deselect-all-button",
-               class: "button button-default w-full" %>
+            ) do %>
     <% end %>
+
+    <%= button_tag t("common.controls.deselect_all"),
+         id: "deselect-all-button",
+         type: "submit",
+         form: "deselect-all-form",
+         class: "button button-default max-sm:grow" %>
 
     <div class="max-sm:hidden sm:grow" role="presentation"></div>
 

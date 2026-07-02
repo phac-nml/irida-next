@@ -291,7 +291,7 @@
                     <% end %>
 
                     <% if @row_actions[:destroy] %>
-                      <%= button_to(
+                      <%= detached_button_to(
                       t("common.actions.delete"),
                       destroy_path(attachment.id),
                       aria: {

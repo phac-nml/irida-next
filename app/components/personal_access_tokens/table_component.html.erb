@@ -60,7 +60,7 @@
           classes: "flex justify-start"
         ) do |row| %>
         <% if @actions[:revoke] %>
-          <%= button_to t("personal_access_tokens.table.revoke"),
+          <%= detached_button_to t("personal_access_tokens.table.revoke"),
           revoke_path(row),
           data: revoke_data_attributes,
           method: revoke_http_method,
@@ -72,7 +72,7 @@
         <% end %>
 
         <% if @actions[:rotate] %>
-          <%= button_to t("personal_access_tokens.table.rotate"),
+          <%= detached_button_to t("personal_access_tokens.table.rotate"),
           rotate_path(row),
           data: rotate_data_attributes,
           method: rotate_http_method,

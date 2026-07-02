@@ -1,15 +1,14 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
+
   <div class="grid gap-4">
-    <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400 ">
+    <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
       <%= t(".description") %>
     </p>
+
     <div class="grid gap-4">
-      <div
-        data-controller="selection"
-        data-selection-storage-key-value="<%= "#{request.base_url}#{@index_path}" %>"
-      >
-        <%= button_to t(".submit_button"),
+      <div data-controller="selection" data-selection-storage-key-value="<%= "#{request.base_url}#{@index_path}" %>">
+        <%= detached_button_to t(".submit_button"),
         @destroy_path,
         method: :delete,
         data: {

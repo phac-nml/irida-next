@@ -114,7 +114,7 @@
 <div>
   <%= t(".unhappy") %>
 
-  <%= button_to t(".cancel_button"),
+  <%= detached_button_to t(".cancel_button"),
   registration_path(resource_name),
   data: {
     confirm: t(".cancel_confirmation"),

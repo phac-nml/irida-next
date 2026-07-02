@@ -1,11 +1,12 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 <%= turbo_stream_from @data_export %>
+
 <%= render Viral::PageHeaderComponent.new(
   title: @data_export.name || @data_export.id, id: @data_export.name.nil? ? nil : @data_export.id) do |component| %>
   <%= component.with_buttons do %>
     <div class="flex flex-col space-y-2 sm:flex-row sm:space-x-2">
       <% if @data_export.status == 'ready' %>
-        <%= button_to(
+        <%= detached_button_to(
           t('common.actions.download'),
           rails_blob_path(@data_export.file),
           method: :get,
@@ -14,15 +15,16 @@
       <% else %>
         <button
           class="
-            button button-default pointer-events-none cursor-not-allowed bg-slate-100
-            text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100
-            dark:border-slate-600 w-full
+            button pointer-events-none w-full cursor-not-allowed button-default border-slate-100 bg-slate-100
+            text-slate-600 dark:border-slate-600 dark:bg-slate-600 dark:text-slate-300
           "
           disabled
-        ><%= t('common.actions.download') %>
+        >
+          <%= t('common.actions.download') %>
         </button>
       <% end %>
-      <%= button_to(
+
+      <%= detached_button_to(
         t('common.actions.remove'),
         data_export_path,
         params: {

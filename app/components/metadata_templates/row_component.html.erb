@@ -6,9 +6,7 @@
                 classes: class_names('px-3 py-3', '2xl:sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
       <% if column == :name %>
-        <span class="text-slate-900 dark:text-slate-100 font-semibold">
-          <%= @metadata_template.name %>
-        </span>
+        <span class="font-semibold text-slate-900 dark:text-slate-100"><%= @metadata_template.name %></span>
       <% elsif column == :description %>
         <%= @metadata_template.description %>
       <% elsif column == :created_by_email %>
@@ -20,13 +18,14 @@
       <% end %>
     <% end %>
   <% end %>
+
   <% if @renders_row_actions %>
     <%= render_cell(
                 tag: 'td',
                 classes: 'flex space-x-2 px-3 py-3 justify-end'
               ) do %>
       <% if @row_actions.key?(:update_metadata_templates) %>
-        <%= button_to t('common.actions.edit'),
+        <%= detached_button_to t('common.actions.edit'),
         edit_path,
         data: {
           controller: "viral--dialog-trigger",
@@ -49,8 +48,9 @@
         class:
           "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
       <% end %>
+
       <% if @row_actions.key?(:destroy_metadata_templates) %>
-        <%= button_to t('common.actions.delete'),
+        <%= detached_button_to t('common.actions.delete'),
         individual_path,
         data: {
           turbo_method: :delete,
