@@ -12,30 +12,28 @@ module AdvancedSearch
       private
 
       def condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-        return scope.where(node.lteq(value)) unless metadata_field
+        if !Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field
+          return metadata_condition_date_comparison(scope, node, value, :lteq) if date_metadata_field?(metadata_key)
 
-        if date_metadata_field?(metadata_key)
-          condition_date_comparison(scope, node, value, :lteq)
-        else
-          condition_numeric_comparison(scope, node, value, :lteq)
+          return metadata_condition_numeric_comparison(scope, node, value, :lteq)
         end
+        scope.where(node.lteq(value))
       end
 
       def condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-        return scope.where(node.gteq(value)) unless metadata_field
+        if !Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field
+          return metadata_condition_date_comparison(scope, node, value, :gteq) if date_metadata_field?(metadata_key)
 
-        if date_metadata_field?(metadata_key)
-          condition_date_comparison(scope, node, value, :gteq)
-        else
-          condition_numeric_comparison(scope, node, value, :gteq)
+          return metadata_condition_numeric_comparison(scope, node, value, :gteq)
         end
+        scope.where(node.gteq(value))
       end
 
       def date_metadata_field?(metadata_key)
         metadata_key.end_with?(DATE_FIELD_SUFFIX)
       end
 
-      def condition_date_comparison(scope, node, value, comparison_method)
+      def metadata_condition_date_comparison(scope, node, value, comparison_method)
         return scope.none unless valid_date_format?(value)
 
         scope
@@ -47,7 +45,7 @@ module AdvancedSearch
           )
       end
 
-      def condition_numeric_comparison(scope, node, value, comparison_method)
+      def metadata_condition_numeric_comparison(scope, node, value, comparison_method)
         return scope.none unless valid_numeric_format?(value)
 
         scope

@@ -193,6 +193,10 @@ input[type="search"] {
     @apply block w-full rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
+  & select optgroup {
+    @apply !text-slate-900 dark:!text-white;
+  }
+
   & select option {
     @apply block w-full rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }

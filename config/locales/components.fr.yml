@@ -129,20 +129,47 @@ fr:
         confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
         description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
         group: Groupe %{index}
-        operation:
-          contains: contient
-          does_not_contain: ne contient pas
-          equals: "="
-          exists: existe
-          greater_than: ">="
-          in: in (dans)
-          less_than: "<="
-          not_equals: "!="
-          not_exists: n’existe pas
-          not_in: not in (pas dans)
+        operations:
+          metadata:
+            labels:
+              date: Options de date
+              existence: Options d'existence
+              numeric: Options numériques
+              text: Options de texte
+            operations:
+              date:
+                date_equals: la date est égale à
+                date_greater_than_equals: date supérieure ou égale
+                date_less_than_equals: date inférieure ou égale
+                date_not_equals: date différente de
+              numeric:
+                numeric_equals: égal à une valeur numérique
+                numeric_greater_than_equals: numérique supérieur ou égal
+                numeric_less_than_equals: numérique inférieur ou égal
+                numeric_not_equals: différent (numérique)
+              text:
+                text_contains: le texte contient
+                text_equals: le texte est égal à
+                text_in: texte dans
+                text_not_contains: le texte ne contient pas
+                text_not_equals: le texte n'est pas égal à
+                text_not_in: texte absent de
+          standard:
+            contains: contient
+            does_not_contain: ne contient pas
+            equals: "="
+            exists: existe
+            greater_than: ">="
+            in: in (dans)
+            less_than: "<="
+            not_equals: "!="
+            not_exists: n’existe pas
+            not_in: not in (pas dans)
         remove_condition_aria_label: Supprimer la condition
         remove_group_button: Supprimer le groupe
-        rules: Une seule condition peut être spécifiée par champ dans un groupe, sauf que vous pouvez spécifier deux conditions si vous utilisez les opérateurs '>=' et '<='. Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
+        rules:
+          metadata_operators: Une seule condition peut être spécifiée par champ dans un groupe, sauf si vous utilisez les opérateurs d'intervalle ('>=' et '<=', « date supérieure ou égale » et « date inférieure ou égale », ou « numérique supérieure ou égale » et « numérique inférieure ou égale »). Pour filtrer par plage de dates, la valeur doit respecter le format « AAAA-MM-JJ ».
+          standard_operators: Une seule condition peut être spécifiée par champ dans un groupe, sauf que vous pouvez spécifier deux conditions si vous utilisez les opérateurs '>=' et '<='. Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
         title: Recherche avancée
     attachments:
       dialogs:

@@ -129,20 +129,47 @@ en:
         confirm_close_text: Are you sure that you want to discard your filter modifications and close the advanced search dialog?
         description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
         group: Group %{index}
-        operation:
-          contains: contains
-          does_not_contain: does not contain
-          equals: "="
-          exists: exists
-          greater_than: ">="
-          in: in
-          less_than: "<="
-          not_equals: "!="
-          not_exists: not exists
-          not_in: not in
+        operations:
+          metadata:
+            labels:
+              date: Date options
+              existence: Existence options
+              numeric: Numeric options
+              text: Text options
+            operations:
+              date:
+                date_equals: date equals
+                date_greater_than_equals: date greater than equals
+                date_less_than_equals: date less than equals
+                date_not_equals: date not equals
+              numeric:
+                numeric_equals: numeric equals
+                numeric_greater_than_equals: numeric greater than equals
+                numeric_less_than_equals: numeric less than equals
+                numeric_not_equals: numeric not equals
+              text:
+                text_contains: text contains
+                text_equals: text equals
+                text_in: text in
+                text_not_contains: text not contains
+                text_not_equals: text not equals
+                text_not_in: text not in
+          standard:
+            contains: contains
+            does_not_contain: does not contain
+            equals: "="
+            exists: exists
+            greater_than: ">="
+            in: in
+            less_than: "<="
+            not_equals: "!="
+            not_exists: not exists
+            not_in: not in
         remove_condition_aria_label: Remove condition
         remove_group_button: Remove group
-        rules: Only one condition can be specified per field within a group, with the exception that you can specify two conditions if using the '>=' and '<=' operators. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field must end with '_date'.
+        rules:
+          metadata_operators: Only one condition can be specified per field within a group, with the exception that you can specify two conditions if using the between operators ('>=' and '<=', 'date greater than equals' and 'date less than equals', or 'numeric greater than equals' and 'numeric less than equals'). To filter by date range, the value should be of the format 'YYYY-MM-DD'.
+          standard_operators: Only one condition can be specified per field within a group, with the exception that you can specify two conditions if using the '>=' and '<=' operators. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field must end with '_date'.
         title: Advanced search
     attachments:
       dialogs:

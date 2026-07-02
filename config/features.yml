@@ -1,4 +1,7 @@
 features:
+  advanced_search_metadata_operators:
+    description: "Enable metadata specific operators in advanced search"
+    enable_in_development: true
   advanced_search_with_auto_complete:
     admin_manageable: true
     description:

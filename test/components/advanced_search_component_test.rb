@@ -16,6 +16,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       within 'dialog' do
         assert_accessible
 
+        assert_text I18n.t('components.advanced_search_component.v1.rules.standard_operators')
         assert_selector "fieldset[data-advanced-search--v1-target='groupsContainer']", count: 2
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
           assert_selector "fieldset[data-advanced-search--v1-target='conditionsContainer']", count: 3
@@ -40,16 +41,16 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         end
 
         within first("select[name$='[operator]']") do
-          assert_text I18n.t('components.advanced_search_component.v1.operation.equals')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.not_equals')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.less_than')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.greater_than')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.contains')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.does_not_contain')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.exists')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.not_exists')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.in')
-          assert_text I18n.t('components.advanced_search_component.v1.operation.not_in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.less_than')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.greater_than')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.contains')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.does_not_contain')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_in')
         end
 
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
@@ -88,7 +89,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         assert_selector ".dialog--header button[aria-label='#{I18n.t('components.dialog.close')}']"
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
-            find("input[id$='field']").fill_in with: 'age'
+            find("input[id$='field']").send_keys('age', :enter)
             find("select[name$='[operator]']").find("option[value='>=']").select_option
             find("input[name$='[value]']").fill_in with: '25'
           end
@@ -108,8 +109,67 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_selector "fieldset[data-advanced-search--v1-target='conditionsContainer']", count: 1
           within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
             assert_equal '', find("input[id$='field']").value
-            assert_equal '', find("select[name$='[operator]']").value
+            assert_equal '', find("select[name$='[operator]']", visible: :all).value
             assert_equal '', find("input[name$='[value]']", visible: :all).value
+          end
+        end
+      end
+    end
+  end
+
+  test 'standard operators when non-metadata field selected with feature flag' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    visit('rails/view_components/advanced_search_component/empty')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within 'dialog' do
+        assert_accessible
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        assert_text I18n.t('components.advanced_search_component.v1.rules.metadata_operators')
+        assert_selector ".dialog--header button[aria-label='#{I18n.t('components.dialog.close')}']"
+        within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+            find("input[id$='field']").send_keys('sample name', :enter)
+            within "select[name$='[operator]']" do
+              assert_selector 'option[value="="]'
+              assert_selector 'option[value="!="]'
+              assert_selector 'option[value="in"]'
+              assert_selector 'option[value="not_in"]'
+              assert_no_selector 'option[value="date_equals"]'
+              assert_no_selector 'option[value="numeric_equals"]'
+            end
+          end
+        end
+      end
+    end
+  end
+
+  test 'metadata operators when metadata field selected with feature flag' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    visit('rails/view_components/advanced_search_component/empty')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within 'dialog' do
+        assert_accessible
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        assert_text I18n.t('components.advanced_search_component.v1.rules.metadata_operators')
+        assert_selector ".dialog--header button[aria-label='#{I18n.t('components.dialog.close')}']"
+        within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+            find("input[id$='field']").send_keys('age', :enter)
+            within "select[name$='[operator]']" do
+              assert_no_selector 'option[value="="]'
+              assert_no_selector 'option[value="!="]'
+              assert_no_selector 'option[value="in"]'
+              assert_no_selector 'option[value="not_in"]'
+              assert_selector 'option[value="date_equals"]'
+              assert_selector 'option[value="numeric_equals"]'
+              assert_selector 'option[value="text_equals"]'
+            end
           end
         end
       end

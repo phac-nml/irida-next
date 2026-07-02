@@ -807,7 +807,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_selector "fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible, count: 1
 
       within all("fieldset[data-advanced-search--v1-target='conditionsContainer']", visible: :visible)[0] do
-        assert_equal '', find("select[name$='[operator]']", visible: :visible).value
+        assert_equal '', find("select[name$='[operator]']", visible: :all).value
         assert_equal '', find("input[name$='[value]']", visible: :all).value
       end
     end
@@ -985,6 +985,33 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     Flipper.disable(:workflow_execution_advanced_search)
   end
 
+  test 'workflow advanced search still has standard operators when non-metadata field selected with feature flag' do
+    Flipper.enable(:workflow_execution_advanced_search)
+    Flipper.enable(:advanced_search_with_auto_complete, @user)
+    Flipper.enable(:advanced_search_metadata_operators)
+
+    visit workflow_executions_path
+
+    click_button I18n.t(:'components.advanced_search_component.v1.title')
+
+    assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+    within('dialog') do
+      select_state_advanced_search_field
+      within "select[name$='[operator]']" do
+        assert_selector 'option[value="="]'
+        assert_selector 'option[value="!="]'
+        assert_selector 'option[value="in"]'
+        assert_selector 'option[value="not_in"]'
+        assert_no_selector 'option[value="date_equals"]'
+        assert_no_selector 'option[value="numeric_equals"]'
+      end
+    end
+  ensure
+    Flipper.disable(:advanced_search_with_auto_complete, @user)
+    Flipper.disable(:workflow_execution_advanced_search)
+    Flipper.disable(:advanced_search_metadata_operators)
+  end
+
   test 'submitter can edit workflow execution post launch from workflow execution page' do
     ### SETUP START ###
     workflow_execution = workflow_executions(:irida_next_example_new)
@@ -1029,7 +1056,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'dt', text: I18n.t(:"workflow_executions.summary.shared_with_namespace.#{workflow_execution.namespace.type.downcase}") # rubocop:disable Layout/LineLength
     assert_selector 'dd', text: workflow_execution.namespace.name
     assert_selector 'dd', text: workflow_execution.namespace.puid
-
     ### VERIFY END ###
   end
 

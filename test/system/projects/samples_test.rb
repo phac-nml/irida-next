@@ -2914,7 +2914,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t(:'general.form.error_summary.title', count: 2)
+      assert_text I18n.t(:'general.form.error_summary.title', count: 1)
       assert_selector '#samples-table table tbody tr', count: 3
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample2)}']"
@@ -2967,6 +2967,64 @@ module Projects
       assert_selector 'table tbody tr th', text: @sample1.puid
       assert_selector 'table tbody tr th', text: @sample2.puid
       assert_selector 'table tbody tr th', text: @sample30.puid
+      ### actions and VERIFY END ###
+    end
+
+    test 'filter samples with advanced search using metadata operators between dates' do
+      ### SETUP START ###
+      Flipper.enable(:advanced_search_metadata_operators)
+      user = users(:metadata_doe)
+      login_as user
+      sample61 = samples(:sample61)
+      sample62 = samples(:sample62)
+      sample63 = samples(:sample63)
+      project = projects(:projectMetadata)
+      namespace = groups(:group_metadata)
+      visit namespace_project_samples_url(namespace, project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: user.locale))
+      assert_selector 'table tbody tr th', text: sample61.puid
+      assert_selector 'table tbody tr th', text: sample62.puid
+      assert_selector 'table tbody tr th', text: sample63.puid
+
+      ### SETUP END ###
+
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+        within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+          find("input[role='combobox']").send_keys('example_date', :enter)
+          find("select[name$='[operator]']").find("option[value='date_greater_than_equals']").select_option
+          find("input[name$='[value]']").fill_in with: (DateTime.strptime(sample62.metadata['example_date'],
+                                                                          '%Y-%m-%d') - 1.day).strftime('%Y-%m-%d')
+        end
+        click_button I18n.t(:'components.advanced_search_component.v1.add_condition_button')
+        assert_selector "fieldset[data-advanced-search--v1-target='conditionsContainer']", count: 2
+        within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[1] do
+          find("input[role='combobox']").send_keys('example_date', :enter)
+          find("select[name$='[operator]']").find("option[value='date_less_than_equals']").select_option
+          find("input[name$='[value]']").fill_in with: (DateTime.strptime(sample62.metadata['example_date'],
+                                                                          '%Y-%m-%d') + 1.day).strftime('%Y-%m-%d')
+        end
+      end
+      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+
+      assert_selector 'table tbody tr', count: 1
+      assert_no_selector 'table tbody tr th', text: sample61.puid
+      assert_no_selector 'table tbody tr th', text: sample63.puid
+      # sample62 found
+      assert_selector 'table tbody tr th', text: sample62.puid
+
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
+
+      assert_selector 'table tbody tr', count: 3
+      assert_selector 'table tbody tr th', text: sample61.puid
+      assert_selector 'table tbody tr th', text: sample62.puid
+      assert_selector 'table tbody tr th', text: sample63.puid
       ### actions and VERIFY END ###
     end
 
@@ -3059,6 +3117,61 @@ module Projects
         within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[1] do
           find("input[role='combobox']").send_keys('example_float', :enter)
           find("select[name$='[operator]']").find("option[value='<=']").select_option
+          find("input[name$='[value]']").fill_in with: sample62.metadata['example_float'].to_f + 0.1
+        end
+      end
+      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+
+      assert_selector 'table tbody tr', count: 1
+      assert_no_selector 'table tbody tr th', text: sample61.puid
+      assert_no_selector 'table tbody tr th', text: sample63.puid
+      # sample62 found
+      assert_selector 'table tbody tr th', text: sample62.puid
+
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
+
+      assert_selector 'table tbody tr', count: 3
+      assert_selector 'table tbody tr th', text: sample61.puid
+      assert_selector 'table tbody tr th', text: sample62.puid
+      assert_selector 'table tbody tr th', text: sample63.puid
+      ### actions and VERIFY END ###
+    end
+
+    test 'filter samples with advanced search using between numeric with metadata operators' do
+      ### SETUP START ###
+      Flipper.enable(:advanced_search_metadata_operators)
+      user = users(:metadata_doe)
+      login_as user
+      sample61 = samples(:sample61)
+      sample62 = samples(:sample62)
+      sample63 = samples(:sample63)
+      project = projects(:projectMetadata)
+      namespace = groups(:group_metadata)
+      visit namespace_project_samples_url(namespace, project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: user.locale))
+      assert_selector 'table tbody tr th', text: sample61.puid
+      assert_selector 'table tbody tr th', text: sample62.puid
+      assert_selector 'table tbody tr th', text: sample63.puid
+      ### SETUP END ###
+
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+        within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+          find("input[role='combobox']").send_keys('example_float', :enter)
+          find("select[name$='[operator]']").find("option[value='numeric_greater_than_equals']").select_option
+          find("input[name$='[value]']").fill_in with: sample62.metadata['example_float'].to_f - 0.1
+        end
+        click_button I18n.t(:'components.advanced_search_component.v1.add_condition_button')
+        assert_selector "fieldset[data-advanced-search--v1-target='conditionsContainer']", count: 2
+        within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[1] do
+          find("input[role='combobox']").send_keys('example_float', :enter)
+          find("select[name$='[operator]']").find("option[value='numeric_less_than_equals']").select_option
           find("input[name$='[value]']").fill_in with: sample62.metadata['example_float'].to_f + 0.1
         end
       end
@@ -3267,6 +3380,29 @@ module Projects
       assert_selector 'table tbody tr th', text: @sample2.puid
       assert_selector 'table tbody tr th', text: @sample30.puid
       ### actions and VERIFY END ###
+    end
+
+    test 'advanced search still has standard operators when non-metadata field selected with feature flag' do
+      Flipper.enable(:advanced_search_metadata_operators)
+
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within('dialog') do
+        find("input[role='combobox']").send_keys('sample name', :enter)
+        within "select[name$='[operator]']" do
+          assert_selector 'option[value="="]'
+          assert_selector 'option[value="!="]'
+          assert_selector 'option[value="in"]'
+          assert_selector 'option[value="not_in"]'
+          assert_no_selector 'option[value="date_equals"]'
+          assert_no_selector 'option[value="numeric_equals"]'
+        end
+      end
     end
 
     test 'can update metadata value that is not from an analysis' do

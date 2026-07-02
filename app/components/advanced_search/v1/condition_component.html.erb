@@ -54,21 +54,33 @@
 
     <% invalid_operator = @condition.errors.include?(:operator) %>
 
-    <div class="form-field w-full sm:max-w-xs <%= 'invalid' if invalid_operator %>">
+    <div class="form-field w-full sm:max-w-xs <%= 'invalid' if invalid_operator %> <%= 'invisible max-xl:hidden' if @condition.field.blank? %>">
+      <% operators = if enum_field? %>
+        <% options_for_select(
+                               enum_operator_options,
+                               @condition.operator,
+                             ) %>
+      <% elsif Flipper.enabled?(:advanced_search_metadata_operators) && @condition.field.to_s.starts_with?('metadata.') %>
+        <% grouped_options_for_select(metadata_operators, @condition.operator) %>
+      <% else %>
+        <% options_for_select(
+                               @operations['standard'],
+                               @condition.operator,
+                             ) %>
+      <% end %>
+
       <%= conditions_form.label :operator, data: { required: true } %>
 
       <%= conditions_form.select :operator,
-                             options_for_select(
-                               operation_options,
-                               @condition.operator,
-                             ),
+                             operators,
                              { include_blank: true },
                              {
                                "data-action": "advanced-search--v1#handleOperatorChange",
                                "aria-label": operator_label,
                                "aria-invalid": invalid_operator,
                                "aria-describedby":
-                                 conditions_form.field_id(:operator, "error")
+                                 conditions_form.field_id(:operator, "error"),
+                                 class: 'hidden'
                              } %>
 
       <%= render "shared/form/field_errors",
