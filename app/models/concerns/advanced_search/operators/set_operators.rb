@@ -2,7 +2,7 @@
 
 module AdvancedSearch
   module Operators
-    # Methods for set-based search conditions (IN, NOT IN)
+    # Methods for set-based search conditions (in, not_in, text_in, text_not_in)
     module SetOperators
       extend ActiveSupport::Concern
 
@@ -11,13 +11,17 @@ module AdvancedSearch
       def condition_in(scope, node, value, metadata_field:, field_name:)
         # Use case-insensitive matching for metadata fields (both enum and non-enum)
         if metadata_field
-          scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).in(downcase_values(value)))
+          condition_in_metadata(scope, node, value)
         elsif field_name == 'name'
           scope.where(node.lower.in(downcase_values(value)))
         else
           # Exact matching for regular fields
           scope.where(node.in(compact_values(value)))
         end
+      end
+
+      def condition_in_metadata(scope, node, value)
+        scope.where(Arel::Nodes::NamedFunction.new('LOWER', [node]).in(downcase_values(value)))
       end
 
       def condition_not_in(scope, node, value, metadata_field:, field_name:)

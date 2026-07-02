@@ -14,37 +14,92 @@ module AdvancedSearch
   module Filtering
     extend ActiveSupport::Concern
 
+    COMPARISON_OPERATORS = ['numeric_less_than_equals', 'numeric_greater_than_equals', 'date_less_than_equals',
+                            'date_greater_than_equals', '<=', '>='].freeze
+    EQUALITY_OPERATORS = ['numeric_equals', 'numeric_not_equals', 'date_equals', 'date_not_equals', 'text_equals',
+                          'text_not_equals', '=', '!='].freeze
+    PATTERN_OPERATORS = %w[text_contains text_not_contains contains not_contains].freeze
+    SET_OPERATORS = %w[text_in text_not_in in not_in].freeze
+    EXISTENCE_OPERATORS = %w[exists not_exists].freeze
+
     private
 
-    def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+    def add_condition(scope, condition) # rubocop:disable Metrics/MethodLength
       field_name = normalize_condition_field(condition)
       node = build_arel_node(field_name, model_class)
       value = normalize_condition_value(condition)
       metadata_field = field_name.starts_with?('metadata.')
-
-      case condition.operator
-      when '='
-        apply_equals_operator(scope, node, value, metadata_field:, field_name:)
-      when 'in'
-        apply_in_operator(scope, node, value, metadata_field:, field_name:)
-      when '!='
-        apply_not_equals_operator(scope, node, value, metadata_field:, field_name:)
-      when 'not_in'
-        apply_not_in_operator(scope, node, value, metadata_field:, field_name:)
-      when '<='
-        apply_less_than_or_equal(scope, node, value, field: field_name, metadata_field:)
-      when '>='
-        apply_greater_than_or_equal(scope, node, value, field: field_name, metadata_field:)
-      when 'contains'
-        condition_contains(scope, node, value, model_class:, field_name:)
-      when 'not_contains'
-        condition_not_contains(scope, node, value, model_class:, field_name:)
-      when 'exists'
-        condition_exists(scope, node)
-      when 'not_exists'
-        condition_not_exists(scope, node)
+      operator = condition.operator
+      case operator
+      when *COMPARISON_OPERATORS
+        apply_comparison_operators(scope, node, value, operator, metadata_field:, field_name:)
+      when *EQUALITY_OPERATORS
+        apply_equality_operators(scope, node, value, operator, metadata_field:, field_name:)
+      when *PATTERN_OPERATORS
+        apply_pattern_operators(scope, node, value, operator, model_class:, field_name:)
+      when *SET_OPERATORS
+        apply_set_operators(scope, node, value, operator, metadata_field:, field_name:)
+      when *EXISTENCE_OPERATORS
+        apply_existence_operators(scope, node, operator)
       else
         scope
+      end
+    end
+
+    # rubocop:disable Metrics/ParameterLists
+    def apply_comparison_operators(scope, node, value, operator, metadata_field:, field_name:)
+      case operator
+      when 'numeric_less_than_equals', 'numeric_greater_than_equals'
+        metadata_condition_numeric_comparison(scope, node, value,
+                                              operator == 'numeric_less_than_equals' ? :lteq : :gteq)
+      when 'date_less_than_equals', 'date_greater_than_equals'
+        metadata_condition_date_comparison(scope, node, value, operator == 'date_less_than_equals' ? :lteq : :gteq)
+      when '<='
+        condition_less_than_or_equal(scope, node, value, metadata_field:,
+                                                         metadata_key: delete_metadata_prefix(field_name))
+      when '>='
+        condition_greater_than_or_equal(scope, node, value, metadata_field:,
+                                                            metadata_key: delete_metadata_prefix(field_name))
+      end
+    end
+
+    def apply_equality_operators(scope, node, value, operator, metadata_field:, field_name:)
+      case operator
+      when 'numeric_equals', 'date_equals', 'text_equals', '='
+        condition_equals(scope, node, value, metadata_field:, field_name:)
+      when 'numeric_not_equals', 'date_not_equals', 'text_not_equals', '!='
+        condition_not_equals(scope, node, value, metadata_field:, field_name:)
+      end
+    end
+
+    def apply_pattern_operators(scope, node, value, operator, model_class:, field_name:)
+      case operator
+      when 'text_contains', 'contains'
+        condition_contains(scope, node, value, model_class:, field_name:)
+      when 'text_not_contains', 'not_contains'
+        condition_not_contains(scope, node, value, model_class:, field_name:)
+      end
+    end
+
+    def apply_set_operators(scope, node, value, operator, metadata_field:, field_name:)
+      case operator
+      when 'text_in'
+        condition_in_metadata(scope, node, value)
+      when 'text_not_in'
+        condition_not_in_metadata(scope, node, value)
+      when 'in'
+        condition_in(scope, node, value, metadata_field:, field_name:)
+      when 'not_in'
+        condition_not_in(scope, node, value, metadata_field:, field_name:)
+      end
+    end
+    # rubocop:enable Metrics/ParameterLists
+
+    def apply_existence_operators(scope, node, operator)
+      if operator == 'exists'
+        condition_exists(scope, node)
+      else
+        condition_not_exists(scope, node)
       end
     end
 
@@ -56,30 +111,8 @@ module AdvancedSearch
       condition.value
     end
 
-    def apply_less_than_or_equal(scope, node, value, field:, metadata_field:)
-      metadata_key = field.delete_prefix('metadata.')
-      condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-    end
-
-    def apply_greater_than_or_equal(scope, node, value, field:, metadata_field:)
-      metadata_key = field.delete_prefix('metadata.')
-      condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-    end
-
-    def apply_equals_operator(scope, node, value, metadata_field:, field_name:)
-      condition_equals(scope, node, value, metadata_field:, field_name:)
-    end
-
-    def apply_in_operator(scope, node, value, metadata_field:, field_name:)
-      condition_in(scope, node, value, metadata_field:, field_name:)
-    end
-
-    def apply_not_equals_operator(scope, node, value, metadata_field:, field_name:)
-      condition_not_equals(scope, node, value, metadata_field:, field_name:)
-    end
-
-    def apply_not_in_operator(scope, node, value, metadata_field:, field_name:)
-      condition_not_in(scope, node, value, metadata_field:, field_name:)
+    def delete_metadata_prefix(field_name)
+      field_name.delete_prefix('metadata.')
     end
   end
 end
