@@ -149,12 +149,48 @@ module AdvancedSearch
       condition = record.groups.first.conditions.first
       assert condition.errors.added?(:value, :not_a_date)
 
+      record1 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: '=',
+                                                                value: 'a')])]
+      )
+
+      assert_not record1.valid?
+      condition1 = record1.groups.first.conditions.first
+      assert condition1.errors.added?(:value, :not_a_date)
+
       record2 = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: '=',
                                                                 value: '2024-12-17')])]
       )
 
       assert record2.valid?
+
+      Flipper.enable(:advanced_search_metadata_operators)
+
+      record3 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: '=',
+                                                                value: '2024-13-40')])]
+      )
+
+      assert_not record3.valid?
+      condition3 = record3.groups.first.conditions.first
+      assert condition3.errors.added?(:value, :not_a_date)
+
+      record4 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: '=',
+                                                                value: 'a')])]
+      )
+
+      assert_not record4.valid?
+      condition4 = record4.groups.first.conditions.first
+      assert condition4.errors.added?(:value, :not_a_date)
+
+      record5 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: '=',
+                                                                value: '2024-12-17')])]
+      )
+
+      assert record5.valid?
     end
 
     test 'treats *_date fields as date fields' do
