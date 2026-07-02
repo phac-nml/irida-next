@@ -14,6 +14,9 @@ importers:
       '@tailwindcss/cli':
         specifier: 4.3.2
         version: 4.3.2
+      '@tailwindcss/forms':
+        specifier: ^0.5.11
+        version: 0.5.11(tailwindcss@4.3.2)
       flowbite:
         specifier: ^3.1.2
         version: 3.1.2(rollup@4.62.2)
@@ -678,6 +681,11 @@ packages:
   '@tailwindcss/cli@4.3.2':
     resolution: {integrity: sha512-Fzt+HrIZHDlkRYKdLMBeufaroaPvwCBG70sMLdmurdeadNMO/LxbmT8Sbb+P83ep0iAlAImettb7Y+rO+37rXw==}
     hasBin: true
+
+  '@tailwindcss/forms@0.5.11':
+    resolution: {integrity: sha512-h9wegbZDPurxG22xZSoWtdzc41/OlNEUQERNqI/0fOwa2aVlWGu7C35E/x6LDyD3lgtztFSSjKZyuVM0hxhbgA==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1 || >= 4.0.0-alpha.20 || >= 4.0.0-beta.1'
 
   '@tailwindcss/node@4.3.2':
     resolution: {integrity: sha512-yWP/sqEcBLaD8JuA6zNwxoYKr75qxTioYwlRwekj5Jr/I5GXnoJfjetH/psLUIv74cYTH2lBUEzBkinthoYcBg==}
@@ -2172,6 +2180,11 @@ snapshots:
       enhanced-resolve: 5.21.6
       mri: 1.2.0
       picocolors: 1.1.1
+      tailwindcss: 4.3.2
+
+  '@tailwindcss/forms@0.5.11(tailwindcss@4.3.2)':
+    dependencies:
+      mini-svg-data-uri: 1.4.4
       tailwindcss: 4.3.2
 
   '@tailwindcss/node@4.3.2':
