@@ -18,13 +18,12 @@
         authorized_namespaces: @authorized_namespaces,
       } %>
 
-      <div class="flex">
-        <%= form.submit t(:"groups.new_subgroup.submit"),
-                    class: "button button-primary mr-2" %>
+      <div class="flex gap-2">
+        <%= render "shared/pathogen/cancel_button", href: group_path(@group) %>
 
-        <%= link_to t('common.actions.cancel'),
-        group_path(@group),
-        class: "button button-default" %>
+        <%= form.submit t(:"groups.new_subgroup.submit"),
+                      tone: :primary,
+                      emphasis: :solid %>
       </div>
     </div>
   <% end %>

@@ -15,12 +15,9 @@
         <div class="grid gap-4">
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
-          <div class="flex">
-            <%= form.submit class: "button button-primary mr-2" %>
-
-            <%= link_to t('common.actions.cancel'),
-            namespace_project_samples_path,
-            class: "button button-default" %>
+          <div class="flex gap-2">
+            <%= render "shared/pathogen/cancel_button", href: namespace_project_samples_path %>
+            <%= form.submit tone: :primary, emphasis: :solid %>
           </div>
         </div>
       <% end %>

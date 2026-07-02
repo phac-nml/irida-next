@@ -14,7 +14,7 @@ module Dropdown
     }
     # Public: Expose key dropdown configuration
     attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip_text, :styles, :prefix,
-                :trigger_id, :icon_size
+                :trigger_id, :icon_size, :tone, :emphasis, :size
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -57,6 +57,9 @@ module Dropdown
       @label = @params[:label]
       @icon_name = @params[:icon]
       @icon_size = @params[:icon_size]
+      @tone = @params.fetch(:tone, :neutral)
+      @emphasis = @params.fetch(:emphasis, :outline)
+      @size = @params[:size] || :medium
       @caret = @params[:caret]
       @skidding = @params[:skidding] || 0
     end
@@ -132,7 +135,7 @@ module Dropdown
       return if @label.blank?
 
       if @styles[:button].present?
-        @system_arguments[:classes] = @styles[:button]
+        @system_arguments[:class] = @styles[:button]
       else
         @system_arguments.merge!(system_arguments_for_button)
       end
@@ -155,18 +158,18 @@ module Dropdown
     #   6. fallback: icon name or 'Menu'
     def add_aria_label
       if aria_label_from_params
-        @system_arguments['aria-label'] = aria_label_from_params
+        @system_arguments[:'aria-label'] = aria_label_from_params
         return
       end
-      return if @system_arguments['aria-label'].present?
+      return if @system_arguments[:'aria-label'].present?
       return if @label.present?
 
       if tooltip_aria_label
-        @system_arguments['aria-label'] = tooltip_aria_label
+        @system_arguments[:'aria-label'] = tooltip_aria_label
         return
       end
       ensure_icon_only_has_aria_label
-      @system_arguments['aria-label'] ||= default_aria_label
+      @system_arguments[:'aria-label'] ||= default_aria_label
     end
 
     # 🔍 Extract aria-label from params
@@ -195,7 +198,7 @@ module Dropdown
 
     # ⚠️ Raise if icon-only button is missing aria-label
     def ensure_icon_only_has_aria_label
-      return unless @icon_name.present? && @label.blank? && @system_arguments['aria-label'].blank?
+      return unless @icon_name.present? && @label.blank? && @system_arguments[:'aria-label'].blank?
 
       raise ArgumentError, "Icon-only buttons must have an aria-label, icon: #{@icon_name}"
     end
@@ -225,7 +228,7 @@ module Dropdown
         data: data,
         tag: :button,
         type: :button,
-        classes: 'cursor-pointer px-4 py-2 w-full',
+        class: 'cursor-pointer w-full',
         'aria-expanded': false,
         'aria-haspopup': true,
         'aria-controls': @dd_id
@@ -238,22 +241,19 @@ module Dropdown
 
     # 🎨 Default system arguments for button
     def system_arguments_for_button
-      return { classes: @styles[:button] } if @styles[:button].present?
+      return { class: @styles[:button] } if @styles[:button].present?
 
       {
-        classes: class_names(
-          'button button-default',
-          system_arguments[:classes]
-        )
+        class: system_arguments[:class]
       }
     end
 
     # 🎨 Default system arguments for icon
     def system_arguments_for_icon
-      return { classes: @styles[:button] } if @styles[:button].present?
+      return { class: @styles[:button] } if @styles[:button].present?
 
       {
-        classes: class_names('dropdown--icon', @system_arguments[:classes])
+        class: class_names('dropdown--icon', @system_arguments[:class])
       }
     end
 

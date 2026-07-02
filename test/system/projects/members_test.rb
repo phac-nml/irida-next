@@ -253,12 +253,11 @@ module Projects
       assert_selector '[role="tabpanel"]#members-panel:not([hidden])'
 
       # Wait for lazy turbo frames and dialog re-render to settle before clicking Add
-      assert_selector 'turbo-frame#members table'
+      assert_selector 'turbo-frame#members table', wait: 10
       within('turbo-frame#new_member_dialog') do
         assert_selector '[data-controller="viral--dialog"][data-controller-connected="true"]'
+        click_button I18n.t(:'projects.members.index.add')
       end
-
-      click_button I18n.t(:'projects.members.index.add')
 
       assert_selector 'dialog[open]', visible: true
 
@@ -384,7 +383,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
       # Wait for the members turbo frame to load (since it's in a tab)
-      assert_selector 'turbo-frame#members table'
+      assert_selector 'turbo-frame#members table', wait: 10
 
       within "table tbody tr[id='member_#{project_member.id}']" do
         assert_selector 'button', text: I18n.t('common.actions.edit')

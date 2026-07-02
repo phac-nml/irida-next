@@ -13,9 +13,9 @@
         authorized_namespaces: @authorized_namespaces,
       } %>
 
-      <div class="flex">
-        <%= form.submit t(:"groups.create.submit"), class: " button button-primary mr-2" %>
-        <%= link_to t('common.actions.cancel'), groups_path, class: "button button-default" %>
+      <div class="flex gap-2">
+        <%= render "shared/pathogen/cancel_button", href: groups_path %>
+        <%= form.submit t(:"groups.create.submit"), tone: :primary, emphasis: :solid %>
       </div>
     </div>
   <% end %>

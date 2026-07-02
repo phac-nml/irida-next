@@ -459,10 +459,10 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
     within %(form[action="/group-1/transfer"]) do
-      assert_selector 'input[type=submit]:disabled'
+      assert_selector 'button[type=submit]:disabled'
       find_field(I18n.t('groups.edit.advanced.transfer.new_parent_id')).click
       find("li[data-label='#{group3.name}']").click
-      assert_selector 'input[type=submit]:not(:disabled)'
+      assert_selector 'button[type=submit]:not(:disabled)'
       click_on I18n.t('groups.edit.advanced.transfer.submit')
     end
 

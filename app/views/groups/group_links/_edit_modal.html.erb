@@ -94,13 +94,12 @@ html: { novalidate: true }) do |form| %>
       </div>
 
       <div class="flex justify-start gap-1">
-        <%= form.submit I18n.t('common.actions.save'),
-                  class: "button button-primary",
-                  disabled: false %>
+        <%= render "shared/pathogen/cancel_button", data: { action: "click->viral--dialog#close" } %>
 
-        <button type="button" class="button button-default" data-action="click->viral--dialog#close">
-          <%= t('common.actions.cancel') %>
-        </button>
+        <%= form.submit I18n.t('common.actions.save'),
+                    tone: :primary,
+                    emphasis: :solid,
+                  disabled: false %>
       </div>
     </div>
   <% end %>
