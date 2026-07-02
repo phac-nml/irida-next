@@ -114,13 +114,13 @@ module AdvancedSearch
     end
 
     def validate_field(condition)
-      return if allowed_fields.include?(condition.field) || METADATA_FIELD_PATTERN.match?(condition.field)
+      return if allowed_fields.include?(condition.field) || metadata_field?(condition.field)
 
       condition.errors.add :field, :not_a_metadata
     end
 
     def validate_date_and_numeric_field(condition)
-      if Flipper.enabled?(:advanced_search_metadata_operators)
+      if Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field?(condition.field)
         validate_metadata_date_and_numeric_fields(condition)
       else
         validate_standard_date_and_numeric_fields(condition)
@@ -199,6 +199,10 @@ module AdvancedSearch
         end
       end
       unique_field_condition.errors.add :field, :taken
+    end
+
+    def metadata_field?(field)
+      METADATA_FIELD_PATTERN.match?(field)
     end
   end
 end
