@@ -51,6 +51,16 @@ features:
     name:
       en: "Data Grid Samples Table"
       fr: "Tableau de données des échantillons"
+  global_groups:
+    admin_manageable: true
+    description:
+      en: "Enable groups to be marked as public so that all users have access"
+      fr: "Permettre de marquer les groupes comme publics afin que tous les utilisateurs\
+        \ y aient accès"
+    enable_in_development: true
+    name:
+      en: "Global groups"
+      fr: "Groupes globaux"
   integration_access_token_generation:
     description: "Allow users to generate access tokens for API access."
     enable_in_development: true

@@ -85,11 +85,13 @@ module Projects
     def update_params(project) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       params = { parent_id: @new_namespace.id }
 
-      if @new_namespace.group_namespace? && @new_namespace.public? && !project.namespace.public?
-        params[:public] = true
-      elsif (@new_namespace.user_namespace? || (@new_namespace.group_namespace? && !@new_namespace.public?)) &&
-            project.namespace.public?
-        params[:public] = false
+      if Flipper.enabled?(:global_groups, current_user)
+        if @new_namespace.group_namespace? && @new_namespace.public? && !project.namespace.public?
+          params[:public] = true
+        elsif (@new_namespace.user_namespace? || (@new_namespace.group_namespace? && !@new_namespace.public?)) &&
+              project.namespace.public?
+          params[:public] = false
+        end
       end
 
       params

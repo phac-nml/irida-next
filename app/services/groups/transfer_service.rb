@@ -2,7 +2,7 @@
 
 module Groups
   # Service used to Transfer Groups
-  class TransferService < BaseGroupService
+  class TransferService < BaseGroupService # rubocop:disable Metrics/ClassLength
     def initialize(group, user = nil, transfer_form = nil)
       super(group, user)
       @transfer_form = transfer_form
@@ -27,23 +27,28 @@ module Groups
 
       parameters = update_params(new_namespace)
 
-      @group.update(parameters)
+      ActiveRecord::Base.transaction do
+        @group.update(parameters)
 
-      if parameters[:public] == true
-        update_descendants_to_public
-      elsif parameters[:public] == false
-        update_descendants_to_private
+        if Flipper.enabled?(:global_groups, current_user)
+          if parameters[:public] == true
+            update_descendants_to_public
+          elsif parameters[:public] == false
+            update_descendants_to_private
+          end
+        end
+
+        create_activities(old_namespace, new_namespace)
+
+        UpdateMembershipsJob.perform_later(new_namespace_member_ids)
+
+        update_samples_count(old_namespace, new_namespace)
+
+        new_namespace.update_metadata_summary_by_namespace_transfer(@group, old_namespace)
+
+        return true
       end
-
-      create_activities(old_namespace, new_namespace)
-
-      UpdateMembershipsJob.perform_later(new_namespace_member_ids)
-
-      update_samples_count(old_namespace, new_namespace)
-
-      new_namespace.update_metadata_summary_by_namespace_transfer(@group, old_namespace)
-
-      true
+      false
     end
 
     private
@@ -51,8 +56,10 @@ module Groups
     def update_params(new_namespace)
       params = { parent_id: new_namespace.id }
 
-      params[:public] = true if new_namespace.public? && !@group.public?
-      params[:public] = false if !new_namespace.public? && @group.public?
+      if Flipper.enabled?(:global_groups, current_user)
+        params[:public] = true if new_namespace.public? && !@group.public?
+        params[:public] = false if !new_namespace.public? && @group.public?
+      end
 
       params
     end

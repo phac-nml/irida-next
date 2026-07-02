@@ -13,29 +13,32 @@ module Groups
     def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       authorize! group.parent, to: :create_subgroup? if params[:parent_id].present?
 
-      group.public = true if params[:parent_id].present? && group.parent.public?
+      if Flipper.enabled?(:global_groups, current_user) && params[:parent_id].present? && group.parent.public?
+        group.public = true
+      end
 
-      group.save
+      ActiveRecord::Base.transaction do
+        group.save
 
-      if group.persisted?
-        @group.create_activity key: 'group.create',
-                               owner: current_user
-        if group.parent.nil?
-          Members::CreateService.new(current_user, group, {
-                                       user: current_user,
-                                       access_level: Member::AccessLevel::OWNER
-                                     }).execute
+        if group.persisted?
+          @group.create_activity key: 'group.create',
+                                 owner: current_user
+          if group.parent.nil?
+            Members::CreateService.new(current_user, group, {
+                                         user: current_user,
+                                         access_level: Member::AccessLevel::OWNER
+                                       }).execute
 
-        else
-          @group.parent.create_activity key: 'group.subgroups.create',
-                                        owner: current_user,
-                                        parameters: {
-                                          created_group_id: @group.id,
-                                          created_group_puid: @group.puid,
-                                          action: 'group_subgroup_create'
-                                        }
+          else
+            @group.parent.create_activity key: 'group.subgroups.create',
+                                          owner: current_user,
+                                          parameters: {
+                                            created_group_id: @group.id,
+                                            created_group_puid: @group.puid,
+                                            action: 'group_subgroup_create'
+                                          }
+          end
         end
-
       end
 
       group

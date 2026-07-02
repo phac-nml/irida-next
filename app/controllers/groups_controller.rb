@@ -135,6 +135,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def edit_view_authorizations
     @allowed_to = {
+      change_visibility: allowed_to?(:change_visibility?, @group),
       destroy: allowed_to?(:destroy?, @group),
       transfer: allowed_to?(:transfer?, @group)
     }

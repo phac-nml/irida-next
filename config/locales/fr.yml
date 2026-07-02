@@ -875,6 +875,26 @@ fr:
       success: Le groupe %{group_name} a été supprimé
     edit:
       advanced:
+        change_visibility:
+          confirm:
+            points_html:
+            - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
+            - Veuillez taper <kbd>%{group}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
+            private:
+              warning_html: Vous êtes sur le point de changer la visibilité de <strong>%{group_name}</strong> en <strong>privée</strong>. Une fois confirmé, tous les sous-groupes et projets sous ce groupe ne seront accessibles que par adhésion explicite.
+            public:
+              warning_html: Vous êtes sur le point de changer la visibilité de <strong>%{group_name}</strong> en <strong>publique</strong>. Une fois confirmé, tous les sous-groupes et projets sous ce groupe seront également visibles publiquement à tous les utilisateurs de l'application.
+          description:
+            private: Ce groupe est actuellement privé
+            public: Ce groupe est actuellement public
+          private:
+            points_html:
+            - Le changement d'un groupe en privé changera tous les descendants (groupes et projets) en privés. Seuls les utilisateurs ayant une adhésion explicite pourront y accéder.
+          public:
+            points_html:
+            - Le changement d'un groupe en public changera tous les descendants (groupes et projets) en publics. Tous les utilisateurs, avec ou sans adhésion explicite, pourront y accéder.
+          submit: Modifier la visibilité
+          title: Modifier la visibilité du groupe
         delete:
           confirm:
             points_html:
@@ -909,6 +929,8 @@ fr:
           - Soyez prudent. Changer le parent d’un groupe peut avoir des effets secondaires involontaires.
           - Vous ne pouvez transférer des groupes que si vous avez suffisamment d’autorisations.
           - Si la visibilité du groupe parent est inférieure à la visibilité actuelle du groupe, les niveaux de visibilité des sous-groupes et des projets seront modifiés pour correspondre à la visibilité du nouveau groupe parent.
+          - Si le groupe parent est public, ce groupe et tous ses descendants seront définis comme publics.
+          - Si le groupe parent est privé, ce groupe et tous ses descendants seront définis comme privés
           select_group: Sélectionner un groupe
           submit: Groupe de transfert
           title: Groupe de transfert

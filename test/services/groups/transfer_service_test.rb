@@ -13,6 +13,12 @@ module Groups
       @subgroup12a = groups(:subgroup_twelve_a)
       @subgroup12b = groups(:subgroup_twelve_b)
       @subgroup12aa = groups(:subgroup_twelve_a_a)
+
+      Flipper.enable(:global_groups)
+    end
+
+    def teardown
+      Flipper.disable(:global_groups)
     end
 
     test 'transfer group with permission' do

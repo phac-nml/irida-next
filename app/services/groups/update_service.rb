@@ -9,24 +9,29 @@ module Groups
       super
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
-      authorize! @group, to: :update?
-      updated = group.update(params)
+    def execute # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Metrics/MethodLength
+      authorize! @group, to: :update? unless params.key?(:public)
+      authorize! @group, to: :change_visibility? if params.key?(:public)
 
-      if updated
-        if group.parent.nil?
-          if params.key?(:public) && params[:public] == true
+      ActiveRecord::Base.transaction do
+        updated = group.update(params)
+
+        if updated && Flipper.enabled?(:global_groups, current_user) && group.parent.nil? && params.key?(:public)
+          public_param_normalized = params[:public].to_s
+          if public_param_normalized == 'true'
             update_descendants_to_public
-          elsif params.key?(:public) && params[:public] == false
+          elsif public_param_normalized == 'false'
             update_descendants_to_private
           end
         end
 
         @group.create_activity key: 'group.update',
                                owner: current_user
+
+        return updated
       end
 
-      updated
+      false
     end
   end
 end

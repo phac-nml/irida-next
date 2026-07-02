@@ -8,6 +8,11 @@ module Projects
       @user = users(:john_doe)
       @parent_namespace = namespaces_user_namespaces(:john_doe_namespace)
       @parent_group_namespace = groups(:group_one)
+      Flipper.enable(:global_groups)
+    end
+
+    def teardown
+      Flipper.disable(:global_groups)
     end
 
     test 'create project with valid params under user namespace' do

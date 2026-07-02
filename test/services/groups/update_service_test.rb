@@ -7,6 +7,11 @@ module Groups
     def setup
       @user = users(:john_doe)
       @group = groups(:group_one)
+      Flipper.enable(:global_groups)
+    end
+
+    def teardown
+      Flipper.disable(:global_groups)
     end
 
     test 'update group with valid params' do

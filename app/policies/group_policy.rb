@@ -51,6 +51,13 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def change_visibility?
+    return true if effective_access_level == Member::AccessLevel::OWNER
+
+    details[:name] = record.name
+    false
+  end
+
   def destroy?
     return true if effective_access_level == Member::AccessLevel::OWNER
 

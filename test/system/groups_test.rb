@@ -16,6 +16,11 @@ class GroupsTest < ApplicationSystemTestCase
     @project30 = projects(:project30)
     @sample34 = samples(:sample34)
     login_as @user
+    Flipper.enable(:global_groups)
+  end
+
+  def teardown
+    Flipper.disable(:global_groups)
   end
 
   test 'can create a group' do
@@ -250,6 +255,68 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_text I18n.t('groups.update.success', group_name: group1.name)
     assert_current_path '/-/groups/group-1-edited/-/edit'
+  end
+
+  test 'can update visibility of parent group to public' do
+    private_group = groups(:group_one)
+
+    visit group_url(private_group)
+
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
+
+    assert_selector 'h2', text: I18n.t('groups.edit.advanced.change_visibility.title')
+    assert_selector 'p', text: I18n.t('groups.edit.advanced.change_visibility.description.private')
+
+    assert_selector 'button', text: I18n.t('groups.edit.advanced.change_visibility.submit')
+    click_on I18n.t('groups.edit.advanced.change_visibility.submit')
+
+    within('#turbo-confirm') do
+      assert_text I18n.t('components.confirmation.title')
+      fill_in I18n.t('components.confirmation.confirm_label'), with: private_group.path
+      click_on I18n.t('common.controls.confirm')
+    end
+
+    assert_text I18n.t('groups.update.success', group_name: private_group.name)
+    assert_selector 'p', text: I18n.t('groups.edit.advanced.change_visibility.description.public')
+  end
+
+  test 'can update visibility of parent group to private' do
+    public_group = groups(:public_group1)
+
+    visit group_url(public_group)
+
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
+
+    assert_selector 'h2', text: I18n.t('groups.edit.advanced.change_visibility.title')
+    assert_selector 'p', text: I18n.t('groups.edit.advanced.change_visibility.description.public')
+
+    assert_selector 'button', text: I18n.t('groups.edit.advanced.change_visibility.submit')
+    click_on I18n.t('groups.edit.advanced.change_visibility.submit')
+
+    within('#turbo-confirm') do
+      assert_text I18n.t('components.confirmation.title')
+      fill_in I18n.t('components.confirmation.confirm_label'), with: public_group.path
+      click_on I18n.t('common.controls.confirm')
+    end
+
+    assert_text I18n.t('groups.update.success', group_name: public_group.name)
+    assert_selector 'p', text: I18n.t('groups.edit.advanced.change_visibility.description.private')
+  end
+
+  test 'cannot update visibility of a subgroup' do
+    subgroup = groups(:subgroup1)
+
+    visit group_url(subgroup)
+
+    click_on I18n.t('common.labels.settings')
+    click_link I18n.t('common.labels.general')
+
+    assert_no_selector 'h2', text: I18n.t('groups.edit.advanced.change_visibility.title')
+    assert_no_selector 'p', text: I18n.t('groups.edit.advanced.change_visibility.description.private')
+    assert_no_selector 'p', text: I18n.t('groups.edit.advanced.change_visibility.description.public')
+    assert_no_selector 'button', text: I18n.t('groups.edit.advanced.change_visibility.submit')
   end
 
   test 'show error when editing a group path and leaving it blank' do
