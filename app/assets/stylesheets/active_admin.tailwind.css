@@ -3,6 +3,6 @@
 @source "../../admin/**/*.{arb,erb,html,rb}";
 
 @plugin "@activeadmin/activeadmin/plugin";
-@plugin "flowbite/plugin";
+@plugin "@tailwindcss/forms";
 
 @custom-variant dark (&:where(.dark, .dark *));
