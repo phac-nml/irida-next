@@ -12,31 +12,8 @@ class BaseSampleService < BaseService
     @namespace = namespace
   end
 
-  private
-
-  def authorize_new_project(new_project_id, auth_method)
-    # Authorize user against new project authorization method
-    @new_project = Project.find_by(id: new_project_id)
-    authorize! @new_project, to: auth_method
-  end
-
-  def validate(sample_ids, action_type, new_project_id = nil) # rubocop:disable Metrics/CyclomaticComplexity
-    if !new_project_id.nil? && new_project_id.blank?
-      raise BaseError, I18n.t("services.samples.#{action_type}.empty_new_project_id")
-    end
-
-    raise BaseError, I18n.t("services.samples.#{action_type}.empty_sample_ids") if sample_ids.blank?
-
-    return unless !new_project_id.nil? && new_project_id.present? && @namespace.project_namespace?
-
-    return unless @namespace.project.id == new_project_id
-
-    raise BaseError,
-          I18n.t("services.samples.#{action_type}.same_project")
-  end
-
   # Filter the samples that the user has permissions to modify/copy
-  def filter_sample_ids(sample_ids, action_type, access_level = Member::AccessLevel::MAINTAINER) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def filter_sample_ids(sample_ids, action_type, append_namespace_errors = true, access_level = Member::AccessLevel::MAINTAINER) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Layout/LineLength,Style/OptionalBooleanParameter
     samples = authorized_scope(Sample, type: :relation, as: :namespace_samples,
                                        scope_options: { namespace: @namespace,
                                                         minimum_access_level: access_level })
@@ -60,17 +37,41 @@ class BaseSampleService < BaseService
 
     # We only need to show an unauthorized messages for sample ids that belong to projects in the
     # group since a user can have different access levels
-    if unauthorized_sample_ids.any? && @namespace.group_namespace?
-      @namespace.errors.add(:samples,
-                            I18n.t("services.samples.#{action_type}.unauthorized",
-                                   sample_ids: unauthorized_sample_ids.join(', ')))
-    end
-    if invalid_ids.any?
-      @namespace.errors.add(:samples,
-                            I18n.t("services.samples.#{action_type}.samples_not_found",
-                                   sample_ids: invalid_ids.join(', ')))
+    if append_namespace_errors
+      if unauthorized_sample_ids.any? && @namespace.group_namespace?
+        @namespace.errors.add(:samples,
+                              I18n.t("services.samples.#{action_type}.unauthorized",
+                                     sample_ids: unauthorized_sample_ids.join(', ')))
+      end
+      if invalid_ids.any?
+        @namespace.errors.add(:samples,
+                              I18n.t("services.samples.#{action_type}.samples_not_found",
+                                     sample_ids: invalid_ids.join(', ')))
+      end
     end
     samples
+  end
+
+  private
+
+  def authorize_new_project(new_project, auth_method)
+    # Authorize user against new project authorization method
+    authorize! new_project, to: auth_method
+  end
+
+  def validate(sample_ids, action_type, new_project_id = nil) # rubocop:disable Metrics/CyclomaticComplexity
+    if !new_project_id.nil? && new_project_id.blank?
+      raise BaseError, I18n.t("services.samples.#{action_type}.empty_new_project_id")
+    end
+
+    raise BaseError, I18n.t("services.samples.#{action_type}.empty_sample_ids") if sample_ids.blank?
+
+    return unless !new_project_id.nil? && new_project_id.present? && @namespace.project_namespace?
+
+    return unless @namespace.project.id == new_project_id
+
+    raise BaseError,
+          I18n.t("services.samples.#{action_type}.same_project")
   end
 
   # Broadcast all turbo broadcasts for sample services where the broadcasts were suppressed
