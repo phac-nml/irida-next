@@ -7,8 +7,8 @@
                       url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                       method: :get,
                       id: "select-all-form",
-                      class: "max-sm:grow"
-                    ) do |f| %>
+                      class: "hidden"
+                    ) do %>
             <input type="hidden" name="format" value="turbo_stream">
             <input type="hidden" name="select" value="on">
 
@@ -17,18 +17,23 @@
               name="q[puid_or_file_blob_filename_cont]"
               value="<%= params.dig(:q, :puid_or_file_blob_filename_cont) %>"
             >
-
-            <%= f.submit t('common.controls.select_all'), class: "button button-default w-full" %>
           <% end %>
+          <%= button_tag t('common.controls.select_all'),
+            type: "submit",
+            form: "select-all-form",
+            class: "button button-default max-sm:grow" %>
           <%= form_with(
                       url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                       method: :get,
                       id: "deselect-all-form" ,
-                      class: "max-sm:grow",
-                    ) do |f| %>
+                      class: "hidden",
+                    ) do %>
             <input type="hidden" name="format" value="turbo_stream">
-            <%= f.submit t('common.controls.deselect_all'), class: "button button-default w-full" %>
           <% end %>
+          <%= button_tag t('common.controls.deselect_all'),
+            type: "submit",
+            form: "deselect-all-form",
+            class: "button button-default max-sm:grow" %>
         <% end %>
       <% end %>
 
