@@ -26,6 +26,8 @@ export default class extends Controller {
     this.boundOnButtonClick = this.onButtonClick.bind(this);
     this.boundOnMenuKeyDown = this.onMenuKeyDown.bind(this);
     this.boundOnMorph = this.onMorph.bind(this);
+    this.boundStopMenuFocusPropagation =
+      this.stopMenuFocusPropagation.bind(this);
   }
 
   connect() {
@@ -58,9 +60,21 @@ export default class extends Controller {
 
   menuTargetConnected(element) {
     element.setAttribute("aria-hidden", "true");
+    // Keep focus events inside the menu from bubbling to a host Pathogen
+    // toolbar, which would otherwise restore focus to the trigger and make the
+    // open menu unreachable by keyboard.
+    element.addEventListener("focusin", this.boundStopMenuFocusPropagation);
     this.#menuItems(element).forEach((menuitem) => {
       menuitem.setAttribute("tabindex", "-1");
     });
+  }
+
+  menuTargetDisconnected(element) {
+    element.removeEventListener("focusin", this.boundStopMenuFocusPropagation);
+  }
+
+  stopMenuFocusPropagation(event) {
+    event.stopPropagation();
   }
 
   triggerTargetConnected(element) {

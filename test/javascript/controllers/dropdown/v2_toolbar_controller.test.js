@@ -159,4 +159,36 @@ describe("dropdown/v2_controller with pathogen toolbar", () => {
       document.activeElement,
     );
   });
+
+  it("keeps focus in a lazily loaded menu after the turbo frame loads", async () => {
+    await startControllers();
+
+    const trigger = document.querySelector("#menu-trigger");
+    const menu = document.querySelector("#sample-menu");
+
+    // Simulate the metadata-template dropdown: the menu is empty until its
+    // lazy turbo frame loads its items.
+    menu.innerHTML = "";
+    trigger.focus();
+    dispatchKey(trigger, "ArrowDown");
+
+    // Frame content arrives, then Turbo fires turbo:frame-load.
+    menu.innerHTML = `
+      <li role="none">
+        <button id="lazy-first" type="submit" role="menuitemradio" tabindex="-1">All</button>
+      </li>
+      <li role="none">
+        <button id="lazy-second" type="submit" role="menuitemradio" tabindex="-1">None</button>
+      </li>
+    `;
+    document.dispatchEvent(
+      new CustomEvent("turbo:frame-load", { bubbles: true }),
+    );
+    await flush();
+
+    expect(document.activeElement.id).toBe("lazy-first");
+
+    dispatchKey(document.activeElement, "ArrowDown");
+    expect(document.activeElement.id).toBe("lazy-second");
+  });
 });
