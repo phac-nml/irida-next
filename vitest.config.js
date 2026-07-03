@@ -6,9 +6,19 @@ const jsRoot = resolve(
   fileURLToPath(new URL("app/javascript", import.meta.url)),
 );
 
+const pathogenJsRoot = resolve(
+  fileURLToPath(
+    new URL(
+      "../pathogen-view-components/app/assets/javascripts/pathogen_view_components",
+      import.meta.url,
+    ),
+  ),
+);
+
 export default defineConfig({
   resolve: {
     alias: {
+      pathogen_view_components: pathogenJsRoot,
       controllers: resolve(jsRoot, "controllers"),
       debounce: resolve("vendor/javascript/debounce.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
