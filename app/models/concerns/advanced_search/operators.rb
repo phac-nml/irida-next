@@ -27,7 +27,7 @@ module AdvancedSearch
     end
 
     def build_arel_node(field_name, model_class)
-      field_name.to_s!
+      field_name = field_name.to_s
       if metadata_field?(field_name)
         metadata_key = metadata_key(field_name)
         Arel::Nodes::InfixOperation.new('->>', model_class.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_key))
