@@ -9,14 +9,14 @@ module AdvancedSearch
 
       private
 
-      def condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-        return scope.where(node.lteq(value)) unless metadata_field
+      def condition_less_than_or_equal(scope, node, value, metadata_key:)
+        return scope.where(node.lteq(value)) unless metadata_key
 
         perform_metadata_comparison(scope, node, value, :lteq, metadata_key)
       end
 
-      def condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-        return scope.where(node.gteq(value)) unless metadata_field
+      def condition_greater_than_or_equal(scope, node, value, metadata_key:)
+        return scope.where(node.gteq(value)) unless metadata_key
 
         perform_metadata_comparison(scope, node, value, :gteq, metadata_key)
       end

@@ -28,17 +28,16 @@ module AdvancedSearch
       field_name = normalize_condition_field(condition)
       node = build_arel_node(field_name, model_class)
       value = normalize_condition_value(condition)
-      metadata_field = field_name.starts_with?('metadata.')
       operator = condition.operator
       case operator
       when *COMPARISON_OPERATORS
-        apply_comparison_operators(scope, node, value, operator, metadata_field:, field_name:)
+        apply_comparison_operators(scope, node, value, operator, field_name:)
       when *EQUALITY_OPERATORS
-        apply_equality_operators(scope, node, value, operator, metadata_field:, field_name:)
+        apply_equality_operators(scope, node, value, operator, field_name:)
       when *PATTERN_OPERATORS
         apply_pattern_operators(scope, node, value, operator, model_class:, field_name:)
       when *SET_OPERATORS
-        apply_set_operators(scope, node, value, operator, metadata_field:, field_name:)
+        apply_set_operators(scope, node, value, operator, field_name:)
       when *EXISTENCE_OPERATORS
         apply_existence_operators(scope, node, operator)
       else
@@ -47,7 +46,7 @@ module AdvancedSearch
     end
 
     # rubocop:disable Metrics/ParameterLists
-    def apply_comparison_operators(scope, node, value, operator, metadata_field:, field_name:)
+    def apply_comparison_operators(scope, node, value, operator, field_name:)
       case operator
       when 'numeric_less_than_equals', 'numeric_greater_than_equals'
         metadata_condition_numeric_comparison(scope, node, value,
@@ -55,20 +54,18 @@ module AdvancedSearch
       when 'date_less_than_equals', 'date_greater_than_equals'
         metadata_condition_date_comparison(scope, node, value, operator == 'date_less_than_equals' ? :lteq : :gteq)
       when '<='
-        condition_less_than_or_equal(scope, node, value, metadata_field:,
-                                                         metadata_key: delete_metadata_prefix(field_name))
+        condition_less_than_or_equal(scope, node, value, metadata_key: metadata_key(field_name))
       when '>='
-        condition_greater_than_or_equal(scope, node, value, metadata_field:,
-                                                            metadata_key: delete_metadata_prefix(field_name))
+        condition_greater_than_or_equal(scope, node, value, metadata_key: metadata_key(field_name))
       end
     end
 
-    def apply_equality_operators(scope, node, value, operator, metadata_field:, field_name:)
+    def apply_equality_operators(scope, node, value, operator, field_name:)
       case operator
       when 'numeric_equals', 'date_equals', 'text_equals', '='
-        condition_equals(scope, node, value, metadata_field:, field_name:)
+        condition_equals(scope, node, value, field_name:)
       when 'numeric_not_equals', 'date_not_equals', 'text_not_equals', '!='
-        condition_not_equals(scope, node, value, metadata_field:, field_name:)
+        condition_not_equals(scope, node, value, field_name:)
       end
     end
 
@@ -81,16 +78,16 @@ module AdvancedSearch
       end
     end
 
-    def apply_set_operators(scope, node, value, operator, metadata_field:, field_name:)
+    def apply_set_operators(scope, node, value, operator, field_name:)
       case operator
       when 'text_in'
         condition_in_metadata(scope, node, value)
       when 'text_not_in'
         condition_not_in_metadata(scope, node, value)
       when 'in'
-        condition_in(scope, node, value, metadata_field:, field_name:)
+        condition_in(scope, node, value, field_name:)
       when 'not_in'
-        condition_not_in(scope, node, value, metadata_field:, field_name:)
+        condition_not_in(scope, node, value, field_name:)
       end
     end
     # rubocop:enable Metrics/ParameterLists
