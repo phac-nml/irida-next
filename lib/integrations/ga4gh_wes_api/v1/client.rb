@@ -65,6 +65,13 @@ module Integrations
         end
 
         # @param run_id [String] Required
+        def get_run_stdout(run_id)
+          get(
+            endpoint: "runs/#{run_id}/stdout"
+          )
+        end
+
+        # @param run_id [String] Required
         def get_run_status(run_id)
           get(
             endpoint: "runs/#{run_id}/status"
