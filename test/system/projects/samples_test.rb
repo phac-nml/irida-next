@@ -73,8 +73,11 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
 
-      assert_selector 'form#select-all-form'
-      assert_selector 'form#deselect-all-form'
+      # The submit buttons are visible and linked to their hidden forms via the form attribute
+      assert_selector 'button#select-all-button'
+      assert_selector 'button#deselect-all-button'
+      assert_selector 'form#select-all-form', visible: false
+      assert_selector 'form#deselect-all-form', visible: false
     end
 
     test 'User with role < Analyst does not see select and deselect buttons for samples table' do
@@ -84,8 +87,10 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
 
-      assert_no_selector 'form#select-all-form'
-      assert_no_selector 'form#deselect-all-form'
+      assert_no_selector 'button#select-all-button'
+      assert_no_selector 'button#deselect-all-button'
+      assert_no_selector 'form#select-all-form', visible: :all
+      assert_no_selector 'form#deselect-all-form', visible: :all
     end
 
     test 'User with role >= Analyst sees sample table checkboxes' do
