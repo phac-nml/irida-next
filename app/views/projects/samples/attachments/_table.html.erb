@@ -3,32 +3,14 @@
     <div class="mb-4 flex flex-wrap gap-2">
       <% if @allowed_to[:update_sample] %>
         <% if Flipper.enabled?(:sample_attachments_searching, current_user) %>
-          <%= form_with(
-                      url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
-                      method: :get,
-                      id: "select-all-form",
-                      class: "max-sm:grow"
-                    ) do |f| %>
-            <input type="hidden" name="format" value="turbo_stream">
-            <input type="hidden" name="select" value="on">
-
-            <input
-              type="hidden"
-              name="q[puid_or_file_blob_filename_cont]"
-              value="<%= params.dig(:q, :puid_or_file_blob_filename_cont) %>"
-            >
-
-            <%= f.submit t('common.controls.select_all'), class: "button button-default w-full" %>
-          <% end %>
-          <%= form_with(
-                      url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
-                      method: :get,
-                      id: "deselect-all-form" ,
-                      class: "max-sm:grow",
-                    ) do |f| %>
-            <input type="hidden" name="format" value="turbo_stream">
-            <%= f.submit t('common.controls.deselect_all'), class: "button button-default w-full" %>
-          <% end %>
+          <%= render "shared/selection_buttons",
+          url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
+          select_form_fields: {
+            format: "turbo_stream",
+            select: "on",
+            "q[puid_or_file_blob_filename_cont]": params.dig(:q, :puid_or_file_blob_filename_cont),
+          },
+          deselect_form_fields: { format: "turbo_stream" } %>
         <% end %>
       <% end %>
 

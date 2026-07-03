@@ -1,0 +1,47 @@
+<% select_form_id = local_assigns.fetch(:select_form_id, "select-all-form") %>
+<% deselect_form_id = local_assigns.fetch(:deselect_form_id, "deselect-all-form") %>
+
+<% select_button_options = {
+     id: "select-all-button",
+     type: "submit",
+     form: select_form_id,
+     class: "button button-default max-sm:grow",
+   }.merge(local_assigns.fetch(:select_button_options, {})) %>
+
+<% deselect_button_options = {
+     id: "deselect-all-button",
+     type: "submit",
+     form: deselect_form_id,
+     class: "button button-default max-sm:grow",
+   }.merge(local_assigns.fetch(:deselect_button_options, {})) %>
+
+<% select_form_fields = local_assigns.fetch(:select_form_fields, {}) %>
+<% deselect_form_fields = local_assigns.fetch(:deselect_form_fields, {}) %>
+
+<%= form_with(
+      url: url,
+      method: :get,
+      id: select_form_id,
+      class: "hidden",
+      data: local_assigns[:form_data],
+    ) do %>
+  <% select_form_fields.each do |field_name, field_value| %>
+    <%= hidden_field_tag field_name, field_value, id: nil %>
+  <% end %>
+<% end %>
+
+<%= button_tag t("common.controls.select_all"), **select_button_options %>
+
+<%= form_with(
+      url: url,
+      method: :get,
+      id: deselect_form_id,
+      class: "hidden",
+      data: local_assigns[:form_data],
+    ) do %>
+  <% deselect_form_fields.each do |field_name, field_value| %>
+    <%= hidden_field_tag field_name, field_value, id: nil %>
+  <% end %>
+<% end %>
+
+<%= button_tag t("common.controls.deselect_all"), **deselect_button_options %>
