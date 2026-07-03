@@ -13,25 +13,12 @@ module AdvancedSearch
       include AdvancedSearch::Operators::PatternOperators
       include AdvancedSearch::Operators::ExistenceOperators
       include AdvancedSearch::MetadataComparison
+      include AdvancedSearch::Operators
 
       extend ActiveSupport::Concern
 
       def model_class
         WorkflowExecution
-      end
-
-      def build_arel_node(field_name, model_class)
-        field_name = field_name.to_s
-        metadata_field = field_name.starts_with?('metadata.')
-
-        if metadata_field
-          metadata_key = field_name.delete_prefix('metadata.')
-          Arel::Nodes::InfixOperation.new(
-            '->>', model_class.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_key)
-          )
-        else
-          model_class.arel_table[field_name]
-        end
       end
 
       def enum_metadata_field?(field_name)
