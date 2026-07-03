@@ -12,6 +12,7 @@ module AdvancedSearch
       include AdvancedSearch::Operators::ComparisonOperators
       include AdvancedSearch::Operators::PatternOperators
       include AdvancedSearch::Operators::ExistenceOperators
+      include AdvancedSearch::Operators::MetadataComparison
 
       extend ActiveSupport::Concern
 
