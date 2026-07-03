@@ -79,7 +79,15 @@
     url: select_namespace_project_workflow_executions_url,
     form_data: { turbo_frame: "selected" },
     select_form_fields: { select: "on" },
-    deselect_form_fields: {} %>
+    deselect_form_fields: {},
+    select_button_options: {
+      title: t(".select_all_tooltip"),
+      aria: { label: t(".select_all_tooltip") },
+    },
+    deselect_button_options: {
+      title: t(".deselect_all_tooltip"),
+      aria: { label: t(".deselect_all_tooltip") },
+    } %>
 
     <div class="max-sm:hidden sm:grow" role="presentation"></div>
 

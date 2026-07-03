@@ -10,7 +10,15 @@
             select: "on",
             "q[puid_or_file_blob_filename_cont]": params.dig(:q, :puid_or_file_blob_filename_cont),
           },
-          deselect_form_fields: { format: "turbo_stream" } %>
+          deselect_form_fields: { format: "turbo_stream" },
+          select_button_options: {
+            title: t(".select_all_tooltip"),
+            aria: { label: t(".select_all_tooltip") },
+          },
+          deselect_button_options: {
+            title: t(".deselect_all_tooltip"),
+            aria: { label: t(".deselect_all_tooltip") },
+          } %>
         <% end %>
       <% end %>
 

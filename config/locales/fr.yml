@@ -1102,6 +1102,8 @@ fr:
         title: Modifier l’exécution du flux de travail
       index:
         create_export_button: Créer une exportation
+        deselect_all_tooltip: Désélectionner toutes les exécutions de flux de travail de ce groupe
+        select_all_tooltip: Sélectionner toutes les exécutions de flux de travail de ce groupe
         subtitle: Ce sont les exécutions du flux de travail qui ont été partagées au sein de ce groupe.
       show:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
@@ -1717,6 +1719,7 @@ fr:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été supprimé avec succès.
         table:
+          deselect_all_tooltip: Désélectionner tous les fichiers de cet échantillon
           empty_state:
             action_text: Télécharger des fichiers
             description: Cet échantillon n’a actuellement aucun fichier joint. Commencer par télécharger les données de séquence, les fichiers d’assemblage ou d’autres documents pertinents
@@ -1724,6 +1727,7 @@ fr:
             title: Aucun fichier n’a été téléchargé
           search:
             placeholder: Rechercher des fichiers
+          select_all_tooltip: Sélectionner tous les fichiers de cet échantillon
       create:
         success: L’échantillon a été créé avec succès.
       edit:
@@ -1847,6 +1851,8 @@ fr:
         submit_button: Envoyer
         title: Modifier l’exécution automatisée du flux de travail
       index:
+        deselect_all_tooltip: Désélectionner toutes les exécutions de flux de travail de ce projet
+        select_all_tooltip: Sélectionner toutes les exécutions de flux de travail de ce projet
         subtitle: Il s’agit des exécutions de flux de travail qui ont été lancées automatiquement pour ce projet, ainsi que des exécutions de flux de travail qui ont été partagées par l’un de ses membres.
       show:
         cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
@@ -2257,6 +2263,9 @@ fr:
         title: Aucun fichier
       search:
         placeholder: Rechercher des fichiers
+    index:
+      deselect_all_tooltip: Désélectionner toutes les exécutions de flux de travail
+      select_all_tooltip: Sélectionner toutes les exécutions de flux de travail
     samples:
       empty: Aucun échantillon n’a pu être trouvé pour cette exécution de flux de travail
     show:

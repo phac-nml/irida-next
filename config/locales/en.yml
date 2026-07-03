@@ -1100,6 +1100,8 @@ en:
         title: Edit workflow execution
       index:
         create_export_button: Create Export
+        deselect_all_tooltip: Deselect all workflow executions in this group
+        select_all_tooltip: Select all workflow executions in this group
         subtitle: These are the workflow executions that have been shared within this group
       show:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
@@ -1713,6 +1715,7 @@ en:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
           success: File %{filename} was successfully removed.
         table:
+          deselect_all_tooltip: Deselect all files for this sample
           empty_state:
             action_text: Upload Files
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
@@ -1720,6 +1723,7 @@ en:
             title: No files have been uploaded
           search:
             placeholder: Search files
+          select_all_tooltip: Select all files for this sample
       create:
         success: Sample was successfully created.
       edit:
@@ -1843,6 +1847,8 @@ en:
         submit_button: Submit
         title: Edit automated workflow execution
       index:
+        deselect_all_tooltip: Deselect all workflow executions in this project
+        select_all_tooltip: Select all workflow executions in this project
         subtitle: These are the workflow executions that have been automatically launched for this project, along with workflow executions that have been shared by any of its members.
       show:
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
@@ -2253,6 +2259,9 @@ en:
         title: No Files
       search:
         placeholder: Search files
+    index:
+      deselect_all_tooltip: Deselect all workflow executions
+      select_all_tooltip: Select all workflow executions
     samples:
       empty: No samples could be found for this workflow execution
     show:
