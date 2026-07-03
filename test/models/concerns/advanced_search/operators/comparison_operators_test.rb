@@ -8,6 +8,7 @@ module AdvancedSearch
       # Test class that includes the ComparisonOperators module
       class TestClass
         include AdvancedSearch::Operators::ComparisonOperators
+        include AdvancedSearch::MetadataComparison
       end
 
       def setup

@@ -8,6 +8,7 @@ module AdvancedSearch
       # Test class that includes the SetOperators module
       class TestClass
         include AdvancedSearch::Operators::SetOperators
+        include AdvancedSearch::MetadataComparison
 
         # Helper method from parent Operators module
         def enum_metadata_field?(field_name)
