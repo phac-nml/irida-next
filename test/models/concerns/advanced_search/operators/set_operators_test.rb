@@ -8,7 +8,7 @@ module AdvancedSearch
       # Test class that includes the SetOperators module
       class TestClass
         include AdvancedSearch::Operators::SetOperators
-        include AdvancedSearch::Operators::MetadataComparison
+        include AdvancedSearch::MetadataComparison
         include AdvancedSearch::Operators
 
         # Helper method from parent Operators module

@@ -10,7 +10,7 @@ module AdvancedSearch
     include AdvancedSearch::Operators::ComparisonOperators
     include AdvancedSearch::Operators::PatternOperators
     include AdvancedSearch::Operators::ExistenceOperators
-    include AdvancedSearch::Operators::MetadataComparison
+    include AdvancedSearch::MetadataComparison
 
     included do
       class_attribute :enum_metadata_fields, instance_accessor: false, default: [].freeze
