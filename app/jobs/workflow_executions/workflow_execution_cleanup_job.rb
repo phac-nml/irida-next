@@ -20,8 +20,23 @@ module WorkflowExecutions
       # Don't run service if already cleaned
       return if @workflow_execution.nil? || @workflow_execution.cleaned?
 
+      step :create_log_attachments
       step :clean_up_blob_run_directory
       step :update_to_cleaned
+    end
+
+    private
+
+    def create_log_attachments
+      # Create attachments for stdout logs if they exist
+      result = WorkflowExecutions::CleanupService.new(@workflow_execution).execute
+      run_log = result[:run_log]
+      run_stdout = result[:run_stdout]
+      files = []
+      files << { io: StringIO.new(run_log.to_json), filename: 'run_log.json' } if run_log.present?
+      files << { io: StringIO.new(run_stdout.to_json), filename: 'run_stdout.json' } if run_stdout.present?
+
+      Attachments::CreateService.new(@workflow_execution.submitter, @workflow_execution, { files: }).execute
     end
 
     def clean_up_blob_run_directory
