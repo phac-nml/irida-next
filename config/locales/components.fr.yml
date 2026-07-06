@@ -350,6 +350,9 @@ fr:
       processing_samplesheet: Feuille d'échantillons de traitement
       samplesheet_processing_error: Une erreur s'est produite lors du traitement de votre demande. Veuillez relancer l’exécution du flux de travail. Si le problème persiste, désélectionnez puis resélectionnez les échantillons.
       submission_error: Quelque chose s’est mal passé avec la demande de soumission.
+    pathogen:
+      cancel_button:
+        cancel: Annuler
     project_dashboard:
       activity_title: Dernière activité
       info_title: Renseignements sur le projet

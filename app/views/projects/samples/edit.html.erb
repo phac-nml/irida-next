@@ -20,7 +20,7 @@
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
           <div class="flex gap-2">
-            <%= render "shared/pathogen/cancel_button", href: namespace_project_sample_path(id: @sample.id) %>
+            <%= render Pathogen::CancelButtonComponent.new(href: namespace_project_sample_path(id: @sample.id)) %>
 
             <%= form.submit t("projects.samples.edit.submit_button"),
                           tone: :primary,
