@@ -8,12 +8,12 @@ module AdvancedSearch
 
       private
 
-      def condition_contains(scope, node, value, model_class: nil, field_name: nil)
+      def condition_contains(scope, node, value, model_class, field_name)
         search_node = model_class && field_name ? cast_to_text_if_uuid(node, model_class, field_name) : node
         scope.where(search_node.matches("%#{escape_like_wildcards(value)}%"))
       end
 
-      def condition_not_contains(scope, node, value, model_class: nil, field_name: nil)
+      def condition_not_contains(scope, node, value, model_class, field_name)
         search_node = model_class && field_name ? cast_to_text_if_uuid(node, model_class, field_name) : node
         scope.where(node.eq(nil).or(search_node.does_not_match("%#{escape_like_wildcards(value)}%")))
       end

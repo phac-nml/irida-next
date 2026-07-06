@@ -8,7 +8,7 @@ module AdvancedSearch
 
       private
 
-      def condition_in(scope, node, value, field_name:)
+      def condition_in(scope, node, value, field_name)
         # Use case-insensitive matching for metadata fields (both enum and non-enum)
         if metadata_field?(field_name)
           condition_in_metadata(scope, node, value)
@@ -20,7 +20,7 @@ module AdvancedSearch
         end
       end
 
-      def condition_not_in(scope, node, value, field_name:)
+      def condition_not_in(scope, node, value, field_name)
         # Use case-insensitive matching for metadata fields (both enum and non-enum)
         if metadata_field?(field_name)
           condition_not_in_metadata(scope, node, value)

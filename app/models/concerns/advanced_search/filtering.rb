@@ -22,82 +22,117 @@ module AdvancedSearch
     SET_OPERATORS = %w[text_in text_not_in in not_in].freeze
     EXISTENCE_OPERATORS = %w[exists not_exists].freeze
 
+    OPERATOR_HANDLERS = {
+      # equals operators
+      '=' => :apply_condition_equals,
+      'numeric_equals' => :apply_condition_equals,
+      'date_equals' => :apply_condition_equals,
+      'text_equals' => :apply_condition_equals,
+      # not_equals operators
+      '!=' => :apply_condition_not_equals,
+      'numeric_not_equals' => :apply_condition_not_equals,
+      'date_not_equals' => :apply_condition_not_equals,
+      'text_not_equals' => :apply_condition_not_equals,
+      # contains operators
+      'text_contains' => :apply_condition_contains,
+      'contains' => :apply_condition_contains,
+      # not_contains operators
+      'text_not_contains' => :apply_condition_not_contains,
+      'not_contains' => :apply_condition_not_contains,
+      # greater_than_or_equal operators
+      '>=' => :apply_condition_standard_greater_than_or_equal,
+      'date_greater_than_equals' => :apply_condition_metadata_date_greater_than_or_equal,
+      'numeric_greater_than_equals' => :apply_condition_metadata_numeric_greater_than_or_equal,
+      # less_than_or_equal operators
+      '<=' => :apply_condition_standard_less_than_or_equal,
+      'date_less_than_equals' => :apply_condition_metadata_date_less_than_or_equal,
+      'numeric_less_than_equals' => :apply_condition_metadata_numeric_less_than_or_equal,
+      # in operators
+      'in' => :apply_condition_in,
+      'not_in' => :apply_condition_not_in,
+      'text_in' => :apply_condition_metadata_in,
+      'text_not_in' => :apply_condition_metadata_not_in,
+      # exists operators
+      'exists' => :apply_condition_exists,
+      'not_exists' => :apply_condition_not_exists
+    }.freeze
+
     private
 
-    def add_condition(scope, condition) # rubocop:disable Metrics/MethodLength
+    def add_condition(scope, condition)
       field_name = normalize_condition_field(condition)
       node = build_arel_node(field_name, model_class)
       value = normalize_condition_value(condition)
-      operator = condition.operator
-      case operator
-      when *COMPARISON_OPERATORS
-        apply_comparison_operators(scope, node, value, operator, field_name:)
-      when *EQUALITY_OPERATORS
-        apply_equality_operators(scope, node, value, operator, field_name:)
-      when *PATTERN_OPERATORS
-        apply_pattern_operators(scope, node, value, operator, model_class:, field_name:)
-      when *SET_OPERATORS
-        apply_set_operators(scope, node, value, operator, field_name:)
-      when *EXISTENCE_OPERATORS
-        apply_existence_operators(scope, node, operator)
-      else
-        scope
-      end
+      # operator = condition.operator
+
+      handler = OPERATOR_HANDLERS[condition.operator]
+      return scope unless handler
+
+      send(handler, scope, node, value, field_name)
     end
 
-    # rubocop:disable Metrics/ParameterLists
-    def apply_comparison_operators(scope, node, value, operator, field_name:)
-      case operator
-      when 'numeric_less_than_equals', 'numeric_greater_than_equals'
-        metadata_condition_numeric_comparison(scope, node, value,
-                                              operator == 'numeric_less_than_equals' ? :lteq : :gteq)
-      when 'date_less_than_equals', 'date_greater_than_equals'
-        metadata_condition_date_comparison(scope, node, value, operator == 'date_less_than_equals' ? :lteq : :gteq)
-      when '<='
-        condition_less_than_or_equal(scope, node, value, metadata_key: metadata_key(field_name))
-      when '>='
-        condition_greater_than_or_equal(scope, node, value, metadata_key: metadata_key(field_name))
-      end
+    def apply_condition_equals(scope, node, value, field_name)
+      condition_equals(scope, node, value, field_name)
     end
 
-    def apply_equality_operators(scope, node, value, operator, field_name:)
-      case operator
-      when 'numeric_equals', 'date_equals', 'text_equals', '='
-        condition_equals(scope, node, value, field_name:)
-      when 'numeric_not_equals', 'date_not_equals', 'text_not_equals', '!='
-        condition_not_equals(scope, node, value, field_name:)
-      end
+    def apply_condition_not_equals(scope, node, value, field_name)
+      condition_not_equals(scope, node, value, field_name)
     end
 
-    def apply_pattern_operators(scope, node, value, operator, model_class:, field_name:)
-      case operator
-      when 'text_contains', 'contains'
-        condition_contains(scope, node, value, model_class:, field_name:)
-      when 'text_not_contains', 'not_contains'
-        condition_not_contains(scope, node, value, model_class:, field_name:)
-      end
+    def apply_condition_contains(scope, node, value, field_name)
+      condition_contains(scope, node, value, model_class, field_name)
     end
 
-    def apply_set_operators(scope, node, value, operator, field_name:)
-      case operator
-      when 'text_in'
-        condition_in_metadata(scope, node, value)
-      when 'text_not_in'
-        condition_not_in_metadata(scope, node, value)
-      when 'in'
-        condition_in(scope, node, value, field_name:)
-      when 'not_in'
-        condition_not_in(scope, node, value, field_name:)
-      end
+    def apply_condition_not_contains(scope, node, value, field_name)
+      condition_not_contains(scope, node, value, model_class, field_name)
     end
-    # rubocop:enable Metrics/ParameterLists
 
-    def apply_existence_operators(scope, node, operator)
-      if operator == 'exists'
-        condition_exists(scope, node)
-      else
-        condition_not_exists(scope, node)
-      end
+    def apply_condition_standard_greater_than_or_equal(scope, node, value, field_name)
+      condition_greater_than_or_equal(scope, node, value, metadata_key(field_name))
+    end
+
+    def apply_condition_metadata_date_greater_than_or_equal(scope, node, value, _field_name)
+      metadata_condition_date_comparison(scope, node, value, :gteq)
+    end
+
+    def apply_condition_metadata_numeric_greater_than_or_equal(scope, node, value, _field_name)
+      metadata_condition_numeric_comparison(scope, node, value, :gteq)
+    end
+
+    def apply_condition_standard_less_than_or_equal(scope, node, value, field_name)
+      condition_less_than_or_equal(scope, node, value, metadata_key(field_name))
+    end
+
+    def apply_condition_metadata_date_less_than_or_equal(scope, node, value, _field_name)
+      metadata_condition_date_comparison(scope, node, value, :lteq)
+    end
+
+    def apply_condition_metadata_numeric_less_than_or_equal(scope, node, value, _field_name)
+      metadata_condition_numeric_comparison(scope, node, value, :lteq)
+    end
+
+    def apply_condition_in(scope, node, value, field_name)
+      condition_in(scope, node, value, field_name)
+    end
+
+    def apply_condition_not_in(scope, node, value, field_name)
+      condition_not_in(scope, node, value, field_name)
+    end
+
+    def apply_condition_metadata_in(scope, node, value, _field_name)
+      condition_in_metadata(scope, node, value)
+    end
+
+    def apply_condition_metadata_not_in(scope, node, value, _field_name)
+      condition_not_in_metadata(scope, node, value)
+    end
+
+    def apply_condition_exists(scope, node, _value, _field_name)
+      condition_exists(scope, node)
+    end
+
+    def apply_condition_not_exists(scope, node, _value, _field_name)
+      condition_not_exists(scope, node)
     end
 
     def normalize_condition_field(condition)
