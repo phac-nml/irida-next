@@ -66,13 +66,11 @@ module AdvancedSearch
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in') => 'text_in', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in') => 'text_not_in' # rubocop:disable Layout/LineLength
             },
-            I18n.t("#{localization_key}.metadata.labels.numeric") => {
-              I18n.t("#{localization_key}.metadata.operations.numeric.numeric_equals") => 'numeric_equals',
-              I18n.t("#{localization_key}.metadata.operations.numeric.numeric_not_equals") => 'numeric_not_equals',
-              I18n.t("#{localization_key}.metadata.operations.numeric.numeric_less_than_equals") =>
-              'numeric_less_than_equals',
-              I18n.t("#{localization_key}.metadata.operations.numeric.numeric_greater_than_equals") =>
-              'numeric_greater_than_equals'
+            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.numeric') => {
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') => 'numeric_equals', # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') => 'numeric_not_equals', # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') => 'numeric_less_than_equals', # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') => 'numeric_greater_than_equals' # rubocop:disable Layout/LineLength
             },
             I18n.t('components.advanced_search_component.v1.operations.metadata.labels.date') => {
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_equals') => 'date_equals', # rubocop:disable Layout/LineLength
