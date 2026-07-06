@@ -10,11 +10,12 @@
       } %>
 
       <div class="my-2 flex gap-2">
-        <%= render "shared/pathogen/cancel_button",
-                   data: {
-                     action: "personal-access-tokens#removeAddNewTokenForm",
-                     "personal-access-tokens-target": "cancel-button",
-                   } %>
+        <%= render Pathogen::CancelButtonComponent.new(
+          data: {
+            action: "personal-access-tokens#removeAddNewTokenForm",
+            "personal-access-tokens-target": "cancel-button",
+          },
+        ) %>
 
         <%= f.submit t("profiles.personal_access_tokens.create.submit"),
                  tone: :primary, emphasis: :solid %>
