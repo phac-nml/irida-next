@@ -13,8 +13,8 @@
 
           <%= render partial: "shared/form/required_field_legend" %>
 
-          <% invalid_path = @project.namespace.errors.include?(:path) %> tone: :danger, emphasis: :outline, class:
-          "inline-block"
+          <% invalid_path = @project.namespace.errors.include?(:path) %>
+
           <div class="form-field <%= 'invalid' if invalid_path %>">
             <div class="@container">
               <%= builder.label :path, data: { required: true } %>
