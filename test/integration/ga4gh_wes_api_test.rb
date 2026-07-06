@@ -77,6 +77,44 @@ class ClientTest < ActionDispatch::IntegrationTest
     stubs.verify_stubbed_calls
   end
 
+  def test_get_run_stdout_json
+    given_hash = {"stdout":"[main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.6"}
+    expected_hash = { stdout: "[main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.6" }
+
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get('/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout') do |env|
+      assert_equal '/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout', env.url.path
+      [
+        200,
+        { 'Content-Type': 'application/json' },
+        given_hash
+      ]
+    end
+
+    cli = client(stubs)
+    assert_equal expected_hash, cli.get_run_stdout('716ab7b0-cef7-4ae7-b467-26444b4c0579')
+    stubs.verify_stubbed_calls
+  end
+
+  def test_get_run_stdout_text
+    given_text = "[main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.6"
+    expected_text = "[main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.6"
+
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get('/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout') do |env|
+      assert_equal '/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout', env.url.path
+      [
+        200,
+        { 'Content-Type': 'text/plain' },
+        given_text
+      ]
+    end
+
+    cli = client(stubs)
+    assert_equal expected_text, cli.get_run_stdout('716ab7b0-cef7-4ae7-b467-26444b4c0579')
+    stubs.verify_stubbed_calls
+  end
+
   # 400
   def test_malformed
     stubs = Faraday::Adapter::Test::Stubs.new
