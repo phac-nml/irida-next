@@ -12,8 +12,13 @@ module Types
   end
 
   class SampleAdvancedSearchConditionOperatorInputType < BaseEnum # rubocop:disable Style/Documentation
+    base_description = 'Sample Advanced Search Condition Operator'
+    if Flipper.enabled?(:advanced_search_metadata_operators)
+      base_description += "\n- To search metadata fields, use the operators below starting with 'METADATA_*'\n- For all other fields, use the operators that are not prefixed with 'METADATA_*'" # rubocop:disable Layout/LineLength
+    end
     graphql_name 'SampleAdvancedSearchConditionOperator'
-    description 'Sample Advanced Search Condition Operator'
+    description base_description
+
     value 'EQUALS', value: '='
     value 'NOT_EQUALS', value: '!='
     value 'LESS_THAN_EQUALS', value: '<='
@@ -24,6 +29,33 @@ module Types
     value 'NOT_EXISTS', value: 'not_exists'
     value 'IN', value: 'in'
     value 'NOT_IN', value: 'not_in'
+    value 'METADATA_DATE_GREATER_THAN_EQUALS', value: 'date_greater_than_equals'
+    value 'METADATA_DATE_LESS_THAN_EQUALS', value: 'date_less_than_equals'
+    value 'METADATA_DATE_EQUALS', value: 'date_equals'
+    value 'METADATA_DATE_NOT_EQUALS', value: 'date_not_equals'
+    value 'METADATA_NUMERIC_GREATER_THAN_EQUALS', value: 'numeric_greater_than_equals'
+    value 'METADATA_NUMERIC_LESS_THAN_EQUALS', value: 'numeric_less_than_equals'
+    value 'METADATA_NUMERIC_EQUALS', value: 'numeric_equals'
+    value 'METADATA_NUMERIC_NOT_EQUALS', value: 'numeric_not_equals'
+    value 'METADATA_TEXT_EQUALS', value: 'text_equals'
+    value 'METADATA_TEXT_NOT_EQUALS', value: 'text_not_equals'
+    value 'METADATA_TEXT_IN', value: 'text_in'
+    value 'METADATA_TEXT_NOT_IN', value: 'text_not_in'
+    value 'METADATA_TEXT_CONTAINS', value: 'text_contains'
+    value 'METADATA_TEXT_NOT_CONTAINS', value: 'text_not_contains'
+    value 'METADATA_EXISTS', value: 'exists'
+    value 'METADATA_NOT_EXISTS', value: 'not_exists'
+
+    # only enable metadata operators with enabled feature flag
+    def self.enum_values(context)
+      all_values = super
+
+      if Flipper.enabled?(:advanced_search_metadata_operators)
+        all_values
+      else
+        all_values.reject { |value_obj| value_obj.graphql_name.starts_with?('METADATA_') }
+      end
+    end
   end
 
   class ValueScalar < BaseScalar # rubocop:disable Style/Documentation
