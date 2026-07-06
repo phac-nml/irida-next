@@ -14,14 +14,6 @@ module AdvancedSearch
   module Filtering
     extend ActiveSupport::Concern
 
-    COMPARISON_OPERATORS = ['numeric_less_than_equals', 'numeric_greater_than_equals', 'date_less_than_equals',
-                            'date_greater_than_equals', '<=', '>='].freeze
-    EQUALITY_OPERATORS = ['numeric_equals', 'numeric_not_equals', 'date_equals', 'date_not_equals', 'text_equals',
-                          'text_not_equals', '=', '!='].freeze
-    PATTERN_OPERATORS = %w[text_contains text_not_contains contains not_contains].freeze
-    SET_OPERATORS = %w[text_in text_not_in in not_in].freeze
-    EXISTENCE_OPERATORS = %w[exists not_exists].freeze
-
     OPERATOR_HANDLERS = {
       # equals operators
       '=' => :apply_condition_equals,
