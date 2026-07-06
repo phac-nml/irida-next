@@ -11,7 +11,6 @@
     "advanced-search--v1-enum-fields-value": json_escape_data(@fields.fetch(:enum_fields, {})),
     "advanced-search--v1-enum-operations-value": json_escape_data(enum_operation_options),
     "advanced-search--v1-operations-value": json_escape_data(operation_options),
-    "advanced-search--v1-metadata-operations-enabled-value": Flipper.enabled?(:advanced_search_metadata_operators),
   },
 ) do %>
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>

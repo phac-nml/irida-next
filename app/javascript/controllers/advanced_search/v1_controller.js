@@ -23,7 +23,6 @@ export default class AdvancedSearchController extends Controller {
     hasErrors: Boolean,
     open: Boolean,
     status: Boolean,
-    metadataOperationsEnabled: Boolean,
   };
 
   #hiddenClasses = ["invisible", "@max-xl:hidden"];
@@ -326,7 +325,7 @@ export default class AdvancedSearchController extends Controller {
       this.#createOperatorOptions(this.enumOperationsValue, operator);
     } else if (
       selectedField.startsWith("metadata.") &&
-      this.metadataOperationsEnabledValue
+      Object.hasOwn(this.operationsValue, "metadata")
     ) {
       this.#createMetadataOperatorOptions(
         this.operationsValue["metadata"],
