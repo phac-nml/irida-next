@@ -55,7 +55,6 @@ module AdvancedSearch
       field_name = normalize_condition_field(condition)
       node = build_arel_node(field_name, model_class)
       value = normalize_condition_value(condition)
-      # operator = condition.operator
 
       handler = OPERATOR_HANDLERS[condition.operator]
       return scope unless handler
