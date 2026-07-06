@@ -107,9 +107,5 @@ module AdvancedSearch
     def normalize_condition_value(condition)
       condition.value
     end
-
-    def delete_metadata_prefix(field_name)
-      field_name.delete_prefix('metadata.')
-    end
   end
 end
