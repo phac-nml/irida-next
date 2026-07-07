@@ -164,8 +164,9 @@ export default class extends Controller {
     const newRow = rows[direction > 0 ? rows.length - 1 : 0];
 
     if (currentRow !== newRow) {
+      const cellIndex = tabbable(currentRow).indexOf(document.activeElement);
       currentRow.tabIndex = -1;
-      this.#focus(newRow, -1);
+      this.#focus(newRow, cellIndex);
     }
   }
 
