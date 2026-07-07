@@ -1,6 +1,6 @@
-<%= helpers.turbo_frame_tag "bots-table" do %>
+<%= helpers.turbo_frame_tag "bots-table-section" do %>
   <% if @bot_accounts.count.positive? %>
-    <%= viral_data_table(@bot_accounts) do |table| %>
+    <%= viral_data_table(@bot_accounts, id: "bots-table") do |table| %>
       <% table.with_column(t("bots.index.table.header.username")) do |row| %>
         <%= row.user.email %>
       <% end %>

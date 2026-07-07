@@ -15,6 +15,6 @@
                          bot_account_name: @bot_account.user.email,
                          token: personal_access_token.token,
                        } %>
-  <%= turbo_stream.replace "bots-table",
+  <%= turbo_stream.replace "bots-table-section",
                        partial: "projects/bots/table" %>
 <% end %>
