@@ -99,11 +99,7 @@ export default class extends Controller {
 
   #ensureAriaLiveReady() {
     // check if aria-live exists as it's added after file selection in import metadata (can't be done in connect())
-    if (
-      !this.#ariaLiveTranslations &&
-      this.hasAriaLiveUpdateTarget &&
-      !this.#wordConnector
-    ) {
+    if (!this.#ariaLiveTranslations && this.hasAriaLiveUpdateTarget) {
       this.#ariaLiveTranslations = JSON.parse(
         this.ariaLiveUpdateTarget.getAttribute("data-translations"),
       );
@@ -113,9 +109,13 @@ export default class extends Controller {
         twoWordsConnector: this.#ariaLiveTranslations["two_words_connector"],
         lastWordConnector: this.#ariaLiveTranslations["last_word_connector"],
       });
-      return true;
     }
-    return false;
+
+    return Boolean(
+      this.#ariaLiveTranslations &&
+      this.#wordConnector &&
+      this.hasAriaLiveUpdateTarget,
+    );
   }
 
   #cleanupAvailableList() {

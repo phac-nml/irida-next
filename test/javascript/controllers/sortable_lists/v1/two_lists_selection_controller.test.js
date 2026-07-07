@@ -445,4 +445,58 @@ describe("sortable lists two-lists selection controller", () => {
       ),
     ).toHaveTextContent("Two was moved up to position 1 in Selected list.");
   });
+
+  it("announces each add and remove action via the aria-live region", async () => {
+    vi.useFakeTimers();
+    renderFixture({
+      available: [option("available-foo", "foo")],
+      selected: [],
+    });
+    application = await startController();
+
+    const availableList = list("available-list");
+    const selectedList = list("selected-list");
+    const addButton = document.querySelector(
+      '[data-sortable-lists--v1--two-lists-selection-target="addButton"]',
+    );
+    const removeButton = document.querySelector(
+      '[data-sortable-lists--v1--two-lists-selection-target="removeButton"]',
+    );
+    const ariaLive = document.querySelector(
+      '[data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"]',
+    );
+
+    availableList.focus();
+    keydown(availableList, " ");
+    addButton.focus();
+    addButton.click();
+    vi.runAllTimers();
+    expect(ariaLive).toHaveTextContent(
+      "The following item was moved to Selected list: foo",
+    );
+    expect(document.activeElement).toBe(addButton);
+    expect(addButton).toHaveAttribute("aria-disabled", "true");
+
+    selectedList.focus();
+    keydown(selectedList, " ");
+    removeButton.focus();
+    removeButton.click();
+    vi.runAllTimers();
+    expect(ariaLive).toHaveTextContent(
+      "The following item was moved to Available list: foo",
+    );
+    expect(document.activeElement).toBe(removeButton);
+    expect(removeButton).toHaveAttribute("aria-disabled", "true");
+
+    availableList.focus();
+    keydown(availableList, " ");
+    addButton.focus();
+    addButton.click();
+    vi.runAllTimers();
+    expect(ariaLive).toHaveTextContent(
+      "The following item was moved to Selected list: foo",
+    );
+    expect(document.activeElement).toBe(addButton);
+    expect(addButton).toHaveAttribute("aria-disabled", "true");
+  });
 });
