@@ -254,7 +254,9 @@ module Projects
       assert_selector '[role="tabpanel"]#members-panel:not([hidden])'
 
       # Wait for lazy turbo frames and dialog re-render to settle before clicking Add
-      assert_selector 'turbo-frame#members table', wait: 15
+      within('turbo-frame#members') do
+        assert_text I18n.t(:'projects.members.index.empty_state.title'), wait: 15
+      end
       within('turbo-frame#new_member_dialog') do
         assert_selector '[data-controller="viral--dialog"][data-controller-connected="true"]'
       end
