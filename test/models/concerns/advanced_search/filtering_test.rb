@@ -127,7 +127,9 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'ILIKE'
+      assert_includes sql, 'CAST'
+      assert_includes sql, 'DOUBLE PRECISION'
+      assert_includes sql, '='
     end
 
     test 'operator numeric_not_equals' do
@@ -137,8 +139,9 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'NOT ILIKE'
-      assert_includes sql, 'IS NULL'
+      assert_includes sql, 'CAST'
+      assert_includes sql, 'DOUBLE PRECISION'
+      assert_includes sql, '!='
     end
 
     test 'operator date_equals' do
