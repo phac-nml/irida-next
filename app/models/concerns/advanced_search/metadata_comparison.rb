@@ -43,9 +43,11 @@ module AdvancedSearch
 
       scope
         .where(node.matches_regexp('^-?\\d+(\\.\\d+)?$'))
-        .where(Arel::Nodes::NamedFunction.new(
-          'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-        ).public_send(comparison_method, value.to_f))
+        .where(
+          Arel::Nodes::NamedFunction.new(
+            'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
+          ).public_send(comparison_method, value.to_f)
+        )
     end
 
     def valid_date_format?(value)
