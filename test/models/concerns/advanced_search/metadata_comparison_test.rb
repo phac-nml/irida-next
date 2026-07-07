@@ -59,6 +59,22 @@ module AdvancedSearch
       assert_includes sql, 'DOUBLE PRECISION'
     end
 
+    test 'condition_numeric_comparison works with eq' do
+      result = @test_instance.send(:metadata_condition_numeric_comparison, @scope, @node, '456.78', :eq)
+      sql = result.to_sql
+      assert_includes sql, '='
+      assert_includes sql, 'CAST'
+      assert_includes sql, 'DOUBLE PRECISION'
+    end
+
+    test 'condition_numeric_comparison works with not_eq' do
+      result = @test_instance.send(:metadata_condition_numeric_comparison, @scope, @node, '456.78', :not_eq)
+      sql = result.to_sql
+      assert_includes sql, '!='
+      assert_includes sql, 'CAST'
+      assert_includes sql, 'DOUBLE PRECISION'
+    end
+
     test 'condition_in_metadata' do
       result = @test_instance.send(:condition_in_metadata,
                                    @scope, @node, %w[Test Value])

@@ -37,16 +37,16 @@ module AdvancedSearch
         )
     end
 
+    # handles all numeric comparisons (:eq, :not_eq, :gteq, :lteq)
     def metadata_condition_numeric_comparison(scope, node, value, comparison_method)
       return scope.none unless valid_numeric_format?(value)
 
       scope
         .where(node.matches_regexp('^-?\\d+(\\.\\d+)?$'))
-        .where(
-          Arel::Nodes::NamedFunction.new(
-            'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-          ).public_send(comparison_method, value)
-        )
+        .where(Arel::Nodes::NamedFunction.new(
+          'CAST',
+          [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
+        ).public_send(comparison_method, value.to_f))
     end
 
     def valid_date_format?(value)
