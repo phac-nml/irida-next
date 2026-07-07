@@ -10,7 +10,7 @@ module BotActions
     before_action proc { bot_account }, only: %i[destroy destroy_confirmation]
     before_action proc { bot_type }, only: %i[create]
     before_action proc { bot_accounts }
-    before_action proc { view_authorizations }, only: %i[index]
+    before_action proc { view_authorizations }, only: %i[index create]
   end
 
   def index
@@ -34,12 +34,14 @@ module BotActions
     end
   end
 
-  def create
+  def create # rubocop:disable Metrics/MethodLength
     @bot_account = Bots::CreateService.new(current_user, @namespace, @bot_type, bot_params).execute
 
     respond_to do |format|
       format.turbo_stream do
         if @bot_account.persisted?
+          @pagy, @bot_accounts = pagy(@bot_accounts, raise_range_error: true)
+
           render status: :ok, locals: {
             type: 'success',
             message: t('concerns.bot_actions.create.success'),
