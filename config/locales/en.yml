@@ -487,7 +487,10 @@ en:
     projects:
       index:
         all: All
+        archived: Archived
         create_project_button: New project
+        no_archived_projects: No archived projects
+        no_archived_projects_description: You currently have no archived projects.
         no_projects: No projects
         no_projects_description: You currently have no projects.
         pagy_item: Projects
@@ -817,6 +820,9 @@ en:
   groups:
     activity:
       title: Group Activity
+    archived_projects:
+      pagy:
+        item: Archived Projects
     attachments:
       create:
         failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
@@ -1040,6 +1046,9 @@ en:
       pagy:
         item: Shared groups and projects
     show:
+      archived_projects:
+        no_archived_projects: No archived projects
+        no_archived_projects_description: These are the projects that are in read-only mode.
       create_project_button: New project
       create_subgroup_button: New subgroup
       information:
@@ -1061,6 +1070,7 @@ en:
           description: Create a subgroup to manage projects and members
           title: No subgroups
       tabs:
+        archived_projects: Archived Projects
         label: Group project details navigation
         shared_namespaces: Shared groups and projects
         subgroups_and_projects: Subgroups and projects
@@ -1457,6 +1467,8 @@ en:
   projects:
     activity:
       title: Project Activity
+    alerts:
+      archived: Project is in read-only mode
     attachments:
       create:
         failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
@@ -1547,6 +1559,14 @@ en:
       success: Project %{project_name} was successfully deleted
     edit:
       advanced:
+        archive_project:
+          confirm:
+            points_html:
+            - To prevent accidental actions we ask you to confirm your intention.
+            - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel.
+            warning_html: You are archiving <strong>%{project_name}</strong>. This will make the project read-only.
+          description: Make your project read-only. You can still access its data
+          title: Archive project
         destroy:
           confirm:
             points_html:
@@ -1565,6 +1585,14 @@ en:
           help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
           submit: Change project URL
           title: Change project URL
+        restore_project:
+          confirm:
+            points_html:
+            - To prevent accidental actions we ask you to confirm your intention.
+            - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel.
+            warning_html: You are restoring <strong>%{project_name}</strong> to an active state. This will make the project readable and writeable.
+          description: Restore your project to an active state. You'll be able to modify its content and settings again
+          title: Restore project
         title: Advanced settings
         transfer:
           confirm:

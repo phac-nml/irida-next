@@ -487,7 +487,10 @@ fr:
     projects:
       index:
         all: Tous
+        archived: Archivé
         create_project_button: Nouveau projet
+        no_archived_projects: Aucun projet archivé
+        no_archived_projects_description: Vous n’avez actuellement aucun projet archivé.
         no_projects: Aucun projet
         no_projects_description: Vous n'avez actuellement aucun projet.
         pagy_item: Projets
@@ -819,6 +822,9 @@ fr:
   groups:
     activity:
       title: Activité en groupe
+    archived_projects:
+      pagy:
+        item: Projets archivés
     attachments:
       create:
         failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
@@ -1042,6 +1048,9 @@ fr:
       pagy:
         item: Groupes et projets partagés
     show:
+      archived_projects:
+        no_archived_projects: Aucun projet archivé
+        no_archived_projects_description: Il s’agit de projets en mode lecture seule.
       create_project_button: Nouveau projet
       create_subgroup_button: Nouveau sous-groupe
       information:
@@ -1063,6 +1072,7 @@ fr:
           description: Créer un sous-groupe pour gérer les projets et les membres
           title: Aucun sous-groupe
       tabs:
+        archived_projects: Projets archivés
         label: Navigation des détails du projet de groupe
         shared_namespaces: Groupes et projets partagés
         subgroups_and_projects: Sous-groupes et projets
@@ -1461,6 +1471,8 @@ fr:
   projects:
     activity:
       title: Activité du projet
+    alerts:
+      archived: Le projet est en mode lecture seule
     attachments:
       create:
         failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
@@ -1551,6 +1563,14 @@ fr:
       success: Le projet %{project_name} a été supprimé avec succès
     edit:
       advanced:
+        archive_project:
+          confirm:
+            points_html:
+            - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
+            - Veuillez taper <kbd>%{project}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
+            warning_html: Vous archivez <strong>%{project_name}</strong>. Ceci rendra le projet en lecture seule.
+          description: Rendez votre projet en lecture seule. Vous pouvez toujours accéder à ses données
+          title: Archiver le projet
         destroy:
           confirm:
             points_html:
@@ -1569,6 +1589,14 @@ fr:
           help: Le chemin est utilisé dans les URL et doit comporter au moins 3 caractères et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
           submit: Modifier l’URL du projet
           title: Modifier l’URL du projet
+        restore_project:
+          confirm:
+            points_html:
+            - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
+            - Veuillez taper <kbd>%{project}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
+            warning_html: Vous restaurez <strong>%{project_name}</strong> à un état actif. Ceci rendra le projet lisible et modifiable.
+          description: Restaurez votre projet à un état actif. Vous pourrez de nouveau modifier son contenu et ses paramètres
+          title: Restaurer le projet
         title: Paramètres avancés
         transfer:
           confirm:

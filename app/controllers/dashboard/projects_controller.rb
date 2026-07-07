@@ -24,14 +24,24 @@ module Dashboard
     def build_ransack_query(all_projects)
       if params[:personal] == 'true'
         all_projects.ransack(params[:personal_projects_q], search_key: :personal_projects_q)
+      elsif params[:archived] == 'true'
+        all_projects.ransack(params[:archived_projects_q], search_key: :archived_projects_q)
       else
         all_projects.ransack(params[:all_projects_q], search_key: :all_projects_q)
       end
     end
 
     def set_tab_variables
-      @tab = params[:personal] == 'true' ? 'personal' : 'all'
-      @tab_index = @tab == 'personal' ? 1 : 0
+      @tab = if params[:personal] == 'true'
+               'personal'
+             else
+               params[:archived] == 'true' ? 'archived' : 'all'
+             end
+      @tab_index = if @tab == 'personal'
+                     1
+                   else
+                     @tab == 'archived' ? 2 : 0
+                   end
     end
 
     def set_default_sort
@@ -41,6 +51,8 @@ module Dashboard
     def authorized_projects(finder_params)
       if finder_params[:personal] == 'true'
         authorized_scope(Project, type: :relation, as: :personal)
+      elsif finder_params[:archived] == 'true'
+        authorized_scope(Project, type: :relation, as: :archived_projects)
       else
         authorized_scope(Project, type: :relation)
       end

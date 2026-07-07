@@ -1,10 +1,13 @@
 <!DOCTYPE html>
+
 <html class="light" lang="<%= locale %>">
   <%= render "layouts/partials/head" %>
+
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: @fixed) do |layout| %>
       <% layout.with_sidebar(pipelines_enabled: @pipelines_enabled) do |navigation| %>
         <%= navigation.with_header(label: t("projects.sidebar.label"), item: @project) %>
+
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: namespace_project_path,
@@ -12,18 +15,21 @@
             label: @project.name,
             selected: @current_page == t('common.labels.details'),
           ) %>
+
           <%= render section.with_item(
             url: namespace_project_members_path,
             icon: Member.icon,
             label: t(:"projects.sidebar.members"),
             selected: @current_page == t(:"projects.sidebar.members"),
           ) %>
+
           <%= render section.with_item(
             url: namespace_project_samples_path,
             icon: Sample.icon,
             label: t(:"projects.sidebar.samples"),
             selected: @current_page == t(:"projects.sidebar.samples"),
           ) %>
+
           <% if allowed_to?(:view_attachments?, @project) %>
             <%= render section.with_item(
               url: namespace_project_attachments_path,
@@ -32,6 +38,7 @@
               selected: @current_page == t(:"projects.sidebar.files"),
             ) %>
           <% end %>
+
           <% if allowed_to?(:view_history?, @project) %>
             <%= render section.with_item(
               url: namespace_project_activity_path,
@@ -40,6 +47,7 @@
               selected: @current_page == t(:"projects.sidebar.activity"),
             ) %>
           <% end %>
+
           <% if allowed_to?(:view_workflow_executions?, @project.namespace) && @pipelines_enabled %>
             <%= render section.with_item(
               url: namespace_project_workflow_executions_path,
@@ -48,6 +56,7 @@
               selected: @current_page == t(:"projects.sidebar.workflow_executions"),
             ) %>
           <% end %>
+
           <% if allowed_to?(:update?, @project) %>
             <%= render section.with_multi_level_menu(
               title: t('common.labels.settings'),
@@ -66,11 +75,13 @@
                 label: t('common.labels.general'),
                 selected: @current_page == t('common.labels.general'),
               ) %>
+
               <% multi_level_menu.with_menu_item(
                 url: namespace_project_bots_path,
                 label: t(:"projects.sidebar.bot_accounts"),
                 selected: @current_page == t(:"projects.sidebar.bot_accounts"),
               ) %>
+
               <% if @pipelines_enabled %>
                 <% multi_level_menu.with_menu_item(
                   url: namespace_project_automated_workflow_executions_path,
@@ -79,11 +90,13 @@
                     @current_page == t(:"projects.sidebar.automated_workflow_executions"),
                 ) %>
               <% end %>
+
               <% multi_level_menu.with_menu_item(
                 url: namespace_project_history_path,
                 label: t(:"projects.sidebar.history"),
                 selected: @current_page == t(:"projects.sidebar.history"),
               ) %>
+
               <% multi_level_menu.with_menu_item(
                 url: namespace_project_metadata_templates_path,
                 label: t(:"projects.sidebar.metadata_templates"),
@@ -92,9 +105,30 @@
             <% end %>
           <% end %>
         <% end %>
+
         <% layout.with_breadcrumb(links: @context_crumbs) %>
         <% layout.with_language_selection %>
+
         <% layout.with_body do %>
+          <% if @project.namespace.archived_at.present? %>
+            <section class="mb-2 w-full shrink-0">
+              <div
+                class="flex flex-col"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                <%= render Viral::AlertComponent.new(
+                  type: 'info',
+                  message: t(:"projects.alerts.archived"),
+                  dismissible: false,
+                  announce_alert: false,
+                  classes: "rounded-none border-x-0 border-t-0",
+                ) %>
+              </div>
+            </section>
+          <% end %>
+
           <%= turbo_frame_tag("errors") %>
           <%= yield %>
         <% end %>

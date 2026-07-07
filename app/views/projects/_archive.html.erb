@@ -1,0 +1,42 @@
+<%= viral_card do |card| %>
+  <% key = @project.namespace.archived_at.present? ? "restore_project" : "archive_project" %>
+  <% title = t("projects.edit.advanced.#{key}.title") %>
+
+  <% card.with_header(title: title) %>
+
+  <% card.with_section do %>
+    <p class="text-slate-600 dark:text-slate-400">
+      <%= t("projects.edit.advanced.#{key}.description") %>
+    </p>
+
+    <div class="py-2">
+      <div class="confirm-archive hidden">
+        <div class="mb-4 flex rounded-lg bg-red-50 p-4 text-red-800 dark:bg-slate-800 dark:text-red-400">
+          <%= icon(:warning_circle, color: :danger) %>
+
+          <span class="ml-4 flex-1">
+            <%= t(
+              "projects.edit.advanced.#{key}.confirm.warning_html",
+              project_name: @project.human_name,
+            ) %>
+          </span>
+        </div>
+
+        <div class="mb-4">
+          <% t("projects.edit.advanced.#{key}.confirm.points_html", project: @project.name).each do |item| %>
+            <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <%= button_to title, "",
+                class: "button button-destructive", data: {
+        turbo_confirm: "",
+        turbo_content: ".confirm-archive",
+        confirm_value: @project.name,
+      } %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

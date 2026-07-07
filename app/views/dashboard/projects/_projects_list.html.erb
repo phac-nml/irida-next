@@ -10,10 +10,14 @@
       class: "max-sm:grow",
       value: @q.namespace_name_or_namespace_puid_cont,
       data: {},
-      as: (params[:personal] == 'true' ? :personal_projects_q : :all_projects_q)
+      as: (params[:personal] == 'true' ? :personal_projects_q : params[:archived] == 'true' ? :archived_projects_q : :all_projects_q)
     ) do %>
       <% if params[:personal] == 'true' %>
         <input type="hidden" name="personal" value="true">
+      <% end %>
+
+      <% if params[:archived] == 'true' %>
+        <input type="hidden" name="archived" value="true">
       <% end %>
     <% end %>
 
@@ -59,10 +63,22 @@
   </div>
 <% else %>
   <div class="empty_state_message">
+    <% if local_assigns[:empty_title] %>
+      <% empty_title = empty_title %>
+    <% else %>
+      <% empty_title = t("dashboard.projects.index.no_projects") %>
+    <% end %>
+
+    <% if local_assigns[:empty_description] %>
+      <% empty_description = empty_description %>
+    <% else %>
+      <% empty_description = t("dashboard.projects.index.no_projects_description") %>
+    <% end %>
+
     <%= viral_empty(
       icon_name: Project.icon,
-      title: t("dashboard.projects.index.no_projects"),
-      description: t("dashboard.projects.index.no_projects_description"),
+      title: empty_title,
+      description: empty_description,
     ) %>
   </div>
 <% end %>

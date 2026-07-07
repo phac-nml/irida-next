@@ -77,6 +77,12 @@
               selected: @tab == "shared_namespaces",
             ) %>
 
+            <% tabs.with_tab(
+              id: "archived_projects_tab",
+              label: t("groups.show.tabs.archived_projects"),
+              selected: @tab == "archived_projects",
+            ) %>
+
             <% tabs.with_lazy_panel(
               id: "subgroups_and_projects_panel",
               tab_id: "subgroups_and_projects_tab",
@@ -136,6 +142,39 @@
               <% end %>
 
               <%= render "groups/shared_namespaces",
+              locals: {
+                namespaces: @namespaces,
+                has_namespaces: @has_namespaces,
+              } %>
+            <% end %>
+
+            <% tabs.with_lazy_panel(
+              id: "archived_projects_panel",
+              tab_id: "archived_projects_tab",
+              frame_id: "archived_projects_content",
+              src_path: group_path(@group, tab: "archived_projects"),
+              selected: @tab == "archived_projects"
+            ) do %>
+              <% if @has_namespaces %>
+                <div class="mb-2 flex justify-end">
+                  <%= render SearchComponent.new(
+                    query: @q,
+                    url: group_path(@group),
+                    search_attribute: :name_or_puid_cont,
+                    label: t('common.controls.search'),
+                    placeholder: t("groups.show.search.placeholder"),
+                    total_count: @pagy.count,
+                    class: "max-sm:grow",
+                    value: @q.name_or_puid_cont,
+                    data: {},
+                    as: :archived_projects_q
+                  ) do %>
+                    <input type="hidden" name="tab" value="archived_projects">
+                  <% end %>
+                </div>
+              <% end %>
+
+              <%= render "groups/archived_projects",
               locals: {
                 namespaces: @namespaces,
                 has_namespaces: @has_namespaces,

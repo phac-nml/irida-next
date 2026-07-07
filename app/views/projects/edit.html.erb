@@ -4,6 +4,7 @@
 
     <%= viral_card do |card| %>
       <% card.with_header(title: t(".general.heading")) %>
+
       <% card.with_section do %>
         <%= turbo_frame_tag("project_name_and_description_form") do %>
           <%= render partial: "edit_name_and_description_form", locals: { project: @project } %>
@@ -21,6 +22,10 @@
 
     <% if @allowed_to[:transfer] %>
       <%= render "transfer", project: @project %>
+    <% end %>
+
+    <% if @allowed_to[:update] %>
+      <%= render "archive", project: @project %>
     <% end %>
 
     <% if @allowed_to[:destroy] %>

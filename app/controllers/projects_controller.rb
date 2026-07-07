@@ -115,7 +115,8 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   def edit_view_authorizations
     @allowed_to = {
       destroy: allowed_to?(:destroy?, @project),
-      transfer: allowed_to?(:transfer?, @project)
+      transfer: allowed_to?(:transfer?, @project),
+      update: allowed_to?(:update?, @project)
     }
   end
 

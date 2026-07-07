@@ -20,10 +20,17 @@
       label: t(".all"),
       selected: @tab == "all"
     ) %>
+
     <% tabs.with_tab(
       id: "personal-tab",
       label: t(".personal"),
       selected: @tab == "personal"
+    ) %>
+
+    <% tabs.with_tab(
+      id: "archived-tab",
+      label: t(".archived"),
+      selected: @tab == "archived"
     ) %>
 
     <% tabs.with_lazy_panel(
@@ -44,6 +51,17 @@
       selected: @tab == "personal"
     ) do %>
       <%= render "projects_list" %>
+    <% end %>
+
+    <% tabs.with_lazy_panel(
+      id: "archived-panel",
+      tab_id: "archived-tab",
+      frame_id: "archived-projects-content",
+      src_path: dashboard_projects_url(archived: "true"),
+      selected: @tab == "archived"
+    ) do %>
+      <%= render "projects_list", empty_title: t("dashboard.projects.index.no_archived_projects"),
+      empty_description: t("dashboard.projects.index.no_archived_projects_description") %>
     <% end %>
   <% end %>
 </div>

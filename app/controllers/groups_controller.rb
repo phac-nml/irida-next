@@ -16,14 +16,20 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     redirect_to dashboard_groups_path
   end
 
-  def show
+  def show # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     authorize! @group, to: :read?
 
     @tab = params[:tab] || 'subgroups_and_projects'
-    @tab_index = @tab == 'shared_namespaces' ? 1 : 0
+    @tab_index = if @tab == 'shared_namespaces'
+                   1
+                 else
+                   @tab == 'archived_projects' ? 2 : 0
+                 end
 
     search_key = if @tab == 'shared_namespaces'
                    :shared_namespaces_q
+                 elsif @tab == 'archived_projects'
+                   :archived_projects_q
                  else
                    :subgroups_and_projects_q
                  end
@@ -174,20 +180,28 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @tab = params[:tab]
   end
 
-  def shared_namespaces_or_sub_namespaces
+  def shared_namespaces_or_sub_namespaces # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     namespaces = if @tab == 'shared_namespaces'
                    @group.shared_namespaces
+                 elsif @tab == 'archived_projects'
+                   @group.children_of_type([Namespaces::ProjectNamespace.sti_name]).where.not(archived_at: nil)
                  else
                    @group.children_of_type(
                      [
                        Namespaces::ProjectNamespace.sti_name, Group.sti_name
                      ]
-                   )
+                   ).where(archived_at: nil)
                  end
 
     if @render_flat_list
-      namespaces = namespaces.self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name,
-                                                                Group.sti_name])
+      namespaces = if @tab == 'archived_projects'
+                     namespaces.self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name]).where.not(
+                       archived_at: nil
+                     )
+                   else
+                     namespaces.self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name,
+                                                                  Group.sti_name]).where(archived_at: nil)
+                   end
     end
 
     namespaces
