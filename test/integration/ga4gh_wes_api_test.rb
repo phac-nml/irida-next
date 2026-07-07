@@ -78,8 +78,8 @@ class ClientTest < ActionDispatch::IntegrationTest
   end
 
   def test_get_run_stdout_json
-    given_hash = {"stdout":"[main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.6"}
-    expected_hash = { stdout: "[main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.6" }
+    given_hash = {"stdout":"workflow execution output"}
+    expected_hash = { stdout: "workflow execution output" }
 
     stubs = Faraday::Adapter::Test::Stubs.new
     stubs.get('/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout') do |env|
@@ -97,8 +97,8 @@ class ClientTest < ActionDispatch::IntegrationTest
   end
 
   def test_get_run_stdout_text
-    given_text = "[main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.6"
-    expected_text = "[main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.6"
+    given_text = "workflow execution output"
+    expected_text = "workflow execution output"
 
     stubs = Faraday::Adapter::Test::Stubs.new
     stubs.get('/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout') do |env|

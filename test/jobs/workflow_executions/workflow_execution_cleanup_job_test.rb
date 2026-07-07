@@ -32,7 +32,7 @@ module WorkflowExecutions
       assert workflow_execution.reload.cleaned?
       output_filenames = workflow_execution.outputs.map { |attachment| attachment.filename.to_s }
       assert_includes output_filenames, 'run_log.json'
-      assert_includes output_filenames, 'run_stdout.json'
+      assert_includes output_filenames, 'run_stdout.txt'
 
       assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
@@ -54,7 +54,7 @@ module WorkflowExecutions
       assert workflow_execution.reload.cleaned?
       output_filenames = workflow_execution.outputs.map { |attachment| attachment.filename.to_s }
       assert_includes output_filenames, 'run_log.json'
-      assert_not_includes output_filenames, 'run_stdout.json'
+      assert_not_includes output_filenames, 'run_stdout.txt'
 
       assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
@@ -76,7 +76,7 @@ module WorkflowExecutions
       assert workflow_execution.reload.cleaned?
       output_filenames = workflow_execution.outputs.map { |attachment| attachment.filename.to_s }
       assert_not_includes output_filenames, 'run_log.json'
-      assert_not_includes output_filenames, 'run_stdout.json'
+      assert_not_includes output_filenames, 'run_stdout.txt'
 
       assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
       assert_enqueued_jobs(2, only: Turbo::Streams::BroadcastStreamJob)
@@ -99,7 +99,7 @@ module WorkflowExecutions
       assert workflow_execution.reload.cleaned?
       output_filenames = workflow_execution.outputs.map { |attachment| attachment.filename.to_s }
       assert_includes output_filenames, 'run_log.json'
-      assert_includes output_filenames, 'run_stdout.json'
+      assert_includes output_filenames, 'run_stdout.txt'
 
       assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
       assert_enqueued_jobs(12, only: Turbo::Streams::BroadcastStreamJob)
@@ -129,7 +129,7 @@ module WorkflowExecutions
       assert workflow_execution.reload.cleaned?
       output_filenames = workflow_execution.outputs.map { |attachment| attachment.filename.to_s }
       assert_includes output_filenames, 'run_log.json'
-      assert_includes output_filenames, 'run_stdout.json'
+      assert_includes output_filenames, 'run_stdout.txt'
 
       assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
       assert_enqueued_jobs(14, only: Turbo::Streams::BroadcastStreamJob) # 2 queued from setting the namespace to nil
@@ -148,7 +148,7 @@ module WorkflowExecutions
       assert_not workflow_execution.reload.cleaned?
       output_filenames = workflow_execution.outputs.map { |attachment| attachment.filename.to_s }
       assert_not_includes output_filenames, 'run_log.json'
-      assert_not_includes output_filenames, 'run_stdout.json'
+      assert_not_includes output_filenames, 'run_stdout.txt'
 
       assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
       assert_enqueued_jobs(0)
@@ -166,7 +166,7 @@ module WorkflowExecutions
       assert workflow_execution.reload.cleaned?
       output_filenames = workflow_execution.outputs.map { |attachment| attachment.filename.to_s }
       assert_not_includes output_filenames, 'run_log.json'
-      assert_not_includes output_filenames, 'run_stdout.json'
+      assert_not_includes output_filenames, 'run_stdout.txt'
 
       assert_performed_jobs(1, only: WorkflowExecutionCleanupJob)
       assert_enqueued_jobs(0)

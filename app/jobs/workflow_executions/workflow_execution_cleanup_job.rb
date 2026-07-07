@@ -34,7 +34,7 @@ module WorkflowExecutions
       run_stdout = result[:run_stdout]
       files = []
       files << { io: StringIO.new(sanitize(run_log.to_json)), filename: 'run_log.json' } if run_log.present?
-      files << { io: StringIO.new(sanitize(run_stdout.to_json)), filename: 'run_stdout.json' } if run_stdout.present?
+      files << { io: StringIO.new(sanitize(run_stdout.to_json)), filename: 'run_stdout.txt' } if run_stdout.present?
 
       Attachments::CreateService.new(@workflow_execution.submitter, @workflow_execution, { files: }).execute
     end
