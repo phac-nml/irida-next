@@ -59,7 +59,7 @@ module AdvancedSearch
         assert_not_includes sql, 'CAST'
       end
 
-      test 'condition_less_than_or_equal uses lteq for regular fields with FF and metadata_field is false' do
+      test 'condition_less_than_or_equal uses lteq for regular fields without FF and metadata_field is false' do
         result = @test_instance.send(:condition_less_than_or_equal,
                                      @scope, @created_at_node, '2024-01-01', nil)
         sql = result.to_sql
@@ -125,7 +125,7 @@ module AdvancedSearch
         assert_not_includes sql, 'CAST'
       end
 
-      test 'condition_greater_than_or_equal uses gteq for regular fields with FF and metadata_field is false' do
+      test 'condition_greater_than_or_equal uses gteq for regular fields without FF and metadata_field is false' do
         result = @test_instance.send(:condition_greater_than_or_equal,
                                      @scope, @created_at_node, '2024-01-01',  nil)
         sql = result.to_sql
