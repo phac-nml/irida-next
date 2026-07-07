@@ -10,27 +10,26 @@ export default class extends Controller {
 
   initialize() {
     this.boundKeydown = this.keydown.bind(this);
+    this.boundFocusin = this.focusin.bind(this);
   }
 
   connect() {
     this.element.addEventListener("keydown", this.boundKeydown);
+    this.element.addEventListener("focusin", this.boundFocusin);
     this.element.setAttribute("data-controller-connected", "true");
-
-    // Make sure focusable elements are not in the tab order
-    // They will be added back in for the active row
-    this.#setTabIndexOfFocusableElements(this.element, -1);
 
     this.rowTargets[0].tabIndex = 0;
     this.#setTabIndexForElementsInRow(this.rowTargets[0], 0);
   }
 
+  disconnect() {
+    this.element.removeEventListener("keydown", this.boundKeydown);
+    this.element.removeEventListener("focusin", this.boundFocusin);
+  }
+
   rowTargetConnected(row) {
-    if (
-      row !== document.activeElement &&
-      !row.contains(document.activeElement)
-    ) {
-      this.#setTabIndexForElementsInRow(row, -1);
-    }
+    row.tabIndex = -1;
+    this.#setTabIndexForElementsInRow(row, -1);
   }
 
   keydown(event) {
@@ -83,8 +82,6 @@ export default class extends Controller {
       this.#moveToExtremeRow(-1);
     } else if (event.key === "PageDown") {
       this.#moveToExtremeRow(+1);
-    } else if (event.key === "Tab") {
-      this.#handleTab(event);
     } else {
       return;
     }
@@ -92,30 +89,22 @@ export default class extends Controller {
     event.preventDefault();
   }
 
-  #handleTab(event) {
-    const direction = event.shiftKey ? -1 : +1;
-    const currentRow = this.#getRowWithFocus();
+  focusin(event) {
+    const newFocusedRow = this.#getContainingRow(event.target);
+    if (!newFocusedRow) {
+      return;
+    }
 
-    const focusableElements = tabbable(document);
-    const currentIndex = focusableElements.indexOf(event.target);
-    let nextElement = null;
-    for (
-      let i = currentIndex + direction;
-      i >= 0 && i < focusableElements.length;
-      i += direction
-    ) {
-      if (
-        currentRow.contains(focusableElements[i]) ||
-        !this.element.contains(focusableElements[i])
-      ) {
-        nextElement = focusableElements[i];
-        break;
+    tabbable(this.element).forEach((elem) => {
+      if (elem !== newFocusedRow && !newFocusedRow.contains(elem)) {
+        elem.tabIndex = -1;
       }
+    });
+
+    if (newFocusedRow) {
+      newFocusedRow.tabIndex = 0;
+      this.#setTabIndexForElementsInRow(newFocusedRow, 0);
     }
-    if (nextElement) {
-      nextElement.focus();
-    }
-    event.preventDefault();
   }
 
   toggleRow(event) {
@@ -161,8 +150,6 @@ export default class extends Controller {
 
     if (newRowIndex !== rowIndex) {
       const cellIndex = tabbable(currentRow).indexOf(document.activeElement);
-      currentRow.tabIndex = -1;
-      this.#setTabIndexForElementsInRow(currentRow, -1);
       this.#focus(rows[newRowIndex], cellIndex);
     }
   }
@@ -180,8 +167,9 @@ export default class extends Controller {
     const newRow = rows[direction > 0 ? rows.length - 1 : 0];
 
     if (currentRow !== newRow) {
+      const cellIndex = tabbable(currentRow).indexOf(document.activeElement);
       currentRow.tabIndex = -1;
-      this.#focus(newRow, -1);
+      this.#focus(newRow, cellIndex);
     }
   }
 
@@ -263,14 +251,6 @@ export default class extends Controller {
         if (willHideRow !== isRowHidden) {
           if (willHideRow) {
             nextRow.classList.add("hidden");
-            // if row was currently tabbable then move tabindex to first row
-            if (nextRow.tabIndex === 0) {
-              nextRow.tabIndex = -1;
-              this.#setTabIndexForElementsInRow(nextRow, -1);
-              // set first row as tabbable
-              this.rowTargets[0].tabIndex = 0;
-              this.#setTabIndexForElementsInRow(this.rowTargets[0], 0);
-            }
           } else {
             nextRow.classList.remove("hidden");
           }
@@ -296,12 +276,6 @@ export default class extends Controller {
     } else {
       toggleButton.setAttribute("aria-label", this.expandTextValue);
     }
-  }
-
-  #setTabIndexOfFocusableElements(element, tabIndex) {
-    tabbable(element).forEach((el) => {
-      el.tabIndex = tabIndex;
-    });
   }
 
   #setTabIndexForElementsInRow(row, tabIndex) {
