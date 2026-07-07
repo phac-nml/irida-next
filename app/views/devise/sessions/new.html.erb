@@ -23,7 +23,7 @@
     class: "button button-default w-full" %>
       <% else %>
         <%- enabled_button_based_providers.each do |provider| %>
-          <%= button_to omniauth_authorize_path(resource_name, provider),
+          <%= pathogen_button_to omniauth_authorize_path(resource_name, provider),
                     data: {
                       turbo: false
                     },

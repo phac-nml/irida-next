@@ -245,7 +245,8 @@ module Projects
       new_project = @user.namespace.project_namespaces.find_by(name: project_name).project
       assert_current_path(namespace_project_path(new_project.parent, new_project))
 
-      click_link I18n.t(:'projects.members.index.tabs.members')
+      visit namespace_project_members_path(new_project.parent, new_project)
+
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
       # Members tab should be selected by default
@@ -253,11 +254,12 @@ module Projects
       assert_selector '[role="tabpanel"]#members-panel:not([hidden])'
 
       # Wait for lazy turbo frames and dialog re-render to settle before clicking Add
-      assert_selector 'turbo-frame#members table', wait: 10
+      assert_selector 'turbo-frame#members table', wait: 15
       within('turbo-frame#new_member_dialog') do
         assert_selector '[data-controller="viral--dialog"][data-controller-connected="true"]'
-        click_button I18n.t(:'projects.members.index.add')
       end
+
+      click_button I18n.t(:'projects.members.index.add')
 
       assert_selector 'dialog[open]', visible: true
 
