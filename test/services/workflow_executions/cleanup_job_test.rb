@@ -52,7 +52,6 @@ module WorkflowExecutions
     def teardown
       # Reset shared Faraday connection cache between tests.
       Faraday.default_connection = nil
-      super
     end
 
     test 'clean all workflow execution run directory files' do

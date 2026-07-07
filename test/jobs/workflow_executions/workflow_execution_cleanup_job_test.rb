@@ -38,6 +38,35 @@ module WorkflowExecutions
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
 
+    test 'cleanup log attachment creation is idempotent when rerun' do
+      workflow_execution = workflow_executions(:irida_next_example_completed_unclean_DELETE)
+
+      assert_not workflow_execution.cleaned?
+
+      assert_difference -> { workflow_execution.outputs.count }, 2 do
+        with_cleanup_service_wes_stubs(workflow_execution, run_log_state: 'COMPLETE') do
+          perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
+            WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+          end
+        end
+      end
+
+      workflow_execution.update!(cleaned: false)
+
+      assert_no_difference -> { workflow_execution.outputs.count } do
+        with_cleanup_service_wes_stubs(workflow_execution, run_log_state: 'COMPLETE') do
+          perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
+            WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+          end
+        end
+      end
+
+      filenames = workflow_execution.reload.outputs.map { |attachment| attachment.filename.to_s }
+      assert_equal 1, filenames.count('run_log.json')
+      assert_equal 1, filenames.count('run_stdout.txt')
+      assert workflow_execution.cleaned?
+    end
+
     test 'successful job on completed workflow execution when stdout endpoint is unavailable' do
       workflow_execution = workflow_executions(:irida_next_example_completed_unclean_DELETE)
 
