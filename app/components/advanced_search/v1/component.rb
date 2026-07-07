@@ -48,6 +48,9 @@ module AdvancedSearch
           I18n.t('components.advanced_search_component.v1.operations.standard.in') => 'in',
           I18n.t('components.advanced_search_component.v1.operations.standard.not_in') => 'not_in'
         } }
+
+        return standard_operations unless Flipper.enabled?(:advanced_search_metadata_operators)
+
         metadata_operations =
           { 'metadata' => {
             I18n.t('components.advanced_search_component.v1.operations.metadata.labels.existence') =>
@@ -77,9 +80,7 @@ module AdvancedSearch
             }
           } }
 
-        return standard_operations.merge(metadata_operations) if Flipper.enabled?(:advanced_search_metadata_operators)
-
-        standard_operations
+        standard_operations.merge(metadata_operations)
       end
     end
   end
