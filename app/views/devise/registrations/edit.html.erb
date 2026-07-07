@@ -114,13 +114,12 @@
 <div>
   <%= t(".unhappy") %>
 
-  <%= button_to t(".cancel_button"),
-  registration_path(resource_name),
-  data: {
-    confirm: t(".cancel_confirmation"),
-    turbo_confirm: t(".cancel_confirmation"),
-  },
-  method: :delete %>
+  <%= render Pathogen::CancelButtonComponent.new(href: registration_path(resource_name),
+    data: {
+      confirm: t(".cancel_confirmation"),
+      turbo_confirm: t(".cancel_confirmation"),
+    },
+    method: :delete) %>
 </div>
 
 <%= link_to t(".back_link"), :back %>
