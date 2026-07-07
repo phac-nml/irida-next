@@ -28,7 +28,7 @@
                       turbo: false
                     },
                     params: params,
-                    class: "button button-default w-full" do %>
+                    tone: :primary, emphasis: :solid, block: true do %>
             <span class="inline-flex items-center text-center">
               <% if Rails.configuration.auth_config["#{provider}_icon"] %>
                 <%= viral_icon(name: "#{provider}_icon", classes: "w-4 h-4 mr-2 -ml-1") %>

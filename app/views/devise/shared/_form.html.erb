@@ -1,13 +1,13 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4", novalidate: true }) do |f| %>
-
   <%= render "devise/shared/hidden_locale_input" %>
 
   <%= render partial: "shared/form/required_field_legend" %>
 
-  <input type="hidden" name="local" value="<%=params[:local]%>"/>
+  <input type="hidden" name="local" value="<%= params[:local] %>">
 
   <div class="form-field">
     <%= f.label :email, data: { required: true } %>
+
     <%= f.email_field :email,
                   autofocus: true,
                   required: true,
@@ -19,6 +19,7 @@
 
   <div class="form-field">
     <%= f.label :password, data: { required: true } %>
+
     <%= f.password_field :password,
                      required: true,
                      aria: {
@@ -29,9 +30,10 @@
 
   <% if devise_mapping.rememberable? %>
     <div class="form-field flex items-start">
-      <div class="flex items-center h-5">
+      <div class="flex h-5 items-center">
         <%= f.check_box :remember_me %>
       </div>
+
       <div class="ml-2 text-sm">
         <%= f.label :remember_me %>
       </div>
@@ -39,6 +41,6 @@
   <% end %>
 
   <div class="flow-root">
-    <%= f.submit t(".sign_in"), class: "button button-primary w-full cursor-pointer" %>
+    <%= f.submit t(".sign_in"), tone: :primary, emphasis: :solid %>
   </div>
 <% end %>
