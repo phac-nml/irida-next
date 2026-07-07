@@ -91,6 +91,9 @@ export default class extends Controller {
 
   focusin(event) {
     const newFocusedRow = this.#getContainingRow(event.target);
+    if (!newFocusedRow) {
+      return;
+    }
 
     tabbable(this.element).forEach((elem) => {
       if (elem !== newFocusedRow && !newFocusedRow.contains(elem)) {
