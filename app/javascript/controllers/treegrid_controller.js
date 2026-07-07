@@ -186,6 +186,8 @@ export default class extends Controller {
   }
 
   #focus(elem, cellIndex) {
+    elem.tabIndex = 0;
+    this.#setTabIndexForElementsInRow(elem, 0);
     if (cellIndex < 0) {
       elem.focus();
     } else {
