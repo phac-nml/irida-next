@@ -8,6 +8,7 @@ module AdvancedSearch
       # Test class that includes the EqualityOperators module
       class TestClass
         include AdvancedSearch::Operators::EqualityOperators
+        include AdvancedSearch::Operators
 
         # Helper method from parent Operators module
         def enum_metadata_field?(field_name)
@@ -24,38 +25,33 @@ module AdvancedSearch
 
       # condition_equals tests
       test 'condition_equals uses exact match for regular fields' do
-        result = @test_instance.send(:condition_equals, @scope, @state_node, 'completed', metadata_field: false,
-                                                                                          field_name: 'state')
+        result = @test_instance.send(:condition_equals, @scope, @state_node, 'completed', 'state')
         sql = result.to_sql
         assert_includes sql, '"workflow_executions"."state" = '
         assert_not_includes sql, 'ILIKE'
       end
 
       test 'condition_equals uses pattern match for metadata fields' do
-        result = @test_instance.send(:condition_equals, @scope, @node, 'test', metadata_field: true,
-                                                                               field_name: 'metadata.some_field')
+        result = @test_instance.send(:condition_equals, @scope, @node, 'test', 'metadata.some_field')
         sql = result.to_sql
         assert_includes sql, 'ILIKE'
       end
 
       test 'condition_equals uses pattern match for name field' do
-        result = @test_instance.send(:condition_equals, @scope, @node, 'test', metadata_field: false,
-                                                                               field_name: 'name')
+        result = @test_instance.send(:condition_equals, @scope, @node, 'test', 'name')
         sql = result.to_sql
         assert_includes sql, 'ILIKE'
       end
 
       test 'condition_equals uses case-insensitive exact match for enum metadata fields' do
-        result = @test_instance.send(:condition_equals, @scope, @node, 'phac-nml/pipeline',
-                                     metadata_field: true, field_name: 'metadata.pipeline_id')
+        result = @test_instance.send(:condition_equals, @scope, @node, 'phac-nml/pipeline', 'metadata.pipeline_id')
         sql = result.to_sql
         assert_includes sql, 'LOWER'
         assert_not_includes sql, 'ILIKE'
       end
 
       test 'condition_equals uses case-insensitive exact match for workflow_version enum field' do
-        result = @test_instance.send(:condition_equals, @scope, @node, '1.0.0', metadata_field: true,
-                                                                                field_name: 'metadata.workflow_version')
+        result = @test_instance.send(:condition_equals, @scope, @node, '1.0.0', 'metadata.workflow_version')
         sql = result.to_sql
         assert_includes sql, 'LOWER'
         assert_not_includes sql, 'ILIKE'
@@ -63,24 +59,21 @@ module AdvancedSearch
 
       # condition_not_equals tests
       test 'condition_not_equals uses not_eq for regular fields' do
-        result = @test_instance.send(:condition_not_equals, @scope, @state_node, 'completed', metadata_field: false,
-                                                                                              field_name: 'state')
+        result = @test_instance.send(:condition_not_equals, @scope, @state_node, 'completed', 'state')
         sql = result.to_sql
         assert_includes sql, '"workflow_executions"."state" != '
         assert_not_includes sql, 'NOT ILIKE'
       end
 
       test 'condition_not_equals uses NOT ILIKE with null check for metadata fields' do
-        result = @test_instance.send(:condition_not_equals, @scope, @node, 'test', metadata_field: true,
-                                                                                   field_name: 'metadata.some_field')
+        result = @test_instance.send(:condition_not_equals, @scope, @node, 'test', 'metadata.some_field')
         sql = result.to_sql
         assert_includes sql, 'NOT ILIKE'
         assert_includes sql, 'IS NULL'
       end
 
       test 'condition_not_equals uses NOT ILIKE with null check for name field' do
-        result = @test_instance.send(:condition_not_equals, @scope, @node, 'test', metadata_field: false,
-                                                                                   field_name: 'name')
+        result = @test_instance.send(:condition_not_equals, @scope, @node, 'test', 'name')
         sql = result.to_sql
         assert_includes sql, 'NOT ILIKE'
         assert_includes sql, 'IS NULL'
@@ -88,8 +81,7 @@ module AdvancedSearch
 
       test 'condition_not_equals uses case-insensitive not_eq for enum metadata fields' do
         result = @test_instance.send(:condition_not_equals,
-                                     @scope, @node, 'phac-nml/pipeline',
-                                     metadata_field: true, field_name: 'metadata.pipeline_id')
+                                     @scope, @node, 'phac-nml/pipeline', 'metadata.pipeline_id')
         sql = result.to_sql
         assert_includes sql, 'LOWER'
         assert_includes sql, '!='
@@ -98,8 +90,7 @@ module AdvancedSearch
       end
 
       test 'condition_not_equals uses case-insensitive not_eq for workflow_version enum field' do
-        result = @test_instance.send(:condition_not_equals, @scope, @node, '1.0.0',
-                                     metadata_field: true, field_name: 'metadata.workflow_version')
+        result = @test_instance.send(:condition_not_equals, @scope, @node, '1.0.0', 'metadata.workflow_version')
         sql = result.to_sql
         assert_includes sql, 'LOWER'
         assert_includes sql, '!='

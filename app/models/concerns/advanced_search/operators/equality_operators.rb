@@ -8,7 +8,8 @@ module AdvancedSearch
 
       private
 
-      def condition_equals(scope, node, value, metadata_field:, field_name:)
+      def condition_equals(scope, node, value, field_name)
+        metadata_field = metadata_field?(field_name)
         # Use pattern matching only for non-enum metadata fields and name field
         use_pattern_match = (metadata_field || field_name == 'name') && !enum_metadata_field?(field_name)
 
@@ -24,7 +25,8 @@ module AdvancedSearch
         end
       end
 
-      def condition_not_equals(scope, node, value, metadata_field:, field_name:)
+      def condition_not_equals(scope, node, value, field_name)
+        metadata_field = metadata_field?(field_name)
         # Use pattern matching only for non-enum metadata fields and name field
         use_pattern_match = (metadata_field || field_name == 'name') && !enum_metadata_field?(field_name)
 

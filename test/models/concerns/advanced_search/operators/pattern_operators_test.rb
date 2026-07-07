@@ -66,20 +66,20 @@ module AdvancedSearch
 
       # condition_contains tests
       test 'condition_contains creates ILIKE query with wildcards' do
-        result = @test_instance.send(:condition_contains, @scope, @node, 'test')
+        result = @test_instance.send(:condition_contains, @scope, @node, 'test', WorkflowExecution, 'id')
         sql = result.to_sql
         assert_includes sql, "ILIKE '%test%'"
       end
 
       test 'condition_contains escapes special characters in value' do
-        result = @test_instance.send(:condition_contains, @scope, @node, '%test%')
+        result = @test_instance.send(:condition_contains, @scope, @node, '%test%', WorkflowExecution, 'id')
         sql = result.to_sql
         assert_includes sql, "ILIKE '%\\%test\\%%'"
       end
 
       test 'condition_contains casts uuid column to text' do
         result = @test_instance.send(:condition_contains, @scope, @uuid_node, 'abc',
-                                     model_class: WorkflowExecution, field_name: 'id')
+                                     WorkflowExecution, 'id')
         sql = result.to_sql
         assert_includes sql, 'CAST'
         assert_includes sql, 'TEXT'
@@ -87,30 +87,16 @@ module AdvancedSearch
 
       # condition_not_contains tests
       test 'condition_not_contains creates NOT ILIKE query with null check' do
-        result = @test_instance.send(:condition_not_contains, @scope, @node, 'test')
+        result = @test_instance.send(:condition_not_contains, @scope, @node, 'test', WorkflowExecution, 'id')
         sql = result.to_sql
         assert_includes sql, 'NOT ILIKE'
         assert_includes sql, 'IS NULL'
       end
 
       test 'condition_not_contains escapes special characters in value' do
-        result = @test_instance.send(:condition_not_contains, @scope, @node, '%test%')
+        result = @test_instance.send(:condition_not_contains, @scope, @node, '%test%', WorkflowExecution, 'id')
         sql = result.to_sql
         assert_includes sql, "NOT ILIKE '%\\%test\\%%'"
-      end
-
-      # condition_exists tests
-      test 'condition_exists creates IS NOT NULL query' do
-        result = @test_instance.send(:condition_exists, @scope, @node)
-        sql = result.to_sql
-        assert_includes sql, 'IS NOT NULL'
-      end
-
-      # condition_not_exists tests
-      test 'condition_not_exists creates IS NULL query' do
-        result = @test_instance.send(:condition_not_exists, @scope, @node)
-        sql = result.to_sql
-        assert_includes sql, 'IS NULL'
       end
     end
   end

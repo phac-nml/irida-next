@@ -14,38 +14,116 @@ module AdvancedSearch
   module Filtering
     extend ActiveSupport::Concern
 
+    OPERATOR_HANDLERS = {
+      # equals operators
+      '=' => :apply_condition_equals,
+      'numeric_equals' => :apply_condition_equals,
+      'date_equals' => :apply_condition_equals,
+      'text_equals' => :apply_condition_equals,
+      # not_equals operators
+      '!=' => :apply_condition_not_equals,
+      'numeric_not_equals' => :apply_condition_not_equals,
+      'date_not_equals' => :apply_condition_not_equals,
+      'text_not_equals' => :apply_condition_not_equals,
+      # contains operators
+      'text_contains' => :apply_condition_contains,
+      'contains' => :apply_condition_contains,
+      # not_contains operators
+      'text_not_contains' => :apply_condition_not_contains,
+      'not_contains' => :apply_condition_not_contains,
+      # greater_than_or_equal operators
+      '>=' => :apply_condition_standard_greater_than_or_equal,
+      'date_greater_than_equals' => :apply_condition_metadata_date_greater_than_or_equal,
+      'numeric_greater_than_equals' => :apply_condition_metadata_numeric_greater_than_or_equal,
+      # less_than_or_equal operators
+      '<=' => :apply_condition_standard_less_than_or_equal,
+      'date_less_than_equals' => :apply_condition_metadata_date_less_than_or_equal,
+      'numeric_less_than_equals' => :apply_condition_metadata_numeric_less_than_or_equal,
+      # in operators
+      'in' => :apply_condition_in,
+      'not_in' => :apply_condition_not_in,
+      'text_in' => :apply_condition_metadata_in,
+      'text_not_in' => :apply_condition_metadata_not_in,
+      # exists operators
+      'exists' => :apply_condition_exists,
+      'not_exists' => :apply_condition_not_exists
+    }.freeze
+
     private
 
-    def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+    def add_condition(scope, condition)
       field_name = normalize_condition_field(condition)
       node = build_arel_node(field_name, model_class)
       value = normalize_condition_value(condition)
-      metadata_field = field_name.starts_with?('metadata.')
 
-      case condition.operator
-      when '='
-        apply_equals_operator(scope, node, value, metadata_field:, field_name:)
-      when 'in'
-        apply_in_operator(scope, node, value, metadata_field:, field_name:)
-      when '!='
-        apply_not_equals_operator(scope, node, value, metadata_field:, field_name:)
-      when 'not_in'
-        apply_not_in_operator(scope, node, value, metadata_field:, field_name:)
-      when '<='
-        apply_less_than_or_equal(scope, node, value, field: field_name, metadata_field:)
-      when '>='
-        apply_greater_than_or_equal(scope, node, value, field: field_name, metadata_field:)
-      when 'contains'
-        condition_contains(scope, node, value, model_class:, field_name:)
-      when 'not_contains'
-        condition_not_contains(scope, node, value, model_class:, field_name:)
-      when 'exists'
-        condition_exists(scope, node)
-      when 'not_exists'
-        condition_not_exists(scope, node)
-      else
-        scope
-      end
+      handler = OPERATOR_HANDLERS[condition.operator]
+      return scope unless handler
+
+      send(handler, scope, node, value, field_name)
+    end
+
+    def apply_condition_equals(scope, node, value, field_name)
+      condition_equals(scope, node, value, field_name)
+    end
+
+    def apply_condition_not_equals(scope, node, value, field_name)
+      condition_not_equals(scope, node, value, field_name)
+    end
+
+    def apply_condition_contains(scope, node, value, field_name)
+      condition_contains(scope, node, value, model_class, field_name)
+    end
+
+    def apply_condition_not_contains(scope, node, value, field_name)
+      condition_not_contains(scope, node, value, model_class, field_name)
+    end
+
+    def apply_condition_standard_greater_than_or_equal(scope, node, value, field_name)
+      condition_greater_than_or_equal(scope, node, value, metadata_key(field_name))
+    end
+
+    def apply_condition_metadata_date_greater_than_or_equal(scope, node, value, _field_name)
+      metadata_condition_date_comparison(scope, node, value, :gteq)
+    end
+
+    def apply_condition_metadata_numeric_greater_than_or_equal(scope, node, value, _field_name)
+      metadata_condition_numeric_comparison(scope, node, value, :gteq)
+    end
+
+    def apply_condition_standard_less_than_or_equal(scope, node, value, field_name)
+      condition_less_than_or_equal(scope, node, value, metadata_key(field_name))
+    end
+
+    def apply_condition_metadata_date_less_than_or_equal(scope, node, value, _field_name)
+      metadata_condition_date_comparison(scope, node, value, :lteq)
+    end
+
+    def apply_condition_metadata_numeric_less_than_or_equal(scope, node, value, _field_name)
+      metadata_condition_numeric_comparison(scope, node, value, :lteq)
+    end
+
+    def apply_condition_in(scope, node, value, field_name)
+      condition_in(scope, node, value, field_name)
+    end
+
+    def apply_condition_not_in(scope, node, value, field_name)
+      condition_not_in(scope, node, value, field_name)
+    end
+
+    def apply_condition_metadata_in(scope, node, value, _field_name)
+      condition_in_metadata(scope, node, value)
+    end
+
+    def apply_condition_metadata_not_in(scope, node, value, _field_name)
+      condition_not_in_metadata(scope, node, value)
+    end
+
+    def apply_condition_exists(scope, node, _value, _field_name)
+      condition_exists(scope, node)
+    end
+
+    def apply_condition_not_exists(scope, node, _value, _field_name)
+      condition_not_exists(scope, node)
     end
 
     def normalize_condition_field(condition)
@@ -54,32 +132,6 @@ module AdvancedSearch
 
     def normalize_condition_value(condition)
       condition.value
-    end
-
-    def apply_less_than_or_equal(scope, node, value, field:, metadata_field:)
-      metadata_key = field.delete_prefix('metadata.')
-      condition_less_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-    end
-
-    def apply_greater_than_or_equal(scope, node, value, field:, metadata_field:)
-      metadata_key = field.delete_prefix('metadata.')
-      condition_greater_than_or_equal(scope, node, value, metadata_field:, metadata_key:)
-    end
-
-    def apply_equals_operator(scope, node, value, metadata_field:, field_name:)
-      condition_equals(scope, node, value, metadata_field:, field_name:)
-    end
-
-    def apply_in_operator(scope, node, value, metadata_field:, field_name:)
-      condition_in(scope, node, value, metadata_field:, field_name:)
-    end
-
-    def apply_not_equals_operator(scope, node, value, metadata_field:, field_name:)
-      condition_not_equals(scope, node, value, metadata_field:, field_name:)
-    end
-
-    def apply_not_in_operator(scope, node, value, metadata_field:, field_name:)
-      condition_not_in(scope, node, value, metadata_field:, field_name:)
     end
   end
 end

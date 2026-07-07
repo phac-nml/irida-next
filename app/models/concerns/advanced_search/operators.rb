@@ -9,6 +9,8 @@ module AdvancedSearch
     include AdvancedSearch::Operators::SetOperators
     include AdvancedSearch::Operators::ComparisonOperators
     include AdvancedSearch::Operators::PatternOperators
+    include AdvancedSearch::Operators::ExistenceOperators
+    include AdvancedSearch::MetadataComparison
 
     included do
       class_attribute :enum_metadata_fields, instance_accessor: false, default: [].freeze
@@ -26,14 +28,22 @@ module AdvancedSearch
 
     def build_arel_node(field_name, model_class)
       field_name = field_name.to_s
-      metadata_field = field_name.starts_with?('metadata.')
-
-      if metadata_field
-        metadata_key = field_name.delete_prefix('metadata.')
+      if metadata_field?(field_name)
+        metadata_key = metadata_key(field_name)
         Arel::Nodes::InfixOperation.new('->>', model_class.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_key))
       else
         model_class.arel_table[field_name]
       end
+    end
+
+    def metadata_field?(field_name)
+      field_name.starts_with?('metadata.')
+    end
+
+    def metadata_key(field_name)
+      return nil unless metadata_field?(field_name)
+
+      field_name.delete_prefix('metadata.')
     end
   end
 end

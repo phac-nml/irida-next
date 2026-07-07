@@ -2,28 +2,20 @@
 
 module AdvancedSearch
   module Operators
-    # Methods for pattern matching search conditions (CONTAINS, NOT CONTAINS, EXISTS)
+    # Methods for pattern matching search conditions (contains, not_contains, text_contains, text_not_contains)
     module PatternOperators
       extend ActiveSupport::Concern
 
       private
 
-      def condition_contains(scope, node, value, model_class: nil, field_name: nil)
+      def condition_contains(scope, node, value, model_class, field_name)
         search_node = model_class && field_name ? cast_to_text_if_uuid(node, model_class, field_name) : node
         scope.where(search_node.matches("%#{escape_like_wildcards(value)}%"))
       end
 
-      def condition_not_contains(scope, node, value, model_class: nil, field_name: nil)
+      def condition_not_contains(scope, node, value, model_class, field_name)
         search_node = model_class && field_name ? cast_to_text_if_uuid(node, model_class, field_name) : node
         scope.where(node.eq(nil).or(search_node.does_not_match("%#{escape_like_wildcards(value)}%")))
-      end
-
-      def condition_exists(scope, node)
-        scope.where(node.not_eq(nil))
-      end
-
-      def condition_not_exists(scope, node)
-        scope.where(node.eq(nil))
       end
 
       # Cast UUID column to text for text-based operations
