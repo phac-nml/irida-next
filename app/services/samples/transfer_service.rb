@@ -214,7 +214,7 @@ module Samples
       untransferred_sample_ids = all_sample_ids - transferred_sample_ids
       return if untransferred_sample_ids.empty?
 
-      filtered_samples = filter_sample_ids(untransferred_sample_ids, 'transfer', true)
+      filtered_samples = filter_sample_ids(untransferred_sample_ids, 'transfer')
       # filtered_sample_ids are samples that should have transferred based on authorization / sample id validity.
       # All that is left in this list are transfer conflict errors
       return if filtered_samples.empty?

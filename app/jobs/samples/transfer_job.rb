@@ -9,7 +9,7 @@ module Samples
     queue_as :default
     queue_with_priority 15
 
-    def perform(namespace, current_user, new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/MethodLength
+    def perform(namespace, current_user, new_project_id, sample_ids, broadcast_target = nil)
       @namespace = namespace
       @current_user = current_user
       @new_project_id = new_project_id
@@ -20,19 +20,23 @@ module Samples
       @authorization_error = false
 
       pre_transfer_check
-      @service.update_progress_bar(5, 100, broadcast_target)
+      @service.update_progress_bar(5, 100, @broadcast_target)
 
-      step :transfer_step, start: 0
-      @service.update_progress_bar(95, 100, broadcast_target)
-      step :update_metadata_step, start: 0
-      step :update_counts_and_activities_step, start: 0
-      @service.update_progress_bar(100, 100, broadcast_target)
-      step :collect_errors_and_broadcast_to_turbo_stream_step
+      run_job_steps
 
       return_data
     end
 
     private
+
+    def run_job_steps
+      step :transfer_step, start: 0
+      @service.update_progress_bar(95, 100, @broadcast_target)
+      step :update_metadata_step, start: 0
+      step :update_counts_and_activities_step, start: 0
+      @service.update_progress_bar(100, 100, @broadcast_target)
+      step :collect_errors_and_broadcast_to_turbo_stream_step
+    end
 
     def pre_transfer_check
       @new_project = Project.find_by(id: @new_project_id)
