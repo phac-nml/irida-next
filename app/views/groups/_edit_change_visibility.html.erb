@@ -48,10 +48,12 @@
       group_path,
       method: :patch,
       params: { group: { public: !group.public}},
-      data: {
-        turbo_confirm: "",
-        turbo_content: ".confirm-change-visibility",
-        confirm_value: group.path,
+      form: {
+        data: {
+          turbo_confirm: "",
+          turbo_content: ".confirm-change-visibility",
+          confirm_value: group.path,
+        }
       },
       class: "button button-primary inline-block" %>
     </div>

@@ -1,10 +1,10 @@
 <%= form_with(model: @transfer_form, url: group_transfer_path, method: :put, class: "grid gap-4", id: "edit_advanced_transfer_form",
-data:
-if Flipper.enabled?(:v2_select2, Current.user)
-    { turbo_confirm: "", controller: "select2--v2" }
-  else
-    { turbo_confirm: "", controller: "select2--v1" }
-  end) do |form| %>
+data: {
+  turbo_confirm: "",
+  turbo_content: ".confirm-transfer",
+  confirm_value: confirm_value,
+  controller: Flipper.enabled?(:v2_select2, Current.user) ? "select2--v2" : "select2--v1"
+}) do |form| %>
   <%= render partial: "shared/form/required_field_legend" %>
 
   <% invalid_new_parent_id = @transfer_form.errors.include?(:new_parent_id) %>
@@ -68,12 +68,8 @@ if Flipper.enabled?(:v2_select2, Current.user)
                 if Flipper.enabled?(:v2_select2, Current.user)
                 {
                   "select2--v2-target": "submitButton",
-                  turbo_content: ".confirm-transfer",
-                  confirm_value: confirm_value,
                 } else {
                   "select2--v1-target": "submitButton",
-                  turbo_content: ".confirm-transfer",
-                  confirm_value: confirm_value,
                 }
                 end %>
   </div>
