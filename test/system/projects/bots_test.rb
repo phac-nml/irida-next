@@ -113,6 +113,64 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'can create a new project bot account and switching locale removes access token section' do
+      ### VERIFY START ###
+      visit namespace_project_bots_path(@namespace, @project2)
+
+      assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
+
+      assert_selector 'button', text: I18n.t(:'projects.bots.index.add_new_bot'), count: 1
+
+      assert_selector 'tr', count: 0
+
+      within('div.empty_state_message') do
+        assert_text I18n.t(:'bots.index.table.empty_state.title')
+        assert_text I18n.t(:'bots.index.table.empty_state.description')
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'projects.bots.index.add_new_bot')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        assert_selector 'h1', text: I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.title')
+        assert_selector 'p', text: I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.description')
+
+        fill_in I18n.t(:'activerecord.attributes.personal_access_token.name'), with: 'Uploader'
+        select I18n.t('activerecord.models.member.access_level.analyst'),
+               from: I18n.t(:'activerecord.attributes.member.access_level')
+
+        all('input[type=checkbox]').each(&:click)
+
+        click_button I18n.t('common.controls.submit')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_no_selector '#dialog'
+
+      assert_selector '#access-token-section div'
+      within('#access-token-section') do
+        bot_account_name = @project2.namespace.bots.last.email
+        assert_selector 'h2', text: I18n.t('projects.bots.index.access_token_section.label', bot_name: bot_account_name)
+        assert_selector 'p', text: I18n.t('projects.bots.index.access_token_section.description')
+        assert_selector 'button', text: I18n.t('components.token.copy')
+      end
+
+      assert_selector 'tr', count: 1 + header_row_count
+
+      # switch locale
+      find('#language-selection-dd-trigger').click
+      within find('#language-selection-dd-trigger-menu') do
+        click_button I18n.t(:'locales.fr', locale: :fr)
+      end
+
+      assert_no_selector '#access-token-section div'
+      ### VERIFY END ###
+    end
+
     test 'can\'t create a new project bot account without selecting scopes' do
       ### SETUP START ###
       visit namespace_project_bots_path(@namespace, @project2)
