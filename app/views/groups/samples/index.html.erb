@@ -157,39 +157,19 @@
   <% if @group_project_ids.count.positive? %>
     <div class="mb-4 flex flex-wrap gap-2">
       <% if @allowed_to[:submit_workflow] || @allowed_to[:export_data] %>
-        <%= form_with(
-                  url: select_group_samples_url,
-                  method: :get,
-                  id: "select-all-form",
-                  class: "max-sm:grow",
-                  data: { turbo_frame: "selected" },
-                ) do |f| %>
-          <input type="hidden" name="select" value="on">
-          <%= render "shared/samples/timestamp_input" %>
-
-          <%= f.submit t("common.controls.select_all"),
-                   id: "select-all-button",
-                   class: "button button-default w-full",
-                   aria: {
-                     label: t(".select_all_tooltip"),
-                   },
-                   title: t(".select_all_tooltip") %>
-        <% end %>
-        <%= form_with(
-                  url: select_group_samples_url,
-                  method: :get,
-                  id: "deselect-all-form",
-                  class: "max-sm:grow",
-                  data: { turbo_frame: "selected" },
-                ) do |f| %>
-          <%= f.submit t("common.controls.deselect_all"),
-                   id: "deselect-all-button",
-                   class: "button button-default w-full",
-                   title: t(".deselect_all_tooltip"),
-                   aria: {
-                     label: t(".deselect_all_tooltip"),
-                   } %>
-        <% end %>
+        <%= render "shared/selection_buttons",
+        url: select_group_samples_url,
+        form_data: { turbo_frame: "selected" },
+        select_form_fields: { select: "on", timestamp: @timestamp },
+        deselect_form_fields: {},
+        select_button_options: {
+          title: t(".select_all_tooltip"),
+          aria: { label: t(".select_all_tooltip") },
+        },
+        deselect_button_options: {
+          title: t(".deselect_all_tooltip"),
+          aria: { label: t(".deselect_all_tooltip") },
+        } %>
       <% end %>
 
       <div class="max-sm:hidden sm:grow" role="presentation"></div>

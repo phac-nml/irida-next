@@ -163,6 +163,7 @@ fr:
         counts:
           attachments: Pièces jointes
           selected: Sélectionné
+          status: "%{selected} sur %{total} pièces jointes sélectionnées"
         created_at: Créé à
         delete_aria_label:
           one: 'Supprimer le fichier : %{name}'
