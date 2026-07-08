@@ -7,10 +7,11 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
   included do
     before_action proc { namespace }
     before_action proc { bot_account }
-    before_action proc { personal_access_tokens }, only: %i[index revoke rotate]
+    before_action proc { personal_access_tokens }, only: %i[index revoke rotate create]
     before_action proc { inactive_personal_access_tokens }, only: %i[inactive]
     before_action proc { personal_access_token }, only: %i[revoke revoke_confirmation rotate rotate_confirmation]
     before_action proc { bot_accounts }
+    before_action proc { view_authorizations }, only: %i[create]
   end
 
   def index
@@ -48,6 +49,8 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
   def create # rubocop:disable Metrics/MethodLength
     @personal_access_token = PersonalAccessTokens::CreateService.new(current_user, bot_personal_access_token_params,
                                                                      @namespace, @bot_account.user).execute
+    @pagy, @bot_accounts = pagy(@bot_accounts, raise_range_error: true)
+
     respond_to do |format|
       format.turbo_stream do
         if @personal_access_token.persisted?
@@ -64,7 +67,8 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
                       end
 
           render status: :unprocessable_content,
-                 locals: { type: 'alert', message: error_msg }
+                 locals: { type: 'alert',
+                           message: error_msg }
 
         end
       end
@@ -140,6 +144,15 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
   end
 
   private
+
+  def view_authorizations
+    @allowed_to = {
+      generate_bot_personal_access_token:
+      allowed_to?(:generate_bot_personal_access_token?, @namespace),
+      destroy_bot_accounts: allowed_to?(:destroy_bot_accounts?, @namespace),
+      create_bot_accounts: allowed_to?(:create_bot_accounts?, @namespace)
+    }
+  end
 
   def bot_account
     @bot_account = @namespace.namespace_bots.find_by(id: params[:bot_id]) || not_found
