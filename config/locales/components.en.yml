@@ -163,6 +163,7 @@ en:
         counts:
           attachments: Attachments
           selected: Selected
+          status: "%{selected} of %{total} attachments selected"
         created_at: Uploaded
         delete_aria_label:
           one: 'Delete file: %{name}'

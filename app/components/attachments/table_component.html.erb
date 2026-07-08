@@ -1,6 +1,8 @@
 <% if @has_attachments %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
+      <%= render LiveRegionComponent.new(controller: "selection") %>
+
       <table
         class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
         style="--puid-width: <%= helpers.puid_width(object_class: Attachment, has_checkbox: @abilities[:select_attachments]) %>;"

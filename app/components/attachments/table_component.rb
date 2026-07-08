@@ -43,15 +43,12 @@ module Attachments
     end
     # rubocop:enable Naming/MethodParameterName,Metrics/ParameterLists
 
-    def system_arguments # rubocop:disable Metrics/AbcSize
+    def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'attachments-table'
         args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar')
         if @abilities[:select_attachments]
-          args[:data] ||= {}
-          args[:data][:controller] = 'selection'
-          args[:data][:'selection-total-value'] = @pagy.count
-          args[:data][:'selection-action-button-outlet'] = '.action-button'
+          args[:data] = (args[:data] || {}).merge(selection_data_attributes)
           if @attachable.instance_of?(Sample)
             args[:data][:'selection-storage-key-value'] =
               "files-#{@attachable.id}"
@@ -110,6 +107,16 @@ module Attachments
       else
         column_str # 📝 Return the original column name if no specific mapping exists.
       end
+    end
+
+    def selection_data_attributes
+      {
+        controller: 'selection',
+        'selection-total-value': @pagy.count,
+        'selection-action-button-outlet': '.action-button',
+        'selection-count-message-value':
+          I18n.t('components.attachments.table_component.counts.status')
+      }
     end
 
     private
