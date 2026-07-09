@@ -1316,6 +1316,9 @@ fr:
     precision:
       format:
         delimiter: ''
+  pages:
+    accessibility_statement:
+      title: Déclaration d'accessibilité
   personal_access_tokens:
     information_component:
       active_tokens: Jetons actifs

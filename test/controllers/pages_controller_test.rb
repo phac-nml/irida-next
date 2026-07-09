@@ -9,6 +9,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     get accessibility_path
     assert_response :success
+    assert_select 'title', text: /#{Regexp.escape(I18n.t('pages.accessibility_statement.title'))}/
   end
 
   test 'should return not found when accessibility statement feature is disabled' do
@@ -17,5 +18,6 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     get accessibility_path
     assert_response :not_found
+    assert_select 'title', text: /#{Regexp.escape(I18n.t('pages.accessibility_statement.title'))}/, count: 0
   end
 end

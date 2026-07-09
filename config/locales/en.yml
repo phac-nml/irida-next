@@ -1312,6 +1312,9 @@ en:
     precision:
       format:
         delimiter: ''
+  pages:
+    accessibility_statement:
+      title: Accessibility Statement
   personal_access_tokens:
     information_component:
       active_tokens: Active tokens
