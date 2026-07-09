@@ -1,5 +1,8 @@
 <% select_form_id = local_assigns.fetch(:select_form_id, "select-all-form") %>
 <% deselect_form_id = local_assigns.fetch(:deselect_form_id, "deselect-all-form") %>
+<% total_count = local_assigns[:total_count] %>
+<% select_all_disabled = total_count.present? && Irida::SelectionLimits.exceeded?(total_count) %>
+<% limit_alert_id = SelectionLimitableTable::SELECTION_LIMIT_ALERT_ID %>
 
 <% select_button_options = {
      id: "select-all-button",
@@ -16,6 +19,11 @@
      form: deselect_form_id,
      class: "button button-default max-sm:grow",
    }.merge(local_assigns.fetch(:deselect_button_options, {})) %>
+
+<% if select_all_disabled %>
+  <% select_button_options[:disabled] = true %>
+  <% select_button_options[:aria] = (select_button_options[:aria] || {}).merge(describedby: limit_alert_id) %>
+<% end %>
 
 <% select_form_fields = local_assigns.fetch(:select_form_fields, {}) %>
 <% deselect_form_fields = local_assigns.fetch(:deselect_form_fields, {}) %>
