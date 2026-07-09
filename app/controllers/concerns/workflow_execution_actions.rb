@@ -126,12 +126,16 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def select
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
     @workflow_executions = []
+    @selection_limit_exceeded = false
 
     return if params[:select].blank?
 
     @query = workflow_execution_query
     scope = @query.results
-    return if selection_limit_exceeded_for_scope?(scope)
+    if selection_limit_exceeded_for_scope?(scope)
+      @selection_limit_exceeded = true
+      return
+    end
 
     @workflow_executions = scope.select(:id)
   end
