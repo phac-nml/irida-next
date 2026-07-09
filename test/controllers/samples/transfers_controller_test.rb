@@ -72,5 +72,25 @@ module Samples
              }
       end
     end
+
+    test 'should not enqueue a Samples::TransferJob when selection exceeds limit' do
+      Samples::TransfersController.any_instance
+                                  .expects(:selection_limit_exceeded_for?)
+                                  .with(2)
+                                  .returns(true)
+
+      assert_no_enqueued_jobs only: ::Samples::TransferJob do
+        post samples_transfer_path(namespace_id: @project1.namespace.id, format: :turbo_stream),
+             params: {
+               transfer: {
+                 new_project_id: @project2.id,
+                 sample_ids: [@sample1.id, @sample2.id]
+               },
+               broadcast_target: 'a_broadcast_target'
+             }
+      end
+
+      assert_response :unprocessable_content
+    end
   end
 end

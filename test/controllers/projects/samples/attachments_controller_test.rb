@@ -134,6 +134,18 @@ module Projects
         assert_response :success
       end
 
+      test 'user with role >= Maintainer cannot select attachments when selection exceeds limit' do
+        Projects::Samples::AttachmentsController.any_instance
+                                                .expects(:selection_limit_exceeded_for?)
+                                                .returns(true)
+
+        get select_namespace_project_sample_attachments_url(@namespace, @project, @sample1, format: :turbo_stream),
+            params: { select: true }
+
+        assert_response :success
+        assert_includes response.body, 'data-table-selection-ids-value="[]"'
+      end
+
       test 'user with role < Maintainer can not select attachments of a sample' do
         sign_in users(:ryan_doe)
         get select_namespace_project_sample_attachments_url(@namespace, @project, @sample1, format: :turbo_stream)
