@@ -68,6 +68,7 @@ search:
   ## Paths or `Find.find` patterns to search in:
   paths:
    - app/
+   - lib/
   ## Root directories for relative keys resolution.
   relative_roots:
     - app/controllers
