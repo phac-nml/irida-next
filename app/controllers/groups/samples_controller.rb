@@ -6,6 +6,7 @@ module Groups
     include Metadata
     include Storable
     include ListActions
+    include SelectionLimitEnforcement
 
     before_action :group, :current_page
     before_action :query, only: %i[index search select]
@@ -39,7 +40,10 @@ module Groups
 
       return if params[:select].blank?
 
-      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime).pluck(:id)
+      scope = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime)
+      return if selection_limit_exceeded_for?(scope.count)
+
+      @sample_ids = scope.pluck(:id)
     end
 
     private

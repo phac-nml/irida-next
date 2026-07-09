@@ -4,6 +4,7 @@ module Samples
   # controller for sample deletions
   class DeletionsController < ApplicationController
     include ListActions
+    include SelectionLimitEnforcement
 
     before_action :namespace, only: %i[new destroy]
     before_action :confirmation_parameters, :sample, only: :new
@@ -14,7 +15,13 @@ module Samples
       @broadcast_target = "samples_destroy_#{SecureRandom.uuid}"
     end
 
-    def destroy # rubocop:disable Metrics/AbcSize
+    def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      if selection_limit_exceeded_for?(destroy_params['sample_ids'].count)
+        flash[:error] = selection_limit_error_message
+        redirect_to redirect_path, status: :see_other
+        return
+      end
+
       samples_to_delete_count = destroy_params['sample_ids'].count
 
       deleted_samples_count = destroy_service

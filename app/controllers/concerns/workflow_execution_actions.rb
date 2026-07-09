@@ -6,6 +6,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   include ListActions
   include NamespacePathHelper
   include WorkflowExecutionAttachment
+  include SelectionLimitEnforcement
 
   included do
     before_action :set_default_tab, only: :show
@@ -129,7 +130,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     return if params[:select].blank?
 
     @query = workflow_execution_query
-    @workflow_executions = @query.results.select(:id)
+    scope = @query.results
+    return if selection_limit_exceeded_for?(scope.count)
+
+    @workflow_executions = scope.select(:id)
   end
 
   def destroy_confirmation
@@ -154,8 +158,14 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     ), status: :ok
   end
 
-  def destroy_multiple # rubocop:disable Metrics/MethodLength
+  def destroy_multiple # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     workflows_to_delete_count = destroy_multiple_params['workflow_execution_ids'].count
+
+    if selection_limit_exceeded_for?(workflows_to_delete_count)
+      render status: :unprocessable_content,
+             locals: { type: 'alert', message: selection_limit_error_message }
+      return
+    end
 
     deleted_workflows_count = ::WorkflowExecutions::DestroyService.new(
       current_user,
@@ -197,8 +207,14 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     ), status: :ok
   end
 
-  def cancel_multiple # rubocop:disable Metrics/MethodLength
+  def cancel_multiple # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     workflows_to_cancel_count = cancel_multiple_params['workflow_execution_ids'].count
+
+    if selection_limit_exceeded_for?(workflows_to_cancel_count)
+      @messages = [{ type: 'alert', message: selection_limit_error_message }]
+      render status: :unprocessable_content
+      return
+    end
 
     canceled_workflows_count = ::WorkflowExecutions::CancelService.new(
       current_user,
