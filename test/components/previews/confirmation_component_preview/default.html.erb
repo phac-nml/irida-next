@@ -1,10 +1,13 @@
 <%# This should be loaded once into the layout %>
 <%= render ConfirmationComponent.new %>
+
 <%# ------------------------------------------ %>
 
 <%= button_to "Confirmation",
 "#",
-data: {
-  turbo_confirm: "Custom modal text here!",
+form: {
+  data: {
+    turbo_confirm: "Custom modal text here!",
+  }
 },
 class: "button button-destructive" %>
