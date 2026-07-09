@@ -365,6 +365,17 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should not select workflow executions when selection exceeds limit' do
+    WorkflowExecutionsController.any_instance
+                                .expects(:selection_limit_exceeded_for?)
+                                .returns(true)
+
+    get select_workflow_executions_url, params: { select: true }
+
+    assert_response :success
+    assert_includes response.body, 'data-table-selection-ids-value="[]"'
+  end
+
   test 'should destroy multiple workflows at once' do
     assert_difference -> { WorkflowExecution.count } => -2,
                       -> { SamplesWorkflowExecution.count } => -2 do
@@ -374,6 +385,23 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                                                             @workflow_execution_canceled.id] } }
                       end
     assert_response :success
+  end
+
+  test 'should not destroy multiple workflows when selection exceeds limit' do
+    WorkflowExecutionsController.any_instance
+                                .expects(:selection_limit_exceeded_for?)
+                                .with(2)
+                                .returns(true)
+
+    assert_no_difference -> { WorkflowExecution.count },
+                         -> { SamplesWorkflowExecution.count } do
+      post destroy_multiple_workflow_executions_path(format: :turbo_stream),
+           params: { destroy_multiple: { workflow_execution_ids:
+                                           [@workflow_execution_error.id, @workflow_execution_canceled.id] } }
+    end
+
+    assert_response :unprocessable_content
+    assert_includes response.body, Irida::SelectionLimits.error_message
   end
 
   test 'should partially destroy multiple workflows at once' do
@@ -403,6 +431,21 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
          params: { cancel_multiple: { workflow_execution_ids: [@workflow_execution_running.id,
                                                                @workflow_execution_new.id] } }
     assert_response :success
+  end
+
+  test 'should not cancel multiple workflows when selection exceeds limit' do
+    WorkflowExecutionsController.any_instance
+                                .expects(:selection_limit_exceeded_for?)
+                                .with(2)
+                                .returns(true)
+
+    post cancel_multiple_workflow_executions_path(format: :turbo_stream),
+         params: { cancel_multiple: { workflow_execution_ids: [@workflow_execution_running.id,
+                                                               @workflow_execution_new.id] } }
+
+    assert_response :unprocessable_content
+    assert_includes response.body, Irida::SelectionLimits.error_message
+    assert @workflow_execution_running.reload.running?
   end
 
   test 'should partially cancel multiple workflows' do

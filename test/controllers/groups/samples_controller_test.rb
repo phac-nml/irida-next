@@ -42,6 +42,19 @@ module Groups
       assert_response :success
     end
 
+    test 'should not select samples when selection exceeds limit' do
+      Groups::SamplesController.any_instance
+                               .expects(:selection_limit_exceeded_for?)
+                               .returns(true)
+
+      get select_group_samples_url(@group),
+          params: { select: true, timestamp: DateTime.current },
+          as: :turbo_stream
+
+      assert_response :success
+      assert_includes response.body, 'data-table-selection-ids-value="[]"'
+    end
+
     test 'should not select samples without permission' do
       sign_in users(:steve_doe)
       timestamp = DateTime.current
