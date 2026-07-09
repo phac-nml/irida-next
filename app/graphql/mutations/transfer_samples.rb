@@ -23,7 +23,7 @@ module Mutations
     validates required: { one_of: %i[project_id project_puid] }
 
     field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
-    field :samples, [ID], description: 'List of transfered sample ids.'
+    field :job_id, ID, description: 'ID of the transfer job.'
 
     def resolve(args) # rubocop:disable Metrics/MethodLength
       project = get_project_from_id_or_puid_args(args)
@@ -34,7 +34,7 @@ module Mutations
           message: 'Project not found by provided ID or PUID'
         }]
         return {
-          samples: nil,
+          job_id: nil,
           errors: user_errors
         }
       end
@@ -48,7 +48,7 @@ module Mutations
           message: 'Project not found by provided ID or PUID'
         }]
         return {
-          samples: nil,
+          job_id: nil,
           errors: user_errors
         }
       end
@@ -63,7 +63,7 @@ module Mutations
 
     private
 
-    def transfer_samples(project, new_project_id, sample_gids) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    def transfer_samples(project, new_project_id, sample_gids) # rubocop:disable Metrics/MethodLength
       user_errors = []
       # remove prefix from sample_ids
       sample_ids = sample_gids.map do |sample_gid|
@@ -78,36 +78,39 @@ module Mutations
         next
       end
 
-      # TODO: This mutation should either replace this perform_now job with a service execute that follows the same
-      # logic as the job, or better yet, change the mutation to return a job id that can be queried for results
-      # As this uses the perform_now job handling, it is susceptible to failures that would normally be retried.
-      samples = Samples::TransferJob.perform_now(
+      enqueued_job = Samples::TransferJob.perform_later(
         project.namespace, current_user, new_project_id, sample_ids.compact
       )
 
-      if samples.empty? # rubocop:disable Style/ConditionalAssignment
-        samples = nil
+      if enqueued_job.nil?
+        { job_id: nil, errors: ['Failed to enqueue transfer job. Please contact an administrator.'] }
       else
-        # add the prefix to sample_ids
-        samples = samples.map do |sample_id|
-          URI::GID.build(app: GlobalID.app, model_name: Sample.name, model_id: sample_id).to_s
-        end
+        { job_id: enqueued_job.job_id, errors: [] }
       end
 
-      project_user_errors = []
-      if project.namespace.errors.any?
-        project_user_errors = project.namespace.errors.map do |error|
-          {
-            path: ['samples', error.attribute.to_s.camelize(:lower)],
-            message: error.message
-          }
-        end
-      end
+      # if samples.empty? # rubocop:disable Style/ConditionalAssignment
+      #   samples = nil
+      # else
+      #   # add the prefix to sample_ids
+      #   samples = samples.map do |sample_id|
+      #     URI::GID.build(app: GlobalID.app, model_name: Sample.name, model_id: sample_id).to_s
+      #   end
+      # end
 
-      {
-        samples:,
-        errors: user_errors.concat(project_user_errors)
-      }
+      # project_user_errors = []
+      # if project.namespace.errors.any?
+      #   project_user_errors = project.namespace.errors.map do |error|
+      #     {
+      #       path: ['samples', error.attribute.to_s.camelize(:lower)],
+      #       message: error.message
+      #     }
+      #   end
+      # end
+
+      # {
+      #   samples:,
+      #   errors: user_errors.concat(project_user_errors)
+      # }
     end
   end
 end
