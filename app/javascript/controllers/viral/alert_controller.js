@@ -40,6 +40,7 @@ export default class extends Controller {
    * @property {string} type - What kind of alert? (danger, info, success, warning) 🏷️
    * @property {string} alertId - Unique identifier for this alert 🆔
    * @property {string} dismissButtonId - ID of the close button 🔘
+   * @property {boolean} removeOnDismiss - Should dismiss remove the element from the DOM? 🗑️
    *
    */
   static values = {
@@ -51,6 +52,7 @@ export default class extends Controller {
     dismissButtonId: String,
     autoDismissDuration: Number,
     dismissedText: String,
+    removeOnDismiss: { type: Boolean, default: true },
   };
 
   // 🔒 Private Properties - Internal state (only accessible within this class)
@@ -124,7 +126,10 @@ export default class extends Controller {
       this.element.dispatchEvent(
         new CustomEvent("viral--alert:dismissed", { bubbles: true }),
       );
-      this.element.remove(); // 🗑️  Remove from DOM
+      // 🗑️  Remove from DOM unless a parent controller wants to reuse the markup
+      if (this.removeOnDismissValue) {
+        this.element.remove();
+      }
     } catch (error) {
       console.error("❌ Failed to dismiss alert:", error);
       // 🆘 Fallback: try to hide the element instead
