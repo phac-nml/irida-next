@@ -35,7 +35,21 @@
         </div>
       </div>
     <% end %>
-    <div class="table-wrapper relative overflow-x-auto">
+    <div
+      class="table-wrapper relative overflow-x-auto"
+      data-controller="selection"
+      data-selection-action-button-outlet=".action-button"
+      data-selection-storage-key-value="metadata-<%= @sample.id %>"
+      data-selection-max-selection-value="<%= Irida::SelectionLimits::MAX_COUNT %>"
+      data-selection-limit-message-value="<%= t(
+        'components.selection.limit.selection_limit_reached',
+        max: Irida::SelectionLimits::MAX_COUNT,
+      ) %>"
+      data-selection-storage-limit-message-value="<%= t(
+        'components.selection.limit.storage_full',
+        max: Irida::SelectionLimits::MAX_COUNT,
+      ) %>"
+    >
       <%= render partial: "shared/selection_limit_alert",
       locals: {
         message: t(
@@ -47,17 +61,7 @@
         proactive: Irida::SelectionLimits.exceeded?(sample_metadata.size),
       } %>
 
-      <table
-        class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
-        data-controller="selection"
-        data-selection-action-button-outlet=".action-button"
-        data-selection-storage-key-value="metadata-<%= @sample.id %>"
-        data-selection-max-selection-value="<%= Irida::SelectionLimits::MAX_COUNT %>"
-        data-selection-limit-message-value="<%= t(
-          'components.selection.limit.selection_limit_reached',
-          max: Irida::SelectionLimits::MAX_COUNT,
-        ) %>"
-      >
+      <table class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400">
         <thead
           class="
             border-b border-slate-200 bg-slate-100 text-xs text-slate-700 uppercase dark:border-slate-700

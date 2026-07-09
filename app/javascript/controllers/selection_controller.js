@@ -24,6 +24,7 @@ export default class extends Controller {
     selectPageAll: String,
     maxSelection: Number,
     limitMessage: String,
+    storageLimitMessage: String,
   };
 
   #lastActiveCheckbox;
@@ -153,7 +154,7 @@ export default class extends Controller {
     }
 
     if (!this.#persistSelection(ids)) {
-      this.#handleSelectionLimitExceeded();
+      this.#handleStorageQuotaExceeded();
       this.#refreshUIFromStorage();
       return;
     }
@@ -188,11 +189,6 @@ export default class extends Controller {
     if (add) {
       // Use a Set to deduplicate values
       newStorageValue = [...new Set([...newStorageValue, ...values])];
-      if (this.#exceedsLimit(newStorageValue.length)) {
-        this.#handleSelectionLimitExceeded();
-        this.#refreshUIFromStorage();
-        return;
-      }
     } else {
       newStorageValue = newStorageValue.filter(
         (value) => !values.includes(value),
@@ -396,21 +392,31 @@ export default class extends Controller {
       return;
     }
 
-    this.#showSelectionLimitAlert();
+    this.#showSelectionLimitAlert(this.#selectionLimitMessage());
 
     if (resetDismissed) {
-      this.#announceSelectionLimitExceeded();
+      this.#announceAlertMessage(this.#selectionLimitMessage());
     }
   }
 
-  #showSelectionLimitAlert() {
+  #handleStorageQuotaExceeded() {
+    const message = this.#storageLimitMessage();
+    if (!message) return;
+
+    this.#clearLimitAlertDismissed();
+    this.#showSelectionLimitAlert(message);
+    this.#announceAlertMessage(message);
+    console.warn("SelectionController: storage quota exceeded");
+  }
+
+  #showSelectionLimitAlert(message) {
     const limitAlert = this.#findLimitAlertElement();
     if (!limitAlert || this.#isLimitAlertDismissed()) return;
 
-    if (!this.#proactiveLimitAlert(limitAlert) && this.limitMessageValue) {
+    if (!this.#proactiveLimitAlert(limitAlert) && message) {
       const limitAlertMessage = this.#findLimitAlertMessageElement(limitAlert);
       if (limitAlertMessage) {
-        limitAlertMessage.textContent = this.#selectionLimitMessage();
+        limitAlertMessage.textContent = message;
       }
     }
 
@@ -445,42 +451,15 @@ export default class extends Controller {
   }
 
   #findLimitAlertElement() {
-    if (this.hasLimitAlertTarget) {
-      return this.limitAlertTarget;
-    }
-
-    const parent = this.element.parentElement;
-    const alertInParent = parent?.querySelector("#selection-limit-alert");
-    if (alertInParent) return alertInParent;
-
-    let sibling = this.element.previousElementSibling;
-    while (sibling) {
-      if (sibling.id === "selection-limit-alert") return sibling;
-      sibling = sibling.previousElementSibling;
-    }
-
-    const tableContainer = this.element.closest(".table-container");
-    if (!tableContainer) return null;
-
-    sibling = tableContainer.previousElementSibling;
-    while (sibling) {
-      if (sibling.id === "selection-limit-alert") return sibling;
-      sibling = sibling.previousElementSibling;
-    }
-
-    return null;
+    return this.hasLimitAlertTarget ? this.limitAlertTarget : null;
   }
 
   #findLimitAlertMessageElement(limitAlert) {
-    if (this.hasLimitAlertMessageTarget) {
-      return this.limitAlertMessageTarget;
-    }
-
-    return (
-      limitAlert?.querySelector(
-        "[data-selection-target='limitAlertMessage']",
-      ) ?? null
-    );
+    return this.hasLimitAlertMessageTarget
+      ? this.limitAlertMessageTarget
+      : limitAlert?.querySelector(
+          "[data-selection-target='limitAlertMessage']",
+        );
   }
 
   #limitAlertDismissedStorageKey() {
@@ -505,8 +484,7 @@ export default class extends Controller {
     return limitAlert?.dataset.selectionLimitProactive === "true";
   }
 
-  #announceSelectionLimitExceeded() {
-    const message = this.#selectionLimitMessage();
+  #announceAlertMessage(message) {
     if (!message) return;
 
     if (this.hasStatusTarget) {
@@ -523,6 +501,17 @@ export default class extends Controller {
     if (!this.limitMessageValue) return "";
 
     return this.limitMessageValue.replace(
+      "%{max}",
+      String(this.maxSelectionValue),
+    );
+  }
+
+  #storageLimitMessage() {
+    if (!this.storageLimitMessageValue) {
+      return this.#selectionLimitMessage();
+    }
+
+    return this.storageLimitMessageValue.replace(
       "%{max}",
       String(this.maxSelectionValue),
     );
