@@ -41,7 +41,7 @@ module Groups
       return if params[:select].blank?
 
       scope = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime)
-      return if selection_limit_exceeded_for?(scope.count)
+      return if selection_limit_exceeded_for_scope?(scope)
 
       @sample_ids = scope.pluck(:id)
     end

@@ -44,7 +44,7 @@ module Groups
 
     test 'should not select samples when selection exceeds limit' do
       Groups::SamplesController.any_instance
-                               .expects(:selection_limit_exceeded_for?)
+                               .expects(:selection_limit_exceeded_for_scope?)
                                .returns(true)
 
       get select_group_samples_url(@group),

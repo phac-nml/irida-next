@@ -367,7 +367,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should not select workflow executions when selection exceeds limit' do
     WorkflowExecutionsController.any_instance
-                                .expects(:selection_limit_exceeded_for?)
+                                .expects(:selection_limit_exceeded_for_scope?)
                                 .returns(true)
 
     get select_workflow_executions_url, params: { select: true }

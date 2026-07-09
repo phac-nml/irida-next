@@ -351,7 +351,7 @@ module Projects
 
     test 'should not select workflow executions when selection exceeds limit' do
       Projects::WorkflowExecutionsController.any_instance
-                                            .expects(:selection_limit_exceeded_for?)
+                                            .expects(:selection_limit_exceeded_for_scope?)
                                             .returns(true)
 
       get select_namespace_project_workflow_executions_url(@namespace, @project),
