@@ -266,20 +266,34 @@ class DataExportsTest < ApplicationSystemTestCase
       end
       assert_text I18n.t('data_exports.new_sample_export_dialog.select_formats')
       assert_text I18n.t('data_exports.new_sample_export_dialog.fields_instructions')
+      assert_button I18n.t('data_exports.new.submit_button'), disabled: true
+
       within '#available-list' do
-        assert_no_selector 'li'
-      end
-      within '#selected-list' do
         assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
         end
       end
+      within '#selected-list' do
+        assert_no_selector 'li'
+      end
+
+      find('li', exact_text: 'csv').click
+      click_button I18n.t('components.sortable_lists.v1.list_component.add')
+      within '#available-list' do
+        assert_selector 'li', count: 9
+      end
+      within '#selected-list' do
+        assert_selector 'li', count: 1
+        assert_selector 'li', exact_text: 'csv'
+      end
+
       assert_text I18n.t('data_exports.new.name_label')
       assert_text I18n.t('data_exports.new.email_label')
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
+      assert_button I18n.t('data_exports.new.submit_button'), disabled: false
       click_button I18n.t('data_exports.new.submit_button')
     end
 
@@ -326,20 +340,32 @@ class DataExportsTest < ApplicationSystemTestCase
       end
       assert_text I18n.t('data_exports.new_sample_export_dialog.select_formats')
       assert_text I18n.t('data_exports.new_sample_export_dialog.fields_instructions')
+      assert_button I18n.t('data_exports.new.submit_button'), disabled: true
       within '#available-list' do
-        assert_no_selector 'li'
-      end
-      within '#selected-list' do
         assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
         end
+      end
+      within '#selected-list' do
+        assert_no_selector 'li'
+      end
+
+      find('li', exact_text: 'csv').click
+      click_button I18n.t('components.sortable_lists.v1.list_component.add')
+      within '#available-list' do
+        assert_selector 'li', count: 9
+      end
+      within '#selected-list' do
+        assert_selector 'li', count: 1
+        assert_selector 'li', exact_text: 'csv'
       end
       assert_text I18n.t('data_exports.new.name_label')
       assert_text I18n.t('data_exports.new.email_label')
 
       fill_in I18n.t('data_exports.new.name_label'), with: 'test data export'
       check I18n.t('data_exports.new.email_label')
+      assert_button I18n.t('data_exports.new.submit_button'), disabled: false
       click_button I18n.t('data_exports.new.submit_button')
     end
 
@@ -1196,15 +1222,28 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within 'dialog[open].dialog--size-lg' do
       within '#available-list' do
-        assert_no_selector 'li'
-      end
-      within '#selected-list' do
         assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
         end
       end
+      within '#selected-list' do
+        assert_no_selector 'li'
+      end
 
+      assert_button I18n.t('data_exports.new.submit_button'), disabled: true
+
+      find('li', exact_text: 'csv').click
+      find('li', exact_text: 'json').click
+
+      click_button I18n.t('components.sortable_lists.v1.list_component.add')
+
+      within '#selected-list' do
+        assert_selector 'li', count: 2
+      end
+      within '#available-list' do
+        assert_selector 'li', count: 8
+      end
       # all buttons disabled again
       assert_selector 'button[aria-disabled="true"]',
                       text: I18n.t('common.actions.remove')
@@ -1237,10 +1276,10 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('common.actions.remove')
 
       within '#selected-list' do
-        assert_selector 'li', count: 8
+        assert_selector 'li', count: 0
       end
       within '#available-list' do
-        assert_selector 'li', count: 2
+        assert_selector 'li', count: 10
       end
 
       # all buttons disabled
@@ -1268,13 +1307,12 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('components.sortable_lists.v1.list_component.add')
 
       within '#available-list' do
-        assert_no_selector 'li'
+        assert_selector 'li', count: 8
       end
       within '#selected-list' do
-        assert_selector 'li', count: 10
-        Attachment::FORMAT_REGEX.each_key do |format|
-          assert_text format
-        end
+        assert_selector 'li', count: 2
+        assert_selector 'li', exact_text: 'csv'
+        assert_selector 'li', exact_text: 'json'
       end
     end
   end

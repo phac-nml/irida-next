@@ -3630,39 +3630,6 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'sample export starts with options in available list' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-
-      # Assert that the Export button is disabled when no samples are selected
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      assert_selector 'button[disabled]',
-                      text: I18n.t('shared.samples.actions_dropdown.sample_export')
-
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      assert_selector 'table tbody tr', count: 3
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      click_button I18n.t('common.controls.select_all')
-      assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.sample_export')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      assert_selector 'dialog h1', text: I18n.t(:'data_exports.new_sample_export_dialog.title')
-
-      assert_selector 'ul#available-list li', count: 10
-      assert_selector 'ul#selected-list li', count: 0
-
-      assert_button I18n.t('data_exports.new.submit_button'), disabled: true
-      ### VERIFY END ###
-    end
-
     def long_filter_text
       text = (1..500).map { |n| "sample#{n}" }.join(', ')
       "#{text}, #{@sample1.name}" # Need to comma to force the tag to be created

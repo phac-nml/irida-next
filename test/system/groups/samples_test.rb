@@ -2470,38 +2470,5 @@ module Groups
                                                                                       locale: @user.locale))
       ### VERIFY END ###
     end
-
-    test 'sample export starts with options in available list' do
-      ### SETUP START ###
-      visit group_samples_url(@group)
-
-      # Assert that the Export button is disabled when no samples are selected
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      assert_selector 'button[disabled]',
-                      text: I18n.t('shared.samples.actions_dropdown.sample_export')
-
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
-      assert_selector 'table tbody tr', count: 20
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      click_button I18n.t('common.controls.select_all')
-      assert_selector 'table tfoot tr', text: 'Samples: 26'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '26'
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.sample_export')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      assert_selector 'dialog h1', text: I18n.t(:'data_exports.new_sample_export_dialog.title')
-
-      assert_selector 'ul#available-list li', count: 10
-      assert_selector 'ul#selected-list li', count: 0
-
-      assert_button I18n.t('data_exports.new.submit_button'), disabled: true
-      ### VERIFY END ###
-    end
   end
 end
