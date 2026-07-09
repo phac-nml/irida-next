@@ -87,30 +87,6 @@ module Mutations
       else
         { job_id: enqueued_job.job_id, errors: [] }
       end
-
-      # if samples.empty? # rubocop:disable Style/ConditionalAssignment
-      #   samples = nil
-      # else
-      #   # add the prefix to sample_ids
-      #   samples = samples.map do |sample_id|
-      #     URI::GID.build(app: GlobalID.app, model_name: Sample.name, model_id: sample_id).to_s
-      #   end
-      # end
-
-      # project_user_errors = []
-      # if project.namespace.errors.any?
-      #   project_user_errors = project.namespace.errors.map do |error|
-      #     {
-      #       path: ['samples', error.attribute.to_s.camelize(:lower)],
-      #       message: error.message
-      #     }
-      #   end
-      # end
-
-      # {
-      #   samples:,
-      #   errors: user_errors.concat(project_user_errors)
-      # }
     end
   end
 end
