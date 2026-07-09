@@ -18,6 +18,7 @@
     "playwright": "1.60.0",
     "prettier": "^3.9.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
+    "vite": "^7.3.5",
     "vitest": "^4.1.10"
   },
   "scripts": {
@@ -45,5 +46,13 @@
     "flowbite": "^3.1.2",
     "tailwindcss": "4.3.2"
   },
-  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be"
+  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
+  "pnpm": {
+    "overrides": {
+      "esbuild@>=0.27.3 <0.28.1": ">=0.28.1",
+      "postcss@<8.5.10": ">=8.5.10",
+      "undici@>=7.0.0 <7.28.0": ">=7.28.0",
+      "vite@>=7.0.0 <=7.3.4": ">=7.3.5"
+    }
+  }
 }
