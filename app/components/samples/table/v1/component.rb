@@ -9,6 +9,7 @@ module Samples
       class Component < ::Component # rubocop:disable Metrics/ClassLength
         include Ransack::Helpers::FormHelper
         include Samples::Table::UrlHelpers
+        include SelectionLimitableTable
 
         # Maximum number of metadata fields to display regardless of sample count
         MAX_METADATA_FIELDS_SIZE = 200
@@ -74,6 +75,7 @@ module Samples
           # i18n-tasks-use t('components.samples.table_component.counts.status')
           args[:data][:'selection-count-message-value'] =
             I18n.t('components.samples.table_component.counts.status')
+          args[:data].merge!(selection_limit_data_attributes)
         end
 
         def wrapper_arguments
