@@ -9,7 +9,7 @@
     data-selection-limit-proactive="true"
   <% end %>
 >
-  <%= viral_alert(type: :warning, dismissible: true) do %>
+  <%= viral_alert(type: :warning, dismissible: true, remove_on_dismiss: false) do %>
     <span data-selection-target="limitAlertMessage"><%= message %></span>
   <% end %>
 </div>
