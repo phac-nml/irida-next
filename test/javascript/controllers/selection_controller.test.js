@@ -60,10 +60,6 @@ function renderFixtureHtml({
   `;
 }
 
-function renderFixture(options = {}) {
-  document.body.innerHTML = renderFixtureHtml(options);
-}
-
 function controllerFor(application) {
   return application.getControllerForElementAndIdentifier(
     document.getElementById("selection-table"),
