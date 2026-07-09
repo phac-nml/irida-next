@@ -355,10 +355,11 @@ module Projects
                                             .returns(true)
 
       get select_namespace_project_workflow_executions_url(@namespace, @project),
-          params: { select: true }
+          params: { select: true }, as: :turbo_stream
 
       assert_response :success
       assert_includes response.body, 'data-table-selection-ids-value="[]"'
+      assert_includes response.body, Irida::SelectionLimits.error_message
     end
 
     test 'should not open destroy_multiple_confirmation due to unauthorized access' do

@@ -144,6 +144,7 @@ module Projects
 
         assert_response :success
         assert_includes response.body, 'data-table-selection-ids-value="[]"'
+        assert_includes response.body, Irida::SelectionLimits.error_message
       end
 
       test 'user with role < Maintainer can not select attachments of a sample' do

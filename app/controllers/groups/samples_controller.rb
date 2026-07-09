@@ -37,11 +37,15 @@ module Groups
     def select
       authorize! @group, to: :sample_listing?
       @sample_ids = []
+      @selection_limit_exceeded = false
 
       return if params[:select].blank?
 
       scope = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime)
-      return if selection_limit_exceeded_for_scope?(scope)
+      if selection_limit_exceeded_for_scope?(scope)
+        @selection_limit_exceeded = true
+        return
+      end
 
       @sample_ids = scope.pluck(:id)
     end

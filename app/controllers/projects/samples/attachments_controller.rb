@@ -82,13 +82,16 @@ module Projects
         authorize! @project, to: :update_sample?
 
         @sample_attachment_ids = []
+        @selection_limit_exceeded = false
 
         respond_to do |format|
           format.turbo_stream do
             if params.key?(:select)
               @q = load_attachments.ransack(params.fetch(:q, {}).permit(:puid_or_file_blob_filename_cont, :sort))
               scope = @q.result
-              unless selection_limit_exceeded_for_scope?(scope)
+              if selection_limit_exceeded_for_scope?(scope)
+                @selection_limit_exceeded = true
+              else
                 scope.each do |attachment|
                   @sample_attachment_ids << if attachment.associated_attachment
                                               [attachment.id, attachment.associated_attachment.id].to_s
