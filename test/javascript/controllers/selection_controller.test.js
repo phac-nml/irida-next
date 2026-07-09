@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import SelectionController from "../../../app/javascript/controllers/selection_controller.js";
 
 async function startController() {
@@ -14,8 +14,8 @@ async function startController() {
 function renderFixtureHtml({
   maxSelection = 2,
   limitMessage = "You cannot select more than %{max} items.",
+  storageLimitMessage = "Browser storage is full.",
   proactiveAlert = false,
-  alertOutsideController = false,
 } = {}) {
   const alertHtml = `
       <div
@@ -30,15 +30,15 @@ function renderFixtureHtml({
       </div>`;
 
   return `
-    ${alertOutsideController ? alertHtml : ""}
     <div
       id="selection-table"
       data-controller="selection"
       data-selection-storage-key-value="selection-test-key"
       data-selection-max-selection-value="${maxSelection}"
       data-selection-limit-message-value="${limitMessage}"
+      data-selection-storage-limit-message-value="${storageLimitMessage}"
     >
-      ${alertOutsideController ? "" : alertHtml}
+      ${alertHtml}
       <span data-selection-target="status" class="sr-only" aria-live="polite"></span>
       <input
         type="checkbox"
@@ -186,52 +186,26 @@ describe("selection controller", () => {
     ).toBe(true);
   });
 
-  it("persists dismiss when the alert is rendered outside the controller element", async () => {
-    document.body.innerHTML = renderFixtureHtml({
-      proactiveAlert: true,
-      alertOutsideController: true,
-    });
-    application = Application.start();
-    application.register("selection", SelectionController);
-    await Promise.resolve();
-    await new Promise((resolve) => requestAnimationFrame(resolve));
+  it("shows storage-specific feedback when session storage quota is exceeded", async () => {
+    application = await startController();
     const controller = controllerFor(application);
-    const alert = document.getElementById("selection-limit-alert");
+    const storagePrototype = Object.getPrototypeOf(window.sessionStorage);
+    const setItemSpy = vi
+      .spyOn(storagePrototype, "setItem")
+      .mockImplementation(() => {
+        const error = new DOMException("quota", "QuotaExceededError");
+        throw error;
+      });
 
-    expect(controller.hasLimitAlertTarget).toBe(false);
-    expect(alert.classList.contains("hidden")).toBe(false);
+    controller.update(["1"], false);
 
-    alert
-      .querySelector("[data-controller='viral--alert']")
-      .dispatchEvent(
-        new CustomEvent("viral--alert:dismissed", { bubbles: true }),
-      );
+    expect(controller.limitAlertTarget.classList.contains("hidden")).toBe(
+      false,
+    );
+    expect(controller.limitAlertMessageTarget.textContent).toBe(
+      "Browser storage is full.",
+    );
 
-    expect(
-      sessionStorage.getItem(
-        "selection-test-key:selection-limit-alert-dismissed",
-      ),
-    ).toBe("true");
-
-    alert.outerHTML = `
-      <div
-        id="selection-limit-alert"
-        class="mb-4"
-        role="alert"
-        data-selection-target="limitAlert"
-        data-selection-limit-proactive="true"
-      >
-        <div data-controller="viral--alert">
-          <span data-selection-target="limitAlertMessage">Alert</span>
-        </div>
-      </div>`;
-
-    controller.onMorph();
-
-    expect(
-      document
-        .getElementById("selection-limit-alert")
-        .classList.contains("hidden"),
-    ).toBe(true);
+    setItemSpy.mockRestore();
   });
 });
