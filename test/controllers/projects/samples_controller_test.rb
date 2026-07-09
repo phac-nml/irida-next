@@ -188,7 +188,7 @@ module Projects
 
     test 'should not select samples when selection exceeds limit' do
       Projects::SamplesController.any_instance
-                                 .expects(:selection_limit_exceeded_for?)
+                                 .expects(:selection_limit_exceeded_for_scope?)
                                  .returns(true)
 
       get select_namespace_project_samples_url(@namespace, @project),

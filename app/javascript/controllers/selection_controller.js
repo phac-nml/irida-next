@@ -211,8 +211,9 @@ export default class extends Controller {
    */
   #updateUI(ids, announce, options = {}) {
     try {
+      const idSet = new Set(ids);
       this.rowSelectionTargets.forEach((row) => {
-        row.checked = ids.indexOf(row.value) > -1;
+        row.checked = idSet.has(row.value);
       });
     } catch (error) {
       console.error(

@@ -88,7 +88,7 @@ module Projects
             if params.key?(:select)
               @q = load_attachments.ransack(params.fetch(:q, {}).permit(:puid_or_file_blob_filename_cont, :sort))
               scope = @q.result
-              unless selection_limit_exceeded_for?(scope.count)
+              unless selection_limit_exceeded_for_scope?(scope)
                 scope.each do |attachment|
                   @sample_attachment_ids << if attachment.associated_attachment
                                               [attachment.id, attachment.associated_attachment.id].to_s

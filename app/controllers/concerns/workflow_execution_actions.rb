@@ -131,7 +131,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     @query = workflow_execution_query
     scope = @query.results
-    return if selection_limit_exceeded_for?(scope.count)
+    return if selection_limit_exceeded_for_scope?(scope)
 
     @workflow_executions = scope.select(:id)
   end
