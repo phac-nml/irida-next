@@ -8,6 +8,8 @@ export default class extends Controller {
     "selectPageStatus",
     "selected",
     "status",
+    "limitAlert",
+    "limitAlertMessage",
   ];
   static outlets = ["action-button"];
 
@@ -20,6 +22,8 @@ export default class extends Controller {
     selectPageNone: String,
     selectPageSome: String,
     selectPageAll: String,
+    maxSelection: Number,
+    limitMessage: String,
   };
 
   #lastActiveCheckbox;
@@ -33,18 +37,37 @@ export default class extends Controller {
     this.element.setAttribute("data-controller-connected", "true");
 
     this.boundOnMorph = this.onMorph.bind(this);
+    this.boundOnTurboRender = this.onTurboRender.bind(this);
+    this.boundOnViralAlertDismissed =
+      this.#handleViralAlertDismissed.bind(this);
 
-    this.update(this.getOrCreateStoredItems(), false);
+    this.#initializeSelectionState();
+    this.#applyLimitAlertDismissedState();
 
     document.addEventListener("turbo:morph", this.boundOnMorph);
+    document.addEventListener("turbo:render", this.boundOnTurboRender);
+    document.addEventListener(
+      "viral--alert:dismissed",
+      this.boundOnViralAlertDismissed,
+    );
   }
 
   disconnect() {
     document.removeEventListener("turbo:morph", this.boundOnMorph);
+    document.removeEventListener("turbo:render", this.boundOnTurboRender);
+    document.removeEventListener(
+      "viral--alert:dismissed",
+      this.boundOnViralAlertDismissed,
+    );
   }
 
   onMorph() {
-    this.update(this.getOrCreateStoredItems(), false);
+    this.#initializeSelectionState();
+    this.#applyLimitAlertDismissedState();
+  }
+
+  onTurboRender() {
+    this.#applyLimitAlertDismissedState();
   }
 
   /**
@@ -122,24 +145,29 @@ export default class extends Controller {
       console.warn("SelectionController: ids must be an array");
       return;
     }
-    // Persist selection and reflect changes in the UI
-    sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
+
+    if (this.#exceedsLimit(ids.length)) {
+      this.#handleSelectionLimitExceeded();
+      this.#refreshUIFromStorage();
+      return;
+    }
+
+    if (!this.#persistSelection(ids)) {
+      this.#handleSelectionLimitExceeded();
+      this.#refreshUIFromStorage();
+      return;
+    }
+
+    this.#hideSelectionLimitAlertIfAllowed();
     this.#updateUI(ids, announce, options);
   }
 
   getOrCreateStoredItems() {
-    try {
-      const storedItems = JSON.parse(
-        sessionStorage.getItem(this.#getStorageKey()),
-      );
-      if (Array.isArray(storedItems)) {
-        return storedItems;
-      }
-    } catch (error) {
-      console.warn("Failed to parse stored selection items:", error);
+    const storedItems = this.#readStoredItems();
+    if (storedItems) {
+      return storedItems;
     }
 
-    // create default empty array
     this.update([], false);
     return [];
   }
@@ -160,6 +188,11 @@ export default class extends Controller {
     if (add) {
       // Use a Set to deduplicate values
       newStorageValue = [...new Set([...newStorageValue, ...values])];
+      if (this.#exceedsLimit(newStorageValue.length)) {
+        this.#handleSelectionLimitExceeded();
+        this.#refreshUIFromStorage();
+        return;
+      }
     } else {
       newStorageValue = newStorageValue.filter(
         (value) => !values.includes(value),
@@ -178,28 +211,36 @@ export default class extends Controller {
    */
   #updateUI(ids, announce, options = {}) {
     try {
-      // Set checkbox checked states based on whether their value is included
       this.rowSelectionTargets.forEach((row) => {
         row.checked = ids.indexOf(row.value) > -1;
       });
+    } catch (error) {
+      console.error(
+        "selectionController: Failed to update row checkboxes",
+        error,
+      );
+    }
 
+    this.#updateCounts(ids.length, announce);
+
+    try {
       this.#updateActionButtons(ids.length);
-      this.#updateCounts(ids.length, announce);
       this.#setSelectPageCheckboxValue(
         options.announceSelectPageStatus ?? announce,
       );
     } catch (error) {
-      console.error("selectionController: Failed to update UI", error);
+      console.error(
+        "selectionController: Failed to update selection controls",
+        error,
+      );
     }
   }
 
   #updateActionButtons(count) {
-    // Ensure outlets exist before iterating
-    if (!this.actionButtonOutlets) return;
+    if (!this.element.hasAttribute("data-selection-action-button-outlet"))
+      return;
 
     this.actionButtonOutlets.forEach((outlet) => {
-      // Outlet's setDisabled expects the number of selected items to decide
-      // whether to enable/disable action buttons.
       outlet.setDisabled(count);
     });
   }
@@ -268,11 +309,7 @@ export default class extends Controller {
   }
 
   /**
-   * 🔊 Announce current selection status to an aria-live region.
-   *
-   * - 🧮 Builds a localized message using a single template: "X of Y selected".
-   * - 🧩 Reads value from the data attribute (`countMessageValue`).
-   * - ♿ Updates the component's hidden polite live region, falling back to `#sr-status` if absent.
+   * Announce current selection status to an aria-live region.
    *
    * @param {number} selected - Current number of selected items.
    * @private
@@ -283,17 +320,211 @@ export default class extends Controller {
     // Skip announcement if this selection context is not configured with a count template.
     if (!messageTemplate) return;
 
-    // 🔁 Interpolate counts into the template
     const message = messageTemplate
       .replace("%{selected}", String(selected))
       .replace("%{total}", String(this.totalValue || 0));
 
-    // 📣 Update local status region or fallback global live region
     if (this.hasStatusTarget) {
       announce(message, { element: this.statusTarget });
     } else {
       announce(message);
     }
+  }
+
+  #initializeSelectionState() {
+    const storedItems = this.#readStoredItems() || [];
+
+    if (this.#exceedsLimit(storedItems.length)) {
+      this.#handleSelectionLimitExceeded({ resetDismissed: false });
+      this.#updateUI(storedItems, false);
+      return;
+    }
+
+    this.update(storedItems, false);
+  }
+
+  #readStoredItems() {
+    try {
+      const storedItems = JSON.parse(
+        sessionStorage.getItem(this.#getStorageKey()),
+      );
+      if (Array.isArray(storedItems)) {
+        return storedItems;
+      }
+    } catch (error) {
+      console.warn("Failed to parse stored selection items:", error);
+    }
+
+    return null;
+  }
+
+  #persistSelection(ids) {
+    try {
+      sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
+      return true;
+    } catch (error) {
+      if (this.#isQuotaExceededError(error)) {
+        return false;
+      }
+
+      throw error;
+    }
+  }
+
+  #isQuotaExceededError(error) {
+    return (
+      error?.name === "QuotaExceededError" ||
+      error?.code === 22 ||
+      error?.code === "QuotaExceededError"
+    );
+  }
+
+  #refreshUIFromStorage() {
+    const storedItems = this.#readStoredItems() || [];
+    this.#updateUI(storedItems, false);
+  }
+
+  #exceedsLimit(count) {
+    return this.maxSelectionValue > 0 && count > this.maxSelectionValue;
+  }
+
+  #handleSelectionLimitExceeded({ resetDismissed = true } = {}) {
+    if (resetDismissed) {
+      this.#clearLimitAlertDismissed();
+    } else if (this.#isLimitAlertDismissed()) {
+      return;
+    }
+
+    this.#showSelectionLimitAlert();
+
+    if (resetDismissed) {
+      this.#announceSelectionLimitExceeded();
+    }
+  }
+
+  #showSelectionLimitAlert() {
+    const limitAlert = this.#findLimitAlertElement();
+    if (!limitAlert || this.#isLimitAlertDismissed()) return;
+
+    if (!this.#proactiveLimitAlert(limitAlert) && this.limitMessageValue) {
+      const limitAlertMessage = this.#findLimitAlertMessageElement(limitAlert);
+      if (limitAlertMessage) {
+        limitAlertMessage.textContent = this.#selectionLimitMessage();
+      }
+    }
+
+    limitAlert.classList.remove("hidden");
+  }
+
+  #hideSelectionLimitAlertIfAllowed() {
+    const limitAlert = this.#findLimitAlertElement();
+    if (!limitAlert) return;
+    if (this.#proactiveLimitAlert(limitAlert)) return;
+
+    limitAlert.classList.add("hidden");
+    this.#clearLimitAlertDismissed();
+  }
+
+  #applyLimitAlertDismissedState() {
+    const limitAlert = this.#findLimitAlertElement();
+    if (!limitAlert) return;
+    if (!this.#isLimitAlertDismissed()) return;
+
+    limitAlert.classList.add("hidden");
+  }
+
+  #handleViralAlertDismissed(event) {
+    const limitAlert = this.#findLimitAlertElement();
+    if (!limitAlert || !limitAlert.contains(event.target)) {
+      return;
+    }
+
+    this.#markLimitAlertDismissed();
+    limitAlert.classList.add("hidden");
+  }
+
+  #findLimitAlertElement() {
+    if (this.hasLimitAlertTarget) {
+      return this.limitAlertTarget;
+    }
+
+    const parent = this.element.parentElement;
+    const alertInParent = parent?.querySelector("#selection-limit-alert");
+    if (alertInParent) return alertInParent;
+
+    let sibling = this.element.previousElementSibling;
+    while (sibling) {
+      if (sibling.id === "selection-limit-alert") return sibling;
+      sibling = sibling.previousElementSibling;
+    }
+
+    const tableContainer = this.element.closest(".table-container");
+    if (!tableContainer) return null;
+
+    sibling = tableContainer.previousElementSibling;
+    while (sibling) {
+      if (sibling.id === "selection-limit-alert") return sibling;
+      sibling = sibling.previousElementSibling;
+    }
+
+    return null;
+  }
+
+  #findLimitAlertMessageElement(limitAlert) {
+    if (this.hasLimitAlertMessageTarget) {
+      return this.limitAlertMessageTarget;
+    }
+
+    return (
+      limitAlert?.querySelector(
+        "[data-selection-target='limitAlertMessage']",
+      ) ?? null
+    );
+  }
+
+  #limitAlertDismissedStorageKey() {
+    return `${this.#getStorageKey()}:selection-limit-alert-dismissed`;
+  }
+
+  #isLimitAlertDismissed() {
+    return (
+      sessionStorage.getItem(this.#limitAlertDismissedStorageKey()) === "true"
+    );
+  }
+
+  #markLimitAlertDismissed() {
+    sessionStorage.setItem(this.#limitAlertDismissedStorageKey(), "true");
+  }
+
+  #clearLimitAlertDismissed() {
+    sessionStorage.removeItem(this.#limitAlertDismissedStorageKey());
+  }
+
+  #proactiveLimitAlert(limitAlert = this.#findLimitAlertElement()) {
+    return limitAlert?.dataset.selectionLimitProactive === "true";
+  }
+
+  #announceSelectionLimitExceeded() {
+    const message = this.#selectionLimitMessage();
+    if (!message) return;
+
+    if (this.hasStatusTarget) {
+      announce(message, {
+        element: this.statusTarget,
+        politeness: "assertive",
+      });
+    } else {
+      announce(message, { politeness: "assertive" });
+    }
+  }
+
+  #selectionLimitMessage() {
+    if (!this.limitMessageValue) return "";
+
+    return this.limitMessageValue.replace(
+      "%{max}",
+      String(this.maxSelectionValue),
+    );
   }
 
   #getStorageKey() {

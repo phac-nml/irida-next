@@ -121,6 +121,9 @@ export default class extends Controller {
   dismiss() {
     try {
       this.#announceDismissal(); // 📢 Tell screen readers
+      this.element.dispatchEvent(
+        new CustomEvent("viral--alert:dismissed", { bubbles: true }),
+      );
       this.element.remove(); // 🗑️  Remove from DOM
     } catch (error) {
       console.error("❌ Failed to dismiss alert:", error);

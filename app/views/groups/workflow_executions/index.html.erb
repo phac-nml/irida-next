@@ -31,6 +31,7 @@
   <div class="mb-4 flex flex-wrap gap-2">
     <%= render "shared/selection_buttons",
     url: select_group_workflow_executions_url,
+    total_count: @pagy.count,
     select_form_fields: { format: "turbo_stream", select: "on" },
     deselect_form_fields: { format: "turbo_stream" },
     select_button_options: {

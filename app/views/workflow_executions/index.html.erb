@@ -71,6 +71,7 @@
     <%= render "shared/selection_buttons",
     url: select_workflow_executions_url,
     form_data: { turbo_frame: "selected" },
+    total_count: @pagy.count,
     select_form_fields: { select: "on" },
     deselect_form_fields: {},
     select_button_options: {

@@ -400,6 +400,10 @@ fr:
     search_field_component:
       clear_button: Effacer la recherche
       instructions: Appuyez sur Entrée pour rechercher
+    selection:
+      limit:
+        list_too_large: Cette liste contient %{count} éléments, ce qui dépasse le maximum de %{max} pouvant être sélectionnés. Utilisez des filtres pour réduire votre sélection.
+        selection_limit_reached: Vous ne pouvez pas sélectionner plus de %{max} éléments. Désélectionnez certains éléments pour continuer.
     sortable_lists:
       v1:
         component:
