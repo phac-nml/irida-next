@@ -14,7 +14,7 @@ module MetadataTemplates
     end
 
     def execute
-      validate_project_not_archived
+      validate_project_not_archived(@metadata_template.namespace) if @metadata_template.namespace.project_namespace?
 
       authorize! @metadata_template, to: :destroy_metadata_template?
 
@@ -41,16 +41,6 @@ module MetadataTemplates
                                                      namespace_id: @metadata_template.namespace.id,
                                                      action: 'metadata_template_destroy'
                                                    }
-    end
-
-    private
-
-    def validate_project_not_archived
-      return unless @metadata_template.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @metadata_template.namespace.archived_at.present?
-
-      raise MetadataTemplatesDestroyError,
-            I18n.t('services.metadata_templates.destroy.project_read_only')
     end
   end
 end

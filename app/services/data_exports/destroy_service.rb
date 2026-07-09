@@ -12,7 +12,10 @@ module DataExports
     end
 
     def execute
-      validate_project_not_archived
+      if @data_export['export_parameters'].present? && @data_export['export_parameters']['namespace_id'].present?
+        namespace = Namespace.find_by(id: @data_export['export_parameters']['namespace_id'])
+        validate_project_not_archived(namespace) if namespace&.project_namespace?
+      end
 
       authorize! @data_export, to: :destroy?
 
@@ -20,18 +23,6 @@ module DataExports
     rescue DataExports::DestroyService::DataExportDestroyError => e
       @data_export.errors.add(:base, e.message)
       @data_export
-    end
-
-    private
-
-    def validate_project_not_archived
-      namespace = Namespace.find(@data_export['export_parameters']['namespace_id'])
-
-      return unless namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    namespace.archived_at.present?
-
-      raise DataExportDestroyError,
-            I18n.t('services.data_exports.destroy.project_read_only')
     end
   end
 end

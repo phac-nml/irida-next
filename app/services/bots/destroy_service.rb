@@ -14,7 +14,7 @@ module Bots
     end
 
     def execute
-      validate_project_not_archived
+      validate_project_not_archived(@namespace_bot.namespace) if @namespace_bot.namespace.project_namespace?
 
       authorize! namespace_bot.namespace, to: :destroy_bot_accounts?
 
@@ -22,16 +22,6 @@ module Bots
     rescue Bots::DestroyService::BotsDestroyError => e
       @namespace_bot.errors.add(:base, e.message)
       @namespace_bot
-    end
-
-    private
-
-    def validate_project_not_archived
-      return unless @namespace_bot.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @namespace_bot.namespace.archived_at.present?
-
-      raise BotsDestroyError,
-            I18n.t('services.bots.destroy.project_read_only')
     end
   end
 end

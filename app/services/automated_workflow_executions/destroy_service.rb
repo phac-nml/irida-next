@@ -14,7 +14,7 @@ module AutomatedWorkflowExecutions
     end
 
     def execute
-      validate_project_not_archived
+      validate_project_not_archived(@automated_workflow_execution.namespace)
 
       authorize! @automated_workflow_execution.namespace, to: :destroy_automated_workflow_executions?
 
@@ -31,16 +31,6 @@ module AutomatedWorkflowExecutions
     rescue AutomatedWorkflowExecutions::DestroyService::AutomatedWorkflowExecutionsDestroyError => e
       @automated_workflow_execution.errors.add(:base, e.message)
       @automated_workflow_execution
-    end
-
-    private
-
-    def validate_project_not_archived
-      return unless @automated_workflow_execution.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @automated_workflow_execution.namespace.archived_at.present?
-
-      raise AutomatedWorkflowExecutionsDestroyError,
-            I18n.t('services.automated_workflow_executions.destroy.project_read_only')
     end
   end
 end

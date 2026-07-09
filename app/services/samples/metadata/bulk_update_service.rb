@@ -20,7 +20,7 @@ module Samples
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-        validate_project_not_archived if @namespace.instance_of?(Namespaces::ProjectNamespace)
+        validate_project_not_archived(@namespace) if @namespace.project_namespace?
 
         authorize! @namespace, to: :update_sample_metadata?
         activity_data = {}
@@ -83,13 +83,6 @@ module Samples
       end
 
       private
-
-      def validate_project_not_archived
-        return if @namespace.archived_at.blank?
-
-        raise MetadataBulkUpdateError,
-              I18n.t('services.samples.metadata.bulk_update.project_read_only')
-      end
 
       # occurs in this service as file import service requires unsanitized version for proper spreadsheet reading
       def sanitize_metadata_fields(metadata_fields)

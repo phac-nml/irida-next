@@ -14,6 +14,8 @@ module WorkflowExecutions
     def execute
       return false unless @workflow_execution.canceling?
 
+      validate_project_not_archived(@workflow_execution.namespace) if @workflow_execution.namespace.project_namespace?
+
       @wes_client.cancel_run(@workflow_execution.run_id)
     end
   end

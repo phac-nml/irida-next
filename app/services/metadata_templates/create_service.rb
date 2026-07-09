@@ -19,7 +19,7 @@ module MetadataTemplates
     end
 
     def execute
-      validate_project_not_archived
+      validate_project_not_archived(@namespace) if @namespace.project_namespace?
 
       authorize! namespace, to: :create_metadata_templates?
       save_template
@@ -30,14 +30,6 @@ module MetadataTemplates
     end
 
     private
-
-    def validate_project_not_archived
-      return unless @metadata_template.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @metadata_template.namespace.archived_at.present?
-
-      raise MetadataTemplatesCreateError,
-            I18n.t('services.metadata_templates.create.project_read_only')
-    end
 
     def save_template
       @metadata_template.save

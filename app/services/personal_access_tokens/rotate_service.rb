@@ -16,8 +16,8 @@ module PersonalAccessTokens
       @bot_user = bot_user
     end
 
-    def execute
-      validate_project_not_archived
+    def execute # rubocop:disable Metrics/AbcSize
+      validate_project_not_archived(@namespace) if !bot_user.nil? && @namespace.project_namespace?
 
       authorize! @existing_personal_access_token.user, to: :rotate_personal_access_token? if bot_user.nil?
       authorize! namespace, to: :rotate_bot_personal_access_token? unless bot_user.nil?
@@ -36,14 +36,6 @@ module PersonalAccessTokens
     end
 
     private
-
-    def validate_project_not_archived
-      return unless @namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @namespace.archived_at.present?
-
-      raise RotateError,
-            I18n.t('services.personal_access_tokens.rotate.project_read_only')
-    end
 
     def validate_existing_token
       return if @existing_personal_access_token.active?

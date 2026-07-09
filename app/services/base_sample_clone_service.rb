@@ -12,7 +12,7 @@ class BaseSampleCloneService < BaseSampleService
   end
 
   def execute(new_project_id, sample_ids, broadcast_target = nil)
-    validate_project_not_archived(@namespace, 'source') if @namespace.instance_of?(Namespaces::ProjectNamespace)
+    validate_project_not_archived(@namespace, 'source') if @namespace.project_namespace?
 
     authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :clone_sample?
 

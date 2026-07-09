@@ -12,6 +12,8 @@ module WorkflowExecutions
     end
 
     def execute
+      validate_project_not_archived(@workflow_execution.namespace) if @workflow_execution.namespace.project_namespace?
+
       return false unless @workflow_execution.prepared?
 
       run = @wes_client.run_workflow(**@workflow_execution.as_wes_params)

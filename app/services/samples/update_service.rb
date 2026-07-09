@@ -14,7 +14,7 @@ module Samples
     end
 
     def execute # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-      validate_project_not_archived
+      validate_project_not_archived(sample.project.namespace)
 
       authorize! sample.project, to: :update_sample?
 
@@ -35,15 +35,6 @@ module Samples
     rescue Samples::CreateService::CreateError => e
       @sample.project.namespace.errors.add(:base, e.message)
       false
-    end
-
-    private
-
-    def validate_project_not_archived
-      return if @sample.project.namespace.archived_at.blank?
-
-      raise UpdateError,
-            I18n.t('services.samples.update.project_read_only')
     end
   end
 end

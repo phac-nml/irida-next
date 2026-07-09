@@ -289,14 +289,5 @@ module WorkflowExecutions
         I18n.t("validators.workflow_execution_samplesheet_params_validator.#{error_key}", **error_options)
       )
     end
-
-    private
-
-    def validate_project_not_archived(namespace)
-      return if namespace.archived_at.blank?
-
-      raise CreateError,
-            I18n.t('services.workflow_executions.create.project_read_only')
-    end
   end
 end

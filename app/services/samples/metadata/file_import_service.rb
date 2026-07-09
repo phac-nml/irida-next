@@ -14,7 +14,7 @@ module Samples
       end
 
       def execute(broadcast_target = nil)
-        validate_project_not_archived if @namespace.instance_of?(Namespaces::ProjectNamespace)
+        validate_project_not_archived(@namespace) if @namespace.project_namespace?
 
         begin
           authorize! @namespace, to: :update_sample_metadata?
@@ -53,13 +53,6 @@ module Samples
       end
 
       private
-
-      def validate_project_not_archived
-        return if @namespace.archived_at.blank?
-
-        raise FileImportError,
-              I18n.t('services.samples.metadata.file_import.project_read_only')
-      end
 
       def retrieve_headers
         headers = [*@selected_headers, *@sample_id_column]

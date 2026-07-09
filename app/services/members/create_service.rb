@@ -11,11 +11,11 @@ module Members
       super(user, params)
       @namespace = namespace
       @email_notification = email_notification
-      @member = Member.new(params.merge(created_by: current_user, namespace:))
+      @member = Member.new(params.merge(created_by: current_user, namespace: namespace))
     end
 
     def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
-      validate_project_not_archived
+      validate_project_not_archived(@namespace) if @namespace.project_namespace?
 
       authorize! @namespace, to: :create_member? unless namespace.parent.nil? && namespace.owner == current_user
 
@@ -54,14 +54,6 @@ module Members
     end
 
     private
-
-    def validate_project_not_archived
-      return unless @member.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @member.namespace.archived_at.present?
-
-      raise MemberCreateError,
-            I18n.t('services.members.create.project_read_only')
-    end
 
     def send_emails
       MemberMailer.access_granted_user_email(member, namespace).deliver_later

@@ -7,6 +7,8 @@ module WorkflowExecutions
       if @workflow_execution.nil?
         cancel_multiple
       else
+        validate_project_not_archived(@workflow_execution.namespace) if @workflow_execution.namespace.project_namespace?
+
         authorize! @workflow_execution, to: :cancel?
         cancel_workflow(@workflow_execution)
       end

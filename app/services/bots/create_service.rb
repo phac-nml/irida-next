@@ -23,7 +23,7 @@ module Bots
     end
 
     def execute
-      validate_project_not_archived
+      validate_project_not_archived(@namespace) if @namespace.project_namespace?
 
       authorize! namespace, to: :create_bot_accounts?
 
@@ -35,14 +35,6 @@ module Bots
     end
 
     private
-
-    def validate_project_not_archived
-      return unless @namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @namespace.archived_at.present?
-
-      raise BotsCreateError,
-            I18n.t('services.bots.create.project_read_only')
-    end
 
     def set_default_params(bot_text, bot_type, current_count) # rubocop:disable Metrics/AbcSize
       @params[:namespace] = namespace

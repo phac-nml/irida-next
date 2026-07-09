@@ -25,7 +25,7 @@ module Samples
       end
 
       def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-        validate_project_not_archived
+        validate_project_not_archived(@project.namespace)
 
         authorize! sample.project, to: :update_sample?
 
@@ -63,13 +63,6 @@ module Samples
       end
 
       private
-
-      def validate_project_not_archived
-        return if @project.namespace.archived_at.blank?
-
-        raise SampleMetadataUpdateError,
-              I18n.t('services.samples.metadata.update.project_read_only')
-      end
 
       def validate_sample_in_project
         return true unless @project.id != @sample.project.id

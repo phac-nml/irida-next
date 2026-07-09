@@ -31,7 +31,7 @@ module Attachments
     end
 
     def execute # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity,Metrics/MethodLength
-      validate_project_not_archived
+      validate_project_not_archived(attachable.project.namespace) if attachable.instance_of?(Sample)
       attachable_authorization
 
       ActiveRecord::Base.transaction do
@@ -63,15 +63,6 @@ module Attachments
     end
 
     private
-
-    def validate_project_not_archived
-      unless (@attachable.instance_of?(Sample) && @attachable.project.namespace.archived_at.present?) ||
-             (@attachable.instance_of?(Namespaces::ProjectNamespace) && @attachable.archived_at.present?)
-        return
-      end
-
-      raise AttachmentsCreateError, I18n.t('services.attachments.create.project_read_only')
-    end
 
     def create_activities # rubocop:disable Metrics/MethodLength
       if @attachable.instance_of?(Sample)

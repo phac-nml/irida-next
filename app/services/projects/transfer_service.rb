@@ -14,7 +14,7 @@ module Projects
     def execute
       return false unless @transfer_form.valid?
 
-      validate_project_not_archived
+      validate_project_not_archived(@project.namespace)
 
       @new_namespace = @transfer_form.new_namespace
       @old_namespace = @project.parent
@@ -111,13 +111,6 @@ module Projects
       elsif @new_namespace.type == 'Group'
         @new_namespace.update_samples_count_by_addition_services(transferred_samples_count)
       end
-    end
-
-    def validate_project_not_archived
-      return if @project.namespace.archived_at.blank?
-
-      raise ProjectTransferError,
-            I18n.t('services.projects.transfer.project_read_only')
     end
   end
 end

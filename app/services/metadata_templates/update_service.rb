@@ -12,7 +12,7 @@ module MetadataTemplates
     end
 
     def execute
-      validate_project_not_archived
+      validate_project_not_archived(@metadata_template.namespace) if @metadata_template.namespace.project_namespace?
 
       authorize! @metadata_template, to: :update_metadata_template?
 
@@ -26,14 +26,6 @@ module MetadataTemplates
     end
 
     private
-
-    def validate_project_not_archived
-      return unless @metadata_template.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @metadata_template.namespace.archived_at.present?
-
-      raise MetadataTemplateUpdateError,
-            I18n.t('services.metadata_templates.update.project_read_only')
-    end
 
     def create_activities
       activity_key = if @metadata_template.namespace.group_namespace?

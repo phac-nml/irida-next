@@ -14,7 +14,7 @@ module GroupLinks
     end
 
     def execute
-      validate_project_not_archived
+      validate_project_not_archived(@namespace_group_link) if @namespace_group_link.namespace.project_namespace?
 
       authorize! @namespace_group_link.namespace, to: :update_namespace_with_group_link?
 
@@ -29,14 +29,6 @@ module GroupLinks
     end
 
     private
-
-    def validate_project_not_archived
-      return unless @namespace_group_link.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @namespace_group_link.namespace.archived_at.present?
-
-      raise NamespaceGroupLinkUpdateError,
-            I18n.t('services.namespace_group_links.group_link_update.project_read_only')
-    end
 
     def create_activities # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       namespace_key = if namespace_group_link.namespace.group_namespace?

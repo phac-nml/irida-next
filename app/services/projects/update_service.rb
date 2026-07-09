@@ -7,7 +7,7 @@ module Projects
     end
 
     def execute
-      validate_project_not_archived
+      validate_project_not_archived(project.namespace)
 
       authorize! project.namespace, to: :update?
 
@@ -24,15 +24,6 @@ module Projects
     rescue Projects::UpdateService::ProjectUpdateError => e
       @project.errors.add(:base, e.message)
       false
-    end
-
-    private
-
-    def validate_project_not_archived
-      return if @project.namespace.archived_at.blank?
-
-      raise ProjectUpdateError,
-            I18n.t('services.projects.update.project_read_only')
     end
   end
 end

@@ -14,8 +14,9 @@ module Attachments
       @concatenation_form = concatenation_form
     end
 
-    def execute
-      validate_project_not_archived
+    def execute # rubocop:disable Metrics/AbcSize
+      validate_project_not_archived(attachable.project.namespace) if attachable.instance_of?(Sample)
+
       # authorize if user can update sample
       authorize! attachable.project, to: :update_sample? if attachable.instance_of?(Sample)
 
@@ -27,15 +28,6 @@ module Attachments
     end
 
     private
-
-    def validate_project_not_archived
-      unless (@attachable.instance_of?(Sample) && @attachable.project.namespace.archived_at.present?) ||
-             (@attachable.instance_of?(Namespaces::ProjectNamespace) && @attachable.archived_at.present?)
-        return
-      end
-
-      raise AttachmentsConcatenationError, I18n.t('services.attachments.concatenate.project_read_only')
-    end
 
     # Calls the validation, concatenate methods for the file type
     # If the user selects to delete the originals the originals

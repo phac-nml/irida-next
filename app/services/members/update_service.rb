@@ -14,8 +14,8 @@ module Members
       @namespace = namespace
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      validate_project_not_archived
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      validate_project_not_archived(@namespace) if @namespace.project_namespace?
 
       authorize! @namespace, to: :update_member?
 
@@ -49,14 +49,6 @@ module Members
     rescue Members::UpdateService::MemberUpdateError => e
       member.errors.add(:base, e.message)
       false
-    end
-
-    def validate_project_not_archived
-      return unless @namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @namespace.archived_at.present?
-
-      raise MemberUpdateError,
-            I18n.t('services.members.update.project_read_only')
     end
   end
 end

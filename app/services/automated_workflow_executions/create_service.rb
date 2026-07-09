@@ -14,7 +14,7 @@ module AutomatedWorkflowExecutions
       @automated_workflow_execution = AutomatedWorkflowExecution.new(params.merge(created_by: current_user))
       namespace = @automated_workflow_execution.namespace
 
-      validate_project_not_archived
+      validate_project_not_archived(namespace)
 
       authorize! namespace, to: :create_automated_workflow_executions? if namespace.present?
 
@@ -33,16 +33,6 @@ module AutomatedWorkflowExecutions
     rescue AutomatedWorkflowExecutions::CreateService::AutomatedWorkflowExecutionsCreateError => e
       @automated_workflow_execution.errors.add(:base, e.message)
       @automated_workflow_execution
-    end
-
-    private
-
-    def validate_project_not_archived
-      return unless @automated_workflow_execution.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @automated_workflow_execution.namespace.archived_at.present?
-
-      raise AutomatedWorkflowExecutionsCreateError,
-            I18n.t('services.automated_workflow_executions.create.project_read_only')
     end
   end
 end

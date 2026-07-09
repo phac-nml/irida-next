@@ -17,12 +17,12 @@ module GroupLinks
       @namespace_group_link = NamespaceGroupLink.new(params.merge(namespace:))
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength,Metrics/CyclomaticComplexity
       unless [Group.sti_name, Namespaces::ProjectNamespace.sti_name].include?(namespace.type)
         raise NamespaceGroupLinkError, I18n.t('services.groups.share.invalid_namespace_type')
       end
 
-      validate_project_not_archived
+      validate_project_not_archived(@namespace) if @namespace.project_namespace?
 
       authorize! namespace, to: :link_namespace_with_group?
 
@@ -48,16 +48,6 @@ module GroupLinks
     rescue GroupLinks::GroupLinkService::NamespaceGroupLinkGroupError => e
       @namespace_group_link.errors.add(:group_id, e.message)
       @namespace_group_link
-    end
-
-    private
-
-    def validate_project_not_archived
-      return unless @namespace_group_link.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @namespace_group_link.namespace.archived_at.present?
-
-      raise NamespaceGroupLinkError,
-            I18n.t('services.namespace_group_links.group_link.project_read_only')
     end
 
     def create_activities # rubocop:disable Metrics/AbcSize,Metrics/MethodLength

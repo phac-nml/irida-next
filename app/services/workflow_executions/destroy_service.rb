@@ -36,8 +36,6 @@ module WorkflowExecutions
     end
 
     def destroy_multiple
-      validate_project_not_archived(@namespace) if @namespace.project_namespace?
-
       authorize! @namespace, to: :destroy_workflow_executions? unless @namespace.nil?
 
       workflow_executions_scope = query_workflow_executions
@@ -72,13 +70,6 @@ module WorkflowExecutions
                                               }
       activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
                                                activity_type: 'workflow_execution_destroy')
-    end
-
-    def validate_project_not_archived(namespace)
-      return if namespace.archived_at.blank?
-
-      raise DestroyError,
-            I18n.t('services.workflow_executions.destroy.project_read_only')
     end
   end
 end

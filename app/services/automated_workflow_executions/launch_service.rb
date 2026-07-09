@@ -18,7 +18,7 @@ module AutomatedWorkflowExecutions
     def execute
       return false unless @workflow.automatable?
 
-      validate_project_not_archived
+      validate_project_not_archived(@automated_workflow_execution.namespace)
 
       authorize! @automated_workflow_execution.namespace, to: :submit_workflow?
 
@@ -26,16 +26,6 @@ module AutomatedWorkflowExecutions
     rescue AutomatedWorkflowExecutions::LaunchService::AutomatedWorkflowExecutionsLaunchError => e
       @automated_workflow_execution.errors.add(:base, e.message)
       @automated_workflow_execution
-    end
-
-    private
-
-    def validate_project_not_archived
-      return unless @automated_workflow_execution.namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    @automated_workflow_execution.namespace.archived_at.present?
-
-      raise AutomatedWorkflowExecutionsLaunchError,
-            I18n.t('services.automated_workflow_executions.launch.project_read_only')
     end
 
     def workflow_execution_params # rubocop:disable Metrics/MethodLength

@@ -7,7 +7,7 @@ module Projects
     end
 
     def execute # rubocop:disable Metrics/AbcSize
-      validate_project_not_archived
+      validate_project_not_archived(project.namespace)
 
       authorize! project, to: :destroy?
 
@@ -42,15 +42,6 @@ module Projects
 
     def update_samples_count(deleted_samples_count)
       @project.parent.update_samples_count_by_destroy_service(deleted_samples_count)
-    end
-
-    private
-
-    def validate_project_not_archived
-      return if @project.namespace.archived_at.blank?
-
-      raise ProjectDestroyError,
-            I18n.t('services.projects.destroy.project_read_only')
     end
   end
 end

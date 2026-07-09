@@ -31,12 +31,11 @@ module Samples
     # @return [Array<Integer>] IDs of successfully transferred samples
     # @raise [BaseSampleService::BaseError] on validation or authorization failures
     def execute(new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/MethodLength
-      validate_project_not_archived(@namespace, 'source') if @namespace.project_namespace?
-
       # Authorize if user can transfer samples from the current project
       if @namespace.group_namespace?
         authorize! @namespace, to: :transfer_sample?
       else
+        validate_project_not_archived(@namespace, 'source')
         authorize! @namespace.project, to: :transfer_sample?
       end
 

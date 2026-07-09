@@ -9,6 +9,9 @@ class BaseService
 
   attr_accessor :current_user, :params
 
+  class BaseError < StandardError
+  end
+
   def initialize(user = nil, params = {})
     @current_user = user
     @params = params.dup
@@ -30,5 +33,14 @@ class BaseService
 
   def strip_whitespaces(string)
     string.gsub(/\s+/, ' ').strip
+  end
+
+  def validate_project_not_archived(obj)
+    unless (obj.instance_of?(Sample) && obj.project.namespace.archived_at.present?) ||
+           (obj.instance_of?(Namespaces::ProjectNamespace) && obj.archived_at.present?)
+      return
+    end
+
+    raise BaseError, 'Project is in read-only mode' # I18n.t('services.shared.project_read_only')
   end
 end

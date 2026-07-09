@@ -16,6 +16,7 @@ module Attachments
     end
 
     def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      validate_project_not_archived(@attachable.project.namespace) if @attachable.instance_of?(Sample)
       attachable_authorization
 
       if @attachment.attachable_id != @attachable.id
@@ -45,15 +46,6 @@ module Attachments
     end
 
     private
-
-    def validate_project_not_archived
-      unless (@attachable.instance_of?(Sample) && @attachable.project.namespace.archived_at.present?) ||
-             (@attachable.instance_of?(Namespaces::ProjectNamespace) && @attachable.archived_at.present?)
-        return
-      end
-
-      raise AttachmentsDestroyError, I18n.t('services.attachments.destroy.project_read_only')
-    end
 
     def attachable_authorization
       if @attachable.instance_of?(Namespaces::ProjectNamespace)

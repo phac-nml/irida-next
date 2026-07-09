@@ -12,9 +12,11 @@ module DataExports
       @data_export = DataExport.new(params)
     end
 
-    def execute
-      validate_project_not_archived
-
+    def execute # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+      if params['export_parameters'].present? && params['export_parameters']['namespace_id'].present?
+        @namespace = Namespace.find_by(id: params['export_parameters']['namespace_id'])
+        validate_project_not_archived(@namespace) if @namespace&.project_namespace?
+      end
       assign_initial_export_attributes
 
       if @data_export.valid?
@@ -30,16 +32,6 @@ module DataExports
     end
 
     private
-
-    def validate_project_not_archived
-      namespace = Namespace.find(params['export_parameters']['namespace_id'])
-
-      return unless namespace.instance_of?(Namespaces::ProjectNamespace) &&
-                    namespace.archived_at.present?
-
-      raise DataExportCreateError,
-            I18n.t('services.data_exports.create.project_read_only')
-    end
 
     # sample and linelist exports pass the namespace the user is exporting from and authorize the selected samples
     # based on the namespace
