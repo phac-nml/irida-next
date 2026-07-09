@@ -136,7 +136,7 @@ module Projects
 
       test 'user with role >= Maintainer cannot select attachments when selection exceeds limit' do
         Projects::Samples::AttachmentsController.any_instance
-                                                .expects(:selection_limit_exceeded_for?)
+                                                .expects(:selection_limit_exceeded_for_scope?)
                                                 .returns(true)
 
         get select_namespace_project_sample_attachments_url(@namespace, @project, @sample1, format: :turbo_stream),
