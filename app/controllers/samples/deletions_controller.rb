@@ -16,13 +16,13 @@ module Samples
     end
 
     def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      if selection_limit_exceeded_for?(destroy_params['sample_ids'].count)
+      samples_to_delete_count = destroy_params['sample_ids'].count
+
+      if selection_limit_exceeded_for?(samples_to_delete_count)
         flash[:error] = selection_limit_error_message
         redirect_to redirect_path, status: :see_other
         return
       end
-
-      samples_to_delete_count = destroy_params['sample_ids'].count
 
       deleted_samples_count = destroy_service
 
