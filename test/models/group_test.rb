@@ -152,10 +152,10 @@ class GroupTest < ActiveSupport::TestCase
     end
 
     assert_difference(
-      -> { Group.count } => (self_and_descendants_count * +1),
-      -> { Namespaces::ProjectNamespace.count } => (projects_count * +1),
-      -> { Project.count } => (projects_count * +1),
-      -> { Member.count } => (members_count * +1)
+      -> { Group.count } => self_and_descendants_count,
+      -> { Namespaces::ProjectNamespace.count } => projects_count,
+      -> { Project.count } => projects_count,
+      -> { Member.count } => members_count
     ) do
       Group.restore(@group_three.id, recursive: true)
     end
