@@ -6,6 +6,7 @@ module Projects
     include ListActions
     include Storable
     include SampleAttachment
+    include SelectionLimitEnforcement
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
@@ -91,7 +92,10 @@ module Projects
 
       return if params[:select].blank?
 
-      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime).pluck(:id)
+      scope = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime)
+      return if selection_limit_exceeded_for?(scope.count)
+
+      @sample_ids = scope.pluck(:id)
     end
 
     private

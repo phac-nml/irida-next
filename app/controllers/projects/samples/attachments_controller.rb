@@ -3,8 +3,9 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Attachments
-    class AttachmentsController < Projects::Samples::ApplicationController
+    class AttachmentsController < Projects::Samples::ApplicationController # rubocop:disable Metrics/ClassLength
       include SampleAttachment
+      include SelectionLimitEnforcement
 
       before_action :attachment, only: %i[destroy]
       before_action :new_destroy_params, only: %i[new_destroy]
@@ -77,7 +78,7 @@ module Projects
         end
       end
 
-      def select # rubocop:disable Metrics/MethodLength
+      def select # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         authorize! @project, to: :update_sample?
 
         @sample_attachment_ids = []
@@ -86,12 +87,15 @@ module Projects
           format.turbo_stream do
             if params.key?(:select)
               @q = load_attachments.ransack(params.fetch(:q, {}).permit(:puid_or_file_blob_filename_cont, :sort))
-              @q.result.each do |attachment|
-                @sample_attachment_ids << if attachment.associated_attachment
-                                            [attachment.id, attachment.associated_attachment.id].to_s
-                                          else
-                                            attachment.id
-                                          end
+              scope = @q.result
+              unless selection_limit_exceeded_for?(scope.count)
+                scope.each do |attachment|
+                  @sample_attachment_ids << if attachment.associated_attachment
+                                              [attachment.id, attachment.associated_attachment.id].to_s
+                                            else
+                                              attachment.id
+                                            end
+                end
               end
             end
           end
