@@ -4,6 +4,8 @@ module Samples
   # controller for sample cloning
   class ClonesController < ApplicationController
     respond_to :turbo_stream
+    include SelectionLimitEnforcement
+
     before_action :namespace, :projects
 
     def new
@@ -12,6 +14,11 @@ module Samples
     end
 
     def create
+      if selection_limit_exceeded_for?(clone_params[:sample_ids].size)
+        render 'shared/selection_limit_exceeded', status: :unprocessable_content
+        return
+      end
+
       @broadcast_target = params[:broadcast_target]
       new_project_id = clone_params[:new_project_id]
       sample_ids = clone_params[:sample_ids]

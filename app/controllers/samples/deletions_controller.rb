@@ -4,6 +4,7 @@ module Samples
   # controller for sample deletions
   class DeletionsController < ApplicationController
     include ListActions
+    include SelectionLimitEnforcement
 
     before_action :namespace, only: %i[new destroy]
     before_action :confirmation_parameters, :sample, only: %i[new destroy]
@@ -16,6 +17,12 @@ module Samples
     end
 
     def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      if selection_limit_exceeded_for?(destroy_params[:sample_ids].count)
+        flash[:error] = selection_limit_error_message
+        redirect_to redirect_path, status: :see_other
+        return
+      end
+
       if Flipper.enabled?(:sample_deletion_reason, current_user)
         @sample_deletion_form = SampleDeletionForm.new(reason: destroy_params[:reason])
         return render status: :unprocessable_content unless @sample_deletion_form.valid?
