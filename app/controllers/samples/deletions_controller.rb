@@ -17,7 +17,9 @@ module Samples
     end
 
     def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      if selection_limit_exceeded_for?(destroy_params[:sample_ids].count)
+      samples_to_delete_count = destroy_params[:sample_ids].count
+
+      if selection_limit_exceeded_for?(samples_to_delete_count)
         flash[:error] = selection_limit_error_message
         redirect_to redirect_path, status: :see_other
         return
@@ -27,8 +29,6 @@ module Samples
         @sample_deletion_form = SampleDeletionForm.new(reason: destroy_params[:reason])
         return render status: :unprocessable_content unless @sample_deletion_form.valid?
       end
-
-      samples_to_delete_count = destroy_params[:sample_ids].count
 
       deleted_samples_count = destroy_service
 
