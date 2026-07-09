@@ -32,8 +32,11 @@ module DataExports
     # sample and linelist exports pass the namespace the user is exporting from and authorize the selected samples
     # based on the namespace
     def validate_selection_count!
-      ids = params.dig('export_parameters', 'ids')
+      export_params = params['export_parameters'] || params[:export_parameters] || {}
+      ids = export_params['ids'] || export_params[:ids]
+
       return if ids.blank?
+      return unless ids.is_a?(Array)
       return unless Irida::SelectionLimits.exceeded?(ids.size)
 
       raise DataExportCreateError, Irida::SelectionLimits.error_message
