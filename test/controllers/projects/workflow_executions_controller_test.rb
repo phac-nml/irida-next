@@ -349,19 +349,6 @@ module Projects
       assert_response :success
     end
 
-    test 'should not select workflow executions when selection exceeds limit' do
-      Projects::WorkflowExecutionsController.any_instance
-                                            .expects(:selection_limit_exceeded_for_scope?)
-                                            .returns(true)
-
-      get select_namespace_project_workflow_executions_url(@namespace, @project),
-          params: { select: true }, as: :turbo_stream
-
-      assert_response :success
-      assert_includes response.body, 'data-table-selection-ids-value="[]"'
-      assert_includes response.body, Irida::SelectionLimits.error_message
-    end
-
     test 'should not open destroy_multiple_confirmation due to unauthorized access' do
       sign_in users(:ryan_doe)
       get destroy_multiple_confirmation_namespace_project_workflow_executions_path(
@@ -386,29 +373,6 @@ module Projects
                                             namespace: @namespace } }
                         end
       assert_response :success
-    end
-
-    test 'should not destroy multiple workflows when selection exceeds limit' do
-      Projects::WorkflowExecutionsController.any_instance
-                                            .expects(:selection_limit_exceeded_for?)
-                                            .with(2)
-                                            .returns(true)
-      canceled_workflow = workflow_executions(:automated_example_canceled)
-      error_workflow = workflow_executions(:automated_example_error)
-
-      assert_no_difference -> { WorkflowExecution.count },
-                           -> { SamplesWorkflowExecution.count } do
-        post destroy_multiple_namespace_project_workflow_executions_path(
-          @namespace,
-          @project,
-          format: :turbo_stream
-        ), params: {
-          destroy_multiple: { workflow_execution_ids: [error_workflow.id, canceled_workflow.id] }
-        }
-      end
-
-      assert_response :unprocessable_content
-      assert_includes response.body, Irida::SelectionLimits.error_message
     end
 
     test 'should partially destroy multiple workflows at once' do
@@ -478,27 +442,6 @@ module Projects
                         namespace: @namespace } }
 
       assert_response :success
-    end
-
-    test 'should not cancel multiple workflows when selection exceeds limit' do
-      Projects::WorkflowExecutionsController.any_instance
-                                            .expects(:selection_limit_exceeded_for?)
-                                            .with(2)
-                                            .returns(true)
-      running_workflow = workflow_executions(:automated_example_running)
-      new_workflow = workflow_executions(:automated_example_new)
-
-      post cancel_multiple_namespace_project_workflow_executions_path(
-        @namespace,
-        @project,
-        format: :turbo_stream
-      ), params: {
-        cancel_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id] }
-      }
-
-      assert_response :unprocessable_content
-      assert_includes response.body, Irida::SelectionLimits.error_message
-      assert running_workflow.reload.running?
     end
 
     test 'should partially cancel multiple workflows at once' do

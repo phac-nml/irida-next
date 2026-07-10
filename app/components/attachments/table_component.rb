@@ -6,7 +6,6 @@ module Attachments
   # Component for rendering a table of Attachments
   class TableComponent < Component # rubocop:disable Metrics/ClassLength
     include Ransack::Helpers::FormHelper
-    include SelectionLimitableTable
 
     METADATA_COLUMNS = %w[format type].freeze
     FILE_DATA_COLUMNS = %w[filename byte_size].freeze
@@ -120,7 +119,7 @@ module Attachments
         'selection-action-button-outlet': '.action-button',
         'selection-count-message-value':
           I18n.t('components.attachments.table_component.counts.status')
-      }.merge(selection_limit_data_attributes)
+      }
     end
 
     private
