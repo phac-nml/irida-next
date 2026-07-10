@@ -46,26 +46,6 @@ module Samples
       assert_redirected_to group_samples_path(@group1)
     end
 
-    test 'should reject destroy when selection exceeds limit' do
-      Samples::DeletionsController.any_instance
-                                  .expects(:selection_limit_exceeded_for?)
-                                  .with(2)
-                                  .returns(true)
-
-      assert_no_difference('Sample.count') do
-        post samples_deletions_path,
-             params: {
-               namespace_id: @group1.id,
-               destroy: {
-                 sample_ids: [@sample1.id, @sample2.id]
-               }
-             }, as: :turbo_stream
-      end
-
-      assert_equal Irida::SelectionLimits.error_message, flash[:error]
-      assert_redirected_to group_samples_path(@group1)
-    end
-
     test 'should destroy single sample at project level' do
       assert_difference('Sample.count', -1) do
         post samples_deletions_path,

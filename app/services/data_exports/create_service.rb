@@ -15,7 +15,6 @@ module DataExports
       assign_initial_export_attributes
 
       if @data_export.valid?
-        validate_selection_count!
         @data_export.export_type == 'analysis' ? validate_analysis_ids : validate_sample_ids
         @data_export.save
         DataExports::CreateJob.perform_later(@data_export)
@@ -31,17 +30,6 @@ module DataExports
 
     # sample and linelist exports pass the namespace the user is exporting from and authorize the selected samples
     # based on the namespace
-    def validate_selection_count!
-      export_params = params['export_parameters'] || params[:export_parameters] || {}
-      ids = export_params['ids'] || export_params[:ids]
-
-      return if ids.blank?
-      return unless ids.is_a?(Array)
-      return unless Irida::SelectionLimits.exceeded?(ids.size)
-
-      raise DataExportCreateError, Irida::SelectionLimits.error_message
-    end
-
     def validate_sample_ids
       namespace = Namespace.find(params['export_parameters']['namespace_id'])
 

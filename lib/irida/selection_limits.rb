@@ -10,9 +10,5 @@ module Irida
     def exceeded?(count)
       count > MAX_COUNT
     end
-
-    def error_message
-      I18n.t('selection_limits.exceeded', max: MAX_COUNT)
-    end
   end
 end
