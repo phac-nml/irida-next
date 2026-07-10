@@ -170,6 +170,7 @@ class ProjectsTest < ApplicationSystemTestCase
     click_on I18n.t(:'projects.new.submit')
     assert_selector 'turbo-frame#project_form [data-controller="form-error-summary"]', focused: true
     assert_selector 'button[type=submit]:not(:disabled)', text: I18n.t(:'projects.new.submit')
+    assert_accessible
   end
 
   test 'can update project name and description' do
