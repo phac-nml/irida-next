@@ -21,10 +21,6 @@ module Activities
           activity[:key].include?('project_namespace.samples.clone')
         end)
 
-        activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.clone_html'
-        end
-
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
         load_more_button = find('button', text: 'Load more')
@@ -58,10 +54,6 @@ module Activities
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.cloned_from')
         end)
-
-        activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.cloned_from_html'
-        end
 
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
@@ -128,10 +120,6 @@ module Activities
           activity[:key].include?('group.samples.destroy')
         end)
 
-        activities.find do |a|
-          a[:key] == 'activity.group.samples.destroy_html'
-        end
-
         visit group_activity_path(group_namespace)
 
         click_button(I18n.t('components.activity.samples.destroy.more_details.button_descriptive_text'))
@@ -165,10 +153,6 @@ module Activities
           activity[:key].include?('group.import_samples.create')
         end)
 
-        activities.find do |a|
-          a[:key] == 'activity.group.import_samples.create_html'
-        end
-
         visit group_activity_path(group_namespace)
 
         click_button(I18n.t('components.activity.samples.import.more_details.button_descriptive_text'))
@@ -201,10 +185,6 @@ module Activities
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.samples.transfer')
         end)
-
-        activities.find do |a|
-          a[:key] == 'activity.group.samples.transfer_html'
-        end
 
         visit group_activity_path(group)
 
@@ -315,10 +295,6 @@ module Activities
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.samples.bulk_metadata_update')
         end)
-
-        activities.find do |a|
-          a[:key] == 'activity.group.samples.bulk_metadata_update_html'
-        end
 
         visit group_activity_path(group_namespace)
 

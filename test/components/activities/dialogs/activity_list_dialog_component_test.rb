@@ -84,10 +84,6 @@ module Activities
           activity[:key].include?('project_namespace.samples.transferred_from')
         end)
 
-        activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.transferred_from_html'
-        end
-
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
         click_button(I18n.t('components.activity.samples.transfer.more_details.button_descriptive_text'))
@@ -114,10 +110,6 @@ module Activities
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('namespaces_project_namespace.import_samples.create')
         end)
-
-        activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.import_samples.create_html'
-        end
 
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
@@ -154,10 +146,6 @@ module Activities
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.bulk_metadata_update')
         end)
-
-        activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.bulk_metadata_update_html'
-        end
 
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
@@ -199,10 +187,6 @@ module Activities
           activity[:key].include?('project_namespace.samples.bulk_metadata_update')
         end)
 
-        activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.bulk_metadata_update_html'
-        end
-
         visit namespace_project_activity_path(project30_namespace.parent, project30_namespace.project)
 
         click_button(I18n.t('components.activity.more_details'))
@@ -225,10 +209,6 @@ module Activities
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.bulk_metadata_update')
         end)
-
-        activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.bulk_metadata_update_html'
-        end
 
         visit namespace_project_activity_path(project31_namespace.parent, project31_namespace.project)
 
