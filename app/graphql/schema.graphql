@@ -966,7 +966,7 @@ type Group implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = {field: created_at, direction: asc}
+    orderBy: AttachmentOrder = { field: created_at, direction: asc }
   ): AttachmentConnection
 
   """
@@ -1828,8 +1828,8 @@ type Namespace implements Node {
 """
 Common fields for namespace metrics.
 """
-# Interface for namespace metrics
-interface NamespaceMetrics {
+interface # Interface for namespace metrics
+NamespaceMetrics {
   """
   Disk usage (bytes) of the group projects or user projects.
   """
@@ -1902,37 +1902,30 @@ A pipeline
 """
 type Pipeline {
   """
-  
   """
   automatable: Boolean
 
   """
-  
   """
   description: String
 
   """
-  
   """
   executable: Boolean
 
   """
-  
   """
   name: String
 
   """
-  
   """
   pipelineId: String
 
   """
-  
   """
   version: String
 
   """
-  
   """
   workflowParams: JSON!
 }
@@ -1973,7 +1966,7 @@ type Project implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = {field: created_at, direction: asc}
+    orderBy: AttachmentOrder = { field: created_at, direction: asc }
   ): AttachmentConnection
 
   """
@@ -2063,7 +2056,7 @@ type Project implements Node {
     """
     Order by
     """
-    orderBy: SampleOrder = {field: created_at, direction: asc}
+    orderBy: SampleOrder = { field: created_at, direction: asc }
   ): SampleConnection
 
   """
@@ -2571,7 +2564,7 @@ type Query {
     """
     Order by
     """
-    orderBy: GroupOrder = {field: created_at, direction: asc}
+    orderBy: GroupOrder = { field: created_at, direction: asc }
   ): GroupConnection!
 
   """
@@ -2724,7 +2717,7 @@ type Query {
     """
     Order by
     """
-    orderBy: ProjectOrder = {field: created_at, direction: asc}
+    orderBy: ProjectOrder = { field: created_at, direction: asc }
   ): ProjectConnection
 
   """
@@ -2774,7 +2767,7 @@ type Query {
     """
     Order by
     """
-    orderBy: SampleOrder = {field: created_at, direction: asc}
+    orderBy: SampleOrder = { field: created_at, direction: asc }
   ): SampleConnection
 
   """
@@ -2839,7 +2832,7 @@ type Sample implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = {field: created_at, direction: asc}
+    orderBy: AttachmentOrder = { field: created_at, direction: asc }
   ): AttachmentConnection
 
   """
@@ -3359,6 +3352,16 @@ type WorkflowExecution implements Node {
   WorkflowExecution state
   """
   state: String
+
+  """
+  WorkflowExecution stderr download url
+  """
+  stderr: String
+
+  """
+  WorkflowExecution stdout download url
+  """
+  stdout: String
 
   """
   WorkflowExecution submitter (User)
