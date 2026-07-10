@@ -137,7 +137,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
       return
     end
 
-    @workflow_executions = scope.select(:id)
+    @workflow_executions = scope.pluck(:id)
   end
 
   def destroy_confirmation
