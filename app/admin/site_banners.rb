@@ -22,7 +22,7 @@ ActiveAdmin.register SiteBanner do # rubocop:disable Metrics/BlockLength
     column :updated_at
     actions do |site_banner|
       action = toggle_action_for(site_banner)
-      item action[:label], action[:path], method: :patch, data: { confirm: action[:confirm] }
+      item action[:label], action[:path], method: :patch, data: { turbo_confirm: action[:confirm] }
     end
   end
 
@@ -88,7 +88,7 @@ ActiveAdmin.register SiteBanner do # rubocop:disable Metrics/BlockLength
             action[:path],
             class: 'action-item-button',
             method: :patch,
-            data: { confirm: action[:confirm] }
+            data: { turbo_confirm: action[:confirm] }
   end
 
   action_item :enable, only: :show, if: proc { !resource.enabled? } do
@@ -98,7 +98,7 @@ ActiveAdmin.register SiteBanner do # rubocop:disable Metrics/BlockLength
             action[:path],
             class: 'action-item-button',
             method: :patch,
-            data: { confirm: action[:confirm] }
+            data: { turbo_confirm: action[:confirm] }
   end
 
   controller do
