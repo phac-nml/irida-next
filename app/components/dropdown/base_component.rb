@@ -132,13 +132,14 @@ module Dropdown
 
     # 🎨 Add button styles, using custom or default
     def add_button_styles
-      return if @label.blank?
-
       if @styles[:button].present?
         @system_arguments[:class] = @styles[:button]
-      else
-        @system_arguments.merge!(system_arguments_for_button)
+        return
       end
+
+      return if @label.blank?
+
+      @system_arguments.merge!(system_arguments_for_button)
     end
 
     # 🖼️ Add icon styles if icon is present
