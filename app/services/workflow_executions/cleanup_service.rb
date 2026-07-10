@@ -12,21 +12,24 @@ module WorkflowExecutions
     end
 
     def execute
-      return { run_log: nil, run_stdout: nil } unless @workflow_execution.completed? || @workflow_execution.error?
+      return { stdout: nil, stderr: nil } unless @workflow_execution.completed? || @workflow_execution.error?
 
-      run_log = @wes_client.get_run_log(@workflow_execution.run_id)
-      run_stdout = fetch_run_stdout
+      stdout = fetch_run_output(:stdout)
+      stderr = fetch_run_output(:stderr)
 
-      { run_log: run_log, run_stdout: run_stdout }
+      return { stdout: stdout, stderr: stderr } if stdout || stderr
+
+      log = @wes_client.get_run_log(@workflow_execution.run_id)
+      { stdout: log[:run_log][:stdout], stderr: log[:run_log][:stderr] }
     end
 
     private
 
-    def fetch_run_stdout
-      @wes_client.get_run_stdout(@workflow_execution.run_id)
+    def fetch_run_output(stream)
+      @wes_client.public_send("get_run_#{stream}", @workflow_execution.run_id)
     rescue Integrations::ApiExceptions::NotFoundError => e
       Rails.logger.info(
-        "WES stdout endpoint unavailable for run_id=#{@workflow_execution.run_id}: #{e.message}"
+        "WES #{stream} endpoint unavailable for run_id=#{@workflow_execution.run_id}: #{e.message}"
       )
       nil
     end
