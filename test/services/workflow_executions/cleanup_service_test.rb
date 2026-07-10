@@ -11,24 +11,24 @@ module WorkflowExecutions
       @running_workflow_execution = workflow_executions(:irida_next_example_running)
     end
 
-    test 'returns run log and stdout for completed workflow execution' do
+    test 'returns stdout and stderr for completed workflow execution' do
       run_id = @completed_workflow_execution.run_id
-      expected_run_log = { run_id:, state: 'COMPLETE' }
-      expected_run_stdout = 'Workflow execution output'
+      expected_stdout = 'Workflow execution output'
+      expected_stderr = 'Workflow execution stderr'
 
       stubs = Faraday::Adapter::Test::Stubs.new
-      stubs.get("/runs/#{run_id}") do
-        [
-          200,
-          { 'Content-Type': 'application/json' },
-          expected_run_log
-        ]
-      end
       stubs.get("/runs/#{run_id}/stdout") do
         [
           200,
           { 'Content-Type': 'text/plain' },
-          expected_run_stdout
+          expected_stdout
+        ]
+      end
+      stubs.get("/runs/#{run_id}/stderr") do
+        [
+          200,
+          { 'Content-Type': 'text/plain' },
+          expected_stderr
         ]
       end
 
@@ -38,28 +38,28 @@ module WorkflowExecutions
 
       result = WorkflowExecutions::CleanupService.new(@completed_workflow_execution, @user, {}, conn).execute
 
-      assert_equal expected_run_log, result[:run_log]
-      assert_equal expected_run_stdout, result[:run_stdout]
+      assert_equal expected_stdout, result[:stdout]
+      assert_equal expected_stderr, result[:stderr]
     end
 
-    test 'returns run log and stdout for error workflow execution' do
+    test 'returns stdout and stderr for error workflow execution' do
       run_id = @error_workflow_execution.run_id
-      expected_run_log = { run_id:, state: 'SYSTEM_ERROR' }
-      expected_run_stdout = 'Workflow execution output from failed run'
+      expected_stdout = 'Workflow execution output from failed run'
+      expected_stderr = 'Workflow execution stderr from failed run'
 
       stubs = Faraday::Adapter::Test::Stubs.new
-      stubs.get("/runs/#{run_id}") do
-        [
-          200,
-          { 'Content-Type': 'application/json' },
-          expected_run_log
-        ]
-      end
       stubs.get("/runs/#{run_id}/stdout") do
         [
           200,
           { 'Content-Type': 'text/plain' },
-          expected_run_stdout
+          expected_stdout
+        ]
+      end
+      stubs.get("/runs/#{run_id}/stderr") do
+        [
+          200,
+          { 'Content-Type': 'text/plain' },
+          expected_stderr
         ]
       end
 
@@ -69,8 +69,38 @@ module WorkflowExecutions
 
       result = WorkflowExecutions::CleanupService.new(@error_workflow_execution, @user, {}, conn).execute
 
-      assert_equal expected_run_log, result[:run_log]
-      assert_equal expected_run_stdout, result[:run_stdout]
+      assert_equal expected_stdout, result[:stdout]
+      assert_equal expected_stderr, result[:stderr]
+    end
+
+    test 'falls back to run log values when stream endpoints are unavailable' do
+      run_id = @completed_workflow_execution.run_id
+      expected_stdout = 'Workflow execution output'
+      expected_stderr = 'Workflow execution stderr'
+
+      stubs = Faraday::Adapter::Test::Stubs.new
+      stubs.get("/runs/#{run_id}/stdout") do
+        raise Faraday::ResourceNotFound, 'stdout endpoint unavailable'
+      end
+      stubs.get("/runs/#{run_id}/stderr") do
+        raise Faraday::ResourceNotFound, 'stderr endpoint unavailable'
+      end
+      stubs.get("/runs/#{run_id}") do
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          { run_id:, run_log: { stdout: expected_stdout, stderr: expected_stderr } }
+        ]
+      end
+
+      conn = Faraday.new do |builder|
+        builder.adapter :test, stubs
+      end
+
+      result = WorkflowExecutions::CleanupService.new(@completed_workflow_execution, @user, {}, conn).execute
+
+      assert_equal expected_stdout, result[:stdout]
+      assert_equal expected_stderr, result[:stderr]
     end
 
     test 'returns nil values for non terminal workflow execution state' do
@@ -82,7 +112,7 @@ module WorkflowExecutions
 
       result = WorkflowExecutions::CleanupService.new(@running_workflow_execution, @user, {}, conn).execute
 
-      assert_equal({ run_log: nil, run_stdout: nil }, result)
+      assert_equal({ stdout: nil, stderr: nil }, result)
     end
   end
 end
