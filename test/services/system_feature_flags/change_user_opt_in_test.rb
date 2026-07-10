@@ -54,6 +54,20 @@ module SystemFeatureFlags
       end
     end
 
+    test 'returns mutation_failed and keeps Flipper state consistent when the adapter raises' do
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        Flipper.expects(:enable_actor).raises(ActiveRecord::StatementInvalid)
+
+        result = ChangeUserOptIn.new(feature_key: :data_grid_samples_table, enabled: true, user: @user).execute
+
+        assert result.failure?
+        assert_equal :mutation_failed, result.error
+        assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
+      end
+    ensure
+      Flipper.disable_actor(:data_grid_samples_table, @user)
+    end
+
     test 'racing admin disable and user opt-in keeps actor gate revoked' do
       with_user_opt_in_features(user_opt_in_feature_config) do |settings|
         ready = Queue.new
