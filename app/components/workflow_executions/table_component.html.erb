@@ -1,15 +1,6 @@
 <% if @has_workflow_executions %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
-      <% if @abilities[:select_workflow_executions] %>
-        <%= render partial: "shared/selection_limit_alert",
-        locals: {
-          message: selection_limit_list_too_large_message,
-          visible: show_selection_limit_alert?,
-          proactive: show_selection_limit_alert?,
-        } %>
-      <% end %>
-
       <%= render LiveRegionComponent.new(controller: "selection") %>
 
       <span id="select-page-status" class="sr-only" data-selection-target="selectPageStatus"></span>

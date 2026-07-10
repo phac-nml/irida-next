@@ -6,7 +6,6 @@ module WorkflowExecutions
   # Component for rendering a table of Samples
   class TableComponent < Component # rubocop:disable Metrics/ClassLength
     include Ransack::Helpers::FormHelper
-    include SelectionLimitableTable
 
     # 🧊 Fields within the 'metadata' JSONB column that require prefixing for sorting.
     METADATA_FIELDS = %i[workflow_name workflow_version].freeze
@@ -104,7 +103,7 @@ module WorkflowExecutions
           I18n.t('components.workflow_executions.table_component.select_page_state.some'),
         'selection-select-page-all-value':
           I18n.t('components.workflow_executions.table_component.select_page_state.all')
-      }.merge(selection_limit_data_attributes)
+      }
     end
 
     def columns
