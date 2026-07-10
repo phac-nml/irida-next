@@ -1943,8 +1943,6 @@ fr:
         select_project: Sélectionner le projet
         submit_button: Envoyer
         title: Transférer des échantillons
-  selection_limits:
-    exceeded: Vous ne pouvez pas sélectionner plus de %{max} éléments à la fois.
   services:
     attachments:
       destroy:

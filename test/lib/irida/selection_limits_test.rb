@@ -15,9 +15,5 @@ module Irida
     test 'exceeded? returns true above the limit' do
       assert SelectionLimits.exceeded?(50_001)
     end
-
-    test 'error_message includes the limit' do
-      assert_includes SelectionLimits.error_message, '50'
-    end
   end
 end

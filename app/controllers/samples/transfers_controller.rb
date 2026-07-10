@@ -4,8 +4,6 @@ module Samples
   # global controller for sample transfers
   class TransfersController < ApplicationController
     respond_to :turbo_stream
-    include SelectionLimitEnforcement
-
     before_action :projects
     before_action :namespace
 
@@ -20,11 +18,6 @@ module Samples
     end
 
     def create
-      if selection_limit_exceeded_for?(transfer_params[:sample_ids].size)
-        render 'shared/selection_limit_exceeded', status: :unprocessable_content
-        return
-      end
-
       @broadcast_target = params[:broadcast_target]
       new_project_id = transfer_params[:new_project_id]
       sample_ids = transfer_params[:sample_ids]

@@ -1939,8 +1939,6 @@ en:
         select_project: Select project
         submit_button: Submit
         title: Transfer Samples
-  selection_limits:
-    exceeded: You cannot select more than %{max} items at once.
   services:
     attachments:
       destroy:

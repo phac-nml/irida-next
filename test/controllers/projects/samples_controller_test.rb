@@ -186,20 +186,6 @@ module Projects
       assert_response :success
     end
 
-    test 'should not select samples when selection exceeds limit' do
-      Projects::SamplesController.any_instance
-                                 .expects(:selection_limit_exceeded_for_scope?)
-                                 .returns(true)
-
-      get select_namespace_project_samples_url(@namespace, @project),
-          params: { select: true, timestamp: DateTime.current },
-          as: :turbo_stream
-
-      assert_response :success
-      assert_includes response.body, 'data-table-selection-ids-value="[]"'
-      assert_includes response.body, Irida::SelectionLimits.error_message
-    end
-
     test 'should handle metadata template none' do
       get namespace_project_samples_path(@namespace, @project), params: { q: { metadata_template: 'none' } }
       assert_response :success

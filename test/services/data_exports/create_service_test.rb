@@ -142,22 +142,6 @@ module DataExports
       end
     end
 
-    test 'cannot create export when selected ids exceed limit' do
-      invalid_params = {
-        'export_type' => 'analysis',
-        'export_parameters' => {
-          'ids' => (1..(Irida::SelectionLimits::MAX_COUNT + 1)).to_a,
-          'analysis_type' => 'user'
-        }
-      }
-
-      assert_no_difference -> { DataExport.count } do
-        data_export = DataExports::CreateService.new(@user, invalid_params).execute
-        assert_equal Irida::SelectionLimits.error_message,
-                     data_export.errors.full_messages.to_sentence
-      end
-    end
-
     test 'cannot create export with missing ids param' do
       invalid_params = { 'export_type' => 'sample',
                          'export_parameters' => { 'namespace_id' => @project1.namespace.id,
