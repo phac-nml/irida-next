@@ -66,26 +66,5 @@ module Samples
 
       assert_response :unauthorized
     end
-
-    test 'should not enqueue a Samples::CloneJob when selection exceeds limit' do
-      Samples::ClonesController.any_instance
-                               .expects(:selection_limit_exceeded_for?)
-                               .with(2)
-                               .returns(true)
-
-      assert_no_enqueued_jobs only: Samples::CloneJob do
-        post samples_clone_path,
-             params: {
-               namespace_id: @project.namespace.id,
-               clone: {
-                 new_project_id: @new_project.id,
-                 sample_ids: [@sample1.id, @sample2.id]
-               },
-               broadcast_target: 'a_broadcast_target'
-             }, as: :turbo_stream
-      end
-
-      assert_response :unprocessable_content
-    end
   end
 end

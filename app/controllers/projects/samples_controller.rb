@@ -6,7 +6,6 @@ module Projects
     include ListActions
     include Storable
     include SampleAttachment
-    include SelectionLimitEnforcement
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
@@ -89,17 +88,10 @@ module Projects
     def select
       authorize! @project, to: :sample_listing?
       @sample_ids = []
-      @selection_limit_exceeded = false
 
       return if params[:select].blank?
 
-      scope = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime)
-      if selection_limit_exceeded_for_scope?(scope)
-        @selection_limit_exceeded = true
-        return
-      end
-
-      @sample_ids = scope.pluck(:id)
+      @sample_ids = @query.results.reorder(nil).where(updated_at: ..params.expect(:timestamp).to_datetime).pluck(:id)
     end
 
     private
