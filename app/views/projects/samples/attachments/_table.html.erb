@@ -6,7 +6,6 @@
       <% if allowed_to[:update_sample] %>
         <%= render "shared/selection_buttons",
         url: select_namespace_project_sample_attachments_url(sample_id: sample.id),
-        total_count: pagy.count,
         select_form_fields: {
           format: "turbo_stream",
           select: "on",
