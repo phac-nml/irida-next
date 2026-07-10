@@ -24,6 +24,8 @@ module Types
           complexity: 5,
           resolver: Resolvers::SamplesWorkflowExecutionsResolver
     field :state, String, null: true, description: 'WorkflowExecution state'
+    field :stderr, String, null: true, description: 'WorkflowExecution stderr download url'
+    field :stdout, String, null: true, description: 'WorkflowExecution stdout download url'
     field :submitter, UserType, null: false, description: 'WorkflowExecution submitter (User)'
     field :submitter_id, String, null: true, description: 'WorkflowExecution submitter_id'
     field :tags, GraphQL::Types::JSON, null: true, description: 'WorkflowExecution tags'
@@ -47,6 +49,18 @@ module Types
       return object.namespace if object.namespace.is_a? Group
 
       nil
+    end
+
+    def stdout
+      return unless object.stdout.attached?
+
+      Rails.application.routes.url_helpers.rails_blob_url(object.stdout)
+    end
+
+    def stderr
+      return unless object.stderr.attached?
+
+      Rails.application.routes.url_helpers.rails_blob_url(object.stderr)
     end
 
     def self.authorized?(object, context)

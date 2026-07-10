@@ -19,6 +19,16 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  WORKFLOW_EXECUTIONS_PAGINATION_QUERY = <<~GRAPHQL
+    query($first: Int, $last: Int) {
+      workflowExecutions(first: $first, last: $last) {
+        nodes {
+          id
+        }
+      }
+    }
+  GRAPHQL
+
   WORKFLOW_EXECUTIONS_NODE_QUERY = <<~GRAPHQL
     query($workflow_execution_id: ID!) {
       node(id: $workflow_execution_id) {
@@ -37,6 +47,8 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
           }
           runId
           state
+          stderr
+          stdout
           submitter {
             id
             email
@@ -152,6 +164,24 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
 
     # We should have a string translated from the enum, not an integer
     assert_equal 'initial', data['state']
+  end
+
+  test 'workflow executions nodes query should return stdout and stderr urls when attached' do
+    workflow_execution = workflow_executions(:workflow_execution_valid)
+    workflow_execution.stdout.attach(io: StringIO.new('stdout log'), filename: 'stdout.txt', content_type: 'text/plain')
+    workflow_execution.stderr.attach(io: StringIO.new('stderr log'), filename: 'stderr.txt', content_type: 'text/plain')
+
+    result = IridaSchema.execute(
+      WORKFLOW_EXECUTIONS_NODE_QUERY,
+      context: { current_user: @user },
+      variables: { workflow_execution_id: workflow_execution.to_global_id.to_s }
+    )
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['node']
+    assert_equal Rails.application.routes.url_helpers.rails_blob_url(workflow_execution.stdout), data['stdout']
+    assert_equal Rails.application.routes.url_helpers.rails_blob_url(workflow_execution.stderr), data['stderr']
   end
 
   test 'workflow executions nodes query should on groups' do
