@@ -92,6 +92,16 @@ class SiteBannerTest < ActiveSupport::TestCase
     assert notification.valid?
   end
 
+  test 'updating an enabled notification does not disable other notifications' do
+    previous = SiteBanner.create!(enabled: false, style: :info, messages: localized_messages('Previous'))
+    current = SiteBanner.create!(style: :warning, messages: localized_messages('Current'))
+
+    current.update!(messages: localized_messages('Updated current'))
+
+    assert current.reload.enabled?
+    assert_not previous.reload.enabled?
+  end
+
   private
 
   def localized_messages(message)

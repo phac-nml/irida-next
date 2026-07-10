@@ -26,7 +26,7 @@ class SiteBanner < ApplicationRecord
   validate :all_locale_messages_present, if: :enabled?
 
   before_validation :set_singleton_guard
-  before_save :disable_other_enabled_banners, if: :enabled?
+  before_save :disable_other_enabled_banners, if: :enabling?
 
   def self.current
     enabled.order(updated_at: :desc, id: :desc).first
@@ -51,6 +51,10 @@ class SiteBanner < ApplicationRecord
 
   def set_singleton_guard
     self.singleton_guard = SINGLETON_GUARD
+  end
+
+  def enabling?
+    enabled? && (new_record? || will_save_change_to_enabled?)
   end
 
   def disable_other_enabled_banners
