@@ -34,6 +34,7 @@ module Profiles
         return true if result.success?
 
         opt_in_form.errors.add(:feature_key, :not_eligible) if result.error == :not_eligible
+        opt_in_form.errors.add(:base, :flipper_error) if result.error == :mutation_failed
         false
       rescue Flipper::Error => e
         Rails.logger.error("Unable to update experimental feature opt-in: #{e.message}")
