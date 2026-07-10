@@ -147,20 +147,25 @@ export default class extends Controller {
       return;
     }
 
-    if (this.#exceedsLimit(ids.length)) {
+    // Normalize IDs to strings and dedupe at the entry point so callers that
+    // provide numeric IDs (e.g. server-side pluck(:id)) stay consistent with
+    // checkbox string values and stored IDs, preventing mixed-type duplicates.
+    const normalizedIds = [...new Set(ids.map((id) => String(id)))];
+
+    if (this.#exceedsLimit(normalizedIds.length)) {
       this.#handleSelectionLimitExceeded();
       this.#refreshUIFromStorage();
       return;
     }
 
-    if (!this.#persistSelection(ids)) {
+    if (!this.#persistSelection(normalizedIds)) {
       this.#handleStorageQuotaExceeded();
       this.#refreshUIFromStorage();
       return;
     }
 
     this.#hideSelectionLimitAlertIfAllowed();
-    this.#updateUI(ids, announce, options);
+    this.#updateUI(normalizedIds, announce, options);
   }
 
   getOrCreateStoredItems() {
