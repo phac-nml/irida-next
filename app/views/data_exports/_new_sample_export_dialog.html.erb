@@ -101,13 +101,13 @@
           <%= sortable_lists.with_list(
             id: "available-list",
             title: t(".available_list_title"),
+            list_items: formats,
             describedby: "#{sortable_lists_guidance_id}-available-description",
           ) %>
 
           <%= sortable_lists.with_list(
             id: "selected-list",
             title: t(".selected_list_title"),
-            list_items: formats,
             required: true,
             describedby: "#{sortable_lists_guidance_id}-selected-description",
           ) %>
