@@ -283,6 +283,11 @@ module WorkflowExecutions
                    headers: { content_type:
                             'text/plain' })
 
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/create_run_5/stderr')
+        .to_return(body: 'workflow execution stderr from failed run',
+                   headers: { content_type:
+                            'text/plain' })
+
       @workflow_execution = WorkflowExecutions::CreateService.new(
         @user, workflow_params
       ).execute

@@ -281,6 +281,27 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     w3c_validate 'Workflow Execution Show Page'
   end
 
+  test 'should show workflow stdout and stderr links when attached' do
+    @workflow_execution_completed.stdout.attach(
+      io: StringIO.new('workflow stdout logs'),
+      filename: 'stdout.txt',
+      content_type: 'text/plain'
+    )
+    @workflow_execution_completed.stderr.attach(
+      io: StringIO.new('workflow stderr logs'),
+      filename: 'stderr.txt',
+      content_type: 'text/plain'
+    )
+
+    get workflow_execution_path(@workflow_execution_completed)
+    assert_response :success
+
+    assert_select 'dt', text: I18n.t('workflow_executions.summary.stdout')
+    assert_select 'dt', text: I18n.t('workflow_executions.summary.stderr')
+    assert_select 'a', text: 'stdout.txt'
+    assert_select 'a', text: 'stderr.txt'
+  end
+
   test 'should not show the workflow' do
     get workflow_execution_path(workflow_executions(:irida_next_example_completing_e))
     assert_response :not_found

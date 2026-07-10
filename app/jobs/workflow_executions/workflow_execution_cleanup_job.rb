@@ -27,31 +27,20 @@ module WorkflowExecutions
 
     private
 
-    def create_log_attachments # rubocop:disable Metrics/AbcSize
-      run_log_filename = 'run_log.json'
-      run_stdout_filename = 'run_stdout.txt'
-      existing_output_filenames = @workflow_execution.outputs.map { |output| output.filename.to_s }
+    def create_log_attachments
+      return if @workflow_execution.stdout.attached? || @workflow_execution.stderr.attached?
 
-      if existing_output_filenames.include?(run_log_filename) || existing_output_filenames.include?(run_stdout_filename)
-        return
+      result = WorkflowExecutions::CleanupService.new(@workflow_execution).execute
+      stdout = result[:stdout]
+      stderr = result[:stderr]
+
+      if stdout.present?
+        @workflow_execution.stdout.attach(io: StringIO.new(stdout), filename: 'stdout.txt', content_type: 'text/plain')
       end
 
-      # Create attachments for pipeline run & stdout logs if they exist
-      result = WorkflowExecutions::CleanupService.new(@workflow_execution).execute
-      run_log = result[:run_log]
-      run_stdout = result[:run_stdout]
-      files = []
+      return if stderr.blank?
 
-      files << { io: StringIO.new(sanitize(run_log.to_json)), filename: run_log_filename } if run_log.present?
-      files << { io: StringIO.new(sanitize(run_stdout)), filename: run_stdout_filename } if run_stdout.present?
-
-      return if files.empty?
-
-      Attachments::CreateService.new(@workflow_execution.submitter, @workflow_execution, { files: }).execute
-    end
-
-    def sanitize(text)
-      text.encode('US-ASCII', invalid: :replace, undef: :replace, replace: '')
+      @workflow_execution.stderr.attach(io: StringIO.new(stderr), filename: 'stderr.txt', content_type: 'text/plain')
     end
 
     def clean_up_blob_run_directory

@@ -239,7 +239,8 @@ module WorkflowExecutions
 
     private
 
-    def with_cleanup_service_wes_stubs(workflow_execution, run_log_state: 'COMPLETE', run_stdout: 'workflow stdout') # rubocop:disable Metrics/MethodLength
+    def with_cleanup_service_wes_stubs(workflow_execution, run_log_state: 'COMPLETE', run_stdout: 'workflow stdout', # rubocop:disable Metrics/MethodLength
+                                       run_stderr: 'workflow stderr')
       mock_client = connection_builder(stubs: @stubs, connection_count: 1)
 
       Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
@@ -256,6 +257,14 @@ module WorkflowExecutions
             200,
             { 'Content-Type': 'text/plain' },
             run_stdout
+          ]
+        end
+
+        @stubs.get("/runs/#{workflow_execution.run_id}/stderr") do |_env|
+          [
+            200,
+            { 'Content-Type': 'text/plain' },
+            run_stderr
           ]
         end
 
