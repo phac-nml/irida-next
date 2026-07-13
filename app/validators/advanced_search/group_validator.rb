@@ -17,8 +17,8 @@ module AdvancedSearch
     METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals].freeze
     METADATA_NUMERIC_OPERATORS = %w[numeric_equals numeric_greater_than_equals numeric_less_than_equals
                                     numeric_not_equals].freeze
-    NON_METADATA_OPERATORS = %w[equals not_equals less_than_equals greater_than_equals contains
-                                not_contains in not_in].freeze
+    NON_METADATA_OPERATORS = %w[= != <= >= contains not_contains in not_in].freeze
+
     def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       return if empty_search?(record)
 
