@@ -19,16 +19,16 @@ module SystemFeatureFlags
       user&.system?
     end
 
-    def success(change:, feature_key:, entry: nil)
-      Result.new(status: :success, change: change, entry: entry || Catalog.fetch(feature_key), error: nil)
+    def success(feature_key:, entry: nil)
+      Result.new(status: :success, entry: entry || Catalog.fetch(feature_key), error: nil)
     end
 
     def no_op(feature_key:, entry: nil)
-      Result.new(status: :no_op, change: nil, entry: entry || Catalog.fetch(feature_key), error: nil)
+      Result.new(status: :no_op, entry: entry || Catalog.fetch(feature_key), error: nil)
     end
 
     def failure(error, feature_key:, entry: nil)
-      Result.new(status: :failure, change: nil, entry: entry || Catalog.fetch(feature_key), error: error)
+      Result.new(status: :failure, entry: entry || Catalog.fetch(feature_key), error: error)
     end
 
     def with_feature_lock(feature_key:, settings: nil)
@@ -38,23 +38,6 @@ module SystemFeatureFlags
         yield
       end
     end
-
-    # rubocop:disable Metrics/ParameterLists
-    def create_change!(feature_key:, user:, action:, old_global_state:, new_global_state:, old_opt_in_state:,
-                       new_opt_in_state:, cleared_gate_summary:)
-      SystemFeatureFlagChange.create!(
-        administrator: user,
-        feature_key: feature_key,
-        action: action,
-        old_global_state: old_global_state,
-        new_global_state: new_global_state,
-        old_opt_in_state: old_opt_in_state,
-        new_opt_in_state: new_opt_in_state,
-        cleared_gate_summary: cleared_gate_summary,
-        environment: Rails.env
-      )
-    end
-    # rubocop:enable Metrics/ParameterLists
 
     def abort_mutation!(error)
       raise AbortMutation, error

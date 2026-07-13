@@ -47,7 +47,7 @@ module Profiles
         with_user_opt_in_features(user_opt_in_feature_config) do
           form = build_form(feature_key: 'data_grid_samples_table', enabled: true)
           not_eligible_result = SystemFeatureFlags::Result.new(
-            status: :failure, change: nil, entry: nil, error: :not_eligible
+            status: :failure, entry: nil, error: :not_eligible
           )
           mock_service = mock('change_user_opt_in')
           mock_service.stubs(:execute).returns(not_eligible_result)

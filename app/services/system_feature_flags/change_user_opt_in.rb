@@ -3,9 +3,6 @@
 module SystemFeatureFlags
   # Applies profile-level actor gate toggles while enforcing opt-in availability under lock.
   #
-  # User-initiated opt-in toggles are not audited in system_feature_flag_changes.
-  # Only admin mutations (global state, opt-in availability) create audit records.
-  #
   # Does not check admin_manageable? — relies on ChangeOptInAvailability enforcing
   # that only admin-manageable features can have opt-in config entries.
   class ChangeUserOptIn < MutationService
@@ -30,7 +27,7 @@ module SystemFeatureFlags
         end
       end
 
-      success(change: nil, feature_key:)
+      success(feature_key:)
     rescue AbortMutation => e
       failure(e.error, feature_key:)
     rescue ActiveRecord::ActiveRecordError, Flipper::Error => e

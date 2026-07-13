@@ -47,14 +47,6 @@ module SystemFeatureFlags
         }
       end
 
-      def actor_gate_count(feature_key)
-        Flipper[feature_key.to_sym].actors_value.size
-      end
-
-      def conditional_gate_summary(feature_key)
-        gate_summary(feature_key).except('boolean')
-      end
-
       private
 
       def entry(catalog_entry)

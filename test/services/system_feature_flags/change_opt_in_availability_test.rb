@@ -21,9 +21,6 @@ module SystemFeatureFlags
         assert result.success?
         assert_equal 'all_users', Catalog.opt_in_state(:data_grid_samples_table)
         assert_equal({ 'allowlist' => 'all' }, settings.reload.user_opt_in_features['data_grid_samples_table'])
-        assert_equal 'enable_opt_in', result.change.action
-        assert_equal 'off', result.change.old_opt_in_state
-        assert_equal 'all_users', result.change.new_opt_in_state
       end
     end
 
@@ -39,7 +36,6 @@ module SystemFeatureFlags
 
         assert result.no_op?
         assert_equal [@user.email], settings.reload.user_opt_in_features.dig('data_grid_samples_table', 'allowlist')
-        assert_equal 0, SystemFeatureFlagChange.count
       end
     end
 
@@ -58,7 +54,6 @@ module SystemFeatureFlags
         assert_nil settings.reload.user_opt_in_features['data_grid_samples_table']
         assert_empty Flipper[:data_grid_samples_table].actors_value
         assert_equal 10, Flipper[:data_grid_samples_table].percentage_of_time_value
-        assert_equal 1, result.change.cleared_gate_summary['actors']
       end
     end
 
@@ -74,14 +69,13 @@ module SystemFeatureFlags
 
         assert result.failure?
         assert_equal :globally_enabled, result.error
-        assert_equal 0, SystemFeatureFlagChange.count
       end
     end
 
-    test 'rolls back settings and actor revocation when audit write fails' do
+    test 'rolls back settings and actor revocation when the adapter raises' do
       with_user_opt_in_features(user_opt_in_feature_config) do |settings|
         Flipper.enable_actor(:data_grid_samples_table, @user)
-        SystemFeatureFlagChange.stubs(:create!).raises(ActiveRecord::RecordInvalid)
+        Flipper::Feature.any_instance.stubs(:disable_actor).raises(Flipper::Error)
 
         result = ChangeOptInAvailability.new(
           feature_key: :data_grid_samples_table,

@@ -970,26 +970,6 @@ ALTER SEQUENCE public.site_banners_id_seq OWNED BY public.site_banners.id;
 
 
 --
--- Name: system_feature_flag_changes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.system_feature_flag_changes (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    administrator_id uuid NOT NULL,
-    feature_key character varying NOT NULL,
-    action character varying NOT NULL,
-    old_global_state character varying NOT NULL,
-    new_global_state character varying NOT NULL,
-    old_opt_in_state character varying NOT NULL,
-    new_opt_in_state character varying NOT NULL,
-    cleared_gate_summary jsonb DEFAULT '{}'::jsonb NOT NULL,
-    environment character varying NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1300,14 +1280,6 @@ ALTER TABLE ONLY public.site_banners
 
 
 --
--- Name: system_feature_flag_changes system_feature_flag_changes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.system_feature_flag_changes
-    ADD CONSTRAINT system_feature_flag_changes_pkey PRIMARY KEY (id);
-
-
---
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1328,27 +1300,6 @@ ALTER TABLE ONLY public.workflow_executions
 --
 
 CREATE UNIQUE INDEX idx_on_activity_id_extended_detail_id_f24c369286 ON public.activity_extended_details USING btree (activity_id, extended_detail_id);
-
-
---
--- Name: idx_on_administrator_id_created_at_3ec7f054a2; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_on_administrator_id_created_at_3ec7f054a2 ON public.system_feature_flag_changes USING btree (administrator_id, created_at);
-
-
---
--- Name: idx_on_feature_key_created_at_64faddd158; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_on_feature_key_created_at_64faddd158 ON public.system_feature_flag_changes USING btree (feature_key, created_at);
-
-
---
--- Name: idx_system_feature_flag_changes_newest_first; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_system_feature_flag_changes_newest_first ON public.system_feature_flag_changes USING btree (created_at DESC, id DESC);
 
 
 --
@@ -2235,21 +2186,12 @@ ALTER TABLE ONLY public.workflow_executions
 
 
 --
--- Name: system_feature_flag_changes fk_rails_f974b5ce5b; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.system_feature_flag_changes
-    ADD CONSTRAINT fk_rails_f974b5ce5b FOREIGN KEY (administrator_id) REFERENCES public.users(id);
-
-
---
 -- PostgreSQL database dump complete
 --
 
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20260626150000'),
 ('20260619150000'),
 ('20260616131525'),
 ('20260424121251'),

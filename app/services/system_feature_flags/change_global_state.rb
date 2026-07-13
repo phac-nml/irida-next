@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
 module SystemFeatureFlags
-  # Changes the global Flipper boolean gate for an admin-manageable feature and audits the result.
+  # Changes the global Flipper boolean gate for an admin-manageable feature.
   class ChangeGlobalState < MutationService
     TARGET_STATES = %w[enabled disabled].freeze
-    ACTION_BY_TARGET_STATE = {
-      'enabled' => 'enable_global',
-      'disabled' => 'disable_global'
-    }.freeze
 
     def initialize(feature_key:, target_state:, user:)
       super()
@@ -25,30 +21,17 @@ module SystemFeatureFlags
       # May be stale under concurrency; the in-lock re-check guarantees correctness.
       return no_op_result if Catalog.global_state(feature_key) == target_state
 
-      change = with_feature_lock(feature_key:) do
-        old_global_state = Catalog.global_state(feature_key)
-        old_opt_in_state = Catalog.opt_in_state(feature_key)
-        next if old_global_state == target_state
+      applied = with_feature_lock(feature_key:) do
+        next if Catalog.global_state(feature_key) == target_state
 
         @feature_state_before_mutation = snapshot_feature_state(feature_key)
-        cleared_gate_summary = Catalog.conditional_gate_summary(feature_key)
         apply_target_state!
-
-        create_change!(
-          user:,
-          feature_key:,
-          action: ACTION_BY_TARGET_STATE.fetch(target_state),
-          old_global_state:,
-          new_global_state: Catalog.global_state(feature_key),
-          old_opt_in_state:,
-          new_opt_in_state: Catalog.opt_in_state(feature_key),
-          cleared_gate_summary:
-        )
+        true
       end
 
-      return no_op_result if change.nil?
+      return no_op_result if applied.nil?
 
-      success(change:, feature_key:)
+      success(feature_key:)
     rescue ActiveRecord::ActiveRecordError, Flipper::Error => e
       # Defensive: transaction rollback restores DB state, but this ensures
       # Flipper's in-memory cache is consistent with the database.
