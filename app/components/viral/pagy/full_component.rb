@@ -5,9 +5,10 @@ module Viral
     # FullComponent is a component that renders the full pagy pagination
     # including the limit and pagination components.
     class FullComponent < Viral::Component
-      def initialize(pagy, item:)
+      def initialize(pagy, item:, params: {})
         @pagy = pagy
         @item = item
+        @params = params
       end
 
       private

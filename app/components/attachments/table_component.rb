@@ -4,7 +4,7 @@ require 'ransack/helpers/form_helper'
 
 module Attachments
   # Component for rendering a table of Attachments
-  class TableComponent < Component
+  class TableComponent < Component # rubocop:disable Metrics/ClassLength
     include Ransack::Helpers::FormHelper
 
     METADATA_COLUMNS = %w[format type].freeze
@@ -18,6 +18,7 @@ module Attachments
       attachable,
       render_individual_attachments,
       has_attachments,
+      pagination_params: {},
       sort_replaces_history: false,
       row_actions: false,
       abilities: {},
@@ -30,6 +31,7 @@ module Attachments
       @attachable = attachable
       @render_individual_attachments = render_individual_attachments
       @has_attachments = has_attachments
+      @pagination_params = pagination_params
       @sort_replaces_history = sort_replaces_history
       @abilities = abilities
       @row_actions = row_actions

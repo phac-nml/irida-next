@@ -333,6 +333,7 @@
     <%= render Viral::Pagy::FullComponent.new(
       @pagy,
       item: t("components.attachments.table_component.limit.item"),
+      params: @pagination_params,
     ) %>
   <% end %>
 <% else %>
