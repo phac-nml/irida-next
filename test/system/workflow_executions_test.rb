@@ -440,6 +440,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     select '10', from: 'pagy-limit-select'
 
+    # Assert on markup that only changes after the server re-renders with the new
+    # limit: the table's sort links carry the updated limit while preserving the tab.
+    assert_selector '#files-panel-content a[href*="limit=10"][href*="tab=files"]'
     assert_selector '#files-panel-content tbody tr', count: 2
     assert_selector '#files-panel-content #pagy-limit-select option[value="10"]:checked'
   end
