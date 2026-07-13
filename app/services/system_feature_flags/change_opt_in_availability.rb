@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
 module SystemFeatureFlags
-  # Changes profile opt-in availability for an admin-manageable feature and audits the result.
+  # Changes profile opt-in availability for an admin-manageable feature.
   class ChangeOptInAvailability < MutationService
-    AVAILABILITY_ACTIONS = {
-      true => 'enable_opt_in',
-      false => 'disable_opt_in'
-    }.freeze
-
     def initialize(feature_key:, available:, user:)
       super()
       @feature_key = feature_key.to_s
@@ -25,37 +20,24 @@ module SystemFeatureFlags
       # May be stale under concurrency; the in-lock re-check guarantees correctness.
       return no_op(feature_key:) if no_op?(Catalog.opt_in_state(feature_key))
 
-      change = with_feature_lock(feature_key:, settings:) do
-        old_global_state = Catalog.global_state(feature_key)
-        abort_mutation!(:globally_enabled) if old_global_state == 'enabled'
+      applied = with_feature_lock(feature_key:, settings:) do
+        abort_mutation!(:globally_enabled) if Catalog.global_state(feature_key) == 'enabled'
 
-        old_opt_in_state = Catalog.opt_in_state(feature_key)
-        next if no_op?(old_opt_in_state)
+        next if no_op?(Catalog.opt_in_state(feature_key))
 
         @previous_opt_in_features = settings.user_opt_in_features.deep_dup
         @feature_state_before_mutation = snapshot_feature_state(feature_key)
-        cleared_gate_summary = available ? {} : { 'actors' => Catalog.actor_gate_count(feature_key) }
         available ? enable_opt_in : disable_opt_in
-
-        create_change!(
-          user:,
-          feature_key:,
-          action: AVAILABILITY_ACTIONS.fetch(available),
-          old_global_state:,
-          new_global_state: Catalog.global_state(feature_key),
-          old_opt_in_state:,
-          new_opt_in_state: Catalog.opt_in_state(feature_key),
-          cleared_gate_summary:
-        )
+        true
       end
 
-      return no_op(feature_key:) if change.nil?
+      return no_op(feature_key:) if applied.nil?
 
-      success(change:, feature_key:)
+      success(feature_key:)
     rescue AbortMutation => e
       failure(e.error, feature_key:)
     rescue ActiveRecord::ActiveRecordError, Flipper::Error => e
-      restore_after_audit_failure!
+      restore_after_mutation_failure!
       log_mutation_failure('Unable to change experimental feature opt-in availability', e)
       failure(:mutation_failed, feature_key:)
     end
@@ -98,13 +80,13 @@ module SystemFeatureFlags
       @settings ||= Irida::CurrentSettings.current_application_settings
     end
 
-    def restore_after_audit_failure!
+    def restore_after_mutation_failure!
       return unless @previous_opt_in_features || @feature_state_before_mutation
 
       settings.update!(user_opt_in_features: @previous_opt_in_features)
       restore_feature_state!(feature_key, @feature_state_before_mutation)
     rescue ActiveRecord::ActiveRecordError, Flipper::Error => e
-      log_mutation_failure('Unable to restore feature state after opt-in audit failure', e)
+      log_mutation_failure('Unable to restore feature state after opt-in mutation failure', e)
     end
   end
 end

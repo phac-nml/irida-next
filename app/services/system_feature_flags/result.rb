@@ -2,7 +2,7 @@
 
 module SystemFeatureFlags
   # Small return contract for UI-independent feature flag mutation services.
-  Result = Data.define(:status, :change, :entry, :error) do
+  Result = Data.define(:status, :entry, :error) do
     def success?
       status == :success
     end
