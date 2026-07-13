@@ -55,9 +55,7 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'CAST'
-      assert_includes sql, 'DOUBLE PRECISION'
-      assert_includes sql, '<='
+      assert_includes sql, "CAST(\"workflow_executions\".\"metadata\" ->> 'test_field' AS DOUBLE PRECISION) <= 20.0"
     end
 
     test 'operator numeric_greater_than_equals' do
@@ -67,9 +65,7 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'CAST'
-      assert_includes sql, 'DOUBLE PRECISION'
-      assert_includes sql, '>='
+      assert_includes sql, "CAST(\"workflow_executions\".\"metadata\" ->> 'test_field' AS DOUBLE PRECISION) >= 20.0"
     end
 
     test 'operator date_less_than_equals' do
@@ -79,6 +75,7 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
+      puts sql
       assert_includes sql, 'TO_DATE'
       assert_includes sql, '<='
       assert_includes sql, '~'
@@ -127,9 +124,7 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'CAST'
-      assert_includes sql, 'DOUBLE PRECISION'
-      assert_includes sql, '='
+      assert_includes sql, "CAST(\"workflow_executions\".\"metadata\" ->> 'test_field' AS DOUBLE PRECISION) = 20.0"
     end
 
     test 'operator numeric_not_equals' do
@@ -139,9 +134,7 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'CAST'
-      assert_includes sql, 'DOUBLE PRECISION'
-      assert_includes sql, '!='
+      assert_includes sql, "CAST(\"workflow_executions\".\"metadata\" ->> 'test_field' AS DOUBLE PRECISION) != 20.0"
     end
 
     test 'operator date_equals' do
