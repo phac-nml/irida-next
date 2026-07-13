@@ -103,7 +103,7 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_difference(
       -> { Namespaces::ProjectNamespace.count } => +1,
       -> { Project.count } => +1,
-      -> { Member.count } => (members_count * +1)
+      -> { Member.count } => members_count
     ) do
       Namespaces::ProjectNamespace.restore(@project_namespace.id, recursive: true)
     end

@@ -84,7 +84,7 @@ class ConcatenationForm
                                       .count.keys
     if paired_end?
       return if attachment_file_types.all? { |t| %w[illumina_pe pe].include?(t) }
-    elsif attachment_file_types.length == 1 && attachment_file_types.none? { |t| %w[illumina_pe pe].include?(t) }
+    elsif attachment_file_types.length == 1 && !attachment_file_types.intersect?(%w[illumina_pe pe])
       return
     end
 
