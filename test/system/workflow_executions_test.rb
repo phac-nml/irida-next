@@ -429,6 +429,21 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
   end
 
+  test 'can change workflow execution files page size' do
+    visit workflow_execution_path(@workflow_execution3)
+
+    within 'main' do
+      click_on I18n.t('workflow_executions.show.tabs.files')
+    end
+
+    assert_selector '#files-panel-content tbody tr', count: 2
+
+    select '10', from: 'pagy-limit-select'
+
+    assert_selector '#files-panel-content tbody tr', count: 2
+    assert_selector '#files-panel-content #pagy-limit-select option[value="10"]:checked'
+  end
+
   test 'can view workflow execution with samplesheet' do
     visit workflow_execution_path(@workflow_execution1)
 
