@@ -202,4 +202,41 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
 
     assert_equal 3, data.count
   end
+
+  test 'cannot filter metadata field with non-metadata operator when feature flag is enabled' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
+                                 }]] } })
+
+    assert_not_nil result['errors'], 'should work and have no errors.'
+
+    assert_equal "filter.advanced_search.0.0.operator: '=' is an invalid operator for metadata fields",
+                 result['errors'].first['message']
+
+    data = result['data']['samples']
+
+    assert_nil data
+  end
+
+  test 'cannot filter non-metadata field with metadata operator when feature flag is enabled' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'name', operator: 'TEXT_EQUALS', value: 'Value1'
+                                 }]] } })
+
+    assert_not_nil result['errors'], 'should work and have no errors.'
+
+    assert_equal "filter.advanced_search.0.0.operator: 'text_equals' is an invalid operator for " \
+                 'non-metadata fields',
+                 result['errors'].first['message']
+
+    data = result['data']['samples']
+
+    assert_nil data
+  end
 end
