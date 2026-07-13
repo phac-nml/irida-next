@@ -103,19 +103,15 @@ Turbo.config.forms.confirm = (message, element) => {
   const defaultState = dialog.innerHTML;
 
   // Determine if custom content is provided
-  // This can be hidden on a button inside a form created by rails
-  const contentIdElement = element.querySelector("[data-turbo-content]");
-
-  if (contentIdElement) {
-    const contentId = contentIdElement.getAttribute("data-turbo-content");
+  if (element.hasAttribute("data-turbo-content")) {
+    const contentId = element.getAttribute("data-turbo-content");
     dialog.querySelector(".dialog--content").innerHTML =
       document.querySelector(contentId).innerHTML;
   }
 
   // See if there is a custom form to display
-  const confirmValueElement = element.querySelector("[data-confirm-value]");
-  if (confirmValueElement) {
-    const value = confirmValueElement.getAttribute("data-confirm-value");
+  if (element.hasAttribute("data-confirm-value")) {
+    const value = element.getAttribute("data-confirm-value");
     const confirmForm = dialog.querySelector(".dialog--form--validate");
     confirmForm.setAttribute("data-confirmation-input-value", value);
 

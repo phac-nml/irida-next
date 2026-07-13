@@ -43,10 +43,12 @@
       <%= button_to t(:"projects.edit.advanced.destroy.submit"),
       namespace_project_path,
       method: :delete,
-      data: {
-        turbo_confirm: "",
-        turbo_content: ".confirm-destroy",
-        confirm_value: @project.name,
+      form: {
+        data: {
+          turbo_confirm: "",
+          turbo_content: ".confirm-destroy",
+          confirm_value: @project.name,
+        }
       },
       class: "button button-destructive" %>
     </div>

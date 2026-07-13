@@ -47,10 +47,12 @@
       <%= button_to t(:"groups.edit.advanced.delete.submit"),
       @group,
       method: :delete,
-      data: {
-        turbo_confirm: "",
-        turbo_content: ".confirm-delete",
-        confirm_value: @group.path,
+      form: {
+        data: {
+          turbo_confirm: "",
+          turbo_content: ".confirm-delete",
+          confirm_value: @group.path,
+        }
       },
       class: "button button-destructive" %>
     </div>

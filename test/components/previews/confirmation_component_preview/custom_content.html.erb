@@ -1,5 +1,6 @@
 <%# This should be loaded once into the layout %>
 <%= render ConfirmationComponent.new %>
+
 <%# ------------------------------------------ %>
 
 <div id="confirmation-content" class="hidden">
@@ -8,8 +9,10 @@
 
 <%= button_to "Confirmation",
 "#",
-data: {
-  turbo_confirm: "",
-  turbo_content: "#confirmation-content",
+form: {
+  data: {
+    turbo_confirm: "",
+    turbo_content: "#confirmation-content",
+  }
 },
 class: "button button-destructive" %>

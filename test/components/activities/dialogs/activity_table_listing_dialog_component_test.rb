@@ -21,18 +21,12 @@ module Activities
           activity[:key].include?('project_namespace.samples.clone')
         end)
 
-        activity_to_render = activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.clone_html'
-        end
-
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
         load_more_button = find('button', text: 'Load more')
         click_button 'Load more' if load_more_button
 
-        within("form[action='#{activity_path(activity_to_render[:id])}']") do
-          click_button(I18n.t('components.activity.more_details'))
-        end
+        click_button(I18n.t('components.activity.samples.clone.more_details.button_descriptive_text'))
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_clone.title')
 
@@ -61,15 +55,9 @@ module Activities
           activity[:key].include?('project_namespace.samples.cloned_from')
         end)
 
-        activity_to_render = activities.find do |a|
-          a[:key] == 'activity.namespaces_project_namespace.samples.cloned_from_html'
-        end
-
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
-        within("form[action='#{activity_path(activity_to_render[:id])}']") do
-          click_button(I18n.t('components.activity.more_details'))
-        end
+        click_button(I18n.t('components.activity.samples.clone.more_details.button_descriptive_text'))
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_clone.title')
 
@@ -103,13 +91,11 @@ module Activities
           a[:key] == 'activity.namespaces_project_namespace.workflow_executions.destroy_html'
         end
 
-        activity_to_render = PublicActivity::Activity.find(activity_to_render[:id])
+        PublicActivity::Activity.find(activity_to_render[:id])
 
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
-        within("form[action='#{activity_path(activity_to_render[:id])}']") do
-          click_button(I18n.t('components.activity.more_details'))
-        end
+        click_button(I18n.t('components.activity.workflow_executions.destroy.more_details.button_descriptive_text'))
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.workflow_execution_destroy.title')
 
@@ -134,15 +120,9 @@ module Activities
           activity[:key].include?('group.samples.destroy')
         end)
 
-        activity_to_render = activities.find do |a|
-          a[:key] == 'activity.group.samples.destroy_html'
-        end
-
         visit group_activity_path(group_namespace)
 
-        within("form[action='#{activity_path(activity_to_render[:id])}']") do
-          click_button(I18n.t('components.activity.more_details'))
-        end
+        click_button(I18n.t('components.activity.samples.destroy.more_details.button_descriptive_text'))
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_destroy.title')
 
@@ -173,15 +153,9 @@ module Activities
           activity[:key].include?('group.import_samples.create')
         end)
 
-        activity_to_render = activities.find do |a|
-          a[:key] == 'activity.group.import_samples.create_html'
-        end
-
         visit group_activity_path(group_namespace)
 
-        within("form[action='#{activity_path(activity_to_render[:id])}']") do
-          click_button(I18n.t('components.activity.more_details'))
-        end
+        click_button(I18n.t('components.activity.samples.import.more_details.button_descriptive_text'))
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.import_samples.title')
 
@@ -212,15 +186,9 @@ module Activities
           activity[:key].include?('group.samples.transfer')
         end)
 
-        activity_to_render = activities.find do |a|
-          a[:key] == 'activity.group.samples.transfer_html'
-        end
-
         visit group_activity_path(group)
 
-        within("form[action='#{activity_path(activity_to_render[:id])}']") do
-          click_button(I18n.t('components.activity.more_details'))
-        end
+        click_button(I18n.t('components.activity.more_details'))
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.group_sample_transfer.title')
 
@@ -286,9 +254,7 @@ module Activities
 
         visit group_activity_path(group)
 
-        within("form[action='#{activity_path(activity_to_render[:id])}']") do
-          click_button(I18n.t('components.activity.more_details'))
-        end
+        click_button(I18n.t('components.activity.samples.clone.more_details.button_descriptive_text'))
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_clone.title')
 
@@ -330,15 +296,9 @@ module Activities
           activity[:key].include?('group.samples.bulk_metadata_update')
         end)
 
-        activity_to_render = activities.find do |a|
-          a[:key] == 'activity.group.samples.bulk_metadata_update_html'
-        end
-
         visit group_activity_path(group_namespace)
 
-        within("form[action='#{activity_path(activity_to_render[:id])}']") do
-          click_button(I18n.t('components.activity.more_details'))
-        end
+        click_button(I18n.t('components.activity.more_details'))
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
 
