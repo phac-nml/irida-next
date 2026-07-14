@@ -75,7 +75,6 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      puts sql
       assert_includes sql, 'TO_DATE'
       assert_includes sql, '<='
       assert_includes sql, '~'
