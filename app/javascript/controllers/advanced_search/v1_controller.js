@@ -172,6 +172,7 @@ export default class AdvancedSearchController extends Controller {
 
   handleOperatorChange(event) {
     const operator = event.target.value;
+    console.log(operator);
     const condition = event.target.closest(this.#conditionSelector);
     const group = condition?.closest(this.#groupSelector);
 
