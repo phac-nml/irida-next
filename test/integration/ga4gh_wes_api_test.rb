@@ -77,13 +77,14 @@ class ClientTest < ActionDispatch::IntegrationTest
     stubs.verify_stubbed_calls
   end
 
-  def test_get_run_stdout
+  def test_get_endpoint
     given_text = "workflow execution output"
     expected_text = "workflow execution output"
+    path = '/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout'
 
     stubs = Faraday::Adapter::Test::Stubs.new
-    stubs.get('/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout') do |env|
-      assert_equal '/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout', env.url.path
+    stubs.get(path) do |env|
+      assert_equal path, env.url.path
       [
         200,
         { 'Content-Type': 'text/plain' },
@@ -92,7 +93,7 @@ class ClientTest < ActionDispatch::IntegrationTest
     end
 
     cli = client(stubs)
-    assert_equal expected_text, cli.get_run_stdout('716ab7b0-cef7-4ae7-b467-26444b4c0579')
+    assert_equal expected_text, cli.get_endpoint(path)
     stubs.verify_stubbed_calls
   end
 

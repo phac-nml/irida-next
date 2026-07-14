@@ -248,7 +248,12 @@ module WorkflowExecutions
           [
             200,
             { 'Content-Type': 'application/json' },
-            { run_id: workflow_execution.run_id, state: run_log_state }
+            { run_id: workflow_execution.run_id,
+              state: run_log_state,
+              run_log: {
+                stdout: "/runs/#{workflow_execution.run_id}/stdout",
+                stderr: "/runs/#{workflow_execution.run_id}/stderr"
+              } }
           ]
         end
 
