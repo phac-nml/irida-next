@@ -80,7 +80,8 @@ module AdvancedSearch
 
     def validate_fields(group)
       group.conditions.each_with_index do |condition, condition_index|
-        validate_blank_field(condition)
+        validate_blank_inputs(condition)
+
         validate_field(condition) if condition.field.present?
         validate_date_and_numeric_field(condition)
 
@@ -94,7 +95,7 @@ module AdvancedSearch
       group.errors.add :base, :invalid
     end
 
-    def validate_blank_field(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+    def validate_blank_inputs(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
       if condition.field.blank?
         condition.errors.add :field, :blank
         return
@@ -119,7 +120,7 @@ module AdvancedSearch
     def validate_date_and_numeric_field(condition)
       if Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field?(condition.field)
         validate_metadata_date_and_numeric_fields(condition)
-      else
+      elsif metadata_field?(condition.field) || date_fields.include?(condition.field)
         validate_standard_date_and_numeric_fields(condition)
       end
     end
@@ -136,7 +137,7 @@ module AdvancedSearch
     end
 
     def validate_standard_date_and_numeric_fields(condition)
-      if date_field?(condition.field)
+      if date_field?(condition.field, condition.operator)
         validate_date_field_condition(condition)
       elsif BETWEEN_OPERATORS[:standard].include?(condition.operator)
         validate_numeric(condition)
@@ -144,8 +145,13 @@ module AdvancedSearch
     end
 
     def date_field?(field, operator)
-      date_fields.include?(field) || field.end_with?('_date') ||
-        (Flipper.enabled?(:advanced_search_metadata_operators) && METADATA_DATE_OPERATORS.include?(operator))
+      return true if date_fields.include?(field)
+
+      if Flipper.enabled?(:advanced_search_metadata_operators)
+        METADATA_DATE_OPERATORS.include?(operator)
+      else
+        field.end_with?('_date')
+      end
     end
 
     def validate_date_field_condition(condition)
