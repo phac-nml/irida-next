@@ -4,32 +4,32 @@
 
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, id: @sample.puid, subtitle: @sample.description) do |component| %>
   <%= viral_pill(text: @sample.puid, color: :blue) %>
+
   <% component.with_buttons do %>
-    <div class="flex flex-col @lg:flex-row @lg:space-x-2 space-y-2">
-      <% if @allowed_to[:update_sample] %>
-        <%= link_to(
-          t("projects.samples.show.edit_button"),
-          edit_namespace_project_sample_path(id: @sample.id),
-          class: "button button-default w-full",
-        ) %>
-      <% end %>
-      <% if @allowed_to[:destroy_sample] %>
-        <%= button_to(
-          t('common.actions.remove'),
-          new_samples_deletions_path,
-          params: {
-            namespace_id: @project.namespace.id,
-            deletion_type: "single",
-            sample_id: @sample.id,
-          },
-          method: :get,
-          data: {
-            turbo_stream: true,
-          },
-          class: "button button-default w-full",
-        ) %>
-      <% end %>
-    </div>
+    <% if @allowed_to[:update_sample] %>
+      <%= link_to(
+        t("projects.samples.show.edit_button"),
+        edit_namespace_project_sample_path(id: @sample.id),
+        class: "button button-default",
+      ) %>
+    <% end %>
+
+    <% if @allowed_to[:destroy_sample] %>
+      <%= button_to(
+        t('common.actions.remove'),
+        new_samples_deletions_path,
+        params: {
+          namespace_id: @project.namespace.id,
+          deletion_type: "single",
+          sample_id: @sample.id,
+        },
+        method: :get,
+        data: {
+          turbo_stream: true,
+        },
+        class: "button button-default",
+      ) %>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -45,11 +45,13 @@
       label: t(:"projects.samples.show.tabs.files"),
       selected: @tab == "files"
     ) %>
+
     <% tabs.with_tab(
       id: "metadata-tab",
       label: t(:"projects.samples.show.tabs.metadata"),
       selected: @tab == "metadata"
     ) %>
+
     <% tabs.with_tab(
       id: "history-tab",
       label: t(:"projects.samples.show.tabs.history"),
