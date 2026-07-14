@@ -2,6 +2,8 @@
 
 # Policy samples authorization
 class SamplePolicy < ApplicationPolicy
+  pre_check :check_project_archived, only: %i[destroy_attachment?]
+
   def effective_access_level # rubocop:disable Metrics/CyclomaticComplexity
     return unless record.instance_of?(Sample)
 
@@ -58,5 +60,11 @@ class SamplePolicy < ApplicationPolicy
           )
         )
     end
+  end
+
+  private
+
+  def check_project_archived
+    deny! if record.project.namespace.archived_at.present?
   end
 end

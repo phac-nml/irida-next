@@ -11,6 +11,13 @@ class SamplePolicyTest < ActiveSupport::TestCase
 
   test '#destroy_attachment?' do
     assert @policy.apply(:destroy_attachment?)
+
+    @sample.project.namespace.archived_at = Time.zone.now
+    @sample.project.namespace.save!
+
+    policy = SamplePolicy.new(@sample, user: @user)
+
+    assert_not policy.apply(:destroy_attachment?)
   end
 
   test 'scope' do
