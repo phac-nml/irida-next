@@ -2,7 +2,7 @@
 
 module SystemFeatureFlags
   # Changes the global Flipper boolean gate for an admin-manageable feature.
-  class ChangeGlobalState < MutationService
+  class UpdateGlobalState < BaseFeatureFlagService
     TARGET_STATES = %w[enabled disabled].freeze
 
     def initialize(feature_key:, target_state:, user:)
@@ -14,15 +14,17 @@ module SystemFeatureFlags
 
     def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       return failure(:unauthorized, feature_key:) unless system_user?(user)
-      return failure(:invalid_feature, feature_key:) unless Catalog.admin_manageable?(feature_key)
+      return failure(:invalid_feature, feature_key:) unless Irida::SystemFeatureFlagsCatalog.admin_manageable?(
+        feature_key
+      )
       return failure(:invalid_target_state, feature_key:) unless TARGET_STATES.include?(target_state)
 
       # Pre-lock optimization: skip lock if already in target state.
       # May be stale under concurrency; the in-lock re-check guarantees correctness.
-      return no_op_result if Catalog.global_state(feature_key) == target_state
+      return no_op_result if Irida::SystemFeatureFlagsCatalog.global_state(feature_key) == target_state
 
       applied = with_feature_lock(feature_key:) do
-        next if Catalog.global_state(feature_key) == target_state
+        next if Irida::SystemFeatureFlagsCatalog.global_state(feature_key) == target_state
 
         @feature_state_before_mutation = snapshot_feature_state(feature_key)
         apply_target_state!

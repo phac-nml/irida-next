@@ -3,9 +3,9 @@
 module SystemFeatureFlags
   # Applies profile-level actor gate toggles while enforcing opt-in availability under lock.
   #
-  # Does not check admin_manageable? — relies on ChangeOptInAvailability enforcing
+  # Does not check admin_manageable? — relies on UpdateOptInAvailability enforcing
   # that only admin-manageable features can have opt-in config entries.
-  class ChangeUserOptIn < MutationService
+  class UpdateUserOptIn < BaseFeatureFlagService
     def initialize(feature_key:, enabled:, user:)
       super()
       @feature_key = feature_key.to_s
