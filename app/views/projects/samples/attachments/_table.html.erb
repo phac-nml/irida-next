@@ -52,8 +52,7 @@
           turbo_frame: "sample_modal",
           turbo_stream: true,
         },
-        form_class: "max-sm:grow",
-        class: "button button-default w-full" %>
+        class: "button button-default max-sm:grow" %>
         <%= button_to t("projects.samples.show.concatenate_button"),
         new_namespace_project_sample_attachments_concatenation_path(
           sample_id: @sample.id,
@@ -65,8 +64,7 @@
           controller: "action-button",
           action_button_required_value: 2,
         },
-        form_class: "max-sm:grow",
-        class: "button button-default action-button w-full" %>
+        class: "button button-default action-button max-sm:grow" %>
         <%= button_to t("projects.samples.show.delete_files_button"),
         new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
         method: :get,
@@ -76,8 +74,7 @@
           controller: "action-button",
           action_button_required_value: 1,
         },
-        form_class: "max-sm:grow",
-        class: "button button-default action-button w-full" %>
+        class: "button button-default action-button max-sm:grow" %>
       <% end %>
     </div>
   <% end %>

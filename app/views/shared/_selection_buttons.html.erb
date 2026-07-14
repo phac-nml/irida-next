@@ -6,7 +6,7 @@
      name: nil,
      type: "submit",
      form: select_form_id,
-     class: "button button-default max-md:flex-1 max-md:basis-0 md:flex-none",
+     class: "button button-default max-sm:grow",
    }.merge(local_assigns.fetch(:select_button_options, {})) %>
 
 <% deselect_button_options = {
@@ -14,7 +14,7 @@
      name: nil,
      type: "submit",
      form: deselect_form_id,
-     class: "button button-default max-md:flex-1 max-md:basis-0 md:flex-none",
+     class: "button button-default max-sm:grow",
    }.merge(local_assigns.fetch(:deselect_button_options, {})) %>
 
 <% select_form_fields = local_assigns.fetch(:select_form_fields, {}) %>
@@ -44,8 +44,6 @@
   <% end %>
 <% end %>
 
-<div class="flex w-full gap-2 md:w-auto">
-  <%= button_tag t("common.controls.select_all"), **select_button_options %>
+<%= button_tag t("common.controls.select_all"), **select_button_options %>
 
-  <%= button_tag t("common.controls.deselect_all"), **deselect_button_options %>
-</div>
+<%= button_tag t("common.controls.deselect_all"), **deselect_button_options %>

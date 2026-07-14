@@ -25,6 +25,10 @@
   --dialog-section-max-height: calc(75vh - 1.25rem - 3.5rem);
 }
 
+form.button_to {
+  display: none;
+}
+
 /* Hide search clear button across all browsers */
 /* For Webkit browsers (Chrome, Safari, Edge) */
 input[type="search"]::-webkit-search-decoration,
