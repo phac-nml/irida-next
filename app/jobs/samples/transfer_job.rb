@@ -17,7 +17,7 @@ module Samples
       @broadcast_target = broadcast_target
       @service = Samples::TransferService.new(@namespace, @current_user)
 
-      @authorization_error = false
+      @pre_transfer_error = false
 
       pre_transfer_check
       @service.update_progress_bar(5, 100, @broadcast_target)
@@ -45,11 +45,11 @@ module Samples
       @service.authorize_transfer(@new_project, @sample_ids)
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
       @namespace.errors.add(:base, e.message)
-      @authorization_error = true
+      @pre_transfer_error = true
     end
 
     def transfer_step(step)
-      return if @authorization_error
+      return if @pre_transfer_error
 
       transferrable_samples = @service.filter_sample_ids(@sample_ids, 'transfer', false)
       project_sample_ids_to_transfer = @service.organize_samples_by_project(transferrable_samples)
@@ -60,7 +60,7 @@ module Samples
     end
 
     def update_metadata_step(step)
-      return if @authorization_error
+      return if @pre_transfer_error
 
       grouped_transferred_samples.sort[step.cursor..]&.each do |previous_project_id, samples|
         @service.update_metadata_summary_counts(
@@ -72,7 +72,7 @@ module Samples
     end
 
     def update_counts_and_activities_step(step)
-      return if @authorization_error
+      return if @pre_transfer_error
 
       grouped_transferred_samples.sort[step.cursor..]&.each do |previous_project_id, samples|
         @service.update_samples_count_and_create_activities(
@@ -84,7 +84,7 @@ module Samples
     end
 
     def collect_errors_and_broadcast_to_turbo_stream_step # rubocop:disable Metrics/MethodLength
-      @service.add_transfer_errors(@sample_ids, transferred_sample_ids, @new_project_id) unless @authorization_error
+      @service.add_transfer_errors(@sample_ids, transferred_sample_ids, @new_project_id) unless @pre_transfer_error
 
       if @namespace.errors.empty?
         Turbo::StreamsChannel.broadcast_replace_to(
@@ -124,7 +124,7 @@ module Samples
     end
 
     def return_data
-      return [] if @authorization_error
+      return [] if @pre_transfer_error
 
       transferred_sample_ids
     end
