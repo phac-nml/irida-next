@@ -1,4 +1,13 @@
 features:
+  advanced_search_metadata_operators:
+    admin_manageable: true
+    description:
+      en: "Enable metadata specific operators in advanced search"
+      fr: "Activer les opérateurs spécifiques aux métadonnées dans la recherche avancée"
+    enable_in_development: true
+    name:
+      en: "Advanced Search Metadata Operators"
+      fr: "Opérateurs de métadonnées pour la recherche avancée"
   advanced_search_with_auto_complete:
     admin_manageable: true
     description:

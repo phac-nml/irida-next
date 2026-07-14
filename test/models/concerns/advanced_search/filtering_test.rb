@@ -50,26 +50,22 @@ module AdvancedSearch
 
     test 'operator numeric_less_than_equals' do
       condition = WorkflowExecution::SearchCondition.new(field: 'metadata.test_field',
-                                                         operator: 'numeric_less_than_equals', value: '20')
+                                                         operator: 'numeric_less_than_equals', value: '20.1')
       result = @test_instance.send(:add_condition,
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'CAST'
-      assert_includes sql, 'DOUBLE PRECISION'
-      assert_includes sql, '<='
+      assert_includes sql, "CAST(\"workflow_executions\".\"metadata\" ->> 'test_field' AS DOUBLE PRECISION) <= 20.1"
     end
 
     test 'operator numeric_greater_than_equals' do
       condition = WorkflowExecution::SearchCondition.new(field: 'metadata.test_field',
-                                                         operator: 'numeric_greater_than_equals', value: '20')
+                                                         operator: 'numeric_greater_than_equals', value: '20.0')
       result = @test_instance.send(:add_condition,
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'CAST'
-      assert_includes sql, 'DOUBLE PRECISION'
-      assert_includes sql, '>='
+      assert_includes sql, "CAST(\"workflow_executions\".\"metadata\" ->> 'test_field' AS DOUBLE PRECISION) >= 20.0"
     end
 
     test 'operator date_less_than_equals' do
@@ -127,7 +123,7 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'ILIKE'
+      assert_includes sql, "CAST(\"workflow_executions\".\"metadata\" ->> 'test_field' AS DOUBLE PRECISION) = 20.0"
     end
 
     test 'operator numeric_not_equals' do
@@ -137,8 +133,7 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, 'NOT ILIKE'
-      assert_includes sql, 'IS NULL'
+      assert_includes sql, "CAST(\"workflow_executions\".\"metadata\" ->> 'test_field' AS DOUBLE PRECISION) != 20.0"
     end
 
     test 'operator date_equals' do

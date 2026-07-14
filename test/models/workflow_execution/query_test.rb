@@ -1442,4 +1442,256 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     results = query.results
     assert_equal 2, results.count
   end
+
+  test 'metadata numeric operators with comparing integers and floats' do
+    we1 = workflow_executions(:workflow_execution_with_metadata_dates)
+    we2 = workflow_executions(:workflow_execution_with_metadata_dates2)
+
+    query1 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.sample_count',
+                                                 operator: 'numeric_greater_than_equals',
+                                                 value: '11.0')
+        ]
+      )]
+    )
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+
+    assert_not_includes results1, we1
+    assert_includes results1, we2
+
+    query2 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(
+            field: 'metadata.sample_count', operator: 'numeric_less_than_equals',
+            value: '25.0'
+          )
+        ]
+      )]
+    )
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+
+    assert_includes results2, we1
+    assert_includes results2, we2
+
+    query3 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(
+            field: 'metadata.file_size', operator: 'numeric_equals',
+            value: '1024.5'
+          )
+        ]
+      )]
+    )
+    assert query3.advanced_query?
+    assert query3.valid?
+    results3 = query3.results
+
+    assert_includes results3, we1
+    assert_not_includes results3, we2
+
+    query4 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(
+            field: 'metadata.file_size', operator: 'numeric_not_equals',
+            value: '1024'
+          )
+        ]
+      )]
+    )
+    assert query4.advanced_query?
+    assert query4.valid?
+    results4 = query4.results
+
+    assert_includes results4, we1
+    assert_includes results4, we2
+  end
+
+  test 'metadata date operators' do
+    we1 = workflow_executions(:workflow_execution_with_metadata_dates)
+    we2 = workflow_executions(:workflow_execution_with_metadata_dates2)
+
+    query1 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.start_date', operator: 'date_greater_than_equals',
+                                                 value: '2024-01-01')
+        ]
+      )]
+    )
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+
+    assert_includes results1, we1
+    assert_includes results1, we2
+
+    query2 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(
+            field: 'metadata.start_date', operator: 'date_less_than_equals',
+            value: '2024-01-15'
+          )
+        ]
+      )]
+    )
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+
+    assert_includes results2, we1
+    assert_not_includes results2, we2
+
+    query3 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(
+            field: 'metadata.start_date', operator: 'date_equals',
+            value: '2024-01-15'
+          )
+        ]
+      )]
+    )
+    assert query3.advanced_query?
+    assert query3.valid?
+    results3 = query3.results
+
+    assert_includes results3, we1
+    assert_not_includes results3, we2
+
+    query4 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(
+            field: 'metadata.start_date', operator: 'date_not_equals',
+            value: '2024-01-15'
+          )
+        ]
+      )]
+    )
+    assert query4.advanced_query?
+    assert query4.valid?
+    results4 = query4.results
+
+    assert_not_includes results4, we1
+    assert_includes results4, we2
+  end
+
+  test 'metadata text operators' do
+    we1 = workflow_executions(:workflow_execution_with_metadata_dates)
+    we2 = workflow_executions(:workflow_execution_with_metadata_dates2)
+
+    query1 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.pipeline_id', operator: 'text_in',
+                                                 value: ['phac-nml/iridanextexample', 'phac-nml/gasclustering'])
+        ]
+      )]
+    )
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+
+    assert_includes results1, we1
+    assert_includes results1, we2
+
+    query2 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.pipeline_id', operator: 'text_not_in',
+                                                 value: ['phac-nml/iridanextexample', 'phac-nml/gasclustering'])
+        ]
+      )]
+    )
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+
+    assert_not_includes results2, we1
+    assert_not_includes results2, we2
+
+    query3 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.pipeline_id', operator: 'text_contains',
+                                                 value: 'x')
+        ]
+      )]
+    )
+    assert query3.advanced_query?
+    assert query3.valid?
+    results3 = query3.results
+
+    assert_includes results3, we1
+    assert_not_includes results3, we2
+
+    query4 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.pipeline_id', operator: 'text_not_contains',
+                                                 value: 'x')
+        ]
+      )]
+    )
+    assert query4.advanced_query?
+    assert query4.valid?
+    results4 = query4.results
+
+    assert_not_includes results4, we1
+    assert_includes results4, we2
+
+    query5 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.pipeline_id', operator: 'text_equals',
+                                                 value: 'phac-nml/iridanextexample')
+        ]
+      )]
+    )
+    assert query5.advanced_query?
+    assert query5.valid?
+    results5 = query5.results
+
+    assert_includes results5, we1
+    assert_not_includes results5, we2
+
+    query6 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.pipeline_id', operator: 'text_not_equals',
+                                                 value: 'phac-nml/iridanextexample')
+        ]
+      )]
+    )
+    assert query6.advanced_query?
+    assert query6.valid?
+    results6 = query6.results
+
+    assert_not_includes results6, we1
+    assert_includes results6, we2
+  end
 end

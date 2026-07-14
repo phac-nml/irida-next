@@ -320,4 +320,225 @@ class QueryTest < ActiveSupport::TestCase
     # Should exclude sample with % in name
     assert_not_includes results, sample
   end
+
+  test 'metadata numeric operators with comparing integers and floats' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    sample1.update(metadata: { 'float_field' => '10.0', 'int_field' => '10' })
+    sample2.update(metadata: { 'float_field' => '100.0', 'int_field' => '100' })
+
+    search_params1 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.float_field', operator: 'numeric_greater_than_equals', value: '12' } }
+                       } },
+                       project_ids: [project.id] }
+    query1 = Sample::Query.new(search_params1)
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+
+    assert_not_includes results1, sample1
+    assert_includes results1, sample2
+
+    search_params2 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.int_field', operator: 'numeric_less_than_equals', value: '101.00' } }
+                       } },
+                       project_ids: [project.id] }
+    query2 = Sample::Query.new(search_params2)
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+
+    assert_includes results2, sample1
+    assert_includes results2, sample2
+
+    search_params3 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.int_field', operator: 'numeric_equals', value: '100.00' } }
+                       } },
+                       project_ids: [project.id] }
+    query3 = Sample::Query.new(search_params3)
+    assert query3.advanced_query?
+    assert query3.valid?
+    results3 = query3.results
+
+    assert_not_includes results3, sample1
+    assert_includes results3, sample2
+
+    search_params4 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.float_field', operator: 'numeric_not_equals', value: '10' } }
+                       } },
+                       project_ids: [project.id] }
+    query4 = Sample::Query.new(search_params4)
+    assert query4.advanced_query?
+    assert query4.valid?
+    results4 = query4.results
+
+    assert_not_includes results4, sample1
+    assert_includes results4, sample2
+  end
+
+  test 'metadata date operators' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    sample1.update(metadata: { 'date_field' => '2026-01-01' })
+    sample2.update(metadata: { 'date_field' => '2026-12-31' })
+
+    search_params1 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.date_field', operator: 'date_greater_than_equals',
+                                value: '2025-12-31' } }
+                       } },
+                       project_ids: [project.id] }
+    query1 = Sample::Query.new(search_params1)
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+
+    assert_includes results1, sample1
+    assert_includes results1, sample2
+
+    search_params2 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.date_field', operator: 'date_less_than_equals', value: '2026-01-01' } }
+                       } },
+                       project_ids: [project.id] }
+    query2 = Sample::Query.new(search_params2)
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+
+    assert_includes results2, sample1
+    assert_not_includes results2, sample2
+
+    search_params3 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.date_field', operator: 'date_equals', value: '2026-01-01' } }
+                       } },
+                       project_ids: [project.id] }
+    query3 = Sample::Query.new(search_params3)
+    assert query3.advanced_query?
+    assert query3.valid?
+    results3 = query3.results
+
+    assert_includes results3, sample1
+    assert_not_includes results3, sample2
+
+    search_params4 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.date_field', operator: 'date_not_equals', value: '2026-01-01' } }
+                       } },
+                       project_ids: [project.id] }
+    query4 = Sample::Query.new(search_params4)
+    assert query4.advanced_query?
+    assert query4.valid?
+    results4 = query4.results
+
+    assert_not_includes results4, sample1
+    assert_includes results4, sample2
+  end
+
+  test 'metadata text operators' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    sample1.update(metadata: { 'text_field' => 'abc' })
+    sample2.update(metadata: { 'text_field' => 'xyz' })
+
+    search_params1 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.text_field', operator: 'text_in', value: %w[abc xyz] } }
+                       } },
+                       project_ids: [project.id] }
+    query1 = Sample::Query.new(search_params1)
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+
+    assert_includes results1, sample1
+    assert_includes results1, sample2
+
+    search_params2 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.text_field', operator: 'text_not_in', value: ['xyz'] } }
+                       } },
+                       project_ids: [project.id] }
+    query2 = Sample::Query.new(search_params2)
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+
+    assert_includes results2, sample1
+    assert_not_includes results2, sample2
+
+    search_params3 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.text_field', operator: 'text_contains', value: 'a' } }
+                       } },
+                       project_ids: [project.id] }
+    query3 = Sample::Query.new(search_params3)
+    assert query3.advanced_query?
+    assert query3.valid?
+    results3 = query3.results
+
+    assert_includes results3, sample1
+    assert_not_includes results3, sample2
+
+    search_params4 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.text_field', operator: 'text_not_contains', value: 'z' } }
+                       } },
+                       project_ids: [project.id] }
+    query4 = Sample::Query.new(search_params4)
+    assert query4.advanced_query?
+    assert query4.valid?
+    results4 = query4.results
+
+    assert_includes results4, sample1
+    assert_not_includes results4, sample2
+
+    search_params5 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.text_field', operator: 'text_equals', value: 'xyz' } }
+                       } },
+                       project_ids: [project.id] }
+    query5 = Sample::Query.new(search_params5)
+    assert query5.advanced_query?
+    assert query5.valid?
+    results5 = query5.results
+
+    assert_not_includes results5, sample1
+    assert_includes results5, sample2
+
+    search_params6 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.text_field', operator: 'text_not_equals', value: 'xyz' } }
+                       } },
+                       project_ids: [project.id] }
+    query6 = Sample::Query.new(search_params6)
+    assert query6.advanced_query?
+    assert query6.valid?
+    results6 = query6.results
+
+    assert_includes results6, sample1
+    assert_not_includes results6, sample2
+  end
 end

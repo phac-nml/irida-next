@@ -17,12 +17,12 @@ module AdvancedSearch
     OPERATOR_HANDLERS = {
       # equals operators
       '=' => :apply_condition_equals,
-      'numeric_equals' => :apply_condition_equals,
+      'numeric_equals' => :apply_condition_metadata_numeric_equals,
       'date_equals' => :apply_condition_equals,
       'text_equals' => :apply_condition_equals,
       # not_equals operators
       '!=' => :apply_condition_not_equals,
-      'numeric_not_equals' => :apply_condition_not_equals,
+      'numeric_not_equals' => :apply_condition_metadata_numeric_not_equals,
       'date_not_equals' => :apply_condition_not_equals,
       'text_not_equals' => :apply_condition_not_equals,
       # contains operators
@@ -76,6 +76,14 @@ module AdvancedSearch
 
     def apply_condition_not_contains(scope, node, value, field_name)
       condition_not_contains(scope, node, value, model_class, field_name)
+    end
+
+    def apply_condition_metadata_numeric_equals(scope, node, value, _field_name)
+      metadata_condition_numeric_comparison(scope, node, value, :eq)
+    end
+
+    def apply_condition_metadata_numeric_not_equals(scope, node, value, _field_name)
+      metadata_condition_numeric_comparison(scope, node, value, :not_eq)
     end
 
     def apply_condition_standard_greater_than_or_equal(scope, node, value, field_name)
