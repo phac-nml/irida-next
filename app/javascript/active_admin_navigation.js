@@ -2,7 +2,7 @@ const DESKTOP_BREAKPOINT = "(min-width: 80rem)";
 
 function initializeActiveAdminNavigation() {
   const navigation = document.querySelector(
-    'nav[data-controller="active-admin-navigation"]',
+    "nav[data-active-admin-navigation]",
   );
   const menu = navigation?.querySelector("#main-menu");
   if (!menu) return;

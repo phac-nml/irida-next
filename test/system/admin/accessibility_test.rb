@@ -11,7 +11,7 @@ module Admin
     test 'admin layout is accessible' do
       page.visit admin_root_path
 
-      assert_selector 'nav[data-controller="active-admin-navigation"]:not([inert])', visible: :all
+      assert_selector 'nav[data-active-admin-navigation]:not([inert])', visible: :all
       assert_no_selector '#main-menu[aria-hidden]', visible: :all
       assert_accessible
     end
