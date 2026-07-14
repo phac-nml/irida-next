@@ -16,6 +16,10 @@ module DataExports
 
       if @data_export.valid?
         @data_export.export_type == 'analysis' ? validate_analysis_ids : validate_sample_ids
+        validate_source_size
+
+        return @data_export if @data_export.errors.any?
+
         @data_export.save
         DataExports::CreateJob.perform_later(@data_export)
       end
@@ -64,6 +68,34 @@ module DataExports
       @data_export.user = current_user
       @data_export.status = 'processing'
       @data_export.name = nil if params.key?('name') && params['name'].empty?
+    end
+
+    def validate_source_size
+      return if @data_export.export_type == 'linelist'
+
+      max_data_export_size_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
+
+      return if export_source_size_bytes < max_data_export_size_gigabytes.gigabytes
+
+      add_max_data_export_size_error(max_data_export_size_gigabytes)
+    end
+
+    def export_source_size_bytes
+      DataExports::ExportSourceSizeCalculator.new(
+        export_type: @data_export.export_type,
+        export_parameters: params['export_parameters']
+      ).execute
+    end
+
+    def add_max_data_export_size_error(max_data_export_size_gigabytes)
+      @data_export.errors.add(
+        :base,
+        :max_data_export_size_exceeded,
+        message: I18n.t(
+          'services.data_exports.create.max_data_export_size_exceeded',
+          max_size_gigabytes: max_data_export_size_gigabytes
+        )
+      )
     end
 
     def authorized_export_samples(namespace, sample_ids)
