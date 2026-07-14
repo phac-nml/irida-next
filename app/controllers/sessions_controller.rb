@@ -26,9 +26,11 @@ class SessionsController < Devise::SessionsController
   end
 
   # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
+  def destroy
+    response.set_header('Clear-Site-Data', '"cookies", "storage", "cache"')
+
+    super
+  end
 
   # protected
 
