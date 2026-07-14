@@ -118,20 +118,18 @@ module AdvancedSearch
     end
 
     def validate_date_and_numeric_field(condition)
-      if Flipper.enabled?(:advanced_search_metadata_operators) && metadata_field?(condition.field)
+      is_metadata_field = metadata_field?(condition.field)
+      if Flipper.enabled?(:advanced_search_metadata_operators) && is_metadata_field
         validate_metadata_date_and_numeric_fields(condition)
-      elsif metadata_field?(condition.field) || date_fields.include?(condition.field)
+      elsif is_metadata_field || date_fields.include?(condition.field)
         validate_standard_date_and_numeric_fields(condition)
       end
     end
 
     def validate_metadata_date_and_numeric_fields(condition)
-      return unless METADATA_DATE_OPERATORS.include?(condition.operator) ||
-                    METADATA_NUMERIC_OPERATORS.include?(condition.operator)
-
       if METADATA_DATE_OPERATORS.include?(condition.operator)
         validate_date(condition)
-      else
+      elsif METADATA_NUMERIC_OPERATORS.include?(condition.operator)
         validate_numeric(condition)
       end
     end

@@ -77,6 +77,68 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
     end
   end
 
+  test 'operators with feature flag' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    visit('rails/view_components/advanced_search_component/default')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within 'dialog' do
+        assert_accessible
+
+        assert_text I18n.t('components.advanced_search_component.v1.rules.metadata_operators')
+        within first("select[name$='[operator]']") do
+          assert_no_text I18n.t('components.advanced_search_component.v1.operations.standard.equals')
+          assert_no_text I18n.t('components.advanced_search_component.v1.operations.standard.not_equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.existence')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.text')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_contains') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_contains') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.numeric')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.date')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_less_than_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_greater_than_equals') # rubocop:disable Layout/LineLength
+        end
+
+        within first("div[data-controller='combobox--v1']") do
+          combobox = find("input[role='combobox']")
+          combobox.click
+          combobox.send_keys([:ctrl, 'a'], :delete)
+          combobox.fill_in with: 'Sample Name'
+        end
+
+        within first("select[name$='[operator]']") do
+          assert_no_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.text')
+          assert_no_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_equals') # rubocop:disable Layout/LineLength
+          assert_no_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.less_than')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.greater_than')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.contains')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.does_not_contain')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_in')
+        end
+      end
+    end
+  end
+
   test 'close dialog clears form and closes when there is no active search' do
     visit('rails/view_components/advanced_search_component/empty')
     within 'div[data-controller-connected="true"]' do
