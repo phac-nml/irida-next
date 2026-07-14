@@ -26,6 +26,7 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_equal true, defaults[:signup_enabled]
     assert_equal true, defaults[:password_authentication_enabled]
     assert_equal 30, defaults[:cleanup_inactive_access_tokens_after_days]
+    assert_equal 30, defaults[:max_data_export_size_gigabytes]
   end
 
   test 'build_from_defaults builds a new instance with defaults' do
@@ -36,6 +37,7 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_equal 30, settings.cleanup_inactive_access_tokens_after_days
     assert_equal false, settings.require_personal_access_token_expiry
     assert_equal 365, settings.max_personal_access_token_lifetime_in_days
+    assert_equal 30, settings.max_data_export_size_gigabytes
   end
 
   test 'build_from_defaults allows overriding defaults' do
@@ -46,6 +48,7 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_equal 30, settings.cleanup_inactive_access_tokens_after_days
     assert_equal true, settings.require_personal_access_token_expiry
     assert_equal 365, settings.max_personal_access_token_lifetime_in_days
+    assert_equal 30, settings.max_data_export_size_gigabytes
   end
 
   test 'create_from_defaults creates and saves a new instance with defaults' do
@@ -56,6 +59,34 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_equal 30, settings.cleanup_inactive_access_tokens_after_days
     assert_equal false, settings.require_personal_access_token_expiry
     assert_equal 365, settings.max_personal_access_token_lifetime_in_days
+    assert_equal 30, settings.max_data_export_size_gigabytes
+  end
+
+  test '#max_data_export_size_gigabytes returns custom override from defaults' do
+    settings = ApplicationSetting.build_from_defaults(max_data_export_size_gigabytes: 45)
+
+    assert_equal 45, settings.max_data_export_size_gigabytes
+  end
+
+  test 'max_data_export_size_gigabytes rejects zero values' do
+    settings = ApplicationSetting.build_from_defaults(max_data_export_size_gigabytes: 0)
+
+    assert_not settings.valid?
+    assert_includes settings.errors[:max_data_export_size_gigabytes], 'must be greater than 0'
+  end
+
+  test 'max_data_export_size_gigabytes rejects negative values' do
+    settings = ApplicationSetting.build_from_defaults(max_data_export_size_gigabytes: -1)
+
+    assert_not settings.valid?
+    assert_includes settings.errors[:max_data_export_size_gigabytes], 'must be greater than 0'
+  end
+
+  test 'max_data_export_size_gigabytes rejects non-whole values' do
+    settings = ApplicationSetting.build_from_defaults(max_data_export_size_gigabytes: 1.5)
+
+    assert_not settings.valid?
+    assert_includes settings.errors[:max_data_export_size_gigabytes], 'must be an integer'
   end
 
   test '#signup_enabled? returns the value of signup_enabled' do
