@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module SystemFeatureFlags
-  class ChangeOptInAvailabilityTest < ActiveSupport::TestCase
+  class UpdateOptInAvailabilityTest < ActiveSupport::TestCase
     setup do
       @administrator = users(:system_user)
       @user = users(:john_doe)
@@ -12,14 +12,14 @@ module SystemFeatureFlags
 
     test 'enables all-user opt-in availability when no entry exists' do
       with_user_opt_in_features({}) do |settings|
-        result = ChangeOptInAvailability.new(
+        result = UpdateOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: true,
           user: @administrator
         ).execute
 
         assert result.success?
-        assert_equal 'all_users', Catalog.opt_in_state(:data_grid_samples_table)
+        assert_equal 'all_users', Irida::SystemFeatureFlagsCatalog.opt_in_state(:data_grid_samples_table)
         assert_equal({ 'allowlist' => 'all' }, settings.reload.user_opt_in_features['data_grid_samples_table'])
       end
     end
@@ -28,7 +28,7 @@ module SystemFeatureFlags
       config = user_opt_in_feature_config(allowlist: [@user.email])
 
       with_user_opt_in_features(config) do |settings|
-        result = ChangeOptInAvailability.new(
+        result = UpdateOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: true,
           user: @administrator
@@ -44,7 +44,7 @@ module SystemFeatureFlags
         Flipper.enable_actor(:data_grid_samples_table, @user)
         Flipper.enable_percentage_of_time(:data_grid_samples_table, 10)
 
-        result = ChangeOptInAvailability.new(
+        result = UpdateOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: false,
           user: @administrator
@@ -61,7 +61,7 @@ module SystemFeatureFlags
       with_user_opt_in_features({}) do
         Flipper.enable(:data_grid_samples_table)
 
-        result = ChangeOptInAvailability.new(
+        result = UpdateOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: true,
           user: @administrator
@@ -77,7 +77,7 @@ module SystemFeatureFlags
         Flipper.enable_actor(:data_grid_samples_table, @user)
         Flipper::Feature.any_instance.stubs(:disable_actor).raises(Flipper::Error)
 
-        result = ChangeOptInAvailability.new(
+        result = UpdateOptInAvailability.new(
           feature_key: :data_grid_samples_table,
           available: false,
           user: @administrator

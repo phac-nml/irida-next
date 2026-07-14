@@ -2,8 +2,8 @@
 
 require 'test_helper'
 
-module SystemFeatureFlags
-  class CatalogTest < ActiveSupport::TestCase
+module Irida
+  class SystemFeatureFlagsCatalogTest < ActiveSupport::TestCase
     setup do
       @user = users(:john_doe)
       Flipper.disable(:data_grid_samples_table)
@@ -13,7 +13,7 @@ module SystemFeatureFlags
       with_user_opt_in_features(user_opt_in_feature_config) do
         Flipper.enable_actor(:data_grid_samples_table, @user)
 
-        entry = Catalog.fetch(:data_grid_samples_table)
+        entry = SystemFeatureFlagsCatalog.fetch(:data_grid_samples_table)
 
         assert_equal 'data_grid_samples_table', entry[:key]
         assert_equal 'conditional', entry[:global_state]
@@ -26,12 +26,12 @@ module SystemFeatureFlags
       config = user_opt_in_feature_config(allowlist: [@user.email])
 
       with_user_opt_in_features(config) do
-        assert_equal 'allowlist', Catalog.fetch(:data_grid_samples_table)[:opt_in_state]
+        assert_equal 'allowlist', SystemFeatureFlagsCatalog.fetch(:data_grid_samples_table)[:opt_in_state]
       end
     end
 
     test 'returns nil for operational features' do
-      assert_nil Catalog.fetch(:compose_with_retry)
+      assert_nil SystemFeatureFlagsCatalog.fetch(:compose_with_retry)
     end
   end
 end

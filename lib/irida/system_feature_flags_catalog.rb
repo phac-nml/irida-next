@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module SystemFeatureFlags
+module Irida
   # Runtime view of admin-manageable experimental features.
-  module Catalog
+  module SystemFeatureFlagsCatalog
     class << self
       def entries(locale: I18n.locale)
-        Irida::ExperimentalFeatureCatalog.admin_entries(locale: locale).map do |catalog_entry|
+        ExperimentalFeatureCatalog.admin_entries(locale: locale).map do |catalog_entry|
           entry(catalog_entry)
         end
       end
@@ -14,11 +14,11 @@ module SystemFeatureFlags
         normalized_key = feature_key.to_s
         return unless admin_manageable?(normalized_key)
 
-        entry(Irida::ExperimentalFeatureCatalog.fetch(normalized_key, locale: locale))
+        entry(ExperimentalFeatureCatalog.fetch(normalized_key, locale: locale))
       end
 
       def admin_manageable?(feature_key)
-        Irida::ExperimentalFeatureCatalog.fetch(feature_key)&.fetch(:admin_manageable, false) == true
+        ExperimentalFeatureCatalog.fetch(feature_key)&.fetch(:admin_manageable, false) == true
       end
 
       def global_state(feature_key)
@@ -60,7 +60,7 @@ module SystemFeatureFlags
       end
 
       def settings
-        Irida::CurrentSettings.current_application_settings
+        CurrentSettings.current_application_settings
       end
     end
   end

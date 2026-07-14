@@ -2,7 +2,7 @@
 
 module SystemFeatureFlags
   # Changes profile opt-in availability for an admin-manageable feature.
-  class ChangeOptInAvailability < MutationService
+  class UpdateOptInAvailability < BaseFeatureFlagService
     def initialize(feature_key:, available:, user:)
       super()
       @feature_key = feature_key.to_s
@@ -12,18 +12,22 @@ module SystemFeatureFlags
 
     def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       return failure(:unauthorized, feature_key:) unless system_user?(user)
-      return failure(:invalid_feature, feature_key:) unless Catalog.admin_manageable?(feature_key)
+      return failure(:invalid_feature, feature_key:) unless Irida::SystemFeatureFlagsCatalog.admin_manageable?(
+        feature_key
+      )
       return failure(:invalid_availability, feature_key:) unless [true, false].include?(available)
-      return failure(:globally_enabled, feature_key:) if Catalog.global_state(feature_key) == 'enabled'
+      if Irida::SystemFeatureFlagsCatalog.global_state(feature_key) == 'enabled'
+        return failure(:globally_enabled, feature_key:)
+      end
 
       # Pre-lock optimization: skip lock if nothing would change.
       # May be stale under concurrency; the in-lock re-check guarantees correctness.
-      return no_op(feature_key:) if no_op?(Catalog.opt_in_state(feature_key))
+      return no_op(feature_key:) if no_op?(Irida::SystemFeatureFlagsCatalog.opt_in_state(feature_key))
 
       applied = with_feature_lock(feature_key:, settings:) do
-        abort_mutation!(:globally_enabled) if Catalog.global_state(feature_key) == 'enabled'
+        abort_mutation!(:globally_enabled) if Irida::SystemFeatureFlagsCatalog.global_state(feature_key) == 'enabled'
 
-        next if no_op?(Catalog.opt_in_state(feature_key))
+        next if no_op?(Irida::SystemFeatureFlagsCatalog.opt_in_state(feature_key))
 
         @previous_opt_in_features = settings.user_opt_in_features.deep_dup
         @feature_state_before_mutation = snapshot_feature_state(feature_key)

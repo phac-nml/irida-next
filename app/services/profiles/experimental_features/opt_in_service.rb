@@ -53,7 +53,7 @@ module Profiles
       end
 
       def update_user_opt_in
-        SystemFeatureFlags::ChangeUserOptIn.new(
+        SystemFeatureFlags::UpdateUserOptIn.new(
           feature_key: opt_in_form.feature,
           enabled: opt_in_form.enabled?,
           user: current_user

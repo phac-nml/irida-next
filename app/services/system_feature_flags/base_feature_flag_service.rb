@@ -2,7 +2,22 @@
 
 module SystemFeatureFlags
   # Shared orchestration for feature-flag mutation services.
-  class MutationService
+  class BaseFeatureFlagService
+    # Small return contract for UI-independent feature flag mutation services.
+    Result = Data.define(:status, :entry, :error) do
+      def success?
+        status == :success
+      end
+
+      def no_op?
+        status == :no_op
+      end
+
+      def failure?
+        status == :failure
+      end
+    end
+
     # Internal sentinel used to abort a mutation inside a transaction with a typed error.
     class AbortMutation < StandardError
       attr_reader :error
@@ -20,15 +35,18 @@ module SystemFeatureFlags
     end
 
     def success(feature_key:, entry: nil)
-      Result.new(status: :success, entry: entry || Catalog.fetch(feature_key), error: nil)
+      Result.new(status: :success, entry: entry || Irida::SystemFeatureFlagsCatalog.fetch(feature_key),
+                 error: nil)
     end
 
     def no_op(feature_key:, entry: nil)
-      Result.new(status: :no_op, entry: entry || Catalog.fetch(feature_key), error: nil)
+      Result.new(status: :no_op, entry: entry || Irida::SystemFeatureFlagsCatalog.fetch(feature_key),
+                 error: nil)
     end
 
     def failure(error, feature_key:, entry: nil)
-      Result.new(status: :failure, entry: entry || Catalog.fetch(feature_key), error: error)
+      Result.new(status: :failure, entry: entry || Irida::SystemFeatureFlagsCatalog.fetch(feature_key),
+                 error: error)
     end
 
     def with_feature_lock(feature_key:, settings: nil)
