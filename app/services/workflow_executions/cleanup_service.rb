@@ -15,7 +15,7 @@ module WorkflowExecutions
       return { stdout: nil, stderr: nil } unless @workflow_execution.completed? || @workflow_execution.error?
 
       response = @wes_client.get_run_log(@workflow_execution.run_id)
-      run_log = response[:run_log] || response.dig(:request, :run_log)
+      run_log = response[:run_log]
 
       stdout = resolve_log_output(run_log, :stdout)
       stderr = resolve_log_output(run_log, :stderr)
