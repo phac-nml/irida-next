@@ -2,6 +2,8 @@
   <% dialog.with_header(title: t(:"data_exports.new_analysis_export_dialog.title")) %>
 
   <div class="font-normal text-slate-500 dark:text-slate-400">
+    <div id="data-export-dialog-errors"></div>
+
     <div class="grid gap-4">
       <div data-controller="collapsible">
         <h2 id="<%= "accordion-collapse-heading-workflows" %>">

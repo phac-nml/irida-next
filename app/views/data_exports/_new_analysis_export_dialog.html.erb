@@ -10,6 +10,8 @@
     data-infinite-scroll-non-zero-header-value="<%= t(".selection_count.non_zero") %>"
     class="font-normal text-slate-500 dark:text-slate-400"
   >
+    <div id="data-export-dialog-errors"></div>
+
     <%= form_with(
       url: list_data_exports_path(list_class: 'workflow_execution'),
       data: { "infinite-scroll-target": "pageForm" }

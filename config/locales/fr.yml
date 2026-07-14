@@ -1952,6 +1952,7 @@ fr:
       create:
         invalid_export_samples: Impossible de créer une exportation en raison des autorisations d’échantillonnage ou d’échantillons introuvables.
         invalid_export_workflow_executions: Impossible de créer une exportation en raison des autorisations d’exécution du flux de travail ou des exécutions de flux de travail introuvables.
+        max_data_export_size_exceeded: La taille des données que vous essayez d’exporter est trop importante. Les exportations de données doivent être inférieures à %{max_size_gigabytes} Go. Veuillez télécharger les fichiers via l’API GraphQL.
         non_completed_workflow_executions: Impossible de créer une exportation en raison des exécutions de flux de travail sélectionnées ayant un état autre que « Terminé ».
     groups:
       share:

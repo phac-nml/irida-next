@@ -1,10 +1,16 @@
-<% if export_type == 'analysis' %>
-  <%= turbo_stream.update "export_dialog" do %>
+<% if keep_dialog_open %>
+  <%= turbo_stream.update "data-export-dialog-errors" do %>
+    <%= viral_flash(type:, data: message) %>
   <% end %>
 <% else %>
-  <%= turbo_stream.update "samples_dialog" do %>
+  <% if export_type == 'analysis' %>
+    <%= turbo_stream.update "export_dialog" do %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.update "samples_dialog" do %>
+    <% end %>
   <% end %>
-<% end %>
-<%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type:, data: message) %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
 <% end %>
