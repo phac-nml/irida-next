@@ -91,22 +91,18 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         within first("select[name$='[operator]']") do
           assert_no_text I18n.t('components.advanced_search_component.v1.operations.standard.equals')
           assert_no_text I18n.t('components.advanced_search_component.v1.operations.standard.not_equals')
-          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.existence')
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.exists')
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_exists')
-          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.text')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_equals')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_contains') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_contains') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in')
-          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.numeric')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') # rubocop:disable Layout/LineLength
-          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.date')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_equals')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_less_than_equals') # rubocop:disable Layout/LineLength
@@ -121,7 +117,6 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         end
 
         within first("select[name$='[operator]']") do
-          assert_no_text I18n.t('components.advanced_search_component.v1.operations.metadata.labels.text')
           assert_no_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_equals') # rubocop:disable Layout/LineLength
           assert_no_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.equals')
