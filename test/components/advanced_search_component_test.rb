@@ -114,6 +114,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           combobox.click
           combobox.send_keys([:ctrl, 'a'], :delete)
           combobox.fill_in with: 'Sample Name'
+          combobox.send_keys(:return)
         end
 
         within first("select[name$='[operator]']") do
