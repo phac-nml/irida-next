@@ -11,6 +11,19 @@
           class: "max-sm:grow",
           value: @q.name_or_puid_cont,
         ) %>
+      <%= render Ransack::SortDropdownComponent.new(
+      @q,
+      "projects",
+      [
+        { name: "updated_at", dir: "desc" },
+        { name: "updated_at", dir: "asc" },
+        { name: "namespace_name", dir: "asc" },
+        { name: "namespace_name", dir: "desc" },
+        { name: "created_at", dir: "desc" },
+        { name: "created_at", dir: "asc" },
+      ],
+      turbo: false,
+    ) %>
     <% end %>
   </div>
 

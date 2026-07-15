@@ -28,7 +28,7 @@ module Dashboard
       assert_selector 'nav.pagy ul li a[aria-current="page"]', text: '2'
       assert_text I18n.t(:'components.viral.pagy.pagination_component.previous')
       within 'div.treegrid-container' do
-        assert_selector 'div.treegrid-row', count: 16
+        assert_selector 'div.treegrid-row', count: 6
         [*('f'..'a')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
