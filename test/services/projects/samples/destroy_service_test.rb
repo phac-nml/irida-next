@@ -159,6 +159,20 @@ module Projects
                                                 { sample_ids: [@sample34.id, sample35.id] }).execute
         end
       end
+
+      test 'stores deletion reason in project sample deletion activity details' do
+        reason = 'Duplicate data cleanup'
+
+        Projects::Samples::DestroyService.new(@project.namespace, @user,
+                                              { sample_ids: [@sample1.id], reason: reason }).execute
+
+        activity = PublicActivity::Activity.where(
+          key: 'namespaces_project_namespace.samples.destroy_multiple',
+          trackable: @project.namespace
+        ).order(created_at: :desc).first
+
+        assert_equal reason, activity.extended_details.details['deletion_reason']
+      end
     end
   end
 end

@@ -15,7 +15,9 @@ module Activities
       test 'sample destroy activity dialog' do
         project_namespace = namespaces_project_namespaces(:project1_namespace)
         sample = samples(:sample1)
-        ::Projects::Samples::DestroyService.new(project_namespace, @user, { sample_ids: [sample.id] }).execute
+        reason = 'Sample no longer required for this project'
+        ::Projects::Samples::DestroyService.new(project_namespace, @user,
+                                                { sample_ids: [sample.id], reason: reason }).execute
 
         activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 
@@ -37,6 +39,8 @@ module Activities
           assert_selector 'p',
                           text: I18n.t(:'components.activity.dialog.sample_destroy.description.project',
                                        user: @user.email, count: 1)
+          assert_selector 'p',
+                          text: I18n.t(:'components.activity.dialog.sample_destroy.reason', reason: reason)
 
           assert_selector 'li', count: 1
           assert_selector 'li > p > span:nth-child(1)', text: 'Project 1 Sample 1'
