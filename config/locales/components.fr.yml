@@ -59,6 +59,7 @@ fr:
               one: "%{user} a retiré un échantillon du projet"
               other: "%{user} a retiré les échantillons %{count} du projet"
           project: Projet
+          reason: 'Raison : %{reason}'
           sample: Échantillon
           title: Échantillons supprimés
         sample_transfer:
