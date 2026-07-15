@@ -43,7 +43,7 @@
       <% end %>
     </ul>
 
-    <div class="mt-4 grid gap-4">
+    <div class="mt-4">
       <%= button_to t("groups.edit.advanced.change_visibility.submit"),
       group_path,
       method: :patch,
@@ -55,7 +55,7 @@
           confirm_value: group.path,
         }
       },
-      class: "button button-primary inline-block" %>
+      class: "button button-primary" %>
     </div>
   <% end %>
 <% end %>
