@@ -103,12 +103,6 @@
 
       <%= render ConfirmationComponent.new %>
 
-      <%= pathogen_toaster(list_id: "flashes") do %>
-        <% flash.each do |key, value| %>
-          <%= pathogen_toast(type: key, message: value) %>
-        <% end %>
-      <% end %>
-
       <span
         class="sr-only"
         role="status"
@@ -120,4 +114,11 @@
 
     <div tabindex="0" data-action="focus->layout#handleContentFocus"></div>
   </div>
+
+  <%# Mount outside .content overflow so fixed peek stacks are not clipped or rebased. %>
+  <%= pathogen_toaster(list_id: "flashes") do %>
+    <% flash.each do |key, value| %>
+      <%= pathogen_toast(type: key, message: value) %>
+    <% end %>
+  <% end %>
 </div>
