@@ -113,6 +113,7 @@ module Activities
 
       test 'group samples destroy activity dialog' do
         group_namespace = groups(:group_one)
+        reason = 'Cleanup after retention period'
 
         activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity).reverse
 
@@ -129,6 +130,7 @@ module Activities
         assert_selector 'p',
                         text: I18n.t(:'components.activity.dialog.sample_destroy.description.group',
                                      user: 'System', count: 2)
+        assert_selector 'p', text: I18n.t(:'components.activity.dialog.sample_destroy.reason', reason: reason)
         assert_selector 'table', count: 1
         assert_selector 'th', count: 2
         assert_selector 'tr', count: 3

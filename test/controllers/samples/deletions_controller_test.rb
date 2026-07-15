@@ -21,7 +21,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
@@ -36,7 +36,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
@@ -51,7 +51,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
@@ -67,7 +67,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
@@ -82,7 +82,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample69.id]
                }
              }, as: :turbo_stream
@@ -97,7 +97,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample69.id]
                }
              }, as: :turbo_stream
@@ -114,7 +114,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample23.id]
                }
              }, as: :turbo_stream
@@ -130,7 +130,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project2_namespace.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample22.id]
                }
              }, as: :turbo_stream
@@ -212,7 +212,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
                }
              }, as: :turbo_stream
@@ -230,7 +230,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
                }
              }, as: :turbo_stream
@@ -248,7 +248,7 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion: {
                  sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
                }
              }, as: :turbo_stream

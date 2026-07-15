@@ -15,7 +15,7 @@ module Samples
     end
 
     def destroy # rubocop:disable Metrics/AbcSize
-      samples_to_delete_count = destroy_params['sample_ids'].count
+      samples_to_delete_count = destroy_params[:sample_ids].count
 
       deleted_samples_count = destroy_service
 
@@ -51,7 +51,7 @@ module Samples
     end
 
     def destroy_params
-      params.expect(destroy: [{ sample_ids: [] }])
+      params.expect(deletion: [:reason, { sample_ids: [] }])
     end
 
     def destroy_service

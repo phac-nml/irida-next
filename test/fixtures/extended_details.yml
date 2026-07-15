@@ -168,6 +168,7 @@ group1_namespace_sample_destroy_extended_details:
           },
         ],
       "samples_deleted_count": 2,
+      "deletion_reason": "Cleanup after retention period",
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

@@ -108,6 +108,7 @@ module Activities
           @description = I18n.t(:'components.activity.dialog.sample_destroy.description.group',
                                 count: @activity.parameters[:samples_deleted_count],
                                 user: @activity_owner)
+          @deletion_reason = @extended_details.details['deletion_reason']
           @data = @extended_details.details['deleted_samples_data'].to_json
           @column_headers = [
             I18n.t(:'components.activity.dialog.sample_destroy.sample'),
