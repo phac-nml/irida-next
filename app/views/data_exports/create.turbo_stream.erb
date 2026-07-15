@@ -1,6 +1,6 @@
 <% if keep_dialog_open %>
   <%= turbo_stream.update "data-export-dialog-errors" do %>
-    <%= viral_flash(type:, data: message) %>
+    <%= viral_alert(type:, message:, classes: "mb-2") %>
   <% end %>
 <% else %>
   <% if export_type == 'analysis' %>
