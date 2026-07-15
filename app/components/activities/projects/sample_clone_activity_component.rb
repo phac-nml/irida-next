@@ -21,12 +21,12 @@ module Activities
         @activity[:source_project].presence || @activity[:target_project]
       end
 
-      def activity_message # rubocop:disable Metrics/MethodLength
+      def activity_message # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         namespace = activity_namespace
         href = if project_exists?(namespace)
                  link_to(
                    namespace_puid(namespace),
-                   namespace_project_samples_path(namespace.parent, namespace.project),
+                   helpers.namespace_project_samples_path(namespace.parent, namespace.project),
                    class: active_link_classes,
                    title:
                      t(

@@ -81,7 +81,7 @@
             <%= @namespace.project_namespaces.count %>
           </span>
         <% end %>
-        <%= pathogen_link(href: group_samples_path(@namespace), data: top_frame_link_data, 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label", namespace_type: @namespace.model_name.human.downcase, namespace_puid: @namespace.puid), class: "group pill-focus-reset") do |component| %>
+        <%= pathogen_link(href: helpers.group_samples_path(@namespace), data: top_frame_link_data, 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label", namespace_type: @namespace.model_name.human.downcase, namespace_puid: @namespace.puid), class: "group pill-focus-reset") do |component| %>
           <% component.with_tooltip(
           text:
             t(
@@ -104,7 +104,7 @@
       <% end %>
 
       <% if @namespace.project_namespace? %>
-        <%= pathogen_link(href: namespace_project_samples_path(@namespace.parent, @namespace.project), data: top_frame_link_data, 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label", namespace_type: @namespace.model_name.human.downcase, namespace_puid: @namespace.puid), class: "group pill-focus-reset") do |component| %>
+        <%= pathogen_link(href: helpers.namespace_project_samples_path(@namespace.parent, @namespace.project), data: top_frame_link_data, 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label", namespace_type: @namespace.model_name.human.downcase, namespace_puid: @namespace.puid), class: "group pill-focus-reset") do |component| %>
           <% component.with_tooltip(
           text:
             t(

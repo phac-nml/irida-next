@@ -18,7 +18,7 @@ module Activities
         href = if template_exists?
                  link_to(
                    @activity[:template_name],
-                   group_metadata_templates_path(@activity[:group]),
+                   helpers.group_metadata_templates_path(@activity[:group]),
                    class: active_link_classes,
                    title:
                      t('components.activity.metadata_templates.group.link_descriptive_text'),

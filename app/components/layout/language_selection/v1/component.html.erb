@@ -40,7 +40,7 @@
               dark:hover:text-white
             "
           >
-            <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
+            <%= form_with(model: @user, url: helpers.profile_preferences_path, method: :patch) do |form| %>
               <%= form.hidden_field :locale,
                                 value: locale_value,
                                 id: "language_selection_#{locale_value}" %>

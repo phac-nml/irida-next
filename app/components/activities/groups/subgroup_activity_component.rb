@@ -20,7 +20,7 @@ module Activities
                elsif subgroup_exists?
                  link_to(
                    @activity[:created_group_puid],
-                   group_path(@activity[:created_group]),
+                   helpers.group_path(@activity[:created_group]),
                    class: active_link_classes,
                    title:
                      t(

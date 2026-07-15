@@ -79,16 +79,16 @@ module Attachments
 
     def destroy_path(attachment_id)
       if @attachable.instance_of?(Sample)
-        namespace_project_sample_attachment_new_destroy_path(
+        helpers.namespace_project_sample_attachment_new_destroy_path(
           sample_id: @attachable.id,
           attachment_id:
         )
       elsif @attachable.instance_of?(Group)
-        group_attachment_new_destroy_path(
+        helpers.group_attachment_new_destroy_path(
           attachment_id:
         )
       elsif @attachable.instance_of?(Namespaces::ProjectNamespace)
-        namespace_project_attachment_new_destroy_path(
+        helpers.namespace_project_attachment_new_destroy_path(
           attachment_id:
         )
       end

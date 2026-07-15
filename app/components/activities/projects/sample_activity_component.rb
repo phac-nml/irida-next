@@ -39,7 +39,7 @@ module Activities
                              href: highlighted_text(@activity[:imported_metadata_samples_count]))
         else
           if sample_exists?(@activity[:sample])
-            url = namespace_project_sample_path(
+            url = helpers.namespace_project_sample_path(
               @activity[:current_project].parent,
               @activity[:current_project].project,
               id: @activity[:sample_id]

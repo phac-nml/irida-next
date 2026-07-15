@@ -16,7 +16,7 @@
 
           <%= dropdown.with_item(
             label: link[:name],
-            url: URI.join(root_url, link[:path]).to_s,
+            url: URI.join(helpers.root_url, link[:path]).to_s,
             data: {
               turbo_frame: "_top",
             },
@@ -40,7 +40,7 @@
         <% else %>
           <!-- Navigable link -->
           <%= link_to link[:name],
-          URI.join(root_url, link[:path]).to_s,
+          URI.join(helpers.root_url, link[:path]).to_s,
           class:
             "text-sm text-slate-600 dark:text-slate-400 underline hover:decoration-2 py-3 font-normal",
           data: {

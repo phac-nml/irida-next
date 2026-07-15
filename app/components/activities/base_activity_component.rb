@@ -29,7 +29,7 @@ module Activities
 
     def more_details_button(dialog_type, descriptive_text)
       button_to t(:'components.activity.more_details'),
-                activity_path(@activity[:id]),
+                helpers.activity_path(@activity[:id]),
                 params: { dialog_type: dialog_type },
                 data: { turbo_stream: true },
                 method: :get,
