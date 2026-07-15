@@ -36,9 +36,13 @@ module DataExports
         attachable_id: selected_ids
       )
 
-      return scope if selected_attachment_formats.blank?
+      return scope if all_attachment_formats_selected?
 
       scope.where("attachments.metadata ->> 'format' IN (?)", selected_attachment_formats)
+    end
+
+    def all_attachment_formats_selected?
+      (Attachment::FORMAT_REGEX.keys - selected_attachment_formats).empty?
     end
 
     def workflow_execution_output_scope
