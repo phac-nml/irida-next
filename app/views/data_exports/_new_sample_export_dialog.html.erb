@@ -2,7 +2,7 @@
   <% dialog.with_header(title: t(".title")) %>
 
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
-    <div id="data-export-dialog-errors"></div>
+    <%= render "data_exports/dialog_errors" %>
 
     <div
       data-controller="infinite-scroll sortable-lists--v1--two-lists-selection"
