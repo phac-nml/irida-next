@@ -750,4 +750,40 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text subgroup1.aggregated_samples_count
     end
   end
+
+  test 'can view shared public groups tab' do
+    @group = groups(:group_one)
+    subgroup1 = groups(:subgroup1)
+    ngl = namespace_group_links(:namespace_group_link4)
+
+    ngl.namespace.public = true
+    ngl.namespace.save!
+
+    visit group_url(subgroup1)
+
+    # Verify the tab exists and is clickable
+    assert_selector 'button', text: I18n.t(:'groups.show.tabs.shared_public_groups')
+
+    click_on I18n.t(:'groups.show.tabs.shared_public_groups')
+    assert_selector 'button[aria-selected="true"]', text: I18n.t(:'groups.show.tabs.shared_public_groups')
+
+    within('div.treegrid-container') do
+      assert_selector 'div.treegrid-row', count: 1
+      within("#group_#{ngl.namespace.id}") do
+        assert_text ngl.namespace.name
+      end
+      assert_no_text projects(:project25).name
+      assert_no_selector "div.treegrid-row#group_#{projects(:project25).id}"
+    end
+  end
+
+  test 'displays empty state when no shared public groups' do
+    @group = groups(:group_one)
+    visit group_url(@group)
+
+    click_on I18n.t(:'groups.show.tabs.shared_public_groups')
+
+    assert_text I18n.t('groups.show.shared_public_groups.no_shared.title')
+    assert_text I18n.t('groups.show.shared_public_groups.no_shared.description')
+  end
 end
