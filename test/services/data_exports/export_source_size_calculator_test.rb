@@ -5,22 +5,23 @@ require 'test_helper'
 module DataExports
   class ExportSourceSizeCalculatorTest < ActiveSupport::TestCase
     test 'sample export totals selected attachment formats only' do
-      sample1 = samples(:sample1)
+      sample22 = samples(:sample22)
       sample3 = samples(:sample3)
 
-      expected = sample1.attachments.sum { |attachment| attachment.file.byte_size }
+      expected = sample22.attachments.select { |attachment| attachment.metadata['format'] == 'fastq' }
+                                     .sum { |attachment| attachment.file.byte_size }
 
-      total_size = calculate('sample', 'ids' => [sample1.id, sample3.id], 'attachment_formats' => ['fastq'])
+      total_size = calculate('sample', 'ids' => [sample22.id, sample3.id], 'attachment_formats' => ['fastq'])
 
       assert_equal expected, total_size
     end
 
     test 'sample export totals all attachments when every format is selected' do
-      sample1 = samples(:sample1)
+      sample22 = samples(:sample22)
 
-      expected = sample1.attachments.sum { |attachment| attachment.file.byte_size }
+      expected = sample22.attachments.sum { |attachment| attachment.file.byte_size }
 
-      total_size = calculate('sample', 'ids' => [sample1.id], 'attachment_formats' => Attachment::FORMAT_REGEX.keys)
+      total_size = calculate('sample', 'ids' => [sample22.id], 'attachment_formats' => Attachment::FORMAT_REGEX.keys)
 
       assert_equal expected, total_size
     end
