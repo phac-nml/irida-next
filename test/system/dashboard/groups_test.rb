@@ -106,6 +106,30 @@ module Dashboard
       assert_text I18n.t(:'components.viral.pagy.empty_state.description')
     end
 
+    test 'can search for a public group by name or puid' do
+      visit dashboard_groups_url
+
+      click_on I18n.t(:'dashboard.groups.index.public')
+
+      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'public group 1'
+      find('input.t-search-component').send_keys(:return)
+
+      assert_text groups(:public_group1).name
+      assert_no_text groups(:public_group2).name
+
+      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: groups(:public_group2).puid
+      find('input.t-search-component').send_keys(:return)
+
+      assert_no_text groups(:public_group1).name
+      assert_text groups(:public_group2).name
+
+      #   Test empty state
+      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'z6z6z6'
+      find('input.t-search-component').send_keys(:return)
+      assert_text I18n.t(:'components.viral.pagy.empty_state.title')
+      assert_text I18n.t(:'components.viral.pagy.empty_state.description')
+    end
+
     test 'filtering renders flat list' do
       group1 = groups(:group_one)
       group3 = groups(:group_three)
