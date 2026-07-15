@@ -9,66 +9,42 @@
 <% end %>
 
 <div class="flex flex-col">
-  <div class="border-b border-slate-200 dark:border-slate-700 dark:text-slate-400">
-    <div class="mb-2 flex flex-wrap justify-end gap-2">
-      <% if @has_groups %>
-        <%= render SearchComponent.new(
-          query: @q,
-          url: dashboard_groups_url,
-          search_attribute: :name_or_puid_cont,
-          label: t("common.controls.search"),
-          placeholder: t(:".search.placeholder"),
-          total_count: @pagy.count,
-          class: "max-sm:grow",
-          value: @q.name_or_puid_cont,
-        ) %>
-        <%= render Ransack::SortDropdownComponent.new(
-          @q,
-          "groups",
-          [
-            { name: "created_at", dir: "desc" },
-            { name: "created_at", dir: "asc" },
-            { name: "name", dir: "asc" },
-            { name: "name", dir: "desc" },
-            { name: "updated_at", dir: "desc" },
-            { name: "updated_at", dir: "asc" },
-          ],
-        ) %>
-      <% end %>
-    </div>
-  </div>
+  <%= render Pathogen::Tabs.new(
+    id: "dashboard-groups-tabs",
+    label: t(".tabs_label"),
+    default_index: 0,
+    sync_url: true
+  ) do |tabs| %>
+    <% tabs.with_tab(
+      id: "private-tab",
+      label: t(".private"),
+      selected: @tab == "private"
+    ) %>
 
-  <% if @has_groups %>
-    <div class="flex flex-col gap-2" id="groups_tree">
-      <%= render TreegridComponent.new(aria: {label: t('.treegrid.aria_label')}) do |component| %>
-        <% @groups.each_with_index do |group, group_index| %>
-          <%= component.with_row(tabindex: (group_index.zero? ? 0 : -1), expandable: !@render_flat_list && group.children_of_type?(Group.sti_name), posinset: group_index + 1, setsize: @groups.size, aria: { label: namespace_row_aria_label(group)}, button_arguments: {data: {"toggle-url": public_send("dashboard_groups_url", { parent_id: group.id, collapse: false, level: 1, posinset: group_index + 1, setsize: @groups.size })}}, id: dom_id(group)) do %>
-            <%= render NamespaceRow::ContentsComponent.new(
-              namespace: group,
-              full_name: @render_flat_list,
-              icon_size: :medium,
-            ) %>
-          <% end %>
-        <% end %>
-      <% end %>
+    <% tabs.with_tab(
+      id: "public-tab",
+      label: t(".public"),
+      selected: @tab == "public"
+    ) %>
 
-      <% if @pagy.count.positive? %>
-        <div class="flex flex-row-reverse"><%= render Viral::Pagy::PaginationComponent.new(@pagy) %></div>
-      <% else %>
-        <%= viral_empty(
-          icon_name: :magnifying_glass,
-          title: t("components.viral.pagy.empty_state.title"),
-          description: t("components.viral.pagy.empty_state.description"),
-        ) %>
-      <% end %>
-    </div>
-  <% else %>
-    <div class="empty_state_message">
-      <%= viral_empty(
-        icon_name: Group.icon,
-        title: t(".no_groups_title"),
-        description: t(".no_groups_description"),
-      ) %>
-    </div>
+    <% tabs.with_lazy_panel(
+      id: "private-panel",
+      tab_id: "private-tab",
+      frame_id: "private-groups-content",
+      src_path: dashboard_groups_url,
+      selected: @tab == "private"
+    ) do %>
+      <%= render "groups_list" %>
+    <% end %>
+
+    <% tabs.with_lazy_panel(
+      id: "public-panel",
+      tab_id: "public-tab",
+      frame_id: "public-groups-content",
+      src_path: dashboard_groups_url(public: "true"),
+      selected: @tab == "public"
+    ) do %>
+      <%= render "groups_list", empty_title: t("dashboard.groups.index.no_public_groups_title"), empty_description: t("dashboard.groups.index.no_public_groups_description") %>
+    <% end %>
   <% end %>
 </div>

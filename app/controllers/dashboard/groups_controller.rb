@@ -13,6 +13,7 @@ module Dashboard
       @q = all_groups.ransack(params[:q])
       set_default_sort
       @pagy, @groups = pagy(@q.result.include_route, raise_range_error: true)
+      set_tab_variables
 
       respond_to do |format|
         if expanding_group?
@@ -24,6 +25,11 @@ module Dashboard
     end
 
     private
+
+    def set_tab_variables
+      @tab = params[:public] == 'true' ? 'public' : 'private'
+      @tab_index = @tab == 'public' ? 1 : 0
+    end
 
     def render_flat_list
       @render_flat_list = params.dig(:q, :name_or_puid_cont).present?
@@ -50,6 +56,8 @@ module Dashboard
     def authorized_groups
       if @render_flat_list
         authorized_scope(Group, type: :relation)
+      elsif params[:public] == 'true'
+        authorized_scope(Group, type: :relation, as: :public_groups).without_descendants
       else
         authorized_scope(Group, type: :relation).without_descendants
       end
