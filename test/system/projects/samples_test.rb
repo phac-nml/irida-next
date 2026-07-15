@@ -3387,6 +3387,107 @@ module Projects
       ### actions and VERIFY END ###
     end
 
+    test 'advanced search with small viewport' do
+      ### SETUP START ###
+      Capybara.current_session.driver.with_playwright_page do |page|
+        page.set_viewport_size(width: 375, height: 667)
+        visit namespace_project_samples_url(@namespace, @project)
+        # verify samples table has loaded to prevent flakes
+        assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                        locale: @user.locale))
+        ### SETUP END ###
+
+        ### actions and VERIFY START ###
+        click_button I18n.t(:'components.advanced_search_component.v1.title')
+        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+            find("input[role='combobox']").send_keys('metadatafield1', :enter)
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
+          end
+        end
+        click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+
+        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']",
+                        focused: true
+
+        within '#samples-table table tbody' do
+          assert_selector 'tr', count: 1
+          assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+          assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+          # sample30 found
+          assert_selector "tr[id='#{dom_id(@sample30)}']"
+        end
+
+        click_button I18n.t(:'components.advanced_search_component.v1.title')
+        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
+
+        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']",
+                        focused: true
+
+        within '#samples-table table tbody' do
+          assert_selector 'tr', count: 3
+          assert_selector "tr[id='#{dom_id(@sample1)}']"
+          assert_selector "tr[id='#{dom_id(@sample2)}']"
+          assert_selector "tr[id='#{dom_id(@sample30)}']"
+        end
+        ### actions and VERIFY END ###
+      end
+    end
+
+    test 'advanced search with small viewport with feature flag enabled' do
+      ### SETUP START ###
+      Flipper.enable(:advanced_search_metadata_operators)
+      Capybara.current_session.driver.with_playwright_page do |page|
+        page.set_viewport_size(width: 375, height: 667)
+        visit namespace_project_samples_url(@namespace, @project)
+        # verify samples table has loaded to prevent flakes
+        assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                        locale: @user.locale))
+        ### SETUP END ###
+
+        ### actions and VERIFY START ###
+        click_button I18n.t(:'components.advanced_search_component.v1.title')
+        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+            find("input[role='combobox']").send_keys('metadatafield1', :enter)
+            find("select[name$='[operator]']").find("option[value='text_equals']").select_option
+            find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
+          end
+        end
+        click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+
+        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']",
+                        focused: true
+
+        within '#samples-table table tbody' do
+          assert_selector 'tr', count: 1
+          assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+          assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+          # sample30 found
+          assert_selector "tr[id='#{dom_id(@sample30)}']"
+        end
+
+        click_button I18n.t(:'components.advanced_search_component.v1.title')
+        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
+
+        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']",
+                        focused: true
+
+        within '#samples-table table tbody' do
+          assert_selector 'tr', count: 3
+          assert_selector "tr[id='#{dom_id(@sample1)}']"
+          assert_selector "tr[id='#{dom_id(@sample2)}']"
+          assert_selector "tr[id='#{dom_id(@sample30)}']"
+        end
+        ### actions and VERIFY END ###
+      end
+    end
+
     test 'can update metadata value that is not from an analysis' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
