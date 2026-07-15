@@ -15,6 +15,24 @@ module DataExports
       assert_equal expected, total_size
     end
 
+    test 'sample export totals all attachments when every format is selected' do
+      sample1 = samples(:sample1)
+
+      expected = sample1.attachments.sum { |attachment| attachment.file.byte_size }
+
+      total_size = calculate('sample', 'ids' => [sample1.id], 'attachment_formats' => Attachment::FORMAT_REGEX.keys)
+
+      assert_equal expected, total_size
+    end
+
+    test 'sample export totals zero when no formats are selected' do
+      sample1 = samples(:sample1)
+
+      total_size = calculate('sample', 'ids' => [sample1.id], 'attachment_formats' => [])
+
+      assert_equal 0, total_size
+    end
+
     test 'analysis export totals workflow and per-sample outputs' do
       workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
 
