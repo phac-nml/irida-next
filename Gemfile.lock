@@ -7,8 +7,10 @@ GIT
       cgi
       rexml
 
-PATH
-  remote: ../pathogen-view-components
+GIT
+  remote: https://github.com/phac-nml/pathogen-view-components.git
+  revision: 105800207db20a40c164d6cc9b319ad8f68027be
+  branch: feat/pathogen-toast-notifications
   specs:
     pathogen_view_components (1.0.0)
       actionview (>= 5.0.0)
