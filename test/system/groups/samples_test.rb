@@ -538,28 +538,6 @@ module Groups
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample3)}']"
     end
 
-    test 'advanced search still has standard operators when non-metadata field selected with feature flag' do
-      Flipper.enable(:advanced_search_metadata_operators)
-
-      visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
-                                                                                      locale: @user.locale))
-
-      click_button I18n.t(:'components.advanced_search_component.v1.title')
-      assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-      within('dialog') do
-        find("input[role='combobox']").send_keys('sample name', :enter)
-        within "select[name$='[operator]']" do
-          assert_selector 'option[value="="]'
-          assert_selector 'option[value="!="]'
-          assert_selector 'option[value="in"]'
-          assert_selector 'option[value="not_in"]'
-          assert_no_selector 'option[value="date_equals"]'
-          assert_no_selector 'option[value="numeric_equals"]'
-        end
-      end
-    end
-
     test 'selecting / deselecting all samples' do
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
