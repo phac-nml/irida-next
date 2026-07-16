@@ -149,14 +149,17 @@ fr:
                 numeric_not_equals: différent (numérique)
               text:
                 text_contains: le texte contient
+                text_ends_with: le texte se termine par
                 text_equals: le texte est égal à
                 text_in: texte dans
                 text_not_contains: le texte ne contient pas
                 text_not_equals: le texte n'est pas égal à
                 text_not_in: texte absent de
+                text_starts_with: le texte commence par
           standard:
             contains: contient
             does_not_contain: ne contient pas
+            ends_with: se termine par
             equals: "="
             exists: existe
             greater_than: ">="
@@ -165,6 +168,7 @@ fr:
             not_equals: "!="
             not_exists: n’existe pas
             not_in: not in (pas dans)
+            starts_with: commence par
         remove_condition_aria_label: Supprimer la condition
         remove_group_button: Supprimer le groupe
         rules:
