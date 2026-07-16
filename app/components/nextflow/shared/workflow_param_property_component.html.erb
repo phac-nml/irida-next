@@ -2,7 +2,7 @@
   <% help_text_id = fields.field_id(name, "help") %>
 
   <% if property[:type] != "boolean" %>
-    <% if property[:format] == "path" || property[:format] == "file-path" %>
+    <% if (property[:format] == "path" || property[:format] == "file-path") && !property[:enum].present? %>
       <% legend_id = fields.field_id(name, "legend") %>
       <% prefix_id = fields.field_id(name, "prefix") %>
       <% describedby_ids = [prefix_id] %>

@@ -63,6 +63,12 @@ class NextflowComponentTest < ViewComponentTestCase
         assert_text 'Kraken2 database'
         assert_selector 'select[name="workflow_execution[workflow_params][kraken2_db]"] option[value="PATH_TO_DB"]',
                         text: 'DBNAME'
+        # verify that the file-path property with enum renders a select instead of a file selector
+        assert_selector 'select[name="workflow_execution[workflow_params][dehosting_idx]"]', count: 1
+        assert_selector 'select[name="workflow_execution[workflow_params][dehosting_idx]"]
+                         option[value="PATH_TO_REF_SKETCH"]',
+                        text: 'REF_SKETCH'
+        assert_no_selector 'a[id$="_dehosting_idx_link"]'
       end
     end
   end
@@ -87,6 +93,12 @@ class NextflowComponentTest < ViewComponentTestCase
         assert_text 'Kraken2 database'
         assert_selector 'select[name="workflow_execution[workflow_params][kraken2_db]"] option[value="PATH_TO_DB"]',
                         text: 'DBNAME'
+        # verify that the file-path property with enum renders a select instead of a file selector
+        assert_selector 'select[name="workflow_execution[workflow_params][dehosting_idx]"]', count: 1
+        assert_selector 'select[name="workflow_execution[workflow_params][dehosting_idx]"]
+                         option[value="PATH_TO_REF_SKETCH"]',
+                        text: 'REF_SKETCH'
+        assert_no_selector 'a[id$="_dehosting_idx_link"]'
       end
     end
   end
@@ -247,6 +259,18 @@ class NextflowComponentTest < ViewComponentTestCase
                   %w[
                     ANOTHER_DB
                     ANOTHER_PATH
+                  ]
+                ]
+              },
+              dehosting_idx: {
+                enum: [
+                  %w[
+                    REF_SKETCH
+                    PATH_TO_REF_SKETCH
+                  ],
+                  %w[
+                    ALT_SKETCH
+                    PATH_TO_ALT_SKETCH
                   ]
                 ]
               }
