@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/phac-nml/pathogen-view-components.git
-  revision: 105800207db20a40c164d6cc9b319ad8f68027be
+  revision: 95226a6b4701509db326e235339e005dbf74ca56
   branch: feat/pathogen-toast-notifications
   specs:
     pathogen_view_components (1.0.0)
