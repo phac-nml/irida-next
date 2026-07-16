@@ -15,12 +15,7 @@
         dark_text: t("theme.modes.dark")
       }
     ) do %>
-      <div
-        id="theme-legend"
-        class="
-          mb-2 text-sm font-semibold text-slate-800 dark:text-white uppercase
-        "
-      >
+      <div id="theme-legend" class="mb-2 text-sm font-semibold text-slate-800 uppercase dark:text-white">
         <%= t(".theme_title") %>
       </div>
 
@@ -65,7 +60,16 @@
       ) %>
     <% end %>
   <% end %>
+
   <% card.with_section do %>
     <%= render "locale_form", user: @user %>
+  <% end %>
+
+  <% card.with_section(border_top: true) do %>
+    <div class="mb-2 text-sm font-semibold text-slate-800 uppercase dark:text-white">
+      <%= t(".notifications_title") %>
+    </div>
+
+    <%= pathogen_toast_settings %>
   <% end %>
 <% end %>

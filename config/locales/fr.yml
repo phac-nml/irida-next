@@ -1431,6 +1431,7 @@ fr:
         dark_theme: Foncé
         light_theme: Clair
         locale_title: Langue
+        notifications_title: Notifications
         preferences: Préférences
         system_desc: Le thème de couleur sera mis à jour en fonction des paramètres de votre système d’exploitation.
         system_theme: Système

@@ -1427,6 +1427,7 @@ en:
         dark_theme: Dark
         light_theme: Light
         locale_title: Language
+        notifications_title: Notifications
         preferences: Preferences
         system_desc: The colour theme will update based on your operating system settings.
         system_theme: System
