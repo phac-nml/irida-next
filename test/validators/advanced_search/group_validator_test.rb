@@ -191,6 +191,8 @@ module AdvancedSearch
       )
 
       assert record5.valid?
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
     end
 
     test 'treats *_date fields as date fields' do
@@ -275,6 +277,8 @@ module AdvancedSearch
       assert_not record.valid?
       condition = record.groups.first.conditions.first
       assert condition.errors.added?(:value, :not_a_number)
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
     end
 
     test 'validates date values for metadata date operators' do
@@ -287,6 +291,8 @@ module AdvancedSearch
       assert_not record.valid?
       condition = record.groups.first.conditions.first
       assert condition.errors.added?(:value, :not_a_date)
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
     end
 
     test 'validates metadata between operators' do
@@ -341,6 +347,8 @@ module AdvancedSearch
       assert_not record4.valid?
       fourth = record4.groups.first.conditions.last
       assert fourth.errors.added?(:field, :taken)
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
     end
   end
 end

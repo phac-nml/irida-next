@@ -3031,6 +3031,8 @@ module Projects
       assert_selector 'table tbody tr th', text: sample62.puid
       assert_selector 'table tbody tr th', text: sample63.puid
       ### actions and VERIFY END ###
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
     end
 
     test 'filter samples with advanced search using between dates' do
@@ -3196,7 +3198,9 @@ module Projects
       assert_selector 'table tbody tr th', text: sample61.puid
       assert_selector 'table tbody tr th', text: sample62.puid
       assert_selector 'table tbody tr th', text: sample63.puid
-      ### actions and VERIFY END ###
+    ### actions and VERIFY END ###
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
     end
 
     test 'filter samples with advanced search using between integers' do
@@ -3486,6 +3490,8 @@ module Projects
         end
         ### actions and VERIFY END ###
       end
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
     end
 
     test 'can update metadata value that is not from an analysis' do

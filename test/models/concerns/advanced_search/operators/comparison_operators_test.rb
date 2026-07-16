@@ -36,6 +36,8 @@ module AdvancedSearch
         assert_includes sql, '<='
         assert_not_includes sql, 'TO_DATE'
         assert_not_includes sql, 'CAST'
+      ensure
+        Flipper.disable(:advanced_search_metadata_operators)
       end
 
       test 'condition_less_than_or_equal uses lteq for regular fields without FF and metadata_field is false' do
@@ -81,6 +83,8 @@ module AdvancedSearch
         assert_includes sql, '>='
         assert_not_includes sql, 'TO_DATE'
         assert_not_includes sql, 'CAST'
+      ensure
+        Flipper.disable(:advanced_search_metadata_operators)
       end
 
       test 'condition_greater_than_or_equal uses gteq for regular fields without FF and metadata_field is false' do
