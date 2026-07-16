@@ -12,6 +12,19 @@ module Types
   end
 
   class SampleAdvancedSearchConditionOperatorInputType < BaseEnum # rubocop:disable Style/Documentation
+    STANDARD_OPERATORS_FOR_ENUM = {
+      'EQUALS' => '=',
+      'NOT_EQUALS' => '!=',
+      'LESS_THAN_EQUALS' => '<=',
+      'GREATER_THAN_EQUALS' => '>=',
+      'CONTAINS' => 'contains',
+      'NOT_CONTAINS' => 'not_contains',
+      'EXISTS' => 'exists',
+      'NOT_EXISTS' => 'not_exists',
+      'IN' => 'in',
+      'NOT_IN' => 'not_in'
+    }.freeze
+
     METADATA_OPERATORS_FOR_ENUM = {
       'DATE_GREATER_THAN_EQUALS' => 'date_greater_than_equals',
       'DATE_LESS_THAN_EQUALS' => 'date_less_than_equals',
@@ -32,25 +45,16 @@ module Types
     graphql_name 'SampleAdvancedSearchConditionOperator'
     description 'Sample Advanced Search Condition Operator'
 
-    value 'EQUALS', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at', value: '='
-    value 'NOT_EQUALS', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at', value: '!='
-    value 'LESS_THAN_EQUALS', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at',
-          value: '<='
-    value 'GREATER_THAN_EQUALS', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at',
-          value: '>='
-    value 'CONTAINS', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at', value: 'contains'
-    value 'NOT_CONTAINS', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at',
-          value: 'not_contains'
-    value 'EXISTS', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at', value: 'exists'
-    value 'NOT_EXISTS', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at',
-          value: 'not_exists'
-    value 'IN', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at', value: 'in'
-    value 'NOT_IN', 'Use to filter name, puid, created_at, updated_at and attachments_updated_at', value: 'not_in'
-
-    # only enable metadata operators with enabled feature flag
-    def self.enum_values(context)
-      all_values = super
-
+    # only enable metadata operators and standard operator descriptions with enabled feature flag
+    def self.enum_values(_context)
+      all_values = []
+      standard_description = if Flipper.enabled?(:advanced_search_metadata_operators)
+                               'Use to filter name, puid, created_at, updated_at and attachments_updated_at'
+                             end
+      STANDARD_OPERATORS_FOR_ENUM.map do |enum_name, enum_value|
+        all_values << GraphQL::Schema::EnumValue.new(enum_name, description: standard_description,
+                                                                value: enum_value, owner: self)
+      end
       return all_values unless Flipper.enabled?(:advanced_search_metadata_operators)
 
       METADATA_OPERATORS_FOR_ENUM.each do |enum_name, enum_value|
@@ -58,6 +62,12 @@ module Types
                                                                 value: enum_value, owner: self)
       end
       all_values
+    end
+
+    def add_standard_field_description
+      return nil unless Flipper.enabled?(:advanced_search_metadata_operators)
+
+      'Use to filter name, puid, created_at, updated_at and attachments_updated_at'
     end
   end
 
