@@ -203,6 +203,40 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal 3, data.count
   end
 
+  test 'advanced search with standard field should still work with feature flag enabled' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'name', operator: 'IN', value: ['Project 1 Sample 1', 'Project 1 Sample 2']
+                                 }]] } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 3, data.count
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
+  end
+
+  test 'advanced search with metadata operator' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'metadata.metadatafield1', operator: 'TEXT_EQUALS', value: 'Value1'
+                                 }]] } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
+  end
+
   test 'cannot filter metadata field with non-metadata operator when feature flag is enabled' do
     Flipper.enable(:advanced_search_metadata_operators)
     result = IridaSchema.execute(SAMPLES_QUERY,
@@ -219,6 +253,8 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     data = result['data']['samples']
 
     assert_nil data
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
   end
 
   test 'cannot filter non-metadata field with metadata operator when feature flag is enabled' do
@@ -238,5 +274,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     data = result['data']['samples']
 
     assert_nil data
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
   end
 end
