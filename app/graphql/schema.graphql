@@ -966,7 +966,7 @@ type Group implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = { field: created_at, direction: asc }
+    orderBy: AttachmentOrder = {field: created_at, direction: asc}
   ): AttachmentConnection
 
   """
@@ -1827,7 +1827,8 @@ type Namespace implements Node {
 
 """
 Common fields for namespace metrics.
-""" # Interface for namespace metrics
+"""
+# Interface for namespace metrics
 interface NamespaceMetrics {
   """
   Disk usage (bytes) of the group projects or user projects.
@@ -1901,30 +1902,37 @@ A pipeline
 """
 type Pipeline {
   """
+  
   """
   automatable: Boolean
 
   """
+  
   """
   description: String
 
   """
+  
   """
   executable: Boolean
 
   """
+  
   """
   name: String
 
   """
+  
   """
   pipelineId: String
 
   """
+  
   """
   version: String
 
   """
+  
   """
   workflowParams: JSON!
 }
@@ -1965,7 +1973,7 @@ type Project implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = { field: created_at, direction: asc }
+    orderBy: AttachmentOrder = {field: created_at, direction: asc}
   ): AttachmentConnection
 
   """
@@ -2055,7 +2063,7 @@ type Project implements Node {
     """
     Order by
     """
-    orderBy: SampleOrder = { field: created_at, direction: asc }
+    orderBy: SampleOrder = {field: created_at, direction: asc}
   ): SampleConnection
 
   """
@@ -2563,7 +2571,7 @@ type Query {
     """
     Order by
     """
-    orderBy: GroupOrder = { field: created_at, direction: asc }
+    orderBy: GroupOrder = {field: created_at, direction: asc}
   ): GroupConnection!
 
   """
@@ -2716,7 +2724,7 @@ type Query {
     """
     Order by
     """
-    orderBy: ProjectOrder = { field: created_at, direction: asc }
+    orderBy: ProjectOrder = {field: created_at, direction: asc}
   ): ProjectConnection
 
   """
@@ -2766,7 +2774,7 @@ type Query {
     """
     Order by
     """
-    orderBy: SampleOrder = { field: created_at, direction: asc }
+    orderBy: SampleOrder = {field: created_at, direction: asc}
   ): SampleConnection
 
   """
@@ -2831,7 +2839,7 @@ type Sample implements Node {
     """
     Order by
     """
-    orderBy: AttachmentOrder = { field: created_at, direction: asc }
+    orderBy: AttachmentOrder = {field: created_at, direction: asc}
   ): AttachmentConnection
 
   """
@@ -2909,16 +2917,125 @@ input SampleAdvancedSearchCondition {
 Sample Advanced Search Condition Operator
 """
 enum SampleAdvancedSearchConditionOperator {
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   CONTAINS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_GREATER_THAN_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_LESS_THAN_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_NOT_EQUALS
+
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   EQUALS
+
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   EXISTS
+
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   GREATER_THAN_EQUALS
+
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   IN
+
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   LESS_THAN_EQUALS
+
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   NOT_CONTAINS
+
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   NOT_EQUALS
+
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   NOT_EXISTS
+
+  """
+  Use to filter name, puid, created_at, updated_at and attachments_updated_at
+  """
   NOT_IN
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_GREATER_THAN_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_LESS_THAN_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_NOT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_CONTAINS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_IN
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_NOT_CONTAINS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_NOT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_NOT_IN
 }
 
 """
