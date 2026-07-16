@@ -23,7 +23,6 @@ export default class AdvancedSearchController extends Controller {
     hasErrors: Boolean,
     open: Boolean,
     status: Boolean,
-    metadataOperationsEnabled: Boolean,
   };
 
   #hiddenClasses = ["invisible", "@max-xl:hidden"];
