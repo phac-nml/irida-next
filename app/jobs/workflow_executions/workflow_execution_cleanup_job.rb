@@ -20,7 +20,6 @@ module WorkflowExecutions
       # Don't run service if already cleaned
       return if @workflow_execution.nil? || @workflow_execution.cleaned?
 
-      step :workflow_execution_logs
       step :attach_stdout_log
       step :attach_stderr_log
       step :clean_up_blob_run_directory
@@ -34,9 +33,7 @@ module WorkflowExecutions
     end
 
     def attach_stdout_log
-      return if @workflow_execution.stdout.attached?
-
-      stdout = @workflow_execution_logs[:stdout]
+      stdout = workflow_execution_logs[:stdout]
 
       return if stdout.blank?
 
@@ -44,9 +41,7 @@ module WorkflowExecutions
     end
 
     def attach_stderr_log
-      return if @workflow_execution.stderr.attached?
-
-      stderr = @workflow_execution_logs[:stderr]
+      stderr = workflow_execution_logs[:stderr]
 
       return if stderr.blank?
 

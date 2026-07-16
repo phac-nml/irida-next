@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'test_helper'
 require 'test_helpers/faraday_test_helpers'
 
 module WorkflowExecutions
   class WorkflowExecutionCleanupJobTest < ActiveJob::TestCase
     include FaradayTestHelpers
+    include ActiveJob::Continuation::TestHelper
 
     def setup
       @stubs = faraday_test_adapter_stubs
@@ -41,15 +43,58 @@ module WorkflowExecutions
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
 
-    test 'cleanup log attachment creation is idempotent when rerun' do
+    test 'cleanup job resumes when interrupted after attach_stdout_log' do
       workflow_execution = workflow_executions(:irida_next_example_completed_unclean_DELETE)
 
       assert_not workflow_execution.cleaned?
+      assert_not workflow_execution.stdout.attached?
+      assert_not workflow_execution.stderr.attached?
+
+      assert_difference -> { log_attachment_count(workflow_execution) }, 1 do
+        with_cleanup_service_wes_stubs(workflow_execution, run_log_state: 'COMPLETE') do
+          WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+
+          interrupt_job_after_step(WorkflowExecutionCleanupJob, :attach_stdout_log) do
+            perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
+          end
+        end
+      end
+
+      workflow_execution.reload
+      stdout_attachment_id = workflow_execution.stdout.attachment.id
+
+      assert workflow_execution.stdout.attached?
+      assert_not workflow_execution.stderr.attached?
+      assert_not workflow_execution.cleaned?
+      assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
+
+      assert_difference -> { log_attachment_count(workflow_execution) }, 1 do
+        with_cleanup_service_wes_stubs(workflow_execution, run_log_state: 'COMPLETE') do
+          perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
+        end
+      end
+
+      workflow_execution.reload
+      assert_equal stdout_attachment_id, workflow_execution.stdout.attachment.id
+      assert workflow_execution.stdout.attached?
+      assert workflow_execution.stderr.attached?
+      assert workflow_execution.cleaned?
+      assert_performed_jobs(2, only: WorkflowExecutionCleanupJob)
+    end
+
+    test 'cleanup job resumes when interrupted after attach_stderr_log' do
+      workflow_execution = workflow_executions(:irida_next_example_completed_unclean_DELETE)
+
+      assert_not workflow_execution.cleaned?
+      assert_not workflow_execution.stdout.attached?
+      assert_not workflow_execution.stderr.attached?
 
       assert_difference -> { log_attachment_count(workflow_execution) }, 2 do
         with_cleanup_service_wes_stubs(workflow_execution, run_log_state: 'COMPLETE') do
-          perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
-            WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+          WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+
+          interrupt_job_after_step(WorkflowExecutionCleanupJob, :attach_stderr_log) do
+            perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
           end
         end
       end
@@ -58,13 +103,14 @@ module WorkflowExecutions
       stdout_attachment_id = workflow_execution.stdout.attachment.id
       stderr_attachment_id = workflow_execution.stderr.attachment.id
 
-      workflow_execution.update!(cleaned: false)
+      assert workflow_execution.stdout.attached?
+      assert workflow_execution.stderr.attached?
+      assert_not workflow_execution.cleaned?
+      assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
 
       assert_no_difference -> { log_attachment_count(workflow_execution) } do
         with_cleanup_service_wes_stubs(workflow_execution, run_log_state: 'COMPLETE') do
-          perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
-            WorkflowExecutionCleanupJob.perform_later(workflow_execution)
-          end
+          perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
         end
       end
 
@@ -72,6 +118,7 @@ module WorkflowExecutions
       assert_equal stdout_attachment_id, workflow_execution.stdout.attachment.id
       assert_equal stderr_attachment_id, workflow_execution.stderr.attachment.id
       assert workflow_execution.cleaned?
+      assert_performed_jobs(2, only: WorkflowExecutionCleanupJob)
     end
 
     test 'successful job on completed workflow execution when stdout endpoint is unavailable' do
