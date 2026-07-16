@@ -133,6 +133,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         end
       end
     end
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
   end
 
   test 'close dialog clears form and closes when there is no active search' do
@@ -202,6 +204,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         end
       end
     end
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
   end
 
   test 'metadata operators when metadata field selected with feature flag' do
@@ -232,6 +236,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         end
       end
     end
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
   end
 
   test 'close dialog restores applied state when active search exists' do
