@@ -31,18 +31,17 @@ module Types
 
     graphql_name 'SampleAdvancedSearchConditionOperator'
     description 'Sample Advanced Search Condition Operator'
-    standard_operator_description = 'Use to filter name, puid, created_at, updated_at and attachments_updated_at'
 
-    value 'EQUALS', standard_operator_description, value: '='
-    value 'NOT_EQUALS', standard_operator_description, value: '!='
-    value 'LESS_THAN_EQUALS', standard_operator_description, value: '<='
-    value 'GREATER_THAN_EQUALS', standard_operator_description, value: '>='
-    value 'CONTAINS', standard_operator_description, value: 'contains'
-    value 'NOT_CONTAINS', standard_operator_description, value: 'not_contains'
-    value 'EXISTS', standard_operator_description, value: 'exists'
-    value 'NOT_EXISTS', standard_operator_description, value: 'not_exists'
-    value 'IN', standard_operator_description, value: 'in'
-    value 'NOT_IN', standard_operator_description, value: 'not_in'
+    value 'EQUALS', value: '='
+    value 'NOT_EQUALS', value: '!='
+    value 'LESS_THAN_EQUALS', value: '<='
+    value 'GREATER_THAN_EQUALS', value: '>='
+    value 'CONTAINS', value: 'contains'
+    value 'NOT_CONTAINS', value: 'not_contains'
+    value 'EXISTS', value: 'exists'
+    value 'NOT_EXISTS', value: 'not_exists'
+    value 'IN', value: 'in'
+    value 'NOT_IN', value: 'not_in'
 
     # only enable metadata operators and standard operator descriptions with enabled feature flag
     def self.enum_values(context)
