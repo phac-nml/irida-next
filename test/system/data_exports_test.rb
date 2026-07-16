@@ -113,13 +113,12 @@ class DataExportsTest < ApplicationSystemTestCase
         click_button I18n.t('common.controls.confirm')
       end
 
-      # Verify success message and close the flash
-      within %(div[data-controller='viral--flash']) do
+      # Verify success toast (status toasts auto-dismiss; no close control)
+      within %(li[data-controller='pathogen--toast']) do
         assert_text I18n.t(
           :'data_exports.destroy.success',
           name: data_export_name_or_id
         )
-        click_button I18n.t('common.controls.close')
       end
     end
 

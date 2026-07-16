@@ -247,7 +247,7 @@ module Projects
 
       assert_text 'Fields already exist in another template with the same ordering'
 
-      assert_no_selector "div[data-controller='viral--flash']"
+      assert_no_selector "li[data-controller='pathogen--toast']"
       assert_no_selector 'div[data-test-selector="spinner"]'
       assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
     end

@@ -99,7 +99,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t('workflow_executions.actions.cancel_confirm')
     click_button I18n.t('common.controls.confirm')
 
-    within %(div[data-controller='viral--flash']) do
+    within %(li[data-controller='pathogen--toast']) do
       assert_text I18n.t(
         :'concerns.workflow_execution_actions.cancel.success',
         workflow_name: workflow_execution.workflow.name
@@ -184,7 +184,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
     click_button I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
-    within %(div[data-controller='viral--flash']) do
+    within %(li[data-controller='pathogen--toast']) do
       assert_text I18n.t(
         :'concerns.workflow_execution_actions.destroy.success',
         workflow_name: @workflow_execution1.workflow.name
