@@ -1827,8 +1827,9 @@ type Namespace implements Node {
 
 """
 Common fields for namespace metrics.
-""" # Interface for namespace metrics
-interface NamespaceMetrics {
+"""
+interface # Interface for namespace metrics
+NamespaceMetrics {
   """
   Disk usage (bytes) of the group projects or user projects.
   """
