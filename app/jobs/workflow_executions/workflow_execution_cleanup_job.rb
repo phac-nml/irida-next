@@ -20,23 +20,33 @@ module WorkflowExecutions
       # Don't run service if already cleaned
       return if @workflow_execution.nil? || @workflow_execution.cleaned?
 
-      step :create_log_attachments
+      step :workflow_execution_logs
+      step :attach_stdout_log
+      step :attach_stderr_log
       step :clean_up_blob_run_directory
       step :update_to_cleaned
     end
 
     private
 
-    def create_log_attachments
-      return if @workflow_execution.stdout.attached? || @workflow_execution.stderr.attached?
+    def workflow_execution_logs
+      @workflow_execution_logs ||= WorkflowExecutions::CleanupService.new(@workflow_execution).execute
+    end
 
-      result = WorkflowExecutions::CleanupService.new(@workflow_execution).execute
-      stdout = result[:stdout]
-      stderr = result[:stderr]
+    def attach_stdout_log
+      return if @workflow_execution.stdout.attached?
 
-      if stdout.present?
-        @workflow_execution.stdout.attach(io: StringIO.new(stdout), filename: 'stdout.txt', content_type: 'text/plain')
-      end
+      stdout = @workflow_execution_logs[:stdout]
+
+      return if stdout.blank?
+
+      @workflow_execution.stdout.attach(io: StringIO.new(stdout), filename: 'stdout.txt', content_type: 'text/plain')
+    end
+
+    def attach_stderr_log
+      return if @workflow_execution.stderr.attached?
+
+      stderr = @workflow_execution_logs[:stderr]
 
       return if stderr.blank?
 
