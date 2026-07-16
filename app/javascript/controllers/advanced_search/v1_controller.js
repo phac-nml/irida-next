@@ -19,7 +19,7 @@ export default class AdvancedSearchController extends Controller {
     confirmCloseText: String,
     enumFields: Object,
     enumOperations: Object,
-    standardOperations: Object,
+    operations: Object,
     hasErrors: Boolean,
     open: Boolean,
     status: Boolean,
@@ -182,11 +182,9 @@ export default class AdvancedSearchController extends Controller {
     const value = condition.querySelector(".value");
     const groupIndex = this.#groupElements().indexOf(group);
     const conditionIndex = this.#conditionElements(group).indexOf(condition);
-
     if (!value || groupIndex < 0 || conditionIndex < 0) {
       return;
     }
-
     if (["", "exists", "not_exists"].includes(operator)) {
       value.classList.add(...this.#hiddenClasses);
       value.querySelectorAll("input").forEach((input) => {
@@ -304,12 +302,15 @@ export default class AdvancedSearchController extends Controller {
     if (!operator) {
       return;
     }
-
     const enumConfig = this.enumFieldsValue[selectedField];
-    const operations =
-      selectedField && this.#enumHasValues(enumConfig)
-        ? this.enumOperationsValue
-        : this.standardOperationsValue;
+
+    const parentContainer = operator.closest(".form-field");
+    if (selectedField) {
+      parentContainer.classList.remove(...this.#hiddenClasses);
+    } else {
+      parentContainer.classList.add(...this.#hiddenClasses);
+      return;
+    }
 
     operator.innerHTML = "";
 
@@ -318,14 +319,40 @@ export default class AdvancedSearchController extends Controller {
     blankOption.text = "";
     operator.appendChild(blankOption);
 
-    Object.entries(operations).forEach(([label, value]) => {
+    if (this.#enumHasValues(enumConfig)) {
+      this.#createOperatorOptions(this.enumOperationsValue, operator);
+    } else if (
+      selectedField.startsWith("metadata.") &&
+      Object.hasOwn(this.operationsValue, "metadata")
+    ) {
+      this.#createMetadataOperatorOptions(
+        this.operationsValue["metadata"],
+        operator,
+      );
+    } else {
+      this.#createOperatorOptions(this.operationsValue["standard"], operator);
+    }
+
+    operator.value = "";
+  }
+
+  #createMetadataOperatorOptions(options, operator) {
+    Object.entries(options).forEach(([optgroup, values]) => {
+      const optGroup = document.createElement("optgroup");
+      optGroup.label = optgroup;
+      operator.appendChild(optGroup);
+
+      this.#createOperatorOptions(values, optGroup);
+    });
+  }
+
+  #createOperatorOptions(options, parentNode) {
+    Object.entries(options).forEach(([label, value]) => {
       const option = document.createElement("option");
       option.value = value;
       option.text = label;
-      operator.appendChild(option);
+      parentNode.appendChild(option);
     });
-
-    operator.value = "";
   }
 
   #reindexGroup(group, groupIndex) {

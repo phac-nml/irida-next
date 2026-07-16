@@ -429,7 +429,7 @@ module Groups
       click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
 
       assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-      assert_text I18n.t(:'general.form.error_summary.title', count: 2)
+      assert_text I18n.t(:'general.form.error_summary.title', count: 1)
 
       assert_selector '#samples-table table tbody tr', count: 20
       assert_selector "#samples-table table tbody tr[id='#{dom_id(@sample1)}']"

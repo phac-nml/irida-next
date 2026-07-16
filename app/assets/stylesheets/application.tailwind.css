@@ -196,6 +196,10 @@ input[type="search"] {
     @apply block w-full rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
+  & select optgroup {
+    @apply !text-slate-900 dark:!text-white;
+  }
+
   & select option {
     @apply block w-full rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
@@ -301,7 +305,7 @@ input[type="search"] {
 }
 
 @utility error {
-  .form-field &select {
+  &.form-field select {
     @apply block w-full rounded-lg border-red-500 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 }

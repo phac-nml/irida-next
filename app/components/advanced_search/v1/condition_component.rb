@@ -41,8 +41,12 @@ module AdvancedSearch
         @condition.class.human_attribute_name(:operator)
       end
 
-      def operation_options
-        enum_field? ? enum_operator_options : @operations
+      def metadata_operators
+        grouped_metadata_operators = {}
+        @operations['metadata'].each do |optgroup, options|
+          grouped_metadata_operators[optgroup] = options.to_a
+        end
+        grouped_metadata_operators
       end
 
       def enum_field?
@@ -58,7 +62,7 @@ module AdvancedSearch
       end
 
       def enum_operator_options
-        @operations.select { |_, value| enum_operator_values.include?(value) }
+        @operations['standard'].select { |_, value| enum_operator_values.include?(value) }
       end
 
       def enum_operator_values
