@@ -2917,9 +2917,6 @@ input SampleAdvancedSearchCondition {
 Sample Advanced Search Condition Operator
 """
 enum SampleAdvancedSearchConditionOperator {
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   CONTAINS
 
   """
@@ -2941,50 +2938,14 @@ enum SampleAdvancedSearchConditionOperator {
   Use to filter metadata fields
   """
   DATE_NOT_EQUALS
-
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   EQUALS
-
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   EXISTS
-
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   GREATER_THAN_EQUALS
-
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   IN
-
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   LESS_THAN_EQUALS
-
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   NOT_CONTAINS
-
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   NOT_EQUALS
-
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   NOT_EXISTS
-
-  """
-  Use to filter name, puid, created_at, updated_at and attachments_updated_at
-  """
   NOT_IN
 
   """
