@@ -63,12 +63,6 @@ module Types
       end
       all_values
     end
-
-    def add_standard_field_description
-      return nil unless Flipper.enabled?(:advanced_search_metadata_operators)
-
-      'Use to filter name, puid, created_at, updated_at and attachments_updated_at'
-    end
   end
 
   class ValueScalar < BaseScalar # rubocop:disable Style/Documentation
