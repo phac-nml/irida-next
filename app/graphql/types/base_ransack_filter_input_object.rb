@@ -46,13 +46,14 @@ module Types
     description 'Sample Advanced Search Condition Operator'
 
     # only enable metadata operators and standard operator descriptions with enabled feature flag
-    def self.enum_values(_context)
+    def self.enum_values(context)
+      all_values = super
       standard_description = if Flipper.enabled?(:advanced_search_metadata_operators)
                                'Use to filter name, puid, created_at, updated_at and attachments_updated_at'
                              end
-      all_values = STANDARD_OPERATORS_FOR_ENUM.map do |enum_name, enum_value|
-        GraphQL::Schema::EnumValue.new(enum_name, description: standard_description,
-                                                  value: enum_value, owner: self)
+      STANDARD_OPERATORS_FOR_ENUM.each do |enum_name, enum_value|
+        all_values << GraphQL::Schema::EnumValue.new(enum_name, description: standard_description,
+                                                                value: enum_value, owner: self)
       end
       return all_values unless Flipper.enabled?(:advanced_search_metadata_operators)
 
