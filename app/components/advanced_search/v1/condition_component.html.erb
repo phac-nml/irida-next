@@ -54,7 +54,7 @@
 
     <% invalid_operator = @condition.errors.include?(:operator) %>
 
-    <div class="form-field w-full sm:max-w-xs <%= 'invalid' if invalid_operator %> <%= 'invisible @max-xl:hidden' if @condition.field.blank? %>">
+    <div class="form-field w-full sm:max-w-xs">
       <% operators = if enum_field? %>
         <% options_for_select(
                                enum_operator_options,
