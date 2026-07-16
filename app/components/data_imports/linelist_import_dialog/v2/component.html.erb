@@ -34,10 +34,10 @@
       <% end %>
 
       <template data-linelist-import-target="flashTemplate">
-        <%= viral_flash(
-        type: :success,
-        data: t("shared.samples.metadata.file_imports.success.description"),
-      ) %>
+        <%= pathogen_toast(
+          type: :success,
+          message: t("shared.samples.metadata.file_imports.success.description"),
+        ) %>
       </template>
 
       <template data-linelist-import-target="alertTemplate">
