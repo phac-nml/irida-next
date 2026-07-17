@@ -446,6 +446,8 @@ module Projects
 
       assert_selector 'dialog h1', text: I18n.t(:'samples.deletions.destroy_single_confirmation_dialog.title')
       within('dialog[open]') do
+        fill_in placeholder: I18n.t(:'samples.deletions.destroy_single_confirmation_dialog.reason_placeholder'),
+                with: 'cleanup'
         click_button I18n.t('common.actions.remove')
       end
       ### ACTIONS END ###
@@ -2837,6 +2839,8 @@ module Projects
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
       assert_selector 'dialog h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      fill_in placeholder: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.reason_placeholder'),
+              with: 'cleanup'
       assert_selector 'form[data-infinite-scroll-target="pageForm"]'
       sleep 1
       click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
