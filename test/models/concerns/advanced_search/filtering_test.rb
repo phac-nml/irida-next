@@ -228,7 +228,7 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, "ILIKE '%string'"
+      assert_includes sql, "ILIKE 'string%'"
     end
 
     test 'operator ends_with' do
@@ -238,7 +238,7 @@ module AdvancedSearch
                                    @test_instance.model_class, condition)
 
       sql = result.to_sql
-      assert_includes sql, "ILIKE 'string%'"
+      assert_includes sql, "ILIKE '%string'"
     end
 
     test 'operator text_starts_with' do
