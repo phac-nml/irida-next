@@ -15,7 +15,7 @@ module Activities
           href = if project_exists?
                    link_to(
                      @activity[:project_puid],
-                     namespace_project_path(@activity[:group], @activity[:project].project),
+                     helpers.namespace_project_path(@activity[:group], @activity[:project].project),
                      class: active_link_classes,
                      title:
                        t(

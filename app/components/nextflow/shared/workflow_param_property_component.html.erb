@@ -34,7 +34,7 @@
 
         <a
           id="<%= fields.field_id(name, "link") %>"
-          href="<%= new_workflow_executions_file_selector_path(
+          href="<%= helpers.new_workflow_executions_file_selector_path(
                             file_selector: {
                               pattern: property[:pattern] || ".*",
                               property: name,

@@ -16,9 +16,9 @@ module Attachments
 
       def destroy_path
         if @namespace.type == 'Group'
-          group_attachment_path(id: @attachment.id)
+          helpers.group_attachment_path(id: @attachment.id)
         else
-          namespace_project_attachment_path(id: @attachment.id)
+          helpers.namespace_project_attachment_path(id: @attachment.id)
         end
       end
     end

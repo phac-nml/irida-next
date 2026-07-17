@@ -29,33 +29,33 @@ module Bots
 
     def bot_tokens_path(bot)
       if @namespace.is_a?(Group)
-        group_bot_personal_access_tokens_path(bot_id: bot.id)
+        helpers.group_bot_personal_access_tokens_path(bot_id: bot.id)
       elsif @namespace.is_a?(Namespaces::ProjectNamespace)
-        namespace_project_bot_personal_access_tokens_path(bot_id: bot.id)
+        helpers.namespace_project_bot_personal_access_tokens_path(bot_id: bot.id)
       end
     end
 
     def bot_inactive_tokens_path(bot)
       if @namespace.is_a?(Group)
-        inactive_group_bot_personal_access_tokens_path(bot_id: bot.id)
+        helpers.inactive_group_bot_personal_access_tokens_path(bot_id: bot.id)
       elsif @namespace.is_a?(Namespaces::ProjectNamespace)
-        inactive_namespace_project_bot_personal_access_tokens_path(bot_id: bot.id)
+        helpers.inactive_namespace_project_bot_personal_access_tokens_path(bot_id: bot.id)
       end
     end
 
     def new_token_path(bot)
       if @namespace.is_a?(Group)
-        new_group_bot_personal_access_token_path(bot_id: bot.id)
+        helpers.new_group_bot_personal_access_token_path(bot_id: bot.id)
       elsif @namespace.is_a?(Namespaces::ProjectNamespace)
-        new_namespace_project_bot_personal_access_token_path(bot_id: bot.id)
+        helpers.new_namespace_project_bot_personal_access_token_path(bot_id: bot.id)
       end
     end
 
     def destroy_path(bot)
       if @namespace.is_a?(Group)
-        group_bot_destroy_confirmation_path(bot_id: bot.id)
+        helpers.group_bot_destroy_confirmation_path(bot_id: bot.id)
       elsif @namespace.is_a?(Namespaces::ProjectNamespace)
-        namespace_project_bot_destroy_confirmation_path(bot_id: bot.id)
+        helpers.namespace_project_bot_destroy_confirmation_path(bot_id: bot.id)
       end
     end
   end

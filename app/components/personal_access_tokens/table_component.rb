@@ -28,17 +28,17 @@ module PersonalAccessTokens
 
     def revoke_path(token)
       if @namespace.is_a?(Group)
-        revoke_confirmation_group_bot_personal_access_token_path(
+        helpers.revoke_confirmation_group_bot_personal_access_token_path(
           bot_id: @bot_account.id,
           id: token.id
         )
       elsif @namespace.is_a?(Namespaces::ProjectNamespace)
-        revoke_confirmation_namespace_project_bot_personal_access_token_path(
+        helpers.revoke_confirmation_namespace_project_bot_personal_access_token_path(
           bot_id: @bot_account.id,
           id: token.id
         )
       else
-        revoke_profile_personal_access_token_path(id: token.id)
+        helpers.revoke_profile_personal_access_token_path(id: token.id)
       end
     end
 
@@ -63,17 +63,17 @@ module PersonalAccessTokens
 
     def rotate_path(token)
       if @namespace.is_a?(Group)
-        rotate_confirmation_group_bot_personal_access_token_path(
+        helpers.rotate_confirmation_group_bot_personal_access_token_path(
           bot_id: @bot_account.id,
           id: token.id
         )
       elsif @namespace.is_a?(Namespaces::ProjectNamespace)
-        rotate_confirmation_namespace_project_bot_personal_access_token_path(
+        helpers.rotate_confirmation_namespace_project_bot_personal_access_token_path(
           bot_id: @bot_account.id,
           id: token.id
         )
       else
-        rotate_profile_personal_access_token_path(id: token.id)
+        helpers.rotate_profile_personal_access_token_path(id: token.id)
       end
     end
 

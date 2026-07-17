@@ -26,7 +26,7 @@ module Activities
 
         href = link_to(
           group.puid,
-          group_path(group),
+          helpers.group_path(group),
           class: active_link_classes
         )
 

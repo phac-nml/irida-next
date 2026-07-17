@@ -151,7 +151,7 @@
                             <%= icon(Attachment.icon, size: :sm, class: "ml-0 mr-2") %>
                           <% end %>
                           <span>
-                            <%= link_to rails_blob_path(attachment.file),
+                            <%= link_to helpers.rails_blob_path(attachment.file),
                             data: {
                               turbo: false,
                             },
@@ -171,7 +171,7 @@
                                 <%= icon(:arrow_right, size: :sm, class: "ml-0 mr-2") %>
 
                                 <span>
-                                  <%= link_to rails_blob_path(attachment.file),
+                                  <%= link_to helpers.rails_blob_path(attachment.file),
                               data: {
                                 turbo: false,
                               },
@@ -190,7 +190,7 @@
                                 <%= icon(:arrow_left, size: :sm, class: "ml-0 mr-2") %>
 
                                 <span>
-                                  <%= link_to rails_blob_path(attachment.associated_attachment.file),
+                                  <%= link_to helpers.rails_blob_path(attachment.associated_attachment.file),
                               data: {
                                 turbo: false,
                               },
@@ -211,7 +211,7 @@
                                 <%= icon(Attachment.icon, size: :sm, class: "ml-0 mr-2") %>
 
                                 <span>
-                                  <%= link_to rails_blob_path(attachment.file),
+                                  <%= link_to helpers.rails_blob_path(attachment.file),
                               data: {
                                 turbo: false,
                               },
@@ -252,7 +252,7 @@
                     <% if @row_actions[:preview] && attachment.previewable? %>
                       <%= link_to(
                       t("components.attachments.table_component.preview"),
-                      attachment_path(attachment),
+                      helpers.attachment_path(attachment),
                       aria: {
                         label:
                           t(

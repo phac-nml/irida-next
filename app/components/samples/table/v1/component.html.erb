@@ -127,7 +127,7 @@
                       </span>
                     <% elsif column == :name %>
                       <%= link_to(
-                        sample_path(sample),
+                        helpers.sample_path(sample),
                         class: "text-slate-700 dark:text-slate-300 font-sans font-semibold underline hover:decoration-2"
                       ) do %>
                         <%= highlight(
@@ -140,7 +140,7 @@
                       <% end %>
                     <% elsif column == "namespaces.puid" %>
                       <%= link_to sample.project.puid,
-                      namespace_project_samples_path(sample.project.namespace.parent, sample.project),
+                      helpers.namespace_project_samples_path(sample.project.namespace.parent, sample.project),
                       class: "font-semibold underline hover:decoration-2" %>
                     <% elsif column == :created_at %>
                       <%= helpers.local_date(sample[column], :long) %>
@@ -198,7 +198,7 @@
     <% if @abilities[:edit_sample_metadata] %>
       <template data-editable-cell-target="formTemplate">
         <%= form_with(
-              url: sample_metadatum_path(sample_id: 'SAMPLE_ID_PLACEHOLDER', id: 'FIELD_ID_PLACEHOLDER'),
+              url: helpers.sample_metadatum_path(sample_id: 'SAMPLE_ID_PLACEHOLDER', id: 'FIELD_ID_PLACEHOLDER'),
               method: :patch,
               class: "w-full"
             ) do |form| %>

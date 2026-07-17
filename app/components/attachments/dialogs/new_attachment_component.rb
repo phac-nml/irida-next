@@ -16,9 +16,9 @@ module Attachments
 
       def upload_path
         if @namespace.type == 'Group'
-          group_attachments_path(id: @namespace.id)
+          helpers.group_attachments_path(id: @namespace.id)
         else
-          namespace_project_attachments_path(id: @namespace.project.id)
+          helpers.namespace_project_attachments_path(id: @namespace.project.id)
         end
       end
     end

@@ -18,7 +18,7 @@ module Activities
         href = if transferred_group_exists?
                  link_to(
                    @activity[:transferred_group_puid],
-                   group_path(@activity[:transferred_group]),
+                   helpers.group_path(@activity[:transferred_group]),
                    class: active_link_classes,
                    title:
                      t(

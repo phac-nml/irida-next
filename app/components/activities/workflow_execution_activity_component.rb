@@ -40,7 +40,7 @@ module Activities
       href = if workflow_execution_exists?
                link_to(
                  @activity[:workflow_id],
-                 namespace_project_automated_workflow_executions_path(
+                 helpers.namespace_project_automated_workflow_executions_path(
                    @activity[:namespace].parent,
                    @activity[:namespace].project
                  ),
@@ -60,7 +60,7 @@ module Activities
     def workflow_execution_and_sample_exists_activity # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       href = link_to(
         @activity[:workflow_id],
-        namespace_project_workflow_execution_path(
+        helpers.namespace_project_workflow_execution_path(
           @activity[:namespace].parent,
           @activity[:namespace].project,
           @activity[:workflow_id]
@@ -80,7 +80,7 @@ module Activities
 
       sample_href = link_to(
         @activity[:sample_puid],
-        namespace_project_sample_path(
+        helpers.namespace_project_sample_path(
           @activity[:namespace].parent,
           @activity[:namespace].project,
           @activity[:sample_id]
@@ -105,7 +105,7 @@ module Activities
     def workflow_execution_exists_activity # rubocop:disable Metrics/MethodLength
       href = link_to(
         @activity[:workflow_id],
-        namespace_project_workflow_execution_path(
+        helpers.namespace_project_workflow_execution_path(
           @activity[:namespace].parent,
           @activity[:namespace].project,
           @activity[:workflow_id]
@@ -133,7 +133,7 @@ module Activities
       href = highlighted_text(@activity[:workflow_id])
       sample_href = link_to(
         @activity[:sample_puid],
-        namespace_project_sample_path(
+        helpers.namespace_project_sample_path(
           @activity[:namespace].parent,
           @activity[:namespace].project,
           @activity[:sample_id]

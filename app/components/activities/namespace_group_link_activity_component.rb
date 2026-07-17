@@ -36,7 +36,7 @@ module Activities
       if link_to_shared_group?
         link_to(
           @activity[:namespace_puid],
-          group_path(@activity[:group_link].namespace),
+          helpers.group_path(@activity[:group_link].namespace),
           class: active_link_classes,
           title: t(
             'components.activity.groups.link_descriptive_text',
@@ -51,7 +51,7 @@ module Activities
       else
         link_to(
           @activity[:group_puid],
-          group_path(@activity[:group_link].group),
+          helpers.group_path(@activity[:group_link].group),
           class: active_link_classes,
           title: t(
             'components.activity.groups.link_descriptive_text',

@@ -1,6 +1,6 @@
 <div id="limit-component" class="w-full text-slate-500 @max-md:flex @max-md:flex-col dark:text-slate-400">
   <%= form_with(
-    url: url_for(request.query_parameters.except("limit", *@params.keys.map(&:to_s))),
+    url: helpers.url_for(request.query_parameters.except("limit", *@params.keys.map(&:to_s))),
     method: :get,
     html: {
       id: "limit-component-form",

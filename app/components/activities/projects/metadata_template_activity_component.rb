@@ -19,7 +19,7 @@ module Activities
 
                  link_to(
                    @activity[:template_name],
-                   namespace_project_metadata_templates_path(
+                   helpers.namespace_project_metadata_templates_path(
                      @activity[:current_project].parent,
                      @activity[:current_project].project
                    ),

@@ -156,8 +156,8 @@
 
 <template data-nextflow--v2--samplesheet-target="fileTemplate">
   <a
-    href="#"
-    data-base-path="/-/workflow_executions/file_selector/new"
+    href="<%= helpers.new_workflow_executions_file_selector_path %>"
+    data-base-path="<%= helpers.new_workflow_executions_file_selector_path %>"
     data-turbo-stream="true"
     data-namespace-id="<%= @namespace_id %>"
     class="
@@ -251,7 +251,7 @@
 </template>
 
 <template data-nextflow--v2--samplesheet-target="metadataHeaderForm">
-  <%= form_with(url: fields_workflow_executions_metadata_path) do |f| %>
+  <%= form_with(url: helpers.fields_workflow_executions_metadata_path) do |f| %>
     <%= f.hidden_field :namespace_id, value: namespace_id %>
   <% end %>
 </template>

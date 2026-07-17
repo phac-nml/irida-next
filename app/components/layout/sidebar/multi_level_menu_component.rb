@@ -8,14 +8,20 @@ module Layout
     #   <%= render Layout::Sidebar::MultiLevelMenuComponent.new(
     #     title: 'Projects',
     #     icon: :folder,
-    #     selectable_pages: [projects_path, new_project_path],
-    #     current_page: request.path
+    #     selectable_pages: [helpers.projects_path, helpers.new_project_path],
+    #     current_page: helpers.request.path
     #   ) do |menu| %>
-    #     <% menu.with_menu_item(url: projects_path, selected: current_page?(projects_path)) do |item| %>
+    #     <% menu.with_menu_item(
+    #       url: helpers.projects_path,
+    #       selected: helpers.current_page?(helpers.projects_path)
+    #     ) do |item| %>
     #       <% item.with_icon { icon(Group.icon) } %>
     #       All Projects
     #     <% end %>
-    #     <% menu.with_menu_item(url: new_project_path, selected: current_page?(new_project_path)) do |item| %>
+    #     <% menu.with_menu_item(
+    #       url: helpers.new_project_path,
+    #       selected: helpers.current_page?(helpers.new_project_path)
+    #     ) do |item| %>
     #       <% item.with_icon { icon(:plus) } %>
     #       New Project
     #     <% end %>

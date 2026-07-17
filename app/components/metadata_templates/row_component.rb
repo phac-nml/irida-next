@@ -29,17 +29,17 @@ module MetadataTemplates
 
     def edit_path
       if @namespace.group_namespace?
-        edit_group_metadata_template_path(@namespace, @metadata_template)
+        helpers.edit_group_metadata_template_path(@namespace, @metadata_template)
       else
-        edit_namespace_project_metadata_template_path(@namespace.parent, @namespace.project, @metadata_template)
+        helpers.edit_namespace_project_metadata_template_path(@namespace.parent, @namespace.project, @metadata_template)
       end
     end
 
     def individual_path
       if @namespace.group_namespace?
-        group_metadata_template_path(@namespace, @metadata_template)
+        helpers.group_metadata_template_path(@namespace, @metadata_template)
       else
-        namespace_project_metadata_template_path(@namespace.parent, @namespace.project, @metadata_template)
+        helpers.namespace_project_metadata_template_path(@namespace.parent, @namespace.project, @metadata_template)
       end
     end
 

@@ -112,37 +112,37 @@ module WorkflowExecutions
 
     def individual_path(workflow_execution)
       if @namespace&.project_namespace?
-        namespace_project_workflow_execution_path(
+        helpers.namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
           workflow_execution
         )
       elsif @namespace&.group_namespace?
-        group_workflow_execution_path(@namespace, workflow_execution)
+        helpers.group_workflow_execution_path(@namespace, workflow_execution)
       else
-        workflow_execution_path(workflow_execution)
+        helpers.workflow_execution_path(workflow_execution)
       end
     end
 
     def cancel_path(workflow_execution)
       if @namespace
-        cancel_namespace_project_workflow_execution_path(
+        helpers.cancel_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
           workflow_execution
         )
       else
-        cancel_workflow_execution_path(workflow_execution)
+        helpers.cancel_workflow_execution_path(workflow_execution)
       end
     end
 
     def destroy_confirmation_path(workflow_execution)
       if @namespace
-        destroy_confirmation_namespace_project_workflow_execution_path(@namespace.parent,
-                                                                       @namespace.project,
-                                                                       workflow_execution)
+        helpers.destroy_confirmation_namespace_project_workflow_execution_path(@namespace.parent,
+                                                                               @namespace.project,
+                                                                               workflow_execution)
       else
-        destroy_confirmation_workflow_execution_path(workflow_execution)
+        helpers.destroy_confirmation_workflow_execution_path(workflow_execution)
       end
     end
   end

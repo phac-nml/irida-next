@@ -74,7 +74,7 @@
     "
   >
     <div class="flex w-full items-start">
-      <div class="mr-3 flex-shrink-0"><%= icon :x_circle, color: :danger %></div>
+      <div class="mr-3 shrink-0"><%= icon :x_circle, color: :danger %></div>
 
       <div class="mt-0.5 min-w-0 flex-1">
         <div class="text-sm leading-5 font-medium" data-nextflow--v1--samplesheet-target="errorMessage"></div>
@@ -153,9 +153,9 @@
 <template data-nextflow--v1--samplesheet-target="fileTemplate">
   <a
     data-turbo-stream="true"
-    data-base-path="/-/workflow_executions/file_selector/new"
+    data-base-path="<%= helpers.new_workflow_executions_file_selector_path %>"
     data-namespace-id="<%= @namespace_id %>"
-    href="#"
+    href="<%= helpers.new_workflow_executions_file_selector_path %>"
     class="
       block cursor-pointer border-2 border-transparent bg-inherit p-2 text-sm text-slate-900
       focus-visible:-outline-offset-2! dark:text-white
@@ -241,7 +241,7 @@
 </template>
 
 <template data-nextflow--v1--samplesheet-target="metadataHeaderForm">
-  <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
+  <%= form_with url: helpers.fields_workflow_executions_metadata_path do |f| %>
     <%= f.hidden_field :namespace_id, value: namespace_id %>
   <% end %>
 </template>

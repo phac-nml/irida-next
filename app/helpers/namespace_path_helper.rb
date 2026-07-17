@@ -6,9 +6,9 @@ module NamespacePathHelper
     return if namespace.deleted?
 
     if namespace&.group_namespace?
-      group_path(namespace)
+      helpers.group_path(namespace)
     elsif namespace&.project_namespace?
-      namespace_project_path(namespace.parent, namespace.project)
+      helpers.namespace_project_path(namespace.parent, namespace.project)
     end
   end
 end
