@@ -265,6 +265,67 @@ module Projects
       end
     end
 
+    test 'changing page size preserves search' do
+      visit namespace_project_attachments_path(@namespace, @project1)
+
+      assert_text 'Displaying 1-2 of 2 items'
+      assert_selector 'table tbody tr', count: 2
+
+      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
+              with: @attachment1.file.filename.to_s
+      find('input.t-search-component').send_keys(:return)
+
+      assert_text 'Displaying 1 item'
+      assert_selector 'table tbody tr', count: 1
+      assert_text @attachment1.puid
+
+      select '10', from: 'pagy-limit-select'
+
+      assert_selector '#pagy-limit-select option[value="10"]:checked'
+      assert_text 'Displaying 1 item'
+      assert_selector 'table tbody tr', count: 1
+      assert_text @attachment1.puid
+      assert_no_text @attachment2.puid
+      assert_selector '#limit-component-form input[type="hidden"][name="q[puid_or_file_blob_filename_cont]"]' \
+                      "[value=\"#{@attachment1.file.filename}\"]",
+                      visible: :hidden
+    end
+
+    test 'changing page size preserves sort' do
+      visit namespace_project_attachments_path(@namespace, @project1)
+
+      assert_text 'Displaying 1-2 of 2 items'
+      click_link I18n.t('components.attachments.table_component.id')
+
+      assert_selector 'th[aria-sort]'
+      assert_selector 'a[href*="q%5Bs%5D=puid"]'
+
+      select '10', from: 'pagy-limit-select'
+
+      assert_selector '#pagy-limit-select option[value="10"]:checked'
+      assert_selector 'th[aria-sort]'
+      assert_selector 'a[href*="limit=10"][href*="q%5Bs%5D=puid"]'
+      assert_selector '#limit-component-form input[type="hidden"][name="q[s]"][value="puid asc"]',
+                      visible: :hidden
+    end
+
+    test 'changing page preserves sort' do
+      visit namespace_project_attachments_path(@namespace, @project1, limit: 1)
+
+      assert_selector 'table tbody tr', count: 1
+      click_link I18n.t('components.attachments.table_component.id')
+
+      assert_selector 'th[aria-sort]'
+      first_page_puid = find('table tbody tr th').text
+
+      click_on I18n.t('components.viral.pagy.pagination_component.next')
+
+      assert_selector 'th[aria-sort]'
+      assert_selector 'a[href*="q%5Bs%5D=puid"]'
+      assert_selector 'table tbody tr', count: 1
+      assert_no_text first_page_puid
+    end
+
     test 'member with role >= analyst can see attachment preview link' do
       project2 = projects(:project2)
       attachment = attachments(:attachmentCSV)
