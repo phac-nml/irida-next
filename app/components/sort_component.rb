@@ -12,6 +12,7 @@ class SortComponent < Component
     @url = url
     @field = field
     @system_arguments = system_arguments
+    @system_arguments[:id] ||= "sort-#{field}-#{label}".parameterize
   end
 
   def sort_icon

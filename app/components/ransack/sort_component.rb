@@ -14,13 +14,15 @@ module Ransack
     end
 
     def system_arguments
-      if @system_arguments.empty?
-        { data: {
-          turbo_stream: 'true'
-        } }
-      else
-        @system_arguments
-      end
+      args = if @system_arguments.empty?
+               { data: {
+                 turbo_stream: 'true'
+               } }
+             else
+               @system_arguments.dup
+             end
+      args[:id] ||= "sort-#{field}-#{label}".parameterize
+      args
     end
 
     def sort_icon

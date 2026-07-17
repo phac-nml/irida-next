@@ -4,12 +4,10 @@ require 'ransack/helpers/form_helper'
 
 module Attachments
   # Component for rendering a table of Attachments
-  class TableComponent < Component
+  class TableComponent < Component # rubocop:disable Metrics/ClassLength
     include Ransack::Helpers::FormHelper
 
-    # 📝 Define columns related to attachment metadata for sorting/filtering.
     METADATA_COLUMNS = %w[format type].freeze
-    # 📝 Define columns related to the actual file data for sorting/filtering.
     FILE_DATA_COLUMNS = %w[filename byte_size].freeze
 
     # rubocop:disable Naming/MethodParameterName,Metrics/ParameterLists
@@ -20,6 +18,8 @@ module Attachments
       attachable,
       render_individual_attachments,
       has_attachments,
+      pagination_params: {},
+      sort_replaces_history: false,
       row_actions: false,
       abilities: {},
       empty: {},
@@ -31,13 +31,14 @@ module Attachments
       @attachable = attachable
       @render_individual_attachments = render_individual_attachments
       @has_attachments = has_attachments
+      @pagination_params = pagination_params
+      @sort_replaces_history = sort_replaces_history
       @abilities = abilities
       @row_actions = row_actions
       # 🚀 Determine if any row actions are enabled for rendering the actions column.
       @renders_row_actions = @row_actions.any? { |_key, value| value }
       @empty = empty
       @system_arguments = system_arguments
-
       # 📝 Set the columns to be displayed in the table.
       @columns = columns
     end
@@ -109,6 +110,8 @@ module Attachments
       end
     end
 
+    def sort_link_arguments = @sort_replaces_history ? { data: { turbo_action: 'replace' } } : {}
+
     def selection_data_attributes
       {
         controller: 'selection',
@@ -121,8 +124,6 @@ module Attachments
 
     private
 
-    def columns
-      %i[id filename format type byte_size created_at]
-    end
+    def columns = %i[id filename format type byte_size created_at]
   end
 end
