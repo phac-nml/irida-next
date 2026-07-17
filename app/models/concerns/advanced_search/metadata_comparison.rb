@@ -28,26 +28,41 @@ module AdvancedSearch
     def metadata_condition_date_comparison(scope, node, value, comparison_method)
       return scope.none unless valid_date_format?(value)
 
-      scope
-        .where(node.matches_regexp('^\\d{4}(-\\d{2}){0,2}$'))
-        .where(
-          Arel::Nodes::NamedFunction.new(
-            'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
-          ).public_send(comparison_method, value)
-        )
+      condition = node.matches_regexp('^\\d{4}(-\\d{2}){0,2}$').and(
+        Arel::Nodes::NamedFunction.new(
+          'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
+        ).public_send(comparison_method, value)
+      )
+
+      if comparison_method == :not_eq
+        # Include NULL or non-date metadata values in negative comparisons: NULL is not equal to the provided value.
+        scope.where(node.eq(nil).or(node.does_not_match_regexp('^\\d{4}(-\\d{2}){0,2}$')).or(
+                      condition
+                    ))
+      else
+        scope.where(condition)
+      end
     end
 
     # handles all numeric comparisons (:eq, :not_eq, :gteq, :lteq)
     def metadata_condition_numeric_comparison(scope, node, value, comparison_method)
       return scope.none unless valid_numeric_format?(value)
 
-      scope
-        .where(node.matches_regexp('^-?\\d+(\\.\\d+)?$'))
-        .where(
-          Arel::Nodes::NamedFunction.new(
-            'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
-          ).public_send(comparison_method, value.to_f)
-        )
+      condition = node.matches_regexp('^-?\\d+(\\.\\d+)?$').and(
+        Arel::Nodes::NamedFunction.new(
+          'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
+        ).public_send(comparison_method, value.to_f)
+      )
+
+      if comparison_method == :not_eq
+        # Include NULL or non-numeric metadata values in negative comparisons: NULL is not equal to the provided value.
+        scope.where(node.eq(nil).or(node.does_not_match_regexp('^-?\\d+(\\.\\d+)?$')).or(
+                      condition
+                    ))
+      else
+        scope
+          .where(condition)
+      end
     end
 
     def valid_date_format?(value)

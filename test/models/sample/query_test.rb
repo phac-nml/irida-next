@@ -384,6 +384,30 @@ class QueryTest < ActiveSupport::TestCase
     assert_includes results4, sample2
   end
 
+  test 'metadata numeric not equals operator with null and non-numeric values' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    sample30 = samples(:sample30)
+    sample1.update(metadata: { 'int_field' => 100 })
+    sample30.update(metadata: { 'int_field' => 'not_a_number' })
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                     { '0': { field: 'metadata.int_field', operator: 'numeric_not_equals', value: '100' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+    results = query.results
+
+    assert_not_includes results, sample1
+    assert_includes results, sample2
+    assert_includes results, sample30
+  end
+
   test 'metadata date operators' do
     project = projects(:project1)
     sample1 = samples(:sample1)
@@ -447,6 +471,30 @@ class QueryTest < ActiveSupport::TestCase
 
     assert_not_includes results4, sample1
     assert_includes results4, sample2
+  end
+
+  test 'metadata date not equals operator with null and non-date values' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    sample30 = samples(:sample30)
+    sample1.update(metadata: { 'date_field' => '2026-01-01' })
+    sample30.update(metadata: { 'date_field' => 'not_a_date' })
+
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                     { '0': { field: 'metadata.date_field', operator: 'date_not_equals', value: '2026-01-01' } }
+                      } },
+                      project_ids: [project.id] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+    results = query.results
+
+    assert_not_includes results, sample1
+    assert_includes results, sample2
+    assert_includes results, sample30
   end
 
   test 'metadata text operators' do
