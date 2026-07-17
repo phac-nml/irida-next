@@ -3,8 +3,8 @@
 <div id="sample-metadata">
   <% if sample_metadata.present? %>
     <% if @allowed_to[:update_sample] %>
-      <div class="mb-2 flex flex-col sm:flex-row-reverse">
-        <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+      <div class="mb-2 flex justify-end">
+        <div class="flex w-full gap-2 sm:w-auto">
           <%= button_to t(".add_metadata"),
           new_namespace_project_sample_metadata_path(
             @project.namespace.parent,
@@ -16,7 +16,8 @@
             turbo_frame: "sample_modal",
             turbo_stream: true,
           },
-          class: "button button-default w-full" %>
+          form_class: "hidden",
+          class: "button button-default min-w-0 flex-1 whitespace-nowrap sm:flex-none" %>
 
           <%= button_to t(".delete_metadata_button"),
           new_namespace_project_sample_metadata_deletion_path(
@@ -31,7 +32,8 @@
             controller: "action-button",
             action_button_required_value: 1,
           },
-          class: "button button-default action-button w-full" %>
+          form_class: "hidden",
+          class: "button button-default action-button min-w-0 flex-1 whitespace-nowrap sm:flex-none" %>
         </div>
       </div>
     <% end %>
