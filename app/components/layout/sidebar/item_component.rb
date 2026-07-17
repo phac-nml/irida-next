@@ -6,19 +6,19 @@ module Layout
     #
     # @example Basic usage
     #   <%= render Layout::Sidebar::ItemComponent.new(
-    #     url: root_path,
+    #     url: helpers.root_path,
     #     label: 'Dashboard',
     #     icon_name: :house,
-    #     selected: current_page?(root_path)
+    #     selected: helpers.current_page?(helpers.root_path)
     #   ) %>
     #
     # @example With badge
     #   <%= render Layout::Sidebar::ItemComponent.new(
-    #     url: notifications_path,
+    #     url: helpers.notifications_path,
     #     label: 'Notifications',
     #     icon_name: :bell,
     #     badge: '3',
-    #     selected: current_page?(notifications_path)
+    #     selected: helpers.current_page?(helpers.notifications_path)
     #   ) %>
     class ItemComponent < Component
       # @!attribute [r] url

@@ -8,7 +8,10 @@ module Layout
       # @example Basic usage
       #   <%= render Layout::SidebarComponent.new do |sidebar| %>
       #     <% sidebar.with_section(title: 'Main') do |section| %>
-      #       <% section.with_item(url: root_path, selected: current_page?(root_path)) do |item| %>
+      #       <% section.with_item(
+      #         url: helpers.root_path,
+      #         selected: helpers.current_page?(helpers.root_path)
+      #       ) do |item| %>
       #         <% item.with_icon { icon(:house) } %>
       #         Dashboard
       #       <% end %>
