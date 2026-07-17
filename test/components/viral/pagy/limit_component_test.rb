@@ -42,6 +42,30 @@ module Viral
         end
       end
 
+      test 'does not preserve page when changing page size' do
+        with_request_url '/-/groups/group-1/-/attachments?page=3&q%5Bs%5D=puid+asc' do
+          render_inline Viral::Pagy::LimitComponent.new(pagy_for(count: 25), item: 'items')
+
+          assert_no_selector '#limit-component-form input[type="hidden"][name="page"]', visible: :hidden
+          assert_selector '#limit-component-form input[type="hidden"][name="q[s]"][value="puid asc"]',
+                          visible: :hidden
+        end
+      end
+
+      test 'strips limit even when reintroduced by explicit params' do
+        with_request_url '/-/groups/group-1/-/attachments?q%5Bs%5D=puid+asc' do
+          render_inline Viral::Pagy::LimitComponent.new(
+            pagy_for(count: 25),
+            item: 'items',
+            params: { limit: 50, tab: 'files' }
+          )
+
+          assert_no_selector '#limit-component-form input[type="hidden"][name="limit"]', visible: :hidden
+          assert_selector '#limit-component-form input[type="hidden"][name="tab"][value="files"]',
+                          visible: :hidden
+        end
+      end
+
       private
 
       def pagy_for(count:)

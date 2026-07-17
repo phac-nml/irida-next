@@ -22,10 +22,10 @@ module Viral
 
       def preserved_query_params
         request.query_parameters
-               .except('limit')
                .to_h
                .deep_stringify_keys
                .deep_merge(@params.deep_stringify_keys)
+               .except('limit', 'page')
       end
 
       def flatten_params(value, prefix = nil)
