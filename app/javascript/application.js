@@ -60,14 +60,37 @@ function isElementInViewport(el) {
   );
 }
 
+// Preserve focus across Turbo Drive/frame renders when the focused element has an id.
+// (ES modules have no meaningful top-level `this`, so keep the id in module scope.)
+let focusedElementId = null;
+
+function saveFocusedElementId() {
+  const id = document.activeElement?.id;
+  if (id) {
+    focusedElementId = id;
+  }
+}
+
+function restoreFocusedElement() {
+  if (!focusedElementId) return;
+
+  document.getElementById(focusedElementId)?.focus();
+}
+
+document.addEventListener("turbo:before-render", saveFocusedElementId);
+document.addEventListener("turbo:before-frame-render", saveFocusedElementId);
+
 document.addEventListener("turbo:render", () => {
   // Reconfigure LocalTime with updated locale and i18n data
   configureLocalTime();
+  restoreFocusedElement();
   // ensure focused element is scrolled into view if out of view
-  if (!isElementInViewport(document.activeElement)) {
+  if (document.activeElement && !isElementInViewport(document.activeElement)) {
     document.activeElement.scrollIntoView();
   }
 });
+
+document.addEventListener("turbo:frame-render", restoreFocusedElement);
 
 document.addEventListener("turbo:before-stream-render", (event) => {
   const fallbackToDefaultActions = event.detail.render;
