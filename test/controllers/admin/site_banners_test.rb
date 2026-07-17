@@ -20,6 +20,9 @@ module Admin
       assert_includes response.body, 'Maintenance notice'
       assert_includes response.body, I18n.t('active_admin.site_banners.disable')
       assert_includes response.body, disable_admin_site_banner_path(SiteBanner.current)
+      assert_select 'nav li[false]', count: 0
+      assert_select '#user-menu[aria-labelledby]', count: 0
+      assert_select '#user-menu > ul[aria-labelledby="user-menu-button"]', count: 1
     end
 
     test 'system user sees translated French resource name' do
