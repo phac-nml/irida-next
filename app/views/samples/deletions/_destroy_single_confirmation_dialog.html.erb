@@ -11,16 +11,24 @@
       <%= t(".description", sample_name: @sample.name) %>
     </p>
 
-    <%= form_for(:deletion, url: samples_deletions_path(namespace_id: @namespace.id),
+    <%= form_for(@audit_form, as: :deletion, url: samples_deletions_path(namespace_id: @namespace.id),
             data: {
               turbo_frame: "_top",
             }
           ) do |form| %>
+      <%= hidden_field_tag :deletion_type, params[:deletion_type] %>
+      <%= hidden_field_tag :sample_id, params[:sample_id] %>
       <%= hidden_field_tag "deletion[sample_ids][]", @sample.id %>
 
       <div class="grid gap-4">
-        <div class="form-field">
-          <%= form.label :reason %>
+        <%= form_error_summary(form) %>
+
+        <%= render partial: "shared/form/required_field_legend" %>
+
+        <% invalid_reason = @audit_form.errors.include?(:reason) %>
+
+        <div class="form-field <%= 'invalid' if invalid_reason %>">
+          <%= form.label :reason, data: { required: true } %>
 
           <%= form.text_area :reason,
               {
@@ -28,7 +36,23 @@
                 :maxlength => 500,
                 :class => "form-control",
                 :placeholder => t(".reason_placeholder"),
+                "aria-describedby" => [
+                  (
+                    if invalid_reason
+                      form.field_id(:reason, "error")
+                    else
+                      nil
+                    end
+                     ),
+                    ].join(" "),
+                    "aria-invalid" => invalid_reason,
               } %>
+
+          <% if invalid_reason %>
+            <%= render "shared/form/field_errors",
+              id: form.field_id(:reason, "error"),
+              errors: @audit_form.errors.full_messages_for(:reason) %>
+          <% end %>
         </div>
 
         <div>

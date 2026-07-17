@@ -21,8 +21,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
+               deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample1.id]
+                 sample_ids: [@sample1.id],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -36,8 +38,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
+               deletion_type: 'multiple',
                deletion: {
-                 sample_ids: [@sample1.id, @sample2.id]
+                 sample_ids: [@sample1.id, @sample2.id],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -51,8 +55,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
+               deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample1.id]
+                 sample_ids: [@sample1.id],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -67,8 +73,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
+               deletion_type: 'multiple',
                deletion: {
-                 sample_ids: [@sample1.id, @sample2.id]
+                 sample_ids: [@sample1.id, @sample2.id],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -82,8 +90,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
+               deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample69.id]
+                 sample_ids: [@sample69.id],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -97,8 +107,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
+               deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample69.id]
+                 sample_ids: [@sample69.id],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -114,8 +126,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
+               deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample23.id]
+                 sample_ids: [@sample23.id],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -130,8 +144,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project2_namespace.id,
+               deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample22.id]
+                 sample_ids: [@sample22.id],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -212,8 +228,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
+               deletion_type: 'multiple',
                deletion: {
-                 sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
+                 sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id'],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -230,8 +248,10 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
+               deletion_type: 'multiple',
                deletion: {
-                 sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
+                 sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id'],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
@@ -248,14 +268,33 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
+               deletion_type: 'multiple',
                deletion: {
-                 sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
+                 sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3],
+                 reason: 'cleanup'
                }
              }, as: :turbo_stream
       end
       assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
+    end
+
+    test 'should not destroy sample when deletion reason exceeds max length' do
+      assert_no_difference('Sample.count') do
+        post samples_deletions_path,
+             params: {
+               namespace_id: @group1.id,
+               deletion_type: 'multiple',
+               deletion: {
+                 sample_ids: [@sample1.id],
+                 reason: 'a' * 501
+               }
+             }, as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
+      assert_match 'Reason is too long', response.body
     end
   end
 end
