@@ -21,7 +21,7 @@ module Ransack
              else
                @system_arguments.dup
              end
-      args[:id] ||= "sort-#{field}-#{label}"
+      args[:id] ||= "sort-#{field}-#{label}".parameterize
       args
     end
 
