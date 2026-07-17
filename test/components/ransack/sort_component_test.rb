@@ -18,6 +18,7 @@ module Ransack
       )
 
       assert_selector "a[href='#{url}']", count: 1
+      assert_selector "a#sort-#{column}-#{label}", count: 1
       assert_text label
       assert_selector 'svg.arrow-up-icon', count: 1
     end
@@ -36,6 +37,7 @@ module Ransack
       )
 
       assert_selector "a[href='#{url}']", count: 1
+      assert_selector "a#sort-#{column}-#{label}", count: 1
       assert_text label
       assert_selector 'svg.arrow-down-icon', count: 1
     end
