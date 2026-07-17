@@ -176,6 +176,8 @@ module Dashboard
       click_button I18n.t('common.actions.remove')
 
       within('dialog[open]') do
+        fill_in placeholder: I18n.t(:'samples.deletions.destroy_single_confirmation_dialog.reason_placeholder'),
+                with: 'cleanup'
         click_button I18n.t('common.actions.remove')
       end
 
