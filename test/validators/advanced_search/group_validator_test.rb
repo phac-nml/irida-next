@@ -129,14 +129,59 @@ module AdvancedSearch
     end
 
     test 'restricts date operators for date fields' do
-      record = DummyRecord.new(
+      record1 = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: 'contains',
                                                                 value: 'x')])]
       )
 
-      assert_not record.valid?
-      condition = record.groups.first.conditions.first
-      assert condition.errors.added?(:operator, :not_a_date_operator)
+      assert_not record1.valid?
+      condition1 = record1.groups.first.conditions.first
+      assert condition1.errors.added?(:operator, :not_a_date_operator)
+
+      record2 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: 'not_contains',
+                                                                value: 'x')])]
+      )
+
+      assert_not record2.valid?
+      condition2 = record2.groups.first.conditions.first
+      assert condition2.errors.added?(:operator, :not_a_date_operator)
+
+      record3 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: 'starts_with',
+                                                                value: 'x')])]
+      )
+
+      assert_not record3.valid?
+      condition3 = record3.groups.first.conditions.first
+      assert condition3.errors.added?(:operator, :not_a_date_operator)
+
+      record4 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: 'ends_with',
+                                                                value: 'x')])]
+      )
+
+      assert_not record4.valid?
+      condition4 = record4.groups.first.conditions.first
+      assert condition4.errors.added?(:operator, :not_a_date_operator)
+
+      record5 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: 'in',
+                                                                value: ['x'])])]
+      )
+
+      assert_not record5.valid?
+      condition5 = record5.groups.first.conditions.first
+      assert condition5.errors.added?(:operator, :not_a_date_operator)
+
+      record6 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at', operator: 'not_in',
+                                                                value: ['x'])])]
+      )
+
+      assert_not record6.valid?
+      condition6 = record6.groups.first.conditions.first
+      assert condition6.errors.added?(:operator, :not_a_date_operator)
     end
 
     test 'validates date format for date fields' do

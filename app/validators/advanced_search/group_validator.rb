@@ -8,7 +8,7 @@ module AdvancedSearch
   # - date_fields
   class GroupValidator < ActiveModel::Validator # rubocop:disable Metrics/ClassLength
     METADATA_FIELD_PATTERN = /^metadata\..+$/
-    DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in].freeze
+    DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in starts_with ends_with].freeze
     COMBINABLE_OPERATORS = { gleqt: %w[>= <=], start_ends_with: %w[ends_with starts_with],
                              metadata_date_gleqt: %w[date_greater_than_equals date_less_than_equals],
                              metadata_numeric_gleqt: %w[numeric_greater_than_equals numeric_less_than_equals],

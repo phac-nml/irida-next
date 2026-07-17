@@ -84,6 +84,21 @@ class QueryTest < ActiveSupport::TestCase
     assert query.valid?
   end
 
+  test 'valid advanced query with starts and ends_with operators' do
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                     {
+                       '0': { field: 'name', operator: 'starts_with', value: 'proj' },
+                       '1': { field: 'name', operator: 'ends_with', value: 'sample 1' }
+                     }
+                      } },
+                      project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+  end
+
   test 'invalid advanced query with non unique fields' do
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
@@ -382,6 +397,24 @@ class QueryTest < ActiveSupport::TestCase
 
     assert_not_includes results4, sample1
     assert_includes results4, sample2
+
+    search_params5 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                   { '0': {
+                       field: 'metadata.int_field', operator: 'numeric_greater_than_equals', value: '10.1'
+                     },
+                     '1': { field: 'metadata.int_field', operator: 'numeric_less_than_equals', value: '99.9' } }
+                       } },
+
+                       project_ids: [project.id] }
+    query5 = Sample::Query.new(search_params5)
+    assert query5.advanced_query?
+    assert query5.valid?
+    results5 = query5.results
+
+    assert_not_includes results5, sample1
+    assert_not_includes results5, sample2
   end
 
   test 'metadata date operators' do
@@ -447,6 +480,24 @@ class QueryTest < ActiveSupport::TestCase
 
     assert_not_includes results4, sample1
     assert_includes results4, sample2
+
+    search_params5 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': {
+                           field: 'metadata.date_field', operator: 'date_greater_than_equals', value: '2026-01-02'
+                         },
+                         '1': { field: 'metadata.date_field', operator: 'date_less_than_equals', value: '2026-12-30' } }
+                       } },
+
+                       project_ids: [project.id] }
+    query5 = Sample::Query.new(search_params5)
+    assert query5.advanced_query?
+    assert query5.valid?
+    results5 = query5.results
+
+    assert_not_includes results5, sample1
+    assert_not_includes results5, sample2
   end
 
   test 'metadata text operators' do
@@ -539,5 +590,48 @@ class QueryTest < ActiveSupport::TestCase
 
     assert_includes results6, sample1
     assert_not_includes results6, sample2
+
+    search_params7 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.text_field', operator: 'text_starts_with', value: 'a' } }
+                       } },
+                       project_ids: [project.id] }
+    query7 = Sample::Query.new(search_params7)
+    assert query7.advanced_query?
+    assert query7.valid?
+    results7 = query7.results
+
+    assert_includes results7, sample1
+    assert_not_includes results7, sample2
+
+    search_params8 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.text_field', operator: 'text_ends_with', value: 'y' } }
+                       } },
+                       project_ids: [project.id] }
+    query8 = Sample::Query.new(search_params8)
+    assert query8.advanced_query?
+    assert query8.valid?
+    results8 = query8.results
+
+    assert_not_includes results8, sample1
+    assert_not_includes results8, sample2
+
+    search_params9 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.text_field', operator: 'text_starts_with', value: 'x' },
+                        '1': { field: 'metadata.text_field', operator: 'text_ends_with', value: 'z' } }
+                       } },
+                       project_ids: [project.id] }
+    query9 = Sample::Query.new(search_params9)
+    assert query9.advanced_query?
+    assert query9.valid?
+    results9 = query9.results
+
+    assert_not_includes results9, sample1
+    assert_includes results9, sample2
   end
 end
