@@ -1309,7 +1309,7 @@ module Projects
 
       # leave ignore empty values enabled
       assert find('input#file_import_ignore_empty_values').checked?
-      click_button I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
+      find_button(I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')).trigger('click')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -1367,7 +1367,7 @@ module Projects
 
       # disable ignore empty values
       find('input#file_import_ignore_empty_values').click
-      click_button I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
+      find_button(I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')).trigger('click')
       ### ACTIONS END ###
 
       ### VERIFY START ###
