@@ -12,7 +12,7 @@
       <% if @allowed_to[:submit_workflow] && @has_samples && @pipelines_enabled %>
         <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @project.namespace.id }, method: :get,
         data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
-                  class: "button button-default action-button cursor-pointer w-full" do %>
+                  class: "button button-default action-button cursor-pointer" do %>
           <%= icon(:rocket_launch, size: :sm) %>
           <span class="ml-2"><%= t(:".workflows.button_sr") %></span>
         <% end %>

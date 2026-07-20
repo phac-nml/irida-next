@@ -10,13 +10,8 @@
   @workflow_execution.name.blank? ? @workflow_execution.workflow.name : @workflow_execution.name
 end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
   <% component.with_buttons do %>
-    <div
-      class="
-        flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-1 mb-2
-      "
-    >
-      <% if @workflow_execution.completed? %>
-        <%= button_to t(".create_export_button"),
+    <% if @workflow_execution.completed? %>
+      <%= button_to t(".create_export_button"),
         new_data_export_path,
         params: {
           export_type: "analysis",
@@ -28,9 +23,9 @@ end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_e
         data: {
           turbo_stream: true,
         },
-        class: "button button-default w-full" %>
-      <% else %>
-        <%= button_to t(".create_export_button"),
+        class: "button button-default" %>
+    <% else %>
+      <%= button_to t(".create_export_button"),
         new_data_export_path,
         params: {
           export_type: "analysis",
@@ -43,39 +38,40 @@ end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_e
           turbo_stream: true,
         },
         class:
-          "button button-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 w-full",
+          "button button-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300",
         disabled: true %>
-      <% end %>
-      <% if @workflow_execution.cancellable? %>
-        <%= button_to t("common.actions.cancel"),
+    <% end %>
+
+    <% if @workflow_execution.cancellable? %>
+      <%= button_to t("common.actions.cancel"),
         cancel_workflow_execution_path(id: @workflow_execution.id),
         data: {
           turbo_method: :put,
           turbo_confirm: t("workflow_executions.show.cancel_button_confirmation"),
         },
         method: :put,
-        class: "button button-default w-full" %>
-      <% end %>
-      <% if @allowed_to[:update] %>
-        <%= button_to t("common.actions.edit"),
+        class: "button button-default" %>
+    <% end %>
+
+    <% if @allowed_to[:update] %>
+      <%= button_to t("common.actions.edit"),
         edit_workflow_execution_path(id: @workflow_execution.id),
         data: {
           turbo_stream: true,
         },
         method: :get,
-        class: "button button-default w-full" %>
+        class: "button button-default" %>
+    <% end %>
 
-      <% end %>
-      <% if @workflow_execution.deletable? %>
-        <%= button_to t("common.actions.remove"),
+    <% if @workflow_execution.deletable? %>
+      <%= button_to t("common.actions.remove"),
         destroy_confirmation_workflow_execution_path(@workflow_execution),
         method: :get,
         data: {
           turbo_stream: true,
         },
-        class: "button button-default w-full" %>
-      <% end %>
-    </div>
+        class: "button button-default" %>
+    <% end %>
   <% end %>
 <% end %>
 
