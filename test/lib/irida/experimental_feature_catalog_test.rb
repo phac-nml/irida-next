@@ -8,6 +8,7 @@ module Irida
       entries = ExperimentalFeatureCatalog.admin_entries
 
       assert_equal %w[
+        accessibility_statement
         advanced_search_metadata_operators
         advanced_search_with_auto_complete
         cancel_multiple_workflows

@@ -209,10 +209,12 @@
 
     <div class="border-t border-slate-200 p-2 dark:border-slate-800">
       <%= render DropdownComponent.new(label: t('general.help'), icon: :question, icon_size: :md) do |dropdown| %>
-        <%= dropdown.with_item(
-        label: t(:"general.accessibility"),
-        url: helpers.accessibility_path,
-      ) %>
+        <% if Flipper.enabled?(:accessibility_statement, Current.user) %>
+          <%= dropdown.with_item(
+          label: t(:"general.accessibility"),
+          url: helpers.accessibility_path,
+        ) %>
+        <% end %>
 
         <%= dropdown.with_item(
         label: t(:"general.documentation"),

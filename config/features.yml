@@ -1,4 +1,13 @@
 features:
+  accessibility_statement:
+    admin_manageable: true
+    description:
+      en: "Show the accessibility link item in the help dropdown menu."
+      fr: "Afficher le lien d'accessibilite dans le menu deroulant d'aide."
+    enable_in_development: true
+    name:
+      en: "Accessibility Statement"
+      fr: "Déclaration d'accessibilité"
   advanced_search_metadata_operators:
     admin_manageable: true
     description:
