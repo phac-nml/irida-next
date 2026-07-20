@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module WorkflowExecutions
-  class CleanupServiceTest < ActiveSupport::TestCase
+  class RunLogFetchServiceTest < ActiveSupport::TestCase
     def setup
       @user = users(:john_doe)
       @completed_workflow_execution = workflow_executions(:irida_next_example_completed_unclean)
@@ -44,7 +44,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      result = WorkflowExecutions::CleanupService.new(@completed_workflow_execution, @user, {}, conn).execute
+      result = WorkflowExecutions::RunLogFetchService.new(@completed_workflow_execution, @user, {}, conn).execute
 
       assert_equal expected_stdout, result[:stdout]
       assert_equal expected_stderr, result[:stderr]
@@ -83,7 +83,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      result = WorkflowExecutions::CleanupService.new(@error_workflow_execution, @user, {}, conn).execute
+      result = WorkflowExecutions::RunLogFetchService.new(@error_workflow_execution, @user, {}, conn).execute
 
       assert_equal expected_stdout, result[:stdout]
       assert_equal expected_stderr, result[:stderr]
@@ -112,7 +112,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      result = WorkflowExecutions::CleanupService.new(@completed_workflow_execution, @user, {}, conn).execute
+      result = WorkflowExecutions::RunLogFetchService.new(@completed_workflow_execution, @user, {}, conn).execute
 
       assert_nil result[:stdout]
       assert_nil result[:stderr]
@@ -125,7 +125,7 @@ module WorkflowExecutions
         builder.adapter :test, stubs
       end
 
-      result = WorkflowExecutions::CleanupService.new(@running_workflow_execution, @user, {}, conn).execute
+      result = WorkflowExecutions::RunLogFetchService.new(@running_workflow_execution, @user, {}, conn).execute
 
       assert_equal({ stdout: nil, stderr: nil }, result)
     end

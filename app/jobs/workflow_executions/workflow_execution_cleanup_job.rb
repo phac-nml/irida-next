@@ -29,7 +29,7 @@ module WorkflowExecutions
     private
 
     def workflow_execution_logs
-      @workflow_execution_logs ||= WorkflowExecutions::CleanupService.new(@workflow_execution).execute
+      @workflow_execution_logs ||= WorkflowExecutions::RunLogFetchService.new(@workflow_execution).execute
     end
 
     def attach_stdout_log

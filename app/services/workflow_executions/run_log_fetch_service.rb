@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module WorkflowExecutions
-  # Service used to Cleanup a WorkflowExecution
-  class CleanupService < BaseService
+  # Service used to fetch logs for a WorkflowExecution
+  class RunLogFetchService < BaseService
     def initialize(workflow_execution, user = nil, params = {}, conn_override = nil)
       super(user, params)
 
