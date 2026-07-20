@@ -2,9 +2,9 @@
   <% dialog.with_header(title: @title) %>
 
   <div
-    data-controller="activities--extended_details"
-    data-activities--extended_details-activity-type-value="<%= activity_type %>"
-    data-activities--extended_details-num-cols-value="<%= @column_headers.length %>"
+    data-controller="activities--extended-details"
+    data-activities--extended-details-activity-type-value="<%= activity_type %>"
+    data-activities--extended-details-num-cols-value="<%= @column_headers.length %>"
   >
     <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
       <%= viral_pill(text: helpers.local_time(activity[:created_at]), color: :green) %>
@@ -20,7 +20,7 @@
         dark:bg-slate-800
       "
     >
-      <div class="hidden" data-activities--extended_details-target="extendedDetailsData">
+      <div class="hidden" data-activities--extended-details-target="extendedDetailsData">
         <%= @data %>
       </div>
 
@@ -34,13 +34,13 @@
         </thead>
 
         <tbody
-          data-activities--extended_details-target="tbody"
+          data-activities--extended-details-target="tbody"
           class="divide-y divide-slate-200 overflow-y-auto bg-white dark:divide-slate-700 dark:bg-slate-800"
         ></tbody>
       </table>
     </div>
 
-    <div data-activities--extended_details-target="paginationContainer" class="mt-4 flex items-center justify-end"></div>
+    <div data-activities--extended-details-target="paginationContainer" class="mt-4 flex items-center justify-end"></div>
 
     <% if @deletion_reason.present? %>
       <div class="text-lg font-normal text-slate-500 dark:text-slate-400">
@@ -64,98 +64,98 @@
       </button>
     </div>
 
-    <template id="sampleCloneTableRow" data-activities--extended_details-target="sampleCloneTableRow">
+    <template id="sampleCloneTableRow" data-activities--extended-details-target="sampleCloneTableRow">
       <tr>
         <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="sampleName"></span>
+          <span class="mr-2" data-activities--extended-details-target="sampleName"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
         </td>
 
         <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="sampleName"></span>
+          <span class="mr-2" data-activities--extended-details-target="sampleName"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
         </td>
       </tr>
     </template>
 
-    <template id="workflowTableRow" data-activities--extended_details-target="workflowTableRow">
+    <template id="workflowTableRow" data-activities--extended-details-target="workflowTableRow">
       <tr>
-        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="workflowName"></span></td>
-        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="workflowId"></span></td>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended-details-target="workflowName"></span></td>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended-details-target="workflowId"></span></td>
       </tr>
     </template>
 
-    <template id="importSampleTableRow" data-activities--extended_details-target="importSampleTableRow">
+    <template id="importSampleTableRow" data-activities--extended-details-target="importSampleTableRow">
       <tr>
         <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="sampleName"></span>
+          <span class="mr-2" data-activities--extended-details-target="sampleName"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
         </td>
 
-        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="projectId"></span></td>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended-details-target="projectId"></span></td>
       </tr>
     </template>
 
-    <template id="groupSampleTransferTableRow" data-activities--extended_details-target="groupSampleTransferTableRow">
+    <template id="groupSampleTransferTableRow" data-activities--extended-details-target="groupSampleTransferTableRow">
       <tr>
         <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="sampleName"></span>
+          <span class="mr-2" data-activities--extended-details-target="sampleName"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
         </td>
 
         <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="transferredFrom"></span>
+          <span class="mr-2" data-activities--extended-details-target="transferredFrom"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
         </td>
 
         <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="transferredTo"></span>
-          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
-        </td>
-      </tr>
-    </template>
-
-    <template id="destroySampleTableRow" data-activities--extended_details-target="destroySampleTableRow">
-      <tr>
-        <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="sampleName"></span>
-          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
-        </td>
-
-        <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="projectName"></span>
+          <span class="mr-2" data-activities--extended-details-target="transferredTo"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
         </td>
       </tr>
     </template>
 
-    <template id="groupSampleCloneTableRow" data-activities--extended_details-target="groupSampleCloneTableRow">
+    <template id="destroySampleTableRow" data-activities--extended-details-target="destroySampleTableRow">
       <tr>
         <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="projectId"></span>
+          <span class="mr-2" data-activities--extended-details-target="sampleName"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
         </td>
 
         <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="sampleName"></span>
-          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
-        </td>
-
-        <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="projectId"></span>
-          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
-        </td>
-
-        <td class="px-3 py-3">
-          <span class="mr-2" data-activities--extended_details-target="sampleName"></span>
+          <span class="mr-2" data-activities--extended-details-target="projectName"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
         </td>
       </tr>
     </template>
 
-    <template data-activities--extended_details-target="pagination">
+    <template id="groupSampleCloneTableRow" data-activities--extended-details-target="groupSampleCloneTableRow">
+      <tr>
+        <td class="px-3 py-3">
+          <span class="mr-2" data-activities--extended-details-target="projectId"></span>
+          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+
+        <td class="px-3 py-3">
+          <span class="mr-2" data-activities--extended-details-target="sampleName"></span>
+          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+
+        <td class="px-3 py-3">
+          <span class="mr-2" data-activities--extended-details-target="projectId"></span>
+          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+
+        <td class="px-3 py-3">
+          <span class="mr-2" data-activities--extended-details-target="sampleName"></span>
+          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+      </tr>
+    </template>
+
+    <template data-activities--extended-details-target="pagination">
       <nav aria-label="<%= t("components.activity.dialog.pagination.aria_label") %>" aria-live="polite">
-        <div class="hidden" data-activities--extended_details-target="ariaLabels">
+        <div class="hidden" data-activities--extended-details-target="ariaLabels">
           <%= @aria_labels %>
         </div>
 
@@ -170,8 +170,8 @@
                 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white disabled:dark:bg-slate-700
                 disabled:dark:text-slate-400
               "
-              data-action="click->activities--extended_details#previousPage"
-              data-activities--extended_details-target="previousBtn"
+              data-action="click->activities--extended-details#previousPage"
+              data-activities--extended-details-target="previousBtn"
               disabled
               aria-label="<%= t("components.activity.dialog.pagination.at_first_aria_label") %>"
             >
@@ -189,8 +189,8 @@
                 dark:hover:text-white disabled:dark:bg-slate-700 disabled:dark:text-slate-400
               "
               type="button"
-              data-activities--extended_details-target="nextBtn"
-              data-action="click->activities--extended_details#nextPage"
+              data-activities--extended-details-target="nextBtn"
+              data-action="click->activities--extended-details#nextPage"
               aria-label="<%= t("components.activity.dialog.pagination.at_last_aria_label") %>"
             >
               <%= I18n.t(:"components.activity.dialog.pagination.next") %>
