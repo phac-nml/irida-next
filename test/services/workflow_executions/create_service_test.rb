@@ -273,6 +273,11 @@ module WorkflowExecutions
                    headers: { content_type:
                             'application/json' })
 
+      stub_request(:get, 'http://www.example.com/ga4gh/wes/v1/runs/create_run_5')
+        .to_return(body: '{ "run_id": "create_run_5", "state": "EXECUTOR_ERROR" }',
+                   headers: { content_type:
+                            'application/json' })
+
       @workflow_execution = WorkflowExecutions::CreateService.new(
         @user, workflow_params
       ).execute

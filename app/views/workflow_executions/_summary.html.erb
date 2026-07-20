@@ -69,6 +69,30 @@
       </div>
     <% end %>
 
+    <% if @workflow_execution.stdout.attached? %>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".stdout") %></dt>
+
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white">
+          <%= link_to @workflow_execution.stdout.filename,
+          rails_blob_path(@workflow_execution.stdout),
+          class: "underline hover:decoration-2" %>
+        </dd>
+      </div>
+    <% end %>
+
+    <% if @workflow_execution.stderr.attached? %>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".stderr") %></dt>
+
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white">
+          <%= link_to @workflow_execution.stderr.filename,
+          rails_blob_path(@workflow_execution.stderr),
+          class: "underline hover:decoration-2" %>
+        </dd>
+      </div>
+    <% end %>
+
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".created_at") %></dt>
 

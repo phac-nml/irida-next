@@ -2,14 +2,18 @@
 
 require 'active_job/continuation/test_helper'
 require 'active_storage_test_case'
+require 'test_helpers/faraday_test_helpers'
 
 module WorkflowExecutions
   include BlobHelper
 
   class CleanupJobTest < ActiveStorageTestCase
     include ActiveJob::Continuation::TestHelper
+    include FaradayTestHelpers
 
     def setup # rubocop:disable Metrics/MethodLength
+      @stubs = faraday_test_adapter_stubs
+
       @user = users(:john_doe)
       @workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
       @workflow_execution.blob_run_directory = generate_run_directory
@@ -45,6 +49,11 @@ module WorkflowExecutions
       )
     end
 
+    def teardown
+      # Reset shared Faraday connection cache between tests.
+      Faraday.default_connection = nil
+    end
+
     test 'clean all workflow execution run directory files' do
       assert_not @workflow_execution.cleaned?
 
@@ -61,8 +70,10 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
-        WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+      with_cleanup_service_wes_stubs(@workflow_execution) do
+        perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
+          WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+        end
       end
       @workflow_execution.reload
 
@@ -90,9 +101,11 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
-      interrupt_job_after_step(WorkflowExecutionCleanupJob, :clean_up_blob_run_directory) do
-        perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
+      with_cleanup_service_wes_stubs(@workflow_execution) do
+        WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+        interrupt_job_after_step(WorkflowExecutionCleanupJob, :clean_up_blob_run_directory) do
+          perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
+        end
       end
       @workflow_execution.reload
 
@@ -103,7 +116,9 @@ module WorkflowExecutions
 
       assert_not @workflow_execution.cleaned?
 
-      perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
+      with_cleanup_service_wes_stubs(@workflow_execution) do
+        perform_enqueued_jobs(only: WorkflowExecutionCleanupJob)
+      end
       @workflow_execution.reload
 
       assert_raises(ActiveStorage::FileNotFoundError) { @output_file_blob.download }
@@ -128,8 +143,10 @@ module WorkflowExecutions
       assert @workflow_execution.completed?
       assert @workflow_execution.cleaned?
 
-      perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
-        WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+      with_cleanup_service_wes_stubs(@workflow_execution) do
+        perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
+          WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+        end
       end
       @workflow_execution.reload
 
@@ -158,8 +175,10 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
-        WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+      with_cleanup_service_wes_stubs(@workflow_execution) do
+        perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
+          WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+        end
       end
       @workflow_execution.reload
 
@@ -187,8 +206,10 @@ module WorkflowExecutions
         @unrelated_file_blob.download
       end
 
-      perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
-        WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+      with_cleanup_service_wes_stubs(@workflow_execution) do
+        perform_enqueued_jobs(only: WorkflowExecutionCleanupJob) do
+          WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+        end
       end
       @workflow_execution.reload
 
@@ -213,6 +234,46 @@ module WorkflowExecutions
         @input_file_blob.download
         @samplesheet_file_blob.download
         @unrelated_file_blob.download
+      end
+    end
+
+    private
+
+    def with_cleanup_service_wes_stubs(workflow_execution, run_log_state: 'COMPLETE', run_stdout: 'workflow stdout', # rubocop:disable Metrics/MethodLength
+                                       run_stderr: 'workflow stderr')
+      mock_client = connection_builder(stubs: @stubs, connection_count: 1)
+
+      Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+        @stubs.get("/runs/#{workflow_execution.run_id}") do |_env|
+          [
+            200,
+            { 'Content-Type': 'application/json' },
+            { run_id: workflow_execution.run_id,
+              state: run_log_state,
+              run_log: {
+                stdout: "/runs/#{workflow_execution.run_id}/stdout",
+                stderr: "/runs/#{workflow_execution.run_id}/stderr"
+              } }
+          ]
+        end
+
+        @stubs.get("/runs/#{workflow_execution.run_id}/stdout") do |_env|
+          [
+            200,
+            { 'Content-Type': 'text/plain' },
+            run_stdout
+          ]
+        end
+
+        @stubs.get("/runs/#{workflow_execution.run_id}/stderr") do |_env|
+          [
+            200,
+            { 'Content-Type': 'text/plain' },
+            run_stderr
+          ]
+        end
+
+        yield
       end
     end
   end

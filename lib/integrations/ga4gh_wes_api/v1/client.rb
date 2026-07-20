@@ -57,6 +57,13 @@ module Integrations
           )
         end
 
+        # @param endpoint [String] Required
+        def get_endpoint(endpoint)
+          get(
+            endpoint: endpoint
+          )
+        end
+
         # @param run_id [String] Required
         def get_run_status(run_id)
           get(

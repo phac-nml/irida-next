@@ -2309,6 +2309,8 @@ fr:
         group: Partagé avec le groupe
         project: Partagé avec le projet
       state: État
+      stderr: Journaux d'erreurs standard
+      stdout: Journaux de sortie standard
       updated_at: Dernière mise à jour
       workflow_name: Nom du flux de travail
       workflow_version: Version du flux de travail

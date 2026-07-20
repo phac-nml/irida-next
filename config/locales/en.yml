@@ -2305,6 +2305,8 @@ en:
         group: Shared with Group
         project: Shared with Project
       state: State
+      stderr: Standard Error Logs
+      stdout: Standard Output Logs
       updated_at: Last Updated
       workflow_name: Workflow Name
       workflow_version: Workflow Version

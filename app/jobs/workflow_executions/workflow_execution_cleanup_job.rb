@@ -20,8 +20,32 @@ module WorkflowExecutions
       # Don't run service if already cleaned
       return if @workflow_execution.nil? || @workflow_execution.cleaned?
 
+      step :attach_stdout_log
+      step :attach_stderr_log
       step :clean_up_blob_run_directory
       step :update_to_cleaned
+    end
+
+    private
+
+    def workflow_execution_logs
+      @workflow_execution_logs ||= WorkflowExecutions::RunLogFetchService.new(@workflow_execution).execute
+    end
+
+    def attach_stdout_log
+      stdout = workflow_execution_logs[:stdout]
+
+      return if stdout.blank?
+
+      @workflow_execution.stdout.attach(io: StringIO.new(stdout), filename: 'stdout.txt', content_type: 'text/plain')
+    end
+
+    def attach_stderr_log
+      stderr = workflow_execution_logs[:stderr]
+
+      return if stderr.blank?
+
+      @workflow_execution.stderr.attach(io: StringIO.new(stderr), filename: 'stderr.txt', content_type: 'text/plain')
     end
 
     def clean_up_blob_run_directory

@@ -33,16 +33,24 @@ module Integrations
           response = @conn.get(endpoint) do |req|
             req.params = params if params.present?
           end
-          response.body&.deep_symbolize_keys
+          handle_response(response)
         rescue Faraday::Error => e
           handle_error e
         end
 
         def post(endpoint:, data: nil)
           response = @conn.post(endpoint, data)
-          response.body&.deep_symbolize_keys # return nil if body is nil
+          handle_response(response)
         rescue Faraday::Error => e
           handle_error e
+        end
+
+        def handle_response(response)
+          if response.headers['content-type'] == 'application/json'
+            response.body&.deep_symbolize_keys
+          else
+            response.body
+          end
         end
 
         def handle_error(err) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity

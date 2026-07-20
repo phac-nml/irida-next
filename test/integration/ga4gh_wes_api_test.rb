@@ -77,6 +77,26 @@ class ClientTest < ActionDispatch::IntegrationTest
     stubs.verify_stubbed_calls
   end
 
+  def test_get_endpoint
+    given_text = "workflow execution output"
+    expected_text = "workflow execution output"
+    path = '/runs/716ab7b0-cef7-4ae7-b467-26444b4c0579/stdout'
+
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get(path) do |env|
+      assert_equal path, env.url.path
+      [
+        200,
+        { 'Content-Type': 'text/plain' },
+        given_text
+      ]
+    end
+
+    cli = client(stubs)
+    assert_equal expected_text, cli.get_endpoint(path)
+    stubs.verify_stubbed_calls
+  end
+
   # 400
   def test_malformed
     stubs = Faraday::Adapter::Test::Stubs.new
