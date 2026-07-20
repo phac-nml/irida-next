@@ -417,24 +417,32 @@ module AdvancedSearch
       assert record6.errors.added?(:base, :invalid)
       sixth = record6.groups.first.conditions.last
       assert sixth.errors.added?(:operator, :use_non_metadata_operator)
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+      Flipper.disable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
     end
 
-    test 'standard operators does not work on metadata fields with advanced_search_disable_standard_operators_for_metadata_in_graphql feature flag enabled' do # rubocop:disable Layout/LineLength
-      Flipper.enable(:advanced_search_metadata_operators)
+    test 'standard operators work as expected with advanced_search_disable_standard_operators_for_metadata_in_graphql enabled but not advanced_search_metadata_operators' do # rubocop:disable Layout/LineLength
       Flipper.enable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
-      record = DummyRecord.new(
+      # standard operators works on metadata
+      record1 = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: '=',
                                                                 value: 'x')])]
       )
 
-      assert_not record.valid?
-      # assert_not record.valid?
-      # assert record.errors.added?(:base, :invalid)
+      assert record1.valid?
+      assert_not record1.errors.added?(:base, :invalid)
 
-      # group = record.groups.first
-      # condition = group.conditions.first
+      # standard operators works on standard field
+      record2 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name', operator: '=',
+                                                                value: 'x')])]
+      )
 
-      # assert condition.errors.added?(:field, :not_a_metadata)
+      assert record2.valid?
+      assert_not record2.errors.added?(:base, :invalid)
+    ensure
+      Flipper.disable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
     end
   end
 end
