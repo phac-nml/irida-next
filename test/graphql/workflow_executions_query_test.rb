@@ -19,16 +19,6 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
-  WORKFLOW_EXECUTIONS_PAGINATION_QUERY = <<~GRAPHQL
-    query($first: Int, $last: Int) {
-      workflowExecutions(first: $first, last: $last) {
-        nodes {
-          id
-        }
-      }
-    }
-  GRAPHQL
-
   WORKFLOW_EXECUTIONS_NODE_QUERY = <<~GRAPHQL
     query($workflow_execution_id: ID!) {
       node(id: $workflow_execution_id) {
