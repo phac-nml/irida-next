@@ -125,7 +125,8 @@ module AdvancedSearch
       operator = condition.operator
       return if EXISTS_OPERATORS.include?(operator)
 
-      if metadata_field?(field) && NON_METADATA_OPERATORS.include?(operator)
+      if metadata_field?(field) && NON_METADATA_OPERATORS.include?(operator) &&
+         Flipper.enabled?(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
         condition.errors.add :operator, :use_metadata_operator
       elsif !metadata_field?(field) && NON_METADATA_OPERATORS.exclude?(operator)
         condition.errors.add :operator, :use_non_metadata_operator
