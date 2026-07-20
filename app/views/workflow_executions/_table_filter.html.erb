@@ -6,11 +6,6 @@
   workflow_advanced_search_enabled ? { classes: "sm:min-w-[20rem]" } : {}
 ).deep_merge(local_assigns.fetch(:search_field_arguments, {})) %>
 
-<% search_form_class = class_names(
-  "max-sm:grow",
-  { "sm:flex sm:items-start sm:gap-2" => workflow_advanced_search_enabled },
-) %>
-
 <% if workflow_advanced_search_enabled %>
   <% base_form_data = base_form_data.merge(
     controller: "filters",
@@ -21,26 +16,28 @@
 <% if workflow_advanced_search_enabled %>
   <div role="status" class="sr-only"><%= @results_message %></div>
   <%= form_with model: @query, html: { role: "search" }, scope: :q, url:, method: :get, data: base_form_data,
-                class: search_form_class do |form| %>
-    <% if query.present? && !query.sorts.empty? %>
-      <%= hidden_field_tag "q[s]", "#{query.sorts.first.name} #{query.sorts.first.dir}" %>
-    <% end %>
+                class: "filters contents" do |form| %>
+    <div class="max-sm:grow">
+      <% if query.present? && !query.sorts.empty? %>
+        <%= hidden_field_tag "q[s]", "#{query.sorts.first.name} #{query.sorts.first.dir}" %>
+      <% end %>
 
-    <% if local_assigns.fetch(:page_limit, nil).present? %>
-      <%= hidden_field_tag :limit, local_assigns[:page_limit] %>
-    <% end %>
+      <% if local_assigns.fetch(:page_limit, nil).present? %>
+        <%= hidden_field_tag :limit, local_assigns[:page_limit] %>
+      <% end %>
 
-    <%= render SearchFieldComponent.new(
-      form: form,
-      field_name: :name_or_id_cont,
-      label: t("common.controls.search"),
-      placeholder: t("shared.workflow_executions.index.search.placeholder"),
-      value: @query.name_or_id_cont,
-      include_advanced_search_outlet: true,
-      **search_field_arguments,
-    ) %>
+      <%= render SearchFieldComponent.new(
+        form: form,
+        field_name: :name_or_id_cont,
+        label: t("common.controls.search"),
+        placeholder: t("shared.workflow_executions.index.search.placeholder"),
+        value: @query.name_or_id_cont,
+        include_advanced_search_outlet: true,
+        **search_field_arguments,
+      ) %>
+    </div>
 
-    <div class="max-sm:mt-2 sm:shrink-0">
+    <div class="max-sm:grow">
       <%= render AdvancedSearchComponent.new(
         form: form,
         search: @query,
