@@ -62,10 +62,6 @@ module WorkflowExecutions
 
       workflow_execution.reload
       stdout_attachment_id = workflow_execution.stdout.attachment.id
-      stderr_attachment_id = workflow_execution.stderr.attachment.id
-
-      workflow_execution.reload
-      stdout_attachment_id = workflow_execution.stdout.attachment.id
 
       assert workflow_execution.stdout.attached?
       assert_not workflow_execution.stderr.attached?
