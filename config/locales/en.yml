@@ -1891,14 +1891,14 @@ en:
           singular: 'The following sample has been selected for deletion:'
           zero: No samples have been selected for deletion
         loading: Loading...
-        reason_placeholder: Add a reason for activity history
+        reason_placeholder: Add a reason for activity tracking
         samples: Samples
         spinner: Deleting samples. This may take a while...
         submit_button: Confirm
         title: Delete Samples
       destroy_single_confirmation_dialog:
         description: Are you sure you want to delete sample '%{sample_name}'?
-        reason_placeholder: Add a reason for activity history
+        reason_placeholder: Add a reason for activity tracking
         title: Delete Sample
     editable_cell:
       update_success: Metadata was successfully updated

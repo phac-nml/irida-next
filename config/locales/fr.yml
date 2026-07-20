@@ -1895,14 +1895,14 @@ fr:
           singular: 'L’échantillon suivant a été sélectionné aux fins de suppression :'
           zero: Aucun échantillon n’a été sélectionné pour être supprimer
         loading: Chargement...
-        reason_placeholder: Ajouter une raison pour l'historique d'activité
+        reason_placeholder: Ajouter une raison pour le suivi d'activité
         samples: Échantillons
         spinner: Suppression des échantillons. Cela peut prendre un certain temps...
         submit_button: Confirmer
         title: Supprimer les échantillons
       destroy_single_confirmation_dialog:
         description: Êtes-vous sûr de vouloir supprimer l’échantillon '%{sample_name}'?
-        reason_placeholder: Ajouter une raison pour l'historique d'activité
+        reason_placeholder: Ajouter une raison pour le suivi d'activité
         title: Supprimer l’échantillon
     editable_cell:
       update_success: Les métadonnées ont été mises à jour avec succès
