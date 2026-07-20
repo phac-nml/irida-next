@@ -238,8 +238,6 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   end
 
   test 'filtering metadata with standard operators and feature flags' do
-    Flipper.enable(:advanced_search_metadata_operators)
-
     result1 = IridaSchema.execute(SAMPLES_QUERY,
                                   context: { current_user: @user },
                                   variables: { filter: { advanced_search: [[{
@@ -252,19 +250,33 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
 
     assert_equal 4, data.count
 
-    Flipper.enable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+    Flipper.enable(:advanced_search_metadata_operators)
+
     result2 = IridaSchema.execute(SAMPLES_QUERY,
                                   context: { current_user: @user },
                                   variables: { filter: { advanced_search: [[{
                                     field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
                                   }]] } })
 
-    assert_not_nil result2['errors'], 'should work and have no errors.'
+    assert_nil result2['errors'], 'should work and have no errors.'
+
+    data = result2['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+
+    Flipper.enable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+    result3 = IridaSchema.execute(SAMPLES_QUERY,
+                                  context: { current_user: @user },
+                                  variables: { filter: { advanced_search: [[{
+                                    field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
+                                  }]] } })
+
+    assert_not_nil result3['errors'], 'should work and have no errors.'
 
     assert_equal "filter.advanced_search.0.0.operator: '=' is an invalid operator for metadata fields",
-                 result2['errors'].first['message']
+                 result3['errors'].first['message']
 
-    data = result2['data']['samples']
+    data = result3['data']['samples']
 
     assert_nil data
   ensure
