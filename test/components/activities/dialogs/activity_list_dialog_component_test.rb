@@ -35,7 +35,7 @@ module Activities
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_destroy.title')
 
-        within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
+        within %(div[data-controller="activities--extended-details"][data-controller-connected="true"]) do
           assert_selector 'p',
                           text: I18n.t(:'components.activity.dialog.sample_destroy.description.project',
                                        user: @user.email, count: 1)
@@ -67,7 +67,7 @@ module Activities
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_transfer.title')
 
-        within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
+        within %(div[data-controller="activities--extended-details"][data-controller-connected="true"]) do
           assert_selector 'p',
                           text: I18n.t(:'components.activity.dialog.sample_transfer.target_project_description',
                                        user: 'System', count: 1,
@@ -94,7 +94,7 @@ module Activities
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_transfer.title')
 
-        within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
+        within %(div[data-controller="activities--extended-details"][data-controller-connected="true"]) do
           assert_selector 'p',
                           text: I18n.t(:'components.activity.dialog.sample_transfer.source_project_description',
                                        user: 'System', count: 1,
@@ -124,7 +124,7 @@ module Activities
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.import_samples.title')
 
-        within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
+        within %(div[data-controller="activities--extended-details"][data-controller-connected="true"]) do
           assert_selector 'p',
                           text: I18n.t(:'components.activity.dialog.import_samples.description.project',
                                        user: 'System', count: 1)
@@ -157,7 +157,7 @@ module Activities
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
 
-        within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
+        within %(div[data-controller="activities--extended-details"][data-controller-connected="true"]) do
           assert_selector 'p',
                           text: I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
                                        user: @user.email, count: 2)
@@ -197,7 +197,7 @@ module Activities
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
 
-        within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
+        within %(div[data-controller="activities--extended-details"][data-controller-connected="true"]) do
           assert_selector 'p',
                           text: I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
                                        user: @user.email, count: 1)
@@ -220,7 +220,7 @@ module Activities
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.bulk_metadata_update.title')
 
-        within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
+        within %(div[data-controller="activities--extended-details"][data-controller-connected="true"]) do
           assert_selector 'p',
                           text: I18n.t(:'components.activity.dialog.bulk_metadata_update.description',
                                        user: @user.email, count: 2)
