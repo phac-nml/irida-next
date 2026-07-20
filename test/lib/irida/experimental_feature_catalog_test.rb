@@ -9,6 +9,7 @@ module Irida
 
       assert_equal %w[
         accessibility_statement
+        advanced_search_disable_standard_operators_for_metadata_in_graphql
         advanced_search_metadata_operators
         advanced_search_with_auto_complete
         cancel_multiple_workflows

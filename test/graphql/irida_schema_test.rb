@@ -4,6 +4,7 @@ require 'test_helper'
 
 class IridaSchemaTest < ActiveSupport::TestCase
   test 'schema is up to date' do
+    Flipper.enable(:advanced_search_metadata_operators)
     current_schema = IridaSchema.to_definition
     generated_schema = Rails.root.join('app/graphql/schema.graphql').read
 

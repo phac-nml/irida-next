@@ -12,6 +12,19 @@ module Types
   end
 
   class SampleAdvancedSearchConditionOperatorInputType < BaseEnum # rubocop:disable Style/Documentation
+    STANDARD_OPERATORS_FOR_ENUM = {
+      'EQUALS' => '=',
+      'NOT_EQUALS' => '!=',
+      'LESS_THAN_EQUALS' => '<=',
+      'GREATER_THAN_EQUALS' => '>=',
+      'CONTAINS' => 'contains',
+      'NOT_CONTAINS' => 'not_contains',
+      'EXISTS' => 'exists',
+      'NOT_EXISTS' => 'not_exists',
+      'IN' => 'in',
+      'NOT_IN' => 'not_in'
+    }.freeze
+
     METADATA_OPERATORS_FOR_ENUM = {
       'DATE_GREATER_THAN_EQUALS' => 'date_greater_than_equals',
       'DATE_LESS_THAN_EQUALS' => 'date_less_than_equals',
@@ -32,22 +45,16 @@ module Types
     graphql_name 'SampleAdvancedSearchConditionOperator'
     description 'Sample Advanced Search Condition Operator'
 
-    standard_description = 'Use to filter non-metadata fields'
+    def self.enum_values(_context)
+      standard_description = if Flipper.enabled?(:advanced_search_metadata_operators)
+                               'Use to filter non-metadata fields'
+                             end
 
-    value 'EQUALS', standard_description, value: '='
-    value 'NOT_EQUALS', standard_description, value: '!='
-    value 'LESS_THAN_EQUALS', standard_description, value: '<='
-    value 'GREATER_THAN_EQUALS', standard_description, value: '>='
-    value 'CONTAINS', standard_description, value: 'contains'
-    value 'NOT_CONTAINS', standard_description, value: 'not_contains'
-    value 'EXISTS', standard_description, value: 'exists'
-    value 'NOT_EXISTS', standard_description, value: 'not_exists'
-    value 'IN', standard_description, value: 'in'
-    value 'NOT_IN', standard_description, value: 'not_in'
+      all_values = STANDARD_OPERATORS_FOR_ENUM.map do |enum_name, enum_value|
+        GraphQL::Schema::EnumValue.new(enum_name, description: standard_description,
+                                                  value: enum_value, owner: self)
+      end
 
-    # only enable metadata operators with enabled feature flag
-    def self.enum_values(context)
-      all_values = super
       return all_values unless Flipper.enabled?(:advanced_search_metadata_operators)
 
       METADATA_OPERATORS_FOR_ENUM.each do |enum_name, enum_value|
