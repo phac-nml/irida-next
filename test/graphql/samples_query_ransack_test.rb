@@ -237,24 +237,39 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     Flipper.disable(:advanced_search_metadata_operators)
   end
 
-  test 'cannot filter metadata field with non-metadata operator when feature flag is enabled' do
+  test 'filtering metadata with standard operators and feature flags' do
     Flipper.enable(:advanced_search_metadata_operators)
-    result = IridaSchema.execute(SAMPLES_QUERY,
-                                 context: { current_user: @user },
-                                 variables: { filter: { advanced_search: [[{
-                                   field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
-                                 }]] } })
 
-    assert_not_nil result['errors'], 'should work and have no errors.'
+    result1 = IridaSchema.execute(SAMPLES_QUERY,
+                                  context: { current_user: @user },
+                                  variables: { filter: { advanced_search: [[{
+                                    field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
+                                  }]] } })
+
+    assert_nil result1['errors'], 'should work and have no errors.'
+
+    data = result1['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+
+    Flipper.enable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+    result2 = IridaSchema.execute(SAMPLES_QUERY,
+                                  context: { current_user: @user },
+                                  variables: { filter: { advanced_search: [[{
+                                    field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
+                                  }]] } })
+
+    assert_not_nil result2['errors'], 'should work and have no errors.'
 
     assert_equal "filter.advanced_search.0.0.operator: '=' is an invalid operator for metadata fields",
-                 result['errors'].first['message']
+                 result2['errors'].first['message']
 
-    data = result['data']['samples']
+    data = result2['data']['samples']
 
     assert_nil data
   ensure
     Flipper.disable(:advanced_search_metadata_operators)
+    Flipper.disable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
   end
 
   test 'cannot filter non-metadata field with metadata operator when feature flag is enabled' do
