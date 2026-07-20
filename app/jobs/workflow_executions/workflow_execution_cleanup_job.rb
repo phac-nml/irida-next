@@ -48,10 +48,6 @@ module WorkflowExecutions
       @workflow_execution.stderr.attach(io: StringIO.new(stderr), filename: 'stderr.txt', content_type: 'text/plain')
     end
 
-    def sanitize(text)
-      text.encode('US-ASCII', invalid: :replace, undef: :replace, replace: '')
-    end
-
     def clean_up_blob_run_directory
       # This check is for safety as passing nil or an empty string into deleted_prefixed will delete all blobs
       if @workflow_execution.blob_run_directory.present? # rubocop:disable Style/GuardClause
