@@ -74,22 +74,22 @@
 <% end %>
 
 <% if @has_workflow_executions %>
-  <div class="mb-4 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
-    <div class="flex w-full gap-2 lg:w-auto">
-      <%= render "shared/selection_buttons",
-      url: select_namespace_project_workflow_executions_url,
-      form_data: { turbo_frame: "selected" },
-      select_form_fields: { select: "on" },
-      deselect_form_fields: {},
-      select_button_options: {
-        title: t(".select_all_tooltip"),
-        aria: { label: t(".select_all_tooltip") },
-      },
-      deselect_button_options: {
-        title: t(".deselect_all_tooltip"),
-        aria: { label: t(".deselect_all_tooltip") },
-      } %>
-    </div>
+  <div class="mb-4 flex flex-wrap gap-2">
+    <%= render "shared/selection_buttons",
+    url: select_namespace_project_workflow_executions_url,
+    form_data: { turbo_frame: "selected" },
+    select_form_fields: { select: "on" },
+    deselect_form_fields: {},
+    select_button_options: {
+      title: t(".select_all_tooltip"),
+      aria: { label: t(".select_all_tooltip") },
+    },
+    deselect_button_options: {
+      title: t(".deselect_all_tooltip"),
+      aria: { label: t(".deselect_all_tooltip") },
+    } %>
+
+    <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
     <%= render partial: "workflow_executions/table_filter", locals: {
       query: @q,
