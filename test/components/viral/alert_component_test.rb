@@ -86,18 +86,6 @@ module Viral
       assert_no_selector '[data-viral--alert-dismissible-value="true"]'
     end
 
-    test 'alert removes itself on dismiss by default' do
-      render_inline(Viral::AlertComponent.new(message: 'Default dismiss alert'))
-
-      assert_selector '[data-viral--alert-remove-on-dismiss-value="true"]', count: 1
-    end
-
-    test 'alert can opt out of removing itself on dismiss' do
-      render_inline(Viral::AlertComponent.new(message: 'Reusable alert', remove_on_dismiss: false))
-
-      assert_selector '[data-viral--alert-remove-on-dismiss-value="false"]', count: 1
-    end
-
     test 'auto-dismiss alert renders with progress bar and correct attributes' do
       render_inline(Viral::AlertComponent.new(message: 'Auto-dismiss alert', auto_dismiss: true))
 

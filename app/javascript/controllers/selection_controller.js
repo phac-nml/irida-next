@@ -193,37 +193,29 @@ export default class extends Controller {
    */
   #updateUI(ids, announce, options = {}) {
     try {
+      // Set checkbox checked states based on whether their value is included
       const idSet = new Set(ids);
       this.rowSelectionTargets.forEach((row) => {
         row.checked = idSet.has(row.value);
       });
-    } catch (error) {
-      console.error(
-        "selectionController: Failed to update row checkboxes",
-        error,
-      );
-    }
 
-    this.#updateCounts(ids.length, announce);
-
-    try {
       this.#updateActionButtons(ids.length);
+      this.#updateCounts(ids.length, announce);
       this.#setSelectPageCheckboxValue(
         options.announceSelectPageStatus ?? announce,
       );
     } catch (error) {
-      console.error(
-        "selectionController: Failed to update selection controls",
-        error,
-      );
+      console.error("selectionController: Failed to update UI", error);
     }
   }
 
   #updateActionButtons(count) {
-    if (!this.element.hasAttribute("data-selection-action-button-outlet"))
-      return;
+    // Ensure outlets exist before iterating
+    if (!this.actionButtonOutlets) return;
 
     this.actionButtonOutlets.forEach((outlet) => {
+      // Outlet's setDisabled expects the number of selected items to decide
+      // whether to enable/disable action buttons.
       outlet.setDisabled(count);
     });
   }
@@ -292,7 +284,11 @@ export default class extends Controller {
   }
 
   /**
-   * Announce current selection status to an aria-live region.
+   * 🔊 Announce current selection status to an aria-live region.
+   *
+   * - 🧮 Builds a localized message using a single template: "X of Y selected".
+   * - 🧩 Reads value from the data attribute (`countMessageValue`).
+   * - ♿ Updates the component's hidden polite live region, falling back to `#sr-status` if absent.
    *
    * @param {number} selected - Current number of selected items.
    * @private
@@ -303,10 +299,12 @@ export default class extends Controller {
     // Skip announcement if this selection context is not configured with a count template.
     if (!messageTemplate) return;
 
+    // 🔁 Interpolate counts into the template
     const message = messageTemplate
       .replace("%{selected}", String(selected))
       .replace("%{total}", String(this.totalValue || 0));
 
+    // 📣 Update local status region or fallback global live region
     if (this.hasStatusTarget) {
       announce(message, { element: this.statusTarget });
     } else {
@@ -393,9 +391,8 @@ export default class extends Controller {
     if (!limitAlert) return;
 
     if (!this.#proactiveLimitAlert(limitAlert) && message) {
-      const limitAlertMessage = this.#findLimitAlertMessageElement(limitAlert);
-      if (limitAlertMessage) {
-        limitAlertMessage.textContent = message;
+      if (this.hasLimitAlertMessageTarget) {
+        this.limitAlertMessageTarget.textContent = message;
       }
     }
 
@@ -412,14 +409,6 @@ export default class extends Controller {
 
   #findLimitAlertElement() {
     return this.hasLimitAlertTarget ? this.limitAlertTarget : null;
-  }
-
-  #findLimitAlertMessageElement(limitAlert) {
-    return this.hasLimitAlertMessageTarget
-      ? this.limitAlertMessageTarget
-      : limitAlert?.querySelector(
-          "[data-selection-target='limitAlertMessage']",
-        );
   }
 
   #proactiveLimitAlert(limitAlert = this.#findLimitAlertElement()) {
