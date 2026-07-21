@@ -1,5 +1,7 @@
+<%# locals: (open:, analysis_type:, namespace_id: nil, workflow_execution:, selected: false) %>
+
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_header(title: t(".title")) %>
 
   <div
     data-controller="infinite-scroll"
@@ -21,7 +23,7 @@
 
     <div class="grid gap-4">
       <div data-controller="collapsible">
-        <h2 id="<%= "accordion-collapse-heading-workflows" %>">
+        <h2 id="accordion-collapse-heading-workflows">
           <button
             type="button"
             class="
@@ -36,7 +38,7 @@
 
             <span
               data-collapsible-target="icon"
-              class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
+              class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": selected }) %>"
             >
               <%= icon(:caret_down, size: :sm) %>
             </span>
@@ -45,10 +47,10 @@
 
         <div
           data-collapsible-target="item"
-          id="<%= "accordion-collapse-body-workflows" %>"
+          id="accordion-collapse-body-workflows"
           class="hidden"
           role="region"
-          aria-labelledby="<%= "accordion-collapse-heading-workflows" %>"
+          aria-labelledby="accordion-collapse-heading-workflows"
         >
           <div class="border border-t-0 border-slate-200 p-2.5 text-base leading-relaxed dark:border-slate-700">
             <span data-infinite-scroll-target="summary">

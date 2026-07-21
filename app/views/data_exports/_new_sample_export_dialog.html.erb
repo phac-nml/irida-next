@@ -1,5 +1,7 @@
+<%# locals: (open:, namespace_id: nil, formats:, selected: false) %>
+
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_header(title: t(".title")) %>
 
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
     <%= render "data_exports/dialog_errors" %>
@@ -25,7 +27,7 @@
 
       <div class="grid gap-4">
         <div data-controller="collapsible">
-          <h2 id="<%= "accordion-collapse-heading-samples" %>">
+          <h2 id="accordion-collapse-heading-samples">
             <button
               type="button"
               class="
@@ -40,7 +42,7 @@
 
               <span
                 data-collapsible-target="icon"
-                class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
+                class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": selected }) %>"
               >
                 <%= icon(:caret_down, size: :sm, class: "mr-0 rotate-0") %>
               </span>
@@ -49,10 +51,10 @@
 
           <div
             data-collapsible-target="item"
-            id="<%= "accordion-collapse-body-samples" %>"
+            id="accordion-collapse-body-samples"
             class="hidden"
             role="region"
-            aria-labelledby="<%= "accordion-collapse-heading-samples" %>"
+            aria-labelledby="accordion-collapse-heading-samples"
           >
             <div
               class="
