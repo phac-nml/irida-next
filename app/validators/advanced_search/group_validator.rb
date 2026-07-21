@@ -111,7 +111,7 @@ module AdvancedSearch
 
       return unless condition.operator.present? && (
         (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) ||
-                    (EXISTS_OPERATORS.exclude?(condition.operator) && condition.value.blank?)
+                    (condition.operator.exclude?('exists') && condition.value.blank?)
       )
 
       condition.errors.add :value, :blank
@@ -174,7 +174,7 @@ module AdvancedSearch
     def validate_date_field_condition(condition)
       if DATE_OPERATOR_DISALLOWED.include?(condition.operator)
         condition.errors.add :operator, :not_a_date_operator
-      elsif EXISTS_OPERATORS.exclude?(condition.operator)
+      elsif STANDARD_EXISTS_OPERATORS.exclude?(condition.operator)
         validate_date(condition)
       end
     end
