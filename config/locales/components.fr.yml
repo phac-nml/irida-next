@@ -133,7 +133,6 @@ fr:
           metadata:
             labels:
               date: Options de date
-              existence: Options d'existence
               numeric: Options numériques
               text: Options de texte
             operations:
