@@ -6,15 +6,21 @@
 # - Formatter: Auto-formats templates with intelligent indentation
 # - Language Server: Provides IDE support (VS Code, Zed, Neovim, etc.)
 #
-# Website: https://herb-tools.dev
-# Configuration: https://herb-tools.dev/configuration
+# Shared gold standard with pathogen-view-components.
+# Docs: https://herb-tools.dev/configuration
+# Linter: https://herb-tools.dev/projects/linter
 
-version: 0.8.10
+version: 0.10.2
+
+framework: actionview
+template_engine: erubi
 
 files:
   exclude:
     - ".devenv/**/*"
+    - ".direnv/**/*"
     - ".git/**/*"
+    - ".worktrees/**/*"
     - "coverage/**/*"
     - "docs-site/**/*"
     - "log/**/*"
@@ -24,8 +30,59 @@ files:
     - "tmp/**/*"
     - "vendor/**/*"
 
+engine:
+  validators:
+    security: true
+    nesting: true
+    accessibility: true
+
 linter:
   enabled: true
+  # Fail CI/hooks on warnings as well as errors (default is error-only).
+  failLevel: warning
+
+  # Opt-in rules (disabled by Herb defaults). Enable for highest standard.
+  rules:
+    a11y-avoid-generic-link-text:
+      enabled: true
+    a11y-disabled-attribute:
+      enabled: true
+    a11y-nested-interactive-elements:
+      enabled: true
+    a11y-no-accesskey-attribute:
+      enabled: true
+    a11y-no-aria-label-misuse:
+      enabled: true
+    a11y-no-aria-unsupported-elements:
+      enabled: true
+    a11y-no-autofocus-attribute:
+      enabled: true
+    a11y-no-redundant-image-alt:
+      enabled: true
+    a11y-svg-has-accessible-text:
+      enabled: true
+    actionview-strict-locals-first-line:
+      enabled: true
+    # Scoped to classic Rails views only — ViewComponent slot APIs use silent ERB.
+    erb-no-silent-statement:
+      enabled: true
+      only:
+        - "app/views/**/*"
+    erb-strict-locals-required:
+      enabled: true
+    # Same scope as erb-no-silent-statement.
+    erb-no-unused-expressions:
+      enabled: true
+      only:
+        - "app/views/**/*"
+    html-navigation-has-label:
+      enabled: true
+    html-no-block-inside-inline:
+      enabled: true
+    html-no-space-in-tag:
+      enabled: true
+    html-no-title-attribute:
+      enabled: true
 
 formatter:
   enabled: true
