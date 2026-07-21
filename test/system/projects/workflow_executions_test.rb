@@ -23,8 +23,6 @@ module Projects
       @workflow_name_col = '5'
       @workflow_version_col = '6'
       @created_at_col = '7'
-
-      Flipper.enable(:cancel_multiple_workflows)
     end
 
     test 'should display a list of workflow executions' do

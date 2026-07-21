@@ -13,7 +13,7 @@
   <%= component.with_buttons do %>
     <% if @has_workflow_executions && @render_workflow_actions %>
       <%= render DropdownComponent.new(label: t("shared.workflow_executions.actions_dropdown.label"), aria: { label: t('shared.workflow_executions.actions_dropdown.label') }, caret: true, classes: "font-normal button button-default") do |dropdown| %>
-        <% if allowed_to?(:cancel_workflow_executions?, @project.namespace) && Flipper.enabled?(:cancel_multiple_workflows, current_user) %>
+        <% if allowed_to?(:cancel_workflow_executions?, @project.namespace) %>
           <% dropdown.with_item(
             label:
               t("shared.workflow_executions.actions_dropdown.cancel_workflow_executions"),

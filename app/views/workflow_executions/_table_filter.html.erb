@@ -5,12 +5,10 @@
   { classes: "sm:min-w-[20rem]" }
 ).deep_merge(local_assigns.fetch(:search_field_arguments, {})) %>
 
-<% if workflow_advanced_search_enabled %>
-  <% base_form_data = base_form_data.merge(
-    controller: "filters",
-    "filters-selection-outlet": "#workflow-executions-table",
-  ) %>
-<% end %>
+<% base_form_data = base_form_data.merge(
+  controller: "filters",
+  "filters-selection-outlet": "#workflow-executions-table",
+) %>
 
 <div role="status" class="sr-only"><%= @results_message %></div>
 

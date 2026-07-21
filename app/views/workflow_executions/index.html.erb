@@ -10,21 +10,19 @@
   <%= component.with_buttons do %>
     <% if @has_workflow_executions %>
       <%= render DropdownComponent.new(label: t("shared.workflow_executions.actions_dropdown.label"), aria: { label: t('shared.workflow_executions.actions_dropdown.label') }, caret: true, classes: "font-normal button button-default") do |dropdown| %>
-        <% if Flipper.enabled?(:cancel_multiple_workflows, current_user) %>
-          <% dropdown.with_item(
-            label:
-              t("shared.workflow_executions.actions_dropdown.cancel_workflow_executions"),
-            url: cancel_multiple_confirmation_workflow_executions_path,
-            disableable: true,
-            data: {
-              turbo_stream: true,
-              controller: "action-button",
-              action_button_required_value: 1,
-            },
-            class:
-              "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
-          ) %>
-        <% end %>
+        <% dropdown.with_item(
+          label:
+            t("shared.workflow_executions.actions_dropdown.cancel_workflow_executions"),
+          url: cancel_multiple_confirmation_workflow_executions_path,
+          disableable: true,
+          data: {
+            turbo_stream: true,
+            controller: "action-button",
+            action_button_required_value: 1,
+          },
+          class:
+            "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
+        ) %>
 
         <% dropdown.with_item(
           label:

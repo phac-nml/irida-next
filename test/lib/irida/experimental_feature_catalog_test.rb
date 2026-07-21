@@ -11,7 +11,6 @@ module Irida
         accessibility_statement
         advanced_search_metadata_operators
         advanced_search_with_auto_complete
-        cancel_multiple_workflows
         client_linelist_exports_v1
         client_linelist_imports_v1
         data_grid_samples_table

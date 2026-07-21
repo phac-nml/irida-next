@@ -28,16 +28,6 @@ features:
     name:
       en: "Advanced Search Autocomplete"
       fr: "Saisie semi-automatique de la recherche avancée"
-  cancel_multiple_workflows:
-    admin_manageable: true
-    description:
-      en: "Allow users to select and cancel multiple workflow executions at once."
-      fr: "Permettre aux utilisateurs de sélectionner et d'annuler plusieurs exécutions\
-        \ de flux de travail à la fois."
-    enable_in_development: true
-    name:
-      en: "Cancel Multiple Workflows"
-      fr: "Annulation de plusieurs flux de travail"
   client_linelist_exports_v1:
     admin_manageable: true
     description:
