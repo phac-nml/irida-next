@@ -395,7 +395,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can search workflow execution files by puid & filename' do
-    Flipper.enable(:workflow_execution_attachments_searching)
     visit workflow_execution_path(@workflow_execution3)
 
     assert_text @workflow_execution3.id
@@ -1187,8 +1186,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can preview workflow execution files' do
-    Flipper.enable(:workflow_execution_attachments_searching)
-
     previewable_attachment = attachments(:samples_workflow_execution_completed_output_attachment)
 
     visit workflow_execution_path(@workflow_execution3)

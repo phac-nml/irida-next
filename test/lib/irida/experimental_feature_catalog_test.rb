@@ -16,14 +16,12 @@ module Irida
         client_linelist_imports_v1
         data_grid_samples_table
         global_groups
-        sample_attachments_searching
         samples_refresh_notice
         v2_dropdown
         v2_prefixed_select2
         v2_samplesheet
         v2_select2
         workflow_execution_advanced_search
-        workflow_execution_attachments_searching
       ], entries.pluck(:key)
     end
 

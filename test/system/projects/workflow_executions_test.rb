@@ -549,7 +549,6 @@ module Projects
     end
 
     test 'can search workflow execution files by puid & filename' do
-      Flipper.enable(:workflow_execution_attachments_searching)
       workflow_execution = workflow_executions(:workflow_execution_shared2)
 
       visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)

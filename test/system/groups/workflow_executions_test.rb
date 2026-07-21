@@ -250,7 +250,6 @@ module Groups
     end
 
     test 'can search workflow execution files by puid & filename' do
-      Flipper.enable(:workflow_execution_attachments_searching)
       user = users(:joan_doe)
       login_as user
 
