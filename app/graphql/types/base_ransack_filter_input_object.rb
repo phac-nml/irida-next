@@ -30,16 +30,22 @@ module Types
       'DATE_LESS_THAN_EQUALS' => 'date_less_than_equals',
       'DATE_EQUALS' => 'date_equals',
       'DATE_NOT_EQUALS' => 'date_not_equals',
+      'DATE_EXISTS' => 'date_exists',
+      'DATE_NOT_EXISTS' => 'date_not_exists',
       'NUMERIC_GREATER_THAN_EQUALS' => 'numeric_greater_than_equals',
       'NUMERIC_LESS_THAN_EQUALS' => 'numeric_less_than_equals',
       'NUMERIC_EQUALS' => 'numeric_equals',
       'NUMERIC_NOT_EQUALS' => 'numeric_not_equals',
+      'NUMERIC_EXISTS' => 'numeric_exists',
+      'NUMERIC_NOT_EXISTS' => 'numeric_not_exists',
       'TEXT_EQUALS' => 'text_equals',
       'TEXT_NOT_EQUALS' => 'text_not_equals',
       'TEXT_IN' => 'text_in',
       'TEXT_NOT_IN' => 'text_not_in',
       'TEXT_CONTAINS' => 'text_contains',
-      'TEXT_NOT_CONTAINS' => 'text_not_contains'
+      'TEXT_NOT_CONTAINS' => 'text_not_contains',
+      'TEXT_EXISTS' => 'text_exists',
+      'TEXT_NOT_EXISTS' => 'text_not_exists'
     }.freeze
 
     graphql_name 'SampleAdvancedSearchConditionOperator'

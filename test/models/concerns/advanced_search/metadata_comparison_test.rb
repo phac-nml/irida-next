@@ -83,13 +83,31 @@ module AdvancedSearch
       assert_includes sql, 'IN'
     end
 
-    test 'condition_not_in_metadata' do
-      result = @test_instance.send(:condition_not_in_metadata,
-                                   @scope, @node, %w[Test Value])
+    test 'condition_metadata_date_exists' do
+      result = @test_instance.send(:condition_metadata_date_exists, @scope, @node)
       sql = result.to_sql
-      assert_includes sql, 'LOWER'
-      assert_includes sql, 'NOT IN'
-      assert_includes sql, 'IS NULL'
+      assert_includes sql, "\"workflow_executions\".\"name\" ~ '^\\d{4}(-\\d{2}){0,2}$'"
+    end
+
+    test 'condition_metadata_date_not_exists' do
+      result = @test_instance.send(:condition_metadata_date_not_exists, @scope, @node)
+      sql = result.to_sql
+      assert_includes sql, '("workflow_executions"."name" IS NULL'
+      assert_includes sql, "OR \"workflow_executions\".\"name\" !~ '^\\d{4}(-\\d{2}){0,2}$')"
+    end
+
+    test 'condition_metadata_numeric_exists' do
+      result = @test_instance.send(:condition_metadata_numeric_exists, @scope, @node)
+      sql = result.to_sql
+      assert_includes sql, "\"workflow_executions\".\"name\" ~ '^-?\\d+(\\.\\d+)?$'"
+    end
+
+    test 'condition_metadata_numeric_not_exists' do
+      result = @test_instance.send(:condition_metadata_numeric_not_exists, @scope, @node)
+      sql = result.to_sql
+      puts sql
+      assert_includes sql, '("workflow_executions"."name" IS NULL'
+      assert_includes sql, "OR \"workflow_executions\".\"name\" !~ '^-?\\d+(\\.\\d+)?$')"
     end
   end
 end

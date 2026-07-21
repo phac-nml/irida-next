@@ -1,8 +1,6 @@
 <% invalid_value = @condition.errors.include?(:value) %>
 
-<% operator_exists =
-  @condition.operator.blank? ||
-    %w[exists not_exists].include?(@condition.operator) %>
+<% operator_exists =  @condition.operator.blank? || @condition.operator.include?("exists") %>
 
 <div
   class="
