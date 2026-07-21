@@ -11,7 +11,8 @@ module AdvancedSearch
     DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in].freeze
     BETWEEN_OPERATORS = { standard: %w[>= <=], metadata_date: %w[date_greater_than_equals date_less_than_equals],
                           metadata_numeric: %w[numeric_greater_than_equals numeric_less_than_equals] }.freeze
-    EXISTS_OPERATORS = %w[exists not_exists].freeze
+    EXISTS_OPERATORS = %w[exists not_exists date_exists date_not_exists text_exists text_not_exists numeric_exists
+                          numeric_not_exists].freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
     METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals].freeze

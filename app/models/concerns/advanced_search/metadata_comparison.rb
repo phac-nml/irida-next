@@ -9,6 +9,8 @@ module AdvancedSearch
 
     # Suffix convention for date-type metadata fields
     DATE_FIELD_SUFFIX = '_date'
+    DATE_REGEX = '^\\d{4}(-\\d{2}){0,2}$'
+    NUMERIC_REGEX = '^-?\\d+(\\.\\d+)?$'
 
     private
 
@@ -28,7 +30,7 @@ module AdvancedSearch
     def metadata_condition_date_comparison(scope, node, value, comparison_method)
       return scope.none unless valid_date_format?(value)
 
-      condition = node.matches_regexp('^\\d{4}(-\\d{2}){0,2}$').and(
+      condition = node.matches_regexp(DATE_REGEX).and(
         Arel::Nodes::NamedFunction.new(
           'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
         ).public_send(comparison_method, value)
@@ -36,7 +38,7 @@ module AdvancedSearch
 
       if comparison_method == :not_eq
         # Include NULL or non-date metadata values in negative comparisons: NULL is not equal to the provided value.
-        scope.where(node.eq(nil).or(node.does_not_match_regexp('^\\d{4}(-\\d{2}){0,2}$')).or(
+        scope.where(node.eq(nil).or(node.does_not_match_regexp(DATE_REGEX)).or(
                       condition
                     ))
       else
@@ -48,7 +50,7 @@ module AdvancedSearch
     def metadata_condition_numeric_comparison(scope, node, value, comparison_method)
       return scope.none unless valid_numeric_format?(value)
 
-      condition = node.matches_regexp('^-?\\d+(\\.\\d+)?$').and(
+      condition = node.matches_regexp(NUMERIC_REGEX).and(
         Arel::Nodes::NamedFunction.new(
           'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
         ).public_send(comparison_method, value.to_f)
@@ -56,7 +58,7 @@ module AdvancedSearch
 
       if comparison_method == :not_eq
         # Include NULL or non-numeric metadata values in negative comparisons: NULL is not equal to the provided value.
-        scope.where(node.eq(nil).or(node.does_not_match_regexp('^-?\\d+(\\.\\d+)?$')).or(
+        scope.where(node.eq(nil).or(node.does_not_match_regexp(NUMERIC_REGEX)).or(
                       condition
                     ))
       else
@@ -86,6 +88,23 @@ module AdvancedSearch
       # Include NULL metadata values in negative set operations: NULL is not in the provided set.
       # This maintains consistency with condition_not_equals, where "not X" includes records without the field.
       scope.where(node.eq(nil).or(lower_function.not_in(downcase_values(value))))
+    end
+
+    # exist operations
+    def condition_metadata_date_exists(scope, node)
+      scope.where(node.matches_regexp(DATE_REGEX))
+    end
+
+    def condition_metadata_date_not_exists(scope, node)
+      scope.where(node.eq(nil).or(node.does_not_match_regexp(DATE_REGEX)))
+    end
+
+    def condition_metadata_numeric_exists(scope, node)
+      scope.where(node.matches_regexp(NUMERIC_REGEX))
+    end
+
+    def condition_metadata_numeric_not_exists(scope, node)
+      scope.where(node.eq(nil).or(node.does_not_match_regexp(NUMERIC_REGEX)))
     end
   end
 end
