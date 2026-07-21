@@ -193,6 +193,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def analysis_locals
     local = { open: true,
+              workflow_execution: nil,
               analysis_type: params['analysis_type'],
               namespace_id: %w[group project].include?(params['analysis_type']) ? params[:namespace_id] : nil }
     if params[:single_workflow]
