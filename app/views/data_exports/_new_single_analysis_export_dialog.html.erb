@@ -1,3 +1,5 @@
+<%# locals: (open:, workflow_execution:, analysis_type:, namespace_id: nil, selected: false) %>
+
 <%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(:"data_exports.new_analysis_export_dialog.title")) %>
 
@@ -21,7 +23,7 @@
 
             <span
               data-collapsible-target="icon"
-              class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
+              class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": selected }) %>"
             >
               <%= icon(:caret_down, size: :sm) %>
             </span>
