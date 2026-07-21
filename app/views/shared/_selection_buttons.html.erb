@@ -1,6 +1,5 @@
-<% select_form_id = local_assigns.fetch(:select_form_id, "select-all-form") %>
-<% deselect_form_id = local_assigns.fetch(:deselect_form_id, "deselect-all-form") %>
-<% total_count = local_assigns[:total_count] %>
+<%# locals: (url:, form_data: nil, total_count: nil, select_form_fields: {}, deselect_form_fields: {}, select_form_id: "select-all-form", deselect_form_id: "deselect-all-form", select_button_options: {}, deselect_button_options: {}) %>
+
 <% select_all_disabled = total_count.present? && Irida::SelectionLimits.exceeded?(total_count) %>
 <% limit_alert_id = SelectionLimitableTable::SELECTION_LIMIT_ALERT_ID %>
 
@@ -10,7 +9,7 @@
      type: "submit",
      form: select_form_id,
      class: "button button-default max-sm:grow",
-   }.merge(local_assigns.fetch(:select_button_options, {})) %>
+   }.merge(select_button_options) %>
 
 <% deselect_button_options = {
      id: "deselect-all-button",
@@ -18,22 +17,19 @@
      type: "submit",
      form: deselect_form_id,
      class: "button button-default max-sm:grow",
-   }.merge(local_assigns.fetch(:deselect_button_options, {})) %>
+   }.merge(deselect_button_options) %>
 
 <% if select_all_disabled %>
   <% select_button_options[:disabled] = true %>
   <% select_button_options[:aria] = (select_button_options[:aria] || {}).merge(describedby: limit_alert_id) %>
 <% end %>
 
-<% select_form_fields = local_assigns.fetch(:select_form_fields, {}) %>
-<% deselect_form_fields = local_assigns.fetch(:deselect_form_fields, {}) %>
-
 <%= form_with(
       url: url,
       method: :get,
       id: select_form_id,
       class: "hidden",
-      data: local_assigns[:form_data],
+      data: form_data,
     ) do %>
   <% select_form_fields.each do |field_name, field_value| %>
     <%= hidden_field_tag field_name, field_value, id: nil %>
@@ -45,7 +41,7 @@
       method: :get,
       id: deselect_form_id,
       class: "hidden",
-      data: local_assigns[:form_data],
+  data: form_data,
     ) do %>
   <% deselect_form_fields.each do |field_name, field_value| %>
     <%= hidden_field_tag field_name, field_value, id: nil %>
