@@ -27,6 +27,8 @@ class ComboboxComponentPreview < ViewComponent::Preview
     )
   end
 
+  def with_slots; end
+
   private
 
   def default_locals(label: 'Metadata field', options: grouped_metadata_options, combobox_arguments: {})
