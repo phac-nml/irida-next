@@ -270,7 +270,7 @@ export default class extends Controller {
     }
 
     this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
-    this.#filter = option ? option.textContent : "";
+    this.#filter = option ? option.textContent.trim() : "";
     this.comboboxTarget.value = this.#filter;
     this.comboboxTarget.setSelectionRange(
       this.#filter.length,
