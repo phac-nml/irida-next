@@ -2930,6 +2930,11 @@ enum SampleAdvancedSearchConditionOperator {
   """
   Use to filter metadata fields
   """
+  DATE_EXISTS
+
+  """
+  Use to filter metadata fields
+  """
   DATE_GREATER_THAN_EQUALS
 
   """
@@ -2941,6 +2946,11 @@ enum SampleAdvancedSearchConditionOperator {
   Use to filter metadata fields
   """
   DATE_NOT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_NOT_EXISTS
 
   """
   Use to filter non-metadata fields
@@ -2995,6 +3005,11 @@ enum SampleAdvancedSearchConditionOperator {
   """
   Use to filter metadata fields
   """
+  NUMERIC_EXISTS
+
+  """
+  Use to filter metadata fields
+  """
   NUMERIC_GREATER_THAN_EQUALS
 
   """
@@ -3010,12 +3025,22 @@ enum SampleAdvancedSearchConditionOperator {
   """
   Use to filter metadata fields
   """
+  NUMERIC_NOT_EXISTS
+
+  """
+  Use to filter metadata fields
+  """
   TEXT_CONTAINS
 
   """
   Use to filter metadata fields
   """
   TEXT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_EXISTS
 
   """
   Use to filter metadata fields
@@ -3031,6 +3056,11 @@ enum SampleAdvancedSearchConditionOperator {
   Use to filter metadata fields
   """
   TEXT_NOT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_NOT_EXISTS
 
   """
   Use to filter metadata fields
