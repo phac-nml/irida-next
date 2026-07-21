@@ -210,6 +210,44 @@ class DataExportTest < ActiveSupport::TestCase
     ), data_export.errors[:export_parameters].first
   end
 
+  test 'sample export below configured source size limit is valid' do
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
+                                 export_parameters: { ids: [@sample1.id],
+                                                      namespace_id: @project1.namespace.id,
+                                                      attachment_formats: Attachment::FORMAT_REGEX.keys })
+
+    max_bytes = Irida::CurrentSettings.max_data_export_size_gigabytes.gigabytes
+    DataExports::ExportSourceSizeCalculator.any_instance.stubs(:execute).returns(max_bytes - 1)
+
+    assert data_export.valid?
+  end
+
+  test 'sample export at configured source size limit is invalid' do
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
+                                 export_parameters: { ids: [@sample1.id],
+                                                      namespace_id: @project1.namespace.id,
+                                                      attachment_formats: Attachment::FORMAT_REGEX.keys })
+
+    max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
+    DataExports::ExportSourceSizeCalculator.any_instance.stubs(:execute).returns(max_gigabytes.gigabytes)
+
+    assert_not data_export.valid?
+    assert_includes data_export.errors.full_messages,
+                    I18n.t('services.data_exports.create.max_data_export_size_exceeded',
+                           max_size_gigabytes: max_gigabytes)
+  end
+
+  test 'linelist export does not perform source size validation on create' do
+    DataExports::ExportSourceSizeCalculator.any_instance.expects(:execute).never
+
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
+                                 export_parameters: { ids: [@sample1.id],
+                                                      namespace_id: @project1.namespace.id,
+                                                      linelist_format: 'csv' })
+
+    assert data_export.valid?
+  end
+
   test 'turbo stream broadcasts' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
                                  export_parameters: { ids: [@sample1.id], namespace_id: @project1.namespace.id,
