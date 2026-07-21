@@ -2,7 +2,7 @@
 
 <div id="sample-attachments">
   <% if has_attachments %>
-    <div class="mb-4 flex flex-col gap-2 @5xl:flex-row @5xl:items-center @5xl:justify-between">
+    <div class="mb-4 flex flex-wrap gap-2">
       <% if allowed_to[:update_sample] %>
         <% if Flipper.enabled?(:sample_attachments_searching, current_user) %>
           <%= render "shared/selection_buttons",
@@ -24,67 +24,60 @@
         <% end %>
       <% end %>
 
-      <div class="flex flex-col gap-2 @5xl:ml-auto @5xl:flex-row @5xl:items-center">
-        <% if Flipper.enabled?(:sample_attachments_searching, current_user) %>
-          <%= render SearchComponent.new(
-                  query: q,
-                  search_attribute: :puid_or_file_blob_filename_cont,
-                  label: t('common.controls.search'),
-                  placeholder: t(:".search.placeholder"),
-                  value: q.puid_or_file_blob_filename_cont,
-                  url: namespace_project_sample_path,
-                  total_count: pagy.count,
-                  class: "w-full @5xl:w-auto",
-                  search_field_arguments: {
-                    data: {
-                      'search-field-selection-outlet': '#attachments-table'
-                    }
+      <div class="max-sm:hidden sm:grow" role="presentation"></div>
+
+      <% if Flipper.enabled?(:sample_attachments_searching, current_user) %>
+        <%= render SearchComponent.new(
+                query: q,
+                search_attribute: :puid_or_file_blob_filename_cont,
+                label: t('common.controls.search'),
+                placeholder: t(:".search.placeholder"),
+                value: q.puid_or_file_blob_filename_cont,
+                url: namespace_project_sample_path,
+                total_count: pagy.count,
+                class: "max-sm:grow",
+                search_field_arguments: {
+                  data: {
+                    'search-field-selection-outlet': '#attachments-table'
                   }
-                  ) do %>
-            <%= hidden_field_tag :limit, pagy.limit %>
-          <% end %>
+                }
+                ) do %>
+          <%= hidden_field_tag :limit, pagy.limit %>
         <% end %>
+      <% end %>
 
-        <% if allowed_to[:update_sample] %>
-          <div class="flex w-full gap-2 @5xl:w-auto">
-            <%= button_to t("projects.samples.show.new_attachment_button"),
-            new_namespace_project_sample_attachment_path(sample_id: sample.id),
-            method: :get,
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: true,
-            },
-            form_class: "hidden",
-            class: "button button-default min-w-0 flex-1 whitespace-nowrap @5xl:flex-none" %>
-
-            <%= button_to t("projects.samples.show.concatenate_button"),
-            new_namespace_project_sample_attachments_concatenation_path(
-              sample_id: sample.id,
-            ),
-            method: :get,
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: false,
-              controller: "action-button",
-              action_button_required_value: 2,
-            },
-            form_class: "hidden",
-            class: "button button-default action-button min-w-0 flex-1 whitespace-nowrap @5xl:flex-none" %>
-
-            <%= button_to t("projects.samples.show.delete_files_button"),
-            new_namespace_project_sample_attachments_deletion_path(sample_id: sample.id),
-            method: :get,
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: false,
-              controller: "action-button",
-              action_button_required_value: 1,
-            },
-            form_class: "hidden",
-            class: "button button-default action-button min-w-0 flex-1 whitespace-nowrap @5xl:flex-none" %>
-          </div>
-        <% end %>
-      </div>
+      <% if allowed_to[:update_sample] %>
+        <%= button_to t("projects.samples.show.new_attachment_button"),
+        new_namespace_project_sample_attachment_path(sample_id: sample.id),
+        method: :get,
+        data: {
+          turbo_frame: "sample_modal",
+          turbo_stream: true,
+        },
+        class: "button button-default max-sm:grow" %>
+        <%= button_to t("projects.samples.show.concatenate_button"),
+        new_namespace_project_sample_attachments_concatenation_path(
+          sample_id: sample.id,
+        ),
+        method: :get,
+        data: {
+          turbo_frame: "sample_modal",
+          turbo_stream: false,
+          controller: "action-button",
+          action_button_required_value: 2,
+        },
+        class: "button button-default action-button max-sm:grow" %>
+        <%= button_to t("projects.samples.show.delete_files_button"),
+        new_namespace_project_sample_attachments_deletion_path(sample_id: sample.id),
+        method: :get,
+        data: {
+          turbo_frame: "sample_modal",
+          turbo_stream: false,
+          controller: "action-button",
+          action_button_required_value: 1,
+        },
+        class: "button button-default action-button max-sm:grow" %>
+      <% end %>
     </div>
   <% end %>
 
