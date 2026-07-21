@@ -10,6 +10,8 @@ class IridaSchemaTest < ActiveSupport::TestCase
 
     assert_equal current_schema, generated_schema,
                  'Update the generated schema with `bin/rails graphql:dump_schema`'
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
   end
 
   test 'has the base mutation' do
