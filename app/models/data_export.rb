@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # entity class for DataExport
-class DataExport < ApplicationRecord
+class DataExport < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_logidze
   broadcasts_refreshes
 
@@ -16,6 +16,7 @@ class DataExport < ApplicationRecord
   validates :export_parameters, presence: true
 
   validate :validate_export_parameters
+  validate :validate_source_size, on: :create, if: :validate_source_size?
 
   ransacker :id do
     Arel.sql('id::varchar')
@@ -109,5 +110,33 @@ class DataExport < ApplicationRecord
       errors.add(:export_parameters,
                  I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_file_format'))
     end
+  end
+
+  def validate_source_size?
+    return false if export_type.blank? || export_type == 'linelist' || export_parameters.blank?
+
+    errors.empty?
+  end
+
+  def validate_source_size
+    max_data_export_size_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
+
+    return if export_source_size_bytes < max_data_export_size_gigabytes.gigabytes
+
+    errors.add(
+      :base,
+      :max_data_export_size_exceeded,
+      message: I18n.t(
+        'services.data_exports.create.max_data_export_size_exceeded',
+        max_size_gigabytes: max_data_export_size_gigabytes
+      )
+    )
+  end
+
+  def export_source_size_bytes
+    DataExports::ExportSourceSizeCalculator.new(
+      export_type:,
+      export_parameters:
+    ).execute
   end
 end
