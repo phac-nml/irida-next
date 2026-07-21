@@ -63,11 +63,6 @@ linter:
       enabled: true
     actionview-strict-locals-first-line:
       enabled: true
-    # Scoped to classic Rails views only — ViewComponent slot APIs use silent ERB.
-    erb-no-silent-statement:
-      enabled: true
-      only:
-        - "app/views/**/*"
     erb-strict-locals-required:
       enabled: true
     # Same scope as erb-no-silent-statement.

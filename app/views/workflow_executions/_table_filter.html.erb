@@ -1,18 +1,8 @@
-<% workflow_advanced_search_fields = AdvancedSearch::Fields.for_workflow_executions %>
-<% base_form_data = { turbo_action: "replace" }.merge(local_assigns.fetch(:form_data, {})) %>
+<%# locals: (page_limit:, query:, results_message:, search:, total_count:, url:) -%>
 
-<% search_field_arguments = (
-  { classes: "sm:min-w-[20rem]" }
-).deep_merge(local_assigns.fetch(:search_field_arguments, {})) %>
+<div role="status" class="sr-only"><%= results_message %></div>
 
-<% base_form_data = base_form_data.merge(
-  controller: "filters",
-  "filters-selection-outlet": "#workflow-executions-table",
-) %>
-
-<div role="status" class="sr-only"><%= @results_message %></div>
-
-<%= form_with model: @query, html: { role: "search" }, scope: :q, url:, method: :get, data: base_form_data,
+<%= form_with model: search, html: { role: "search" }, scope: :q, url:, method: :get, data: {turbo_action: "replace", controller: "filters", "filters-selection-outlet": "#workflow-executions-table"},
               class: "filters contents" do |form| %>
   <div class="max-sm:grow">
     <% if query.present? && !query.sorts.empty? %>
@@ -28,19 +18,22 @@
       field_name: :name_or_id_cont,
       label: t("common.controls.search"),
       placeholder: t("shared.workflow_executions.index.search.placeholder"),
-      value: @query.name_or_id_cont,
+      value: search.name_or_id_cont,
       include_advanced_search_outlet: true,
-      **search_field_arguments,
+      data: {
+        "search-field-selection-outlet": "#workflow-executions-table",
+      },
+      classes: "sm:min-w-[20rem]"
     ) %>
   </div>
 
   <div class="max-sm:grow">
     <%= render AdvancedSearchComponent.new(
       form: form,
-      search: @query,
-      fields: workflow_advanced_search_fields,
-      open: @query.errors.any?,
-      status: @query.advanced_query?,
+      search: search,
+      fields: AdvancedSearch::Fields.for_workflow_executions,
+      open: search.errors.any?,
+      status: search.advanced_query?,
     ) %>
   </div>
 <% end %>

@@ -1,4 +1,5 @@
-<%# locals: (pagy:, q:, search_url:, attachments:, workflow_execution:, has_attachments: ) -%>
+<%# locals: (allowed_to:, pagy:, q:, search_url:, attachments:, workflow_execution:, has_attachments: ) -%>
+
 <div class="mb-2 flex justify-end">
   <%= render SearchComponent.new(
             query: q,
@@ -28,7 +29,7 @@
   abilities: {
   },
   row_actions: {
-    preview: @allowed_to[:preview],
+    preview: allowed_to[:preview],
   },
   empty: {
     icon_name: Attachment.icon,
