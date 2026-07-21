@@ -35,13 +35,13 @@
         </div>
       </div>
     <% end %>
-    <div
-      class="table-wrapper relative overflow-x-auto"
-      data-controller="selection"
-      data-selection-action-button-outlet=".action-button"
-      data-selection-storage-key-value="metadata-<%= @sample.id %>"
-    >
-      <table class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400">
+    <div class="table-wrapper relative overflow-x-auto">
+      <table
+        class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
+        data-controller="selection"
+        data-selection-action-button-outlet=".action-button"
+        data-selection-storage-key-value="metadata-<%= @sample.id %>"
+      >
         <thead
           class="
             border-b border-slate-200 bg-slate-100 text-xs text-slate-700 uppercase dark:border-slate-700
