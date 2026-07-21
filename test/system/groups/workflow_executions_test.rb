@@ -85,29 +85,7 @@ module Groups
       end
     end
 
-    test 'workflow advanced search is hidden when workflow advanced-search feature flag is disabled' do
-      Flipper.disable(:workflow_execution_advanced_search)
-
-      visit group_workflow_executions_path(@group)
-
-      assert_no_button I18n.t(:'components.advanced_search_component.v1.title')
-
-      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
-              with: @workflow_execution_group_shared1.id
-      find('input.t-search-component').send_keys(:return)
-
-      assert_text 'Displaying 1 item'
-      assert_selector 'table tbody tr', count: 1
-      assert_text @workflow_execution_group_shared1.id
-    ensure
-      Flipper.disable(:workflow_execution_advanced_search)
-    end
-
-    test(
-      'workflow advanced search filters group workflow results when workflow advanced-search feature flag is ' \
-      'enabled'
-    ) do
-      Flipper.enable(:workflow_execution_advanced_search)
+    test 'workflow advanced search filters group workflow results' do
       workflow_execution_group_shared_completed = workflow_executions(:workflow_execution_group_shared_completed)
       workflow_execution_group_shared_running = workflow_executions(:workflow_execution_group_shared_running)
 
@@ -140,12 +118,9 @@ module Groups
       assert_selector "div[role='status']", text: /advanced search/, visible: false
       assert_text workflow_execution_group_shared_completed.id
       assert_no_text workflow_execution_group_shared_running.id
-    ensure
-      Flipper.disable(:workflow_execution_advanced_search)
     end
 
-    test 'workflow advanced search clear removes group filter state when feature flag is enabled' do
-      Flipper.enable(:workflow_execution_advanced_search)
+    test 'workflow advanced search clear removes group filter state' do
       workflow_execution_group_shared_completed = workflow_executions(:workflow_execution_group_shared_completed)
       workflow_execution_group_shared_running = workflow_executions(:workflow_execution_group_shared_running)
 
@@ -180,8 +155,6 @@ module Groups
       assert_no_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.clear_aria_label')}']"
       assert_text workflow_execution_group_shared_completed.id
       assert_text workflow_execution_group_shared_running.id
-    ensure
-      Flipper.disable(:workflow_execution_advanced_search)
     end
 
     test 'should only include workflows that have been shared to the group' do
@@ -250,7 +223,6 @@ module Groups
     end
 
     test 'can search workflow execution files by puid & filename' do
-      Flipper.enable(:workflow_execution_attachments_searching)
       user = users(:joan_doe)
       login_as user
 

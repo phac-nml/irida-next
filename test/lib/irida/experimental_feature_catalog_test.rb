@@ -11,19 +11,14 @@ module Irida
         accessibility_statement
         advanced_search_metadata_operators
         advanced_search_with_auto_complete
-        cancel_multiple_workflows
         client_linelist_exports_v1
         client_linelist_imports_v1
         data_grid_samples_table
         global_groups
-        sample_attachments_searching
-        samples_refresh_notice
         v2_dropdown
         v2_prefixed_select2
         v2_samplesheet
         v2_select2
-        workflow_execution_advanced_search
-        workflow_execution_attachments_searching
       ], entries.pluck(:key)
     end
 
@@ -32,7 +27,6 @@ module Irida
 
       assert_not_includes keys, 'compose_with_retry'
       assert_not_includes keys, 'integration_access_token_generation'
-      assert_not_includes keys, 'wes_extended_metadata'
     end
 
     test 'returns localized names and descriptions with english fallback' do

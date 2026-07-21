@@ -5,57 +5,55 @@
                               "refresh-target": "source",
                             } %>
 
-  <% if show_notice? %>
+  <div
+    id="<%= alert_id %>"
+    data-refresh-target="notice"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+    class="fixed top-4 left-1/2 z-50 mx-auto hidden w-full max-w-xl -translate-x-1/2 px-4"
+  >
     <div
-      id="<%= alert_id %>"
-      data-refresh-target="notice"
-      role="alert"
-      aria-live="assertive"
-      aria-atomic="true"
-      class="fixed top-4 left-1/2 z-50 mx-auto hidden w-full max-w-xl -translate-x-1/2 px-4"
+      class="
+        flex items-center rounded-lg border border-slate-200 bg-white p-4 shadow-lg dark:border-slate-700
+        dark:bg-slate-800
+      "
     >
-      <div
-        class="
-          flex items-center rounded-lg border border-slate-200 bg-white p-4 shadow-lg dark:border-slate-700
-          dark:bg-slate-800
-        "
-      >
-        <!-- Icon -->
-        <div class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
-          <%= icon(:info, color: :blue, size: :md) %>
-        </div>
+      <!-- Icon -->
+      <div class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
+        <%= icon(:info, color: :blue, size: :md) %>
+      </div>
 
-        <!-- Message -->
-        <div class="ml-3 flex-1 text-sm font-medium text-slate-700 dark:text-slate-200"><%= message %></div>
+      <!-- Message -->
+      <div class="ml-3 flex-1 text-sm font-medium text-slate-700 dark:text-slate-200"><%= message %></div>
 
-        <!-- Actions -->
-        <div class="ml-auto flex items-center gap-3 pl-3">
-          <!-- Refresh Button -->
-          <button
-            type="button"
-            data-action="click->refresh#refresh"
-            class="
-              cursor-pointer px-3 py-1.5 text-sm font-medium text-primary-600 transition-colors duration-200
-              hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300
-            "
-          >
-            <%= link_text %>
-          </button>
+      <!-- Actions -->
+      <div class="ml-auto flex items-center gap-3 pl-3">
+        <!-- Refresh Button -->
+        <button
+          type="button"
+          data-action="click->refresh#refresh"
+          class="
+            cursor-pointer px-3 py-1.5 text-sm font-medium text-primary-600 transition-colors duration-200
+            hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300
+          "
+        >
+          <%= link_text %>
+        </button>
 
-          <!-- Dismiss Button -->
-          <button
-            type="button"
-            data-action="click->refresh#dismiss"
-            class="
-              inline-flex cursor-pointer items-center justify-center p-1 text-slate-400 transition-colors
-              duration-200 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300
-            "
-            aria-label="<%= I18n.t('general.screen_reader.close') %>"
-          >
-            <%= icon(:x, color: :subdued, size: :sm) %>
-          </button>
-        </div>
+        <!-- Dismiss Button -->
+        <button
+          type="button"
+          data-action="click->refresh#dismiss"
+          class="
+            inline-flex cursor-pointer items-center justify-center p-1 text-slate-400 transition-colors duration-200
+            hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300
+          "
+          aria-label="<%= I18n.t('general.screen_reader.close') %>"
+        >
+          <%= icon(:x, color: :subdued, size: :sm) %>
+        </button>
       </div>
     </div>
-  <% end %>
+  </div>
 <% end %>

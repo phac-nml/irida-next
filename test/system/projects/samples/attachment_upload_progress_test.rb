@@ -6,7 +6,6 @@ module Projects
   module Samples
     class AttachmentUploadProgressTest < ApplicationSystemTestCase
       setup do
-        Flipper.enable(:sample_attachments_searching)
         @user = users(:john_doe)
         login_as @user
         @sample = samples(:sample2)

@@ -23,8 +23,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     @workflow_name_col = '5'
     @workflow_version_col = '6'
     @created_at_col = '7'
-
-    Flipper.enable(:cancel_multiple_workflows)
   end
 
   test 'should display a list of workflow executions' do
@@ -395,7 +393,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can search workflow execution files by puid & filename' do
-    Flipper.enable(:workflow_execution_attachments_searching)
     visit workflow_execution_path(@workflow_execution3)
 
     assert_text @workflow_execution3.id
@@ -554,85 +551,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'can filter by ID and name on workflow execution index page when workflow advanced-search flag is enabled' do
-    Flipper.enable(:workflow_execution_advanced_search)
-    visit workflow_executions_path
-
-    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
-    assert_selector 'table tbody tr', count: PAGE_SIZE
-
-    within('table tbody') do
-      assert_text @workflow_execution2.id
-      assert_text @workflow_execution2.name
-      assert_text @workflow_execution3.id
-      assert_text @workflow_execution3.name
-    end
-
-    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
-            with: @workflow_execution2.id
-    find('input.t-search-component').send_keys(:return)
-
-    assert_text 'Displaying 1 item'
-    assert_selector 'table tbody tr', count: 1
-
-    within('table tbody') do
-      assert_text @workflow_execution2.id
-      assert_text @workflow_execution2.name
-      assert_no_text @workflow_execution3.id
-      assert_no_text @workflow_execution3.name
-    end
-
-    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
-            with: ''
-    find('input.t-search-component').send_keys(:return)
-
-    assert_button I18n.t(:'components.search_field_component.clear_button')
-    assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-
-    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
-    assert_selector 'table tbody tr', count: PAGE_SIZE
-
-    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
-            with: @workflow_execution3.name
-    find('input.t-search-component').send_keys(:return)
-
-    assert_button I18n.t(:'components.search_field_component.clear_button')
-    assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-
-    assert_text 'Displaying 1 item'
-    assert_selector 'table tbody tr', count: 1
-
-    within('table tbody') do
-      assert_no_text @workflow_execution2.id
-      assert_no_text @workflow_execution2.name
-      assert_text @workflow_execution3.id
-      assert_text @workflow_execution3.name
-    end
-  ensure
-    Flipper.disable(:workflow_execution_advanced_search)
-  end
-
-  test 'workflow advanced search is hidden when workflow advanced-search feature flag is disabled' do
-    Flipper.disable(:workflow_execution_advanced_search)
-
-    visit workflow_executions_path
-
-    assert_no_button I18n.t(:'components.advanced_search_component.v1.title')
-
-    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
-            with: @workflow_execution1.id
-    find('input.t-search-component').send_keys(:return)
-
-    assert_text 'Displaying 1 item'
-    assert_selector 'table tbody tr', count: 1
-    assert_text @workflow_execution1.id
-  ensure
-    Flipper.disable(:workflow_execution_advanced_search)
-  end
-
-  test 'workflow advanced search filters results when workflow advanced-search feature flag is enabled' do
-    Flipper.enable(:workflow_execution_advanced_search)
-
+  test 'workflow advanced search filters results' do
     visit workflow_executions_path
 
     assert_button I18n.t(:'components.advanced_search_component.v1.title')
@@ -666,13 +585,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector "div[role='status']", text: /advanced search/, visible: false
     assert_text @workflow_execution1.id
     assert_no_text @workflow_execution4.id
-  ensure
-    Flipper.disable(:workflow_execution_advanced_search)
   end
 
   test 'workflow advanced search returns no results for invalid enum state value' do
-    Flipper.enable(:workflow_execution_advanced_search)
-
     visit workflow_executions_path
 
     click_button I18n.t(:'components.advanced_search_component.v1.title')
@@ -698,13 +613,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_selector "div[role='status']", text: /advanced search/, visible: false
       assert_text 'Displaying 0 items'
     end
-  ensure
-    Flipper.disable(:workflow_execution_advanced_search)
   end
 
-  test 'workflow quick search preserves active advanced search when feature flag is enabled' do
-    Flipper.enable(:workflow_execution_advanced_search)
-
+  test 'workflow quick search preserves active advanced search' do
     visit workflow_executions_path
 
     click_button I18n.t(:'components.advanced_search_component.v1.title')
@@ -746,13 +657,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_button I18n.t(:'components.search_field_component.clear_button')
     assert_button I18n.t(:'components.advanced_search_component.v1.clear_aria_label')
-  ensure
-    Flipper.disable(:workflow_execution_advanced_search)
   end
 
   test 'workflow advanced search keeps completed results visible when broadening state not_in filters' do
-    Flipper.enable(:workflow_execution_advanced_search)
-
     visit workflow_executions_path
 
     click_button I18n.t(:'components.advanced_search_component.v1.title')
@@ -791,13 +698,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text @workflow_execution1.id
     assert_no_text @workflow_execution4.id
     assert_no_text @workflow_execution5.id
-  ensure
-    Flipper.disable(:workflow_execution_advanced_search)
   end
 
   test 'workflow advanced search clears form on close when there is no active search' do
-    Flipper.enable(:workflow_execution_advanced_search)
-
     visit workflow_executions_path
 
     click_button I18n.t(:'components.advanced_search_component.v1.title')
@@ -829,13 +732,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
         assert_equal '', find("input[name$='[value]']", visible: :all).value
       end
     end
-  ensure
-    Flipper.disable(:workflow_execution_advanced_search)
   end
 
   test 'workflow advanced search retains applied state with multiple conditions when reopening dialog' do
-    Flipper.enable(:workflow_execution_advanced_search)
-
     visit workflow_executions_path
 
     click_button I18n.t(:'components.advanced_search_component.v1.title')
@@ -893,13 +792,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
         assert_equal 'my_run_id', find("input[name$='[value]']", visible: :visible).value
       end
     end
-  ensure
-    Flipper.disable(:workflow_execution_advanced_search)
   end
 
   test 'workflow advanced search resets to applied state on close when active search exists' do
-    Flipper.enable(:workflow_execution_advanced_search)
-
     visit workflow_executions_path
 
     click_button I18n.t(:'components.advanced_search_component.v1.title')
@@ -958,12 +853,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_no_selector "fieldset[data-advanced-search--v1-target='conditionsContainer'] input[value='draft_run_id']",
                          visible: :all
     end
-  ensure
-    Flipper.disable(:workflow_execution_advanced_search)
   end
 
   test 'workflow advanced search retains operator and value after reopen with autocomplete enabled' do
-    Flipper.enable(:workflow_execution_advanced_search)
     Flipper.enable(:advanced_search_with_auto_complete, @user)
 
     visit workflow_executions_path
@@ -1000,7 +892,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
   ensure
     Flipper.disable(:advanced_search_with_auto_complete, @user)
-    Flipper.disable(:workflow_execution_advanced_search)
   end
 
   test 'submitter can edit workflow execution post launch from workflow execution page' do
@@ -1187,8 +1078,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can preview workflow execution files' do
-    Flipper.enable(:workflow_execution_attachments_searching)
-
     previewable_attachment = attachments(:samples_workflow_execution_completed_output_attachment)
 
     visit workflow_execution_path(@workflow_execution3)

@@ -11,12 +11,10 @@ class SampleTest < ActiveSupport::TestCase
     @fastq_regex = '^\\S+\\.f(ast)?q(\\.gz)?$'
     # project1 is under group_one
     # project4 is under subgroup_one_group_three -> group_three (deeply nested)
-    Flipper.enable(:samples_refresh_notice)
     Flipper.enable(:v2_samplesheet)
   end
 
   def teardown
-    Flipper.disable(:samples_refresh_notice)
     Sample.suppressed_turbo_broadcasts = false
   end
 
@@ -436,58 +434,6 @@ class SampleTest < ActiveSupport::TestCase
     assert_equal expected_count, broadcast_calls.count
   end
 
-  test 'broadcasts only to project on sample create when flag disabled' do
-    Flipper.disable(:samples_refresh_notice)
-    project = @project1
-
-    broadcast_calls = count_broadcasts_for do
-      Sample.create!(name: 'New Sample No Flag', project: project)
-    end
-
-    # Only 1 broadcast (to project only, no ancestors)
-    assert_equal 1, broadcast_calls.count
-  end
-
-  test 'broadcasts only to project on sample update when flag disabled' do
-    Flipper.disable(:samples_refresh_notice)
-    sample = samples(:sample1)
-
-    broadcast_calls = count_broadcasts_for do
-      sample.update!(name: 'Updated Without Flag')
-    end
-
-    assert_equal 1, broadcast_calls.count
-  end
-
-  test 'broadcasts only to project on sample destroy when flag disabled' do
-    Flipper.disable(:samples_refresh_notice)
-    sample = samples(:sample2)
-
-    broadcast_calls = count_broadcasts_for do
-      sample.destroy
-    end
-
-    assert_equal 1, broadcast_calls.count
-  end
-
-  test 'broadcasts only to project on sample restore when flag disabled' do
-    Flipper.disable(:samples_refresh_notice)
-    sample = samples(:sample2)
-
-    # Destroy and restore to get a restored sample
-    sample.destroy
-    sample_id = sample.id
-    Sample.restore(sample_id, recursive: true)
-    restored_sample = Sample.find(sample_id)
-
-    # Test the broadcast method directly since Sample.restore doesn't trigger after_commit in tests
-    broadcast_calls = count_broadcasts_for do
-      restored_sample.send(:broadcast_refresh_later_to_samples_table)
-    end
-
-    assert_equal 1, broadcast_calls.count
-  end
-
   test 'broadcasts to both old and new projects when sample transferred with flag enabled' do
     sample = samples(:sample1)
     old_project = sample.project
@@ -502,18 +448,6 @@ class SampleTest < ActiveSupport::TestCase
     # Expected: 2 projects + old_ancestors + new_ancestors
     expected_count = 2 + old_ancestors.count + new_ancestors.count
     assert_equal expected_count, broadcast_calls.count
-  end
-
-  test 'broadcasts to both old and new projects when sample transferred with flag disabled' do
-    Flipper.disable(:samples_refresh_notice)
-    sample = samples(:sample2)
-
-    broadcast_calls = count_broadcasts_for do
-      sample.update!(project: @project4)
-    end
-
-    # Expected: 2 broadcasts (old project + new project), no ancestors
-    assert_equal 2, broadcast_calls.count
   end
 
   test 'handles sample transfer when old project is nil' do
@@ -587,22 +521,6 @@ class SampleTest < ActiveSupport::TestCase
     # Expected: 1 project + all ancestors
     expected_count = 1 + ancestors.count
     assert_equal expected_count, broadcast_calls.count
-  end
-
-  test 'broadcasts only to project in deeply nested namespace when flag disabled' do
-    Flipper.disable(:samples_refresh_notice)
-    project = @project4
-    ancestors = project.namespace.parent.self_and_ancestors
-
-    # Verify we have a deep hierarchy
-    assert ancestors.count >= 2, 'Test requires deeply nested namespace'
-
-    broadcast_calls = count_broadcasts_for do
-      Sample.create!(name: 'Deep Nested No Flag', project: project)
-    end
-
-    # Expected: 1 broadcast (project only, no ancestors)
-    assert_equal 1, broadcast_calls.count
   end
 
   test 'ancestor broadcasts include correct stream name and arguments' do

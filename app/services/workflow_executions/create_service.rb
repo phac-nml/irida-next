@@ -103,12 +103,8 @@ module WorkflowExecutions
     end
 
     def add_workflow_execution_tags
-      @workflow_execution.tags = if Flipper.enabled?(:wes_extended_metadata)
-                                   { createdBy: current_user.email, namespaceId: @workflow_execution.namespace.puid,
-                                     samplesCount: @samples_count.to_s }
-                                 else
-                                   { createdBy: current_user.email }
-                                 end
+      @workflow_execution.tags = { createdBy: current_user.email, namespaceId: @workflow_execution.namespace.puid,
+                                   samplesCount: @samples_count.to_s }
     end
 
     def sanitized_workflow_params

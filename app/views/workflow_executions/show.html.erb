@@ -144,6 +144,7 @@ end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_e
   ) do %>
     <%= render partial: "workflow_executions/files",
     locals: {
+      allowed_to: @allowed_to,
       pagy: @pagy,
       q: @q,
       search_url: workflow_execution_path(@workflow_execution),

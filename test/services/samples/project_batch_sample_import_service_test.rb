@@ -62,11 +62,6 @@ module Samples
         sample_description_column: 'description',
         metadata_fields: %w[metadata1 metadata2]
       }
-      Flipper.enable(:samples_refresh_notice)
-    end
-
-    def teardown
-      Flipper.disable(:samples_refresh_notice)
     end
 
     test 'import samples with permission for project namespace' do

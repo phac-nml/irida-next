@@ -67,7 +67,13 @@
     ) do %>
       <%= render partial: "projects/samples/attachments/table",
       locals: {
+        allowed_to: @allowed_to,
         attachments: @sample_attachments,
+        has_attachments: @has_attachments,
+        pagy: @pagy,
+        sample: @sample,
+        q: @q,
+        render_individual_attachments: @render_individual_attachments
       } %>
     <% end %>
 

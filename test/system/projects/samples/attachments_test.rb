@@ -8,7 +8,6 @@ module Projects
       include ActionView::Helpers::SanitizeHelper
 
       setup do
-        Flipper.enable(:sample_attachments_searching)
         @user = users(:john_doe)
         login_as @user
         @sample1 = samples(:sample1)

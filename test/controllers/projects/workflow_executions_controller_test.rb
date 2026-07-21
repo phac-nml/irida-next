@@ -78,30 +78,13 @@ module Projects
       assert_response :unauthorized
     end
 
-    test 'should ignore advanced search groups when workflow advanced-search feature flag is disabled' do
-      Flipper.disable(:workflow_execution_advanced_search)
-
-      get namespace_project_workflow_executions_path(@namespace, @project),
-          params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
-
-      assert_response :success
-      assert_includes response.body, @workflow_execution.id
-      assert_includes response.body, @workflow_execution_running.id
-    ensure
-      Flipper.disable(:workflow_execution_advanced_search)
-    end
-
-    test 'should apply advanced search groups when workflow advanced-search feature flag is enabled' do
-      Flipper.enable(:workflow_execution_advanced_search)
-
+    test 'should apply advanced search groups' do
       get namespace_project_workflow_executions_path(@namespace, @project),
           params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
 
       assert_response :success
       assert_includes response.body, @workflow_execution.id
       assert_not_includes response.body, @workflow_execution_running.id
-    ensure
-      Flipper.disable(:workflow_execution_advanced_search)
     end
 
     test 'should show workflow execution' do
