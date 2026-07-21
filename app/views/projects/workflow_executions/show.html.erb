@@ -9,11 +9,7 @@
 <%= render Viral::PageHeaderComponent.new(title: turbo_frame_tag('we_name_header') do @workflow_execution.name.blank? ? @workflow_execution.workflow.name :
    @workflow_execution.name end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
   <% component.with_buttons do %>
-    <div
-      class="
-        flex flex-col @xl:flex-row @lg:justify-between space-y-2 @lg:space-x-1 mb-2
-      "
-    >
+    <div class="mb-2 flex flex-col space-y-2 @lg:justify-between @lg:space-x-1 @xl:flex-row">
       <% if @allowed_to[:export_data] %>
         <% if @workflow_execution.completed? %>
           <%= button_to t("projects.workflow_executions.show.create_export_button"),
@@ -49,6 +45,7 @@
           disabled: true %>
         <% end %>
       <% end %>
+
       <% if @workflow_execution.cancellable? && @allowed_to[:cancel] %>
         <%= button_to t("common.actions.cancel"),
         cancel_namespace_project_workflow_execution_path(
@@ -64,6 +61,7 @@
         method: :put,
         class: "button button-default w-full" %>
       <% end %>
+
       <% if @allowed_to[:update] %>
         <%= button_to t("common.actions.edit"),
         edit_namespace_project_workflow_execution_path(
@@ -77,6 +75,7 @@
         method: :get,
         class: "button button-default w-full" %>
       <% end %>
+
       <% if @workflow_execution.deletable? && @allowed_to[:destroy] %>
         <%= button_to t("common.actions.remove"),
         destroy_confirmation_namespace_project_workflow_execution_path(
@@ -183,6 +182,7 @@
   ) do %>
     <%= render partial: "workflow_executions/files",
     locals: {
+      allowed_to: @allowed_to,
       pagy: @pagy,
       q: @q,
       search_url:
