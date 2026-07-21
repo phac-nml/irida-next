@@ -65,7 +65,6 @@ linter:
       enabled: true
     erb-strict-locals-required:
       enabled: true
-    # Same scope as erb-no-silent-statement.
     erb-no-unused-expressions:
       enabled: true
       only:
