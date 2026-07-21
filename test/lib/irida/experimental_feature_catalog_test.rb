@@ -15,7 +15,6 @@ module Irida
         client_linelist_imports_v1
         data_grid_samples_table
         global_groups
-        samples_refresh_notice
         v2_dropdown
         v2_prefixed_select2
         v2_samplesheet

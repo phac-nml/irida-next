@@ -50,8 +50,6 @@ class Project < ApplicationRecord
   def broadcast_refresh_later_to_samples_table
     broadcast_refresh_later_to self, :samples if self && !deleted?
 
-    return unless Flipper.enabled?(:samples_refresh_notice, Current.user)
-
     # Broadcast to all ancestor groups since they display samples from child projects/groups.
     # This ensures group sample views are notified of changes in nested projects.
     namespace.self_and_ancestors_of_type(Group.sti_name).each do |namespace|

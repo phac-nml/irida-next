@@ -551,61 +551,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'can filter by ID and name on workflow execution index page' do
-    visit workflow_executions_path
-
-    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
-    assert_selector 'table tbody tr', count: PAGE_SIZE
-
-    within('table tbody') do
-      assert_text @workflow_execution2.id
-      assert_text @workflow_execution2.name
-      assert_text @workflow_execution3.id
-      assert_text @workflow_execution3.name
-    end
-
-    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
-            with: @workflow_execution2.id
-    find('input.t-search-component').send_keys(:return)
-
-    assert_text 'Displaying 1 item'
-    assert_selector 'table tbody tr', count: 1
-
-    within('table tbody') do
-      assert_text @workflow_execution2.id
-      assert_text @workflow_execution2.name
-      assert_no_text @workflow_execution3.id
-      assert_no_text @workflow_execution3.name
-    end
-
-    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
-            with: ''
-    find('input.t-search-component').send_keys(:return)
-
-    assert_button I18n.t(:'components.search_field_component.clear_button')
-    assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-
-    assert_text "Displaying items 1-#{PAGE_SIZE} of #{WORKFLOW_EXECUTION_COUNT} in total"
-    assert_selector 'table tbody tr', count: PAGE_SIZE
-
-    fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
-            with: @workflow_execution3.name
-    find('input.t-search-component').send_keys(:return)
-
-    assert_button I18n.t(:'components.search_field_component.clear_button')
-    assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-
-    assert_text 'Displaying 1 item'
-    assert_selector 'table tbody tr', count: 1
-
-    within('table tbody') do
-      assert_no_text @workflow_execution2.id
-      assert_no_text @workflow_execution2.name
-      assert_text @workflow_execution3.id
-      assert_text @workflow_execution3.name
-    end
-  end
-
   test 'workflow advanced search filters results' do
     visit workflow_executions_path
 

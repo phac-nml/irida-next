@@ -72,17 +72,6 @@ features:
   integration_access_token_generation:
     description: "Allow users to generate access tokens for API access."
     enable_in_development: true
-  samples_refresh_notice:
-    admin_manageable: true
-    description:
-      en: "Show a notice on the samples table when samples table is out of date due\
-        \ to additions, deletions, or updates."
-      fr: "Afficher un avis lorsque le tableau des échantillons n'est plus à jour\
-        \ après un ajout, une suppression ou une modification."
-    enable_in_development: true
-    name:
-      en: "Samples Refresh Notice"
-      fr: "Avis d'actualisation des échantillons"
   v2_dropdown:
     admin_manageable: true
     description:
