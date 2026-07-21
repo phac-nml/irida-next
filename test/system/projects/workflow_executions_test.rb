@@ -386,30 +386,7 @@ module Projects
       end
     end
 
-    test 'workflow advanced search is hidden when workflow advanced-search feature flag is disabled' do
-      Flipper.disable(:workflow_execution_advanced_search)
-
-      visit namespace_project_workflow_executions_path(@namespace, @project)
-
-      assert_no_button I18n.t(:'components.advanced_search_component.v1.title')
-
-      fill_in placeholder: I18n.t(:'shared.workflow_executions.index.search.placeholder'),
-              with: @workflow_execution1.id
-      find('input.t-search-component').send_keys(:return)
-
-      assert_text 'Displaying 1 item'
-      assert_selector 'table tbody tr', count: 1
-      assert_text @workflow_execution1.id
-    ensure
-      Flipper.disable(:workflow_execution_advanced_search)
-    end
-
-    test(
-      'workflow advanced search filters project workflow results when workflow advanced-search feature flag is ' \
-      'enabled'
-    ) do
-      Flipper.enable(:workflow_execution_advanced_search)
-
+    test 'workflow advanced search filters project workflow results' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_button I18n.t(:'components.advanced_search_component.v1.title')
@@ -439,13 +416,9 @@ module Projects
       assert_selector "div[role='status']", text: /advanced search/, visible: false
       assert_text @workflow_execution1.id
       assert_no_text @workflow_execution3.id
-    ensure
-      Flipper.disable(:workflow_execution_advanced_search)
     end
 
-    test 'workflow advanced search clear removes project filter state when feature flag is enabled' do
-      Flipper.enable(:workflow_execution_advanced_search)
-
+    test 'workflow advanced search clear removes project filter state' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       click_button I18n.t(:'components.advanced_search_component.v1.title')
@@ -477,8 +450,6 @@ module Projects
       assert_no_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.clear_aria_label')}']"
       assert_text @workflow_execution1.id
       assert_text @workflow_execution3.id
-    ensure
-      Flipper.disable(:workflow_execution_advanced_search)
     end
 
     test 'analyst or higher access can edit workflow execution post launch from workflow execution page' do

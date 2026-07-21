@@ -1,9 +1,8 @@
-<% workflow_advanced_search_enabled = Flipper.enabled?(:workflow_execution_advanced_search) %>
-<% workflow_advanced_search_fields = workflow_advanced_search_enabled ? AdvancedSearch::Fields.for_workflow_executions : nil %>
+<% workflow_advanced_search_fields = AdvancedSearch::Fields.for_workflow_executions %>
 <% base_form_data = { turbo_action: "replace" }.merge(local_assigns.fetch(:form_data, {})) %>
 
 <% search_field_arguments = (
-  workflow_advanced_search_enabled ? { classes: "sm:min-w-[20rem]" } : {}
+  { classes: "sm:min-w-[20rem]" }
 ).deep_merge(local_assigns.fetch(:search_field_arguments, {})) %>
 
 <% if workflow_advanced_search_enabled %>
@@ -13,51 +12,37 @@
   ) %>
 <% end %>
 
-<% if workflow_advanced_search_enabled %>
-  <div role="status" class="sr-only"><%= @results_message %></div>
-  <%= form_with model: @query, html: { role: "search" }, scope: :q, url:, method: :get, data: base_form_data,
-                class: "filters contents" do |form| %>
-    <div class="max-sm:grow">
-      <% if query.present? && !query.sorts.empty? %>
-        <%= hidden_field_tag "q[s]", "#{query.sorts.first.name} #{query.sorts.first.dir}" %>
-      <% end %>
+<div role="status" class="sr-only"><%= @results_message %></div>
 
-      <% if local_assigns.fetch(:page_limit, nil).present? %>
-        <%= hidden_field_tag :limit, local_assigns[:page_limit] %>
-      <% end %>
+<%= form_with model: @query, html: { role: "search" }, scope: :q, url:, method: :get, data: base_form_data,
+              class: "filters contents" do |form| %>
+  <div class="max-sm:grow">
+    <% if query.present? && !query.sorts.empty? %>
+      <%= hidden_field_tag "q[s]", "#{query.sorts.first.name} #{query.sorts.first.dir}" %>
+    <% end %>
 
-      <%= render SearchFieldComponent.new(
-        form: form,
-        field_name: :name_or_id_cont,
-        label: t("common.controls.search"),
-        placeholder: t("shared.workflow_executions.index.search.placeholder"),
-        value: @query.name_or_id_cont,
-        include_advanced_search_outlet: true,
-        **search_field_arguments,
-      ) %>
-    </div>
+    <% if local_assigns.fetch(:page_limit, nil).present? %>
+      <%= hidden_field_tag :limit, local_assigns[:page_limit] %>
+    <% end %>
 
-    <div class="max-sm:grow">
-      <%= render AdvancedSearchComponent.new(
-        form: form,
-        search: @query,
-        fields: workflow_advanced_search_fields,
-        open: @query.errors.any?,
-        status: @query.advanced_query?,
-      ) %>
-    </div>
-  <% end %>
-<% else %>
-  <%= render SearchComponent.new(
-    query: query,
-    url: url,
-    search_attribute: :name_or_id_cont,
-    label: t("common.controls.search"),
-    placeholder: t("shared.workflow_executions.index.search.placeholder"),
-    value: query.name_or_id_cont,
-    total_count: total_count,
-    class: "max-sm:grow",
-    data: base_form_data,
-    search_field_arguments: search_field_arguments,
-  ) %>
+    <%= render SearchFieldComponent.new(
+      form: form,
+      field_name: :name_or_id_cont,
+      label: t("common.controls.search"),
+      placeholder: t("shared.workflow_executions.index.search.placeholder"),
+      value: @query.name_or_id_cont,
+      include_advanced_search_outlet: true,
+      **search_field_arguments,
+    ) %>
+  </div>
+
+  <div class="max-sm:grow">
+    <%= render AdvancedSearchComponent.new(
+      form: form,
+      search: @query,
+      fields: workflow_advanced_search_fields,
+      open: @query.errors.any?,
+      status: @query.advanced_query?,
+    ) %>
+  </div>
 <% end %>
