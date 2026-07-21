@@ -129,17 +129,3 @@ features:
     name:
       en: "Version 2 Select"
       fr: "Sélecteur version 2"
-  wes_extended_metadata:
-    description: "Include additional metadata in WES submission, such as namespaceId\
-      \ and samplesCount."
-    enable_in_development: true
-  workflow_execution_advanced_search:
-    admin_manageable: true
-    description:
-      en: "Enable the advanced search dialog for workflow executions."
-      fr: "Activer la boîte de dialogue de recherche avancée pour les exécutions de\
-        \ flux de travail."
-    enable_in_development: true
-    name:
-      en: "Workflow Execution Advanced Search"
-      fr: "Recherche avancée des exécutions de flux de travail"

@@ -21,7 +21,6 @@ module Irida
         v2_prefixed_select2
         v2_samplesheet
         v2_select2
-        workflow_execution_advanced_search
       ], entries.pluck(:key)
     end
 
@@ -30,7 +29,6 @@ module Irida
 
       assert_not_includes keys, 'compose_with_retry'
       assert_not_includes keys, 'integration_access_token_generation'
-      assert_not_includes keys, 'wes_extended_metadata'
     end
 
     test 'returns localized names and descriptions with english fallback' do
