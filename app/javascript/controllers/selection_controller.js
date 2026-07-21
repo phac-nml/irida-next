@@ -38,37 +38,18 @@ export default class extends Controller {
     this.element.setAttribute("data-controller-connected", "true");
 
     this.boundOnMorph = this.onMorph.bind(this);
-    this.boundOnTurboRender = this.onTurboRender.bind(this);
-    this.boundOnViralAlertDismissed =
-      this.#handleViralAlertDismissed.bind(this);
 
     this.#initializeSelectionState();
-    this.#applyLimitAlertDismissedState();
 
     document.addEventListener("turbo:morph", this.boundOnMorph);
-    document.addEventListener("turbo:render", this.boundOnTurboRender);
-    document.addEventListener(
-      "viral--alert:dismissed",
-      this.boundOnViralAlertDismissed,
-    );
   }
 
   disconnect() {
     document.removeEventListener("turbo:morph", this.boundOnMorph);
-    document.removeEventListener("turbo:render", this.boundOnTurboRender);
-    document.removeEventListener(
-      "viral--alert:dismissed",
-      this.boundOnViralAlertDismissed,
-    );
   }
 
   onMorph() {
     this.#initializeSelectionState();
-    this.#applyLimitAlertDismissedState();
-  }
-
-  onTurboRender() {
-    this.#applyLimitAlertDismissedState();
   }
 
   /**
@@ -337,7 +318,7 @@ export default class extends Controller {
     const storedItems = this.#readStoredItems() || [];
 
     if (this.#exceedsLimit(storedItems.length)) {
-      this.#handleSelectionLimitExceeded({ resetDismissed: false });
+      this.#handleSelectionLimitExceeded({ announce: false });
       this.#updateUI(storedItems, false);
       return;
     }
@@ -390,16 +371,10 @@ export default class extends Controller {
     return this.maxSelectionValue > 0 && count > this.maxSelectionValue;
   }
 
-  #handleSelectionLimitExceeded({ resetDismissed = true } = {}) {
-    if (resetDismissed) {
-      this.#clearLimitAlertDismissed();
-    } else if (this.#isLimitAlertDismissed()) {
-      return;
-    }
-
+  #handleSelectionLimitExceeded({ announce = true } = {}) {
     this.#showSelectionLimitAlert(this.#selectionLimitMessage());
 
-    if (resetDismissed) {
+    if (announce) {
       this.#announceAlertMessage(this.#selectionLimitMessage());
     }
   }
@@ -408,7 +383,6 @@ export default class extends Controller {
     const message = this.#storageLimitMessage();
     if (!message) return;
 
-    this.#clearLimitAlertDismissed();
     this.#showSelectionLimitAlert(message);
     this.#announceAlertMessage(message);
     console.warn("SelectionController: storage quota exceeded");
@@ -416,7 +390,7 @@ export default class extends Controller {
 
   #showSelectionLimitAlert(message) {
     const limitAlert = this.#findLimitAlertElement();
-    if (!limitAlert || this.#isLimitAlertDismissed()) return;
+    if (!limitAlert) return;
 
     if (!this.#proactiveLimitAlert(limitAlert) && message) {
       const limitAlertMessage = this.#findLimitAlertMessageElement(limitAlert);
@@ -434,25 +408,6 @@ export default class extends Controller {
     if (this.#proactiveLimitAlert(limitAlert)) return;
 
     limitAlert.classList.add("hidden");
-    this.#clearLimitAlertDismissed();
-  }
-
-  #applyLimitAlertDismissedState() {
-    const limitAlert = this.#findLimitAlertElement();
-    if (!limitAlert) return;
-    if (!this.#isLimitAlertDismissed()) return;
-
-    limitAlert.classList.add("hidden");
-  }
-
-  #handleViralAlertDismissed(event) {
-    const limitAlert = this.#findLimitAlertElement();
-    if (!limitAlert || !limitAlert.contains(event.target)) {
-      return;
-    }
-
-    this.#markLimitAlertDismissed();
-    limitAlert.classList.add("hidden");
   }
 
   #findLimitAlertElement() {
@@ -465,24 +420,6 @@ export default class extends Controller {
       : limitAlert?.querySelector(
           "[data-selection-target='limitAlertMessage']",
         );
-  }
-
-  #limitAlertDismissedStorageKey() {
-    return `${this.#getStorageKey()}:selection-limit-alert-dismissed`;
-  }
-
-  #isLimitAlertDismissed() {
-    return (
-      sessionStorage.getItem(this.#limitAlertDismissedStorageKey()) === "true"
-    );
-  }
-
-  #markLimitAlertDismissed() {
-    sessionStorage.setItem(this.#limitAlertDismissedStorageKey(), "true");
-  }
-
-  #clearLimitAlertDismissed() {
-    sessionStorage.removeItem(this.#limitAlertDismissedStorageKey());
   }
 
   #proactiveLimitAlert(limitAlert = this.#findLimitAlertElement()) {
