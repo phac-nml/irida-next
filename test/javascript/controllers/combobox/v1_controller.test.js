@@ -358,6 +358,24 @@ describe("combobox v1 controller", () => {
     expect(hiddenChange).toHaveBeenCalledTimes(1);
   });
 
+  it("trims selected option text from nested markup", async () => {
+    renderFixture();
+    listbox().innerHTML = `
+      <div id="option-user" role="option" data-value="user-3">
+        <span class="font-semibold">User 3</span>
+      </div>
+    `;
+
+    application = await startController();
+    focusCombobox();
+
+    keydown("ArrowDown");
+    keydown("Enter");
+
+    expect(combobox()).toHaveValue("User 3");
+    expect(hidden()).toHaveValue("user-3");
+  });
+
   it("ignores keyboard and mouse input when aria-disabled is true", async () => {
     renderFixture({ disabled: true });
     application = await startController();
