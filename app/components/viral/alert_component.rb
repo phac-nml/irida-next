@@ -26,7 +26,7 @@ module Viral
     # @return [String, nil]
     attr_reader :message
     # @return [Boolean]
-    attr_reader :dismissible, :auto_dismiss, :announce_alert, :remove_on_dismiss
+    attr_reader :dismissible, :auto_dismiss, :announce_alert
     # @return [Integer]
     attr_reader :auto_dismiss_duration
 
@@ -55,12 +55,10 @@ module Viral
     # @param dismissible [Boolean] whether to render a close button
     # @param auto_dismiss [Boolean] whether to render a progress bar that a Stimulus controller can manage
     # @param auto_dismiss_duration [Integer] Manually set how long the alert takes to dismiss itself (in milliseconds)
-    # @param remove_on_dismiss [Boolean] whether dismissing removes the element from the DOM (false lets a parent
-    #   controller keep the markup for later reuse)
     # @param system_arguments [Hash] additional HTML attributes (classes are merged)
     # rubocop:disable Metrics/ParameterLists
     def initialize(type: TYPE_DEFAULT, message: nil, dismissible: true, auto_dismiss: false,
-                   auto_dismiss_duration: 5000, announce_alert: true, remove_on_dismiss: true, **system_arguments)
+                   auto_dismiss_duration: 5000, announce_alert: true, **system_arguments)
       # Normalize to canonical string type for styling and iconography
       @type = TYPE_MAPPINGS[type.to_sym] || TYPE_MAPPINGS[TYPE_DEFAULT]
       @message = message
@@ -68,7 +66,6 @@ module Viral
       @auto_dismiss = auto_dismiss
       @auto_dismiss_duration = auto_dismiss_duration
       @announce_alert = announce_alert
-      @remove_on_dismiss = remove_on_dismiss
       @system_arguments = system_arguments
       @system_arguments[:classes] =
         class_names('alert-component', classes_for_alert, @system_arguments[:classes])
@@ -170,7 +167,6 @@ module Viral
         'data-viral--alert-dismiss-button-id-value': dismiss_button_id,
         'data-viral--alert-auto-dismiss-duration-value': auto_dismiss_duration,
         'data-viral--alert-announce-alert-value': announce_alert,
-        'data-viral--alert-remove-on-dismiss-value': remove_on_dismiss,
         'data-viral--alert-dismissed-text-value': I18n.t('general.screen_reader.alert_dismissed')
       }
     end
