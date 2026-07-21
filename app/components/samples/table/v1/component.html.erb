@@ -225,21 +225,21 @@
 
           <p class="text-base leading-8 text-wrap text-slate-900 dark:text-white">
             <span data-message-type="wov" class="hidden">
-              <%= raw t(
+              <%= sanitize(t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
-              ) %>
+              ), tags: %w[kbd span], attributes: %w[class]) %>
             </span>
 
             <span data-message-type="woov" class="hidden">
-              <%= raw t(
+              <%= sanitize(t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
-              ) %>
+              ), tags: %w[kbd span], attributes: %w[class]) %>
             </span>
 
             <span data-message-type="wonv" class="hidden">
-              <%= raw t(
+              <%= sanitize(t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
-              ) %>
+              ), tags: %w[kbd span], attributes: %w[class]) %>
             </span>
           </p>
 
