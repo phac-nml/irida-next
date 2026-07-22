@@ -83,13 +83,32 @@
       id: conditions_form.field_id(:operator, "error") %>
     </div>
 
-    <%= render AdvancedSearch::V1::ValueComponent.new(
+    <% if @condition.operator == "=" %>
+      <%= render AdvancedSearch::V1::ValueComponent.new(
       conditions_form: conditions_form,
       group_index: @group_index,
       condition: @condition,
       condition_index: @condition_index,
       options: value_options,
+      label: :starting
     ) %>
+      <%= render AdvancedSearch::V1::ValueComponent.new(
+      conditions_form: conditions_form,
+      group_index: @group_index,
+      condition: @condition,
+      condition_index: @condition_index,
+      options: value_options,
+      label: :ending
+    ) %>
+    <% else %>
+      <%= render AdvancedSearch::V1::ValueComponent.new(
+      conditions_form: conditions_form,
+      group_index: @group_index,
+      condition: @condition,
+      condition_index: @condition_index,
+      options: value_options
+    ) %>
+    <% end %>
   <% end %>
 
   <button <%# herb:disable html-no-title-attribute %>
@@ -100,7 +119,6 @@
       dark:hover:text-white
     "
     aria-label="<%= t("components.advanced_search_component.v1.remove_condition_aria_label") %>"
-    title="<%= t("components.advanced_search_component.v1.remove_condition_aria_label") %>"
     data-action="advanced-search--v1#removeCondition"
   >
     <%= icon(:x, size: :sm) %>
