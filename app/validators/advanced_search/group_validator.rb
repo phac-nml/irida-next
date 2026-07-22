@@ -180,10 +180,10 @@ module AdvancedSearch
       condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
     end
 
-    def validate_date(condition, error_key = :value)
+    def validate_date(condition)
       DateTime.strptime(condition.value, '%Y-%m-%d')
     rescue StandardError
-      condition.errors.add error_key, :not_a_date
+      condition.errors.add :value, :not_a_date
     end
 
     def validate_unique_condition(group, condition, condition_index)
