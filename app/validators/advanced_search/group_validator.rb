@@ -15,9 +15,10 @@ module AdvancedSearch
     BETWEEN_OPERATORS = %w[between date_between numeric_between text_between].freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
-    METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals].freeze
+    METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals
+                                 date_between].freeze
     METADATA_NUMERIC_OPERATORS = %w[numeric_equals numeric_greater_than_equals numeric_less_than_equals
-                                    numeric_not_equals].freeze
+                                    numeric_not_equals numeric_between].freeze
     def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       return if empty_search?(record)
 
@@ -177,13 +178,27 @@ module AdvancedSearch
     end
 
     def validate_numeric(condition)
-      condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
+      Array(condition.value).each_with_index do |number, index|
+        error_key = condition.value.is_a?(Array) ? :"value[#{index}]" : :value
+        next if Float(number, exception: false)
+
+        condition.errors.add error_key,
+                             I18n.t('errors.messages.not_a_number')
+      end
     end
 
     def validate_date(condition)
-      DateTime.strptime(condition.value, '%Y-%m-%d')
-    rescue StandardError
-      condition.errors.add :value, :not_a_date
+      Array(condition.value).each_with_index do |date, index|
+        error_key = condition.value.is_a?(Array) ? :"value[#{index}]" : :value
+        begin
+          DateTime.strptime(date, '%Y-%m-%d')
+        rescue StandardError
+          condition.errors.add(
+            error_key,
+            I18n.t('activemodel.errors.models.advanced_search_condition.attributes.value.not_a_date')
+          )
+        end
+      end
     end
 
     def validate_unique_condition(group, condition, condition_index)
