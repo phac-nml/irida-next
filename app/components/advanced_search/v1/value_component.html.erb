@@ -81,7 +81,7 @@
 
     <%= render "shared/form/field_errors",
   errors: @condition.errors.full_messages_for(:'value[0]'),
-  id: @conditions_form.field_id(:value, "error") %>
+  id: @conditions_form.field_id(:starting_value, "error") %>
   </div>
   <div
     class="
@@ -98,10 +98,10 @@
                                 "aria-label": I18n.t('components.advanced_search_component.v1.ending_value'),
                                 "aria-invalid": invalid_ending_value,
                                 "aria-describedby":
-                                  @conditions_form.field_id(:"value[1]", "error") %>
+                                  @conditions_form.field_id(:ending_value, "error") %>
 
     <%= render "shared/form/field_errors",
   errors: @condition.errors.full_messages_for(:'value[1]'),
-  id: @conditions_form.field_id(:value, "error") %>
+  id: @conditions_form.field_id(:ending_value, "error") %>
   </div>
 <% end %>
