@@ -1,0 +1,14 @@
+<%= form_with(url: "#") do |form| %>
+  <label for="<%= form.field_id(:field) %>">Combobox with slots</label>
+
+  <%= render ComboboxComponent.new(
+    form: form,
+    field: :field,
+  ) do |combobox| %>
+    <% (1..50).each do |num| %>
+      <% combobox.with_option(value: num, label: "User #{num}", disabled: (num % 5).zero?, selected: (num == 3)) do %>
+        <span class="font-semibold text-slate-900 dark:text-slate-100">User <%= num %></span>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

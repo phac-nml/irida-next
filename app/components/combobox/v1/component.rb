@@ -73,7 +73,7 @@ module Combobox
       def selection_from_node(node, value_attribute:)
         return if node.blank?
 
-        { name: node.text.strip, value: node[value_attribute].to_s }
+        { name: node['data-label'] || node.text, value: node[value_attribute].to_s }
       end
 
       def empty_selection
@@ -128,6 +128,7 @@ module Combobox
           listbox_group_option['id'] = "#{@listbox_id}_option#{option_index}"
           listbox_group_option['role'] = 'option'
           listbox_group_option['data-value'] = option['value']
+          listbox_group_option['data-label'] = option.text
           listbox_group_option['aria-disabled'] = 'true' if option.key?('disabled')
           listbox_group_option.content = option.text
           option.replace(listbox_group_option)
