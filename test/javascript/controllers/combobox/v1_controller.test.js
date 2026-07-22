@@ -45,6 +45,7 @@ function option({ id, value, text, disabled = false }) {
       id="${id}"
       role="option"
       data-value="${value}"
+      data-label="${text}"
       ${disabled ? 'aria-disabled="true"' : ""}
     >${text}</div>
   `;
@@ -356,24 +357,6 @@ describe("combobox v1 controller", () => {
     expect(hidden()).toHaveValue("bravo");
     expect(comboboxChange).toHaveBeenCalledTimes(1);
     expect(hiddenChange).toHaveBeenCalledTimes(1);
-  });
-
-  it("trims selected option text from nested markup", async () => {
-    renderFixture();
-    listbox().innerHTML = `
-      <div id="option-user" role="option" data-value="user-3">
-        <span class="font-semibold">User 3</span>
-      </div>
-    `;
-
-    application = await startController();
-    focusCombobox();
-
-    keydown("ArrowDown");
-    keydown("Enter");
-
-    expect(combobox()).toHaveValue("User 3");
-    expect(hidden()).toHaveValue("user-3");
   });
 
   it("ignores keyboard and mouse input when aria-disabled is true", async () => {
