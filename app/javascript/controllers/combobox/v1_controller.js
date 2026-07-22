@@ -272,10 +272,12 @@ export default class extends Controller {
     this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
     this.#filter = option ? option.getAttribute("data-label") : "";
     this.comboboxTarget.value = this.#filter;
-    this.comboboxTarget.setSelectionRange(
-      this.#filter.length,
-      this.#filter.length,
-    );
+    if (this.#filter.length > 0) {
+      this.comboboxTarget.setSelectionRange(
+        this.#filter.length,
+        this.#filter.length,
+      );
+    }
     this.hiddenTarget.dispatchEvent(new Event("change", { bubbles: true }));
     this.comboboxTarget.dispatchEvent(new Event("change", { bubbles: true }));
     this.#updateIndicatorState();
