@@ -455,10 +455,7 @@ export default class extends Controller {
       return this.#selectionLimitMessage();
     }
 
-    return this.storageLimitMessageValue.replace(
-      "%{max}",
-      String(this.maxSelectionValue),
-    );
+    return this.storageLimitMessageValue;
   }
 
   #getStorageKey() {
