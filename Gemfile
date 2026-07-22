@@ -218,7 +218,7 @@ group :test do
   gem 'webmock'
 end
 
-gem 'activerecord-session_store', '~> 2.1'
+gem 'activerecord-session_store', '~> 2.3'
 
 gem 'minitest', '~> 5.27'
 
