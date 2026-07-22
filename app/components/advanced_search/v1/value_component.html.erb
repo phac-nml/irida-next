@@ -2,7 +2,7 @@
   @condition.operator.blank? ||
     %w[exists not_exists].include?(@condition.operator) %>
 
-<% if @condition.operator.blank? || @condition.operator != 'between' %>
+<% if @condition.operator.blank? || !@condition.operator.to_s.include?("between") %>
   <% invalid_value = @condition.errors.include?(:value) %>
   <div
     class="
