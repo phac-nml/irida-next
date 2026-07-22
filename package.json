@@ -17,7 +17,7 @@
     "jsdom": "^29.1.1",
     "playwright": "1.60.0",
     "prettier": "^3.9.6",
-    "prettier-plugin-tailwindcss": "^0.8.0",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "vite": "^8.1.5",
     "vitest": "^4.1.10"
   },
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@activeadmin/activeadmin": "4.0.0-beta22",
-    "@tailwindcss/cli": "4.3.2",
+    "@tailwindcss/cli": "4.3.3",
     "@tailwindcss/forms": "^0.5.11",
     "flowbite": "^3.1.2",
     "tailwindcss": "4.3.3"
