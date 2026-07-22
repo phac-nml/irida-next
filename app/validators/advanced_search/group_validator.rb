@@ -95,13 +95,20 @@ module AdvancedSearch
       group.errors.add :base, :invalid
     end
 
-    def validate_blank_inputs(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+    def validate_blank_inputs(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       if condition.field.blank?
         condition.errors.add :field, :blank
         return
       end
 
       condition.errors.add :operator, :blank if condition.operator.blank?
+
+      if condition.operator.to_s.include?('between') && condition.value.include?('')
+        condition.errors.add :'value[0]', I18n.t('errors.messages.blank') if condition.value[0].blank?
+
+        condition.errors.add :'value[1]', I18n.t('errors.messages.blank') if condition.value[1].blank?
+        return
+      end
 
       return unless condition.operator.present? && (
         (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) ||

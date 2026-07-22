@@ -83,32 +83,13 @@
       id: conditions_form.field_id(:operator, "error") %>
     </div>
 
-    <% if @condition.operator.to_s.include?("between") %>
-      <%= render AdvancedSearch::V1::ValueComponent.new(
-      conditions_form: conditions_form,
-      group_index: @group_index,
-      condition: @condition,
-      condition_index: @condition_index,
-      options: value_options,
-      label: :starting
-    ) %>
-      <%= render AdvancedSearch::V1::ValueComponent.new(
-      conditions_form: conditions_form,
-      group_index: @group_index,
-      condition: @condition,
-      condition_index: @condition_index,
-      options: value_options,
-      label: :ending
-    ) %>
-    <% else %>
-      <%= render AdvancedSearch::V1::ValueComponent.new(
+    <%= render AdvancedSearch::V1::ValueComponent.new(
       conditions_form: conditions_form,
       group_index: @group_index,
       condition: @condition,
       condition_index: @condition_index,
       options: value_options
     ) %>
-    <% end %>
   <% end %>
 
   <button
