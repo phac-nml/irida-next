@@ -22,6 +22,8 @@ en:
         operator: Operator
         starting_value: Starting Value
         value: Value
+        value[0]: Starting Value
+        value[1]: Ending Value
       sample/search_group:
         condition: Condition
       workflow_execution/search_condition:
@@ -30,6 +32,8 @@ en:
         operator: Operator
         starting_value: Starting Value
         value: Value
+        value[0]: Starting Value
+        value[1]: Ending Value
       workflow_execution/search_group:
         condition: Condition
     errors:
