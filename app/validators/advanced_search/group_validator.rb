@@ -14,6 +14,7 @@ module AdvancedSearch
                              metadata_numeric_gleqt: %w[numeric_greater_than_equals numeric_less_than_equals],
                              text_starts_ends_with: %w[text_ends_with text_starts_with] }.freeze
     EXISTS_OPERATORS = %w[exists not_exists].freeze
+    BETWEEN_OPERATORS = %w[between date_between numeric_between text_between].freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
     METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals].freeze
@@ -44,11 +45,19 @@ module AdvancedSearch
           condition.errors.each do |error|
             next if error.attribute.eql? :base
 
+            attribute = if error.attribute == :'value[0]'
+                          'starting_value'
+                        elsif error.attribute == :'value[1]'
+                          'ending_value'
+                        else
+                          error.attribute
+                        end
+
             record.errors.add format(
               GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT,
               group_index: group_index,
               condition_index: condition_index,
-              attribute: error.attribute
+              attribute:
             ).to_sym,
                               error.message
           end
@@ -108,7 +117,7 @@ module AdvancedSearch
 
       condition.errors.add :operator, :blank if condition.operator.blank?
 
-      if condition.operator.to_s.include?('between') && condition.value.include?('')
+      if BETWEEN_OPERATORS.includes?(condition.operator) && condition.value.include?('')
         condition.errors.add :'value[0]', I18n.t('errors.messages.blank') if condition.value[0].blank?
 
         condition.errors.add :'value[1]', I18n.t('errors.messages.blank') if condition.value[1].blank?
@@ -201,7 +210,7 @@ module AdvancedSearch
       end
 
       if COMBINABLE_OPERATORS.values.flatten.include?(condition.operator)
-        validate_between(condition, common_field_conditions)
+        validate_glteq(condition, common_field_conditions)
       elsif condition.field.present?
         validate_uniqueness(condition, common_field_conditions)
       end
@@ -213,7 +222,7 @@ module AdvancedSearch
       unique_field_condition.errors.add :field, :taken
     end
 
-    def validate_between(unique_field_condition, common_field_conditions)
+    def validate_glteq(unique_field_condition, common_field_conditions)
       return unless common_field_conditions.count == 2
 
       operators = common_field_conditions.map(&:operator).sort
