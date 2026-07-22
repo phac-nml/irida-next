@@ -1,34 +1,34 @@
-<% invalid_value = @condition.errors.include?(:value) %>
-
 <% operator_exists =
   @condition.operator.blank? ||
     %w[exists not_exists].include?(@condition.operator) %>
 
-<div
-  class="
-    value form-field w-full <%= 'invalid' if invalid_value %>
-    <%= 'invisible @max-xl:hidden' if operator_exists %>
-  "
->
-  <%= @conditions_form.label @label, data: { required: true } %>
+<% if @condition.operator.blank? || @condition.operator != 'between' %>
+  <% invalid_value = @condition.errors.include?(:value) %>
+  <div
+    class="
+      value form-field w-full <%= 'invalid' if invalid_value %>
+      <%= 'invisible @max-xl:hidden' if operator_exists %>
+    "
+  >
+    <%= @conditions_form.label :value, data: { required: true } %>
 
-  <% if %w[in not_in].include?(@condition.operator) %>
-    <% if @options.nil? %>
-      <div
-        data-controller="list-input"
-        data-list-input-filters-value="<%= ERB::Util.json_escape(@condition.value.present? ? @condition.value.to_json : '[]') %>"
-        class="list-input"
-      >
-        <%= render ListInputComponent.new(
+    <% if %w[in not_in].include?(@condition.operator) %>
+      <% if @options.nil? %>
+        <div
+          data-controller="list-input"
+          data-list-input-filters-value="<%= ERB::Util.json_escape(@condition.value.present? ? @condition.value.to_json : '[]') %>"
+          class="list-input"
+        >
+          <%= render ListInputComponent.new(
           list_input_form_name: @conditions_form.field_name(:value, multiple: true),
           id: @conditions_form.field_id(:value),
           show_description: false,
           "aria-invalid": invalid_value,
           "aria-describedby": @conditions_form.field_id(:value, "error"),
         ) %>
-      </div>
-    <% else %>
-      <%= @conditions_form.select :value,
+        </div>
+      <% else %>
+        <%= @conditions_form.select :value,
                                  options_for_select(@options, selected_values),
                                  { include_hidden: false },
                                  {
@@ -37,17 +37,15 @@
                                    "aria-invalid": invalid_value,
                                    "aria-describedby": @conditions_form.field_id(:value, "error")
                                  } %>
-    <% end %>
-  <% elsif @options.nil? %>
-    <%= @conditions_form.text_field :value,
-    id: "#{@conditions_form.field_id(@label)}",
-    multiple: @label != :value,
+      <% end %>
+    <% elsif @options.nil? %>
+      <%= @conditions_form.text_field :value,
                                 "aria-label": value_label,
                                 "aria-invalid": invalid_value,
                                 "aria-describedby":
                                   @conditions_form.field_id(:value, "error") %>
-  <% else %>
-    <%= @conditions_form.select :value,
+    <% else %>
+      <%= @conditions_form.select :value,
                                options_for_select(@options, selected_values.first),
                                { include_blank: true },
                                {
@@ -55,9 +53,55 @@
                                  "aria-invalid": invalid_value,
                                  "aria-describedby": @conditions_form.field_id(:value, "error")
                                } %>
-  <% end %>
+    <% end %>
 
-  <%= render "shared/form/field_errors",
+    <%= render "shared/form/field_errors",
   errors: @condition.errors.full_messages_for(:value),
   id: @conditions_form.field_id(:value, "error") %>
-</div>
+  </div>
+<% else %>
+  <% invalid_starting_value = @condition.errors.include?(:"value[0]") %>
+  <% invalid_ending_value = @condition.errors.include?(:"value[1]") %>
+  <div
+    class="
+      value form-field w-full <%= 'invalid' if invalid_starting_value %>
+      <%= 'invisible @max-xl:hidden' if operator_exists %>
+    "
+  >
+    <%= @conditions_form.label :"value[0]", data: { required: true } %>
+
+    <%= @conditions_form.text_field :value,
+    id: "#{@conditions_form.field_id(:"value[0]")}",
+    multiple: true,
+    value:  @condition.value.blank? ? nil : @condition.value[0],
+                                "aria-label": :"value[0]",
+                                "aria-invalid": invalid_starting_value,
+                                "aria-describedby":
+                                  @conditions_form.field_id(:"value[0]", "error") %>
+
+    <%= render "shared/form/field_errors",
+  errors: @condition.errors.full_messages_for(:'value[0]'),
+  id: @conditions_form.field_id(:value, "error") %>
+  </div>
+  <div
+    class="
+      value form-field w-full <%= 'invalid' if invalid_ending_value %>
+      <%= 'invisible @max-xl:hidden' if operator_exists %>
+    "
+  >
+    <%= @conditions_form.label :"value[1]", data: { required: true } %>
+
+    <%= @conditions_form.text_field :value,
+    id: "#{@conditions_form.field_id(:"value[1]")}",
+    multiple: true,
+    value: @condition.value.blank? ? nil : @condition.value[1],
+                                "aria-label": :"value[1]",
+                                "aria-invalid": invalid_ending_value,
+                                "aria-describedby":
+                                  @conditions_form.field_id(:"value[1]", "error") %>
+
+    <%= render "shared/form/field_errors",
+  errors: @condition.errors.full_messages_for(:'value[1]'),
+  id: @conditions_form.field_id(:value, "error") %>
+  </div>
+<% end %>
