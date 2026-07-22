@@ -550,7 +550,7 @@ module DataExports
       }
 
       max_bytes = Irida::CurrentSettings.max_data_export_size_gigabytes.gigabytes
-      DataExports::ExportSourceSizeCalculator.any_instance.stubs(:execute).returns(max_bytes - 1)
+      DataExport.any_instance.stubs(:source_size_bytes).returns(max_bytes - 1)
 
       assert_enqueued_jobs(1, only: DataExports::CreateJob) do
         assert_difference -> { DataExport.count } => 1 do
@@ -570,7 +570,7 @@ module DataExports
       }
 
       max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
-      DataExports::ExportSourceSizeCalculator.any_instance.stubs(:execute).returns(max_gigabytes.gigabytes)
+      DataExport.any_instance.stubs(:source_size_bytes).returns(max_gigabytes.gigabytes)
 
       assert_enqueued_jobs(0, only: DataExports::CreateJob) do
         assert_no_difference -> { DataExport.count } do
@@ -593,7 +593,7 @@ module DataExports
       }
 
       max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
-      DataExports::ExportSourceSizeCalculator.any_instance.stubs(:execute).returns(max_gigabytes.gigabytes + 1)
+      DataExport.any_instance.stubs(:source_size_bytes).returns(max_gigabytes.gigabytes + 1)
 
       assert_enqueued_jobs(0, only: DataExports::CreateJob) do
         assert_no_difference -> { DataExport.count } do

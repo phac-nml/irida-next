@@ -13,14 +13,16 @@ module DataExports
     def execute
       @data_export = DataExport.new(params)
       assign_initial_export_attributes
+      # Authorize selected IDs before querying attachment sizes for the limit check.
+      @data_export.skip_source_size_validation = true
 
       if @data_export.valid?
         @data_export.export_type == 'analysis' ? validate_analysis_ids : validate_sample_ids
 
         return @data_export if @data_export.errors.any?
 
-        @data_export.save
-        DataExports::CreateJob.perform_later(@data_export)
+        @data_export.skip_source_size_validation = false
+        DataExports::CreateJob.perform_later(@data_export) if @data_export.save
       end
 
       @data_export
