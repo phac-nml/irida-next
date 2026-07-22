@@ -112,7 +112,7 @@ module AdvancedSearch
 
       condition.errors.add :operator, :blank if condition.operator.blank?
 
-      if BETWEEN_OPERATORS.includes?(condition.operator) && condition.value.include?('')
+      if BETWEEN_OPERATORS.include?(condition.operator) && condition.value.include?('')
         condition.errors.add :'value[0]', I18n.t('errors.messages.blank') if condition.value[0].blank?
 
         condition.errors.add :'value[1]', I18n.t('errors.messages.blank') if condition.value[1].blank?
@@ -180,10 +180,10 @@ module AdvancedSearch
       condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
     end
 
-    def validate_date(condition)
+    def validate_date(condition, error_key = :value)
       DateTime.strptime(condition.value, '%Y-%m-%d')
     rescue StandardError
-      condition.errors.add :value, :not_a_date
+      condition.errors.add error_key, :not_a_date
     end
 
     def validate_unique_condition(group, condition, condition_index)
