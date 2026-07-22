@@ -14,8 +14,7 @@ module SelectionLimitableTable
         max: Irida::SelectionLimits::MAX_COUNT
       ),
       'selection-storage-limit-message-value': I18n.t(
-        'components.selection.limit.storage_full',
-        max: Irida::SelectionLimits::MAX_COUNT
+        'components.selection.limit.storage_full'
       )
     }
   end
