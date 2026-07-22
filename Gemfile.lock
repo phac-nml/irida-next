@@ -496,7 +496,7 @@ GEM
       omniauth (~> 2.1)
       ruby-saml (~> 1.18)
     openssl (4.0.2)
-    opentelemetry-api (1.10.1)
+    opentelemetry-api (1.11.0)
       logger
     opentelemetry-common (0.25.1)
       opentelemetry-api (~> 1.0)
