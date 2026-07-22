@@ -68,16 +68,16 @@
       <%= 'invisible @max-xl:hidden' if operator_exists %>
     "
   >
-    <%= @conditions_form.label :"value[0]", data: { required: true } %>
+    <%= @conditions_form.label :"starting_value", data: { required: true } %>
 
     <%= @conditions_form.text_field :value,
-    id: "#{@conditions_form.field_id(:"value[0]")}",
+    id: "#{@conditions_form.field_id(:"starting_value")}",
     multiple: true,
     value:  @condition.value.blank? ? nil : @condition.value[0],
-                                "aria-label": :"value[0]",
+                                "aria-label":  I18n.t('components.advanced_search_component.v1.starting_value'),
                                 "aria-invalid": invalid_starting_value,
                                 "aria-describedby":
-                                  @conditions_form.field_id(:"value[0]", "error") %>
+                                  @conditions_form.field_id(:"starting_value.", "error") %>
 
     <%= render "shared/form/field_errors",
   errors: @condition.errors.full_messages_for(:'value[0]'),
@@ -89,13 +89,13 @@
       <%= 'invisible @max-xl:hidden' if operator_exists %>
     "
   >
-    <%= @conditions_form.label :"value[1]", data: { required: true } %>
+    <%= @conditions_form.label :"ending_value", data: { required: true } %>
 
     <%= @conditions_form.text_field :value,
-    id: "#{@conditions_form.field_id(:"value[1]")}",
+    id: "#{@conditions_form.field_id(:"ending_value")}",
     multiple: true,
     value: @condition.value.blank? ? nil : @condition.value[1],
-                                "aria-label": :"value[1]",
+                                "aria-label": I18n.t('components.advanced_search_component.v1.ending_value'),
                                 "aria-invalid": invalid_ending_value,
                                 "aria-describedby":
                                   @conditions_form.field_id(:"value[1]", "error") %>
