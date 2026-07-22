@@ -52,7 +52,12 @@ module AdvancedSearch
       'text_starts_with' => :apply_condition_starts_with,
       # ends_with operators
       'ends_with' => :apply_condition_ends_with,
-      'text_ends_with' => :apply_condition_ends_with
+      'text_ends_with' => :apply_condition_ends_with,
+      # between operators
+      'between' => :apply_condition_between,
+      'date_between' => :apply_condition_date_between,
+      'numeric_between' => :apply_condition_numeric_between,
+      'text_between' => :apply_condition_text_between
     }.freeze
 
     private
@@ -146,6 +151,22 @@ module AdvancedSearch
 
     def apply_condition_ends_with(scope, node, value, field_name)
       condition_ends_with(scope, node, value, model_class, field_name)
+    end
+
+    def apply_condition_between(scope, node, value, _field_name)
+      condition_between(scope, node, value)
+    end
+
+    def apply_condition_date_between(scope, node, value, _field_name)
+      condition_date_between(scope, node, value)
+    end
+
+    def apply_condition_numeric_between(scope, node, value, _field_name)
+      condition_numeric_between(scope, node, value)
+    end
+
+    def apply_condition_text_between(scope, node, value, _field_name)
+      condition_text_between(scope, node, value)
     end
 
     def normalize_condition_field(condition)
