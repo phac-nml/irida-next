@@ -138,6 +138,7 @@ en:
               text: Text options
             operations:
               date:
+                date_between: date between
                 date_equals: date equals
                 date_exists: date exists
                 date_greater_than_equals: date greater than equals
@@ -145,6 +146,7 @@ en:
                 date_not_equals: date not equals
                 date_not_exists: date not exists
               numeric:
+                numeric_between: numeric between
                 numeric_equals: numeric equals
                 numeric_exists: numeric exists
                 numeric_greater_than_equals: numeric greater than equals
@@ -152,6 +154,7 @@ en:
                 numeric_not_equals: numeric not equals
                 numeric_not_exists: numeric not exists
               text:
+                text_between: text between
                 text_contains: text contains
                 text_ends_with: text ends with
                 text_equals: text equals

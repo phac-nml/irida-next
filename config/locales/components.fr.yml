@@ -138,6 +138,7 @@ fr:
               text: Options de texte
             operations:
               date:
+                date_between: date comprise entre
                 date_equals: date est égale à
                 date_exists: date existe
                 date_greater_than_equals: date supérieure ou égale
@@ -145,6 +146,7 @@ fr:
                 date_not_equals: date différente de
                 date_not_exists: date n'existe pas
               numeric:
+                numeric_between: numérique compris entre
                 numeric_equals: égal à une valeur numérique
                 numeric_exists: numeric existe
                 numeric_greater_than_equals: numérique supérieur ou égal
@@ -152,6 +154,7 @@ fr:
                 numeric_not_equals: différent (numérique)
                 numeric_not_exists: numérique inexistant
               text:
+                text_between: texte entre
                 text_contains: texte contient
                 text_ends_with: le texte se termine par
                 text_equals: texte est égal à
