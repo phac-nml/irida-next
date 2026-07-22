@@ -48,7 +48,8 @@ module AdvancedSearch
           I18n.t('components.advanced_search_component.v1.operations.standard.in') => 'in',
           I18n.t('components.advanced_search_component.v1.operations.standard.not_in') => 'not_in',
           I18n.t('components.advanced_search_component.v1.operations.standard.starts_with') => 'starts_with',
-          I18n.t('components.advanced_search_component.v1.operations.standard.ends_with') => 'ends_with'
+          I18n.t('components.advanced_search_component.v1.operations.standard.ends_with') => 'ends_with',
+          I18n.t('components.advanced_search_component.v1.operations.standard.between') => 'between'
         } }
 
         return standard_operations unless Flipper.enabled?(:advanced_search_metadata_operators)

@@ -157,6 +157,7 @@ en:
                 text_not_in: text not in
                 text_starts_with: text starts with
           standard:
+            between: between
             contains: contains
             does_not_contain: does not contain
             ends_with: ends with
