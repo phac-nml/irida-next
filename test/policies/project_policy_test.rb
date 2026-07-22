@@ -12,85 +12,243 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
   test '#read?' do
     assert @policy.apply(:read?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert policy.apply(:read?)
   end
 
   test '#edit?' do
     assert @policy.apply(:edit?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:edit?)
   end
 
   test '#new?' do
     assert @policy.apply(:new?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert policy.apply(:new?)
   end
 
   test '#update?' do
     assert @policy.apply(:update?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:update?)
   end
 
   test '#activity?' do
     assert @policy.apply(:activity?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert policy.apply(:activity?)
   end
 
   test '#destroy?' do
     assert @policy.apply(:destroy?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert policy.apply(:destroy?)
   end
 
   test '#transfer?' do
     assert @policy.apply(:transfer?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:transfer?)
   end
 
   test '#sample_listing?' do
     assert @policy.apply(:sample_listing?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert policy.apply(:sample_listing?)
   end
 
   test '#create_sample?' do
     assert @policy.apply(:create_sample?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:create_sample?)
   end
 
   test '#update_sample?' do
     assert @policy.apply(:update_sample?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:update_sample?)
   end
 
   test '#transfer_sample?' do
     assert @policy.apply(:transfer_sample?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:transfer_sample?)
   end
 
   test '#destroy_sample?' do
     assert @policy.apply(:destroy_sample?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:destroy_sample?)
   end
 
   test '#read_sample?' do
     assert @policy.apply(:read_sample?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert policy.apply(:read_sample?)
   end
 
   test '#transfer_sample_into_project?' do
     assert @policy.apply(:transfer_sample_into_project?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:transfer_sample_into_project?)
   end
 
   test '#clone_sample?' do
     assert @policy.apply(:clone_sample?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:clone_sample?)
   end
 
   test '#clone_sample_into_project?' do
     assert @policy.apply(:clone_sample_into_project?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:clone_sample_into_project?)
   end
   test '#export_data?' do
     assert @policy.apply(:export_data?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:export_data?)
   end
 
   test '#submit_workflow?' do
     assert @policy.apply(:submit_workflow?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:submit_workflow?)
+  end
+
+  test '#view_history?' do
+    assert @policy.apply(:view_history?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert policy.apply(:view_history?)
   end
 
   test '#view_attachments?' do
     assert @policy.apply(:view_attachments?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert policy.apply(:view_attachments?)
   end
 
   test '#create_attachment?' do
     assert @policy.apply(:create_attachment?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:create_attachment?)
   end
 
   test '#destroy_attachment?' do
     assert @policy.apply(:destroy_attachment?)
+
+    @project.namespace.archived_at = Time.zone.now
+    @project.namespace.save!
+
+    policy = ProjectPolicy.new(@project, user: @user)
+
+    assert_not policy.apply(:destroy_attachment?)
   end
 
   test 'scope' do
@@ -109,6 +267,24 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     # group link between one of his groups and group_one
     # and one project of their own under david_doe_group_four
     assert_equal 23, scoped_projects.count
+  end
+
+  test 'scope archived projects' do
+    scoped_projects = @policy.apply_scope(Project, type: :relation)
+    # John Doe has access to 33 projects. 32 through his namespace
+    # and projects under groups in which he is a member plus a project
+    # from David Doe's Group Four which is shared with subgroup 1 under
+    # John Doe's group Group 1
+    assert_equal 40, scoped_projects.count
+
+    project = projects(:project1)
+    project.namespace.archived_at = Time.zone.now
+    project.namespace.save
+
+    scoped_projects = @policy.apply_scope(Project, type: :relation, name: :archived_projects)
+
+    # John doe has access to 1 archived project
+    assert_equal 1, scoped_projects.count
   end
 
   test 'scope expired memberships' do

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 # Policy for workflow execution authorization
-class WorkflowExecutionPolicy < ApplicationPolicy
+class WorkflowExecutionPolicy < ApplicationPolicy # rubocop:disable Metrics/ClassLength
+  pre_check :check_project_archived, only: %i[create?]
+
   def effective_access_level(current_user = user)
     return unless record.instance_of?(WorkflowExecution)
 
@@ -144,5 +146,13 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     group = options[:group]
 
     relation.where(namespace_id: group.id, shared_with_namespace: true)
+  end
+
+  private
+
+  def check_project_archived
+    return unless record.namespace.type == Namespaces::ProjectNamespace.sti_name
+
+    deny! if record.namespace.archived_at.present?
   end
 end
