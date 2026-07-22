@@ -17,19 +17,19 @@ fr:
       sample/query:
         group: Groupe
       sample/search_condition:
-        ending_value: Valeur finale
         field: Champ
         operator: Opérateur
-        starting_value: Valeur initiale
         value: Valeur
+        value[0]: Valeur initiale
+        value[1]: Valeur finale
       sample/search_group:
         condition: Condition
       workflow_execution/search_condition:
-        ending_value: Valeur finale
         field: Champ
         operator: Opérateur
-        starting_value: Valeur initiale
         value: Valeur
+        value[0]: Valeur initiale
+        value[1]: Valeur finale
       workflow_execution/search_group:
         condition: Condition
     errors:

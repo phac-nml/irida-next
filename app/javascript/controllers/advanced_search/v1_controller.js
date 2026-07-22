@@ -172,6 +172,7 @@ export default class AdvancedSearchController extends Controller {
   }
 
   handleOperatorChange(event) {
+    console.log("change");
     const operator = event.target.value;
     const condition = event.target.closest(this.#conditionSelector);
     const group = condition?.closest(this.#groupSelector);
@@ -179,7 +180,7 @@ export default class AdvancedSearchController extends Controller {
     if (!condition || !group) {
       return;
     }
-
+    console.log("pass return 1");
     const value = this.#getValueInput(condition);
     const groupIndex = this.#groupElements().indexOf(group);
     const conditionIndex = this.#conditionElements(group).indexOf(condition);
@@ -593,7 +594,7 @@ export default class AdvancedSearchController extends Controller {
 
   #getValueInput(condition) {
     const values = condition.querySelectorAll(".value");
-
+    console.log(values);
     if (values.length === 0) {
       return null;
       // handles removing second input for between operator
