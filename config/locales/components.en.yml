@@ -138,16 +138,19 @@ en:
               text: Text options
             operations:
               date:
+                date_between: date between
                 date_equals: date equals
                 date_greater_than_equals: date greater than equals
                 date_less_than_equals: date less than equals
                 date_not_equals: date not equals
               numeric:
+                numeric_between: numeric between
                 numeric_equals: numeric equals
                 numeric_greater_than_equals: numeric greater than equals
                 numeric_less_than_equals: numeric less than equals
                 numeric_not_equals: numeric not equals
               text:
+                text_between: text between
                 text_contains: text contains
                 text_equals: text equals
                 text_in: text in

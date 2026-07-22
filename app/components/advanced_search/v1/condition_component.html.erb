@@ -83,7 +83,7 @@
       id: conditions_form.field_id(:operator, "error") %>
     </div>
 
-    <% if @condition.operator == "=" %>
+    <% if @condition.operator.to_s.include?("between") %>
       <%= render AdvancedSearch::V1::ValueComponent.new(
       conditions_form: conditions_form,
       group_index: @group_index,
