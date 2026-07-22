@@ -8,10 +8,11 @@ module Combobox
         <%= tag.div(
           role: "option",
           "data-value": @value,
+          "data-label": @label,
           "data-selected": @selected ? "true" : nil,
           "aria-disabled": @disabled ? "true" : nil,
         ) do %>
-          <%= content.presence || @label %>
+          <%= content.presence %>
         <% end %>
       ERB
 
