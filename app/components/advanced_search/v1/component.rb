@@ -46,7 +46,8 @@ module AdvancedSearch
           I18n.t('components.advanced_search_component.v1.operations.standard.exists') => 'exists',
           I18n.t('components.advanced_search_component.v1.operations.standard.not_exists') => 'not_exists',
           I18n.t('components.advanced_search_component.v1.operations.standard.in') => 'in',
-          I18n.t('components.advanced_search_component.v1.operations.standard.not_in') => 'not_in'
+          I18n.t('components.advanced_search_component.v1.operations.standard.not_in') => 'not_in',
+          I18n.t('components.advanced_search_component.v1.operations.standard.between') => 'between'
         } }
 
         return standard_operations unless Flipper.enabled?(:advanced_search_metadata_operators)

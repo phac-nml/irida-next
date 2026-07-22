@@ -10,7 +10,7 @@
     <%= 'invisible @max-xl:hidden' if operator_exists %>
   "
 >
-  <%= @conditions_form.label :value, data: { required: true } %>
+  <%= @conditions_form.label @label, data: { required: true } %>
 
   <% if %w[in not_in].include?(@condition.operator) %>
     <% if @options.nil? %>
@@ -40,6 +40,8 @@
     <% end %>
   <% elsif @options.nil? %>
     <%= @conditions_form.text_field :value,
+    id: "#{@conditions_form.field_id(@label)}",
+    multiple: @label != :value,
                                 "aria-label": value_label,
                                 "aria-invalid": invalid_value,
                                 "aria-describedby":

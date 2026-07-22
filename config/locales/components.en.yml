@@ -155,6 +155,7 @@ en:
                 text_not_equals: text not equals
                 text_not_in: text not in
           standard:
+            between: between
             contains: contains
             does_not_contain: does not contain
             equals: "="
