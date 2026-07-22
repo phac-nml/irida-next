@@ -9,8 +9,10 @@ en:
       groups/transfer_form:
         new_parent_id: Parent group
       groups_attributes/conditions_attributes:
+        ending_value: Group %{group_index} Condition %{condition_index} Ending Value
         field: Group %{group_index} Condition %{condition_index} Field
         operator: Group %{group_index} Condition %{condition_index} Operator
+        starting_value: Group %{group_index} Condition %{condition_index} Starting Value
         value: Group %{group_index} Condition %{condition_index} Value
       projects/transfer_form:
         new_namespace_id: New namespace
