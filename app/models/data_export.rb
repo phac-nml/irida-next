@@ -11,6 +11,9 @@ class DataExport < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_one_attached :file, dependent: :purge_later
 
+  # Used by CreateService so authorization can run before the source-size query.
+  attr_accessor :skip_source_size_validation
+
   validates :status, presence: true, acceptance: { accept: %w[processing ready] }
   validates :export_type, presence: true, acceptance: { accept: %w[sample analysis linelist] }
   validates :export_parameters, presence: true
@@ -32,6 +35,18 @@ class DataExport < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def self.icon
     :export
+  end
+
+  # Source-file byte total for limit checks, without downloading files.
+  def source_size_bytes
+    case export_type
+    when 'sample'
+      sample_export_source_size
+    when 'analysis'
+      analysis_export_source_size
+    else
+      0
+    end
   end
 
   private
@@ -113,6 +128,7 @@ class DataExport < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def validate_source_size?
+    return false if skip_source_size_validation
     return false if export_type.blank? || export_type == 'linelist' || export_parameters.blank?
 
     errors.empty?
@@ -121,7 +137,7 @@ class DataExport < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def validate_source_size
     max_data_export_size_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
 
-    return if export_source_size_bytes < max_data_export_size_gigabytes.gigabytes
+    return if source_size_bytes < max_data_export_size_gigabytes.gigabytes
 
     errors.add(
       :base,
@@ -133,10 +149,53 @@ class DataExport < ApplicationRecord # rubocop:disable Metrics/ClassLength
     )
   end
 
-  def export_source_size_bytes
-    DataExports::ExportSourceSizeCalculator.new(
-      export_type:,
-      export_parameters:
-    ).execute
+  def sample_export_source_size
+    sample_attachment_scope.sum('active_storage_blobs.byte_size')
+  end
+
+  def analysis_export_source_size
+    workflow_execution_output_scope.sum('active_storage_blobs.byte_size') +
+      sample_workflow_execution_output_scope.sum('active_storage_blobs.byte_size')
+  end
+
+  def sample_attachment_scope
+    scope = attachments_scope.where(
+      attachable_type: 'Sample',
+      attachable_id: selected_ids
+    )
+
+    return scope if all_attachment_formats_selected?
+
+    scope.where("attachments.metadata ->> 'format' IN (?)", selected_attachment_formats)
+  end
+
+  def all_attachment_formats_selected?
+    (Attachment::FORMAT_REGEX.keys - selected_attachment_formats).empty?
+  end
+
+  def workflow_execution_output_scope
+    attachments_scope.where(
+      attachable_type: 'WorkflowExecution',
+      attachable_id: selected_ids
+    )
+  end
+
+  def sample_workflow_execution_output_scope
+    attachments_scope.where(
+      attachable_type: 'SamplesWorkflowExecution',
+      attachable_id: SamplesWorkflowExecution.where(workflow_execution_id: selected_ids).select(:id)
+    )
+  end
+
+  def attachments_scope
+    Attachment.joins(:file_blob)
+  end
+
+  def selected_ids
+    Array((export_parameters || {})['ids'])
+  end
+
+  def selected_attachment_formats
+    Array((export_parameters || {})['attachment_formats'])
   end
 end

@@ -217,7 +217,7 @@ class DataExportTest < ActiveSupport::TestCase
                                                       attachment_formats: Attachment::FORMAT_REGEX.keys })
 
     max_bytes = Irida::CurrentSettings.max_data_export_size_gigabytes.gigabytes
-    DataExports::ExportSourceSizeCalculator.any_instance.stubs(:execute).returns(max_bytes - 1)
+    data_export.stubs(:source_size_bytes).returns(max_bytes - 1)
 
     assert data_export.valid?
   end
@@ -229,7 +229,7 @@ class DataExportTest < ActiveSupport::TestCase
                                                       attachment_formats: Attachment::FORMAT_REGEX.keys })
 
     max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
-    DataExports::ExportSourceSizeCalculator.any_instance.stubs(:execute).returns(max_gigabytes.gigabytes)
+    data_export.stubs(:source_size_bytes).returns(max_gigabytes.gigabytes)
 
     assert_not data_export.valid?
     assert_includes data_export.errors.full_messages,
@@ -238,14 +238,100 @@ class DataExportTest < ActiveSupport::TestCase
   end
 
   test 'linelist export does not perform source size validation on create' do
-    DataExports::ExportSourceSizeCalculator.any_instance.expects(:execute).never
-
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'linelist',
                                  export_parameters: { ids: [@sample1.id],
                                                       namespace_id: @project1.namespace.id,
                                                       linelist_format: 'csv' })
+    data_export.expects(:source_size_bytes).never
 
     assert data_export.valid?
+  end
+
+  test 'source_size_bytes totals selected attachment formats only for sample exports' do
+    sample22 = samples(:sample22)
+    sample3 = samples(:sample3)
+
+    expected = sample22.attachments.select { |attachment| attachment.metadata['format'] == 'fastq' }
+                                   .sum { |attachment| attachment.file.byte_size }
+
+    data_export = DataExport.new(
+      export_type: 'sample',
+      export_parameters: { 'ids' => [sample22.id, sample3.id], 'attachment_formats' => ['fastq'] }
+    )
+
+    assert_equal expected, data_export.source_size_bytes
+  end
+
+  test 'source_size_bytes totals all attachments when every format is selected' do
+    sample22 = samples(:sample22)
+
+    expected = sample22.attachments.sum { |attachment| attachment.file.byte_size }
+
+    data_export = DataExport.new(
+      export_type: 'sample',
+      export_parameters: { 'ids' => [sample22.id], 'attachment_formats' => Attachment::FORMAT_REGEX.keys }
+    )
+
+    assert_equal expected, data_export.source_size_bytes
+  end
+
+  test 'source_size_bytes totals zero when no formats are selected' do
+    data_export = DataExport.new(
+      export_type: 'sample',
+      export_parameters: { 'ids' => [@sample1.id], 'attachment_formats' => [] }
+    )
+
+    assert_equal 0, data_export.source_size_bytes
+  end
+
+  test 'source_size_bytes totals workflow and per-sample outputs for analysis exports' do
+    workflow_output_size = @workflow_execution.outputs.sum { |output| output.file.byte_size }
+    sample_output_size = @workflow_execution.samples_workflow_executions.sum do |samples_workflow_execution|
+      samples_workflow_execution.outputs.sum { |output| output.file.byte_size }
+    end
+
+    data_export = DataExport.new(
+      export_type: 'analysis',
+      export_parameters: { 'ids' => [@workflow_execution.id] }
+    )
+
+    assert_equal workflow_output_size + sample_output_size, data_export.source_size_bytes
+  end
+
+  test 'source_size_bytes returns zero when export has no source files' do
+    workflow_execution = workflow_executions(:workflow_execution_valid)
+
+    data_export = DataExport.new(
+      export_type: 'analysis',
+      export_parameters: { 'ids' => [workflow_execution.id] }
+    )
+
+    assert_equal 0, data_export.source_size_bytes
+  end
+
+  test 'source_size_bytes returns zero for linelist exports' do
+    data_export = DataExport.new(
+      export_type: 'linelist',
+      export_parameters: { 'ids' => [@sample1.id] }
+    )
+
+    assert_equal 0, data_export.source_size_bytes
+  end
+
+  test 'source_size_bytes counts the same blob more than once when copied more than once' do
+    source_blob = attachments(:attachment1).file.blob
+    sample_one = sample_with_attached_blob('duplicate-source-size-one', source_blob)
+    sample_two = sample_with_attached_blob('duplicate-source-size-two', source_blob)
+
+    data_export = DataExport.new(
+      export_type: 'sample',
+      export_parameters: {
+        'ids' => [sample_one.id, sample_two.id],
+        'attachment_formats' => ['fastq']
+      }
+    )
+
+    assert_equal source_blob.byte_size * 2, data_export.source_size_bytes
   end
 
   test 'turbo stream broadcasts' do
@@ -258,5 +344,15 @@ class DataExportTest < ActiveSupport::TestCase
     assert_turbo_stream_broadcasts [@user, :data_exports], count: 1 do
       data_export.save
     end
+  end
+
+  private
+
+  def sample_with_attached_blob(name, blob)
+    sample = Sample.create!(project: projects(:project1), name:)
+    attachment = Attachment.new(attachable: sample, metadata: { 'compression' => 'none', 'format' => 'fastq' })
+    attachment.file.attach(blob)
+    attachment.save!
+    sample
   end
 end

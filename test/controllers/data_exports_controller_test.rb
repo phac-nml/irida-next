@@ -321,7 +321,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should return 422 and translated message in export dialog when export exceeds size limit' do
     max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
-    DataExports::ExportSourceSizeCalculator.any_instance.stubs(:execute).returns(max_gigabytes.gigabytes)
+    DataExport.any_instance.stubs(:source_size_bytes).returns(max_gigabytes.gigabytes)
 
     params = {
       'data_export' => {
