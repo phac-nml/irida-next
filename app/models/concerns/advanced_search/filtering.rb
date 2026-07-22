@@ -11,7 +11,7 @@
 # - `apply_*_operator` methods for special-case fields (e.g., upcasing PUID)
 module AdvancedSearch
   # Applies search conditions to build filtered ActiveRecord scopes.
-  module Filtering
+  module Filtering # rubocop:disable Metrics/ModuleLength
     extend ActiveSupport::Concern
 
     OPERATOR_HANDLERS = {
@@ -46,7 +46,12 @@ module AdvancedSearch
       'text_not_in' => :apply_condition_metadata_not_in,
       # exists operators
       'exists' => :apply_condition_exists,
-      'not_exists' => :apply_condition_not_exists
+      'not_exists' => :apply_condition_not_exists,
+      # between operators
+      'between' => :apply_condition_between,
+      'date_between' => :apply_condition_date_between,
+      'numeric_between' => :apply_condition_numeric_between,
+      'text_between' => :apply_condition_text_between
     }.freeze
 
     private
@@ -132,6 +137,22 @@ module AdvancedSearch
 
     def apply_condition_not_exists(scope, node, _value, _field_name)
       condition_not_exists(scope, node)
+    end
+
+    def apply_condition_between(scope, node, value, _field_name)
+      condition_between(scope, node, value)
+    end
+
+    def apply_condition_date_between(scope, node, value, _field_name)
+      condition_date_between(scope, node, value)
+    end
+
+    def apply_condition_numeric_between(scope, node, value, _field_name)
+      condition_numeric_between(scope, node, value)
+    end
+
+    def apply_condition_text_between(scope, node, value, _field_name)
+      condition_text_between(scope, node, value)
     end
 
     def normalize_condition_field(condition)
