@@ -42,19 +42,11 @@ module AdvancedSearch
           condition.errors.each do |error|
             next if error.attribute.eql? :base
 
-            attribute = if error.attribute == :'value[0]'
-                          'starting_value'
-                        elsif error.attribute == :'value[1]'
-                          'ending_value'
-                        else
-                          error.attribute
-                        end
-
             record.errors.add format(
               GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT,
               group_index: group_index,
               condition_index: condition_index,
-              attribute:
+              attribute: error.attribute
             ).to_sym,
                               error.message
           end
@@ -114,9 +106,9 @@ module AdvancedSearch
       condition.errors.add :operator, :blank if condition.operator.blank?
 
       if BETWEEN_OPERATORS.include?(condition.operator) && condition.value.include?('')
-        condition.errors.add :'value[0]', I18n.t('errors.messages.blank') if condition.value[0].blank?
+        condition.errors.add :from_value, I18n.t('errors.messages.blank') if condition.value[0].blank?
 
-        condition.errors.add :'value[1]', I18n.t('errors.messages.blank') if condition.value[1].blank?
+        condition.errors.add :to_value, I18n.t('errors.messages.blank') if condition.value[1].blank?
         return
       end
 
@@ -179,7 +171,11 @@ module AdvancedSearch
 
     def validate_numeric(condition)
       Array(condition.value).each_with_index do |number, index|
-        error_key = condition.value.is_a?(Array) ? :"value[#{index}]" : :value
+        error_key = if condition.value.is_a?(Array)
+                      index.zero? ? :from_value : :to_value
+                    else
+                      :value
+                    end
         next if Float(number, exception: false)
 
         condition.errors.add error_key,
@@ -189,7 +185,11 @@ module AdvancedSearch
 
     def validate_date(condition)
       Array(condition.value).each_with_index do |date, index|
-        error_key = condition.value.is_a?(Array) ? :"value[#{index}]" : :value
+        error_key = if condition.value.is_a?(Array)
+                      index.zero? ? :from_value : :to_value
+                    else
+                      :value
+                    end
         begin
           DateTime.strptime(date, '%Y-%m-%d')
         rescue StandardError
