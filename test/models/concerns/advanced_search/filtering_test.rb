@@ -12,6 +12,7 @@ module AdvancedSearch
       include AdvancedSearch::Operators::ComparisonOperators
       include AdvancedSearch::Operators::PatternOperators
       include AdvancedSearch::Operators::ExistenceOperators
+      include AdvancedSearch::Operators::BetweenOperators
       include AdvancedSearch::MetadataComparison
       include AdvancedSearch::Operators
 
@@ -286,6 +287,46 @@ module AdvancedSearch
 
       sql = result.to_sql
       assert_includes sql, 'IS NULL'
+    end
+
+    test 'operator between' do
+      condition = WorkflowExecution::SearchCondition.new(field: 'state', operator: 'between',
+                                                         value: %w[a z])
+      result = @test_instance.send(:add_condition,
+                                   @test_instance.model_class, condition)
+
+      sql = result.to_sql
+      assert_includes sql, "LOWER(\"workflow_executions\".\"state\") BETWEEN 'a' AND 'z'"
+    end
+
+    test 'operator date_between' do
+      condition = WorkflowExecution::SearchCondition.new(field: 'state', operator: 'date_between',
+                                                         value: %w[2026-01-01 2026-12-31])
+      result = @test_instance.send(:add_condition,
+                                   @test_instance.model_class, condition)
+
+      sql = result.to_sql
+      assert_includes sql, "AND TO_DATE(\"workflow_executions\".\"state\", 'YYYY-MM-DD') BETWEEN '2026-01-01' AND '2026-12-31'" # rubocop:disable Layout/LineLength
+    end
+
+    test 'operator numeric_between' do
+      condition = WorkflowExecution::SearchCondition.new(field: 'state', operator: 'numeric_between',
+                                                         value: ['0', '99.9'])
+      result = @test_instance.send(:add_condition,
+                                   @test_instance.model_class, condition)
+
+      sql = result.to_sql
+      assert_includes sql, 'AND CAST("workflow_executions"."state" AS DOUBLE PRECISION) BETWEEN 0.0 AND 99.9'
+    end
+
+    test 'operator text_between' do
+      condition = WorkflowExecution::SearchCondition.new(field: 'state', operator: 'text_between',
+                                                         value: %w[ABC XYZ])
+      result = @test_instance.send(:add_condition,
+                                   @test_instance.model_class, condition)
+
+      sql = result.to_sql
+      assert_includes sql, "LOWER(\"workflow_executions\".\"state\") BETWEEN 'abc' AND 'xyz'"
     end
   end
 end

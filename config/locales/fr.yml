@@ -10,7 +10,9 @@ fr:
         new_parent_id: Groupe parent
       groups_attributes/conditions_attributes:
         field: Groupe %{group_index} Condition %{condition_index} Champ
+        from_value: Groupe %{group_index} Condition %{condition_index} Valeur de départ
         operator: Groupe %{group_index} Condition %{condition_index} Opérateur
+        to_value: Groupe %{group_index} Condition %{condition_index} À évaluer
         value: Groupe %{group_index} Condition %{condition_index} Valeur
       projects/transfer_form:
         new_namespace_id: Nouvel espace de noms
@@ -18,13 +20,17 @@ fr:
         group: Groupe
       sample/search_condition:
         field: Champ
+        from_value: Valeur de départ
         operator: Opérateur
+        to_value: À évaluer
         value: Valeur
       sample/search_group:
         condition: Condition
       workflow_execution/search_condition:
         field: Champ
+        from_value: Valeur de départ
         operator: Opérateur
+        to_value: À évaluer
         value: Valeur
       workflow_execution/search_group:
         condition: Condition
@@ -38,7 +44,7 @@ fr:
             operator:
               not_a_date_operator: ne peut pas être utilisé sur les dates
             value:
-              not_a_date: doit être formaté AAAA-MM-JJ
+              invalid_between_value: doit être un tableau contenant deux valeurs
         concatenation_form:
           attributes:
             attachment_ids:
@@ -759,6 +765,7 @@ fr:
       less_than: doit être inférieur à %{count}
       less_than_or_equal_to: doit être inférieur ou égal à %{count}
       model_invalid: 'Validation échouée : %{errors}'
+      not_a_date: doit être formaté AAAA-MM-JJ
       not_a_number: n'est pas un nombre
       not_an_integer: doit être un nombre entier
       odd: doit être impair

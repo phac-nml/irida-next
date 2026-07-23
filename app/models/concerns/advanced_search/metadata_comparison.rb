@@ -87,5 +87,17 @@ module AdvancedSearch
       # This maintains consistency with condition_not_equals, where "not X" includes records without the field.
       scope.where(node.eq(nil).or(lower_function.not_in(downcase_values(value))))
     end
+
+    # between operation
+    def metadata_condition_date_between(scope, node, value)
+      casted_node = Arel::Nodes::NamedFunction.new(
+        'TO_DATE',
+        [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
+      )
+
+      scope.where(node.matches_regexp('^\\d{4}-\\d{2}-\\d{2}$').and(
+                    casted_node.between(value[0]..value[1])
+                  ))
+    end
   end
 end

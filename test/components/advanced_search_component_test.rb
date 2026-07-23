@@ -99,14 +99,17 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_contains') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_between')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_between') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_equals')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_less_than_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_greater_than_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_between')
         end
 
         within first("div[data-controller='combobox--v1']") do
@@ -130,6 +133,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_exists')
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.in')
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.between')
         end
       end
     end
@@ -411,6 +415,40 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
         assert_no_selector 'legend',
                            text: I18n.t('components.advanced_search_component.v1.group', index: '3')
+      end
+    end
+  end
+
+  test 'switching to and from between operator handles number of value inputs correctly' do
+    visit('rails/view_components/advanced_search_component/empty')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within 'dialog' do
+        assert_accessible
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        assert_text I18n.t('components.advanced_search_component.v1.rules.standard_operators')
+        assert_selector ".dialog--header button[aria-label='#{I18n.t('components.dialog.close')}']"
+        within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+            find("input[id$='field']").send_keys('sample name', :enter)
+            find("select[name$='[operator]']").find("option[value='between']").select_option
+            assert_selector 'label', text: I18n.t('activemodel.attributes.sample/search_condition.from_value')
+            assert_selector 'label', text: I18n.t('activemodel.attributes.sample/search_condition.to_value')
+            assert_selector 'div.value input', count: 2
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            assert_no_selector 'label', text: I18n.t('activemodel.attributes.sample/search_condition.from_value')
+            assert_no_selector 'label', text: I18n.t('activemodel.attributes.sample/search_condition.to_value')
+            assert_selector 'label', text: I18n.t('activemodel.attributes.sample/search_condition.value')
+            assert_selector 'div.value input', count: 1
+            find("select[name$='[operator]']").find("option[value='between']").select_option
+            assert_selector 'label', text: I18n.t('activemodel.attributes.sample/search_condition.from_value')
+            assert_selector 'label', text: I18n.t('activemodel.attributes.sample/search_condition.to_value')
+            assert_no_selector 'label', text: I18n.t('activemodel.attributes.sample/search_condition.value')
+            assert_selector 'div.value input', count: 2
+          end
+        end
       end
     end
   end

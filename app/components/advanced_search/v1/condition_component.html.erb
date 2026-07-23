@@ -15,15 +15,11 @@
     <% invalid_field = @condition.errors.include?(:field) %>
 
     <div class="form-field w-full <%= 'invalid' if invalid_field %>">
-      <% options = options_for_select(field_options, @condition.field).concat(
-        grouped_options_for_select(grouped_field_options, @condition.field),
-      ) %>
-
       <%= conditions_form.label :field, data: { required: true } %>
 
       <% unless Flipper.enabled?(:advanced_search_with_auto_complete, Current.user) %>
         <%= conditions_form.select :field,
-                               options,
+                               field_options_for_select,
                                { include_blank: true },
                                {
                                  "data-action": "change->advanced-search--v1#handleFieldChange",
@@ -35,7 +31,7 @@
         <%= render ComboboxComponent.new(
           form: conditions_form,
           field: :field,
-          options: options,
+          options: field_options_for_select,
           data: {
             action: "change->advanced-search--v1#handleFieldChange",
           },
@@ -92,7 +88,7 @@
       group_index: @group_index,
       condition: @condition,
       condition_index: @condition_index,
-      options: value_options,
+      options: value_options
     ) %>
   <% end %>
 
@@ -104,7 +100,6 @@
       dark:hover:text-white
     "
     aria-label="<%= t("components.advanced_search_component.v1.remove_condition_aria_label") %>"
-    title="<%= t("components.advanced_search_component.v1.remove_condition_aria_label") %>"
     data-action="advanced-search--v1#removeCondition"
   >
     <%= icon(:x, size: :sm) %>

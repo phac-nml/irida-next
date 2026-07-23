@@ -588,4 +588,86 @@ class QueryTest < ActiveSupport::TestCase
     assert_includes results6, sample1
     assert_not_includes results6, sample2
   end
+
+  test 'between operators' do
+    project = projects(:project1)
+    sample1 = samples(:sample1)
+    sample2 = samples(:sample2)
+    sample1.update(metadata: { 'text_field' => 'abc', 'date_field' => '2026-01-01', 'numeric_field' => '0.1' })
+    sample2.update(metadata: { 'text_field' => 'xyz', 'date_field' => '2026-06-01', 'numeric_field' => '50'  })
+
+    search_params1 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.text_field', operator: 'text_between', value: %w[a w] } }
+                       } },
+                       project_ids: [project.id] }
+    query1 = Sample::Query.new(search_params1)
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+
+    assert_includes results1, sample1
+    assert_not_includes results1, sample2
+
+    search_params2 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.date_field', operator: 'date_between',
+                                value: %w[2026-01-01 2026-05-01] } }
+                       } },
+                       project_ids: [project.id] }
+    query2 = Sample::Query.new(search_params2)
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+
+    assert_includes results2, sample1
+    assert_not_includes results2, sample2
+
+    search_params3 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.numeric_field', operator: 'numeric_between', value: %w[0 49] } }
+                       } },
+                       project_ids: [project.id] }
+    query3 = Sample::Query.new(search_params3)
+    assert query3.advanced_query?
+    assert query3.valid?
+    results3 = query3.results
+
+    assert_includes results3, sample1
+    assert_not_includes results3, sample2
+
+    search_params4 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'puid', operator: 'between',
+                               value: %w[INXT_SAL_AAAAAAAAAA INXT_SAM_AAAAAAAAAA] } }
+                       } },
+                       project_ids: [project.id] }
+    query4 = Sample::Query.new(search_params4)
+    assert query4.advanced_query?
+    assert query4.valid?
+    results4 = query4.results
+
+    assert_includes results4, sample1
+    assert_not_includes results4, sample2
+
+    search_params5 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'created_at', operator: 'between',
+                               value: [2.weeks.ago.strftime('%Y-%m-%d'),
+                                       1.day.ago.strftime('%Y-%m-%d')] } }
+                       } },
+                       project_ids: [project.id] }
+    query5 = Sample::Query.new(search_params5)
+    assert query5.advanced_query?
+    assert query5.valid?
+    results5 = query5.results
+
+    assert_includes results5, sample1
+    assert_includes results5, sample2
+  end
 end
