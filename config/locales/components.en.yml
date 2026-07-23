@@ -400,6 +400,11 @@ en:
     search_field_component:
       clear_button: Clear search
       instructions: Press enter to search
+    selection:
+      limit:
+        list_too_large: This list has %{count} items, which exceeds the maximum of %{max} that can be selected. Use filters to narrow your selection.
+        selection_limit_reached: You cannot select more than %{max} items. Deselect some items to continue.
+        storage_full: Your browser could not save this many selected items. Reduce your selection and try again.
     sortable_lists:
       v1:
         component:

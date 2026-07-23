@@ -1,0 +1,16 @@
+<%# locals: (message:, visible: false, alert_id: SelectionLimitableTable::SELECTION_LIMIT_ALERT_ID, proactive: visible) %>
+
+<div
+  id="<%= alert_id %>"
+  class="<%= class_names("mb-4", hidden: !visible) %>"
+  role="alert"
+  aria-live="assertive"
+  data-selection-target="limitAlert"
+  <% if proactive %>
+    data-selection-limit-proactive="true"
+  <% end %>
+>
+  <%= viral_alert(type: :warning, dismissible: false) do %>
+    <span data-selection-target="limitAlertMessage"><%= message %></span>
+  <% end %>
+</div>

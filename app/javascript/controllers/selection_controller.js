@@ -8,6 +8,8 @@ export default class extends Controller {
     "selectPageStatus",
     "selected",
     "status",
+    "limitAlert",
+    "limitAlertMessage",
   ];
   static outlets = ["action-button"];
 
@@ -20,6 +22,9 @@ export default class extends Controller {
     selectPageNone: String,
     selectPageSome: String,
     selectPageAll: String,
+    maxSelection: Number,
+    limitMessage: String,
+    storageLimitMessage: String,
   };
 
   #lastActiveCheckbox;
@@ -34,7 +39,7 @@ export default class extends Controller {
 
     this.boundOnMorph = this.onMorph.bind(this);
 
-    this.update(this.getOrCreateStoredItems(), false);
+    this.#initializeSelectionState();
 
     document.addEventListener("turbo:morph", this.boundOnMorph);
   }
@@ -44,7 +49,7 @@ export default class extends Controller {
   }
 
   onMorph() {
-    this.update(this.getOrCreateStoredItems(), false);
+    this.#initializeSelectionState();
   }
 
   /**
@@ -122,24 +127,34 @@ export default class extends Controller {
       console.warn("SelectionController: ids must be an array");
       return;
     }
-    // Persist selection and reflect changes in the UI
-    sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
-    this.#updateUI(ids, announce, options);
+
+    // Normalize IDs to strings and dedupe at the entry point so callers that
+    // provide numeric IDs (e.g. server-side pluck(:id)) stay consistent with
+    // checkbox string values and stored IDs, preventing mixed-type duplicates.
+    const normalizedIds = [...new Set(ids.map((id) => String(id)))];
+
+    if (this.#exceedsLimit(normalizedIds.length)) {
+      this.#handleSelectionLimitExceeded();
+      this.#refreshUIFromStorage();
+      return;
+    }
+
+    if (!this.#persistSelection(normalizedIds)) {
+      this.#handleStorageQuotaExceeded();
+      this.#refreshUIFromStorage();
+      return;
+    }
+
+    this.#hideSelectionLimitAlertIfAllowed();
+    this.#updateUI(normalizedIds, announce, options);
   }
 
   getOrCreateStoredItems() {
-    try {
-      const storedItems = JSON.parse(
-        sessionStorage.getItem(this.#getStorageKey()),
-      );
-      if (Array.isArray(storedItems)) {
-        return storedItems;
-      }
-    } catch (error) {
-      console.warn("Failed to parse stored selection items:", error);
+    const storedItems = this.#readStoredItems();
+    if (storedItems) {
+      return storedItems;
     }
 
-    // create default empty array
     this.update([], false);
     return [];
   }
@@ -179,8 +194,9 @@ export default class extends Controller {
   #updateUI(ids, announce, options = {}) {
     try {
       // Set checkbox checked states based on whether their value is included
+      const idSet = new Set(ids);
       this.rowSelectionTargets.forEach((row) => {
-        row.checked = ids.indexOf(row.value) > -1;
+        row.checked = idSet.has(row.value);
       });
 
       this.#updateActionButtons(ids.length);
@@ -294,6 +310,139 @@ export default class extends Controller {
     } else {
       announce(message);
     }
+  }
+
+  #initializeSelectionState() {
+    const storedItems = this.#readStoredItems() || [];
+
+    if (this.#exceedsLimit(storedItems.length)) {
+      this.#handleSelectionLimitExceeded({ announce: false });
+      this.#updateUI(storedItems, false);
+      return;
+    }
+
+    this.update(storedItems, false);
+  }
+
+  #readStoredItems() {
+    try {
+      const storedItems = JSON.parse(
+        sessionStorage.getItem(this.#getStorageKey()),
+      );
+      if (Array.isArray(storedItems)) {
+        return storedItems;
+      }
+    } catch (error) {
+      console.warn("Failed to parse stored selection items:", error);
+    }
+
+    return null;
+  }
+
+  #persistSelection(ids) {
+    try {
+      sessionStorage.setItem(this.#getStorageKey(), JSON.stringify(ids));
+      return true;
+    } catch (error) {
+      if (this.#isQuotaExceededError(error)) {
+        return false;
+      }
+
+      throw error;
+    }
+  }
+
+  #isQuotaExceededError(error) {
+    return (
+      error?.name === "QuotaExceededError" ||
+      error?.code === 22 ||
+      error?.code === "QuotaExceededError"
+    );
+  }
+
+  #refreshUIFromStorage() {
+    const storedItems = this.#readStoredItems() || [];
+    this.#updateUI(storedItems, false);
+  }
+
+  #exceedsLimit(count) {
+    return this.maxSelectionValue > 0 && count > this.maxSelectionValue;
+  }
+
+  #handleSelectionLimitExceeded({ announce = true } = {}) {
+    this.#showSelectionLimitAlert(this.#selectionLimitMessage());
+
+    if (announce) {
+      this.#announceAlertMessage(this.#selectionLimitMessage());
+    }
+  }
+
+  #handleStorageQuotaExceeded() {
+    const message = this.#storageLimitMessage();
+    if (!message) return;
+
+    this.#showSelectionLimitAlert(message);
+    this.#announceAlertMessage(message);
+    console.warn("SelectionController: storage quota exceeded");
+  }
+
+  #showSelectionLimitAlert(message) {
+    const limitAlert = this.#findLimitAlertElement();
+    if (!limitAlert) return;
+
+    if (!this.#proactiveLimitAlert(limitAlert) && message) {
+      if (this.hasLimitAlertMessageTarget) {
+        this.limitAlertMessageTarget.textContent = message;
+      }
+    }
+
+    limitAlert.classList.remove("hidden");
+  }
+
+  #hideSelectionLimitAlertIfAllowed() {
+    const limitAlert = this.#findLimitAlertElement();
+    if (!limitAlert) return;
+    if (this.#proactiveLimitAlert(limitAlert)) return;
+
+    limitAlert.classList.add("hidden");
+  }
+
+  #findLimitAlertElement() {
+    return this.hasLimitAlertTarget ? this.limitAlertTarget : null;
+  }
+
+  #proactiveLimitAlert(limitAlert = this.#findLimitAlertElement()) {
+    return limitAlert?.dataset.selectionLimitProactive === "true";
+  }
+
+  #announceAlertMessage(message) {
+    if (!message) return;
+
+    if (this.hasStatusTarget) {
+      announce(message, {
+        element: this.statusTarget,
+        politeness: "assertive",
+      });
+    } else {
+      announce(message, { politeness: "assertive" });
+    }
+  }
+
+  #selectionLimitMessage() {
+    if (!this.limitMessageValue) return "";
+
+    return this.limitMessageValue.replace(
+      "%{max}",
+      String(this.maxSelectionValue),
+    );
+  }
+
+  #storageLimitMessage() {
+    if (!this.storageLimitMessageValue) {
+      return this.#selectionLimitMessage();
+    }
+
+    return this.storageLimitMessageValue;
   }
 
   #getStorageKey() {
