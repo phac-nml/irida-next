@@ -21,6 +21,14 @@ module AdvancedSearch
 
       attr_accessor :field, :operator, :value
 
+      def from_value
+        value&.[](0)
+      end
+
+      def to_value
+        value&.[](1)
+      end
+
       def initialize(field:, operator:, value:)
         @field = field
         @operator = operator
