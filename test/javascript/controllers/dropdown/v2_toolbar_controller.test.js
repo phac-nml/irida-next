@@ -2,7 +2,7 @@ import { Application } from "@hotwired/stimulus";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import DropdownV2Controller from "../../../../app/javascript/controllers/dropdown/v2_controller";
-import ToolbarController from "../../../../../pathogen-view-components/app/assets/javascripts/pathogen_view_components/toolbar_controller";
+import ToolbarController from "pathogen_view_components/toolbar_controller";
 
 vi.mock("utilities/floating_dropdown", () => {
   class MockFloatingDropdown {

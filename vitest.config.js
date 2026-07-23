@@ -6,13 +6,16 @@ const jsRoot = resolve(
   fileURLToPath(new URL("app/javascript", import.meta.url)),
 );
 
+// Prefer PATHOGEN_VIEW_COMPONENTS_JS when set (CI / non-sibling checkouts).
+// Default assumes a sibling pathogen-view-components checkout.
 const pathogenJsRoot = resolve(
-  fileURLToPath(
-    new URL(
-      "../pathogen-view-components/app/assets/javascripts/pathogen_view_components",
-      import.meta.url,
+  process.env.PATHOGEN_VIEW_COMPONENTS_JS ||
+    fileURLToPath(
+      new URL(
+        "../pathogen-view-components/app/assets/javascripts/pathogen_view_components",
+        import.meta.url,
+      ),
     ),
-  ),
 );
 
 export default defineConfig({
