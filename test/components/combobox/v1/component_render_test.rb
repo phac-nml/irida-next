@@ -70,7 +70,7 @@ module Combobox
         render_combobox_preview(:with_slots)
 
         assert_selector 'input[role="combobox"][value="User 3"]'
-        assert_selector '[role="option"][data-value="3"]', visible: :all
+        assert_selector '[role="option"][data-value="3"][id]', visible: :all
         assert_selector '[role="option"][data-value="5"][aria-disabled="true"]', visible: :all
       end
 

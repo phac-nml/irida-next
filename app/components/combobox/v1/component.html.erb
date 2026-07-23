@@ -59,9 +59,7 @@
       "data-combobox--v1-target": "listbox",
     ) do %>
       <% if options? %>
-        <% options.each do |option| %>
-          <%= option %>
-        <% end %>
+        <%= create_slot_listbox %>
       <% else %>
         <%= @listbox_options %>
       <% end %>
