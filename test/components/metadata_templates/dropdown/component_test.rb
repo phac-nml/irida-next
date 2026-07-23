@@ -37,6 +37,7 @@ module MetadataTemplates
         render_inline MetadataTemplates::DropdownComponent.new(url: url, toolbar_item: true)
 
         assert_selector 'button[data-pathogen--toolbar-target="item"][tabindex="-1"]'
+        assert_selector 'button svg.caret-down-icon', visible: :all
       end
     end
   end

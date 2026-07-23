@@ -52,18 +52,18 @@ class SearchFieldComponent < Component
   def field_input_classes
     class_names(
       't-search-component h-full w-full placeholder-shown:field-sizing-content block border',
-      'border-slate-300 rounded-lg bg-slate-50 text-slate-900 dark:border-slate-600',
+      'border-slate-300 bg-slate-50 text-slate-900 dark:border-slate-600',
       'dark:bg-slate-700 dark:placeholder-slate-300 dark:text-white',
-      compact? ? 'px-2 py-1 pr-8 text-xs' : 'p-2.5 pr-11.5 text-sm'
+      compact? ? 'rounded-[var(--pvc-radius-control)] px-2 py-1 pr-8 text-xs' : 'rounded-lg p-2.5 pr-11.5 text-sm'
     )
   end
 
   def field_action_classes
     class_names(
       'pointer-events-auto absolute inset-y-0 right-0 flex cursor-pointer items-center justify-center',
-      'rounded-r-lg border-t border-r border-b border-slate-300 transition-colors',
+      'border-t border-r border-b border-slate-300 transition-colors',
       'hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-600',
-      compact? ? 'w-8' : 'w-[44px]'
+      compact? ? 'w-8 rounded-r-[var(--pvc-radius-control)]' : 'w-[44px] rounded-r-lg'
     )
   end
 end

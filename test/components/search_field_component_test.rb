@@ -614,8 +614,11 @@ class SearchFieldComponentTest < ViewComponent::TestCase
 
     assert_selector 'div.relative.h-8', count: 1
     assert_no_selector 'div.relative.h-\\[44px\\]'
-    assert_selector 'input.t-search-component.text-xs', count: 1
-    assert_selector 'button.w-8[data-search-field-target="submitButton"]', count: 1
+    assert_selector 'input.t-search-component.text-xs[class*="rounded-[var(--pvc-radius-control)]"]', count: 1
+    assert_selector(
+      'button.w-8[data-search-field-target="submitButton"][class*="rounded-r-[var(--pvc-radius-control)]"]',
+      count: 1
+    )
   end
 
   # Transition Effects Tests
