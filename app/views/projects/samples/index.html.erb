@@ -48,6 +48,16 @@
         <%= render partial: "list_action_band", locals: {
           show_selection_buttons: show_selection_buttons,
           show_launch: show_launch,
+          project: @project,
+          has_samples: @has_samples,
+          render_sample_actions: @render_sample_actions,
+          allowed_to: @allowed_to,
+          metadata_template: @metadata_template,
+          pagy: @pagy,
+          results_message: @results_message,
+          query: @query,
+          advanced_search_fields: @advanced_search_fields,
+          search_params: @search_params,
         } %>
       </div>
 
