@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require 'active_job/continuation/test_helper'
 require 'test_helper'
 module Samples
   class TransferServiceTest < ActiveSupport::TestCase
+    include ActiveJob::Continuation::TestHelper
+
     def setup # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
@@ -38,9 +41,12 @@ module Samples
                                   sample_ids: [@sample1.id, @sample2.id] }
 
       assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
-        Samples::TransferService.new(@current_project.namespace, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @current_project.namespace,
+          @john_doe,
           @sample_transfer_params[:new_project_id],
-          @sample_transfer_params[:sample_ids]
+          @sample_transfer_params[:sample_ids],
+          nil
         )
       end
     end
@@ -50,9 +56,12 @@ module Samples
                                   sample_ids: [@sample1.id, @sample2.id] }
 
       assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
-        Samples::TransferService.new(@current_project.namespace, @joan_doe).execute(
+        Samples::TransferJob.perform_now(
+          @current_project.namespace,
+          @joan_doe,
           @sample_transfer_params[:new_project_id],
-          @sample_transfer_params[:sample_ids]
+          @sample_transfer_params[:sample_ids],
+          nil
         )
       end
     end
@@ -64,7 +73,9 @@ module Samples
                                   sample_ids: [@sample1.id, @sample2.id] }
 
       assert_no_changes -> { @sample1.reload.project.id } do
-        Samples::TransferService.new(@current_project.namespace, @joan_doe).execute(
+        Samples::TransferJob.perform_now(
+          @current_project.namespace,
+          @joan_doe,
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
         )
@@ -76,16 +87,24 @@ module Samples
     end
 
     test 'transfer project samples without specifying details' do
-      assert_empty Samples::TransferService.new(@current_project.namespace, @john_doe).execute(nil, nil)
+      assert_empty Samples::TransferJob.perform_now(@current_project.namespace, @john_doe, nil, nil)
+
+      assert @current_project.namespace.errors.full_messages.include?(
+        I18n.t('services.samples.transfer.invalid_new_project')
+      )
     end
 
     test 'transfer project samples to existing project' do
       @sample_transfer_params = { new_project_id: @current_project.id,
                                   sample_ids: [@sample1.id, @sample2.id] }
 
-      assert_empty Samples::TransferService.new(@current_project.namespace, @john_doe)
-                                           .execute(@sample_transfer_params[:new_project_id],
-                                                    @sample_transfer_params[:sample_ids])
+      assert_empty Samples::TransferJob.perform_now(
+        @current_project.namespace,
+        @john_doe,
+        @sample_transfer_params[:new_project_id],
+        @sample_transfer_params[:sample_ids],
+        nil
+      )
     end
 
     test 'authorize allowed to transfer project samples with project permission' do
@@ -95,9 +114,12 @@ module Samples
       assert_authorized_to(:transfer_sample?, @current_project,
                            with: ProjectPolicy,
                            context: { user: @john_doe }) do
-        Samples::TransferService.new(@current_project.namespace, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @current_project.namespace,
+          @john_doe,
           @sample_transfer_params[:new_project_id],
-          @sample_transfer_params[:sample_ids]
+          @sample_transfer_params[:sample_ids],
+          nil
         )
       end
     end
@@ -109,7 +131,9 @@ module Samples
       assert_authorized_to(:transfer_sample_into_project?, @new_project,
                            with: ProjectPolicy,
                            context: { user: @john_doe }) do
-        Samples::TransferService.new(@current_project.namespace, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @current_project.namespace,
+          @john_doe,
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
         )
@@ -121,7 +145,9 @@ module Samples
                                   sample_ids: [@sample1.id, @sample2.id] }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Samples::TransferService.new(@current_project.namespace, @jane_doe).execute(
+        Samples::TransferJob.perform_now(
+          @current_project.namespace,
+          @jane_doe,
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
         )
@@ -135,6 +161,42 @@ module Samples
                    exception.result.message
     end
 
+    test 'samples transfer with interrupt' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal(2, @project31.samples.count)
+      assert_equal(1, @project29.samples.count)
+      assert_equal(1, @project30.samples.count)
+
+      Samples::TransferJob.perform_later(
+        @group12,
+        @john_doe,
+        @project29.id,
+        [@sample33.id, @sample34.id, @sample35.id]
+      )
+
+      assert_no_changes -> { @group12.reload.samples_count } do
+        interrupt_job_during_step(Samples::TransferJob, :transfer_step, cursor: 1) do
+          perform_enqueued_jobs(only: Samples::TransferJob)
+        end
+      end
+
+      # verify only some samples transferred
+      assert_equal(0, @project31.samples.count)
+      assert_equal(3, @project29.samples.count)
+      assert_equal(1, @project30.samples.count)
+
+      # continue the job queue
+      perform_enqueued_jobs(only: Samples::TransferJob)
+
+      # verify all the counts updated
+      assert_equal(0, @project31.samples.count)
+      assert_equal(4, @project29.samples.count)
+      assert_equal(0, @project30.samples.count)
+    end
+
     test 'metadata summary updates after sample transfer' do
       # Reference group/projects descendants tree:
       # group12 < subgroup12b (project30 > sample 33)
@@ -144,11 +206,12 @@ module Samples
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
-      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 },
-                   @group12.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
       assert_no_changes -> { @group12.reload.metadata_summary } do
-        Samples::TransferService.new(@project31.namespace, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @project31.namespace,
+          @john_doe,
           @sample_transfer_params1[:new_project_id],
           @sample_transfer_params1[:sample_ids]
         )
@@ -160,11 +223,58 @@ module Samples
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.reload.metadata_summary)
 
       assert_no_changes -> { @group12.reload.metadata_summary } do
-        Samples::TransferService.new(@project30.namespace, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @project30.namespace,
+          @john_doe,
           @sample_transfer_params2[:new_project_id],
           @sample_transfer_params2[:sample_ids]
         )
       end
+
+      assert_equal({}, @project30.namespace.reload.metadata_summary)
+      assert_equal({}, @project31.namespace.reload.metadata_summary)
+      assert_equal({}, @subgroup12b.reload.metadata_summary)
+      assert_equal({}, @subgroup12aa.reload.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @subgroup12a.reload.metadata_summary)
+    end
+
+    test 'metadata summary updates after sample transfer with interrupt' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+      Samples::TransferJob.perform_later(
+        @group12,
+        @john_doe,
+        @project29.id,
+        [@sample33.id, @sample34.id, @sample35.id]
+      )
+
+      assert_no_changes -> { @group12.reload.metadata_summary } do
+        interrupt_job_during_step(Samples::TransferJob, :update_metadata_step, cursor: 1) do
+          perform_enqueued_jobs(only: Samples::TransferJob)
+        end
+      end
+
+      # verify transfer step occurred
+      assert_equal(0, @project31.samples.count) # actual
+      assert_equal(4, @project29.samples.count) # actual
+      assert_equal(0, @project30.samples.count) # actual
+
+      assert_equal({}, @project31.namespace.reload.metadata_summary) # updated
+      assert_equal({}, @subgroup12aa.reload.metadata_summary) # updated
+      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.reload.metadata_summary) # not updated
+      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.reload.metadata_summary) # not updated
+      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary) # remains unchanged
+
+      # continue the job queue
+      perform_enqueued_jobs(only: Samples::TransferJob)
 
       assert_equal({}, @project30.namespace.reload.metadata_summary)
       assert_equal({}, @project31.namespace.reload.metadata_summary)
@@ -184,7 +294,9 @@ module Samples
       assert_equal(4, @group12.samples_count)
 
       assert_no_changes -> { @group12.reload.samples_count } do
-        Samples::TransferService.new(@project31.namespace, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @project31.namespace,
+          @john_doe,
           @sample_transfer_params1[:new_project_id],
           @sample_transfer_params1[:sample_ids]
         )
@@ -195,7 +307,9 @@ module Samples
       assert_equal(3, @subgroup12b.reload.samples_count)
 
       assert_no_changes -> { @group12.reload.samples_count } do
-        Samples::TransferService.new(@project30.namespace, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @project30.namespace,
+          @john_doe,
           @sample_transfer_params2[:new_project_id],
           @sample_transfer_params2[:sample_ids]
         )
@@ -204,6 +318,51 @@ module Samples
       assert_equal(0, @subgroup12aa.reload.samples_count)
       assert_equal(4, @subgroup12a.reload.samples_count)
       assert_equal(0, @subgroup12b.reload.samples_count)
+    end
+
+    test 'samples count updates after sample transfer interrupt' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal(2, @subgroup12aa.samples_count)
+      assert_equal(3, @subgroup12a.samples_count)
+      assert_equal(1, @subgroup12b.samples_count)
+      assert_equal(4, @group12.samples_count)
+
+      Samples::TransferJob.perform_later(
+        @group12,
+        @john_doe,
+        @project29.id,
+        [@sample33.id, @sample34.id, @sample35.id]
+      )
+
+      assert_no_changes -> { @group12.reload.samples_count } do
+        interrupt_job_during_step(Samples::TransferJob, :update_counts_and_activities_step, cursor: 1) do
+          perform_enqueued_jobs(only: Samples::TransferJob)
+        end
+      end
+
+      # verify only some of the counts updated
+      assert_equal(0, @subgroup12aa.reload.samples_count) # updated correctly
+      assert_equal(0, @project31.samples.count) # actual
+      assert_equal(3, @subgroup12a.reload.samples_count) # not updated
+      assert_equal(4, @project29.samples.count) # actual
+      assert_equal(1, @subgroup12b.reload.samples_count) # not updated
+      assert_equal(0, @project30.samples.count) # actual
+
+      # continue the job queue
+      perform_enqueued_jobs(only: Samples::TransferJob)
+
+      # verify all the counts updated
+      assert_equal(0, @subgroup12aa.reload.samples_count)
+      assert_equal(0, @project31.samples.count) # actual
+
+      assert_equal(4, @subgroup12a.reload.samples_count)
+      assert_equal(4, @project29.samples.count) # actual
+
+      assert_equal(0, @subgroup12b.reload.samples_count)
+      assert_equal(0, @project30.samples.count) # actual
     end
 
     test 'samples count updates after a sample transfer from a user namespace' do
@@ -218,8 +377,12 @@ module Samples
                         -> { @subgroup12b.reload.samples_count } => 0,
                         -> { @group12.reload.samples_count } => 1,
                         -> { @john_doe_project2.reload.samples.size } => -1 do
-        Samples::TransferService.new(@john_doe_project2.namespace, @john_doe).execute(@project31.id,
-                                                                                      [sample24.id])
+        Samples::TransferJob.perform_now(
+          @john_doe_project2.namespace,
+          @john_doe,
+          @project31.id,
+          [sample24.id]
+        )
       end
     end
 
@@ -233,8 +396,12 @@ module Samples
                         -> { @subgroup12b.reload.samples_count } => 0,
                         -> { @group12.reload.samples_count } => -2,
                         -> { @john_doe_project2.reload.samples.size } => 2 do
-        Samples::TransferService.new(@project31.namespace, @john_doe).execute(@john_doe_project2.id,
-                                                                              [@sample34.id, @sample35.id])
+        Samples::TransferJob.perform_now(
+          @project31.namespace,
+          @john_doe,
+          @john_doe_project2.id,
+          [@sample34.id, @sample35.id]
+        )
       end
     end
 
@@ -244,8 +411,7 @@ module Samples
 
       assert_difference -> { @john_doe_project2.reload.samples.size } => -1,
                         -> { john_doe_project3.reload.samples.size } => 1 do
-        Samples::TransferService.new(@john_doe_project2.namespace, @john_doe).execute(john_doe_project3.id,
-                                                                                      [sample24.id])
+        Samples::TransferJob.perform_now(@john_doe_project2.namespace, @john_doe, john_doe_project3.id, [sample24.id])
       end
     end
 
@@ -254,7 +420,9 @@ module Samples
                                   sample_ids: [@sample1.id, @sample2.id] }
 
       assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
-        Samples::TransferService.new(@group, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @group,
+          @john_doe,
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
         )
@@ -266,8 +434,12 @@ module Samples
                                   sample_ids: [@sample1.id, @sample2.id] }
 
       assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
-        Samples::TransferService.new(@group, @joan_doe).execute(@sample_transfer_params[:new_project_id],
-                                                                @sample_transfer_params[:sample_ids])
+        Samples::TransferJob.perform_now(
+          @group,
+          @joan_doe,
+          @sample_transfer_params[:new_project_id],
+          @sample_transfer_params[:sample_ids]
+        )
       end
     end
 
@@ -278,7 +450,9 @@ module Samples
                                   sample_ids: [@sample1.id, @sample2.id] }
 
       assert_no_changes -> { @sample1.reload.project.id } do
-        Samples::TransferService.new(@group, @joan_doe).execute(
+        Samples::TransferJob.perform_now(
+          @group,
+          @joan_doe,
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
         )
@@ -297,7 +471,9 @@ module Samples
                                  sample_ids: [sample.id] }
 
       assert_no_changes -> { sample.reload.project.id } do
-        Samples::TransferService.new(@group, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @group,
+          @john_doe,
           sample_transfer_params[:new_project_id],
           sample_transfer_params[:sample_ids]
         )
@@ -314,7 +490,9 @@ module Samples
       sample_transfer_params = { new_project_id: new_project.id,
                                  sample_ids: ['123'] }
 
-      Samples::TransferService.new(@group, @john_doe).execute(
+      Samples::TransferJob.perform_now(
+        @group,
+        @john_doe,
         sample_transfer_params[:new_project_id],
         sample_transfer_params[:sample_ids]
       )
@@ -332,7 +510,9 @@ module Samples
                                  sample_ids: [sample.id, '123'] }
 
       assert_no_changes -> { sample.reload.project.id } do
-        Samples::TransferService.new(@group, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @group,
+          @john_doe,
           sample_transfer_params[:new_project_id],
           sample_transfer_params[:sample_ids]
         )
@@ -348,16 +528,28 @@ module Samples
     end
 
     test 'transfer group samples without specifying details' do
-      assert_empty Samples::TransferService.new(@group, @john_doe).execute(nil, nil)
+      assert_empty Samples::TransferJob.perform_now(
+        @group,
+        @john_doe,
+        nil,
+        nil
+      )
+
+      assert @group.errors.full_messages.include?(
+        I18n.t('services.samples.transfer.invalid_new_project')
+      )
     end
 
     test 'transfer group samples to existing project' do
       @sample_transfer_params = { new_project_id: @current_project.id,
                                   sample_ids: [@sample1.id, @sample2.id] }
 
-      assert_empty Samples::TransferService.new(@group, @john_doe)
-                                           .execute(@sample_transfer_params[:new_project_id],
-                                                    @sample_transfer_params[:sample_ids])
+      assert_empty Samples::TransferJob.perform_now(
+        @group,
+        @john_doe,
+        @sample_transfer_params[:new_project_id],
+        @sample_transfer_params[:sample_ids]
+      )
     end
 
     test 'authorize allowed to transfer group samples with project permission' do
@@ -367,8 +559,12 @@ module Samples
       assert_authorized_to(:transfer_sample?, @group,
                            with: GroupPolicy,
                            context: { user: @john_doe }) do
-        Samples::TransferService.new(@group, @john_doe).execute(@sample_transfer_params[:new_project_id],
-                                                                @sample_transfer_params[:sample_ids])
+        Samples::TransferJob.perform_now(
+          @group,
+          @john_doe,
+          @sample_transfer_params[:new_project_id],
+          @sample_transfer_params[:sample_ids]
+        )
       end
     end
 
@@ -379,8 +575,12 @@ module Samples
       assert_authorized_to(:transfer_sample_into_project?, @new_project,
                            with: ProjectPolicy,
                            context: { user: @john_doe }) do
-        Samples::TransferService.new(@group, @john_doe).execute(@sample_transfer_params[:new_project_id],
-                                                                @sample_transfer_params[:sample_ids])
+        Samples::TransferJob.perform_now(
+          @group,
+          @john_doe,
+          @sample_transfer_params[:new_project_id],
+          @sample_transfer_params[:sample_ids]
+        )
       end
     end
 
@@ -389,8 +589,12 @@ module Samples
                                   sample_ids: [@sample1.id, @sample2.id] }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Samples::TransferService.new(@group, @ryan_doe).execute(@sample_transfer_params[:new_project_id],
-                                                                @sample_transfer_params[:sample_ids])
+        Samples::TransferJob.perform_now(
+          @group,
+          @ryan_doe,
+          @sample_transfer_params[:new_project_id],
+          @sample_transfer_params[:sample_ids]
+        )
       end
 
       assert_equal GroupPolicy, exception.policy
@@ -414,7 +618,9 @@ module Samples
                    @group12.metadata_summary)
 
       assert_no_changes -> { @group12.reload.metadata_summary } do
-        Samples::TransferService.new(@subgroup12aa, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @subgroup12aa,
+          @john_doe,
           @sample_transfer_params1[:new_project_id],
           @sample_transfer_params1[:sample_ids]
         )
@@ -427,7 +633,9 @@ module Samples
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.reload.metadata_summary)
 
       assert_no_changes -> { @group12.reload.metadata_summary } do
-        Samples::TransferService.new(@subgroup12b, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @subgroup12b,
+          @john_doe,
           @sample_transfer_params2[:new_project_id],
           @sample_transfer_params2[:sample_ids]
         )
@@ -453,7 +661,9 @@ module Samples
                    @group12.metadata_summary)
 
       assert_no_changes -> { @group12.reload.metadata_summary } do
-        Samples::TransferService.new(@group12, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @group12,
+          @john_doe,
           @sample_transfer_params1[:new_project_id],
           @sample_transfer_params1[:sample_ids]
         )
@@ -477,7 +687,9 @@ module Samples
       assert_equal(4, @group12.samples_count)
 
       assert_no_changes -> { @group12.reload.samples_count } do
-        Samples::TransferService.new(@subgroup12aa, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @subgroup12aa,
+          @john_doe,
           @sample_transfer_params1[:new_project_id],
           @sample_transfer_params1[:sample_ids]
         )
@@ -488,7 +700,9 @@ module Samples
       assert_equal(3, @subgroup12b.reload.samples_count)
 
       assert_no_changes -> { @group12.reload.samples_count } do
-        Samples::TransferService.new(@subgroup12b, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @subgroup12b,
+          @john_doe,
           @sample_transfer_params2[:new_project_id],
           @sample_transfer_params2[:sample_ids]
         )
@@ -509,7 +723,9 @@ module Samples
       assert_equal(4, @group12.samples_count)
 
       assert_no_changes -> { @group12.reload.samples_count } do
-        Samples::TransferService.new(@group12, @john_doe).execute(
+        Samples::TransferJob.perform_now(
+          @group12,
+          @john_doe,
           @sample_transfer_params1[:new_project_id],
           @sample_transfer_params1[:sample_ids]
         )
@@ -530,8 +746,12 @@ module Samples
                         -> { @subgroup12b.reload.samples_count } => 0,
                         -> { @group12.reload.samples_count } => -2,
                         -> { @john_doe_project2.reload.samples.size } => 2 do
-        Samples::TransferService.new(@subgroup12aa, @john_doe).execute(@john_doe_project2.id,
-                                                                       [@sample34.id, @sample35.id])
+        Samples::TransferJob.perform_now(
+          @subgroup12aa,
+          @john_doe,
+          @john_doe_project2.id,
+          [@sample34.id, @sample35.id]
+        )
       end
     end
 
@@ -549,26 +769,6 @@ module Samples
       assert_equal 2, organized[@current_project.id].size
       assert_includes organized[@current_project.id], @sample1.id
       assert_includes organized[@current_project.id], @sample2.id
-    end
-
-    test 'build_transferred_project_sample_ids returns empty when no samples transferred' do
-      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-
-      project_sample_ids_to_transfer = {
-        @current_project.id => [@sample1.id, @sample2.id]
-      }
-      num_transferred_samples_by_project = {
-        @current_project.id => 0
-      }
-
-      result = service.build_transferred_project_sample_ids(
-        project_sample_ids_to_transfer,
-        num_transferred_samples_by_project,
-        @new_project,
-        Sample.where(id: [@sample1.id, @sample2.id])
-      )
-
-      assert_empty result[@current_project.id]
     end
 
     test 'build_metadata_payload_from_samples extracts metadata keys and counts' do
@@ -603,14 +803,8 @@ module Samples
       # Create duplicate sample in target project
       duplicate = Sample.create!(name: @sample1.name, project: @new_project)
 
-      # Build the expected inputs for the new helper signature:
-      # project_sample_ids_to_transfer maps source project => attempted sample ids
-      project_sample_ids_to_transfer = { @current_project.id => [@sample1.id] }
-      # transferred_project_sample_ids maps source project => actually transferred ids (none in this case)
-      transferred_project_sample_ids = { @current_project.id => [] }
-
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
+      service.add_transfer_errors([@sample1.id], [], @new_project.id)
 
       # Should have conflict error
       error_messages = @current_project.namespace.errors.full_messages
@@ -623,11 +817,8 @@ module Samples
       # Create a conflicting sample in the target project (same name as @sample1)
       conflict = Sample.create!(name: @sample1.name, project: @new_project, puid: SecureRandom.hex)
 
-      project_sample_ids_to_transfer = { @current_project.id => [@sample1.id] }
-      transferred_project_sample_ids = { @current_project.id => [] }
-
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
+      service.add_transfer_errors([@sample1.id], [], @new_project.id)
 
       # Expect a sample_exists error mentioning the sample name and puid
       error_messages = @current_project.namespace.errors.full_messages
@@ -643,11 +834,8 @@ module Samples
       other_sample = Sample.create!(name: "mismatch_#{SecureRandom.hex}", project: @project29)
 
       # Attempt to transfer it from @current_project (wrong source)
-      project_sample_ids_to_transfer = { @current_project.id => [other_sample.id] }
-      transferred_project_sample_ids = { @current_project.id => [] }
-
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
+      service.add_transfer_errors([other_sample.id], [], @new_project.id)
 
       error_messages = @current_project.namespace.errors.full_messages
       expected = I18n.t('services.samples.transfer.samples_not_found', sample_ids: other_sample.id.to_s)
@@ -656,16 +844,23 @@ module Samples
       other_sample.destroy
     end
 
-    test 'add_transfer_conflict_errors adds target_project_duplicate when sample attempted from target project' do
+    test 'add_transfer_errors adds target_project_duplicate when sample transfer attempted from target project' do
       # Edge case: attempting to transfer a sample that already lives in the target project
-      project_sample_ids_to_transfer = { @new_project.id => [@sample1.id] }
-      transferred_project_sample_ids = { @new_project.id => [] }
-
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
+      service.add_transfer_errors([@sample1.id], [], @sample1.project_id)
 
       error_messages = @current_project.namespace.errors.full_messages
       expected = I18n.t('services.samples.transfer.target_project_duplicate', sample_name: @sample1.name)
+      assert(error_messages.any? { |msg| msg.include?(expected) })
+    end
+
+    test 'add_transfer_errors adds sample_exists when valid sample transfer attempted but failed do to generic conflict' do # rubocop:disable Layout/LineLength
+      # Edge case: attempting to transfer a sample to a project that already has a sample with that name
+      service = Samples::TransferService.new(@current_project.namespace, @john_doe)
+      service.add_transfer_errors([@sample1.id], [], @new_project.id)
+
+      error_messages = @current_project.namespace.errors.full_messages
+      expected = I18n.t('services.samples.transfer.sample_exists', sample_name: @sample1.name, sample_puid: @sample1.puid) # rubocop:disable Layout/LineLength
       assert(error_messages.any? { |msg| msg.include?(expected) })
     end
 
@@ -675,11 +870,8 @@ module Samples
       missing_sample2 = Sample.create!(name: "missing_2_#{SecureRandom.hex}", project: @project30)
 
       # Attempt to transfer both from @current_project (wrong source for both)
-      project_sample_ids_to_transfer = { @current_project.id => [missing_sample1.id, missing_sample2.id] }
-      transferred_project_sample_ids = { @current_project.id => [] }
-
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
-      service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
+      service.add_transfer_errors([missing_sample1.id, missing_sample2.id], [], @new_project.id)
 
       # Both missing ids should be consolidated into a single error message
       error_messages = @current_project.namespace.errors.full_messages
@@ -689,6 +881,73 @@ module Samples
 
       missing_sample1.destroy
       missing_sample2.destroy
+    end
+
+    test 'authorized results in a broadcasted success message and log data with correct responsible id' do
+      broadcast_target = SecureRandom.uuid
+      sample_ids = [@sample1.id, @sample2.id]
+
+      assert_difference -> { @new_project.reload.samples.count } => 2 do
+        Samples::TransferJob.perform_now(@current_project.namespace, @john_doe, @new_project.id, sample_ids,
+                                         broadcast_target)
+      end
+
+      turbo_streams = capture_turbo_stream_broadcasts broadcast_target
+
+      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample1.name).reload_log_data.responsible_id
+      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample2.name).reload_log_data.responsible_id
+      assert_equal 4, turbo_streams.size
+      # first 3 turbo streams are for progress bar updates
+      turbo_streams.take(3).each do |ts|
+        assert_equal 'replace', ts['action']
+        assert_equal "#{broadcast_target}-progress-bar", ts['target']
+      end
+      # last turbo stream is the success message
+      assert_equal 'replace', turbo_streams.last['action']
+      assert_equal 'transfer_samples_dialog_content', turbo_streams.last['target']
+      assert_includes turbo_streams.last.to_html, I18n.t('samples.transfers.create.success')
+    end
+
+    test 'authorized results in a broadcasted success message and log dat with interrupt' do
+      broadcast_target = SecureRandom.uuid
+      sample_ids = [@sample1.id, @sample2.id]
+
+      Samples::TransferJob.perform_later(@current_project.namespace, @john_doe, @new_project.id, sample_ids,
+                                         broadcast_target)
+
+      assert_difference -> { @new_project.reload.samples.count } => 2 do
+        interrupt_job_after_step(Samples::TransferJob, :update_counts_and_activities_step) do
+          perform_enqueued_jobs(only: Samples::TransferJob)
+        end
+      end
+
+      turbo_streams = capture_turbo_stream_broadcasts broadcast_target
+
+      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample1.name).reload_log_data.responsible_id
+      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample2.name).reload_log_data.responsible_id
+      assert_equal 3, turbo_streams.size # only get the first 3 from the status updates
+
+      # first 3 turbo streams are for progress bar updates
+      turbo_streams.take(3).each do |ts|
+        assert_equal 'replace', ts['action']
+        assert_equal "#{broadcast_target}-progress-bar", ts['target']
+      end
+
+      # resume job
+      perform_enqueued_jobs(only: Samples::TransferJob)
+
+      turbo_streams = capture_turbo_stream_broadcasts broadcast_target
+      assert_equal 7, turbo_streams.size # on retry all 4 broadcasts occur, plus the 3 from the first run
+
+      # first 6 turbo streams are for progress bar updates
+      turbo_streams.take(6).each do |ts|
+        assert_equal 'replace', ts['action']
+        assert_equal "#{broadcast_target}-progress-bar", ts['target']
+      end
+      # last turbo stream is the success message
+      assert_equal 'replace', turbo_streams.last['action']
+      assert_equal 'transfer_samples_dialog_content', turbo_streams.last['target']
+      assert_includes turbo_streams.last.to_html, I18n.t('samples.transfers.create.success')
     end
   end
 end
