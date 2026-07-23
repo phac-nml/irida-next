@@ -216,5 +216,7 @@ class DropdownComponentTest < ViewComponentTestCase
     assert_not_includes leading[:class].split, 'mr-2'
     assert_includes caret[:class], 'size-3'
     assert_no_selector 'button span.ml-2'
+    assert_selector 'div.flex'
+    assert_no_selector 'div.max-sm\\:grow'
   end
 end

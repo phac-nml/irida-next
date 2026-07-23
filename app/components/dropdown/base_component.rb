@@ -68,6 +68,10 @@ module Dropdown
       compact
     end
 
+    def wrapper_classes
+      class_names('flex', 'max-sm:grow' => !compact?)
+    end
+
     private
 
     # 🏷️ Set basic attributes from params

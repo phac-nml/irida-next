@@ -39,29 +39,30 @@
   label: t("projects.samples.index.title"),
   controls: (@has_samples ? "samples-table" : nil),
 ) do %>
-    <% if show_selection_buttons %>
-      <%= render Pathogen::Toolbar::Group.new do %>
-        <%= render Pathogen::Toolbar::Button.new(
-        form: "select-all-form",
-        id: "select-all-button",
-        label: t("projects.samples.index.select_all_tooltip"),
-        title: t("projects.samples.index.select_all_tooltip"),
-      ) do %>
-          <%= t("common.controls.select_all") %>
-        <% end %>
+    <%= render Pathogen::Toolbar::Group.new(class: "flex-wrap") do %>
+      <% if show_selection_buttons %>
+        <div class="flex items-center gap-2 max-[472px]:basis-full">
+          <%= render Pathogen::Toolbar::Button.new(
+          form: "select-all-form",
+          id: "select-all-button",
+          label: t("projects.samples.index.select_all_tooltip"),
+          title: t("projects.samples.index.select_all_tooltip"),
+        ) do %>
+            <%= t("common.controls.select_all") %>
+          <% end %>
 
-        <%= render Pathogen::Toolbar::Button.new(
-        form: "deselect-all-form",
-        id: "deselect-all-button",
-        label: t("projects.samples.index.deselect_all_tooltip"),
-        title: t("projects.samples.index.deselect_all_tooltip"),
-      ) do %>
-          <%= t("common.controls.deselect_all") %>
-        <% end %>
+          <%= render Pathogen::Toolbar::Button.new(
+          form: "deselect-all-form",
+          id: "deselect-all-button",
+          label: t("projects.samples.index.deselect_all_tooltip"),
+          title: t("projects.samples.index.deselect_all_tooltip"),
+        ) do %>
+            <%= t("common.controls.deselect_all") %>
+          <% end %>
+        </div>
+        <%= render Pathogen::Toolbar::Separator.new(class: "max-[472px]:hidden") if @render_sample_actions || @has_samples %>
       <% end %>
-    <% end %>
 
-    <%= render Pathogen::Toolbar::Group.new do %>
       <% if @render_sample_actions %>
         <%= render DropdownComponent.new(
         label: t("shared.samples.actions_dropdown.label"),
