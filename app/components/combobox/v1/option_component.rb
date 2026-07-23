@@ -9,18 +9,16 @@ module Combobox
           role: "option",
           "data-value": @value,
           "data-label": @label,
-          "data-selected": @selected ? "true" : nil,
           "aria-disabled": @disabled ? "true" : nil,
         ) do %>
           <%= content.presence %>
         <% end %>
       ERB
 
-      def initialize(value:, label:, disabled: false, selected: false)
+      def initialize(value:, label:, disabled: false)
         @value = value
         @label = label
         @disabled = disabled
-        @selected = selected
       end
     end
   end
