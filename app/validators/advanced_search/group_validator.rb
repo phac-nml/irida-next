@@ -80,11 +80,13 @@ module AdvancedSearch
       groups.all? { |group| Array(group.conditions).empty? }
     end
 
-    def validate_fields(group)
+    def validate_fields(group) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
       group.conditions.each_with_index do |condition, condition_index|
         validate_blank_inputs(condition)
-
         validate_field(condition) if condition.field.present?
+
+        next if BETWEEN_OPERATORS.include?(condition.operator) && !valid_between_value?(condition)
+
         validate_date_and_numeric_field(condition)
 
         validate_unique_condition(group, condition, condition_index)
@@ -106,9 +108,9 @@ module AdvancedSearch
       condition.errors.add :operator, :blank if condition.operator.blank?
 
       if BETWEEN_OPERATORS.include?(condition.operator) && condition.value.include?('')
-        condition.errors.add :from_value, I18n.t('errors.messages.blank') if condition.value[0].blank?
+        condition.errors.add :from_value, :blank if condition.value[0].blank?
 
-        condition.errors.add :to_value, I18n.t('errors.messages.blank') if condition.value[1].blank?
+        condition.errors.add :to_value, :blank if condition.value[1].blank?
         return
       end
 
@@ -178,8 +180,7 @@ module AdvancedSearch
                     end
         next if Float(number, exception: false)
 
-        condition.errors.add error_key,
-                             I18n.t('errors.messages.not_a_number')
+        condition.errors.add error_key, :not_a_number
       end
     end
 
@@ -193,10 +194,7 @@ module AdvancedSearch
         begin
           DateTime.strptime(date, '%Y-%m-%d')
         rescue StandardError
-          condition.errors.add(
-            error_key,
-            I18n.t('activemodel.errors.models.advanced_search_condition.attributes.value.not_a_date')
-          )
+          condition.errors.add error_key, :not_a_date
         end
       end
     end
@@ -231,6 +229,15 @@ module AdvancedSearch
 
     def metadata_field?(field)
       METADATA_FIELD_PATTERN.match?(field)
+    end
+
+    def valid_between_value?(condition)
+      if condition.value.is_a?(Array) && condition.value.length == 2
+        true
+      else
+        condition.errors.add :value, :invalid_between_value
+        false
+      end
     end
   end
 end

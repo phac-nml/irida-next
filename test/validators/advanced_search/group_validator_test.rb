@@ -233,7 +233,7 @@ module AdvancedSearch
       assert condition.errors.added?(:value, :not_a_number)
     end
 
-    test 'enforces unique field conditions except for a valid between pair' do
+    test 'enforces unique field conditions except for a valid combinable pair' do
       record = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [
                                   DummyCondition.new(field: 'name', operator: '=', value: 'a'),
@@ -295,7 +295,7 @@ module AdvancedSearch
       Flipper.disable(:advanced_search_metadata_operators)
     end
 
-    test 'validates metadata between operators' do
+    test 'validates metadata gteq and lteq operators' do
       Flipper.enable(:advanced_search_metadata_operators)
 
       record1 = DummyRecord.new(
@@ -347,6 +347,66 @@ module AdvancedSearch
       assert_not record4.valid?
       fourth = record4.groups.first.conditions.last
       assert fourth.errors.added?(:field, :taken)
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    test 'invalid between queries' do
+      Flipper.enable(:advanced_search_metadata_operators)
+      # non-date value for date operator and attaching error to from_value
+      record1 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: 'date_between',
+                                                                value: %w[a 2026-01-01])])]
+      )
+
+      assert_not record1.valid?
+      condition1 = record1.groups.first.conditions.first
+      assert condition1.errors.added?(:from_value, :not_a_date)
+
+      # non-numeric value for numeric operator and attaching error to to_value
+      record2 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field',
+                                                                operator: 'numeric_between',
+                                                                value: %w[1 a])])]
+      )
+
+      assert_not record2.valid?
+      condition2 = record2.groups.first.conditions.first
+      assert condition2.errors.added?(:to_value, :not_a_number)
+
+      # not an array error
+      record3 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: 'a')])]
+      )
+
+      assert_not record3.valid?
+      condition3 = record3.groups.first.conditions.first
+      assert condition3.errors.added?(:value, :invalid_between_value)
+
+      # not two value array error
+      record4 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: ['a'])])]
+      )
+
+      assert_not record4.valid?
+      condition4 = record4.groups.first.conditions.first
+      assert condition4.errors.added?(:value, :invalid_between_value)
+
+      # blank values
+      record5 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: ['', ''])])]
+      )
+
+      assert_not record5.valid?
+      condition5 = record5.groups.first.conditions.first
+      assert condition5.errors.added?(:from_value, :blank)
+      assert condition5.errors.added?(:to_value, :blank)
     ensure
       Flipper.disable(:advanced_search_metadata_operators)
     end

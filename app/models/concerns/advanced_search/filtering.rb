@@ -144,7 +144,7 @@ module AdvancedSearch
     end
 
     def apply_condition_date_between(scope, node, value, _field_name)
-      condition_date_between(scope, node, value)
+      metadata_condition_date_between(scope, node, value)
     end
 
     def apply_condition_numeric_between(scope, node, value, _field_name)

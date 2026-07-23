@@ -20,13 +20,17 @@ en:
         group: Group
       sample/search_condition:
         field: Field
+        from_value: From value
         operator: Operator
+        to_value: To value
         value: Value
       sample/search_group:
         condition: Condition
       workflow_execution/search_condition:
         field: Field
+        from_value: From value
         operator: Operator
+        to_value: To value
         value: Value
       workflow_execution/search_group:
         condition: Condition
@@ -40,7 +44,7 @@ en:
             operator:
               not_a_date_operator: cannot be used on dates
             value:
-              not_a_date: must be formatted YYYY-MM-DD
+              invalid_between_value: must be an array with two values
         concatenation_form:
           attributes:
             attachment_ids:
@@ -759,6 +763,7 @@ en:
       less_than: must be less than %{count}
       less_than_or_equal_to: must be less than or equal to %{count}
       model_invalid: 'Validation failed: %{errors}'
+      not_a_date: must be formatted YYYY-MM-DD
       not_a_number: is not a number
       not_an_integer: must be an integer
       odd: must be odd

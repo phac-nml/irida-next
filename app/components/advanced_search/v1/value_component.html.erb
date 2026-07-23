@@ -74,7 +74,7 @@
     id: "#{@conditions_form.field_id(:"from_value")}",
     multiple: true,
     value:  @condition.value.blank? ? nil : @condition.value[0],
-                                "aria-label":  I18n.t('components.advanced_search_component.v1.from_value'),
+                                "aria-label":  I18n.t('activemodel.attributes.sample/search_condition.from_value'),
                                 "aria-invalid": invalid_from_value,
                                 "aria-describedby":
                                   @conditions_form.field_id(:"from_value", "error") %>
@@ -95,7 +95,7 @@
     id: "#{@conditions_form.field_id(:"to_value")}",
     multiple: true,
     value: @condition.value.blank? ? nil : @condition.value[1],
-                                "aria-label": I18n.t('components.advanced_search_component.v1.to_value'),
+                                "aria-label": I18n.t('activemodel.attributes.sample/search_condition.to_value'),
                                 "aria-invalid": invalid_to_value,
                                 "aria-describedby":
                                   @conditions_form.field_id(:to_value, "error") %>
