@@ -1,4 +1,5 @@
-<%# locals: (show_selection_buttons:, show_launch:) -%>
+<%# locals: (show_selection_buttons:, show_launch:, project:, has_samples:, render_sample_actions:, allowed_to:, metadata_template:, pagy:, results_message:, query:, advanced_search_fields:, search_params:) -%>
+
 <%# Detached forms: Select/Launch associate via form=; Sample Actions menu uses button_to (must stay outside search form). %>
 <% if show_selection_buttons %>
   <%= form_with(
@@ -11,14 +12,13 @@
     <input type="hidden" name="select" value="on">
     <%= render "shared/samples/timestamp_input" %>
   <% end %>
-  <%= form_with(
-        url: select_namespace_project_samples_url,
-        method: :get,
+  <%= tag.form(
+        action: select_namespace_project_samples_url,
+        method: "get",
         id: "deselect-all-form",
         class: "hidden",
         data: { turbo_frame: "selected" },
-      ) do %>
-  <% end %>
+      ) %>
 <% end %>
 
 <% if show_launch %>
@@ -29,7 +29,7 @@
         class: "hidden",
         data: { turbo_stream: true },
       ) do %>
-    <%= hidden_field_tag :namespace_id, @project.namespace.id %>
+    <%= hidden_field_tag :namespace_id, project.namespace.id %>
   <% end %>
 <% end %>
 
@@ -37,7 +37,7 @@
 <div class="flex min-w-0 items-center">
   <%= render Pathogen::Toolbar.new(
   label: t("projects.samples.index.title"),
-  controls: (@has_samples ? "samples-table" : nil),
+  controls: (has_samples ? "samples-table" : nil),
 ) do %>
     <%= render Pathogen::Toolbar::Group.new(class: "flex-wrap") do %>
       <% if show_selection_buttons %>
@@ -60,10 +60,10 @@
             <%= t("common.controls.deselect_all") %>
           <% end %>
         </div>
-        <%= render Pathogen::Toolbar::Separator.new(class: "max-[472px]:hidden") if @render_sample_actions || @has_samples %>
+        <%= render Pathogen::Toolbar::Separator.new(class: "max-[472px]:hidden") if render_sample_actions || has_samples %>
       <% end %>
 
-      <% if @render_sample_actions %>
+      <% if render_sample_actions %>
         <%= render DropdownComponent.new(
         label: t("shared.samples.actions_dropdown.label"),
         aria: { label: t("shared.samples.actions_dropdown.label") },
@@ -78,7 +78,7 @@
           data: { "pathogen--toolbar-target": "item" },
         },
       ) do |dropdown| %>
-          <% if @allowed_to[:create_sample] %>
+          <% if allowed_to[:create_sample] %>
             <% dropdown.with_item(
             label: t("shared.samples.actions_dropdown.new_sample"),
             url: new_namespace_project_sample_path,
@@ -89,11 +89,11 @@
           ) %>
           <% end %>
 
-          <% if @allowed_to[:clone_sample] %>
+          <% if allowed_to[:clone_sample] %>
             <% dropdown.with_item(
             label: t("shared.samples.actions_dropdown.clone"),
             url: new_samples_clone_path,
-            params: { namespace_id: @project.namespace.id },
+            params: { namespace_id: project.namespace.id },
             disableable: true,
             data: {
               turbo_stream: true,
@@ -105,11 +105,11 @@
           ) %>
           <% end %>
 
-          <% if @allowed_to[:transfer_sample] %>
+          <% if allowed_to[:transfer_sample] %>
             <% dropdown.with_item(
             label: t("shared.samples.actions_dropdown.transfer"),
             url: new_samples_transfer_path,
-            params: { namespace_id: @project.namespace.id },
+            params: { namespace_id: project.namespace.id },
             disableable: true,
             data: {
               turbo_stream: true,
@@ -121,12 +121,12 @@
           ) %>
           <% end %>
 
-          <% if @allowed_to[:destroy_sample] %>
+          <% if allowed_to[:destroy_sample] %>
             <% dropdown.with_item(
             label: t("shared.samples.actions_dropdown.delete_samples"),
             url: new_samples_deletions_path,
             params: {
-              namespace_id: @project.namespace.id,
+              namespace_id: project.namespace.id,
               deletion_type: "multiple",
             },
             disableable: true,
@@ -140,12 +140,12 @@
           ) %>
           <% end %>
 
-          <% if @allowed_to[:update_sample_metadata] || @allowed_to[:import_samples_and_metadata] %>
+          <% if allowed_to[:update_sample_metadata] || allowed_to[:import_samples_and_metadata] %>
             <% dropdown.with_item(
             label: t("shared.samples.actions_dropdown.import"),
             section_header: true,
           ) %>
-            <% if @allowed_to[:update_sample_metadata] && @has_samples %>
+            <% if allowed_to[:update_sample_metadata] && has_samples %>
               <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.import_metadata"),
               url: new_namespace_project_samples_file_import_path,
@@ -155,7 +155,7 @@
                 "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
             ) %>
             <% end %>
-            <% if @allowed_to[:import_samples_and_metadata] %>
+            <% if allowed_to[:import_samples_and_metadata] %>
               <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.import_samples"),
               url: new_namespace_project_samples_spreadsheet_import_path,
@@ -167,7 +167,7 @@
             <% end %>
           <% end %>
 
-          <% if @allowed_to[:export_data] %>
+          <% if allowed_to[:export_data] %>
             <% dropdown.with_item(
             label: t("shared.samples.actions_dropdown.export"),
             section_header: true,
@@ -177,7 +177,7 @@
             url: new_data_export_path,
             params: {
               export_type: "linelist",
-              namespace_id: @project.namespace.id,
+              namespace_id: project.namespace.id,
             },
             disableable: true,
             data: {
@@ -193,7 +193,7 @@
             url: new_data_export_path,
             params: {
               export_type: "sample",
-              namespace_id: @project.namespace.id,
+              namespace_id: project.namespace.id,
             },
             disableable: true,
             data: {
@@ -211,11 +211,11 @@
       <%= render MetadataTemplates::DropdownComponent.new(
       url:
         list_namespace_project_metadata_templates_url(
-          @project.namespace.parent, @project, metadata_template: @metadata_template[:id],
-          limit: @pagy&.limit, page: @pagy&.page
+          project.namespace.parent, project, metadata_template: metadata_template[:id],
+          limit: pagy&.limit, page: pagy&.page
         ),
       toolbar_item: true,
-    ) if @has_samples %>
+    ) if has_samples %>
     <% end %>
 
     <% if show_launch %>
@@ -238,30 +238,30 @@
         </button>
       <% end %>
       <%= render Pathogen::Toolbar::Spacer.new %>
-    <% elsif @has_samples %>
+    <% elsif has_samples %>
       <%= render Pathogen::Toolbar::Spacer.new %>
     <% end %>
   <% end %>
 </div>
 
-<% if @has_samples %>
+<% if has_samples %>
   <div id="table-filter" class="flex min-w-0 items-center">
-    <div role="status" class="sr-only"><%= @results_message %></div>
+    <div role="status" class="sr-only"><%= results_message %></div>
 
-    <%= form_with model: @query, html: { role: "search", id: "samples-filter-form" }, scope: :q,
+    <%= form_with model: query, html: { role: "search", id: "samples-filter-form" }, scope: :q,
       url: search_namespace_project_samples_url, method: :post, data: {
         turbo_action: "replace",
         controller: "form--json-submission filters metadata-toggle",
-        "metadata-toggle-page-value": @pagy&.page,
+        "metadata-toggle-page-value": pagy&.page,
         "filters-selection-outlet": "#samples-table",
         "form--json-submission-target": "form",
       }, class: "filters flex w-full min-w-0 flex-wrap items-center gap-2" do |f| %>
       <%= render AdvancedSearchComponent.new(
         form: f,
-        search: @query,
-        fields: @advanced_search_fields,
-        open: @query.errors.any?,
-        status: @query.advanced_query?,
+        search: query,
+        fields: advanced_search_fields,
+        open: query.errors.any?,
+        status: query.advanced_query?,
         ghost: true,
       ) %>
 
@@ -271,7 +271,7 @@
           placeholder: t("projects.samples.table_filter.search.placeholder"),
           form: f,
           field_name: :name_or_puid_cont,
-          value: @search_params[:name_or_puid_cont],
+          value: search_params[:name_or_puid_cont],
           toolbar_item: false,
           compact: true,
           data: {
@@ -281,7 +281,7 @@
       </div>
 
       <%= hidden_field_tag :format, "turbo_stream" %>
-      <%= hidden_field_tag :limit, @pagy&.limit %>
+      <%= hidden_field_tag :limit, pagy&.limit %>
       <%= f.submit hidden: true %>
     <% end %>
   </div>
