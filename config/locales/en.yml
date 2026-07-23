@@ -95,6 +95,11 @@ en:
       sample:
         description: Description
         name: Name
+      site_banner:
+        created_at: Created at
+        enabled: Enabled
+        style: Style
+        updated_at: Updated at
       user:
         confirmation_sent_at: Confirmation sent at
         confirmation_token: Confirmation token
@@ -204,6 +209,10 @@ en:
         personal_access_tokens:
           rotate:
             only_active: Only active tokens can be rotated
+        site_banner:
+          attributes:
+            messages:
+              missing_locale_message: must include a message for %{locale_code}
         user:
           attributes:
             password:
@@ -251,6 +260,9 @@ en:
       sample:
         one: Sample
         other: Samples
+      site_banner:
+        one: Site Banner
+        other: Site Banners
       workflow_execution:
         one: Workflow Execution
         other: Workflow Executions

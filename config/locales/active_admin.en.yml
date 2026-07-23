@@ -2,3 +2,17 @@
 en:
   active_admin:
     dashboard: Dashboard
+    logout: Sign out
+    site_banners:
+      disable: Disable
+      disable_confirm: Disable this site banner?
+      disabled: Site banner disabled.
+      enable: Enable
+      enable_confirm: Enable this site banner?
+      enabled: Site banner enabled.
+      message_for: Message (%{locale_code})
+      messages_fieldset: Messages
+    toggle_dark_mode: Toggle dark mode
+    toggle_main_navigation_menu: Toggle main navigation menu
+    toggle_section: Toggle section
+    toggle_user_menu: Toggle user menu

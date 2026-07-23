@@ -95,6 +95,11 @@ fr:
       sample:
         description: Description
         name: Nom
+      site_banner:
+        created_at: Créé le
+        enabled: Activé
+        style: Style
+        updated_at: Mis à jour le
       user:
         confirmation_sent_at: Date d'envoi de la confirmation
         confirmation_token: Clé de confirmation du mot de passe
@@ -204,6 +209,10 @@ fr:
         personal_access_tokens:
           rotate:
             only_active: Seuls les jetons actifs peuvent être remis en rotation
+        site_banner:
+          attributes:
+            messages:
+              missing_locale_message: doit inclure un message pour %{locale_code}
         user:
           attributes:
             password:
@@ -251,6 +260,9 @@ fr:
       sample:
         one: Échantillon
         other: Échantillons
+      site_banner:
+        one: Bannière du site
+        other: Bannières du site
       workflow_execution:
         one: Exécution de flux de travail
         other: Exécutions de flux de travail

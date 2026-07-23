@@ -2,3 +2,17 @@
 fr:
   active_admin:
     dashboard: Tableau de bord
+    logout: Déconnexion
+    site_banners:
+      disable: Désactiver
+      disable_confirm: Désactiver cette bannière du site?
+      disabled: Bannière du site désactivée.
+      enable: Activer
+      enable_confirm: Activer cette bannière du site?
+      enabled: Bannière du site activée.
+      message_for: Message (%{locale_code})
+      messages_fieldset: Messages
+    toggle_dark_mode: Basculer le mode sombre
+    toggle_main_navigation_menu: Basculer le menu de navigation principal
+    toggle_section: Basculer la section
+    toggle_user_menu: Basculer le menu utilisateur
