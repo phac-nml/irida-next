@@ -3,7 +3,7 @@
 module Combobox
   module V1
     # Component for rendering a drop down that filters dynamically
-    class Component < ::Component
+    class Component < ::Component # rubocop:disable Metrics/ClassLength
       renders_many :options, ::Combobox::V1::OptionComponent
 
       def initialize(form:, field:, options: nil, selected_value: nil, **combobox_arguments)
@@ -82,6 +82,12 @@ module Combobox
         ActiveSupport::SafeBuffer.new(fragment.to_html)
       end
 
+      def create_slot_listbox
+        fragment = Nokogiri::HTML.fragment(options.join)
+        assign_option_ids(fragment.search('[role="option"]'))
+        ActiveSupport::SafeBuffer.new(fragment.to_html)
+      end
+
       def create_listbox_grouped_options(fragment) # rubocop:disable Metrics/MethodLength
         fragment.search('optgroup').each_with_index do |group, group_index|
           listbox_group_option_id = "#{@listbox_id}_group#{group_index}"
@@ -104,7 +110,7 @@ module Combobox
       def create_listbox_options(fragment)
         fragment.search('option').each_with_index do |option, option_index|
           listbox_group_option = Nokogiri::XML::Node.new('div', fragment)
-          listbox_group_option['id'] = "#{@listbox_id}_option#{option_index}"
+          listbox_group_option['id'] = listbox_option_id(option_index)
           listbox_group_option['role'] = 'option'
           listbox_group_option['data-value'] = option['value']
           listbox_group_option['data-label'] = option.text
@@ -113,6 +119,18 @@ module Combobox
           option.replace(listbox_group_option)
         end
         fragment
+      end
+
+      def assign_option_ids(option_nodes)
+        option_nodes.each_with_index do |option, option_index|
+          next if option['id'].present?
+
+          option['id'] = listbox_option_id(option_index)
+        end
+      end
+
+      def listbox_option_id(option_index)
+        "#{@listbox_id}_option#{option_index}"
       end
     end
   end
