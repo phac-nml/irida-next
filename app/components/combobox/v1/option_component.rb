@@ -11,7 +11,7 @@ module Combobox
           "data-label": @label,
           "aria-disabled": @disabled ? "true" : nil,
         ) do %>
-          <%= content.presence %>
+          <%= content.presence || @label %>
         <% end %>
       ERB
 
