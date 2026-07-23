@@ -25,6 +25,20 @@
   --dialog-section-max-height: calc(75vh - 1.25rem - 3.5rem);
 }
 
+/*
+  IRIDA focus contract: black (light) / white (dark), separate from brand primary.
+  Pathogen defaults --pvc-color-focus to primary-500; override after the gem stylesheet
+  so Toolbar items and Pathogen::Button match host :focus-visible.
+*/
+:root,
+:host {
+  --pvc-color-focus: #000000;
+}
+
+.dark {
+  --pvc-color-focus: #ffffff;
+}
+
 form.button_to {
   display: none;
 }
