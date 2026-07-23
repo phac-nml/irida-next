@@ -10,7 +10,9 @@ fr:
         new_parent_id: Groupe parent
       groups_attributes/conditions_attributes:
         field: Groupe %{group_index} Condition %{condition_index} Champ
+        from_value: Groupe %{group_index} Condition %{condition_index} Valeur de départ
         operator: Groupe %{group_index} Condition %{condition_index} Opérateur
+        to_value: Groupe %{group_index} Condition %{condition_index} À évaluer
         value: Groupe %{group_index} Condition %{condition_index} Valeur
       projects/transfer_form:
         new_namespace_id: Nouvel espace de noms
@@ -20,16 +22,12 @@ fr:
         field: Champ
         operator: Opérateur
         value: Valeur
-        value[0]: Valeur initiale
-        value[1]: Valeur finale
       sample/search_group:
         condition: Condition
       workflow_execution/search_condition:
         field: Champ
         operator: Opérateur
         value: Valeur
-        value[0]: Valeur initiale
-        value[1]: Valeur finale
       workflow_execution/search_group:
         condition: Condition
     errors:

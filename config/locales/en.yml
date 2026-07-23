@@ -9,33 +9,25 @@ en:
       groups/transfer_form:
         new_parent_id: Parent group
       groups_attributes/conditions_attributes:
-        ending_value: Group %{group_index} Condition %{condition_index} Ending Value
         field: Group %{group_index} Condition %{condition_index} Field
+        from_value: Group %{group_index} Condition %{condition_index} From value
         operator: Group %{group_index} Condition %{condition_index} Operator
-        starting_value: Group %{group_index} Condition %{condition_index} Starting Value
+        to_value: Group %{group_index} Condition %{condition_index} To value
         value: Group %{group_index} Condition %{condition_index} Value
       projects/transfer_form:
         new_namespace_id: New namespace
       sample/query:
         group: Group
       sample/search_condition:
-        ending_value: Ending Value
         field: Field
         operator: Operator
-        starting_value: Starting Value
         value: Value
-        value[0]: Starting Value
-        value[1]: Ending Value
       sample/search_group:
         condition: Condition
       workflow_execution/search_condition:
-        ending_value: Ending Value
         field: Field
         operator: Operator
-        starting_value: Starting Value
         value: Value
-        value[0]: Starting Value
-        value[1]: Ending Value
       workflow_execution/search_group:
         condition: Condition
     errors:
