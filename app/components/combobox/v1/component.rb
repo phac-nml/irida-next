@@ -6,23 +6,26 @@ module Combobox
     class Component < ::Component
       renders_many :options, ::Combobox::V1::OptionComponent
 
-      # rubocop:disable Metrics/ParameterLists
-      def initialize(form:, field:, options: nil, selected_name: nil, selected_value: nil, **combobox_arguments)
+      def initialize(form:, field:, options: nil, selected_value: nil, **combobox_arguments)
         @combobox_id = form.field_id(field)
         @listbox_id = "#{form.field_id(field)}_listbox"
         @form = form
         @field = field
+        @selected_value = selected_value
 
-        if options.nil?
-          @selected_option = { name: selected_name, value: selected_value }
-        else
+        unless options.nil?
           @listbox_options = create_listbox(options)
           @selected_option = selected_option(options, selected_value)
         end
 
         @combobox_arguments = combobox_arguments
       end
-      # rubocop:enable Metrics/ParameterLists
+
+      def before_render
+        return unless options?
+
+        @selected_option = selected_slot_option(@selected_value)
+      end
 
       private
 
@@ -61,6 +64,15 @@ module Combobox
           end
         end
         { name: '', value: '' }
+      end
+
+      def selected_slot_option(selected_value)
+        return { name: '', value: '' } if selected_value.blank?
+
+        option = options.find { |slot_option| slot_option.value.to_s == selected_value.to_s }
+        return { name: '', value: '' } if option.nil?
+
+        { name: option.label, value: option.value }
       end
 
       def create_listbox(options)
