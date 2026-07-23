@@ -41,7 +41,8 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     if @data_export.errors.any?
       render status: :unprocessable_content,
              locals: { type: 'alert', message: error_message(@data_export),
-                       export_type: data_export_params['export_type'] }
+                       export_type: data_export_params['export_type'],
+                       keep_dialog_open: max_data_export_size_exceeded?(@data_export) }
     else
       flash[:success] = t('.success', name: @data_export.name || @data_export.id)
       redirect_to data_export_path(@data_export), status: :see_other
@@ -192,6 +193,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def analysis_locals
     local = { open: true,
+              workflow_execution: nil,
               analysis_type: params['analysis_type'],
               namespace_id: %w[group project].include?(params['analysis_type']) ? params[:namespace_id] : nil }
     if params[:single_workflow]
@@ -240,5 +242,11 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def preview_tab_available?
     @data_export.manifest.present? && @data_export.status == 'ready' && @data_export.export_type != 'linelist'
+  end
+
+  def max_data_export_size_exceeded?(data_export)
+    data_export.errors.details.fetch(:base, []).any? do |error|
+      error[:error] == :max_data_export_size_exceeded
+    end
   end
 end

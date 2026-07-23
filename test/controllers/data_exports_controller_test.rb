@@ -319,6 +319,35 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
   end
 
+  test 'should return 422 and translated message in export dialog when export exceeds size limit' do
+    max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
+    DataExport.any_instance.stubs(:source_size_bytes).returns(max_gigabytes.gigabytes)
+
+    params = {
+      'data_export' => {
+        'export_type' => 'sample',
+        'export_parameters' => {
+          'ids' => [@sample1.id],
+          'namespace_id' => @project1.namespace.id,
+          'attachment_formats' => Attachment::FORMAT_REGEX.keys
+        }
+      },
+      format: :turbo_stream
+    }
+
+    assert_enqueued_jobs(0, only: DataExports::CreateJob) do
+      assert_no_difference('DataExport.count') do
+        post data_exports_path(params)
+      end
+    end
+
+    assert_response :unprocessable_content
+    assert_includes @response.body, 'target="data-export-dialog-errors"'
+    assert_includes @response.body,
+                    I18n.t('services.data_exports.create.max_data_export_size_exceeded',
+                           max_size_gigabytes: max_gigabytes)
+  end
+
   test 'should redirect from project PUID' do
     get redirect_data_export_path(@data_export1, identifier: 'INXT_PRJ_AAAAAAAAAA')
     assert_response :redirect

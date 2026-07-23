@@ -1948,6 +1948,7 @@ en:
       create:
         invalid_export_samples: Unable to create export due to either sample permissions or not found samples.
         invalid_export_workflow_executions: Unable to create export due to either workflow execution permissions or not found workflow executions.
+        max_data_export_size_exceeded: The size of the data you are trying to export is too large. Data exports must be smaller than %{max_size_gigabytes} GB. Please download files through the GraphQL API.
         non_completed_workflow_executions: Unable to create export due to selected workflow executions having a state other than 'Completed'.
     groups:
       share:
