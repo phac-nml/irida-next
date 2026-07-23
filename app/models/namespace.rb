@@ -24,6 +24,10 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_many :attachments, as: :attachable, dependent: :destroy
 
+  has_many :metadata_templates, dependent: :destroy
+
+  has_many :workflow_executions # rubocop:disable Rails/HasManyOrHasOneDependent
+
   validates :owner, presence: true, if: ->(n) { n.owner_required? }
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
   validates :name, uniqueness: { case_sensitive: false, scope: %i[type] }, if: -> { parent_id.blank? }
@@ -40,6 +44,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :validate_nesting_level, if: -> { new_record? || parent_id_changed? }
 
   scope :include_route, -> { includes(:route) }
+
+  before_real_destroy :nullify_workflow_executions
 
   after_restore :restore_routes
   after_destroy :propagate_destruction, unless: :destroyed_by_association
@@ -670,5 +676,9 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     old_parent = old_parent_id ? Namespace.find(old_parent_id) : nil
     new_parent = Namespace.find(new_parent_id)
     transfer_samples_count_delta(old_parent, new_parent, samples_count)
+  end
+
+  def nullify_workflow_executions
+    workflow_executions.update_all(namespace_id: nil) # rubocop:disable Rails/SkipsModelValidations
   end
 end

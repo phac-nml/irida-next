@@ -31,7 +31,7 @@ class NamespaceGroupLink < ApplicationRecord
                            new_record? || expires_at_before_type_cast.present?
                          }
 
-  after_destroy :send_access_revoked_emails
+  after_destroy :send_access_revoked_emails, unless: :destroyed_by_association
   after_save :send_access_granted_emails, if: :previously_new_record?
 
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
