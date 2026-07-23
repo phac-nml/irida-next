@@ -7,8 +7,8 @@
     <% if icon_name.present? %>
       <%= icon(
         icon_name,
-        size: icon_size,
-        class: class_names({ "mr-2": label.present?, "size-5": icon_size.nil? }),
+        size: leading_icon_size,
+        class: leading_icon_classes,
       ) %>
     <% end %>
 
@@ -23,8 +23,8 @@
     <% end %>
 
     <% if caret %>
-      <span data-dropdown--v2-target="caret" class="ml-2 inline-flex flex-none">
-        <%= icon(:caret_down, size: :sm) %>
+      <span data-dropdown--v2-target="caret" class="<%= caret_wrapper_classes %>">
+        <%= icon(:caret_down, size: caret_icon_size) %>
       </span>
     <% end %>
   <% end %>
