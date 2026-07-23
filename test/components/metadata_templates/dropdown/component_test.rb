@@ -25,6 +25,19 @@ module MetadataTemplates
                         visible: :all
         assert_text I18n.t('shared.samples.metadata_templates.loading')
       end
+
+      test 'registers the trigger as a toolbar item when toolbar_item is true' do
+        url = Rails.application.routes.url_helpers.list_group_metadata_templates_url(
+          @group,
+          metadata_template: @metadata_template[:id],
+          limit: @pagy&.limit,
+          page: @pagy&.page
+        )
+
+        render_inline MetadataTemplates::DropdownComponent.new(url: url, toolbar_item: true)
+
+        assert_selector 'button[data-pathogen--toolbar-target="item"][tabindex="-1"]'
+      end
     end
   end
 end

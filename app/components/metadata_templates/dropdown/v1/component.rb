@@ -22,6 +22,14 @@ module MetadataTemplates
             }
           }
         end
+
+        def button_classes
+          if @toolbar_item
+            helpers.pathogen_toolbar_trigger_classes
+          else
+            'button w-full button-default'
+          end
+        end
       end
     end
   end
