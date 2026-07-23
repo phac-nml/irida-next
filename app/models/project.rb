@@ -8,6 +8,7 @@ class Project < ApplicationRecord
 
   before_restore :restore_namespace
   after_destroy :destroy_namespace
+  after_commit :propagate_samples_count_change, if: :saved_change_to_samples_count?
 
   belongs_to :creator, class_name: 'User'
   belongs_to :namespace, autosave: true, class_name: 'Namespaces::ProjectNamespace'
@@ -59,6 +60,21 @@ class Project < ApplicationRecord
     end
   end
 
+  # Update the project's sample count by a given delta and propagate changes to ancestors.
+  # @param delta [Integer] positive or negative change in sample count
+  def update_samples_count_delta(delta)
+    return if delta.zero?
+
+    if delta.positive?
+      Project.increment_counter(:samples_count, id, by: delta) # rubocop:disable Rails/SkipsModelValidations
+    else
+      Project.decrement_counter(:samples_count, id, by: delta.abs) # rubocop:disable Rails/SkipsModelValidations
+    end
+
+    # Propagate the delta to group ancestors directly
+    namespace.propagate_samples_count_delta(delta)
+  end
+
   private
 
   def destroy_namespace
@@ -72,5 +88,13 @@ class Project < ApplicationRecord
     return if namespace_to_restore.nil?
 
     Namespace.restore(namespace_to_restore.id, recursive: true)
+  end
+
+  # Propagate sample count changes to group namespace ancestors.
+  # Called when samples_count is updated (e.g., via counter_cache on Sample creation/deletion).
+  def propagate_samples_count_change
+    old_count, new_count = saved_change_to_samples_count
+    delta = new_count - old_count
+    namespace.propagate_samples_count_delta(delta)
   end
 end

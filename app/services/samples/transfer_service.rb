@@ -93,13 +93,8 @@ module Samples
     # @param new_project [Project] the target project
     # @param transferred_samples_count [Integer] number of samples transferred
     def update_samples_count(old_project, new_project, transferred_samples_count)
-      Project.decrement_counter(:samples_count, old_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations
-      Project.increment_counter(:samples_count, new_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations
-      if old_project.parent.type == 'Group'
-        old_project.parent.update_samples_count_by_transfer_service(new_project, transferred_samples_count)
-      elsif new_project.parent.type == 'Group'
-        new_project.parent.update_samples_count_by_addition_services(transferred_samples_count)
-      end
+      old_project.update_samples_count_delta(-transferred_samples_count)
+      new_project.update_samples_count_delta(transferred_samples_count)
     end
 
     # Update metadata summaries for all namespaces affected by the transfer.

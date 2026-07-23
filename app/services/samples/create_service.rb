@@ -15,27 +15,18 @@ module Samples
     def execute
       authorize! @project, to: :create_sample? unless @project.nil?
 
-      if sample.save
-
-        update_samples_count if @project.parent.group_namespace?
-
-        if @include_activity
-          @project.namespace.create_activity key: 'namespaces_project_namespace.samples.create',
-                                             owner: current_user,
-                                             parameters:
-                                               {
-                                                 sample_id: sample.id,
-                                                 sample_puid: sample.puid,
-                                                 action: 'sample_create'
-                                               }
-        end
+      if sample.save && @include_activity
+        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.create',
+                                           owner: current_user,
+                                           parameters:
+                                             {
+                                               sample_id: sample.id,
+                                               sample_puid: sample.puid,
+                                               action: 'sample_create'
+                                             }
       end
 
       sample
-    end
-
-    def update_samples_count
-      @project.parent.update_samples_count_by_addition_services
     end
   end
 end

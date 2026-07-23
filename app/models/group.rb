@@ -132,30 +132,9 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def update_samples_count_by_addition_services(added_samples_count = 1)
-    namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
-    add_to_samples_count(namespaces_to_update, added_samples_count)
-  end
-
+  # Delegates to namespace helper to propagate negative sample count changes through group ancestors.
   def update_samples_count_by_destroy_service(deleted_samples_count)
-    namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
-    subtract_from_samples_count(namespaces_to_update, deleted_samples_count)
-  end
-
-  def update_samples_count_by_transfer_service(destination, transferred_samples_count, destination_type = 'Project')
-    namespaces_to_update = self_and_ancestors_of_type(Group.sti_name)
-    subtract_from_samples_count(namespaces_to_update, transferred_samples_count)
-
-    case destination_type
-    when 'Project'
-      namespaces_to_update = destination.parent.self_and_ancestors.where(type: Group.sti_name)
-    when 'Group'
-      namespaces_to_update = destination.self_and_ancestors.where(type: Group.sti_name)
-    else
-      return
-    end
-
-    add_to_samples_count(namespaces_to_update, transferred_samples_count)
+    propagate_samples_count_delta(-deleted_samples_count)
   end
 
   def validate_public_namespace_type

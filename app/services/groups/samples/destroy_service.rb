@@ -34,7 +34,6 @@ module Groups
 
           project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
 
-          update_samples_count(project_namespace, samples_deleted_count) if project_namespace.parent.group_namespace?
           create_project_activity(project_namespace, @deleted_samples_data[:project_data][project_puid])
 
           total_deleted_samples_count += samples_deleted_count

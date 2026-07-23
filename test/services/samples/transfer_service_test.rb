@@ -690,5 +690,125 @@ module Samples
       missing_sample1.destroy
       missing_sample2.destroy
     end
+
+    test 'transferring samples updates project and group ancestor counts - different hierarchies' do
+      # Hierarchy: group_twelve -> subgroup_twelve_a -> subgroup_twelve_a_a -> project31
+      # and: group_twelve -> subgroup_twelve_b -> project30
+      service = Samples::TransferService.new(@project31.namespace, @john_doe)
+
+      # Store initial counts
+      project31_count_before = @project31.samples_count
+      project30_count_before = @project30.samples_count
+      subgroup12aa_count_before = @subgroup12aa.samples_count
+      subgroup12b_count_before = @subgroup12b.samples_count
+      group12_count_before = @group12.samples_count
+
+      # Transfer sample34 and sample35 from project31 to project30
+      transferred_ids = service.execute(@project30.id, [@sample34.id, @sample35.id])
+
+      # Verify transfers succeeded
+      assert_equal 2, transferred_ids.count
+
+      # Reload all groups to get updated counts
+      @project31.reload
+      @project30.reload
+      @subgroup12aa.reload
+      @subgroup12b.reload
+      @group12.reload
+
+      # Verify source project count decreased
+      assert_equal project31_count_before - 2, @project31.samples_count
+
+      # Verify destination project count increased
+      assert_equal project30_count_before + 2, @project30.samples_count
+
+      # Verify source subgroup count decreased
+      assert_equal subgroup12aa_count_before - 2, @subgroup12aa.samples_count
+
+      # Verify destination subgroup count increased
+      assert_equal subgroup12b_count_before + 2, @subgroup12b.samples_count
+
+      # Verify group count stayed the same (both are under group12)
+      assert_equal group12_count_before, @group12.samples_count
+    end
+
+    test 'transferring samples between different groups updates both groups and their ancestors' do
+      # Transfer from project31 (group_twelve hierarchy) to project1 (group_one)
+      project1 = projects(:project1)
+      group_one = groups(:group_one)
+      group12 = @group12
+
+      service = Samples::TransferService.new(@project31.namespace, @john_doe)
+
+      # Store initial counts
+      project31_count_before = @project31.samples_count
+      project1_count_before = project1.samples_count
+      group12_count_before = group12.samples_count
+      group_one_count_before = group_one.samples_count
+
+      # Transfer samples from project31 to project1
+      transferred_ids = service.execute(project1.id, [@sample34.id, @sample35.id])
+
+      assert_equal 2, transferred_ids.count
+
+      # Reload all
+      @project31.reload
+      project1.reload
+      group12.reload
+      group_one.reload
+
+      # Verify source project and group decreased
+      assert_equal project31_count_before - 2, @project31.samples_count
+      assert_equal group12_count_before - 2, group12.samples_count
+
+      # Verify destination project and group increased
+      assert_equal project1_count_before + 2, project1.samples_count
+      assert_equal group_one_count_before + 2, group_one.samples_count
+    end
+
+    test 'transferring single sample updates counts correctly' do
+      service = Samples::TransferService.new(@project31.namespace, @john_doe)
+
+      project31_count_before = @project31.samples_count
+      project30_count_before = @project30.samples_count
+
+      # Transfer just one sample
+      transferred_ids = service.execute(@project30.id, [@sample34.id])
+
+      assert_equal 1, transferred_ids.count
+
+      @project31.reload
+      @project30.reload
+
+      # Verify counts changed by 1
+      assert_equal project31_count_before - 1, @project31.samples_count
+      assert_equal project30_count_before + 1, @project30.samples_count
+    end
+
+    test 'transferring samples with conflicts does not affect untransferred sample counts' do
+      # Create a sample in project30 with same name as sample34
+      # This will prevent sample34 from being transferred due to conflict
+      Sample.create!(name: @sample34.name, project: @project30)
+
+      service = Samples::TransferService.new(@project31.namespace, @john_doe)
+
+      project31_count_before = @project31.samples_count
+      project30_count_before = @project30.samples_count
+
+      # Attempt to transfer both samples
+      # sample34 will conflict, sample35 should transfer
+      transferred_ids = service.execute(@project30.id, [@sample34.id, @sample35.id])
+
+      # Only sample35 should be transferred (sample34 conflicts)
+      assert_equal 1, transferred_ids.count
+      assert transferred_ids.include?(@sample35.id)
+
+      @project31.reload
+      @project30.reload
+
+      # Verify only 1 sample was counted in transfers
+      assert_equal project31_count_before - 1, @project31.samples_count
+      assert_equal project30_count_before + 1, @project30.samples_count
+    end
   end
 end
