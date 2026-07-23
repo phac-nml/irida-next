@@ -15,33 +15,77 @@
 ) do %>
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>
     <% dialog.with_trigger do %>
-      <div class="flex w-full grow flex-row rounded-lg" role="group">
-        <button
-          type="button"
-          class="<%= class_names("button button-default w-full focus-visible:z-10", { "rounded-e-none border-e-0": @status }) %>"
-          data-viral--dialog-target="trigger"
-          <% if @toolbar_item %>
-            data-pathogen--toolbar-target="item"
-            tabindex="-1"
+      <div class="flex w-full grow flex-row items-stretch rounded-[var(--pvc-radius-action)]" role="group">
+        <% if @toolbar_item %>
+          <%= render Pathogen::Toolbar::Button.new(
+            type: :button,
+            label: t("components.advanced_search_component.v1.title"),
+            data: {
+              "viral--dialog-target": "trigger",
+              action: "advanced-search--v1#renderSearch viral--dialog#open",
+            },
+          ) do %>
+            <%= t("components.advanced_search_component.v1.title") %>
           <% end %>
-          data-action="advanced-search--v1#renderSearch viral--dialog#open"
-          aria-label="<%= t("components.advanced_search_component.v1.title") %>"
-        >
-          <%= t("components.advanced_search_component.v1.title") %>
-        </button>
-
-        <% if @status %>
+          <% if @status %>
+            <%= render Pathogen::Toolbar::Button.new(
+              type: :button,
+              label: t("components.advanced_search_component.v1.clear_aria_label"),
+              data: {
+                action: "advanced-search--v1#clearForm filters#submit",
+              },
+            ) do %>
+              <%= icon(:x, size: :sm) %>
+            <% end %>
+          <% end %>
+        <% elsif @ghost %>
+          <%= render Pathogen::Button.new(
+            type: :button,
+            tone: :neutral,
+            emphasis: :ghost,
+            size: :small,
+            aria: { label: t("components.advanced_search_component.v1.title") },
+            data: {
+              "viral--dialog-target": "trigger",
+              action: "advanced-search--v1#renderSearch viral--dialog#open",
+            },
+          ) do %>
+            <%= t("components.advanced_search_component.v1.title") %>
+          <% end %>
+          <% if @status %>
+            <%= render Pathogen::Button.new(
+              type: :button,
+              tone: :neutral,
+              emphasis: :ghost,
+              size: :small,
+              aria: { label: t("components.advanced_search_component.v1.clear_aria_label") },
+              data: {
+                action: "advanced-search--v1#clearForm filters#submit",
+              },
+            ) do %>
+              <%= icon(:x, size: :sm) %>
+            <% end %>
+          <% end %>
+        <% else %>
           <button
             type="button"
-            class="button rounded-s-none button-default"
-            data-action="advanced-search--v1#clearForm filters#submit"
-            aria-label="<%= t("components.advanced_search_component.v1.clear_aria_label") %>"
-            <% if @toolbar_item %>
-              tabindex="-1"
-            <% end %>
+            class="<%= class_names("button button-default w-full focus-visible:z-10", { "rounded-e-none border-e-0": @status }) %>"
+            data-viral--dialog-target="trigger"
+            data-action="advanced-search--v1#renderSearch viral--dialog#open"
+            aria-label="<%= t("components.advanced_search_component.v1.title") %>"
           >
-            <%= icon(:x, size: :sm) %>
+            <%= t("components.advanced_search_component.v1.title") %>
           </button>
+          <% if @status %>
+            <button
+              type="button"
+              class="button rounded-s-none button-default"
+              data-action="advanced-search--v1#clearForm filters#submit"
+              aria-label="<%= t("components.advanced_search_component.v1.clear_aria_label") %>"
+            >
+              <%= icon(:x, size: :sm) %>
+            </button>
+          <% end %>
         <% end %>
       </div>
     <% end %>

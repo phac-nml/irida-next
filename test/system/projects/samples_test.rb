@@ -122,8 +122,11 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      assert_selector 'span',
+      assert_selector 'button#launch-workflow-button',
                       text: I18n.t('projects.samples.index.workflows.button_sr', locale: user.locale)
+      assert_selector 'form#launch-workflow-form', visible: false
+      assert_selector '[data-pathogen--toolbar-surface]'
+      assert_selector '[role="toolbar"]'
     end
 
     test 'User with role < Analyst does not see workflow execution link' do
@@ -134,7 +137,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
-      assert_no_selector 'span', text: I18n.t('projects.samples.index.workflows.button_sr')
+      assert_no_selector 'button#launch-workflow-button'
     end
 
     test 'User with role >= Analyst sees sample actions dropdown' do
@@ -143,6 +146,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
       assert_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector '[role="toolbar"]', text: I18n.t('shared.samples.actions_dropdown.label')
     end
 
     test 'User with role < Analyst does not see sample actions dropdown' do

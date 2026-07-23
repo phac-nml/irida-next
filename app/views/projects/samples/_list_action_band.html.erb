@@ -1,0 +1,287 @@
+<%# locals: (show_selection_buttons:, show_launch:) -%>
+<%# Detached forms: Select/Launch associate via form=; Sample Actions menu uses button_to (must stay outside search form). %>
+<% if show_selection_buttons %>
+  <%= form_with(
+        url: select_namespace_project_samples_url,
+        method: :get,
+        id: "select-all-form",
+        class: "hidden",
+        data: { turbo_frame: "selected" },
+      ) do %>
+    <input type="hidden" name="select" value="on">
+    <%= render "shared/samples/timestamp_input" %>
+  <% end %>
+  <%= form_with(
+        url: select_namespace_project_samples_url,
+        method: :get,
+        id: "deselect-all-form",
+        class: "hidden",
+        data: { turbo_frame: "selected" },
+      ) do %>
+  <% end %>
+<% end %>
+
+<% if show_launch %>
+  <%= form_with(
+        url: pipeline_selection_workflow_executions_submissions_path,
+        method: :get,
+        id: "launch-workflow-form",
+        class: "hidden",
+        data: { turbo_stream: true },
+      ) do %>
+    <%= hidden_field_tag :namespace_id, @project.namespace.id %>
+  <% end %>
+<% end %>
+
+<%# Match Pathogen Lookbook: commands in role=toolbar; search (+ Advanced) stays a sibling Tab stop. %>
+<div class="flex min-w-0 items-center">
+  <%= render Pathogen::Toolbar.new(
+  label: t("projects.samples.index.title"),
+  controls: (@has_samples ? "samples-table" : nil),
+) do %>
+    <% if show_selection_buttons %>
+      <%= render Pathogen::Toolbar::Group.new do %>
+        <%= render Pathogen::Toolbar::Button.new(
+        form: "select-all-form",
+        id: "select-all-button",
+        label: t("projects.samples.index.select_all_tooltip"),
+        title: t("projects.samples.index.select_all_tooltip"),
+      ) do %>
+          <%= t("common.controls.select_all") %>
+        <% end %>
+
+        <%= render Pathogen::Toolbar::Button.new(
+        form: "deselect-all-form",
+        id: "deselect-all-button",
+        label: t("projects.samples.index.deselect_all_tooltip"),
+        title: t("projects.samples.index.deselect_all_tooltip"),
+      ) do %>
+          <%= t("common.controls.deselect_all") %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= render Pathogen::Toolbar::Group.new do %>
+      <% if @render_sample_actions %>
+        <%= render DropdownComponent.new(
+        label: t("shared.samples.actions_dropdown.label"),
+        aria: { label: t("shared.samples.actions_dropdown.label") },
+        caret: true,
+        compact: true,
+        styles: {
+          button: pathogen_toolbar_trigger_classes,
+          dropdown: "divide-y divide-slate-100 dark:divide-slate-600",
+        },
+        system_arguments: {
+          tabindex: -1,
+          data: { "pathogen--toolbar-target": "item" },
+        },
+      ) do |dropdown| %>
+          <% if @allowed_to[:create_sample] %>
+            <% dropdown.with_item(
+            label: t("shared.samples.actions_dropdown.new_sample"),
+            url: new_namespace_project_sample_path,
+            disableable: true,
+            data: { turbo_stream: true },
+            class:
+              "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
+          ) %>
+          <% end %>
+
+          <% if @allowed_to[:clone_sample] %>
+            <% dropdown.with_item(
+            label: t("shared.samples.actions_dropdown.clone"),
+            url: new_samples_clone_path,
+            params: { namespace_id: @project.namespace.id },
+            disableable: true,
+            data: {
+              turbo_stream: true,
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class:
+              "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
+          ) %>
+          <% end %>
+
+          <% if @allowed_to[:transfer_sample] %>
+            <% dropdown.with_item(
+            label: t("shared.samples.actions_dropdown.transfer"),
+            url: new_samples_transfer_path,
+            params: { namespace_id: @project.namespace.id },
+            disableable: true,
+            data: {
+              turbo_stream: true,
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class:
+              "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
+          ) %>
+          <% end %>
+
+          <% if @allowed_to[:destroy_sample] %>
+            <% dropdown.with_item(
+            label: t("shared.samples.actions_dropdown.delete_samples"),
+            url: new_samples_deletions_path,
+            params: {
+              namespace_id: @project.namespace.id,
+              deletion_type: "multiple",
+            },
+            disableable: true,
+            data: {
+              turbo_stream: true,
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class:
+              "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-button cursor-pointer",
+          ) %>
+          <% end %>
+
+          <% if @allowed_to[:update_sample_metadata] || @allowed_to[:import_samples_and_metadata] %>
+            <% dropdown.with_item(
+            label: t("shared.samples.actions_dropdown.import"),
+            section_header: true,
+          ) %>
+            <% if @allowed_to[:update_sample_metadata] && @has_samples %>
+              <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.import_metadata"),
+              url: new_namespace_project_samples_file_import_path,
+              disableable: true,
+              data: { turbo_stream: true },
+              class:
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
+            ) %>
+            <% end %>
+            <% if @allowed_to[:import_samples_and_metadata] %>
+              <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.import_samples"),
+              url: new_namespace_project_samples_spreadsheet_import_path,
+              disableable: true,
+              data: { turbo_stream: true },
+              class:
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
+            ) %>
+            <% end %>
+          <% end %>
+
+          <% if @allowed_to[:export_data] %>
+            <% dropdown.with_item(
+            label: t("shared.samples.actions_dropdown.export"),
+            section_header: true,
+          ) %>
+            <% dropdown.with_item(
+            label: t("shared.samples.actions_dropdown.linelist_export"),
+            url: new_data_export_path,
+            params: {
+              export_type: "linelist",
+              namespace_id: @project.namespace.id,
+            },
+            disableable: true,
+            data: {
+              turbo_stream: true,
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class:
+              "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
+          ) %>
+            <% dropdown.with_item(
+            label: t("shared.samples.actions_dropdown.sample_export"),
+            url: new_data_export_path,
+            params: {
+              export_type: "sample",
+              namespace_id: @project.namespace.id,
+            },
+            disableable: true,
+            data: {
+              turbo_stream: true,
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class:
+              "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
+          ) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= render MetadataTemplates::DropdownComponent.new(
+      url:
+        list_namespace_project_metadata_templates_url(
+          @project.namespace.parent, @project, metadata_template: @metadata_template[:id],
+          limit: @pagy&.limit, page: @pagy&.page
+        ),
+      toolbar_item: true,
+    ) if @has_samples %>
+    <% end %>
+
+    <% if show_launch %>
+      <%= render Pathogen::Toolbar::Spacer.new %>
+      <%= render Pathogen::Toolbar::Group.new do %>
+        <%# Host button: Pathogen::Button drops custom classes, but selection needs .action-button. %>
+        <button
+          type="submit"
+          form="launch-workflow-form"
+          id="launch-workflow-button"
+          class="action-button max-sm:w-full <%= pathogen_toolbar_trigger_classes(tone: :neutral, emphasis: :solid) %>"
+          tabindex="-1"
+          data-pathogen--toolbar-target="item"
+          data-controller="action-button"
+          data-action-button-required-value="1"
+          data-turbo-stream="true"
+          aria-label="<%= t("projects.samples.index.workflows.button_sr") %>"
+        >
+          <%= t("projects.samples.index.workflows.button_sr") %>
+        </button>
+      <% end %>
+      <%= render Pathogen::Toolbar::Spacer.new %>
+    <% elsif @has_samples %>
+      <%= render Pathogen::Toolbar::Spacer.new %>
+    <% end %>
+  <% end %>
+</div>
+
+<% if @has_samples %>
+  <div id="table-filter" class="flex min-w-0 items-center">
+    <div role="status" class="sr-only"><%= @results_message %></div>
+
+    <%= form_with model: @query, html: { role: "search", id: "samples-filter-form" }, scope: :q,
+      url: search_namespace_project_samples_url, method: :post, data: {
+        turbo_action: "replace",
+        controller: "form--json-submission filters metadata-toggle",
+        "metadata-toggle-page-value": @pagy&.page,
+        "filters-selection-outlet": "#samples-table",
+        "form--json-submission-target": "form",
+      }, class: "filters flex w-full min-w-0 flex-wrap items-center gap-2" do |f| %>
+      <%= render AdvancedSearchComponent.new(
+        form: f,
+        search: @query,
+        fields: @advanced_search_fields,
+        open: @query.errors.any?,
+        status: @query.advanced_query?,
+        ghost: true,
+      ) %>
+
+      <div class="min-w-0 grow">
+        <%= render SearchFieldComponent.new(
+          label: t("common.controls.search"),
+          placeholder: t("projects.samples.table_filter.search.placeholder"),
+          form: f,
+          field_name: :name_or_puid_cont,
+          value: @search_params[:name_or_puid_cont],
+          toolbar_item: false,
+          compact: true,
+          data: {
+            "search-field-selection-outlet": "#samples-table",
+          },
+        ) %>
+      </div>
+
+      <%= hidden_field_tag :format, "turbo_stream" %>
+      <%= hidden_field_tag :limit, @pagy&.limit %>
+      <%= f.submit hidden: true %>
+    <% end %>
+  </div>
+<% end %>
