@@ -28,7 +28,6 @@
       data-combobox--v1-target="indicatorClearButton"
       data-action="mousedown->combobox--v1#onIndicatorMouseDown click->combobox--v1#onClearClick"
       aria-label="<%= t('combobox_component.clear_selection') %>"
-      title="<%= t('combobox_component.clear_selection') %>"
       tabindex="-1"
       aria-disabled="<%= combobox_disabled? %>"
     >
@@ -45,7 +44,6 @@
       data-combobox--v1-target="indicatorButton"
       data-action="mousedown->combobox--v1#onIndicatorMouseDown click->combobox--v1#onIndicatorClick"
       aria-label="<%= t('combobox_component.show_options') %>"
-      title="<%= t('combobox_component.show_options') %>"
       tabindex="-1"
       aria-disabled="<%= combobox_disabled? %>"
     >
@@ -60,7 +58,13 @@
       "aria-label": combobox_arguments[:aria][:label],
       "data-combobox--v1-target": "listbox",
     ) do %>
-      <%= @listbox_options %>
+      <% if options? %>
+        <% options.each do |option| %>
+          <%= option %>
+        <% end %>
+      <% else %>
+        <%= @listbox_options %>
+      <% end %>
     <% end %>
 
     <div role="status" hidden data-combobox--v1-target="noResults"></div>

@@ -3,25 +3,27 @@
 module Combobox
   module V1
     # Component for rendering a drop down that filters dynamically
-    class Component < ::Component # rubocop:disable Metrics/ClassLength
+    class Component < ::Component
       renders_many :options, ::Combobox::V1::OptionComponent
 
-      def initialize(form:, field:, options: nil, **combobox_arguments)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(form:, field:, options: nil, selected_name: nil, selected_value: nil, **combobox_arguments)
         @combobox_id = form.field_id(field)
         @listbox_id = "#{form.field_id(field)}_listbox"
         @form = form
         @field = field
-        @options_argument = options
-        @listbox_options = ActiveSupport::SafeBuffer.new
-        @selected_option = { name: '', value: '' }
+        @listbox_options = nil
+
+        if options.nil?
+          @selected_option = { name: selected_name, value: selected_value }
+        else
+          @listbox_options = create_listbox(options)
+          @selected_option = selected_option(options, selected_value)
+        end
+
         @combobox_arguments = combobox_arguments
       end
-
-      def before_render
-        option_markup = source_option_markup
-        @listbox_options = create_listbox(option_markup)
-        @selected_option = selected_option(option_markup)
-      end
+      # rubocop:enable Metrics/ParameterLists
 
       private
 
@@ -52,55 +54,21 @@ module Combobox
         @combobox_arguments[:disabled] == true
       end
 
-      def selected_option(options_markup)
-        fragment = Nokogiri::HTML.fragment(options_markup.to_s)
-
-        selected_native_option(fragment) || selected_role_option(fragment) || empty_selection
-      end
-
-      def selected_native_option(fragment)
-        option = fragment.search('option').find { |node| node.key?('selected') }
-        selection_from_node(option, value_attribute: 'value')
-      end
-
-      def selected_role_option(fragment)
-        option = fragment.search('[role="option"]').find do |node|
-          node['data-selected'] == 'true' || node['aria-selected'] == 'true'
+      def selected_option(options, selected_value)
+        fragment = Nokogiri::HTML.fragment(options)
+        fragment.search('option').each do |option|
+          if option.key?('selected') || option['value'] == selected_value
+            return { name: option.text, value: option['value'] }
+          end
         end
-        selection_from_node(option, value_attribute: 'data-value')
-      end
-
-      def selection_from_node(node, value_attribute:)
-        return if node.blank?
-
-        { name: node['data-label'] || node.text, value: node[value_attribute].to_s }
-      end
-
-      def empty_selection
         { name: '', value: '' }
       end
 
-      def create_listbox(options_markup)
-        fragment = Nokogiri::HTML.fragment(options_markup.to_s)
+      def create_listbox(options)
+        fragment = Nokogiri::HTML.fragment(options)
         fragment = create_listbox_options(fragment)
         fragment = create_listbox_grouped_options(fragment)
-        fragment = ensure_option_ids(fragment)
         ActiveSupport::SafeBuffer.new(fragment.to_html)
-      end
-
-      def source_option_markup
-        if options?
-          ActiveSupport::SafeBuffer.new(options.join)
-        else
-          @options_argument.to_s
-        end
-      end
-
-      def ensure_option_ids(fragment)
-        fragment.search('[role="option"]').each_with_index do |option, option_index|
-          option['id'] = "#{@listbox_id}_option#{option_index}"
-        end
-        fragment
       end
 
       def create_listbox_grouped_options(fragment) # rubocop:disable Metrics/MethodLength

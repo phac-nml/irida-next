@@ -13,19 +13,6 @@ module Combobox
         assert_selector 'input[role="combobox"][aria-autocomplete="list"][aria-expanded="false"]'
       end
 
-      test 'renders slot options and selected slot value' do
-        render_component do |combobox|
-          combobox.with_option(value: 'enabled-option', label: 'Enabled option')
-          combobox.with_option(value: 'disabled-option', label: 'Disabled option', disabled: true)
-          combobox.with_option(value: 'selected-option', label: 'Selected option', selected: true)
-        end
-
-        assert_selector '[role="option"][data-value="enabled-option"]', visible: :all
-        assert_selector '[role="option"][data-value="disabled-option"][aria-disabled="true"]', visible: :all
-        assert_selector 'input[role="combobox"][value="Selected option"]'
-        assert_selector 'input[type="hidden"][value="selected-option"]', visible: :all
-      end
-
       test 'passes through aria attributes' do
         render_component(
           aria: {
@@ -89,15 +76,14 @@ module Combobox
 
       private
 
-      def render_component(options: default_options, **component_arguments, &)
+      def render_component(options: default_options, **)
         render_inline(
           ComboboxComponent.new(
             form: build_form_builder,
             field: :field,
             options: options,
-            **component_arguments
-          ),
-          &
+            **
+          )
         )
       end
 

@@ -4,9 +4,11 @@
   <%= render ComboboxComponent.new(
     form: form,
     field: :field,
+    selected_name: "User 3",
+    selected_value: 3
   ) do |combobox| %>
     <% (1..50).each do |num| %>
-      <% combobox.with_option(value: num, label: "User #{num}", disabled: (num % 5).zero?, selected: (num == 3)) do %>
+      <% combobox.with_option(value: num, label: "User #{num}", disabled: (num % 5).zero?) do %>
         <span class="font-semibold text-slate-900 dark:text-slate-100">User <%= num %></span>
       <% end %>
     <% end %>
