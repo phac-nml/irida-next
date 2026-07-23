@@ -108,5 +108,12 @@ module AdvancedSearch
       assert_includes sql, '("workflow_executions"."name" IS NULL'
       assert_includes sql, "OR \"workflow_executions\".\"name\" !~ '^-?\\d+(\\.\\d+)?$')"
     end
+
+    test 'metadata_condition_date_between' do
+      result = @test_instance.send(:metadata_condition_date_between,
+                                   @scope, @node, %w[2026-01-01 2026-12-31])
+      sql = result.to_sql
+      assert_includes sql, "AND TO_DATE(\"workflow_executions\".\"name\", 'YYYY-MM-DD') BETWEEN '2026-01-01' AND '2026-12-31'" # rubocop:disable Layout/LineLength
+    end
   end
 end
