@@ -1694,4 +1694,73 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert_not_includes results6, we1
     assert_includes results6, we2
   end
+
+  test 'between operators' do
+    we1 = workflow_executions(:workflow_execution_with_metadata_dates)
+    we2 = workflow_executions(:workflow_execution_with_metadata_dates2)
+
+    query1 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.pipeline_id', operator: 'text_between',
+                                                 value: ['phac-nml/h', 'phac-nml/j'])
+        ]
+      )]
+    )
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+
+    assert_includes results1, we1
+    assert_not_includes results1, we2
+
+    query2 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.start_date', operator: 'date_between',
+                                                 value: %w[2024-01-01 2024-01-31])
+        ]
+      )]
+    )
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+
+    assert_includes results2, we1
+    assert_not_includes results2, we2
+
+    query3 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'metadata.file_size', operator: 'numeric_between',
+                                                 value: ['1024', '2048.7'])
+        ]
+      )]
+    )
+    assert query3.advanced_query?
+    assert query3.valid?
+    results3 = query3.results
+
+    assert_includes results3, we1
+    assert_not_includes results3, we2
+
+    query4 = WorkflowExecution::Query.new(
+      namespace_ids: [we1.namespace_id, we2.namespace_id],
+      groups: [WorkflowExecution::SearchGroup.new(
+        conditions: [
+          WorkflowExecution::SearchCondition.new(field: 'name', operator: 'between',
+                                                 value: %w[workflow_with_metadata_dates workflow_with_metadata_dates_1])
+        ]
+      )]
+    )
+    assert query4.advanced_query?
+    assert query4.valid?
+    results4 = query4.results
+
+    assert_includes results4, we1
+    assert_not_includes results4, we2
+  end
 end
