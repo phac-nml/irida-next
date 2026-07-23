@@ -602,6 +602,22 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     assert_selector 'div[data-search-field-toolbar-item-value="true"]', count: 1
   end
 
+  test 'renders a shorter control when compact is true' do
+    render_inline SearchFieldComponent.new(
+      label: @label,
+      placeholder: @placeholder,
+      form: @mock_form,
+      field_name: @field_name,
+      value: @value,
+      compact: true
+    )
+
+    assert_selector 'div.relative.h-8', count: 1
+    assert_no_selector 'div.relative.h-\\[44px\\]'
+    assert_selector 'input.t-search-component.text-xs', count: 1
+    assert_selector 'button.w-8[data-search-field-target="submitButton"]', count: 1
+  end
+
   # Transition Effects Tests
   test 'has transition effects for buttons' do
     render_inline SearchFieldComponent.new(
