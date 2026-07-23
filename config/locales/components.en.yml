@@ -128,7 +128,7 @@ en:
         condition: Condition %{index}
         confirm_close_text: Are you sure that you want to discard your filter modifications and close the advanced search dialog?
         description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
-        ending_value: Ending Value
+        from_value: From value
         group: Group %{index}
         operations:
           metadata:
@@ -175,8 +175,8 @@ en:
         rules:
           metadata_operators: Only one condition can be specified per field within a group, with the exception that you can specify two conditions if using the between operators ('>=' and '<=', 'date greater than equals' and 'date less than equals', or 'numeric greater than equals' and 'numeric less than equals'). To filter by date range, the value should be of the format 'YYYY-MM-DD'.
           standard_operators: Only one condition can be specified per field within a group, with the exception that you can specify two conditions if using the '>=' and '<=' operators. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field must end with '_date'.
-        starting_value: Starting Value
         title: Advanced search
+        to_value: To Value
     attachments:
       dialogs:
         delete_attachment_component:

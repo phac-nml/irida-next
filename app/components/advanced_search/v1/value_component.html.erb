@@ -56,8 +56,8 @@
     <% end %>
 
     <%= render "shared/form/field_errors",
-  errors: @condition.errors.full_messages_for(:value),
-  id: @conditions_form.field_id(:value, "error") %>
+    errors: @condition.errors.full_messages_for(:value),
+    id: @conditions_form.field_id(:value, "error") %>
   </div>
 <% else %>
   <% invalid_from_value = @condition.errors.include?(:from_value) %>
@@ -74,14 +74,14 @@
     id: "#{@conditions_form.field_id(:"from_value")}",
     multiple: true,
     value:  @condition.value.blank? ? nil : @condition.value[0],
-                                "aria-label":  I18n.t('components.advanced_search_component.v1.starting_value'),
+                                "aria-label":  I18n.t('components.advanced_search_component.v1.from_value'),
                                 "aria-invalid": invalid_from_value,
                                 "aria-describedby":
                                   @conditions_form.field_id(:"from_value", "error") %>
 
     <%= render "shared/form/field_errors",
-  errors: @condition.errors.full_messages_for(:from_value),
-  id: @conditions_form.field_id(:from_value, "error") %>
+    errors: @condition.errors.full_messages_for(:from_value),
+    id: @conditions_form.field_id(:from_value, "error") %>
   </div>
   <div
     class="
@@ -95,13 +95,13 @@
     id: "#{@conditions_form.field_id(:"to_value")}",
     multiple: true,
     value: @condition.value.blank? ? nil : @condition.value[1],
-                                "aria-label": I18n.t('components.advanced_search_component.v1.ending_value'),
+                                "aria-label": I18n.t('components.advanced_search_component.v1.to_value'),
                                 "aria-invalid": invalid_to_value,
                                 "aria-describedby":
                                   @conditions_form.field_id(:to_value, "error") %>
 
     <%= render "shared/form/field_errors",
-  errors: @condition.errors.full_messages_for(:to_value),
-  id: @conditions_form.field_id(:to_value, "error") %>
+      errors: @condition.errors.full_messages_for(:to_value),
+      id: @conditions_form.field_id(:to_value, "error") %>
   </div>
 <% end %>

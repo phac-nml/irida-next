@@ -128,6 +128,7 @@ fr:
         condition: Condition %{index}
         confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
         description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
+        from_value: Valeur de départ
         group: Groupe %{index}
         operations:
           metadata:
@@ -175,6 +176,7 @@ fr:
           metadata_operators: Une seule condition peut être spécifiée par champ dans un groupe, sauf si vous utilisez les opérateurs d'intervalle ('>=' et '<=', « date supérieure ou égale » et « date inférieure ou égale », ou « numérique supérieure ou égale » et « numérique inférieure ou égale »). Pour filtrer par plage de dates, la valeur doit respecter le format « AAAA-MM-JJ ».
           standard_operators: Une seule condition peut être spécifiée par champ dans un groupe, sauf que vous pouvez spécifier deux conditions si vous utilisez les opérateurs '>=' et '<='. Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
         title: Recherche avancée
+        to_value: À évaluer
     attachments:
       dialogs:
         delete_attachment_component:
