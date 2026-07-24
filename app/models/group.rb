@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Namespace for Groups
-class Group < Namespace # rubocop:disable Metrics/ClassLength
+class Group < Namespace
   include History
 
   has_many :group_members, foreign_key: :namespace_id, inverse_of: :group,
@@ -118,23 +118,6 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
 
   def has_samples? # rubocop:disable Naming/PredicatePrefix
     samples_count.positive? || aggregated_samples_count.positive?
-  end
-
-  def add_to_samples_count(namespaces, addition_amount)
-    namespaces.each do |namespace|
-      Group.increment_counter(:samples_count, namespace.id, by: addition_amount) # rubocop:disable Rails/SkipsModelValidations
-    end
-  end
-
-  def subtract_from_samples_count(namespaces, subtraction_amount)
-    namespaces.each do |namespace|
-      Group.decrement_counter(:samples_count, namespace.id, by: subtraction_amount) # rubocop:disable Rails/SkipsModelValidations
-    end
-  end
-
-  # Delegates to namespace helper to propagate negative sample count changes through group ancestors.
-  def update_samples_count_by_destroy_service(deleted_samples_count)
-    propagate_samples_count_delta(-deleted_samples_count)
   end
 
   def validate_public_namespace_type
