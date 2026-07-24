@@ -22,7 +22,7 @@ bundle install
 
 Before committing, unset these environment variables and run `bundle install` again so `Gemfile.lock` stays on the published tag. Do not commit lockfile changes from local-path mode.
 
-Open both repositories in a code editor (VS Code, Cursor, etc.) with `irida-pathogen.code-workspace` (multi-root) so Lookbook docs and gem code sit alongside the host app.
+Open both repositories in a code editor (VS Code, Cursor, etc.) with `irida-next-pathogen.code-workspace` (multi-root) so Lookbook docs and gem code sit alongside the host app.
 
 ### Drop, rebuild, and seed the database
 

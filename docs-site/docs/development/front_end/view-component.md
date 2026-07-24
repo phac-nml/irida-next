@@ -9,7 +9,7 @@ sidebar_position: 2
 
 Prefer `Pathogen::*` components from the sibling [pathogen-view-components](https://github.com/phac-nml/pathogen-view-components) gem when building new reusable UI. Design rules live in that repository under `docs/lookbook/design_system/`.
 
-To develop against a local sibling checkout of the gem, see [Useful Commands](../useful_commands.md#local-pathogen-view-components-sibling-checkout) (`USE_LOCAL_PATHOGEN=1`). Open `irida-pathogen.code-workspace` in a code editor (VS Code, Cursor, etc.) for a multi-root workspace that includes both repositories.
+To develop against a local sibling checkout of the gem, see [Useful Commands](../useful_commands.md#local-pathogen-view-components-sibling-checkout) (`USE_LOCAL_PATHOGEN=1`). Open `irida-next-pathogen.code-workspace` in a code editor (VS Code, Cursor, etc.) for a multi-root workspace that includes both repositories.
 
 Host-local `Viral::*` components are compatibility layers. Prefer Pathogen for new shared UI.
 
