@@ -22,7 +22,7 @@ bundle install
 
 Avant de committer, retirez ces variables d’environnement et relancez `bundle install` pour que `Gemfile.lock` reste sur le tag publié. Ne committez pas les changements de lockfile issus du mode chemin local.
 
-Ouvrez les deux dépôts dans Cursor avec `irida-pathogen.code-workspace` (multi-root) pour avoir la documentation Lookbook et le code de la gem à côté de l’application hôte.
+Ouvrez les deux dépôts dans un éditeur de code (VS Code, Cursor, etc.) avec `irida-pathogen.code-workspace` (multi-root) pour avoir la documentation Lookbook et le code de la gem à côté de l’application hôte.
 
 ### Supprimer, reconstruire et peupler la base de données
 

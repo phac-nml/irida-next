@@ -9,7 +9,7 @@ sidebar_position: 2
 
 Préférez les composants `Pathogen::*` de la gem voisine [pathogen-view-components](https://github.com/phac-nml/pathogen-view-components) pour toute nouvelle interface utilisateur réutilisable. Les règles de conception se trouvent dans ce dépôt sous `docs/lookbook/design_system/`.
 
-Pour développer contre un clone local voisin de la gem, voir [Commandes utiles](../useful_commands.md#pathogen-view-components-en-local-dépôt-voisin) (`USE_LOCAL_PATHOGEN=1`). Ouvrez `irida-pathogen.code-workspace` pour un espace de travail Cursor multi-root incluant les deux dépôts.
+Pour développer contre un clone local voisin de la gem, voir [Commandes utiles](../useful_commands.md#pathogen-view-components-en-local-dépôt-voisin) (`USE_LOCAL_PATHOGEN=1`). Ouvrez `irida-pathogen.code-workspace` dans un éditeur de code (VS Code, Cursor, etc.) pour un espace de travail multi-root incluant les deux dépôts.
 
 Les composants locaux `Viral::*` sont des couches de compatibilité. Préférez Pathogen pour toute nouvelle interface partagée.
 
