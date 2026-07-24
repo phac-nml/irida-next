@@ -11,7 +11,7 @@
 # - `apply_*_operator` methods for special-case fields (e.g., upcasing PUID)
 module AdvancedSearch
   # Applies search conditions to build filtered ActiveRecord scopes.
-  module Filtering
+  module Filtering # rubocop:disable Metrics/ModuleLength
     extend ActiveSupport::Concern
 
     OPERATOR_HANDLERS = {
@@ -46,7 +46,13 @@ module AdvancedSearch
       'text_not_in' => :apply_condition_metadata_not_in,
       # exists operators
       'exists' => :apply_condition_exists,
-      'not_exists' => :apply_condition_not_exists
+      'not_exists' => :apply_condition_not_exists,
+      # starts_with operators
+      'starts_with' => :apply_condition_starts_with,
+      'text_starts_with' => :apply_condition_starts_with,
+      # ends_with operators
+      'ends_with' => :apply_condition_ends_with,
+      'text_ends_with' => :apply_condition_ends_with
     }.freeze
 
     private
@@ -132,6 +138,14 @@ module AdvancedSearch
 
     def apply_condition_not_exists(scope, node, _value, _field_name)
       condition_not_exists(scope, node)
+    end
+
+    def apply_condition_starts_with(scope, node, value, field_name)
+      condition_starts_with(scope, node, value, model_class, field_name)
+    end
+
+    def apply_condition_ends_with(scope, node, value, field_name)
+      condition_ends_with(scope, node, value, model_class, field_name)
     end
 
     def normalize_condition_field(condition)
