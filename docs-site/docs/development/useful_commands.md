@@ -4,7 +4,27 @@ id: useful_commands
 title: Useful Commands for Development
 ---
 
-### Drop, rebuild and seed db
+### Local Pathogen View Components (sibling checkout)
+
+To work against a local `../pathogen-view-components` checkout instead of the Gemfile tag:
+
+```bash
+export USE_LOCAL_PATHOGEN=1
+bundle install
+```
+
+Or point Bundler at any checkout:
+
+```bash
+export PATHOGEN_VIEW_COMPONENTS_PATH=/absolute/path/to/pathogen-view-components
+bundle install
+```
+
+Before committing, unset these environment variables and run `bundle install` again so `Gemfile.lock` stays on the published tag. Do not commit lockfile changes from local-path mode.
+
+Open both repositories in a code editor (VS Code, Cursor, etc.) with `irida-next-pathogen.code-workspace` (multi-root) so Lookbook docs and gem code sit alongside the host app.
+
+### Drop, rebuild, and seed the database
 
 ```bash
 bin/rails db:drop db:create db:migrate db:seed
@@ -17,21 +37,21 @@ rm config/credentials.yml.enc
 EDITOR="vim --nofork" bin/rails credentials:edit
 ```
 
-### Additional process to have UI changes updated as they are changed
+### Rebuild CSS while the Rails server is running
 
-When running the server with `bin/rails s` instead of `bin/dev`, like when attaching the debugger in VSCode, the css build process can be run separately.
+When you run the server with `bin/rails s` instead of `bin/dev` (for example, when attaching the VS Code debugger), start the CSS build process separately:
 
 ```bash
 pnpm run dev:css
 ```
 
-### Build graphql schema
+### Build the GraphQL schema
 
 ```bash
 bin/rails graphql:dump_schema
 ```
 
-### Build and run docs
+### Build and serve the docs
 
 ```bash
 cd docs-site
@@ -40,9 +60,9 @@ pnpm build
 npm run serve
 ```
 
-### Output logs during rake tasks
+### Output logs during Rake tasks
 
-Rake tasks can be prepended with `info`, `debug`, or `verbose` to output the appropriate level of logging
+Prepend Rake tasks with `info`, `debug`, or `verbose` to set the logging level:
 
 ```bash
 # Example
