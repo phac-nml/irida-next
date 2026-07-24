@@ -350,6 +350,9 @@ en:
       processing_samplesheet: Processing samplesheet
       samplesheet_processing_error: An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples.
       submission_error: Something went wrong with the submission request.
+    pathogen:
+      cancel_button:
+        cancel: Cancel
     project_dashboard:
       activity_title: Latest Activity
       info_title: Project Information

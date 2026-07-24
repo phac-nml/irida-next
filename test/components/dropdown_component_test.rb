@@ -151,6 +151,25 @@ class DropdownComponentTest < ViewComponentTestCase
     assert_no_selector('button', text: 'Actions') # No visible label
   end
 
+  test 'renders icon-only trigger with custom button styles' do
+    custom_styles = 'p-3 rounded-lg custom-dropdown-trigger'
+
+    render_inline(
+      DropdownComponent.new(
+        icon: :dots_three_vertical,
+        aria: { label: 'Overflow menu' },
+        styles: { button: custom_styles }
+      )
+    ) do |dropdown|
+      dropdown.with_item(label: 'Item 1', url: '#')
+    end
+
+    button = page.find('button[aria-label="Overflow menu"]')
+    assert_includes button[:class], 'custom-dropdown-trigger'
+    assert_includes button[:class], 'p-3'
+    assert_includes button[:class], 'rounded-lg'
+  end
+
   test 'raises error for icon-only button without aria-label' do
     assert_raises(ArgumentError, match: /Icon-only buttons must have an aria-label/) do
       render_inline(DropdownComponent.new(icon: :dots)) do |dropdown|
