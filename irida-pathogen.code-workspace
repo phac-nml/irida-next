@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "name": "irida-next",
+      "path": "."
+    },
+    {
+      "name": "pathogen-view-components",
+      "path": "../pathogen-view-components"
+    }
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      "**/tmp/**": true,
+      "**/log/**": true,
+      "**/node_modules/**": true,
+      "**/.git/objects/**": true,
+      "**/.git/subtree-cache/**": true,
+      "**/app/assets/builds/**": true
+    }
+  }
+}

@@ -54,6 +54,7 @@ coverage
 
 # Ignore IDE folders
 *.code-workspace
+!irida-pathogen.code-workspace
 .vscode
 .idea
 
