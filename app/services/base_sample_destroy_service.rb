@@ -28,8 +28,13 @@ class BaseSampleDestroyService < BaseService
   end
 
   def create_project_activity(project_namespace, deleted_samples_data)
-    ext_details = ExtendedDetail.create!(details: { samples_deleted_count: deleted_samples_data.size,
-                                                    deleted_samples_data: deleted_samples_data })
+    details = {
+      samples_deleted_count: deleted_samples_data.size,
+      deleted_samples_data: deleted_samples_data,
+      deletion_reason: params[:reason]
+    }
+
+    ext_details = ExtendedDetail.create!(details: details)
 
     activity = project_namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
                                                  owner: current_user,

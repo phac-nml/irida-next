@@ -159,6 +159,34 @@ module Groups
         assert_equal I18n.t(:'action_policy.policy.group.destroy_sample?', name: group7.name),
                      exception.result.message
       end
+
+      test 'stores deletion reason in group and project sample deletion activity details' do
+        reason = 'No longer needed for analysis'
+
+        Groups::Samples::DestroyService.new(@group12, @user,
+                                            { sample_ids: [@sample32.id, @sample34.id], reason: reason }).execute
+
+        group_activity = PublicActivity::Activity.where(
+          key: 'group.samples.destroy',
+          trackable: @group12
+        ).order(created_at: :desc).first
+
+        assert_equal reason, group_activity.extended_details.details['deletion_reason']
+
+        project_activity_sample32 = PublicActivity::Activity.where(
+          key: 'namespaces_project_namespace.samples.destroy_multiple',
+          trackable: @sample32.project.namespace
+        ).order(created_at: :desc).first
+
+        assert_equal reason, project_activity_sample32.extended_details.details['deletion_reason']
+
+        project_activity_sample34 = PublicActivity::Activity.where(
+          key: 'namespaces_project_namespace.samples.destroy_multiple',
+          trackable: @sample34.project.namespace
+        ).order(created_at: :desc).first
+
+        assert_equal reason, project_activity_sample34.extended_details.details['deletion_reason']
+      end
     end
   end
 end

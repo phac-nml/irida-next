@@ -186,7 +186,7 @@ export default class extends Controller {
       const template = this.sampleCloneTableRowTarget;
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
-        "span[data-activities--extended_details-target='sampleName']";
+        "span[data-activities--extended-details-target='sampleName']";
       const puidSelector = "span:nth-child(2)";
 
       table_data.forEach((data) => {
@@ -220,7 +220,7 @@ export default class extends Controller {
         const li = clone.querySelector("li");
 
         li.querySelector(
-          "span[data-activities--extended_details-target='itemName']",
+          "span[data-activities--extended-details-target='itemName']",
         ).textContent = data["sample_name"];
         li.querySelector("p > span:nth-child(2)").textContent =
           data["sample_puid"];
@@ -238,9 +238,9 @@ export default class extends Controller {
       const template = this.workflowTableRowTarget;
       const fragment = document.createDocumentFragment();
       const workflowNameSelector =
-        "span[data-activities--extended_details-target='workflowName']";
+        "span[data-activities--extended-details-target='workflowName']";
       const workflowIdSelector =
-        "span[data-activities--extended_details-target='workflowId']";
+        "span[data-activities--extended-details-target='workflowId']";
 
       table_data.forEach((data) => {
         const clone = template.content.cloneNode(true);
@@ -265,10 +265,10 @@ export default class extends Controller {
       const template = this.destroySampleTableRowTarget;
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
-        "span[data-activities--extended_details-target='sampleName']";
+        "span[data-activities--extended-details-target='sampleName']";
       const puidSelector = "span:nth-child(2)";
       const projectNameSelector =
-        "span[data-activities--extended_details-target='projectName']";
+        "span[data-activities--extended-details-target='projectName']";
 
       table_data.forEach((data) => {
         const clone = template.content.cloneNode(true);
@@ -298,10 +298,10 @@ export default class extends Controller {
       const template = this.importSampleTableRowTarget;
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
-        "span[data-activities--extended_details-target='sampleName']";
+        "span[data-activities--extended-details-target='sampleName']";
       const puidSelector = "span:nth-child(2)";
       const projectIdSelector =
-        "span[data-activities--extended_details-target='projectId']";
+        "span[data-activities--extended-details-target='projectId']";
 
       table_data.forEach((data) => {
         const clone = template.content.cloneNode(true);
@@ -333,12 +333,12 @@ export default class extends Controller {
       const template = this.groupSampleTransferTableRowTarget;
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
-        "span[data-activities--extended_details-target='sampleName']";
+        "span[data-activities--extended-details-target='sampleName']";
       const puidSelector = "span:nth-child(2)";
       const transferredFromSelector =
-        "span[data-activities--extended_details-target='transferredFrom']";
+        "span[data-activities--extended-details-target='transferredFrom']";
       const transferredToSelector =
-        "span[data-activities--extended_details-target='transferredTo']";
+        "span[data-activities--extended-details-target='transferredTo']";
 
       table_data.forEach((data) => {
         const clone = template.content.cloneNode(true);
@@ -382,10 +382,10 @@ export default class extends Controller {
       const template = this.groupSampleCloneTableRowTarget;
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
-        "span[data-activities--extended_details-target='sampleName']";
+        "span[data-activities--extended-details-target='sampleName']";
       const puidSelector = "span:nth-child(2)";
       const projectIdSelector =
-        "span[data-activities--extended_details-target='projectId']";
+        "span[data-activities--extended-details-target='projectId']";
 
       table_data.forEach((data) => {
         const clone = template.content.cloneNode(true);

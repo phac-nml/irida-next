@@ -44,12 +44,13 @@ module Groups
       end
 
       def create_group_activity(total_deleted_samples_count)
-        group_ext_details = ExtendedDetail.create!(
-          details: {
-            deleted_samples_data: @deleted_samples_data[:group_data],
-            samples_deleted_count: total_deleted_samples_count
-          }
-        )
+        details = {
+          deleted_samples_data: @deleted_samples_data[:group_data],
+          samples_deleted_count: total_deleted_samples_count,
+          deletion_reason: params[:reason]
+        }
+
+        group_ext_details = ExtendedDetail.create!(details: details)
         group_activity = @namespace.create_activity key: 'group.samples.destroy',
                                                     owner: current_user,
                                                     parameters:
