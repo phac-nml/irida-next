@@ -66,6 +66,14 @@ module Combobox
         assert_selector 'button[data-combobox--v1-target="indicatorButton"][aria-disabled="true"]:not([disabled])'
       end
 
+      test 'with_slots preview renders slot options' do
+        render_combobox_preview(:with_slots)
+
+        assert_selector 'input[role="combobox"][value="User 3"]'
+        assert_selector '[role="option"][data-value="3"][id]', visible: :all
+        assert_selector '[role="option"][data-value="5"][aria-disabled="true"]', visible: :all
+      end
+
       private
 
       def render_component(options: default_options, **)

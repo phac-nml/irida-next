@@ -48,7 +48,7 @@ export default class extends Controller {
   #popupView = "options";
 
   connect() {
-    this.#filter = this.comboboxTarget.value;
+    this.#filter = "";
     this.#filteredOptions = [];
     this.#allOptions = [];
     this.#option = null;
@@ -95,10 +95,10 @@ export default class extends Controller {
     this.#addListboxEventListeners(this.listboxTarget);
 
     // Initialize
-    if (this.#filter) {
-      const option = this.#filterOptions();
-      this.#setOption(option);
-      this.#setValue(option);
+    const initialOption = this.#findOptionByValue(this.hiddenTarget.value);
+    if (initialOption) {
+      this.#filter = initialOption.getAttribute("data-label") || "";
+      this.comboboxTarget.value = this.#filter;
     }
 
     this.#updateIndicatorState();
@@ -264,18 +264,30 @@ export default class extends Controller {
     return this.#filteredOptions.filter((option) => !isOptionDisabled(option));
   }
 
+  #findOptionByValue(value) {
+    if (!value) {
+      return null;
+    }
+
+    return Array.from(
+      this.listboxTarget.querySelectorAll('[role="option"]'),
+    ).find((option) => option.getAttribute("data-value") === value);
+  }
+
   #setValue(option) {
     if (isOptionDisabled(option)) {
       return;
     }
 
     this.hiddenTarget.value = option ? option.getAttribute("data-value") : "";
-    this.#filter = option ? option.textContent : "";
+    this.#filter = option ? option.getAttribute("data-label") || "" : "";
     this.comboboxTarget.value = this.#filter;
-    this.comboboxTarget.setSelectionRange(
-      this.#filter.length,
-      this.#filter.length,
-    );
+    if (this.#filter.length > 0) {
+      this.comboboxTarget.setSelectionRange(
+        this.#filter.length,
+        this.#filter.length,
+      );
+    }
     this.hiddenTarget.dispatchEvent(new Event("change", { bubbles: true }));
     this.comboboxTarget.dispatchEvent(new Event("change", { bubbles: true }));
     this.#updateIndicatorState();

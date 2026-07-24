@@ -3,15 +3,28 @@
 module Combobox
   module V1
     # Component for rendering a drop down that filters dynamically
-    class Component < ::Component
-      def initialize(form:, field:, options:, **combobox_arguments)
+    class Component < ::Component # rubocop:disable Metrics/ClassLength
+      renders_many :options, ::Combobox::V1::OptionComponent
+
+      def initialize(form:, field:, options: nil, selected_value: nil, **combobox_arguments)
         @combobox_id = form.field_id(field)
         @listbox_id = "#{form.field_id(field)}_listbox"
         @form = form
         @field = field
-        @listbox_options = create_listbox(options)
-        @selected_option = selected_option(options)
+        @selected_value = selected_value
+
+        unless options.nil?
+          @listbox_options = create_listbox(options)
+          @selected_option = selected_option(options, selected_value)
+        end
+
         @combobox_arguments = combobox_arguments
+      end
+
+      def before_render
+        return unless options?
+
+        @selected_option = selected_slot_option(@selected_value)
       end
 
       private
@@ -43,12 +56,23 @@ module Combobox
         @combobox_arguments[:disabled] == true
       end
 
-      def selected_option(options)
+      def selected_option(options, selected_value)
         fragment = Nokogiri::HTML.fragment(options)
         fragment.search('option').each do |option|
-          return { name: option.text, value: option['value'] } if option.key?('selected')
+          if option.key?('selected') || option['value'] == selected_value
+            return { name: option.text, value: option['value'] }
+          end
         end
         { name: '', value: '' }
+      end
+
+      def selected_slot_option(selected_value)
+        return { name: '', value: '' } if selected_value.blank?
+
+        option = options.find { |slot_option| slot_option.value.to_s == selected_value.to_s }
+        return { name: '', value: '' } if option.nil?
+
+        { name: option.label, value: option.value }
       end
 
       def create_listbox(options)
@@ -80,14 +104,27 @@ module Combobox
       def create_listbox_options(fragment)
         fragment.search('option').each_with_index do |option, option_index|
           listbox_group_option = Nokogiri::XML::Node.new('div', fragment)
-          listbox_group_option['id'] = "#{@listbox_id}_option#{option_index}"
+          listbox_group_option['id'] = listbox_option_id(option_index)
           listbox_group_option['role'] = 'option'
           listbox_group_option['data-value'] = option['value']
+          listbox_group_option['data-label'] = option.text
           listbox_group_option['aria-disabled'] = 'true' if option.key?('disabled')
           listbox_group_option.content = option.text
           option.replace(listbox_group_option)
         end
         fragment
+      end
+
+      def assign_option_ids(option_nodes)
+        option_nodes.each_with_index do |option, option_index|
+          next if option['id'].present?
+
+          option['id'] = listbox_option_id(option_index)
+        end
+      end
+
+      def listbox_option_id(option_index)
+        "#{@listbox_id}_option#{option_index}"
       end
     end
   end
