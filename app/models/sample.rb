@@ -12,7 +12,11 @@ class Sample < ApplicationRecord
 
   belongs_to :project, counter_cache: true
 
+  after_destroy :propagate_samples_count_on_destroy
+  after_restore :propagate_samples_count_on_restore
   after_commit :broadcast_refresh_later_to_samples_table
+  after_commit :propagate_samples_count_on_create, on: :create
+  after_commit :propagate_samples_count_on_transfer, on: :update
 
   has_many :attachments, as: :attachable, dependent: :destroy
 
@@ -70,6 +74,40 @@ class Sample < ApplicationRecord
   end
 
   private
+
+  # Propagate samples_count increment when sample is created.
+  def propagate_samples_count_on_create
+    project&.namespace&.propagate_samples_count_delta(1)
+  end
+
+  # Propagate samples_count increment when sample is restored.
+  def propagate_samples_count_on_restore
+    project&.namespace&.propagate_samples_count_delta(1)
+  end
+
+  # Propagate samples_count transfer when sample is moved to a different project.
+  def propagate_samples_count_on_transfer # rubocop:disable Metrics/CyclomaticComplexity
+    return unless saved_change_to_project_id?
+
+    old_project_id = saved_change_to_project_id[0]
+    new_project_id = saved_change_to_project_id[1]
+
+    # Decrement old project's ancestors
+    old_project = Project.find(old_project_id) if old_project_id
+    old_project&.namespace&.propagate_samples_count_delta(-1)
+
+    # Increment new project's ancestors
+    new_project = Project.find(new_project_id) if new_project_id
+    new_project&.namespace&.propagate_samples_count_delta(1)
+  end
+
+  # Propagate samples_count decrement when sample is destroyed.
+  def propagate_samples_count_on_destroy
+    return if destroyed_by_association
+
+    # Decrement project's ancestors when sample is deleted
+    project&.namespace&.propagate_samples_count_delta(-1)
+  end
 
   def broadcast_refresh_later_to_samples_table # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     return if Sample.suppressed_turbo_broadcasts

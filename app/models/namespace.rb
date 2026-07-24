@@ -24,6 +24,10 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_many :attachments, as: :attachable, dependent: :destroy
 
+  has_many :metadata_templates, dependent: :destroy
+
+  has_many :workflow_executions # rubocop:disable Rails/HasManyOrHasOneDependent
+
   validates :owner, presence: true, if: ->(n) { n.owner_required? }
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
   validates :name, uniqueness: { case_sensitive: false, scope: %i[type] }, if: -> { parent_id.blank? }
@@ -41,7 +45,12 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :include_route, -> { includes(:route) }
 
+  before_real_destroy :nullify_workflow_executions
+
   after_restore :restore_routes
+  after_destroy :propagate_destruction, unless: :destroyed_by_association
+  after_restore :propagate_restoration
+  after_commit :propagate_parent_change, if: :saved_change_to_parent_id?
 
   class << self
     def sti_class_for(type_name)
@@ -63,6 +72,34 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     def as_ids
       select(Namespace.arel_table[:id])
+    end
+
+    # Return common group ancestor IDs between two namespace parents.
+    # This can be reused by operations that need to skip shared ancestors.
+    # @param old_parent [Namespace, nil] the previous parent namespace
+    # @param new_parent [Namespace] the new parent namespace
+    # @return [Array<Integer>] group ancestor IDs shared by both parents
+    def common_group_ancestor_ids(old_parent, new_parent)
+      old_group_ids = old_parent&.group_ancestor_ids || []
+      new_group_ids = new_parent.group_ancestor_ids
+
+      old_group_ids & new_group_ids
+    end
+
+    # Transfer sample counts when a namespace moves from one parent to another.
+    # Subtracts from old parent's group ancestors and adds to new parent's group ancestors.
+    # @param old_parent [Namespace, nil] the old parent namespace
+    # @param new_parent [Namespace] the new parent namespace
+    # @param sample_count [Integer] the number of samples to transfer
+    def transfer_samples_count_delta(old_parent, new_parent, sample_count)
+      return if sample_count.nil? || sample_count.zero?
+
+      common_group_ids = common_group_ancestor_ids(old_parent, new_parent)
+
+      # Subtract from old parent ancestors except common ancestors.
+      old_parent&.propagate_samples_count_delta(-sample_count, except_group_ancestor_ids: common_group_ids)
+      # Add to new parent ancestors except common ancestors.
+      new_parent.propagate_samples_count_delta(sample_count, except_group_ancestor_ids: common_group_ids)
     end
 
     # Return a relation containing this namespace (or namespaces from the
@@ -589,10 +626,69 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     MetadataTemplate.where(namespace: self)
   end
 
+  # Return IDs of group namespace ancestors (excluding user namespaces and project namespaces)
+  def group_ancestor_ids
+    self_and_ancestors_of_type(Group.sti_name).pluck(:id)
+  end
+
+  # Propagate a positive or negative sample count delta to all group namespace ancestors.
+  # This is called when a project's sample count changes or a project is transferred.
+  # @param delta [Integer] positive or negative change in sample count
+  # @param except_group_ancestor_ids [Array<Integer>] group ancestor IDs to skip
+  def propagate_samples_count_delta(delta, except_group_ancestor_ids: [])
+    return if delta.zero?
+
+    group_ids = group_ancestor_ids - except_group_ancestor_ids
+    return if group_ids.empty?
+
+    group_ids.each do |group_id|
+      if delta.positive?
+        Group.increment_counter(:samples_count, group_id, by: delta) # rubocop:disable Rails/SkipsModelValidations
+      else
+        Group.decrement_counter(:samples_count, group_id, by: delta.abs) # rubocop:disable Rails/SkipsModelValidations
+      end
+    end
+  end
+
   private
 
   # Method to restore namespace routes when the namespace is restored
   def restore_routes
     Route.restore(Route.only_deleted.find_by(source_id: id)&.id, recursive: true)
+  end
+
+  # Propagate sample count decrements when namespace is soft-deleted.
+  # Only fires if this namespace is not being destroyed as part of a parent's cascade.
+  # This ensures we decrement at the top-level of the deletion tree, not at every level.
+  def propagate_destruction
+    return if parent.nil?
+
+    # Decrement group ancestors by this namespace's current sample count
+    parent.propagate_samples_count_delta(-samples_count) if samples_count.positive?
+  end
+
+  # Propagate sample count increments when namespace is restored.
+  # Restores the entire subtree and then increments parent's group ancestors.
+  def propagate_restoration
+    return if parent.nil?
+
+    # Increment group ancestors by this namespace's current sample count
+    parent.propagate_samples_count_delta(samples_count) if samples_count.positive?
+  end
+
+  # Transfer sample counts when namespace parent changes (e.g., project or group transfer).
+  # Moves the counts from old parent's group ancestors to new parent's group ancestors.
+  def propagate_parent_change
+    # Skip for ProjectNamespace during creation (project hasn't been associated yet)
+    return if is_a?(Namespaces::ProjectNamespace) && project.nil?
+
+    old_parent_id, new_parent_id = saved_change_to_parent_id
+    old_parent = old_parent_id ? Namespace.find(old_parent_id) : nil
+    new_parent = Namespace.find(new_parent_id)
+    Namespace.transfer_samples_count_delta(old_parent, new_parent, samples_count)
+  end
+
+  def nullify_workflow_executions
+    workflow_executions.update_all(namespace_id: nil) # rubocop:disable Rails/SkipsModelValidations
   end
 end

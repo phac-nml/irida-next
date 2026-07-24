@@ -543,4 +543,209 @@ class SampleTest < ActiveSupport::TestCase
     expected_count = 1 + ancestors.count
     assert_equal expected_count, broadcast_calls.count
   end
+
+  test 'creating a sample propagates samples_count to project and group ancestors' do
+    # Hierarchy: group_twelve -> subgroup_twelve_a -> subgroup_twelve_a_a -> project31
+    project31 = projects(:project31)
+    subgroup12aa = groups(:subgroup_twelve_a_a)
+    subgroup12a = groups(:subgroup_twelve_a)
+    group12 = groups(:group_twelve)
+
+    # Reset counts
+    [project31.namespace, subgroup12aa, subgroup12a, group12].each do |ns|
+      ns.update(samples_count: 0)
+    end
+
+    assert_difference(-> { project31.reload.samples_count } => 1,
+                      -> { subgroup12aa.reload.samples_count } => 1,
+                      -> { subgroup12a.reload.samples_count } => 1,
+                      -> { group12.reload.samples_count } => 1) do
+      Sample.create!(name: 'Test Sample Create', project: project31)
+    end
+  end
+
+  test 'deleting a sample propagates samples_count decrement to project and group ancestors' do
+    # Hierarchy: group_twelve -> subgroup_twelve_a -> subgroup_twelve_a_a -> project31
+    project31 = projects(:project31)
+    subgroup12aa = groups(:subgroup_twelve_a_a)
+    subgroup12a = groups(:subgroup_twelve_a)
+    group12 = groups(:group_twelve)
+
+    # Create a sample first
+    sample = Sample.create!(name: 'Test Sample Delete', project: project31)
+
+    # Reload all to get current counts
+    project31.reload
+    subgroup12aa.reload
+    subgroup12a.reload
+    group12.reload
+
+    # Verify sample was created and counts incremented
+    assert project31.samples_count.positive?
+    assert subgroup12a.samples_count.positive?
+    assert subgroup12aa.samples_count.positive?
+    assert group12.samples_count.positive?
+
+    # Now delete and verify counts decrement
+    assert_difference(-> { project31.reload.samples_count } => -1,
+                      -> { subgroup12aa.reload.samples_count } => -1,
+                      -> { subgroup12a.reload.samples_count } => -1,
+                      -> { group12.reload.samples_count } => -1) do
+      sample.destroy
+    end
+  end
+
+  test 'restoring a deleted sample propagates samples_count increment to project and group ancestors' do
+    # Hierarchy: group_twelve -> subgroup_twelve_a -> subgroup_twelve_a_a -> project31
+    project31 = projects(:project31)
+    subgroup12aa = groups(:subgroup_twelve_a_a)
+    subgroup12a = groups(:subgroup_twelve_a)
+    group12 = groups(:group_twelve)
+
+    # Create a sample
+    sample = Sample.create!(name: 'Test Sample Restore', project: project31)
+    sample_id = sample.id
+
+    # Reload to get accurate counts after creation
+    project31.reload
+    subgroup12aa.reload
+    subgroup12a.reload
+    group12.reload
+
+    project_count_after_create = project31.samples_count
+    subgroup12a_count_after_create = subgroup12a.samples_count
+    subgroup12aa_count_after_create = subgroup12aa.samples_count
+    group12_count_after_create = group12.samples_count
+
+    # Delete the sample
+    sample.destroy
+    project31.reload
+    subgroup12aa.reload
+    subgroup12a.reload
+    group12.reload
+
+    # Verify counts decremented after delete
+    assert_equal project_count_after_create - 1, project31.samples_count
+    assert_equal subgroup12a_count_after_create - 1, subgroup12a.samples_count
+    assert_equal subgroup12aa_count_after_create - 1, subgroup12aa.samples_count
+    assert_equal group12_count_after_create - 1, group12.samples_count
+
+    # Restore the sample and verify counts increment
+    assert_difference(-> { project31.reload.samples_count } => 1,
+                      -> { subgroup12aa.reload.samples_count } => 1,
+                      -> { subgroup12a.reload.samples_count } => 1,
+                      -> { group12.reload.samples_count } => 1) do
+      Sample.restore(sample_id, recursive: true)
+    end
+  end
+
+  test 'transferring a sample between projects in different hierarchies propagates counts correctly' do
+    # Transfer from project31 (group_twelve -> subgroup_twelve_a -> subgroup_twelve_a_a)
+    # to project1 (group_one)
+    project31 = projects(:project31)
+    project1 = projects(:project1)
+    subgroup12aa = groups(:subgroup_twelve_a_a)
+    subgroup12a = groups(:subgroup_twelve_a)
+    group12 = groups(:group_twelve)
+    group_one = groups(:group_one)
+
+    # Create sample in project31
+    sample = Sample.create!(name: 'Test Sample Transfer', project: project31)
+
+    # Reload all to get current counts
+    project31.reload
+    project1.reload
+    subgroup12aa.reload
+    subgroup12a.reload
+    group12.reload
+    group_one.reload
+
+    # Store counts before transfer
+    project31_count_before = project31.samples_count
+    project1_count_before = project1.samples_count
+    group12_count_before = group12.samples_count
+    group_one_count_before = group_one.samples_count
+
+    # Transfer sample to project1
+    sample.update(project: project1)
+
+    # Verify old hierarchy decremented
+    assert_equal project31_count_before - 1, project31.reload.samples_count
+    assert_equal group12_count_before - 1, group12.reload.samples_count
+
+    # Verify new hierarchy incremented
+    assert_equal project1_count_before + 1, project1.reload.samples_count
+    assert_equal group_one_count_before + 1, group_one.reload.samples_count
+  end
+
+  test 'transferring a sample within same project hierarchy does not change ancestor counts' do
+    # Both projects under group_one, so transfers should only move count within same hierarchy
+    project1 = projects(:project1)
+    project5 = projects(:project5)
+    group_one = groups(:group_one)
+
+    # Create sample in project1
+    sample = Sample.create!(name: 'Test Sample Transfer Within', project: project1)
+
+    project1.reload
+    project5.reload
+    group_one.reload
+
+    # Store counts before transfer
+    group_one_count_before = group_one.samples_count
+
+    # Transfer sample to project5 (same group)
+    sample.update(project: project5)
+
+    # Group one count should remain same (decrement from project1, increment to project5)
+    assert_equal group_one_count_before, group_one.reload.samples_count
+
+    # Project counts should be updated correctly
+    assert project1.reload.samples_count < (project1.samples.count + 1)
+    assert project5.reload.samples_count > (project5.samples.count - 1)
+  end
+
+  test 'multiple samples creation and deletion maintains correct hierarchy counts' do
+    # Test with multiple samples to ensure counts stay accurate
+    project31 = projects(:project31)
+    subgroup12a = groups(:subgroup_twelve_a)
+    group12 = groups(:group_twelve)
+
+    # NOTE: project31 already has 2 samples in the fixture (sample34, sample35)
+    initial_project_count = project31.samples_count
+    initial_subgroup_count = subgroup12a.samples_count
+    initial_group_count = group12.samples_count
+
+    # Create 3 additional samples
+    samples = []
+    3.times do |i|
+      samples << Sample.create!(name: "Multi Sample #{i}", project: project31)
+    end
+
+    project31.reload
+    subgroup12a.reload
+    group12.reload
+
+    # Verify all 3 new samples were counted
+    assert_equal initial_project_count + 3, project31.samples_count
+    assert_equal initial_subgroup_count + 3, subgroup12a.samples_count
+    assert_equal initial_group_count + 3, group12.samples_count
+
+    # Delete 2 of the new samples
+    samples[0].destroy
+    samples[1].destroy
+
+    # Verify counts decremented by 2
+    assert_equal initial_project_count + 1, project31.reload.samples_count
+    assert_equal initial_subgroup_count + 1, subgroup12a.reload.samples_count
+    assert_equal initial_group_count + 1, group12.reload.samples_count
+
+    # Restore one
+    Sample.restore(samples[0].id, recursive: true)
+
+    # Verify count incremented by 1 again
+    assert_equal initial_project_count + 2, project31.reload.samples_count
+    assert_equal initial_subgroup_count + 2, subgroup12a.reload.samples_count
+    assert_equal initial_group_count + 2, group12.reload.samples_count
+  end
 end

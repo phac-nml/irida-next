@@ -9,7 +9,7 @@ module Groups
 
       private
 
-      def clone_samples(sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def clone_samples(sample_ids, broadcast_target)
         @cloned_samples_data = { project_data: {}, group_data: [] }
         cloned_sample_ids = {}
         filtered_samples = filter_sample_ids(sample_ids, 'clone')
@@ -24,10 +24,7 @@ module Groups
           update_progress_bar(index, total_sample_count, broadcast_target)
         end
 
-        unless @cloned_samples_data[:project_data].empty?
-          update_samples_count(cloned_sample_ids.count) if @new_project.parent.group_namespace?
-          create_activities
-        end
+        create_activities unless @cloned_samples_data[:project_data].empty?
 
         cloned_sample_ids
       end

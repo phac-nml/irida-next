@@ -119,4 +119,56 @@ class NamespaceTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test '#common_group_ancestor_ids with overlapping ancestors' do
+    old_parent = groups(:subgroup_twelve_a_a)
+    new_parent = groups(:subgroup_twelve_b)
+
+    common_group_ids = Namespace.common_group_ancestor_ids(old_parent, new_parent)
+
+    assert_equal [groups(:group_twelve).id], common_group_ids
+  end
+
+  test '#common_group_ancestor_ids with nil old parent' do
+    new_parent = groups(:subgroup_twelve_b)
+
+    common_group_ids = Namespace.common_group_ancestor_ids(nil, new_parent)
+
+    assert_equal [], common_group_ids
+  end
+
+  test '#common_group_ancestor_ids with non-overlapping ancestors' do
+    old_parent = groups(:subgroup_twelve_a_a)
+    new_parent = groups(:group_two)
+
+    common_group_ids = Namespace.common_group_ancestor_ids(old_parent, new_parent)
+
+    assert_equal [], common_group_ids
+  end
+
+  test '#propagate_samples_count_delta skips except_group_ancestor_ids' do
+    namespace = namespaces_project_namespaces(:project31_namespace)
+    excluded_group_id = groups(:group_twelve).id
+
+    Group.expects(:increment_counter).with(:samples_count, groups(:subgroup_twelve_a_a).id, by: 1).once
+    Group.expects(:increment_counter).with(:samples_count, groups(:subgroup_twelve_a).id, by: 1).once
+    Group.expects(:increment_counter).with(:samples_count, excluded_group_id, by: 1).never
+
+    namespace.propagate_samples_count_delta(1, except_group_ancestor_ids: [excluded_group_id])
+  end
+
+  test '#transfer_samples_count_delta updates only non-common ancestors' do
+    old_parent = groups(:subgroup_twelve_a_a)
+    new_parent = groups(:subgroup_twelve_b)
+    sample_count = 2
+
+    Group.expects(:decrement_counter).with(:samples_count, groups(:subgroup_twelve_a_a).id, by: sample_count).once
+    Group.expects(:decrement_counter).with(:samples_count, groups(:subgroup_twelve_a).id, by: sample_count).once
+    Group.expects(:decrement_counter).with(:samples_count, groups(:group_twelve).id, by: sample_count).never
+
+    Group.expects(:increment_counter).with(:samples_count, groups(:subgroup_twelve_b).id, by: sample_count).once
+    Group.expects(:increment_counter).with(:samples_count, groups(:group_twelve).id, by: sample_count).never
+
+    Namespace.transfer_samples_count_delta(old_parent, new_parent, sample_count)
+  end
 end

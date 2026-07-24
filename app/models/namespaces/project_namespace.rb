@@ -5,7 +5,7 @@ module Namespaces
   class ProjectNamespace < Namespace
     include History
 
-    has_one :project, inverse_of: :namespace, foreign_key: :namespace_id, dependent: :destroy
+    has_one :project, -> { with_deleted }, inverse_of: :namespace, foreign_key: :namespace_id, dependent: :destroy
     has_many :project_members, foreign_key: :namespace_id, inverse_of: :project_namespace,
                                class_name: 'Member', dependent: :destroy
 
@@ -15,6 +15,8 @@ module Namespaces
                               class_name: 'NamespaceBot', dependent: :destroy
 
     has_many :bots, through: :namespace_bots, source: :user
+
+    has_many :namespace_group_links, inverse_of: :namespace, foreign_key: :namespace_id, dependent: :destroy
 
     has_many :shared_with_group_links, # rubocop:disable Rails/InverseOf
              lambda {
@@ -41,6 +43,8 @@ module Namespaces
 
     has_many :automated_workflow_executions, foreign_key: :namespace_id, inverse_of: :project_namespace,
                                              class_name: 'AutomatedWorkflowExecution', dependent: :destroy
+
+    delegate :samples_count, to: :project
 
     validate :validate_public_namespace_type, if: -> { public_changed? }
 

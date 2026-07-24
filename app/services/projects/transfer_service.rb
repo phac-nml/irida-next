@@ -24,8 +24,6 @@ module Projects
 
       @new_namespace.update_metadata_summary_by_namespace_transfer(@project.namespace, @old_namespace)
 
-      update_samples_count
-
       true
     end
 
@@ -95,16 +93,6 @@ module Projects
       end
 
       params
-    end
-
-    def update_samples_count
-      transferred_samples_count = @project.samples.size
-      if @old_namespace.type == 'Group'
-        @old_namespace.update_samples_count_by_transfer_service(@new_namespace, transferred_samples_count,
-                                                                @new_namespace.type)
-      elsif @new_namespace.type == 'Group'
-        @new_namespace.update_samples_count_by_addition_services(transferred_samples_count)
-      end
     end
   end
 end
