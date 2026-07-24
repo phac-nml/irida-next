@@ -1,0 +1,66 @@
+<div class="flex flex-col">
+  <div class="mb-2 flex flex-wrap justify-end gap-2">
+    <% if @has_groups %>
+      <%= render SearchComponent.new(
+          query: @q,
+          url: dashboard_groups_url,
+          search_attribute: :name_or_puid_cont,
+          label: t("common.controls.search"),
+          placeholder: t('dashboard.groups.index.search.placeholder'),
+          total_count: @pagy.count,
+          class: "max-sm:grow",
+          value: @q.name_or_puid_cont,
+        ) %>
+      <%= render Ransack::SortDropdownComponent.new(
+      @q,
+      "projects",
+      [
+        { name: "updated_at", dir: "desc" },
+        { name: "updated_at", dir: "asc" },
+        { name: "namespace_name", dir: "asc" },
+        { name: "namespace_name", dir: "desc" },
+        { name: "created_at", dir: "desc" },
+        { name: "created_at", dir: "asc" },
+      ],
+      turbo: false,
+    ) %>
+    <% end %>
+  </div>
+
+  <% if @has_groups %>
+    <div class="flex flex-col gap-2" id="groups_tree">
+      <%= render TreegridComponent.new(aria: {label: t("dashboard.groups.treegrid.aria_label.#{@tab}")}) do |component| %>
+        <% @groups.each_with_index do |group, group_index| %>
+          <%= component.with_row(tabindex: (group_index.zero? ? 0 : -1), expandable: !@render_flat_list && group.children_of_type?(Group.sti_name), posinset: group_index + 1, setsize: @groups.size, aria: { label: namespace_row_aria_label(group)}, button_arguments: {data: {"toggle-url": public_send("dashboard_groups_url", { parent_id: group.id, collapse: false, level: 1, posinset: group_index + 1, setsize: @groups.size })}}, id: dom_id(group)) do %>
+            <%= render NamespaceRow::ContentsComponent.new(
+              namespace: group,
+              full_name: @render_flat_list,
+              icon_size: :medium,
+            ) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% if @pagy.count.positive? %>
+        <div class="flex flex-row-reverse"><%= render Viral::Pagy::PaginationComponent.new(@pagy) %></div>
+      <% else %>
+        <%= viral_empty(
+          icon_name: :magnifying_glass,
+          title: t("components.viral.pagy.empty_state.title"),
+          description: t("components.viral.pagy.empty_state.description"),
+        ) %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty_state_message">
+      <% empty_title = local_assigns[:empty_title] ? empty_title : t("dashboard.groups.index.no_groups_title") %>
+      <% empty_description = local_assigns[:empty_description] ? empty_description : t("dashboard.groups.index.no_groups_description") %>
+
+      <%= viral_empty(
+        icon_name: Group.icon,
+        title: empty_title,
+        description: empty_description
+      ) %>
+    </div>
+  <% end %>
+</div>

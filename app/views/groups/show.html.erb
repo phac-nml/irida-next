@@ -77,6 +77,12 @@
               selected: @tab == "shared_namespaces",
             ) %>
 
+            <% tabs.with_tab(
+              id: "shared_public_groups_tab",
+              label: t("groups.show.tabs.shared_public_groups"),
+              selected: @tab == "shared_public_groups",
+            ) %>
+
             <% tabs.with_lazy_panel(
               id: "subgroups_and_projects_panel",
               tab_id: "subgroups_and_projects_tab",
@@ -136,6 +142,39 @@
               <% end %>
 
               <%= render "groups/shared_namespaces",
+              locals: {
+                namespaces: @namespaces,
+                has_namespaces: @has_namespaces,
+              } %>
+            <% end %>
+
+            <% tabs.with_lazy_panel(
+              id: "shared_public_groups_panel",
+              tab_id: "shared_public_groups_tab",
+              frame_id: "shared_public_groups_content",
+              src_path: group_path(@group, tab: "shared_public_groups"),
+              selected: @tab == "shared_public_groups"
+            ) do %>
+              <% if @has_namespaces %>
+                <div class="mb-2 flex justify-end">
+                  <%= render SearchComponent.new(
+                    query: @q,
+                    url: group_path(@group),
+                    search_attribute: :name_or_puid_cont,
+                    label: t('common.controls.search'),
+                    placeholder: t("groups.show.search.placeholder"),
+                    total_count: @pagy.count,
+                    class: "max-sm:grow",
+                    value: @q.name_or_puid_cont,
+                    data: {},
+                    as: :shared_public_groups_q
+                  ) do %>
+                    <input type="hidden" name="tab" value="shared_public_groups">
+                  <% end %>
+                </div>
+              <% end %>
+
+              <%= render "groups/shared_public_groups",
               locals: {
                 namespaces: @namespaces,
                 has_namespaces: @has_namespaces,

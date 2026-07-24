@@ -472,6 +472,10 @@ fr:
         create_group_button: Nouveau groupe
         no_groups_description: Vous n’avez actuellement aucun groupe.
         no_groups_title: Aucun groupe
+        no_public_groups_description: Vous n’avez actuellement aucun groupe public.
+        no_public_groups_title: Aucun groupe public
+        private: Privé
+        public: Publique
         search:
           placeholder: Rechercher des groupes
         sorting:
@@ -481,9 +485,12 @@ fr:
           name_desc: Nom, décroissant
           updated_at_asc: Plus ancien mis à jour
           updated_at_desc: Mis à jour à
+        tabs_label: Navigation des groupes
         title: Groupes
-        treegrid:
-          aria_label: Liste des groupes
+      treegrid:
+        aria_label:
+          private: Liste des groupes privés
+          public: Liste des groupes publics
     projects:
       index:
         all: Tous
@@ -1041,6 +1048,9 @@ fr:
     shared_namespaces:
       pagy:
         item: Groupes et projets partagés
+    shared_public_groups:
+      pagy:
+        item: Groupes publics partagés
     show:
       create_project_button: Nouveau projet
       create_subgroup_button: Nouveau sous-groupe
@@ -1058,6 +1068,10 @@ fr:
         no_shared:
           description: Les groupes et les projets peuvent être partagés avec d’autres groupes par l’intermédiaire de leur page de membres.
           title: Pas de groupes ou de projets partagés
+      shared_public_groups:
+        no_shared:
+          description: Les groupes publics peuvent être partagés avec d’autres groupes grâce à la page de leurs membres.
+          title: Aucun groupe public partagé
       subgroups:
         no_subgroups:
           description: Créer un sous-groupe pour gérer les projets et les membres
@@ -1065,10 +1079,12 @@ fr:
       tabs:
         label: Navigation des détails du projet de groupe
         shared_namespaces: Groupes et projets partagés
+        shared_public_groups: Groupes publics partagés
         subgroups_and_projects: Sous-groupes et projets
       treegrid:
         aria_label:
           shared_namespaces: Liste des groupes et projets partagés
+          shared_public_groups: Liste des groupes publics partagés
           subgroups_and_projects: Liste des sous-groupes et des projets
     sidebar:
       activity: Activité
