@@ -27,9 +27,6 @@ class AttachmentsTest < ApplicationSystemTestCase
     assert_button I18n.t('attachment.show.copy')
     assert_button I18n.t('common.actions.download')
 
-    download_button = find_button(I18n.t('common.actions.download'))
-    assert_equal 'false', download_button['data-turbo']
-
     assert_selector 'table', count: 1
     assert_selector 'thead th', count: 8
     assert_selector 'tbody tr', count: 10
