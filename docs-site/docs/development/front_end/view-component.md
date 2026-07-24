@@ -5,12 +5,20 @@ sidebar_position: 2
 
 # View Component
 
-## Browse components with LookBook
+## Pathogen View Components
 
-We have a [LookBook](https://v2.lookbook.build/guide) at `http://localhost:3000/rails/lookbook` (only available in development mode) to browse and interact with ViewComponent previews.
+Prefer `Pathogen::*` components from the sibling [pathogen-view-components](https://github.com/phac-nml/pathogen-view-components) gem when building new reusable UI. Design rules live in that repository under `docs/lookbook/design_system/`.
+
+To develop against a local sibling checkout of the gem, see [Useful Commands](../useful_commands.md#local-pathogen-view-components-sibling-checkout) (`USE_LOCAL_PATHOGEN=1`). Open `irida-pathogen.code-workspace` for a multi-root Cursor workspace that includes both repositories.
+
+Host-local `Viral::*` components are compatibility layers. Prefer Pathogen for new shared UI.
+
+## Browse components with Lookbook
+
+Use [Lookbook](https://v2.lookbook.build/guide) at `http://localhost:3000/rails/lookbook` (development only) to browse and interact with ViewComponent previews.
 
 ## Best practices
 
-- If you are creating a new view in Html, use the available components over creating plain Html tags with Tailwind CSS classes.
-- If you are making changes to an existing Html view, for example, an svg icon that is still implemented in plain Html, consider migrating it to use a ViewComponet.
-- If you decide to create a new component, consider creating [previews](https://viewcomponent.org/guide/previews.html) for it as well. This will help others to discover your component with LookBook, also it makes it much eaier to test its different states.
+- When creating a new HTML view, use existing components instead of plain HTML tags with Tailwind CSS classes.
+- When updating an existing HTML view—for example, an SVG icon still written as plain HTML—consider migrating it to a ViewComponent.
+- When creating a new component, also add [previews](https://viewcomponent.org/guide/previews.html). Previews make the component discoverable in Lookbook and easier to test across states.
