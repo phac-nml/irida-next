@@ -48,6 +48,22 @@ class Project < ApplicationRecord
     :stack
   end
 
+  # Transfer sample count delta between two projects.
+  # @param old_project [Project] the source project
+  # @param new_project [Project] the target project
+  # @param transferred_samples_count [Integer] number of samples transferred
+  def self.transfer_samples_count_delta(old_project, new_project, transferred_samples_count)
+    return if transferred_samples_count.nil? || transferred_samples_count.zero?
+
+    # Update project counters directly without ancestor propagation.
+    Project.decrement_counter(:samples_count, old_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations
+    Project.increment_counter(:samples_count, new_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations
+
+    # Move ancestor counts once based on parent namespaces.
+    Namespace.transfer_samples_count_delta(old_project.namespace.parent, new_project.namespace.parent,
+                                           transferred_samples_count)
+  end
+
   def broadcast_refresh_later_to_samples_table
     broadcast_refresh_later_to self, :samples if self && !deleted?
 
@@ -58,21 +74,6 @@ class Project < ApplicationRecord
 
       broadcast_refresh_later_to namespace, :samples
     end
-  end
-
-  # Update the project's sample count by a given delta and propagate changes to ancestors.
-  # @param delta [Integer] positive or negative change in sample count
-  def update_samples_count_delta(delta)
-    return if delta.zero?
-
-    if delta.positive?
-      Project.increment_counter(:samples_count, id, by: delta) # rubocop:disable Rails/SkipsModelValidations
-    else
-      Project.decrement_counter(:samples_count, id, by: delta.abs) # rubocop:disable Rails/SkipsModelValidations
-    end
-
-    # Propagate the delta to group ancestors directly
-    namespace.propagate_samples_count_delta(delta)
   end
 
   private

@@ -74,6 +74,34 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
       select(Namespace.arel_table[:id])
     end
 
+    # Return common group ancestor IDs between two namespace parents.
+    # This can be reused by operations that need to skip shared ancestors.
+    # @param old_parent [Namespace, nil] the previous parent namespace
+    # @param new_parent [Namespace] the new parent namespace
+    # @return [Array<Integer>] group ancestor IDs shared by both parents
+    def common_group_ancestor_ids(old_parent, new_parent)
+      old_group_ids = old_parent&.group_ancestor_ids || []
+      new_group_ids = new_parent.group_ancestor_ids
+
+      old_group_ids & new_group_ids
+    end
+
+    # Transfer sample counts when a namespace moves from one parent to another.
+    # Subtracts from old parent's group ancestors and adds to new parent's group ancestors.
+    # @param old_parent [Namespace, nil] the old parent namespace
+    # @param new_parent [Namespace] the new parent namespace
+    # @param sample_count [Integer] the number of samples to transfer
+    def transfer_samples_count_delta(old_parent, new_parent, sample_count)
+      return if sample_count.nil? || sample_count.zero?
+
+      common_group_ids = common_group_ancestor_ids(old_parent, new_parent)
+
+      # Subtract from old parent ancestors except common ancestors.
+      old_parent&.propagate_samples_count_delta(-sample_count, except_group_ancestor_ids: common_group_ids)
+      # Add to new parent ancestors except common ancestors.
+      new_parent.propagate_samples_count_delta(sample_count, except_group_ancestor_ids: common_group_ids)
+    end
+
     # Return a relation containing this namespace (or namespaces from the
     # receiver relation) and all ancestor namespaces.
     #
@@ -606,10 +634,11 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Propagate a positive or negative sample count delta to all group namespace ancestors.
   # This is called when a project's sample count changes or a project is transferred.
   # @param delta [Integer] positive or negative change in sample count
-  def propagate_samples_count_delta(delta)
+  # @param except_group_ancestor_ids [Array<Integer>] group ancestor IDs to skip
+  def propagate_samples_count_delta(delta, except_group_ancestor_ids: [])
     return if delta.zero?
 
-    group_ids = group_ancestor_ids
+    group_ids = group_ancestor_ids - except_group_ancestor_ids
     return if group_ids.empty?
 
     group_ids.each do |group_id|
@@ -619,25 +648,6 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
         Group.decrement_counter(:samples_count, group_id, by: delta.abs) # rubocop:disable Rails/SkipsModelValidations
       end
     end
-  end
-
-  # Transfer sample counts when a namespace moves from one parent to another.
-  # Subtracts from old parent's group ancestors and adds to new parent's group ancestors.
-  # @param old_parent [Namespace, nil] the old parent namespace
-  # @param new_parent [Namespace] the new parent namespace
-  # @param sample_count [Integer] the number of samples to transfer
-  def transfer_samples_count_delta(old_parent, new_parent, sample_count) # rubocop:disable Metrics/CyclomaticComplexity
-    return if sample_count.nil? || sample_count.zero?
-
-    # Subtract from old parent's group ancestors
-    if old_parent&.group_namespace? || old_parent&.project_namespace?
-      old_parent.propagate_samples_count_delta(-sample_count)
-    end
-
-    # Add to new parent's group ancestors
-    return unless new_parent.group_namespace? || new_parent.project_namespace?
-
-    new_parent.propagate_samples_count_delta(sample_count)
   end
 
   private
@@ -675,7 +685,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     old_parent_id, new_parent_id = saved_change_to_parent_id
     old_parent = old_parent_id ? Namespace.find(old_parent_id) : nil
     new_parent = Namespace.find(new_parent_id)
-    transfer_samples_count_delta(old_parent, new_parent, samples_count)
+    Namespace.transfer_samples_count_delta(old_parent, new_parent, samples_count)
   end
 
   def nullify_workflow_executions
