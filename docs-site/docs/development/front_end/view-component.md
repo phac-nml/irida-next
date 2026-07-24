@@ -9,9 +9,11 @@ sidebar_position: 2
 
 Prefer `Pathogen::*` components from the sibling [pathogen-view-components](https://github.com/phac-nml/pathogen-view-components) gem when building new reusable UI. Design rules live in that repository under `docs/lookbook/design_system/`.
 
-To develop against a local sibling checkout of the gem, see [Useful Commands](../useful_commands.md#local-pathogen-view-components-sibling-checkout) (`USE_LOCAL_PATHOGEN=1`). Open `irida-next-pathogen.code-workspace` in a code editor (VS Code, Cursor, etc.) for a multi-root workspace that includes both repositories.
+For what belongs in the gem versus the host app, read Pathogen’s [Host and library boundary](https://github.com/phac-nml/pathogen-view-components/blob/main/docs/lookbook/design_system/06-host-library-boundary.md.erb) Lookbook page (local sibling: `../pathogen-view-components/docs/lookbook/design_system/06-host-library-boundary.md.erb`).
 
-Host-local `Viral::*` components are compatibility layers. Prefer Pathogen for new shared UI.
+End-state for IRIDA Next: reusable UI is Pathogen-only. Existing `Viral::*` components are legacy debt — replace call sites with `Pathogen::*` (or promote the pattern into Pathogen), then delete the Viral class. Do not add new Viral components.
+
+To develop against a local sibling checkout of the gem, see [Useful Commands](../useful_commands.md#local-pathogen-view-components-sibling-checkout) (`USE_LOCAL_PATHOGEN=1`). Open `irida-next-pathogen.code-workspace` in a code editor (VS Code, Cursor, etc.) for a multi-root workspace that includes both repositories.
 
 ## Browse components with Lookbook
 
