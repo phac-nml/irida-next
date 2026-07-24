@@ -82,12 +82,6 @@ module Combobox
         ActiveSupport::SafeBuffer.new(fragment.to_html)
       end
 
-      def create_slot_listbox
-        fragment = Nokogiri::HTML.fragment(options.join)
-        assign_option_ids(fragment.search('[role="option"]'))
-        ActiveSupport::SafeBuffer.new(fragment.to_html)
-      end
-
       def create_listbox_grouped_options(fragment) # rubocop:disable Metrics/MethodLength
         fragment.search('optgroup').each_with_index do |group, group_index|
           listbox_group_option_id = "#{@listbox_id}_group#{group_index}"
