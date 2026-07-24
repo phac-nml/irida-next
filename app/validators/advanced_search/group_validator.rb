@@ -11,12 +11,14 @@ module AdvancedSearch
     DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in].freeze
     BETWEEN_OPERATORS = { standard: %w[>= <=], metadata_date: %w[date_greater_than_equals date_less_than_equals],
                           metadata_numeric: %w[numeric_greater_than_equals numeric_less_than_equals] }.freeze
-    EXISTS_OPERATORS = %w[exists not_exists].freeze
+    STANDARD_EXISTS_OPERATORS = %w[exists not_exists].freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
     METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals].freeze
     METADATA_NUMERIC_OPERATORS = %w[numeric_equals numeric_greater_than_equals numeric_less_than_equals
                                     numeric_not_equals].freeze
+    NON_METADATA_OPERATORS = %w[= != <= >= contains not_contains in not_in].freeze
+
     def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       return if empty_search?(record)
 
@@ -83,6 +85,7 @@ module AdvancedSearch
         validate_blank_inputs(condition)
 
         validate_field(condition) if condition.field.present?
+        validate_operator_type(condition) if Flipper.enabled?(:advanced_search_metadata_operators)
         validate_date_and_numeric_field(condition)
 
         validate_unique_condition(group, condition, condition_index)
@@ -105,7 +108,7 @@ module AdvancedSearch
 
       return unless condition.operator.present? && (
         (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) ||
-                    (EXISTS_OPERATORS.exclude?(condition.operator) && condition.value.blank?)
+                    (condition.operator.exclude?('exists') && condition.value.blank?)
       )
 
       condition.errors.add :value, :blank
@@ -115,6 +118,19 @@ module AdvancedSearch
       return if allowed_fields.include?(condition.field) || metadata_field?(condition.field)
 
       condition.errors.add :field, :not_a_metadata
+    end
+
+    def validate_operator_type(condition)
+      field = condition.field
+      operator = condition.operator
+      return if STANDARD_EXISTS_OPERATORS.include?(operator)
+
+      if metadata_field?(field) && NON_METADATA_OPERATORS.include?(operator) &&
+         Flipper.enabled?(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+        condition.errors.add :operator, :use_metadata_operator
+      elsif !metadata_field?(field) && NON_METADATA_OPERATORS.exclude?(operator)
+        condition.errors.add :operator, :use_non_metadata_operator
+      end
     end
 
     def validate_date_and_numeric_field(condition)
@@ -155,7 +171,7 @@ module AdvancedSearch
     def validate_date_field_condition(condition)
       if DATE_OPERATOR_DISALLOWED.include?(condition.operator)
         condition.errors.add :operator, :not_a_date_operator
-      elsif EXISTS_OPERATORS.exclude?(condition.operator)
+      elsif STANDARD_EXISTS_OPERATORS.exclude?(condition.operator)
         validate_date(condition)
       end
     end

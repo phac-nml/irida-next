@@ -133,26 +133,31 @@ fr:
           metadata:
             labels:
               date: Options de date
-              existence: Options d'existence
               numeric: Options numériques
               text: Options de texte
             operations:
               date:
-                date_equals: la date est égale à
+                date_equals: date est égale à
+                date_exists: date existe
                 date_greater_than_equals: date supérieure ou égale
                 date_less_than_equals: date inférieure ou égale
                 date_not_equals: date différente de
+                date_not_exists: date n'existe pas
               numeric:
                 numeric_equals: égal à une valeur numérique
+                numeric_exists: numeric existe
                 numeric_greater_than_equals: numérique supérieur ou égal
                 numeric_less_than_equals: numérique inférieur ou égal
                 numeric_not_equals: différent (numérique)
+                numeric_not_exists: numérique inexistant
               text:
-                text_contains: le texte contient
-                text_equals: le texte est égal à
+                text_contains: texte contient
+                text_equals: texte est égal à
+                text_exists: texte existe
                 text_in: texte dans
-                text_not_contains: le texte ne contient pas
-                text_not_equals: le texte n'est pas égal à
+                text_not_contains: texte ne contient pas
+                text_not_equals: texte n'est pas égal à
+                text_not_exists: texte n'existe pas
                 text_not_in: texte absent de
           standard:
             contains: contient

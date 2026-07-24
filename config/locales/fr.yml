@@ -37,6 +37,8 @@ fr:
               taken: existe déjà dans une autre condition de ce groupe
             operator:
               not_a_date_operator: ne peut pas être utilisé sur les dates
+              use_metadata_operator: est un opérateur non valide pour les champs de métadonnées
+              use_non_metadata_operator: est un opérateur non valide pour les champs autres que les métadonnées
             value:
               not_a_date: doit être formaté AAAA-MM-JJ
         concatenation_form:

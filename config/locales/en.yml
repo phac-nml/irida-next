@@ -37,6 +37,8 @@ en:
               taken: exists within another condition in this group
             operator:
               not_a_date_operator: cannot be used on dates
+              use_metadata_operator: is an invalid operator for metadata fields
+              use_non_metadata_operator: is an invalid operator for non-metadata fields
             value:
               not_a_date: must be formatted YYYY-MM-DD
         concatenation_form:

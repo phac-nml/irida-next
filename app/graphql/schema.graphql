@@ -2917,16 +2917,155 @@ input SampleAdvancedSearchCondition {
 Sample Advanced Search Condition Operator
 """
 enum SampleAdvancedSearchConditionOperator {
+  """
+  Use to filter non-metadata fields
+  """
   CONTAINS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_EXISTS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_GREATER_THAN_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_LESS_THAN_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_NOT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  DATE_NOT_EXISTS
+
+  """
+  Use to filter non-metadata fields
+  """
   EQUALS
+
+  """
+  Use to filter non-metadata fields
+  """
   EXISTS
+
+  """
+  Use to filter non-metadata fields
+  """
   GREATER_THAN_EQUALS
+
+  """
+  Use to filter non-metadata fields
+  """
   IN
+
+  """
+  Use to filter non-metadata fields
+  """
   LESS_THAN_EQUALS
+
+  """
+  Use to filter non-metadata fields
+  """
   NOT_CONTAINS
+
+  """
+  Use to filter non-metadata fields
+  """
   NOT_EQUALS
+
+  """
+  Use to filter non-metadata fields
+  """
   NOT_EXISTS
+
+  """
+  Use to filter non-metadata fields
+  """
   NOT_IN
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_EXISTS
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_GREATER_THAN_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_LESS_THAN_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_NOT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  NUMERIC_NOT_EXISTS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_CONTAINS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_EXISTS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_IN
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_NOT_CONTAINS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_NOT_EQUALS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_NOT_EXISTS
+
+  """
+  Use to filter metadata fields
+  """
+  TEXT_NOT_IN
 }
 
 """

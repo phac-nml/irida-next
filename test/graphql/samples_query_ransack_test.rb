@@ -202,4 +202,106 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
 
     assert_equal 3, data.count
   end
+
+  test 'advanced search with standard field should still work with feature flag enabled' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'name', operator: 'IN', value: ['Project 1 Sample 1', 'Project 1 Sample 2']
+                                 }]] } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 3, data.count
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
+  end
+
+  test 'advanced search with metadata operator' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'metadata.metadatafield1', operator: 'TEXT_EQUALS', value: 'Value1'
+                                 }]] } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
+  end
+
+  test 'filtering metadata with standard operators and feature flags' do
+    result1 = IridaSchema.execute(SAMPLES_QUERY,
+                                  context: { current_user: @user },
+                                  variables: { filter: { advanced_search: [[{
+                                    field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
+                                  }]] } })
+
+    assert_nil result1['errors'], 'should work and have no errors.'
+
+    data = result1['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+
+    Flipper.enable(:advanced_search_metadata_operators)
+
+    result2 = IridaSchema.execute(SAMPLES_QUERY,
+                                  context: { current_user: @user },
+                                  variables: { filter: { advanced_search: [[{
+                                    field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
+                                  }]] } })
+
+    assert_nil result2['errors'], 'should work and have no errors.'
+
+    data = result2['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+
+    Flipper.enable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+    result3 = IridaSchema.execute(SAMPLES_QUERY,
+                                  context: { current_user: @user },
+                                  variables: { filter: { advanced_search: [[{
+                                    field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
+                                  }]] } })
+
+    assert_not_nil result3['errors'], 'should work and have no errors.'
+
+    assert_equal "filter.advanced_search.0.0.operator: '=' is an invalid operator for metadata fields",
+                 result3['errors'].first['message']
+
+    data = result3['data']['samples']
+
+    assert_nil data
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
+    Flipper.disable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+  end
+
+  test 'cannot filter non-metadata field with metadata operator when feature flag is enabled' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'name', operator: 'TEXT_EQUALS', value: 'Value1'
+                                 }]] } })
+
+    assert_not_nil result['errors'], 'should work and have no errors.'
+
+    assert_equal "filter.advanced_search.0.0.operator: 'text_equals' is an invalid operator for " \
+                 'non-metadata fields',
+                 result['errors'].first['message']
+
+    data = result['data']['samples']
+
+    assert_nil data
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
+  end
 end
