@@ -2,6 +2,8 @@
 
 # Helper for Application
 module ApplicationHelper
+  include PathogenToolbarHelper
+
   # Returns the i18n configuration for LocalTime as a JSON string.
   # Handles missing translations gracefully by returning empty JSON.
   # @return [String] JSON string of the i18n configuration for the current locale

@@ -11,7 +11,7 @@ module Projects
     before_action :current_page
     before_action :query, only: %i[index search select]
     before_action :current_metadata_template, only: %i[index]
-    before_action :index_view_authorizations, only: %i[index]
+    before_action :index_view_authorizations, only: %i[index search]
     before_action :show_view_authorizations, only: %i[show]
     before_action :page_title
 
@@ -24,6 +24,10 @@ module Projects
     end
 
     def search
+      # Action band re-render needs the same selection/auth context as index.
+      @timestamp = DateTime.current
+      @has_samples = @project.samples.size.positive?
+
       respond_to do |format|
         format.turbo_stream do
           if @query.valid?

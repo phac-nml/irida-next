@@ -194,4 +194,29 @@ class DropdownComponentTest < ViewComponentTestCase
     assert_includes describedby.split, 'existing-id'
     assert describedby.split.size >= 2, 'tooltip id should be appended to existing describedby'
   end
+
+  test 'compact toolbar density tightens icon and caret pairing' do
+    render_inline(
+      DropdownComponent.new(
+        label: 'Sample Actions',
+        icon: :sliders_horizontal,
+        icon_size: :xs,
+        caret: true,
+        compact: true
+      )
+    ) do |dropdown|
+      dropdown.with_item(label: 'Item 1', url: '#')
+    end
+
+    button = page.find('button', text: 'Sample Actions')
+    leading = button.find('svg.sliders-horizontal-icon', visible: :all)
+    caret = button.find('svg.caret-down-icon', visible: :all)
+
+    assert_includes leading[:class], 'size-3'
+    assert_not_includes leading[:class].split, 'mr-2'
+    assert_includes caret[:class], 'size-3'
+    assert_no_selector 'button span.ml-2'
+    assert_selector 'div.flex'
+    assert_no_selector 'div.max-sm\\:grow'
+  end
 end

@@ -104,6 +104,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      # Toolbar integration tests import Pathogen JS that is not in the published
+      # gem tag yet; resolve via PATHOGEN_VIEW_COMPONENTS_JS (see vitest.config.js).
+      - name: Checkout pathogen-view-components
+        uses: actions/checkout@v7
+        with:
+          repository: phac-nml/pathogen-view-components
+          ref: 001-add-toolbar-component
+          path: pathogen-view-components
+
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
 
@@ -117,6 +126,8 @@ jobs:
         run: pnpm install
 
       - name: Run JavaScript tests
+        env:
+          PATHOGEN_VIEW_COMPONENTS_JS: ${{ github.workspace }}/pathogen-view-components/app/assets/javascripts/pathogen_view_components
         run: pnpm run test:js
 
   test:
