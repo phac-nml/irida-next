@@ -350,5 +350,99 @@ module AdvancedSearch
     ensure
       Flipper.disable(:advanced_search_metadata_operators)
     end
+
+    test 'operators with advanced_search_disable_standard_operators_for_metadata_in_graphql feature flag enabled' do
+      Flipper.enable(:advanced_search_metadata_operators)
+
+      # standard operators still work on metadata field
+      record1 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: '=',
+                                                                value: 'x')])]
+      )
+
+      assert record1.valid?
+      assert_not record1.errors.added?(:base, :invalid)
+
+      # metadata operator works as expected on metadata field
+      record2 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: 'TEXT_EQUALS',
+                                                                value: 'x')])]
+      )
+
+      assert record2.valid?
+      assert_not record2.errors.added?(:base, :invalid)
+
+      # metadata operator cannot be used on standard field
+      record3 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name', operator: 'TEXT_EQUALS',
+                                                                value: 'x')])]
+      )
+
+      assert_not record3.valid?
+      assert record3.errors.added?(:base, :invalid)
+      third = record3.groups.first.conditions.last
+      assert third.errors.added?(:operator, :use_non_metadata_operator)
+
+      Flipper.enable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+      # standard operators cannot be used on metadata field with
+      # advanced_search_disable_standard_operators_for_metadata_in_graphql enabled
+      record4 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: '=',
+                                                                value: 'x')])]
+      )
+
+      assert_not record4.valid?
+      assert record4.errors.added?(:base, :invalid)
+      fourth = record4.groups.first.conditions.last
+      assert fourth.errors.added?(:operator, :use_metadata_operator)
+
+      # metadata operator works as expected on metadata field with
+      # advanced_search_disable_standard_operators_for_metadata_in_graphql enabled
+      record5 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: 'TEXT_EQUALS',
+                                                                value: 'x')])]
+      )
+
+      assert record5.valid?
+      assert_not record5.errors.added?(:base, :invalid)
+
+      # metadata operator still cannot be used on standard field with
+      # advanced_search_disable_standard_operators_for_metadata_in_graphql enabled
+      record6 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name', operator: 'TEXT_EQUALS',
+                                                                value: 'x')])]
+      )
+
+      assert_not record6.valid?
+      assert record6.errors.added?(:base, :invalid)
+      sixth = record6.groups.first.conditions.last
+      assert sixth.errors.added?(:operator, :use_non_metadata_operator)
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+      Flipper.disable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+    end
+
+    test 'standard operators work as expected with advanced_search_disable_standard_operators_for_metadata_in_graphql enabled but not advanced_search_metadata_operators' do # rubocop:disable Layout/LineLength
+      Flipper.enable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+      # standard operators works on metadata
+      record1 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: '=',
+                                                                value: 'x')])]
+      )
+
+      assert record1.valid?
+      assert_not record1.errors.added?(:base, :invalid)
+
+      # standard operators works on standard field
+      record2 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name', operator: '=',
+                                                                value: 'x')])]
+      )
+
+      assert record2.valid?
+      assert_not record2.errors.added?(:base, :invalid)
+    ensure
+      Flipper.disable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+    end
   end
 end
