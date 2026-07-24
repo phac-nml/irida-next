@@ -23,37 +23,31 @@ module Mutations
     validates required: { one_of: %i[project_id project_puid] }
 
     field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
-    field :samples, [ID], description: 'List of transfered sample ids.'
+    field :job_id, ID, description: 'ID of the transfer job.'
 
     def resolve(args) # rubocop:disable Metrics/MethodLength
       project = get_project_from_id_or_puid_args(args)
 
       if project.nil? || !project.persisted?
-        user_errors = [{
-          path: ['project'],
-          message: 'Project not found by provided ID or PUID'
-        }]
-        return {
-          samples: nil,
-          errors: user_errors
-        }
+        user_errors = [{ path: ['project'], message: 'Project not found by provided ID or PUID' }]
+        return { job_id: nil, errors: user_errors }
       end
 
       new_project_args = { project_id: args[:new_project_id], project_puid: args[:new_project_puid] }
       new_project = get_project_from_id_or_puid_args(new_project_args)
 
       if new_project.nil? || !new_project.persisted?
-        user_errors = [{
-          path: ['new_project'],
-          message: 'Project not found by provided ID or PUID'
-        }]
-        return {
-          samples: nil,
-          errors: user_errors
-        }
+        user_errors = [{ path: ['new_project'],
+                         message: 'Project not found by provided ID or PUID' }]
+        return { job_id: nil, errors: user_errors }
       end
 
-      transfer_samples(project, new_project.id, args[:sample_ids])
+      enqueued_job = queue_transfer_job(project, new_project.id, args[:sample_ids])
+      if enqueued_job.nil?
+        { job_id: nil, errors: ['Failed to enqueue transfer job. Please contact an administrator.'] }
+      else
+        { job_id: enqueued_job.job_id, errors: [] }
+      end
     end
 
     def ready?(**_args)
@@ -63,7 +57,7 @@ module Mutations
 
     private
 
-    def transfer_samples(project, new_project_id, sample_gids) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    def queue_transfer_job(project, new_project_id, sample_gids)
       user_errors = []
       # remove prefix from sample_ids
       sample_ids = sample_gids.map do |sample_gid|
@@ -78,33 +72,9 @@ module Mutations
         next
       end
 
-      samples = Samples::TransferService.new(
-        project.namespace, current_user
-      ).execute(new_project_id, sample_ids.compact)
-
-      if samples.empty? # rubocop:disable Style/ConditionalAssignment
-        samples = nil
-      else
-        # add the prefix to sample_ids
-        samples = samples.map do |sample_id|
-          URI::GID.build(app: GlobalID.app, model_name: Sample.name, model_id: sample_id).to_s
-        end
-      end
-
-      project_user_errors = []
-      if project.namespace.errors.any?
-        project_user_errors = project.namespace.errors.map do |error|
-          {
-            path: ['samples', error.attribute.to_s.camelize(:lower)],
-            message: error.message
-          }
-        end
-      end
-
-      {
-        samples:,
-        errors: user_errors.concat(project_user_errors)
-      }
+      Samples::TransferJob.perform_later(
+        project.namespace, current_user, new_project_id, sample_ids.compact
+      )
     end
   end
 end

@@ -2738,6 +2738,16 @@ type Query {
   ): Sample
 
   """
+  Find the status of a sample transfer job.
+  """
+  sampleTransferJob(
+    """
+    ID of the transfer job.
+    """
+    jobId: ID!
+  ): SampleTransferJob
+
+  """
   Find samples.
   """
   samples(
@@ -2999,6 +3009,26 @@ enum SampleOrderField {
 }
 
 """
+The status of a sample transfer job.
+"""
+type SampleTransferJob {
+  """
+  A list of errors that prevented the mutation.
+  """
+  errors: [UserError!]!
+
+  """
+  List of transferred sample ids.
+  """
+  samples: [ID!]
+
+  """
+  Status of the transfer job.
+  """
+  status: String
+}
+
+"""
 A SamplesWorkflowExecition
 """
 type SamplesWorkflowExecution implements Node {
@@ -3153,9 +3183,9 @@ type TransferSamplesPayload {
   errors: [UserError!]!
 
   """
-  List of transfered sample ids.
+  ID of the transfer job.
   """
-  samples: [ID!]
+  jobId: ID
 }
 
 """
