@@ -14,17 +14,13 @@ module SimpleCov
   end
 end
 
-SimpleCov.start 'rails' do
-  add_group 'Graphql', 'app/graphql'
-  add_group 'View Components', 'app/components'
-  add_group 'Policies', 'app/policies'
-  add_filter 'lib/active_storage/service/'
-  add_filter 'lib/azure/'
-  add_filter '/test/'
-  add_filter '/vendor/'
-  enable_coverage :branch
-  enable_coverage_for_eval
-end
+SimpleCov.load_profile 'rails'
+SimpleCov.group 'Graphql', 'app/graphql'
+SimpleCov.group 'View Components', 'app/components'
+SimpleCov.group 'Policies', 'app/policies'
+SimpleCov.enable_coverage :method
+SimpleCov.enable_coverage :branch
+SimpleCov.enable_coverage :eval
 
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
@@ -47,12 +43,10 @@ module ActiveSupport
   class TestCase
     parallelize_setup do |worker|
       Capybara.server_port = 43_567 + worker if ENV.key?('BROWSERLESS_HOST')
-      SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
       ActiveStorage::Blob.service.root = "#{ActiveStorage::Blob.service.root}-#{worker}"
     end
 
     parallelize_teardown do |_worker|
-      SimpleCov.result
       FileUtils.rm_rf(ActiveStorage::Blob.service.root)
     end
 
