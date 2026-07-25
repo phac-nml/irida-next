@@ -84,24 +84,6 @@ module Samples
       project_namespace.self_and_ancestors_of_type([Namespaces::ProjectNamespace.sti_name, Group.sti_name])
     end
 
-    # Update sample counts on projects after transfer.
-    #
-    # Decrements the source project's count and increments the target project's count.
-    # If either project belongs to a group, also updates the group's metadata summary.
-    #
-    # @param old_project [Project] the source project
-    # @param new_project [Project] the target project
-    # @param transferred_samples_count [Integer] number of samples transferred
-    def update_samples_count(old_project, new_project, transferred_samples_count)
-      Project.decrement_counter(:samples_count, old_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations
-      Project.increment_counter(:samples_count, new_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations
-      if old_project.parent.type == 'Group'
-        old_project.parent.update_samples_count_by_transfer_service(new_project, transferred_samples_count)
-      elsif new_project.parent.type == 'Group'
-        new_project.parent.update_samples_count_by_addition_services(transferred_samples_count)
-      end
-    end
-
     # Update metadata summaries for all namespaces affected by the transfer.
     #
     # For each source project, collects the metadata keys and counts from samples
@@ -347,7 +329,7 @@ module Samples
         old_project = Project.find(old_project_id)
         data = fetch_transferred_sample_data(sample_ids)
 
-        update_samples_count(old_project, new_project, sample_ids.size)
+        Project.transfer_samples_count_delta(old_project, new_project, sample_ids.size)
 
         process_project_transfer_activity(old_project, new_project, data, group_activity_data)
 

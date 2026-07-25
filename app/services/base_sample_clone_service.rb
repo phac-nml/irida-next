@@ -45,10 +45,6 @@ class BaseSampleCloneService < BaseSampleService
     ::Attachments::CreateService.new(current_user, clone, { files:, include_activity: false }).execute
   end
 
-  def update_samples_count(cloned_samples_count)
-    @new_project.parent.update_samples_count_by_addition_services(cloned_samples_count)
-  end
-
   def create_project_level_activity(cloned_samples_data, old_project_namespace) # rubocop:disable Metrics/MethodLength
     cloned_samples_count = cloned_samples_data.count
     ext_details = ExtendedDetail.create!(details: { cloned_samples_count: cloned_samples_count,

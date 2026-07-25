@@ -74,7 +74,9 @@ module Projects
       project_namespace = namespaces_project_namespaces(:project2_namespace)
       project1 = projects(:project1)
 
-      project1.really_destroy!
+      project_namespace_to_destroy = project1.namespace
+      project_namespace_to_destroy.destroy!
+      project_namespace_to_destroy.really_destroy!
 
       activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 
@@ -107,7 +109,9 @@ module Projects
       project_namespace = namespaces_project_namespaces(:project1_namespace)
       project2 = projects(:project2)
 
-      project2.really_destroy!
+      project_namespace_to_destroy = project2.namespace
+      project_namespace_to_destroy.destroy!
+      project_namespace_to_destroy.really_destroy!
 
       activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 

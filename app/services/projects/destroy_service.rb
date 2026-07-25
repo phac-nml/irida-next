@@ -3,10 +3,8 @@
 module Projects
   # Service used to Delete Projects
   class DestroyService < BaseProjectService
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute
       authorize! project, to: :destroy?
-
-      deleted_samples_count = @project.samples.size
 
       project.namespace.destroy!
 
@@ -14,7 +12,6 @@ module Projects
 
       return unless project.namespace.deleted? && @project.parent.type == 'Group'
 
-      update_samples_count(deleted_samples_count)
       project.namespace.update_metadata_summary_by_namespace_deletion
     end
 
@@ -30,10 +27,6 @@ module Projects
                                                   project_puid: @project.namespace.puid,
                                                   action: 'group_project_destroy'
                                                 }
-    end
-
-    def update_samples_count(deleted_samples_count)
-      @project.parent.update_samples_count_by_destroy_service(deleted_samples_count)
     end
   end
 end

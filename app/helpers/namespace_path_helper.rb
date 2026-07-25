@@ -3,7 +3,7 @@
 # Helper for namespace paths
 module NamespacePathHelper
   def namespace_path(namespace)
-    return if namespace.deleted?
+    return if namespace.nil? || namespace.deleted?
 
     if namespace&.group_namespace?
       helpers.group_path(namespace)

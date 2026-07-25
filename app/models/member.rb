@@ -28,7 +28,7 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                            new_record? || expires_at_before_type_cast.present?
                          }
 
-  before_destroy :last_namespace_owner_member
+  before_destroy :last_namespace_owner_member, unless: :destroyed_by_association
 
   delegate :project, to: :project_namespace
 
@@ -147,8 +147,8 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   # Method to ensure we don't leave a group or project without an owner
-  def last_namespace_owner_member # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-    return if destroyed_by_association
+  def last_namespace_owner_member # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    return if destroyed_by_association || namespace.nil?
     return if access_level != Member::AccessLevel::OWNER
     return if namespace.parent&.user_namespace?
     return if Member.where(namespace:, access_level: Member::AccessLevel::OWNER).many?

@@ -365,28 +365,6 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal group.samples_count, group.aggregated_samples_count
   end
 
-  test 'update samples_count by sample transfer' do
-    project = projects(:project22)
-    assert_difference -> { @group_three.reload.samples_count } => -1,
-                      -> { @group_three_subgroup1.reload.samples_count } => -1 do
-      @group_three_subgroup1.update_samples_count_by_transfer_service(project, 1)
-    end
-  end
-
-  test 'update samples_count by sample deletion' do
-    assert_difference -> { @group_three.reload.samples_count } => -1,
-                      -> { @group_three_subgroup1.reload.samples_count } => -1 do
-      @group_three_subgroup1.update_samples_count_by_destroy_service(1)
-    end
-  end
-
-  test 'update samples_count by sample addition' do
-    assert_difference -> { @group_three.reload.samples_count } => 1,
-                      -> { @group_three_subgroup1.reload.samples_count } => 1 do
-      @group_three_subgroup1.update_samples_count_by_addition_services(1)
-    end
-  end
-
   test 'samples_count for each group fixture should be correct' do
     # If you've added samples to fixtures, update the sample_count to the corresponding project/groups
     Group.find_each do |group|

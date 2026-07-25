@@ -8,6 +8,7 @@ class Project < ApplicationRecord
 
   before_restore :restore_namespace
   after_destroy :destroy_namespace
+  after_commit :propagate_samples_count_change, if: :saved_change_to_samples_count?
 
   belongs_to :creator, class_name: 'User'
   belongs_to :namespace, autosave: true, class_name: 'Namespaces::ProjectNamespace'
@@ -47,6 +48,22 @@ class Project < ApplicationRecord
     :stack
   end
 
+  # Transfer sample count delta between two projects.
+  # @param old_project [Project] the source project
+  # @param new_project [Project] the target project
+  # @param transferred_samples_count [Integer] number of samples transferred
+  def self.transfer_samples_count_delta(old_project, new_project, transferred_samples_count)
+    return if transferred_samples_count.nil? || transferred_samples_count.zero?
+
+    # Update project counters directly without ancestor propagation.
+    Project.decrement_counter(:samples_count, old_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations
+    Project.increment_counter(:samples_count, new_project.id, by: transferred_samples_count) # rubocop:disable Rails/SkipsModelValidations
+
+    # Move ancestor counts once based on parent namespaces.
+    Namespace.transfer_samples_count_delta(old_project.namespace.parent, new_project.namespace.parent,
+                                           transferred_samples_count)
+  end
+
   def broadcast_refresh_later_to_samples_table
     broadcast_refresh_later_to self, :samples if self && !deleted?
 
@@ -72,5 +89,13 @@ class Project < ApplicationRecord
     return if namespace_to_restore.nil?
 
     Namespace.restore(namespace_to_restore.id, recursive: true)
+  end
+
+  # Propagate sample count changes to group namespace ancestors.
+  # Called when samples_count is updated (e.g., via counter_cache on Sample creation/deletion).
+  def propagate_samples_count_change
+    old_count, new_count = saved_change_to_samples_count
+    delta = new_count - old_count
+    namespace.propagate_samples_count_delta(delta)
   end
 end

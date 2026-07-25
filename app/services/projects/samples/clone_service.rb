@@ -6,7 +6,7 @@ module Projects
     class CloneService < BaseSampleCloneService
       private
 
-      def clone_samples(sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def clone_samples(sample_ids, broadcast_target)
         cloned_sample_ids = {}
         cloned_samples_data = []
         filtered_samples = filter_sample_ids(sample_ids, 'clone')
@@ -23,10 +23,7 @@ module Projects
           update_progress_bar(index, total_sample_count, broadcast_target)
         end
 
-        if cloned_sample_ids.any?
-          update_samples_count(cloned_sample_ids.count) if @new_project.parent.group_namespace?
-          create_project_level_activity(cloned_samples_data, @namespace)
-        end
+        create_project_level_activity(cloned_samples_data, @namespace) if cloned_sample_ids.any?
 
         cloned_sample_ids
       end
