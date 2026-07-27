@@ -5,11 +5,12 @@
 # Supports text, images, FASTA, FASTQ, GenBank, and more!
 class AttachmentsController < ApplicationController
   include SpreadsheetParser
+  include ListActions
 
   layout 'attachment'
 
-  before_action :set_attachment
-  before_action :set_context_crumbs
+  before_action :set_attachment, only: %i[show]
+  before_action :set_context_crumbs, only: %i[show]
 
   # 🖼️ Shows a preview of the attachment if it exists
   # Preview format depends on the file type in metadata

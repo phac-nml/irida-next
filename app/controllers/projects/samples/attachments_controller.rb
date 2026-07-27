@@ -5,6 +5,7 @@ module Projects
     # Controller actions for Project Samples Attachments
     class AttachmentsController < Projects::Samples::ApplicationController
       include SampleAttachment
+      include ListActions
 
       before_action :attachment, only: %i[destroy]
       before_action :new_destroy_params, only: %i[new_destroy]
