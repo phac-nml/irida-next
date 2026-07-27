@@ -179,6 +179,20 @@ class ResetSamplesCountJobTest < ActiveJob::TestCase
     end
   end
 
+  test 'resets root group itself when root_group_ids are provided' do
+    # Verify that the root group passed as root_group_ids is reset, not just its descendants
+    root_group = groups(:group_twelve)
+    root_group.update_columns(samples_count: 999) # rubocop:disable Rails/SkipsModelValidations
+
+    ResetSamplesCountJob.perform_now(root_group_ids: [root_group.id])
+
+    root_group.reload
+
+    # Root group itself should have been reset to correct count
+    assert_equal expected_group_samples_count(root_group), root_group.samples_count,
+                 'Root group passed as root_group_id should be reset'
+  end
+
   test 'resets projects before groups' do
     ResetSamplesCountJob.perform_later
 
