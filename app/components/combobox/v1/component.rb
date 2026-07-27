@@ -60,7 +60,8 @@ module Combobox
       def selected_option(options, selected_value)
         fragment = Nokogiri::HTML.fragment(options)
         fragment.search('option').each do |option|
-          if option.key?('selected') || option['value'] == selected_value
+          if option.key?('selected') ||
+             (selected_value.present? && option['value'].to_s == selected_value.to_s)
             return { name: option.text, value: option['value'] }
           end
         end
