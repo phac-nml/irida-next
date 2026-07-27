@@ -61,23 +61,14 @@ class ResetSamplesCountJob < ApplicationJob
   def scoped_projects(root_groups)
     return Project.all if root_groups.nil?
 
-    descendant_project_namespace_ids = descendant_namespace_ids(root_groups,
-                                                                Namespaces::ProjectNamespace.sti_name)
+    group_ids = scoped_groups(root_groups).select(:id)
 
-    Project.where(namespace_id: descendant_project_namespace_ids)
+    Project.joins(:namespace).where(namespace: { parent_id: group_ids })
   end
 
   def scoped_groups(root_groups)
     return Group.all if root_groups.nil?
 
-    descendant_group_ids = descendant_namespace_ids(root_groups, Group.sti_name)
-
-    Group.where(id: descendant_group_ids)
-  end
-
-  def descendant_namespace_ids(root_groups, type)
-    root_groups.find_each.flat_map do |root_group|
-      root_group.self_and_descendants_of_type(type).pluck(:id)
-    end.uniq
+    root_groups.self_and_descendants
   end
 end
