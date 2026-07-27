@@ -21,7 +21,7 @@
       </p>
 
       <div>
-        <div class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"><%= t(".attachments") %></div>
+        <div class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"><%= t(".files") %></div>
 
         <div
           class="
@@ -50,7 +50,7 @@
           ) do |form| %>
         <div class="grid gap-4">
           <div>
-            <%= form.submit t(".submit_button"),
+            <%= form.submit t("common.actions.delete"),
                         class:
                           "button button-destructive",
                         data: {
