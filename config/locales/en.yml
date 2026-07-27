@@ -1714,14 +1714,13 @@ en:
             partial_success: Some files were successfully deleted.
             success: Files were successfully deleted.
           modal:
-            attachments: Files
             description:
               plural: 'The following files were selected for deletion:'
               singular: 'The following file was selected for deletion:'
               zero: No files were selected for deletion
+            files: Files
             loading: Loading...
             spinner: Deleting files. This may take a while...
-            submit_button: Delete
             title: Delete Files
         destroy:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
