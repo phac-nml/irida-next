@@ -3,7 +3,7 @@
 module Combobox
   module V1
     # Component for rendering a drop down that filters dynamically
-    class Component < ::Component # rubocop:disable Metrics/ClassLength
+    class Component < ::Component
       renders_many :options, ::Combobox::V1::OptionComponent
 
       def initialize(form:, field:, options: nil, selected_value: nil, **combobox_arguments)
@@ -115,14 +115,6 @@ module Combobox
           option.replace(listbox_group_option)
         end
         fragment
-      end
-
-      def assign_option_ids(option_nodes)
-        option_nodes.each_with_index do |option, option_index|
-          next if option['id'].present?
-
-          option['id'] = listbox_option_id(option_index)
-        end
       end
 
       def listbox_option_id(option_index)
