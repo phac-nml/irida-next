@@ -3,7 +3,7 @@
 module Combobox
   module V1
     # Component for rendering a drop down that filters dynamically
-    class Component < ::Component
+    class Component < ::Component # rubocop:disable Metrics/ClassLength
       renders_many :options, ::Combobox::V1::OptionComponent
 
       def initialize(form:, field:, options: nil, selected_value: nil, **combobox_arguments)
@@ -25,6 +25,7 @@ module Combobox
       def before_render
         return unless options?
 
+        assign_slot_option_ids
         @selected_option = selected_slot_option(@selected_value)
       end
 
@@ -75,6 +76,12 @@ module Combobox
         return { name: '', value: '' } if option.nil?
 
         { name: option.label, value: option.value }
+      end
+
+      def assign_slot_option_ids
+        options.each_with_index do |option, option_index|
+          option.id ||= listbox_option_id(option_index)
+        end
       end
 
       def create_listbox(options)
