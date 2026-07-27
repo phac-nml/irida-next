@@ -2,17 +2,42 @@
 
 <%= render Viral::DialogComponent.new(open: open, size: :extra_large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
-  <%= turbo_frame_tag("deletion-alert") %>
 
-  <div class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400">
-    <p class="mb-4"><%= t(".description") %></p>
+  <div
+    data-controller="infinite-scroll"
+    data-infinite-scroll-selection-outlet="#attachments-table"
+    data-infinite-scroll-paged-field-name-value="attachment_ids[]"
+    data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
+    data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
+  >
+    <%= form_with(
+        url: list_namespace_project_sample_attachments_path(list_class: 'attachment'),
+        data: { "infinite-scroll-target": "pageForm" }
+      ) do %>
+      <div data-infinite-scroll-target="pageFormContent"></div>
+    <% end %>
 
-    <div
-      class="scrollbar overflow-auto"
-      data-controller="projects--samples--attachments--files"
-      data-projects--samples--attachments--files-target="field"
-    ></div>
-  </div>
+    <div class="grid gap-4">
+      <p data-infinite-scroll-target="summary" class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+        <%= t(".description.zero") %>
+      </p>
+
+      <div>
+        <div class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"><%= t(".attachments") %></div>
+
+        <div
+          class="
+            block max-h-[300px] w-full overflow-y-auto rounded-lg border border-slate-300 p-2.5
+            dark:border-slate-600 dark:bg-slate-800
+          "
+          data-action="scroll->infinite-scroll#scroll"
+          data-infinite-scroll-target="scrollable"
+        >
+          <%= turbo_frame_tag "list_selections" do %>
+            <%= render partial: "shared/loading/samples_list_skeleton" %>
+          <% end %>
+        </div>
+      </div>
 
   <%= form_for(:deletion, url: namespace_project_sample_attachments_deletion_path,
     data: {
@@ -26,5 +51,5 @@
     <div>
       <%= form.submit t('common.actions.delete'), tone: :danger, emphasis: :solid %>
     </div>
-  <% end %>
+  </div>
 <% end %>
