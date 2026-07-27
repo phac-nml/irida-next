@@ -11,6 +11,7 @@ module Combobox
         @listbox_id = "#{form.field_id(field)}_listbox"
         @form = form
         @field = field
+        @selected_option = { name: '', value: '' }
         @selected_value = selected_value
 
         unless options.nil?
