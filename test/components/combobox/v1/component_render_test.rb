@@ -43,7 +43,7 @@ module Combobox
         render_component(options: nil)
 
         assert_selector 'input[role="combobox"][value=""]'
-        assert_selector "##{build_form_builder.field_id(:field)}_hidden[value='']"
+        assert_selector "##{build_form_builder.field_id(:field)}_hidden[value='']", visible: :hidden
       end
 
       test 'renders combobox input with aria-disabled and indicator buttons disabled when disabled is true' do
