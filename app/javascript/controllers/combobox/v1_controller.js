@@ -97,8 +97,11 @@ export default class extends Controller {
     // Initialize
     const initialOption = this.#findOptionByValue(this.hiddenTarget.value);
     if (initialOption) {
-      this.#filter = initialOption.getAttribute("data-label") || "";
-      this.comboboxTarget.value = this.#filter;
+      this.comboboxTarget.value =
+        initialOption.getAttribute("data-label") || "";
+      this.#setOption(this.#filterOptions());
+    } else {
+      this.#filterOptions();
     }
 
     this.#updateIndicatorState();
@@ -239,6 +242,7 @@ export default class extends Controller {
 
   #populateCurrentFirstLastOptions() {
     const currentOption = this.#option;
+    const selectedOption = this.#findOptionByValue(this.hiddenTarget.value);
     const selectableOptions = this.#selectableOptions();
     const numItems = selectableOptions.length;
     let option;
@@ -247,7 +251,9 @@ export default class extends Controller {
       this.#firstOption = selectableOptions[0];
       this.#lastOption = selectableOptions[numItems - 1];
 
-      if (currentOption && selectableOptions.includes(currentOption)) {
+      if (selectedOption && selectableOptions.includes(selectedOption)) {
+        option = selectedOption;
+      } else if (currentOption && selectableOptions.includes(currentOption)) {
         option = currentOption;
       } else {
         option = this.#firstOption;
