@@ -193,6 +193,26 @@ class ResetSamplesCountJobTest < ActiveJob::TestCase
                  'Root group passed as root_group_id should be reset'
   end
 
+  test 'resets group with no descendant projects to zero' do
+    # Find a group that has no descendant projects
+    group_without_projects = groups(:group_eight)
+
+    # Ensure the group has no descendant projects (for this test to be valid)
+    expected_count = expected_group_samples_count(group_without_projects)
+    skip "Test group must have no descendant projects, but has #{expected_count}" unless expected_count.zero?
+
+    # Corrupt sample count
+    group_without_projects.update_columns(samples_count: 999) # rubocop:disable Rails/SkipsModelValidations
+
+    ResetSamplesCountJob.perform_now
+
+    group_without_projects.reload
+
+    # Group with no descendant projects should have samples_count of 0
+    assert_equal 0, group_without_projects.samples_count,
+                 'Group with no descendant projects should have samples_count reset to 0'
+  end
+
   test 'resets projects before groups' do
     ResetSamplesCountJob.perform_later
 
@@ -213,6 +233,8 @@ class ResetSamplesCountJobTest < ActiveJob::TestCase
 
   def expected_group_samples_count(group)
     descendant_project_namespace_ids = group.self_and_descendants_of_type(Namespaces::ProjectNamespace.sti_name).select(:id)
-    Project.where(namespace_id: descendant_project_namespace_ids).sum { |project| project.samples.count }
+    Sample.joins(:project)
+          .where(projects: { namespace_id: descendant_project_namespace_ids })
+          .count
   end
 end

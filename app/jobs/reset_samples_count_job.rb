@@ -28,7 +28,9 @@ class ResetSamplesCountJob < ApplicationJob
   private
 
   def reset_project_counts_step(step)
-    start_id = scoped_projects(@root_groups).order(:id).offset(step.cursor).first.id
+    start_id = scoped_projects(@root_groups).order(:id).offset(step.cursor).first&.id
+    return if start_id.nil?
+
     scoped_projects(@root_groups).find_each(start: start_id) do |project|
       Project.reset_counters(project.id, :samples)
       step.advance!
@@ -36,7 +38,9 @@ class ResetSamplesCountJob < ApplicationJob
   end
 
   def reset_group_counts_step(step)
-    start_id = scoped_groups(@root_groups).order(:id).offset(step.cursor).first.id
+    start_id = scoped_groups(@root_groups).order(:id).offset(step.cursor).first&.id
+    return if start_id.nil?
+
     scoped_groups(@root_groups).find_each(start: start_id) do |group|
       descendant_project_namespace_ids =
         group.self_and_descendants_of_type(Namespaces::ProjectNamespace.sti_name).select(:id)
