@@ -7,6 +7,8 @@ module Samples
     include ActiveJob::Continuation::TestHelper
 
     def setup # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      Flipper.enable(:v2_sample_transfer)
+
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
       @joan_doe = users(:joan_doe)

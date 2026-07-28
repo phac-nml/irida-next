@@ -78,12 +78,7 @@ module Mutations
         next
       end
 
-      # # TODO: This mutation should either replace this perform_now job with a service execute that follows the same
-      # # logic as the job, or better yet, change the mutation to return a job id that can be queried for results
-      # # As this uses the perform_now job handling, it is susceptible to failures that would normally be retried.
-      # samples = Samples::TransferJobV2.perform_now(
-      #   project.namespace, current_user, new_project_id, sample_ids.compact
-      # )
+      # TODO: this should switch to using a job, and return a job id that can be queried for the job status and results.
       samples = Samples::TransferService.new(
         project.namespace, current_user
       ).execute(new_project_id, sample_ids.compact)
