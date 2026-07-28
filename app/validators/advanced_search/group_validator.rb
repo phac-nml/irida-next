@@ -8,9 +8,11 @@ module AdvancedSearch
   # - date_fields
   class GroupValidator < ActiveModel::Validator # rubocop:disable Metrics/ClassLength
     METADATA_FIELD_PATTERN = /^metadata\..+$/
-    DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in].freeze
-    BETWEEN_OPERATORS = { standard: %w[>= <=], metadata_date: %w[date_greater_than_equals date_less_than_equals],
-                          metadata_numeric: %w[numeric_greater_than_equals numeric_less_than_equals] }.freeze
+    DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in starts_with ends_with].freeze
+    COMBINABLE_OPERATORS = { gleqt: %w[>= <=], start_ends_with: %w[ends_with starts_with],
+                             metadata_date_gleqt: %w[date_greater_than_equals date_less_than_equals],
+                             metadata_numeric_gleqt: %w[numeric_greater_than_equals numeric_less_than_equals],
+                             text_starts_ends_with: %w[text_ends_with text_starts_with] }.freeze
     EXISTS_OPERATORS = %w[exists not_exists].freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
@@ -137,7 +139,7 @@ module AdvancedSearch
     def validate_standard_date_and_numeric_fields(condition)
       if date_field?(condition.field, condition.operator)
         validate_date_field_condition(condition)
-      elsif BETWEEN_OPERATORS[:standard].include?(condition.operator)
+      elsif COMBINABLE_OPERATORS[:gleqt].include?(condition.operator)
         validate_numeric(condition)
       end
     end
@@ -175,7 +177,7 @@ module AdvancedSearch
         group_condition.field == condition.field
       end
 
-      if BETWEEN_OPERATORS.values.flatten.include?(condition.operator)
+      if COMBINABLE_OPERATORS.values.flatten.include?(condition.operator)
         validate_between(condition, common_field_conditions)
       elsif condition.field.present?
         validate_uniqueness(condition, common_field_conditions)
@@ -193,7 +195,7 @@ module AdvancedSearch
 
       operators = common_field_conditions.map(&:operator).sort
 
-      return if BETWEEN_OPERATORS.values.any? { |between_operators| operators == between_operators.sort }
+      return if COMBINABLE_OPERATORS.values.any? { |combinable_operators| operators == combinable_operators.sort }
 
       unique_field_condition.errors.add :field, :taken
     end

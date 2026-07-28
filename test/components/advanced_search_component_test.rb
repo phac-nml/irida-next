@@ -51,6 +51,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_exists')
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.in')
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.starts_with')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.ends_with')
         end
 
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
@@ -99,6 +101,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_contains') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_starts_with') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_ends_with') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') # rubocop:disable Layout/LineLength
@@ -130,6 +134,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_exists')
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.in')
           assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_in')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.starts_with')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.ends_with')
         end
       end
     end

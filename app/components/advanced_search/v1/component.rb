@@ -46,7 +46,9 @@ module AdvancedSearch
           I18n.t('components.advanced_search_component.v1.operations.standard.exists') => 'exists',
           I18n.t('components.advanced_search_component.v1.operations.standard.not_exists') => 'not_exists',
           I18n.t('components.advanced_search_component.v1.operations.standard.in') => 'in',
-          I18n.t('components.advanced_search_component.v1.operations.standard.not_in') => 'not_in'
+          I18n.t('components.advanced_search_component.v1.operations.standard.not_in') => 'not_in',
+          I18n.t('components.advanced_search_component.v1.operations.standard.starts_with') => 'starts_with',
+          I18n.t('components.advanced_search_component.v1.operations.standard.ends_with') => 'ends_with'
         } }
 
         return standard_operations unless Flipper.enabled?(:advanced_search_metadata_operators)
@@ -64,7 +66,9 @@ module AdvancedSearch
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_contains') => 'text_contains', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_contains') => 'text_not_contains', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in') => 'text_in', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in') => 'text_not_in' # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in') => 'text_not_in', # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_starts_with') => 'text_starts_with', # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_ends_with') => 'text_ends_with' # rubocop:disable Layout/LineLength
             },
             I18n.t('components.advanced_search_component.v1.operations.metadata.labels.numeric') => {
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') => 'numeric_equals', # rubocop:disable Layout/LineLength

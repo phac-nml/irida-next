@@ -98,6 +98,48 @@ module AdvancedSearch
         sql = result.to_sql
         assert_includes sql, "NOT ILIKE '%\\%test\\%%'"
       end
+
+      # condition_starts_with tests
+      test 'condition_starts_with creates ILIKE query with leading wildcard' do
+        result = @test_instance.send(:condition_starts_with, @scope, @node, 'test', WorkflowExecution, 'id')
+        sql = result.to_sql
+        assert_includes sql, "ILIKE 'test%'"
+      end
+
+      test 'condition_starts_with escapes special characters in value' do
+        result = @test_instance.send(:condition_starts_with, @scope, @node, '%test%', WorkflowExecution, 'id')
+        sql = result.to_sql
+        assert_includes sql, "ILIKE '\\%test\\%%'"
+      end
+
+      test 'condition_starts_with casts uuid column to text' do
+        result = @test_instance.send(:condition_starts_with, @scope, @uuid_node, 'abc',
+                                     WorkflowExecution, 'id')
+        sql = result.to_sql
+        assert_includes sql, 'CAST'
+        assert_includes sql, 'TEXT'
+      end
+
+      # condition_ends_with tests
+      test 'condition_ends_with creates ILIKE query with trailing wildcard' do
+        result = @test_instance.send(:condition_ends_with, @scope, @node, 'test', WorkflowExecution, 'id')
+        sql = result.to_sql
+        assert_includes sql, "ILIKE '%test'"
+      end
+
+      test 'condition_ends_with escapes special characters in value' do
+        result = @test_instance.send(:condition_ends_with, @scope, @node, '%test%', WorkflowExecution, 'id')
+        sql = result.to_sql
+        assert_includes sql, "ILIKE '%\\%test\\%'"
+      end
+
+      test 'condition_ends_with casts uuid column to text' do
+        result = @test_instance.send(:condition_ends_with, @scope, @uuid_node, 'abc',
+                                     WorkflowExecution, 'id')
+        sql = result.to_sql
+        assert_includes sql, 'CAST'
+        assert_includes sql, 'TEXT'
+      end
     end
   end
 end

@@ -221,6 +221,46 @@ module AdvancedSearch
       assert_includes sql, 'IS NULL'
     end
 
+    test 'operator starts_with' do
+      condition = WorkflowExecution::SearchCondition.new(field: 'metadata.test_field', operator: 'starts_with',
+                                                         value: 'string')
+      result = @test_instance.send(:add_condition,
+                                   @test_instance.model_class, condition)
+
+      sql = result.to_sql
+      assert_includes sql, "ILIKE 'string%'"
+    end
+
+    test 'operator ends_with' do
+      condition = WorkflowExecution::SearchCondition.new(field: 'metadata.test_field', operator: 'ends_with',
+                                                         value: 'string')
+      result = @test_instance.send(:add_condition,
+                                   @test_instance.model_class, condition)
+
+      sql = result.to_sql
+      assert_includes sql, "ILIKE '%string'"
+    end
+
+    test 'operator text_starts_with' do
+      condition = WorkflowExecution::SearchCondition.new(field: 'metadata.test_field', operator: 'text_starts_with',
+                                                         value: 'string')
+      result = @test_instance.send(:add_condition,
+                                   @test_instance.model_class, condition)
+
+      sql = result.to_sql
+      assert_includes sql, "ILIKE 'string%'"
+    end
+
+    test 'operator text_ends_with' do
+      condition = WorkflowExecution::SearchCondition.new(field: 'metadata.test_field', operator: 'text_ends_with',
+                                                         value: 'string')
+      result = @test_instance.send(:add_condition,
+                                   @test_instance.model_class, condition)
+
+      sql = result.to_sql
+      assert_includes sql, "ILIKE '%string'"
+    end
+
     # set operators
     test 'operator in' do
       condition = WorkflowExecution::SearchCondition.new(field: 'name', operator: 'in',
@@ -267,7 +307,6 @@ module AdvancedSearch
     end
 
     # existence operators
-
     test 'operator exists' do
       condition = WorkflowExecution::SearchCondition.new(field: 'metadata.test_field', operator: 'exists',
                                                          value: 'string')
