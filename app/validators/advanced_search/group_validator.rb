@@ -120,10 +120,10 @@ module AdvancedSearch
       condition.errors.add :field, :not_a_metadata
     end
 
-    def validate_operator_type(condition)
+    def validate_operator_type(condition) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       field = condition.field
       operator = condition.operator
-      return if EXISTS_OPERATORS.include?(operator)
+      return if EXISTS_OPERATORS.include?(operator) || operator.blank?
 
       if metadata_field?(field) && NON_METADATA_OPERATORS.include?(operator) &&
          Flipper.enabled?(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
