@@ -273,7 +273,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
 
     assert_not_nil result3['errors'], 'should work and have no errors.'
 
-    assert_equal "filter.advanced_search.0.0.operator: '=' is an invalid operator for metadata fields",
+    assert_equal "filter.advanced_search.0.0.operator: 'EQUALS' is an invalid operator for metadata fields",
                  result3['errors'].first['message']
 
     data = result3['data']['samples']
@@ -294,7 +294,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
 
     assert_not_nil result['errors'], 'should work and have no errors.'
 
-    assert_equal "filter.advanced_search.0.0.operator: 'text_equals' is an invalid operator for " \
+    assert_equal "filter.advanced_search.0.0.operator: 'TEXT_EQUALS' is an invalid operator for " \
                  'non-metadata fields',
                  result['errors'].first['message']
 

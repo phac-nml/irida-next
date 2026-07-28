@@ -20,9 +20,9 @@ module Validators
       query.groups.each_with_index do |group, group_index|
         group.conditions.each_with_index do |condition, condition_index|
           condition.errors.messages.each do |attribute, message|
-            operator = retrieve_operator_name(condition, attribute)
+            attribute_name = retrieve_attribute_name(condition, attribute.to_sym)
             errors << "#{error_message_prefix(group_index, condition_index,
-                                              attribute)} '#{operator}' #{message.first}"
+                                              attribute)} '#{attribute_name}' #{message.first}"
           end
         end
       end
@@ -33,10 +33,14 @@ module Validators
       "filter.advanced_search.#{group_index}.#{condition_index}.#{attribute.to_s.camelize(:lower)}:"
     end
 
-    def retrieve_operator_name(condition, attribute)
-      Types::SampleAdvancedSearchConditionOperatorInputType.values.values.find do |v|
-        v.value == condition.send(attribute.to_sym)
-      end&.graphql_name
+    def retrieve_attribute_name(condition, attribute)
+      if attribute == :operator
+        Types::SampleAdvancedSearchConditionOperatorInputType.values.values.find do |v|
+          v.value == condition.send(attribute)
+        end&.graphql_name
+      else
+        condition.send(attribute)
+      end
     end
   end
 end
