@@ -287,8 +287,8 @@ module Samples
 
         params = { sample_id_column: 'sample_name' }
         assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
-        assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                     I18n.t('services.spreadsheet_import.csv_file_malformed'))
+        assert_equal(I18n.t('services.spreadsheet_import.csv_file_malformed'),
+                     @project.namespace.errors.full_messages_for(:base).first)
       end
 
       test 'import sample metadata with an empty header' do
