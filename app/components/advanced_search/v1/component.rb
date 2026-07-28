@@ -3,7 +3,7 @@
 module AdvancedSearch
   module V1
     # View component for advanced search component
-    class Component < ::Component
+    class Component < ::Component # rubocop:disable Metrics/ClassLength
       # @param sample_fields [Array] @deprecated Use fields: instead
       # @param metadata_fields [Array] @deprecated Use fields: instead
       # rubocop:disable Metrics/ParameterLists
@@ -37,8 +37,8 @@ module AdvancedSearch
         AdvancedSearch::ENUM_OPERATOR_VALUES
       end
 
-      def operation_options # rubocop:disable Metrics/MethodLength
-        { 'standard' =>
+      def operation_options # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        standard_operations = { 'standard' =>
         { '=' => {
             'option' => { I18n.t('components.advanced_search_component.v1.operations.standard.equals') => '=' },
             'input_type' => 'text'
@@ -87,40 +87,93 @@ module AdvancedSearch
             'input_type' => 'text'
           } } }
 
-        # return standard_operations unless Flipper.enabled?(:advanced_search_metadata_operators)
+        return standard_operations unless Flipper.enabled?(:advanced_search_metadata_operators)
 
-        # metadata_operations =
-        #   { 'metadata' => {
-        #     I18n.t('components.advanced_search_component.v1.operations.metadata.labels.existence') =>
-        #    {
-        #      I18n.t('components.advanced_search_component.v1.operations.standard.exists') => 'exists',
-        #      I18n.t('components.advanced_search_component.v1.operations.standard.not_exists') => 'not_exists'
-        #    },
-        #     I18n.t('components.advanced_search_component.v1.operations.metadata.labels.text') => {
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_equals') => 'text_equals', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_equals') => 'text_not_equals', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_contains') => 'text_contains', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_contains') => 'text_not_contains', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in') => 'text_in', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in') => 'text_not_in', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_starts_with') => 'text_starts_with', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_ends_with') => 'text_ends_with' # rubocop:disable Layout/LineLength
-        #     },
-        #     I18n.t('components.advanced_search_component.v1.operations.metadata.labels.numeric') => {
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') => 'numeric_equals', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') => 'numeric_not_equals', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') => 'numeric_less_than_equals', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') => 'numeric_greater_than_equals' # rubocop:disable Layout/LineLength
-        #     },
-        #     I18n.t('components.advanced_search_component.v1.operations.metadata.labels.date') => {
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_equals') => 'date_equals', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_equals') => 'date_not_equals', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_less_than_equals') => 'date_less_than_equals', # rubocop:disable Layout/LineLength
-        #       I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_greater_than_equals') => 'date_greater_than_equals' # rubocop:disable Layout/LineLength
-        #     }
-        #   } }
+        metadata_operations =
+          { 'metadata' => {
+            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.existence') =>
+           {
+             'exists' => {
+               'option' => { I18n.t('components.advanced_search_component.v1.operations.standard.exists') => 'exists' },
+               'input_type' => nil
+             }, 'not_exists' => {
+               'option' => {
+                 I18n.t('components.advanced_search_component.v1.operations.standard.not_exists') => 'not_exists'
+               },
+               'input_type' => nil
+             }
 
-        # standard_operations.merge(metadata_operations)
+           },
+            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.text') => {
+              'text_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_equals') => 'text_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              },
+              'text_not_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_equals') => 'text_not_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              },
+              'text_contains' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_contains') => 'text_contains' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              },
+              'text_not_contains' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_contains') => 'text_not_contains' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              },
+              'text_in' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in') => 'text_in' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'list'
+              },
+              'text_not_in' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in') => 'text_not_in' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'list'
+              },
+              'text_starts_with' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_starts_with') => 'text_starts_with' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              },
+              'text_ends_with' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_ends_with') => 'text_ends_with' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              }
+            },
+            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.numeric') => {
+              'numeric_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') => 'numeric_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              }, 'numeric_not_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') => 'numeric_not_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              }, 'numeric_less_than_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') => 'numeric_less_than_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              }, 'numeric_greater_than_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') => 'numeric_greater_than_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              }
+            },
+            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.date') => {
+              'date_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_equals') => 'date_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              },
+              'date_not_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_equals') => 'date_not_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              },
+              'date_less_than_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_less_than_equals') => 'date_less_than_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              },
+              'date_greater_than_equals' => {
+                'option' => { I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_greater_than_equals') => 'date_greater_than_equals' }, # rubocop:disable Layout/LineLength
+                'input_type' => 'text'
+              }
+            }
+          } }
+
+        standard_operations.merge(metadata_operations)
       end
     end
   end
