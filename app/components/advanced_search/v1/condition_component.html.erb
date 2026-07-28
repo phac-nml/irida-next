@@ -15,15 +15,11 @@
     <% invalid_field = @condition.errors.include?(:field) %>
 
     <div class="form-field w-full <%= 'invalid' if invalid_field %>">
-      <% options = options_for_select(field_options, @condition.field).concat(
-        grouped_options_for_select(grouped_field_options, @condition.field),
-      ) %>
-
       <%= conditions_form.label :field, data: { required: true } %>
 
       <% unless Flipper.enabled?(:advanced_search_with_auto_complete, Current.user) %>
         <%= conditions_form.select :field,
-                               options,
+                               field_options_for_select,
                                { include_blank: true },
                                {
                                  "data-action": "change->advanced-search--v1#handleFieldChange",
@@ -55,20 +51,6 @@
     <% invalid_operator = @condition.errors.include?(:operator) %>
 
     <div class="form-field w-full sm:max-w-xs <%= 'invalid' if invalid_operator %> <%= 'invisible @max-xl:hidden' if @condition.field.blank? %>">
-      <% operators = if enum_field? %>
-        <% options_for_select(
-                               enum_operator_options,
-                               @condition.operator,
-                             ) %>
-      <% elsif Flipper.enabled?(:advanced_search_metadata_operators) && @condition.field.to_s.starts_with?('metadata.') %>
-        <% grouped_options_for_select(metadata_operators, @condition.operator) %>
-      <% else %>
-        <% options_for_select(
-                               @operations['standard'],
-                               @condition.operator,
-                             ) %>
-      <% end %>
-
       <%= conditions_form.label :operator, data: { required: true } %>
 
       <%= conditions_form.select :operator,
@@ -104,7 +86,6 @@
       dark:hover:text-white
     "
     aria-label="<%= t("components.advanced_search_component.v1.remove_condition_aria_label") %>"
-    title="<%= t("components.advanced_search_component.v1.remove_condition_aria_label") %>"
     data-action="advanced-search--v1#removeCondition"
   >
     <%= icon(:x, size: :sm) %>

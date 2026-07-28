@@ -158,13 +158,13 @@ en:
                 text_starts_with: text starts with
           standard:
             contains: contains
-            does_not_contain: does not contain
             ends_with: ends with
             equals: "="
             exists: exists
             greater_than: ">="
             in: in
             less_than: "<="
+            not_contains: not contains
             not_equals: "!="
             not_exists: not exists
             not_in: not in

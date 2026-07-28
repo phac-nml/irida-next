@@ -31,11 +31,15 @@ export default class AdvancedSearchController extends Controller {
   #conditionSelector =
     "fieldset[data-advanced-search--v1-target='conditionsContainer']";
 
+  #standardOperators;
+  #valueInputTypes;
   connect() {
     this.renderSearchIfOpen();
     this.boundOnMorph = this.onMorph.bind(this);
 
     document.addEventListener("turbo:morph", this.boundOnMorph);
+
+    this.#mapOperatorsAndValueInputTypes();
   }
 
   disconnect() {
@@ -94,6 +98,35 @@ export default class AdvancedSearchController extends Controller {
       event.stopImmediatePropagation();
       event.preventDefault();
     }
+  }
+
+  #mapOperatorsAndValueInputTypes() {
+    this.#mapStandardOperators();
+    // this.#mapMetadataOperators(); TODO
+    this.#determineValueInputs();
+  }
+
+  #mapStandardOperators() {
+    // each operator is mapped as follow:
+    // { '=' => {
+    //   'option' => { I18n.t('components.advanced_search_component.v1.operations.standard.equals') => '=' },
+    //   'input_type' => 'text'
+    // }
+    // operatorOptions mapping isolates the 'option' values to create the operator dropdown options
+    this.#standardOperators = Object.fromEntries(
+      Object.entries(this.operationsValue["standard"]).flatMap(
+        ([_key, value]) => Object.entries(value.option),
+      ),
+    );
+  }
+
+  #determineValueInputs() {
+    this.#valueInputTypes = Object.fromEntries(
+      Object.entries(this.operationsValue["standard"]).map(([key, value]) => [
+        key,
+        value.input_type,
+      ]),
+    );
   }
 
   addCondition(event) {
@@ -185,39 +218,54 @@ export default class AdvancedSearchController extends Controller {
     if (!value || groupIndex < 0 || conditionIndex < 0) {
       return;
     }
-    if (["", "exists", "not_exists"].includes(operator)) {
+
+    const valueInputType = this.#valueInputTypes[operator];
+
+    // existence values where valueInputType === null
+    if (!valueInputType) {
       value.classList.add(...this.#hiddenClasses);
       value.querySelectorAll("input").forEach((input) => {
         input.value = "";
       });
-    } else {
-      const selectedField = this.#selectedConditionField(condition);
-      if (Object.hasOwn(this.enumFieldsValue, selectedField)) {
-        const templateTarget = ["in", "not_in"].includes(operator)
-          ? this.listSelectValueTemplateTarget
-          : this.selectValueTemplateTarget;
-        value.outerHTML = templateTarget.innerHTML
-          .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-          .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+      return;
+    }
 
-        const updatedCondition = this.#conditionElements(group)[conditionIndex];
-        const updatedValue = updatedCondition?.querySelector(".value");
-        updatedValue?.classList.remove(...this.#hiddenClasses);
-        this.#updateValueFieldForEnum(
-          updatedValue,
-          updatedCondition,
-          selectedField,
-          operator,
-        );
+    const selectedField = this.#selectedConditionField(condition);
+    const enumFieldSelected = Object.hasOwn(
+      this.enumFieldsValue,
+      selectedField,
+    );
+
+    let templateTarget;
+    if (enumFieldSelected) {
+      if (valueInputType === "list") {
+        templateTarget = this.listSelectValueTemplateTarget;
       } else {
-        const templateTarget = ["in", "not_in"].includes(operator)
-          ? this.listValueTemplateTarget
-          : this.valueTemplateTarget;
-        value.outerHTML = templateTarget.innerHTML
-          .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-          .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+        templateTarget = this.selectValueTemplateTarget;
+      }
+    } else {
+      if (valueInputType === "list") {
+        templateTarget = this.listValueTemplateTarget;
+      } else {
+        templateTarget = this.valueTemplateTarget;
       }
     }
+
+    value.outerHTML = templateTarget.innerHTML
+      .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+
+    if (!enumFieldSelected) return;
+
+    const updatedCondition = this.#conditionElements(group)[conditionIndex];
+    const updatedValue = updatedCondition?.querySelector(".value");
+    updatedValue?.classList.remove(...this.#hiddenClasses);
+    this.#updateValueFieldForEnum(
+      updatedValue,
+      updatedCondition,
+      selectedField,
+      operator,
+    );
   }
 
   handleFieldChange(event) {
@@ -330,7 +378,7 @@ export default class AdvancedSearchController extends Controller {
         operator,
       );
     } else {
-      this.#createOperatorOptions(this.operationsValue["standard"], operator);
+      this.#createOperatorOptions(this.#standardOperators, operator);
     }
 
     operator.value = "";
@@ -346,8 +394,8 @@ export default class AdvancedSearchController extends Controller {
     });
   }
 
-  #createOperatorOptions(options, parentNode) {
-    Object.entries(options).forEach(([label, value]) => {
+  #createOperatorOptions(operators, parentNode) {
+    Object.entries(operators).forEach(([label, value]) => {
       const option = document.createElement("option");
       option.value = value;
       option.text = label;

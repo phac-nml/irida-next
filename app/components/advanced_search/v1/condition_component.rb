@@ -14,6 +14,7 @@ module AdvancedSearch
         @condition_number = condition_number
         @fields = fields
         @operations = operations
+        @standard_operators = standard_operators
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -41,6 +42,12 @@ module AdvancedSearch
         @condition.class.human_attribute_name(:operator)
       end
 
+      def standard_operators
+        @operations['standard'].each_with_object({}) do |(_, value), hash|
+          hash.merge!(value['option'])
+        end
+      end
+
       def metadata_operators
         grouped_metadata_operators = {}
         @operations['metadata'].each do |optgroup, options|
@@ -62,7 +69,7 @@ module AdvancedSearch
       end
 
       def enum_operator_options
-        @operations['standard'].select { |_, value| enum_operator_values.include?(value) }
+        @standard_operators.select { |_, value| enum_operator_values.include?(value) }
       end
 
       def enum_operator_values
@@ -92,6 +99,28 @@ module AdvancedSearch
         return I18n.t("#{translation_key}.#{value}", default: value.to_s.humanize) if translation_key
 
         value.to_s.humanize
+      end
+
+      def field_options_for_select
+        options_for_select(field_options, @condition.field).concat(
+          grouped_options_for_select(grouped_field_options, @condition.field)
+        )
+      end
+
+      def operators
+        if enum_field?
+          options_for_select(
+            enum_operator_options,
+            @condition.operator
+          )
+        elsif Flipper.enabled?(:advanced_search_metadata_operators) && @condition.field.to_s.starts_with?('metadata.')
+          grouped_options_for_select(metadata_operators, @condition.operator)
+        else
+          options_for_select(
+            @standard_operators,
+            @condition.operator
+          )
+        end
       end
     end
   end
