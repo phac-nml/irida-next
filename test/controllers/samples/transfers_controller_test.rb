@@ -35,6 +35,21 @@ module Samples
     end
 
     test 'should enqueue a Samples::TransferJob for group' do
+      assert_enqueued_jobs 1, only: ::Samples::TransferJob do
+        post samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream),
+             params: {
+               transfer: {
+                 new_project_id: @project2.id,
+                 sample_ids: [@sample1.id, @sample2.id]
+               },
+               broadcast_target: 'a_broadcast_target'
+             }
+      end
+    end
+
+    test 'should enqueue a Samples::TransferJobV2 for group' do
+      Flipper.enable(:v2_sample_transfer)
+
       assert_enqueued_jobs 1, only: ::Samples::TransferJobV2 do
         post samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream),
              params: {
@@ -61,6 +76,21 @@ module Samples
     end
 
     test 'should enqueue a Samples::TransferJob for project' do
+      assert_enqueued_jobs 1, only: ::Samples::TransferJob do
+        post samples_transfer_path(namespace_id: @project1.namespace.id, format: :turbo_stream),
+             params: {
+               transfer: {
+                 new_project_id: @project2.id,
+                 sample_ids: [@sample1.id, @sample2.id]
+               },
+               broadcast_target: 'a_broadcast_target'
+             }
+      end
+    end
+
+    test 'should enqueue a Samples::TransferJobV2 for project' do
+      Flipper.enable(:v2_sample_transfer)
+
       assert_enqueued_jobs 1, only: ::Samples::TransferJobV2 do
         post samples_transfer_path(namespace_id: @project1.namespace.id, format: :turbo_stream),
              params: {
