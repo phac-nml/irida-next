@@ -14,16 +14,9 @@ module Types
   class SampleAdvancedSearchConditionOperatorInputType < BaseEnum # rubocop:disable Style/Documentation
     graphql_name 'SampleAdvancedSearchConditionOperator'
     description 'Sample Advanced Search Condition Operator'
-    value 'EQUALS', value: '='
-    value 'NOT_EQUALS', value: '!='
-    value 'LESS_THAN_EQUALS', value: '<='
-    value 'GREATER_THAN_EQUALS', value: '>='
-    value 'CONTAINS', value: 'contains'
-    value 'NOT_CONTAINS', value: 'not_contains'
-    value 'EXISTS', value: 'exists'
-    value 'NOT_EXISTS', value: 'not_exists'
-    value 'IN', value: 'in'
-    value 'NOT_IN', value: 'not_in'
+    AdvancedSearch::OperatorRegistry.sample_graphql_operators.each do |graphql_name, operator|
+      value graphql_name, value: operator
+    end
   end
 
   class ValueScalar < BaseScalar # rubocop:disable Style/Documentation

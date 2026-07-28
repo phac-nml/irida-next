@@ -11,6 +11,8 @@
     "advanced-search--v1-enum-fields-value": json_escape_data(@fields.fetch(:enum_fields, {})),
     "advanced-search--v1-enum-operations-value": json_escape_data(enum_operation_options),
     "advanced-search--v1-operations-value": json_escape_data(operation_options),
+    "advanced-search--v1-no-value-operators-value": json_escape_data(AdvancedSearch::OperatorRegistry.no_value_operator_values),
+    "advanced-search--v1-list-value-operators-value": json_escape_data(AdvancedSearch::OperatorRegistry.list_value_operator_values),
   },
 ) do %>
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>

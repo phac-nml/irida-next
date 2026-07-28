@@ -11,49 +11,10 @@
 # - `apply_*_operator` methods for special-case fields (e.g., upcasing PUID)
 module AdvancedSearch
   # Applies search conditions to build filtered ActiveRecord scopes.
-  module Filtering # rubocop:disable Metrics/ModuleLength
+  module Filtering
     extend ActiveSupport::Concern
 
-    OPERATOR_HANDLERS = {
-      # equals operators
-      '=' => :apply_condition_equals,
-      'numeric_equals' => :apply_condition_metadata_numeric_equals,
-      'date_equals' => :apply_condition_equals,
-      'text_equals' => :apply_condition_equals,
-      # not_equals operators
-      '!=' => :apply_condition_not_equals,
-      'numeric_not_equals' => :apply_condition_metadata_numeric_not_equals,
-      'date_not_equals' => :apply_condition_not_equals,
-      'text_not_equals' => :apply_condition_not_equals,
-      # contains operators
-      'text_contains' => :apply_condition_contains,
-      'contains' => :apply_condition_contains,
-      # not_contains operators
-      'text_not_contains' => :apply_condition_not_contains,
-      'not_contains' => :apply_condition_not_contains,
-      # greater_than_or_equal operators
-      '>=' => :apply_condition_standard_greater_than_or_equal,
-      'date_greater_than_equals' => :apply_condition_metadata_date_greater_than_or_equal,
-      'numeric_greater_than_equals' => :apply_condition_metadata_numeric_greater_than_or_equal,
-      # less_than_or_equal operators
-      '<=' => :apply_condition_standard_less_than_or_equal,
-      'date_less_than_equals' => :apply_condition_metadata_date_less_than_or_equal,
-      'numeric_less_than_equals' => :apply_condition_metadata_numeric_less_than_or_equal,
-      # in operators
-      'in' => :apply_condition_in,
-      'not_in' => :apply_condition_not_in,
-      'text_in' => :apply_condition_metadata_in,
-      'text_not_in' => :apply_condition_metadata_not_in,
-      # exists operators
-      'exists' => :apply_condition_exists,
-      'not_exists' => :apply_condition_not_exists,
-      # starts_with operators
-      'starts_with' => :apply_condition_starts_with,
-      'text_starts_with' => :apply_condition_starts_with,
-      # ends_with operators
-      'ends_with' => :apply_condition_ends_with,
-      'text_ends_with' => :apply_condition_ends_with
-    }.freeze
+    OPERATOR_HANDLERS = AdvancedSearch::OperatorRegistry.filtering_handler_map.freeze
 
     private
 

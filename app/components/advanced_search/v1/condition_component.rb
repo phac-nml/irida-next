@@ -62,11 +62,11 @@ module AdvancedSearch
       end
 
       def enum_operator_options
-        @operations['standard'].select { |_, value| enum_operator_values.include?(value) }
+        AdvancedSearch::OperatorRegistry.enum_options
       end
 
       def enum_operator_values
-        AdvancedSearch::ENUM_OPERATOR_VALUES
+        AdvancedSearch::OperatorRegistry.enum_operator_values
       end
 
       def enum_field_config

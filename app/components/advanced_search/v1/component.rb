@@ -11,6 +11,7 @@ module AdvancedSearch
         @form = form
         @search = search
         @fields = normalized_fields(fields:, sample_fields:, metadata_fields:)
+        @operator_payload = operator_payload
         @operations = operation_options
         @open = open
         @status = status
@@ -28,63 +29,21 @@ module AdvancedSearch
       end
 
       def enum_operation_options
-        operation_options['standard'].select { |_, value| enum_operation_values.include?(value) }
+        AdvancedSearch::OperatorRegistry.enum_options
       end
 
       def enum_operation_values
-        AdvancedSearch::ENUM_OPERATOR_VALUES
+        AdvancedSearch::OperatorRegistry.enum_operator_values
       end
 
-      def operation_options # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-        standard_operations = { 'standard' => {
-          I18n.t('components.advanced_search_component.v1.operations.standard.equals') => '=',
-          I18n.t('components.advanced_search_component.v1.operations.standard.not_equals') => '!=',
-          I18n.t('components.advanced_search_component.v1.operations.standard.less_than') => '<=',
-          I18n.t('components.advanced_search_component.v1.operations.standard.greater_than') => '>=',
-          I18n.t('components.advanced_search_component.v1.operations.standard.contains') => 'contains',
-          I18n.t('components.advanced_search_component.v1.operations.standard.does_not_contain') => 'not_contains',
-          I18n.t('components.advanced_search_component.v1.operations.standard.exists') => 'exists',
-          I18n.t('components.advanced_search_component.v1.operations.standard.not_exists') => 'not_exists',
-          I18n.t('components.advanced_search_component.v1.operations.standard.in') => 'in',
-          I18n.t('components.advanced_search_component.v1.operations.standard.not_in') => 'not_in',
-          I18n.t('components.advanced_search_component.v1.operations.standard.starts_with') => 'starts_with',
-          I18n.t('components.advanced_search_component.v1.operations.standard.ends_with') => 'ends_with'
-        } }
+      def operation_options
+        @operator_payload.slice('standard', 'metadata')
+      end
 
-        return standard_operations unless Flipper.enabled?(:advanced_search_metadata_operators)
-
-        metadata_operations =
-          { 'metadata' => {
-            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.existence') =>
-           {
-             I18n.t('components.advanced_search_component.v1.operations.standard.exists') => 'exists',
-             I18n.t('components.advanced_search_component.v1.operations.standard.not_exists') => 'not_exists'
-           },
-            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.text') => {
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_equals') => 'text_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_equals') => 'text_not_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_contains') => 'text_contains', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_contains') => 'text_not_contains', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in') => 'text_in', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in') => 'text_not_in', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_starts_with') => 'text_starts_with', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_ends_with') => 'text_ends_with' # rubocop:disable Layout/LineLength
-            },
-            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.numeric') => {
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') => 'numeric_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') => 'numeric_not_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') => 'numeric_less_than_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') => 'numeric_greater_than_equals' # rubocop:disable Layout/LineLength
-            },
-            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.date') => {
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_equals') => 'date_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_equals') => 'date_not_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_less_than_equals') => 'date_less_than_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_greater_than_equals') => 'date_greater_than_equals' # rubocop:disable Layout/LineLength
-            }
-          } }
-
-        standard_operations.merge(metadata_operations)
+      def operator_payload
+        AdvancedSearch::OperatorRegistry.advanced_search_payload(
+          metadata_operators_enabled: Flipper.enabled?(:advanced_search_metadata_operators)
+        )
       end
     end
   end

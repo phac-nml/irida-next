@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AdvancedSearch
-  ENUM_OPERATOR_VALUES = %w[= != in not_in].freeze
+  ENUM_OPERATOR_VALUES = OperatorRegistry.enum_operator_values.freeze
 
   # Builds field option payloads for advanced-search UI rendering.
   class Fields

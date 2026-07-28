@@ -19,6 +19,8 @@ export default class AdvancedSearchController extends Controller {
     confirmCloseText: String,
     enumFields: Object,
     enumOperations: Object,
+    listValueOperators: Array,
+    noValueOperators: Array,
     operations: Object,
     hasErrors: Boolean,
     open: Boolean,
@@ -185,7 +187,7 @@ export default class AdvancedSearchController extends Controller {
     if (!value || groupIndex < 0 || conditionIndex < 0) {
       return;
     }
-    if (["", "exists", "not_exists"].includes(operator)) {
+    if (operator === "" || this.#noValueOperator(operator)) {
       value.classList.add(...this.#hiddenClasses);
       value.querySelectorAll("input").forEach((input) => {
         input.value = "";
@@ -193,7 +195,7 @@ export default class AdvancedSearchController extends Controller {
     } else {
       const selectedField = this.#selectedConditionField(condition);
       if (Object.hasOwn(this.enumFieldsValue, selectedField)) {
-        const templateTarget = ["in", "not_in"].includes(operator)
+        const templateTarget = this.#listValueOperator(operator)
           ? this.listSelectValueTemplateTarget
           : this.selectValueTemplateTarget;
         value.outerHTML = templateTarget.innerHTML
@@ -210,7 +212,7 @@ export default class AdvancedSearchController extends Controller {
           operator,
         );
       } else {
-        const templateTarget = ["in", "not_in"].includes(operator)
+        const templateTarget = this.#listValueOperator(operator)
           ? this.listValueTemplateTarget
           : this.valueTemplateTarget;
         value.outerHTML = templateTarget.innerHTML
@@ -488,7 +490,7 @@ export default class AdvancedSearchController extends Controller {
       return;
     }
 
-    const listOperator = ["in", "not_in"].includes(operator);
+    const listOperator = this.#listValueOperator(operator);
     const select = listOperator
       ? valueContainer.querySelector("select[name$='[value][]']")
       : valueContainer.querySelector("select[name$='[value]']");
@@ -563,5 +565,13 @@ export default class AdvancedSearchController extends Controller {
         element.selectedIndex = -1;
       }
     });
+  }
+
+  #noValueOperator(operator) {
+    return this.noValueOperatorsValue.includes(operator);
+  }
+
+  #listValueOperator(operator) {
+    return this.listValueOperatorsValue.includes(operator);
   }
 }

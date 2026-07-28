@@ -8,17 +8,13 @@ module AdvancedSearch
   # - date_fields
   class GroupValidator < ActiveModel::Validator # rubocop:disable Metrics/ClassLength
     METADATA_FIELD_PATTERN = /^metadata\..+$/
-    DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in starts_with ends_with].freeze
-    COMBINABLE_OPERATORS = { gleqt: %w[>= <=], start_ends_with: %w[ends_with starts_with],
-                             metadata_date_gleqt: %w[date_greater_than_equals date_less_than_equals],
-                             metadata_numeric_gleqt: %w[numeric_greater_than_equals numeric_less_than_equals],
-                             text_starts_ends_with: %w[text_ends_with text_starts_with] }.freeze
-    EXISTS_OPERATORS = %w[exists not_exists].freeze
+    DATE_OPERATOR_DISALLOWED = AdvancedSearch::OperatorRegistry.date_disallowed_operator_values.freeze
+    COMBINABLE_OPERATORS = AdvancedSearch::OperatorRegistry.combinable_operator_sets.freeze
+    EXISTS_OPERATORS = AdvancedSearch::OperatorRegistry.no_value_operator_values.freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
-    METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals].freeze
-    METADATA_NUMERIC_OPERATORS = %w[numeric_equals numeric_greater_than_equals numeric_less_than_equals
-                                    numeric_not_equals].freeze
+    METADATA_DATE_OPERATORS = AdvancedSearch::OperatorRegistry.metadata_date_operator_values.freeze
+    METADATA_NUMERIC_OPERATORS = AdvancedSearch::OperatorRegistry.metadata_numeric_operator_values.freeze
     def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       return if empty_search?(record)
 
