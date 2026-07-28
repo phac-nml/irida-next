@@ -1772,6 +1772,13 @@ CREATE UNIQUE INDEX index_samples_on_id_and_project_id ON public.samples USING b
 
 
 --
+-- Name: index_samples_on_latest_transfer_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_samples_on_latest_transfer_job_id ON public.samples USING btree ((((((log_data -> 'h'::text) -> '-1'::integer) -> 'm'::text) ->> 'transfer_job_id'::text)));
+
+
+--
 -- Name: index_samples_on_metadata_ci; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2192,6 +2199,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260629203551'),
 ('20260619150000'),
 ('20260616131525'),
 ('20260424121251'),
