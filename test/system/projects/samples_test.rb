@@ -587,7 +587,7 @@ module Projects
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
 
-      perform_enqueued_jobs only: [::Samples::TransferJob]
+      perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
       assert_no_text I18n.t('shared.progress_bar.in_progress')
       # flash msg
@@ -646,7 +646,7 @@ module Projects
       assert_text I18n.t('shared.progress_bar.in_progress')
 
       assert_no_selector 'button.dialog--close'
-      perform_enqueued_jobs only: [::Samples::TransferJob]
+      perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
       assert_no_text I18n.t('shared.progress_bar.in_progress')
       # flash msg
@@ -685,7 +685,7 @@ module Projects
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
 
-      perform_enqueued_jobs only: [::Samples::TransferJob]
+      perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
       assert_no_text I18n.t('shared.progress_bar.in_progress')
 
@@ -738,7 +738,7 @@ module Projects
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
 
-      perform_enqueued_jobs only: [::Samples::TransferJob]
+      perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
       assert_no_text I18n.t('shared.progress_bar.in_progress')
 
@@ -860,7 +860,7 @@ module Projects
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
 
-      perform_enqueued_jobs only: [::Samples::TransferJob]
+      perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
       assert_no_text I18n.t('shared.progress_bar.in_progress')
 

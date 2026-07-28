@@ -34,8 +34,8 @@ module Samples
       assert_response :unauthorized
     end
 
-    test 'should enqueue a Samples::TransferJo for group' do
-      assert_enqueued_jobs 1, only: ::Samples::TransferJob do
+    test 'should enqueue a Samples::TransferJob for group' do
+      assert_enqueued_jobs 1, only: ::Samples::TransferJobV2 do
         post samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream),
              params: {
                transfer: {
@@ -61,7 +61,7 @@ module Samples
     end
 
     test 'should enqueue a Samples::TransferJob for project' do
-      assert_enqueued_jobs 1, only: ::Samples::TransferJob do
+      assert_enqueued_jobs 1, only: ::Samples::TransferJobV2 do
         post samples_transfer_path(namespace_id: @project1.namespace.id, format: :turbo_stream),
              params: {
                transfer: {

@@ -1785,7 +1785,7 @@ module Groups
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
       assert_text I18n.t('shared.progress_bar.in_progress')
 
-      perform_enqueued_jobs only: [::Samples::TransferJob]
+      perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
 
       # flash msg
@@ -1844,7 +1844,7 @@ module Groups
 
       # close button hidden during transfer
       assert_no_selector 'button.dialog--close'
-      perform_enqueued_jobs only: [::Samples::TransferJob]
+      perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
       ### VERIFY END ###
     end
@@ -1880,7 +1880,7 @@ module Groups
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
       assert_text I18n.t('shared.progress_bar.in_progress')
 
-      perform_enqueued_jobs only: [::Samples::TransferJob]
+      perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
 
       # samples listing should no longer appear in dialog
@@ -1930,7 +1930,7 @@ module Groups
       assert_selector 'h1.dialog--title', text: I18n.t('samples.transfers.dialog.title')
       assert_text I18n.t('shared.progress_bar.in_progress')
 
-      perform_enqueued_jobs only: [::Samples::TransferJob]
+      perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
 
       # error messages in dialog

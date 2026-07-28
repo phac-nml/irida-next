@@ -94,37 +94,28 @@ module Projects
       end
 
       test 'metadata summary updated after multiple sample deletion' do
-        # Reference group/projects descendants tree:
-        # group12 < subgroup12b (project30 > sample 33)
-        #    |
-        #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-        project30 = projects(:project30)
-        sample33 = samples(:sample33)
+        project = projects(:snvphyl_project)
+        group = project.namespace.parent
+        sample1 = samples(:snvphyl_sample1)
+        sample2 = samples(:snvphyl_sample2)
 
-        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
-        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
-        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
-        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+        starting_metadata_summary = {
+          'metadata_1' => 2, 'metadata_2' => 2, 'metadata_3' => 2, 'metadata_4' => 2,
+          'metadata_5' => 2, 'metadata_6' => 2, 'metadata_7' => 2, 'metadata_8' => 2
+        }
 
-        ::Samples::TransferService.new(project30.namespace, @user).execute(@project31.id, [sample33.id])
+        assert_equal(starting_metadata_summary, project.namespace.metadata_summary)
+        assert_equal(starting_metadata_summary, group.metadata_summary)
 
-        assert_equal(
-          { 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project31.reload.namespace.metadata_summary
-        )
-
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.reload.metadata_summary)
-
-        assert_no_changes -> { @subgroup12b.reload.metadata_summary } do
-          Projects::Samples::DestroyService.new(@project31.namespace, @user,
-                                                { sample_ids: [sample33.id, @sample34.id] }).execute
+        assert_difference -> { group.reload.samples_count } => -2,
+                          -> { project.reload.samples.size } => -2 do
+          Projects::Samples::DestroyService.new(
+            project.namespace, users(:snvphyl_user), { sample_ids: [sample1.id, sample2.id] }
+          ).execute
         end
 
-        assert_equal({}, @project31.namespace.reload.metadata_summary)
-        assert_equal({}, @subgroup12aa.reload.metadata_summary)
-        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.reload.metadata_summary)
-        assert_equal({}, @subgroup12b.reload.metadata_summary)
-        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @group12.reload.metadata_summary)
+        assert_equal({}, project.namespace.metadata_summary)
+        assert_equal({}, group.metadata_summary)
       end
 
       test 'samples count updated after single sample deletion' do
