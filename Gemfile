@@ -206,7 +206,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
   gem 'capybara-playwright-driver'
-  gem 'playwright-ruby-client', '1.60.0'
+  gem 'playwright-ruby-client', '1.61.0'
 
   gem 'minitest-retry', require: false
   gem 'mocha', require: false
