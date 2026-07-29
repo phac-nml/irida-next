@@ -59,14 +59,12 @@ class BaseSampleService < BaseService
     authorize! new_project, to: auth_method
   end
 
-  def validate(sample_ids, action_type, new_project_id = nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def validate(sample_ids, action_type, new_project_id = nil) # rubocop:disable Metrics/CyclomaticComplexity
     if !new_project_id.nil? && new_project_id.blank?
       raise BaseError, I18n.t("services.samples.#{action_type}.empty_new_project_id")
     end
 
     raise BaseError, I18n.t("services.samples.#{action_type}.empty_sample_ids") if sample_ids.blank?
-
-    validate_no_active_workflow_executions(sample_ids, action_type) if action_type == 'transfer'
 
     return unless !new_project_id.nil? && new_project_id.present? && @namespace.project_namespace?
 
