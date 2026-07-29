@@ -37,10 +37,12 @@ module Samples
 
     def pre_transfer_check
       @new_project = Project.find_by(id: @new_project_id)
-      raise TransferService::TransferError, I18n.t('services.samples.transfer.invalid_new_project') if @new_project.nil?
+      if @new_project.nil?
+        raise TransferServiceV2::TransferError, I18n.t('services.samples.transfer.invalid_new_project')
+      end
 
       @service.authorize_transfer(@new_project, @sample_ids)
-    rescue BaseSampleService::BaseError, TransferService::TransferError => e
+    rescue BaseSampleService::BaseError, TransferServiceV2::TransferError => e
       @namespace.errors.add(:base, e.message)
       @pre_transfer_error = true
     end
