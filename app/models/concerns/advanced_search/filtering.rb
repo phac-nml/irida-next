@@ -173,8 +173,24 @@ module AdvancedSearch
       condition_metadata_not_exists(scope, node, :numeric)
     end
 
+    def apply_condition_metadata_date_exists(scope, node, _value, _field_name)
+      condition_metadata_exists(scope, node, :date)
+    end
+
+    def apply_condition_metadata_date_not_exists(scope, node, _value, _field_name)
+      condition_metadata_not_exists(scope, node, :date)
+    end
+
+    def apply_condition_metadata_numeric_exists(scope, node, _value, _field_name)
+      condition_metadata_exists(scope, node, :numeric)
+    end
+
+    def apply_condition_metadata_numeric_not_exists(scope, node, _value, _field_name)
+      condition_metadata_not_exists(scope, node, :numeric)
+    end
+
     def apply_condition_between(scope, node, value, _field_name)
-      condition_between(scope, node, value)
+      condition_between(scope, node, value, field_name)
     end
 
     def apply_condition_date_between(scope, node, value, _field_name)
