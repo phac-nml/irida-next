@@ -13,6 +13,7 @@ module Dashboard
       @project2 = projects(:project2)
       @group1 = groups(:group_one)
       @sample1 = samples(:sample1)
+      @sample3 = samples(:sample3)
     end
 
     test 'can see the list of projects' do
@@ -244,19 +245,19 @@ module Dashboard
         assert_text @project.samples.size.to_s
       end
 
-      visit namespace_project_samples_url(@group1, @project)
+      visit namespace_project_samples_url(@group1, @project2)
 
-      find("input[type='checkbox'][id='#{dom_id(@sample1, :checkbox)}']").click
+      find("input[type='checkbox'][id='#{dom_id(@sample3, :checkbox)}']").click
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('samples.transfers.dialog.description.singular')
         within %(turbo-frame[id="list_selections"]) do
-          assert_text @sample1.name
+          assert_text @sample3.name
         end
         find('input.select2-input').click
-        find("li[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project.id}']").click
         click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -272,7 +273,7 @@ module Dashboard
 
       assert_text @project.namespace.name
       assert_no_text @project2.namespace.name
-      assert_equal 2, @project.reload.samples.size
+      assert_equal 4, @project.reload.samples.size
 
       # Look for the updated samples count
       within("##{dom_id(@project)}") do
@@ -284,7 +285,7 @@ module Dashboard
 
       assert_text @project2.namespace.name
       assert_no_text @project.namespace.name
-      assert_equal 21, @project2.reload.samples.size
+      assert_equal 19, @project2.reload.samples.size
 
       # Look for the updated samples count
       within("##{dom_id(@project2)}") do
