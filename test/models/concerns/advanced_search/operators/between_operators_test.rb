@@ -9,6 +9,7 @@ module AdvancedSearch
       class TestClass
         include AdvancedSearch::Operators::BetweenOperators
         include AdvancedSearch::MetadataComparison
+        include AdvancedSearch::Operators
       end
 
       def setup
@@ -39,23 +40,30 @@ module AdvancedSearch
         assert_includes sql, "LOWER(\"workflow_executions\".\"name\") BETWEEN 'a' AND 'z'"
       end
 
-      test 'condition_between casts dates when it receives dates' do
+      test 'condition_between casts standard date query when it receives dates on standard field' do
         result = @test_instance.send(:condition_between,
-                                     @scope, @created_at_node, %w[2026-01-01 2026-12-31])
+                                     @scope, @created_at_node, %w[2026-01-01 2026-12-31], 'created_at')
         sql = result.to_sql
         assert_includes sql, "DATE(\"workflow_executions\".\"created_at\") BETWEEN '2026-01-01' AND '2026-12-31'"
       end
 
+      test 'condition_between casts metadata standard date query when it receives dates on metadata field' do
+        result = @test_instance.send(:condition_between,
+                                     @scope, @node, %w[2026-01-01 2026-12-31], 'metadata.test_field')
+        sql = result.to_sql
+        assert_includes sql, "AND TO_DATE(\"workflow_executions\".\"name\", 'YYYY-MM-DD') BETWEEN '2026-01-01' AND '2026-12-31'" # rubocop:disable Layout/LineLength
+      end
+
       test 'condition_between casts numeric when it receives numbers' do
         result = @test_instance.send(:condition_between,
-                                     @scope, @node, ['0', '99.9'])
+                                     @scope, @node, ['0', '99.9'], 'name')
         sql = result.to_sql
         assert_includes sql, 'AND CAST("workflow_executions"."name" AS DOUBLE PRECISION) BETWEEN 0.0 AND 99.9'
       end
 
       test 'condition_between casts text when it does not receive both numbers or dates' do
         result = @test_instance.send(:condition_between,
-                                     @scope, @node, %w[0 2026-12-31])
+                                     @scope, @node, %w[0 2026-12-31], 'name')
         sql = result.to_sql
         assert_includes sql, "LOWER(\"workflow_executions\".\"name\") BETWEEN '0' AND '2026-12-31'"
       end
