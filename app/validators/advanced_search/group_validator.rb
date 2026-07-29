@@ -84,7 +84,7 @@ module AdvancedSearch
       groups.all? { |group| Array(group.conditions).empty? }
     end
 
-    def validate_fields(group) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    def validate_fields(group) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       group.conditions.each_with_index do |condition, condition_index|
         validate_blank_inputs(condition)
         validate_field(condition) if condition.field.present?

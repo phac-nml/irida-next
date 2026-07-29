@@ -153,8 +153,8 @@ module AdvancedSearch
       condition_ends_with(scope, node, value, model_class, field_name)
     end
 
-    def apply_condition_between(scope, node, value, _field_name)
-      condition_between(scope, node, value)
+    def apply_condition_between(scope, node, value, field_name)
+      condition_between(scope, node, value, field_name)
     end
 
     def apply_condition_date_between(scope, node, value, _field_name)
