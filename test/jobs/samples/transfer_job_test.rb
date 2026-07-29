@@ -7,15 +7,15 @@ module Samples
     def setup
       @john_doe = users(:john_doe)
       @group = groups(:group_one)
-      @new_project = projects(:project2)
-      @sample1 = samples(:sample1)
-      @sample2 = samples(:sample2)
+      @project = projects(:project2)
+      @new_project = projects(:project1)
+      @sample3 = samples(:sample3)
+      @sample4 = samples(:sample4)
     end
 
     test 'cloning samples while authorized results in a broadcasted success message and log data with correct responsible id' do # rubocop:disable Layout/LineLength
       broadcast_target = SecureRandom.uuid
-      sample_ids = [@sample1.id, @sample2.id]
-      project = projects(:project1)
+      sample_ids = [@sample3.id, @sample4.id]
 
       assert_difference -> { @new_project.reload.samples.count } => 2 do
         Samples::TransferJob.perform_now(project.namespace, @john_doe, @new_project.id, sample_ids, broadcast_target)
@@ -23,8 +23,8 @@ module Samples
 
       turbo_streams = capture_turbo_stream_broadcasts broadcast_target
 
-      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample1.name).reload_log_data.responsible_id
-      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample2.name).reload_log_data.responsible_id
+      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample3.name).reload_log_data.responsible_id
+      assert_equal @john_doe.id, @new_project.samples.find_by(name: @sample4.name).reload_log_data.responsible_id
       assert_equal 4, turbo_streams.size
       # first 3 turbo streams are for progress bar updates
       turbo_streams.take(3).each do |ts|
