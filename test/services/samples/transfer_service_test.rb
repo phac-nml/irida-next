@@ -8,10 +8,10 @@ module Samples
       @jane_doe = users(:jane_doe)
       @joan_doe = users(:joan_doe)
       @ryan_doe = users(:ryan_doe)
-      @current_project = projects(:project1)
-      @new_project = projects(:project2)
-      @sample1 = samples(:sample1)
-      @sample2 = samples(:sample2)
+      @current_project = projects(:project2)
+      @new_project = projects(:project1)
+      @sample3 = samples(:sample3)
+      @sample4 = samples(:sample4)
 
       @sample33 = samples(:sample33)
       @sample34 = samples(:sample34)
@@ -35,9 +35,9 @@ module Samples
 
     test 'transfer project samples with permission' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
-      assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
+      assert_changes -> { @sample3.reload.project.id }, to: @new_project.id do
         Samples::TransferService.new(@current_project.namespace, @john_doe).execute(
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
@@ -47,9 +47,9 @@ module Samples
 
     test 'transfer project samples with maintainer permission within hierarchy' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
-      assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
+      assert_changes -> { @sample3.reload.project.id }, to: @new_project.id do
         Samples::TransferService.new(@current_project.namespace, @joan_doe).execute(
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
@@ -61,9 +61,9 @@ module Samples
       new_project = projects(:project32)
 
       @sample_transfer_params = { new_project_id: new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
-      assert_no_changes -> { @sample1.reload.project.id } do
+      assert_no_changes -> { @sample3.reload.project.id } do
         Samples::TransferService.new(@current_project.namespace, @joan_doe).execute(
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
@@ -81,7 +81,7 @@ module Samples
 
     test 'transfer project samples to existing project' do
       @sample_transfer_params = { new_project_id: @current_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
       assert_empty Samples::TransferService.new(@current_project.namespace, @john_doe)
                                            .execute(@sample_transfer_params[:new_project_id],
@@ -90,7 +90,7 @@ module Samples
 
     test 'authorize allowed to transfer project samples with project permission' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
       assert_authorized_to(:transfer_sample?, @current_project,
                            with: ProjectPolicy,
@@ -104,7 +104,7 @@ module Samples
 
     test 'authorize allowed to transfer project samples with target project permission' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
       assert_authorized_to(:transfer_sample_into_project?, @new_project,
                            with: ProjectPolicy,
@@ -118,7 +118,7 @@ module Samples
 
     test 'transfer project samples without permission' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
         Samples::TransferService.new(@current_project.namespace, @jane_doe).execute(
@@ -251,9 +251,9 @@ module Samples
 
     test 'transfer group samples with permission' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
-      assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
+      assert_changes -> { @sample3.reload.project.id }, to: @new_project.id do
         Samples::TransferService.new(@group, @john_doe).execute(
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
@@ -263,9 +263,9 @@ module Samples
 
     test 'transfer group samples with maintainer permission within hierarchy' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
-      assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
+      assert_changes -> { @sample3.reload.project.id }, to: @new_project.id do
         Samples::TransferService.new(@group, @joan_doe).execute(@sample_transfer_params[:new_project_id],
                                                                 @sample_transfer_params[:sample_ids])
       end
@@ -275,9 +275,9 @@ module Samples
       new_project = projects(:project32)
 
       @sample_transfer_params = { new_project_id: new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
-      assert_no_changes -> { @sample1.reload.project.id } do
+      assert_no_changes -> { @sample3.reload.project.id } do
         Samples::TransferService.new(@group, @joan_doe).execute(
           @sample_transfer_params[:new_project_id],
           @sample_transfer_params[:sample_ids]
@@ -353,7 +353,7 @@ module Samples
 
     test 'transfer group samples to existing project' do
       @sample_transfer_params = { new_project_id: @current_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
       assert_empty Samples::TransferService.new(@group, @john_doe)
                                            .execute(@sample_transfer_params[:new_project_id],
@@ -362,7 +362,7 @@ module Samples
 
     test 'authorize allowed to transfer group samples with project permission' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
       assert_authorized_to(:transfer_sample?, @group,
                            with: GroupPolicy,
@@ -374,7 +374,7 @@ module Samples
 
     test 'authorize allowed to transfer group samples with target project permission' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
       assert_authorized_to(:transfer_sample_into_project?, @new_project,
                            with: ProjectPolicy,
@@ -386,7 +386,7 @@ module Samples
 
     test 'transfer group samples without permission' do
       @sample_transfer_params = { new_project_id: @new_project.id,
-                                  sample_ids: [@sample1.id, @sample2.id] }
+                                  sample_ids: [@sample3.id, @sample4.id] }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
         Samples::TransferService.new(@group, @ryan_doe).execute(@sample_transfer_params[:new_project_id],
@@ -538,7 +538,7 @@ module Samples
     # Tests for extracted helper methods
     test 'organize_samples_by_project groups samples by source project' do
       # Create a relation with multiple samples from the same project
-      samples = Sample.where(id: [@sample1.id, @sample2.id])
+      samples = Sample.where(id: [@sample3.id, @sample4.id])
 
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
       organized = service.organize_samples_by_project(samples)
@@ -547,15 +547,15 @@ module Samples
       assert_includes organized.keys, @current_project.id
       # All samples from current_project should be grouped together
       assert_equal 2, organized[@current_project.id].size
-      assert_includes organized[@current_project.id], @sample1.id
-      assert_includes organized[@current_project.id], @sample2.id
+      assert_includes organized[@current_project.id], @sample3.id
+      assert_includes organized[@current_project.id], @sample4.id
     end
 
     test 'build_transferred_project_sample_ids returns empty when no samples transferred' do
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
 
       project_sample_ids_to_transfer = {
-        @current_project.id => [@sample1.id, @sample2.id]
+        @current_project.id => [@sample3.id, @sample4.id]
       }
       num_transferred_samples_by_project = {
         @current_project.id => 0
@@ -565,7 +565,7 @@ module Samples
         project_sample_ids_to_transfer,
         num_transferred_samples_by_project,
         @new_project,
-        Sample.where(id: [@sample1.id, @sample2.id])
+        Sample.where(id: [@sample3.id, @sample4.id])
       )
 
       assert_empty result[@current_project.id]
@@ -601,11 +601,11 @@ module Samples
 
     test 'add_transfer_conflict_errors adds error for duplicate sample in target project' do
       # Create duplicate sample in target project
-      duplicate = Sample.create!(name: @sample1.name, project: @new_project)
+      duplicate = Sample.create!(name: @sample3.name, project: @new_project)
 
       # Build the expected inputs for the new helper signature:
       # project_sample_ids_to_transfer maps source project => attempted sample ids
-      project_sample_ids_to_transfer = { @current_project.id => [@sample1.id] }
+      project_sample_ids_to_transfer = { @current_project.id => [@sample3.id] }
       # transferred_project_sample_ids maps source project => actually transferred ids (none in this case)
       transferred_project_sample_ids = { @current_project.id => [] }
 
@@ -614,16 +614,16 @@ module Samples
 
       # Should have conflict error
       error_messages = @current_project.namespace.errors.full_messages
-      assert(error_messages.any? { |msg| msg.include?(@sample1.name) })
+      assert(error_messages.any? { |msg| msg.include?(@sample3.name) })
 
       duplicate.destroy
     end
 
     test 'add_transfer_conflict_errors adds sample_exists error when name conflict in target project' do
-      # Create a conflicting sample in the target project (same name as @sample1)
-      conflict = Sample.create!(name: @sample1.name, project: @new_project, puid: SecureRandom.hex)
+      # Create a conflicting sample in the target project (same name as @sample3)
+      conflict = Sample.create!(name: @sample3.name, project: @new_project, puid: SecureRandom.hex)
 
-      project_sample_ids_to_transfer = { @current_project.id => [@sample1.id] }
+      project_sample_ids_to_transfer = { @current_project.id => [@sample3.id] }
       transferred_project_sample_ids = { @current_project.id => [] }
 
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
@@ -631,8 +631,8 @@ module Samples
 
       # Expect a sample_exists error mentioning the sample name and puid
       error_messages = @current_project.namespace.errors.full_messages
-      expected = I18n.t('services.samples.transfer.sample_exists', sample_name: @sample1.name,
-                                                                   sample_puid: @sample1.puid)
+      expected = I18n.t('services.samples.transfer.sample_exists', sample_name: @sample3.name,
+                                                                   sample_puid: @sample3.puid)
       assert(error_messages.any? { |msg| msg.include?(expected) })
 
       conflict.destroy
@@ -658,14 +658,14 @@ module Samples
 
     test 'add_transfer_conflict_errors adds target_project_duplicate when sample attempted from target project' do
       # Edge case: attempting to transfer a sample that already lives in the target project
-      project_sample_ids_to_transfer = { @new_project.id => [@sample1.id] }
+      project_sample_ids_to_transfer = { @new_project.id => [@sample3.id] }
       transferred_project_sample_ids = { @new_project.id => [] }
 
       service = Samples::TransferService.new(@current_project.namespace, @john_doe)
       service.add_transfer_conflict_errors(project_sample_ids_to_transfer, transferred_project_sample_ids, @new_project)
 
       error_messages = @current_project.namespace.errors.full_messages
-      expected = I18n.t('services.samples.transfer.target_project_duplicate', sample_name: @sample1.name)
+      expected = I18n.t('services.samples.transfer.target_project_duplicate', sample_name: @sample3.name)
       assert(error_messages.any? { |msg| msg.include?(expected) })
     end
 
