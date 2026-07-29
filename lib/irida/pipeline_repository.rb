@@ -38,9 +38,9 @@ module Irida
 
     def git_repo?(path)
       g = Git.bare(path)
-      g.lib.fsck('--full')
+      g.fsck(full: true)
       true
-    rescue ArgumentError, Git::GitExecuteError
+    rescue ArgumentError, Git::Error
       FileUtils.rm_rf(path)
       false
     end
