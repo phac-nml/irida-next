@@ -16,6 +16,7 @@ module Samples
     test 'cloning samples while authorized results in a broadcasted success message and log data with correct responsible id' do # rubocop:disable Layout/LineLength
       broadcast_target = SecureRandom.uuid
       sample_ids = [@sample1.id, @sample2.id]
+      assert @project.reload.exists?
 
       assert_difference -> { @new_project.reload.samples.count } => 2 do
         Samples::TransferJob.perform_now(@project.namespace, @john_doe, @new_project.id, sample_ids, broadcast_target)
