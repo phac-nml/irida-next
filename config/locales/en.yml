@@ -2053,6 +2053,7 @@ en:
           value_required: Metadata value is required
         user_cannot_update_metadata: Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis.
       transfer:
+        active_workflow_executions: 'Samples with the following ids cannot be transferred as they are currently in use by a workflow execution: %{sample_ids}'
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
         invalid_new_project: The selected destination project does not exist.

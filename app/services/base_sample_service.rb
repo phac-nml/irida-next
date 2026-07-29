@@ -59,12 +59,14 @@ class BaseSampleService < BaseService
     authorize! new_project, to: auth_method
   end
 
-  def validate(sample_ids, action_type, new_project_id = nil) # rubocop:disable Metrics/CyclomaticComplexity
+  def validate(sample_ids, action_type, new_project_id = nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if !new_project_id.nil? && new_project_id.blank?
       raise BaseError, I18n.t("services.samples.#{action_type}.empty_new_project_id")
     end
 
     raise BaseError, I18n.t("services.samples.#{action_type}.empty_sample_ids") if sample_ids.blank?
+
+    validate_no_active_workflow_executions(sample_ids, action_type) if action_type == 'transfer'
 
     return unless !new_project_id.nil? && new_project_id.present? && @namespace.project_namespace?
 
@@ -72,6 +74,28 @@ class BaseSampleService < BaseService
 
     raise BaseError,
           I18n.t("services.samples.#{action_type}.same_project")
+  end
+
+  # Validate that samples do not have active workflow executions.
+  #
+  # Prevents transferring samples that are currently being used in a workflow execution.
+  # Active workflow states are: initial, prepared, submitted, running.
+  #
+  # @param sample_ids [Array<Integer>] IDs of samples to check
+  # @param action_type [String] the type of action being performed (e.g., 'transfer')
+  # @raise [BaseError] if any samples have active workflow executions
+  def validate_no_active_workflow_executions(sample_ids, action_type)
+    active_workflow_sample_ids = Sample.where(id: sample_ids)
+                                       .joins(:workflow_executions)
+                                       .where(workflow_executions: { state: %w[initial prepared submitted running] })
+                                       .distinct
+                                       .pluck(:id)
+
+    return if active_workflow_sample_ids.empty?
+
+    raise BaseError,
+          I18n.t("services.samples.#{action_type}.active_workflow_executions",
+                 sample_ids: active_workflow_sample_ids.join(', '))
   end
 
   # Broadcast all turbo broadcasts for sample services where the broadcasts were suppressed
