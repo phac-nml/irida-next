@@ -589,8 +589,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query7.valid?
     results7 = query7.results
 
-    assert_not_includes results7, sample1
-    assert_not_includes results7, sample2
+    assert_not_includes results7, sample3
+    assert_not_includes results7, sample4
   end
 
   test 'metadata date not equals operator with null and non-date values' do
