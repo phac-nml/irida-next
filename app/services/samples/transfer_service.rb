@@ -40,6 +40,8 @@ module Samples
 
       validate(sample_ids, 'transfer', new_project_id)
 
+      validate_no_active_workflow_executions(sample_ids)
+
       authorize_new_project(new_project_id, :transfer_sample_into_project?)
 
       if Member.effective_access_level(@namespace, current_user) == Member::AccessLevel::MAINTAINER
@@ -50,6 +52,28 @@ module Samples
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
       @namespace.errors.add(:base, e.message)
       []
+    end
+
+    # Validate that samples do not have active workflow executions.
+    #
+    # Prevents transferring samples that are currently being used in a workflow execution.
+    # Active workflow states are: initial, prepared, submitted, running.
+    #
+    # @param sample_ids [Array<Integer>] IDs of samples to check
+    # @raise [TransferError] if any samples have active workflow executions
+    def validate_no_active_workflow_executions(sample_ids)
+      active_workflow_sample_ids = Sample.where(id: sample_ids)
+                                         .joins(:workflow_executions)
+                                         .where(workflow_executions: { state: %w[initial prepared submitted
+                                                                                 running] })
+                                         .distinct
+                                         .pluck(:id)
+
+      return if active_workflow_sample_ids.empty?
+
+      raise TransferError,
+            I18n.t('services.samples.transfer.active_workflow_executions',
+                   sample_ids: active_workflow_sample_ids.join(', '))
     end
 
     # Validate that a maintainer can transfer samples between projects.
