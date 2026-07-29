@@ -447,8 +447,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query7.valid?
     results7 = query7.results
 
-    assert_not_includes results7, sample1
-    assert_not_includes results7, sample2
+    assert_not_includes results7, sample3
+    assert_not_includes results7, sample4
   end
 
   test 'metadata numeric not equals operator with null and non-numeric values' do
@@ -750,8 +750,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query9.valid?
     results9 = query9.results
 
-    assert_includes results9, sample1
-    assert_not_includes results9, sample2
+    assert_includes results9, sample3
+    assert_not_includes results9, sample4
 
     search_params10 = { sort: 'updated_at desc',
                         groups_attributes: { '0': {
@@ -764,8 +764,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query10.valid?
     results10 = query10.results
 
-    assert_not_includes results10, sample1
-    assert_not_includes results10, sample2
+    assert_not_includes results10, sample3
+    assert_not_includes results10, sample4
 
     search_params11 = { sort: 'updated_at desc',
                         groups_attributes: { '0': {
@@ -779,7 +779,7 @@ class QueryTest < ActiveSupport::TestCase
     assert query11.valid?
     results11 = query11.results
 
-    assert_not_includes results11, sample1
-    assert_includes results11, sample2
+    assert_not_includes results11, sample3
+    assert_includes results11, sample4
   end
 end
