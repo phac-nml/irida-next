@@ -141,9 +141,8 @@ lib.mkMerge [
     # See full reference at https://devenv.sh/reference/options/
   }
   (lib.mkIf pkgs.stdenv.isLinux {
-    # Additional Linux packages
-    packages = [ pkgs.sssd ];
-
-    env.LD_LIBRARY_PATH = "${pkgs.sssd}/lib";
+    enterShell = ''
+      export NIX_LDFLAGS="-L/lib64 -L/usr/lib64 $NIX_LDFLAGS"
+    '';
   })
 ]
