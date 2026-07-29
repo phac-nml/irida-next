@@ -162,5 +162,105 @@ module Samples
       missing_sample1.destroy
       missing_sample2.destroy
     end
+
+    test 'perform_transfer_with_lock moves samples without conflicts' do
+      assert_equal @current_project.id, @sample1.project_id
+
+      # Minimal step-like object with cursor and advance!
+      step = Struct.new(:cursor) do
+        def initialize(cursor = 0)
+          @cursor = cursor
+        end
+
+        attr_reader :cursor
+
+        def advance!
+          @cursor += 1
+        end
+      end.new(0)
+
+      service = Samples::TransferServiceV2.new(@current_project.namespace, @john_doe)
+      service.perform_transfer_with_lock(@new_project, { @current_project.id => [@sample1.id] }, SecureRandom.hex, step)
+
+      @sample1.reload
+      assert_equal @new_project.id, @sample1.project_id
+      assert_not Sample.exists?(id: @sample1.id, project_id: @current_project.id)
+    end
+
+    test 'update_metadata_summary_counts delegates to namespace update' do
+      @sample1.metadata = { 'm1' => 'v1' }
+      @sample1.save!(validate: false)
+
+      called = false
+      old_ns = @current_project.namespace
+
+      old_ns.define_singleton_method(:update_metadata_summary_by_sample_transfer) do |payload, _old_namespaces, _new_namespaces| # rubocop:disable Layout/LineLength
+        called = true
+        raise unless payload.key?('m1')
+
+        true
+      end
+
+      service = Samples::TransferServiceV2.new(@current_project.namespace, @john_doe)
+      service.update_metadata_summary_counts([@sample1.id], @current_project, @new_project)
+
+      assert called
+    end
+
+    test 'process_project_transfer_activity creates activities and extended details' do
+      data = [{ sample_name: 's1', sample_puid: SecureRandom.hex }]
+      group_activity_data = []
+
+      service = Samples::TransferServiceV2.new(@current_project.namespace, @john_doe)
+      service.process_project_transfer_activity(@current_project, @new_project, data, group_activity_data)
+
+      # Check ExtendedDetail created with expected count
+      ext = ExtendedDetail.order(:created_at).last
+      assert_equal data.size, ext.details['transferred_samples_count']
+
+      # Check activities created on both namespaces
+      assert PublicActivity::Activity.exists?(
+        trackable_id: @current_project.namespace.id,
+        key: 'namespaces_project_namespace.samples.transfer'
+      )
+      assert PublicActivity::Activity.exists?(
+        trackable_id: @new_project.namespace.id,
+        key: 'namespaces_project_namespace.samples.transferred_from'
+      )
+    end
+
+    test 'create_group_activity produces group activity and extended details' do
+      group_activity_data = [
+        { sample_name: 'g1', sample_puid: SecureRandom.hex, source_project_name: 'src', source_project_id: 1,
+          source_project_puid: 'p1', target_project_name: 'tgt', target_project_id: 2, target_project_puid: 'p2' }
+      ]
+
+      service = Samples::TransferServiceV2.new(@group, @john_doe)
+      service.create_group_activity(group_activity_data)
+
+      assert_equal group_activity_data.size, ExtendedDetail.order(:created_at).last.details['transferred_samples_count']
+      assert PublicActivity::Activity.exists?(
+        trackable_id: @group.id,
+        key: 'group.samples.transfer'
+      )
+    end
+
+    test 'create_project_activity produces project activity and extended detail' do
+      ext_details = ExtendedDetail.create!(
+        details: { transferred_samples_count: 1,
+                   transferred_samples_data: [{ sample_name: 'p1', sample_puid: SecureRandom.hex }] }
+      )
+
+      key = 'namespaces_project_namespace.samples.test_project_activity'
+      params = { transferred_samples_count: 1, action: 'sample_transfer' }
+
+      service = Samples::TransferServiceV2.new(@current_project.namespace, @john_doe)
+      service.create_project_activity(@current_project.namespace, ext_details.id, key, params)
+
+      activity = PublicActivity::Activity.where(trackable_id: @current_project.namespace.id,
+                                                key: key).order(:created_at).last
+      assert activity
+      assert ActivityExtendedDetail.exists?(activity: activity, extended_detail: ext_details)
+    end
   end
 end
