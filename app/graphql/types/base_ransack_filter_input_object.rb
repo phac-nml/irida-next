@@ -12,18 +12,57 @@ module Types
   end
 
   class SampleAdvancedSearchConditionOperatorInputType < BaseEnum # rubocop:disable Style/Documentation
+    STANDARD_OPERATORS_FOR_ENUM = {
+      'EQUALS' => '=',
+      'NOT_EQUALS' => '!=',
+      'LESS_THAN_EQUALS' => '<=',
+      'GREATER_THAN_EQUALS' => '>=',
+      'CONTAINS' => 'contains',
+      'NOT_CONTAINS' => 'not_contains',
+      'EXISTS' => 'exists',
+      'NOT_EXISTS' => 'not_exists',
+      'IN' => 'in',
+      'NOT_IN' => 'not_in'
+    }.freeze
+
+    METADATA_OPERATORS_FOR_ENUM = {
+      'DATE_GREATER_THAN_EQUALS' => 'date_greater_than_equals',
+      'DATE_LESS_THAN_EQUALS' => 'date_less_than_equals',
+      'DATE_EQUALS' => 'date_equals',
+      'DATE_NOT_EQUALS' => 'date_not_equals',
+      'NUMERIC_GREATER_THAN_EQUALS' => 'numeric_greater_than_equals',
+      'NUMERIC_LESS_THAN_EQUALS' => 'numeric_less_than_equals',
+      'NUMERIC_EQUALS' => 'numeric_equals',
+      'NUMERIC_NOT_EQUALS' => 'numeric_not_equals',
+      'TEXT_EQUALS' => 'text_equals',
+      'TEXT_NOT_EQUALS' => 'text_not_equals',
+      'TEXT_IN' => 'text_in',
+      'TEXT_NOT_IN' => 'text_not_in',
+      'TEXT_CONTAINS' => 'text_contains',
+      'TEXT_NOT_CONTAINS' => 'text_not_contains'
+    }.freeze
+
     graphql_name 'SampleAdvancedSearchConditionOperator'
     description 'Sample Advanced Search Condition Operator'
-    value 'EQUALS', value: '='
-    value 'NOT_EQUALS', value: '!='
-    value 'LESS_THAN_EQUALS', value: '<='
-    value 'GREATER_THAN_EQUALS', value: '>='
-    value 'CONTAINS', value: 'contains'
-    value 'NOT_CONTAINS', value: 'not_contains'
-    value 'EXISTS', value: 'exists'
-    value 'NOT_EXISTS', value: 'not_exists'
-    value 'IN', value: 'in'
-    value 'NOT_IN', value: 'not_in'
+
+    def self.enum_values(_context)
+      standard_description = if Flipper.enabled?(:advanced_search_metadata_operators)
+                               'Use to filter non-metadata fields'
+                             end
+
+      all_values = STANDARD_OPERATORS_FOR_ENUM.map do |enum_name, enum_value|
+        GraphQL::Schema::EnumValue.new(enum_name, description: standard_description,
+                                                  value: enum_value, owner: self)
+      end
+
+      return all_values unless Flipper.enabled?(:advanced_search_metadata_operators)
+
+      METADATA_OPERATORS_FOR_ENUM.each do |enum_name, enum_value|
+        all_values << GraphQL::Schema::EnumValue.new(enum_name, description: 'Use to filter metadata fields',
+                                                                value: enum_value, owner: self)
+      end
+      all_values
+    end
   end
 
   class ValueScalar < BaseScalar # rubocop:disable Style/Documentation

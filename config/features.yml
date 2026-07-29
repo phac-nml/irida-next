@@ -8,6 +8,19 @@ features:
     name:
       en: "Accessibility Statement"
       fr: "Déclaration d'accessibilité"
+  advanced_search_disable_standard_operators_for_metadata_in_graphql:
+    admin_manageable: true
+    description:
+      en: "Disable using standard operators on metadata fields in GraphQL"
+      fr:
+        "Désactiver l'utilisation des opérateurs standard sur les champs de métadonnées\
+        \ dans GraphQL"
+    enable_in_development: false
+    name:
+      en: "Advanced Search Disable Standard Operators for Metadata in GraphQL"
+      fr:
+        "Recherche avancée : désactiver les opérateurs standard pour les métadonnées\
+        \ dans GraphQL"
   advanced_search_metadata_operators:
     admin_manageable: true
     description:
