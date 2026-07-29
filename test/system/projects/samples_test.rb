@@ -1007,6 +1007,8 @@ module Projects
 
     test 'should not transfer samples with session storage cleared v2' do
       ### SETUP START ###
+      Flipper.enable(:v2_sample_transfer)
+
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
