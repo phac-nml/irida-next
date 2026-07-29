@@ -8,9 +8,15 @@ module AdvancedSearch
 
       private
 
-      def condition_between(scope, node, value)
+      def condition_between(scope, node, value, field_name)
         if valid_date_format?(value[0]) && valid_date_format?(value[1])
-          condition_date_between(scope, node, value)
+          # date and metadata date values (eg: datetime vs YYYY-MM-DD metadata string) need to be handled slightly
+          # differently. metadata_condition_date_between in metadata_comparison.rb
+          if metadata_field?(field_name)
+            metadata_condition_date_between(scope, node, value)
+          else
+            condition_date_between(scope, node, value)
+          end
         elsif valid_numeric_format?(value[0]) && valid_numeric_format?(value[1])
           condition_numeric_between(scope, node, value)
         else
@@ -29,8 +35,6 @@ module AdvancedSearch
                     ))
       end
 
-      # date and metadata date values (eg: datetime vs YYYY-MM-DD metadata string) need to be handled slightly
-      # differently. metadata_date_between in metadata_comparison.rb
       def condition_date_between(scope, node, value)
         casted_node = Arel::Nodes::NamedFunction.new(
           'DATE',
