@@ -1,5 +1,7 @@
+<%# locals: (audit_form: @audit_form, namespace:, open:) %>
+
 <%= viral_dialog(id: "multiple-deletions-dialog", open: open) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <% dialog.with_header(title: t(".title")) %> <%# herb:disable erb-no-unused-expressions %>
 
   <div
     data-controller="infinite-scroll"
@@ -37,7 +39,7 @@
         </div>
       </div>
 
-      <%= form_for(@audit_form, as: :deletion, url: samples_deletions_path(namespace_id: @namespace.id),
+      <%= form_for(audit_form, as: :deletion, url: samples_deletions_path(namespace_id: namespace.id),
             data: {
               controller: "spinner form--json-submission",
               "form--json-submission-selection-outlet": '#samples-table',
@@ -55,7 +57,7 @@
 
           <%= render partial: "shared/form/required_field_legend" %>
 
-          <% invalid_reason = @audit_form.errors.include?(:reason) %>
+          <% invalid_reason = audit_form.errors.include?(:reason) %>
 
           <div class="form-field <%= 'invalid' if invalid_reason %>">
             <%= form.label :reason, data: { required: true } %>
@@ -81,7 +83,7 @@
             <% if invalid_reason %>
               <%= render "shared/form/field_errors",
                 id: form.field_id(:reason, "error"),
-                errors: @audit_form.errors.full_messages_for(:reason) %>
+                errors: audit_form.errors.full_messages_for(:reason) %>
             <% end %>
           </div>
 
