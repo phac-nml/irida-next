@@ -93,6 +93,8 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         within first("select[name$='[operator]']") do
           assert_no_text I18n.t('components.advanced_search_component.v1.operations.standard.equals')
           assert_no_text I18n.t('components.advanced_search_component.v1.operations.standard.not_equals')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.standard.not_exists')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_equals')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_contains') # rubocop:disable Layout/LineLength

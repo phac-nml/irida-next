@@ -55,6 +55,11 @@ module AdvancedSearch
 
         metadata_operations =
           { 'metadata' => {
+            I18n.t('components.advanced_search_component.v1.operations.metadata.labels.existence') =>
+           {
+             I18n.t('components.advanced_search_component.v1.operations.standard.exists') => 'exists',
+             I18n.t('components.advanced_search_component.v1.operations.standard.not_exists') => 'not_exists'
+           },
             I18n.t('components.advanced_search_component.v1.operations.metadata.labels.text') => {
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_equals') => 'text_equals', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_equals') => 'text_not_equals', # rubocop:disable Layout/LineLength
