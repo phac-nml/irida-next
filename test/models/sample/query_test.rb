@@ -782,4 +782,37 @@ class QueryTest < ActiveSupport::TestCase
     assert_not_includes results11, sample3
     assert_includes results11, sample4
   end
+
+  test 'exists on metadata' do
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
+    sample3.update(metadata: { 'custom_field' => 'test_value' })
+
+    search_params1 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.custom_field', operator: 'exists' } }
+                       } },
+                       project_ids: [project.id] }
+    query1 = Sample::Query.new(search_params1)
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+    assert_includes results1, sample3
+    assert_not_includes results1, sample4
+
+    search_params2 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.custom_field', operator: 'not_exists' } }
+                       } },
+                       project_ids: [project.id] }
+    query2 = Sample::Query.new(search_params2)
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+    assert_not_includes results2, sample3
+    assert_includes results2, sample4
+  end
 end
