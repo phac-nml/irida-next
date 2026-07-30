@@ -352,6 +352,8 @@ module Dashboard
       within("##{dom_id(@project2)}") do
         assert_text @project2.samples.size.to_s
       end
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'should update samples count after a sample clone' do

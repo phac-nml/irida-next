@@ -35,6 +35,10 @@ module Samples
       @group = groups(:group_one)
     end
 
+    def teardown
+      Flipper.disable(:v2_sample_transfer)
+    end
+
     # Tests for extracted helper methods
     test 'organize_samples_by_project groups samples by source project' do
       # Create a relation with multiple samples from the same project
