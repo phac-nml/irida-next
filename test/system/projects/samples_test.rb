@@ -954,6 +954,8 @@ module Projects
         assert_selector 'table tbody tr td:nth-child(2)', text: sample[1]
       end
       ### VERIFY END ###
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'dialog close button hidden during transfer samples v2' do
@@ -1003,6 +1005,8 @@ module Projects
 
       assert_no_selector 'dialog[open]'
       ### VERIFY END ###
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'should not transfer samples with session storage cleared v2' do
@@ -1044,6 +1048,8 @@ module Projects
       # error msg displayed in dialog
       assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
       ### VERIFY END ###
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'transfer samples with and without same name in destination project v2' do
@@ -1119,6 +1125,8 @@ module Projects
       assert_selector "table tbody tr[id='#{dom_id(@sample2)}']"
       assert_no_selector "table tbody tr[id='#{dom_id(@sample30)}']"
       ### VERIFY END ###
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'updating sample selection during transfer samples v2' do
@@ -1184,6 +1192,8 @@ module Projects
       assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 21"
       assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '0'
       ### VERIFY END ###
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'sample transfer button should not be available for maintainer of a user namespace project' do

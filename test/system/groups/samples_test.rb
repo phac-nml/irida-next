@@ -2038,6 +2038,8 @@ module Groups
       assert_selector '#samples-table table tbody tr:first-child th:first-child', text: samples[1]
       assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: samples[0]
       ### VERIFY END ###
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'dialog close button hidden during transfer samples v2' do
@@ -2080,6 +2082,8 @@ module Groups
       perform_enqueued_jobs only: [::Samples::TransferJobV2]
       assert_performed_jobs 1
       ### VERIFY END ###
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'should not transfer samples with session storage cleared v2' do
@@ -2123,6 +2127,8 @@ module Groups
       # error msg displayed in dialog
       assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
       ### VERIFY END ###
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'transfer samples with and without same name in destination project v2' do
@@ -2206,6 +2212,8 @@ module Groups
       assert_no_selector "tr[id='#{dom_id(sample28)}']"
       assert_no_selector "tr[id='#{dom_id(sample29)}']"
       ### VERIFY END ###
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'sample transfer project listing should be empty for maintainer if no other projects in hierarchy' do
