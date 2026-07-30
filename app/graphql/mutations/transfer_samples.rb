@@ -78,7 +78,6 @@ module Mutations
         next
       end
 
-      # TODO: this should switch to using a job, and return a job id that can be queried for the job status and results.
       samples = Samples::TransferService.new(
         project.namespace, current_user
       ).execute(new_project_id, sample_ids.compact)
