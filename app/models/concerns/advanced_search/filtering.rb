@@ -51,8 +51,6 @@ module AdvancedSearch
       'date_not_exists' => :apply_condition_metadata_date_not_exists,
       'numeric_exists' => :apply_condition_metadata_numeric_exists,
       'numeric_not_exists' => :apply_condition_metadata_numeric_not_exists,
-      'text_exists' => :apply_condition_exists,
-      'text_not_exists' => :apply_condition_not_exists,
       # starts_with operators
       'starts_with' => :apply_condition_starts_with,
       'text_starts_with' => :apply_condition_starts_with,

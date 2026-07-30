@@ -3040,11 +3040,6 @@ enum SampleAdvancedSearchConditionOperator {
   """
   Use to filter metadata fields
   """
-  TEXT_EXISTS
-
-  """
-  Use to filter metadata fields
-  """
   TEXT_IN
 
   """
@@ -3056,11 +3051,6 @@ enum SampleAdvancedSearchConditionOperator {
   Use to filter metadata fields
   """
   TEXT_NOT_EQUALS
-
-  """
-  Use to filter metadata fields
-  """
-  TEXT_NOT_EXISTS
 
   """
   Use to filter metadata fields

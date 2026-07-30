@@ -155,11 +155,9 @@ fr:
                 text_contains: texte contient
                 text_ends_with: le texte se termine par
                 text_equals: texte est égal à
-                text_exists: texte existe
                 text_in: texte dans
                 text_not_contains: texte ne contient pas
                 text_not_equals: texte n'est pas égal à
-                text_not_exists: texte n'existe pas
                 text_not_in: texte absent de
                 text_starts_with: le texte commence par
           standard:

@@ -621,7 +621,7 @@ class QueryTest < ActiveSupport::TestCase
     project = projects(:project2)
     sample3 = samples(:sample3)
     sample4 = samples(:sample4)
-    sample5 = samples(:sample5)
+    samples(:sample5)
     sample3.update(metadata: { 'text_field' => 'abc' })
     sample4.update(metadata: { 'text_field' => 'xyz' })
 
@@ -712,7 +712,7 @@ class QueryTest < ActiveSupport::TestCase
     search_params7 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
                          conditions_attributes:
-                     { '0': { field: 'metadata.text_field', operator: 'text_exists' } }
+                      { '0': { field: 'metadata.text_field', operator: 'text_starts_with', value: 'a' } }
                        } },
                        project_ids: [project.id] }
     query7 = Sample::Query.new(search_params7)
@@ -721,13 +721,12 @@ class QueryTest < ActiveSupport::TestCase
     results7 = query7.results
 
     assert_includes results7, sample3
-    assert_includes results7, sample4
-    assert_not_includes results7, sample5
+    assert_not_includes results7, sample4
 
     search_params8 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
                          conditions_attributes:
-                     { '0': { field: 'metadata.text_field', operator: 'text_not_exists' } }
+                      { '0': { field: 'metadata.text_field', operator: 'text_ends_with', value: 'y' } }
                        } },
                        project_ids: [project.id] }
     query8 = Sample::Query.new(search_params8)
@@ -737,12 +736,12 @@ class QueryTest < ActiveSupport::TestCase
 
     assert_not_includes results8, sample3
     assert_not_includes results8, sample4
-    assert_includes results8, sample5
 
     search_params9 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
                          conditions_attributes:
-                      { '0': { field: 'metadata.text_field', operator: 'text_starts_with', value: 'a' } }
+                      { '0': { field: 'metadata.text_field', operator: 'text_starts_with', value: 'x' },
+                        '1': { field: 'metadata.text_field', operator: 'text_ends_with', value: 'z' } }
                        } },
                        project_ids: [project.id] }
     query9 = Sample::Query.new(search_params9)
@@ -750,37 +749,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query9.valid?
     results9 = query9.results
 
-    assert_includes results9, sample3
-    assert_not_includes results9, sample4
-
-    search_params10 = { sort: 'updated_at desc',
-                        groups_attributes: { '0': {
-                          conditions_attributes:
-                      { '0': { field: 'metadata.text_field', operator: 'text_ends_with', value: 'y' } }
-                        } },
-                        project_ids: [project.id] }
-    query10 = Sample::Query.new(search_params10)
-    assert query10.advanced_query?
-    assert query10.valid?
-    results10 = query10.results
-
-    assert_not_includes results10, sample3
-    assert_not_includes results10, sample4
-
-    search_params11 = { sort: 'updated_at desc',
-                        groups_attributes: { '0': {
-                          conditions_attributes:
-                      { '0': { field: 'metadata.text_field', operator: 'text_starts_with', value: 'x' },
-                        '1': { field: 'metadata.text_field', operator: 'text_ends_with', value: 'z' } }
-                        } },
-                        project_ids: [project.id] }
-    query11 = Sample::Query.new(search_params11)
-    assert query11.advanced_query?
-    assert query11.valid?
-    results11 = query11.results
-
-    assert_not_includes results11, sample3
-    assert_includes results11, sample4
+    assert_not_includes results9, sample3
+    assert_includes results9, sample4
   end
 
   test 'exists on metadata' do

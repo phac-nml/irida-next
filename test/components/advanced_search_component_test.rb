@@ -103,8 +103,6 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_starts_with') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_ends_with') # rubocop:disable Layout/LineLength
-          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_exists')
-          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_exists') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') # rubocop:disable Layout/LineLength

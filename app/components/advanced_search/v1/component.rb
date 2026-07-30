@@ -68,9 +68,7 @@ module AdvancedSearch
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_in') => 'text_in', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in') => 'text_not_in', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_starts_with') => 'text_starts_with', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_ends_with') => 'text_ends_with', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_exists') => 'text_exists', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_exists') => 'text_not_exists' # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_ends_with') => 'text_ends_with' # rubocop:disable Layout/LineLength
 
             },
             I18n.t('components.advanced_search_component.v1.operations.metadata.labels.numeric') => {

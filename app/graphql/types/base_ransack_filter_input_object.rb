@@ -43,9 +43,7 @@ module Types
       'TEXT_IN' => 'text_in',
       'TEXT_NOT_IN' => 'text_not_in',
       'TEXT_CONTAINS' => 'text_contains',
-      'TEXT_NOT_CONTAINS' => 'text_not_contains',
-      'TEXT_EXISTS' => 'text_exists',
-      'TEXT_NOT_EXISTS' => 'text_not_exists'
+      'TEXT_NOT_CONTAINS' => 'text_not_contains'
     }.freeze
 
     graphql_name 'SampleAdvancedSearchConditionOperator'

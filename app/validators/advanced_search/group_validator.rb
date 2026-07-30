@@ -13,7 +13,7 @@ module AdvancedSearch
                              metadata_date_gleqt: %w[date_greater_than_equals date_less_than_equals],
                              metadata_numeric_gleqt: %w[numeric_greater_than_equals numeric_less_than_equals],
                              text_starts_ends_with: %w[text_ends_with text_starts_with] }.freeze
-    EXISTS_OPERATORS = %w[exists not_exists date_exists date_not_exists text_exists text_not_exists numeric_exists
+    EXISTS_OPERATORS = %w[exists not_exists date_exists date_not_exists numeric_exists
                           numeric_not_exists].freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'

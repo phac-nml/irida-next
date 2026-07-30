@@ -155,11 +155,9 @@ en:
                 text_contains: text contains
                 text_ends_with: text ends with
                 text_equals: text equals
-                text_exists: text exists
                 text_in: text in
                 text_not_contains: text not contains
                 text_not_equals: text not equals
-                text_not_exists: text not exists
                 text_not_in: text not in
                 text_starts_with: text starts with
           standard:
