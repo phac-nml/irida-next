@@ -576,6 +576,39 @@ module AdvancedSearch
       condition7 = record7.groups.first.conditions.first
       assert condition7.errors.added?(:from_value, :greater_than_to)
       assert condition7.errors.added?(:to_value, :lower_than_from)
+
+      record8 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at',
+                                                                operator: 'between',
+                                                                value: %w[2020-01-02 2020-01-01])])]
+      )
+
+      assert_not record8.valid?
+      condition8 = record8.groups.first.conditions.first
+      assert condition8.errors.added?(:from_value, :greater_than_to)
+      assert condition8.errors.added?(:to_value, :lower_than_from)
+
+      record9 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field',
+                                                                operator: 'numeric_between',
+                                                                value: %w[100.1 100])])]
+      )
+
+      assert_not record9.valid?
+      condition9 = record9.groups.first.conditions.first
+      assert condition9.errors.added?(:from_value, :greater_than_to)
+      assert condition9.errors.added?(:to_value, :lower_than_from)
+
+      record10 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field',
+                                                                operator: 'date_between',
+                                                                value: %w[2024-01-02 2024-01-01])])]
+      )
+
+      assert_not record10.valid?
+      condition10 = record10.groups.first.conditions.first
+      assert condition10.errors.added?(:from_value, :greater_than_to)
+      assert condition10.errors.added?(:to_value, :lower_than_from)
     ensure
       Flipper.disable(:advanced_search_metadata_operators)
     end
