@@ -90,9 +90,13 @@ module AdvancedSearch
         validate_field(condition) if condition.field.present?
         validate_operator_type(condition) if Flipper.enabled?(:advanced_search_metadata_operators)
 
-        next if BETWEEN_OPERATORS.include?(condition.operator) && !valid_between_value?(condition)
-
         validate_date_and_numeric_field(condition)
+
+        next if condition.errors.any?
+
+        validate_between_values(condition)
+
+        next if condition.errors.any?
 
         validate_unique_condition(group, condition, condition_index)
 
@@ -249,12 +253,29 @@ module AdvancedSearch
       METADATA_FIELD_PATTERN.match?(field)
     end
 
-    def valid_between_value?(condition)
-      if condition.value.is_a?(Array) && condition.value.length == 2
-        true
-      else
+    def validate_between_values(condition) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+      unless condition.value.is_a?(Array) && condition.value.length == 2
         condition.errors.add :value, :invalid_between_value
-        false
+      end
+
+      value_comparison = if %w[between
+                               text_between].include?(condition.operator) &&
+                            Float(condition.value[0],
+                                  exception: false) && Float(
+                                    condition.value[1], exception: false
+                                  )
+                           condition.value[0].to_f <=> condition.value[1].to_f
+                         else
+                           condition.value[0] <=> condition.value[1]
+                         end
+
+      case value_comparison
+      when 1
+        condition.errors.add :from_value, :greater_than_to
+        condition.errors.add :to_value, :lower_than_from
+      when nil
+        condition.errors.add :from_value, :invalid_between_comparison
+        condition.errors.add :to_value, :invalid_between_comparison
       end
     end
   end
