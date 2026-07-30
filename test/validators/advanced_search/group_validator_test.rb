@@ -554,6 +554,28 @@ module AdvancedSearch
       condition5 = record5.groups.first.conditions.first
       assert condition5.errors.added?(:from_value, :blank)
       assert condition5.errors.added?(:to_value, :blank)
+
+      record6 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: %w[b a])])]
+      )
+
+      assert_not record6.valid?
+      condition6 = record6.groups.first.conditions.first
+      assert condition6.errors.added?(:from_value, :greater_than_to)
+      assert condition6.errors.added?(:to_value, :lower_than_from)
+
+      record7 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: %w[1.1 1])])]
+      )
+
+      assert_not record7.valid?
+      condition7 = record7.groups.first.conditions.first
+      assert condition7.errors.added?(:from_value, :greater_than_to)
+      assert condition7.errors.added?(:to_value, :lower_than_from)
     ensure
       Flipper.disable(:advanced_search_metadata_operators)
     end
