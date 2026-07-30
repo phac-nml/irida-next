@@ -2958,7 +2958,7 @@ enum SampleAdvancedSearchConditionOperator {
   EQUALS
 
   """
-  Use to filter non-metadata fields
+  Use to filter any field
   """
   EXISTS
 
@@ -2988,7 +2988,7 @@ enum SampleAdvancedSearchConditionOperator {
   NOT_EQUALS
 
   """
-  Use to filter non-metadata fields
+  Use to filter any field
   """
   NOT_EXISTS
 

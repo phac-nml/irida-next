@@ -51,14 +51,17 @@ module Types
     graphql_name 'SampleAdvancedSearchConditionOperator'
     description 'Sample Advanced Search Condition Operator'
 
-    def self.enum_values(_context)
+    def self.enum_values(_context) # rubocop:disable Metrics/MethodLength
       standard_description = if Flipper.enabled?(:advanced_search_metadata_operators)
                                'Use to filter non-metadata fields'
                              end
-
+      exists_description = ('Use to filter any field' if Flipper.enabled?(:advanced_search_metadata_operators))
       all_values = STANDARD_OPERATORS_FOR_ENUM.map do |enum_name, enum_value|
-        GraphQL::Schema::EnumValue.new(enum_name, description: standard_description,
-                                                  value: enum_value, owner: self)
+        GraphQL::Schema::EnumValue.new(
+          enum_name,
+          description: enum_name.include?('EXISTS') ? exists_description : standard_description,
+          value: enum_value, owner: self
+        )
       end
 
       return all_values unless Flipper.enabled?(:advanced_search_metadata_operators)
