@@ -42,14 +42,12 @@ en:
               not_a_metadata: is an invalid metadata field
               taken: exists within another condition in this group
             from_value:
-              from_invalid_between_comparison: is an invalid value to compare with the To value
               greater_than_to: must be less than To value
             operator:
               not_a_date_operator: cannot be used on dates
               use_metadata_operator: is an invalid operator for metadata fields
               use_non_metadata_operator: is an invalid operator for non-metadata fields
             to_value:
-              invalid_between_comparison: is an invalid value to compare with the From value
               lower_than_from: must be greater than From value
             value:
               invalid_between_value: must be an array with two values

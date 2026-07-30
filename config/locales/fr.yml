@@ -41,10 +41,14 @@ fr:
             field:
               not_a_metadata: est un champ de métadonnées non valide
               taken: existe déjà dans une autre condition de ce groupe
+            from_value:
+              greater_than_to: doit être inférieur à la Valeur à évaluer
             operator:
               not_a_date_operator: ne peut pas être utilisé sur les dates
               use_metadata_operator: est un opérateur non valide pour les champs de métadonnées
               use_non_metadata_operator: est un opérateur non valide pour les champs autres que les métadonnées
+            to_value:
+              lower_than_from: doit être supérieur à la Valeur de départ
             value:
               invalid_between_value: doit être un tableau contenant deux valeurs
         concatenation_form:
