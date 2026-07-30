@@ -2007,6 +2007,7 @@ fr:
           value_required: La valeur de métadonnées est requise.
         user_cannot_update_metadata: Les champs de métadonnées '%{metadata_fields}' de l’échantillon '%{sample_name}' ne peuvent pas être écrasés par un utilisateur puisqu’ils ont été précédemment mis à jour avec une analyse.
       transfer:
+        active_workflow_executions: 'Les échantillons avec les identifiants suivants ne peuvent pas être transférés car ils sont actuellement utilisés par une exécution de flux de travail : %{sample_ids}'
         empty_new_project_id: Le projet de destination n’a pas été sélectionné.
         empty_sample_ids: Les identifiants de l’échantillon sont vides.
         maintainer_transfer_not_allowed: Un responsable ne peut transférer des échantillons qu’à d’autres projets dans la même hiérarchie avec un ancêtre commun
