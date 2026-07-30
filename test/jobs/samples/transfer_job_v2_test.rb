@@ -39,6 +39,10 @@ module Samples
       @group = groups(:group_one)
     end
 
+    def teardown
+      Flipper.disable(:v2_sample_transfer)
+    end
+
     test 'transfer project samples with permission' do
       @sample_transfer_params = { new_project_id: @new_project.id,
                                   sample_ids: [@sample1.id, @sample2.id] }

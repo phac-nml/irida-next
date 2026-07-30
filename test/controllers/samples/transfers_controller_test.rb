@@ -60,6 +60,8 @@ module Samples
                broadcast_target: 'a_broadcast_target'
              }
       end
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
 
     test 'should get new for project if owner' do
@@ -101,6 +103,8 @@ module Samples
                broadcast_target: 'a_broadcast_target'
              }
       end
+    ensure
+      Flipper.disable(:v2_sample_transfer)
     end
   end
 end
