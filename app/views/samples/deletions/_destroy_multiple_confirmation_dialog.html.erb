@@ -1,7 +1,7 @@
 <%# locals: (audit_form: @audit_form, namespace: @namespace, open:) %>
 
 <%= viral_dialog(id: "multiple-deletions-dialog", open: open) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %> <%# herb:disable erb-no-unused-expressions %>
+  <% dialog.with_header(title: t(".title")) %>
 
   <div
     data-controller="infinite-scroll"

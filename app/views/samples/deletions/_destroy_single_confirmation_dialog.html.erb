@@ -1,8 +1,7 @@
 <%# locals: (audit_form: @audit_form, namespace: @namespace, open:, sample: @sample) %>
 
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %> <%# herb:disable erb-no-unused-expressions %>
-  <%= turbo_frame_tag("deletion-alert") %>
+  <% dialog.with_header(title: t(".title")) %>
 
   <div
     data-controller="selection"
