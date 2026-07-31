@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 namespace :graphql do
+  desc 'Dump GraphQL schema definition to app/graphql/schema.graphql'
   task dump_schema: :environment do
     # Get a string containing the definition in GraphQL IDL:
     schema_defn = IridaSchema.to_definition
