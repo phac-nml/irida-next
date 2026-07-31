@@ -37,8 +37,8 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
           }
           runId
           state
-          stderr
-          stdout
+          stderrUrl
+          stdoutUrl
           submitter {
             id
             email
@@ -170,8 +170,8 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
     assert_nil result['errors'], 'should work and have no errors.'
 
     data = result['data']['node']
-    assert_equal Rails.application.routes.url_helpers.rails_blob_url(workflow_execution.stdout), data['stdout']
-    assert_equal Rails.application.routes.url_helpers.rails_blob_url(workflow_execution.stderr), data['stderr']
+    assert_equal Rails.application.routes.url_helpers.rails_blob_url(workflow_execution.stdout), data['stdoutUrl']
+    assert_equal Rails.application.routes.url_helpers.rails_blob_url(workflow_execution.stderr), data['stderrUrl']
   end
 
   test 'workflow executions nodes query should on groups' do
