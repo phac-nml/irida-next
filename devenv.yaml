@@ -1,4 +1,6 @@
 inputs:
+  nextflow-pin:
+    url: github:nixos/nixpkgs/1f6deaff6d3c8546398eadc710c3fb6fbcaf45e4
   nixpkgs:
     url: github:cachix/devenv-nixpkgs/rolling
   nixpkgs-ruby:

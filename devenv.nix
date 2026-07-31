@@ -6,6 +6,15 @@ lib.mkMerge [
     env.PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright.passthru.browsers}";
     env.PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS="true";
 
+    # pin nextflow to 25.10.2
+    overlays = [
+      (final: prev: {
+        nextflow = (import inputs.nextflow-pin {
+          system = prev.stdenv.system;
+        }).nextflow;
+      })
+    ];
+
     # https://devenv.sh/packages/
     packages = with pkgs; [
       pkg-config
@@ -142,7 +151,11 @@ lib.mkMerge [
   }
   (lib.mkIf pkgs.stdenv.isLinux {
     enterShell = ''
-      export NIX_LDFLAGS="-L/lib64 -L/usr/lib64 $NIX_LDFLAGS"
+      # add libnss_sss.so.2 to LD_PRELOAD if it exists, to avoid issues with SSSD and NSS
+      LIBNSS_SSS_PATH=$(find /lib /usr/lib /lib64 /usr/lib64 -name "libnss_sss.so.2" 2>/dev/null | head -n 1)
+      if [ -n "$LIBNSS_SSS_PATH" ]; then
+        export LD_PRELOAD="$LIBNSS_SSS_PATH"
+      fi
     '';
   })
 ]
