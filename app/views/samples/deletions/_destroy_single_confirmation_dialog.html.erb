@@ -2,6 +2,7 @@
 
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
+  <%= turbo_frame_tag("deletion-alert") %>
 
   <div
     data-controller="selection"
