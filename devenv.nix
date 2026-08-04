@@ -5,6 +5,27 @@ lib.mkMerge [
     env.GA4GH_WES_URL = "http://localhost:1122";
     env.PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright.passthru.browsers}";
     env.PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS="true";
+    env.POETRY_DATA_DIR = "${config.devenv.state}/poetry/data";
+    env.POETRY_CACHE_DIR = "${config.devenv.state}/poetry/cache";
+
+    # pin nextflow to 25.10.2
+    overlays = [
+      (final: prev: {
+        nextflow = inputs.nextflow-pin.legacyPackages.${prev.system}.nextflow.overrideAttrs (oldAttrs: {
+          system = prev.stdenv.system;
+          postPatch = ''
+            # Nextflow invokes the constant "/bin/bash" (not as a shebang) at
+            # several locations so we fix that globally. However, when running inside
+            # a container, we actually *want* "/bin/bash". Thus the global fix needs
+            # to be reverted for this specific use case.
+            substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
+              --replace-fail "['/bin/bash'," "['${prev.bash}/bin/bash'," \
+              --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
+                        launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
+          '';
+        });
+      })
+    ];
 
     # https://devenv.sh/packages/
     packages = with pkgs; [
@@ -49,9 +70,9 @@ lib.mkMerge [
     processes.sapporo-service = {
       ports.http.allocate = 1122;
       exec = ''
-        SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=${toString config.processes.sapporo-service.ports.http.value} SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.git.root}/.devenv/sapporo-service/sapporo/run_irida_next.sh poetry run sapporo
+        SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=${toString config.processes.sapporo-service.ports.http.value} SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.devenv.state}/sapporo-service/sapporo/run_irida_next.sh poetry run sapporo
       '';
-      cwd = "${config.git.root}/.devenv/sapporo-service/sapporo";
+      cwd = "${config.devenv.state}/sapporo-service/sapporo";
     };
 
     # https://devenv.sh/services/
@@ -128,7 +149,7 @@ lib.mkMerge [
         mkdir -p sapporo/runs/.nextflow
         printf "docker {\n\tenabled = true\n\trunOptions = '--network host'\n}" > sapporo/runs/.nextflow/config
       '';
-      cwd = "${config.git.root}/.devenv";
+      cwd = "${config.devenv.state}";
       before = [ "devenv:processes:sapporo-service" ];
     };
 
@@ -142,7 +163,11 @@ lib.mkMerge [
   }
   (lib.mkIf pkgs.stdenv.isLinux {
     enterShell = ''
-      export NIX_LDFLAGS="-L/lib64 -L/usr/lib64 $NIX_LDFLAGS"
+      # add libnss_sss.so.2 to LD_PRELOAD if it exists, to avoid issues with SSSD and NSS
+      LIBNSS_SSS_PATH=$(find /lib /usr/lib /lib64 /usr/lib64 -name "libnss_sss.so.2" 2>/dev/null | head -n 1)
+      if [ -n "$LIBNSS_SSS_PATH" ]; then
+        export LD_PRELOAD="$LIBNSS_SSS_PATH"
+      fi
     '';
   })
 ]
