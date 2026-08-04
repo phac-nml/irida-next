@@ -26,57 +26,92 @@ module Dashboard
       get dashboard_groups_path
 
       assert_response :success
-      assert_active_sort('q', 'created_at desc')
+      assert_active_sort('all_groups_q', 'created_at desc')
+
+      get dashboard_groups_path, params: { public: 'true' }
+
+      assert_response :success
+      assert_active_sort('public_groups_q', 'created_at desc')
     end
 
     test 'should sort groups by name descending' do
       sign_in @user
 
-      get dashboard_groups_path, params: { q: { s: 'name desc' } }
+      get dashboard_groups_path, params: { all_groups_q: { s: 'name desc' } }
 
       assert_response :success
-      assert_active_sort('q', 'name desc')
+      assert_active_sort('all_groups_q', 'name desc')
       assert_includes first_treegrid_row_text, groups(:group_z).name
+
+      get dashboard_groups_path, params: { public: 'true', public_groups_q: { s: 'name desc' } }
+
+      assert_response :success
+      assert_active_sort('public_groups_q', 'name desc')
+      assert_includes first_treegrid_row_text, groups(:public_group10).name
     end
 
     test 'should sort groups by name ascending' do
       sign_in @user
 
-      get dashboard_groups_path, params: { q: { s: 'name asc' } }
+      get dashboard_groups_path, params: { all_groups_q: { s: 'name asc' } }
 
       assert_response :success
-      assert_active_sort('q', 'name asc')
+      assert_active_sort('all_groups_q', 'name asc')
       assert_includes first_treegrid_row_text, groups(:group_a).name
+
+      get dashboard_groups_path, params: { public: 'true', public_groups_q: { s: 'name asc' } }
+
+      assert_response :success
+      assert_active_sort('public_groups_q', 'name asc')
+      assert_includes first_treegrid_row_text, groups(:public_group1).name
     end
 
     test 'should sort groups by updated_at descending' do
       sign_in @user
 
-      get dashboard_groups_path, params: { q: { s: 'updated_at desc' } }
+      get dashboard_groups_path, params: { all_groups_q: { s: 'updated_at desc' } }
 
       assert_response :success
-      assert_active_sort('q', 'updated_at desc')
+      assert_active_sort('all_groups_q', 'updated_at desc')
       assert_includes first_treegrid_row_text, groups(:group_a).name
+
+      get dashboard_groups_path, params: { public: 'true', public_groups_q: { s: 'updated_at desc' } }
+
+      assert_response :success
+      assert_active_sort('public_groups_q', 'updated_at desc')
+      assert_includes first_treegrid_row_text, groups(:public_group1).name
     end
 
     test 'should sort groups by updated_at ascending' do
       sign_in @user
 
-      get dashboard_groups_path, params: { q: { s: 'updated_at asc' } }
+      get dashboard_groups_path, params: { all_groups_q: { s: 'updated_at asc' } }
 
       assert_response :success
-      assert_active_sort('q', 'updated_at asc')
+      assert_active_sort('all_groups_q', 'updated_at asc')
       assert_includes first_treegrid_row_text, groups(:group_z).name
+
+      get dashboard_groups_path, params: { public: 'true', public_groups_q: { s: 'updated_at asc' } }
+
+      assert_response :success
+      assert_active_sort('public_groups_q', 'updated_at asc')
+      assert_includes first_treegrid_row_text, groups(:public_group10).name
     end
 
     test 'should sort groups by created_at ascending' do
       sign_in @user
 
-      get dashboard_groups_path, params: { q: { s: 'created_at asc' } }
+      get dashboard_groups_path, params: { all_groups_q: { s: 'created_at asc' } }
 
       assert_response :success
-      assert_active_sort('q', 'created_at asc')
+      assert_active_sort('all_groups_q', 'created_at asc')
       assert_includes first_treegrid_row_text, groups(:group_z).name
+
+      get dashboard_groups_path, params: { public: 'true', public_groups_q: { s: 'created_at asc' } }
+
+      assert_response :success
+      assert_active_sort('public_groups_q', 'created_at asc')
+      assert_includes first_treegrid_row_text, groups(:public_group10).name
     end
 
     test 'accessing groups index on invalid page causes pagy overflow redirect' do
