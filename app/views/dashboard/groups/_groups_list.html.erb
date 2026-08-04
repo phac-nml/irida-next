@@ -1,4 +1,4 @@
-<%# locals: (q:, pagy:, has_groups:, tab:, groups:, render_flat_list:, empty_title:, empty_description:) %>
+<%# locals: (q:, pagy:, has_groups:, tab:, groups:, render_flat_list:, empty_title: t("dashboard.groups.index.no_groups_title"), empty_description: t("dashboard.groups.index.no_groups_description")) %>
 
 <div class="flex flex-col">
   <div class="mb-2 flex flex-wrap justify-end gap-2">
@@ -61,9 +61,6 @@
     </div>
   <% else %>
     <div class="empty_state_message">
-      <% empty_title = local_assigns[:empty_title] ? empty_title : t("dashboard.groups.index.no_groups_title") %>
-      <% empty_description = local_assigns[:empty_description] ? empty_description : t("dashboard.groups.index.no_groups_description") %>
-
       <%= viral_empty(
         icon_name: Group.icon,
         title: empty_title,
