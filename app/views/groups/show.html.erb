@@ -175,13 +175,11 @@
               <% end %>
 
               <%= render "groups/shared_public_groups",
-              locals: {
                 namespaces: @namespaces,
                 has_namespaces: @has_namespaces,
                 render_flat_list: @render_flat_list,
                 group: @group,
-                pagy: @pagy
-              } %>
+                pagy: @pagy %>
             <% end %>
           <% end %>
         </div>
