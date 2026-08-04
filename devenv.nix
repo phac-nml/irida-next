@@ -5,13 +5,25 @@ lib.mkMerge [
     env.GA4GH_WES_URL = "http://localhost:1122";
     env.PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright.passthru.browsers}";
     env.PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS="true";
+    env.POETRY_DATA_DIR = "${config.devenv.state}/poetry/data";
+    env.POETRY_CACHE_DIR = "${config.devenv.state}/poetry/cache";
 
     # pin nextflow to 25.10.2
     overlays = [
       (final: prev: {
-        nextflow = (import inputs.nextflow-pin {
+        nextflow = inputs.nextflow-pin.legacyPackages.${prev.system}.nextflow.overrideAttrs (oldAttrs: {
           system = prev.stdenv.system;
-        }).nextflow;
+          postPatch = ''
+            # Nextflow invokes the constant "/bin/bash" (not as a shebang) at
+            # several locations so we fix that globally. However, when running inside
+            # a container, we actually *want* "/bin/bash". Thus the global fix needs
+            # to be reverted for this specific use case.
+            substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
+              --replace-fail "['/bin/bash'," "['${prev.bash}/bin/bash'," \
+              --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
+                        launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
+          '';
+        });
       })
     ];
 
