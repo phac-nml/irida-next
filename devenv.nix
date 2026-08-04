@@ -70,9 +70,9 @@ lib.mkMerge [
     processes.sapporo-service = {
       ports.http.allocate = 1122;
       exec = ''
-        SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=${toString config.processes.sapporo-service.ports.http.value} SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.git.root}/.devenv/sapporo-service/sapporo/run_irida_next.sh poetry run sapporo
+        SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=${toString config.processes.sapporo-service.ports.http.value} SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.devenv.state}/sapporo-service/sapporo/run_irida_next.sh poetry run sapporo
       '';
-      cwd = "${config.git.root}/.devenv/sapporo-service/sapporo";
+      cwd = "${config.devenv.state}/sapporo-service/sapporo";
     };
 
     # https://devenv.sh/services/
@@ -149,7 +149,7 @@ lib.mkMerge [
         mkdir -p sapporo/runs/.nextflow
         printf "docker {\n\tenabled = true\n\trunOptions = '--network host'\n}" > sapporo/runs/.nextflow/config
       '';
-      cwd = "${config.git.root}/.devenv";
+      cwd = "${config.devenv.state}";
       before = [ "devenv:processes:sapporo-service" ];
     };
 
