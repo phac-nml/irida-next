@@ -76,7 +76,7 @@ gem 'view_component', ['>= 4.0', '< 5.0']
 gem 'activerecord_cursor_paginate', '~> 0.4.1'
 
 # Pagy
-gem 'pagy', '~> 43.3.0'
+gem 'pagy', '~> 43.6.1'
 
 # Ransack
 gem 'ransack', '~> 4.4.1'
