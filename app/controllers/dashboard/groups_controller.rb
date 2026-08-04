@@ -10,7 +10,7 @@ module Dashboard
     def index
       all_groups = authorized_groups
       @has_groups = all_groups.any?
-      @q = all_groups.ransack(params[:q])
+      @q = build_ransack_query(all_groups)
       set_default_sort
       @pagy, @groups = pagy(@q.result.include_route, raise_range_error: true)
       set_tab_variables
@@ -26,13 +26,22 @@ module Dashboard
 
     private
 
+    def build_ransack_query(all_groups)
+      if params[:public] == 'true'
+        all_groups.ransack(params[:public_groups_q], search_key: :public_groups_q)
+      else
+        all_groups.ransack(params[:all_groups_q], search_key: :all_groups_q)
+      end
+    end
+
     def set_tab_variables
       @tab = params[:public] == 'true' ? 'public' : 'private'
       @tab_index = @tab == 'public' ? 1 : 0
     end
 
     def render_flat_list
-      @render_flat_list = params.dig(:q, :name_or_puid_cont).present?
+      params_key = params.key?(:public_groups_q) ? :public_groups_q : :all_groups_q
+      @render_flat_list = params.dig(params_key, :name_or_puid_cont).present?
     end
 
     def set_default_sort
@@ -54,10 +63,12 @@ module Dashboard
     end
 
     def authorized_groups
-      if @render_flat_list
-        authorized_scope(Group, type: :relation)
+      if @render_flat_list && params[:public] == 'true'
+        authorized_scope(Group, type: :relation, as: :public_groups)
       elsif params[:public] == 'true'
         authorized_scope(Group, type: :relation, as: :public_groups).without_descendants
+      elsif @render_flat_list
+        authorized_scope(Group, type: :relation)
       else
         authorized_scope(Group, type: :relation).without_descendants
       end
