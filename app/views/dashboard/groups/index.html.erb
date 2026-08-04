@@ -34,7 +34,7 @@
       src_path: dashboard_groups_url,
       selected: @tab == "private"
     ) do %>
-      <%= render "groups_list" %>
+      <%= render "groups_list", has_groups: @has_groups, q: @q, pagy: @pagy, tab: @tab, groups: @groups, render_flat_list: @render_flat_list %>
     <% end %>
 
     <% tabs.with_lazy_panel(
@@ -44,7 +44,7 @@
       src_path: dashboard_groups_url(public: "true"),
       selected: @tab == "public"
     ) do %>
-      <%= render "groups_list", empty_title: t("dashboard.groups.index.no_public_groups_title"), empty_description: t("dashboard.groups.index.no_public_groups_description") %>
+      <%= render "groups_list", has_groups: @has_groups, q: @q, pagy: @pagy, tab: @tab, groups: @groups, render_flat_list: @render_flat_list, empty_title: t("dashboard.groups.index.no_public_groups_title"), empty_description: t("dashboard.groups.index.no_public_groups_description") %>
     <% end %>
   <% end %>
 </div>
