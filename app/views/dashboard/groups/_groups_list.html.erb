@@ -3,22 +3,28 @@
     <% if @has_groups %>
       <%= render SearchComponent.new(
           query: @q,
-          url: dashboard_groups_url,
+          url: dashboard_groups_url(**request.query_parameters),
           search_attribute: :name_or_puid_cont,
           label: t("common.controls.search"),
           placeholder: t('dashboard.groups.index.search.placeholder'),
           total_count: @pagy.count,
           class: "max-sm:grow",
           value: @q.name_or_puid_cont,
-        ) %>
+          data: {},
+          as: (params[:public] == 'true' ? :public_groups_q : :all_groups_q)
+        ) do %>
+        <% if params[:public] == 'true' %>
+          <input type="hidden" name="public" value="true">
+        <% end %>
+      <% end %>
       <%= render Ransack::SortDropdownComponent.new(
       @q,
-      "projects",
+      "groups",
       [
         { name: "updated_at", dir: "desc" },
         { name: "updated_at", dir: "asc" },
-        { name: "namespace_name", dir: "asc" },
-        { name: "namespace_name", dir: "desc" },
+        { name: "name", dir: "asc" },
+        { name: "name", dir: "desc" },
         { name: "created_at", dir: "desc" },
         { name: "created_at", dir: "asc" },
       ],
