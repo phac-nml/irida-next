@@ -31,6 +31,27 @@ class NamespaceTest < ActiveSupport::TestCase
     ].map(&:id))).empty?
   end
 
+  test 'archivable scopes and methods only apply to project namespaces' do
+    namespace = namespaces_project_namespaces(:project1_namespace)
+    group_namespace = groups(:group_one)
+
+    assert namespace.archivable?
+    assert_not namespace.archived?
+    assert Namespaces::ProjectNamespace.not_archived.exists?(namespace.id)
+
+    assert_not group_namespace.archivable?
+
+    namespace.archive!
+    assert namespace.archived?
+    assert_not namespace.archivable?
+    assert Namespaces::ProjectNamespace.archived.exists?(namespace.id)
+
+    namespace.unarchive!
+    assert namespace.archivable?
+    assert_not namespace.archived?
+    assert Namespaces::ProjectNamespace.not_archived.exists?(namespace.id)
+  end
+
   test '#without_descendants when collection is empty' do
     assert_equal [], Namespace.none.without_descendants
   end
