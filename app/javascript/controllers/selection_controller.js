@@ -10,6 +10,7 @@ export default class extends Controller {
     "status",
     "limitAlert",
     "limitAlertMessage",
+    "limitAlertStatus",
   ];
   static outlets = ["action-button"];
 
@@ -316,8 +317,8 @@ export default class extends Controller {
     const storedItems = this.#readStoredItems() || [];
 
     if (this.#exceedsLimit(storedItems.length)) {
-      this.#handleSelectionLimitExceeded({ announce: false });
-      this.#updateUI(storedItems, false);
+      this.update([], false);
+      this.#handleSelectionLimitExceeded();
       return;
     }
 
@@ -411,11 +412,8 @@ export default class extends Controller {
   #announceAlertMessage(message) {
     if (!message) return;
 
-    if (this.hasStatusTarget) {
-      announce(message, {
-        element: this.statusTarget,
-        politeness: "assertive",
-      });
+    if (this.hasLimitAlertStatusTarget) {
+      announce(message, { element: this.limitAlertStatusTarget });
     } else {
       announce(message, { politeness: "assertive" });
     }

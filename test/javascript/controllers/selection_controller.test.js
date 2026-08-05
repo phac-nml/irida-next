@@ -2,8 +2,8 @@ import { Application } from "@hotwired/stimulus";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import SelectionController from "../../../app/javascript/controllers/selection_controller.js";
 
-async function startController() {
-  document.body.innerHTML = renderFixtureHtml();
+async function startController(options = {}) {
+  document.body.innerHTML = renderFixtureHtml(options);
   const application = Application.start();
   application.register("selection", SelectionController);
   await Promise.resolve();
@@ -37,6 +37,12 @@ function renderFixtureHtml({
       data-selection-storage-limit-message-value="${storageLimitMessage}"
     >
       ${alertHtml}
+      <span
+        data-selection-target="limitAlertStatus"
+        class="sr-only"
+        role="status"
+        aria-live="assertive"
+      ></span>
       <span data-selection-target="status" class="sr-only" aria-live="polite"></span>
       <input
         type="checkbox"
@@ -91,6 +97,41 @@ describe("selection controller", () => {
     expect(controller.limitAlertTarget.classList.contains("hidden")).toBe(
       false,
     );
+  });
+
+  it("clears a persisted selection above the configured max", async () => {
+    sessionStorage.setItem("selection-test-key", '["1","2","3"]');
+
+    application = await startController();
+    const controller = controllerFor(application);
+
+    expect(sessionStorage.getItem("selection-test-key")).toBe("[]");
+    expect(controller.selectedTarget.textContent).toBe("0");
+    expect(controller.rowSelectionTargets.every((row) => !row.checked)).toBe(
+      true,
+    );
+    expect(controller.limitAlertTarget.classList.contains("hidden")).toBe(
+      false,
+    );
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    expect(
+      document.querySelector('[data-selection-target="limitAlertStatus"]')
+        .textContent,
+    ).toBe("You cannot select more than 2 items.");
+  });
+
+  it("announces a rejected update only in the assertive limit region", async () => {
+    application = await startController();
+    const controller = controllerFor(application);
+
+    controller.update(["1", "2", "3"]);
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    expect(
+      document.querySelector('[data-selection-target="limitAlertStatus"]')
+        .textContent,
+    ).toBe("You cannot select more than 2 items.");
+    expect(controller.statusTarget.textContent).toBe("");
   });
 
   it("hides the reactive limit alert after a successful update", async () => {
