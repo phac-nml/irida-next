@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: https://github.com/phac-nml/pathogen-view-components.git
-  revision: 293b8d041bd186f510e87c92d573f6fef21eed59
-  tag: v1.1.8
+  revision: 6356083d74d334883f3d9a824d374038336ea8b9
+  branch: 001-add-toolbar-component
   specs:
     pathogen_view_components (1.0.0)
       actionview (>= 5.0.0)
