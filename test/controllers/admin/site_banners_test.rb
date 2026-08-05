@@ -69,6 +69,32 @@ module Admin
       assert_equal 'Maintenance planifiée', banner.messages['fr']
     end
 
+    test 'system user can create a disabled site banner' do
+      assert_difference -> { SiteBanner.count }, 1 do
+        post admin_site_banners_path, params: {
+          site_banner: {
+            enabled: '0',
+            style: 'info',
+            messages: {
+              en: 'Draft notice',
+              fr: 'Avis brouillon'
+            }
+          }
+        }
+      end
+
+      banner = SiteBanner.order(:created_at).last
+      assert_redirected_to admin_site_banner_path(banner)
+      assert_not banner.enabled?
+    end
+
+    test 'new site banner form renders an enabled checkbox' do
+      get new_admin_site_banner_path
+
+      assert_response :success
+      assert_select '#site_banner_enabled_input input[type=checkbox][name="site_banner[enabled]"][checked]'
+    end
+
     test 'system user can disable an enabled site banner' do
       banner = SiteBanner.create!(
         style: :danger,
