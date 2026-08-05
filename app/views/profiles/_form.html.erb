@@ -1,3 +1,5 @@
+<%# locals: (user:) -%>
+
 <%= form_with(model: user, url: profile_path, method: :patch, html: { novalidate: true }) do |f| %>
   <%= form_error_summary(f, classes: "mb-2", include: [:email, :first_name, :last_name]) %>
 
@@ -71,6 +73,6 @@
   <br>
 
   <div class="my-2">
-    <%= f.submit t(:"profiles.show.email.submit"), class: "button button-primary" %>
+    <%= f.submit t(:"profiles.show.email.submit"), tone: :primary, emphasis: :solid %>
   </div>
 <% end %>

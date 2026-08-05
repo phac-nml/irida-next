@@ -1,3 +1,5 @@
+<%# locals: (form:, broadcast_target:, controller:, direct_upload: false) -%>
+
 <input type="hidden" name="broadcast_target" value="<%= broadcast_target %>">
 
 <div class="grid gap-4">
@@ -162,7 +164,8 @@
 
   <div>
     <%= form.submit t(".submit_button"),
-                        class: "button button-primary",
+                          tone: :primary,
+                          emphasis: :solid,
                         data: {
                           turbo_frame: "_top",
                           action:

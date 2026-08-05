@@ -10,7 +10,7 @@
       <%= link_to(
         t("projects.samples.show.edit_button"),
         edit_namespace_project_sample_path(id: @sample.id),
-        class: "button button-default w-auto",
+        class: "button button-default",
       ) %>
     <% end %>
 
@@ -27,7 +27,7 @@
         data: {
           turbo_stream: true,
         },
-        class: "button button-default w-auto",
+        class: "button button-default",
       ) %>
     <% end %>
   <% end %>

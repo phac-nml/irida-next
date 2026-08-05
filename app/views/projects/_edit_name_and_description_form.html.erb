@@ -1,3 +1,5 @@
+<%# locals: (project:) -%>
+
 <%= form_with(model: project, url: namespace_project_path, method: :patch, html: { novalidate: true }, class: "grid gap-4") do |form| %>
   <%= render partial: "shared/form/required_field_legend" %>
 
@@ -52,7 +54,7 @@
     </div>
 
     <div>
-      <%= form.submit t("projects.edit.general.submit"), class: "button button-default" %>
+      <%= form.submit t("projects.edit.general.submit"), tone: :primary, emphasis: :solid %>
     </div>
   <% end %>
 <% end %>

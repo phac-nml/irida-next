@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: https://github.com/phac-nml/pathogen-view-components.git
-  revision: 293b8d041bd186f510e87c92d573f6fef21eed59
-  tag: v1.1.8
+  revision: e02775d809d597ba5f9812c9d0e378fad85d3d5c
+  tag: v1.1.13
   specs:
     pathogen_view_components (1.0.0)
       actionview (>= 5.0.0)

@@ -2,6 +2,8 @@
   <%= activity_message %>
 
   <% if show_more_details_button? %>
-    <%= more_details_button(dialog_type, descriptive_text) %>
+    <div class="mt-2">
+      <%= more_details_button(dialog_type, descriptive_text) %>
+    </div>
   <% end %>
 </section>

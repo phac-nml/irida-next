@@ -46,9 +46,9 @@ module Projects
         within('dialog[open]') do
           attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
           # check that button goes from being enabled to disabled when clicked
-          assert_selector 'input[type=submit]:not(:disabled)'
+          assert_selector 'button[type=submit]:not(:disabled)'
           click_on I18n.t('projects.samples.show.upload')
-          assert_selector 'input[type=submit]:disabled'
+          assert_selector 'button[type=submit]:disabled'
         end
 
         assert_text I18n.t('projects.samples.attachments.create.success', filename: 'data_export_1.zip')

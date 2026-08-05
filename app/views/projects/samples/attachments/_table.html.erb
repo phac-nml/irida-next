@@ -4,42 +4,46 @@
   <% if has_attachments %>
     <div class="mb-4 flex flex-wrap gap-2">
       <% if allowed_to[:update_sample] %>
-        <%= render "shared/selection_buttons",
-        url: select_namespace_project_sample_attachments_url(sample_id: sample.id),
-        select_form_fields: {
-          format: "turbo_stream",
-          select: "on",
-          "q[puid_or_file_blob_filename_cont]": params.dig(:q, :puid_or_file_blob_filename_cont),
-        },
-        deselect_form_fields: { format: "turbo_stream" },
-        select_button_options: {
-          title: t(".select_all_tooltip"),
-          aria: { label: t(".select_all_tooltip") },
-        },
-        deselect_button_options: {
-          title: t(".deselect_all_tooltip"),
-          aria: { label: t(".deselect_all_tooltip") },
-        } %>
+        <% if Flipper.enabled?(:sample_attachments_searching, current_user) %>
+          <%= render "shared/selection_buttons",
+          url: select_namespace_project_sample_attachments_url(sample_id: sample.id),
+          select_form_fields: {
+            format: "turbo_stream",
+            select: "on",
+            "q[puid_or_file_blob_filename_cont]": params.dig(:q, :puid_or_file_blob_filename_cont),
+          },
+          deselect_form_fields: { format: "turbo_stream" },
+          select_button_options: {
+            title: t(".select_all_tooltip"),
+            aria: { label: t(".select_all_tooltip") },
+          },
+          deselect_button_options: {
+            title: t(".deselect_all_tooltip"),
+            aria: { label: t(".deselect_all_tooltip") },
+          } %>
+        <% end %>
       <% end %>
 
       <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
-      <%= render SearchComponent.new(
-              query: q,
-              search_attribute: :puid_or_file_blob_filename_cont,
-              label: t('common.controls.search'),
-              placeholder: t(:".search.placeholder"),
-              value: q.puid_or_file_blob_filename_cont,
-              url: namespace_project_sample_path,
-              total_count: pagy.count,
-              class: "max-sm:grow",
-              search_field_arguments: {
-                data: {
-                  'search-field-selection-outlet': '#attachments-table'
+      <% if Flipper.enabled?(:sample_attachments_searching, current_user) %>
+        <%= render SearchComponent.new(
+                query: q,
+                search_attribute: :puid_or_file_blob_filename_cont,
+                label: t('common.controls.search'),
+                placeholder: t(:".search.placeholder"),
+                value: q.puid_or_file_blob_filename_cont,
+                url: namespace_project_sample_path,
+                total_count: pagy.count,
+                class: "max-sm:grow",
+                search_field_arguments: {
+                  data: {
+                    'search-field-selection-outlet': '#attachments-table'
+                  }
                 }
-              }
-              ) do %>
-        <%= hidden_field_tag :limit, pagy.limit %>
+                ) do %>
+          <%= hidden_field_tag :limit, pagy.limit %>
+        <% end %>
       <% end %>
 
       <% if allowed_to[:update_sample] %>

@@ -19,13 +19,12 @@
         <div class="grid gap-4">
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
 
-          <div>
-            <%= form.submit t("projects.samples.edit.submit_button"),
-                        class: "button button-primary mr-1" %>
+          <div class="flex gap-2">
+            <%= render Pathogen::CancelButtonComponent.new(href: namespace_project_sample_path(id: @sample.id)) %>
 
-            <%= link_to t('common.actions.cancel'),
-            namespace_project_sample_path(id: @sample.id),
-            class: "button button-default" %>
+            <%= form.submit t("projects.samples.edit.submit_button"),
+                          tone: :primary,
+                          emphasis: :solid %>
           </div>
         </div>
       <% end %>
