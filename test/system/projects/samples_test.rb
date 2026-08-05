@@ -23,7 +23,7 @@ module Projects
     end
 
     test 'samples index table' do
-      freeze_time
+      travel_to(@sample1.updated_at + 3.hours)
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -3856,7 +3856,7 @@ module Projects
     end
 
     test 'local_time localization with language toggle' do
-      freeze_time
+      travel_to(@sample1.updated_at + 3.hours)
       visit namespace_project_samples_url(@namespace, @project)
 
       # verify samples table has loaded to prevent flakes
