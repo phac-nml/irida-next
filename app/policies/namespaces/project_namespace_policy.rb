@@ -247,7 +247,7 @@ module Namespaces
     private
 
     def check_project_archived
-      deny! if record.archived_at.present?
+      deny! if record.archived?
     end
   end
 end

@@ -151,6 +151,23 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_equal 'PRJ', Namespaces::ProjectNamespace.model_prefix
   end
 
+  test 'project namespace archivable/unarchivable' do
+    assert @project_namespace.archivable?
+    assert_not @project_namespace.archived?
+
+    @project_namespace.archive!
+    assert @project_namespace.archived?
+    assert_not @project_namespace.archivable?
+    assert_not Namespaces::ProjectNamespace.not_archived.exists?(@project_namespace.id)
+    assert Namespaces::ProjectNamespace.archived.exists?(@project_namespace.id)
+
+    @project_namespace.unarchive!
+    assert @project_namespace.archivable?
+    assert_not @project_namespace.archived?
+    assert_not Namespaces::ProjectNamespace.archived.exists?(@project_namespace.id)
+    assert Namespaces::ProjectNamespace.not_archived.exists?(@project_namespace.id)
+  end
+
   test 'project namespace with automation_bot' do
     bot = users(:project1_automation_bot)
     assert_equal bot, @project_namespace.automation_bot

@@ -153,6 +153,6 @@ class WorkflowExecutionPolicy < ApplicationPolicy # rubocop:disable Metrics/Clas
   def check_project_archived
     return unless record.namespace.type == Namespaces::ProjectNamespace.sti_name
 
-    deny! if record.namespace.archived_at.present?
+    deny! if record.namespace.archived?
   end
 end

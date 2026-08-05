@@ -32,16 +32,17 @@ class SamplePolicy < ApplicationPolicy
     next relation.none unless Member.effective_access_level(namespace, user) >= minimum_access_level
 
     if namespace.type == Namespaces::ProjectNamespace.sti_name
-      relation.joins(project: :namespace).where(project_id: namespace.project.id,
-                                                namespace: { archived_at: nil })
+      relation.joins(project: :namespace)
+              .where(project_id: namespace.project.id)
+              .merge(Namespaces::ProjectNamespace.not_archived)
     elsif namespace.type == Group.sti_name
       relation
         .with(
           direct_group_projects: Project.joins(:namespace)
-                                 .where(namespace: { parent_id: namespace.self_and_descendant_ids,
-                                                     archived_at: nil }).select(:id),
+                                 .merge(Namespaces::ProjectNamespace.not_archived)
+                                 .where(namespaces: { parent_id: namespace.self_and_descendant_ids }).select(:id),
           linked_group_projects: Project.joins(:namespace)
-          .where(namespace: { archived_at: nil })
+          .merge(Namespaces::ProjectNamespace.not_archived)
           .where(namespace_id: Namespace
           .where(
             id: NamespaceGroupLink
@@ -65,6 +66,6 @@ class SamplePolicy < ApplicationPolicy
   private
 
   def check_project_archived
-    deny! if record.project.namespace.archived_at.present?
+    deny! if record.project.namespace.archived?
   end
 end

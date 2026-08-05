@@ -209,24 +209,23 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   scope_for :relation do |relation| # rubocop:disable Metrics/BlockLength
     relation
       .with(
-        personal_project_namespaces: Namespaces::ProjectNamespace.where(parent_id: user.namespace&.id,
-                                                                        archived_at: nil),
-        direct_project_namespaces: user.members.not_expired.joins(:namespace).where(
-          namespace: { type: Namespaces::ProjectNamespace.sti_name, archived_at: nil }
+        personal_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent_id: user.namespace&.id),
+        direct_project_namespaces: user.members.not_expired.joins(:namespace).merge(
+          Namespaces::ProjectNamespace.not_archived
         ).select(:namespace_id),
-        group_project_namespaces: Namespaces::ProjectNamespace.where(parent_id:
+        group_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent_id:
           Namespace.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids.where(
             type: Group.sti_name
-          ), archived_at: nil).select(:id),
-        group_linked_project_namespaces: Namespaces::ProjectNamespace.where(
+          )).select(:id),
+        group_linked_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(
           parent_id: Group.where(id: NamespaceGroupLink.where(group: Group.where(
             id: user.members.not_expired.joins(:namespace).select(:namespace_id)
-          ).self_and_descendants).not_expired.select(:namespace_id)).self_and_descendants, archived_at: nil
+          ).self_and_descendants).not_expired.select(:namespace_id)).self_and_descendants
         ).select(:id),
-        direct_linked_project_namespaces: Namespaces::ProjectNamespace.where(id: NamespaceGroupLink.where(
+        direct_linked_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(id: NamespaceGroupLink.where(
           group: Group.where(id: user.members.not_expired.joins(:namespace).select(:namespace_id)).self_and_descendants
-        ).not_expired.select(:namespace_id), archived_at: nil).select(:id),
-        public_project_namespaces: Namespaces::ProjectNamespace.where(public: true, archived_at: nil).select(:id)
+        ).not_expired.select(:namespace_id)).select(:id),
+        public_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(public: true).select(:id)
       ).where(
         Arel.sql(
           'projects.namespace_id in (select id from personal_project_namespaces)
@@ -242,24 +241,23 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   scope_for :relation, :archived_projects do |relation| # rubocop:disable Metrics/BlockLength
     relation
       .with(
-        personal_project_namespaces: Namespaces::ProjectNamespace.where(parent_id: user.namespace&.id)
-        .where.not(archived_at: nil),
-        direct_project_namespaces: user.members.not_expired.joins(:namespace).where(
-          namespace: { type: Namespaces::ProjectNamespace.sti_name }
-        ).where.not(namespace: { archived_at: nil }).select(:namespace_id),
-        group_project_namespaces: Namespaces::ProjectNamespace.where(parent_id:
+        personal_project_namespaces: Namespaces::ProjectNamespace.archived.where(parent_id: user.namespace&.id),
+        direct_project_namespaces: user.members.not_expired.joins(:namespace).merge(
+          Namespaces::ProjectNamespace.archived
+        ).select(:namespace_id),
+        group_project_namespaces: Namespaces::ProjectNamespace.archived.where(parent_id:
           Namespace.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids.where(
             type: Group.sti_name
-          )).where.not(archived_at: nil).select(:id),
-        group_linked_project_namespaces: Namespaces::ProjectNamespace.where(
+          )).select(:id),
+        group_linked_project_namespaces: Namespaces::ProjectNamespace.archived.where(
           parent_id: Group.where(id: NamespaceGroupLink.where(group: Group.where(
             id: user.members.not_expired.joins(:namespace).select(:namespace_id)
           ).self_and_descendants).not_expired.select(:namespace_id)).self_and_descendants
-        ).where.not(archived_at: nil).select(:id),
-        direct_linked_project_namespaces: Namespaces::ProjectNamespace.where(id: NamespaceGroupLink.where(
+        ).select(:id),
+        direct_linked_project_namespaces: Namespaces::ProjectNamespace.archived.where(id: NamespaceGroupLink.where(
           group: Group.where(id: user.members.not_expired.joins(:namespace).select(:namespace_id)).self_and_descendants
-        ).not_expired.select(:namespace_id)).where.not(archived_at: nil).select(:id),
-        public_project_namespaces: Namespaces::ProjectNamespace.where(public: true).where.not(archived_at: nil)
+        ).not_expired.select(:namespace_id)).select(:id),
+        public_project_namespaces: Namespaces::ProjectNamespace.archived.where(public: true)
         .select(:id)
       ).where(
         Arel.sql(
@@ -297,16 +295,15 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   scope_for :relation, :manageable_without_shared_links do |relation|
     relation.with(
-      direct_project_namespaces: user.members.not_expired.joins(:namespace).where(
-        access_level: Member::AccessLevel.manageable,
-        namespace: { type: Namespaces::ProjectNamespace.sti_name, archived_at: nil }
-      ).select(:namespace_id),
-      group_project_namespaces: Namespaces::ProjectNamespace.where(parent: Namespace.where(id:
+      direct_project_namespaces: user.members.not_expired.joins(:namespace).merge(
+        Namespaces::ProjectNamespace.not_archived
+      ).where(access_level: Member::AccessLevel.manageable).select(:namespace_id),
+      group_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent: Namespace.where(id:
         user.members.not_expired.joins(:namespace).where(
           namespace_id: user.groups.self_and_descendants,
           access_level: Member::AccessLevel.manageable,
           namespace: { type: Group.sti_name }
-        ).select(:namespace_id), type: Group.sti_name).self_and_descendant_ids, archived_at: nil).select(:id)
+        ).select(:namespace_id), type: Group.sti_name).self_and_descendant_ids).select(:id)
     ).where(
       Arel.sql(
         'projects.namespace_id in (select namespace_id from direct_project_namespaces)
@@ -317,26 +314,25 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   scope_for :relation, :manageable do |relation| # rubocop:disable Metrics/BlockLength
     relation.with(
-      personal_project_namespaces: Namespaces::ProjectNamespace.where(parent_id: user.namespace&.id, archived_at: nil),
-      direct_project_namespaces: user.members.not_expired.joins(:namespace).where(
-        access_level: Member::AccessLevel.manageable,
-        namespace: { type: Namespaces::ProjectNamespace.sti_name, archived_at: nil }
-      ).select(:namespace_id),
-      group_project_namespaces: Namespaces::ProjectNamespace.where(parent: Namespace.where(
+      personal_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent_id: user.namespace&.id),
+      direct_project_namespaces: user.members.not_expired.joins(:namespace).merge(
+        Namespaces::ProjectNamespace.not_archived
+      ).where(access_level: Member::AccessLevel.manageable).select(:namespace_id),
+      group_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent: Namespace.where(
         id: user.members.not_expired.joins(:namespace).where(
           namespace_id: user.groups.self_and_descendants,
           access_level: Member::AccessLevel.manageable,
           namespace: { type: Group.sti_name }
         ).select(:namespace_id), type: Group.sti_name
-      ).self_and_descendant_ids, archived_at: nil).select(:id),
-      group_linked_project_namespaces: Namespaces::ProjectNamespace.where(id: NamespaceGroupLink.where(
+      ).self_and_descendant_ids).select(:id),
+      group_linked_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(id: NamespaceGroupLink.where(
         group: user.groups.where(id: user.members.not_expired.joins(:namespace)
                                          .where(access_level: Member::AccessLevel.manageable,
                                                 namespace: { type: Group.sti_name })
                                          .select(:namespace_id)).self_and_descendants,
         group_access_level: Member::AccessLevel.manageable
-      ).not_expired.select(:namespace_id), archived_at: nil).select(:id),
-      direct_linked_project_namespaces: Namespaces::ProjectNamespace.where(
+      ).not_expired.select(:namespace_id)).select(:id),
+      direct_linked_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(
         parent_id: Group.where(id: NamespaceGroupLink.where(
           group: user.groups.where(id: user.members.not_expired.joins(:namespace)
                                            .where(access_level: Member::AccessLevel.manageable,
@@ -344,7 +340,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
                                            .select(:namespace_id)).self_and_descendants,
           group_access_level: Member::AccessLevel.manageable,
           namespace_type: Group.sti_name
-        ).not_expired.select(:namespace_id)).self_and_descendant_ids, archived_at: nil
+        ).not_expired.select(:namespace_id)).self_and_descendant_ids
       ).select(:id)
     ).where(
       Arel.sql(
@@ -360,7 +356,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   scope_for :relation, :personal do |relation|
     relation
       .with(
-        personal_project_namespaces: Namespaces::ProjectNamespace.where(parent_id: user.namespace&.id, archived_at: nil)
+        personal_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent_id: user.namespace&.id)
       )
       .where(
         Arel.sql(
@@ -381,15 +377,15 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
     relation
       .with(
-        direct_group_project_namespaces: Namespaces::ProjectNamespace.where(
-          parent_id: group.self_and_descendants.select(:id), archived_at: nil
+        direct_group_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(
+          parent_id: group.self_and_descendants.select(:id)
         ).select(:id),
         linked_group_project_namespaces: Namespace.where(
           id: NamespaceGroupLink
               .not_expired
               .where(group_id: group.self_and_descendant_ids, group_access_level: minimum_access_level..)
               .select(:namespace_id)
-        ).self_and_descendants.where(type: 'Project', archived_at: nil).select(:id)
+        ).self_and_descendants.where(type: 'Project').not_archived.select(:id)
       ).where(
         Arel.sql(
           'namespace_id in (select id from direct_group_project_namespaces)
@@ -401,6 +397,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   private
 
   def check_project_archived
-    deny! if record.namespace.archived_at.present?
+    deny! if record.namespace.archived?
   end
 end
