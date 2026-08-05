@@ -6,34 +6,40 @@ module Samples
     include ListActions
 
     before_action :namespace, only: %i[new destroy]
-    before_action :confirmation_parameters, :sample, only: :new
+    before_action :confirmation_parameters, :sample, only: %i[new destroy]
 
     def new
       authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :destroy_sample?
 
+      @audit_form = AuditForm.new
       @broadcast_target = "samples_destroy_#{SecureRandom.uuid}"
     end
 
-    def destroy # rubocop:disable Metrics/AbcSize
-      samples_to_delete_count = destroy_params['sample_ids'].count
+    def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      @audit_form = AuditForm.new(reason: destroy_params[:reason])
 
-      deleted_samples_count = destroy_service
+      if @audit_form.valid?
+        samples_to_delete_count = destroy_params[:sample_ids].count
 
-      # No selected samples deleted
-      if deleted_samples_count.zero?
-        flash[:error] = t('.no_deleted_samples')
-      # Partial sample deletion
-      elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
-        flash[:success] = t('.partial_success',
-                            deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
-        flash[:error] = t('.partial_error',
-                          not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
-      # All samples deleted successfully
+        deleted_samples_count = destroy_service
+
+        # No selected samples deleted
+        if deleted_samples_count.zero?
+          flash[:error] = t('.no_deleted_samples')
+        # Partial sample deletion
+        elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
+          flash[:success] = t('.partial_success', deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
+          flash[:error] = t('.partial_error',
+                            not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}") # rubocop:disable Layout/LineLength
+        # All samples deleted successfully
+        else
+          flash[:success] = t('.success', count: deleted_samples_count)
+        end
+
+        redirect_to redirect_path, status: :see_other
       else
-        flash[:success] = t('.success', count: deleted_samples_count)
+        render status: :unprocessable_content
       end
-
-      redirect_to redirect_path, status: :see_other
     end
 
     private
@@ -51,7 +57,7 @@ module Samples
     end
 
     def destroy_params
-      params.expect(destroy: [{ sample_ids: [] }])
+      params.expect(deletion: [:reason, { sample_ids: [] }])
     end
 
     def destroy_service
