@@ -39,6 +39,13 @@ module Combobox
         assert_selector 'button[data-combobox--v1-target="indicatorButton"][tabindex="-1"]'
       end
 
+      test 'renders safely with no html options and no slot options' do
+        render_component(options: nil)
+
+        assert_selector 'input[role="combobox"][value=""]'
+        assert_selector "##{build_form_builder.field_id(:field)}_hidden[value='']", visible: :hidden
+      end
+
       test 'renders combobox input with aria-disabled and indicator buttons disabled when disabled is true' do
         render_component(disabled: true)
 
@@ -64,6 +71,14 @@ module Combobox
 
         assert_selector 'input[role="combobox"][aria-disabled="true"][readonly]:not([disabled])'
         assert_selector 'button[data-combobox--v1-target="indicatorButton"][aria-disabled="true"]:not([disabled])'
+      end
+
+      test 'with_slots preview renders slot options' do
+        render_combobox_preview(:with_slots)
+
+        assert_selector 'input[role="combobox"][value="User 3"]'
+        assert_selector '[role="option"][data-value="3"][id]', visible: :all
+        assert_selector '[role="option"][data-value="5"][aria-disabled="true"]', visible: :all
       end
 
       private
