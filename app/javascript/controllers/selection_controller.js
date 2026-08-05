@@ -403,10 +403,8 @@ export default class extends Controller {
     const limitAlert = this.#findLimitAlertElement();
     if (!limitAlert) return;
 
-    if (!this.#proactiveLimitAlert(limitAlert) && message) {
-      if (this.hasLimitAlertMessageTarget) {
-        this.limitAlertMessageTarget.textContent = message;
-      }
+    if (message && this.hasLimitAlertMessageTarget) {
+      this.limitAlertMessageTarget.textContent = message;
     }
 
     limitAlert.classList.remove("hidden");
@@ -415,17 +413,12 @@ export default class extends Controller {
   #hideSelectionLimitAlertIfAllowed() {
     const limitAlert = this.#findLimitAlertElement();
     if (!limitAlert) return;
-    if (this.#proactiveLimitAlert(limitAlert)) return;
 
     limitAlert.classList.add("hidden");
   }
 
   #findLimitAlertElement() {
     return this.hasLimitAlertTarget ? this.limitAlertTarget : null;
-  }
-
-  #proactiveLimitAlert(limitAlert = this.#findLimitAlertElement()) {
-    return limitAlert?.dataset.selectionLimitProactive === "true";
   }
 
   #announceAlertMessage(message) {

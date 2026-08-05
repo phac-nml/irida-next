@@ -11,9 +11,11 @@
       <% if @abilities[:select_samples] %>
         <%= render partial: "shared/selection_limit_alert",
         locals: {
-          message: selection_limit_list_too_large_message,
-          visible: show_selection_limit_alert?,
-          proactive: show_selection_limit_alert?,
+          message: t(
+            "components.selection.limit.selection_limit_reached",
+            max: Irida::SelectionLimits::MAX_COUNT,
+          ),
+          visible: false,
         } %>
       <% end %>
 

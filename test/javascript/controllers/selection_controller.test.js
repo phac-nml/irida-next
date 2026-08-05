@@ -15,14 +15,12 @@ function renderFixtureHtml({
   maxSelection = 2,
   limitMessage = "You cannot select more than %{max} items.",
   storageLimitMessage = "Browser storage is full.",
-  proactiveAlert = false,
 } = {}) {
   const alertHtml = `
       <div
         id="selection-limit-alert"
-        class="${proactiveAlert ? "" : "hidden"}"
+        class="hidden"
         data-selection-target="limitAlert"
-        ${proactiveAlert ? 'data-selection-limit-proactive="true"' : ""}
       >
         <div data-controller="viral--alert">
           <span data-selection-target="limitAlertMessage">Alert</span>
@@ -95,21 +93,18 @@ describe("selection controller", () => {
     );
   });
 
-  it("keeps a proactive alert visible after a successful update", async () => {
-    document.body.innerHTML = renderFixtureHtml({ proactiveAlert: true });
-    application = Application.start();
-    application.register("selection", SelectionController);
-    await Promise.resolve();
-    await new Promise((resolve) => requestAnimationFrame(resolve));
+  it("hides the reactive limit alert after a successful update", async () => {
+    application = await startController();
     const controller = controllerFor(application);
+
+    controller.update(["1", "2", "3"], false);
+    expect(controller.limitAlertTarget.classList.contains("hidden")).toBe(
+      false,
+    );
 
     controller.update(["1"], false);
 
-    expect(
-      document
-        .getElementById("selection-limit-alert")
-        .classList.contains("hidden"),
-    ).toBe(false);
+    expect(controller.limitAlertTarget.classList.contains("hidden")).toBe(true);
   });
 
   it("shows storage-specific feedback when session storage quota is exceeded", async () => {
