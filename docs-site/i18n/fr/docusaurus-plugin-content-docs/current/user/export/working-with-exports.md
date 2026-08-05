@@ -50,7 +50,7 @@ Prérequis :
 
 Pour créer une exportation de liste linéaire d'échantillons :
 
-1. Naviguez vers le [projet](../project/projects/manage-projects#view-projects-you-have-access-to) ou le [groupe](../organization/groups/groups-manage.md#view-groups) qui contient les échantillons que vous souhaitez exporter.
+1. Naviguez vers le [projet](../project/projects/manage-projects.md#view-projects-you-have-access-to) ou le [groupe](../organization/groups/groups-manage.md#view-groups) qui contient les échantillons que vous souhaitez exporter.
 2. Dans la barre latérale gauche, sélectionnez **Échantillons**.
 3. Cochez la case de chaque échantillon que vous souhaitez exporter.
 4. Cliquez sur **Créer une exportation**.

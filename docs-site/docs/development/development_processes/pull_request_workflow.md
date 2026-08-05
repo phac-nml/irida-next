@@ -10,7 +10,7 @@ We welcome pull requests from everyone, with fixes and improvements to IRIDA Nex
 
 ### Best practices
 
-- If the change is non-trivial, we encourage you start a discussion with a team member. You can do this by tagging them in a PR before submitting the code for review. Taking to team embers can be helpful when making design decisions. Communicating the intent behind your changes can also help expedite pull request reviews.
+- If the change is non-trivial, we encourage you start a discussion with a team member. You can do this by tagging them in a PR before submitting the code for review. Talking to team embers can be helpful when making design decisions. Communicating the intent behind your changes can also help expedite pull request reviews.
 - When having your code reviewed and when reviewing pull requests, please keep the [code review guidelines](./code_review.md) in mind.
 
 ### Keep it simple

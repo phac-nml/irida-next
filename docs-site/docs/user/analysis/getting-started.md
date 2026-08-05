@@ -57,4 +57,4 @@ The current state of any workflow execution is shown on the workflow execution [
 When deleting a workflow execution, there are a couple points to keep in mind:
 
 - Deleted errored and canceled runs have no additional considerations
-- Deleting completed runs does not delete the associated results that have been propogated to the samples
+- Deleting completed runs does not delete the associated results that have been propagated to the samples
