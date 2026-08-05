@@ -43,7 +43,6 @@
 <% end %>
 
 <% if select_all_disabled %>
-  <%# Disabled controls do not receive hover/focus, so wrap Select all for the tooltip trigger. %>
   <% tooltip_id = Pathogen::Tooltip.generate_id(base_name: "select-all-limit") %>
   <%# i18n-tasks-use t('components.selection.limit.list_too_large') %>
   <% limit_tooltip_text = t(
@@ -51,23 +50,24 @@
        count: total_count,
        max: Irida::SelectionLimits::MAX_COUNT,
      ) %>
-  <% select_button_options = select_button_options.merge(disabled: true).except(:title) %>
-  <% select_all_label = select_button_options.dig(:aria, :label) || t("common.controls.select_all") %>
+  <% select_button_options = select_button_options.except(:disabled, :title).merge(
+     type: "button",
+     form: nil,
+     class: class_names(select_button_options[:class], "cursor-not-allowed"),
+     aria: select_button_options.fetch(:aria, {}).merge(
+       disabled: true,
+       describedby: tooltip_id,
+     ),
+     data: select_button_options.fetch(:data, {}).merge(
+       "pathogen--tooltip-target": "trigger",
+     ),
+   ) %>
   <div
     class="inline-flex max-sm:grow"
     data-controller="pathogen--tooltip"
     data-pathogen--tooltip-portal-aria-label-value="<%= Pathogen::Tooltip.portal_aria_label %>"
   >
-    <span
-      class="inline-flex cursor-not-allowed max-sm:grow"
-      role="group"
-      tabindex="0"
-      data-pathogen--tooltip-target="trigger"
-      aria-describedby="<%= tooltip_id %>"
-      aria-label="<%= select_all_label %>"
-    >
-      <%= button_tag t("common.controls.select_all"), **select_button_options %>
-    </span>
+    <%= button_tag t("common.controls.select_all"), **select_button_options %>
 
     <%= render Pathogen::Tooltip.new(
       text: limit_tooltip_text,
