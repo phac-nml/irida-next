@@ -38,10 +38,25 @@ module Profiles
       test 'execute returns false when the form is invalid' do
         form = mock('opt_in_form')
         form.expects(:valid?).returns(false)
-        Flipper.expects(:enable_actor).never
-        Flipper.expects(:disable_actor).never
+        SystemFeatureFlags::UpdateUserOptIn.expects(:new).never
 
         assert_not OptInService.new(@user, form).execute
+      end
+
+      test 'execute adds not_eligible when actor mutation is rejected by runtime guard' do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          form = build_form(feature_key: 'data_grid_samples_table', enabled: true)
+          not_eligible_result = SystemFeatureFlags::BaseFeatureFlagService::Result.new(
+            status: :failure, entry: nil, error: :not_eligible
+          )
+          mock_service = mock('change_user_opt_in')
+          mock_service.stubs(:execute).returns(not_eligible_result)
+          SystemFeatureFlags::UpdateUserOptIn.stubs(:new).returns(mock_service)
+
+          assert_not OptInService.new(@user, form).execute
+          assert_includes form.errors.details[:feature_key].pluck(:error), :not_eligible
+          assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
+        end
       end
 
       test 'execute adds flipper_error when toggle fails' do
