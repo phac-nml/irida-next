@@ -251,7 +251,7 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
 
   group = Groups::CreateService.new(
     owner,
-    group_params.slice(:name, :path, :description).merge({ parent: })
+    group_params.slice(:name, :path, :description, :public).merge({ parent: })
   ).execute
 
   # seed the members using group_params[:members_by_role]
@@ -812,6 +812,16 @@ if Rails.env.development?
       member_emails_by_role:,
       subgroups: [
         { name: 'Pseudomonas aeruginosa', path: 'pseudomonas-aeruginosa', projects: generic_projects }
+      ] },
+    { name: 'Public Group 1', path: 'public-group-1', public: true, owner_email: group_owner_emails[0],
+      subgroups: [
+        { name: 'Public subgroup 1', path: 'public-subgroup-1', public: true, projects: generic_projects },
+        { name: 'Public subgroup 2', path: 'public-subgroup-2', public: true, projects: generic_projects }
+      ] },
+    { name: 'Public Group 2', path: 'public-group-2', public: true, owner_email: group_owner_emails[0],
+      subgroups: [
+        { name: 'Public subgroup 3', path: 'public-subgroup-3', public: true, projects: generic_projects },
+        { name: 'Public subgroup 4', path: 'public-subgroup-4', public: true, projects: generic_projects }
       ] },
     { name: 'Rickettsia', path: 'rickettsia', owner_email: group_owner_emails[3],
       member_emails_by_role:,
