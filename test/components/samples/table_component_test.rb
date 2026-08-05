@@ -36,6 +36,19 @@ module Samples
       assert_selector 'input[type="checkbox"][class*="-mt-0.5"]', minimum: 1
     end
 
+    test 'selection limit markup uses one dedicated assertive status region' do
+      render_table_component
+
+      assert_selector '#samples-table[data-selection-max-selection-value="50000"]', count: 1
+      alert = page.find('#selection-limit-alert[data-selection-target="limitAlert"]')
+      assert_nil alert['role']
+      assert_nil alert['aria-live']
+      assert_selector(
+        'span[data-selection-target="limitAlertStatus"][role="status"][aria-live="assertive"]',
+        count: 1
+      )
+    end
+
     private
 
     def render_table_component
