@@ -9,7 +9,6 @@ module Samples
       class Component < ::Component # rubocop:disable Metrics/ClassLength
         include Ransack::Helpers::FormHelper
         include Samples::Table::UrlHelpers
-        include SelectionLimitableTable
 
         # Maximum number of metadata fields to display regardless of sample count
         MAX_METADATA_FIELDS_SIZE = 200
@@ -100,6 +99,17 @@ module Samples
         end
 
         private
+
+        def selection_limit_data_attributes
+          {
+            'selection-max-selection-value': Irida::SelectionLimits::MAX_COUNT,
+            'selection-limit-message-value': I18n.t(
+              'components.selection.limit.selection_limit_reached',
+              max: Irida::SelectionLimits::MAX_COUNT
+            ),
+            'selection-storage-limit-message-value': I18n.t('components.selection.limit.storage_full')
+          }
+        end
 
         def columns
           columns = %i[puid name]

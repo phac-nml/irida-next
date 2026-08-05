@@ -9,14 +9,21 @@
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <% if @abilities[:select_samples] %>
-        <%= render partial: "shared/selection_limit_alert",
-        locals: {
-          message: t(
-            "components.selection.limit.selection_limit_reached",
-            max: Irida::SelectionLimits::MAX_COUNT,
-          ),
-          visible: false,
-        } %>
+        <div id="selection-limit-alert" class="mb-4 hidden" data-selection-target="limitAlert">
+          <%= viral_alert(type: :warning, dismissible: false) do %>
+            <span data-selection-target="limitAlertMessage">
+              <%= t(
+                "components.selection.limit.selection_limit_reached",
+                max: Irida::SelectionLimits::MAX_COUNT,
+              ) %>
+            </span>
+          <% end %>
+        </div>
+        <%= render LiveRegionComponent.new(
+          controller: "selection",
+          target: "limitAlertStatus",
+          politeness: :assertive,
+        ) %>
       <% end %>
 
       <%= render LiveRegionComponent.new(controller: "selection") %>
