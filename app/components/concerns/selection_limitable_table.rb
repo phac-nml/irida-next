@@ -18,22 +18,4 @@ module SelectionLimitableTable
       )
     }
   end
-
-  def show_selection_limit_alert?
-    selection_limit_exceeded?(@pagy.count)
-  end
-
-  def selection_limit_list_too_large_message
-    I18n.t(
-      'components.selection.limit.list_too_large',
-      count: @pagy.count,
-      max: Irida::SelectionLimits::MAX_COUNT
-    )
-  end
-
-  private
-
-  def selection_limit_exceeded?(count)
-    Irida::SelectionLimits.exceeded?(count)
-  end
 end

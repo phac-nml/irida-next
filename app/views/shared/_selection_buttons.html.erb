@@ -1,7 +1,6 @@
 <%# locals: (url:, form_data: nil, total_count: nil, select_form_fields: {}, deselect_form_fields: {}, select_form_id: "select-all-form", deselect_form_id: "deselect-all-form", select_button_options: {}, deselect_button_options: {}) %>
 
 <% select_all_disabled = total_count.present? && Irida::SelectionLimits.exceeded?(total_count) %>
-<% limit_alert_id = SelectionLimitableTable::SELECTION_LIMIT_ALERT_ID %>
 
 <% select_button_options = {
      id: "select-all-button",
@@ -18,11 +17,6 @@
      form: deselect_form_id,
      class: "button button-default max-sm:grow",
    }.merge(deselect_button_options) %>
-
-<% if select_all_disabled %>
-  <% select_button_options[:disabled] = true %>
-  <% select_button_options[:aria] = (select_button_options[:aria] || {}).merge(describedby: limit_alert_id) %>
-<% end %>
 
 <%= form_with(
       url: url,
@@ -41,13 +35,48 @@
       method: :get,
       id: deselect_form_id,
       class: "hidden",
-  data: form_data,
+      data: form_data,
     ) do %>
   <% deselect_form_fields.each do |field_name, field_value| %>
     <%= hidden_field_tag field_name, field_value, id: nil %>
   <% end %>
 <% end %>
 
-<%= button_tag t("common.controls.select_all"), **select_button_options %>
+<% if select_all_disabled %>
+  <%# Disabled controls do not receive hover/focus, so wrap Select all for the tooltip trigger. %>
+  <% tooltip_id = Pathogen::Tooltip.generate_id(base_name: "select-all-limit") %>
+  <%# i18n-tasks-use t('components.selection.limit.list_too_large') %>
+  <% limit_tooltip_text = t(
+       "components.selection.limit.list_too_large",
+       count: total_count,
+       max: Irida::SelectionLimits::MAX_COUNT,
+     ) %>
+  <% select_button_options = select_button_options.merge(disabled: true).except(:title) %>
+  <% select_all_label = select_button_options.dig(:aria, :label) || t("common.controls.select_all") %>
+  <div
+    class="inline-flex max-sm:grow"
+    data-controller="pathogen--tooltip"
+    data-pathogen--tooltip-portal-aria-label-value="<%= Pathogen::Tooltip.portal_aria_label %>"
+  >
+    <span
+      class="inline-flex cursor-not-allowed max-sm:grow"
+      role="group"
+      tabindex="0"
+      data-pathogen--tooltip-target="trigger"
+      aria-describedby="<%= tooltip_id %>"
+      aria-label="<%= select_all_label %>"
+    >
+      <%= button_tag t("common.controls.select_all"), **select_button_options %>
+    </span>
+
+    <%= render Pathogen::Tooltip.new(
+      text: limit_tooltip_text,
+      id: tooltip_id,
+      placement: :bottom,
+    ) %>
+  </div>
+<% else %>
+  <%= button_tag t("common.controls.select_all"), **select_button_options %>
+<% end %>
 
 <%= button_tag t("common.controls.deselect_all"), **deselect_button_options %>
