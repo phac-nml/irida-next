@@ -1,5 +1,7 @@
+<%# locals: (open:, namespace: @namespace) -%>
+
 <%= viral_dialog(id: "multiple-deletions-dialog", open: open) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_header(title: t(".title")) %>
 
   <div
     data-controller="infinite-scroll"
@@ -37,7 +39,7 @@
         </div>
       </div>
 
-      <%= form_for(:deletion, url: samples_deletions_path(namespace_id: @namespace.id),
+      <%= form_for(:deletion, url: samples_deletions_path(namespace_id: namespace.id),
             data: {
               controller: "spinner form--json-submission",
               "form--json-submission-selection-outlet": '#samples-table',

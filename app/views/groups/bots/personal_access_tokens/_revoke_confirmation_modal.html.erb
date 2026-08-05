@@ -1,5 +1,7 @@
+<%# locals: (open:, personal_access_token:, bot_account: @bot_account) -%>
+
 <%= viral_dialog(open: open, id: 'revoke_confirmation_dialog') do |dialog| %>
-  <% dialog.with_header(title: t("personal_access_tokens.revoke_confirmation.title")) %>
+  <%= dialog.with_header(title: t("personal_access_tokens.revoke_confirmation.title")) %>
 
   <%= turbo_frame_tag("deletion-alert") %>
 
@@ -13,7 +15,7 @@
     </p>
 
     <%= form_for(:deletion, url: revoke_group_bot_personal_access_token_path(
-          bot_id: @bot_account.id,
+          bot_id: bot_account.id,
           id: personal_access_token.id
         ), method: :delete,
             data: {

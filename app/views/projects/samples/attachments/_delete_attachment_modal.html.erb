@@ -1,25 +1,27 @@
+<%# locals: (open:, attachment: @attachment, sample: @sample) -%>
+
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_header(title: t(".title")) %>
   <%= turbo_frame_tag("deletion-alert") %>
 
   <div
     data-controller="selection"
-    data-selection-delete-id-param="<%= @attachment.id %>"
-    data-selection-storage-key-value="<%= "files-#{@sample.id}" %>"
+    data-selection-delete-id-param="<%= attachment.id %>"
+    data-selection-storage-key-value="files-<%= sample.id %>"
     class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400"
   >
     <p class="mb-4">
       <%= t(".description") %>
     </p>
 
-    <%= form_for(:deletion, url: namespace_project_sample_attachment_path(id: @attachment.id), method: :delete) do |form| %>
+    <%= form_for(:deletion, url: namespace_project_sample_attachment_path(id: attachment.id), method: :delete) do |form| %>
       <%= form.submit t(".submit_button"),
                     tone: :danger,
                     emphasis: :solid,
                   data: {
                     turbo_frame: "_top",
                     action: "click->selection#remove",
-                    "selection-id-param": @attachment.id,
+                    "selection-id-param": attachment.id,
                   } %>
     <% end %>
   </div>

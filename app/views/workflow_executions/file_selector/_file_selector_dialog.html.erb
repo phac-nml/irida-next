@@ -1,7 +1,9 @@
-<%= viral_dialog(open: open, id: "file_selector_form_dialog", size: :extra_large) do |dialog| %>
-  <% dialog.with_header(title: t(".select_file")) %>
+<%# locals: (open:, listing_attachments: @listing_attachments) -%>
 
-  <% if @listing_attachments.empty? %>
+<%= viral_dialog(open: open, id: "file_selector_form_dialog", size: :extra_large) do |dialog| %>
+  <%= dialog.with_header(title: t(".select_file")) %>
+
+  <% if listing_attachments.empty? %>
     <div class="empty_state_message mb-2">
       <%= viral_empty(
         title: t(".empty.title"),
@@ -49,7 +51,7 @@
               </thead>
 
               <tbody class="overflow-y-auto border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-                <% @listing_attachments.each do |attachment| %>
+                <% listing_attachments.each do |attachment| %>
                   <tr class="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
                     <td class="bg-white p-3 dark:bg-slate-800">
                       <%= form.radio_button "attachment_id",
@@ -100,7 +102,7 @@
         </div>
       </div>
 
-      <% unless @listing_attachments.empty? %>
+      <% unless listing_attachments.empty? %>
         <%= form.submit t(".submit_button"),
                     tone: :primary,
                     emphasis: :solid %>

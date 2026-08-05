@@ -1,12 +1,14 @@
+<%# locals: (open:, broadcast_target: @broadcast_target, group_projects: @group_projects, namespace: @namespace) -%>
+
 <%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
-  <% dialog.with_header(title: t("shared.samples.spreadsheet_imports.dialog.title")) %>
-  <%= turbo_stream_from @broadcast_target %>
+  <%= dialog.with_header(title: t("shared.samples.spreadsheet_imports.dialog.title")) %>
+  <%= turbo_stream_from broadcast_target %>
 
   <%= turbo_frame_tag "import_spreadsheet_dialog_content" do %>
     <%= turbo_frame_tag "import_spreadsheet_dialog_alert" %>
 
     <div
-      data-controller="spreadsheet-import sortable-lists--v1--two-lists-selection attachment-upload <% if @namespace.group_namespace? %> <%= Flipper.enabled?(:v2_select2, Current.user) ? 'select2--v2' : 'select2--v1' %> <% end %>"
+      data-controller="spreadsheet-import sortable-lists--v1--two-lists-selection attachment-upload <% if namespace.group_namespace? %> <%= Flipper.enabled?(:v2_select2, Current.user) ? 'select2--v2' : 'select2--v1' %> <% end %>"
       data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
       data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
       data-sortable-lists--v1--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
@@ -18,12 +20,12 @@
       data-attachment-upload-error-fallback-text-value="<%= t('common.upload.failed') %>"
       <% if Flipper.enabled?(:v2_select2, Current.user) %>
         data-select2--v2-enable-controller-coordination-value="<%= true %>"
-        <% if @namespace.group_namespace? %>
+        <% if namespace.group_namespace? %>
           data-select2--v2-spreadsheet-import-outlet="#spreadsheet-import-dialog-content"
         <% end %>
       <% else %>
         data-select2--v1-enable-controller-coordination-value="<%= true %>"
-        <% if @namespace.group_namespace? %>
+        <% if namespace.group_namespace? %>
           data-select2--v1-spreadsheet-import-outlet="#spreadsheet-import-dialog-content"
         <% end %>
       <% end %>
@@ -34,7 +36,7 @@
       id="spreadsheet-import-dialog-content"
     >
       <%= form_for(:spreadsheet_import, url: url, method: :post) do |form| %>
-        <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>">
+        <input type="hidden" name="broadcast_target" value="<%= broadcast_target %>">
 
         <div class="grid gap-4">
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-300">
@@ -42,7 +44,7 @@
           </p>
 
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-300">
-            <% if @namespace.group_namespace? %>
+            <% if namespace.group_namespace? %>
               <%= t("shared.samples.spreadsheet_imports.dialog.namespace.group.description_html") %>
             <% else %>
               <%= t(
@@ -139,7 +141,7 @@
                           "disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
           </div>
 
-          <% if @namespace.group_namespace? %>
+          <% if namespace.group_namespace? %>
             <div class="form-field">
               <fieldset>
                 <legend data-required="true" class="font-sm font-medium text-slate-900 dark:text-white">
@@ -189,7 +191,7 @@
                 </p>
 
                 <%= render Select2Component.new(form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select| %>
-                  <% @group_projects.each do |project| %>
+                  <% group_projects.each do |project| %>
                     <% select.with_option(
                         value: project.id,
                         label: project.namespace.full_path,

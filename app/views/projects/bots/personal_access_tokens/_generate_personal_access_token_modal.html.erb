@@ -1,5 +1,7 @@
+<%# locals: (open:, bot_account: @bot_account, personal_access_token: @personal_access_token) -%>
+
 <%= viral_dialog(open: open) do |dialog| %>
-  <% dialog.with_header(
+  <%= dialog.with_header(
     title:
       t(
         "projects.bots.index.bot_listing.generate_personal_access_token_modal.title",
@@ -10,18 +12,18 @@
     <p class="dark:text-slate-400">
       <%= t(
         "projects.bots.index.bot_listing.generate_personal_access_token_modal.description",
-        bot_account: @bot_account.user.email,
+        bot_account: bot_account.user.email,
       ) %>
     </p>
   </div>
 
-  <%= form_for(@personal_access_token, url: namespace_project_bot_personal_access_tokens_path, method: :post,  html: { novalidate: true}) do |form| %>
+  <%= form_for(personal_access_token, url: namespace_project_bot_personal_access_tokens_path, method: :post,  html: { novalidate: true}) do |form| %>
     <div class="grid gap-4">
       <%= render partial: "shared/form/required_field_legend" %>
 
       <%= render partial: "shared/personal_access_tokens/form_fields",
       locals: {
-        pat: @personal_access_token,
+        pat: personal_access_token,
         form: form,
       } %>
     </div>

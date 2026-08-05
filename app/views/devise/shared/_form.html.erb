@@ -1,3 +1,5 @@
+<%# locals: () -%>
+
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4", novalidate: true }) do |f| %>
   <%= render "devise/shared/hidden_locale_input" %>
 

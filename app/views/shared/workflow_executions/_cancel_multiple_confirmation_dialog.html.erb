@@ -1,5 +1,7 @@
+<%# locals: (open:, cancel_path: @cancel_path, list_path: @list_path) -%>
+
 <%= viral_dialog(open: open) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_header(title: t(".title")) %>
 
   <div
     data-controller="infinite-scroll"
@@ -9,7 +11,7 @@
     data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
   >
     <%= form_with(
-        url: @list_path,
+        url: list_path,
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
       <div data-infinite-scroll-target="pageFormContent"></div>
@@ -42,7 +44,7 @@
         </div>
       </div>
 
-      <%= form_for(:cancel, url: @cancel_path, method: :delete,
+      <%= form_for(:cancel, url: cancel_path, method: :delete,
           data: {
             controller: "form--json-submission",
             "form--json-submission-selection-outlet": '#workflow-executions-table',

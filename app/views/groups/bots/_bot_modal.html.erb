@@ -1,5 +1,7 @@
+<%# locals: (open:, access_levels: @access_levels, bot_account: @bot_account) -%>
+
 <%= viral_dialog(open: open) do |dialog| %>
-  <% dialog.with_header(
+  <%= dialog.with_header(
     title: t("groups.bots.index.bot_listing.new_bot_modal.title"),
   ) %>
 
@@ -9,7 +11,7 @@
     </p>
   </div>
 
-  <%= form_for(@bot_account, url: group_bots_path, method: :post, html: { novalidate: true }) do |form| %>
+  <%= form_for(bot_account, url: group_bots_path, method: :post, html: { novalidate: true }) do |form| %>
     <%= form.fields_for :user do |user_fields| %>
       <% summary_entries = [] %>
 
@@ -19,13 +21,13 @@
           <%= render partial: "shared/form/required_field_legend" %>
 
           <% invalid_access_level =
-            @bot_account.user.members[0].errors.include?(:access_level) %>
+            bot_account.user.members[0].errors.include?(:access_level) %>
 
           <div class="form-field <%= 'invalid' if invalid_access_level %>">
             <%= member_fields.label :access_level, data: { required: true } %>
 
             <%= member_fields.select :access_level,
-                                 @access_levels,
+                                 access_levels,
                                  {
                                    prompt:
                                      t(
@@ -51,7 +53,7 @@
             <% if invalid_access_level %>
               <%= render "shared/form/field_errors",
               id: member_fields.field_id(:access_level, "error"),
-              errors: @bot_account.user.members[0].errors.full_messages_for(:access_level) %>
+              errors: bot_account.user.members[0].errors.full_messages_for(:access_level) %>
             <% end %>
           </div>
         <% end %>
@@ -73,7 +75,7 @@
 
             <%= render partial: "shared/personal_access_tokens/form_fields",
             locals: {
-              pat: @bot_account.user.personal_access_tokens[0],
+              pat: bot_account.user.personal_access_tokens[0],
               form: pat_fields,
             } %>
           </div>

@@ -12,9 +12,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
                       value: num,
                       label: "User #{num}",
                     ) do %>
-        <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
-          <%= "User #{num}" %>
-        </span>
+        <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">User <%= num %></span>
       <% end %>
 
       <%= select.with_empty_state do %>

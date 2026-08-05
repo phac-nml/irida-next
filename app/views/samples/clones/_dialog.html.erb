@@ -1,6 +1,8 @@
+<%# locals: (open:, broadcast_target: @broadcast_target, namespace: @namespace, projects: @projects) -%>
+
 <%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
-  <% dialog.with_header(title: t("samples.clones.dialog.title")) %>
-  <%= turbo_stream_from @broadcast_target %>
+  <%= dialog.with_header(title: t("samples.clones.dialog.title")) %>
+  <%= turbo_stream_from broadcast_target %>
 
   <%= turbo_frame_tag "clone_samples_dialog_content" do %>
     <div
@@ -43,7 +45,7 @@
 
         <%= render partial: "shared/form/required_field_legend" %>
 
-        <%= form_for(:clone, url: samples_clone_path(namespace_id: @namespace.id), method: :post,
+        <%= form_for(:clone, url: samples_clone_path(namespace_id: namespace.id), method: :post,
           data: {
             controller: "form--json-submission",
             "form--json-submission-selection-outlet": '#samples-table',
@@ -52,7 +54,7 @@
             "form--json-submission-target": "form",
           }
         ) do |form| %>
-          <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>">
+          <input type="hidden" name="broadcast_target" value="<%= broadcast_target %>">
 
           <div class="grid gap-4">
             <div class="form-field">
@@ -67,7 +69,7 @@
                            required: true,
                          } %>
 
-              <% if @projects.empty? %>
+              <% if projects.empty? %>
                 <input
                   disabled
                   placeholder="<%= t("samples.clones.dialog.no_available_projects") %>"
@@ -80,7 +82,7 @@
                 >
               <% else %>
                 <%= render Select2Component.new(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.clones.dialog.select_project")) do |select| %>
-                  <% @projects.each do |project| %>
+                  <% projects.each do |project| %>
                     <% select.with_option(
                       value: project.id,
                       label: project.name,
