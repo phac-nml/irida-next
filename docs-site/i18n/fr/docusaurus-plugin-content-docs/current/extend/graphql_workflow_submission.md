@@ -6,7 +6,7 @@ title: Tutoriel de soumission de flux de travail GraphQL
 
 ### Veuillez noter :
 
-Ceci est une fonctionnalité avancée. Veuillez vous familiariser avec la [Documentation de l'API GraphQL](./graphql) avant de continuer avec ce tutoriel.
+Ceci est une fonctionnalité avancée. Veuillez vous familiariser avec la [Documentation de l'API GraphQL](./graphql.md) avant de continuer avec ce tutoriel.
 
 ## Aperçu
 

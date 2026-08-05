@@ -10,4 +10,4 @@ Vous pouvez utiliser des groupes pour gérer les permissions de vos projets. Si 
 
 Vous pouvez également créer des sous-groupes.
 
-Pour plus d'informations sur la création et la gestion de vos groupes, consultez [Gérer les groupes](manage).
+Pour plus d'informations sur la création et la gestion de vos groupes, consultez [Gérer les groupes](./groups-manage.md).

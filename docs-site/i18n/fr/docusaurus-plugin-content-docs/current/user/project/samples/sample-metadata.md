@@ -146,7 +146,7 @@ Prérequis :
 3. Dans la barre latérale gauche, sélectionnez **Échantillons**
 4. Cliquez sur **Importer des métadonnées**
 
-Une boîte de dialogue apparaîtra pour sélectionner la feuille de calcul à importer. Après avoir sélectionné le fichier de feuille de calcul, identifiez quelle colonne contient l'identifiant d'échantillon et si vous souhaitez [Ignorer les valeurs vides](sample-metadata#learn-about-importing-metadata).
+Une boîte de dialogue apparaîtra pour sélectionner la feuille de calcul à importer. Après avoir sélectionné le fichier de feuille de calcul, identifiez quelle colonne contient l'identifiant d'échantillon et si vous souhaitez [Ignorer les valeurs vides](./sample-metadata.md#learn-about-importing-metadata).
 
 ## Supprimer des métadonnées
 

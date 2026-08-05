@@ -36,5 +36,5 @@ Pour créer un sous-groupe :
 1. Dans la barre supérieure, sélectionnez **Menu principal > Groupes** et trouvez et sélectionnez le groupe parent auquel ajouter un sous-groupe.
 2. Sur la page d'aperçu du groupe parent, dans le coin supérieur droit, sélectionnez **Nouveau sous-groupe**.
 3. Sélectionnez **Créer un groupe**.
-4. Remplissez les champs. Consultez une liste de [noms réservés](../../project/projects/reserved-names).
+4. Remplissez les champs. Consultez une liste de [noms réservés](../../project/projects/reserved-names.md).
 5. Sélectionnez **Créer un groupe**.

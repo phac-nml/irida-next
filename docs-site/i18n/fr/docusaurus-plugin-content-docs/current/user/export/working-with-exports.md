@@ -17,7 +17,7 @@ La page des exportations répertorie toutes vos exportations actuelles.
 
 Pour voir une seule exportation :
 
-1. Suivez les [étapes](../export/working-with-exports#view-exports) pour naviguer vers la page des exportations.
+1. Suivez les [étapes](../export/working-with-exports.md#view-exports) pour naviguer vers la page des exportations.
 2. Cliquez sur l'**ID** ou le **nom** de l'exportation souhaitée.
 
 Chaque exportation individuelle contiendra un onglet de résumé. Les exportations d'échantillon et d'analyse auront également un onglet d'aperçu disponible. L'onglet d'aperçu contient un aperçu du contenu de l'exportation et n'est disponible qu'une fois que le statut de l'exportation est **Prêt**.
@@ -31,7 +31,7 @@ Prérequis :
 
 Pour créer une exportation d'échantillon :
 
-1. Naviguez vers le [projet](../project/projects/manage-projects#view-projects-you-have-access-to) ou le [groupe](../organization/groups/manage#view-groups) qui contient les échantillons que vous souhaitez exporter.
+1. Naviguez vers le [projet](../project/projects/manage-projects.md#view-projects-you-have-access-to) ou le [groupe](../organization/groups/groups-manage.md#view-groups) qui contient les échantillons que vous souhaitez exporter.
 2. Dans la barre latérale gauche, sélectionnez **Échantillons**.
 3. Cochez la case de chaque échantillon que vous souhaitez exporter.
 4. Cliquez sur **Créer une exportation**.
@@ -50,7 +50,7 @@ Prérequis :
 
 Pour créer une exportation de liste linéaire d'échantillons :
 
-1. Naviguez vers le [projet](../project/projects/manage-projects#view-projects-you-have-access-to) ou le [groupe](../organization/groups/manage#view-groups) qui contient les échantillons que vous souhaitez exporter.
+1. Naviguez vers le [projet](../project/projects/manage-projects.md#view-projects-you-have-access-to) ou le [groupe](../organization/groups/groups-manage.md#view-groups) qui contient les échantillons que vous souhaitez exporter.
 2. Dans la barre latérale gauche, sélectionnez **Échantillons**.
 3. Cochez la case de chaque échantillon que vous souhaitez exporter.
 4. Cliquez sur **Créer une exportation**.
@@ -69,7 +69,7 @@ Prérequis :
 
 Pour créer une exportation d'analyse à partir d'une exécution de flux de travail utilisateur :
 
-1. [Naviguez](../analysis/working-with-workflow-executions#view-user-workflow-executions) vers la page des exécutions de flux de travail.
+1. [Naviguez](../analysis/working-with-workflow-executions.md#view-user-workflow-executions) vers la page des exécutions de flux de travail.
 2. Cliquez sur l'exécution de flux de travail que vous souhaitez exporter.
 3. Cliquez sur **Créer une exportation**.
 4. Une fenêtre contextuelle apparaîtra demandant si vous souhaitez donner un nom à l'exportation et si vous souhaitez recevoir une notification par courriel lorsque l'exportation est prête à être téléchargée. Aucun de ces éléments n'est requis pour créer l'exportation.
@@ -83,7 +83,7 @@ Prérequis :
 
 Pour créer une exportation d'analyse à partir d'une exécution de flux de travail automatisée :
 
-1. Naviguez vers le [projet](../project/projects/manage-projects#view-projects-you-have-access-to) contenant l'exécution de flux de travail.
+1. Naviguez vers le [projet](../project/projects/manage-projects.md#view-projects-you-have-access-to) contenant l'exécution de flux de travail.
 2. Dans la barre latérale gauche, cliquez sur **Exécutions de flux de travail**.
 3. Cliquez sur l'exécution de flux de travail que vous souhaitez exporter.
 4. Cliquez sur **Créer une exportation**.

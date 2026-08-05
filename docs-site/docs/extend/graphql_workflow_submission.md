@@ -6,7 +6,7 @@ title: GraphQL Workflow Submission Tutorial
 
 ### Please Note:
 
-This is an advanced feature. Please familiarize yourself with the [GraphQL API Documentation](./graphql) before continuing with this tutorial.
+This is an advanced feature. Please familiarize yourself with the [GraphQL API Documentation](./graphql.md) before continuing with this tutorial.
 
 ## Overview
 

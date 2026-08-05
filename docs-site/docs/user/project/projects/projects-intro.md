@@ -11,4 +11,4 @@ Access to projects can be granted either through direct user invitation or invit
 Through a project, automated analysis of samples can be set up. Follow these steps to learn how.
 <!-- TODO: link steps to automated WE set up when available -->
 
-Learn how to work with projects under [Manage Projects](manage-projects).
+Learn how to work with projects under [Manage Projects](./manage-projects.md).

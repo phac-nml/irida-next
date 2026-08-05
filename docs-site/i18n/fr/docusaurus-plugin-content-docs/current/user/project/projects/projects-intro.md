@@ -11,4 +11,4 @@ L'accès aux projets peut être accordé soit par invitation directe d'utilisate
 Grâce à un projet, l'analyse automatisée des échantillons peut être configurée. Suivez ces étapes pour apprendre comment.
 <!-- TODO: link steps to automated WE set up when available -->
 
-Apprenez à travailler avec les projets sous [Gérer les projets](manage-projects).
+Apprenez à travailler avec les projets sous [Gérer les projets](./manage-projects.md).
