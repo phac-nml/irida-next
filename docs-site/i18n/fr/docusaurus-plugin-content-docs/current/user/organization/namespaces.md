@@ -24,12 +24,12 @@ IRIDA Next a deux types d'espaces de noms :
 
 Pour déterminer si vous consultez un espace de noms de groupe ou personnel, vous pouvez consulter l'URL. Par exemple :
 
-| Espace de noms pour                                           | Url                                                      | Espace de noms            |
-| :------------------------------------------------------------ | :------------------------------------------------------- | :------------------------ |
-| Un utilisateur avec l'adresse courriel `john.doe@example.com` | `https://irida-next.example.com/john.doe_at_example.com` | `john.doe_at_example.com` |
-| Un groupe nommé `pathogen`                                    | `https://irida-next.example.com/pathogen`                | `pathogen`                |
+| Espace de noms pour                                                 | Url                                                      | Espace de noms            |
+| :------------------------------------------------------------------ | :------------------------------------------------------- | :------------------------ |
+| Un utilisateur avec l'adresse courriel `john.doe@example.com`       | `https://irida-next.example.com/john.doe_at_example.com` | `john.doe_at_example.com` |
+| Un groupe nommé `pathogen`                                          | `https://irida-next.example.com/pathogen`                | `pathogen`                |
 | Un groupe nommé `pathogen` avec un sous-groupe nommé `surveillance` | `https://irida-next.example.com/pathogen/surveillance`   | `pathogen/surveillance`   |
 
 ## Limitations de nommage pour les espaces de noms
 
-Lors du choix d'un nom pour votre espace de noms, gardez à l'esprit les [limitations de caractères](../project/projects/reserved-names#limitations-on-project-names), les [noms de groupe réservés](../organization/groups/reserved-names) et les [noms de projet réservés](../project/projects/reserved-names#reserved-project-names).
+Lors du choix d'un nom pour votre espace de noms, gardez à l'esprit les [limitations de caractères](../project/projects/reserved-names.md#limitations-on-project-names), les [noms de groupe réservés](../organization/groups/reserved-names.md) et les [noms de projet réservés](../project/projects/reserved-names.md#reserved-project-names).

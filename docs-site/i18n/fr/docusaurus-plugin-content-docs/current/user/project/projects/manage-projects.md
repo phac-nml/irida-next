@@ -21,7 +21,7 @@ Pour créer un projet sous votre espace de noms utilisateur :
 
 1. Dans la barre latérale gauche, en haut, sélectionnez (**+**) et **Créer un nouveau projet**, ou si vous êtes sur la vue **Projets**, sélectionnez **Nouveau projet**
 2. Entrez les détails du projet :
-   - Dans le champ **Nom du projet**, entrez le nom du projet. [Voir les limitations pour les noms de projet.](reserved-names)
+   - Dans le champ **Nom du projet**, entrez le nom du projet. [Voir les limitations pour les noms de projet.](./reserved-names.md)
    - L'**URL du projet** est automatiquement définie sur votre espace de noms utilisateur. Vous pouvez la modifier si vous souhaitez que le projet soit sous un espace de noms différent. Notez que les projets ne peuvent vivre que sous un **espace de noms utilisateur** ou **groupe**.
    - Dans le champ **Chemin**, entrez le chemin vers votre projet. Pour modifier le chemin, entrez d'abord le nom du projet, puis modifiez le chemin.
    - Dans le champ **Description**, entrez une description. Ce champ est optionnel.
@@ -37,7 +37,7 @@ Prérequis :
 
 1. Au sein d'un groupe, sélectionnez **Nouveau projet**
 2. Entrez les détails du projet :
-   - Dans le champ **Nom du projet**, entrez le nom du projet. [Voir les limitations pour les noms de projet.](reserved-names)
+   - Dans le champ **Nom du projet**, entrez le nom du projet. [Voir les limitations pour les noms de projet.](./reserved-names.md)
    - L'**URL du projet** est automatiquement définie sur l'espace de noms du groupe actuel. Vous pouvez la modifier si vous souhaitez que le projet soit sous un espace de noms différent. Notez que les projets ne peuvent vivre que sous un **espace de noms utilisateur** ou **groupe**.
    - Dans le champ **Chemin**, entrez le chemin vers votre projet. Pour modifier le chemin, entrez d'abord le nom du projet, puis modifiez le chemin.
    - Dans le champ **Description**, entrez une description. Ce champ est optionnel.
@@ -54,7 +54,7 @@ Pour modifier les détails du projet :
 1. Sélectionnez le projet que vous souhaitez modifier, puis dans la barre latérale gauche, sélectionnez **Paramètres**
 2. Pour mettre à jour le **Nom** ou la **Description** :
 
-   - Dans le champ **Nom du projet**, entrez le nom du projet. [Voir les limitations pour les noms de projet.](reserved-names)
+   - Dans le champ **Nom du projet**, entrez le nom du projet. [Voir les limitations pour les noms de projet.](./reserved-names.md)
    - Dans le champ **Description**, entrez une description. Ce champ est optionnel.
 
 3. Sélectionnez **Mettre à jour le projet**

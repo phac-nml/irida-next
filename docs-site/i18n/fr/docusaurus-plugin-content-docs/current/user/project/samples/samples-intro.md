@@ -8,4 +8,4 @@ Les échantillons appartiennent aux projets et contiennent les fichiers à analy
 
 L'accès aux échantillons dépend de l'appartenance à son projet.
 
-Apprenez à [gérer vos échantillons](manage-samples), [travailler avec les fichiers d'échantillon](sample-files) et [gérer les métadonnées d'échantillon](sample-metadata).
+Apprenez à [gérer vos échantillons](./manage-samples.md), [travailler avec les fichiers d'échantillon](./sample-files.md) et [gérer les métadonnées d'échantillon](./sample-metadata.md).

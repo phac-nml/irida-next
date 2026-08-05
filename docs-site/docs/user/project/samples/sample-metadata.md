@@ -146,7 +146,7 @@ Prerequisites:
 3. From the left sidebar, select **Samples**
 4. Click **Import Metadata**
 
-A dialog will pop-up to select the spreadsheet to be imported. After selecting the spreadsheet file, identify which column contains the sample identifier and whether you'd like to [Ignore empty values](sample-metadata#learn-about-importing-metadata).
+A dialog will pop-up to select the spreadsheet to be imported. After selecting the spreadsheet file, identify which column contains the sample identifier and whether you'd like to [Ignore empty values](./sample-metadata.md#learn-about-importing-metadata).
 
 ## Delete Metadata
 

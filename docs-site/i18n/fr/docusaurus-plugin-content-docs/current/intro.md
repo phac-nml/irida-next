@@ -9,6 +9,6 @@ hide_table_of_contents: true
 
 Bienvenue dans la documentation d'IRIDA Next.
 
-|                                                                                       |                                                                                  |
-| :------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------- |
-| [**Utiliser IRIDA Next**](user)<br />Commencez avec les fonctionnalités d'IRIDA Next. | **Administrer IRIDA Next**<br />Administrez une instance autogérée d'IRIDA Next. |
+|                                                                                                   |                                                                                  |
+| :------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------- |
+| [**Utiliser IRIDA Next**](./user/index.mdx)<br />Commencez avec les fonctionnalités d'IRIDA Next. | **Administrer IRIDA Next**<br />Administrez une instance autogérée d'IRIDA Next. |

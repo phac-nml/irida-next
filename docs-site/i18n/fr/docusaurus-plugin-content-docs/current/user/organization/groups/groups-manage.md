@@ -28,8 +28,8 @@ Pour créer un groupe :
 - À gauche de la zone de recherche, sélectionnez le signe plus puis **Nouveau groupe**.
 
 2. Sélectionnez **Créer un groupe**.
-3. Entrez un nom pour le groupe dans **Nom du groupe**. Pour une liste de mots qui ne peuvent pas être utilisés comme noms de groupe, consultez [noms réservés](../../project/projects/reserved-names).
-4. Entrez un chemin pour le groupe dans **URL du groupe**, qui est utilisé pour l'[espace de noms](../namespaces).
+3. Entrez un nom pour le groupe dans **Nom du groupe**. Pour une liste de mots qui ne peuvent pas être utilisés comme noms de groupe, consultez [noms réservés](../../project/projects/reserved-names.md).
+4. Entrez un chemin pour le groupe dans **URL du groupe**, qui est utilisé pour l'[espace de noms](../namespaces.md).
 
 ## Retirer un groupe
 

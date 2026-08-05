@@ -4,7 +4,7 @@ id: manage-bot-PAT
 title: Gérer les jetons d'accès personnels des comptes de robot
 ---
 
-Les jetons d'accès personnels (PAT) sont nécessaires pour utiliser l'API GraphQL d'IRIDA Next. Consultez [Authentification avec les jetons d'accès personnels](/docs/extend/graphql#authentication-with-personal-access-tokens) pour plus d'informations.
+Les jetons d'accès personnels (PAT) sont nécessaires pour utiliser l'API GraphQL d'IRIDA Next. Consultez [Authentification avec les jetons d'accès personnels](/extend/graphql.md#authentication-with-personal-access-tokens) pour plus d'informations.
 
 ## Voir le jeton d'accès personnel
 

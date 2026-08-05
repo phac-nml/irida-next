@@ -49,7 +49,7 @@ Cela permet une authentification supplémentaire ou des paramètres de serveur p
 
 GA4GH WES et IRIDA Next doivent avoir un répertoire de données (ou un système de stockage cloud équivalent) auquel les deux services peuvent accéder.
 
-[Pour configurer votre service de stockage, consultez ce guide.](configuration/storage.md)
+[Pour configurer votre service de stockage, consultez ce guide.](./storage.md)
 
 #### Nettoyage de l'exécution du flux de travail
 
@@ -72,4 +72,4 @@ Après qu'une exécution de flux de travail soit terminée, tous les fichiers du
 
 ### Développement
 
-[Pour le guide sur la configuration d'un serveur GA4GH WES à des fins de développement d'IRIDA Next, consultez ce guide.](development/integration/ga4gh_wes_sapporo_setup.md)
+[Pour le guide sur la configuration d'un serveur GA4GH WES à des fins de développement d'IRIDA Next, consultez ce guide.](/development/integration/ga4gh_wes_sapporo_setup.md)

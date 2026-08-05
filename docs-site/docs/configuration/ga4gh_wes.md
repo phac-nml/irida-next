@@ -18,9 +18,9 @@ The following fields can be set.
 
 ```yml
 ga4gh_wes:
-  server_url_endpoint: 'https://<some server url>/wes/1.01/'
+  server_url_endpoint: "https://<some server url>/wes/1.01/"
   oauth_token: <some oauth token>
-  headers: { '<some header key>': '<some header value>' }
+  headers: { "<some header key>": "<some header value>" }
 ```
 
 Only `server_url_endpoint` is required by default, but depending on your GA4GH WES server configuration the other fields may also be required.
@@ -49,7 +49,7 @@ This allows for additional authentication or server settings for your specific d
 
 GA4GH WES and IRIDA Next must have a data directory (or equivalent cloud storage system) which both services can access.
 
-[For configuring your storage service, see this guide.](configuration/storage.md)
+[For configuring your storage service, see this guide.](./storage.md)
 
 #### Workflow Execution clean up
 
@@ -72,4 +72,4 @@ After a workflow execution has completed, all files in the `<some blob id>` dire
 
 ### Development
 
-[For the guide on setting up a GA4GH WES server for IRIDA Next development purposes, see this guide.](development/integration/ga4gh_wes_sapporo_setup.md)
+[For the guide on setting up a GA4GH WES server for IRIDA Next development purposes, see this guide.](/development/integration/ga4gh_wes_sapporo_setup.md)

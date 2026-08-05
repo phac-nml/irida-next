@@ -12,7 +12,7 @@ Toutes les demandes de fusion pour IRIDA Next, qu'elles soient écrites par un m
 
 Avant de commencer :
 
-- Familiarisez-vous avec les [critères d'acceptation de contribution](./pull_request_workflow#contribution-acceptance-criteria)
+- Familiarisez-vous avec les [critères d'acceptation de contribution](./pull_request_workflow.md#contribution-acceptance-criteria)
 
 Dès que vous avez du code à réviser, faites **réviser** le code par un réviseur. Le réviseur peut :
 
@@ -29,7 +29,7 @@ L'utilisation de listes de vérification améliore la qualité en génie logicie
 
 #### Qualité
 
-1. Vous avez effectué une auto-révision de cette PR selon les [directives de révision de code](./code_review).
+1. Vous avez effectué une auto-révision de cette PR selon les [directives de révision de code](./code_review.md).
 1. Pour le code que ce changement impacte, vous croyez que les essais automatisés valident les fonctionnalités qui sont très importantes pour les utilisateurs.
 1. Si les essais automatisés existants ne couvrent pas la fonctionnalité ci-dessus, vous avez ajouté les essais nécessaires ou ajouté un problème pour décrire l'écart d'essai d'automatisation et l'avez lié à cette PR.
 1. Vous avez considéré les aspects techniques de l'impact de ce changement sur IRIDA Next.
@@ -71,7 +71,7 @@ L'utilisation de listes de vérification améliore la qualité en génie logicie
 Veuillez garder à l'esprit que la révision de code est un processus qui peut prendre plusieurs itérations, et les réviseurs peuvent repérer des choses plus tard qu'ils n'ont peut-être pas vues la première fois.
 
 - Le premier réviseur de votre code, c'est _vous_. Avant d'effectuer cette première poussée de votre nouvelle branche brillante, lisez l'intégralité du diff. Est-ce que cela a du sens ? Avez-vous inclus quelque chose de non lié à l'objectif global des changements ? Avez-vous oublié de supprimer du code de débogage ?
-- Rédigez une description détaillée comme indiqué dans les [directives de pull request](./pull_request_workflow). Certains réviseurs peuvent ne pas être familiers avec la fonctionnalité ou la zone de la base de code. Des descriptions approfondies aident tous les réviseurs à comprendre votre demande et à tester efficacement.
+- Rédigez une description détaillée comme indiqué dans les [directives de pull request](./pull_request_workflow.md). Certains réviseurs peuvent ne pas être familiers avec la fonctionnalité ou la zone de la base de code. Des descriptions approfondies aident tous les réviseurs à comprendre votre demande et à tester efficacement.
 - Si vous savez que votre changement dépend d'une autre fusion en premier, notez-le dans la description et définissez une dépendance.
 - Soyez reconnaissant pour les suggestions du réviseur. (« Bon point. Je vais faire ce changement. »)
 - Ne le prenez pas personnellement. La révision porte sur le code, pas sur vous.

@@ -11,7 +11,7 @@ Nous accueillons les pull requests de tous, avec des corrections et des amélior
 ### Meilleures pratiques
 
 - Si le changement n'est pas trivial, nous vous encourageons à entamer une discussion avec un membre de l'équipe. Vous pouvez le faire en les identifiant dans une PR avant de soumettre le code pour révision. Parler aux membres de l'équipe peut être utile lors de la prise de décisions de conception. Communiquer l'intention derrière vos changements peut également aider à accélérer les révisions de pull request.
-- Lorsque vous faites réviser votre code et lorsque vous révisez des pull requests, veuillez garder à l'esprit les [directives de révision de code](./code_review).
+- Lorsque vous faites réviser votre code et lorsque vous révisez des pull requests, veuillez garder à l'esprit les [directives de révision de code](./code_review.md).
 
 ### Rester simple
 
@@ -75,7 +75,7 @@ Si une régression se produit, nous préférons que vous annuliez le changement.
 
 ### Approbation
 
-1. La [liste de vérification d'acceptation de PR](./code_review#acceptance-checklist) a été cochée comme confirmée dans la PR.
+1. La [liste de vérification d'acceptation de PR](./code_review.md#acceptance-checklist) a été cochée comme confirmée dans la PR.
 1. Révisée par les réviseurs pertinents, et toutes les préoccupations sont traitées pour la disponibilité, les régressions et la sécurité. Les révisions de documentation doivent avoir lieu dès que possible, mais elles ne doivent pas bloquer une demande de fusion.
 1. Votre pull request a au moins 1 approbation, mais selon vos changements, elle pourrait nécessiter des approbations supplémentaires.
    - Vous n'êtes pas obligé de sélectionner des réviseurs spécifiques, mais vous pouvez le faire si vous voulez vraiment que des personnes spécifiques approuvent votre pull request.
@@ -83,4 +83,4 @@ Si une régression se produit, nous préférons que vous annuliez le changement.
 
 ## Sujets connexes
 
-- [Faire réviser votre pull request](./code_review#having-your-pull-request-reviewed)
+- [Faire réviser votre pull request](./code_review.md#having-your-pull-request-reviewed)
