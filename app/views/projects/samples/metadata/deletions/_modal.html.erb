@@ -1,5 +1,8 @@
+<%# locals: (open:, sample: @sample) -%>
+
+
 <%= render Viral::DialogComponent.new(open: open, classes: ["overflow-x-visible"]) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_header(title: t(".title")) %>
   <%= turbo_frame_tag("deletion-alert") %>
 
   <div class="mb-4 font-normal text-slate-500 dark:text-slate-400">
@@ -22,7 +25,7 @@
   <%= form_for(:deletion, url: namespace_project_sample_metadata_deletion_path,
     data: {
       controller: "projects--samples--metadata--destroy",
-      'projects--samples--metadata--destroy-storage-key-value': "metadata-#{@sample.id}",
+      'projects--samples--metadata--destroy-storage-key-value': "metadata-#{sample.id}",
       action: 'turbo:submit-end->projects--samples--metadata--destroy#clear'
     }, method: :delete) do |form| %>
     <div data-projects--samples--metadata--destroy-target="field"></div>

@@ -1,7 +1,7 @@
-<%# locals: (open:, workflow_execution:) %>
+<%# locals: (open:, workflow_execution: @workflow_execution) -%>
 
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
-  <% dialog.with_header(
+  <%= dialog.with_header(
     title:
       t(
         "groups.workflow_executions.edit_dialog.title",

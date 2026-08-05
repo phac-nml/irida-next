@@ -1,16 +1,19 @@
+<%# locals: (open:, access_levels: @access_levels, namespace: @namespace, namespace_group_link: @namespace_group_link, tab: @tab) -%>
+
+
 <%= render Viral::DialogComponent.new(id: 'edit-group-link-dialog', open: open) do |dialog| %>
-  <% dialog.with_header(title: t(:"groups.group_links.edit.title")) %>
+  <%= dialog.with_header(title: t(:"groups.group_links.edit.title")) %>
 
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">
       <%= I18n.t(
       "groups.group_links.edit.description",
-      name: @namespace_group_link.group.name,
+      name: namespace_group_link.group.name,
     ) %>
     </p>
   </div>
 
-  <%= form_with(model: @namespace_group_link, url: group_group_link_path(@namespace, @namespace_group_link, tab: @tab), method: :patch,
+  <%= form_with(model: namespace_group_link, url: group_group_link_path(namespace, namespace_group_link, tab: tab), method: :patch,
 html: { novalidate: true }) do |form| %>
     <% form_id = "update-group-group-link" %>
     <% expires_at_input_id = "#{form.field_id(:expires_at)}-input" %>
@@ -23,7 +26,7 @@ html: { novalidate: true }) do |form| %>
 
       <%= render partial: "shared/form/required_field_legend" %>
 
-      <% invalid_group_access_level = @namespace_group_link.errors.include?(:group_access_level) %>
+      <% invalid_group_access_level = namespace_group_link.errors.include?(:group_access_level) %>
 
       <div class="form-field <%= 'invalid' if invalid_group_access_level %>">
         <%= form.label :group_access_level,
@@ -34,8 +37,8 @@ html: { novalidate: true }) do |form| %>
 
         <%= form.select :group_access_level,
                   options_for_select(
-                    @access_levels,
-                    @namespace_group_link.group_access_level,
+                    access_levels,
+                    namespace_group_link.group_access_level,
                   ),
                   {},
                   {
@@ -57,13 +60,13 @@ html: { novalidate: true }) do |form| %>
                      data: {
                        placeholder: I18n.t('common.actions.select'),
                      },
-                     value: @namespace_group_link.group_access_level,
+                     value: namespace_group_link.group_access_level,
                    } %>
 
         <% if invalid_group_access_level %>
           <%= render "shared/form/field_errors",
         id: form.field_id(:group_access_level, "error"),
-        errors: @namespace_group_link.errors.full_messages_for(:group_access_level) %>
+        errors: namespace_group_link.errors.full_messages_for(:group_access_level) %>
         <% end %>
 
         <p id="<%= form.field_id(:group_access_level, "hint") %>" class="field-hint">
@@ -71,7 +74,7 @@ html: { novalidate: true }) do |form| %>
         </p>
       </div>
 
-      <% invalid_expires_at = @namespace_group_link.errors.include?(:expires_at) %>
+      <% invalid_expires_at = namespace_group_link.errors.include?(:expires_at) %>
 
       <% if invalid_expires_at %>
         <% error_container_id = form.field_id(:expires_at, "error") %>
@@ -83,13 +86,13 @@ html: { novalidate: true }) do |form| %>
         input_name: "namespace_group_link[expires_at]",
         label: t("groups.group_links.new.label.access_expiration"),
         errored: invalid_expires_at,
-        selected_date: @namespace_group_link.expires_at
+        selected_date: namespace_group_link.expires_at
       ) %>
 
         <% if invalid_expires_at %>
           <%= render "shared/form/field_errors",
       id: error_container_id,
-      errors: @namespace_group_link.errors[:expires_at] %>
+      errors: namespace_group_link.errors[:expires_at] %>
         <% end %>
       </div>
 

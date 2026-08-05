@@ -1,3 +1,5 @@
+<%# locals: (sample: @sample) -%>
+
 <div
   data-controller="projects--samples--metadata--create"
   data-projects--samples--metadata--create-key-missing-value="<%= t("projects.samples.metadata.new_metadata_modal.required_error.key") %>"
@@ -26,7 +28,7 @@
     </div>
   </div>
 
-  <%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :post, data: { "projects--samples--metadata--create-target": "form" }) do |form| %>
+  <%= form_with(model: sample, url: sample_metadata_path(sample), method: :post, data: { "projects--samples--metadata--create-target": "form" }) do |form| %>
     <div class="grid gap-2">
       <%= render partial: "shared/form/required_field_legend" %>
 

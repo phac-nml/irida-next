@@ -3,7 +3,7 @@
 <% sample_deletion_reason_enabled = Flipper.enabled?(:sample_deletion_reason, current_user) %>
 
 <%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_header(title: t(".title")) %>
   <%= turbo_frame_tag("deletion-alert") %>
 
   <div
@@ -15,7 +15,7 @@
       <%= t(".description", sample_name: sample.name) %>
     </p>
 
-    <%= form_for((sample_deletion_reason_enabled ? sample_deletion_form : :deletion), as: :deletion, url: samples_deletions_path(namespace_id: namespace.id),
+    <%= form_for(:deletion, url: samples_deletions_path(namespace_id: namespace.id, 'destroy[sample_ids]': [sample.id]),
             data: {
               turbo_frame: "_top",
             }
