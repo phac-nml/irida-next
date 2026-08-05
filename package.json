@@ -14,7 +14,7 @@
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.8.0",
-    "jsdom": "^30.0.0",
+    "jsdom": "^30.0.1",
     "playwright": "1.61.1",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
