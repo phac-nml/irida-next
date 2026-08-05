@@ -438,9 +438,9 @@ input[type="search"] {
     @apply outline-2 outline-offset-2;
   }
 
-  /* Disabled state for button */
+  /* ARIA-disabled buttons remain interactive so they can expose contextual feedback. */
   &[aria-disabled="true"] {
-    @apply pointer-events-none cursor-not-allowed opacity-50;
+    @apply cursor-not-allowed opacity-50;
   }
 }
 

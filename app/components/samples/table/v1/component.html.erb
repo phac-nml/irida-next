@@ -8,6 +8,24 @@
   <% end %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
+      <% if @abilities[:select_samples] %>
+        <div id="selection-limit-alert" class="mb-4 hidden" data-selection-target="limitAlert">
+          <%= viral_alert(type: :warning, dismissible: false) do %>
+            <span data-selection-target="limitAlertMessage">
+              <%= t(
+                "components.selection.limit.selection_limit_reached",
+                max: Irida::SelectionLimits::MAX_COUNT,
+              ) %>
+            </span>
+          <% end %>
+        </div>
+        <%= render LiveRegionComponent.new(
+          controller: "selection",
+          target: "limitAlertStatus",
+          politeness: :assertive,
+        ) %>
+      <% end %>
+
       <%= render LiveRegionComponent.new(controller: "selection") %>
 
       <table
@@ -216,21 +234,21 @@
 
           <p class="text-base leading-8 text-wrap text-slate-900 dark:text-white">
             <span data-message-type="wov" class="hidden">
-              <%= raw t(
+              <%= sanitize(t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
-              ) %>
+              ), tags: %w[kbd span], attributes: %w[class]) %>
             </span>
 
             <span data-message-type="woov" class="hidden">
-              <%= raw t(
+              <%= sanitize(t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
-              ) %>
+              ), tags: %w[kbd span], attributes: %w[class]) %>
             </span>
 
             <span data-message-type="wonv" class="hidden">
-              <%= raw t(
+              <%= sanitize(t(
                 "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
-              ) %>
+              ), tags: %w[kbd span], attributes: %w[class]) %>
             </span>
           </p>
 
