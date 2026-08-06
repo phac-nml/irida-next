@@ -8,7 +8,11 @@ module WorkflowExecutions
       return false unless workflow_execution
 
       # check that workflow_execution has namespace
-      return false if validate_namespace && (!workflow_execution.namespace || workflow_execution.namespace.deleted?)
+      if validate_namespace &&
+         (!workflow_execution.namespace || workflow_execution.namespace.deleted? ||
+         (workflow_execution.namespace.project_namespace? && workflow_execution.namespace.archived?))
+        return false
+      end
 
       # check that the state is in expected states
       return false if expected_states&.exclude?(workflow_execution.state.to_sym)

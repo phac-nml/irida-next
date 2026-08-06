@@ -31,6 +31,12 @@ module WorkflowExecutions
       assert_not WorkflowExecutionJob.new.validate_initial_state(@workflow_execution_new)
     end
 
+    test 'namespace archived after workflow execution created' do
+      @workflow_execution_new.namespace.archived_at = Time.zone.now
+      @workflow_execution_new.namespace.save!
+      assert_not WorkflowExecutionJob.new.validate_initial_state(@workflow_execution_new)
+    end
+
     test 'state in expected states' do
       assert WorkflowExecutionJob.new.validate_initial_state(
         @workflow_execution_submitted, %i[prepared submitted]
