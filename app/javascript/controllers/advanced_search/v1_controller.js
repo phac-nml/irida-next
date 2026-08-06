@@ -202,7 +202,7 @@ export default class AdvancedSearchController extends Controller {
           .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
 
         const updatedCondition = this.#conditionElements(group)[conditionIndex];
-        const updatedValue = updatedCondition?.querySelector(".value");
+        const updatedValue = this.#getValueInput(updatedCondition);
         updatedValue?.classList.remove(...this.#hiddenClasses);
         this.#updateValueFieldForEnum(
           updatedValue,
@@ -572,6 +572,7 @@ export default class AdvancedSearchController extends Controller {
   }
 
   #getValueInput(condition) {
+    if (!condition) return null;
     const values = condition.querySelectorAll(".value");
     if (values.length === 0) {
       return null;
