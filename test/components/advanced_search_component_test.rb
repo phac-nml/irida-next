@@ -107,10 +107,14 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_exists') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_exists') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_equals')
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_less_than_equals') # rubocop:disable Layout/LineLength
           assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_greater_than_equals') # rubocop:disable Layout/LineLength
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_exists')
+          assert_text I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_exists') # rubocop:disable Layout/LineLength
         end
 
         within first("div[data-controller='combobox--v1']") do

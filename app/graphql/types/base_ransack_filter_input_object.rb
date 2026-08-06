@@ -30,10 +30,14 @@ module Types
       'DATE_LESS_THAN_EQUALS' => 'date_less_than_equals',
       'DATE_EQUALS' => 'date_equals',
       'DATE_NOT_EQUALS' => 'date_not_equals',
+      'DATE_EXISTS' => 'date_exists',
+      'DATE_NOT_EXISTS' => 'date_not_exists',
       'NUMERIC_GREATER_THAN_EQUALS' => 'numeric_greater_than_equals',
       'NUMERIC_LESS_THAN_EQUALS' => 'numeric_less_than_equals',
       'NUMERIC_EQUALS' => 'numeric_equals',
       'NUMERIC_NOT_EQUALS' => 'numeric_not_equals',
+      'NUMERIC_EXISTS' => 'numeric_exists',
+      'NUMERIC_NOT_EXISTS' => 'numeric_not_exists',
       'TEXT_EQUALS' => 'text_equals',
       'TEXT_NOT_EQUALS' => 'text_not_equals',
       'TEXT_IN' => 'text_in',
@@ -45,14 +49,17 @@ module Types
     graphql_name 'SampleAdvancedSearchConditionOperator'
     description 'Sample Advanced Search Condition Operator'
 
-    def self.enum_values(_context)
+    def self.enum_values(_context) # rubocop:disable Metrics/MethodLength
       standard_description = if Flipper.enabled?(:advanced_search_metadata_operators)
                                'Use to filter non-metadata fields'
                              end
-
+      exists_description = ('Use to filter any field' if Flipper.enabled?(:advanced_search_metadata_operators))
       all_values = STANDARD_OPERATORS_FOR_ENUM.map do |enum_name, enum_value|
-        GraphQL::Schema::EnumValue.new(enum_name, description: standard_description,
-                                                  value: enum_value, owner: self)
+        GraphQL::Schema::EnumValue.new(
+          enum_name,
+          description: enum_name.include?('EXISTS') ? exists_description : standard_description,
+          value: enum_value, owner: self
+        )
       end
 
       return all_values unless Flipper.enabled?(:advanced_search_metadata_operators)

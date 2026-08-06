@@ -69,18 +69,23 @@ module AdvancedSearch
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_not_in') => 'text_not_in', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_starts_with') => 'text_starts_with', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.text.text_ends_with') => 'text_ends_with' # rubocop:disable Layout/LineLength
+
             },
             I18n.t('components.advanced_search_component.v1.operations.metadata.labels.numeric') => {
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_equals') => 'numeric_equals', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_equals') => 'numeric_not_equals', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_less_than_equals') => 'numeric_less_than_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') => 'numeric_greater_than_equals' # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_greater_than_equals') => 'numeric_greater_than_equals', # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_exists') => 'numeric_exists', # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.numeric.numeric_not_exists') => 'numeric_not_exists' # rubocop:disable Layout/LineLength
             },
             I18n.t('components.advanced_search_component.v1.operations.metadata.labels.date') => {
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_equals') => 'date_equals', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_equals') => 'date_not_equals', # rubocop:disable Layout/LineLength
               I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_less_than_equals') => 'date_less_than_equals', # rubocop:disable Layout/LineLength
-              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_greater_than_equals') => 'date_greater_than_equals' # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_greater_than_equals') => 'date_greater_than_equals', # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_exists') => 'date_exists', # rubocop:disable Layout/LineLength
+              I18n.t('components.advanced_search_component.v1.operations.metadata.operations.date.date_not_exists') => 'date_not_exists' # rubocop:disable Layout/LineLength
             }
           } }
 
