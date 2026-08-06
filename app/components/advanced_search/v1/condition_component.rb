@@ -93,6 +93,12 @@ module AdvancedSearch
 
         value.to_s.humanize
       end
+
+      def field_options_for_select
+        options_for_select(field_options, @condition.field).concat(
+          grouped_options_for_select(grouped_field_options, @condition.field)
+        )
+      end
     end
   end
 end

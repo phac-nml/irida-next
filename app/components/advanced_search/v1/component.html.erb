@@ -138,6 +138,21 @@
     <% end %>
   </template>
 
+  <template data-advanced-search--v1-target="betweenValueTemplate">
+    <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+      <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "between") %>
+
+      <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
+        <%= render AdvancedSearch::V1::ValueComponent.new(
+          conditions_form: conditions_form,
+          group_index: "GROUP_INDEX_PLACEHOLDER",
+          condition: condition,
+          condition_index: "CONDITION_INDEX_PLACEHOLDER",
+        ) %>
+      <% end %>
+    <% end %>
+  </template>
+
   <template data-advanced-search--v1-target="selectValueTemplate">
     <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
       <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "=") %>

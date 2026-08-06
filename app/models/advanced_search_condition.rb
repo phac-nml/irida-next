@@ -11,6 +11,8 @@ class AdvancedSearchCondition
   attribute :operator
   attribute :value
 
+  attr_accessor :value
+
   def empty?
     field.blank? && operator.blank? && value_empty?
   end
@@ -21,5 +23,13 @@ class AdvancedSearchCondition
     return value.none?(&:nil?) if value.is_a?(Array)
 
     value.blank?
+  end
+
+  def from_value
+    value&.[](0)
+  end
+
+  def to_value
+    value&.[](1)
   end
 end
