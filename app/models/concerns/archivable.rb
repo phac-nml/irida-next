@@ -4,8 +4,6 @@
 module Archivable
   extend ActiveSupport::Concern
 
-  ARCHIVABLE_TYPES = ['Project'].freeze
-
   included do
     scope :archived, -> { where.not(archived_at: nil) }
     scope :not_archived, -> { where(archived_at: nil) }
@@ -16,7 +14,7 @@ module Archivable
   end
 
   def archivable?
-    archived_at.blank? && ARCHIVABLE_TYPES.include?(type)
+    archived_at.blank?
   end
 
   def archive(timestamp = Time.current)
