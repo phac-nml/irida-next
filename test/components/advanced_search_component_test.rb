@@ -420,4 +420,35 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
       end
     end
   end
+
+  test 'text_in and text_not_in render list input' do
+    Flipper.enable(:advanced_search_metadata_operators)
+    visit('rails/view_components/advanced_search_component/empty')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within 'dialog' do
+        assert_accessible
+        assert_selector 'h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        assert_selector ".dialog--header button[aria-label='#{I18n.t('components.dialog.close')}']"
+        within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+            assert_no_selector 'div[data-controller="list-input"]'
+            find("input[id$='field']").send_keys('age', :enter)
+            find("select[name$='[operator]']").find("option[value='text_in']").select_option
+            assert_selector 'div[data-controller="list-input"]'
+
+            find("select[name$='[operator]']").find("option[value='text_equals']").select_option
+            assert_no_selector 'div[data-controller="list-input"]'
+
+            find("select[name$='[operator]']").find("option[value='text_not_in']").select_option
+            assert_selector 'div[data-controller="list-input"]'
+          end
+        end
+      end
+    end
+  ensure
+    Flipper.enable(:advanced_search_with_auto_complete)
+  end
 end

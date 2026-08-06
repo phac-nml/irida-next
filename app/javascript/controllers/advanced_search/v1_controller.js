@@ -193,7 +193,12 @@ export default class AdvancedSearchController extends Controller {
     } else {
       const selectedField = this.#selectedConditionField(condition);
       if (Object.hasOwn(this.enumFieldsValue, selectedField)) {
-        const templateTarget = ["in", "not_in"].includes(operator)
+        const templateTarget = [
+          "in",
+          "not_in",
+          "text_in",
+          "text_not_in",
+        ].includes(operator)
           ? this.listSelectValueTemplateTarget
           : this.selectValueTemplateTarget;
         value.outerHTML = templateTarget.innerHTML
@@ -210,7 +215,12 @@ export default class AdvancedSearchController extends Controller {
           operator,
         );
       } else {
-        const templateTarget = ["in", "not_in"].includes(operator)
+        const templateTarget = [
+          "in",
+          "not_in",
+          "text_in",
+          "text_not_in",
+        ].includes(operator)
           ? this.listValueTemplateTarget
           : this.valueTemplateTarget;
         value.outerHTML = templateTarget.innerHTML
@@ -488,7 +498,9 @@ export default class AdvancedSearchController extends Controller {
       return;
     }
 
-    const listOperator = ["in", "not_in"].includes(operator);
+    const listOperator = ["in", "not_in", "text_in", "text_not_in"].includes(
+      operator,
+    );
     const select = listOperator
       ? valueContainer.querySelector("select[name$='[value][]']")
       : valueContainer.querySelector("select[name$='[value]']");
