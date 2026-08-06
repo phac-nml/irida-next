@@ -12,90 +12,244 @@ module Namespaces
 
     test '#update?' do
       assert @policy.apply(:update?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:update?)
     end
 
     test '#create_member?' do
       assert @policy.apply(:create_member?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:create_member?)
     end
 
     test '#update_member?' do
       assert @policy.apply(:update_member?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:update_member?)
     end
 
     test '#destroy_member?' do
       assert @policy.apply(:destroy_member?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:destroy_member?)
     end
 
     test '#member_listing?' do
       assert @policy.apply(:member_listing?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert policy.apply(:member_listing?)
     end
 
     test '#link_namespace_with_group?' do
       assert @policy.apply(:link_namespace_with_group?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:link_namespace_with_group?)
     end
 
     test '#unlink_namespace_with_group?' do
       assert @policy.apply(:unlink_namespace_with_group?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:unlink_namespace_with_group?)
     end
 
     test '#update_namespace_with_group_link?' do
       assert @policy.apply(:update_namespace_with_group_link?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:update_namespace_with_group_link?)
     end
 
     test '#create_automated_workflow_executions?' do
       assert @policy.apply(:create_automated_workflow_executions?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:create_automated_workflow_executions?)
     end
 
     test '#destroy_automated_workflow_executions?' do
       assert @policy.apply(:destroy_automated_workflow_executions?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:destroy_automated_workflow_executions?)
     end
 
     test '#update_automated_workflow_executions?' do
       assert @policy.apply(:update_automated_workflow_executions?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:update_automated_workflow_executions?)
     end
 
     test '#view_automated_workflow_executions?' do
       assert @policy.apply(:view_automated_workflow_executions?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert policy.apply(:view_automated_workflow_executions?)
     end
 
     test '#view_workflow_executions?' do
-      assert @policy.apply(:view_automated_workflow_executions?)
+      assert @policy.apply(:view_workflow_executions?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:view_workflow_executions)
     end
 
     test '#update_sample_metadata?' do
       assert @policy.apply(:update_sample_metadata?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:update_sample_metadata?)
     end
 
     test '#import_samples_and_metadata?' do
       assert @policy.apply(:import_samples_and_metadata?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:import_samples_and_metadata?)
     end
 
     test '#create_metadata_templates?' do
       assert @policy.apply(:create_metadata_templates?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:create_metadata_templates?)
     end
 
     test '#update_metadata_templates?' do
       assert @policy.apply(:update_metadata_templates?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:update_metadata_templates?)
     end
 
     test '#destroy_metadata_templates?' do
       assert @policy.apply(:destroy_metadata_templates?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:destroy_metadata_templates?)
     end
 
     test '#view_metadata_templates?' do
       assert @policy.apply(:view_metadata_templates?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert policy.apply(:view_metadata_templates?)
     end
 
     test '#destroy_workflow_executions?' do
       assert @policy.apply(:destroy_workflow_executions?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:destroy_workflow_executions?)
     end
 
     test '#cancel_workflow_executions?' do
       assert @policy.apply(:cancel_workflow_executions?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:cancel_workflow_executions?)
     end
 
     test '#update_samplesheet_data?' do
       assert @policy.apply(:update_samplesheet_data?)
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:update_samplesheet_data?)
     end
   end
 end
