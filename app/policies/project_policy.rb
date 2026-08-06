@@ -365,7 +365,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
       ).include_route
   end
 
-  scope_for :relation, :group_projects do |relation, options|
+  scope_for :relation, :group_projects do |relation, options| # rubocop:disable Metrics/BlockLength
     group = options[:group]
     minimum_access_level = if options.key?(:minimum_access_level)
                              options[:minimum_access_level]
@@ -385,7 +385,9 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
               .not_expired
               .where(group_id: group.self_and_descendant_ids, group_access_level: minimum_access_level..)
               .select(:namespace_id)
-        ).self_and_descendants.where(type: 'Project').not_archived.select(:id)
+        ).self_and_descendants.merge(
+          Namespaces::ProjectNamespace.not_archived
+        ).where(type: Namespaces::ProjectNamespace.sti_name).select(:id)
       ).where(
         Arel.sql(
           'namespace_id in (select id from direct_group_project_namespaces)

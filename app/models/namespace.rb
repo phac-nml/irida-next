@@ -7,7 +7,6 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Routable
   include TrackActivity
   include Namespaces::Traversal::RouteBased
-  include Archivable
 
   has_logidze
   acts_as_paranoid
