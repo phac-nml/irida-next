@@ -252,6 +252,7 @@ module AdvancedSearch
     def validate_between_values(condition) # rubocop:disable Metrics/AbcSize
       unless condition.value.is_a?(Array) && condition.value.length == 2
         condition.errors.add :value, :invalid_between_value
+        return
       end
 
       value_comparison = if condition.operator == 'numeric_between'
