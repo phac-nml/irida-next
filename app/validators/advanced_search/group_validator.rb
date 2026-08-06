@@ -257,7 +257,7 @@ module AdvancedSearch
       value_comparison = if condition.operator == 'numeric_between'
                            condition.value[0].to_f <=> condition.value[1].to_f
                          else
-                           condition.value[0] <=> condition.value[1]
+                           condition.value[0].downcase <=> condition.value[1].downcase
                          end
 
       return unless value_comparison == 1
