@@ -612,5 +612,26 @@ module AdvancedSearch
     ensure
       Flipper.disable(:advanced_search_metadata_operators)
     end
+
+    test 'between operators with different cases' do
+      Flipper.enable(:advanced_search_metadata_operators)
+      # Z comes before a unless .downcased
+      record1 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: 'between',
+                                                                value: %w[a Z])])]
+      )
+
+      assert record1.valid?
+
+      record2 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field',
+                                                                operator: 'text_between',
+                                                                value: %w[a Z])])]
+      )
+
+      assert record2.valid?
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
   end
 end
