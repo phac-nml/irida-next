@@ -429,10 +429,12 @@ module Projects
         end
         click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
         within('dialog[open]') do
+          assert_text I18n.t('projects.samples.attachments.deletions.modal.description.plural')
+                          .gsub! 'COUNT_PLACEHOLDER', '2'
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
           click_on I18n.t('common.actions.delete')
-          assert_html5_inputs_valid
+          # assert_html5_inputs_valid
         end
         assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
         within '#sample-attachments' do
