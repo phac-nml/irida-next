@@ -206,9 +206,10 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     declarative (0.0.20)
-    dentaku (3.5.7)
-      bigdecimal
-      concurrent-ruby
+    dentaku (4.0.2)
+      bigdecimal (>= 3.1)
+      concurrent-ruby (~> 1.1)
+      tsort (>= 0.1.1)
     devise (5.0.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
