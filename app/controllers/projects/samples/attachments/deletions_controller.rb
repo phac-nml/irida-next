@@ -19,6 +19,8 @@ module Projects
         end
 
         def destroy # rubocop:disable Metrics/MethodLength
+          puts 'hihihidfsfasdhih'
+          puts deletion_params
           authorize! @sample, to: :destroy_attachment?
 
           attachments_to_delete = get_attachments(deletion_params['attachment_ids'])
