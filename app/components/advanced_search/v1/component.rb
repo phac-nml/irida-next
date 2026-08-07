@@ -29,8 +29,7 @@ module AdvancedSearch
 
       def enum_operation_options
         enum_operators = {}
-        if Flipper.enabled?(:advanced_search_metadata_operators) &&
-           Flipper.enabled?(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+        if Flipper.enabled?(:advanced_search_metadata_operators)
           # flatten metadata operators to exclude optgroup labeling
           metadata_operators = operation_options['metadata']
                                .values
