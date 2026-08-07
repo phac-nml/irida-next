@@ -1,11 +1,13 @@
-<% if @page == 1 %>
+<%# locals: (page:, attachments:) -%>
+
+<% if page == 1 %>
   <%= turbo_stream.replace "list_selections" do %>
     <%= turbo_frame_tag "list_selections" %>
   <% end %>
 <% end %>
 
 <%= turbo_stream.append("list_selections") do %>
-  <% @attachments.each do |attachment| %>
+  <% attachments.each do |attachment| %>
     <%= render "shared/attachments/list_attachment", attachment: %>
   <% end %>
 <% end %>
