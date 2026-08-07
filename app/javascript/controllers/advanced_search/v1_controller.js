@@ -328,7 +328,7 @@ export default class AdvancedSearchController extends Controller {
     blankOption.value = "";
     blankOption.text = "";
     operator.appendChild(blankOption);
-    console.log(this.enumOperationsValue);
+
     if (this.#enumHasValues(enumConfig)) {
       if (
         selectedField.startsWith("metadata.") &&

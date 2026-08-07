@@ -70,7 +70,6 @@ module AdvancedSearch
           metadata_operators.select { |_, value| AdvancedSearch::ENUM_OPERATOR_VALUES['metadata'].include?(value) }
         else
           @operations['standard'].select { |_, value| AdvancedSearch::ENUM_OPERATOR_VALUES['standard'].include?(value) }
-
         end
       end
 
