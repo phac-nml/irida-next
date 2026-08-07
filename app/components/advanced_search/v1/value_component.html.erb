@@ -12,7 +12,7 @@
 >
   <%= @conditions_form.label :value, data: { required: true } %>
 
-  <% if %w[in not_in].include?(@condition.operator) %>
+  <% if %w[in not_in text_in text_not_in].include?(@condition.operator) %>
     <% if @options.nil? %>
       <div
         data-controller="list-input"

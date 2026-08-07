@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 module AdvancedSearch
-  ENUM_OPERATOR_VALUES = %w[= != in not_in].freeze
+  ENUM_OPERATOR_VALUES = {
+    'metadata' => %w[text_equals text_not_equals text_in text_not_in],
+    'standard' => %w[= != in not_in]
+  }.freeze
 
   # Builds field option payloads for advanced-search UI rendering.
   class Fields
