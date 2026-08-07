@@ -78,13 +78,12 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           scope module: :attachments, as: :attachments do
             collection do
               resource :concatenation, only: %i[create new]
-            end
-            collection do
               resource :deletion, only: %i[new destroy]
             end
           end
           collection do
             get :select
+            post :list
           end
           get :new_destroy
         end

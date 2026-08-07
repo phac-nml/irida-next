@@ -1718,7 +1718,13 @@ fr:
             partial_success: Certains fichiers ont été supprimés avec succès.
             success: Les fichiers ont été supprimés avec succès.
           modal:
-            description: 'Les fichiers suivants ont été sélectionnés pour suppression :'
+            description:
+              plural: 'Les COUNT_PLACEHOLDER fichiers suivants ont été sélectionnés pour être supprimés :'
+              singular: 'Le fichier suivant a été sélectionné pour être supprimé :'
+              zero: Aucun fichier n'a été sélectionné pour la suppression.
+            files: Fichiers
+            loading: Chargement...
+            spinner: Suppression des fichiers. Cela peut prendre un certain temps....
             title: Supprimer des fichiers
         destroy:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
