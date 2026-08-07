@@ -28,11 +28,18 @@ module AdvancedSearch
       end
 
       def enum_operation_options
-        operation_options['standard'].select { |_, value| enum_operation_values.include?(value) }
-      end
+        enum_operators = {}
+        if Flipper.enabled?(:advanced_search_metadata_operators) &&
+           Flipper.enabled?(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+          # flatten metadata operators to exclude optgroup labeling
+          metadata_operators = operation_options['metadata']
+                               .values
+                               .reduce({}, :merge)
+          enum_operators['metadata'] = metadata_operators.select { |_, value| AdvancedSearch::ENUM_OPERATOR_VALUES['metadata'].include?(value) }
+        end
 
-      def enum_operation_values
-        AdvancedSearch::ENUM_OPERATOR_VALUES
+        enum_operators['standard'] = operation_options['standard'].select { |_, value| AdvancedSearch::ENUM_OPERATOR_VALUES['standard'].include?(value) }
+        enum_operators
       end
 
       def operation_options # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
