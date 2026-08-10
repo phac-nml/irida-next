@@ -1,3 +1,5 @@
+<%# locals: () %>
+
 <%# Override ActiveAdmin 4.0.0.beta22 to avoid rendering false as an HTML attribute. %>
 <div
   id="main-menu"
@@ -21,10 +23,14 @@
         <% end %>
       <% end %>
 
-      <li <%= "data-open" if current_menu_item?(item) %> class="group" data-item-id="<%= item.id %>">
+      <%= tag.li(
+            class: "group",
+            data: { item_id: item.id, open: (true if current_menu_item?(item)) }
+          ) do %>
         <% if children %>
           <% if url.present? && url == "#" %>
             <button
+              type="button"
               data-menu-button
               class="
                 flex w-full items-center gap-x-2 rounded-md p-2 text-sm text-gray-600 hover:text-gray-900
@@ -52,6 +58,7 @@
               <%= label %>
 
               <button
+                type="button"
                 class="
                   flex items-center p-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400
                   dark:hover:text-white
@@ -89,7 +96,7 @@
         <% else %>
           <%= label %>
         <% end %>
-      </li>
+      <% end %>
     <% end %>
   </ul>
 </div>

@@ -73,6 +73,9 @@ linter:
       enabled: true
     html-no-block-inside-inline:
       enabled: true
+      # ActiveAdmin icon buttons use inline <svg>; Herb treats unknown <svg> as block.
+      exclude:
+        - "app/views/active_admin/**"
     html-no-space-in-tag:
       enabled: true
     html-no-title-attribute:

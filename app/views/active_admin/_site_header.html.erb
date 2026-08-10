@@ -1,3 +1,5 @@
+<%# locals: (title:) %>
+
 <%# Override ActiveAdmin 4.0.0.beta22 so the user menu's accessible name is attached to its semantic list. %>
 <div
   class="
@@ -6,6 +8,7 @@
   "
 >
   <button
+    type="button"
     class="
       focus-visible:ring-ring inline-flex h-8 w-8 items-center justify-center pe-3 text-sm text-gray-500
       focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-hidden
@@ -81,6 +84,7 @@
   </button>
 
   <button
+    type="button"
     id="user-menu-button"
     class="flex h-9 w-9 items-center justify-center text-sm text-gray-500 focus:outline-hidden dark:text-gray-200"
     data-dropdown-toggle="user-menu"
