@@ -1,4 +1,4 @@
-<%# locals: (authorized_namespaces: @authorized_namespaces, transfer_form: @transfer_form) -%>
+<%# locals: (confirm_value:, authorized_namespaces: @authorized_namespaces, transfer_form: @transfer_form) -%>
 
 <%= form_with(model: transfer_form, url: group_transfer_path, method: :put, class: "grid gap-4", id: "edit_advanced_transfer_form",
 data: {

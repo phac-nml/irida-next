@@ -1,4 +1,4 @@
-<%# locals: (open:, listing_attachments: @listing_attachments) -%>
+<%# locals: (open:, file_selector_params:, listing_attachments: @listing_attachments) -%>
 
 <%= render Viral::DialogComponent.new(open: open, id: "file_selector_form_dialog", size: :extra_large) do |dialog| %>
   <%= dialog.with_header(title: t(".select_file")) %>

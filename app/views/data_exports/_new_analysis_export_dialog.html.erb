@@ -1,4 +1,4 @@
-<%# locals: (open:, selected: @selected) -%>
+<%# locals: (open:, analysis_type:, namespace_id:, selected: @selected) -%>
 
 <%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
