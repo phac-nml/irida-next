@@ -262,7 +262,7 @@ GEM
     fx (0.11.0)
       activerecord (>= 7.2)
       railties (>= 7.2)
-    git (5.0.1)
+    git (5.0.2)
       activesupport (>= 5.0)
       addressable (~> 2.8)
       process_executer (~> 4.0)
