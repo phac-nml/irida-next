@@ -1,9 +1,30 @@
-<%= turbo_stream.update "table-filter", partial: "table_filter" %>
+<% show_selection_buttons = @has_samples && (
+     @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] ||
+     @allowed_to[:transfer_sample] || @allowed_to[:export_data]
+   ) %>
+
+<% show_launch = @has_samples && @allowed_to[:submit_workflow] && @pipelines_enabled %>
+
+<%= turbo_stream.update "samples-list-action-band",
+  partial: "list_action_band",
+  locals: {
+    show_selection_buttons: show_selection_buttons,
+    show_launch: show_launch,
+    project: @project,
+    has_samples: @has_samples,
+    render_sample_actions: @render_sample_actions,
+    allowed_to: @allowed_to,
+    metadata_template: @metadata_template,
+    pagy: @pagy,
+    results_message: @results_message,
+    query: @query,
+    advanced_search_fields: @advanced_search_fields,
+    search_params: @search_params,
+  } %>
 
 <% if @query.valid? %>
   <%= turbo_stream.append "samples-table" do %>
     <%= render SpinnerComponent.new(message: t("projects.samples.table_filter.loading")) %>
   <% end %>
-
   <turbo-stream action="refresh"></turbo-stream>
 <% end %>

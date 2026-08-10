@@ -1,13 +1,16 @@
 <%= render DropdownComponent.new(
   label: t("shared.samples.metadata_templates.label"),
-  icon: :sliders_horizontal,
-  icon_size: :sm,
+  icon: (@toolbar_item ? nil : :sliders_horizontal),
+  icon_size: (@toolbar_item ? nil : :sm),
+  caret: @toolbar_item,
   title: t("shared.samples.metadata_templates.tooltip"),
   trigger_id: "metadata-template-dd-trigger",
   skidding: 0,
   distance: 10,
+  compact: @toolbar_item,
+  system_arguments: dropdown_system_arguments,
   styles: {
-    button: "button w-full button-default",
+    button: button_classes,
     dropdown: "divide-y divide-slate-100 dark:divide-slate-600",
   },
 ) do |dropdown| %>
