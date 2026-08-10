@@ -1,8 +1,7 @@
 <%# locals: (open:, cancel_path: @cancel_path, list_path: @list_path) -%>
 
-
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
-  <%= dialog.with_header(title: t(".title")) %>
+  <% dialog.with_header(title: t(".title")) %>
 
   <div
     data-controller="infinite-scroll"

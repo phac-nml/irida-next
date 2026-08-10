@@ -1,8 +1,7 @@
 <%# locals: (open:, personal_access_token:, bot_account:, rotate_path:) -%>
 
-
 <%= render Viral::DialogComponent.new(open: open, id: 'rotate_confirmation_dialog') do |dialog| %>
-  <%= dialog.with_header(title: t("personal_access_tokens.rotate_confirmation.title")) %>
+  <% dialog.with_header(title: t("personal_access_tokens.rotate_confirmation.title")) %>
 
   <div class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400">
     <p class="mb-4">

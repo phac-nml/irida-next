@@ -1,8 +1,7 @@
 <%# locals: (open:, bot_account:) -%>
 
-
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
-  <%= dialog.with_header(title: t("bots.destroy_confirmation.title")) %>
+  <% dialog.with_header(title: t("bots.destroy_confirmation.title")) %>
 
   <%= turbo_frame_tag("deletion-alert") %>
 

@@ -1,11 +1,8 @@
 <%# locals: (open:, closable:, broadcast_target: @broadcast_target, namespace: @namespace, projects: @projects) -%>
 
-
-  
-  <%= turbo_stream_from @broadcast_target %>
-
 <%= render Viral::DialogComponent.new(open: open, size: :large, closable: closable) do |dialog| %>
-  <%= dialog.with_header(title: t("samples.transfers.dialog.title")) %>
+  <% dialog.with_header(title: t("samples.transfers.dialog.title")) %>
+  <%= turbo_stream_from broadcast_target %>
 
   <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
     <div

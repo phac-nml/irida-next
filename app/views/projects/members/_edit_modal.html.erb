@@ -1,8 +1,7 @@
 <%# locals: (open:, access_levels: @access_levels, member: @member, namespace: @namespace) -%>
 
-
 <%= render Viral::DialogComponent.new(id: 'edit-member-dialog', open: open) do |dialog| %>
-  <%= dialog.with_header(title: t(:"projects.members.edit.title")) %>
+  <% dialog.with_header(title: t(:"projects.members.edit.title")) %>
 
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">

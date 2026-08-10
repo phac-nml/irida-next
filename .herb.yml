@@ -75,8 +75,11 @@ linter:
     html-no-underscores-in-attribute-names:
       # Stimulus identifiers must match controller file names (underscores).
       severity: hint
+    # Disabled: false-positive on ViewComponent slot setters used via helpers
+    # (e.g. silent ERB dialog.with_header). Changing those to
+    # output ERB tags double-renders the slot into the dialog body.
     erb-no-unused-expressions:
-      enabled: true
+      enabled: false
     html-navigation-has-label:
       enabled: true
     html-no-block-inside-inline:

@@ -1,7 +1,7 @@
 <%# locals: (open:, bot_account: @bot_account, personal_access_token: @personal_access_token) -%>
 
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
-  <%= dialog.with_header(
+  <% dialog.with_header(
     title:
       t(
         "groups.bots.index.bot_listing.generate_personal_access_token_modal.title",

@@ -1,7 +1,7 @@
 <%# locals: (open:, concatenation_form: @concatenation_form, sample: @sample) -%>
 
 <%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
-  <%= dialog.with_header(title: t(".title")) %>
+  <% dialog.with_header(title: t(".title")) %>
 
   <%= form_with(model: concatenation_form, url: namespace_project_sample_attachments_concatenation_path,
     data: {

@@ -1,7 +1,7 @@
 <%# locals: (open:, access_levels: @access_levels, bot_account: @bot_account) -%>
 
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
-  <%= dialog.with_header(
+  <% dialog.with_header(
     title: t("projects.bots.index.bot_listing.new_bot_modal.title"),
   ) %>
 

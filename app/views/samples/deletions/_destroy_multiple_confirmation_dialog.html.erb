@@ -3,7 +3,7 @@
 <% sample_deletion_reason_enabled = Flipper.enabled?(:sample_deletion_reason, current_user) %>
 
 <%= render Viral::DialogComponent.new(id: "multiple-deletions-dialog", open: open) do |dialog| %>
-  <%= dialog.with_header(title: t(".title")) %>
+  <% dialog.with_header(title: t(".title")) %>
 
   <div
     data-controller="infinite-scroll"
