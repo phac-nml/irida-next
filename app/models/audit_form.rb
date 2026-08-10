@@ -17,6 +17,6 @@ class AuditForm
   private
 
   def normalize_reason
-    self.reason = reason.to_s.squish
+    self.reason = reason.to_s.strip
   end
 end
