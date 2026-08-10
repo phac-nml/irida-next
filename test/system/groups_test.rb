@@ -751,39 +751,32 @@ class GroupsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'can view shared public groups tab' do
-    @group = groups(:group_one)
-    subgroup1 = groups(:subgroup1)
-    ngl = namespace_group_links(:namespace_group_link4)
+  test 'should display shared public group on the shared namespaces tab for a private group' do
+    # Create a new private group
+    valid_params = { name: 'New Private Group', path: 'new-private-group', parent_id: nil }
+    new_group = Groups::CreateService.new(@user, valid_params).execute
 
-    ngl.namespace.public = true
-    ngl.namespace.save!
+    # Share the public group with the new group
+    public_group = groups(:public_group1)
+    GroupLinks::GroupLinkService.new(
+      @user,
+      public_group,
+      {
+        group_id: new_group.id,
+        group_access_level: Member::AccessLevel::GUEST
+      }
+    ).execute
 
-    visit group_url(subgroup1)
+    visit group_url(new_group)
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
 
-    # Verify the tab exists and is clickable
-    assert_selector 'button', text: I18n.t(:'groups.show.tabs.shared_public_groups')
-
-    click_on I18n.t(:'groups.show.tabs.shared_public_groups')
-    assert_selector 'button[aria-selected="true"]', text: I18n.t(:'groups.show.tabs.shared_public_groups')
+    assert_selector 'button[aria-selected="true"]', text: I18n.t(:'groups.show.tabs.shared_namespaces')
 
     within('div.treegrid-container') do
       assert_selector 'div.treegrid-row', count: 1
-      within("#group_#{ngl.namespace.id}") do
-        assert_text ngl.namespace.name
+      within("#group_#{public_group.id}") do
+        assert_text public_group.name
       end
-      assert_no_text projects(:project25).name
-      assert_no_selector "div.treegrid-row#group_#{projects(:project25).id}"
     end
-  end
-
-  test 'displays empty state when no shared public groups' do
-    @group = groups(:group_one)
-    visit group_url(@group)
-
-    click_on I18n.t(:'groups.show.tabs.shared_public_groups')
-
-    assert_text I18n.t('groups.show.shared_public_groups.no_shared.title')
-    assert_text I18n.t('groups.show.shared_public_groups.no_shared.description')
   end
 end

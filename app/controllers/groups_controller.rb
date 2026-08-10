@@ -16,20 +16,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     redirect_to dashboard_groups_path
   end
 
-  def show # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def show
     authorize! @group, to: :read?
 
     @tab = params[:tab] || 'subgroups_and_projects'
-    @tab_index = if @tab == 'shared_namespaces'
-                   1
-                 else
-                   @tab == 'shared_public_groups' ? 2 : 0
-                 end
+    @tab_index = @tab == 'shared_namespaces' ? 1 : 0
 
     search_key = if @tab == 'shared_namespaces'
                    :shared_namespaces_q
-                 elsif @tab == 'shared_public_groups'
-                   :shared_public_groups_q
                  else
                    :subgroups_and_projects_q
                  end
@@ -180,11 +174,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @tab = params[:tab]
   end
 
-  def shared_namespaces_or_sub_namespaces # rubocop:disable Metrics/MethodLength
+  def shared_namespaces_or_sub_namespaces
     namespaces = if @tab == 'shared_namespaces'
-                   @group.shared_namespaces.where(public: false)
-                 elsif @tab == 'shared_public_groups'
-                   @group.shared_namespaces.where(public: true)
+                   @group.shared_namespaces
                  else
                    @group.children_of_type(
                      [
