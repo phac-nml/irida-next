@@ -166,11 +166,16 @@ module Groups
         Groups::Samples::DestroyService.new(@group12, @user,
                                             { sample_ids: [@sample32.id, @sample34.id], reason: reason }).execute
 
+        deleted_sample32 = Sample.with_deleted.find(@sample32.id)
+        deleted_sample34 = Sample.with_deleted.find(@sample34.id)
+
         group_activity = PublicActivity::Activity.where(
           key: 'group.samples.destroy',
           trackable: @group12
         ).order(created_at: :desc).first
 
+        assert_equal reason, deleted_sample32.deletion_reason
+        assert_equal reason, deleted_sample34.deletion_reason
         assert_equal reason, group_activity.extended_details.details['deletion_reason']
 
         project_activity_sample32 = PublicActivity::Activity.where(

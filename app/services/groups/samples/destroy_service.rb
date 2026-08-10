@@ -17,6 +17,7 @@ module Groups
         samples.each do |sample|
           next unless sample.deleted?
 
+          sample.update_column(:deletion_reason, params[:reason]) # rubocop:disable Rails/SkipsModelValidations
           update_metadata_summary(sample)
           add_deleted_sample_to_data(sample, sample.project.puid, sample.project.name)
         end

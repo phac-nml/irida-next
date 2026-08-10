@@ -166,11 +166,14 @@ module Projects
         Projects::Samples::DestroyService.new(@project.namespace, @user,
                                               { sample_ids: [@sample1.id], reason: reason }).execute
 
+        deleted_sample = Sample.with_deleted.find(@sample1.id)
+
         activity = PublicActivity::Activity.where(
           key: 'namespaces_project_namespace.samples.destroy_multiple',
           trackable: @project.namespace
         ).order(created_at: :desc).first
 
+        assert_equal reason, deleted_sample.deletion_reason
         assert_equal reason, activity.extended_details.details['deletion_reason']
       end
     end

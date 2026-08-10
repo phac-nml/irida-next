@@ -871,8 +871,16 @@ CREATE TABLE public.samples (
     puid character varying NOT NULL,
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     project_id uuid NOT NULL,
-    attachments_updated_at timestamp(6) without time zone
+    attachments_updated_at timestamp(6) without time zone,
+    deletion_reason text
 );
+
+
+--
+-- Name: COLUMN samples.deletion_reason; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.samples.deletion_reason IS 'Reason for deletion of the sample';
 
 
 --
@@ -2192,6 +2200,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260810103000'),
 ('20260619150000'),
 ('20260616131525'),
 ('20260424121251'),
