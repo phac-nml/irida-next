@@ -36,6 +36,15 @@
       color: "transparent",
       border: true,
     ) %>
+
+    <% if @namespace.public? %>
+      <%= viral_pill(
+                text: 'Public',
+                color: :yellow,
+                border: true,
+                classes: "ml-2"
+              ) %>
+    <% end %>
   </div>
 
   <div class="mr-2 ml-auto flex flex-col items-end">
