@@ -20,7 +20,6 @@ module Groups
       @sample9 = samples(:sample9)
       @sample25 = samples(:sample25)
       @sample28 = samples(:sample28)
-      @sample29 = samples(:sample29)
       @sample30 = samples(:sample30)
       @sample31 = samples(:sample31)
     end
@@ -1750,6 +1749,7 @@ module Groups
     test 'transfer samples' do
       ### SETUP START ###
       project4 = projects(:project4)
+      samples = pluck_sample_names_and_puids(@group.project_namespaces)
 
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -1766,7 +1766,7 @@ module Groups
 
       ### ACTIONS START ###
       # select first sample
-      check "checkbox_sample_#{@sample3.id}"
+      check "checkbox_sample_#{@sample1.id}"
       assert_selector 'table tfoot', text: 'Samples: 26 Selected: 1'
       assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '1'
 
@@ -1804,7 +1804,8 @@ module Groups
       visit namespace_project_samples_url(project4.namespace.parent, project4)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
-      assert_selector '#samples-table table tbody tr:first-child th:first-child', text: @sample3.puid
+      assert_selector '#samples-table table tbody tr:first-child th:first-child', text: samples[1]
+      assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: samples[0]
       ### VERIFY END ###
     end
 
@@ -1894,6 +1895,10 @@ module Groups
 
       ### SETUP START ###
       project4 = projects(:project4)
+      sample1 = samples(:sample1)
+      sample2 = samples(:sample2)
+      sample28 = samples(:sample28)
+      sample29 = samples(:sample29)
 
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -1912,7 +1917,6 @@ module Groups
       assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 20
       assert_selector 'table tfoot', text: "#{I18n.t('samples.table_component.counts.samples')}: 26"
       assert_selector 'table tfoot strong[data-selection-target="selected"]', text: '26'
-      uncheck "checkbox_sample_#{@sample1.id}"
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
@@ -1932,11 +1936,11 @@ module Groups
       # error messages in dialog
       assert_text I18n.t('samples.transfers.create.error')
 
-      assert_text I18n.t('services.samples.transfer.unauthorized', sample_ids: @sample28.id.to_s).gsub(':', '')
+      assert_text I18n.t('services.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
 
       # colon is removed from translation in UI
-      assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: @sample29.puid,
-                                                                    sample_name: @sample29.name).gsub(':', '')
+      assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample29.puid,
+                                                                    sample_name: sample29.name).gsub(':', '')
 
       click_button I18n.t('shared.samples.errors.ok_button')
 
@@ -1945,25 +1949,25 @@ module Groups
       # verify page has finished loading
       assert_no_selector 'html[aria-busy="true"]'
 
-      # verify sample2 transferred, sample 1, sample 28, sample 29 did not
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+      # verify sample1 and 2 transferred, sample 28, sample 29 did not
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                                       locale: @user.locale))
-      assert_selector "tr[id='#{dom_id(@sample1)}']"
-      assert_no_selector "tr[id='#{dom_id(@sample2)}']"
-      assert_selector "tr[id='#{dom_id(@sample28)}']"
-      assert_selector "tr[id='#{dom_id(@sample29)}']"
+      assert_no_selector "tr[id='#{dom_id(sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(sample2)}']"
+      assert_selector "tr[id='#{dom_id(sample28)}']"
+      assert_selector "tr[id='#{dom_id(sample29)}']"
 
       # destination project
       visit namespace_project_samples_url(project4.namespace.parent, project4)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                                       locale: @user.locale))
 
       click_on I18n.t(:'samples.table_component.puid')
 
-      assert_no_selector "tr[id='#{dom_id(@sample1)}']"
-      assert_selector "tr[id='#{dom_id(@sample2)}']"
-      assert_no_selector "tr[id='#{dom_id(@sample28)}']"
-      assert_no_selector "tr[id='#{dom_id(@sample29)}']"
+      assert_selector "tr[id='#{dom_id(sample1)}']"
+      assert_selector "tr[id='#{dom_id(sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(sample28)}']"
+      assert_no_selector "tr[id='#{dom_id(sample29)}']"
       ### VERIFY END ###
     end
 
