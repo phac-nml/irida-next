@@ -29,8 +29,8 @@ module Samples
     # @param broadcast_target [String, nil] optional Turbo broadcast target for progress updates
     #
     # @return [Array<Integer>] IDs of successfully transferred samples
-    # @raise [BaseSampleService::BaseError] on validation or authorization failures
-    def execute(new_project_id, sample_ids, broadcast_target = nil)
+    # @raise [BaseSampleService::BaseError, TransferService::TransferError] on validation or authorization failures
+    def execute(new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/MethodLength
       # Authorize if user can transfer samples from the current project
       if @namespace.group_namespace?
         authorize! @namespace, to: :transfer_sample?
@@ -40,7 +40,9 @@ module Samples
 
       validate(sample_ids, 'transfer', new_project_id)
 
-      validate_no_active_workflow_executions(sample_ids)
+      if Flipper.enabled?(:prevent_sample_deletions_and_transfers_with_active_workflows)
+        validate_no_active_workflow_executions(sample_ids)
+      end
 
       authorize_new_project(new_project_id, :transfer_sample_into_project?)
 
@@ -62,18 +64,13 @@ module Samples
     # @param sample_ids [Array<Integer>] IDs of samples to check
     # @raise [TransferError] if any samples have active workflow executions
     def validate_no_active_workflow_executions(sample_ids)
-      active_workflow_sample_ids = Sample.where(id: sample_ids)
-                                         .joins(:workflow_executions)
-                                         .where(workflow_executions: { state: %w[initial prepared submitted
-                                                                                 running] })
-                                         .distinct
-                                         .pluck(:id)
+      active_workflow_sample_puids = active_workflow_execution_sample_puids(sample_ids)
 
-      return if active_workflow_sample_ids.empty?
+      return if active_workflow_sample_puids.empty?
 
       raise TransferError,
             I18n.t('services.samples.transfer.active_workflow_executions',
-                   sample_ids: active_workflow_sample_ids.join(', '))
+                   sample_puids: active_workflow_sample_puids.join(', '))
     end
 
     # Validate that a maintainer can transfer samples between projects.
