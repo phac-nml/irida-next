@@ -49,8 +49,24 @@
     }, method: :delete) do |form| %>
     <div data-projects--samples--attachments--selected-attachments-target="field"></div>
 
-    <div>
-      <%= form.submit t('common.actions.delete'), tone: :danger, emphasis: :solid %>
+        <div>
+          <%= form.submit t('common.actions.delete'), tone: :danger, emphasis: :solid %>
+        </div>
+      </div>
+    </div>
+
+    <div
+      role="status"
+      id="spinner"
+      class="
+        absolute top-2/4 left-1/2 grid hidden h-full w-full -translate-x-1/2 -translate-y-1/2 place-items-center
+        backdrop-blur-sm
+      "
+    >
+      <div class="grid place-items-center">
+        <%= icon :faded_spinner, library: "animated" %>
+        <span class="text-black dark:text-white"><%= t(:".spinner") %>.</span>
+      </div>
     </div>
   </div>
 <% end %>
