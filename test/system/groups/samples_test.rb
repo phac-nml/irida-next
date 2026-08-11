@@ -2385,7 +2385,7 @@ module Groups
       assert_selector '#list_selections', text: @sample2.name
       assert_selector '#list_selections', text: @sample2.name
       # submit
-      fill_in placeholder: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.reason_placeholder'),
+      fill_in placeholder: I18n.t('samples.deletions.reason_placeholder'),
               with: 'cleanup'
       click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       ### ACTIONS END ###
@@ -2425,7 +2425,7 @@ module Groups
       # verify dialog contents
       assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
       # submit
-      fill_in placeholder: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.reason_placeholder'),
+      fill_in placeholder: I18n.t('samples.deletions.reason_placeholder'),
               with: 'cleanup'
       click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       ### ACTIONS END ###
@@ -2464,7 +2464,7 @@ module Groups
       # verify dialog contents
       assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
       # submit
-      fill_in placeholder: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.reason_placeholder'),
+      fill_in placeholder: I18n.t('samples.deletions.reason_placeholder'),
               with: 'cleanup'
       click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
 
