@@ -39,8 +39,8 @@ module Activities
                           text: I18n.t(:'components.activity.dialog.sample_destroy.description.project',
                                        user: @user.email, count: 1)
           assert_selector 'li', count: 1
-          assert_selector 'li > p > span:nth-child(1)', text: 'Project 1 Sample 1'
-          assert_selector 'li > p > span:nth-child(2)', text: 'INXT_SAM_AAAAAAAAAA'
+          assert_selector 'li > p > span:nth-child(1)', text: sample.name
+          assert_selector 'li > p > span:nth-child(2)', text: sample.puid
         end
       end
 

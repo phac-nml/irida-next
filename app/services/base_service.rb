@@ -5,6 +5,8 @@ class BaseService
   include ActionPolicy::Behaviour
   include Irida::Auth
 
+  ACTIVE_WORKFLOW_EXECUTION_STATES = %w[initial prepared submitted running].freeze
+
   authorize :user, through: :current_user
 
   attr_accessor :current_user, :params
@@ -30,5 +32,13 @@ class BaseService
 
   def strip_whitespaces(string)
     string.gsub(/\s+/, ' ').strip
+  end
+
+  def active_workflow_execution_sample_puids(sample_ids)
+    Sample.where(id: sample_ids)
+          .joins(:workflow_executions)
+          .where(workflow_executions: { state: ACTIVE_WORKFLOW_EXECUTION_STATES })
+          .distinct
+          .pluck(:puid)
   end
 end

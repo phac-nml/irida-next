@@ -13,6 +13,7 @@ module Dashboard
       @project2 = projects(:project2)
       @group1 = groups(:group_one)
       @sample1 = samples(:sample1)
+      @sample2 = samples(:sample2)
       @sample3 = samples(:sample3)
     end
 
@@ -173,7 +174,7 @@ module Dashboard
         assert_text @project.samples.size.to_s
       end
 
-      visit namespace_project_sample_url(@group1, @project, @sample1)
+      visit namespace_project_sample_url(@group1, @project, @sample2)
       click_button I18n.t('common.actions.remove')
 
       within('dialog[open]') do

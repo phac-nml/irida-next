@@ -25,17 +25,22 @@ module Samples
 
       deleted_samples_count = destroy_service
 
-      # No selected samples deleted
-      if deleted_samples_count.zero?
-        flash[:error] = t('.no_deleted_samples')
-      # Partial sample deletion
-      elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
-        flash[:success] = t('.partial_success', deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
-        flash[:error] = t('.partial_error',
-                          not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
-      # All samples deleted successfully
+      if @namespace.errors.empty?
+        # No selected samples deleted
+        if deleted_samples_count.zero?
+          flash[:error] = t('.no_deleted_samples')
+        # Partial sample deletion
+        elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
+          flash[:success] = t('.partial_success',
+                              deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
+          flash[:error] = t('.partial_error',
+                            not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}") # rubocop:disable Layout/LineLength
+        # All samples deleted successfully
+        else
+          flash[:success] = t('.success', count: deleted_samples_count)
+        end
       else
-        flash[:success] = t('.success', count: deleted_samples_count)
+        flash[:error] = @namespace.errors.full_messages.join(', ')
       end
 
       redirect_to redirect_path, status: :see_other
