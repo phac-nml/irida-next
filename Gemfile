@@ -68,7 +68,21 @@ gem 'faraday-net_http_persistent', '~> 2.1'
 gem 'openssl', '~> 4.0'
 
 gem 'heroicon-rails', '>= 0.2.9'
-gem 'pathogen_view_components', github: 'phac-nml/pathogen-view-components', tag: 'v1.1.8'
+
+# Pathogen View Components: default to the published tag. For local design sync with a
+# sibling checkout at ../pathogen-view-components, set USE_LOCAL_PATHOGEN=1 (or
+# PATHOGEN_VIEW_COMPONENTS_PATH to an absolute/relative path) before bundle install.
+# Do not commit Gemfile.lock changes produced by local-path mode.
+pathogen_view_components_opts =
+  if (local_pathogen = ENV.fetch('PATHOGEN_VIEW_COMPONENTS_PATH', '')).strip != ''
+    { path: local_pathogen }
+  elsif ENV['USE_LOCAL_PATHOGEN'] == '1'
+    { path: File.expand_path('../pathogen-view-components', __dir__) }
+  else
+    { github: 'phac-nml/pathogen-view-components', tag: 'v1.1.8' }
+  end
+gem 'pathogen_view_components', **pathogen_view_components_opts
+
 gem 'reactionview', '~> 0.3.0'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
