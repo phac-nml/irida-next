@@ -38,17 +38,17 @@ export default class extends Controller {
   }
 
   #calculateNumSelected() {
-    const numSelected = this.allIds.length;
+    let numSelected = this.allIds.length;
 
-    // if (this.countPeAttachmentsValue) {
-    //   // pe files are saved as nested stringified 2 value arrays
-    //   // eg: ["att_1", "att_2", "["att_3_fwd", "att_3_rev"]"]
-    //   // we'll count how many opening brackets ([) exist, and add an additional count for each to represent the
-    //   // two PE files
-    //   numSelected += this.allIds.reduce((total, str) => {
-    //     return total + (str.match(/\[/g) || []).length;
-    //   }, 0);
-    // }
+    if (this.countPeAttachmentsValue) {
+      // pe files are saved as nested stringified 2 value arrays
+      // eg: ["att_1", "att_2", "["att_3_fwd", "att_3_rev"]"]
+      // we'll count how many opening brackets ([) exist, and add an additional count for each to represent the
+      // two PE files
+      numSelected += this.allIds.reduce((total, str) => {
+        return total + (str.match(/\[/g) || []).length;
+      }, 0);
+    }
 
     return numSelected;
   }
