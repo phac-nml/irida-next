@@ -14,7 +14,8 @@ module Projects
           render turbo_stream: turbo_stream.update('sample_modal',
                                                    partial: 'modal',
                                                    locals: {
-                                                     open: true
+                                                     open: true,
+                                                     sample: @sample
                                                    }), status: :ok
         end
 
