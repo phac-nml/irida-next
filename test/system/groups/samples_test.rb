@@ -20,7 +20,6 @@ module Groups
       @sample9 = samples(:sample9)
       @sample25 = samples(:sample25)
       @sample28 = samples(:sample28)
-      @sample29 = samples(:sample29)
       @sample30 = samples(:sample30)
       @sample31 = samples(:sample31)
     end
