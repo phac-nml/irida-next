@@ -6,20 +6,25 @@ module Groups
     class DestroyService < BaseSampleDestroyService
       private
 
-      def destroy_samples
+      def destroy_samples # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         samples = authorized_scope(Sample, type: :relation, as: :namespace_samples,
                                            scope_options: { namespace: @namespace,
                                                             minimum_access_level: Member::AccessLevel::OWNER })
                   .where(id: @sample_ids)
         @deleted_samples_data = { project_data: {}, group_data: [] }
+        deleted_sample_ids = []
         samples = samples.destroy_all
 
         samples.each do |sample|
           next unless sample.deleted?
 
-          sample.update_column(:deletion_reason, params[:reason]) # rubocop:disable Rails/SkipsModelValidations
+          deleted_sample_ids << sample.id
           update_metadata_summary(sample)
           add_deleted_sample_to_data(sample, sample.project.puid, sample.project.name)
+        end
+
+        if deleted_sample_ids.any?
+          Sample.with_deleted.where(id: deleted_sample_ids).update_all(deletion_reason: params[:reason]) # rubocop:disable Rails/SkipsModelValidations
         end
 
         create_activities_and_update_samples_count unless @deleted_samples_data[:project_data].empty?
