@@ -121,7 +121,7 @@ module Projects
       end
 
       def destroy_status(attachment, count)
-        return count == 2 ? :ok : :multi_status if attachment.associated_attachment
+        return count == 2 ? :ok : :multi_status if attachment.metadata.key?('associated_attachment_id')
 
         count == 1 ? :ok : :unprocessable_content
       end

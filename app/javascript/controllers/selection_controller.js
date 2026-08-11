@@ -161,9 +161,22 @@ export default class extends Controller {
       // Use a Set to deduplicate values
       newStorageValue = [...new Set([...newStorageValue, ...values])];
     } else {
-      newStorageValue = newStorageValue.filter(
-        (value) => !values.includes(value),
-      );
+      newStorageValue = newStorageValue.filter((value) => {
+        try {
+          const parsed = JSON.parse(value);
+
+          // If it's a nested array, remove it if ANY value matches
+          if (Array.isArray(parsed)) {
+            return !parsed.some((item) => values.includes(item));
+          }
+
+          // Otherwise, treat it as a normal string
+          return !values.includes(value);
+        } catch {
+          // Not JSON, so treat it as a normal string
+          return !values.includes(value);
+        }
+      });
     }
     this.update(newStorageValue, true, options);
   }
@@ -182,7 +195,6 @@ export default class extends Controller {
       this.rowSelectionTargets.forEach((row) => {
         row.checked = ids.indexOf(row.value) > -1;
       });
-
       this.#updateActionButtons(ids.length);
       this.#updateCounts(ids.length, announce);
       this.#setSelectPageCheckboxValue(
