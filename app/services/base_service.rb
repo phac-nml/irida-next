@@ -36,7 +36,7 @@ class BaseService
 
   def active_workflow_execution_sample_puids(sample_ids)
     Sample.where(id: sample_ids)
-          .joins(:workflow_executions)
+          .joins(samples_workflow_executions: :workflow_execution)
           .where(workflow_executions: { state: ACTIVE_WORKFLOW_EXECUTION_STATES })
           .distinct
           .pluck(:puid)

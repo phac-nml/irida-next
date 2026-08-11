@@ -608,6 +608,7 @@ module Projects
 
     test 'transfer samples' do
       ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
       # show destination project has 20 samples prior to transfer
       visit namespace_project_samples_url(@namespace, @project2)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
@@ -619,22 +620,21 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      # select 2 samples
-      check "checkbox_sample_#{@sample2.id}"
-      check "checkbox_sample_#{@sample30.id}"
-      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 2
+      # select all 3 samples
+      click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
       assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '2'
+      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       assert_selector 'dialog h1', text: I18n.t('samples.transfers.dialog.title')
       within('#list_selections') do
-        # additional asserts to help prevent select2 actions below from flaking
-        assert_text @sample2.puid
-        assert_text @sample2.name
-        assert_text @sample30.puid
-        assert_text @sample30.name
+        samples.each do |sample|
+          # additional asserts to help prevent select2 actions below from flaking
+          assert_text sample[0]
+          assert_text sample[1]
+        end
       end
       # select destination project
       find('input.select2-input').click
@@ -653,13 +653,12 @@ module Projects
       click_button I18n.t('shared.samples.success.ok_button')
 
       assert_no_selector 'dialog[open]'
-      # originating project has one sample
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary.one', count: 1,
-                                                                                          locale: @user.locale))
+      # originating project no longer has samples
+      assert_text I18n.t('projects.samples.index.no_samples')
 
       # destination project received transferred samples
       visit namespace_project_samples_url(@namespace, @project2)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 22,
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 23,
                                                                                       locale: @user.locale))
 
       samples.each do |sample|
@@ -671,6 +670,7 @@ module Projects
 
     test 'dialog close button hidden during transfer samples' do
       ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
       # originating project has 3 samples prior to transfer
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -678,9 +678,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      # select 2 samples
-      check "checkbox_sample_#{@sample2.id}"
-      check "checkbox_sample_#{@sample30.id}"
+      # select all 3 samples
+      click_button I18n.t('common.controls.select_all')
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
@@ -688,11 +687,11 @@ module Projects
       # close button available before confirming
       assert_selector 'dialog button.dialog--close'
       within('#list_selections') do
-        # additional asserts to help prevent select2 actions below from flaking
-        assert_text @sample2.puid
-        assert_text @sample2.name
-        assert_text @sample30.puid
-        assert_text @sample30.name
+        samples.each do |sample|
+          # additional asserts to help prevent select2 actions below from flaking
+          assert_text sample[0]
+          assert_text sample[1]
+        end
       end
       # select destination project
       find('input.select2-input').click
@@ -759,6 +758,7 @@ module Projects
       # only samples without a matching name to samples in destination project will transfer
 
       ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
       namespace = groups(:subgroup1)
       project25 = projects(:project25)
 
@@ -773,19 +773,20 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      check "checkbox_sample_#{@sample2.id}"
-      check "checkbox_sample_#{@sample30.id}"
-      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 2
+      click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
       assert_selector 'table tfoot tr', text: 'Samples: 3'
-      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '2'
+      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       assert_selector 'dialog h1', text: I18n.t('samples.transfers.dialog.title')
       within('#list_selections') do
-        # additional asserts to help prevent select2 actions below from flaking
-        assert_text @sample2.name
-        assert_text @sample30.name
+        samples.each do |sample|
+          # additional asserts to help prevent select2 actions below from flaking
+          assert_text sample[0]
+          assert_text sample[1]
+        end
       end
       find('input.select2-input').click
       find("li[data-value='#{project25.id}']").click
@@ -809,18 +810,18 @@ module Projects
 
       assert_no_selector 'dialog[open]'
 
-      # verify sample2 transferred, sample 1 & sample 30 did not
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
-                                                                                      locale: @user.locale))
-      assert_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      # verify sample1 and 2 transferred, sample 30 did not
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary.one', count: 1,
+                                                                                          locale: @user.locale))
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample1)}']"
       assert_no_selector "table tbody tr[id='#{dom_id(@sample2)}']"
       assert_selector "table tbody tr[id='#{dom_id(@sample30)}']"
 
       # destination project
       visit namespace_project_samples_url(namespace, project25)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
                                                                                       locale: @user.locale))
-      assert_no_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}']"
       assert_selector "table tbody tr[id='#{dom_id(@sample2)}']"
       assert_no_selector "table tbody tr[id='#{dom_id(@sample30)}']"
       ### VERIFY END ###
@@ -842,7 +843,7 @@ module Projects
 
       ### ACTIONS START ###
       # select 1 sample to transfer
-      check "checkbox_sample_#{@sample2.id}"
+      find('table tbody tr:first-child th input[type="checkbox"]').click
 
       # verify 1 sample selected in originating project
       assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
@@ -855,8 +856,8 @@ module Projects
       assert_selector 'dialog h1', text: I18n.t('samples.transfers.dialog.title')
       within('#list_selections') do
         # additional asserts to help prevent select2 actions below from flaking
-        assert_text @sample2.name
-        assert_text @sample2.puid
+        assert_text @sample1.name
+        assert_text @sample1.puid
       end
       find('input.select2-input').click
       find("li[data-value='#{@project2.id}']").click
