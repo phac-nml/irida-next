@@ -163,17 +163,15 @@ export default class extends Controller {
     } else {
       newStorageValue = newStorageValue.filter((value) => {
         try {
+          // parse potential stringified array for PE attachments being deleted
           const parsed = JSON.parse(value);
 
-          // If it's a nested array, remove it if ANY value matches
+          // if PE attachment, it will be a nested array value where the entire array must be removed
           if (Array.isArray(parsed)) {
             return !parsed.some((item) => values.includes(item));
           }
-
-          // Otherwise, treat it as a normal string
-          return !values.includes(value);
         } catch {
-          // Not JSON, so treat it as a normal string
+          // else remove the single attachment string value
           return !values.includes(value);
         }
       });
