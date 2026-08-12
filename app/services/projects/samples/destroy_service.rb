@@ -21,7 +21,7 @@ module Projects
         end
 
         if deleted_sample_ids.any?
-          Sample.with_deleted.where(id: deleted_sample_ids).update_all(deletion_reason: params[:reason]) # rubocop:disable Rails/SkipsModelValidations
+          Sample.only_deleted.where(id: deleted_sample_ids).update_all(deletion_reason: params[:reason]) # rubocop:disable Rails/SkipsModelValidations
         end
 
         deleted_samples_count = deleted_sample_ids.count

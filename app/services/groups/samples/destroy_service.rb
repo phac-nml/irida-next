@@ -24,7 +24,7 @@ module Groups
         end
 
         if deleted_sample_ids.any?
-          Sample.with_deleted.where(id: deleted_sample_ids).update_all(deletion_reason: params[:reason]) # rubocop:disable Rails/SkipsModelValidations
+          Sample.only_deleted.where(id: deleted_sample_ids).update_all(deletion_reason: params[:reason]) # rubocop:disable Rails/SkipsModelValidations
         end
 
         create_activities_and_update_samples_count unless @deleted_samples_data[:project_data].empty?
