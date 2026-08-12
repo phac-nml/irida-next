@@ -1744,7 +1744,6 @@ fr:
               singular: 'Le fichier suivant a été sélectionné pour être supprimé :'
               zero: Aucun fichier n'a été sélectionné pour la suppression.
             files: Fichiers
-            loading: Chargement...
             spinner: Suppression des fichiers. Cela peut prendre un certain temps....
             title: Supprimer des fichiers
         destroy:

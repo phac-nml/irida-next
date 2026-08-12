@@ -1740,7 +1740,6 @@ en:
               singular: 'The following file was selected for deletion:'
               zero: No files were selected for deletion
             files: Files
-            loading: Loading...
             spinner: Deleting files. This may take a while...
             title: Delete Files
         destroy:
