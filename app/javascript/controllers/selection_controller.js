@@ -162,18 +162,20 @@ export default class extends Controller {
       newStorageValue = [...new Set([...newStorageValue, ...values])];
     } else {
       newStorageValue = newStorageValue.filter((value) => {
+        // exact match (single checkbox toggle / select-page store the raw value)
+        if (values.includes(value)) return false;
+        let parsed;
         try {
-          // parse potential stringified array for PE attachments being deleted
-          const parsed = JSON.parse(value);
-
-          // if PE attachment, it will be a nested array value where the entire array must be removed
-          if (Array.isArray(parsed)) {
-            return !parsed.some((item) => values.includes(item));
-          }
+          parsed = JSON.parse(value);
         } catch {
-          // else remove the single attachment string value
-          return !values.includes(value);
+          return true; // plain id that wasn't targeted
         }
+        // contained-id match (row-action delete passes a single id that may be
+        // part of a stored paired-end "[fwd, rev]" value)
+        if (Array.isArray(parsed)) {
+          return !parsed.some((item) => values.includes(item));
+        }
+        return true;
       });
     }
     this.update(newStorageValue, true, options);

@@ -761,6 +761,77 @@ module Projects
           assert_selector 'strong[data-selection-target="selected"]', text: '0'
         end
       end
+
+      test 'selecting and de-selecting attachments updates selection count' do
+        login_as users(:jeff_doe)
+        project = projects(:projectA)
+        sample = samples(:sampleC)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        pe_fwd_attachment = attachments(:attachmentPEFWD4)
+        non_pe_attachment = attachments(:attachmentG)
+
+        visit namespace_project_sample_url(namespace, project, sample)
+
+        # no attachments selected/checked
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+
+        assert_selector '#sample-attachments table #attachments-table-body tr', count: 8
+
+        check "checkbox_attachment_#{pe_fwd_attachment.id}"
+
+        # verify selection counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 1
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '1'
+        end
+
+        check "checkbox_attachment_#{non_pe_attachment.id}"
+
+        # verify selection counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 2
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '2'
+        end
+
+        uncheck "checkbox_attachment_#{pe_fwd_attachment.id}"
+
+        # verify selection counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 1
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '1'
+        end
+
+        uncheck "checkbox_attachment_#{non_pe_attachment.id}"
+
+        # verify selection counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+      end
     end
   end
 end
