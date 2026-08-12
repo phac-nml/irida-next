@@ -1,3 +1,5 @@
+<%# locals: (open:, sample:) -%>
+
 <%= render Viral::DialogComponent.new(open: open, size: :extra_large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
 
