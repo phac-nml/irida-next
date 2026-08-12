@@ -15,7 +15,7 @@ module Samples
       @broadcast_target = "samples_destroy_#{SecureRandom.uuid}"
     end
 
-    def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
       if Flipper.enabled?(:sample_deletion_reason, current_user)
         @sample_deletion_form = SampleDeletionForm.new(reason: destroy_params[:reason])
         return render status: :unprocessable_content unless @sample_deletion_form.valid?
@@ -39,11 +39,16 @@ module Samples
         else
           flash[:success] = t('.success', count: deleted_samples_count)
         end
+        redirect_to redirect_path, status: :see_other
       else
-        flash[:error] = @namespace.errors.full_messages.join(', ')
+        errors = @namespace.errors.full_messages
+        render turbo_stream: turbo_stream.update('samples_dialog',
+                                                 partial: @confirmation_dialog,
+                                                 locals: {
+                                                   errors: errors,
+                                                   open: true
+                                                 }), status: :ok
       end
-
-      redirect_to redirect_path, status: :see_other
     end
 
     private
