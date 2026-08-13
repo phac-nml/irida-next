@@ -19,7 +19,7 @@
         <%= t(".theme_title") %>
       </div>
 
-      <%= pathogen_radio_button(
+      <%= render Pathogen::Form::RadioButton.new(
         attribute: :color_theme,
         value: "system",
         input_name: "color-theme",
@@ -33,7 +33,7 @@
         },
       ) %>
 
-      <%= pathogen_radio_button(
+      <%= render Pathogen::Form::RadioButton.new(
         attribute: :color_theme,
         value: "dark",
         input_name: "color-theme",
@@ -46,7 +46,7 @@
         },
       ) %>
 
-      <%= pathogen_radio_button(
+      <%= render Pathogen::Form::RadioButton.new(
         attribute: :color_theme,
         value: "light",
         input_name: "color-theme",
