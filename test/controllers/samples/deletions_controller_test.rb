@@ -32,6 +32,22 @@ module Samples
       assert_redirected_to group_samples_path(@group1)
     end
 
+    test 'should not destroy single sample at group level with active workflow executions' do
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      assert_no_difference('Sample.count') do
+        post samples_deletions_path,
+             params: {
+               namespace_id: @group1.id,
+               deletion_type: 'single',
+               destroy: {
+                 sample_ids: [@sample1.id]
+               }
+             }, as: :turbo_stream
+      end
+      assert_response :unprocessable_content
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+    end
+
     test 'should destroy multiple samples at group level' do
       assert_difference('Sample.count', -2) do
         post samples_deletions_path,
@@ -46,6 +62,22 @@ module Samples
       assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
+    end
+
+    test 'should not destroy multiple samples at group level with active workflow executions' do
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      assert_no_difference('Sample.count') do
+        post samples_deletions_path,
+             params: {
+               namespace_id: @group1.id,
+               deletion_type: 'multiple',
+               destroy: {
+                 sample_ids: [@sample1.id, @sample2.id]
+               }
+             }, as: :turbo_stream
+      end
+      assert_response :unprocessable_content
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
     end
 
     test 'should destroy single sample at project level' do
@@ -65,6 +97,22 @@ module Samples
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
     end
 
+    test 'should not destroy single sample at project level with active workflow executions' do
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      assert_no_difference('Sample.count') do
+        post samples_deletions_path,
+             params: {
+               namespace_id: @project1_namespace.id,
+               deletion_type: 'single',
+               destroy: {
+                 sample_ids: [@sample1.id]
+               }
+             }, as: :turbo_stream
+      end
+      assert_response :unprocessable_content
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+    end
+
     test 'should destroy multiple samples at project level' do
       assert_difference('Sample.count', -2) do
         post samples_deletions_path,
@@ -79,6 +127,22 @@ module Samples
       assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
+    end
+
+    test 'should not destroy multiple samples at project level with active workflow executions' do
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      assert_no_difference('Sample.count') do
+        post samples_deletions_path,
+             params: {
+               namespace_id: @project1_namespace.id,
+               deletion_type: 'multiple',
+               destroy: {
+                 sample_ids: [@sample1.id, @sample2.id]
+               }
+             }, as: :turbo_stream
+      end
+      assert_response :unprocessable_content
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
     end
 
     test 'should not destroy sample, if it does not belong to the group' do
