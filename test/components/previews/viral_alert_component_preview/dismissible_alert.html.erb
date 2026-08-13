@@ -12,49 +12,62 @@
   - Perfect for important but not critical messages
 
   Usage:
-  viral_alert(message: "Message", dismissible: true)
+  render Viral::AlertComponent.new(message: "Message", dismissible: true)
 -->
 
 <div class="space-y-6">
   <!-- Basic Dismissible Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🚪 Basic Dismissible Alert
     </h3>
-    <%= viral_alert(message: "This alert can be dismissed by clicking the X button or pressing Escape.", dismissible: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "This alert can be dismissed by clicking the X button or pressing Escape.", dismissible: true) %>
   </div>
 
   <!-- Dismissible Info Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-      ℹ️  Dismissible Info Alert
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
+      ℹ️ Dismissible Info Alert
     </h3>
-    <%= viral_alert(message: "Your profile has been updated. You can dismiss this message when you're ready.", type: :info, dismissible: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "Your profile has been updated. You can dismiss this message when you're ready.", type: :info, dismissible: true) %>
   </div>
 
   <!-- Dismissible Success Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       ✅ Dismissible Success Alert
     </h3>
-    <%= viral_alert(message: "Changes saved successfully! Click the X to dismiss this confirmation.", type: :success, dismissible: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "Changes saved successfully! Click the X to dismiss this confirmation.", type: :success, dismissible: true) %>
   </div>
 
   <!-- Dismissible Warning Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-      ⚠️  Dismissible Warning Alert
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
+      ⚠️ Dismissible Warning Alert
     </h3>
-    <%= viral_alert(message: "Please review your settings before proceeding. Dismiss when you're ready.", type: :warning, dismissible: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "Please review your settings before proceeding. Dismiss when you're ready.", type: :warning, dismissible: true) %>
   </div>
 
   <!-- Accessibility Note -->
-  <div class="mt-8 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">♿ Accessibility Features</h4>
-    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
-      <li>• Press <kbd class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-xs">Escape</kbd> to dismiss</li>
-      <li>• Use <kbd class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-xs">Tab</kbd> to focus the close button</li>
-      <li>• Press <kbd class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-xs">Enter</kbd> or <kbd class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-xs">Space</kbd> to activate</li>
+  <div class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+    <h4 class="mb-2 font-semibold text-slate-900 dark:text-white">♿ Accessibility Features</h4>
+
+    <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-400">
+      <li>• Press <kbd class="rounded bg-slate-200 px-2 py-1 text-xs dark:bg-slate-700">Escape</kbd> to dismiss</li>
+
+      <li>
+        • Use <kbd class="rounded bg-slate-200 px-2 py-1 text-xs dark:bg-slate-700">Tab</kbd> to focus the close button
+      </li>
+
+      <li>
+        • Press <kbd class="rounded bg-slate-200 px-2 py-1 text-xs dark:bg-slate-700">Enter</kbd> or
+        <kbd class="rounded bg-slate-200 px-2 py-1 text-xs dark:bg-slate-700">Space</kbd> to activate
+      </li>
+
       <li>• Screen readers announce when alerts are dismissed</li>
     </ul>
   </div>

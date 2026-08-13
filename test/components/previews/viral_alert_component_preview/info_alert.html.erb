@@ -11,7 +11,7 @@
   - Responsive design that works on all devices
 
   Usage:
-  viral_alert(message: "Your message here", type: :info)
+  render Viral::AlertComponent.new(message: "Your message here", type: :info)
 -->
 
 <div class="space-y-6">
@@ -21,7 +21,7 @@
       📋 Basic Info Alert
     </h3>
 
-    <%= viral_alert(message: "Your profile has been updated successfully. All changes have been saved to your account.") %>
+    <%= render Viral::AlertComponent.new(message: "Your profile has been updated successfully. All changes have been saved to your account.") %>
   </div>
 
   <!-- Info Alert with Custom Message -->
@@ -30,7 +30,7 @@
       ✏️ Custom Message
     </h3>
 
-    <%= viral_alert(message: "New features are available! Check out our latest updates in the dashboard.") %>
+    <%= render Viral::AlertComponent.new(message: "New features are available! Check out our latest updates in the dashboard.") %>
   </div>
 
   <!-- Info Alert with Long Message -->
@@ -39,6 +39,6 @@
       📖 Long Message
     </h3>
 
-    <%= viral_alert(message: "We've made several improvements to the system based on your feedback. The new interface is more intuitive, loads faster, and includes additional features that will make your workflow more efficient. These changes will be rolled out gradually over the next few days.") %>
+    <%= render Viral::AlertComponent.new(message: "We've made several improvements to the system based on your feedback. The new interface is more intuitive, loads faster, and includes additional features that will make your workflow more efficient. These changes will be rolled out gradually over the next few days.") %>
   </div>
 </div>

@@ -13,47 +13,53 @@
   - Perfect balance of user control and automation
 
   Usage:
-  viral_alert(message: "Message", dismissible: true, auto_dismiss: true)
+  render Viral::AlertComponent.new(message: "Message", dismissible: true, auto_dismiss: true)
 -->
 
 <div class="space-y-6">
   <!-- Basic Combination Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🎭 Basic Combination Alert
     </h3>
-    <%= viral_alert(message: "This alert gives you the best of both worlds - close it now or wait for auto-dismiss!", dismissible: true, auto_dismiss: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "This alert gives you the best of both worlds - close it now or wait for auto-dismiss!", dismissible: true, auto_dismiss: true) %>
   </div>
 
   <!-- Info Combination Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-      ℹ️  Info with Options
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
+      ℹ️ Info with Options
     </h3>
-    <%= viral_alert(message: "New updates available. You can review them now or dismiss this message to check later.", type: :info, dismissible: true, auto_dismiss: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "New updates available. You can review them now or dismiss this message to check later.", type: :info, dismissible: true, auto_dismiss: true) %>
   </div>
 
   <!-- Success Combination Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       ✅ Success with Options
     </h3>
-    <%= viral_alert(message: "Your preferences have been saved! This confirmation will auto-dismiss, or you can close it now.", type: :success, dismissible: true, auto_dismiss: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "Your preferences have been saved! This confirmation will auto-dismiss, or you can close it now.", type: :success, dismissible: true, auto_dismiss: true) %>
   </div>
 
   <!-- Warning Combination Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-      ⚠️  Warning with Options
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
+      ⚠️ Warning with Options
     </h3>
-    <%= viral_alert(message: "Please review your recent changes. This reminder will auto-dismiss, or you can acknowledge it now.", type: :warning, dismissible: true, auto_dismiss: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "Please review your recent changes. This reminder will auto-dismiss, or you can acknowledge it now.", type: :warning, dismissible: true, auto_dismiss: true) %>
   </div>
 
   <!-- User Choice Explanation -->
-  <div class="mt-8 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-2">🤔 User Choice Options</h4>
-    <div class="text-sm text-green-700 dark:text-green-300 space-y-2">
+  <div class="mt-8 rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
+    <h4 class="mb-2 font-semibold text-green-900 dark:text-green-100">🤔 User Choice Options</h4>
+
+    <div class="space-y-2 text-sm text-green-700 dark:text-green-300">
       <p><strong>Option 1: Close Now</strong></p>
+
       <ul class="ml-4 space-y-1">
         <li>• Click the X button</li>
         <li>• Press Escape key</li>
@@ -61,6 +67,7 @@
       </ul>
 
       <p class="mt-3"><strong>Option 2: Wait for Auto-dismiss</strong></p>
+
       <ul class="ml-4 space-y-1">
         <li>• Do nothing - disappears in 5 seconds</li>
         <li>• Hover to pause the countdown</li>
@@ -70,9 +77,10 @@
   </div>
 
   <!-- Use Case Examples -->
-  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">💡 Perfect Use Cases</h4>
-    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+  <div class="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+    <h4 class="mb-2 font-semibold text-slate-900 dark:text-white">💡 Perfect Use Cases</h4>
+
+    <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-400">
       <li>• <strong>Feature announcements</strong> - users can read now or dismiss</li>
       <li>• <strong>Success confirmations</strong> - acknowledge or let disappear</li>
       <li>• <strong>Reminders</strong> - act now or dismiss for later</li>

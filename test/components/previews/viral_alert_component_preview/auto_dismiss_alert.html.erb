@@ -13,46 +13,51 @@
   - Perfect for temporary notifications
 
   Usage:
-  viral_alert(message: "Message", auto_dismiss: true)
+  render Viral::AlertComponent.new(message: "Message", auto_dismiss: true)
 -->
 
 <div class="space-y-6">
   <!-- Basic Auto-dismiss Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       ⏰ Basic Auto-dismiss Alert
     </h3>
-    <%= viral_alert(message: "This alert will automatically disappear in 5 seconds. Watch the progress bar at the bottom!", auto_dismiss: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "This alert will automatically disappear in 5 seconds. Watch the progress bar at the bottom!", auto_dismiss: true) %>
   </div>
 
   <!-- Auto-dismiss Info Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-      ℹ️  Auto-dismiss Info Alert
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
+      ℹ️ Auto-dismiss Info Alert
     </h3>
-    <%= viral_alert(message: "New message received from John Doe. This notification will auto-dismiss shortly.", type: :info, auto_dismiss: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "New message received from John Doe. This notification will auto-dismiss shortly.", type: :info, auto_dismiss: true) %>
   </div>
 
   <!-- Auto-dismiss Success Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       ✅ Auto-dismiss Success Alert
     </h3>
-    <%= viral_alert(message: "File uploaded successfully! This confirmation will disappear automatically.", type: :success, auto_dismiss: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "File uploaded successfully! This confirmation will disappear automatically.", type: :success, auto_dismiss: true) %>
   </div>
 
   <!-- Auto-dismiss Warning Alert -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-      ⚠️  Auto-dismiss Warning Alert
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
+      ⚠️ Auto-dismiss Warning Alert
     </h3>
-    <%= viral_alert(message: "Your session will expire soon. Please save your work. This reminder will auto-dismiss.", type: :warning, auto_dismiss: true) %>
+
+    <%= render Viral::AlertComponent.new(message: "Your session will expire soon. Please save your work. This reminder will auto-dismiss.", type: :warning, auto_dismiss: true) %>
   </div>
 
   <!-- Interactive Demo Note -->
-  <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-    <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">🎭 Interactive Features</h4>
-    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+  <div class="mt-8 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
+    <h4 class="mb-2 font-semibold text-blue-900 dark:text-blue-100">🎭 Interactive Features</h4>
+
+    <ul class="space-y-1 text-sm text-blue-700 dark:text-blue-300">
       <li>• <strong>Hover over any alert</strong> to pause the countdown</li>
       <li>• <strong>Move your mouse away</strong> to resume the countdown</li>
       <li>• <strong>Focus on any alert</strong> to pause (Tab navigation)</li>
@@ -62,9 +67,10 @@
   </div>
 
   <!-- Technical Details -->
-  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">⚙️  Technical Details</h4>
-    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+  <div class="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+    <h4 class="mb-2 font-semibold text-slate-900 dark:text-white">⚙️ Technical Details</h4>
+
+    <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-400">
       <li>• <strong>Duration:</strong> 5 seconds (5000ms)</li>
       <li>• <strong>Update interval:</strong> 50ms for smooth progress bar</li>
       <li>• <strong>Pause events:</strong> mouseenter, focusin</li>

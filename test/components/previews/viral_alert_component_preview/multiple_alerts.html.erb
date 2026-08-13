@@ -13,88 +13,95 @@
   - Demonstrates best practices for multiple alerts
 
   Usage:
-  Multiple viral_alert components can be rendered in sequence
+  Multiple Viral::AlertComponent instances can be rendered in sequence
 -->
 
 <div class="space-y-6">
   <!-- Multiple Alert Types -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🎨 Multiple Alert Types
     </h3>
+
     <div class="space-y-3">
-      <%= viral_alert(message: "System maintenance completed successfully!", type: :success) %>
-      <%= viral_alert(message: "New features are now available in your dashboard.", type: :info) %>
-      <%= viral_alert(message: "Please review your recent changes before proceeding.", type: :warning) %>
+      <%= render Viral::AlertComponent.new(message: "System maintenance completed successfully!", type: :success) %>
+      <%= render Viral::AlertComponent.new(message: "New features are now available in your dashboard.", type: :info) %>
+      <%= render Viral::AlertComponent.new(message: "Please review your recent changes before proceeding.", type: :warning) %>
     </div>
   </div>
 
   <!-- Mixed Configurations -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🔧 Mixed Configurations
     </h3>
+
     <div class="space-y-3">
-      <%= viral_alert(message: "Profile updated successfully!", type: :success, dismissible: true) %>
-      <%= viral_alert(message: "This notification will auto-dismiss in 5 seconds.", type: :info, auto_dismiss: true) %>
-      <%= viral_alert(message: "You have 3 unread messages.", type: :warning, dismissible: true, auto_dismiss: true) %>
+      <%= render Viral::AlertComponent.new(message: "Profile updated successfully!", type: :success, dismissible: true) %>
+      <%= render Viral::AlertComponent.new(message: "This notification will auto-dismiss in 5 seconds.", type: :info, auto_dismiss: true) %>
+      <%= render Viral::AlertComponent.new(message: "You have 3 unread messages.", type: :warning, dismissible: true, auto_dismiss: true) %>
     </div>
   </div>
 
   <!-- Sequential Information -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       📋 Sequential Information
     </h3>
+
     <div class="space-y-3">
-      <%= viral_alert(message: "Step 1: Data validation completed", type: :success) %>
-      <%= viral_alert(message: "Step 2: Processing files...", type: :info) %>
-      <%= viral_alert(message: "Step 3: Uploading to server...", type: :info) %>
-      <%= viral_alert(message: "Step 4: Finalizing...", type: :info) %>
+      <%= render Viral::AlertComponent.new(message: "Step 1: Data validation completed", type: :success) %>
+      <%= render Viral::AlertComponent.new(message: "Step 2: Processing files...", type: :info) %>
+      <%= render Viral::AlertComponent.new(message: "Step 3: Uploading to server...", type: :info) %>
+      <%= render Viral::AlertComponent.new(message: "Step 4: Finalizing...", type: :info) %>
     </div>
   </div>
 
   <!-- Error Recovery Flow -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🔄 Error Recovery Flow
     </h3>
+
     <div class="space-y-3">
-      <%= viral_alert(message: "Connection failed. Attempting to reconnect...", type: :danger) %>
-      <%= viral_alert(message: "Reconnection successful! Syncing data...", type: :warning) %>
-      <%= viral_alert(message: "All data synchronized successfully!", type: :success) %>
+      <%= render Viral::AlertComponent.new(message: "Connection failed. Attempting to reconnect...", type: :danger) %>
+      <%= render Viral::AlertComponent.new(message: "Reconnection successful! Syncing data...", type: :warning) %>
+      <%= render Viral::AlertComponent.new(message: "All data synchronized successfully!", type: :success) %>
     </div>
   </div>
 
   <!-- User Action Required -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       📋 User Action Required
     </h3>
+
     <div class="space-y-3">
-      <%= viral_alert(message: "Please complete your profile setup", type: :warning, dismissible: true) %>
-      <%= viral_alert(message: "2 of 5 required fields are incomplete", type: :info) %>
-      <%= viral_alert(message: "Profile completion will unlock additional features", type: :success) %>
+      <%= render Viral::AlertComponent.new(message: "Please complete your profile setup", type: :warning, dismissible: true) %>
+      <%= render Viral::AlertComponent.new(message: "2 of 5 required fields are incomplete", type: :info) %>
+      <%= render Viral::AlertComponent.new(message: "Profile completion will unlock additional features", type: :success) %>
     </div>
   </div>
 
   <!-- System Status Overview -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       📊 System Status Overview
     </h3>
+
     <div class="space-y-3">
-      <%= viral_alert(message: "✅ Database: Online and healthy", type: :success) %>
-      <%= viral_alert(message: "✅ File Storage: 85% capacity used", type: :warning) %>
-      <%= viral_alert(message: "✅ API Services: All endpoints responding", type: :success) %>
-      <%= viral_alert(message: "⚠️  Backup System: Last backup 23 hours ago", type: :warning) %>
+      <%= render Viral::AlertComponent.new(message: "✅ Database: Online and healthy", type: :success) %>
+      <%= render Viral::AlertComponent.new(message: "✅ File Storage: 85% capacity used", type: :warning) %>
+      <%= render Viral::AlertComponent.new(message: "✅ API Services: All endpoints responding", type: :success) %>
+      <%= render Viral::AlertComponent.new(message: "⚠️  Backup System: Last backup 23 hours ago", type: :warning) %>
     </div>
   </div>
 
   <!-- Multiple Alerts Best Practices -->
-  <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-    <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">🎯 Multiple Alerts Best Practices</h4>
-    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+  <div class="mt-8 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
+    <h4 class="mb-2 font-semibold text-blue-900 dark:text-blue-100">🎯 Multiple Alerts Best Practices</h4>
+
+    <ul class="space-y-1 text-sm text-blue-700 dark:text-blue-300">
       <li>• <strong>Limit to 5-7 alerts</strong> - too many can overwhelm users</li>
       <li>• <strong>Use consistent spacing</strong> - maintain visual rhythm</li>
       <li>• <strong>Group related alerts</strong> - show logical relationships</li>
@@ -104,9 +111,10 @@
   </div>
 
   <!-- When to Use Multiple Alerts -->
-  <div class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-    <h4 class="font-semibold text-green-900 dark:text-green-100 mb-2">💡 Perfect Use Cases</h4>
-    <ul class="text-sm text-green-700 dark:text-green-300 space-y-1">
+  <div class="mt-6 rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
+    <h4 class="mb-2 font-semibold text-green-900 dark:text-green-100">💡 Perfect Use Cases</h4>
+
+    <ul class="space-y-1 text-sm text-green-700 dark:text-green-300">
       <li>• <strong>Multi-step processes</strong> - show progress and status</li>
       <li>• <strong>System overviews</strong> - display multiple status indicators</li>
       <li>• <strong>User onboarding</strong> - guide through setup steps</li>
@@ -116,9 +124,10 @@
   </div>
 
   <!-- Accessibility Considerations -->
-  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">♿ Accessibility Considerations</h4>
-    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+  <div class="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+    <h4 class="mb-2 font-semibold text-slate-900 dark:text-white">♿ Accessibility Considerations</h4>
+
+    <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-400">
       <li>• <strong>Screen reader order</strong> - alerts are announced in DOM order</li>
       <li>• <strong>Focus management</strong> - ensure logical tab order</li>
       <li>• <strong>Dismissal patterns</strong> - consistent behavior across all alerts</li>

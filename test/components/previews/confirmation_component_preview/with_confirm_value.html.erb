@@ -4,7 +4,7 @@
 <%# ------------------------------------------ %>
 
 <div class="custom-content hidden">
-  <%= viral_alert(
+  <%= render Viral::AlertComponent.new(
     message: "You are about to delete this project.  This cannot be undone.",
     type: :alert,
   ) %>

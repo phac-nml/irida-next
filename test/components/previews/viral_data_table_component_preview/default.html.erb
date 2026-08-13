@@ -15,26 +15,31 @@
   },
 ] %>
 
-<%= viral_data_table(table_data, id: 'preview_table') do |table| %>
+<%= render Viral::DataTableComponent.new(table_data, id: 'preview_table') do |table| %>
   <% table.with_column("id") do |row| %>
     <%= row[:id] %>
   <% end %>
+
   <% table.with_column("name") do |row| %>
     <%= row[:name] %>
   <% end %>
+
   <% table.with_column("pill with conditional") do |row| %>
     <% if row[:pill] == 'green' %>
-      <%= viral_pill(text: "this pill is green", color: :green, border: true) %>
+      <%= render Viral::PillComponent.new(text: "this pill is green", color: :green, border: true) %>
     <% elsif row[:pill] == 'blue' %>
-      <%= viral_pill(text: "this pill is blue", color: :blue, border: true) %>
+      <%= render Viral::PillComponent.new(text: "this pill is blue", color: :blue, border: true) %>
     <% end %>
   <% end %>
+
   <% table.with_column("date") do |row| %>
     <%= local_date(row[:date], :long) %>
   <% end %>
+
   <% table.with_column("time ago") do |row| %>
     <%= local_time_ago(row[:time_ago_date]) %>
   <% end %>
+
   <% table.with_column(I18n.t('workflow_executions.table_component.actions'), sticky_key: :right) do |row| %>
     <%= link_to(
       "#{row[:name]} Action1",
@@ -42,6 +47,7 @@
       class:
         "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer",
     ) %>
+
     <%= link_to(
       "#{row[:name]} Action2",
       "",
