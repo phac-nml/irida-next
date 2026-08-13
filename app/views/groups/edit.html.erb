@@ -2,7 +2,7 @@
   <div class="grid gap-4">
     <%= render Viral::PageHeaderComponent.new(title: t(".details.title")) %>
 
-    <%= viral_card do |card| %>
+    <%= render Viral::CardComponent.new do |card| %>
       <% card.with_header(title: t(:"groups.edit.details.subtitle")) %>
 
       <% card.with_section do %>

@@ -1,4 +1,4 @@
-<%= viral_card do |card| %>
+<%= render Viral::CardComponent.new do |card| %>
   <% card.with_header(title: t("groups.edit.advanced.transfer.title")) %>
 
   <% card.with_section do %>

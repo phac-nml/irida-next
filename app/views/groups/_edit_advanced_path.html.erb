@@ -1,4 +1,4 @@
-<%= viral_card do |card| %>
+<%= render Viral::CardComponent.new do |card| %>
   <% card.with_header(title: t(:"groups.edit.advanced.path.title")) %>
 
   <% card.with_section do %>
@@ -25,7 +25,8 @@
                   text-sm font-medium text-ellipsis whitespace-nowrap text-slate-700 @md:!rounded-r-none
                   @md:border-r-0 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300
                 "
-                title="<%= "#{root_url}#{@group&.parent&.full_path}" %>"
+                aria-label="<%= root_url %><%= @group&.parent&.full_path %>"
+                role="group"
               >
                 <% if @group.parent %>
                   <%= root_url %>

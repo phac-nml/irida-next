@@ -1,13 +1,15 @@
-<%= viral_dialog(open: true, size: :large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: true, size: :large) do |dialog| %>
   <% dialog.with_header(
     title: t(".version_number", version_number: log_data[:version]),
   ) %>
+
   <div>
     <%= render partial: "group_history_modal_description", locals: { log_data: } %>
     <%= render HistoryVersionComponent.new(log_data: log_data) %>
   </div>
+
   <% dialog.with_secondary_action do %>
-    <%= viral_button(data: { action: 'click->viral--dialog#close' }) do %>
+    <%= render Viral::ButtonComponent.new(data: { action: 'click->viral--dialog#close' }) do %>
       <%= t(".close") %>
     <% end %>
   <% end %>

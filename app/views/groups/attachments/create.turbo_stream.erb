@@ -1,14 +1,14 @@
 <% attachments&.each do |attachment| %>
   <% if attachment.persisted? %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(
+      <%= render Viral::FlashComponent.new(
         type: :success,
         data: t(".success", filename: attachment.file.filename),
       ) %>
     <% end %>
   <% else %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(
+      <%= render Viral::FlashComponent.new(
         type: :error,
         data:
           t(
@@ -20,6 +20,7 @@
     <% end %>
   <% end %>
 <% end %>
+
 <%= turbo_stream.update "attachment_modal",
                     partial: "new_attachment_modal",
                     locals: {

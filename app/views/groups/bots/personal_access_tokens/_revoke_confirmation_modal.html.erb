@@ -1,13 +1,9 @@
-<%= viral_dialog(open: open, id: 'revoke_confirmation_dialog') do |dialog| %>
+<%= render Viral::DialogComponent.new(open: open, id: 'revoke_confirmation_dialog') do |dialog| %>
   <% dialog.with_header(title: t("personal_access_tokens.revoke_confirmation.title")) %>
 
   <%= turbo_frame_tag("deletion-alert") %>
 
-  <div
-    class="
-      mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400
-    "
-  >
+  <div class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400">
     <p class="mb-4">
       <%= t(
         "personal_access_tokens.revoke_confirmation.description",
@@ -15,6 +11,7 @@
         bot_name: bot_account.user.email,
       ) %>
     </p>
+
     <%= form_for(:deletion, url: revoke_group_bot_personal_access_token_path(
           bot_id: @bot_account.id,
           id: personal_access_token.id
