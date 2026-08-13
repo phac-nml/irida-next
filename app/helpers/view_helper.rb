@@ -2,34 +2,6 @@
 
 # ViewHelper for user interface components
 module ViewHelper
-  VIRAL_HELPERS = {
-    alert: 'Viral::AlertComponent',
-    avatar: 'Viral::AvatarComponent',
-    button: 'Viral::ButtonComponent',
-    card: 'Viral::CardComponent',
-    dialog: 'Viral::DialogComponent',
-    empty: 'Viral::EmptyStateComponent',
-    data_table: 'Viral::DataTableComponent',
-    file_input: 'Viral::Form::FileInputComponent',
-    flash: 'Viral::FlashComponent',
-    help_text: 'Viral::Form::HelpTextComponent',
-    icon: 'Viral::IconComponent',
-    pageheader: 'Viral::PageHeaderComponent',
-    prefixed_boolean: 'Viral::Form::Prefixed::BooleanComponent',
-    prefixed_select: 'Viral::Form::Prefixed::SelectComponent',
-    prefixed_text_input: 'Viral::Form::Prefixed::TextInputComponent',
-    pill: 'Viral::PillComponent',
-    select: 'Viral::Form::SelectComponent',
-    text_input: 'Viral::Form::TextInputComponent',
-    tooltip: 'Viral::TooltipComponent'
-  }.freeze
-
-  VIRAL_HELPERS.each do |name, component|
-    define_method "viral_#{name}" do |*args, **kwargs, &block|
-      render component.constantize.new(*args, **kwargs), &block
-    end
-  end
-
   def combobox_datepicker(*, **, &)
     render(ComboboxDatepickerComponent.new(*, **), &)
   end
