@@ -111,6 +111,7 @@
               type="text"
               class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700"
               placeholder="e.g., SAMPLE-2024-001"
+              autocomplete="off"
             >
 
             <%= render Pathogen::Typography::Supporting.new(variant: :muted, class: "mt-1") { "Enter a unique identifier for this sample" } %>
@@ -119,10 +120,12 @@
           <div>
             <label class="mb-1 block text-sm font-medium">Project *</label>
 
-            <select class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700">
-              <option>COVID-19 Analysis</option>
-              <option>Influenza Study</option>
-            </select>
+            <input
+              type="text"
+              class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700"
+              value="COVID-19 Analysis"
+              autocomplete="off"
+            >
           </div>
 
           <div>
@@ -148,6 +151,7 @@
             <input
               type="date"
               class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700"
+              autocomplete="off"
             >
           </div>
 
@@ -158,6 +162,7 @@
               type="text"
               class="block w-full rounded-lg border border-slate-300 p-2.5 dark:border-slate-600 dark:bg-slate-700"
               placeholder="e.g., SARS-CoV-2"
+              autocomplete="off"
             >
           </div>
         </div>
