@@ -1,6 +1,6 @@
 <div>
-  <%= render Viral::ButtonComponent.new(disclosure: true, classes: "mb-2") { "Organism" } %>
-  <%= render Viral::ButtonComponent.new(disclosure: :down, classes: "mb-2") { "Organism" } %>
-  <%= render Viral::ButtonComponent.new(disclosure: :up, classes: "mb-2") { "Organism" } %>
-  <%= render Viral::ButtonComponent.new(disclosure: :right) { "Organism" } %>
+  <%= render(Viral::ButtonComponent.new(disclosure: true, classes: "mb-2")) { "Organism" } %>
+  <%= render(Viral::ButtonComponent.new(disclosure: :down, classes: "mb-2")) { "Organism" } %>
+  <%= render(Viral::ButtonComponent.new(disclosure: :up, classes: "mb-2")) { "Organism" } %>
+  <%= render(Viral::ButtonComponent.new(disclosure: :right)) { "Organism" } %>
 </div>

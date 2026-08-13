@@ -1,5 +1,5 @@
 <%= render Viral::PageHeaderComponent.new(title: 'Page header with buttons', subtitle: 'This is a page header') do |header| %>
   <%= header.with_buttons do %>
-    <%= render Viral::ButtonComponent.new { "Button" } %>
+    <%= render(Viral::ButtonComponent.new) { "Button" } %>
   <% end %>
 <% end %>
