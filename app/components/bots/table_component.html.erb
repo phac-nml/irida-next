@@ -1,6 +1,6 @@
 <%= helpers.turbo_frame_tag "bots-table-section" do %>
   <% if @bot_accounts.count.positive? %>
-    <%= viral_data_table(@bot_accounts, id: "bots-table") do |table| %>
+    <%= render Viral::DataTableComponent.new(@bot_accounts, id: "bots-table") do |table| %>
       <% table.with_column(t("bots.index.table.header.username")) do |row| %>
         <%= row.user.email %>
       <% end %>
@@ -102,7 +102,7 @@
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t("bots.index.pagy_item")) %>
   <% else %>
     <div class="empty_state_message">
-      <%= viral_empty(
+      <%= render Viral::EmptyStateComponent.new(
       title: t("bots.index.table.empty_state.title"),
       description: t("bots.index.table.empty_state.description"),
       icon_name: NamespaceBot.icon,

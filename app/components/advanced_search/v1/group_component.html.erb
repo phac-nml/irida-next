@@ -24,11 +24,11 @@
   <% end %>
 
   <div class="my-4 flex justify-end">
-    <%= viral_button(data: { action: "advanced-search--v1#addCondition" }) do %>
+    <%= render Viral::ButtonComponent.new(data: { action: "advanced-search--v1#addCondition" }) do %>
       <%= t("components.advanced_search_component.v1.add_condition_button") %>
     <% end %>
 
-    <%= viral_button(classes: class_names("ml-2", "hidden": !@show_remove_group_button), data: { action: "advanced-search--v1#removeGroup" }) do %>
+    <%= render Viral::ButtonComponent.new(classes: class_names("ml-2", "hidden": !@show_remove_group_button), data: { action: "advanced-search--v1#removeGroup" }) do %>
       <%= t("components.advanced_search_component.v1.remove_group_button") %>
     <% end %>
   </div>

@@ -68,7 +68,7 @@
                                 "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
 
           <div id="workflow_execution_name_error" class="mt-2 text-sm">
-            <%= viral_help_text(state: :error, classes: "hidden") %>
+            <%= render Viral::Form::HelpTextComponent.new(state: :error, classes: "hidden") %>
           </div>
 
           <p

@@ -141,7 +141,7 @@
                         ) %>
                       <% end %>
                     <% elsif column == :state %>
-                      <%= viral_pill(
+                      <%= render Viral::PillComponent.new(
                         text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
                         color: helpers.find_pill_color_for_state(workflow_execution[column]),
                         border: true,
@@ -282,7 +282,7 @@
   <% end %>
 <% else %>
   <div class="empty_state_message">
-    <%= viral_empty(
+    <%= render Viral::EmptyStateComponent.new(
       title: @empty[:title],
       description: @empty[:description],
       icon_name: WorkflowExecution.icon,

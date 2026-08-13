@@ -1,12 +1,12 @@
 <% if @personal_access_tokens.size.positive? %>
-  <%= viral_data_table(@personal_access_tokens, id: "access-tokens-table") do |table| %>
+  <%= render Viral::DataTableComponent.new(@personal_access_tokens, id: "access-tokens-table") do |table| %>
     <% table.with_column(t("personal_access_tokens.table.header.name")) do |row| %>
       <%= row[:name] %>
     <% end %>
 
     <% table.with_column(t("personal_access_tokens.table.header.status")) do |row| %>
       <% row_status = row_token_status(row) %>
-      <%= viral_pill(color: row_status[:color], text: row_status[:text], classes: "token-status") %>
+      <%= render Viral::PillComponent.new(color: row_status[:color], text: row_status[:text], classes: "token-status") %>
     <% end %>
 
     <% table.with_column(t("personal_access_tokens.table.header.scopes")) do |row| %>
@@ -87,7 +87,7 @@
   <% end %>
 <% else %>
   <div class="empty_state_message">
-    <%= viral_empty(
+    <%= render Viral::EmptyStateComponent.new(
       title: @empty[:title],
       description: @empty[:description],
       icon_name: PersonalAccessToken.icon,

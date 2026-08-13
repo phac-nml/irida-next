@@ -230,7 +230,7 @@
                         <% end %>
                       </div>
                     <% elsif column == :format || column == :type %>
-                      <%= viral_pill(
+                      <%= render Viral::PillComponent.new(
                         text: attachment.metadata[column.to_s],
                         color: helpers.find_pill_color_for_attachment(attachment, column.to_s),
                       ) %>
@@ -337,5 +337,5 @@
     ) %>
   <% end %>
 <% else %>
-  <div class="empty_state_message"><%= viral_empty(**@empty) %></div>
+  <div class="empty_state_message"><%= render Viral::EmptyStateComponent.new(**@empty) %></div>
 <% end %>

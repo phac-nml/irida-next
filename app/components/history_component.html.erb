@@ -29,7 +29,7 @@
           <% end %>
 
           <% if index == 0 %>
-            <%= viral_pill(
+            <%= render Viral::PillComponent.new(
               text: t(:"components.history.latest"),
               color: :green,
               classes: "ml-2",

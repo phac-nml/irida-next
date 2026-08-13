@@ -1,5 +1,5 @@
 <template data-list-input-target="template">
-  <%= viral_pill(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1 py-1.5", style: "content-visibility: auto;") do %>
+  <%= render Viral::PillComponent.new(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1 py-1.5", style: "content-visibility: auto;") do %>
     <input type="hidden" data-turbo-temporary name="<%= list_input_form_name %>">
     <span class="label mr-1 font-mono text-sm font-semibold"></span>
 
@@ -20,7 +20,7 @@
 <div class="space-y-4">
   <% if @show_description %>
     <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-      <%= raw t(:"components.list_input.description") %>
+      <%= sanitize t(:"components.list_input.description"), tags: %w[kbd] %>
     </p>
   <% end %>
 
@@ -44,7 +44,6 @@
         "
         data-action="click->list-input#clear"
         aria-label="<%= t(:'components.list_input.clear') %>"
-        title="<%= t(:'components.list_input.clear') %>"
       >
         <%= icon(:x, size: :sm) %>
       </button>

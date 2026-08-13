@@ -1,4 +1,4 @@
-<%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: true, size: :extra_large) do |dialog| %>
   <% dialog.with_header(title: @title) %>
 
   <div
@@ -7,7 +7,7 @@
     data-activities--extended-details-num-cols-value="<%= @column_headers.length %>"
   >
     <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
-      <%= viral_pill(text: helpers.local_time(activity[:created_at]), color: :green) %>
+      <%= render Viral::PillComponent.new(text: helpers.local_time(activity[:created_at]), color: :green) %>
 
       <p class="mt-2 dark:text-slate-400">
         <%= @description %>

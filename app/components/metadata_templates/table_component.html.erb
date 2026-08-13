@@ -52,7 +52,7 @@
     </table>
   <% else %>
     <div class="empty_state_message">
-      <%= viral_empty(
+      <%= render Viral::EmptyStateComponent.new(
         title:
           t(
             :"metadata_templates.table.empty.title",

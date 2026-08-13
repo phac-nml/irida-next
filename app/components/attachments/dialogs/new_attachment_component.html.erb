@@ -1,4 +1,4 @@
-<%= viral_dialog(open: @open) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: @open) do |dialog| %>
   <% dialog.with_header(
     title:
       t("components.attachments.dialogs.new_attachment_component.upload_files"),
@@ -16,7 +16,7 @@
       data-attachment-upload-error-fallback-text-value="<%= t('common.upload.failed') %>"
       data-attachment-upload-fastq-pairing-patterns-value="<%= helpers.attachment_upload_fastq_pairing_data_attributes[:attachment_upload_fastq_pairing_patterns_value].to_json %>"
     >
-      <%= viral_alert(
+      <%= render Viral::AlertComponent.new(
         message: t("common.upload.upload_failed_retry"),
         type: :danger,
         data: { "attachment-upload-target": "uploadErrorAlert" },
@@ -24,7 +24,7 @@
         aria: { live: "assertive", role: "alert" }
       ) %>
 
-      <%= viral_alert(
+      <%= render Viral::AlertComponent.new(
         message: t("common.upload.form_submit_failed"),
         type: :danger,
         data: { "attachment-upload-target": "formErrorAlert" },
@@ -59,7 +59,7 @@
                         class:
                           "block w-full mb-5 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" %>
 
-        <%= viral_alert(message: t('components.attachments.dialogs.new_attachment_component.files_ignored'), type: :alert, data: { "file-upload-target": "alert" }, classes: "hidden", aria: {
+        <%= render Viral::AlertComponent.new(message: t('components.attachments.dialogs.new_attachment_component.files_ignored'), type: :alert, data: { "file-upload-target": "alert" }, classes: "hidden", aria: {
             live: "assertive",
           }) do %>
           <ul class="mt-4 max-w-md list-inside list-disc space-y-1" data-file-upload-target="error"></ul>

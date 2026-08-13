@@ -18,7 +18,7 @@
   "linelist-import-error-message-value": t(".error_message"),
 } %>
 
-<%= viral_dialog(open: true, size: :large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: true, size: :large) do |dialog| %>
   <% dialog.with_header(title: t("shared.samples.metadata.file_imports.dialog.title")) %>
   <%= helpers.turbo_stream_from @broadcast_target %>
 
@@ -34,14 +34,14 @@
       <% end %>
 
       <template data-linelist-import-target="flashTemplate">
-        <%= viral_flash(
+        <%= render Viral::FlashComponent.new(
         type: :success,
         data: t("shared.samples.metadata.file_imports.success.description"),
       ) %>
       </template>
 
       <template data-linelist-import-target="alertTemplate">
-        <%= viral_alert(
+        <%= render Viral::AlertComponent.new(
                 type: :danger,
                 message: "PLACEHOLDER",
                 classes: class_names("mb-4"),
@@ -50,7 +50,7 @@
       </template>
 
       <template data-linelist-import-target="dialogTemplate">
-        <%= viral_dialog(
+        <%= render Viral::DialogComponent.new(
           size: :large,
           open: false,
           closable: false,
@@ -63,7 +63,7 @@
             <div id="error-messages"></div>
 
             <div>
-              <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
+              <%= render Viral::ButtonComponent.new(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
                 <%= t("shared.samples.metadata.file_imports.errors.ok_button") %>
               <% end %>
             </div>

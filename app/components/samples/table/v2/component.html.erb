@@ -1,6 +1,6 @@
 <% if empty_state? %>
   <div class="empty_state_message">
-    <%= viral_empty(
+    <%= render Viral::EmptyStateComponent.new(
       title: @empty[:title],
       description: @empty[:description],
       icon_name: Sample.icon,

@@ -15,7 +15,7 @@
   "linelist-export-created-records-message-value": t("data_exports.new_linelist_export_dialog.created_records")
 } %>
 
-<%= viral_dialog(open: @open, size: :large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: @open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t("data_exports.new_linelist_export_dialog.title")) %>
 
   <%= tag.div class: "font-normal text-slate-500 dark:text-slate-400", data: linelist_data do %>
