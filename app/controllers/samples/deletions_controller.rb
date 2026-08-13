@@ -46,7 +46,8 @@ module Samples
                                                  partial: @confirmation_dialog,
                                                  locals: {
                                                    errors: errors,
-                                                   open: true
+                                                   open: true,
+                                                   closable: false
                                                  }), status: :ok
       end
     end
