@@ -166,7 +166,7 @@ module Projects
         Projects::Samples::DestroyService.new(@project.namespace, @user,
                                               { sample_ids: [@sample1.id], reason: reason }).execute
 
-        deleted_sample = Sample.with_deleted.find(@sample1.id)
+        deleted_sample = Sample.only_deleted.find(@sample1.id)
 
         activity = PublicActivity::Activity.where(
           key: 'namespaces_project_namespace.samples.destroy_multiple',

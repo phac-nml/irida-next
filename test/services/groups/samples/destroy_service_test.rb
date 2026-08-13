@@ -166,8 +166,8 @@ module Groups
         Groups::Samples::DestroyService.new(@group12, @user,
                                             { sample_ids: [@sample32.id, @sample34.id], reason: reason }).execute
 
-        deleted_sample32 = Sample.with_deleted.find(@sample32.id)
-        deleted_sample34 = Sample.with_deleted.find(@sample34.id)
+        deleted_sample32 = Sample.only_deleted.find(@sample32.id)
+        deleted_sample34 = Sample.only_deleted.find(@sample34.id)
 
         group_activity = PublicActivity::Activity.where(
           key: 'group.samples.destroy',
