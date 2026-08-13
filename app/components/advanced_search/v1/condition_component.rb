@@ -62,12 +62,14 @@ module AdvancedSearch
       end
 
       def enum_operator_options
-        if Flipper.enabled?(:advanced_search_metadata_operators) && selected_field.starts_with?('metadata')
+        if Flipper.enabled?(:advanced_search_metadata_operators) && selected_field.starts_with?('metadata.')
           # flatten metadata operators to exclude optgroup labeling
-          metadata_operators = @operations['metadata']
-                               .values
-                               .reduce({}, :merge)
-          metadata_operators.select { |_, value| AdvancedSearch::ENUM_OPERATOR_VALUES['metadata'].include?(value) }
+          flattened_metadata_operators = @operations['metadata']
+                                         .values
+                                         .reduce({}, :merge)
+          flattened_metadata_operators.select do |_, value|
+            AdvancedSearch::ENUM_OPERATOR_VALUES['metadata'].include?(value)
+          end
         else
           @operations['standard'].select { |_, value| AdvancedSearch::ENUM_OPERATOR_VALUES['standard'].include?(value) }
         end

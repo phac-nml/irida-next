@@ -31,13 +31,17 @@ module AdvancedSearch
         enum_operators = {}
         if Flipper.enabled?(:advanced_search_metadata_operators)
           # flatten metadata operators to exclude optgroup labeling
-          metadata_operators = operation_options['metadata']
+          metadata_operators = @operations['metadata']
                                .values
                                .reduce({}, :merge)
-          enum_operators['metadata'] = metadata_operators.select { |_, value| AdvancedSearch::ENUM_OPERATOR_VALUES['metadata'].include?(value) }
+          enum_operators['metadata'] = metadata_operators.select do |_, value|
+            AdvancedSearch::ENUM_OPERATOR_VALUES['metadata'].include?(value)
+          end
         end
 
-        enum_operators['standard'] = operation_options['standard'].select { |_, value| AdvancedSearch::ENUM_OPERATOR_VALUES['standard'].include?(value) }
+        enum_operators['standard'] = @operations['standard'].select do |_, value|
+          AdvancedSearch::ENUM_OPERATOR_VALUES['standard'].include?(value)
+        end
         enum_operators
       end
 
