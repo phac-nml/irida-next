@@ -1,4 +1,4 @@
-<%= viral_dialog(open: true, size: :large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: true, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
   <%= turbo_stream_from broadcast_target %>
 

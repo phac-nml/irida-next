@@ -1,13 +1,16 @@
-<%= viral_dialog(open: open, id: 'workflow_execution_error_dialog', size: :large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: open, id: 'workflow_execution_error_dialog', size: :large) do |dialog| %>
   <% dialog.with_header(title: t("shared.workflow_executions.error_dialog.title")) %>
 
-  <%= viral_alert(message:, type: :alert, classes: "mb-4 h-30 overflow-y-auto", dismissible: false) do %>
-    <ul class="mt-1.5 ml-4 list-disc list-inside">
+  <%= render Viral::AlertComponent.new(message:, type: :alert, classes: "mb-4 h-30 overflow-y-auto", dismissible: false) do %>
+    <ul class="mt-1.5 ml-4 list-inside list-disc">
       <% errors.each do |error| %>
         <%- error_parts = error.split(":") %>
+
         <%- if error_parts.length > 1 %>
-          <li><%= error_parts[0] %>
-            <ul class="mt-1.5 ml-4 list-disc list-inside">
+          <li>
+            <%= error_parts[0] %>
+
+            <ul class="mt-1.5 ml-4 list-inside list-disc">
               <li><%= error_parts[1] %></li>
             </ul>
           </li>

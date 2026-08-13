@@ -1,6 +1,6 @@
 <% unless @workflow_execution.errors.any? %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
+    <%= render Viral::FlashComponent.new(type:, data: message) %>
   <% end %>
 <% end %>
 

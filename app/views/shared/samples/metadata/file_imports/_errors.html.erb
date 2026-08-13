@@ -33,7 +33,7 @@
   </ul>
 
   <div class="mt-4 flex">
-    <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
+    <%= render Viral::ButtonComponent.new(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
       <%= t(".ok_button") %>
     <% end %>
   </div>

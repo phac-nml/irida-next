@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: open, size: :large, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t("shared.samples.spreadsheet_imports.dialog.title")) %>
   <%= turbo_stream_from @broadcast_target %>
 
