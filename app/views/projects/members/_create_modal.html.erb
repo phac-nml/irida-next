@@ -1,10 +1,12 @@
-<%= viral_dialog(id: 'new-member-dialog', open: open) do |dialog| %>
+<%= render Viral::DialogComponent.new(id: 'new-member-dialog', open: open) do |dialog| %>
   <% dialog.with_header(title: t(:"projects.members.new.title")) %>
+
   <% dialog.with_trigger do %>
-    <button class="button button-primary w-full" data-action="viral--dialog#open">
+    <button class="button w-full button-primary" data-action="viral--dialog#open">
       <%= I18n.t("projects.members.index.add") %>
     </button>
   <% end %>
+
   <% if @new_member&.invalid? %>
     <%= render partial: "form" %>
   <% else %>

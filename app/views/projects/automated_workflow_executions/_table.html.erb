@@ -1,32 +1,39 @@
 <% if @automated_workflow_executions.count.positive? %>
-  <%= viral_data_table(@automated_workflow_executions, id: "automated_workflow_executions") do |table| %>
+  <%= render Viral::DataTableComponent.new(@automated_workflow_executions, id: "automated_workflow_executions") do |table| %>
     <% table.with_column(t(".headers.id"),
       sticky_key: :left
     ) do |row| %>
       <%= row[:id] %>
     <% end %>
+
     <% table.with_column(t(".headers.name")) do |row| %>
       <%= row[:name] %>
     <% end %>
+
     <% table.with_column(t(".headers.workflow_name")) do |row| %>
       <%= row.workflow.name %>
     <% end %>
+
     <% table.with_column(t(".headers.workflow_version")) do |row| %>
       <%= row.metadata["workflow_version"] %>
     <% end %>
+
     <% table.with_column(t(".headers.created_at")) do |row| %>
       <%= local_date(row[:created_at], :long) %>
     <% end %>
+
     <% table.with_column(t(".headers.updated_at")) do |row| %>
       <%= local_time_ago(row[:updated_at]) %>
     <% end %>
+
     <% table.with_column(t(".headers.status")) do |row| %>
       <% if row[:disabled] %>
-        <%= viral_pill(text: t("common.statuses.disabled").upcase, color: "red") %>
+        <%= render Viral::PillComponent.new(text: t("common.statuses.disabled").upcase, color: "red") %>
       <% else %>
-        <%= viral_pill(text: t("common.statuses.enabled"), color: "green") %>
+        <%= render Viral::PillComponent.new(text: t("common.statuses.enabled"), color: "green") %>
       <% end %>
     <% end %>
+
     <% table.with_column(t(".headers.actions"),
         classes: "flex justify-start"
       ) do |row| %>
@@ -51,6 +58,7 @@
         class:
           "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer mr-2" %>
       <% end %>
+
       <%= button_to t("common.actions.delete"),
       namespace_project_automated_workflow_execution_path(
         @project.parent,
@@ -76,7 +84,7 @@
   <% end %>
 <% else %>
   <div class="empty_state_message">
-    <%= viral_empty(
+    <%= render Viral::EmptyStateComponent.new(
       title: t(:".empty.title"),
       description: t(:".empty.description"),
       icon_name: AutomatedWorkflowExecution.icon,

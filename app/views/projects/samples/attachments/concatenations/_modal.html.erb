@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
 
   <%= form_with(model: @concatenation_form, url: namespace_project_sample_attachments_concatenation_path,
@@ -20,6 +20,7 @@
 
         <%= tag.div class: "mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400",
                     tabindex: 0,
+                    role: "group",
                     aria: {
                       label: form.field_id(:attachment_ids),
                       describedby: (invalid_attachment_ids ? form.field_id(:attachment_ids, "error") : nil)

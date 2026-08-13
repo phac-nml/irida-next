@@ -3,7 +3,7 @@
 <%= turbo_frame_tag "samples_dialog" %>
 
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, id: @sample.puid, subtitle: @sample.description) do |component| %>
-  <%= viral_pill(text: @sample.puid, color: :blue) %>
+  <%= render Viral::PillComponent.new(text: @sample.puid, color: :blue) %>
 
   <% component.with_buttons do %>
     <% if @allowed_to[:update_sample] %>

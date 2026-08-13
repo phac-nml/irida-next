@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(title: t(:".title")) %>
 
   <ul>
@@ -22,7 +22,7 @@
                   <%= workflow.name %>
                 </span>
 
-                <%= viral_pill(text: workflow.version, color: :primary) %>
+                <%= render Viral::PillComponent.new(text: workflow.version, color: :primary) %>
               </span>
 
               <span class="truncate text-sm font-normal text-slate-500 group-hover:text-slate-200 dark:text-slate-400">

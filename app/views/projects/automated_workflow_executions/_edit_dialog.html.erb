@@ -1,4 +1,4 @@
-<%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: true, size: :extra_large) do |dialog| %>
   <% workflow_name =
     (
       if @automated_workflow_execution.name.empty?
