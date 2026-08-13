@@ -48,9 +48,14 @@
 
           <%= render Pathogen::Typography::Text.new(class: "mb-4") { "The platform is built on Ruby on Rails 8.0 with a modern ViewComponent-based architecture. Here's an example of how to render a sample list:" } %>
 
-          <%= render Pathogen::Typography::CodeBlock.new(language: "ruby", class: "mb-4") do %>
-            def index @samples = Sample.includes(:project) .order(created_at: :desc) .page(params[:page]) end
-          <% end %>
+          <%= render Pathogen::Typography::CodeBlock.new(language: "ruby", class: "mb-4") { <<~RUBY.chomp
+            def index
+              @samples = Sample.includes(:project)
+                               .order(created_at: :desc)
+                               .page(params[:page])
+            end
+          RUBY
+          } %>
 
           <%= render Pathogen::Typography::Text.new { "This approach ensures optimal performance even with large datasets." } %>
         <% end %>

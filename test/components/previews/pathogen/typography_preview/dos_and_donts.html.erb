@@ -160,9 +160,12 @@
               for short snippets
             <% end %>
 
-            <%= render Pathogen::Typography::CodeBlock.new(language: "ruby") do %>
-              def example # Use code_block for multi-line code end
-            <% end %>
+            <%= render Pathogen::Typography::CodeBlock.new(language: "ruby") { <<~RUBY.chomp
+              def example
+                # Use code_block for multi-line code
+              end
+            RUBY
+            } %>
           </div>
         </div>
 

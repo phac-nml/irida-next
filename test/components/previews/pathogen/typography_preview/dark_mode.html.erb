@@ -135,9 +135,13 @@
             Code Blocks
           <% end %>
 
-          <%= render Pathogen::Typography::CodeBlock.new(language: "ruby") do %>
-            def example puts "Code blocks have dark backgrounds" puts "that work in both light and dark mode" end
-          <% end %>
+          <%= render Pathogen::Typography::CodeBlock.new(language: "ruby") { <<~RUBY.chomp
+            def example
+              puts "Code blocks have dark backgrounds"
+              puts "that work in both light and dark mode"
+            end
+          RUBY
+          } %>
         </div>
       </div>
     </div>
