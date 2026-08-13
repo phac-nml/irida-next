@@ -1,5 +1,5 @@
 <%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type: :success, data: message) %>
+  <%= render Viral::FlashComponent.new(type: :success, data: message) %>
 <% end %>
 
 <%= turbo_stream.replace "token-information-component" do %>

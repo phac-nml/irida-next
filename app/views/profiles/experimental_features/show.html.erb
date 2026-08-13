@@ -8,7 +8,7 @@
   class="sr-only"
 ></div>
 
-<%= viral_card do |card| %>
+<%= render Viral::CardComponent.new do |card| %>
   <% card.with_section(border_bottom: true, border_top: true) do %>
     <p class="text-sm text-slate-500 dark:text-slate-400"><%= t(".description") %></p>
   <% end %>

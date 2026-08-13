@@ -1,6 +1,6 @@
 <%= render Viral::PageHeaderComponent.new(title: t(".preferences")) %>
 
-<%= viral_card do |card| %>
+<%= render Viral::CardComponent.new do |card| %>
   <% card.with_section(border_bottom: true, border_top: true) do %>
     <%= tag.div(
       role: "radiogroup",
@@ -15,12 +15,7 @@
         dark_text: t("theme.modes.dark")
       }
     ) do %>
-      <div
-        id="theme-legend"
-        class="
-          mb-2 text-sm font-semibold text-slate-800 dark:text-white uppercase
-        "
-      >
+      <div id="theme-legend" class="mb-2 text-sm font-semibold text-slate-800 uppercase dark:text-white">
         <%= t(".theme_title") %>
       </div>
 
@@ -65,6 +60,7 @@
       ) %>
     <% end %>
   <% end %>
+
   <% card.with_section do %>
     <%= render "locale_form", user: @user %>
   <% end %>

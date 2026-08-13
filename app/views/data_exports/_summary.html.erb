@@ -1,49 +1,60 @@
 <div class="px-4 py-4">
-  <dl
-    class="
-      max-w-md text-slate-900 divide-y divide-slate-200 dark:text-white
-      dark:divide-slate-700
-    "
-  >
+  <dl class="max-w-md divide-y divide-slate-200 text-slate-900 dark:divide-slate-700 dark:text-white">
     <div class="flex flex-col pb-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".id") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @data_export.id %></dd>
     </div>
+
     <% unless @data_export.name.nil? %>
       <div class="flex flex-col py-3">
         <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t('common.labels.name') %></dt>
         <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @data_export.name %></dd>
       </div>
     <% end %>
+
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".type") %></dt>
-      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= t(:"data_exports.types.#{@data_export.export_type}") %></dd>
+
+      <dd class="text-lg font-semibold text-slate-900 dark:text-white">
+        <%= t(:"data_exports.types.#{@data_export.export_type}") %>
+      </dd>
     </div>
+
     <% if @data_export.export_type == 'linelist' %>
       <div class="flex flex-col py-3">
         <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".format") %></dt>
-        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @data_export.export_parameters["linelist_format"] %></dd>
+
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white">
+          <%= @data_export.export_parameters["linelist_format"] %>
+        </dd>
       </div>
     <% end %>
+
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".status") %></dt>
+
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
         <% status_text = t("common.statuses.#{@data_export.status}").upcase %>
+
         <% if @data_export.status == 'ready' %>
-          <%= viral_pill(text: status_text, color: :green) %>
+          <%= render Viral::PillComponent.new(text: status_text, color: :green) %>
         <% else %>
-          <%= viral_pill(text: status_text, color: :slate) %>
+          <%= render Viral::PillComponent.new(text: status_text, color: :slate) %>
         <% end %>
       </dd>
     </div>
+
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t('common.labels.created') %></dt>
+
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
         <%= local_date(@data_export.created_at, :long) %>
       </dd>
     </div>
+
     <div class="flex flex-col pt-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".expires_at") %></dt>
+
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
         <% if @data_export.expires_at.nil? %>
           <%= t(:".once_ready") %>

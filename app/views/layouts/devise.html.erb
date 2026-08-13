@@ -54,7 +54,7 @@
             </div>
 
             <% flash.each do |type, msg| %>
-              <%= viral_alert(type: type, message: msg) %>
+              <%= render Viral::AlertComponent.new(type: type, message: msg) %>
             <% end %>
 
             <%= yield %>

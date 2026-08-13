@@ -1,10 +1,9 @@
 <% if export_type == 'analysis' %>
-  <%= turbo_stream.update "export_dialog" do %>
-  <% end %>
+  <%= turbo_stream.update "export_dialog", "" %>
 <% else %>
-  <%= turbo_stream.update "samples_dialog" do %>
-  <% end %>
+  <%= turbo_stream.update "samples_dialog", "" %>
 <% end %>
+
 <%= turbo_stream.append "flashes" do %>
-  <%= viral_flash(type:, data: message) %>
+  <%= render Viral::FlashComponent.new(type:, data: message) %>
 <% end %>
