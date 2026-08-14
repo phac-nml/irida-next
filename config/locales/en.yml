@@ -1720,6 +1720,10 @@ en:
             basename_help: The base filename can contain only letters, digits, '-', '.', and '_'
             success: Files were successfully concatenated.
           modal:
+            description:
+              plural: 'The following COUNT_PLACEHOLDER files were selected for concatenation:'
+              singular: 'The following file was selected for concatenation:'
+              zero: No files were selected for concatenation
             submit_button: Concatenate
             title: Concatenate Files
         create:
