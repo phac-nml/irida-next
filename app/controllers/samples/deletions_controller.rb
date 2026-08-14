@@ -11,12 +11,12 @@ module Samples
     def new
       authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :destroy_sample?
 
-      @audit_form = AuditForm.new
+      @audit_form = AuditForm.new(user: current_user)
       @broadcast_target = "samples_destroy_#{SecureRandom.uuid}"
     end
 
     def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      @audit_form = AuditForm.new(reason: destroy_params[:reason])
+      @audit_form = AuditForm.new(reason: destroy_params[:reason], user: current_user)
 
       if @audit_form.valid?
         samples_to_delete_count = destroy_params[:sample_ids].count
@@ -57,7 +57,10 @@ module Samples
     end
 
     def destroy_params
-      params.expect(deletion: [:reason, { sample_ids: [] }])
+      # Make reason optional by only extracting what's provided
+      deletion_params = params.expect(deletion: [{ sample_ids: [] }])
+      deletion_params[:reason] = params.dig(:deletion, :reason)
+      deletion_params
     end
 
     def destroy_service

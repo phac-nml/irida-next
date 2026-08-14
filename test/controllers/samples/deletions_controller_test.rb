@@ -23,8 +23,7 @@ module Samples
                namespace_id: @group1.id,
                deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample1.id],
-                 reason: 'cleanup'
+                 sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
       end
@@ -40,8 +39,7 @@ module Samples
                namespace_id: @group1.id,
                deletion_type: 'multiple',
                deletion: {
-                 sample_ids: [@sample1.id, @sample2.id],
-                 reason: 'cleanup'
+                 sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
       end
@@ -57,8 +55,7 @@ module Samples
                namespace_id: @project1_namespace.id,
                deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample1.id],
-                 reason: 'cleanup'
+                 sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
       end
@@ -75,8 +72,7 @@ module Samples
                namespace_id: @project1_namespace.id,
                deletion_type: 'multiple',
                deletion: {
-                 sample_ids: [@sample1.id, @sample2.id],
-                 reason: 'cleanup'
+                 sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
       end
@@ -92,8 +88,7 @@ module Samples
                namespace_id: @group1.id,
                deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample69.id],
-                 reason: 'cleanup'
+                 sample_ids: [@sample69.id]
                }
              }, as: :turbo_stream
       end
@@ -109,8 +104,7 @@ module Samples
                namespace_id: @project1_namespace.id,
                deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample69.id],
-                 reason: 'cleanup'
+                 sample_ids: [@sample69.id]
                }
              }, as: :turbo_stream
       end
@@ -128,8 +122,7 @@ module Samples
                namespace_id: @group1.id,
                deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample23.id],
-                 reason: 'cleanup'
+                 sample_ids: [@sample23.id]
                }
              }, as: :turbo_stream
       end
@@ -146,8 +139,7 @@ module Samples
                namespace_id: @project2_namespace.id,
                deletion_type: 'single',
                deletion: {
-                 sample_ids: [@sample22.id],
-                 reason: 'cleanup'
+                 sample_ids: [@sample22.id]
                }
              }, as: :turbo_stream
       end
@@ -230,8 +222,7 @@ module Samples
                namespace_id: @group1.id,
                deletion_type: 'multiple',
                deletion: {
-                 sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id'],
-                 reason: 'cleanup'
+                 sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
                }
              }, as: :turbo_stream
       end
@@ -250,8 +241,7 @@ module Samples
                namespace_id: @project1_namespace.id,
                deletion_type: 'multiple',
                deletion: {
-                 sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id'],
-                 reason: 'cleanup'
+                 sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
                }
              }, as: :turbo_stream
       end
@@ -270,8 +260,7 @@ module Samples
                namespace_id: @group1.id,
                deletion_type: 'multiple',
                deletion: {
-                 sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3],
-                 reason: 'cleanup'
+                 sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
                }
              }, as: :turbo_stream
       end
@@ -281,6 +270,7 @@ module Samples
     end
 
     test 'should not destroy sample when deletion reason exceeds max length' do
+      Flipper.enable(:sample_deletion_reason)
       assert_no_difference('Sample.count') do
         post samples_deletions_path,
              params: {
@@ -295,6 +285,7 @@ module Samples
 
       assert_response :unprocessable_content
       assert_match 'Reason is too long', response.body
+      Flipper.disable(:sample_deletion_reason)
     end
   end
 end

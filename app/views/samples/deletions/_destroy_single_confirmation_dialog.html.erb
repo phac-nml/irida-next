@@ -25,37 +25,33 @@
       <div class="grid gap-4">
         <%= form_error_summary(form) %>
 
-        <%= render partial: "shared/form/required_field_legend" %>
+        <% if Flipper.enabled?(:sample_deletion_reason, current_user) %>
+          <%= render partial: "shared/form/required_field_legend" %>
 
-        <% invalid_reason = audit_form.errors.include?(:reason) %>
+          <% invalid_reason = audit_form.errors.include?(:reason) %>
 
-        <div class="form-field <%= 'invalid' if invalid_reason %>">
-          <%= form.label :reason, data: { required: true } %>
+          <div class="form-field <%= 'invalid' if invalid_reason %>">
+            <%= form.label :reason, data: { required: true } %>
 
-          <%= form.text_area :reason,
-              {
-                :rows => 3,
-                :maxlength => 500,
-                :class => "form-control",
-                :placeholder => t("samples.deletions.reason_placeholder"),
-                "aria-describedby" => [
-                  (
-                    if invalid_reason
-                      form.field_id(:reason, "error")
-                    else
-                      nil
-                    end
-                     ),
-                    ].join(" "),
-                    "aria-invalid" => invalid_reason,
-              } %>
+            <% aria_describedby = invalid_reason ? form.field_id(:reason, "error") : nil %>
 
-          <% if invalid_reason %>
-            <%= render "shared/form/field_errors",
-              id: form.field_id(:reason, "error"),
-              errors: audit_form.errors.full_messages_for(:reason) %>
-          <% end %>
-        </div>
+            <%= form.text_area :reason,
+                {
+                  :rows => 3,
+                  :maxlength => 500,
+                  :class => "form-control",
+                  :placeholder => t("samples.deletions.reason_placeholder"),
+                  "aria-describedby" => aria_describedby,
+                  "aria-invalid" => invalid_reason,
+                } %>
+
+            <% if invalid_reason %>
+              <%= render "shared/form/field_errors",
+                id: form.field_id(:reason, "error"),
+                errors: audit_form.errors.full_messages_for(:reason) %>
+            <% end %>
+          </div>
+        <% end %>
 
         <div>
           <%= form.submit t('common.actions.remove'),

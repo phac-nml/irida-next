@@ -12,14 +12,12 @@ features:
     admin_manageable: true
     description:
       en: "Disable using standard operators on metadata fields in GraphQL"
-      fr:
-        "Désactiver l'utilisation des opérateurs standard sur les champs de métadonnées\
+      fr: "Désactiver l'utilisation des opérateurs standard sur les champs de métadonnées\
         \ dans GraphQL"
     enable_in_development: false
     name:
       en: "Advanced Search Disable Standard Operators for Metadata in GraphQL"
-      fr:
-        "Recherche avancée : désactiver les opérateurs standard pour les métadonnées\
+      fr: "Recherche avancée : désactiver les opérateurs standard pour les métadonnées\
         \ dans GraphQL"
   advanced_search_metadata_operators:
     admin_manageable: true
@@ -85,6 +83,15 @@ features:
   integration_access_token_generation:
     description: "Allow users to generate access tokens for API access."
     enable_in_development: true
+  sample_deletion_reason:
+    admin_manageable: true
+    description:
+      en: "Require a reason when deleting samples."
+      fr: "Exiger une raison lors de la suppression d'échantillons."
+    enable_in_development: true
+    name:
+      en: "Sample Deletion Reason"
+      fr: "Raison de suppression d'échantillon"
   v2_dropdown:
     admin_manageable: true
     description:
