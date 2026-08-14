@@ -87,6 +87,25 @@ module Projects
       assert_not_includes response.body, @workflow_execution_running.id
     end
 
+    test 'should render project listing with project-shared workflow visibility rules' do
+      shared_to_project = workflow_executions(:workflow_execution_shared1)
+      also_shared_to_project = workflow_executions(:workflow_execution_shared2)
+      not_shared_to_project = workflow_executions(:workflow_execution_shared3)
+
+      get namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_response :success
+      assert_select 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+      assert_select 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+
+      assert_select "tr##{dom_id(shared_to_project)}", count: 1
+      assert_select "tr##{dom_id(also_shared_to_project)}", count: 1
+      assert_select "tr##{dom_id(not_shared_to_project)}", count: 0
+
+      assert_select "tr##{dom_id(shared_to_project)} button", text: I18n.t('common.actions.cancel'), count: 0
+      assert_select "tr##{dom_id(shared_to_project)} button", text: I18n.t('common.actions.delete'), count: 0
+    end
+
     test 'should show workflow execution' do
       workflow_execution = workflow_executions(:automated_workflow_execution)
 
@@ -105,6 +124,34 @@ module Projects
       assert_response :success
 
       w3c_validate 'Project Workflow Execution Show Page'
+    end
+
+    test 'should render shared workflow show page action restrictions and tab content' do
+      workflow_execution = workflow_executions(:workflow_execution_shared2)
+      output_attachment = attachments(:workflow_execution_shared_with_project_output_attachment)
+      cancel_action = cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+      edit_action = edit_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+      destroy_action =
+        destroy_confirmation_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+
+      get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+
+      assert_response :success
+      assert_select "form[action^='#{new_data_export_path}'] button", count: 0
+      assert_select "form[action='#{cancel_action}'] button", count: 0
+      assert_select "form[action='#{edit_action}'] button", count: 0
+      assert_select "form[action='#{destroy_action}'] button", count: 0
+
+      get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution), params: { tab: 'files' }
+
+      assert_response :success
+      assert_includes response.body, output_attachment.puid
+      assert_includes response.body, output_attachment.file.filename.to_s
+
+      get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution), params: { tab: 'params' }
+
+      assert_response :success
+      assert_select '#workflow-executions-tabs'
     end
 
     test 'should not show shared workflow execution for user with incorrect permissions' do
