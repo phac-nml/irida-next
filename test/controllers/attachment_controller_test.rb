@@ -2,12 +2,6 @@
 
 require 'test_helper'
 
-# Tests for the AttachmentController
-#
-# Note: These tests focus on the error handling and authorization aspects of the controller.
-# Testing the preview functionality would require setting up Active Storage test fixtures
-# with actual file content, which is complex in a test environment. The preview functionality
-# is better tested through system/integration tests where actual files can be uploaded.
 class AttachmentsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
