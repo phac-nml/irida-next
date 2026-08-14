@@ -253,7 +253,7 @@ attachmentJ:
   puid: INXT_ATT_AAAAAAAAAS
 
 workflow_execution_completed_output_attachment:
-  metadata: { "compression": "gzip", "format": "unknown" }
+  metadata: { "compression": "gzip", "format": "text" }
   attachable: irida_next_example_completed_with_output (WorkflowExecution)
   puid: INXT_ATT_AAAAAAAAAT
 
