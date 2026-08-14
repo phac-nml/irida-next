@@ -685,6 +685,153 @@ module Projects
         assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
         assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
       end
+
+      test 'deleting by delete row action link selected pe and non-pe attachments updates selection count' do
+        login_as users(:jeff_doe)
+        project = projects(:projectA)
+        sample = samples(:sampleC)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        pe_fwd_attachment = attachments(:attachmentPEFWD4)
+        non_pe_attachment = attachments(:attachmentG)
+
+        visit namespace_project_sample_url(namespace, project, sample)
+
+        # no attachments selected/checked
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+
+        # select a pe and non-pe attachment
+        within '#sample-attachments' do
+          assert_selector 'table #attachments-table-body tr', count: 8
+          check "checkbox_attachment_#{pe_fwd_attachment.id}"
+          check "checkbox_attachment_#{non_pe_attachment.id}"
+        end
+
+        # verify selection counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 2
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '2'
+        end
+
+        # delete pe attachment
+        within "#attachment_#{pe_fwd_attachment.id}" do
+          click_button I18n.t('common.actions.delete')
+        end
+
+        within 'dialog' do
+          click_button I18n.t('common.controls.confirm')
+        end
+
+        # verify updated count
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 7
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 1
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 7"
+          assert_selector 'strong[data-selection-target="selected"]', text: '1'
+        end
+
+        # delete non pe attachment
+        within "#attachment_#{non_pe_attachment.id}" do
+          click_button I18n.t('common.actions.delete')
+        end
+
+        within 'dialog' do
+          click_button I18n.t('common.controls.confirm')
+        end
+
+        # verify updated attachment counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 6
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 6"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+      end
+
+      test 'selecting and de-selecting attachments updates selection count' do
+        login_as users(:jeff_doe)
+        project = projects(:projectA)
+        sample = samples(:sampleC)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        pe_fwd_attachment = attachments(:attachmentPEFWD4)
+        non_pe_attachment = attachments(:attachmentG)
+
+        visit namespace_project_sample_url(namespace, project, sample)
+
+        # no attachments selected/checked
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+
+        assert_selector '#sample-attachments table #attachments-table-body tr', count: 8
+
+        check "checkbox_attachment_#{pe_fwd_attachment.id}"
+
+        # verify selection counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 1
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '1'
+        end
+
+        check "checkbox_attachment_#{non_pe_attachment.id}"
+
+        # verify selection counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 2
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '2'
+        end
+
+        uncheck "checkbox_attachment_#{pe_fwd_attachment.id}"
+
+        # verify selection counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 1
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '1'
+        end
+
+        uncheck "checkbox_attachment_#{non_pe_attachment.id}"
+
+        # verify selection counts
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 8
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('components.attachments.table_component.counts.attachments')}: 8"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+      end
     end
   end
 end

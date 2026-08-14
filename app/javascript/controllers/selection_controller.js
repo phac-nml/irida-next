@@ -161,9 +161,22 @@ export default class extends Controller {
       // Use a Set to deduplicate values
       newStorageValue = [...new Set([...newStorageValue, ...values])];
     } else {
-      newStorageValue = newStorageValue.filter(
-        (value) => !values.includes(value),
-      );
+      newStorageValue = newStorageValue.filter((value) => {
+        // exact match (single checkbox toggle / select-page store the raw value)
+        if (values.includes(value)) return false;
+        let parsed;
+        try {
+          parsed = JSON.parse(value);
+        } catch {
+          return true; // plain id that wasn't targeted
+        }
+        // contained-id match (row-action delete passes a single id that may be
+        // part of a stored paired-end "[fwd, rev]" value)
+        if (Array.isArray(parsed)) {
+          return !parsed.some((item) => values.includes(item));
+        }
+        return true;
+      });
     }
     this.update(newStorageValue, true, options);
   }
@@ -182,7 +195,6 @@ export default class extends Controller {
       this.rowSelectionTargets.forEach((row) => {
         row.checked = ids.indexOf(row.value) > -1;
       });
-
       this.#updateActionButtons(ids.length);
       this.#updateCounts(ids.length, announce);
       this.#setSelectPageCheckboxValue(

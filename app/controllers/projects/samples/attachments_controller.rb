@@ -3,7 +3,7 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Attachments
-    class AttachmentsController < Projects::Samples::ApplicationController
+    class AttachmentsController < Projects::Samples::ApplicationController # rubocop:disable Metrics/ClassLength
       include SampleAttachment
 
       before_action :attachment, only: %i[destroy]
@@ -121,9 +121,18 @@ module Projects
       end
 
       def destroy_status(attachment, count)
-        return count == 2 ? :ok : :multi_status if attachment.associated_attachment
-
-        count == 1 ? :ok : :unprocessable_content
+        if attachment.metadata.key?('associated_attachment_id')
+          case count
+          when 2
+            :ok
+          when 1
+            :multi_status
+          when 0
+            :unprocessable_content
+          end
+        else
+          count == 1 ? :ok : :unprocessable_content
+        end
       end
     end
   end
