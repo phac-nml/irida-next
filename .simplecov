@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 SimpleCov.load_profile 'rails'
 SimpleCov.group 'Graphql', 'app/graphql'
 SimpleCov.group 'View Components', 'app/components'
