@@ -5,6 +5,8 @@ module Projects
     module Attachments
       # Controller actions for Project Samples Attachments Concatenation
       class ConcatenationsController < Projects::Samples::ApplicationController
+        include ListActions
+
         respond_to :turbo_stream
 
         before_action :view_authorizations, only: %i[create]
@@ -17,7 +19,9 @@ module Projects
                                                    partial: 'modal',
                                                    locals: {
                                                      open: true,
-                                                     concatenation_params: nil
+                                                     concatenation_params: nil,
+                                                     concatenation_form: @concatenation_form,
+                                                     sample: @sample
                                                    }), status: :ok
         end
 
@@ -27,7 +31,8 @@ module Projects
           @concatenation_form = ::ConcatenationForm.new(concatenation_params.merge(attachable_id: @sample.id,
                                                                                    attachable_type: @sample.class.name))
 
-          @concatenated_attachments = ::Attachments::ConcatenationService.new(current_user, @concatenation_form).execute
+          @concatenated_attachments = ::Attachments::ConcatenationService.new(current_user,
+                                                                              @concatenation_form).execute
 
           if @concatenation_form.errors.empty?
             render status: :ok, locals: { type: :success, message: t('.success') }
