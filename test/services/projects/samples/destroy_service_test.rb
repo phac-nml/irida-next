@@ -169,12 +169,12 @@ module Projects
         deleted_sample = Sample.only_deleted.find(@sample1.id)
 
         activity = PublicActivity::Activity.where(
-          key: 'namespaces_project_namespace.samples.destroy_multiple',
+          key: 'namespaces_project_namespace.samples.destroy_multiple_with_reason',
           trackable: @project.namespace
         ).order(created_at: :desc).first
 
         assert_equal reason, deleted_sample.deletion_reason
-        assert_equal reason, activity.extended_details.details['deletion_reason']
+        assert_equal reason, activity.parameters[:reason]
       end
     end
   end

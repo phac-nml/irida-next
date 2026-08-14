@@ -48,20 +48,25 @@ module Groups
         create_group_activity(total_deleted_samples_count)
       end
 
-      def create_group_activity(total_deleted_samples_count)
+      def create_group_activity(total_deleted_samples_count) # rubocop:disable Metrics/MethodLength
         details = {
           deleted_samples_data: @deleted_samples_data[:group_data],
-          samples_deleted_count: total_deleted_samples_count,
-          deletion_reason: params[:reason]
+          samples_deleted_count: total_deleted_samples_count
         }
 
         group_ext_details = ExtendedDetail.create!(details: details)
-        group_activity = @namespace.create_activity key: 'group.samples.destroy',
+        key = if params[:reason].present?
+                'group.samples.destroy_with_reason'
+              else
+                'group.samples.destroy'
+              end
+        group_activity = @namespace.create_activity key: key,
                                                     owner: current_user,
                                                     parameters:
                               {
                                 samples_deleted_count: total_deleted_samples_count,
-                                action: 'group_samples_destroy'
+                                action: 'group_samples_destroy',
+                                reason: params[:reason]
                               }
         group_activity.create_activity_extended_detail(extended_detail_id: group_ext_details.id,
                                                        activity_type: 'group_samples_destroy')

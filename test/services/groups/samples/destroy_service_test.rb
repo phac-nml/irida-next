@@ -170,27 +170,27 @@ module Groups
         deleted_sample34 = Sample.only_deleted.find(@sample34.id)
 
         group_activity = PublicActivity::Activity.where(
-          key: 'group.samples.destroy',
+          key: 'group.samples.destroy_with_reason',
           trackable: @group12
         ).order(created_at: :desc).first
 
         assert_equal reason, deleted_sample32.deletion_reason
         assert_equal reason, deleted_sample34.deletion_reason
-        assert_equal reason, group_activity.extended_details.details['deletion_reason']
+        assert_equal reason, group_activity.parameters[:reason]
 
         project_activity_sample32 = PublicActivity::Activity.where(
-          key: 'namespaces_project_namespace.samples.destroy_multiple',
+          key: 'namespaces_project_namespace.samples.destroy_multiple_with_reason',
           trackable: @sample32.project.namespace
         ).order(created_at: :desc).first
 
-        assert_equal reason, project_activity_sample32.extended_details.details['deletion_reason']
+        assert_equal reason, project_activity_sample32.parameters[:reason]
 
         project_activity_sample34 = PublicActivity::Activity.where(
-          key: 'namespaces_project_namespace.samples.destroy_multiple',
+          key: 'namespaces_project_namespace.samples.destroy_multiple_with_reason',
           trackable: @sample34.project.namespace
         ).order(created_at: :desc).first
 
-        assert_equal reason, project_activity_sample34.extended_details.details['deletion_reason']
+        assert_equal reason, project_activity_sample34.parameters[:reason]
       end
     end
   end

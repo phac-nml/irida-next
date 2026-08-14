@@ -31,14 +31,6 @@
 
     <div data-activities--extended-details-target="paginationContainer" class="mt-4 flex items-center justify-end"></div>
 
-    <% if @deletion_reason.present? %>
-      <div class="text-lg font-normal text-slate-500 dark:text-slate-400">
-        <p class="dark:text-slate-400">
-          <%= t('components.activity.dialog.sample_destroy.reason', reason: @deletion_reason) %>
-        </p>
-      </div>
-    <% end %>
-
     <div class="mt-4">
       <button
         type="button"

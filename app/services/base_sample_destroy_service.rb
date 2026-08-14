@@ -23,21 +23,27 @@ class BaseSampleDestroyService < BaseService
     sample.project.namespace.update_metadata_summary_by_sample_deletion(sample)
   end
 
-  def create_project_activity(project_namespace, deleted_samples_data)
+  def create_project_activity(project_namespace, deleted_samples_data) # rubocop:disable Metrics/MethodLength
     details = {
       samples_deleted_count: deleted_samples_data.size,
-      deleted_samples_data: deleted_samples_data,
-      deletion_reason: params[:reason]
+      deleted_samples_data: deleted_samples_data
     }
 
     ext_details = ExtendedDetail.create!(details: details)
 
-    activity = project_namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
+    key = if params[:reason].present?
+            'namespaces_project_namespace.samples.destroy_multiple_with_reason'
+          else
+            'namespaces_project_namespace.samples.destroy_multiple'
+          end
+
+    activity = project_namespace.create_activity key: key,
                                                  owner: current_user,
                                                  parameters:
                                                  {
                                                    samples_deleted_count: deleted_samples_data.size,
-                                                   action: 'sample_destroy_multiple'
+                                                   action: 'sample_destroy_multiple',
+                                                   reason: params[:reason]
                                                  }
     activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
                                              activity_type: 'sample_destroy_multiple')

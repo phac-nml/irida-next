@@ -48,7 +48,6 @@ module Activities
             I18n.t(:'components.activity.dialog.sample_destroy.description.project',
                    user: @activity_owner,
                    count: @activity.parameters[:samples_deleted_count])
-          @deletion_reason = @extended_details.details['deletion_reason']
           @data = @extended_details.details['deleted_samples_data'].to_json
 
         when 'project_import_samples'
