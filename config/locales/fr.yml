@@ -1724,6 +1724,10 @@ fr:
             basename_help: Le nom de fichier de base ne peut contenir que des lettres, des chiffres, '-', '.' et '_'
             success: Les dossiers ont été concaténés avec succès.
           modal:
+            description:
+              plural: 'Les 4 fichiers suivants ont été sélectionnés pour la concaténation :'
+              singular: 'Le fichier suivant a été sélectionné pour la concaténation :'
+              zero: Aucun fichier n'a été sélectionné pour la concaténation.
             submit_button: Concaténer
             title: Concaténer les fichiers
         create:

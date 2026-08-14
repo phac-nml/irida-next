@@ -7,6 +7,8 @@
     data-controller="infinite-scroll"
     data-infinite-scroll-selection-outlet="#attachments-table"
     data-infinite-scroll-paged-field-name-value="attachment_ids[]"
+    data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
+    data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
     data-infinite-scroll-count-pe-attachments-value="true"
   >
     <%= form_with(
@@ -29,6 +31,10 @@
         <% invalid_attachment_ids = concatenation_form.errors.include?(:attachment_ids) %>
 
         <%= render partial: "shared/form/required_field_legend" %>
+
+        <p data-infinite-scroll-target="summary" class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+          <%= t(".description.zero") %>
+        </p>
 
         <%= tag.div class: class_names("form-field", 'invalid': invalid_attachment_ids) do %>
           <%= form.label :attachment_ids, data: { required: true } %>
