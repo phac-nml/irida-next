@@ -306,6 +306,8 @@ fr:
         samples:
           aria-label: Afficher les échantillons pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip: "%{count} échantillons dans %{namespace_name}"
+        shared_namespaces:
+          public: Publique
         subnamespaces:
           aria-label: Afficher les sous-groupes pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip: "%{count} sous-groupes dans %{namespace_name}"
