@@ -360,6 +360,7 @@ en:
       copied: Copied
       copy: Copy
       file_not_found: File not found.
+      file_not_previewable: This file type cannot be previewed.
       image:
         alt: Rendering of file %{filename}
       not_available:

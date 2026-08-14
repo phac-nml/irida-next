@@ -14,13 +14,7 @@ module SimpleCov
   end
 end
 
-SimpleCov.load_profile 'rails'
-SimpleCov.group 'Graphql', 'app/graphql'
-SimpleCov.group 'View Components', 'app/components'
-SimpleCov.group 'Policies', 'app/policies'
-SimpleCov.enable_coverage :method
-SimpleCov.enable_coverage :branch
-SimpleCov.enable_coverage :eval
+SimpleCov.start unless ENV['CI'] == 'true'
 
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
@@ -37,7 +31,7 @@ require 'test_helpers/ip_test_helpers'
 require 'turbo/broadcastable/test_helper'
 require 'minitest/retry'
 
-Minitest::Retry.use!
+Minitest::Retry.use! unless ENV['NO_RETRY'] == 'true'
 
 module ActiveSupport
   class TestCase

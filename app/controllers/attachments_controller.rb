@@ -11,6 +11,8 @@ class AttachmentsController < ApplicationController
   before_action :set_attachment
   before_action :set_context_crumbs
 
+  rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
+
   # 🖼️ Shows a preview of the attachment if it exists
   # Preview format depends on the file type in metadata
   #
@@ -25,22 +27,16 @@ class AttachmentsController < ApplicationController
   # - tsv
   # - spreadsheet (xls, xlsx)
   def show
-    return handle_preview if @attachment.present?
-
-    handle_not_found
-  end
-
-  private
-
-  # 🎬 Renders the appropriate preview template based on file format
-  def handle_preview
     format = Attachment::PREVIEWABLE_TYPES[@attachment.metadata['format']]
     if format.present? && lookup_context.template_exists?("attachments/#{format}_preview")
       render "#{format}_preview", locals: { contents: attachment_contents }
     else
-      handle_not_found
+      redirect_back_or_to(root_path, alert: I18n.t('attachment.show.file_not_previewable'))
+      nil
     end
   end
+
+  private
 
   # 📄 Retrieves the contents of the attachment based on its format
   # Supports various formats and parses them accordingly
@@ -71,7 +67,7 @@ class AttachmentsController < ApplicationController
   # 🔍 Finds and sets the attachment by ID
   # Ensures the attachment exists and is authorized for the current user
   def set_attachment
-    @attachment = Attachment.find_by(id: params[:id])
+    @attachment = Attachment.find(params.expect(:id))
     authorize! @attachment, to: :read?
   end
 
@@ -91,7 +87,7 @@ class AttachmentsController < ApplicationController
 
     @context_crumbs.concat(workflow_execution_crumb(parent)) if parent.is_a?(WorkflowExecution)
     @context_crumbs.concat(samples_workflow_execution_crumb(parent)) if parent.is_a?(SamplesWorkflowExecution)
-    @context_crumbs << attachment_crumb if @attachment.present?
+    @context_crumbs << attachment_crumb
   end
 
   # ⬇️ Breadcrumb generation methods ⬇️
