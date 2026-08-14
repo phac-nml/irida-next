@@ -84,7 +84,7 @@ module Groups
       assert_text strip_tags(
         I18n.t('activity.group.samples.destroy_html', user: @user.email, href: 2)
       )
-      assert_text reason: 'cleanup'
+      assert_text 'Reason: cleanup'
       assert_selector 'span', text: 2
 
       assert_selector 'button', text: I18n.t(:'components.activity.more_details')
