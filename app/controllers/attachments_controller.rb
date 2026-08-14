@@ -5,7 +5,6 @@
 # Supports text, images, FASTA, FASTQ, GenBank, and more!
 class AttachmentsController < ApplicationController
   include SpreadsheetParser
-  include ListActions
 
   layout 'attachment'
 

@@ -5,8 +5,6 @@ module Projects
     module Attachments
       # Controller actions for Project Samples Attachments Concatenation
       class ConcatenationsController < Projects::Samples::ApplicationController
-        include ListActions
-
         respond_to :turbo_stream
 
         before_action :view_authorizations, only: %i[create]
