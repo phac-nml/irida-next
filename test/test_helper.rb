@@ -31,7 +31,7 @@ require 'test_helpers/ip_test_helpers'
 require 'turbo/broadcastable/test_helper'
 require 'minitest/retry'
 
-Minitest::Retry.use! unless ENV['NO_RETRY'] == 'true'
+Minitest::Retry.use! if ENV['CI'] == 'true'
 
 module ActiveSupport
   class TestCase
