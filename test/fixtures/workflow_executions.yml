@@ -370,6 +370,43 @@ workflow_execution_existing:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   name: "workflow_execution_existing"
 
+workflow_execution_refactor_search_target:
+  <<: *DEFAULTS
+  workflow_params: { "assembler": "stub", "project_name": "assembly", "random_seed": "1" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/refactor-search-target"
+  run_id: "refactor_run_search_target"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "completed"
+  cleaned: true
+  name: "workflow_execution_refactor_search_target_unique"
+
+workflow_execution_refactor_search_noise:
+  <<: *DEFAULTS
+  workflow_params: { "assembler": "stub", "project_name": "assembly", "random_seed": "2" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/refactor-search-noise"
+  run_id: "refactor_run_search_noise"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  state: "completed"
+  cleaned: true
+  name: "workflow_execution_refactor_search_noise_unique"
+
+workflow_execution_refactor_shared_submitter_running:
+  <<: *DEFAULTS
+  workflow_params: { "assembler": "stub", "project_name": "assembly", "random_seed": "3" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/refactor-shared-submitter-running"
+  run_id: "refactor_run_shared_submitter_running"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
+  state: "running"
+  cleaned: false
+  shared_with_namespace: true
+  name: "workflow_execution_refactor_shared_submitter_running"
+
 automated_example_prepared:
   <<: *DEFAULTS
   workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }

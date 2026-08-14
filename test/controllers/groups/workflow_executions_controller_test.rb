@@ -80,6 +80,22 @@ module Groups
       assert_not_includes response.body, @workflow_execution_running.id
     end
 
+    test 'should render group listing with group-shared visibility and no row actions' do
+      group_shared_workflow = workflow_executions(:workflow_execution_group_shared1)
+      project_shared_workflow = workflow_executions(:workflow_execution_shared1)
+
+      get group_workflow_executions_path(@group)
+
+      assert_response :success
+      assert_select '#workflow-executions-table'
+
+      assert_select "tr##{dom_id(group_shared_workflow)}", count: 1
+      assert_select "tr##{dom_id(project_shared_workflow)}", count: 0
+
+      assert_select '#workflow-executions-table table tbody button', text: I18n.t('common.actions.cancel'), count: 0
+      assert_select '#workflow-executions-table table tbody button', text: I18n.t('common.actions.delete'), count: 0
+    end
+
     test 'should show workflow execution that was shared to group by the user' do
       get group_workflow_execution_path(@group, @workflow_execution)
 
@@ -94,6 +110,32 @@ module Groups
       get group_workflow_execution_path(@group, workflow_execution)
 
       assert_response :success
+    end
+
+    test 'should render shared-by-other-user group workflow show action restrictions and tab content' do
+      workflow_execution = workflow_executions(:workflow_execution_group_shared2)
+      cancel_action = cancel_group_workflow_execution_path(@group, workflow_execution)
+      locale = users(:joan_doe).locale
+
+      get group_workflow_execution_path(@group, workflow_execution)
+
+      assert_response :success
+      assert_select "form[action='#{cancel_action}'] button", count: 0
+      assert_select "form[action='#{edit_group_workflow_execution_path(@group, workflow_execution)}'] button", count: 0
+      assert_select "form[action='#{group_workflow_execution_path(@group, workflow_execution)}'] button", count: 0
+
+      get group_workflow_execution_path(@group, workflow_execution), params: { tab: 'files' }
+
+      assert_response :success
+      empty_description = I18n.t('workflow_executions.files.empty.description', locale: locale)
+      assert_includes response.body, I18n.t('workflow_executions.files.empty.title', locale: locale)
+      assert_includes response.body, empty_description
+
+      get group_workflow_execution_path(@group, workflow_execution), params: { tab: 'params' }
+
+      assert_response :success
+      assert_select 'div.project_name-param span', text: '--project_name'
+      assert_select 'div.assembler-param span', text: '--assembler'
     end
 
     test 'should not show shared workflow execution for user with incorrect permissions' do
