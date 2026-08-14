@@ -15,15 +15,11 @@
     <% invalid_field = @condition.errors.include?(:field) %>
 
     <div class="form-field w-full <%= 'invalid' if invalid_field %>">
-      <% options = options_for_select(field_options, @condition.field).concat(
-        grouped_options_for_select(grouped_field_options, @condition.field),
-      ) %>
-
       <%= conditions_form.label :field, data: { required: true } %>
 
       <% unless Flipper.enabled?(:advanced_search_with_auto_complete, Current.user) %>
         <%= conditions_form.select :field,
-                               options,
+                               field_options_for_select,
                                { include_blank: true },
                                {
                                  "data-action": "change->advanced-search--v1#handleFieldChange",
@@ -35,7 +31,7 @@
         <%= render ComboboxComponent.new(
           form: conditions_form,
           field: :field,
-          options: options,
+          options: field_options_for_select,
           data: {
             action: "change->advanced-search--v1#handleFieldChange",
           },
@@ -96,7 +92,7 @@
     ) %>
   <% end %>
 
-  <button
+  <button <%# herb:disable html-no-title-attribute %>
     type="button"
     class="
       absolute -top-4 right-2 inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg

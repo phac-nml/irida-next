@@ -330,7 +330,20 @@ export default class AdvancedSearchController extends Controller {
     operator.appendChild(blankOption);
 
     if (this.#enumHasValues(enumConfig)) {
-      this.#createOperatorOptions(this.enumOperationsValue, operator);
+      if (
+        selectedField.startsWith("metadata.") &&
+        Object.hasOwn(this.operationsValue, "metadata")
+      ) {
+        this.#createOperatorOptions(
+          this.enumOperationsValue["metadata"],
+          operator,
+        );
+      } else {
+        this.#createOperatorOptions(
+          this.enumOperationsValue["standard"],
+          operator,
+        );
+      }
     } else if (
       selectedField.startsWith("metadata.") &&
       Object.hasOwn(this.operationsValue, "metadata")

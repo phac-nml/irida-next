@@ -451,4 +451,46 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
   ensure
     Flipper.enable(:advanced_search_with_auto_complete)
   end
+
+  test 'standard and metadata operators based on enum field type' do
+    Flipper.enable(:advanced_search_metadata_operators)
+
+    visit('rails/view_components/advanced_search_component/workflow')
+    within 'div[data-controller-connected="true"]' do
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within 'dialog' do
+        within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+            find("input[id$='field']").send_keys([:ctrl, 'a'], :delete, 'state', :enter)
+            within "select[name$='[operator]']" do
+              assert_selector 'option[value="="]'
+              assert_selector 'option[value="!="]'
+              assert_selector 'option[value="in"]'
+              assert_selector 'option[value="not_in"]'
+              assert_no_selector 'option[value="text_equals"]'
+              assert_no_selector 'option[value="text_not_equals"]'
+              assert_no_selector 'option[value="text_in"]'
+              assert_no_selector 'option[value="text_not_in"]'
+            end
+
+            find("input[id$='field']").send_keys([:ctrl, 'a'], :delete, 'workflow name', :enter)
+            within "select[name$='[operator]']" do
+              assert_no_selector 'option[value="="]'
+              assert_no_selector 'option[value="!="]'
+              assert_no_selector 'option[value="in"]'
+              assert_no_selector 'option[value="not_in"]'
+              assert_selector 'option[value="text_equals"]'
+              assert_selector 'option[value="text_not_equals"]'
+              assert_selector 'option[value="text_in"]'
+              assert_selector 'option[value="text_not_in"]'
+            end
+          end
+        end
+      end
+    end
+  ensure
+    Flipper.disable(:advanced_search_metadata_operators)
+  end
 end
