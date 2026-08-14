@@ -23,21 +23,48 @@
         <%= t(".description.zero") %>
       </p>
 
-      <div>
-        <div class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"><%= t(".attachments") %></div>
+      <div
+        class="
+          block max-h-[300px] w-full overflow-y-auto rounded-lg border border-slate-300 dark:border-slate-600
+          dark:bg-slate-800
+        "
+        data-action="scroll->infinite-scroll#scroll"
+        data-infinite-scroll-target="scrollable"
+      >
+        <table class="w-full text-left text-sm whitespace-nowrap text-slate-500 dark:text-slate-400">
+          <thead class="sticky top-0 z-10 uppercase">
+            <tr
+              class="
+                border-b border-slate-200 bg-slate-100 text-slate-900 dark:border-slate-900 dark:bg-slate-900
+                dark:text-slate-400
+              "
+            >
+              <th scope="col" class="px-3 py-2 font-medium whitespace-nowrap">
+                <%= t("components.attachments.table_component.id") %>
+              </th>
 
-        <div
-          class="
-            block max-h-[300px] w-full overflow-y-auto rounded-lg border border-slate-300 p-2.5
-            dark:border-slate-600 dark:bg-slate-800
-          "
-          data-action="scroll->infinite-scroll#scroll"
-          data-infinite-scroll-target="scrollable"
-        >
-          <%= turbo_frame_tag "list_selections" do %>
-            <%= render partial: "shared/loading/samples_list_skeleton" %>
-          <% end %>
-        </div>
+              <th scope="col" class="px-3 py-2 font-medium whitespace-nowrap">
+                <%= t("components.attachments.table_component.filename") %>
+              </th>
+
+              <th scope="col" class="px-3 py-2 font-medium whitespace-nowrap">
+                <%= t("components.attachments.table_component.format") %>
+              </th>
+
+              <th scope="col" class="px-3 py-2 font-medium whitespace-nowrap">
+                <%= t("components.attachments.table_component.byte_size") %>
+              </th>
+
+              <th scope="col" class="px-3 py-2 font-medium whitespace-nowrap">
+                <%= t("components.attachments.table_component.created_at") %>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody id="list_selections">
+            <%= render "shared/loading/table_body", column_count: 5 %>
+          </tbody>
+        </table>
       </div>
 
       <%= form_for(:deletion, url: namespace_project_sample_attachments_deletion_path,

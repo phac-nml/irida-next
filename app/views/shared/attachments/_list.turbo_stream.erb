@@ -2,7 +2,7 @@
 
 <% if page == 1 %>
   <%= turbo_stream.replace "list_selections" do %>
-    <%= turbo_frame_tag "list_selections" %>
+    <tbody id="list_selections"></tbody>
   <% end %>
 <% end %>
 
