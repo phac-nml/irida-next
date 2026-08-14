@@ -84,6 +84,17 @@ module SystemFeatureFlags
       assert result.no_op?
     end
 
+    test 'returns no-op when disabling an already-disabled feature' do
+      result = UpdateGlobalState.new(
+        feature_key: :data_grid_samples_table,
+        target_state: :disabled,
+        user: @administrator
+      ).execute
+
+      assert result.no_op?
+      assert_equal 'disabled', Irida::SystemFeatureFlagsCatalog.global_state(:data_grid_samples_table)
+    end
+
     test 'returns mutation_failed and keeps state consistent when the adapter raises' do
       Flipper.stubs(:enable).raises(Flipper::Error)
 

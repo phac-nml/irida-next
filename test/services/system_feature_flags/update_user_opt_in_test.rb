@@ -54,6 +54,16 @@ module SystemFeatureFlags
       end
     end
 
+    test 'returns invalid_enabled when the enabled flag is not a boolean' do
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        result = UpdateUserOptIn.new(feature_key: :data_grid_samples_table, enabled: 'yes', user: @user).execute
+
+        assert result.failure?
+        assert_equal :invalid_enabled, result.error
+        assert_not_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
+      end
+    end
+
     test 'returns mutation_failed and keeps Flipper state consistent when the adapter raises' do
       with_user_opt_in_features(user_opt_in_feature_config) do
         Flipper.expects(:enable_actor).raises(ActiveRecord::StatementInvalid)

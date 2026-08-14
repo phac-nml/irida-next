@@ -89,5 +89,54 @@ module SystemFeatureFlags
         assert_includes Flipper[:data_grid_samples_table].actors_value, @user.flipper_id
       end
     end
+
+    test 'rejects non-system users without mutation' do
+      with_user_opt_in_features({}) do |settings|
+        result = UpdateOptInAvailability.new(
+          feature_key: :data_grid_samples_table,
+          available: true,
+          user: @user
+        ).execute
+
+        assert result.failure?
+        assert_equal :unauthorized, result.error
+        assert_nil settings.reload.user_opt_in_features['data_grid_samples_table']
+      end
+    end
+
+    test 'rejects non-admin-manageable feature keys' do
+      result = UpdateOptInAvailability.new(
+        feature_key: :compose_with_retry,
+        available: true,
+        user: @administrator
+      ).execute
+
+      assert result.failure?
+      assert_equal :invalid_feature, result.error
+    end
+
+    test 'rejects non-boolean availability values' do
+      result = UpdateOptInAvailability.new(
+        feature_key: :data_grid_samples_table,
+        available: 'yes',
+        user: @administrator
+      ).execute
+
+      assert result.failure?
+      assert_equal :invalid_availability, result.error
+    end
+
+    test 'returns no-op when disabling availability that is already off' do
+      with_user_opt_in_features({}) do |settings|
+        result = UpdateOptInAvailability.new(
+          feature_key: :data_grid_samples_table,
+          available: false,
+          user: @administrator
+        ).execute
+
+        assert result.no_op?
+        assert_nil settings.reload.user_opt_in_features['data_grid_samples_table']
+      end
+    end
   end
 end
