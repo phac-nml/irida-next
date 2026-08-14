@@ -1743,7 +1743,6 @@ en:
               plural: 'The following COUNT_PLACEHOLDER files were selected for deletion:'
               singular: 'The following file was selected for deletion:'
               zero: No files were selected for deletion
-            files: Files
             spinner: Deleting files. This may take a while...
             title: Delete Files
         destroy:
