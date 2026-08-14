@@ -53,21 +53,17 @@ module Groups
           deleted_samples_data: @deleted_samples_data[:group_data],
           samples_deleted_count: total_deleted_samples_count
         }
-
+        activity_params = { samples_deleted_count: total_deleted_samples_count, action: 'group_samples_destroy' }
         group_ext_details = ExtendedDetail.create!(details: details)
         key = if params[:reason].present?
+                activity_params[:reason] = params[:reason]
                 'group.samples.destroy_with_reason'
               else
                 'group.samples.destroy'
               end
         group_activity = @namespace.create_activity key: key,
                                                     owner: current_user,
-                                                    parameters:
-                              {
-                                samples_deleted_count: total_deleted_samples_count,
-                                action: 'group_samples_destroy',
-                                reason: params[:reason]
-                              }
+                                                    parameters: activity_params
         group_activity.create_activity_extended_detail(extended_detail_id: group_ext_details.id,
                                                        activity_type: 'group_samples_destroy')
       end

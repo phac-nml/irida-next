@@ -28,10 +28,10 @@ class BaseSampleDestroyService < BaseService
       samples_deleted_count: deleted_samples_data.size,
       deleted_samples_data: deleted_samples_data
     }
-
+    activity_params = { samples_deleted_count: deleted_samples_data.size, action: 'sample_destroy_multiple' }
     ext_details = ExtendedDetail.create!(details: details)
-
     key = if params[:reason].present?
+            activity_params[:reason] = params[:reason]
             'namespaces_project_namespace.samples.destroy_multiple_with_reason'
           else
             'namespaces_project_namespace.samples.destroy_multiple'
@@ -39,12 +39,7 @@ class BaseSampleDestroyService < BaseService
 
     activity = project_namespace.create_activity key: key,
                                                  owner: current_user,
-                                                 parameters:
-                                                 {
-                                                   samples_deleted_count: deleted_samples_data.size,
-                                                   action: 'sample_destroy_multiple',
-                                                   reason: params[:reason]
-                                                 }
+                                                 parameters: activity_params
     activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
                                              activity_type: 'sample_destroy_multiple')
   end
