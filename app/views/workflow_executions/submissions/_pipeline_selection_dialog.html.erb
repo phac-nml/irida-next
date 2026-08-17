@@ -1,4 +1,4 @@
-<%# locals: %>
+<%# locals: (workflows:, namespace_id:) %>
 
 <%= render Viral::DialogComponent.new(open: true) do |dialog| %>
   <% dialog.with_header(
@@ -19,7 +19,7 @@
                           "workflow-selection-target": "workflowVersion",
                         } %>
 
-      <%= form.hidden_field :namespace_id, value: @namespace_id %>
+      <%= form.hidden_field :namespace_id, value: namespace_id %>
 
       <ul class="space-y-2">
         <% workflows.each do |key, workflow| %>
@@ -34,7 +34,7 @@
               data-workflow-selection-pipelineId-param="<%= workflow.pipeline_id %>"
               data-workflow-selection-workflowName-param="<%= workflow.name %>"
               data-workflow-selection-workflowVersion-param="<%= workflow.version %>"
-              data-workflow-selection-namespaceId-param="<%= @namespace_id %>"
+              data-workflow-selection-namespaceId-param="<%= namespace_id %>"
               data-workflow-selection-min-samples-configured="<%= min_samples_configured %>"
               data-workflow-selection-max-samples-configured="<%= max_samples_configured %>"
               data-workflow-selection-min-samples="<%= workflow.minimum_samples if min_samples_configured %>"

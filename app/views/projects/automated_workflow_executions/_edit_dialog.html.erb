@@ -1,28 +1,28 @@
-<%# locals: %>
+<%# locals: (open:, automated_workflow_execution:, workflow:, project:) %>
 
-<%= render Viral::DialogComponent.new(open: true, size: :extra_large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: open, size: :extra_large) do |dialog| %>
   <% workflow_name =
     (
-      if @automated_workflow_execution.name.empty?
-        @automated_workflow_execution.id
+      if automated_workflow_execution.name.empty?
+        automated_workflow_execution.id
       else
-        @automated_workflow_execution.name
+        automated_workflow_execution.name
       end
     ) %>
 
   <% dialog.with_header(title: t(".title", workflow_name:)) %>
 
   <%= render NextflowComponent.new(
-      workflow: @workflow,
+      workflow: workflow,
       url:
         namespace_project_automated_workflow_execution_path(
-          @project.parent,
-          @project,
-          @automated_workflow_execution,
+          project.parent,
+          project,
+          automated_workflow_execution,
         ),
       sample_count: nil,
-      namespace_id: @project.namespace.id,
+      namespace_id: project.namespace.id,
       fields: nil,
-      instance: @automated_workflow_execution,
+      instance: automated_workflow_execution,
     ) %>
 <% end %>

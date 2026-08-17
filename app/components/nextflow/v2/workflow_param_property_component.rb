@@ -15,6 +15,16 @@ module Nextflow
         @instance = instance
         @namespace_id = namespace_id
         @namespace_type = namespace_type
+
+        setup_ids(@name)
+      end
+
+      private
+
+      def setup_ids(name)
+        @help_text_id = fields.field_id(name, 'help')
+        @legend_id = fields.field_id(name, 'legend')
+        @prefix_id = fields.field_id(name, 'prefix')
       end
     end
   end

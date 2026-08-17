@@ -1,14 +1,10 @@
 <div>
-  <% help_text_id = fields.field_id(name, "help") %> <%# herb:disable actionview-no-silent-helper %>
-
   <% if property[:type] != "boolean" %>
     <% if (property[:format] == "path" || property[:format] == "file-path") && !property[:enum].present? %>
-      <% legend_id = fields.field_id(name, "legend") %> <%# herb:disable actionview-no-silent-helper %>
-      <% prefix_id = fields.field_id(name, "prefix") %> <%# herb:disable actionview-no-silent-helper %>
-      <% describedby_ids = [prefix_id] %>
-      <% describedby_ids << help_text_id if property[:help_text].present? %>
+      <% describedby_ids = [@prefix_id] %>
+      <% describedby_ids << @help_text_id if property[:help_text].present? %>
       <fieldset class="m-0 border-0 p-0">
-        <legend id="<%= legend_id %>" class="mb-2 block text-sm font-medium text-slate-900 dark:text-white">
+        <legend id="<%= @legend_id %>" class="mb-2 block text-sm font-medium text-slate-900 dark:text-white">
           <%= property[:description] %>
 
           <% if property[:required] %>
@@ -23,7 +19,7 @@
         "
       >
         <span
-          id="<%= prefix_id %>"
+          id="<%= @prefix_id %>"
           class="
             inline-flex items-center rounded-t-lg px-3 py-2 font-mono text-sm text-slate-900 @md:rounded-l-lg
             @md:rounded-tr-none dark:text-slate-300
@@ -51,7 +47,7 @@
             focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700 dark:text-white
             dark:placeholder-slate-400
           "
-          aria-labelledby="<%= legend_id %>"
+          aria-labelledby="<%= @legend_id %>"
           aria-describedby="<%= describedby_ids.join(" ") %>"
           data-turbo-stream="true"
         >
