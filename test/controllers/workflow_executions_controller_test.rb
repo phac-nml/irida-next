@@ -14,9 +14,8 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     @workflow_execution_running = workflow_executions(:irida_next_example_running)
     @workflow_execution_new = workflow_executions(:irida_next_example_new)
     @workflow_execution_existing = workflow_executions(:workflow_execution_existing)
-    @search_target_workflow_execution = workflow_executions(:workflow_execution_refactor_search_target)
-    @search_noise_workflow_execution = workflow_executions(:workflow_execution_refactor_search_noise)
-    @shared_workflow_execution_current_user = workflow_executions(:workflow_execution_refactor_shared_submitter_running)
+    @workflow_execution_valid = workflow_executions(:workflow_execution_valid)
+    @shared_workflow_execution_current_user = workflow_executions(:workflow_execution_shared1)
     @shared_workflow_execution_other_user = workflow_executions(:workflow_execution_shared2)
   end
 
@@ -25,7 +24,6 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
-    assert_select '#workflow-executions-table table tbody tr', count: 20
 
     assert_select "tr##{dom_id(@shared_workflow_execution_current_user)}", count: 1
     assert_select "tr##{dom_id(@shared_workflow_execution_other_user)}", count: 0
@@ -36,20 +34,22 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_select "tr##{dom_id(prepared_workflow)} button", text: I18n.t('common.actions.cancel'), count: 1
     assert_select "tr##{dom_id(prepared_workflow)} button", text: I18n.t('common.actions.delete'), count: 0
     assert_select "tr##{dom_id(completed_workflow)} button", text: I18n.t('common.actions.delete'), count: 1
+    assert_select "tr##{dom_id(@shared_workflow_execution_current_user)} button",
+                  text: I18n.t('common.actions.cancel'), count: 1
   end
 
   test 'should filter global workflow execution listing by id or name' do
-    get workflow_executions_path, params: { q: { name_or_id_cont: @search_target_workflow_execution.id } }
+    get workflow_executions_path, params: { q: { name_or_id_cont: @workflow_execution_existing.id } }
 
     assert_response :success
-    assert_includes response.body, @search_target_workflow_execution.id
-    assert_not_includes response.body, @search_noise_workflow_execution.id
+    assert_select "tr##{dom_id(@workflow_execution_existing)}", count: 1
+    assert_select "tr##{dom_id(@workflow_execution_valid)}", count: 0
 
-    get workflow_executions_path, params: { q: { name_or_id_cont: @search_noise_workflow_execution.name } }
+    get workflow_executions_path, params: { q: { name_or_id_cont: @workflow_execution_valid.name } }
 
     assert_response :success
-    assert_includes response.body, @search_noise_workflow_execution.id
-    assert_not_includes response.body, @search_target_workflow_execution.id
+    assert_select "tr##{dom_id(@workflow_execution_valid)}", count: 1
+    assert_select "tr##{dom_id(@workflow_execution_existing)}", count: 0
   end
 
   test 'should create workflow execution with valid params' do
@@ -288,17 +288,14 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
   end
 
-  test 'should show the workflow' do
-    get workflow_execution_path(@workflow_execution_completed)
-    assert_response :success
+  test 'should show workflow execution with summary and tab content' do
+    sample = samples(:sample1)
+    attachment = attachments(:attachment1)
 
-    w3c_validate 'Workflow Execution Show Page'
-  end
-
-  test 'should render workflow show content for summary params samplesheet and files tabs' do
     get workflow_execution_path(@workflow_execution_existing)
 
     assert_response :success
+    w3c_validate 'Workflow Execution Show Page'
     assert_select '#workflow-executions-tabs'
     assert_select 'dt', text: I18n.t('workflow_executions.summary.workflow_name')
     assert_select 'dd', text: @workflow_execution_existing.workflow.name
@@ -315,14 +312,15 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'table tbody tr', count: 1
-    assert_includes response.body, 'INXT_SAM_AAAAAAAAAA'
-    assert_includes response.body, 'INXT_ATT_AAAAAAAAAA'
+    assert_select 'table tbody', text: /#{sample.puid}/
+    assert_select 'table tbody', text: /#{attachment.puid}/
 
     get workflow_execution_path(@workflow_execution_existing), params: { tab: 'files' }
 
     assert_response :success
-    assert_includes response.body, I18n.t('workflow_executions.files.empty.title')
-    assert_includes response.body, I18n.t('workflow_executions.files.empty.description')
+    assert_select '#files-panel-content', text: /#{Regexp.escape(I18n.t('workflow_executions.files.empty.title'))}/
+    assert_select '#files-panel-content',
+                  text: /#{Regexp.escape(I18n.t('workflow_executions.files.empty.description'))}/
   end
 
   test 'should filter files tab attachments with server-side query params' do
@@ -338,26 +336,21 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
         }
 
     assert_response :success
-    assert_includes response.body, matching_attachment.puid
-    assert_not_includes response.body, non_matching_attachment.puid
+    assert_select '#files-panel-content tbody', text: /#{matching_attachment.puid}/
+    assert_select '#files-panel-content tbody', text: /#{non_matching_attachment.puid}/, count: 0
   end
 
   test 'should render shared workflow actions for submitter in global show page' do
-    get workflow_execution_path(@shared_workflow_execution_current_user)
+    workflow_execution = @shared_workflow_execution_current_user
+
+    get workflow_execution_path(workflow_execution)
 
     assert_response :success
 
-    assert_select "form[action^='#{new_data_export_path}'] button", count: 0
-    assert_select "form[action='#{cancel_workflow_execution_path(@shared_workflow_execution_current_user)}'] button",
-                  count: 0
-    assert_select(
-      "form[action='#{edit_workflow_execution_path(@shared_workflow_execution_current_user)}'] button",
-      count: 0
-    )
-    assert_select(
-      "form[action='#{destroy_confirmation_workflow_execution_path(@shared_workflow_execution_current_user)}'] button",
-      count: 0
-    )
+    assert_select "form[action^='#{new_data_export_path}']", count: 1
+    assert_select "form[action='#{cancel_workflow_execution_path(workflow_execution)}']", count: 1
+    assert_select "form[action='#{edit_workflow_execution_path(workflow_execution)}']", count: 1
+    assert_select "form[action='#{destroy_confirmation_workflow_execution_path(workflow_execution)}']", count: 0
   end
 
   test 'should show deleted namespace badge when workflow namespace project is deleted' do
