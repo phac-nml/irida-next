@@ -14,8 +14,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     login_as @user
   end
 
-  test 'default v2' do
-    Flipper.enable(:v2_samplesheet)
+  test 'default' do
     visit('/rails/view_components/nextflow/samplesheet_component/default_v2')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
@@ -26,23 +25,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'default v1' do
-    visit("/rails/view_components/nextflow/samplesheet_component/default_v1?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
-
-    assert_selector 'table' do |table|
-      table.assert_selector 'thead th', count: 5
-      table.assert_selector 'thead tr:first-of-type th:last-of-type', text: 'STRANDEDNESS (REQUIRED)'
-      table.assert_selector 'tbody tr', count: 2
-      table.assert_selector 'tbody tr:first-of-type th:first-of-type', text: @sample1.puid
-      table.assert_selector 'tbody tr:first-of-type td:first-of-type', text: @sample1.name
-      table.assert_selector 'tbody tr:first-of-type td:last-of-type select option', count: 4
-      table.assert_selector 'tbody tr:first-of-type td:last-of-type select option:nth-of-type(2)',
-                            text: 'forward'
-    end
-  end
-
-  test 'with reference files v2' do
-    Flipper.enable(:v2_samplesheet)
+  test 'with reference files' do
     visit('/rails/view_components/nextflow/samplesheet_component/with_reference_files_v2')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
@@ -53,21 +36,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with reference files v1' do
-    visit("/rails/view_components/nextflow/samplesheet_component/with_reference_files_v1?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
-
-    assert_selector 'table' do |table|
-      table.assert_selector 'thead th', count: 4
-      table.assert_selector 'thead tr:first-of-type th:last-of-type', text: 'REFERENCE_ASSEMBLY'
-      table.assert_selector 'tbody tr', count: 2
-      table.assert_selector 'tbody tr:first-of-type th:first-of-type', text: @sample1.puid
-      table.assert_selector 'tbody tr:first-of-type td:last-of-type a',
-                            text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-    end
-  end
-
-  test 'with metadata v2' do
-    Flipper.enable(:v2_samplesheet)
+  test 'with metadata' do
     visit('/rails/view_components/nextflow/samplesheet_component/with_metadata_v2')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 1)
@@ -86,22 +55,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     end
   end
 
-  test 'with metadata v1' do
-    visit("/rails/view_components/nextflow/samplesheet_component/with_metadata_v1?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
-    assert_selector 'table' do |table|
-      table.assert_selector 'thead th', count: 4
-      table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', count: 1
-      table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', text: 'pfge_pattern (default)'
-      table.assert_selector 'tbody tr', count: 2
-      table.assert_selector 'tbody tr:first-of-type th:first-of-type', text: @sample1.puid
-      table.assert_selector 'tbody tr:first-of-type td:last-of-type', text: 'ERR86724108'
-      table.assert_selector 'tbody tr:last-of-type th:first-of-type', text: @sample2.puid
-      table.assert_selector 'tbody tr:last-of-type td:last-of-type', text: 'ERR31551163'
-    end
-  end
-
-  test 'with samplesheet overrides v2' do
-    Flipper.enable(:v2_samplesheet)
+  test 'with samplesheet overrides' do
     visit('/rails/view_components/nextflow/samplesheet_component/with_samplesheet_overrides_v2')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
@@ -116,36 +70,6 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
         within('tr:first-child th:nth-child(7)') do
           assert_selector 'select', text: 'metadata_3 (default)'
         end
-      end
-    end
-  end
-
-  test 'with samplesheet overrides v1' do
-    visit("/rails/view_components/nextflow/samplesheet_component/with_samplesheet_overrides_v1?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
-
-    within('div[data-controller-connected="true"]') do
-      assert_selector 'table' do |table|
-        table.assert_selector 'thead th', count: 20
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(5) select', count: 1
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(5) select', text: 'new_isolates_date (default)'
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(6) select', count: 1
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(6) select',
-                              text: 'predicted_primary_identification_name (default)'
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(7) select', count: 1
-        table.assert_selector 'thead tr:first-of-type th:nth-of-type(7) select',
-                              text: 'metadata_3 (default)'
-        table.assert_selector 'tbody tr', count: 2
-        table.assert_selector 'tbody tr:first-of-type th:first-of-type', text: @sample1.puid
-        table.assert_selector 'tbody tr:first-of-type td:nth-of-type(1)', text: @sample1.name
-        table.assert_selector 'tbody tr:last-of-type th:first-of-type', text: @sample2.puid
-        table.assert_selector 'tbody tr:last-of-type td:nth-of-type(1)', text: @sample2.name
-        assert_field 'The header name of metadata column 1.', with: 'new_isolates_date'
-        assert_field 'The header name of metadata column 2.', with: 'predicted_primary_identification_name'
-
-        assert_field 'The header name of metadata column 3.', with: 'metadata_3'
-
-        select('age', from: 'field-metadata_3')
-        assert_field 'The header name of metadata column 3.', with: 'age'
       end
     end
   end

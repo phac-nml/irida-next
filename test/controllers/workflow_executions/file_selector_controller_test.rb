@@ -6,7 +6,6 @@ module WorkflowExecutions
   class FileSelectorControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
 
-    # TODO: refactor this file when feature flag v2_samplesheet is retired
     setup do
       sign_in users(:john_doe)
 
@@ -49,22 +48,13 @@ module WorkflowExecutions
         namespace_id: groups(:snvphyl_group).id
       }
     end
-    test 'new file selection with fastq params with feature flag' do
-      Flipper.enable(:v2_samplesheet)
+    test 'new file selection with fastq params' do
       get new_workflow_executions_file_selector_path(file_selector: @expected_fastq_params, format: :turbo_stream)
 
       assert_response :ok
     end
 
-    test 'new file selection with fastq params without feature flag' do
-      @expected_fastq_params['index'] = 0
-      get new_workflow_executions_file_selector_path(file_selector: @expected_fastq_params, format: :turbo_stream)
-
-      assert_response :ok
-    end
-
-    test 'create file selection with fastq params with feature flag' do
-      Flipper.enable(:v2_samplesheet)
+    test 'create file selection with fastq params' do
       attachment = attachments(:attachmentPEFWD43)
 
       post workflow_executions_file_selector_index_path(
@@ -75,7 +65,7 @@ module WorkflowExecutions
 
       assert_response :ok
 
-      payload = parsed_v2_files_payload
+      payload = parsed_files_payload
 
       assert_equal samples(:sample43).id, payload['attachable_id']
       assert_equal 2, payload['files'].length
@@ -85,30 +75,7 @@ module WorkflowExecutions
       assert_equal attachments(:attachmentPEREV43).id, payload['files'][1]['id']
     end
 
-    test 'create file selection with fastq params without feature flag' do
-      @expected_fastq_params['index'] = 0
-      attachment = attachments(:attachmentPEFWD43)
-
-      post workflow_executions_file_selector_index_path(
-        file_selector: @expected_fastq_params,
-        attachment_id: attachment.id,
-        format: :turbo_stream
-      )
-
-      assert_response :ok
-
-      payload = parsed_v1_files_payload
-
-      assert_equal '0', payload['index']
-      assert_equal 2, payload['files'].length
-      assert_equal 'fastq_1', payload['files'][0]['property']
-      assert_equal attachment.id, payload['files'][0]['id']
-      assert_equal 'fastq_2', payload['files'][1]['property']
-      assert_equal attachments(:attachmentPEREV43).id, payload['files'][1]['id']
-    end
-
-    test 'create project file selection with fastq params with feature flag' do
-      Flipper.enable(:v2_samplesheet)
+    test 'create project file selection with fastq params' do
       sign_in users(:snvphyl_user)
       attachment = attachments(:snvphyl_project_attachment_ref)
 
@@ -132,56 +99,7 @@ module WorkflowExecutions
       assert_equal attachment.to_global_id.to_s, input['value']
     end
 
-    test 'create project file selection with fastq params without feature flag' do
-      sign_in users(:snvphyl_user)
-      attachment = attachments(:snvphyl_project_attachment_ref)
-
-      post workflow_executions_file_selector_index_path(
-        file_selector: @project_ref_params,
-        attachment_id: attachment.id,
-        format: :turbo_stream
-      )
-
-      assert_response :ok
-
-      property = @project_ref_params[:property]
-      link_target_id = "workflow_execution_workflow_params_#{property}_link"
-      input_target_id = "workflow_execution_workflow_params_#{property}"
-      doc = Nokogiri::HTML(response.parsed_body)
-      link = doc.at_css("turbo-stream[target=\"#{link_target_id}\"] template a")
-      input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
-
-      assert_equal attachment.filename.to_s, link.text
-      assert_equal 'autofocus', link['autofocus']
-      assert_equal attachment.to_global_id.to_s, input['value']
-    end
-
-    test 'create group file selection with fastq params with feature flag' do
-      Flipper.enable(:v2_samplesheet)
-      sign_in users(:snvphyl_user)
-      attachment = attachments(:snvphyl_group_attachment_ref)
-
-      post workflow_executions_file_selector_index_path(
-        file_selector: @group_ref_params,
-        attachment_id: attachment.id,
-        format: :turbo_stream
-      )
-
-      assert_response :ok
-
-      property = @group_ref_params[:property]
-      link_target_id = "workflow_execution_workflow_params_#{property}_link"
-      input_target_id = "workflow_execution_workflow_params_#{property}"
-      doc = Nokogiri::HTML(response.parsed_body)
-      link = doc.at_css("turbo-stream[target=\"#{link_target_id}\"] template a")
-      input = doc.at_css("turbo-stream[target=\"#{input_target_id}\"] template input")
-
-      assert_equal attachment.filename.to_s, link.text
-      assert_equal 'autofocus', link['autofocus']
-      assert_equal attachment.to_global_id.to_s, input['value']
-    end
-
-    test 'create group file selection with fastq params without feature flag' do
+    test 'create group file selection with fastq params' do
       sign_in users(:snvphyl_user)
       attachment = attachments(:snvphyl_group_attachment_ref)
 
@@ -206,8 +124,6 @@ module WorkflowExecutions
     end
 
     test 'create file selection with no attachment keeps empty payload for selected property' do
-      Flipper.enable(:v2_samplesheet)
-
       post workflow_executions_file_selector_index_path(
         file_selector: @expected_fastq_params,
         attachment_id: 'no_attachment',
@@ -216,7 +132,7 @@ module WorkflowExecutions
 
       assert_response :ok
 
-      payload = parsed_v2_files_payload
+      payload = parsed_files_payload
 
       assert_equal 1, payload['files'].length
       assert_equal 'fastq_1', payload['files'][0]['property']
@@ -224,23 +140,13 @@ module WorkflowExecutions
       assert_equal '', payload['files'][0]['filename']
     end
 
-    test 'new file selection with other params with feature flag' do
-      Flipper.enable(:v2_samplesheet)
-      get new_workflow_executions_file_selector_path(file_selector: @expected_other_params, format: :turbo_stream)
-
-      assert_response :ok
-    end
-
-    test 'new file selection with other params without feature flag' do
-      @expected_other_params['index'] = 1
+    test 'new file selection with other params' do
       get new_workflow_executions_file_selector_path(file_selector: @expected_other_params, format: :turbo_stream)
 
       assert_response :ok
     end
 
     test 'new file selection with attachable outside authorized namespace responds not found' do
-      Flipper.enable(:v2_samplesheet)
-
       get new_workflow_executions_file_selector_path(
         file_selector: @expected_fastq_params.merge(attachable_id: samples(:sample1).id),
         format: :turbo_stream
@@ -249,21 +155,7 @@ module WorkflowExecutions
       assert_response :not_found
     end
 
-    test 'create file selection with other params with feature flag' do
-      Flipper.enable(:v2_samplesheet)
-      attachment = attachments(:attachment1)
-
-      post workflow_executions_file_selector_index_path(
-        file_selector: @expected_other_params,
-        attachment_id: attachment.id,
-        format: :turbo_stream
-      )
-
-      assert_response :ok
-    end
-
-    test 'create file selection with other params without feature flag' do
-      @expected_other_params['index'] = 1
+    test 'create file selection with other params' do
       attachment = attachments(:attachment1)
 
       post workflow_executions_file_selector_index_path(
@@ -276,8 +168,6 @@ module WorkflowExecutions
     end
 
     test 'create file selection with attachment outside attachable responds not found' do
-      Flipper.enable(:v2_samplesheet)
-
       post workflow_executions_file_selector_index_path(
         file_selector: @expected_fastq_params,
         attachment_id: attachments(:attachment1).id,
@@ -287,37 +177,14 @@ module WorkflowExecutions
       assert_response :not_found
     end
 
-    test 'unauthorized new file selection with feature flag' do
-      Flipper.enable(:v2_samplesheet)
+    test 'unauthorized new file selection' do
       sign_in users(:ryan_doe)
       get new_workflow_executions_file_selector_path(file_selector: @expected_fastq_params, format: :turbo_stream)
 
       assert_response :unauthorized
     end
 
-    test 'unauthorized new file selection without feature flag' do
-      @expected_fastq_params['index'] = 0
-      sign_in users(:ryan_doe)
-      get new_workflow_executions_file_selector_path(file_selector: @expected_fastq_params, format: :turbo_stream)
-
-      assert_response :unauthorized
-    end
-
-    test 'unauthorized create file selection with feature flag' do
-      Flipper.enable(:v2_samplesheet)
-      sign_in users(:ryan_doe)
-      attachment = attachments(:attachmentPEFWD43)
-      post workflow_executions_file_selector_index_path(
-        file_selector: @expected_fastq_params,
-        attachment_id: attachment.id,
-        format: :turbo_stream
-      )
-
-      assert_response :unauthorized
-    end
-
-    test 'unauthorized create file selection without feature flag' do
-      @expected_fastq_params['index'] = 0
+    test 'unauthorized create file selection' do
       sign_in users(:ryan_doe)
       attachment = attachments(:attachmentPEFWD43)
       post workflow_executions_file_selector_index_path(
@@ -331,16 +198,10 @@ module WorkflowExecutions
 
     private
 
-    def parsed_v2_files_payload
+    def parsed_files_payload
       doc = Nokogiri::HTML(response.body) # rubocop:disable Rails/ResponseParsedBody
 
       JSON.parse(doc.at_css('[data-payload-type="files"]')['data-files'])
-    end
-
-    def parsed_v1_files_payload
-      doc = Nokogiri::HTML(response.body) # rubocop:disable Rails/ResponseParsedBody
-
-      JSON.parse(doc.at_css('[data-controller="nextflow--v1--file"]')['data-nextflow--v1--file-files-value'])
     end
   end
 end

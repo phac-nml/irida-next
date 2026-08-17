@@ -3,64 +3,7 @@
 module Nextflow
   # @label Samplesheet Component
   class SamplesheetComponentPreview < ViewComponent::Preview
-    def default_v1(schema_file: 'nextflow_schema.json',
-                   sample_ids: [Sample.first.id, Sample.second.id])
-      Flipper.disable(:v2_samplesheet)
-      samples = Sample.where(id: sample_ids)
-
-      render NextflowComponent.new(
-        workflow: default_workflow(schema_file),
-        url: 'no_where',
-        samples:,
-        fields: [],
-        namespace_id: 'SDFSDFSDF'
-      )
-    end
-
-    def with_reference_files_v1(schema_file: 'nextflow_schema.json',
-                                sample_ids: [Sample.first.id, Sample.second.id])
-      Flipper.disable(:v2_samplesheet)
-      samples = Sample.where(id: sample_ids)
-
-      render NextflowComponent.new(
-        workflow: with_reference_files_workflow(schema_file),
-        url: 'no_where',
-        samples:,
-        fields: [],
-        namespace_id: 'SDFSDFSDF'
-      )
-    end
-
-    def with_metadata_v1(schema_file: 'nextflow_schema.json',
-                         sample_ids: [Sample.first.id, Sample.second.id])
-      Flipper.disable(:v2_samplesheet)
-      samples = Sample.where(id: sample_ids)
-
-      render NextflowComponent.new(
-        workflow: with_metadata_workflow(schema_file),
-        url: 'no_where',
-        samples:,
-        fields: [],
-        namespace_id: 'SDFSDFSDF'
-      )
-    end
-
-    def with_samplesheet_overrides_v1(sample_ids: [Sample.first.id, Sample.second.id])
-      Flipper.disable(:v2_samplesheet)
-      samples = Sample.where(id: sample_ids)
-
-      render NextflowComponent.new(
-        workflow: with_samplesheet_overrides_workflow,
-        url: 'no_where',
-        samples:,
-        fields: %w[age gender collection_date],
-        namespace_id: 'SDFSDFSDF'
-      )
-    end
-
     def default_v2(schema_file: 'nextflow_schema.json')
-      Flipper.enable(:v2_samplesheet)
-
       render NextflowComponent.new(
         workflow: default_workflow(schema_file),
         url: 'no_where',
@@ -70,9 +13,7 @@ module Nextflow
       )
     end
 
-    def with_reference_files_v2(schema_file: 'nextflow_schema.json')
-      Flipper.enable(:v2_samplesheet)
-
+    def with_reference_files(schema_file: 'nextflow_schema.json')
       render NextflowComponent.new(
         workflow: with_reference_files_workflow(schema_file),
         url: 'no_where',
@@ -82,9 +23,7 @@ module Nextflow
       )
     end
 
-    def with_metadata_v2(schema_file: 'nextflow_schema.json')
-      Flipper.enable(:v2_samplesheet)
-
+    def with_metadata(schema_file: 'nextflow_schema.json')
       render NextflowComponent.new(
         workflow: with_metadata_workflow(schema_file),
         url: 'no_where',
@@ -94,9 +33,7 @@ module Nextflow
       )
     end
 
-    def with_samplesheet_overrides_v2
-      Flipper.enable(:v2_samplesheet)
-
+    def with_samplesheet_overrides
       render NextflowComponent.new(
         workflow: with_samplesheet_overrides_workflow,
         url: 'no_where',

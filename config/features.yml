@@ -106,15 +106,6 @@ features:
     description:
       en: "Enable the new v2 prefixed select2 component in the UI."
       fr: "Activer le nouveau composant de sélection préfixé version 2 dans l'interface."
-    name:
-      en: "Version 2 Prefixed Select"
-      fr: "Sélecteur préfixé version 2"
-  v2_samplesheet:
-    admin_manageable: true
-    description:
-      en: "Enable the new v2 nextflow samplesheet display and submission process."
-      fr: "Activer le nouvel affichage et le nouveau processus de soumission de la\
-        \ feuille d'échantillons Nextflow version 2."
     enable_in_development: true
     name:
       en: "Version 2 Samplesheet"

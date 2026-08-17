@@ -11,7 +11,6 @@ class SampleTest < ActiveSupport::TestCase
     @fastq_regex = '^\\S+\\.f(ast)?q(\\.gz)?$'
     # project1 is under group_one
     # project4 is under subgroup_one_group_three -> group_three (deeply nested)
-    Flipper.enable(:v2_samplesheet)
   end
 
   def teardown

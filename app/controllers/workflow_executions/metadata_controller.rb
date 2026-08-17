@@ -6,17 +6,11 @@ module WorkflowExecutions
     before_action :namespace
     respond_to :turbo_stream
 
-    def fields # rubocop:disable Metrics/AbcSize
+    def fields
       authorize! @namespace, to: :update_samplesheet_data?
-      if Flipper.enabled?(:v2_samplesheet, current_user)
-        @sample_ids = params.expect(:sample_ids).split(',')
-        @metadata_fields = JSON.parse(params.expect(:metadata_fields))
-        @headers = @metadata_fields.keys.to_json
-      else
-        @samples = Sample.where(id: params.expect(sample_ids: []))
-        @header = params.expect(:header)
-        @field = params.expect(:field)
-      end
+      @sample_ids = params.expect(:sample_ids).split(',')
+      @metadata_fields = JSON.parse(params.expect(:metadata_fields))
+      @headers = @metadata_fields.keys.to_json
       @metadata = generate_metadata_for_samplesheet.to_json
       render status: :ok
     end
@@ -25,12 +19,6 @@ module WorkflowExecutions
 
     def namespace
       @namespace = Namespace.find(params.expect(:namespace_id))
-    end
-
-    # TODO: when feature flag :v2_samplesheet is retired, move fetch_metadata_with_feature_flag logic
-    # into generate_metadata_for_samplesheet
-    def generate_metadata_for_samplesheet
-      Flipper.enabled?(:v2_samplesheet, current_user) ? fetch_metadata_with_feature_flag : fetch_metadata
     end
 
     # generate metadata is now updated to handle multiple metadata fields at once. This is to handle metadata changes
@@ -42,7 +30,7 @@ module WorkflowExecutions
     #   0: {metadata_header_4: "46", metadata_header_5: "canada"},
     #   1: {metadata_header_4: "10", metadata_header_5: "USA"}
     # }
-    def fetch_metadata_with_feature_flag
+    def generate_metadata_for_samplesheet
       fields_to_query = [:id]
 
       @metadata_fields.each_value do |metadata_field|
@@ -68,14 +56,6 @@ module WorkflowExecutions
 
     def create_query_node(metadata_field)
       Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata], Arel::Nodes::Quoted.new(metadata_field))
-    end
-
-    def fetch_metadata
-      metadata = {}
-      @samples.each_with_index do |sample, index|
-        metadata[index] = sample.metadata.fetch(@field, '')
-      end
-      metadata
     end
   end
 end

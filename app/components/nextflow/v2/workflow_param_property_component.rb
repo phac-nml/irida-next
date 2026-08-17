@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nextflow
-  module Shared
+  module V2
     # Render a single workflow parameter property input shared across nextflow form versions.
     class WorkflowParamPropertyComponent < Component
       include NextflowHelper

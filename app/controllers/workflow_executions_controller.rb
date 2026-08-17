@@ -54,14 +54,10 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def samples_workflow_execution_params_attributes
-    attributes = [
+    [
       :sample_id,
       { samplesheet_params: {} }
     ]
-
-    # index, increment for each one, not necessary for functionality
-    attributes.push(:id) unless Flipper.enabled?(:v2_samplesheet, current_user)
-    attributes
   end
 
   def current_page
