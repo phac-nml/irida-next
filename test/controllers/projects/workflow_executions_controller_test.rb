@@ -15,11 +15,21 @@ module Projects
     end
 
     test 'should show a listing of workflow executions for the project' do
+      shared_to_project = workflow_executions(:workflow_execution_shared1)
+      also_shared_to_project = workflow_executions(:workflow_execution_shared2)
+      not_shared_to_project = workflow_executions(:workflow_execution_shared3)
+
       get namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_response :success
-
       w3c_validate 'Project Workflow Executions Page'
+      assert_select 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+      assert_select 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_select "tr##{dom_id(shared_to_project)}", count: 1
+      assert_select "tr##{dom_id(also_shared_to_project)}", count: 1
+      assert_select "tr##{dom_id(not_shared_to_project)}", count: 0
+      assert_select "tr##{dom_id(shared_to_project)} button", text: I18n.t('common.actions.cancel'), count: 0
+      assert_select "tr##{dom_id(shared_to_project)} button", text: I18n.t('common.actions.delete'), count: 0
     end
 
     test 'should apply default sort and support sorting workflow executions' do
@@ -87,25 +97,6 @@ module Projects
       assert_not_includes response.body, @workflow_execution_running.id
     end
 
-    test 'should render project listing with project-shared workflow visibility rules' do
-      shared_to_project = workflow_executions(:workflow_execution_shared1)
-      also_shared_to_project = workflow_executions(:workflow_execution_shared2)
-      not_shared_to_project = workflow_executions(:workflow_execution_shared3)
-
-      get namespace_project_workflow_executions_path(@namespace, @project)
-
-      assert_response :success
-      assert_select 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
-      assert_select 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
-
-      assert_select "tr##{dom_id(shared_to_project)}", count: 1
-      assert_select "tr##{dom_id(also_shared_to_project)}", count: 1
-      assert_select "tr##{dom_id(not_shared_to_project)}", count: 0
-
-      assert_select "tr##{dom_id(shared_to_project)} button", text: I18n.t('common.actions.cancel'), count: 0
-      assert_select "tr##{dom_id(shared_to_project)} button", text: I18n.t('common.actions.delete'), count: 0
-    end
-
     test 'should show workflow execution' do
       workflow_execution = workflow_executions(:automated_workflow_execution)
 
@@ -116,17 +107,7 @@ module Projects
       w3c_validate 'Project Workflow Execution Show Page'
     end
 
-    test 'should show shared workflow execution' do
-      workflow_execution = workflow_executions(:workflow_execution_shared1)
-
-      get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
-
-      assert_response :success
-
-      w3c_validate 'Project Workflow Execution Show Page'
-    end
-
-    test 'should render shared workflow show page action restrictions and tab content' do
+    test 'should show shared workflow execution with action restrictions and tab content' do
       workflow_execution = workflow_executions(:workflow_execution_shared2)
       output_attachment = attachments(:workflow_execution_shared_with_project_output_attachment)
       cancel_action = cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
@@ -137,16 +118,17 @@ module Projects
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_response :success
-      assert_select "form[action^='#{new_data_export_path}'] button", count: 0
-      assert_select "form[action='#{cancel_action}'] button", count: 0
-      assert_select "form[action='#{edit_action}'] button", count: 0
-      assert_select "form[action='#{destroy_action}'] button", count: 0
+      w3c_validate 'Project Workflow Execution Show Page'
+      assert_select "form[action^='#{new_data_export_path}']", count: 1
+      assert_select "form[action='#{cancel_action}']", count: 0
+      assert_select "form[action='#{edit_action}']", count: 0
+      assert_select "form[action='#{destroy_action}']", count: 0
 
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution), params: { tab: 'files' }
 
       assert_response :success
-      assert_includes response.body, output_attachment.puid
-      assert_includes response.body, output_attachment.file.filename.to_s
+      assert_select '#files-panel-content tbody', text: /#{output_attachment.puid}/
+      assert_select '#files-panel-content tbody', text: /#{output_attachment.file.filename}/
 
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution), params: { tab: 'params' }
 
