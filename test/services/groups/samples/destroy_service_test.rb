@@ -161,6 +161,7 @@ module Groups
       end
 
       test 'stores deletion reason in group and project sample deletion activity details' do
+        Flipper.enable(:sample_deletion_reason)
         reason = 'No longer needed for analysis'
 
         Groups::Samples::DestroyService.new(@group12, @user,
@@ -191,6 +192,7 @@ module Groups
         ).order(created_at: :desc).first
 
         assert_equal reason, project_activity_sample34.parameters[:reason]
+        Flipper.disable(:sample_deletion_reason)
       end
     end
   end

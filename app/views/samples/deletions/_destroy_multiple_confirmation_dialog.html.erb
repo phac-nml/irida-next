@@ -1,4 +1,6 @@
-<%# locals: (audit_form: @audit_form, namespace: @namespace, open:) %>
+<%# locals: (sample_deletion_form: @sample_deletion_form, namespace: @namespace, open:) %>
+
+<% sample_deletion_reason_enabled = Flipper.enabled?(:sample_deletion_reason, current_user) %>
 
 <%= viral_dialog(id: "multiple-deletions-dialog", open: open) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
@@ -39,7 +41,7 @@
         </div>
       </div>
 
-      <%= form_for(audit_form, as: :deletion, url: samples_deletions_path(namespace_id: namespace.id),
+      <%= form_for((sample_deletion_reason_enabled ? sample_deletion_form : :deletion), as: :deletion, url: samples_deletions_path(namespace_id: namespace.id),
             data: {
               controller: "spinner form--json-submission",
               "form--json-submission-selection-outlet": '#samples-table',
@@ -53,12 +55,12 @@
         <%= hidden_field_tag :deletion_type, params[:deletion_type] %>
 
         <div class="grid gap-4">
-          <%= form_error_summary(form) %>
+          <% if sample_deletion_reason_enabled %>
+            <%= form_error_summary(form) %>
 
-          <% if Flipper.enabled?(:sample_deletion_reason, current_user) %>
             <%= render partial: "shared/form/required_field_legend" %>
 
-            <% invalid_reason = audit_form.errors.include?(:reason) %>
+            <% invalid_reason = sample_deletion_form.errors.include?(:reason) %>
 
             <div class="form-field <%= 'invalid' if invalid_reason %>">
               <%= form.label :reason, data: { required: true } %>
@@ -78,7 +80,7 @@
               <% if invalid_reason %>
                 <%= render "shared/form/field_errors",
                   id: form.field_id(:reason, "error"),
-                  errors: audit_form.errors.full_messages_for(:reason) %>
+                  errors: sample_deletion_form.errors.full_messages_for(:reason) %>
               <% end %>
             </div>
           <% end %>

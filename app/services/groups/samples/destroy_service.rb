@@ -23,7 +23,8 @@ module Groups
           add_deleted_sample_to_data(sample, sample.project.puid, sample.project.name)
         end
 
-        if deleted_sample_ids.any?
+        if deleted_sample_ids.any? && Flipper.enabled?(:sample_deletion_reason, current_user) &&
+           params[:reason].present?
           Sample.only_deleted.where(id: deleted_sample_ids).update_all(deletion_reason: params[:reason]) # rubocop:disable Rails/SkipsModelValidations
         end
 

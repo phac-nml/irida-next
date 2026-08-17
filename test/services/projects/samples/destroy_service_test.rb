@@ -161,6 +161,7 @@ module Projects
       end
 
       test 'stores deletion reason in project sample deletion activity details' do
+        Flipper.enable(:sample_deletion_reason)
         reason = 'Duplicate data cleanup'
 
         Projects::Samples::DestroyService.new(@project.namespace, @user,
@@ -175,6 +176,7 @@ module Projects
 
         assert_equal reason, deleted_sample.deletion_reason
         assert_equal reason, activity.parameters[:reason]
+        Flipper.disable(:sample_deletion_reason)
       end
     end
   end

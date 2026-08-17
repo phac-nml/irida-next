@@ -1,5 +1,5 @@
 <%= turbo_stream.update "samples_dialog",
                     partial: @confirmation_dialog,
                     locals: {
-                      open: @audit_form.errors.any?,
+                      open: @sample_deletion_form.errors.any?,
                     } %>
