@@ -397,12 +397,14 @@ group1Attachment1:
   attachable: group_one (Namespace)
   puid: INXT_ATT_ABAAAAAAAL
   created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
 
 group1Attachment2:
   metadata: { "compression": "none", "format": "csv" }
   attachable: group_one (Namespace)
   puid: INXT_ATT_ABAAAAAAAM
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 gasclusteringAttachment:
   metadata: { "compression": "none", "format": "json" }
