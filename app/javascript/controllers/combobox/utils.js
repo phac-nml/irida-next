@@ -11,7 +11,9 @@ export function isComboboxDisabled(combobox) {
 }
 
 export function getLowercaseContent(node) {
-  return node.textContent.toLowerCase();
+  const label = node.getAttribute?.("data-label");
+  const content = label ? label : node.textContent;
+  return content.toLowerCase();
 }
 
 export function highlightOption(option, filter) {

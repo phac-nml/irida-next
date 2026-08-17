@@ -39,13 +39,13 @@ vi.mock("utilities/floating_dropdown", () => ({
   },
 }));
 
-function option({ id, value, text, disabled = false }) {
+function option({ id, value, text, label = text, disabled = false }) {
   return `
     <div
       id="${id}"
       role="option"
       data-value="${value}"
-      data-label="${text}"
+      data-label="${label}"
       ${disabled ? 'aria-disabled="true"' : ""}
     >${text}</div>
   `;
@@ -415,5 +415,38 @@ describe("combobox v1 controller", () => {
     expect(combobox()).toHaveValue("Bravo");
     expect(hiddenChange).not.toHaveBeenCalled();
     expect(comboboxChange).not.toHaveBeenCalled();
+  });
+
+  it("keeps selected value and avoids no-results when data-label differs from slot text", async () => {
+    renderFixture({
+      hiddenValue: "alpha",
+      optionsHtml: [
+        option({
+          id: "option-alpha",
+          value: "alpha",
+          label: "Alpha Label",
+          text: "Slot Alpha",
+        }),
+        option({ id: "option-bravo", value: "bravo", text: "Bravo" }),
+      ].join("\n"),
+    });
+
+    application = await startController();
+
+    expect(hidden()).toHaveValue("alpha");
+    expect(combobox()).toHaveValue("Alpha Label");
+    expect(noResults()).toHaveAttribute("hidden");
+
+    focusCombobox();
+    keydown("ArrowDown", { altKey: true });
+
+    expect(combobox()).toHaveAttribute("aria-expanded", "true");
+    expect(noResults()).toHaveAttribute("hidden");
+    expect(listbox()).not.toHaveAttribute("hidden");
+    expect(listbox().querySelectorAll('[role="option"]').length).toBe(1);
+    expect(listbox().querySelector('[role="option"]')).toHaveAttribute(
+      "data-value",
+      "alpha",
+    );
   });
 });
