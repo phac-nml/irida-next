@@ -775,11 +775,11 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     members_data = data['members']
 
     assert_not_empty members_data, 'members field should return data'
-    assert_equal 4, members_data['totalCount'], 'totalCount should be correct'
+    assert_equal 5, members_data['totalCount'], 'totalCount should be correct'
 
     member_nodes = members_data['nodes']
     assert_not_empty member_nodes, 'member nodes should not be empty'
-    assert_equal 4, member_nodes.size, 'should return the correct number of member nodes'
+    assert_equal 5, member_nodes.size, 'should return the correct number of member nodes'
 
     member_nodes.each do |member_node|
       user_email = member_node['user']['email']
@@ -787,12 +787,13 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       expires_at = member_node['expiresAt']
 
       expected_emails = [users(:john_doe).email, users(:joan_doe).email, users(:ryan_doe).email,
-                         users(:james_doe).email]
+                         users(:james_doe).email, users(:michelle_doe).email]
 
       assert_includes expected_emails,
                       user_email
 
       access_level_translations = [I18n.t('members.access_levels.level_10'),
+                                   I18n.t('members.access_levels.level_30'),
                                    I18n.t('members.access_levels.level_40'),
                                    I18n.t('members.access_levels.level_50')]
 

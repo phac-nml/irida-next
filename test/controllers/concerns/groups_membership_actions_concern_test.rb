@@ -12,7 +12,6 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get group_members_path(group)
 
     assert_response :success
-    assert_equal 5, group.group_members.count
 
     w3c_validate 'Group Members Page'
   end
@@ -31,7 +30,6 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get new_group_member_path(group)
 
     assert_response :success
-    assert_equal 5, group.group_members.count
   end
 
   test 'group members new invalid route get' do
@@ -48,13 +46,14 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get group_members_path(group)
     user = users(:john_doe)
 
-    post group_members_path, params: { member: { user_id: users(:steve_doe).id,
-                                                 namespace_id: group.id,
-                                                 created_by_id: user.id,
-                                                 access_level: Member::AccessLevel::OWNER }, format: :turbo_stream }
+    assert_difference -> { group.group_members.count } do
+      post group_members_path, params: { member: { user_id: users(:steve_doe).id,
+                                                   namespace_id: group.id,
+                                                   created_by_id: user.id,
+                                                   access_level: Member::AccessLevel::OWNER }, format: :turbo_stream }
+    end
 
     assert_response :success
-    assert_equal 6, group.group_members.count
   end
 
   test 'group members create invalid post data' do
@@ -77,10 +76,11 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get group_members_path(group)
     group_member = members(:group_one_member_james_doe)
 
-    delete group_member_path(group, group_member, format: :turbo_stream)
+    assert_difference -> { group.group_members.count } => -1 do
+      delete group_member_path(group, group_member, format: :turbo_stream)
+    end
 
     assert_response :ok
-    assert_equal 4, group.group_members.count
   end
 
   test 'group members destroy invalid route delete' do

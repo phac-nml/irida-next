@@ -374,8 +374,8 @@ module Groups
       username_col = 1
       visit group_members_path(@namespace)
 
-      assert_text 'Displaying 5 items'
-      assert_selector 'table tbody tr', count: 5
+      assert_text 'Displaying 6 items'
+      assert_selector 'table tbody tr', count: 6
       assert_selector "table tbody tr td:nth-child(#{username_col})", text: @member_john.user.email
       assert_selector "table tbody tr td:nth-child(#{username_col})", text: @member_james.user.email
       assert_selector "table tbody tr td:nth-child(#{username_col})", text: @member_joan.user.email
