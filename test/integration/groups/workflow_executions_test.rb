@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Groups
-  class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
+  class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     setup do
       sign_in users(:joan_doe)
       @group = groups(:group_one)
