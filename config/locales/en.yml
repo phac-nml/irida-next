@@ -293,6 +293,10 @@ en:
         bulk_metadata_update_html: "%{user} updated metadata for %{href} samples"
         clone_html: "%{user} copied %{cloned_samples_count} samples to other projects"
         destroy_html: "%{user} removed %{href} samples from group"
+        destroy_with_reason_html: |
+          %{user} removed %{href} samples from group
+          <br />
+          Reason: %{reason}
         transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
       subgroups:
         create_html: "%{user} created subgroup %{href}"
@@ -332,6 +336,10 @@ en:
         create_html: "%{user} created sample %{href}"
         destroy_html: "%{user} removed sample %{href}"
         destroy_multiple_html: "%{user} removed %{href} samples from project"
+        destroy_multiple_with_reason_html: |
+          %{user} removed %{href} samples from project
+          <br />
+          Reason: %{reason}
         metadata:
           update_html: "%{user} updated sample %{href} metadata"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples to project %{href}"
@@ -1904,6 +1912,7 @@ en:
       destroy_single_confirmation_dialog:
         description: Are you sure you want to delete sample '%{sample_name}'?
         title: Delete Sample
+      reason_placeholder: Provide a justification for deletion
     editable_cell:
       update_success: Metadata was successfully updated
     table_component:

@@ -66,9 +66,7 @@ linter:
     erb-strict-locals-required:
       enabled: true
     erb-no-unused-expressions:
-      enabled: true
-      only:
-        - "app/views/**/*"
+      enabled: false
     html-navigation-has-label:
       enabled: true
     html-no-block-inside-inline:

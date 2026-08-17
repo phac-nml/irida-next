@@ -33,7 +33,8 @@ module Activities
         when 'project_import_samples'
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:imported_samples_count]))
         when 'sample_destroy_multiple'
-          t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]))
+          t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]),
+                             reason: @activity[:reason])
         when 'project_bulk_metadata_update'
           t(@activity[:key], user: @activity[:user],
                              href: highlighted_text(@activity[:imported_metadata_samples_count]))

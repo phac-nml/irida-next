@@ -470,6 +470,62 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'destroy sample with reason from sample show page' do
+      ### SETUP START ###
+      Flipper.enable(:sample_deletion_reason)
+      # nav to samples index and verify sample exists within table
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+
+      # select all samples
+      click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody input[name="sample_ids[]"]:checked', count: 3
+      assert_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector 'table tbody tr', count: 3
+      assert_selector 'table tfoot tr', text: 'Samples: 3'
+      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+
+      # nav to sample show
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+      # verify header has loaded to prevent flakes
+      assert_selector 'h1', text: @sample1.name
+      ### SETUP END ###
+
+      ### ACTIONS START ##
+      # remove sample
+      click_button I18n.t('common.actions.remove')
+
+      assert_selector 'dialog h1', text: I18n.t(:'samples.deletions.destroy_single_confirmation_dialog.title')
+      within('dialog[open]') do
+        fill_in placeholder: I18n.t(:'samples.deletions.reason_placeholder'),
+                with: 'cleanup'
+        click_button I18n.t('common.actions.remove')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # success flash msg
+      assert_text I18n.t('samples.deletions.destroy.success', count: 1)
+      # redirected to samples index
+      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
+                                                                                      locale: @user.locale))
+      # remaining samples still appear selected
+      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked',
+                      count: 2
+      # remaining samples still appear on table
+      assert_selector 'table tbody tr', count: 2
+      # deleted sample row no longer exists
+      assert_no_selector "table tbody tr[id='#{dom_id(@sample1)}']"
+      assert_selector 'table tfoot tr', text: 'Samples: 2'
+      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '2'
+      Flipper.disable(:sample_deletion_reason)
+      ### VERIFY END ###
+    end
+
     test 'transfer dialog sample listing' do
       ### SETUP START ###
       samples = @project.samples.pluck(:puid, :name)
@@ -2851,6 +2907,46 @@ module Projects
         assert_text I18n.t('projects.samples.index.no_samples')
         assert_text I18n.t('projects.samples.index.no_associated_samples')
       end
+    end
+
+    test 'delete multiple samples with reason' do
+      ### SETUP START ###
+      Flipper.enable(:sample_deletion_reason)
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      assert_selector 'table tbody tr th', text: @sample1.puid
+      assert_selector 'table tbody tr th', text: @sample2.puid
+      assert_selector 'table tbody tr th', text: @sample30.puid
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
+      assert_selector 'table tfoot tr', text: 'Samples: 3'
+      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
+
+      assert_selector 'dialog h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      fill_in placeholder: I18n.t('samples.deletions.reason_placeholder'),
+              with: 'cleanup'
+      assert_selector 'form[data-infinite-scroll-target="pageForm"]'
+      sleep 1
+      click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # flash msg
+      assert_text I18n.t('samples.deletions.destroy.success', count: 3)
+
+      # no remaining samples
+      within 'section[role="status"]' do
+        assert_text I18n.t('projects.samples.index.no_samples')
+        assert_text I18n.t('projects.samples.index.no_associated_samples')
+      end
+      Flipper.disable(:sample_deletion_reason)
     end
 
     test 'filter samples with advanced search' do

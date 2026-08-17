@@ -21,7 +21,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion_type: 'single',
+               deletion: {
                  sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
@@ -36,7 +37,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion_type: 'multiple',
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
@@ -51,7 +53,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy: {
+               deletion_type: 'single',
+               deletion: {
                  sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
@@ -67,7 +70,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy: {
+               deletion_type: 'multiple',
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
@@ -82,7 +86,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion_type: 'single',
+               deletion: {
                  sample_ids: [@sample69.id]
                }
              }, as: :turbo_stream
@@ -97,7 +102,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy: {
+               deletion_type: 'single',
+               deletion: {
                  sample_ids: [@sample69.id]
                }
              }, as: :turbo_stream
@@ -114,7 +120,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion_type: 'single',
+               deletion: {
                  sample_ids: [@sample23.id]
                }
              }, as: :turbo_stream
@@ -130,7 +137,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project2_namespace.id,
-               destroy: {
+               deletion_type: 'single',
+               deletion: {
                  sample_ids: [@sample22.id]
                }
              }, as: :turbo_stream
@@ -212,7 +220,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion_type: 'multiple',
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
                }
              }, as: :turbo_stream
@@ -230,7 +239,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy: {
+               deletion_type: 'multiple',
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
                }
              }, as: :turbo_stream
@@ -248,7 +258,8 @@ module Samples
         post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy: {
+               deletion_type: 'multiple',
+               deletion: {
                  sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
                }
              }, as: :turbo_stream
@@ -256,6 +267,25 @@ module Samples
       assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
+    end
+
+    test 'should not destroy sample when deletion reason exceeds max length' do
+      Flipper.enable(:sample_deletion_reason)
+      assert_no_difference('Sample.count') do
+        post samples_deletions_path,
+             params: {
+               namespace_id: @group1.id,
+               deletion_type: 'multiple',
+               deletion: {
+                 sample_ids: [@sample1.id],
+                 reason: 'a' * 501
+               }
+             }, as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
+      assert_match 'Reason is too long', response.body
+      Flipper.disable(:sample_deletion_reason)
     end
   end
 end

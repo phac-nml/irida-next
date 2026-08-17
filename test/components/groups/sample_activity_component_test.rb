@@ -60,5 +60,34 @@ module Groups
 
       assert_selector 'button', text: I18n.t(:'components.activity.more_details')
     end
+
+    test 'multiple sample destroy with reason activity' do
+      group = groups(:group_one)
+      sample1 = samples(:sample1)
+      sample2 = samples(:sample2)
+
+      params = { sample_ids: [sample1.id, sample2.id], reason: 'cleanup' }
+      Groups::Samples::DestroyService.new(group, @user, params).execute
+
+      activities = group.human_readable_activity(group.retrieve_group_activity)
+
+      assert_equal(1, activities.count do |activity|
+        activity[:key].include?('group.samples.destroy_with_reason')
+      end)
+
+      activity_to_render = activities.find do |a|
+        a[:key] == 'activity.group.samples.destroy_with_reason_html'
+      end
+
+      render_inline Activities::Groups::SampleActivityComponent.new(activity: activity_to_render)
+
+      assert_text strip_tags(
+        I18n.t('activity.group.samples.destroy_html', user: @user.email, href: 2)
+      )
+      assert_text 'Reason: cleanup'
+      assert_selector 'span', text: 2
+
+      assert_selector 'button', text: I18n.t(:'components.activity.more_details')
+    end
   end
 end

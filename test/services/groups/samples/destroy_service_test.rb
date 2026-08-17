@@ -159,6 +159,41 @@ module Groups
         assert_equal I18n.t(:'action_policy.policy.group.destroy_sample?', name: group7.name),
                      exception.result.message
       end
+
+      test 'stores deletion reason in group and project sample deletion activity details' do
+        Flipper.enable(:sample_deletion_reason)
+        reason = 'No longer needed for analysis'
+
+        Groups::Samples::DestroyService.new(@group12, @user,
+                                            { sample_ids: [@sample32.id, @sample34.id], reason: reason }).execute
+
+        deleted_sample32 = Sample.only_deleted.find(@sample32.id)
+        deleted_sample34 = Sample.only_deleted.find(@sample34.id)
+
+        group_activity = PublicActivity::Activity.where(
+          key: 'group.samples.destroy_with_reason',
+          trackable: @group12
+        ).order(created_at: :desc).first
+
+        assert_equal reason, deleted_sample32.deletion_reason
+        assert_equal reason, deleted_sample34.deletion_reason
+        assert_equal reason, group_activity.parameters[:reason]
+
+        project_activity_sample32 = PublicActivity::Activity.where(
+          key: 'namespaces_project_namespace.samples.destroy_multiple_with_reason',
+          trackable: @sample32.project.namespace
+        ).order(created_at: :desc).first
+
+        assert_equal reason, project_activity_sample32.parameters[:reason]
+
+        project_activity_sample34 = PublicActivity::Activity.where(
+          key: 'namespaces_project_namespace.samples.destroy_multiple_with_reason',
+          trackable: @sample34.project.namespace
+        ).order(created_at: :desc).first
+
+        assert_equal reason, project_activity_sample34.parameters[:reason]
+        Flipper.disable(:sample_deletion_reason)
+      end
     end
   end
 end

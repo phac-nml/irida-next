@@ -22,7 +22,8 @@ module Activities
         when 'group_import_samples'
           t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:imported_samples_count]))
         when 'group_samples_destroy'
-          t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]))
+          t(@activity[:key], user: @activity[:user], href: highlighted_text(@activity[:samples_deleted_count]),
+                             reason: @activity[:reason])
         when 'group_bulk_metadata_update'
           t(@activity[:key], user: @activity[:user],
                              href: highlighted_text(@activity[:imported_metadata_samples_count]))
