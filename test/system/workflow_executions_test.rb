@@ -28,6 +28,24 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text I18n.t('workflow_executions.files.empty.title')
   end
 
+  test 'files tab page-size selector reloads tab content through browser interaction' do
+    workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
+
+    visit workflow_execution_path(workflow_execution)
+
+    within 'main' do
+      click_on I18n.t('workflow_executions.show.tabs.files')
+    end
+
+    assert_selector '#files-panel-content tbody tr', count: 2
+
+    select '10', from: 'pagy-limit-select'
+
+    assert_selector '#files-panel-content a[href*="limit=10"][href*="tab=files"]'
+    assert_selector '#files-panel-content tbody tr', count: 2
+    assert_selector '#files-panel-content #pagy-limit-select option[value="10"]:checked'
+  end
+
   test 'advanced-search dialog supports apply and clear lifecycle on workflow listing' do
     visit workflow_executions_path
 
@@ -142,6 +160,49 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.success')
+  end
+
+  test 'edit action opens turbo dialog and updates workflow summary through browser interaction' do
+    workflow_execution = workflow_executions(:irida_next_example_new)
+    new_name = 'New Name'
+    name_label = I18n.t('common.labels.name')
+    run_from_label =
+      I18n.t(:"workflow_executions.summary.run_from_namespace.#{workflow_execution.namespace.type.downcase}")
+    shared_with_label =
+      I18n.t(:"workflow_executions.summary.shared_with_namespace.#{workflow_execution.namespace.type.downcase}")
+
+    visit workflow_execution_path(workflow_execution)
+
+    assert_selector 'h1', text: workflow_execution.name
+    assert_selector 'dt', exact_text: name_label
+    assert_selector 'dt', text: run_from_label
+    assert_no_selector 'dt', text: shared_with_label
+
+    click_button I18n.t('common.actions.edit')
+
+    within('dialog') do
+      assert_selector 'h1', text: I18n.t('workflow_executions.edit_dialog.title')
+      assert_selector 'p',
+                      text: I18n.t('workflow_executions.edit_dialog.description',
+                                   workflow_execution_id: workflow_execution.id)
+      assert_selector 'label', text: name_label
+
+      fill_in placeholder: I18n.t('workflow_executions.edit_dialog.name_placeholder'),
+              with: new_name
+      check I18n.t(
+        :"workflow_executions.edit_dialog.shared_with_namespace.#{workflow_execution.namespace.type.downcase}"
+      )
+
+      click_button I18n.t(:'workflow_executions.edit_dialog.submit_button')
+    end
+
+    assert_selector 'h1', text: new_name
+    assert_selector 'dt', exact_text: name_label
+    assert_selector 'dd', text: new_name
+    assert_no_selector 'dt', text: run_from_label
+    assert_selector 'dt', text: shared_with_label
+    assert_selector 'dd', text: workflow_execution.namespace.name
+    assert_selector 'dd', text: workflow_execution.namespace.puid
   end
 
   private
