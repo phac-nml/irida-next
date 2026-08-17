@@ -6,26 +6,25 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   PAGE_SIZE = 20
 
   setup do
-    @user = users(:john_doe)
-    login_as @user
-    @workflow_execution = workflow_executions(:workflow_execution_existing)
-    @deletable_workflow_execution = workflow_executions(:irida_next_example_completed)
+    login_as users(:john_doe)
   end
 
   test 'tab clicks lazy-load tab content without full-page navigation' do
-    visit workflow_execution_path(@workflow_execution)
+    workflow_execution = workflow_executions(:workflow_execution_existing)
 
-    assert_current_path workflow_execution_path(@workflow_execution)
+    visit workflow_execution_path(workflow_execution)
+
+    assert_current_path workflow_execution_path(workflow_execution)
 
     click_on I18n.t('workflow_executions.show.tabs.params')
 
-    assert_current_path workflow_execution_path(@workflow_execution), ignore_query: false
+    assert_current_path workflow_execution_path(workflow_execution), ignore_query: false
     assert_selector 'div.project_name-param > span', text: '--project_name'
     assert_selector 'div.assembler-param > span', text: '--assembler'
 
     click_on I18n.t('workflow_executions.show.tabs.files')
 
-    assert_current_path workflow_execution_path(@workflow_execution), ignore_query: false
+    assert_current_path workflow_execution_path(workflow_execution), ignore_query: false
     assert_text I18n.t('workflow_executions.files.empty.title')
   end
 
@@ -67,6 +66,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     select_page = find('input#select-page', visible: :all)
     assert_not select_page.checked?
+    assert_equal false, page.evaluate_script("document.querySelector('#select-page').indeterminate")
     assert_equal 'select-page-status', select_page[:'aria-describedby']
 
     within '#select-page-status' do
@@ -83,9 +83,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'delete action opens turbo confirmation dialog and completes through browser interaction' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
     visit workflow_executions_path
 
-    within("tr[id='#{dom_id(@deletable_workflow_execution)}']") do
+    within("tr[id='#{dom_id(workflow_execution)}']") do
       click_button I18n.t('common.actions.delete')
     end
 
@@ -93,8 +95,53 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     click_button I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
     assert_text I18n.t(:'concerns.workflow_execution_actions.destroy.success',
-                       workflow_name: @deletable_workflow_execution.workflow.name)
-    assert_no_text @deletable_workflow_execution.id
+                       workflow_name: workflow_execution.workflow.name)
+    assert_no_text workflow_execution.id
+  end
+
+  test 'bulk delete submits selected workflows through the confirmation dialog' do
+    selected_workflows = [
+      workflow_executions(:irida_next_example_completed),
+      workflow_executions(:irida_next_example_completed_2_files)
+    ]
+
+    visit workflow_executions_path
+
+    selected_workflows.each do |workflow_execution|
+      find("input[type='checkbox'][value='#{workflow_execution.id}']").click
+    end
+
+    click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+    click_button I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
+
+    within('dialog[open]') do
+      click_button I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.submit_button')
+    end
+
+    assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.success')
+    selected_workflows.each { |workflow_execution| assert_no_text workflow_execution.id }
+  end
+
+  test 'bulk cancel submits selected workflows through the confirmation dialog' do
+    selected_workflows = [
+      workflow_executions(:irida_next_example_running),
+      workflow_executions(:irida_next_example_new)
+    ]
+
+    visit workflow_executions_path
+
+    selected_workflows.each do |workflow_execution|
+      find("input[type='checkbox'][value='#{workflow_execution.id}']").click
+    end
+
+    click_button I18n.t('shared.workflow_executions.actions_dropdown.label')
+    click_button I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+
+    within('dialog[open]') do
+      click_button I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.submit_button')
+    end
+
+    assert_text I18n.t('concerns.workflow_execution_actions.cancel_multiple.success')
   end
 
   private

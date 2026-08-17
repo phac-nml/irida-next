@@ -105,7 +105,6 @@ module Groups
       assert_select "form[action^='#{new_data_export_path}']", count: 1
       assert_select "form[action='#{cancel_group_workflow_execution_path(@group, workflow_execution)}']", count: 0
       assert_select "form[action='#{edit_group_workflow_execution_path(@group, workflow_execution)}']", count: 0
-      assert_select "form[action='#{group_workflow_execution_path(@group, workflow_execution)}']", count: 0
 
       get group_workflow_execution_path(@group, workflow_execution), params: { tab: 'files' }
 
@@ -120,6 +119,13 @@ module Groups
       assert_response :success
       assert_select 'div.project_name-param span', text: '--project_name'
       assert_select 'div.assembler-param span', text: '--assembler'
+
+      deletable_workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
+
+      get group_workflow_execution_path(@group, deletable_workflow_execution)
+
+      assert_response :success
+      assert_select 'button', text: I18n.t('common.actions.remove', locale: locale), count: 0
     end
 
     test 'should not show shared workflow execution for user with incorrect permissions' do

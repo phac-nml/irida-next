@@ -32,6 +32,25 @@ module Projects
       assert_select "tr##{dom_id(shared_to_project)} button", text: I18n.t('common.actions.delete'), count: 0
     end
 
+    test 'should render bulk workflow actions based on project access level' do
+      cancel_label = I18n.t('shared.workflow_executions.actions_dropdown.cancel_workflow_executions')
+      delete_label = I18n.t('shared.workflow_executions.actions_dropdown.delete_workflow_executions')
+
+      get namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_response :success
+      assert_select 'button[role="menuitem"]', text: cancel_label, count: 1
+      assert_select 'button[role="menuitem"]', text: delete_label, count: 1
+
+      sign_in users(:michelle_doe)
+
+      get namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_response :success
+      assert_select 'button[role="menuitem"]', text: cancel_label, count: 0
+      assert_select 'button[role="menuitem"]', text: delete_label, count: 0
+    end
+
     test 'should apply default sort and support sorting workflow executions' do
       workflow_executions(:automated_workflow_execution)
       workflow_execution2 = workflow_executions(:automated_example_canceled)
