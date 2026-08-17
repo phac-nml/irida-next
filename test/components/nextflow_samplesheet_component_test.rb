@@ -15,7 +15,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'default' do
-    visit('/rails/view_components/nextflow/samplesheet_component/default_v2')
+    visit('/rails/view_components/nextflow/samplesheet_component/default')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
       within('table') do
@@ -26,7 +26,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'with reference files' do
-    visit('/rails/view_components/nextflow/samplesheet_component/with_reference_files_v2')
+    visit('/rails/view_components/nextflow/samplesheet_component/with_reference_files')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
       within('table') do
@@ -37,7 +37,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'with metadata' do
-    visit('/rails/view_components/nextflow/samplesheet_component/with_metadata_v2')
+    visit('/rails/view_components/nextflow/samplesheet_component/with_metadata')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 1)
       within('table') do
@@ -56,7 +56,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   end
 
   test 'with samplesheet overrides' do
-    visit('/rails/view_components/nextflow/samplesheet_component/with_samplesheet_overrides_v2')
+    visit('/rails/view_components/nextflow/samplesheet_component/with_samplesheet_overrides')
     within('div[id="nextflow-container"][data-controller-connected="true"]') do
       assert_text I18n.t('components.nextflow_component.loading_samplesheet', count: 2)
       within('table') do

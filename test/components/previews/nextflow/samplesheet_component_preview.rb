@@ -3,7 +3,7 @@
 module Nextflow
   # @label Samplesheet Component
   class SamplesheetComponentPreview < ViewComponent::Preview
-    def default_v2(schema_file: 'nextflow_schema.json')
+    def default(schema_file: 'nextflow_schema.json')
       render NextflowComponent.new(
         workflow: default_workflow(schema_file),
         url: 'no_where',
