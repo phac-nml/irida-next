@@ -109,6 +109,16 @@ features:
     name:
       en: "Version 2 Prefixed Select"
       fr: "Sélecteur préfixé version 2"
+  v2_sample_transfer:
+    admin_manageable: true
+    description:
+      en: "Enable the new v2 sample transfer functionality."
+      fr: "Activer la nouvelle fonctionnalité de transfert d'échantillons version\
+        \ 2."
+    enable_in_development: true
+    name:
+      en: "Version 2 Sample Transfer"
+      fr: "Transfert d'échantillons version 2"
   v2_select2:
     admin_manageable: true
     description:
