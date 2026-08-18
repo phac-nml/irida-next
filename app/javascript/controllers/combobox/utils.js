@@ -12,6 +12,7 @@ export function isComboboxDisabled(combobox) {
 
 export function getLowercaseContent(node) {
   const label = node.getAttribute?.("data-label");
+  // For slot options, filtering is based on data-label (semantic label), not rich rendered text.
   const content = label ? label : node.textContent;
   return content.toLowerCase();
 }
