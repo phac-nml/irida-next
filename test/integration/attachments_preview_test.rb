@@ -233,6 +233,7 @@ class AttachmentsPreviewTest < ActionDispatch::IntegrationTest
   end
 
   test 'should list attachments' do
+    sign_in users(:jeff_doe)
     project = projects(:projectA)
     sample = samples(:sampleC)
     namespace = namespaces_user_namespaces(:jeff_doe_namespace)
