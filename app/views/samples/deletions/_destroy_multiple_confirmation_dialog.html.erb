@@ -41,7 +41,8 @@
         </div>
       </div>
 
-      <%= form_for(:deletion, url: samples_deletions_path(namespace_id: namespace.id),
+      <%= form_for(sample_deletion_form || :deletion, as: :deletion,
+            url: samples_deletions_path(namespace_id: namespace.id),
             data: {
               controller: "spinner form--json-submission",
               "form--json-submission-selection-outlet": '#samples-table',
