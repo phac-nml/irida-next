@@ -8,8 +8,8 @@ class AttachmentsController < ApplicationController
 
   layout 'attachment'
 
-  before_action :set_attachment, only: %i[show]
-  before_action :set_context_crumbs, only: %i[show]
+  before_action :set_attachment
+  before_action :set_context_crumbs
 
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 
