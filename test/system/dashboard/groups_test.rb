@@ -154,10 +154,16 @@ module Dashboard
       fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'group'
       find('input.t-search-component').send_keys(:return)
 
-      within('#groups_tree') do
+      # Wait for search results and flat list rendering by verifying groups appear
+      # and their rows no longer have expand buttons
+      within("##{dom_id(group1)}") do
         assert_text group1.name
+        assert_no_selector 'button[data-action*="toggle-expand"]'
+      end
+
+      within("##{dom_id(group3)}") do
         assert_text group3.name
-        assert_no_selector 'svg.caret-right-icon'
+        assert_no_selector 'button[data-action*="toggle-expand"]'
       end
     end
 
