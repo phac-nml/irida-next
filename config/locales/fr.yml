@@ -1725,7 +1725,7 @@ fr:
             success: Les dossiers ont été concaténés avec succès.
           modal:
             description:
-              plural: 'Les 4 fichiers suivants ont été sélectionnés pour la concaténation :'
+              plural: 'Les COUNT_PLACEHOLDER fichiers suivants ont été sélectionnés pour la concaténation :'
               singular: 'Le fichier suivant a été sélectionné pour la concaténation :'
               zero: Aucun fichier n'a été sélectionné pour la concaténation.
             submit_button: Concaténer
