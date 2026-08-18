@@ -13,6 +13,7 @@ module WorkflowExecutions
     before_action :samplesheet_params, only: %i[samplesheet]
 
     def pipeline_selection
+      authorize! Namespace.find_by(id: @namespace_id), to: :submit_workflow?
       render status: :ok
     end
 
