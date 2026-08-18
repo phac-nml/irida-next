@@ -4,6 +4,8 @@ require 'test_helper'
 
 module WorkflowExecutions
   class FileSelectorTest < ActionDispatch::IntegrationTest
+    include ActionView::Helpers::NumberHelper
+
     test 'fastq_1 displays both forward and non-pe files' do
       sample = samples(:sampleB)
       sign_in users(:jane_doe)
@@ -18,19 +20,25 @@ module WorkflowExecutions
       )
 
       assert_response :success
-
+      attachments = [attachments(:attachmentPEFWD3), attachments(:attachmentPEFWD2), attachments(:attachmentPEFWD1),
+                     attachments(:attachmentF), attachments(:attachmentE), attachments(:attachmentD)]
       assert_select 'table' do
         assert_select 'tbody' do
-          assert_select 'td', text: 'test_file_fwd_3.fastq'
-          assert_select 'td', text: 'test_file_fwd_2.fastq'
-          assert_select 'td', text: 'test_file_fwd_1.fastq'
-          assert_select 'td', text: 'test_file_14.fastq.gz'
-          assert_select 'td', text: 'test_file_2.fastq.gz'
-          assert_select 'td', text: 'test_file_D.fastq'
-          assert_select 'td', text: 'test_file_rev_3.fastq', count: 0
-          assert_select 'td', text: 'test_file_rev_2.fastq', count: 0
-          assert_select 'td', text: 'test_file_rev_1.fastq', count: 0
-          assert_select 'td', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.no_file'), count: 0
+          attachments.each do |attachment|
+            assert_select 'tr' do
+              assert_select 'td', text: attachment.file.filename.to_s
+              assert_select 'td', text: attachment.metadata['format']
+              assert_select 'td', text: attachment.metadata['type']
+              assert_select 'td', number_to_human_size(attachment.file.byte_size)
+              assert_select 'td' do
+                assert_select 'time[datetime=?]', attachment.created_at.iso8601
+              end
+            end
+            assert_select 'td', text: 'test_file_rev_3.fastq', count: 0
+            assert_select 'td', text: 'test_file_rev_2.fastq', count: 0
+            assert_select 'td', text: 'test_file_rev_1.fastq', count: 0
+            assert_select 'td', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.no_file'), count: 0
+          end
         end
       end
     end
@@ -50,11 +58,20 @@ module WorkflowExecutions
 
       assert_response :success
 
+      attachments = [attachments(:attachmentPEREV3), attachments(:attachmentPEREV2), attachments(:attachmentPEREV1)]
       assert_select 'table' do
         assert_select 'tbody' do
-          assert_select 'td', text: 'test_file_rev_3.fastq'
-          assert_select 'td', text: 'test_file_rev_2.fastq'
-          assert_select 'td', text: 'test_file_rev_1.fastq'
+          attachments.each do |attachment|
+            assert_select 'tr' do
+              assert_select 'td', text: attachment.file.filename.to_s
+              assert_select 'td', text: attachment.metadata['format']
+              assert_select 'td', text: attachment.metadata['type']
+              assert_select 'td', number_to_human_size(attachment.file.byte_size)
+              assert_select 'td' do
+                assert_select 'time[datetime=?]', attachment.created_at.iso8601
+              end
+            end
+          end
           assert_select 'td', text: 'test_file_fwd_3.fastq', count: 0
           assert_select 'td', text: 'test_file_fwd_2.fastq', count: 0
           assert_select 'td', text: 'test_file_fwd_1.fastq', count: 0
