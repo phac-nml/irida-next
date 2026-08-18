@@ -39,6 +39,14 @@ module Combobox
         assert_selector 'button[data-combobox--v1-target="indicatorButton"][tabindex="-1"]'
       end
 
+      test 'selects html option by selected_value when selected attribute is missing' do
+        html_options = options_for_select([['User 1', 'user-1'], ['User 2', 'user-2']])
+        render_component(options: html_options, selected_value: 'user-2')
+
+        assert_selector 'input[role="combobox"][value="User 2"]'
+        assert_selector "##{build_form_builder.field_id(:field)}_hidden[value='user-2']", visible: :hidden
+      end
+
       test 'renders safely with no html options and no slot options' do
         render_component(options: nil)
 
