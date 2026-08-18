@@ -10,7 +10,7 @@
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <% if @abilities[:select_samples] %>
         <div id="selection-limit-alert" class="mb-4 hidden" data-selection-target="limitAlert">
-          <%= viral_alert(type: :warning, dismissible: false) do %>
+          <%= render Viral::AlertComponent.new(type: :warning, dismissible: false) do %>
             <span data-selection-target="limitAlertMessage">
               <%= t(
                 "components.selection.limit.selection_limit_reached",

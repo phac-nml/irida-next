@@ -16,12 +16,12 @@ module Samples
     end
 
     def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      samples_to_delete_count = destroy_params[:sample_ids].count
-
       if Flipper.enabled?(:sample_deletion_reason, current_user)
         @sample_deletion_form = SampleDeletionForm.new(reason: destroy_params[:reason])
         return render status: :unprocessable_content unless @sample_deletion_form.valid?
       end
+
+      samples_to_delete_count = destroy_params[:sample_ids].count
 
       deleted_samples_count = destroy_service
 
