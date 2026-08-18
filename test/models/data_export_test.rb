@@ -252,7 +252,7 @@ class DataExportTest < ActiveSupport::TestCase
     sample3 = samples(:sample3)
 
     expected = sample22.attachments.select { |attachment| attachment.metadata['format'] == 'fastq' }
-                                   .sum { |attachment| attachment.file.byte_size }
+                       .sum { |attachment| attachment.file.byte_size }
 
     data_export = DataExport.new(
       export_type: 'sample',
