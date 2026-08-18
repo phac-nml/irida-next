@@ -81,6 +81,23 @@ module Combobox
         assert_selector '[role="option"][data-value="5"][aria-disabled="true"]', visible: :all
       end
 
+      test 'slot options preserve explicit id and assign fallback ids to missing ones' do
+        render_inline(
+          ComboboxComponent.new(
+            form: build_form_builder,
+            field: :field,
+            selected_value: 2
+          )
+        ) do |combobox|
+          combobox.with_option(value: 1, label: 'User 1')
+          combobox.with_option(value: 2, label: 'User 2', id: 'explicit-option-id')
+        end
+
+        listbox_id = "#{build_form_builder.field_id(:field)}_listbox"
+        assert_selector "##{listbox_id}_option0[role='option'][data-value='1']", visible: :all
+        assert_selector "#explicit-option-id[role='option'][data-value='2']", visible: :all
+      end
+
       private
 
       def render_component(options: default_options, **)
