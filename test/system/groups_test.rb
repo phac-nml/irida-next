@@ -623,12 +623,21 @@ class GroupsTest < ApplicationSystemTestCase
     fill_in I18n.t('groups.show.search.placeholder'), with: 'subgroup'
     find('input.t-search-component').send_keys(:return)
 
-    within('div.treegrid-container') do
-      assert_selector 'div.treegrid-row', count: 3
+    # Wait for search results and flat list rendering by verifying groups appear
+    # and their rows no longer have expand buttons
+    within("#group_#{subgroup12a.id}") do
       assert_text subgroup12a.name
+      assert_no_selector 'button[data-action*="toggle-expand"]'
+    end
+
+    within("#group_#{subgroup12b.id}") do
       assert_text subgroup12b.name
+      assert_no_selector 'button[data-action*="toggle-expand"]'
+    end
+
+    within("#group_#{subgroup12aa.id}") do
       assert_text subgroup12aa.name
-      assert_no_selector 'svg.caret-right-icon'
+      assert_no_selector 'button[data-action*="toggle-expand"]'
     end
   end
 
