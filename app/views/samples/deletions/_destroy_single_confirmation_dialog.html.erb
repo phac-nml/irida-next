@@ -23,13 +23,12 @@
       </p>
 
       <%= form_for(sample_deletion_form || :deletion, as: :deletion,
-            url: samples_deletions_path(deletion_type: 'single', namespace_id: namespace.id, 'destroy[sample_ids]': [sample.id]),
+            url: samples_deletions_path(namespace_id: namespace.id, 'destroy[sample_ids]': [sample.id]),
             data: {
-              turbo_frame: "_top"
+              turbo_frame: "_top",
             }
           ) do |form| %>
         <%= hidden_field_tag :deletion_type, params[:deletion_type] %>
-        <%= hidden_field_tag :sample_id, params[:sample_id] %>
         <%= hidden_field_tag "deletion[sample_ids][]", sample.id %>
 
         <div class="grid gap-4">

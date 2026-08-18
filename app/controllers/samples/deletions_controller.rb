@@ -49,7 +49,7 @@ module Samples
 
     def destroy_params
       # Make reason optional by only extracting what's provided
-      deletion_params = params.expect(deletion: [{ sample_ids: [] }])
+      deletion_params = params.expect(deletion: { sample_ids: [] })
       if Flipper.enabled?(:sample_deletion_reason, current_user)
         deletion_params[:reason] = params.dig(:deletion, :reason)
       end
