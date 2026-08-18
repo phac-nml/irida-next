@@ -116,12 +116,7 @@ module Samples
     # @param transferrable_samples [ActiveRecord::Relation] samples to organize
     # @return [Hash{Integer => Array<Integer>}] mapping from project ID to sample IDs
     def organize_samples_by_project(transferrable_samples)
-      project_sample_ids_to_transfer = {}
-      transferrable_samples.pluck(:id, :project_id).each do |id, project_id|
-        project_sample_ids_to_transfer[project_id] ||= []
-        project_sample_ids_to_transfer[project_id] << id
-      end
-      project_sample_ids_to_transfer
+      transferrable_samples.group_by(&:project_id).transform_values { |samples| samples.map(&:id) }
     end
 
     # Perform the actual sample transfer with database-level locking.
@@ -131,6 +126,8 @@ module Samples
     #
     # @param new_project [Project] the target project
     # @param project_sample_ids_to_transfer [Hash{Integer => Array<Integer>}] samples to transfer
+    # @param transfer_job_id [String] unique identifier for this transfer job
+    # @param step [Step] the current step in the job execution
     def perform_transfer_with_lock(new_project, project_sample_ids_to_transfer, transfer_job_id, step) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       conflicting_samples = Arel::Table.new(Sample.table_name, as: 'conflicting_samples')
 
@@ -159,17 +156,13 @@ module Samples
     end
 
     def find_transferred_samples_with_log_data_group_by_project(sample_ids, new_project_id, transfer_job_id)
-      transferred_samples = Sample.with_log_data.select(
+      Sample.with_log_data.select(
         "samples.*, #{LATEST_META} ->> 'previous_project_id' AS previous_project_id"
       ).where(
         id: sample_ids, project_id: new_project_id
       ).where(
         "#{LATEST_META} ->> 'transfer_job_id' = ?", transfer_job_id
-      )
-
-      return [] if transferred_samples.empty?
-
-      transferred_samples.group_by(&:previous_project_id)
+      ).group_by(&:previous_project_id)
     end
 
     # Inspect samples that were attempted for transfer and record any errors
