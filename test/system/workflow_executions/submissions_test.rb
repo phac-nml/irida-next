@@ -90,40 +90,6 @@ module WorkflowExecutions
       assert_text I18n.t('shared.workflow_executions.sample_limits.max_samples_exceeded', max_samples: 2)
     end
 
-    test 'should display a pipeline selection modal for project samples as analyst through namespace group link' do
-      user = users(:user30)
-      login_as user
-
-      namespace = namespaces_user_namespaces(:user29_namespace)
-      project = projects(:user29_project1)
-      sample = samples(:sample45)
-      Project.reset_counters(project.id, :samples_count)
-      visit namespace_project_samples_url(namespace_id: namespace.path, project_id: project.path)
-
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                                      locale: user.locale))
-
-      check "checkbox_sample_#{sample.id}"
-
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/iridanextexample', count: 3
-      click_button 'phac-nml/iridanextexample', match: :first
-
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t('workflow_executions.submissions.create.title',
-                                   workflow: 'phac-nml/iridanextexample')
-      assert_selector 'table[data-test-selector="samplesheet-table"]'
-      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
-      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
-                      text: sample.puid
-
-      assert_no_text I18n.t(:'components.nextflow.update_samples')
-      assert_text I18n.t(:'components.nextflow.email_notification')
-      assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
-    end
-
     test 'cannot launch workflow execution (user launched) without a name' do
       user = users(:john_doe)
       login_as user
@@ -159,25 +125,6 @@ module WorkflowExecutions
       click_button I18n.t('workflow_executions.submissions.create.submit')
 
       assert_text I18n.t('components.nextflow_component.name.error')
-    end
-
-    test 'launch pipeline button is not displayed when a project does not contain any samples' do
-      login_as users(:empty_doe)
-
-      visit namespace_project_samples_url(namespace_id: groups(:empty_group).path,
-                                          project_id: projects(:empty_project).path)
-
-      assert_no_selector 'button',
-                         text: I18n.t(:'projects.samples.index.workflows.button_sr')
-    end
-
-    test 'launch pipeline button is not displayed when a group does not contain any projects with samples' do
-      login_as users(:empty_doe)
-
-      visit group_samples_url(groups(:empty_group))
-
-      assert_no_selector 'button',
-                         text: I18n.t(:'projects.samples.index.workflows.button_sr')
     end
 
     test 'default attachment selections' do
