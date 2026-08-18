@@ -241,4 +241,61 @@ class ApplicationSettingTest < ActiveSupport::TestCase
 
     assert_nil settings.opt_in_feature_payload(:unknown_feature, user)
   end
+
+  test 'opt_in_state reports all_users when allowlist is all' do
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: user_opt_in_feature_config)
+
+    assert_equal 'all_users', settings.opt_in_state(:data_grid_samples_table)
+  end
+
+  test 'opt_in_state reports allowlist when allowlist is a populated array' do
+    config = user_opt_in_feature_config(allowlist: [users(:john_doe).email])
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: config)
+
+    assert_equal 'allowlist', settings.opt_in_state(:data_grid_samples_table)
+  end
+
+  test 'opt_in_state reports off when the feature has no configuration' do
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: {})
+
+    assert_equal 'off', settings.opt_in_state(:data_grid_samples_table)
+  end
+
+  test 'opt_in_feature_eligible_for_user? is true when allowlist is all' do
+    user = users(:john_doe)
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: user_opt_in_feature_config)
+
+    assert settings.opt_in_feature_eligible_for_user?(:data_grid_samples_table, user)
+  end
+
+  test 'opt_in_feature_eligible_for_user? matches allowlist emails case-insensitively' do
+    user = users(:john_doe)
+    config = user_opt_in_feature_config(allowlist: [user.email.upcase])
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: config)
+
+    assert settings.opt_in_feature_eligible_for_user?(:data_grid_samples_table, user)
+  end
+
+  test 'opt_in_feature_eligible_for_user? is false when the user is not in the allowlist' do
+    user = users(:john_doe)
+    config = user_opt_in_feature_config(allowlist: [users(:jane_doe).email])
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: config)
+
+    assert_not settings.opt_in_feature_eligible_for_user?(:data_grid_samples_table, user)
+  end
+
+  test 'opt_in_feature_eligible_for_user? is false when the feature has no configuration' do
+    user = users(:john_doe)
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: {})
+
+    assert_not settings.opt_in_feature_eligible_for_user?(:data_grid_samples_table, user)
+  end
+
+  test 'opt_in_feature_eligible_for_user? is false for features missing from the flipper config' do
+    user = users(:john_doe)
+    config = user_opt_in_feature_config(feature_key: :unknown_experiment, allowlist: 'all')
+    settings = ApplicationSetting.build_from_defaults(user_opt_in_features: config)
+
+    assert_not settings.opt_in_feature_eligible_for_user?(:unknown_experiment, user)
+  end
 end
