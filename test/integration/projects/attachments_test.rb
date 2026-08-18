@@ -2,23 +2,26 @@
 
 require 'test_helper'
 
-module Groups
+module Projects
   class AttachmentsTest < ActionDispatch::IntegrationTest
     include ActionView::Helpers::NumberHelper
 
-    test 'can view attachments for a group with proper access' do
+    test 'can view attachments for a project with proper access' do
       sign_in users(:john_doe)
+      project = projects(:project1)
       group = groups(:group_one)
-      attachments = [attachments(:group1Attachment1), attachments(:group1Attachment2)]
-      get group_attachments_path(group)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+      attachments = [attachment1, attachment2]
+      get namespace_project_attachments_path(group, project)
 
       assert_response :success
 
-      assert_select 'h1', I18n.t('groups.attachments.index.title')
-      assert_select 'p', I18n.t('groups.attachments.index.subtitle', puid: group.puid)
+      assert_select 'h1', I18n.t('projects.attachments.index.title')
+      assert_select 'p', I18n.t('projects.attachments.index.subtitle', puid: project.puid)
 
       assert_select 'button', I18n.t('components.attachments.dialogs.new_attachment_component.upload_files')
-      assert_select "input[placeholder='#{I18n.t('groups.attachments.index.search.placeholder')}']"
+      assert_select "input[placeholder='#{I18n.t('projects.attachments.index.search.placeholder')}']"
 
       assert_select 'table' do
         assert_select 'thead' do
@@ -56,26 +59,28 @@ module Groups
       assert_select 'div#limit-component'
     end
 
-    test 'cannot view attachments for a group without proper access' do
+    test 'cannot view attachments for a project without proper access' do
       sign_in users(:ryan_doe)
+      project = projects(:project1)
       group = groups(:group_one)
 
-      get group_path(group)
+      get namespace_project_path(group, project)
 
       assert_response :success
 
-      assert_select 'a', text: I18n.t('groups.sidebar.files'), count: 0
+      assert_select 'a', text: I18n.t('projects.sidebar.files'), count: 0
 
-      get group_attachments_path(group)
+      get namespace_project_attachments_path(group, project)
 
       assert_response :unauthorized
     end
 
-    test 'can create an attachment in a group with proper access' do
+    test 'can create an attachment in a project with proper access' do
       sign_in users(:john_doe)
+      project = projects(:project1)
       group = groups(:group_one)
 
-      get new_group_attachment_path(group, format: :turbo_stream)
+      get new_namespace_project_attachment_path(group, project, format: :turbo_stream)
 
       assert_response :success
 
@@ -83,8 +88,8 @@ module Groups
         assert_select 'h1', I18n.t('components.attachments.dialogs.new_attachment_component.upload_files')
       end
 
-      assert_difference -> { group.attachments.count } do
-        post group_attachments_path(group),
+      assert_difference -> { project.namespace.attachments.count } do
+        post namespace_project_attachments_path(group, project),
              params: { attachment: {
                files: [fixture_file_upload('test_file_1.fastq', 'text/plain')]
              } },
@@ -97,7 +102,7 @@ module Groups
         assert_select 'template' do
           assert_select 'div[role="alert"]' do
             assert_select 'div',
-                          "#{I18n.t('common.statuses.success')}: #{I18n.t('groups.attachments.create.success',
+                          "#{I18n.t('common.statuses.success')}: #{I18n.t('projects.attachments.create.success',
                                                                           filename: 'test_file_1.fastq')}"
           end
         end
@@ -106,25 +111,26 @@ module Groups
       assert_select 'turbo-stream[action="refresh"]'
     end
 
-    test 'cannot create an attachment in a group with role == Analyst' do
+    test 'cannot create an attachment in a project with role == Analyst' do
       sign_in(users(:michelle_doe))
+      project = projects(:project1)
       group = groups(:group_one)
 
-      get group_attachments_path(group)
+      get namespace_project_attachments_path(group, project)
 
-      assert_select 'h1', I18n.t('groups.attachments.index.title')
-      assert_select 'p', I18n.t('groups.attachments.index.subtitle', puid: groups(:group_one).puid)
+      assert_select 'h1', I18n.t('projects.attachments.index.title')
+      assert_select 'p', I18n.t('projects.attachments.index.subtitle', puid: project.namespace.puid)
 
       assert_select 'button', text: I18n.t('components.attachments.dialogs.new_attachment_component.upload_files'),
                               count: 0
-      assert_select "input[placeholder='#{I18n.t('groups.attachments.index.search.placeholder')}']"
+      assert_select "input[placeholder='#{I18n.t('projects.attachments.index.search.placeholder')}']"
 
-      get new_group_attachment_path(group, format: :turbo_stream)
+      get new_namespace_project_attachment_path(group, project, format: :turbo_stream)
 
       assert_response :unauthorized
 
-      assert_no_difference -> { group.attachments.count } do
-        post group_attachments_path(group),
+      assert_no_difference -> { project.namespace.attachments.count } do
+        post namespace_project_attachments_path(group, project),
              params: { attachment: {
                files: [fixture_file_upload('test_file_1.fastq', 'text/plain')]
              } },
@@ -134,13 +140,14 @@ module Groups
       assert_response :unauthorized
     end
 
-    test 'can delete an attachment in a group with proper access' do
+    test 'can delete an attachment in a project with proper access' do
       sign_in users(:john_doe)
+      project = projects(:project1)
       group = groups(:group_one)
 
-      attachment = attachments(:group1Attachment1)
+      attachment = attachments(:project1Attachment1)
 
-      get group_attachments_path(group)
+      get namespace_project_attachments_path(group, project)
 
       assert_response :success
 
@@ -152,12 +159,12 @@ module Groups
         end
       end
 
-      get group_attachment_new_destroy_path(group, attachment)
+      get namespace_project_attachment_new_destroy_path(group, project, attachment)
 
       assert_response :success
 
-      assert_difference -> { group.attachments.count } => -1 do
-        delete group_attachment_path(group, attachment), as: :turbo_stream
+      assert_difference -> { project.namespace.attachments.count } => -1 do
+        delete namespace_project_attachment_path(group, project, attachment), as: :turbo_stream
       end
 
       assert_response :success
@@ -166,7 +173,7 @@ module Groups
         assert_select 'template' do
           assert_select 'div[role="alert"]' do
             assert_select 'div',
-                          "#{I18n.t('common.statuses.success')}: #{I18n.t('groups.attachments.destroy.success',
+                          "#{I18n.t('common.statuses.success')}: #{I18n.t('projects.attachments.destroy.success',
                                                                           filename: attachment.file.filename)}"
           end
         end
@@ -175,35 +182,37 @@ module Groups
       assert_select 'turbo-stream[action="refresh"]'
     end
 
-    test 'cannot delete an attachment in a group without proper access' do
+    test 'cannot delete an attachment in a project without proper access' do
       sign_in users(:michelle_doe)
+      project = projects(:project1)
       group = groups(:group_one)
 
-      attachment = attachments(:group1Attachment1)
+      attachment = attachments(:project1Attachment1)
 
-      get group_attachment_new_destroy_path(group, attachment)
+      get namespace_project_attachment_new_destroy_path(group, project, attachment)
 
       assert_response :unauthorized
 
-      assert_no_difference -> { group.attachments.count } do
-        delete group_attachment_path(group, attachment), as: :turbo_stream
+      assert_no_difference -> { project.namespace.attachments.count } do
+        delete namespace_project_attachment_path(group, project, attachment), as: :turbo_stream
       end
 
       assert_response :unauthorized
     end
 
-    test 'cannot delete an attachment in a group that does not belong to the group' do
+    test 'cannot delete an attachment in a project that does not belong to the project' do
       sign_in users(:john_doe)
+      project = projects(:project1)
       group = groups(:group_one)
 
       attachment = attachments(:attachmentA)
 
-      get group_attachment_new_destroy_path(group, attachment)
+      get namespace_project_attachment_new_destroy_path(group, project, attachment)
 
       assert_response :success
 
       assert_no_difference -> { Attachment.count } do
-        delete group_attachment_path(group, attachment), as: :turbo_stream
+        delete namespace_project_attachment_path(group, project, attachment), as: :turbo_stream
       end
 
       assert_response :unprocessable_content
@@ -211,40 +220,41 @@ module Groups
 
     test 'can sort attachments by supported columns' do
       sign_in(users(:john_doe))
+      project = projects(:project1)
       group = groups(:group_one)
-      attachment1 = attachments(:group1Attachment1)
-      attachment2 = attachments(:group1Attachment2)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
 
-      get group_attachments_path(group)
+      get namespace_project_attachments_path(group, project)
       assert_response :success
       assert_first_rows_include(attachment2.puid, attachment1.puid, row_scope: '#attachments-table-body')
 
-      get group_attachments_path(group, params: { q: { s: 'puid asc' } })
+      get namespace_project_attachments_path(group, project, params: { q: { s: 'puid asc' } })
       assert_response :success
       assert_sort_state(1, 'ascending')
       assert_first_rows_include(attachment1.puid, attachment2.puid, row_scope: '#attachments-table-body')
 
-      get group_attachments_path(group, params: { q: { s: 'puid desc' } })
+      get namespace_project_attachments_path(group, project, params: { q: { s: 'puid desc' } })
       assert_response :success
       assert_sort_state(1, 'descending')
       assert_first_rows_include(attachment2.puid, attachment1.puid, row_scope: '#attachments-table-body')
 
-      get group_attachments_path(group, params: { q: { s: 'file_blob_filename asc' } })
+      get namespace_project_attachments_path(group, project, params: { q: { s: 'file_blob_filename asc' } })
       assert_response :success
       assert_sort_state(2, 'ascending')
       assert_first_rows_include(attachment2.puid, attachment1.puid, row_scope: '#attachments-table-body')
 
-      get group_attachments_path(group, params: { q: { s: 'metadata_format asc' } })
+      get namespace_project_attachments_path(group, project, params: { q: { s: 'metadata_format asc' } })
       assert_response :success
       assert_sort_state(3, 'ascending')
       assert_first_rows_include(attachment2.puid, attachment1.puid, row_scope: '#attachments-table-body')
 
-      get group_attachments_path(group, params: { q: { s: 'file_blob_byte_size asc' } })
+      get namespace_project_attachments_path(group, project, params: { q: { s: 'file_blob_byte_size asc' } })
       assert_response :success
       assert_sort_state(5, 'ascending')
       assert_first_rows_include(attachment2.puid, attachment1.puid, row_scope: '#attachments-table-body')
 
-      get group_attachments_path(group, params: { q: { s: 'updated_at asc' } })
+      get namespace_project_attachments_path(group, project, params: { q: { s: 'updated_at asc' } })
       assert_response :success
       assert_first_rows_include(attachment1.puid, attachment2.puid, row_scope: '#attachments-table-body')
     end
@@ -253,7 +263,7 @@ module Groups
       sign_in users(:john_doe)
       group = groups(:group_one)
 
-      get group_attachments_path(group, page: 50)
+      get namespace_project_attachments_path(group, projects(:project1), page: 50)
 
       assert_response :redirect
 
@@ -265,11 +275,12 @@ module Groups
 
     test 'can filter attachments by filename or puid' do
       sign_in users(:john_doe)
+      project = projects(:project1)
       group = groups(:group_one)
-      attachment1 = attachments(:group1Attachment1)
-      attachment2 = attachments(:group1Attachment2)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
 
-      get group_attachments_path(group),
+      get namespace_project_attachments_path(group, project),
           params: { q: { puid_or_file_blob_filename_cont: attachment1.file.filename.to_s } }
       assert_response :success
 
@@ -280,7 +291,7 @@ module Groups
         end
       end
 
-      get group_attachments_path(group),
+      get namespace_project_attachments_path(group, project),
           params: { q: { puid_or_file_blob_filename_cont: attachment2.puid } }
       assert_response :success
 
