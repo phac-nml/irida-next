@@ -268,13 +268,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
 
-  def workflow_properties
-    workflow = @workflow_execution.workflow
-    return {} if workflow.workflow_params.empty?
-
-    workflow.workflow_params[:input_output_options][:properties][:input][:schema]['items']['properties']
-  end
-
   def set_default_tab
     @tab = params[:tab]
 

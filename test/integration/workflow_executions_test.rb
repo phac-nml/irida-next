@@ -53,6 +53,20 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "tr##{dom_id(workflow_execution)}", count: 0
   end
 
+  test 'should render quick search results messages for zero and multiple matches' do
+    search_term = 'irida_next_example'
+    get workflow_executions_path, params: { q: { name_or_id_cont: search_term }, limit: 100 }
+
+    assert_response :success
+    assert_select '[role=status]', text: /results found for '#{search_term}'/
+
+    missing_term = 'zzz-no-such-workflow'
+    get workflow_executions_path, params: { q: { name_or_id_cont: missing_term } }
+
+    assert_response :success
+    assert_select '[role=status]', text: I18n.t('components.search.results_message.zero', search_term: missing_term)
+  end
+
   test 'should paginate global workflow executions' do
     get workflow_executions_path, params: { page: 2 }
 
@@ -109,6 +123,42 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal true, created_workflow_execution.shared_with_namespace
   end
 
+  test 'should render an error dialog when workflow execution create fails' do
+    assert_no_difference -> { WorkflowExecution.count } do
+      post workflow_executions_path(format: :turbo_stream),
+           params: {
+             workflow_execution: {
+               metadata: {
+                 pipeline_id: 'phac-nml/iridanextexample',
+                 workflow_version: '1.0.2'
+               },
+               namespace_id: projects(:project1).namespace.id,
+               samples_workflow_executions_attributes: [
+                 { sample_id: @sample1.id, samplesheet_params: { sample: @sample1.puid } }
+               ],
+               name: ''
+             }
+           }
+    end
+
+    assert_response :unprocessable_content
+    assert_select '#workflow_execution_error_dialog'
+  end
+
+  test 'should select and deselect workflow executions' do
+    get select_workflow_executions_path
+
+    assert_response :success
+    assert_select '[data-table-selection-ids-value="[]"]'
+
+    get select_workflow_executions_path, params: { select: 'on' }
+
+    assert_response :success
+    assert_select '[data-table-selection-ids-value="[]"]', count: 0
+    assert_includes css_select('[data-table-selection-ids-value]').first['data-table-selection-ids-value'],
+                    @workflow_execution_completed.id.to_s
+  end
+
   test 'should apply advanced search groups' do
     get workflow_executions_path, params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
 
@@ -137,6 +187,42 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_includes response.body, @workflow_execution_completed.id
     assert_not_includes response.body, @workflow_execution_running.id
     assert_not_includes response.body, @workflow_execution_new.id
+  end
+
+  test 'should render advanced search zero results message' do
+    get workflow_executions_path,
+        params: {
+          q: {
+            groups_attributes: {
+              '0' => {
+                conditions_attributes: {
+                  '0' => { field: 'name', operator: 'contains', value: 'zzz-no-such-workflow' }
+                }
+              }
+            }
+          }
+        }
+
+    assert_response :success
+    assert_select '[role=status]', text: I18n.t('components.search.advanced.results_message.zero')
+  end
+
+  test 'should render advanced search singular results message' do
+    get workflow_executions_path,
+        params: {
+          q: {
+            groups_attributes: {
+              '0' => {
+                conditions_attributes: {
+                  '0' => { field: 'name', operator: '=', value: @workflow_execution_completed.name }
+                }
+              }
+            }
+          }
+        }
+
+    assert_response :success
+    assert_select '[role=status]', text: I18n.t('components.search.advanced.results_message.singular')
   end
 
   test 'should apply default sort and support sorting workflow executions' do
@@ -448,6 +534,20 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should open edit dialog' do
+    get edit_workflow_execution_path(@workflow_execution_new, format: :turbo_stream)
+
+    assert_response :success
+  end
+
+  test 'should not update workflow execution with a blank name' do
+    put workflow_execution_path(@workflow_execution_new, format: :turbo_stream),
+        params: { workflow_execution: { name: '' } }
+
+    assert_response :unprocessable_content
+    assert_equal 'irida_next_example_new', @workflow_execution_new.reload.name
+  end
+
   test 'Submitter can share the pipeline results post launch' do
     update_params = { workflow_execution: { shared_with_namespace: true } }
 
@@ -474,6 +574,12 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
 
   test 'should open destroy_multiple_confirmation' do
     get destroy_multiple_confirmation_workflow_executions_path(format: :turbo_stream)
+
+    assert_response :success
+  end
+
+  test 'should open cancel_multiple_confirmation' do
+    get cancel_multiple_confirmation_workflow_executions_path(format: :turbo_stream)
 
     assert_response :success
   end
