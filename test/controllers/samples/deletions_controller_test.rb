@@ -39,7 +39,7 @@ module Samples
              params: {
                namespace_id: @group1.id,
                deletion_type: 'single',
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
@@ -71,7 +71,7 @@ module Samples
              params: {
                namespace_id: @group1.id,
                deletion_type: 'multiple',
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
@@ -104,7 +104,7 @@ module Samples
              params: {
                namespace_id: @project1_namespace.id,
                deletion_type: 'single',
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
@@ -136,7 +136,7 @@ module Samples
              params: {
                namespace_id: @project1_namespace.id,
                deletion_type: 'multiple',
-               destroy: {
+               deletion: {
                  sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
