@@ -20,7 +20,7 @@
   </td>
 
   <td class="px-3 py-2">
-    <%= viral_pill(
+    <%= render Viral::PillComponent.new(
       text: attachment.metadata["format"],
       color: find_pill_color_for_attachment(attachment, "format"),
     ) %>
