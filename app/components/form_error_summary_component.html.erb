@@ -1,4 +1,4 @@
-<%= viral_alert(**alert_system_arguments) do %>
+<%= render Viral::AlertComponent.new(**alert_system_arguments) do %>
   <div class="outline-hidden" data-controller="form-error-summary" tabindex="-1">
     <h2 id="<%= heading_id %>" class="text-sm font-semibold">
       <%= title_text %>

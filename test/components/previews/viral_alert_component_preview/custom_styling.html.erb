@@ -13,82 +13,90 @@
   - Maintains all accessibility and functionality
 
   Usage:
-  viral_alert(message: "Message", classes: "custom-class bg-purple-100 border-purple-300")
+  render Viral::AlertComponent.new(message: "Message", classes: "custom-class bg-purple-100 border-purple-300")
 -->
 
 <div class="space-y-6">
   <!-- Custom Background Colors -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🎨 Custom Background Colors
     </h3>
-    <%= viral_alert(message: "Custom purple background", classes: "bg-purple-100 border-purple-300 text-purple-800") %>
 
-    <%= viral_alert(message: "Custom indigo background", classes: "bg-indigo-100 border-indigo-300 text-indigo-800") %>
+    <%= render Viral::AlertComponent.new(message: "Custom purple background", classes: "bg-purple-100 border-purple-300 text-purple-800") %>
 
-    <%= viral_alert(message: "Custom emerald background", classes: "bg-emerald-100 border-emerald-300 text-emerald-800") %>
+    <%= render Viral::AlertComponent.new(message: "Custom indigo background", classes: "bg-indigo-100 border-indigo-300 text-indigo-800") %>
+
+    <%= render Viral::AlertComponent.new(message: "Custom emerald background", classes: "bg-emerald-100 border-emerald-300 text-emerald-800") %>
   </div>
 
   <!-- Custom Styling with Icons -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🖼️ Custom Styling with Icons
     </h3>
-    <%= viral_alert(message: "Premium feature available", type: :success, classes: "bg-gradient-to-r from-green-50 to-emerald-50 border-green-300 shadow-lg") %>
 
-    <%= viral_alert(message: "Limited time offer", type: :warning, classes: "bg-gradient-to-r from-amber-50 to-orange-50 border-amber-300 shadow-md") %>
+    <%= render Viral::AlertComponent.new(message: "Premium feature available", type: :success, classes: "bg-gradient-to-r from-green-50 to-emerald-50 border-green-300 shadow-lg") %>
+
+    <%= render Viral::AlertComponent.new(message: "Limited time offer", type: :warning, classes: "bg-gradient-to-r from-amber-50 to-orange-50 border-amber-300 shadow-md") %>
   </div>
 
   <!-- Custom Layout Modifications -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       📐 Custom Layout Modifications
     </h3>
-    <%= viral_alert(message: "Large padding and rounded corners", classes: "p-6 rounded-xl shadow-lg") %>
 
-    <%= viral_alert(message: "Compact design with custom spacing", classes: "p-2 rounded-md mx-4") %>
+    <%= render Viral::AlertComponent.new(message: "Large padding and rounded corners", classes: "p-6 rounded-xl shadow-lg") %>
+
+    <%= render Viral::AlertComponent.new(message: "Compact design with custom spacing", classes: "p-2 rounded-md mx-4") %>
   </div>
 
   <!-- Brand-Specific Styling -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🏷️ Brand-Specific Styling
     </h3>
-    <%= viral_alert(message: "Company announcement", classes: "bg-slate-800 text-white border-slate-600 shadow-xl") %>
 
-    <%= viral_alert(message: "Partner notification", classes: "bg-blue-900 text-blue-100 border-blue-700") %>
+    <%= render Viral::AlertComponent.new(message: "Company announcement", classes: "bg-slate-800 text-white border-slate-600 shadow-xl") %>
+
+    <%= render Viral::AlertComponent.new(message: "Partner notification", classes: "bg-blue-900 text-blue-100 border-blue-700") %>
   </div>
 
   <!-- Interactive Custom Styling -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🔘 Interactive Custom Styling
     </h3>
-    <%= viral_alert(message: "Custom dismissible alert", dismissible: true, classes: "bg-rose-50 border-rose-300 text-rose-800 hover:bg-rose-100 transition-colors") %>
 
-    <%= viral_alert(message: "Custom auto-dismiss alert", auto_dismiss: true, classes: "bg-violet-50 border-violet-300 text-violet-800") %>
+    <%= render Viral::AlertComponent.new(message: "Custom dismissible alert", dismissible: true, classes: "bg-rose-50 border-rose-300 text-rose-800 hover:bg-rose-100 transition-colors") %>
+
+    <%= render Viral::AlertComponent.new(message: "Custom auto-dismiss alert", auto_dismiss: true, classes: "bg-violet-50 border-violet-300 text-violet-800") %>
   </div>
 
   <!-- Advanced Custom Styling -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       ⚡ Advanced Custom Styling
     </h3>
-    <%= viral_alert(message: "Premium notification", type: :success, classes: "bg-gradient-to-r from-yellow-50 via-amber-50 to-orange-50 border-amber-300 text-amber-900 shadow-lg transform hover:scale-105 transition-transform") %>
 
-    <%= viral_alert(message: "System status update", type: :info, classes: "bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-300 text-blue-900 backdrop-blur-sm") %>
+    <%= render Viral::AlertComponent.new(message: "Premium notification", type: :success, classes: "bg-gradient-to-r from-yellow-50 via-amber-50 to-orange-50 border-amber-300 text-amber-900 shadow-lg transform hover:scale-105 transition-transform") %>
+
+    <%= render Viral::AlertComponent.new(message: "System status update", type: :info, classes: "bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-300 text-blue-900 backdrop-blur-sm") %>
   </div>
 
   <!-- Design System Integration -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🎯 Design System Integration
     </h3>
-    <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-      <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+
+    <div class="rounded-lg bg-slate-50 p-4 dark:bg-slate-800">
+      <h4 class="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">
         Design System Guidelines
       </h4>
-      <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-2">
+
+      <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
         <li>• Use consistent color palettes from your design system</li>
         <li>• Maintain proper contrast ratios for accessibility</li>
         <li>• Keep custom styling within brand guidelines</li>
@@ -100,29 +108,37 @@
 
   <!-- Technical Implementation -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🔧 Technical Implementation
     </h3>
-    <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-      <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+
+    <div class="rounded-lg bg-slate-50 p-4 dark:bg-slate-800">
+      <h4 class="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">
         How to Use Custom Styling
       </h4>
-      <div class="text-sm text-slate-600 dark:text-slate-400 space-y-2">
+
+      <div class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
         <p><strong>Basic Usage:</strong></p>
-        <code class="block bg-slate-100 dark:bg-slate-700 p-2 rounded text-xs font-mono">
-          viral_alert(message: "Message", classes: "custom-class")
+
+        <code class="block rounded bg-slate-100 p-2 font-mono text-xs dark:bg-slate-700">
+          render Viral::AlertComponent.new(message: "Message", classes: "custom-class")
         </code>
 
         <p class="mt-3"><strong>Advanced Usage:</strong></p>
-        <code class="block bg-slate-100 dark:bg-slate-700 p-2 rounded text-xs font-mono">
-          viral_alert(message: "Message", type: :info, classes: "bg-purple-100 border-purple-300 text-purple-800 p-6 rounded-xl shadow-lg")
+
+        <code class="block rounded bg-slate-100 p-2 font-mono text-xs dark:bg-slate-700">
+          render Viral::AlertComponent.new(message: "Message", type: :info, classes: "bg-purple-100 border-purple-300
+          text-purple-800 p-6 rounded-xl shadow-lg")
         </code>
 
         <p class="mt-3"><strong>With Content Block:</strong></p>
-        <code class="block bg-slate-100 dark:bg-slate-700 p-2 rounded text-xs font-mono">
-          viral_alert(message: "Message", classes: "custom-styling") do
-          <br>&nbsp;&nbsp;div "Additional content"
-          <br>end
+
+        <code class="block rounded bg-slate-100 p-2 font-mono text-xs dark:bg-slate-700">
+          render Viral::AlertComponent.new(message: "Message", classes: "custom-styling") do
+          <br>
+          &nbsp;&nbsp;div "Additional content"
+          <br>
+          end
         </code>
       </div>
     </div>
@@ -130,14 +146,16 @@
 
   <!-- Best Practices -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       💡 Best Practices
     </h3>
-    <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-      <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+
+    <div class="rounded-lg bg-slate-50 p-4 dark:bg-slate-800">
+      <h4 class="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">
         Custom Styling Guidelines
       </h4>
-      <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-2">
+
+      <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
         <li>• <strong>Accessibility First:</strong> Always maintain proper contrast ratios</li>
         <li>• <strong>Consistency:</strong> Use your established color palette</li>
         <li>• <strong>Responsiveness:</strong> Test custom styles on all screen sizes</li>

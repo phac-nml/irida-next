@@ -2,5 +2,5 @@
   value: "Different value",
   title: 'Copy to clipboard value: "Different value"',
 ) do %>
-  <%= viral_pill(text: "INXT_GRP_AYJFZ42CTQ", color: "orange", classes: "ml-2") %>
+  <%= render Viral::PillComponent.new(text: "INXT_GRP_AYJFZ42CTQ", color: "orange", classes: "ml-2") %>
 <% end %>

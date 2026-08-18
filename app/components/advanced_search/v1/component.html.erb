@@ -13,7 +13,7 @@
     "advanced-search--v1-operations-value": json_escape_data(operation_options),
   },
 ) do %>
-  <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>
+  <%= render Viral::DialogComponent.new(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>
     <% dialog.with_trigger do %>
       <div class="flex w-full grow flex-row rounded-lg" role="group">
         <button
@@ -61,7 +61,7 @@
       <div class="space-y-4" data-advanced-search--v1-target="searchGroupsContainer"></div>
 
       <div class="flex justify-end space-x-2">
-        <%= viral_button(data: { action: "advanced-search--v1#addGroup" }) do %>
+        <%= render Viral::ButtonComponent.new(data: { action: "advanced-search--v1#addGroup" }) do %>
           <%= t("components.advanced_search_component.v1.add_group_button") %>
         <% end %>
       </div>
@@ -86,7 +86,7 @@
     ) { t("components.advanced_search_component.v1.apply_filter_button") } %>
 
     <% dialog.with_secondary_action do %>
-      <%= viral_button(data: { action: "advanced-search--v1#clearForm viral--dialog#close filters#submit" }) do %>
+      <%= render Viral::ButtonComponent.new(data: { action: "advanced-search--v1#clearForm viral--dialog#close filters#submit" }) do %>
         <%= t("components.advanced_search_component.v1.clear_filter_button") %>
       <% end %>
     <% end %>

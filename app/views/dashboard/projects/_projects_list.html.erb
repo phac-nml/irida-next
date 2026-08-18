@@ -50,7 +50,7 @@
         item: t("dashboard.projects.index.pagy_item"),
       ) %>
     <% else %>
-      <%= viral_empty(
+      <%= render Viral::EmptyStateComponent.new(
         icon_name: :magnifying_glass,
         title: t("components.viral.pagy.empty_state.title"),
         description: t("components.viral.pagy.empty_state.description"),
@@ -59,7 +59,7 @@
   </div>
 <% else %>
   <div class="empty_state_message">
-    <%= viral_empty(
+    <%= render Viral::EmptyStateComponent.new(
       icon_name: Project.icon,
       title: t("dashboard.projects.index.no_projects"),
       description: t("dashboard.projects.index.no_projects_description"),

@@ -1,6 +1,7 @@
-<%= viral_pill(text: "This is blue", color: "blue", border: true) %>
-<%= viral_pill(text: "This is green", color: "green", border: true) %>
-<%= viral_pill(
+<%= render Viral::PillComponent.new(text: "This is blue", color: "blue", border: true) %>
+<%= render Viral::PillComponent.new(text: "This is green", color: "green", border: true) %>
+
+<%= render Viral::PillComponent.new(
   text: "This has much more text and is purple",
   color: "purple",
   border: true

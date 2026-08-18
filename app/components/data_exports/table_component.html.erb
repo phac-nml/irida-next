@@ -64,9 +64,9 @@
                 <% status_text = t("common.statuses.#{data_export.status}").upcase %>
 
                 <% if data_export.status == 'ready' %>
-                  <%= viral_pill(text: status_text, color: :green) %>
+                  <%= render Viral::PillComponent.new(text: status_text, color: :green) %>
                 <% else %>
-                  <%= viral_pill(text: status_text, color: :slate) %>
+                  <%= render Viral::PillComponent.new(text: status_text, color: :slate) %>
                 <% end %>
               </td>
 
@@ -139,7 +139,7 @@
   <% end %>
 <% else %>
   <div class="empty_state_message">
-    <%= viral_empty(
+    <%= render Viral::EmptyStateComponent.new(
       title: @empty[:title],
       description: @empty[:description],
       icon_name: DataExport.icon,

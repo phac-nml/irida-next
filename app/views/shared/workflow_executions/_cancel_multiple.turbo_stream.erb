@@ -1,6 +1,6 @@
 <% messages.each do |message| %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type: message[:type], data: message[:message]) %>
+    <%= render Viral::FlashComponent.new(type: message[:type], data: message[:message]) %>
   <% end %>
 <% end %>
 

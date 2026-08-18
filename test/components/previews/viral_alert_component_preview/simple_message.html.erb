@@ -12,54 +12,60 @@
   - Responsive and accessible
 
   Usage:
-  viral_alert(message: "Your simple message here")
+  render Viral::AlertComponent.new(message: "Your simple message here")
 -->
 
 <div class="space-y-6">
   <!-- Basic Simple Message -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       💬 Basic Simple Message
     </h3>
-    <%= viral_alert(message: "Your profile has been updated.") %>
+
+    <%= render Viral::AlertComponent.new(message: "Your profile has been updated.") %>
   </div>
 
   <!-- Short Status Update -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       📊 Status Update
     </h3>
-    <%= viral_alert(message: "Processing complete.", type: :success) %>
+
+    <%= render Viral::AlertComponent.new(message: "Processing complete.", type: :success) %>
   </div>
 
   <!-- Quick Notification -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       🔔 Quick Notification
     </h3>
-    <%= viral_alert(message: "New message received.", type: :info) %>
+
+    <%= render Viral::AlertComponent.new(message: "New message received.", type: :info) %>
   </div>
 
   <!-- Simple Warning -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-      ⚠️  Simple Warning
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
+      ⚠️ Simple Warning
     </h3>
-    <%= viral_alert(message: "Please save your work.", type: :warning) %>
+
+    <%= render Viral::AlertComponent.new(message: "Please save your work.", type: :warning) %>
   </div>
 
   <!-- Error Message -->
   <div>
-    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+    <h3 class="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
       ❌ Error Message
     </h3>
-    <%= viral_alert(message: "Connection failed.", type: :danger) %>
+
+    <%= render Viral::AlertComponent.new(message: "Connection failed.", type: :danger) %>
   </div>
 
   <!-- Design Principles -->
-  <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-    <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">🎨 Design Principles</h4>
-    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+  <div class="mt-8 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
+    <h4 class="mb-2 font-semibold text-blue-900 dark:text-blue-100">🎨 Design Principles</h4>
+
+    <ul class="space-y-1 text-sm text-blue-700 dark:text-blue-300">
       <li>• <strong>Keep it short</strong> - one line, under 60 characters</li>
       <li>• <strong>Be specific</strong> - what happened, not how it happened</li>
       <li>• <strong>Use active voice</strong> - "Updated" not "Has been updated"</li>
@@ -69,9 +75,10 @@
   </div>
 
   <!-- Best Practices -->
-  <div class="mt-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-    <h4 class="font-semibold text-slate-900 dark:text-white mb-2">💡 Best Practices</h4>
-    <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+  <div class="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+    <h4 class="mb-2 font-semibold text-slate-900 dark:text-white">💡 Best Practices</h4>
+
+    <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-400">
       <li>• <strong>Use for:</strong> confirmations, status updates, quick notifications</li>
       <li>• <strong>Avoid for:</strong> complex instructions, detailed explanations, user actions</li>
       <li>• <strong>Test length:</strong> ensure messages fit on mobile devices</li>

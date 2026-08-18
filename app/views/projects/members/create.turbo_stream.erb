@@ -7,7 +7,7 @@
 
 <% if @new_member.persisted? %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
+    <%= render Viral::FlashComponent.new(type:, data: message) %>
   <% end %>
 
   <%= turbo_stream.replace "members" do %>

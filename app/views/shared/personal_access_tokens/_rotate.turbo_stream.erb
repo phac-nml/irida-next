@@ -1,4 +1,4 @@
-<%= turbo_stream.update "personal-access-token-alert", viral_alert(type:, message:) %>
+<%= turbo_stream.update "personal-access-token-alert", render(Viral::AlertComponent.new(type:, message:)) %>
 
 <% if local_assigns[:personal_access_token] %>
   <%= turbo_stream.update "rotate-access-token-section",

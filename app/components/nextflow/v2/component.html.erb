@@ -64,7 +64,7 @@
                                 "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
 
           <div id="workflow_execution_name_error" class="mt-2 text-sm">
-            <%= viral_help_text(state: :error, classes: "hidden") %>
+            <%= render Viral::Form::HelpTextComponent.new(state: :error, classes: "hidden") %>
           </div>
 
           <p id="<%= form.field_id("workflow_execution_name", "hint") %>" class="field-hint">
@@ -90,7 +90,7 @@
               <% if item == :input_output_options && property[:format] == "file-path" %>
                 <% unless @automated_workflow %>
                   <div id="samplesheet_message" data-nextflow--v2--samplesheet-target="samplesheetMessagesContainer">
-                    <%= viral_alert(
+                    <%= render Viral::AlertComponent.new(
                       message:
                         t(
                           "components.nextflow_component.loading_samplesheet",
@@ -252,6 +252,7 @@
       <%= form_with(
       url: helpers.samplesheet_workflow_executions_submissions_path,
     ) do |f| %>
+        <!-- Samplesheet params form is cloned client-side. -->
       <% end %>
     </template>
   <% end %>
@@ -259,7 +260,7 @@
   <div class="sr-only" aria-live="assertive" data-nextflow--v2--samplesheet-target="ariaLive"></div>
 
   <template data-nextflow--v2--samplesheet-target="samplesheetReadyTemplate">
-    <%= viral_alert(
+    <%= render Viral::AlertComponent.new(
       type: "success",
       message:
         t(

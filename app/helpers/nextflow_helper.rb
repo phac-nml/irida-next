@@ -2,12 +2,12 @@
 
 # Helper to render a Nextflow pipeline form
 module NextflowHelper
-  def form_input(container, name, property, required, instance) # rubocop:disable Metrics/MethodLength
+  def form_input(container, name, property, required, instance) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     value = instance.present? ? instance['workflow_params'][name.to_s] : property[:default]
 
     if property[:enum].present?
-      return viral_prefixed_select(form: container, name:, options: property[:enum],
-                                   selected_value: value) do |select|
+      return render(Viral::Form::Prefixed::SelectComponent.new(form: container, name:, options: property[:enum],
+                                                               selected_value: value)) do |select|
                select.with_prefix do
                  format_name_as_arg(name)
                end
@@ -16,8 +16,8 @@ module NextflowHelper
 
     data = { 'metadata-header-name': name.to_s.remove('_header') } if metadata_header?(name.to_s)
 
-    viral_prefixed_text_input(form: container, name:, required:, pattern: property[:pattern],
-                              value:, data:) do |input|
+    render(Viral::Form::Prefixed::TextInputComponent.new(form: container, name:, required:, pattern: property[:pattern],
+                                                         value:, data:)) do |input|
       input.with_prefix do
         format_name_as_arg(name)
       end

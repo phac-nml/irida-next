@@ -4,7 +4,7 @@
 <%# ------------------------------------------ %>
 
 <div id="confirmation-content" class="hidden">
-  <%= viral_alert(message: "This is some custom content") %>
+  <%= render Viral::AlertComponent.new(message: "This is some custom content") %>
 </div>
 
 <%= button_to "Confirmation",

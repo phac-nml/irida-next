@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
 
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
@@ -23,7 +23,7 @@
 
       <div class="grid gap-4">
         <div data-controller="collapsible">
-          <h2 id="<%= "accordion-collapse-heading-samples" %>">
+          <h2 id="accordion-collapse-heading-samples">
             <button
               type="button"
               class="
@@ -47,10 +47,10 @@
 
           <div
             data-collapsible-target="item"
-            id="<%= "accordion-collapse-body-samples" %>"
+            id="accordion-collapse-body-samples"
             class="hidden"
             role="region"
-            aria-labelledby="<%= "accordion-collapse-heading-samples" %>"
+            aria-labelledby="accordion-collapse-heading-samples"
           >
             <div
               class="

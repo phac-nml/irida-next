@@ -66,7 +66,7 @@
                     id="sample_key_PLACEHOLDER_error"
                     class="invisible relative z-0 mt-1 min-h-[1.5rem] w-full text-sm"
                   >
-                    <%= viral_help_text(state: :error, classes: "hidden") %>
+                    <%= render Viral::Form::HelpTextComponent.new(state: :error, classes: "hidden") %>
                   </div>
                 </div>
 
@@ -94,7 +94,7 @@
                     id="sample_value_PLACEHOLDER_error"
                     class="invisible relative z-0 mt-1 min-h-[1.5rem] w-full text-sm"
                   >
-                    <%= viral_help_text(state: :error, classes: "hidden") %>
+                    <%= render Viral::Form::HelpTextComponent.new(state: :error, classes: "hidden") %>
                   </div>
                 </div>
               </div>

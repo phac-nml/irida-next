@@ -19,20 +19,20 @@
     ) do %>
       <% if avatar %>
         <span class="rounded-lg bg-white">
-          <%= viral_avatar(name: label, colour_string: "#{label}-#{url}", size: :xs) %>
+          <%= render Viral::AvatarComponent.new(name: label, colour_string: "#{label}-#{url}", size: :xs) %>
         </span>
       <% else %>
         <%= create_icon %>
       <% end %>
     <% end %>
 
-    <span class="line-clamp-2 text-sm font-medium transition-opacity duration-200 ease-in-out" title="<%= label %>">
+    <div class="line-clamp-2 text-sm font-medium transition-opacity duration-200 ease-in-out">
       <% if avatar %>
         <turbo-frame id="namespace_name"><%= label %></turbo-frame>
       <% else %>
         <%= label %>
       <% end %>
-    </span>
+    </div>
 
     <% if defined?(badge) && badge.present? %>
       <span

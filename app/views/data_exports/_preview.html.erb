@@ -1,5 +1,5 @@
 <div class="mt-2">
-  <%= viral_card do |card| %>
+  <%= render Viral::CardComponent.new do |card| %>
     <% card.with_header(title: "#{@data_export.file.filename}", classes: "pb-0") %>
 
     <% card.with_section do %>

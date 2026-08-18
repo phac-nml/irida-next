@@ -1,5 +1,5 @@
 <%= form_with url: '#' do |form| %>
-  <%= viral_prefixed_select(form:, name: "prefixed-select", options: [['Lisbon', 1], ['Madrid', 2]]) do |select| %>
+  <%= render Viral::Form::Prefixed::SelectComponent.new(form:, name: "prefixed-select", options: [['Lisbon', 1], ['Madrid', 2]]) do |select| %>
     <%= select.with_prefix do %>
       --prefix
     <% end %>

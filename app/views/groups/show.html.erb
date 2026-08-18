@@ -2,7 +2,7 @@
 
 <%= render Viral::PageHeaderComponent.new(title: @group.name, id: @group.puid) do |component| %>
   <%= component.icon do %>
-    <%= viral_avatar(
+    <%= render Viral::AvatarComponent.new(
       name: @group.name,
       colour_string: "#{@group.name}-#{@group.id}",
       size: :large,

@@ -1,14 +1,11 @@
-<%= viral_dialog(open: @open, size: :large) do |dialog| %>
+<%= render Viral::DialogComponent.new(open: @open, size: :large) do |dialog| %>
   <% dialog.with_header(
     title: t("components.attachments.dialogs.delete_attachment_component.title"),
   ) %>
+
   <%= helpers.turbo_frame_tag("deletion-alert") %>
 
-  <div
-    class="
-      mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400
-    "
-  >
+  <div class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400">
     <p class="mb-4">
       <% if @attachment.associated_attachment %>
         <%= t(
@@ -25,6 +22,7 @@
         ) %>
       <% end %>
     </p>
+
     <%= form_for(:deletion, url: destroy_path, method: :delete) do |form| %>
       <%= form.submit t(
                     "components.attachments.dialogs.delete_attachment_component.submit_button",

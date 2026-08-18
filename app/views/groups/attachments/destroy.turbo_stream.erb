@@ -9,7 +9,7 @@
 
   <% destroyed_attachments.each do |attachment| %>
     <%= turbo_stream.append "flashes" do %>
-      <%= viral_flash(
+      <%= render Viral::FlashComponent.new(
         type: :success,
         data: t(".success", filename: attachment.file.filename),
       ) %>
@@ -17,9 +17,8 @@
   <% end %>
 
   <turbo-stream action="refresh"></turbo-stream>
-
 <% else %>
   <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type: :error, data: message) %>
+    <%= render Viral::FlashComponent.new(type: :error, data: message) %>
   <% end %>
 <% end %>

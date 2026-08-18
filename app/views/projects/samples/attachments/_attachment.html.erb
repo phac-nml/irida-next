@@ -74,14 +74,14 @@
   <% end %>
 
   <td class="px-6 py-4">
-    <%= viral_pill(
+    <%= render Viral::PillComponent.new(
       text: attachment.metadata["format"],
       color: find_pill_color_for_attachment(attachment, "format"),
     ) %>
   </td>
 
   <td class="px-6 py-4">
-    <%= viral_pill(
+    <%= render Viral::PillComponent.new(
       text: attachment.metadata["type"],
       color: find_pill_color_for_attachment(attachment, "type"),
     ) %>

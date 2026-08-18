@@ -55,7 +55,7 @@
       <% if @pagy.count.positive? %>
         <div class="flex flex-row-reverse"><%= render Viral::Pagy::PaginationComponent.new(@pagy) %></div>
       <% else %>
-        <%= viral_empty(
+        <%= render Viral::EmptyStateComponent.new(
           icon_name: :magnifying_glass,
           title: t("components.viral.pagy.empty_state.title"),
           description: t("components.viral.pagy.empty_state.description"),
@@ -64,7 +64,7 @@
     </div>
   <% else %>
     <div class="empty_state_message">
-      <%= viral_empty(
+      <%= render Viral::EmptyStateComponent.new(
         icon_name: Group.icon,
         title: t(".no_groups_title"),
         description: t(".no_groups_description"),

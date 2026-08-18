@@ -1,10 +1,10 @@
 <div>
-  <% help_text_id = fields.field_id(name, "help") %>
+  <% help_text_id = fields.field_id(name, "help") %> <%# herb:disable actionview-no-silent-helper %>
 
   <% if property[:type] != "boolean" %>
     <% if (property[:format] == "path" || property[:format] == "file-path") && !property[:enum].present? %>
-      <% legend_id = fields.field_id(name, "legend") %>
-      <% prefix_id = fields.field_id(name, "prefix") %>
+      <% legend_id = fields.field_id(name, "legend") %> <%# herb:disable actionview-no-silent-helper %>
+      <% prefix_id = fields.field_id(name, "prefix") %> <%# herb:disable actionview-no-silent-helper %>
       <% describedby_ids = [prefix_id] %>
       <% describedby_ids << help_text_id if property[:help_text].present? %>
       <fieldset class="m-0 border-0 p-0">
@@ -12,7 +12,7 @@
           <%= property[:description] %>
 
           <% if property[:required] %>
-            <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
+            <%= render Viral::PillComponent.new(text: t(:"components.nextflow.required"), color: :primary) %>
           <% end %>
         </legend>
       </fieldset>
@@ -65,14 +65,14 @@
         <%= property[:description] %>
 
         <% if property[:required] %>
-          <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
+          <%= render Viral::PillComponent.new(text: t(:"components.nextflow.required"), color: :primary) %>
         <% end %>
       <% end %>
       <%= form_input(fields, name, property, property[:required], instance) %>
     <% end %>
   <% else %>
     <% value = instance.present? ? instance["workflow_params"][name.to_s] : property[:default] %>
-    <%= viral_prefixed_boolean(form: fields, name:, value: ActiveModel::Type::Boolean.new.cast(value)) do |input| %>
+    <%= render Viral::Form::Prefixed::BooleanComponent.new(form: fields, name:, value: ActiveModel::Type::Boolean.new.cast(value)) do |input| %>
       <%= input.with_prefix do %>
         <%= format_name_as_arg(name) %>
       <% end %>
@@ -81,14 +81,14 @@
         <%= property[:description] %>
 
         <% if property[:required] %>
-          <%= viral_pill(text: t(:"components.nextflow.required"), color: :primary) %>
+          <%= render Viral::PillComponent.new(text: t(:"components.nextflow.required"), color: :primary) %>
         <% end %>
       <% end %>
     <% end %>
   <% end %>
 
   <% if property[:help_text].present? %>
-    <%= viral_help_text(id: help_text_id) do %>
+    <%= render Viral::Form::HelpTextComponent.new(id: help_text_id) do %>
       <%= property[:help_text] %>
     <% end %>
   <% end %>
