@@ -623,6 +623,12 @@ projectA_member_joan_doe:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::MAINTAINER %>
 
+projectA_member_ryan_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+  access_level: <%= Member::AccessLevel::ANALYST %>
+
 project_jeff_member_user_bot_account:
   user_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff_bot, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>

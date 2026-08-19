@@ -722,6 +722,138 @@ module Projects
 
         assert_response :unauthorized
       end
+
+      test 'can concatenate attachments for a sample with role >= Maintainer' do
+        sign_in users(:jeff_doe)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        project = projects(:projectA)
+        sample = samples(:sampleA)
+        attachment_a = attachments(:attachmentA)
+        attachment_b = attachments(:attachmentB)
+
+        get new_namespace_project_sample_attachments_concatenation_path(namespace, project, sample,
+                                                                        format: :turbo_stream)
+
+        assert_response :success
+
+        assert_select 'turbo-stream[target="sample_modal"]' do
+          assert_select 'h1', I18n.t('projects.samples.attachments.concatenations.modal.title')
+
+          assert_select 'form' do
+            assert_select 'input[name="concatenation_form[basename]"]'
+            assert_select 'input[name="concatenation_form[delete_originals]"]'
+            assert_select 'input[type="submit"]', value: I18n.t('common.actions.concatenate')
+          end
+        end
+
+        assert_difference -> { sample.attachments.count }, 1 do
+          post namespace_project_sample_attachments_concatenation_path(namespace, project, sample,
+                                                                       format: :turbo_stream),
+               params: {
+                 concatenation_form: {
+                   basename: 'blah',
+                   attachment_ids: { '0' => attachment_a.id, '1' => attachment_b.id }
+                 }
+               }
+        end
+
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('projects.samples.attachments.concatenations.create.success')}"
+            end
+          end
+        end
+
+        assert_select 'turbo-stream[action="refresh"]'
+      end
+
+      test 'cannot concatenate attachments for a sample with role < Maintainer' do
+        sign_in users(:ryan_doe)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        project = projects(:projectA)
+        sample = samples(:sampleA)
+
+        get new_namespace_project_sample_attachments_concatenation_path(namespace, project, sample,
+                                                                        format: :turbo_stream)
+
+        assert_response :unauthorized
+
+        assert_no_difference -> { sample.attachments.count } do
+          post namespace_project_sample_attachments_concatenation_path(namespace, project, sample,
+                                                                       format: :turbo_stream),
+               params: {
+                 concatenation_form: {
+                   basename: 'blah',
+                   attachment_ids: { '0' => attachments(:attachmentA).id, '1' => attachments(:attachmentB).id }
+                 }
+               }
+        end
+
+        assert_response :unauthorized
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              error_msg = I18n.t('common.statuses.error')
+              policy_msg = I18n.t('action_policy.policy.project.update_sample?',
+                                  name: project.namespace.name)
+              assert_select 'div', "#{error_msg}: #{policy_msg}"
+            end
+          end
+        end
+
+        assert_select 'turbo-stream[action="refresh"]', count: 0
+      end
+
+      test 'cannot concatenate attachments in a sample that do not belong to the sample' do
+        sign_in users(:jeff_doe)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        project = projects(:projectA)
+        sample = samples(:sampleA)
+
+        assert_no_difference -> { sample.attachments.count }, -> { Attachment.count } do
+          post namespace_project_sample_attachments_concatenation_path(namespace, project, sample,
+                                                                       format: :turbo_stream),
+               params: {
+                 concatenation_form: {
+                   basename: 'blah',
+                   attachment_ids: { '0' => attachments(:attachmentA).id, '1' => attachments(:attachmentPEFWD1).id }
+                 }
+               }
+        end
+
+        assert_response :unprocessable_entity
+
+        assert_select 'turbo-stream[action="update"][target="sample_modal"]' do
+          assert_select 'template' do
+            assert_select 'h1', I18n.t('projects.samples.attachments.concatenations.modal.title')
+
+            assert_select 'div' do
+              assert_select 'h2', I18n.t('general.form.error_summary.title', count: 1)
+              assert_select 'p', I18n.t('general.form.error_notification')
+              assert_select 'ul' do
+                assert_select 'li' do
+                  error_message = I18n.t(
+                    'activemodel.errors.models.concatenation_form.attributes.attachment_ids.mismatching_attachable',
+                    attachable_type: 'Sample'
+                  )
+                  assert_select 'a', text: /#{error_message}/
+                end
+              end
+            end
+
+            assert_select 'form' do
+              assert_select 'input[name="concatenation_form[basename]"]'
+              assert_select 'input[name="concatenation_form[delete_originals]"]'
+              assert_select 'input[type="submit"]', value: I18n.t('common.actions.concatenate')
+            end
+          end
+        end
+      end
     end
   end
 end
