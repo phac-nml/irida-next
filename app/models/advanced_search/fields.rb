@@ -28,6 +28,21 @@ module AdvancedSearch
         }
       end
 
+      def for_attachments(field_configuration: Attachment::FieldConfiguration)
+        metadata_fields = field_configuration::SEARCHABLE_FIELDS.select { |field| field.start_with?('metadata.') }
+        base_fields = field_configuration::SEARCHABLE_FIELDS - metadata_fields
+
+        options = Array(base_fields).map do |field|
+          [I18n.t("components.attachments.table_component.#{field}", default: field.to_s.humanize), field]
+        end
+
+        metadata_options = Array(metadata_fields).map do |field|
+          [field, field]
+        end
+
+        build(options:, groups: metadata_group(metadata_options))
+      end
+
       def for_samples(sample_fields:, metadata_fields:)
         options = Array(sample_fields).map do |field|
           [I18n.t("samples.table_component.#{field}", default: field.to_s.humanize), field]
