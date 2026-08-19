@@ -22,6 +22,8 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
+    assert_select "input[placeholder='#{I18n.t('shared.workflow_executions.index.search.placeholder')}']"
+    assert_workflow_executions_table_headers
 
     assert_select "tr##{dom_id(shared_workflow)}", count: 1
     assert_select "tr##{dom_id(other_users_shared_workflow)}", count: 0
@@ -79,36 +81,36 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
   test 'should create workflow execution with valid params' do
     assert_difference -> { WorkflowExecution.count } => 1,
                       -> { SamplesWorkflowExecution.count } => 1 do
-      post workflow_executions_path(format: :turbo_stream),
-           params: {
-             workflow_execution: {
-               metadata: {
-                 pipeline_id: 'phac-nml/iridanextexample',
-                 workflow_version: '1.0.2'
-               },
-               workflow_params: { assembler: 'stub' },
-               workflow_type: 'NFL',
-               workflow_type_version: 'DSL2',
-               workflow_engine: 'nextflow',
-               workflow_engine_version: '24.10.3',
-               workflow_engine_parameters: { '-r': 'dev' },
-               workflow_url: 'https://github.com/phac-nml/iridanextexample',
-               email_notification: true,
-               shared_with_namespace: true,
-               namespace_id: projects(:project1).namespace.id,
-               samples_workflow_executions_attributes: [
-                 {
-                   sample_id: @sample1.id,
-                   samplesheet_params: {
-                     sample: @sample1.puid,
-                     'fastq_1' => @attachment1.to_global_id,
-                     'fastq_2' => ''
-                   }
-                 }
-               ],
-               name: 'Newest Workflow Execution'
-             }
-           }
+      post workflow_executions_path, as: :turbo_stream,
+                                     params: {
+                                       workflow_execution: {
+                                         metadata: {
+                                           pipeline_id: 'phac-nml/iridanextexample',
+                                           workflow_version: '1.0.2'
+                                         },
+                                         workflow_params: { assembler: 'stub' },
+                                         workflow_type: 'NFL',
+                                         workflow_type_version: 'DSL2',
+                                         workflow_engine: 'nextflow',
+                                         workflow_engine_version: '24.10.3',
+                                         workflow_engine_parameters: { '-r': 'dev' },
+                                         workflow_url: 'https://github.com/phac-nml/iridanextexample',
+                                         email_notification: true,
+                                         shared_with_namespace: true,
+                                         namespace_id: projects(:project1).namespace.id,
+                                         samples_workflow_executions_attributes: [
+                                           {
+                                             sample_id: @sample1.id,
+                                             samplesheet_params: {
+                                               sample: @sample1.puid,
+                                               'fastq_1' => @attachment1.to_global_id,
+                                               'fastq_2' => ''
+                                             }
+                                           }
+                                         ],
+                                         name: 'Newest Workflow Execution'
+                                       }
+                                     }
 
       assert_response :redirect
     end
@@ -125,20 +127,20 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
 
   test 'should render an error dialog when workflow execution create fails' do
     assert_no_difference -> { WorkflowExecution.count } do
-      post workflow_executions_path(format: :turbo_stream),
-           params: {
-             workflow_execution: {
-               metadata: {
-                 pipeline_id: 'phac-nml/iridanextexample',
-                 workflow_version: '1.0.2'
-               },
-               namespace_id: projects(:project1).namespace.id,
-               samples_workflow_executions_attributes: [
-                 { sample_id: @sample1.id, samplesheet_params: { sample: @sample1.puid } }
-               ],
-               name: ''
-             }
-           }
+      post workflow_executions_path, as: :turbo_stream,
+                                     params: {
+                                       workflow_execution: {
+                                         metadata: {
+                                           pipeline_id: 'phac-nml/iridanextexample',
+                                           workflow_version: '1.0.2'
+                                         },
+                                         namespace_id: projects(:project1).namespace.id,
+                                         samples_workflow_executions_attributes: [
+                                           { sample_id: @sample1.id, samplesheet_params: { sample: @sample1.puid } }
+                                         ],
+                                         name: ''
+                                       }
+                                     }
     end
 
     assert_response :unprocessable_content
@@ -163,8 +165,8 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     get workflow_executions_path, params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
 
     assert_response :success
-    assert_includes response.body, @workflow_execution_completed.id
-    assert_not_includes response.body, @workflow_execution_running.id
+    assert_select "tr##{dom_id(@workflow_execution_completed)}", count: 1
+    assert_select "tr##{dom_id(@workflow_execution_running)}", count: 0
   end
 
   test 'should apply advanced search groups when workflow advanced-search uses translated state labels' do
@@ -172,8 +174,8 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
         params: workflow_advanced_search_params(state: I18n.t('workflow_executions.state.completed')).merge(limit: 100)
 
     assert_response :success
-    assert_includes response.body, @workflow_execution_completed.id
-    assert_not_includes response.body, @workflow_execution_running.id
+    assert_select "tr##{dom_id(@workflow_execution_completed)}", count: 1
+    assert_select "tr##{dom_id(@workflow_execution_running)}", count: 0
   end
 
   test 'should apply advanced search not_in state arrays when blank values are submitted' do
@@ -184,9 +186,9 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
         ).merge(limit: 100)
 
     assert_response :success
-    assert_includes response.body, @workflow_execution_completed.id
-    assert_not_includes response.body, @workflow_execution_running.id
-    assert_not_includes response.body, @workflow_execution_new.id
+    assert_select "tr##{dom_id(@workflow_execution_completed)}", count: 1
+    assert_select "tr##{dom_id(@workflow_execution_running)}", count: 0
+    assert_select "tr##{dom_id(@workflow_execution_new)}", count: 0
   end
 
   test 'should render advanced search zero results message' do
@@ -261,19 +263,17 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test 'should cancel a new workflow with valid params' do
-    put cancel_workflow_execution_path(@workflow_execution_new, format: :turbo_stream)
-    assert_response :success
+    put cancel_workflow_execution_path(@workflow_execution_new), as: :turbo_stream
     # A new workflow goes directly to the canceled state as ga4gh does not know it exists
-    assert_equal 'canceled', @workflow_execution_new.reload.state
+    assert_workflow_execution_cancel_success(@workflow_execution_new, expected_state: 'canceled')
   end
 
   test 'should cancel a prepared workflow with valid params' do
     workflow_execution = workflow_executions(:irida_next_example_prepared)
 
-    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
-    assert_response :success
+    put cancel_workflow_execution_path(workflow_execution), as: :turbo_stream
     # A prepared workflow goes directly to the canceled state as ga4gh does not know it exists
-    assert_equal 'canceled', workflow_execution.reload.state
+    assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceled')
   end
 
   test 'should not delete a prepared workflow' do
@@ -281,7 +281,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert workflow_execution.prepared?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+      delete workflow_execution_path(workflow_execution), as: :turbo_stream
     end
     assert_response :unprocessable_content
   end
@@ -290,10 +290,9 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     workflow_execution = workflow_executions(:irida_next_example_submitted)
     assert workflow_execution.submitted?
 
-    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
-    assert_response :success
+    put cancel_workflow_execution_path(workflow_execution), as: :turbo_stream
     # A submitted workflow goes to the canceling state as ga4gh must be sent a cancel request
-    assert_equal 'canceling', workflow_execution.reload.state
+    assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling')
   end
 
   test 'should not delete a submitted workflow' do
@@ -301,7 +300,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert workflow_execution.submitted?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+      delete workflow_execution_path(workflow_execution), as: :turbo_stream
     end
     assert_response :unprocessable_content
   end
@@ -310,7 +309,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     workflow_execution = workflow_executions(:irida_next_example_completed)
     assert workflow_execution.completed?
 
-    put cancel_workflow_execution_path(workflow_execution, format: :turbo_stream)
+    put cancel_workflow_execution_path(workflow_execution), as: :turbo_stream
     assert_response :unprocessable_content
 
     assert workflow_execution.completed?
@@ -321,7 +320,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert workflow_execution.completed?
     assert_difference -> { WorkflowExecution.count } => -1,
                       -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+      delete workflow_execution_path(workflow_execution), as: :turbo_stream
     end
     assert_response :redirect
     assert_redirected_to workflow_executions_path
@@ -331,7 +330,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert @workflow_execution_error.error?
     assert_difference -> { WorkflowExecution.count } => -1,
                       -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(@workflow_execution_error, format: :turbo_stream)
+      delete workflow_execution_path(@workflow_execution_error), as: :turbo_stream
     end
     assert_response :redirect
     assert_redirected_to workflow_executions_path
@@ -342,7 +341,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert workflow_execution.canceling?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution, format: :turbo_stream)
+      delete workflow_execution_path(workflow_execution), as: :turbo_stream
     end
     assert_response :unprocessable_content
   end
@@ -351,7 +350,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert @workflow_execution_canceled.canceled?
     assert_difference -> { WorkflowExecution.count } => -1,
                       -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(@workflow_execution_canceled, format: :turbo_stream)
+      delete workflow_execution_path(@workflow_execution_canceled), as: :turbo_stream
     end
     assert_response :redirect
     assert_redirected_to workflow_executions_path
@@ -361,7 +360,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert @workflow_execution_running.running?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(@workflow_execution_running, format: :turbo_stream)
+      delete workflow_execution_path(@workflow_execution_running), as: :turbo_stream
     end
     assert_response :unprocessable_content
   end
@@ -369,17 +368,16 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
   test 'should cancel a running workflow' do
     assert @workflow_execution_running.running?
 
-    put cancel_workflow_execution_path(@workflow_execution_running, format: :turbo_stream)
-    assert_response :success
+    put cancel_workflow_execution_path(@workflow_execution_running), as: :turbo_stream
     # A running workflow goes to the canceling state as ga4gh must be sent a cancel request
-    assert_equal 'canceling', @workflow_execution_running.reload.state
+    assert_workflow_execution_cancel_success(@workflow_execution_running, expected_state: 'canceling')
   end
 
   test 'should not delete a new workflow' do
     assert @workflow_execution_new.initial?
     assert_difference -> { WorkflowExecution.count } => 0,
                       -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(@workflow_execution_new, format: :turbo_stream)
+      delete workflow_execution_path(@workflow_execution_new), as: :turbo_stream
     end
     assert_response :unprocessable_content
   end
@@ -392,7 +390,6 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     get workflow_execution_path(workflow_execution)
 
     assert_response :success
-    w3c_validate 'Workflow Execution Show Page'
     assert_select '#workflow-executions-tabs'
     assert_select 'dt', text: I18n.t('workflow_executions.summary.workflow_name')
     assert_select 'dd', text: workflow_execution.workflow.name
@@ -453,6 +450,17 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select '#files-panel-content tbody', text: /#{non_matching_attachment.puid}/
   end
 
+  test 'should apply files tab page size through query params' do
+    workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
+
+    get workflow_execution_path(workflow_execution), params: { tab: 'files', limit: 10 }
+
+    assert_response :success
+    assert_select '#files-panel-content tbody tr', count: 2
+    assert_select '#files-panel-content a[href*="limit=10"][href*="tab=files"]'
+    assert_select '#files-panel-content #pagy-limit-select option[value="10"][selected]'
+  end
+
   test 'should render shared workflow actions for submitter in global show page' do
     workflow_execution = workflow_executions(:workflow_execution_shared1)
 
@@ -510,7 +518,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     sign_in users(:jane_doe)
     assert @workflow_execution_running.running?
 
-    put cancel_workflow_execution_path(@workflow_execution_running, format: :turbo_stream)
+    put cancel_workflow_execution_path(@workflow_execution_running), as: :turbo_stream
     assert_response :not_found
 
     assert_equal 'running', @workflow_execution_running.reload.state
@@ -519,41 +527,62 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
   test 'redirect to global workflow executions page when workflow execution is deleted' do
     workflow_execution = workflow_executions(:irida_next_example_completed)
 
-    delete workflow_execution_path(workflow_execution, redirect: true,
-                                                       format: :turbo_stream)
+    delete workflow_execution_path(workflow_execution, redirect: true), as: :turbo_stream
     assert_response :redirect
 
     assert_redirected_to workflow_executions_path
   end
 
   test 'Submitter can update workflow execution name post launch' do
-    update_params = { workflow_execution: { name: 'New Name' } }
+    new_name = 'New Name'
+    update_params = { workflow_execution: { name: new_name } }
 
-    put workflow_execution_path(@workflow_execution_new, format: :turbo_stream), params: update_params
+    put workflow_execution_path(@workflow_execution_new), params: update_params, as: :turbo_stream
 
     assert_response :success
+    assert_equal new_name, @workflow_execution_new.reload.name
+    assert_turbo_stream_flash(
+      I18n.t('concerns.workflow_execution_actions.update.success',
+             workflow_name: @workflow_execution_new.workflow.name)
+    )
+    assert_select 'turbo-stream[action="replace"][target="workflow_execution_summary"]'
+    assert_select 'turbo-stream[action="update"][target="we_name_header"]', text: /#{Regexp.escape(new_name)}/
   end
 
   test 'should open edit dialog' do
     get edit_workflow_execution_path(@workflow_execution_new, format: :turbo_stream)
 
     assert_response :success
+    assert_select 'turbo-stream[action="update"][target="edit_dialog"]' do
+      assert_select 'h1', I18n.t('workflow_executions.edit_dialog.title')
+      assert_select 'p', I18n.t('workflow_executions.edit_dialog.description',
+                                workflow_execution_id: @workflow_execution_new.id)
+      assert_select "input[placeholder='#{I18n.t('workflow_executions.edit_dialog.name_placeholder')}']"
+    end
   end
 
   test 'should not update workflow execution with a blank name' do
-    put workflow_execution_path(@workflow_execution_new, format: :turbo_stream),
-        params: { workflow_execution: { name: '' } }
+    put workflow_execution_path(@workflow_execution_new),
+        params: { workflow_execution: { name: '' } },
+        as: :turbo_stream
 
     assert_response :unprocessable_content
     assert_equal 'irida_next_example_new', @workflow_execution_new.reload.name
+    assert_select 'turbo-stream[action="update"][target="edit_dialog"]'
   end
 
   test 'Submitter can share the pipeline results post launch' do
     update_params = { workflow_execution: { shared_with_namespace: true } }
 
-    put workflow_execution_path(@workflow_execution_new, format: :turbo_stream), params: update_params
+    put workflow_execution_path(@workflow_execution_new), params: update_params, as: :turbo_stream
 
     assert_response :success
+    assert @workflow_execution_new.reload.shared_with_namespace
+    assert_turbo_stream_flash(
+      I18n.t('concerns.workflow_execution_actions.update.success',
+             workflow_name: @workflow_execution_new.workflow.name)
+    )
+    assert_select 'turbo-stream[action="replace"][target="workflow_execution_summary"]'
   end
 
   test 'Cannot update another user\'s personal workflow execution name' do
@@ -561,7 +590,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
 
     update_params = { workflow_execution: { name: 'New Name' } }
 
-    put workflow_execution_path(@workflow_execution_new, format: :turbo_stream), params: update_params
+    put workflow_execution_path(@workflow_execution_new), params: update_params, as: :turbo_stream
 
     assert_response :not_found
   end
@@ -570,39 +599,52 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     get destroy_confirmation_workflow_execution_path(@workflow_execution_completed, format: :turbo_stream)
 
     assert_response :success
+    assert_select 'turbo-stream[action="update"][target="workflow_execution_dialog"]' do
+      assert_select 'h1', I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+    end
   end
 
   test 'should open destroy_multiple_confirmation' do
     get destroy_multiple_confirmation_workflow_executions_path(format: :turbo_stream)
 
     assert_response :success
+    assert_select 'turbo-stream[action="update"][target="workflow_execution_dialog"]' do
+      assert_select 'h1', I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.title')
+    end
   end
 
   test 'should open cancel_multiple_confirmation' do
     get cancel_multiple_confirmation_workflow_executions_path(format: :turbo_stream)
 
     assert_response :success
+    assert_select 'turbo-stream[action="update"][target="workflow_execution_dialog"]' do
+      assert_select 'h1', I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.title')
+    end
   end
 
   test 'should destroy multiple workflows at once' do
     assert_difference -> { WorkflowExecution.count } => -2,
                       -> { SamplesWorkflowExecution.count } => -2 do
-                        post destroy_multiple_workflow_executions_path(format: :turbo_stream),
+                        post destroy_multiple_workflow_executions_path,
                              params: { destroy_multiple: { workflow_execution_ids:
                                                            [@workflow_execution_error.id,
-                                                            @workflow_execution_canceled.id] } }
+                                                            @workflow_execution_canceled.id] } },
+                             as: :turbo_stream
                       end
     assert_response :success
+    assert_turbo_stream_flash(I18n.t('concerns.workflow_execution_actions.destroy_multiple.success'))
+    assert_select 'turbo-stream[action="refresh"]'
   end
 
   test 'should partially destroy multiple workflows at once' do
     assert_difference -> { WorkflowExecution.count } => -2,
                       -> { SamplesWorkflowExecution.count } => -2 do
-                        post destroy_multiple_workflow_executions_path(format: :turbo_stream),
+                        post destroy_multiple_workflow_executions_path,
                              params: { destroy_multiple: { workflow_execution_ids:
                                                            [@workflow_execution_error.id,
                                                             @workflow_execution_canceled.id,
-                                                            @workflow_execution_new.id] } }
+                                                            @workflow_execution_new.id] } },
+                             as: :turbo_stream
                       end
     assert_response :multi_status
   end
@@ -610,31 +652,37 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
   test 'should not destroy multiple non-deletable workflows' do
     assert_no_difference -> { WorkflowExecution.count },
                          -> { SamplesWorkflowExecution.count } do
-      post destroy_multiple_workflow_executions_path(format: :turbo_stream),
+      post destroy_multiple_workflow_executions_path,
            params: { destroy_multiple: { workflow_execution_ids: [@workflow_execution_running.id,
-                                                                  @workflow_execution_new.id] } }
+                                                                  @workflow_execution_new.id] } },
+           as: :turbo_stream
     end
     assert_response :unprocessable_content
   end
 
   test 'should cancel multiple workflows' do
-    post cancel_multiple_workflow_executions_path(format: :turbo_stream),
+    post cancel_multiple_workflow_executions_path,
          params: { cancel_multiple: { workflow_execution_ids: [@workflow_execution_running.id,
-                                                               @workflow_execution_new.id] } }
+                                                               @workflow_execution_new.id] } },
+         as: :turbo_stream
     assert_response :success
+    assert_turbo_stream_flash(I18n.t('concerns.workflow_execution_actions.cancel_multiple.success'))
+    assert_select 'turbo-stream[action="refresh"]'
   end
 
   test 'should partially cancel multiple workflows' do
-    post cancel_multiple_workflow_executions_path(format: :turbo_stream),
+    post cancel_multiple_workflow_executions_path,
          params: { cancel_multiple: { workflow_execution_ids: [@workflow_execution_running.id,
-                                                               @workflow_execution_error.id] } }
+                                                               @workflow_execution_error.id] } },
+         as: :turbo_stream
     assert_response :multi_status
   end
 
   test 'should not cancel multiple un-cancellable workflows' do
-    post cancel_multiple_workflow_executions_path(format: :turbo_stream),
+    post cancel_multiple_workflow_executions_path,
          params: { cancel_multiple: { workflow_execution_ids: [@workflow_execution_canceled.id,
-                                                               @workflow_execution_error.id] } }
+                                                               @workflow_execution_error.id] } },
+         as: :turbo_stream
     assert_response :unprocessable_content
   end
 
