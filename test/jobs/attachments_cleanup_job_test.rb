@@ -3,10 +3,25 @@
 require 'test_helper'
 
 class AttachmentsCleanupJobTest < ActiveJob::TestCase
-  def setup
-    @attachment1 = attachments(:attachmentA)
-    @attachment2 = attachments(:attachmentB)
-    @attachment3 = attachments(:attachmentC)
+  include ActionDispatch::TestProcess::FixtureFile
+
+  def setup # rubocop:disable Metrics/MethodLength
+    attachable = samples(:sample2)
+    @attachment1 = Attachment.create!(
+      attachable: attachable,
+      file: fixture_file_upload('test_file_A.fastq', 'text/plain'),
+      metadata: { 'format' => 'fastq', 'compression' => 'none' }
+    )
+    @attachment2 = Attachment.create!(
+      attachable: attachable,
+      file: fixture_file_upload('test_file_B.fastq', 'text/plain'),
+      metadata: { 'format' => 'fastq', 'compression' => 'none' }
+    )
+    @attachment3 = Attachment.create!(
+      attachable: attachable,
+      file: fixture_file_upload('test_file_C.fastq', 'text/plain'),
+      metadata: { 'format' => 'fastq', 'compression' => 'none' }
+    )
   end
 
   test 'valid attachments pretest' do
