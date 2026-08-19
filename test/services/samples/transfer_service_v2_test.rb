@@ -39,6 +39,21 @@ module Samples
       Flipper.disable(:v2_sample_transfer)
     end
 
+    def build_mock_step
+      # Minimal step-like object with cursor and advance!
+      Struct.new(:cursor) do
+        def initialize(cursor = 0)
+          @cursor = cursor
+        end
+
+        attr_reader :cursor
+
+        def advance!
+          @cursor += 1
+        end
+      end.new(0)
+    end
+
     # Tests for extracted helper methods
     test 'organize_samples_by_project groups samples by source project' do
       # Create a relation with multiple samples from the same project
@@ -170,25 +185,35 @@ module Samples
     test 'perform_transfer_with_lock moves samples without conflicts' do
       assert_equal @current_project.id, @sample1.project_id
 
-      # Minimal step-like object with cursor and advance!
-      step = Struct.new(:cursor) do
-        def initialize(cursor = 0)
-          @cursor = cursor
-        end
-
-        attr_reader :cursor
-
-        def advance!
-          @cursor += 1
-        end
-      end.new(0)
-
+      step = build_mock_step
       service = Samples::TransferServiceV2.new(@current_project.namespace, @john_doe)
       service.perform_transfer_with_lock(@new_project, { @current_project.id => [@sample1.id] }, SecureRandom.hex, step)
 
       @sample1.reload
       assert_equal @new_project.id, @sample1.project_id
       assert_not Sample.exists?(id: @sample1.id, project_id: @current_project.id)
+    end
+
+    test 'perform_transfer_with_lock with multiple transfers' do
+      assert_equal @current_project.id, @sample1.project_id
+      assert_equal @current_project.id, @sample2.project_id
+
+      step = build_mock_step
+      step2 = build_mock_step
+      service = Samples::TransferServiceV2.new(@current_project.namespace, @john_doe)
+      service.perform_transfer_with_lock(
+        @new_project, { @current_project.id => [@sample1.id] }, SecureRandom.hex, step
+      )
+      service.perform_transfer_with_lock(
+        @new_project, { @current_project.id => [@sample2.id] }, SecureRandom.hex, step2
+      )
+
+      @sample1.reload
+      @sample2.reload
+      assert_equal @new_project.id, @sample1.project_id
+      assert_equal @new_project.id, @sample2.project_id
+      assert_not Sample.exists?(id: @sample1.id, project_id: @current_project.id)
+      assert_not Sample.exists?(id: @sample2.id, project_id: @current_project.id)
     end
 
     test 'update_metadata_summary_counts delegates to namespace update' do
