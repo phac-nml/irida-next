@@ -185,15 +185,13 @@ module Samples
     # @param new_project_id [Integer] the target project receiving samples
     #
     # @return [void] side-effects by adding messages to `@namespace.errors`
-    def add_transfer_errors(all_sample_ids, transferred_sample_ids, new_project_id) # rubocop:disable Metrics/MethodLength
+    def add_transfer_errors(all_sample_ids, transferred_sample_ids, new_project_id)
       untransferred_sample_ids = all_sample_ids - transferred_sample_ids
       return if untransferred_sample_ids.empty?
 
       filtered_samples = filter_sample_ids(untransferred_sample_ids, 'transfer')
-      # filtered_sample_ids are samples that should have transferred based on authorization / sample id validity.
+      # filtered_samples are samples that should have transferred based on authorization / sample id validity.
       # All that is left in this list are transfer conflict errors
-      return if filtered_samples.empty?
-
       filtered_samples.each do |sample|
         if sample.project_id == new_project_id
           # The attempted transfer targeted the same project the sample
