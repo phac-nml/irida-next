@@ -3,7 +3,7 @@
     <%= render Viral::PageHeaderComponent.new(title: t(".details.title")) %>
 
     <%= render Viral::CardComponent.new do |card| %>
-      <% _ = card.with_header(title: t(:"groups.edit.details.subtitle")) %>
+      <% card.with_header(title: t(:"groups.edit.details.subtitle")) %>
 
       <% card.with_section do %>
         <%= turbo_frame_tag("group_name_and_description_form") do %>
