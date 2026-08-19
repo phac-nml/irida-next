@@ -186,11 +186,13 @@
       allowed_to: @allowed_to,
       pagy: @pagy,
       q: @q,
+      search: @query,
       search_url:
         namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
           @workflow_execution,
+          tab: "files",
         ),
       attachments: @attachments,
       workflow_execution: @workflow_execution,
