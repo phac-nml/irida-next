@@ -414,6 +414,187 @@ module Projects
         assert_select 'turbo-stream[action="refresh"]'
       end
 
+      test 'can delete multiple attachments in a sample with role >= Maintainer' do
+        sign_in users(:john_doe)
+
+        get new_namespace_project_sample_attachments_deletion_path(@group, @project, @sample1, format: :turbo_stream)
+
+        assert_response :success
+
+        assert_select 'turbo-stream[target="sample_modal"]' do
+          assert_select 'h1', I18n.t('projects.samples.attachments.deletions.modal.title')
+          assert_select 'p', I18n.t('projects.samples.attachments.deletions.modal.description')
+
+          assert_select 'form' do
+            assert_select 'input[type="submit"]', value: I18n.t('common.actions.delete')
+          end
+        end
+
+        assert_difference -> { @sample1.attachments.count }, -2 do
+          delete namespace_project_sample_attachments_deletion_path(@group, @project, @sample1, format: :turbo_stream),
+                 params: {
+                   deletion: {
+                     attachment_ids: { '0' => attachments(:attachment1).id, '1' => attachments(:attachment2).id }
+                   }
+                 }
+        end
+
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('projects.samples.attachments.deletions.destroy.success',
+                                             count: 2)}"
+            end
+          end
+        end
+
+        assert_select 'turbo-stream[action="refresh"]'
+      end
+
+      test 'cannot delete multiple attachments in a sample with role < Maintainer' do
+        sign_in users(:michelle_doe)
+
+        get new_namespace_project_sample_attachments_deletion_path(@group, @project, @sample1, format: :turbo_stream)
+
+        assert_response :unauthorized
+
+        assert_no_difference -> { @sample1.attachments.count }, -> { Attachment.count } do
+          delete namespace_project_sample_attachments_deletion_path(@group, @project, @sample1, format: :turbo_stream),
+                 params: {
+                   deletion: {
+                     attachment_ids: { '0' => attachments(:attachment1).id, '1' => attachments(:attachment2).id }
+                   }
+                 }
+        end
+
+        assert_response :unauthorized
+      end
+
+      test 'cannot delete multiple attachments in a sample that do not belong to the sample' do
+        sign_in users(:john_doe)
+
+        assert_no_difference -> { @sample1.attachments.count }, -> { Attachment.count } do
+          delete namespace_project_sample_attachments_deletion_path(@group, @project, @sample1, format: :turbo_stream),
+                 params: {
+                   deletion: {
+                     attachment_ids: { '0' => attachments(:attachmentA).id, '1' => attachments(:attachmentB).id }
+                   }
+                 }
+        end
+
+        assert_response :unprocessable_content
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.error')}: " \
+                                   "#{I18n.t('projects.samples.attachments.deletions.destroy.error',
+                                             filename: attachments(:attachmentA).file.filename.to_s,
+                                             errors:
+                                               I18n.t('services.attachments.destroy.does_not_belong_to_attachable'))}"
+            end
+          end
+        end
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.error')}: " \
+                                   "#{I18n.t('projects.samples.attachments.deletions.destroy.error',
+                                             filename: attachments(:attachmentB).file.filename.to_s,
+                                             errors:
+                                               I18n.t('services.attachments.destroy.does_not_belong_to_attachable'))}"
+            end
+          end
+        end
+
+        assert_select 'turbo-stream[action="refresh"]'
+      end
+
+      test 'can delete multiple paired attachments in a sample with role >= Maintainer' do
+        sign_in users(:jeff_doe)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        project = projects(:projectA)
+        sample = samples(:sampleB)
+        attachment_pe_fwd1 = attachments(:attachmentPEFWD1)
+        attachment_pe_rev1 = attachments(:attachmentPEREV1)
+        attachment_pe_fwd2 = attachments(:attachmentPEFWD2)
+        attachment_pe_rev2 = attachments(:attachmentPEREV2)
+
+        get new_namespace_project_sample_attachments_deletion_path(namespace, project, sample, format: :turbo_stream)
+
+        assert_response :success
+
+        assert_difference -> { sample.attachments.count }, -4 do
+          delete namespace_project_sample_attachments_deletion_path(namespace, project, sample, format: :turbo_stream),
+                 params: {
+                   deletion: {
+                     attachment_ids: { '0' => [attachment_pe_fwd1.id, attachment_pe_rev1.id],
+                                       '1' => [attachment_pe_fwd2.id, attachment_pe_rev2.id] }
+                   }
+                 }
+        end
+
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('projects.samples.attachments.deletions.destroy.success')}"
+            end
+          end
+        end
+
+        assert_select 'turbo-stream[action="refresh"]'
+      end
+
+      test 'multiple deletion request returns multi_status when only some attachments are deleted' do
+        sign_in users(:jeff_doe)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        project = projects(:projectA)
+        sample = samples(:sampleB)
+        attachment_a = attachments(:attachmentA)
+        attachment_pe_fwd1 = attachments(:attachmentPEFWD1)
+        attachment_pe_rev1 = attachments(:attachmentPEREV1)
+
+        assert_difference -> { sample.attachments.count }, -2 do
+          delete namespace_project_sample_attachments_deletion_path(namespace, project, sample, format: :turbo_stream),
+                 params: {
+                   deletion: {
+                     attachment_ids: { '0' => [attachment_pe_fwd1.id, attachment_pe_rev1.id],
+                                       '1' => attachment_a.id }
+                   }
+                 }
+        end
+
+        assert_response :multi_status
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('projects.samples.attachments.deletions.destroy.partial_success')}"
+            end
+          end
+        end
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.error')}: " \
+                                   "#{I18n.t('projects.samples.attachments.deletions.destroy.error',
+                                             filename: attachment_a.file.filename.to_s,
+                                             errors:
+                                               I18n.t('services.attachments.destroy.does_not_belong_to_attachable'))}"
+            end
+          end
+        end
+      end
+
       test 'can sort attachments by supported columns' do
         sign_in users(:john_doe)
 
