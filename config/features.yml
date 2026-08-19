@@ -39,6 +39,15 @@ features:
     name:
       en: "Advanced Search Autocomplete"
       fr: "Saisie semi-automatique de la recherche avancée"
+  attachments_advanced_search:
+    admin_manageable: true
+    description:
+      en: "Enable advanced search functionality for file attachments."
+      fr: "Activer la fonctionnalité de recherche avancée pour les pièces jointes."
+    enable_in_development: true
+    name:
+      en: "Attachments Advanced Search"
+      fr: "Recherche avancée pour les pièces jointes"
   client_linelist_exports_v1:
     admin_manageable: true
     description:
