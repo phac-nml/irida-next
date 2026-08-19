@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Projects
-  class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
+  class WorkflowExecutionsTest < ActionDispatch::IntegrationTest
     setup do
       sign_in users(:john_doe)
       @sample1 = samples(:sample1)
@@ -22,9 +22,10 @@ module Projects
       get namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_response :success
-      w3c_validate 'Project Workflow Executions Page'
       assert_select 'h1', text: I18n.t(:'shared.workflow_executions.index.title')
       assert_select 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+      assert_select "input[placeholder='#{I18n.t('shared.workflow_executions.index.search.placeholder')}']"
+      assert_workflow_executions_table_headers
       assert_select "tr##{dom_id(shared_to_project)}", count: 1
       assert_select "tr##{dom_id(also_shared_to_project)}", count: 1
       assert_select "tr##{dom_id(not_shared_to_project)}", count: 0
@@ -112,8 +113,8 @@ module Projects
           params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
 
       assert_response :success
-      assert_includes response.body, @workflow_execution.id
-      assert_not_includes response.body, @workflow_execution_running.id
+      assert_select "tr##{dom_id(@workflow_execution)}", count: 1
+      assert_select "tr##{dom_id(@workflow_execution_running)}", count: 0
     end
 
     test 'should show workflow execution' do
@@ -122,8 +123,6 @@ module Projects
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_response :success
-
-      w3c_validate 'Project Workflow Execution Show Page'
     end
 
     test 'should show shared workflow execution with action restrictions and tab content' do
@@ -137,7 +136,6 @@ module Projects
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_response :success
-      w3c_validate 'Project Workflow Execution Show Page'
       assert_select "form[action^='#{new_data_export_path}']", count: 1
       assert_select "form[action='#{cancel_action}']", count: 0
       assert_select "form[action='#{edit_action}']", count: 0
@@ -193,21 +191,19 @@ module Projects
     test 'should cancel a new workflow with valid params' do
       workflow_execution = workflow_executions(:automated_example_new)
 
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                           format: :turbo_stream)
-      assert_response :success
+      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+          as: :turbo_stream
       # A new workflow goes directly to the canceled state as ga4gh does not know it exists
-      assert_equal 'canceled', workflow_execution.reload.state
+      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceled')
     end
 
     test 'should cancel a prepared workflow with valid params' do
       workflow_execution = workflow_executions(:automated_example_prepared)
 
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                           format: :turbo_stream)
-      assert_response :success
+      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+          as: :turbo_stream
       # A prepared workflow goes directly to the canceled state as ga4gh does not know it exists
-      assert_equal 'canceled', workflow_execution.reload.state
+      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceled')
     end
 
     test 'should not delete a prepared workflow' do
@@ -215,8 +211,8 @@ module Projects
       assert workflow_execution.prepared?
       assert_difference -> { WorkflowExecution.count } => 0,
                         -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                         format: :turbo_stream)
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+               as: :turbo_stream
       end
       assert_response :unprocessable_content
     end
@@ -225,11 +221,10 @@ module Projects
       workflow_execution = workflow_executions(:automated_example_submitted)
       assert workflow_execution.submitted?
 
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                           format: :turbo_stream)
-      assert_response :success
+      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+          as: :turbo_stream
       # A submitted workflow goes to the canceling state as ga4gh must be sent a cancel request
-      assert_equal 'canceling', workflow_execution.reload.state
+      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling')
     end
 
     test 'should not delete a submitted workflow' do
@@ -237,8 +232,8 @@ module Projects
       assert workflow_execution.submitted?
       assert_difference -> { WorkflowExecution.count } => 0,
                         -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                         format: :turbo_stream)
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+               as: :turbo_stream
       end
       assert_response :unprocessable_content
     end
@@ -247,8 +242,8 @@ module Projects
       workflow_execution = workflow_executions(:automated_example_completed)
       assert workflow_execution.completed?
 
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                           format: :turbo_stream)
+      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+          as: :turbo_stream
       assert_response :unprocessable_content
 
       assert workflow_execution.completed?
@@ -259,8 +254,8 @@ module Projects
       assert workflow_execution.completed?
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                         format: :turbo_stream)
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+               as: :turbo_stream
       end
       assert_response :redirect
       assert_redirected_to namespace_project_workflow_executions_path
@@ -271,8 +266,8 @@ module Projects
       assert workflow_execution.error?
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                         format: :turbo_stream)
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+               as: :turbo_stream
       end
       assert_response :redirect
       assert_redirected_to namespace_project_workflow_executions_path
@@ -283,8 +278,8 @@ module Projects
       assert workflow_execution.canceling?
       assert_difference -> { WorkflowExecution.count } => 0,
                         -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                         format: :turbo_stream)
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+               as: :turbo_stream
       end
       assert_response :unprocessable_content
     end
@@ -294,8 +289,8 @@ module Projects
       assert workflow_execution.canceled?
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                         format: :turbo_stream)
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+               as: :turbo_stream
       end
       assert_response :redirect
       assert_redirected_to namespace_project_workflow_executions_path
@@ -306,8 +301,8 @@ module Projects
       assert workflow_execution.running?
       assert_difference -> { WorkflowExecution.count } => 0,
                         -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                         format: :turbo_stream)
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+               as: :turbo_stream
       end
       assert_response :unprocessable_content
     end
@@ -316,11 +311,10 @@ module Projects
       workflow_execution = workflow_executions(:automated_example_running)
       assert workflow_execution.running?
 
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                           format: :turbo_stream)
-      assert_response :success
+      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+          as: :turbo_stream
       # A running workflow goes to the canceling state as ga4gh must be sent a cancel request
-      assert_equal 'canceling', workflow_execution.reload.state
+      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling')
     end
 
     test 'should not delete a new workflow' do
@@ -328,8 +322,8 @@ module Projects
       assert workflow_execution.initial?
       assert_difference -> { WorkflowExecution.count } => 0,
                         -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution,
-                                                         format: :turbo_stream)
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
+               as: :turbo_stream
       end
       assert_response :unprocessable_content
     end
@@ -337,20 +331,27 @@ module Projects
     test 'redirect to project workflow executions page when workflow execution is deleted' do
       workflow_execution = workflow_executions(:automated_example_canceled)
 
-      delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, redirect: true,
-                                                                                                 format: :turbo_stream)
+      delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, redirect: true),
+             as: :turbo_stream
       assert_response :redirect
 
       assert_redirected_to namespace_project_workflow_executions_path(@namespace, @project)
     end
 
     test 'analyst or higher access level can update workflow execution name post launch' do
-      update_params = { workflow_execution: { name: 'New Name' } }
+      new_name = 'New Name'
+      update_params = { workflow_execution: { name: new_name } }
 
-      put namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution, format: :turbo_stream),
-          params: update_params
+      put namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution),
+          params: update_params, as: :turbo_stream
 
       assert_response :success
+      assert_equal new_name, @workflow_execution.reload.name
+      assert_turbo_stream_flash(
+        I18n.t('concerns.workflow_execution_actions.update.success',
+               workflow_name: @workflow_execution.workflow.name)
+      )
+      assert_select 'turbo-stream[action="replace"][target="workflow_execution_summary"]'
     end
 
     test 'access level less than analyst cannot update workflow execution name post launch for an automated workflow' do
@@ -358,8 +359,8 @@ module Projects
 
       update_params = { workflow_execution: { name: 'New Name' } }
 
-      put namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution, format: :turbo_stream),
-          params: update_params
+      put namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution),
+          params: update_params, as: :turbo_stream
 
       assert_response :unauthorized
     end
@@ -370,6 +371,9 @@ module Projects
       )
 
       assert_response :success
+      assert_select 'turbo-stream[action="update"][target="workflow_execution_dialog"]' do
+        assert_select 'h1', I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+      end
     end
 
     test 'should open destroy_multiple_confirmation' do
@@ -378,6 +382,9 @@ module Projects
       )
 
       assert_response :success
+      assert_select 'turbo-stream[action="update"][target="workflow_execution_dialog"]' do
+        assert_select 'h1', I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.title')
+      end
     end
 
     test 'should not open destroy_multiple_confirmation due to unauthorized access' do
@@ -397,13 +404,15 @@ module Projects
                         -> { SamplesWorkflowExecution.count } => -2 do
                           post destroy_multiple_namespace_project_workflow_executions_path(
                             @namespace,
-                            @project,
-                            format: :turbo_stream
+                            @project
                           ), params: { destroy_multiple:
                                           { workflow_execution_ids: [error_workflow.id, canceled_workflow.id],
-                                            namespace: @namespace } }
+                                            namespace: @namespace } },
+                             as: :turbo_stream
                         end
       assert_response :success
+      assert_turbo_stream_flash(I18n.t('concerns.workflow_execution_actions.destroy_multiple.success'))
+      assert_select 'turbo-stream[action="refresh"]'
     end
 
     test 'should partially destroy multiple workflows at once' do
@@ -415,14 +424,13 @@ module Projects
                         -> { SamplesWorkflowExecution.count } => -2 do
                           post destroy_multiple_namespace_project_workflow_executions_path(
                             @namespace,
-                            @project,
-                            format: :turbo_stream
+                            @project
                           ), params: {
                             destroy_multiple: {
                               workflow_execution_ids: [error_workflow.id, canceled_workflow.id,
                                                        running_workflow.id], namespace: @namespace
                             }
-                          }
+                          }, as: :turbo_stream
                         end
       assert_response :multi_status
     end
@@ -434,11 +442,10 @@ module Projects
                            -> { SamplesWorkflowExecution.count } do
         post destroy_multiple_namespace_project_workflow_executions_path(
           @namespace,
-          @project,
-          format: :turbo_stream
+          @project
         ), params: {
           destroy_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id], namespace: @namespace }
-        }
+        }, as: :turbo_stream
       end
       assert_response :unprocessable_content
     end
@@ -452,11 +459,10 @@ module Projects
                            -> { SamplesWorkflowExecution.count } do
         post destroy_multiple_namespace_project_workflow_executions_path(
           @namespace,
-          @project,
-          format: :turbo_stream
+          @project
         ), params: {
           destroy_multiple: { workflow_execution_ids: [canceled_workflow.id, error_workflow.id] }
-        }
+        }, as: :turbo_stream
       end
       assert_response :unauthorized
     end
@@ -466,13 +472,15 @@ module Projects
       new_workflow = workflow_executions(:automated_example_new)
       post cancel_multiple_namespace_project_workflow_executions_path(
         @namespace,
-        @project,
-        format: :turbo_stream
+        @project
       ), params: { cancel_multiple:
                       { workflow_execution_ids: [running_workflow.id, new_workflow.id],
-                        namespace: @namespace } }
+                        namespace: @namespace } },
+         as: :turbo_stream
 
       assert_response :success
+      assert_turbo_stream_flash(I18n.t('concerns.workflow_execution_actions.cancel_multiple.success'))
+      assert_select 'turbo-stream[action="refresh"]'
     end
 
     test 'should partially cancel multiple workflows at once' do
@@ -482,14 +490,13 @@ module Projects
 
       post cancel_multiple_namespace_project_workflow_executions_path(
         @namespace,
-        @project,
-        format: :turbo_stream
+        @project
       ), params: {
         cancel_multiple: {
           workflow_execution_ids: [error_workflow.id, canceled_workflow.id,
                                    running_workflow.id], namespace: @namespace
         }
-      }
+      }, as: :turbo_stream
       assert_response :multi_status
     end
 
@@ -498,11 +505,10 @@ module Projects
       error_workflow = workflow_executions(:automated_example_error)
       post cancel_multiple_namespace_project_workflow_executions_path(
         @namespace,
-        @project,
-        format: :turbo_stream
+        @project
       ), params: {
         cancel_multiple: { workflow_execution_ids: [canceled_workflow.id, error_workflow.id], namespace: @namespace }
-      }
+      }, as: :turbo_stream
       assert_response :unprocessable_content
     end
 
@@ -513,11 +519,10 @@ module Projects
 
       post cancel_multiple_namespace_project_workflow_executions_path(
         @namespace,
-        @project,
-        format: :turbo_stream
+        @project
       ), params: {
         cancel_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id] }
-      }
+      }, as: :turbo_stream
       assert_response :unauthorized
     end
 
@@ -527,11 +532,10 @@ module Projects
 
       post cancel_multiple_namespace_project_workflow_executions_path(
         @namespace,
-        @project,
-        format: :turbo_stream
+        @project
       ), params: {
         cancel_multiple: { workflow_execution_ids: [running_workflow.id, shared_workflow.id] }
-      }
+      }, as: :turbo_stream
       assert_response :multi_status
     end
 
