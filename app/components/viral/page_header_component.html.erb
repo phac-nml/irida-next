@@ -11,7 +11,7 @@
         <% end %>
 
         <div class="min-w-0 flex-1">
-          <%= pathogen_heading(level: 1, class: "break-words") do %>
+          <%= render Pathogen::Typography::Heading.new(level: 1, class: "break-words") do %>
             <%= title %>
           <% end %>
         </div>
@@ -20,7 +20,7 @@
       <!-- Subtitle -->
       <% if subtitle.present? %>
         <div class="<%= icon? ? 'pl-12' : '' %>">
-          <%= pathogen_supporting(variant: :muted, class: "break-words") do %>
+          <%= render Pathogen::Typography::Supporting.new(variant: :muted, class: "break-words") do %>
             <%= subtitle %>
           <% end %>
         </div>

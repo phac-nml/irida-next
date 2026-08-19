@@ -1,40 +1,40 @@
 <% external_link_classes = "min-w-0 font-semibold wrap-anywhere underline hover:decoration-2 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:rounded-sm dark:text-white" %>
 
 <div class="mx-auto max-w-7xl space-y-12">
-  <%= pathogen_section(level: 1) do |section| %>
+  <%= render Pathogen::Typography::Section.new(level: 1) do |section| %>
     <% section.with_heading { "Accessibility Statement for IRIDA Next" } %>
 
-    <%= pathogen_text { "Health Canada and the Public Health Agency of Canada is committed to making its websites and mobile applications accessible, in accordance with the Accessible Canada Regulations." } %>
+    <%= render Pathogen::Typography::Text.new { "Health Canada and the Public Health Agency of Canada are committed to making their websites and mobile applications accessible, in accordance with the Accessible Canada Regulations." } %>
   <% end %>
 
-  <%= pathogen_section(level: 2) do |section| %>
+  <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
     <% section.with_heading { "Compliance status" } %>
 
-    <%= pathogen_text { "The website has been tested against the Web Content Accessibility Guidelines (WCAG) 2.2 AA standard as per Canada's adopted accessibility standard EN 301 549."} %>
-    <%= pathogen_text { "IRIDA Next is fully compliant with the Web Content Accessibility Guidelines (WCAG) version 2.2 AA standard." } %>
-    <%= pathogen_text { "IRIDA Next is partially compliant with the Web Content Accessibility Guidelines version 2.2 AA standard. For more details please see the included Accessibility Conformance Report (ACR)." } %>
-    <%= pathogen_text { "IRIDA Next is not compliant with the Web Content Accessibility Guidelines version 2.2 AA standard. For more details please see the included Accessibility Conformance Report (ACR)." } %>
+    <%= render Pathogen::Typography::Text.new { "The website has been tested against the Web Content Accessibility Guidelines (WCAG) 2.2 AA standard as per Canada's adopted accessibility standard EN 301 549."} %>
+    <%= render Pathogen::Typography::Text.new { "IRIDA Next is fully compliant with the Web Content Accessibility Guidelines (WCAG) version 2.2 AA standard." } %>
+    <%= render Pathogen::Typography::Text.new { "IRIDA Next is partially compliant with the Web Content Accessibility Guidelines version 2.2 AA standard. For more details please see the included Accessibility Conformance Report (ACR)." } %>
+    <%= render Pathogen::Typography::Text.new { "IRIDA Next is not compliant with the Web Content Accessibility Guidelines version 2.2 AA standard. For more details please see the included Accessibility Conformance Report (ACR)." } %>
   <% end %>
 
-  <%= pathogen_section(level: 2) do |section| %>
+  <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
     <% section.with_heading { "What we are doing to improve accessibility" } %>
 
-    <%= pathogen_text { "Our accessibility roadmap [add link to roadmap] shows how and when we plan to improve accessibility on this website." } %>
+    <%= render Pathogen::Typography::Text.new { "Our accessibility roadmap [add link to roadmap] shows how and when we plan to improve accessibility on this website." } %>
   <% end %>
 
-  <%= pathogen_section(level: 2) do |section| %>
+  <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
     <% section.with_heading { "Preparation of this accessibility statement" } %>
 
-    <%= pathogen_text { "This statement was prepared on [date when it was first published]." } %>
-    <%= pathogen_text { "This website was last tested on [date] against the WCAG 2.2 AA standard." } %>
-    <%= pathogen_text { "The test was carried out by [add name of organisation that carried out the assessment, or indicate that you did your own testing/assessment]." } %>
-    <%= pathogen_text { "You can read the full accessibility test report [add link to report]." } %>
+    <%= render Pathogen::Typography::Text.new { "This statement was prepared on [date when it was first published]." } %>
+    <%= render Pathogen::Typography::Text.new { "This website was last tested on [date] against the WCAG 2.2 AA standard." } %>
+    <%= render Pathogen::Typography::Text.new { "The test was carried out by [add name of organisation that carried out the assessment, or indicate that you did your own testing/assessment]." } %>
+    <%= render Pathogen::Typography::Text.new { "You can read the full accessibility test report [add link to report]." } %>
   <% end %>
 
-  <%= pathogen_section(level: 2) do |section| %>
+  <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
     <% section.with_heading { "Feedback and contact information" } %>
 
-    <%= pathogen_text do %>
+    <%= render Pathogen::Typography::Text.new do %>
       To provide feedback or to report a barrier, you can use the Health Canada
       <a href="https://health.canada.ca/en/accessibility-form/hc-external" class="<%= external_link_classes %>">accessibility feedback form</a>
       or call 1-833-725-2751.

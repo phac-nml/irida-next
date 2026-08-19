@@ -1,11 +1,11 @@
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
   <!-- Header -->
   <div class="mb-12 text-center">
-    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+    <%= render Pathogen::Typography::Heading.new(level: 1, class: "mb-4") do %>
       <%= icon(:wheelchair, color: :primary, size: :xl, class: "inline mr-3") %> Accessibility Features
     <% end %>
 
-    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+    <%= render Pathogen::Typography::Text.new(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
       Typography components are built with accessibility in mind, using semantic HTML and proper ARIA patterns.
     <% end %>
   </div>
@@ -13,17 +13,17 @@
   <!-- Semantic HTML -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:code, color: :primary, class: "mr-3") %> Semantic HTML
       <% end %>
 
-      <%= pathogen_text(class: "mb-6") do %>
+      <%= render Pathogen::Typography::Text.new(class: "mb-6") do %>
         All typography components use semantic HTML elements that convey meaning to assistive technologies. Headings
         always render actual h1-h6 tags, never divs with heading styles.
       <% end %>
 
       <div class="overflow-x-auto rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
-        <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200">&lt;%= render pathogen_heading(level: 1) do %&gt; Main Title &lt;% end %&gt; &lt;%= render pathogen_text do %&gt; Body paragraph &lt;% end %&gt;        </code></pre>
+        <pre class="text-sm"><code class="text-slate-800 dark:text-slate-200">&lt;%= render Pathogen::Typography::Heading.new(level: 1) do %&gt; Main Title &lt;% end %&gt; &lt;%= render Pathogen::Typography::Text.new do %&gt; Body paragraph &lt;% end %&gt;        </code></pre>
       </div>
 
       <div class="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
@@ -49,33 +49,33 @@
   <!-- Heading Hierarchy -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:list_numbers, color: :primary, class: "mr-3") %> Proper Heading Hierarchy
       <% end %>
 
-      <%= pathogen_text(class: "mb-6") do %>
+      <%= render Pathogen::Typography::Text.new(class: "mb-6") do %>
         Screen readers use heading structure to navigate content. Always maintain a logical hierarchy without skipping
         levels.
       <% end %>
 
       <div class="max-w-3xl space-y-4">
-        <%= pathogen_heading(level: 1) do %>
+        <%= render Pathogen::Typography::Heading.new(level: 1) do %>
           Main Page Title (H1)
         <% end %>
 
-        <%= pathogen_text(variant: :muted, class: "text-sm mb-4") do %>
+        <%= render Pathogen::Typography::Text.new(variant: :muted, class: "text-sm mb-4") do %>
           Only one H1 per page
         <% end %>
 
-        <%= pathogen_heading(level: 2) do %>
+        <%= render Pathogen::Typography::Heading.new(level: 2) do %>
           Section Heading (H2)
         <% end %>
 
-        <%= pathogen_heading(level: 3) do %>
+        <%= render Pathogen::Typography::Heading.new(level: 3) do %>
           Subsection Heading (H3)
         <% end %>
 
-        <%= pathogen_heading(level: 2) do %>
+        <%= render Pathogen::Typography::Heading.new(level: 2) do %>
           Another Section (H2)
         <% end %>
       </div>
@@ -100,11 +100,11 @@
   <!-- Contrast Ratios -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:eye, color: :primary, class: "mr-3") %> Color Contrast
       <% end %>
 
-      <%= pathogen_text(class: "mb-6") do %>
+      <%= render Pathogen::Typography::Text.new(class: "mb-6") do %>
         All typography components meet WCAG AA contrast requirements for readability.
       <% end %>
 
@@ -148,37 +148,37 @@
   <!-- Screen Reader Support -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:speaker_high, color: :primary, class: "mr-3") %> Screen Reader Support
       <% end %>
 
       <div class="space-y-6">
         <div>
-          <%= pathogen_heading(level: 3, class: "mb-3") do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, class: "mb-3") do %>
             Semantic Structure
           <% end %>
 
-          <%= pathogen_text do %>
+          <%= render Pathogen::Typography::Text.new do %>
             Screen readers announce headings with their level, helping users understand document structure.
           <% end %>
         </div>
 
         <div>
-          <%= pathogen_heading(level: 3, class: "mb-3") do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, class: "mb-3") do %>
             Navigation
           <% end %>
 
-          <%= pathogen_text do %>
+          <%= render Pathogen::Typography::Text.new do %>
             Users can jump between headings using screen reader shortcuts (e.g., H key in NVDA/JAWS).
           <% end %>
         </div>
 
         <div>
-          <%= pathogen_heading(level: 3, class: "mb-3") do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, class: "mb-3") do %>
             Lists
           <% end %>
 
-          <%= pathogen_text do %>
+          <%= render Pathogen::Typography::Text.new do %>
             List components render proper &lt;ul&gt; and &lt;ol&gt; tags, allowing screen readers to announce list
             structure and item count.
           <% end %>
@@ -190,11 +190,11 @@
   <!-- Keyboard Navigation -->
   <div>
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:keyboard, color: :primary, class: "mr-3") %> Keyboard Navigation
       <% end %>
 
-      <%= pathogen_text(class: "mb-6") do %>
+      <%= render Pathogen::Typography::Text.new(class: "mb-6") do %>
         Screen reader users can navigate through headings, lists, and other semantic elements using standard keyboard
         shortcuts.
       <% end %>

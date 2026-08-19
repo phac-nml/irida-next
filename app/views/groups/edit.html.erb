@@ -16,7 +16,7 @@
       <% end %>
     <% end %>
 
-    <%= pathogen_heading(level: 2) do %>
+    <%= render Pathogen::Typography::Heading.new(level: 2) do %>
       <%= t(".advanced.title") %>
     <% end %>
 

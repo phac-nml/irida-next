@@ -2,7 +2,7 @@
   <div class="mx-auto max-w-7xl space-y-12">
     <!-- Header -->
     <div class="text-center">
-      <%= pathogen_heading_group(level: 1) do |group| %>
+      <%= render Pathogen::Typography::HeadingGroup.new(level: 1) do |group| %>
         <%= group.with_eyebrow { "Typography System" } %>
         <%= group.with_heading { "Typography Presets" } %>
         <%= group.with_metadata { "Pre-configured patterns for common UI scenarios" } %>
@@ -12,39 +12,39 @@
     <!-- Presets Overview -->
     <div class="grid grid-cols-1 gap-6 md:grid-cols-5">
       <div class="rounded-xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-        <%= pathogen_heading(level: 4, class: "mb-2") { "Article" } %>
-        <%= pathogen_supporting(variant: :muted) { "h1, responsive" } %>
+        <%= render Pathogen::Typography::Heading.new(level: 4, class: "mb-2") { "Article" } %>
+        <%= render Pathogen::Typography::Supporting.new(variant: :muted) { "h1, responsive" } %>
       </div>
       <div class="rounded-xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-        <%= pathogen_heading(level: 4, class: "mb-2") { "Card" } %>
-        <%= pathogen_supporting(variant: :muted) { "h3, compact" } %>
+        <%= render Pathogen::Typography::Heading.new(level: 4, class: "mb-2") { "Card" } %>
+        <%= render Pathogen::Typography::Supporting.new(variant: :muted) { "h3, compact" } %>
       </div>
       <div class="rounded-xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-        <%= pathogen_heading(level: 4, class: "mb-2") { "Section" } %>
-        <%= pathogen_supporting(variant: :muted) { "h2, responsive" } %>
+        <%= render Pathogen::Typography::Heading.new(level: 4, class: "mb-2") { "Section" } %>
+        <%= render Pathogen::Typography::Supporting.new(variant: :muted) { "h2, responsive" } %>
       </div>
       <div class="rounded-xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-        <%= pathogen_heading(level: 4, class: "mb-2") { "Dialog" } %>
-        <%= pathogen_supporting(variant: :muted) { "h2, compact" } %>
+        <%= render Pathogen::Typography::Heading.new(level: 4, class: "mb-2") { "Dialog" } %>
+        <%= render Pathogen::Typography::Supporting.new(variant: :muted) { "h2, compact" } %>
       </div>
       <div class="rounded-xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-        <%= pathogen_heading(level: 4, class: "mb-2") { "Form" } %>
-        <%= pathogen_supporting(variant: :muted) { "h3, compact" } %>
+        <%= render Pathogen::Typography::Heading.new(level: 4, class: "mb-2") { "Form" } %>
+        <%= render Pathogen::Typography::Supporting.new(variant: :muted) { "h3, compact" } %>
       </div>
     </div>
 
     <!-- Article Preset -->
     <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-      <%= pathogen_heading(level: 2, class: "mb-6") { "Article Preset" } %>
-      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Blog posts, documentation, and long-form content" } %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6") { "Article Preset" } %>
+      <%= render Pathogen::Typography::Supporting.new(variant: :muted, class: "mb-8") { "Blog posts, documentation, and long-form content" } %>
 
-      <%= pathogen_typography_preset(:article) do |group| %>
+      <%= render Pathogen::Typography::HeadingGroup.new(level: 1, heading_variant: :default, spacing: :default) do |group| %>
         <%= group.with_eyebrow { "Tutorial" } %>
         <%= group.with_heading { "Getting Started with IRIDA Next" } %>
         <%= group.with_metadata { "Published January 15, 2024 · 8 min read · Bioinformatics Team" } %>
       <% end %>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:article) do |group| %>
+      <%= render Pathogen::Typography::CodeBlock.new(language: "erb", class: "mt-8") do %><%%= render Pathogen::Typography::HeadingGroup.new(level: 1, heading_variant: :default, spacing: :default) do |group| %>
   <%%= group.with_eyebrow { "Category" } %>
   <%%= group.with_heading { "Article Title" } %>
   <%%= group.with_metadata { "Date · Read time" } %>
@@ -54,19 +54,19 @@
 
     <!-- Card Preset -->
     <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-      <%= pathogen_heading(level: 2, class: "mb-6") { "Card Preset" } %>
-      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Cards, compact headers with eyebrow and metadata" } %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6") { "Card Preset" } %>
+      <%= render Pathogen::Typography::Supporting.new(variant: :muted, class: "mb-8") { "Cards, compact headers with eyebrow and metadata" } %>
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
-          <%= pathogen_typography_preset(:card) do |group| %>
+          <%= render Pathogen::Typography::HeadingGroup.new(level: 3, heading_variant: :default, spacing: :compact) do |group| %>
             <%= group.with_heading { "Sample Analysis" } %>
             <%= group.with_metadata { "3 samples · Active" } %>
           <% end %>
         </div>
 
         <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
-          <%= pathogen_typography_preset(:card) do |group| %>
+          <%= render Pathogen::Typography::HeadingGroup.new(level: 3, heading_variant: :default, spacing: :compact) do |group| %>
             <%= group.with_eyebrow { "Workflow" } %>
             <%= group.with_heading { "COVID-19 Analysis" } %>
             <%= group.with_metadata { "Completed 2h ago" } %>
@@ -74,7 +74,7 @@
         </div>
 
         <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
-          <%= pathogen_typography_preset(:card) do |group| %>
+          <%= render Pathogen::Typography::HeadingGroup.new(level: 3, heading_variant: :default, spacing: :compact) do |group| %>
             <%= group.with_eyebrow { "Project" } %>
             <%= group.with_heading { "Research Study" } %>
             <%= group.with_metadata { "12 members" } %>
@@ -82,7 +82,7 @@
         </div>
       </div>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:card) do |group| %>
+      <%= render Pathogen::Typography::CodeBlock.new(language: "erb", class: "mt-8") do %><%%= render Pathogen::Typography::HeadingGroup.new(level: 3, heading_variant: :default, spacing: :compact) do |group| %>
   <%%= group.with_heading { "Card Title" } %>
   <%%= group.with_metadata { "Metadata" } %>
 <%% end %>
@@ -91,17 +91,17 @@
 
     <!-- Section Preset -->
     <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-      <%= pathogen_heading(level: 2, class: "mb-6") { "Section Preset" } %>
-      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Page sections with heading and metadata" } %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6") { "Section Preset" } %>
+      <%= render Pathogen::Typography::Supporting.new(variant: :muted, class: "mb-8") { "Page sections with heading and metadata" } %>
 
-      <%= pathogen_typography_preset(:section) do |group| %>
+      <%= render Pathogen::Typography::HeadingGroup.new(level: 2, heading_variant: :default, spacing: :default) do |group| %>
         <%= group.with_heading { "Recent Activity" } %>
         <%= group.with_metadata { "Last updated 5 minutes ago" } %>
       <% end %>
 
-      <%= pathogen_text(class: "mt-4") { "List of recent activities and changes in your workspace." } %>
+      <%= render Pathogen::Typography::Text.new(class: "mt-4") { "List of recent activities and changes in your workspace." } %>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:section) do |group| %>
+      <%= render Pathogen::Typography::CodeBlock.new(language: "erb", class: "mt-8") do %><%%= render Pathogen::Typography::HeadingGroup.new(level: 2, heading_variant: :default, spacing: :default) do |group| %>
   <%%= group.with_heading { "Section Title" } %>
   <%%= group.with_metadata { "Updated time" } %>
 <%% end %>
@@ -110,15 +110,15 @@
 
     <!-- Dialog Preset -->
     <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-      <%= pathogen_heading(level: 2, class: "mb-6") { "Dialog Preset" } %>
-      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Modal dialogs and compact headers" } %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6") { "Dialog Preset" } %>
+      <%= render Pathogen::Typography::Supporting.new(variant: :muted, class: "mb-8") { "Modal dialogs and compact headers" } %>
 
       <div class="mx-auto max-w-md rounded-lg border border-slate-200 bg-slate-50 p-6 shadow-lg dark:border-slate-700 dark:bg-slate-900">
-        <%= pathogen_typography_preset(:dialog) do |group| %>
+        <%= render Pathogen::Typography::HeadingGroup.new(level: 2, heading_variant: :default, spacing: :compact) do |group| %>
           <%= group.with_heading { "Confirm Deletion" } %>
         <% end %>
 
-        <%= pathogen_text(variant: :muted, class: "mt-4") { "Are you sure you want to delete this sample? This action cannot be undone." } %>
+        <%= render Pathogen::Typography::Text.new(variant: :muted, class: "mt-4") { "Are you sure you want to delete this sample? This action cannot be undone." } %>
 
         <div class="mt-6 flex gap-3">
           <button class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white">Delete</button>
@@ -126,7 +126,7 @@
         </div>
       </div>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:dialog) do |group| %>
+      <%= render Pathogen::Typography::CodeBlock.new(language: "erb", class: "mt-8") do %><%%= render Pathogen::Typography::HeadingGroup.new(level: 2, heading_variant: :default, spacing: :compact) do |group| %>
   <%%= group.with_heading { "Dialog Title" } %>
 <%% end %>
       <% end %>
@@ -134,11 +134,11 @@
 
     <!-- Form Section Preset -->
     <div class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-      <%= pathogen_heading(level: 2, class: "mb-6") { "Form Section Preset" } %>
-      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Form groups with helper text" } %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6") { "Form Section Preset" } %>
+      <%= render Pathogen::Typography::Supporting.new(variant: :muted, class: "mb-8") { "Form groups with helper text" } %>
 
       <div class="max-w-2xl">
-        <%= pathogen_typography_preset(:form_section) do |group| %>
+        <%= render Pathogen::Typography::HeadingGroup.new(level: 3, heading_variant: :default, spacing: :compact) do |group| %>
           <%= group.with_heading { "Sample Information" } %>
           <%= group.with_metadata { "Required fields are marked with *" } %>
         <% end %>
@@ -146,7 +146,7 @@
         <div class="mt-4 space-y-4">
           <div>
             <label class="mb-1 block text-sm font-medium">Sample Name *</label>
-            <input type="text" class="block w-full rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700" placeholder="Enter sample name">
+            <input type="text" class="block w-full rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700" placeholder="Enter sample name" autocomplete="off">
           </div>
           <div>
             <label class="mb-1 block text-sm font-medium">Description</label>
@@ -155,7 +155,7 @@
         </div>
       </div>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:form_section) do |group| %>
+      <%= render Pathogen::Typography::CodeBlock.new(language: "erb", class: "mt-8") do %><%%= render Pathogen::Typography::HeadingGroup.new(level: 3, heading_variant: :default, spacing: :compact) do |group| %>
   <%%= group.with_heading { "Form Section" } %>
   <%%= group.with_metadata { "Helper text" } %>
 <%% end %>
@@ -164,15 +164,16 @@
 
     <!-- Custom Overrides -->
     <div class="rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 p-8 dark:from-primary-900/20 dark:to-primary-800/20">
-      <%= pathogen_heading(level: 2, class: "mb-6") { "Custom Overrides" } %>
-      <%= pathogen_supporting(variant: :muted, class: "mb-8") { "Customize any preset by passing override options" } %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6") { "Custom Overrides" } %>
+      <%= render Pathogen::Typography::Supporting.new(variant: :muted, class: "mb-8") { "Customize any preset by passing override options" } %>
 
-      <%= pathogen_typography_preset(:card, heading_variant: :subdued, spacing: :spacious) do |group| %>
+      <%= render Pathogen::Typography::HeadingGroup.new(level: 3, heading_variant: :subdued, spacing: :spacious) do |group| %>
         <%= group.with_heading { "Custom Styled Card" } %>
         <%= group.with_metadata { "Using card preset with custom variant and spacing" } %>
       <% end %>
 
-      <%= pathogen_code_block(language: "erb", class: "mt-8") do %><%%= pathogen_typography_preset(:card,
+        <%= render Pathogen::Typography::CodeBlock.new(language: "erb", class: "mt-8") do %><%%= render Pathogen::Typography::HeadingGroup.new(
+      level: 3,
   heading_variant: :subdued,
   spacing: :spacious
 ) do |group| %>

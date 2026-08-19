@@ -1,11 +1,11 @@
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
   <!-- Header -->
   <div class="mb-12 text-center">
-    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+    <%= render Pathogen::Typography::Heading.new(level: 1, class: "mb-4") do %>
       <%= icon(:lightbulb, color: :primary, size: :xl, class: "inline mr-3") %> Do's and Don'ts
     <% end %>
 
-    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+    <%= render Pathogen::Typography::Text.new(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
       Best practices and common mistakes when using typography components.
     <% end %>
   </div>
@@ -13,7 +13,7 @@
   <!-- Heading Hierarchy -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:list_numbers, color: :primary, class: "mr-3") %> Heading Hierarchy
       <% end %>
 
@@ -26,23 +26,23 @@
           </div>
 
           <div class="space-y-3 rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Use Sequential Levels
             <% end %>
 
-            <%= pathogen_heading(level: 1) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 1) do %>
               Main Title
             <% end %>
 
-            <%= pathogen_heading(level: 2) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 2) do %>
               Section
             <% end %>
 
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Subsection
             <% end %>
 
-            <%= pathogen_text(variant: :muted, class: "text-sm mt-3") do %>
+            <%= render Pathogen::Typography::Text.new(variant: :muted, class: "text-sm mt-3") do %>
               Use headings in order (h1 → h2 → h3) without skipping levels
             <% end %>
           </div>
@@ -56,19 +56,19 @@
           </div>
 
           <div class="space-y-3 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Skip Heading Levels
             <% end %>
 
-            <%= pathogen_heading(level: 1) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 1) do %>
               Main Title
             <% end %>
 
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Skipped H2
             <% end %>
 
-            <%= pathogen_text(variant: :muted, class: "text-sm mt-3") do %>
+            <%= render Pathogen::Typography::Text.new(variant: :muted, class: "text-sm mt-3") do %>
               Never skip heading levels - it breaks accessibility and SEO
             <% end %>
           </div>
@@ -80,7 +80,7 @@
   <!-- Color Usage -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:palette, color: :primary, class: "mr-3") %> Color Variants
       <% end %>
 
@@ -93,15 +93,15 @@
           </div>
 
           <div class="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Use Variants Appropriately
             <% end %>
 
-            <%= pathogen_text(variant: :default) do %>
+            <%= render Pathogen::Typography::Text.new(variant: :default) do %>
               Default for primary content
             <% end %>
 
-            <%= pathogen_text(variant: :muted) do %>
+            <%= render Pathogen::Typography::Text.new(variant: :muted) do %>
               Muted for secondary information
             <% end %>
           </div>
@@ -115,15 +115,15 @@
           </div>
 
           <div class="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Overuse Muted Text
             <% end %>
 
-            <%= pathogen_text(variant: :muted) do %>
+            <%= render Pathogen::Typography::Text.new(variant: :muted) do %>
               Don't make everything muted - it reduces readability
             <% end %>
 
-            <%= pathogen_text(variant: :muted) do %>
+            <%= render Pathogen::Typography::Text.new(variant: :muted) do %>
               Use muted sparingly for less important content
             <% end %>
           </div>
@@ -135,7 +135,7 @@
   <!-- Code Usage -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:code, color: :primary, class: "mr-3") %> Code Component Usage
       <% end %>
 
@@ -148,21 +148,24 @@
           </div>
 
           <div class="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Use Appropriate Component
             <% end %>
 
-            <%= pathogen_text do %>
+            <%= render Pathogen::Typography::Text.new do %>
               Use
-              <%= pathogen_code do %>
+              <%= render Pathogen::Typography::Code.new do %>
                 inline code
               <% end %>
               for short snippets
             <% end %>
 
-            <%= pathogen_code_block(language: "ruby") do %>
-              def example # Use code_block for multi-line code end
-            <% end %>
+            <%= render Pathogen::Typography::CodeBlock.new(language: "ruby") { <<~RUBY.chomp
+              def example
+                # Use code_block for multi-line code
+              end
+            RUBY
+            } %>
           </div>
         </div>
 
@@ -174,11 +177,11 @@
           </div>
 
           <div class="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Mix Inline and Block
             <% end %>
 
-            <%= pathogen_text do %>
+            <%= render Pathogen::Typography::Text.new do %>
               Don't use code_block for single words - use inline code instead
             <% end %>
           </div>
@@ -190,7 +193,7 @@
   <!-- Responsive Sizing -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:device_mobile, color: :primary, class: "mr-3") %> Responsive Behavior
       <% end %>
 
@@ -203,11 +206,11 @@
           </div>
 
           <div class="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Let Headings Scale
             <% end %>
 
-            <%= pathogen_text(variant: :muted, class: "text-sm") do %>
+            <%= render Pathogen::Typography::Text.new(variant: :muted, class: "text-sm") do %>
               Allow headings to scale responsively by default for better mobile experience
             <% end %>
           </div>
@@ -221,15 +224,15 @@
           </div>
 
           <div class="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
-            <%= pathogen_heading(level: 3) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 3) do %>
               Disable Responsive Unnecessarily
             <% end %>
 
-            <%= pathogen_heading(level: 1, responsive: false) do %>
+            <%= render Pathogen::Typography::Heading.new(level: 1, responsive: false) do %>
               Fixed Size Heading
             <% end %>
 
-            <%= pathogen_text(variant: :muted, class: "text-sm mt-3") do %>
+            <%= render Pathogen::Typography::Text.new(variant: :muted, class: "text-sm mt-3") do %>
               Only disable responsive sizing when you have a specific design requirement
             <% end %>
           </div>
@@ -241,7 +244,7 @@
   <!-- Best Practices Summary -->
   <div>
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:star, color: :warning, class: "mr-3") %> Best Practices Summary
       <% end %>
 
@@ -251,7 +254,7 @@
             <%= icon(:check_circle, color: :success, class: "mr-2") %> Do's
           </div>
 
-          <%= pathogen_list do |list| %>
+          <%= render Pathogen::Typography::List.new do |list| %>
             <%= list.with_item { 'Maintain proper heading hierarchy (h1 → h2 → h3)' } %>
             <%= list.with_item { 'Choose appropriate components for content type' } %>
             <%= list.with_item { 'Let headings scale responsively by default' } %>
@@ -265,7 +268,7 @@
             <%= icon(:x_circle, color: :danger, class: "mr-2") %> Don'ts
           </div>
 
-          <%= pathogen_list do |list| %>
+          <%= render Pathogen::Typography::List.new do |list| %>
             <%= list.with_item { "Don't skip heading levels" } %>
             <%= list.with_item { "Don't overuse muted text variants" } %>
             <%= list.with_item { "Don't disable responsive sizing unnecessarily" } %>

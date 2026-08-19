@@ -1,11 +1,11 @@
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8 dark:from-slate-900 dark:to-slate-800">
   <!-- Header -->
   <div class="mb-12 text-center">
-    <%= pathogen_heading(level: 1, class: "mb-4") do %>
+    <%= render Pathogen::Typography::Heading.new(level: 1, class: "mb-4") do %>
       <%= icon(:moon, color: :primary, size: :xl, class: "inline mr-3") %> Dark Mode Typography
     <% end %>
 
-    <%= pathogen_text(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
+    <%= render Pathogen::Typography::Text.new(variant: :muted, class: "text-lg max-w-3xl mx-auto") do %>
       All typography components automatically adapt to light and dark modes with proper contrast ratios and readable
       colors.
     <% end %>
@@ -14,11 +14,11 @@
   <!-- Side-by-Side Comparison -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:squares_four, color: :primary, class: "mr-3") %> Light vs Dark Mode
       <% end %>
 
-      <%= pathogen_text(variant: :muted, class: "mb-8") do %>
+      <%= render Pathogen::Typography::Text.new(variant: :muted, class: "mb-8") do %>
         Toggle your system's dark mode preference to see how components adapt. All components maintain WCAG AA contrast
         ratios in both themes.
       <% end %>
@@ -30,11 +30,11 @@
             <span class="font-semibold text-slate-900">Light Mode</span>
           </div>
 
-          <%= pathogen_heading(level: 3) do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3) do %>
             Heading in Light Mode
           <% end %>
 
-          <%= pathogen_text do %>
+          <%= render Pathogen::Typography::Text.new do %>
             Body text automatically adjusts to dark slate-900 in light mode for optimal readability.
           <% end %>
         </div>
@@ -45,11 +45,11 @@
             <span class="font-semibold text-white">Dark Mode</span>
           </div>
 
-          <%= pathogen_heading(level: 3, variant: :inverse) do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, variant: :inverse) do %>
             Heading in Dark Mode
           <% end %>
 
-          <%= pathogen_text(variant: :inverse) do %>
+          <%= render Pathogen::Typography::Text.new(variant: :inverse) do %>
             Body text automatically adjusts to white in dark mode for optimal readability.
           <% end %>
         </div>
@@ -60,47 +60,47 @@
   <!-- Color Variants in Dark Mode -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:palette, color: :primary, class: "mr-3") %> Color Variants
       <% end %>
 
       <div class="space-y-6">
         <div>
-          <%= pathogen_heading(level: 3, variant: :default) do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, variant: :default) do %>
             Default Variant
           <% end %>
 
-          <%= pathogen_text(variant: :default) do %>
+          <%= render Pathogen::Typography::Text.new(variant: :default) do %>
             Primary text color - slate-900 in light mode, white in dark mode
           <% end %>
         </div>
 
         <div>
-          <%= pathogen_heading(level: 3, variant: :muted) do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, variant: :muted) do %>
             Muted Variant
           <% end %>
 
-          <%= pathogen_text(variant: :muted) do %>
+          <%= render Pathogen::Typography::Text.new(variant: :muted) do %>
             Secondary text color - slate-500 in light mode, slate-400 in dark mode
           <% end %>
         </div>
 
         <div>
-          <%= pathogen_heading(level: 3, variant: :subdued) do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, variant: :subdued) do %>
             Subdued Variant
           <% end %>
 
-          <%= pathogen_text(variant: :subdued) do %>
+          <%= render Pathogen::Typography::Text.new(variant: :subdued) do %>
             Medium contrast - slate-700 in light mode, slate-300 in dark mode
           <% end %>
         </div>
 
         <div class="rounded-lg bg-slate-900 p-6 dark:bg-slate-100">
-          <%= pathogen_heading(level: 3, variant: :inverse) do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, variant: :inverse) do %>
             Inverse Variant
           <% end %>
 
-          <%= pathogen_text(variant: :inverse) do %>
+          <%= render Pathogen::Typography::Text.new(variant: :inverse) do %>
             Light text for dark backgrounds - white in light mode, slate-900 in dark mode
           <% end %>
         </div>
@@ -111,33 +111,37 @@
   <!-- Code Components -->
   <div class="mb-12">
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:code, color: :primary, class: "mr-3") %> Code Components
       <% end %>
 
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div>
-          <%= pathogen_heading(level: 3, class: "mb-4") do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, class: "mb-4") do %>
             Inline Code
           <% end %>
 
-          <%= pathogen_text do %>
+          <%= render Pathogen::Typography::Text.new do %>
             Use
-            <%= pathogen_code do %>
-              pathogen_code
+            <%= render Pathogen::Typography::Code.new do %>
+              render Pathogen::Typography::Code.new
             <% end %>
             for inline code snippets. The background adapts to both themes.
           <% end %>
         </div>
 
         <div>
-          <%= pathogen_heading(level: 3, class: "mb-4") do %>
+          <%= render Pathogen::Typography::Heading.new(level: 3, class: "mb-4") do %>
             Code Blocks
           <% end %>
 
-          <%= pathogen_code_block(language: "ruby") do %>
-            def example puts "Code blocks have dark backgrounds" puts "that work in both light and dark mode" end
-          <% end %>
+          <%= render Pathogen::Typography::CodeBlock.new(language: "ruby") { <<~RUBY.chomp
+            def example
+              puts "Code blocks have dark backgrounds"
+              puts "that work in both light and dark mode"
+            end
+          RUBY
+          } %>
         </div>
       </div>
     </div>
@@ -146,11 +150,11 @@
   <!-- Contrast Ratios -->
   <div>
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
-      <%= pathogen_heading(level: 2, class: "mb-6 flex items-center") do %>
+      <%= render Pathogen::Typography::Heading.new(level: 2, class: "mb-6 flex items-center") do %>
         <%= icon(:check_circle, color: :success, class: "mr-3") %> WCAG AA Compliance
       <% end %>
 
-      <%= pathogen_text(variant: :muted, class: "mb-6") do %>
+      <%= render Pathogen::Typography::Text.new(variant: :muted, class: "mb-6") do %>
         All typography components meet WCAG AA contrast requirements in both light and dark modes.
       <% end %>
 

@@ -1,3 +1,5 @@
+<%# locals: (token:) %>
+
 <%= turbo_frame_tag "access-token-section" do %>
   <div
     data-turbo-temporary
@@ -6,7 +8,7 @@
       dark:bg-slate-800
     "
   >
-    <%= pathogen_heading(level: 2) do %>
+    <%= render Pathogen::Typography::Heading.new(level: 2) do %>
       <%= t(".label") %>
     <% end %>
 
