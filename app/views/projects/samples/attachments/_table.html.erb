@@ -1,5 +1,7 @@
 <%# locals: (allowed_to:, attachments:, has_attachments:, pagy:, render_individual_attachments:, sample:, q:) -%>
 
+<% attachments_advanced_search = Flipper.enabled?(:attachments_advanced_search) %>
+
 <div id="sample-attachments">
   <% if has_attachments %>
     <div class="mb-4 flex flex-wrap gap-2">

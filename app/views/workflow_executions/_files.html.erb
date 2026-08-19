@@ -1,7 +1,50 @@
-<%# locals: (allowed_to:, pagy:, q:, search_url:, attachments:, workflow_execution:, has_attachments: ) -%>
+<%# locals: (allowed_to:, pagy:, q:, search:, search_url:, attachments:, workflow_execution:, has_attachments:, results_message: @results_message ) -%>
 
-<div class="mb-2 flex justify-end">
-  <%= render SearchComponent.new(
+<% attachments_advanced_search = Flipper.enabled?(:attachments_advanced_search) %>
+
+<% if attachments_advanced_search %>
+  <div role="status" class="sr-only"><%= results_message %></div>
+
+  <%= form_with model: search, html: { role: "search", class: "mb-2 flex justify-end gap-2" }, scope: :q, url: search_url, method: :get,
+    data: { turbo_action: 'replace', controller: 'filters', "filters-selection-outlet": "#attachments-table" } do |form| %>
+    <% if q.present? && !q.sorts.empty? %>
+      <%= hidden_field_tag "q[s]", "#{q.sorts.first.name} #{q.sorts.first.dir}" %>
+    <% end %>
+
+    <% if local_assigns.fetch(:page_limit, nil).present? %>
+      <%= hidden_field_tag :limit, local_assigns[:page_limit] %>
+    <% end %>
+
+    <%= hidden_field_tag :tab, "files" %>
+
+    <div class="max-sm:grow">
+      <%= render SearchFieldComponent.new(
+      form: form,
+      field_name: :puid_or_file_blob_filename_cont,
+      label: t("common.controls.search"),
+      placeholder: t("workflow_executions.files.search.placeholder"),
+      value: search.puid_or_file_blob_filename_cont,
+      include_advanced_search_outlet: true,
+      data: {
+        "search-field-selection-outlet": "#attachments-table",
+      },
+      classes: "sm:min-w-[20rem]"
+    ) %>
+    </div>
+
+    <div class="max-sm:grow">
+      <%= render AdvancedSearchComponent.new(
+        form: form,
+        search: search,
+        fields: AdvancedSearch::Fields.for_attachments,
+        open: search.errors.any?,
+        status: search.advanced_query?,
+      ) %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="mb-2 flex justify-end">
+    <%= render SearchComponent.new(
             query: q,
             search_attribute: :puid_or_file_blob_filename_cont,
             label: t('common.controls.search'),
@@ -12,10 +55,11 @@
             class: "max-sm:grow",
             data: {}
           ) do %>
-    <%= hidden_field_tag :limit, pagy.limit %>
-    <%= hidden_field_tag :tab, "files" %>
-  <% end %>
-</div>
+      <%= hidden_field_tag :limit, pagy.limit %>
+      <%= hidden_field_tag :tab, "files" %>
+    <% end %>
+  </div>
+<% end %>
 
 <%= render Attachments::TableComponent.new(
   attachments,
