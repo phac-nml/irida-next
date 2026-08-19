@@ -59,10 +59,9 @@ jobs:
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
         with:
+          cache: true
+          run_install: true
           runtime: node@24.14.1
-
-      - name: Install JavaScript dependencies
-        run: pnpm install
 
       - name: Prepare RuboCop cache
         uses: actions/cache@v6
@@ -103,6 +102,8 @@ jobs:
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
         with:
+          cache: true
+          run_install: true
           runtime: node@24.14.1
 
       - name: Run JavaScript tests
@@ -143,6 +144,8 @@ jobs:
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
         with:
+          cache: true
+          run_install: true
           runtime: node@24.14.1
 
       - name: Install icons
@@ -190,6 +193,8 @@ jobs:
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
         with:
+          cache: true
+          run_install: true
           runtime: node@24.14.1
 
       - name: Cache Playwright Chromium browser
@@ -256,6 +261,8 @@ jobs:
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
         with:
+          cache: true
+          run_install: true
           runtime: node@24.14.1
 
       - name: Download Sapporo
