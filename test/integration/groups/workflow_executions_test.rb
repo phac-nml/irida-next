@@ -80,6 +80,20 @@ module Groups
       assert_response :unauthorized
     end
 
+    test 'should select and deselect group workflow executions' do
+      get select_group_workflow_executions_path(@group), as: :turbo_stream
+
+      assert_response :success
+      assert_select '[data-table-selection-ids-value="[]"]'
+
+      get select_group_workflow_executions_path(@group), params: { select: 'on' }, as: :turbo_stream
+
+      assert_response :success
+      assert_select '[data-table-selection-ids-value="[]"]', count: 0
+      assert_includes css_select('[data-table-selection-ids-value]').first['data-table-selection-ids-value'],
+                      @workflow_execution.id.to_s
+    end
+
     test 'should apply advanced search groups' do
       get group_workflow_executions_path(@group),
           params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
