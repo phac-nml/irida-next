@@ -68,10 +68,12 @@
       <%= render partial: "projects/samples/attachments/table",
       locals: {
         allowed_to: @allowed_to,
-        attachments: @sample_attachments,
+        attachments: @attachments,
         has_attachments: @has_attachments,
         pagy: @pagy,
         sample: @sample,
+        search: @query,
+        search_url: namespace_project_sample_path(id: @sample.id, tab: "files"),
         q: @q,
         render_individual_attachments: @render_individual_attachments
       } %>
