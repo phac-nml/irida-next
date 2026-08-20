@@ -463,8 +463,7 @@ module Projects
     test 'should not destroy multiple non-deletable workflows' do
       running_workflow = workflow_executions(:automated_example_running)
       new_workflow = workflow_executions(:automated_example_new)
-      assert_no_difference -> { WorkflowExecution.count },
-                           -> { SamplesWorkflowExecution.count } do
+      assert_no_difference [-> { WorkflowExecution.count }, -> { SamplesWorkflowExecution.count }] do
         post destroy_multiple_namespace_project_workflow_executions_path(
           @namespace,
           @project
@@ -480,8 +479,7 @@ module Projects
       canceled_workflow = workflow_executions(:automated_example_canceled)
       error_workflow = workflow_executions(:automated_example_error)
 
-      assert_no_difference -> { WorkflowExecution.count },
-                           -> { SamplesWorkflowExecution.count } do
+      assert_no_difference [-> { WorkflowExecution.count }, -> { SamplesWorkflowExecution.count }] do
         post destroy_multiple_namespace_project_workflow_executions_path(
           @namespace,
           @project
