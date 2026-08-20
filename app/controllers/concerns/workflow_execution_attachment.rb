@@ -6,25 +6,21 @@ module WorkflowExecutionAttachment
   include Metadata
 
   def list_workflow_execution_attachments
-    @query = attachments_query
-
     all_attachments = load_attachments
+    @query = attachments_query(all_attachments)
     @has_attachments = all_attachments.any?
+    @search_params = attachment_search_params
 
-    @q = all_attachments.ransack(params[:q])
-    setup_ransack_for_attachments_form
-
-    filtered_attachments = @q.result
-    filtered_attachments = filtered_attachments.merge(@query.send(:advanced_query_groups)) if @query.advanced_query?
-
-    @pagy, @attachments = pagy_with_metadata_sort(filtered_attachments, Attachment)
+    @pagy, @attachments = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
     @results_message = attachments_results_message
+
+    setup_ransack_for_attachments_form(all_attachments)
   end
 
   private
 
-  def attachments_query
-    Attachment::Query.new(attachment_search_params)
+  def attachments_query(scope)
+    Attachment::Query.new(attachment_search_params.merge(request:, scope:))
   end
 
   def load_attachments
@@ -34,14 +30,14 @@ module WorkflowExecutionAttachment
               .or(Attachment.where(attachable: samples_workflow_executions))
   end
 
-  def setup_ransack_for_attachments_form
+  def setup_ransack_for_attachments_form(all_attachments)
+    # Create Ransack object from request params for UI component compatibility
+    @q = all_attachments.ransack(params[:q])
     # Sync search values from custom Query to Ransack for accurate form display
     @q.puid_or_file_blob_filename_cont = @query.puid_or_file_blob_filename_cont
     # Set default sort order if none provided
     @q.sorts = 'created_at desc' if @q.sorts.empty?
   end
-
-  protected
 
   def attachment_search_params
     search_params = {}
