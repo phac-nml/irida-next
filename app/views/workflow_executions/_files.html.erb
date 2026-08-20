@@ -1,4 +1,4 @@
-<%# locals: (allowed_to:, pagy:, q:, search:, search_url:, attachments:, workflow_execution:, has_attachments:, results_message: @results_message ) -%>
+<%# locals: (allowed_to:, attachments:, has_attachments:, pagy:, q:, results_message: @results_message, search:, search_url:, workflow_execution:) -%>
 
 <% attachments_advanced_search = Flipper.enabled?(:attachments_advanced_search) %>
 
@@ -11,10 +11,7 @@
       <%= hidden_field_tag "q[s]", "#{q.sorts.first.name} #{q.sorts.first.dir}" %>
     <% end %>
 
-    <% if local_assigns.fetch(:page_limit, nil).present? %>
-      <%= hidden_field_tag :limit, local_assigns[:page_limit] %>
-    <% end %>
-
+    <%= hidden_field_tag :limit, pagy.limit %>
     <%= hidden_field_tag :tab, "files" %>
 
     <div class="max-sm:grow">
