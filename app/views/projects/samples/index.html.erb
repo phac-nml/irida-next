@@ -13,6 +13,9 @@
         <%= form_with url: pipeline_selection_workflow_executions_submissions_path,
         method: :get,
         data: { turbo_stream: true },
+        form: {
+         id: "launch-workflow-form"
+        },
         class: "contents" do %>
           <%= hidden_field_tag :namespace_id, @project.namespace.id %>
 
