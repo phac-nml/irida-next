@@ -82,7 +82,7 @@ module Projects
                                                                           errors: 'File checksum matches existing file')
       end
 
-        test 'should not be able to upload uncompressed fastq files to a Sample' do
+      test 'should not be able to upload uncompressed fastq files to a Sample' do
         visit namespace_project_sample_url(@namespace, @project, @sample1)
         assert_selector 'button', text: I18n.t('projects.samples.show.new_attachment_button')
         click_on I18n.t('projects.samples.show.upload_files')

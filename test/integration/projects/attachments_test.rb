@@ -119,7 +119,7 @@ module Projects
       get namespace_project_attachments_path(group, project)
 
       assert_select 'h1', I18n.t('projects.attachments.index.title')
-      assert_select 'p', I18n.t('projects.attachments.index.subtitle', puid: project.namespace.puid)
+      assert_select 'p', I18n.t('projects.attachments.index.subtitle', puid: project.puid)
 
       assert_select 'button', text: I18n.t('components.attachments.dialogs.new_attachment_component.upload_files'),
                               count: 0
