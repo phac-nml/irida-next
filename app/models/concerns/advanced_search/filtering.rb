@@ -173,7 +173,7 @@ module AdvancedSearch
       condition_metadata_not_exists(scope, node, :numeric)
     end
 
-    def apply_condition_between(scope, node, value, _field_name)
+    def apply_condition_between(scope, node, value, field_name)
       condition_between(scope, node, value, field_name)
     end
 
