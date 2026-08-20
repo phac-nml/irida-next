@@ -7,7 +7,7 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
   class ResultTypeError < StandardError
   end
 
-  allowed_sort_columns :id, :created_at
+  allowed_sort_columns :puid, :created_at, :updated_at, :file_blob_filename, :file_blob_byte_size
 
   self.enum_metadata_fields = Attachment::FieldConfiguration::ENUM_METADATA_FIELDS
 
@@ -21,6 +21,27 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
   end
 
   private
+
+  def filtered_scope
+    search_scope
+  end
+
+  def advanced_query_scope
+    search_scope.merge(advanced_query_groups)
+  end
+
+  def apply_sort(scope)
+    return scope unless column.present? && direction.present?
+
+    case column
+    when 'file_blob_filename', 'file_blob_byte_size'
+      blob_column = column.delete_prefix('file_blob_')
+      ordered_scope = scope.joins(:file_blob).order(ActiveStorage::Blob.arel_table[blob_column] => direction)
+      ordered_scope.order(id: direction)
+    else
+      super
+    end
+  end
 
   def add_condition(scope, condition)
     field_name = normalize_condition_field(condition)
@@ -42,6 +63,10 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
     return 'puid' if condition.field == 'id'
 
     condition.field
+  end
+
+  def default_sort
+    'created_at desc'
   end
 
   def ransack_params
