@@ -56,19 +56,17 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Set up PNPM
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.1
+
+      - name: Set up pnpm and install dependencies
         uses: pnpm/action-setup@v6
         with:
           cache: true
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.14.1
-          cache: 'pnpm'
-
-      - name: Install javascript dependencies
-        run: pnpm install --frozen-lockfile
+          run_install: |
+            - args: [--frozen-lockfile]
 
       - name: Prepare RuboCop cache
         uses: actions/cache@v6
@@ -106,19 +104,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      - name: Set up PNPM
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.1
+
+      - name: Set up pnpm and install dependencies
         uses: pnpm/action-setup@v6
         with:
           cache: true
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.14.1
-          cache: 'pnpm'
-
-      - name: Install javascript dependencies
-        run: pnpm install --frozen-lockfile
+          run_install: |
+            - args: [--frozen-lockfile]
 
       - name: Run JavaScript tests
         run: pnpm run test:js
@@ -155,19 +151,17 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Set up PNPM
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.1
+
+      - name: Set up pnpm and install dependencies
         uses: pnpm/action-setup@v6
         with:
           cache: true
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.14.1
-          cache: 'pnpm'
-
-      - name: Install javascript dependencies
-        run: pnpm install --frozen-lockfile
+          run_install: |
+            - args: [--frozen-lockfile]
 
       - name: Install icons
         run: |
@@ -211,19 +205,17 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Set up PNPM
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.1
+
+      - name: Set up pnpm and install dependencies
         uses: pnpm/action-setup@v6
         with:
           cache: true
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.14.1
-          cache: 'pnpm'
-
-      - name: Install javascript dependencies
-        run: pnpm install --frozen-lockfile
+          run_install: |
+            - args: [--frozen-lockfile]
 
       - name: Cache Playwright Chromium browser
         id: playwright-cache
@@ -286,19 +278,17 @@ jobs:
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-      - name: Set up PNPM
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.1
+
+      - name: Set up pnpm and install dependencies
         uses: pnpm/action-setup@v6
         with:
           cache: true
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.14.1
-          cache: 'pnpm'
-
-      - name: Install javascript dependencies
-        run: pnpm install --frozen-lockfile
+          run_install: |
+            - args: [--frozen-lockfile]
 
       - name: Download Sapporo
         uses: actions/checkout@v7

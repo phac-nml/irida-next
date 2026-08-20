@@ -34,15 +34,17 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v7
-      - name: Set up PNPM
-        uses: pnpm/action-setup@v6
       - name: Use Node.js 24
         uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install
+      - name: Set up pnpm and install dependencies
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+          cache_dependency_path: docs-site/pnpm-lock.yaml
+          run_install: |
+            - cwd: docs-site
       - name: Build Docs Site
         run: pnpm run build
       - name: Setup Pages
