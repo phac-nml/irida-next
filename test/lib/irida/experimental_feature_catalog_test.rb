@@ -19,6 +19,7 @@ module Irida
         sample_deletion_reason
         v2_dropdown
         v2_prefixed_select2
+        v2_sample_transfer
         v2_select2
       ], entries.pluck(:key)
     end
