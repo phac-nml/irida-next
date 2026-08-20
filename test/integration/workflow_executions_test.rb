@@ -55,12 +55,19 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "tr##{dom_id(workflow_execution)}", count: 0
   end
 
-  test 'should render quick search results messages for zero and multiple matches' do
+  test 'should render quick search results messages for zero, singular, and multiple matches' do
     search_term = 'irida_next_example'
     get workflow_executions_path, params: { q: { name_or_id_cont: search_term }, limit: 100 }
 
     assert_response :success
     assert_select '[role=status]', text: /results found for '#{search_term}'/
+
+    singular_term = @workflow_execution_completed.id
+    get workflow_executions_path, params: { q: { name_or_id_cont: singular_term } }
+
+    assert_response :success
+    assert_select '[role=status]',
+                  text: I18n.t('components.search.results_message.singular', search_term: singular_term)
 
     missing_term = 'zzz-no-such-workflow'
     get workflow_executions_path, params: { q: { name_or_id_cont: missing_term } }
@@ -225,6 +232,15 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select '[role=status]', text: I18n.t('components.search.advanced.results_message.singular')
+  end
+
+  test 'should render advanced search plural results message' do
+    get workflow_executions_path,
+        params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
+
+    assert_response :success
+    assert_select '[role=status]', text: /results found for advanced search/
+    assert_select "tr##{dom_id(@workflow_execution_completed)}", count: 1
   end
 
   test 'should apply default sort and support sorting workflow executions' do
@@ -411,6 +427,12 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select 'table tbody tr', count: 1
     assert_select 'table tbody', text: /#{sample.puid}/
     assert_select 'table tbody', text: /#{attachment.puid}/
+
+    non_executable = workflow_executions(:irida_next_example_non_executable)
+    get workflow_execution_path(non_executable), params: { tab: 'samplesheet' }
+
+    assert_response :success
+    assert_select 'table tbody tr', count: 0
 
     get workflow_execution_path(workflow_execution), params: { tab: 'files' }
 

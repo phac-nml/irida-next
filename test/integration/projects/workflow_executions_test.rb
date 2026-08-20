@@ -376,6 +376,31 @@ module Projects
       end
     end
 
+    test 'should select and deselect project workflow executions' do
+      get select_namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_response :success
+      assert_select '[data-table-selection-ids-value="[]"]'
+
+      get select_namespace_project_workflow_executions_path(@namespace, @project), params: { select: 'on' }
+
+      assert_response :success
+      assert_select '[data-table-selection-ids-value="[]"]', count: 0
+      assert_includes css_select('[data-table-selection-ids-value]').first['data-table-selection-ids-value'],
+                      @workflow_execution.id.to_s
+    end
+
+    test 'should open cancel_multiple_confirmation' do
+      get cancel_multiple_confirmation_namespace_project_workflow_executions_path(
+        @namespace, @project, format: :turbo_stream
+      )
+
+      assert_response :success
+      assert_select 'turbo-stream[action="update"][target="workflow_execution_dialog"]' do
+        assert_select 'h1', I18n.t('shared.workflow_executions.cancel_multiple_confirmation_dialog.title')
+      end
+    end
+
     test 'should open destroy_multiple_confirmation' do
       get destroy_multiple_confirmation_namespace_project_workflow_executions_path(
         @namespace, @project, format: :turbo_stream
