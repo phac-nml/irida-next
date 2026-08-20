@@ -5,36 +5,42 @@ attachment1:
   attachable: sample1 (Sample)
   puid: INXT_ATT_AAAAAAAAAA
   created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
 
 attachment2:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample1 (Sample)
   puid: INXT_ATT_AAAAAAAAAB
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 attachment3:
   metadata: { "compression": "none", "format": "fasta" }
   attachable: sample3 (Sample)
   puid: INXT_ATT_BAAAAAAAAB
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 attachmentA:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
   puid: INXT_ATT_AAAAAAAAAC
   created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
 
 attachmentB:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
   puid: INXT_ATT_AAAAAAAAAD
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 attachmentC:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleA (Sample)
   puid: INXT_ATT_AAAAAAAAAE
   created_at: <%= 1.hour.ago %>
+  updated_at: <%= 1.hour.ago %>
 
 attachmentPEFWD1:
   metadata:
@@ -49,6 +55,7 @@ attachmentPEFWD1:
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAF
   created_at: <%= 4.hour.ago %>
+  updated_at: <%= 4.hour.ago %>
 
 attachmentPEREV1:
   metadata:
@@ -63,6 +70,7 @@ attachmentPEREV1:
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAF
   created_at: <%= 4.hour.ago %>
+  updated_at: <%= 4.hour.ago %>
 
 attachmentPEFWD2:
   metadata:
@@ -77,6 +85,7 @@ attachmentPEFWD2:
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAG
   created_at: <%= 3.hour.ago %>
+  updated_at: <%= 3.hour.ago %>
 
 attachmentPEREV2:
   metadata:
@@ -91,6 +100,7 @@ attachmentPEREV2:
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAG
   created_at: <%= 3.hour.ago %>
+  updated_at: <%= 3.hour.ago %>
 
 attachmentPEFWD3:
   metadata:
@@ -104,6 +114,7 @@ attachmentPEFWD3:
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAH
   created_at: <%= 2.hour.ago %>
+  updated_at: <%= 2.hour.ago %>
 
 attachmentPEREV3:
   metadata:
@@ -117,6 +128,7 @@ attachmentPEREV3:
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAH
   created_at: <%= 2.hour.ago %>
+  updated_at: <%= 2.hour.ago %>
 
 attachmentPEFWD4:
   metadata:
@@ -171,18 +183,21 @@ attachmentE:
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAL
   created_at: <%= 2.hour.ago %>
+  updated_at: <%= 2.hour.ago %>
 
 attachmentF:
   metadata: { "compression": "gzip", "format": "fastq" }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAM
   created_at: <%= 1.hour.ago %>
+  updated_at: <%= 1.hour.ago %>
 
 attachmentD:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAK
   created_at: <%= 3.hour.ago %>
+  updated_at: <%= 3.hour.ago %>
 
 attachmentG:
   metadata: { "compression": "none", "format": "fastq" }
@@ -385,72 +400,84 @@ project1Attachment1:
   attachable: project1_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAAAJ
   created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
 
 project1Attachment2:
   metadata: { "compression": "none", "format": "csv" }
   attachable: project1_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAAAK
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 group1Attachment1:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: group_one (Namespace)
   puid: INXT_ATT_ABAAAAAAAL
   created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
 
 group1Attachment2:
   metadata: { "compression": "none", "format": "csv" }
   attachable: group_one (Namespace)
   puid: INXT_ATT_ABAAAAAAAM
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 gasclusteringAttachment:
   metadata: { "compression": "none", "format": "json" }
   attachable: sample32 (Sample)
   puid: INXT_ATT_ABAAAAAAAN
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 sample32JsonAttachment:
   metadata: { "compression": "none", "format": "json" }
   attachable: sample32 (Sample)
   puid: INXT_ATT_ABAAAAAAAO
   created_at: <%= 1.hours.ago %>
+  updated_at: <%= 1.hours.ago %>
 
 attachmentCSV:
   metadata: { "compression": "none", "format": "csv" }
   attachable: project2_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABA
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 attachmentText:
   metadata: { "compression": "none", "format": "text" }
   attachable: project2_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABB
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 attachmentJSON:
   metadata: { "compression": "none", "format": "json" }
   attachable: project2_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABC
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 attachmentSpreadsheet:
   metadata: { "compression": "none", "format": "spreadsheet" }
   attachable: project2_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABD
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 attachmentImage:
   metadata: { "compression": "none", "format": "image" }
   attachable: project2_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABE
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 attachmentTSV:
   metadata: { "compression": "none", "format": "tsv" }
   attachable: project2_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABF
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 workflow_execution_group_shared_output_attachment:
   metadata: { "compression": "none", "format": "json" }
@@ -467,42 +494,49 @@ sample_preparation_test_attachment_1:
   attachable: sample_preparation_test_1 (Sample)
   puid: INXT_ATT_AAAAAAAAZA
   created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
 
 sample_preparation_test_attachment_1B:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample_preparation_test_1 (Sample)
   puid: INXT_ATT_AAAAAAAZZA
   created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
 
 sample_preparation_test_attachment_2:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample_preparation_test_2 (Sample)
   puid: INXT_ATT_AAAAAAAAZB
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 sample_preparation_test_attachment_2B:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample_preparation_test_2 (Sample)
   puid: INXT_ATT_AAAAAAAZZB
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 sample_preparation_test_attachment_3:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample_preparation_test_3 (Sample)
   puid: INXT_ATT_BAAAAAAAZB
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 sample_preparation_test_attachment_3B:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample_preparation_test_3 (Sample)
   puid: INXT_ATT_BAAAAAAZZB
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 group16AttachmentCSV:
   metadata: { "compression": "none", "format": "csv" }
   attachable: group_sixteen (Namespace)
   puid: INXT_ATT_ABAAAAAABI
   created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 snvphyl_sample1_attachment_fwd:
   metadata:
