@@ -93,8 +93,6 @@ formatter:
   enabled: true
   indentWidth: 2
   maxLineLength: 120
-  exclude:
-    - "app/components/combobox/v1/component.html.erb"
 
   rewriter:
     pre:
