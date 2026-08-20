@@ -74,6 +74,7 @@ module Samples
           # i18n-tasks-use t('components.samples.table_component.counts.status')
           args[:data][:'selection-count-message-value'] =
             I18n.t('components.samples.table_component.counts.status')
+          args[:data].merge!(selection_limit_data_attributes)
         end
 
         def wrapper_arguments
@@ -98,6 +99,17 @@ module Samples
         end
 
         private
+
+        def selection_limit_data_attributes
+          {
+            'selection-max-selection-value': Irida::SelectionLimits::MAX_COUNT,
+            'selection-limit-message-value': I18n.t(
+              'components.selection.limit.selection_limit_reached',
+              max: Irida::SelectionLimits::MAX_COUNT
+            ),
+            'selection-storage-limit-message-value': I18n.t('components.selection.limit.storage_full')
+          }
+        end
 
         def columns
           columns = %i[puid name]

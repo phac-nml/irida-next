@@ -1,5 +1,6 @@
-<% select_form_id = local_assigns.fetch(:select_form_id, "select-all-form") %>
-<% deselect_form_id = local_assigns.fetch(:deselect_form_id, "deselect-all-form") %>
+<%# locals: (url:, form_data: nil, total_count: nil, select_form_fields: {}, deselect_form_fields: {}, select_form_id: "select-all-form", deselect_form_id: "deselect-all-form", select_button_options: {}, deselect_button_options: {}) %>
+
+<% select_all_disabled = total_count.present? && Irida::SelectionLimits.exceeded?(total_count) %>
 
 <% select_button_options = {
      id: "select-all-button",
@@ -7,7 +8,7 @@
      type: "submit",
      form: select_form_id,
      class: "button button-default max-sm:grow",
-   }.merge(local_assigns.fetch(:select_button_options, {})) %>
+   }.merge(select_button_options) %>
 
 <% deselect_button_options = {
      id: "deselect-all-button",
@@ -15,17 +16,14 @@
      type: "submit",
      form: deselect_form_id,
      class: "button button-default max-sm:grow",
-   }.merge(local_assigns.fetch(:deselect_button_options, {})) %>
-
-<% select_form_fields = local_assigns.fetch(:select_form_fields, {}) %>
-<% deselect_form_fields = local_assigns.fetch(:deselect_form_fields, {}) %>
+   }.merge(deselect_button_options) %>
 
 <%= form_with(
       url: url,
       method: :get,
       id: select_form_id,
       class: "hidden",
-      data: local_assigns[:form_data],
+      data: form_data,
     ) do %>
   <% select_form_fields.each do |field_name, field_value| %>
     <%= hidden_field_tag field_name, field_value, id: nil %>
@@ -37,13 +35,48 @@
       method: :get,
       id: deselect_form_id,
       class: "hidden",
-      data: local_assigns[:form_data],
+      data: form_data,
     ) do %>
   <% deselect_form_fields.each do |field_name, field_value| %>
     <%= hidden_field_tag field_name, field_value, id: nil %>
   <% end %>
 <% end %>
 
-<%= button_tag t("common.controls.select_all"), **select_button_options %>
+<% if select_all_disabled %>
+  <% tooltip_id = Pathogen::Tooltip.generate_id(base_name: "select-all-limit") %>
+  <%# i18n-tasks-use t('components.selection.limit.list_too_large') %>
+  <% limit_tooltip_text = t(
+       "components.selection.limit.list_too_large",
+       count: total_count,
+       max: Irida::SelectionLimits::MAX_COUNT,
+     ) %>
+  <% select_button_options = select_button_options.except(:disabled, :title).merge(
+     type: "button",
+     form: nil,
+     class: class_names(select_button_options[:class], "cursor-not-allowed"),
+     aria: select_button_options.fetch(:aria, {}).merge(
+       disabled: true,
+       describedby: tooltip_id,
+     ),
+     data: select_button_options.fetch(:data, {}).merge(
+       "pathogen--tooltip-target": "trigger",
+     ),
+   ) %>
+  <div
+    class="inline-flex max-sm:grow"
+    data-controller="pathogen--tooltip"
+    data-pathogen--tooltip-portal-aria-label-value="<%= Pathogen::Tooltip.portal_aria_label %>"
+  >
+    <%= button_tag t("common.controls.select_all"), **select_button_options %>
+
+    <%= render Pathogen::Tooltip.new(
+      text: limit_tooltip_text,
+      id: tooltip_id,
+      placement: :bottom,
+    ) %>
+  </div>
+<% else %>
+  <%= button_tag t("common.controls.select_all"), **select_button_options %>
+<% end %>
 
 <%= button_tag t("common.controls.deselect_all"), **deselect_button_options %>
