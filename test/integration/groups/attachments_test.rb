@@ -156,7 +156,7 @@ module Groups
 
       assert_response :success
 
-      assert_difference -> { group.attachments.count } => -1 do
+      assert_difference -> { group.attachments.count }, -1 do
         delete group_attachment_path(group, attachment), as: :turbo_stream
       end
 
@@ -185,7 +185,7 @@ module Groups
 
       assert_response :unauthorized
 
-      assert_no_difference -> { group.attachments.count } do
+      assert_no_difference [-> { Attachment.count }, -> { group.attachments.count }] do
         delete group_attachment_path(group, attachment), as: :turbo_stream
       end
 
@@ -202,7 +202,7 @@ module Groups
 
       assert_response :success
 
-      assert_no_difference -> { Attachment.count } do
+      assert_no_difference [-> { Attachment.count }, -> { group.attachments.count }] do
         delete group_attachment_path(group, attachment), as: :turbo_stream
       end
 

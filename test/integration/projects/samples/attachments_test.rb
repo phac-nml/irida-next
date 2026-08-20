@@ -188,7 +188,7 @@ module Projects
 
         assert_response :unauthorized
 
-        assert_no_difference -> { @sample1.attachments.count } do
+        assert_no_difference [-> { Attachment.count }, -> { @sample1.attachments.count }] do
           post namespace_project_sample_attachments_url(@group, @project, @sample1),
                params: { attachment: {
                  files: [fixture_file_upload('test_file_1.fastq', 'text/plain')]
@@ -249,7 +249,7 @@ module Projects
           assert_select 'h1', I18n.t('projects.samples.show.upload_files')
         end
 
-        assert_no_difference -> { @sample1.attachments.count } do
+        assert_no_difference [-> { Attachment.count }, -> { @sample1.attachments.count }] do
           post namespace_project_sample_attachments_url(@group, @project, @sample1),
                params: { attachment: {
                  files: [fixture_file_upload('test_file_A.fastq', 'text/plain')]
@@ -284,7 +284,7 @@ module Projects
           assert_select 'h1', I18n.t('projects.samples.show.upload_files')
         end
 
-        assert_no_difference -> { @sample1.attachments.count } do
+        assert_no_difference [-> { Attachment.count }, -> { @sample1.attachments.count }] do
           post namespace_project_sample_attachments_url(@group, @project, @sample1),
                params: { attachment: {
                  files: []
@@ -344,7 +344,7 @@ module Projects
 
         assert_response :unauthorized
 
-        assert_no_difference -> { @sample1.attachments.count } do
+        assert_no_difference [-> { Attachment.count }, -> { @sample1.attachments.count }] do
           delete namespace_project_sample_attachment_url(@group, @project, @sample1, attachment), as: :turbo_stream
         end
 
@@ -360,7 +360,7 @@ module Projects
 
         assert_response :success
 
-        assert_no_difference -> { @sample1.attachments.count } do
+        assert_no_difference [-> { Attachment.count }, -> { @sample1.attachments.count }] do
           delete namespace_project_sample_attachment_url(@group, @project, @sample1, attachment), as: :turbo_stream
         end
 
@@ -461,7 +461,7 @@ module Projects
 
         assert_response :unauthorized
 
-        assert_no_difference -> { @sample1.attachments.count }, -> { Attachment.count } do
+        assert_no_difference [-> { Attachment.count }, -> { @sample1.attachments.count }] do
           delete namespace_project_sample_attachments_deletion_path(@group, @project, @sample1, format: :turbo_stream),
                  params: {
                    deletion: {
@@ -476,7 +476,7 @@ module Projects
       test 'cannot delete multiple attachments in a sample that do not belong to the sample' do
         sign_in users(:john_doe)
 
-        assert_no_difference -> { @sample1.attachments.count }, -> { Attachment.count } do
+        assert_no_difference [-> { Attachment.count }, -> { @sample1.attachments.count }] do
           delete namespace_project_sample_attachments_deletion_path(@group, @project, @sample1, format: :turbo_stream),
                  params: {
                    deletion: {
@@ -746,7 +746,7 @@ module Projects
           end
         end
 
-        assert_difference -> { sample.attachments.count }, 1 do
+        assert_difference -> { sample.attachments.count } do
           post namespace_project_sample_attachments_concatenation_path(namespace, project, sample,
                                                                        format: :turbo_stream),
                params: {
@@ -782,7 +782,7 @@ module Projects
 
         assert_response :unauthorized
 
-        assert_no_difference -> { sample.attachments.count } do
+        assert_no_difference [-> { Attachment.count }, -> { sample.attachments.count }] do
           post namespace_project_sample_attachments_concatenation_path(namespace, project, sample,
                                                                        format: :turbo_stream),
                params: {
@@ -815,7 +815,7 @@ module Projects
         project = projects(:projectA)
         sample = samples(:sampleA)
 
-        assert_no_difference -> { sample.attachments.count }, -> { Attachment.count } do
+        assert_no_difference [-> { Attachment.count }, -> { sample.attachments.count }] do
           post namespace_project_sample_attachments_concatenation_path(namespace, project, sample,
                                                                        format: :turbo_stream),
                params: {

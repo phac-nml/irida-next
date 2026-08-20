@@ -129,7 +129,7 @@ module Projects
 
       assert_response :unauthorized
 
-      assert_no_difference -> { project.namespace.attachments.count } do
+      assert_no_difference [-> { Attachment.count }, -> { project.namespace.attachments.count }] do
         post namespace_project_attachments_path(group, project),
              params: { attachment: {
                files: [fixture_file_upload('test_file_1.fastq', 'text/plain')]
@@ -163,7 +163,7 @@ module Projects
 
       assert_response :success
 
-      assert_difference -> { project.namespace.attachments.count } => -1 do
+      assert_difference -> { project.namespace.attachments.count }, -1 do
         delete namespace_project_attachment_path(group, project, attachment), as: :turbo_stream
       end
 
@@ -193,7 +193,7 @@ module Projects
 
       assert_response :unauthorized
 
-      assert_no_difference -> { project.namespace.attachments.count } do
+      assert_no_difference [-> { Attachment.count }, -> { project.namespace.attachments.count }] do
         delete namespace_project_attachment_path(group, project, attachment), as: :turbo_stream
       end
 
@@ -211,7 +211,7 @@ module Projects
 
       assert_response :success
 
-      assert_no_difference -> { Attachment.count } do
+      assert_no_difference [-> { Attachment.count }, -> { project.namespace.attachments.count }] do
         delete namespace_project_attachment_path(group, project, attachment), as: :turbo_stream
       end
 
