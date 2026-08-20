@@ -672,8 +672,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not destroy multiple non-deletable workflows' do
-    assert_no_difference -> { WorkflowExecution.count },
-                         -> { SamplesWorkflowExecution.count } do
+    assert_no_difference [-> { WorkflowExecution.count }, -> { SamplesWorkflowExecution.count }] do
       post destroy_multiple_workflow_executions_path,
            params: { destroy_multiple: { workflow_execution_ids: [@workflow_execution_running.id,
                                                                   @workflow_execution_new.id] } },
