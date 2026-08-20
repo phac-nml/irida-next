@@ -34,6 +34,7 @@ module WorkflowExecutions
                 assert_select 'time[datetime=?]', attachment.created_at.iso8601
               end
             end
+            # no rev files
             assert_select 'td', text: 'test_file_rev_3.fastq', count: 0
             assert_select 'td', text: 'test_file_rev_2.fastq', count: 0
             assert_select 'td', text: 'test_file_rev_1.fastq', count: 0
@@ -72,6 +73,7 @@ module WorkflowExecutions
               end
             end
           end
+          # no fwd or non-pe files
           assert_select 'td', text: 'test_file_fwd_3.fastq', count: 0
           assert_select 'td', text: 'test_file_fwd_2.fastq', count: 0
           assert_select 'td', text: 'test_file_fwd_1.fastq', count: 0
