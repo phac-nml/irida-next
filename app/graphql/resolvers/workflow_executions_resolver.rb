@@ -6,7 +6,7 @@ module Resolvers
     type Types::WorkflowExecutionType.connection_type, null: true
 
     def resolve
-      WorkflowExecution.where(submitter: current_user)
+      WorkflowExecution.where(submitter: current_user).order(created_at: :asc)
     end
   end
 end

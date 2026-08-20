@@ -3470,6 +3470,16 @@ type WorkflowExecution implements Node {
   state: String
 
   """
+  WorkflowExecution stderr download url
+  """
+  stderrUrl: String
+
+  """
+  WorkflowExecution stdout download url
+  """
+  stdoutUrl: String
+
+  """
   WorkflowExecution submitter (User)
   """
   submitter: User!
