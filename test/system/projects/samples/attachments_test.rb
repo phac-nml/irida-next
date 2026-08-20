@@ -6,6 +6,8 @@ module Projects
   module Samples
     class AttachmentsTest < ApplicationSystemTestCase
       include ActionView::Helpers::SanitizeHelper
+      include ActionView::Helpers::NumberHelper
+      include ActionView::Helpers::DateHelper
 
       setup do
         @user = users(:john_doe)
@@ -45,10 +47,14 @@ module Projects
       end
 
       test 'should be able to delete multiple attachments' do
+        freeze_time
         login_as users(:jeff_doe)
         project = projects(:projectA)
         sample = samples(:sampleB)
         namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        attachments = [attachments(:attachmentPEFWD1), attachments(:attachmentPEREV1), attachments(:attachmentPEFWD2),
+                       attachments(:attachmentPEREV2), attachments(:attachmentPEFWD3), attachments(:attachmentPEREV3),
+                       attachments(:attachmentD)]
         visit namespace_project_sample_url(namespace, project, sample)
         within '#sample-attachments' do
           assert_selector 'table #attachments-table-body tr', count: 6
@@ -59,13 +65,18 @@ module Projects
         end
         click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
         within('dialog[open]') do
-          assert_text 'test_file_fwd_1.fastq'
-          assert_text 'test_file_rev_1.fastq'
-          assert_text 'test_file_fwd_2.fastq'
-          assert_text 'test_file_rev_2.fastq'
-          assert_text 'test_file_fwd_3.fastq'
-          assert_text 'test_file_rev_3.fastq'
-          assert_text 'test_file_D.fastq'
+          assert_text I18n.t('projects.samples.attachments.deletions.modal.description.plural')
+                          .gsub! 'COUNT_PLACEHOLDER',
+                                 '7'
+          within 'table tbody' do
+            attachments.each do |attachment|
+              assert_selector 'td:first-child', text: attachment.puid
+              assert_selector 'td:nth-child(2)', text: attachment.file.filename.to_s
+              assert_selector 'td:nth-child(3)', text: attachment.metadata['format']
+              assert_selector 'td:nth-child(4)', text: number_to_human_size(attachment.file.byte_size)
+              assert_selector 'td:last-child', text: attachment.created_at.strftime('%B %-d, %Y')
+            end
+          end
           click_on I18n.t('common.actions.delete')
         end
         assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
