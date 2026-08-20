@@ -1,4 +1,4 @@
-<%# locals: (workflows:, namespace_id:) %>
+<%# locals: (workflows:, namespace_id:, sample_count:) %>
 
 <%= render Viral::DialogComponent.new(open: true) do |dialog| %>
   <% dialog.with_header(
@@ -7,7 +7,8 @@
 
   <% field_name = "sample_count" %>
 
-  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": field_name, "workflow-selection-unavailable-label-value": t("workflow_executions.submissions.pipeline_selection.unavailable") }) do %>
+  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table",
+              "workflow-selection-sample-count-value": sample_count, "workflow-selection-field-name-value": field_name, "workflow-selection-unavailable-label-value": t("workflow_executions.submissions.pipeline_selection.unavailable") }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
       <%= form.hidden_field :pipeline_id,
                         data: {
