@@ -185,7 +185,7 @@ export default class AdvancedSearchController extends Controller {
     if (!value || groupIndex < 0 || conditionIndex < 0) {
       return;
     }
-    if (["", "exists", "not_exists"].includes(operator)) {
+    if (operator === "" || operator.includes("exists")) {
       value.classList.add(...this.#hiddenClasses);
       value.querySelectorAll("input").forEach((input) => {
         input.value = "";

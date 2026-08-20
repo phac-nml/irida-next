@@ -47,6 +47,10 @@ module AdvancedSearch
       # exists operators
       'exists' => :apply_condition_exists,
       'not_exists' => :apply_condition_not_exists,
+      'date_exists' => :apply_condition_metadata_date_exists,
+      'date_not_exists' => :apply_condition_metadata_date_not_exists,
+      'numeric_exists' => :apply_condition_metadata_numeric_exists,
+      'numeric_not_exists' => :apply_condition_metadata_numeric_not_exists,
       # starts_with operators
       'starts_with' => :apply_condition_starts_with,
       'text_starts_with' => :apply_condition_starts_with,
@@ -146,6 +150,22 @@ module AdvancedSearch
 
     def apply_condition_ends_with(scope, node, value, field_name)
       condition_ends_with(scope, node, value, model_class, field_name)
+    end
+
+    def apply_condition_metadata_date_exists(scope, node, _value, _field_name)
+      condition_metadata_exists(scope, node, :date)
+    end
+
+    def apply_condition_metadata_date_not_exists(scope, node, _value, _field_name)
+      condition_metadata_not_exists(scope, node, :date)
+    end
+
+    def apply_condition_metadata_numeric_exists(scope, node, _value, _field_name)
+      condition_metadata_exists(scope, node, :numeric)
+    end
+
+    def apply_condition_metadata_numeric_not_exists(scope, node, _value, _field_name)
+      condition_metadata_not_exists(scope, node, :numeric)
     end
 
     def normalize_condition_field(condition)

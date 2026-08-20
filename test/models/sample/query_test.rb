@@ -180,39 +180,39 @@ class QueryTest < ActiveSupport::TestCase
   end
 
   test 'in operator with puid field' do
-    project = projects(:project1)
-    sample1 = samples(:sample1)
-    sample2 = samples(:sample2)
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
                         conditions_attributes:
-                       { '0': { field: 'puid', operator: 'in', value: [sample1.puid] } }
+                       { '0': { field: 'puid', operator: 'in', value: [sample3.puid] } }
                       } },
                       project_ids: [project.id] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert query.valid?
     results = query.results
-    assert_includes results, sample1
-    assert_not_includes results, sample2
+    assert_includes results, sample3
+    assert_not_includes results, sample4
   end
 
   test 'not_in operator with puid field' do
-    project = projects(:project1)
-    sample1 = samples(:sample1)
-    sample2 = samples(:sample2)
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
                         conditions_attributes:
-                       { '0': { field: 'puid', operator: 'not_in', value: [sample1.puid] } }
+                       { '0': { field: 'puid', operator: 'not_in', value: [sample3.puid] } }
                       } },
                       project_ids: [project.id] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert query.valid?
     results = query.results
-    assert_not_includes results, sample1
-    assert_includes results, sample2
+    assert_not_includes results, sample3
+    assert_includes results, sample4
   end
 
   test 'applies a default sort of updated_at desc' do
@@ -240,43 +240,43 @@ class QueryTest < ActiveSupport::TestCase
   end
 
   test 'not_contains operator with name field' do
-    project = projects(:project1)
-    sample1 = samples(:sample1)
-    sample2 = samples(:sample2)
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
                         conditions_attributes:
-                       { '0': { field: 'name', operator: 'not_contains', value: 'Sample 1' } }
+                       { '0': { field: 'name', operator: 'not_contains', value: 'Sample 3' } }
                       } },
                       project_ids: [project.id] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert query.valid?
     results = query.results
-    assert_not_includes results, sample1
-    assert_includes results, sample2
+    assert_not_includes results, sample3
+    assert_includes results, sample4
   end
 
   test 'not_contains operator with puid field' do
-    project = projects(:project1)
-    sample1 = samples(:sample1)
-    samples(:sample2)
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    samples(:sample4)
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
                         conditions_attributes:
-                       { '0': { field: 'puid', operator: 'not_contains', value: sample1.puid[0..5] } }
+                       { '0': { field: 'puid', operator: 'not_contains', value: sample3.puid[0..5] } }
                       } },
                       project_ids: [project.id] }
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert query.valid?
     results = query.results
-    assert_not_includes results, sample1
+    assert_not_includes results, sample3
   end
 
   test 'not_contains operator with metadata field' do
-    project = projects(:project1)
-    sample = samples(:sample1)
+    project = projects(:project2)
+    sample = samples(:sample3)
     sample.update(metadata: { 'custom_field' => 'test_value' })
 
     search_params = { sort: 'updated_at desc',
@@ -293,9 +293,9 @@ class QueryTest < ActiveSupport::TestCase
   end
 
   test 'not_contains operator with nil metadata field should include record' do
-    project = projects(:project1)
-    sample_with_field = samples(:sample1)
-    sample_without_field = samples(:sample2)
+    project = projects(:project2)
+    sample_with_field = samples(:sample3)
+    sample_without_field = samples(:sample4)
 
     sample_with_field.update(metadata: { 'custom_field' => 'contains_value' })
     sample_without_field.update(metadata: {})
@@ -317,8 +317,8 @@ class QueryTest < ActiveSupport::TestCase
   end
 
   test 'not_contains operator with SQL wildcard characters should be escaped' do
-    project = projects(:project1)
-    sample = samples(:sample1)
+    project = projects(:project2)
+    sample = samples(:sample3)
     sample.update(name: 'Test%Sample')
 
     search_params = { sort: 'updated_at desc',
@@ -336,11 +336,13 @@ class QueryTest < ActiveSupport::TestCase
   end
 
   test 'metadata numeric operators with comparing integers and floats' do
-    project = projects(:project1)
-    sample1 = samples(:sample1)
-    sample2 = samples(:sample2)
-    sample1.update(metadata: { 'float_field' => '10.0', 'int_field' => '10' })
-    sample2.update(metadata: { 'float_field' => '100.0', 'int_field' => '100' })
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
+    sample5 = samples(:sample5)
+    sample6 = samples(:sample6)
+    sample3.update(metadata: { 'float_field' => '10.0', 'int_field' => '10' })
+    sample4.update(metadata: { 'float_field' => '100.0', 'int_field' => '100' })
 
     search_params1 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -353,8 +355,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query1.valid?
     results1 = query1.results
 
-    assert_not_includes results1, sample1
-    assert_includes results1, sample2
+    assert_not_includes results1, sample3
+    assert_includes results1, sample4
 
     search_params2 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -367,8 +369,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query2.valid?
     results2 = query2.results
 
-    assert_includes results2, sample1
-    assert_includes results2, sample2
+    assert_includes results2, sample3
+    assert_includes results2, sample4
 
     search_params3 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -381,8 +383,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query3.valid?
     results3 = query3.results
 
-    assert_not_includes results3, sample1
-    assert_includes results3, sample2
+    assert_not_includes results3, sample3
+    assert_includes results3, sample4
 
     search_params4 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -395,10 +397,42 @@ class QueryTest < ActiveSupport::TestCase
     assert query4.valid?
     results4 = query4.results
 
-    assert_not_includes results4, sample1
-    assert_includes results4, sample2
+    assert_not_includes results4, sample3
+    assert_includes results4, sample4
 
     search_params5 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.float_field', operator: 'numeric_exists' } }
+                       } },
+                       project_ids: [project.id] }
+    query5 = Sample::Query.new(search_params5)
+    assert query5.advanced_query?
+    assert query5.valid?
+    results5 = query5.results
+
+    assert_includes results5, sample3
+    assert_includes results5, sample4
+    assert_not_includes results5, sample5
+    assert_not_includes results5, sample6
+
+    search_params6 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.int_field', operator: 'numeric_not_exists' } }
+                       } },
+                       project_ids: [project.id] }
+    query6 = Sample::Query.new(search_params6)
+    assert query6.advanced_query?
+    assert query6.valid?
+    results6 = query6.results
+
+    assert_not_includes results6, sample3
+    assert_not_includes results6, sample4
+    assert_includes results6, sample5
+    assert_includes results6, sample6
+
+    search_params7 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
                          conditions_attributes:
                    { '0': {
@@ -408,22 +442,22 @@ class QueryTest < ActiveSupport::TestCase
                        } },
 
                        project_ids: [project.id] }
-    query5 = Sample::Query.new(search_params5)
-    assert query5.advanced_query?
-    assert query5.valid?
-    results5 = query5.results
+    query7 = Sample::Query.new(search_params7)
+    assert query7.advanced_query?
+    assert query7.valid?
+    results7 = query7.results
 
-    assert_not_includes results5, sample1
-    assert_not_includes results5, sample2
+    assert_not_includes results7, sample3
+    assert_not_includes results7, sample4
   end
 
   test 'metadata numeric not equals operator with null and non-numeric values' do
-    project = projects(:project1)
-    sample1 = samples(:sample1)
-    sample2 = samples(:sample2)
-    sample30 = samples(:sample30)
-    sample1.update(metadata: { 'int_field' => 100 })
-    sample30.update(metadata: { 'int_field' => 'not_a_number' })
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
+    sample5 = samples(:sample5)
+    sample3.update(metadata: { 'int_field' => 100 })
+    sample5.update(metadata: { 'int_field' => 'not_a_number' })
 
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
@@ -436,17 +470,20 @@ class QueryTest < ActiveSupport::TestCase
     assert query.valid?
     results = query.results
 
-    assert_not_includes results, sample1
-    assert_includes results, sample2
-    assert_includes results, sample30
+    assert_not_includes results, sample3
+    assert_includes results, sample4
+    assert_includes results, sample5
   end
 
   test 'metadata date operators' do
-    project = projects(:project1)
-    sample1 = samples(:sample1)
-    sample2 = samples(:sample2)
-    sample1.update(metadata: { 'date_field' => '2026-01-01' })
-    sample2.update(metadata: { 'date_field' => '2026-12-31' })
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
+    sample5 = samples(:sample5)
+    sample6 = samples(:sample6)
+    sample3.update(metadata: { 'date_field' => '2026-01-01' })
+    sample4.update(metadata: { 'date_field' => '2026-12-31' })
+    sample5.update(metadata: { 'date_field' => '01-01-2026' })
 
     search_params1 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -460,8 +497,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query1.valid?
     results1 = query1.results
 
-    assert_includes results1, sample1
-    assert_includes results1, sample2
+    assert_includes results1, sample3
+    assert_includes results1, sample4
 
     search_params2 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -474,8 +511,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query2.valid?
     results2 = query2.results
 
-    assert_includes results2, sample1
-    assert_not_includes results2, sample2
+    assert_includes results2, sample3
+    assert_not_includes results2, sample4
 
     search_params3 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -488,8 +525,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query3.valid?
     results3 = query3.results
 
-    assert_includes results3, sample1
-    assert_not_includes results3, sample2
+    assert_includes results3, sample3
+    assert_not_includes results3, sample4
 
     search_params4 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -502,10 +539,42 @@ class QueryTest < ActiveSupport::TestCase
     assert query4.valid?
     results4 = query4.results
 
-    assert_not_includes results4, sample1
-    assert_includes results4, sample2
+    assert_not_includes results4, sample3
+    assert_includes results4, sample4
 
     search_params5 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                      { '0': { field: 'metadata.date_field', operator: 'date_exists' } }
+                       } },
+                       project_ids: [project.id] }
+    query5 = Sample::Query.new(search_params5)
+    assert query5.advanced_query?
+    assert query5.valid?
+    results5 = query5.results
+
+    assert_includes results5, sample3
+    assert_includes results5, sample4
+    assert_not_includes results5, sample5
+    assert_not_includes results5, sample6
+
+    search_params6 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                     { '0': { field: 'metadata.date_field', operator: 'date_not_exists' } }
+                       } },
+                       project_ids: [project.id] }
+    query6 = Sample::Query.new(search_params6)
+    assert query6.advanced_query?
+    assert query6.valid?
+    results6 = query6.results
+
+    assert_not_includes results6, sample3
+    assert_not_includes results6, sample4
+    assert_includes results6, sample5
+    assert_includes results6, sample6
+
+    search_params7 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
                          conditions_attributes:
                        { '0': {
@@ -515,22 +584,22 @@ class QueryTest < ActiveSupport::TestCase
                        } },
 
                        project_ids: [project.id] }
-    query5 = Sample::Query.new(search_params5)
-    assert query5.advanced_query?
-    assert query5.valid?
-    results5 = query5.results
+    query7 = Sample::Query.new(search_params7)
+    assert query7.advanced_query?
+    assert query7.valid?
+    results7 = query7.results
 
-    assert_not_includes results5, sample1
-    assert_not_includes results5, sample2
+    assert_not_includes results7, sample3
+    assert_not_includes results7, sample4
   end
 
   test 'metadata date not equals operator with null and non-date values' do
-    project = projects(:project1)
-    sample1 = samples(:sample1)
-    sample2 = samples(:sample2)
-    sample30 = samples(:sample30)
-    sample1.update(metadata: { 'date_field' => '2026-01-01' })
-    sample30.update(metadata: { 'date_field' => 'not_a_date' })
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
+    sample5 = samples(:sample5)
+    sample3.update(metadata: { 'date_field' => '2026-01-01' })
+    sample5.update(metadata: { 'date_field' => 'not_a_date' })
 
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
@@ -543,17 +612,18 @@ class QueryTest < ActiveSupport::TestCase
     assert query.valid?
     results = query.results
 
-    assert_not_includes results, sample1
-    assert_includes results, sample2
-    assert_includes results, sample30
+    assert_not_includes results, sample3
+    assert_includes results, sample4
+    assert_includes results, sample5
   end
 
   test 'metadata text operators' do
-    project = projects(:project1)
-    sample1 = samples(:sample1)
-    sample2 = samples(:sample2)
-    sample1.update(metadata: { 'text_field' => 'abc' })
-    sample2.update(metadata: { 'text_field' => 'xyz' })
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
+    samples(:sample5)
+    sample3.update(metadata: { 'text_field' => 'abc' })
+    sample4.update(metadata: { 'text_field' => 'xyz' })
 
     search_params1 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -566,8 +636,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query1.valid?
     results1 = query1.results
 
-    assert_includes results1, sample1
-    assert_includes results1, sample2
+    assert_includes results1, sample3
+    assert_includes results1, sample4
 
     search_params2 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -580,8 +650,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query2.valid?
     results2 = query2.results
 
-    assert_includes results2, sample1
-    assert_not_includes results2, sample2
+    assert_includes results2, sample3
+    assert_not_includes results2, sample4
 
     search_params3 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -594,8 +664,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query3.valid?
     results3 = query3.results
 
-    assert_includes results3, sample1
-    assert_not_includes results3, sample2
+    assert_includes results3, sample3
+    assert_not_includes results3, sample4
 
     search_params4 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -608,8 +678,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query4.valid?
     results4 = query4.results
 
-    assert_includes results4, sample1
-    assert_not_includes results4, sample2
+    assert_includes results4, sample3
+    assert_not_includes results4, sample4
 
     search_params5 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -622,8 +692,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query5.valid?
     results5 = query5.results
 
-    assert_not_includes results5, sample1
-    assert_includes results5, sample2
+    assert_not_includes results5, sample3
+    assert_includes results5, sample4
 
     search_params6 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -636,8 +706,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query6.valid?
     results6 = query6.results
 
-    assert_includes results6, sample1
-    assert_not_includes results6, sample2
+    assert_includes results6, sample3
+    assert_not_includes results6, sample4
 
     search_params7 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -650,8 +720,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query7.valid?
     results7 = query7.results
 
-    assert_includes results7, sample1
-    assert_not_includes results7, sample2
+    assert_includes results7, sample3
+    assert_not_includes results7, sample4
 
     search_params8 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -664,8 +734,8 @@ class QueryTest < ActiveSupport::TestCase
     assert query8.valid?
     results8 = query8.results
 
-    assert_not_includes results8, sample1
-    assert_not_includes results8, sample2
+    assert_not_includes results8, sample3
+    assert_not_includes results8, sample4
 
     search_params9 = { sort: 'updated_at desc',
                        groups_attributes: { '0': {
@@ -679,7 +749,40 @@ class QueryTest < ActiveSupport::TestCase
     assert query9.valid?
     results9 = query9.results
 
-    assert_not_includes results9, sample1
-    assert_includes results9, sample2
+    assert_not_includes results9, sample3
+    assert_includes results9, sample4
+  end
+
+  test 'exists on metadata' do
+    project = projects(:project2)
+    sample3 = samples(:sample3)
+    sample4 = samples(:sample4)
+    sample3.update(metadata: { 'custom_field' => 'test_value' })
+
+    search_params1 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.custom_field', operator: 'exists' } }
+                       } },
+                       project_ids: [project.id] }
+    query1 = Sample::Query.new(search_params1)
+    assert query1.advanced_query?
+    assert query1.valid?
+    results1 = query1.results
+    assert_includes results1, sample3
+    assert_not_includes results1, sample4
+
+    search_params2 = { sort: 'updated_at desc',
+                       groups_attributes: { '0': {
+                         conditions_attributes:
+                       { '0': { field: 'metadata.custom_field', operator: 'not_exists' } }
+                       } },
+                       project_ids: [project.id] }
+    query2 = Sample::Query.new(search_params2)
+    assert query2.advanced_query?
+    assert query2.valid?
+    results2 = query2.results
+    assert_not_includes results2, sample3
+    assert_includes results2, sample4
   end
 end
