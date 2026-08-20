@@ -58,15 +58,17 @@ jobs:
 
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
+        with:
+          cache: true
 
-      - name: Use Node.js 24
-        uses: actions/setup-node@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 24.14.1
-          cache: "pnpm"
+          cache: 'pnpm'
 
-      - name: Install JavaScript dependencies
-        run: pnpm install
+      - name: Install javascript dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Prepare RuboCop cache
         uses: actions/cache@v6
@@ -106,15 +108,17 @@ jobs:
 
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
+        with:
+          cache: true
 
-      - name: Use Node.js 24
-        uses: actions/setup-node@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 24.14.1
-          cache: "pnpm"
+          cache: 'pnpm'
 
-      - name: Install JavaScript dependencies
-        run: pnpm install
+      - name: Install javascript dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Run JavaScript tests
         run: pnpm run test:js
@@ -143,9 +147,6 @@ jobs:
           - 8888:8888
 
     steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y curl libjemalloc2 libvips
-
       - name: Checkout code
         uses: actions/checkout@v7
 
@@ -156,15 +157,17 @@ jobs:
 
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
+        with:
+          cache: true
 
-      - name: Use Node.js 24
-        uses: actions/setup-node@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 24.14.1
-          cache: "pnpm"
+          cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install javascript dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Install icons
         run: |
@@ -200,9 +203,6 @@ jobs:
           - 8888:8888
 
     steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y curl libjemalloc2 libvips
-
       - name: Checkout code
         uses: actions/checkout@v7
 
@@ -213,15 +213,17 @@ jobs:
 
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
+        with:
+          cache: true
 
-      - name: Use Node.js 24
-        uses: actions/setup-node@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 24.14.1
-          cache: "pnpm"
+          cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install javascript dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Cache Playwright Chromium browser
         id: playwright-cache
@@ -240,9 +242,6 @@ jobs:
 
       - name: Install icons
         run: bin/rails generate rails_icons:install --libraries=phosphor heroicons
-
-      - name: Precompile assets
-        run: bin/rails assets:precompile
 
       - name: Run System Tests
         env:
@@ -289,15 +288,17 @@ jobs:
 
       - name: Set up PNPM
         uses: pnpm/action-setup@v6
+        with:
+          cache: true
 
-      - name: Use Node.js 24
-        uses: actions/setup-node@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 24.14.1
-          cache: "pnpm"
+          cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install javascript dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Download Sapporo
         uses: actions/checkout@v7
