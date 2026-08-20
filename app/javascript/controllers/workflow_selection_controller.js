@@ -14,6 +14,7 @@ export default class extends Controller {
   static outlets = ["selection"];
 
   connect() {
+    console.log(this.sampleCountValue);
     this.boundAmendForm = this.amendForm.bind(this);
     this.boundOnSuccess = this.onSuccess.bind(this);
 
