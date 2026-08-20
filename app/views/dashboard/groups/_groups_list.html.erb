@@ -61,7 +61,7 @@
     </div>
   <% else %>
     <div class="empty_state_message">
-      <%= viral_empty(
+      <%= render Viral::EmptyStateComponent.new(
         icon_name: Group.icon,
         title: empty_title,
         description: empty_description
