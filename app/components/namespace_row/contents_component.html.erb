@@ -38,12 +38,12 @@
     ) %>
 
     <% if @namespace.public? %>
-      <%= viral_pill(
-                text: t(:"components.namespace_row.contents_component.shared_namespaces.public"),
-                color: :yellow,
-                border: true,
-                classes: "ml-2"
-              ) %>
+      <%= render Viral::PillComponent.new(
+              text: t(:"components.namespace_row.contents_component.shared_namespaces.public"),
+              color: :yellow,
+              border: true,
+              classes: "ml-2",
+            ) %>
     <% end %>
   </div>
 
