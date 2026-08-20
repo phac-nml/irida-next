@@ -3,48 +3,7 @@
 module Nextflow
   # @label Base Component
   class BaseComponentPreview < ViewComponent::Preview
-    def default_v1(schema_file: 'nextflow_schema.json')
-      Flipper.disable(:v2_samplesheet)
-      sample1 = Sample.first
-      sample2 = Sample.second
-
-      render NextflowComponent.new(
-        workflow: default_workflow(schema_file),
-        url: 'no_where',
-        samples: [sample1, sample2],
-        fields: %w[metadata1 metadata2 metadata3],
-        namespace_id: 'SDFSDFSDF'
-      )
-    end
-
-    def with_overrides_v1
-      Flipper.disable(:v2_samplesheet)
-
-      render NextflowComponent.new(
-        workflow: with_overrides_workflow,
-        url: 'no_where',
-        samples: [],
-        fields: [],
-        namespace_id: 'SDFSDFSDF'
-      )
-    end
-
-    def with_values_v1(schema_file: 'mikrokondo/nextflow_schema.json')
-      Flipper.disable(:v2_samplesheet)
-
-      render NextflowComponent.new(
-        workflow: with_values_workflow(schema_file),
-        url: 'no_where',
-        samples: [],
-        fields: [],
-        namespace_id: 'SDFSDFSDF',
-        instance: create_instance
-      )
-    end
-
-    def default_v2(schema_file: 'nextflow_schema.json')
-      Flipper.enable(:v2_samplesheet)
-
+    def default(schema_file: 'nextflow_schema.json')
       render NextflowComponent.new(
         workflow: default_workflow(schema_file),
         url: 'no_where',
@@ -54,9 +13,7 @@ module Nextflow
       )
     end
 
-    def with_overrides_v2
-      Flipper.enable(:v2_samplesheet)
-
+    def with_overrides
       render NextflowComponent.new(
         workflow: with_overrides_workflow,
         url: 'no_where',
@@ -66,9 +23,7 @@ module Nextflow
       )
     end
 
-    def with_values_v2(schema_file: 'mikrokondo/nextflow_schema.json')
-      Flipper.enable(:v2_samplesheet)
-
+    def with_values(schema_file: 'mikrokondo/nextflow_schema.json')
       render NextflowComponent.new(
         workflow: with_values_workflow(schema_file),
         url: 'no_where',

@@ -3,8 +3,7 @@
 require 'application_system_test_case'
 
 module WorkflowExecutions
-  ### TODO: Rename this file to submissions_test.rb once feature flag v2_samplesheet is retired
-  class SubmissionsV2Test < ApplicationSystemTestCase
+  class SubmissionsTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
 
     setup do
@@ -30,8 +29,6 @@ module WorkflowExecutions
       @attachment_rev3 = attachments(:attachmentPEREV3)
       @attachment_fwd43 = attachments(:attachmentPEFWD43)
       @attachment_rev43 = attachments(:attachmentPEREV43)
-
-      Flipper.enable(:v2_samplesheet)
     end
 
     # used by test 'chunked samples request' to create thousands of samples to test chunked retrieval

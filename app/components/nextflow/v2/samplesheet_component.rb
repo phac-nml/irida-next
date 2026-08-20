@@ -2,7 +2,7 @@
 
 module Nextflow
   module V2
-    # Render the contents of a Nextflow samplesheet to a table for feature flag :v2_samplesheet
+    # Render the contents of a Nextflow samplesheet to a table
     class SamplesheetComponent < Component
       attr_reader :properties, :required_properties, :metadata_fields, :namespace_id, :workflow_params, :sample_count
 

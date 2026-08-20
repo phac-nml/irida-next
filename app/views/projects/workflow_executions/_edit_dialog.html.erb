@@ -1,9 +1,11 @@
+<%# locals: {open:, workflow_execution:) %>
+
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(
     title:
       t(
         "projects.workflow_executions.edit_dialog.title",
-        workflow_execution_id: @workflow_execution.id,
+        workflow_execution_id: workflow_execution.id,
       ),
   ) %>
 
@@ -11,7 +13,7 @@
     <p class="dark:text-slate-400">
       <%= t(
         "projects.workflow_executions.edit_dialog.description",
-        workflow_execution_id: @workflow_execution.id,
+        workflow_execution_id: workflow_execution.id,
       ) %>
     </p>
   </div>
@@ -21,20 +23,20 @@
 
     <%= form_error_summary(form) %>
 
-    <% invalid_name = @workflow_execution.errors.include?(:name) %>
+    <% invalid_name = workflow_execution.errors.include?(:name) %>
 
     <div class="form-field <%= 'invalid' if invalid_name %>">
       <%= form.label :name, data: { required: true } %>
 
       <%= form.text_field :name,
-                      value: @workflow_execution.name,
+                      value: workflow_execution.name,
                       placeholder:
                         t("projects.workflow_executions.edit_dialog.name_placeholder") %>
 
       <% if invalid_name %>
         <%= render "shared/form/field_errors",
               id: form.field_id(:name, "error"),
-              errors: @workflow_execution.errors.full_messages_for(:name) %>
+              errors: workflow_execution.errors.full_messages_for(:name) %>
       <% end %>
     </div>
 

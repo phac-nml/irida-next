@@ -3,9 +3,7 @@
 require 'view_component_test_case'
 
 class NextflowComponentTest < ViewComponentTestCase
-  test 'default v2' do
-    Flipper.enable(:v2_samplesheet)
-
+  test 'default' do
     render_inline NextflowComponent.new(
       workflow: default_workflow,
       sample_count: 2,
@@ -22,30 +20,7 @@ class NextflowComponentTest < ViewComponentTestCase
     end
   end
 
-  test 'default v1' do
-    Flipper.disable(:v2_samplesheet)
-    sample43 = samples(:sample43)
-    sample44 = samples(:sample44)
-
-    render_inline NextflowComponent.new(
-      workflow: default_workflow,
-      samples: [sample43, sample44],
-      url: 'https://nf-co.re/testpipeline',
-      namespace_id: projects(:project1).namespace,
-      fields: %w[metadata_1 metadata_2 metadata_3]
-    )
-
-    assert_selector 'form' do
-      assert_selector 'h1', text: 'phac-nml/iridanextexample', count: 1
-      assert_selector 'input[type=text][name="workflow_execution[name]"]'
-      assert_selector 'input[type=checkbox][name="workflow_execution[shared_with_namespace]"]'
-      assert_text I18n.t(:'components.nextflow.shared_with.project')
-    end
-  end
-
-  test 'with overrides v2' do
-    Flipper.enable(:v2_samplesheet)
-
+  test 'with overrides' do
     I18n.with_locale :en do
       render_inline NextflowComponent.new(
         workflow: with_overrides_workflow,
@@ -73,39 +48,7 @@ class NextflowComponentTest < ViewComponentTestCase
     end
   end
 
-  test 'with overrides v1' do
-    Flipper.disable(:v2_samplesheet)
-
-    I18n.with_locale :en do
-      render_inline NextflowComponent.new(
-        workflow: with_overrides_workflow,
-        samples: [],
-        url: 'https://github.com/phac-nml/mikrokondo',
-        namespace_id: 'SDSDDFDSFDS',
-        fields: []
-      )
-
-      assert_selector 'form' do
-        assert_selector 'h1', text: 'Mikrokondo pipeline', count: 1
-        assert_text 'Mikrokondo pipeline example'
-        assert_text 'Databases and Pre-Computed Files'
-        assert_text 'The location of databases used by mikrokondo'
-        assert_text 'Kraken2 database'
-        assert_selector 'select[name="workflow_execution[workflow_params][kraken2_db]"] option[value="PATH_TO_DB"]',
-                        text: 'DBNAME'
-        # verify that the file-path property with enum renders a select instead of a file selector
-        assert_selector 'select[name="workflow_execution[workflow_params][dehosting_idx]"]', count: 1
-        assert_selector 'select[name="workflow_execution[workflow_params][dehosting_idx]"]
-                         option[value="PATH_TO_REF_SKETCH"]',
-                        text: 'REF_SKETCH'
-        assert_no_selector 'a[id$="_dehosting_idx_link"]'
-      end
-    end
-  end
-
-  test 'with overrides in french v2' do
-    Flipper.enable(:v2_samplesheet)
-
+  test 'with overrides in french' do
     I18n.with_locale :fr do
       render_inline NextflowComponent.new(
         workflow: with_overrides_workflow,
@@ -127,63 +70,10 @@ class NextflowComponentTest < ViewComponentTestCase
     end
   end
 
-  test 'with overrides in french v1' do
-    Flipper.disable(:v2_samplesheet)
-
-    I18n.with_locale :fr do
-      render_inline NextflowComponent.new(
-        workflow: with_overrides_workflow,
-        samples: [],
-        url: 'https://github.com/phac-nml/mikrokondo',
-        namespace_id: 'SDSDDFDSFDS',
-        fields: []
-      )
-
-      assert_selector 'form' do
-        assert_selector 'h1', text: 'Pipeline Mikrokondo', count: 1
-        assert_text 'Exemple Pipeline Mikrokondo'
-        assert_text 'Bases de données et fichiers pré-calculés'
-        assert_text "L'emplacement des bases de données utilisées par mikrokondo"
-        assert_text 'Base de données Kraken2'
-        assert_selector 'select[name="workflow_execution[workflow_params][kraken2_db]"] option[value="PATH_TO_DB"]',
-                        text: 'DBNAME'
-      end
-    end
-  end
-
-  test 'with values v2' do
-    Flipper.enable(:v2_samplesheet)
+  test 'with values' do
     render_inline NextflowComponent.new(
       workflow: with_values_workflow,
       sample_count: nil,
-      url: 'https://nf-co.re/testpipeline',
-      namespace_id: projects(:project1).namespace,
-      fields: %w[metadata_1 metadata_2 metadata_3],
-      instance: with_values_instance
-    )
-
-    # rubocop:disable Layout/LineLength
-    assert_selector 'form' do
-      assert_selector ' input[name="workflow_execution[name]"][value="Test Instance"]', count: 1
-      assert_selector 'input[name="workflow_execution[workflow_params][kraken2_db]"][value="PATH_TO_DB"]', count: 1
-      assert_selector 'input[type="radio"][name="workflow_execution[workflow_params][run_kraken]"][value="true"][checked="checked"]',
-                      count: 1
-      assert_no_selector 'input[type="radio"][name="workflow_execution[workflow_params][run_kraken]"][value="false"][checked="checked"]'
-
-      assert_selector 'input[type="radio"][name="workflow_execution[workflow_params][skip_depth_sampling]"][value="false"][checked="checked"]',
-                      count: 1
-      assert_no_selector 'input[type="radio"][name="workflow_execution[workflow_params][skip_depth_sampling]"][value="true"][checked="checked"]'
-      assert_no_selector 'input[type=checkbox][name="workflow_execution[shared_with_namespace]"]'
-    end
-    # rubocop:enable Layout/LineLength
-  end
-
-  test 'with values v1' do
-    Flipper.disable(:v2_samplesheet)
-
-    render_inline NextflowComponent.new(
-      workflow: with_values_workflow,
-      samples: [],
       url: 'https://nf-co.re/testpipeline',
       namespace_id: projects(:project1).namespace,
       fields: %w[metadata_1 metadata_2 metadata_3],
