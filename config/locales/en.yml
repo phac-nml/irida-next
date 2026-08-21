@@ -493,9 +493,9 @@ en:
     groups:
       index:
         create_group_button: New group
-        no_groups_description: You currently have no groups.
-        no_groups_title: No groups
-        no_public_groups_description: You currently have no public groups.
+        no_groups_description: You have no private groups.
+        no_groups_title: No private groups
+        no_public_groups_description: You have no public groups.
         no_public_groups_title: No public groups
         private: Private
         public: Public
