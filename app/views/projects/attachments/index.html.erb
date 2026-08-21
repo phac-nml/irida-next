@@ -44,6 +44,8 @@
       attachments: @attachments,
       pagy: @pagy,
       q: @q,
+      search: @query,
+      search_url: namespace_project_attachments_path(@project.parent, @project),
       namespace: @project.namespace,
       render_individual_attachments: @render_individual_attachments,
       has_attachments: @has_attachments,
