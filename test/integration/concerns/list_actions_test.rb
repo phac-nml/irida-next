@@ -19,6 +19,10 @@ module Concerns
         list_class: 'attachment'
       }
       assert_response :success
+
+      assert_match pe_fwd_attachment.puid, response.body
+      assert_match pe_rev_attachment.puid, response.body
+      assert_match non_pe_attachment.puid, response.body
     end
   end
 end

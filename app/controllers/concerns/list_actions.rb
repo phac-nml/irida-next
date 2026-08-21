@@ -4,7 +4,7 @@
 module ListActions
   extend ActiveSupport::Concern
 
-  def list # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def list # rubocop:disable Metrics/AbcSize
     @page = params[:page].to_i
     case params[:list_class]
     when 'sample'
@@ -13,16 +13,8 @@ module ListActions
       @workflow_executions = WorkflowExecution.where(id: params[:workflow_execution_ids])
     when 'attachment'
       authorize! @project, to: :read_sample?
-      # handles flattening attachment_ids where PE files come in as a nested array and need further parsing
-      # PE files are outputted as individual ids
-      flattened_attachment_ids = params[:attachment_ids].flat_map do |item|
-        parsed = JSON.parse(item)
-        parsed.is_a?(Array) ? parsed : item
-      rescue JSON::ParserError
-        item
-      end
 
-      @attachments = @sample.attachments.with_attached_file.where(id: flattened_attachment_ids)
+      @attachments = @sample.attachments.with_attached_file.where(id: params[:attachment_ids])
     end
 
     respond_to do |format|

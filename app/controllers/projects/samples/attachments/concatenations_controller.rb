@@ -17,7 +17,6 @@ module Projects
                                                    partial: 'modal',
                                                    locals: {
                                                      open: true,
-                                                     concatenation_params: nil,
                                                      concatenation_form: @concatenation_form,
                                                      sample: @sample
                                                    }), status: :ok
