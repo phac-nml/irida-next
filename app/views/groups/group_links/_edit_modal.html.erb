@@ -96,7 +96,7 @@ html: { novalidate: true }) do |form| %>
       </div>
 
       <div class="flex justify-start gap-1">
-        <%= render Pathogen::CancelButtonComponent.new(data: { action: "click->viral--dialog#close" }) %>
+        <%= render CancelButtonComponent.new(data: { action: "click->viral--dialog#close" }) %>
 
         <%= form.submit I18n.t('common.actions.save'),
                     tone: :primary,

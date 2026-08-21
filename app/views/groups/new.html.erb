@@ -14,7 +14,7 @@
       } %>
 
       <div class="flex gap-2">
-        <%= render Pathogen::CancelButtonComponent.new(href: groups_path) %>
+        <%= render CancelButtonComponent.new(href: groups_path) %>
         <%= form.submit t(:"groups.create.submit"), tone: :primary, emphasis: :solid %>
       </div>
     </div>

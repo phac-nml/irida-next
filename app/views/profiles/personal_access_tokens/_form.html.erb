@@ -12,7 +12,7 @@
       } %>
 
       <div class="my-2 flex gap-2">
-        <%= render Pathogen::CancelButtonComponent.new(
+        <%= render CancelButtonComponent.new(
           data: {
             action: "personal-access-tokens#removeAddNewTokenForm",
             "personal-access-tokens-target": "cancel-button",

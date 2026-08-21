@@ -117,7 +117,7 @@
     </div>
 
     <div class="flex justify-start gap-1">
-      <%= render Pathogen::CancelButtonComponent.new(data: { action: "click->viral--dialog#close" }) %>
+      <%= render CancelButtonComponent.new(data: { action: "click->viral--dialog#close" }) %>
 
       <%= form.submit t(:"groups.members.new.add_member_to_group"),
                     tone: :primary,

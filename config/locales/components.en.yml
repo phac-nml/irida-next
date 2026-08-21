@@ -217,6 +217,8 @@ en:
       dropdown:
         aria_label: Breadcrumb dropdown
       navigation_aria_label: Breadcrumb navigation
+    cancel_button:
+      cancel: Cancel
     clipboard:
       copied: Copied!
     confirmation:
@@ -357,9 +359,6 @@ en:
       processing_request: Processing your submission, this may take some time.
       processing_samplesheet: Processing samplesheet
       samplesheet_processing_error: An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples.
-    pathogen:
-      cancel_button:
-        cancel: Cancel
     project_dashboard:
       activity_title: Latest Activity
       info_title: Project Information

@@ -217,6 +217,8 @@ fr:
       dropdown:
         aria_label: Menu déroulant du fil d’Ariane
       navigation_aria_label: Navigation du fil d'Ariane
+    cancel_button:
+      cancel: Annuler
     clipboard:
       copied: Copié!
     confirmation:
@@ -357,9 +359,6 @@ fr:
       processing_request: Le traitement de votre soumission peut prendre un certain temps.
       processing_samplesheet: Feuille d'échantillons de traitement
       samplesheet_processing_error: Une erreur s'est produite lors du traitement de votre demande. Veuillez relancer l’exécution du flux de travail. Si le problème persiste, désélectionnez puis resélectionnez les échantillons.
-    pathogen:
-      cancel_button:
-        cancel: Annuler
     project_dashboard:
       activity_title: Dernière activité
       info_title: Renseignements sur le projet
