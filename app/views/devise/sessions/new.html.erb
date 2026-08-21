@@ -31,15 +31,16 @@
                     },
                     params: params,
                     form_class: "w-full",
-                    tone: :neutral, emphasis: :outline, block: true,
-                    text: t(".omniauth", provider: provider_text) do |button| %>
-            <% button.with_leading_visual do %>
+                    tone: :neutral, emphasis: :outline, block: true do %>
+            <span class="inline-flex items-center justify-center gap-2">
               <% if Rails.configuration.auth_config["#{provider}_icon"] %>
                 <%= render Viral::IconComponent.new(name: "#{provider}_icon", classes: "size-4") %>
               <% else %>
                 <%= render Viral::IconComponent.new(name: provider, classes: "size-4") %>
               <% end %>
-            <% end %>
+
+              <span><%= t(".omniauth", provider: provider_text) %></span>
+            </span>
           <% end %>
         <% end %>
         <% if password_authentication_enabled? %>

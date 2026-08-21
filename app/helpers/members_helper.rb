@@ -23,7 +23,7 @@ module MembersHelper
   private
 
   def resolved_group_url(namespace)
-    if respond_to?(:helpers) && helpers.respond_to?(:group_url)
+    if respond_to?(:helpers)
       helpers.group_url(namespace)
     else
       group_url(namespace)
