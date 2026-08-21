@@ -1908,6 +1908,8 @@ fr:
         submit_button: Envoyer
         title: Copier des échantillons
     deletions:
+      create:
+        error: 'Les échantillons n’ont pas pu être supprimés pour les raisons suivantes :'
       destroy:
         no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
         partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
@@ -2006,6 +2008,8 @@ fr:
         sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
         samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans le projet source: %{sample_ids}'
         unauthorized: 'Vous n’avez pas la permission de copier les échantillons suivants avec les identifiants d’échantillon : %{sample_ids}'
+      destroy:
+        active_workflow_executions: 'Les échantillons avec les identifiants PUID suivants sont actuellement utilisés par une exécution de flux de travail : %{sample_puids}'
       metadata:
         bulk_update:
           duplicate_identifier: 'Échantillon %{sample_identifier}: Plusieurs échantillons avec identifiant "%{sample_identifier}"'
@@ -2029,6 +2033,7 @@ fr:
           value_required: La valeur de métadonnées est requise.
         user_cannot_update_metadata: Les champs de métadonnées '%{metadata_fields}' de l’échantillon '%{sample_name}' ne peuvent pas être écrasés par un utilisateur puisqu’ils ont été précédemment mis à jour avec une analyse.
       transfer:
+        active_workflow_executions: 'Les échantillons avec les identifiants PUID suivants sont actuellement utilisés par une exécution de flux de travail : %{sample_puids}'
         empty_new_project_id: Le projet de destination n’a pas été sélectionné.
         empty_sample_ids: Les identifiants de l’échantillon sont vides.
         maintainer_transfer_not_allowed: Un responsable ne peut transférer des échantillons qu’à d’autres projets dans la même hiérarchie avec un ancêtre commun

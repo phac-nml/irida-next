@@ -17,6 +17,7 @@ module Irida
         data_grid_samples_table
         global_groups
         sample_deletion_reason
+        prevent_sample_deletions_and_transfers_with_active_workflows
         v2_dropdown
         v2_prefixed_select2
         v2_select2

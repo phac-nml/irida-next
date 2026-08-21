@@ -15,7 +15,7 @@ module Samples
       @broadcast_target = "samples_destroy_#{SecureRandom.uuid}"
     end
 
-    def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def destroy
       if Flipper.enabled?(:sample_deletion_reason, current_user)
         @sample_deletion_form = SampleDeletionForm.new(reason: destroy_params[:reason])
         return render status: :unprocessable_content unless @sample_deletion_form.valid?
@@ -25,20 +25,12 @@ module Samples
 
       deleted_samples_count = destroy_service
 
-      # No selected samples deleted
-      if deleted_samples_count.zero?
-        flash[:error] = t('.no_deleted_samples')
-      # Partial sample deletion
-      elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
-        flash[:success] = t('.partial_success', deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
-        flash[:error] = t('.partial_error',
-                          not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
-      # All samples deleted successfully
+      if @namespace.errors.empty?
+        set_deletion_flash_messages(deleted_samples_count, samples_to_delete_count)
+        redirect_to redirect_path, status: :see_other
       else
-        flash[:success] = t('.success', count: deleted_samples_count)
+        render_deletion_errors
       end
-
-      redirect_to redirect_path, status: :see_other
     end
 
     private
@@ -57,7 +49,7 @@ module Samples
 
     def destroy_params
       # Make reason optional by only extracting what's provided
-      deletion_params = params.expect(deletion: [{ sample_ids: [] }])
+      deletion_params = params.expect(deletion: { sample_ids: [] })
       if Flipper.enabled?(:sample_deletion_reason, current_user)
         deletion_params[:reason] = params.dig(:deletion, :reason)
       end
@@ -70,6 +62,30 @@ module Samples
       else
         Projects::Samples::DestroyService.new(@namespace, current_user, destroy_params).execute
       end
+    end
+
+    def set_deletion_flash_messages(deleted_count, total_count)
+      if deleted_count.zero?
+        flash[:error] = t('samples.deletions.destroy.no_deleted_samples')
+      elsif deleted_count.positive? && deleted_count != total_count
+        flash[:success] =
+          t('samples.deletions.destroy.partial_success',
+            deleted: "#{deleted_count}/#{total_count}")
+        flash[:error] = t('samples.deletions.destroy.partial_error',
+                          not_deleted: "#{total_count - deleted_count}/#{total_count}")
+      else
+        flash[:success] = t('samples.deletions.destroy.success', count: deleted_count)
+      end
+    end
+
+    def render_deletion_errors
+      render turbo_stream: turbo_stream.update('samples_dialog',
+                                               partial: @confirmation_dialog,
+                                               locals: {
+                                                 errors: @namespace.errors.full_messages,
+                                                 open: true,
+                                                 closable: false
+                                               }), status: :unprocessable_content
     end
 
     def redirect_path

@@ -1904,6 +1904,8 @@ en:
         submit_button: Submit
         title: Copy Samples
     deletions:
+      create:
+        error: 'Samples could not be deleted for the following reasons:'
       destroy:
         no_deleted_samples: Selected samples could not be deleted
         partial_error: "%{not_deleted} samples could not be deleted"
@@ -2002,6 +2004,8 @@ en:
         sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
         samples_not_found: 'Samples with the following sample ids could not be copied as they were not found in the source project: %{sample_ids}'
         unauthorized: 'You do not have permission to copy the following samples with sample ids: %{sample_ids}'
+      destroy:
+        active_workflow_executions: 'Samples with the following puids are currently in use by a workflow execution: %{sample_puids}'
       metadata:
         bulk_update:
           duplicate_identifier: 'Sample %{sample_identifier}: Multiple samples with identifier "%{sample_identifier}"'
@@ -2025,6 +2029,7 @@ en:
           value_required: Metadata value is required
         user_cannot_update_metadata: Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis.
       transfer:
+        active_workflow_executions: 'Samples with the following puids are currently in use by a workflow execution: %{sample_puids}'
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
         maintainer_transfer_not_allowed: A maintainer can only transfer samples to other projects within the same hierarchy with a common ancestor

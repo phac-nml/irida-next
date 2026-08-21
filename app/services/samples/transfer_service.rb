@@ -29,8 +29,8 @@ module Samples
     # @param broadcast_target [String, nil] optional Turbo broadcast target for progress updates
     #
     # @return [Array<Integer>] IDs of successfully transferred samples
-    # @raise [BaseSampleService::BaseError] on validation or authorization failures
-    def execute(new_project_id, sample_ids, broadcast_target = nil)
+    # @raise [BaseSampleService::BaseError, TransferService::TransferError] on validation or authorization failures
+    def execute(new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/MethodLength
       # Authorize if user can transfer samples from the current project
       if @namespace.group_namespace?
         authorize! @namespace, to: :transfer_sample?
@@ -39,6 +39,10 @@ module Samples
       end
 
       validate(sample_ids, 'transfer', new_project_id)
+
+      if Flipper.enabled?(:prevent_sample_deletions_and_transfers_with_active_workflows)
+        validate_no_active_workflow_executions(sample_ids)
+      end
 
       authorize_new_project(new_project_id, :transfer_sample_into_project?)
 
@@ -50,6 +54,23 @@ module Samples
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
       @namespace.errors.add(:base, e.message)
       []
+    end
+
+    # Validate that samples do not have active workflow executions.
+    #
+    # Prevents transferring samples that are currently being used in a workflow execution.
+    # Active workflow states are: initial, prepared, submitted, running.
+    #
+    # @param sample_ids [Array<Integer>] IDs of samples to check
+    # @raise [TransferError] if any samples have active workflow executions
+    def validate_no_active_workflow_executions(sample_ids)
+      active_workflow_sample_puids = active_workflow_execution_sample_puids(sample_ids)
+
+      return if active_workflow_sample_puids.empty?
+
+      raise TransferError,
+            I18n.t('services.samples.transfer.active_workflow_executions',
+                   sample_puids: active_workflow_sample_puids.join(', '))
     end
 
     # Validate that a maintainer can transfer samples between projects.

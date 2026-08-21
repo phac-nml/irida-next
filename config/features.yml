@@ -12,12 +12,14 @@ features:
     admin_manageable: true
     description:
       en: "Disable using standard operators on metadata fields in GraphQL"
-      fr: "Désactiver l'utilisation des opérateurs standard sur les champs de métadonnées\
+      fr:
+        "Désactiver l'utilisation des opérateurs standard sur les champs de métadonnées\
         \ dans GraphQL"
     enable_in_development: false
     name:
       en: "Advanced Search Disable Standard Operators for Metadata in GraphQL"
-      fr: "Recherche avancée : désactiver les opérateurs standard pour les métadonnées\
+      fr:
+        "Recherche avancée : désactiver les opérateurs standard pour les métadonnées\
         \ dans GraphQL"
   advanced_search_metadata_operators:
     admin_manageable: true
@@ -31,9 +33,11 @@ features:
   advanced_search_with_auto_complete:
     admin_manageable: true
     description:
-      en: "Enable auto-complete suggestions for the field dropdown within the advanced\
+      en:
+        "Enable auto-complete suggestions for the field dropdown within the advanced\
         \ search dialog."
-      fr: "Activer les suggestions de saisie semi-automatique dans la liste des champs\
+      fr:
+        "Activer les suggestions de saisie semi-automatique dans la liste des champs\
         \ de la recherche avancée."
     enable_in_development: true
     name:
@@ -58,7 +62,8 @@ features:
       en: "Client-Side Linelist Imports"
       fr: "Importations de listes linéaires côté client"
   compose_with_retry:
-    description: "Exponentially backoff and retry failed compose operations. This\
+    description:
+      "Exponentially backoff and retry failed compose operations. This\
       \ is intended to mitigate transient errors in the compose process."
     enable_in_development: true
   data_grid_samples_table:
@@ -74,7 +79,8 @@ features:
     admin_manageable: true
     description:
       en: "Enable groups to be marked as public so that all users have access"
-      fr: "Permettre de marquer les groupes comme publics afin que tous les utilisateurs\
+      fr:
+        "Permettre de marquer les groupes comme publics afin que tous les utilisateurs\
         \ y aient accès"
     enable_in_development: true
     name:
@@ -92,6 +98,21 @@ features:
     name:
       en: "Sample Deletion Reason"
       fr: "Raison de suppression d'échantillon"
+  prevent_sample_deletions_and_transfers_with_active_workflows:
+    admin_manageable: true
+    description:
+      en:
+        "Prevent sample deletions and transfers if the sample is currently in use\
+        \ by a workflow execution."
+      fr:
+        "Empêcher la suppression et le transfert d'échantillons si l'échantillon\
+        \ est actuellement utilisé par une exécution de flux de travail."
+    enable_in_development: true
+    name:
+      en: "Prevent Sample Deletions and Transfers with Active Workflows"
+      fr:
+        "Empêcher la suppression et le transfert d'échantillons avec des flux de\
+        \ travail actifs"
   v2_dropdown:
     admin_manageable: true
     description:
