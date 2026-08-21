@@ -7,7 +7,7 @@ module WorkflowExecutions
 
     respond_to :turbo_stream
     before_action :workflows
-    before_action :sample_count, only: %i[create]
+    before_action :sample_count, only: %i[create pipeline_selection]
     before_action :workflow, only: %i[create]
     before_action :namespace_id, only: %i[create pipeline_selection]
     before_action :samplesheet_params, only: %i[samplesheet]

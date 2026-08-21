@@ -1,4 +1,4 @@
-<%# locals: (workflows:, namespace_id:) %>
+<%# locals: (workflows:, namespace_id:, sample_count:) %>
 
 <%= render Viral::DialogComponent.new(open: true) do |dialog| %>
   <% dialog.with_header(
@@ -7,7 +7,7 @@
 
   <% field_name = "sample_count" %>
 
-  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": field_name, "workflow-selection-unavailable-label-value": t("workflow_executions.submissions.pipeline_selection.unavailable") }) do %>
+  <%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": field_name, "workflow-selection-unavailable-label-value": t("workflow_executions.submissions.pipeline_selection.unavailable"), "workflow-selection-workflows-count-value": workflows.count, "workflow-selection-sample-count-value": sample_count }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
       <%= form.hidden_field :pipeline_id,
                         data: {
@@ -22,56 +22,8 @@
       <%= form.hidden_field :namespace_id, value: namespace_id %>
 
       <ul class="space-y-2">
-        <% workflows.each do |key, workflow| %>
-          <% min_samples_configured = workflow.min_samples_limit_configured? %>
-          <% max_samples_configured = workflow.max_samples_limit_configured? %>
-
-          <li>
-            <button
-              type="button"
-              class="group button w-full button-default"
-              data-workflow-selection-target="workflow"
-              data-workflow-selection-pipelineId-param="<%= workflow.pipeline_id %>"
-              data-workflow-selection-workflowName-param="<%= workflow.name %>"
-              data-workflow-selection-workflowVersion-param="<%= workflow.version %>"
-              data-workflow-selection-namespaceId-param="<%= namespace_id %>"
-              data-workflow-selection-min-samples-configured="<%= min_samples_configured %>"
-              data-workflow-selection-max-samples-configured="<%= max_samples_configured %>"
-              data-workflow-selection-min-samples="<%= workflow.minimum_samples if min_samples_configured %>"
-              data-workflow-selection-max-samples="<%= workflow.maximum_samples if max_samples_configured %>"
-              data-workflow-selection-min-samples-message="<%= t('shared.workflow_executions.sample_limits.min_samples_required', min_samples: workflow.minimum_samples) %>"
-              data-workflow-selection-max-samples-message="<%= t('shared.workflow_executions.sample_limits.max_samples_exceeded', max_samples: workflow.maximum_samples) %>"
-              data-action="click->workflow-selection#selectWorkflow"
-            >
-              <span class="mr-2 shrink-0">
-                <%= icon(
-                  :rocket_launch,
-                  color: :nil,
-                  class:
-                    "dark:text-slate-500 group-hover:-rotate-45 transition-rotate-45 delay-150 duration-300 ease-in-out",
-                ) %>
-              </span>
-
-              <span class="min-w-0 flex-1 text-left group-hover:stroke-slate-100">
-                <span class="flex items-center space-x-2">
-                  <span class="truncate font-medium text-slate-900 dark:text-white"><%= workflow.name %></span>
-                  <%= render Viral::PillComponent.new(text: workflow.version, color: :primary) %>
-                </span>
-
-                <span class="text-sm font-normal text-wrap text-slate-500 dark:text-slate-400">
-                  <%= workflow.description %>
-                </span>
-
-                <span
-                  class="
-                    mt-2 block hidden w-fit rounded-md bg-red-100 px-2 py-1 text-sm font-medium text-red-700
-                    dark:bg-red-900/40 dark:text-red-300
-                  "
-                  data-workflow-selection-limit-message
-                ></span>
-              </span>
-            </button>
-          </li>
+        <% workflows.each do |_, workflow| %>
+          <%= render WorkflowExecutions::WorkflowSelectionButtonComponent.new(workflow:, sample_count:) %>
         <% end %>
       </ul>
     <% end %>
