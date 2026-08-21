@@ -116,7 +116,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
         end
       else
         format.turbo_stream do
-          render status: :bad_request
+          render status: :unprocessable_content
         end
       end
     end
