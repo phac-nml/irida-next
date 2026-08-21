@@ -21,6 +21,14 @@ module AdvancedSearch
 
       attr_accessor :field, :operator, :value
 
+      def from_value
+        value&.[](0)
+      end
+
+      def to_value
+        value&.[](1)
+      end
+
       def initialize(field:, operator:, value:)
         @field = field
         @operator = operator
@@ -278,7 +286,7 @@ module AdvancedSearch
       assert condition.errors.added?(:value, :not_a_number)
     end
 
-    test 'enforces unique field conditions except for a valid between pair' do
+    test 'enforces unique field conditions except for a valid combinable pair' do
       record = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [
                                   DummyCondition.new(field: 'name', operator: '=', value: 'a'),
@@ -340,7 +348,7 @@ module AdvancedSearch
       Flipper.disable(:advanced_search_metadata_operators)
     end
 
-    test 'validates metadata between operators' do
+    test 'validates metadata gteq and lteq operators' do
       Flipper.enable(:advanced_search_metadata_operators)
 
       record1 = DummyRecord.new(
@@ -488,6 +496,142 @@ module AdvancedSearch
       assert_not record2.errors.added?(:base, :invalid)
     ensure
       Flipper.disable(:advanced_search_disable_standard_operators_for_metadata_in_graphql)
+    end
+
+    test 'invalid between queries' do
+      Flipper.enable(:advanced_search_metadata_operators)
+      # non-date value for date operator and attaching error to from_value
+      record1 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: 'date_between',
+                                                                value: %w[a 2026-01-01])])]
+      )
+
+      assert_not record1.valid?
+      condition1 = record1.groups.first.conditions.first
+      assert condition1.errors.added?(:from_value, :not_a_date)
+
+      # non-numeric value for numeric operator and attaching error to to_value
+      record2 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field',
+                                                                operator: 'numeric_between',
+                                                                value: %w[1 a])])]
+      )
+
+      assert_not record2.valid?
+      condition2 = record2.groups.first.conditions.first
+      assert condition2.errors.added?(:to_value, :not_a_number)
+
+      # not an array error
+      record3 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: 'a')])]
+      )
+
+      assert_not record3.valid?
+      condition3 = record3.groups.first.conditions.first
+      assert condition3.errors.added?(:value, :invalid_between_value)
+
+      # not two value array error
+      record4 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: ['a'])])]
+      )
+
+      assert_not record4.valid?
+      condition4 = record4.groups.first.conditions.first
+      assert condition4.errors.added?(:value, :invalid_between_value)
+
+      # blank values
+      record5 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: ['', ''])])]
+      )
+
+      assert_not record5.valid?
+      condition5 = record5.groups.first.conditions.first
+      assert condition5.errors.added?(:from_value, :blank)
+      assert condition5.errors.added?(:to_value, :blank)
+
+      record6 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: %w[b a])])]
+      )
+
+      assert_not record6.valid?
+      condition6 = record6.groups.first.conditions.first
+      assert condition6.errors.added?(:from_value, :greater_than_to)
+      assert condition6.errors.added?(:to_value, :lower_than_from)
+
+      record7 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
+                                                                operator: 'between',
+                                                                value: %w[1.1 1])])]
+      )
+
+      assert_not record7.valid?
+      condition7 = record7.groups.first.conditions.first
+      assert condition7.errors.added?(:from_value, :greater_than_to)
+      assert condition7.errors.added?(:to_value, :lower_than_from)
+
+      record8 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'created_at',
+                                                                operator: 'between',
+                                                                value: %w[2020-01-02 2020-01-01])])]
+      )
+
+      assert_not record8.valid?
+      condition8 = record8.groups.first.conditions.first
+      assert condition8.errors.added?(:from_value, :greater_than_to)
+      assert condition8.errors.added?(:to_value, :lower_than_from)
+
+      record9 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field',
+                                                                operator: 'numeric_between',
+                                                                value: %w[100.1 100])])]
+      )
+
+      assert_not record9.valid?
+      condition9 = record9.groups.first.conditions.first
+      assert condition9.errors.added?(:from_value, :greater_than_to)
+      assert condition9.errors.added?(:to_value, :lower_than_from)
+
+      record10 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field',
+                                                                operator: 'date_between',
+                                                                value: %w[2024-01-02 2024-01-01])])]
+      )
+
+      assert_not record10.valid?
+      condition10 = record10.groups.first.conditions.first
+      assert condition10.errors.added?(:from_value, :greater_than_to)
+      assert condition10.errors.added?(:to_value, :lower_than_from)
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    test 'between operators with different cases' do
+      Flipper.enable(:advanced_search_metadata_operators)
+      # Z comes before a unless .downcased
+      record1 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field', operator: 'between',
+                                                                value: %w[a Z])])]
+      )
+
+      assert record1.valid?
+
+      record2 = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'metadata.test_field',
+                                                                operator: 'text_between',
+                                                                value: %w[a Z])])]
+      )
+
+      assert record2.valid?
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
     end
   end
 end

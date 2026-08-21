@@ -10,6 +10,7 @@ module AdvancedSearch
     include AdvancedSearch::Operators::ComparisonOperators
     include AdvancedSearch::Operators::PatternOperators
     include AdvancedSearch::Operators::ExistenceOperators
+    include AdvancedSearch::Operators::BetweenOperators
     include AdvancedSearch::MetadataComparison
 
     included do

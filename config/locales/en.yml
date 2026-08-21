@@ -10,7 +10,9 @@ en:
         new_parent_id: Parent group
       groups_attributes/conditions_attributes:
         field: Group %{group_index} Condition %{condition_index} Field
+        from_value: Group %{group_index} Condition %{condition_index} From value
         operator: Group %{group_index} Condition %{condition_index} Operator
+        to_value: Group %{group_index} Condition %{condition_index} To value
         value: Group %{group_index} Condition %{condition_index} Value
       projects/transfer_form:
         new_namespace_id: New namespace
@@ -18,13 +20,17 @@ en:
         group: Group
       sample/search_condition:
         field: Field
+        from_value: From value
         operator: Operator
+        to_value: To value
         value: Value
       sample/search_group:
         condition: Condition
       workflow_execution/search_condition:
         field: Field
+        from_value: From value
         operator: Operator
+        to_value: To value
         value: Value
       workflow_execution/search_group:
         condition: Condition
@@ -35,12 +41,16 @@ en:
             field:
               not_a_metadata: is an invalid metadata field
               taken: exists within another condition in this group
+            from_value:
+              greater_than_to: must be less than To value
             operator:
               not_a_date_operator: cannot be used on dates
               use_metadata_operator: is an invalid operator for metadata fields
               use_non_metadata_operator: is an invalid operator for non-metadata fields
+            to_value:
+              lower_than_from: must be greater than From value
             value:
-              not_a_date: must be formatted YYYY-MM-DD
+              invalid_between_value: must be an array with two values
         concatenation_form:
           attributes:
             attachment_ids:
@@ -780,6 +790,7 @@ en:
       less_than: must be less than %{count}
       less_than_or_equal_to: must be less than or equal to %{count}
       model_invalid: 'Validation failed: %{errors}'
+      not_a_date: must be formatted YYYY-MM-DD
       not_a_number: is not a number
       not_an_integer: must be an integer
       odd: must be odd
