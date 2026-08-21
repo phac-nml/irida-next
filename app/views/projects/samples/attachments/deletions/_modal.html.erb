@@ -1,28 +1,59 @@
+<%# locals: (open:, sample:) -%>
+
 <%= render Viral::DialogComponent.new(open: open, size: :extra_large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
-  <%= turbo_frame_tag("deletion-alert") %>
 
-  <div class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400">
-    <p class="mb-4"><%= t(".description") %></p>
+  <div
+    data-controller="infinite-scroll"
+    data-infinite-scroll-selection-outlet="#attachments-table"
+    data-infinite-scroll-paged-field-name-value="attachment_ids[]"
+    data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
+    data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
+    data-infinite-scroll-separate-pe-attachments-value="true"
+  >
+    <%= form_with(
+        url: list_namespace_project_sample_attachments_path(list_class: 'attachment'),
+        data: { "infinite-scroll-target": "pageForm" }
+      ) do %>
+      <div data-infinite-scroll-target="pageFormContent"></div>
+    <% end %>
+
+    <div class="grid gap-4">
+      <p data-infinite-scroll-target="summary" class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+        <%= t(".description.zero") %>
+      </p>
+
+      <%= render "shared/attachments/infinite_scroll_attachment_listing" %>
+
+      <%= form_for(:deletion, url: namespace_project_sample_attachments_deletion_path,
+          data: {
+            controller: "spinner projects--samples--attachments--selected-attachments",
+            'projects--samples--attachments--selected-attachments-field-name-value':"deletion[attachment_ids]",
+            'projects--samples--attachments--selected-attachments-storage-key-value': "files-#{sample.id}",
+            action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear turbo:submit-start->spinner#submitStart'
+          }, method: :delete) do |form| %>
+        <div data-projects--samples--attachments--selected-attachments-target="field"></div>
+
+        <div>
+          <%= form.submit t('common.actions.delete'), class: "button button-destructive", data: {
+                          "spinner-target": "submit",
+                        } %>
+        </div>
+      <% end %>
+    </div>
 
     <div
-      class="scrollbar overflow-auto"
-      data-controller="projects--samples--attachments--files"
-      data-projects--samples--attachments--files-target="field"
-    ></div>
-  </div>
-
-  <%= form_for(:deletion, url: namespace_project_sample_attachments_deletion_path,
-    data: {
-      controller: "projects--samples--attachments--selected-attachments",
-      'projects--samples--attachments--selected-attachments-field-name-value':"deletion[attachment_ids]",
-      'projects--samples--attachments--selected-attachments-storage-key-value': "files-#{@sample.id}",
-      action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear'
-    }, method: :delete) do |form| %>
-    <div data-projects--samples--attachments--selected-attachments-target="field"></div>
-
-    <div>
-      <%= form.submit t('common.actions.delete'), class: "button button-destructive" %>
+      role="status"
+      id="spinner"
+      class="
+        absolute top-2/4 left-1/2 grid hidden h-full w-full -translate-x-1/2 -translate-y-1/2 place-items-center
+        backdrop-blur-sm
+      "
+    >
+      <div class="grid place-items-center">
+        <%= icon :faded_spinner, library: "animated" %>
+        <span class="text-black dark:text-white"><%= t(:".spinner") %></span>
+      </div>
     </div>
-  <% end %>
+  </div>
 <% end %>

@@ -4,12 +4,17 @@
 module ListActions
   extend ActiveSupport::Concern
 
-  def list
+  def list # rubocop:disable Metrics/AbcSize
     @page = params[:page].to_i
-    if params[:list_class] == 'sample'
+    case params[:list_class]
+    when 'sample'
       @samples = Sample.where(id: params[:sample_ids])
-    elsif params[:list_class] == 'workflow_execution'
+    when 'workflow_execution'
       @workflow_executions = WorkflowExecution.where(id: params[:workflow_execution_ids])
+    when 'attachment'
+      authorize! @project, to: :read_sample?
+
+      @attachments = @sample.attachments.with_attached_file.where(id: params[:attachment_ids])
     end
 
     respond_to do |format|

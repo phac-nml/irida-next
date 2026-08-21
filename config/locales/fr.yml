@@ -1724,6 +1724,10 @@ fr:
             basename_help: Le nom de fichier de base ne peut contenir que des lettres, des chiffres, '-', '.' et '_'
             success: Les dossiers ont été concaténés avec succès.
           modal:
+            description:
+              plural: 'Les COUNT_PLACEHOLDER fichiers suivants ont été sélectionnés pour la concaténation :'
+              singular: 'Le fichier suivant a été sélectionné pour la concaténation :'
+              zero: Aucun fichier n'a été sélectionné pour la concaténation.
             submit_button: Concaténer
             title: Concaténer les fichiers
         create:
@@ -1739,7 +1743,11 @@ fr:
             partial_success: Certains fichiers ont été supprimés avec succès.
             success: Les fichiers ont été supprimés avec succès.
           modal:
-            description: 'Les fichiers suivants ont été sélectionnés pour suppression :'
+            description:
+              plural: 'Les COUNT_PLACEHOLDER fichiers suivants ont été sélectionnés pour être supprimés :'
+              singular: 'Le fichier suivant a été sélectionné pour être supprimé :'
+              zero: Aucun fichier n'a été sélectionné pour la suppression.
+            spinner: Suppression des fichiers. Cela peut prendre un certain temps....
             title: Supprimer des fichiers
         destroy:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
