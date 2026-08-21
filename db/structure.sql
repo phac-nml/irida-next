@@ -955,7 +955,7 @@ CREATE TABLE public.site_banners (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     CONSTRAINT site_banners_singleton_guard_check CHECK (((singleton_guard)::text = 'global'::text)),
-    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY ((ARRAY['info'::character varying, 'warning'::character varying, 'danger'::character varying, 'success'::character varying])::text[])))
+    CONSTRAINT site_banners_style_check CHECK (((style)::text = ANY (ARRAY[('info'::character varying)::text, ('warning'::character varying)::text, ('danger'::character varying)::text, ('success'::character varying)::text])))
 );
 
 
@@ -1620,6 +1620,13 @@ CREATE INDEX index_namespace_group_links_on_namespace_id ON public.namespace_gro
 
 
 --
+-- Name: index_namespaces_on_archived_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_namespaces_on_archived_at ON public.namespaces USING btree (archived_at);
+
+
+--
 -- Name: index_namespaces_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1778,6 +1785,13 @@ CREATE INDEX index_samples_on_deleted_at ON public.samples USING btree (deleted_
 --
 
 CREATE UNIQUE INDEX index_samples_on_id_and_project_id ON public.samples USING btree (id, project_id);
+
+
+--
+-- Name: index_samples_on_latest_transfer_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_samples_on_latest_transfer_job_id ON public.samples USING btree ((((((log_data -> 'h'::text) -> '-1'::integer) -> 'm'::text) ->> 'transfer_job_id'::text)));
 
 
 --
@@ -2202,6 +2216,7 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20260810103000'),
+('20260629203551'),
 ('20260619150000'),
 ('20260616131525'),
 ('20260615152555'),
