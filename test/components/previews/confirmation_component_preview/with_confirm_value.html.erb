@@ -23,7 +23,7 @@
   </p>
 </div>
 
-<%= button_to "Delete project",
+<%= pathogen_button_to "Delete project",
 "#",
 form: {
   data: {
@@ -32,4 +32,4 @@ form: {
     confirm_value: "Project X",
   }
 },
-class: "button button-destructive" %>
+tone: :danger, emphasis: :solid %>

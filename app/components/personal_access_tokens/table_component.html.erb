@@ -60,27 +60,29 @@
           classes: "flex justify-start"
         ) do |row| %>
         <% if @actions[:revoke] %>
-          <%= button_to t("personal_access_tokens.table.revoke"),
+          <%= pathogen_button_to t("personal_access_tokens.table.revoke"),
           revoke_path(row),
           data: revoke_data_attributes,
           method: revoke_http_method,
           aria: {
             label: t(:"personal_access_tokens.table.revoke_aria_label", name: row[:name]),
           },
-          class:
-            "bg-white dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer mr-2" %>
+          tone: :danger,
+          emphasis: :ghost,
+          size: :small %>
         <% end %>
 
         <% if @actions[:rotate] %>
-          <%= button_to t("personal_access_tokens.table.rotate"),
+          <%= pathogen_button_to t("personal_access_tokens.table.rotate"),
           rotate_path(row),
           data: rotate_data_attributes,
           method: rotate_http_method,
           aria: {
             label: t(:"personal_access_tokens.table.rotate_aria_label", name: row[:name]),
           },
-          class:
-            "bg-white dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+          tone: :neutral,
+          emphasis: :ghost,
+          size: :small %>
         <% end %>
       <% end %>
     <% end %>

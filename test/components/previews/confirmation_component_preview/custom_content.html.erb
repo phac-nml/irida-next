@@ -7,7 +7,7 @@
   <%= render Viral::AlertComponent.new(message: "This is some custom content") %>
 </div>
 
-<%= button_to "Confirmation",
+<%= pathogen_button_to "Confirmation",
 "#",
 form: {
   data: {
@@ -15,4 +15,4 @@ form: {
     turbo_content: "#confirmation-content",
   }
 },
-class: "button button-destructive" %>
+tone: :danger, emphasis: :solid %>

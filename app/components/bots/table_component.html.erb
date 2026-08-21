@@ -9,7 +9,7 @@
         <% active_count = row.user.personal_access_tokens.active.count %>
 
         <% if active_count.positive? %>
-          <%= button_to active_count,
+          <%= pathogen_button_to active_count,
         bot_tokens_path(row),
         data: {
           turbo_stream: true,
@@ -18,8 +18,9 @@
           label: t("bots.index.table.active_tokens_aria_label", count: active_count, name: row.user.email),
         },
         method: :get,
-        class:
-          "font-semibold text-slate-800 dark:text-slate-300 underline hover:decoration-2 cursor-pointer" %>
+        tone: :neutral,
+        emphasis: :ghost,
+        size: :small %>
         <% else %>
           0
         <% end %>
@@ -29,7 +30,7 @@
         <% inactive_count = row.user.personal_access_tokens.inactive.count %>
 
         <% if inactive_count.positive? %>
-          <%= button_to inactive_count,
+          <%= pathogen_button_to inactive_count,
         bot_inactive_tokens_path(row),
         data: {
           turbo_stream: true,
@@ -38,8 +39,9 @@
           label: t("bots.index.table.inactive_tokens_aria_label", count: inactive_count, name: row.user.email),
         },
         method: :get,
-        class:
-          "font-semibold text-slate-800 dark:text-slate-300 underline hover:decoration-2 cursor-pointer" %>
+        tone: :neutral,
+        emphasis: :ghost,
+        size: :small %>
         <% else %>
           0
         <% end %>
@@ -67,7 +69,7 @@
         classes: "flex justify-start"
       ) do |row| %>
         <% if @abilities[:generate_token] %>
-          <%= button_to t("bots.index.table.actions.generate_new_token"),
+          <%= pathogen_button_to t("bots.index.table.actions.generate_new_token"),
         new_token_path(row),
         data: {
           turbo_stream: true,
@@ -80,12 +82,13 @@
               name: row.user.email,
             ),
         },
-        class:
-          "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer mr-2" %>
+        tone: :neutral,
+        emphasis: :ghost,
+        size: :small %>
         <% end %>
 
         <% if @abilities[:destroy_bot] %>
-          <%= button_to t('common.actions.delete'),
+          <%= pathogen_button_to t('common.actions.delete'),
         destroy_path(row),
         data: {
           turbo_stream: true,
@@ -94,8 +97,9 @@
         aria: {
           label: t("bots.index.table.actions.destroy_aria_label", name: row.user.email),
         },
-        class:
-          "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+        tone: :danger,
+        emphasis: :ghost,
+        size: :small %>
         <% end %>
       <% end %>
     <% end %>

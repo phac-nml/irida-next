@@ -44,7 +44,7 @@
     </ul>
 
     <div class="mt-4">
-      <%= button_to t("groups.edit.advanced.change_visibility.submit"),
+      <%= pathogen_button_to t("groups.edit.advanced.change_visibility.submit"),
       group_path,
       method: :patch,
       params: { group: { public: !group.public}},
@@ -55,7 +55,7 @@
           confirm_value: group.path,
         }
       },
-      class: "button button-primary" %>
+      tone: :primary, emphasis: :solid %>
     </div>
   <% end %>
 <% end %>

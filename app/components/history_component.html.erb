@@ -14,7 +14,8 @@
 
       <% unless @url.nil? %>
         <div class="flex items-center justify-start">
-          <%= button_to @url,
+          <%= pathogen_button_to t(:"components.history.link_text", version: changes[:version]),
+            @url,
             params: {
               version: changes[:version],
             },
@@ -22,11 +23,10 @@
               turbo_stream: true,
             },
             method: :get,
-            class: "text-slate-900 min-h-[44px] min-w-[44px] dark:text-white underline hover:decoration-2 cursor-pointer" do %>
-            <span class="text-xl font-extrabold dark:text-white">
-              <%= t(:"components.history.link_text", version: changes[:version]) %>
-            </span>
-          <% end %>
+            tone: :neutral,
+            emphasis: :outline,
+            size: :small,
+            class: "font-semibold" %>
 
           <% if index == 0 %>
             <%= render Viral::PillComponent.new(

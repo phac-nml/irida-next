@@ -250,7 +250,7 @@
                 ) do %>
                   <div class="flex items-center gap-2">
                     <% if @row_actions[:preview] && attachment.previewable? %>
-                      <%= link_to(
+                      <%= pathogen_button_to(
                       t("components.attachments.table_component.preview"),
                       helpers.attachment_path(attachment),
                       aria: {
@@ -263,13 +263,15 @@
                       data: {
                         turbo_frame: "_top",
                       },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer",
+                      method: :get,
+                      tone: :neutral,
+                      emphasis: :ghost,
+                      size: :small,
                     ) %>
                     <% end %>
 
                     <% if @row_actions[:destroy] %>
-                      <%= button_to(
+                      <%= pathogen_button_to(
                       t("common.actions.delete"),
                       destroy_path(attachment.id),
                       aria: {
@@ -294,8 +296,9 @@
                         turbo_stream: true,
                       },
                       method: :get,
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer",
+                      tone: :danger,
+                      emphasis: :ghost,
+                      size: :small,
                     ) %>
                     <% end %>
                   </div>

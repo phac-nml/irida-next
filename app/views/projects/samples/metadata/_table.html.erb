@@ -5,7 +5,7 @@
     <% if allowed_to[:update_sample] %>
       <div class="mb-2 flex justify-end">
         <div class="flex w-full gap-2 sm:w-auto">
-          <%= button_to t(".add_metadata"),
+          <%= pathogen_button_to t(".add_metadata"),
           new_namespace_project_sample_metadata_path(
             project.namespace.parent,
             project,
@@ -17,9 +17,9 @@
             turbo_stream: true,
           },
           form_class: "hidden",
-          class: "button button-default min-w-0 flex-1 whitespace-nowrap sm:flex-none" %>
+          tone: :neutral, emphasis: :outline, class: "min-w-0 flex-1 whitespace-nowrap sm:flex-none" %>
 
-          <%= button_to t(".delete_metadata_button"),
+          <%= pathogen_button_to t(".delete_metadata_button"),
           new_namespace_project_sample_metadata_deletion_path(
             project.namespace.parent,
             project,
@@ -33,7 +33,7 @@
             action_button_required_value: 1,
           },
           form_class: "hidden",
-          class: "button button-default action-button min-w-0 flex-1 whitespace-nowrap sm:flex-none" %>
+          tone: :neutral, emphasis: :outline, class: "action-button min-w-0 flex-1 whitespace-nowrap sm:flex-none" %>
         </div>
       </div>
     <% end %>
@@ -96,7 +96,7 @@
               <% if allowed_to[:update_sample] %>
                 <td class="flex justify-start space-x-2 px-6 py-4">
                   <% unless metadata[:source_type] == 'analysis' %>
-                    <%= button_to t("common.actions.update"),
+                    <%= pathogen_button_to t("common.actions.update"),
                     edit_namespace_project_sample_metadata_path(
                       project.namespace.parent,
                       project,
@@ -107,11 +107,12 @@
                       value: metadata[:value],
                     },
                     method: :get,
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+                    tone: :neutral,
+                    emphasis: :ghost,
+                    size: :small %>
                   <% end %>
 
-                  <%= button_to t("common.actions.delete"),
+                  <%= pathogen_button_to t("common.actions.delete"),
                   namespace_project_sample_metadata_path(
                     project.namespace.parent,
                     project,
@@ -140,8 +141,9 @@
                         deleted_key: metadata[:key],
                       ),
                   },
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+                  tone: :danger,
+                  emphasis: :ghost,
+                  size: :small %>
                 </td>
               <% end %>
             </tr>

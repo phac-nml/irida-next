@@ -5,11 +5,11 @@
   title: @data_export.name || @data_export.id, id: @data_export.name.nil? ? nil : @data_export.id) do |component| %>
   <%= component.with_buttons do %>
     <% if @data_export.status == 'ready' %>
-      <%= button_to(
+      <%= pathogen_button_to(
           t('common.actions.download'),
           rails_blob_path(@data_export.file),
           method: :get,
-          class: "button button-primary w-full",
+          tone: :primary, emphasis: :solid, block: true,
         ) %>
     <% else %>
       <button
@@ -23,7 +23,7 @@
       </button>
     <% end %>
 
-    <%= button_to(
+    <%= pathogen_button_to(
         t('common.actions.remove'),
         data_export_path,
         params: {
@@ -38,7 +38,7 @@
               name: @data_export.name || @data_export.id,
             ),
         },
-        class: "button button-default w-full",
+        tone: :neutral, emphasis: :outline, block: true,
       ) %>
   <% end %>
 <% end %>
