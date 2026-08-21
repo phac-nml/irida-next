@@ -66,8 +66,8 @@ module Projects
         click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
         within('dialog[open]') do
           assert_text I18n.t('projects.samples.attachments.deletions.modal.description.plural')
-                          .gsub! 'COUNT_PLACEHOLDER',
-                                 '7'
+                          .gsub 'COUNT_PLACEHOLDER',
+                                '7'
           within 'table tbody' do
             attachments.each do |attachment|
               assert_selector 'td:first-child', text: attachment.puid

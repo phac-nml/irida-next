@@ -16,14 +16,14 @@ export default class extends Controller {
     singularDescription: String,
     pluralDescription: String,
     nonZeroHeader: String,
-    countPeAttachments: { type: Boolean, default: false },
+    separatePeAttachments: { type: Boolean, default: false },
   };
 
   #page = 1;
 
   connect() {
-    this.allIds = this.selectionOutlet.getOrCreateStoredItems();
-    this.numSelected = this.#calculateNumSelected();
+    this.allIds = this.#parseIds();
+    this.numSelected = this.allIds.length;
     this.#makePagedHiddenInputs();
     this.#replaceDescriptionPlaceholder();
     if (this.hasSelectionCountTarget) {
@@ -37,20 +37,23 @@ export default class extends Controller {
     this.element.setAttribute("data-connected", true);
   }
 
-  #calculateNumSelected() {
-    let numSelected = this.allIds.length;
-
-    if (this.countPeAttachmentsValue) {
-      // pe files are saved as nested stringified 2 value arrays
-      // eg: ["att_1", "att_2", "["att_3_fwd", "att_3_rev"]"]
-      // we'll count how many opening brackets ([) exist, and add an additional count for each to represent the
-      // two PE files
-      numSelected += this.allIds.reduce((total, str) => {
-        return total + (str.match(/\[/g) || []).length;
-      }, 0);
+  #parseIds() {
+    const ids = this.selectionOutlet.getOrCreateStoredItems();
+    if (this.separatePeAttachmentsValue) {
+      // handles flattening attachment ids where PE files come in as a stringified nested array and need further parsing
+      // PE files are outputted as individual ids
+      const flattenedPeIds = ids.flatMap((item) => {
+        try {
+          const parsed = JSON.parse(item);
+          return Array.isArray(parsed) ? parsed : [item];
+        } catch {
+          return [item];
+        }
+      });
+      return flattenedPeIds;
+    } else {
+      return ids;
     }
-
-    return numSelected;
   }
 
   scroll() {
