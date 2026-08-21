@@ -1,7 +1,5 @@
 <%# locals: (allowed_to:, attachments:, has_attachments:, pagy:, render_individual_attachments:, results_message: @results_message, sample:, search:, search_url:, q:) -%>
 
-<% attachments_advanced_search = Flipper.enabled?(:attachments_advanced_search) %>
-
 <div id="sample-attachments">
   <% if has_attachments %>
     <div class="mb-4 flex flex-wrap gap-2">
@@ -26,7 +24,7 @@
 
       <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
-      <% if attachments_advanced_search %>
+      <% if Flipper.enabled?(:attachments_advanced_search) %>
         <div role="status" class="sr-only"><%= results_message %></div>
 
         <%= form_with model: search, html: { role: "search", class: "flex justify-end gap-2" }, scope: :q,
