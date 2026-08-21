@@ -3,8 +3,7 @@
 module WorkflowExecutions
   # Component for rendering a table of Samples
   class WorkflowSelectionButtonComponent < Component
-    def initialize(namespace_id:, workflow:, sample_count:)
-      @namespace_id = namespace_id
+    def initialize(workflow:, sample_count:)
       @workflow = workflow
       @sample_count = sample_count.to_i
       @max_samples_configured = max_samples_configured?

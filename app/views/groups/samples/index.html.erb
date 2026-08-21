@@ -15,6 +15,7 @@
         },
         data: { turbo_stream: true, controller: "action-button launch-workflow", action_button_required_value: 1, "launch-workflow-selection-outlet": '#samples-table', action: "click->launch-workflow#appendSelectionLength"},
                   class: "button button-default action-button" do %>
+          <%= icon(:rocket_launch, size: :sm) %>
           <span class="ml-2"><%= t(".workflows.button_sr") %></span>
         <% end %>
       <% end %>

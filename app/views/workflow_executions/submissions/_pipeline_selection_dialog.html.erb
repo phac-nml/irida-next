@@ -23,7 +23,7 @@
 
       <ul class="space-y-2">
         <% workflows.each do |_, workflow| %>
-          <%= render WorkflowExecutions::WorkflowSelectionButtonComponent.new(namespace_id:, workflow:, sample_count:) %>
+          <%= render WorkflowExecutions::WorkflowSelectionButtonComponent.new(workflow:, sample_count:) %>
         <% end %>
       </ul>
     <% end %>
