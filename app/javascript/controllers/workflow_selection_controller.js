@@ -15,9 +15,11 @@ export default class extends Controller {
   static values = {
     fieldName: String,
     unavailableLabel: String,
+    workflowsCount: Number,
+    sampleCount: Number,
   };
 
-  #sampleCount;
+  #workflowsRenderedCount = 0;
 
   connect() {
     this.boundAmendForm = this.amendForm.bind(this);
@@ -31,11 +33,6 @@ export default class extends Controller {
     this.formTarget.addEventListener("turbo:submit-end", this.boundOnSuccess);
 
     document.addEventListener("turbo:submit-end", preventEscapeListener);
-
-    this.#sampleCount = this.hasSelectionOutlet
-      ? this.selectionOutlet.getStoredItemsCount()
-      : 0;
-    this.updateWorkflowAvailability();
   }
 
   disconnect() {
@@ -50,6 +47,14 @@ export default class extends Controller {
     );
 
     this.removeEscapeListener();
+  }
+
+  workflowTargetConnected() {
+    this.#workflowsRenderedCount += 1;
+
+    if (this.#workflowsRenderedCount == this.workflowsCountValue) {
+      this.updateWorkflowAvailability();
+    }
   }
 
   amendForm(event) {
@@ -92,56 +97,12 @@ export default class extends Controller {
     const workflowsByState = [];
 
     this.workflowTargets.forEach((workflow) => {
-      const disabledMessage = this.disabledMessage(workflow);
-      const isDisabled = disabledMessage.length > 0;
-      const limitMessage = workflow.querySelector(
-        "[data-workflow-selection-limit-message]",
-      );
-
-      this.setDisabledState(workflow, isDisabled);
-
-      if (limitMessage) {
-        limitMessage.classList.toggle("hidden", !isDisabled);
-        limitMessage.textContent = disabledMessage;
-      }
+      const isDisabled = workflow.getAttribute("aria-disabled") === "true";
 
       workflowsByState.push({ workflow, isDisabled });
     });
 
     this.reorderWorkflows(workflowsByState);
-  }
-
-  disabledMessage(workflow) {
-    const minSamplesConfigured =
-      workflow.dataset.workflowSelectionMinSamplesConfigured === "true";
-    const maxSamplesConfigured =
-      workflow.dataset.workflowSelectionMaxSamplesConfigured === "true";
-    const minimumSamples = Number.parseInt(
-      workflow.dataset.workflowSelectionMinSamples ?? "0",
-      10,
-    );
-    const maximumSamples = Number.parseInt(
-      workflow.dataset.workflowSelectionMaxSamples ?? "-1",
-      10,
-    );
-
-    if (minSamplesConfigured && this.#sampleCount < minimumSamples) {
-      return workflow.dataset.workflowSelectionMinSamplesMessage;
-    }
-
-    if (
-      maxSamplesConfigured &&
-      maximumSamples > 0 &&
-      this.#sampleCount > maximumSamples
-    ) {
-      return workflow.dataset.workflowSelectionMaxSamplesMessage;
-    }
-
-    return "";
-  }
-
-  setDisabledState(workflow, disabled) {
-    workflow.setAttribute("aria-disabled", disabled.toString());
   }
 
   reorderWorkflows(workflowsByState) {
@@ -210,7 +171,7 @@ export default class extends Controller {
     const params = formDataToJsonParams(formData);
 
     // add sample_ids under the fieldNameValue key to the params
-    normalizeParams(params, this.fieldNameValue, this.#sampleCount, 0);
+    normalizeParams(params, this.fieldNameValue, this.sampleCountValue, 0);
 
     return params;
   }
