@@ -16,6 +16,72 @@ module Projects
         @namespace = groups(:group_one)
       end
 
+      test 'user with role >= Maintainer should be able to see empty state with upload message' do
+        visit namespace_project_sample_url(@namespace, @project, @sample2)
+        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+        assert_no_selector 'button[disabled]', text: I18n.t('projects.samples.show.concatenate_button')
+        assert_no_selector 'button[disabled]', text: I18n.t('projects.samples.show.delete_files_button')
+      end
+
+      test 'user with role < Maintainer should not be able to see upload, concatenate and delete files buttons' do
+        user = users(:ryan_doe)
+        login_as user
+        visit namespace_project_sample_url(@namespace, @project, @sample2)
+        assert_no_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+        assert_no_selector 'button', text: I18n.t('projects.samples.show.concatenate_button')
+        assert_no_selector 'button', text: I18n.t('projects.samples.show.delete_files_button')
+        assert_text I18n.t('projects.samples.attachments.table.empty_state.no_permission_description')
+      end
+
+      test 'user with role >= Maintainer should be able to attach a file to a Sample' do
+        visit namespace_project_sample_url(@namespace, @project, @sample2)
+        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+        within('#sample-attachments') do
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
+          assert_no_text 'test_file_2.fastq.gz'
+        end
+        click_on I18n.t('projects.samples.show.upload_files'), match: :first
+
+        within('dialog[open]') do
+          attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
+          # check that button goes from being enabled to disabled when clicked
+          assert_selector 'button[type=submit]:not(:disabled)'
+          click_on I18n.t('projects.samples.show.upload')
+          assert_selector 'button[type=submit]:disabled'
+        end
+
+        assert_text I18n.t('projects.samples.attachments.create.success', filename: 'data_export_1.zip')
+        within('#sample-attachments') do
+          assert_no_text I18n.t('projects.samples.show.no_files')
+          assert_no_text I18n.t('projects.samples.show.no_associated_files')
+          assert_text 'data_export_1.zip'
+        end
+      end
+
+      test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
+        visit namespace_project_sample_url(@namespace, @project, @sample1)
+        assert_selector 'button', text: I18n.t('projects.samples.show.new_attachment_button')
+        click_on I18n.t('projects.samples.show.upload_files')
+
+        within('dialog[open]') do
+          attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
+          click_on I18n.t('projects.samples.show.upload')
+        end
+
+        assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file_2.fastq.gz')
+
+        click_on I18n.t('projects.samples.show.upload_files')
+
+        within('dialog[open]') do
+          attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
+          click_on I18n.t('projects.samples.show.upload')
+        end
+
+        assert_text I18n.t('projects.samples.attachments.create.failure', filename: 'test_file_2.fastq.gz',
+                                                                          errors: 'File checksum matches existing file')
+      end
+
       test 'should not be able to upload uncompressed fastq files to a Sample' do
         visit namespace_project_sample_url(@namespace, @project, @sample1)
         assert_selector 'button', text: I18n.t('projects.samples.show.new_attachment_button')

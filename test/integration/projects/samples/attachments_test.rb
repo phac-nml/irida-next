@@ -56,7 +56,9 @@ module Projects
                   assert_select 'time[datetime=?]', attachment.created_at.iso8601
                 end
                 assert_select 'td' do
-                  assert_select 'a', text: I18n.t('components.attachments.table_component.preview')
+                  assert_select 'button[aria-label=?]',
+                                I18n.t('components.attachments.table_component.preview_aria_label',
+                                       name: attachment.file.filename.to_s)
                   assert_select 'button', text: I18n.t('common.actions.delete')
                 end
               end
@@ -111,7 +113,9 @@ module Projects
                   assert_select 'time[datetime=?]', attachment.created_at.iso8601
                 end
                 assert_select 'td' do
-                  assert_select 'a', text: I18n.t('components.attachments.table_component.preview')
+                  assert_select 'button[aria-label=?]',
+                                I18n.t('components.attachments.table_component.preview_aria_label',
+                                       name: attachment.file.filename.to_s)
                   assert_select 'button', text: I18n.t('common.actions.delete'), count: 0
                 end
               end
@@ -426,7 +430,7 @@ module Projects
           assert_select 'p', I18n.t('projects.samples.attachments.deletions.modal.description')
 
           assert_select 'form' do
-            assert_select 'input[type="submit"]', value: I18n.t('common.actions.delete')
+            assert_select 'button[type="submit"]', text: /#{I18n.t('common.actions.delete')}/
           end
         end
 
@@ -742,7 +746,8 @@ module Projects
           assert_select 'form' do
             assert_select 'input[name="concatenation_form[basename]"]'
             assert_select 'input[name="concatenation_form[delete_originals]"]'
-            assert_select 'input[type="submit"]', value: I18n.t('common.actions.concatenate')
+            assert_select 'button[type="submit"]',
+                          text: /#{I18n.t('projects.samples.attachments.concatenations.modal.submit_button')}/
           end
         end
 
@@ -849,7 +854,8 @@ module Projects
             assert_select 'form' do
               assert_select 'input[name="concatenation_form[basename]"]'
               assert_select 'input[name="concatenation_form[delete_originals]"]'
-              assert_select 'input[type="submit"]', value: I18n.t('common.actions.concatenate')
+              assert_select 'button[type="submit"]',
+                            text: /#{I18n.t('projects.samples.attachments.concatenations.modal.submit_button')}/
             end
           end
         end

@@ -1,3 +1,5 @@
+<%# locals: (open:, bot_account: @bot_account, personal_access_token: @personal_access_token) -%>
+
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(
     title:
@@ -10,28 +12,25 @@
     <p class="dark:text-slate-400">
       <%= t(
         "groups.bots.index.bot_listing.generate_personal_access_token_modal.description",
-        bot_account: @bot_account.user.email,
+        bot_account: bot_account.user.email,
       ) %>
     </p>
   </div>
 
-  <%= form_for(@personal_access_token, url: group_bot_personal_access_tokens_path, method: :post, html: { novalidate: true}) do |form| %>
+  <%= form_for(personal_access_token, url: group_bot_personal_access_tokens_path, method: :post, html: { novalidate: true}) do |form| %>
     <div class="grid gap-4">
       <%= render partial: "shared/form/required_field_legend" %>
 
       <%= render partial: "shared/personal_access_tokens/form_fields",
       locals: {
-        pat: @personal_access_token,
+        pat: personal_access_token,
         form: form,
       } %>
     </div>
 
-    <div class="mt-4">
-      <%= form.submit t('common.controls.submit'), class: "button button-primary" %>
-
-      <button type="button" class="button button-default" data-action="click->viral--dialog#close">
-        <%= t('common.actions.cancel') %>
-      </button>
+    <div class="mt-4 flex gap-2">
+      <%= render CancelButtonComponent.new(data: { action: "click->viral--dialog#close" }) %>
+      <%= form.submit t('common.controls.submit'), tone: :primary, emphasis: :solid %>
     </div>
   <% end %>
 <% end %>

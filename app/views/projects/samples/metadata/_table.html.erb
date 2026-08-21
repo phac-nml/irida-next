@@ -1,28 +1,29 @@
-<%# locals: (sample_metadata: @sample.metadata_with_provenance, sample: @sample) %>
+<%# locals: (sample_metadata: @sample.metadata_with_provenance, sample: @sample, project: @project, allowed_to: @allowed_to) -%>
 
 <div id="sample-metadata">
   <% if sample_metadata.present? %>
-    <% if @allowed_to[:update_sample] %>
-      <div class="mb-2 flex flex-col sm:flex-row-reverse">
-        <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-          <%= button_to t(".add_metadata"),
+    <% if allowed_to[:update_sample] %>
+      <div class="mb-2 flex justify-end">
+        <div class="flex w-full gap-2 sm:w-auto">
+          <%= pathogen_button_to t(".add_metadata"),
           new_namespace_project_sample_metadata_path(
-            @project.namespace.parent,
-            @project,
-            @sample,
+            project.namespace.parent,
+            project,
+            sample,
           ),
           method: :get,
           data: {
             turbo_frame: "sample_modal",
             turbo_stream: true,
           },
-          class: "button button-default w-full" %>
+          form_class: "hidden",
+          tone: :neutral, emphasis: :outline, class: "min-w-0 flex-1 whitespace-nowrap sm:flex-none" %>
 
-          <%= button_to t(".delete_metadata_button"),
+          <%= pathogen_button_to t(".delete_metadata_button"),
           new_namespace_project_sample_metadata_deletion_path(
-            @project.namespace.parent,
-            @project,
-            @sample,
+            project.namespace.parent,
+            project,
+            sample,
           ),
           method: :get,
           data: {
@@ -31,7 +32,8 @@
             controller: "action-button",
             action_button_required_value: 1,
           },
-          class: "button button-default action-button w-full" %>
+          form_class: "hidden",
+          tone: :neutral, emphasis: :outline, class: "action-button min-w-0 flex-1 whitespace-nowrap sm:flex-none" %>
         </div>
       </div>
     <% end %>
@@ -40,7 +42,7 @@
         class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400"
         data-controller="selection"
         data-selection-action-button-outlet=".action-button"
-        data-selection-storage-key-value="metadata-<%= @sample.id %>"
+        data-selection-storage-key-value="metadata-<%= sample.id %>"
       >
         <thead
           class="
@@ -49,7 +51,7 @@
           "
         >
           <tr>
-            <% if @allowed_to[:update_sample] %>
+            <% if allowed_to[:update_sample] %>
               <th aria-hidden="true" style="width: 24px;" class="px-3 py-3"></th>
             <% end %>
 
@@ -58,7 +60,7 @@
             <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.source") %></th>
             <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.last_updated") %></th>
 
-            <% if @allowed_to[:update_sample] %>
+            <% if allowed_to[:update_sample] %>
               <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
             <% end %>
           </tr>
@@ -67,7 +69,7 @@
         <tbody id="metadata-table-body" class="bg-white dark:bg-slate-800">
           <% sample_metadata.each_with_index do |metadata, index| %>
             <tr class="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-              <% if @allowed_to[:update_sample] %>
+              <% if allowed_to[:update_sample] %>
                 <td style="width: 24px;" class="px-3 py-3">
                   <%= check_box_tag "metadata_keys[]",
                   metadata[:key],
@@ -91,29 +93,30 @@
               <td class="px-6 py-4"><%= metadata[:source] %></td>
               <td class="px-6 py-4"><%= local_time_ago(metadata[:last_updated]) %></td>
 
-              <% if @allowed_to[:update_sample] %>
+              <% if allowed_to[:update_sample] %>
                 <td class="flex justify-start space-x-2 px-6 py-4">
                   <% unless metadata[:source_type] == 'analysis' %>
-                    <%= button_to t("common.actions.update"),
+                    <%= pathogen_button_to t("common.actions.update"),
                     edit_namespace_project_sample_metadata_path(
-                      @project.namespace.parent,
-                      @project,
-                      @sample,
+                      project.namespace.parent,
+                      project,
+                      sample,
                     ),
                     params: {
                       key: metadata[:key],
                       value: metadata[:value],
                     },
                     method: :get,
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+                    tone: :neutral,
+                    emphasis: :ghost,
+                    size: :small %>
                   <% end %>
 
-                  <%= button_to t("common.actions.delete"),
+                  <%= pathogen_button_to t("common.actions.delete"),
                   namespace_project_sample_metadata_path(
-                    @project.namespace.parent,
-                    @project,
-                    @sample,
+                    project.namespace.parent,
+                    project,
+                    sample,
                   ),
                   params: {
                     sample: {
@@ -138,8 +141,9 @@
                         deleted_key: metadata[:key],
                       ),
                   },
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+                  tone: :danger,
+                  emphasis: :ghost,
+                  size: :small %>
                 </td>
               <% end %>
             </tr>
@@ -148,7 +152,7 @@
       </table>
     </div>
   <% else %>
-    <% if @allowed_to[:update_sample] %>
+    <% if allowed_to[:update_sample] %>
       <%= render(
         Viral::EmptyStateComponent.new(
           icon_name: :table,
@@ -157,9 +161,9 @@
           action_text: t(".add_metadata"),
           action_path:
             new_namespace_project_sample_metadata_path(
-              @project.namespace.parent,
-              @project,
-              @sample,
+              project.namespace.parent,
+              project,
+              sample,
             ),
           action_method: :get,
           data: {

@@ -3,13 +3,28 @@
               controller: tooltip? ? "pathogen--tooltip dropdown--v2" : "dropdown--v2",
               "dropdown--v2-distance-value": distance,
             }) do %>
-  <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
+  <%= render Pathogen::Button.new(
+    tone:,
+    emphasis:,
+    size:,
+    icon_only: label.blank? && !caret && prefix.blank?,
+    text: label.presence,
+    **system_arguments
+  ) do |button| %>
     <% if icon_name.present? %>
-      <%= icon(
-        icon_name,
-        size: icon_size,
-        class: class_names({ "mr-2": label.present?, "size-5": icon_size.nil? }),
-      ) %>
+      <% button.with_leading_visual do %>
+        <%= icon(
+          icon_name,
+          size: icon_size,
+          class: class_names({ "size-5": icon_size.nil? }),
+        ) %>
+      <% end %>
+    <% end %>
+
+    <% if caret %>
+      <% button.with_trailing_visual do %>
+        <span data-dropdown--v2-target="caret" class="inline-flex flex-none"><%= icon(:caret_down, size: :sm) %></span>
+      <% end %>
     <% end %>
 
     <% if prefix.present? %>
@@ -20,12 +35,6 @@
       <%= tag.span(class: class_names("truncate", styles[:label])) do %>
         <%= label %>
       <% end %>
-    <% end %>
-
-    <% if caret %>
-      <span data-dropdown--v2-target="caret" class="ml-2 inline-flex flex-none">
-        <%= icon(:caret_down, size: :sm) %>
-      </span>
     <% end %>
   <% end %>
 

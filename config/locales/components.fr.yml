@@ -217,6 +217,8 @@ fr:
       dropdown:
         aria_label: Menu déroulant du fil d’Ariane
       navigation_aria_label: Navigation du fil d'Ariane
+    cancel_button:
+      cancel: Annuler
     clipboard:
       copied: Copié!
     confirmation:

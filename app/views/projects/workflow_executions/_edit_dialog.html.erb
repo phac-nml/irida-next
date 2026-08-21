@@ -1,4 +1,4 @@
-<%# locals: {open:, workflow_execution:) %>
+<%# locals: (open:, workflow_execution: @workflow_execution) -%>
 
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(
@@ -40,13 +40,12 @@
       <% end %>
     </div>
 
-    <div class="mt-4">
-      <%= form.submit t("projects.workflow_executions.edit_dialog.submit_button"),
-                  class: "button button-primary" %>
+    <div class="mt-4 flex gap-2">
+      <%= render CancelButtonComponent.new(data: { action: "click->viral--dialog#close" }) %>
 
-      <button type="button" class="button button-default" data-action="click->viral--dialog#close">
-        <%= t('common.actions.cancel') %>
-      </button>
+      <%= form.submit t("projects.workflow_executions.edit_dialog.submit_button"),
+                  tone: :primary,
+                  emphasis: :solid %>
     </div>
   <% end %>
 <% end %>

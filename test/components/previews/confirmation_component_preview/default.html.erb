@@ -3,11 +3,11 @@
 
 <%# ------------------------------------------ %>
 
-<%= button_to "Confirmation",
+<%= pathogen_button_to "Confirmation",
 "#",
 form: {
   data: {
     turbo_confirm: "Custom modal text here!",
   }
 },
-class: "button button-destructive" %>
+tone: :danger, emphasis: :solid %>

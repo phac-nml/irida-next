@@ -43,15 +43,15 @@
       <% end %>
 
       <% if allowed_to[:update_sample] %>
-        <%= button_to t("projects.samples.show.new_attachment_button"),
+        <%= pathogen_button_to t("projects.samples.show.new_attachment_button"),
         new_namespace_project_sample_attachment_path(sample_id: sample.id),
         method: :get,
         data: {
           turbo_frame: "sample_modal",
           turbo_stream: true,
         },
-        class: "button button-default max-sm:grow" %>
-        <%= button_to t("projects.samples.show.concatenate_button"),
+        tone: :neutral, emphasis: :outline, class: "max-sm:grow" %>
+        <%= pathogen_button_to t("projects.samples.show.concatenate_button"),
         new_namespace_project_sample_attachments_concatenation_path(
           sample_id: sample.id,
         ),
@@ -62,8 +62,8 @@
           controller: "action-button",
           action_button_required_value: 2,
         },
-        class: "button button-default action-button max-sm:grow" %>
-        <%= button_to t("projects.samples.show.delete_files_button"),
+        tone: :neutral, emphasis: :outline, class: "action-button max-sm:grow" %>
+        <%= pathogen_button_to t("projects.samples.show.delete_files_button"),
         new_namespace_project_sample_attachments_deletion_path(sample_id: sample.id),
         method: :get,
         data: {
@@ -72,7 +72,7 @@
           controller: "action-button",
           action_button_required_value: 1,
         },
-        class: "button button-default action-button max-sm:grow" %>
+        tone: :neutral, emphasis: :outline, class: "action-button max-sm:grow" %>
       <% end %>
     </div>
   <% end %>

@@ -16,8 +16,7 @@ module Projects
           render turbo_stream: turbo_stream.update('sample_modal',
                                                    partial: 'modal',
                                                    locals: {
-                                                     open: true,
-                                                     concatenation_params: nil
+                                                     open: true
                                                    }), status: :ok
         end
 

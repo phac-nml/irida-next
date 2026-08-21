@@ -271,7 +271,7 @@ module Groups
       assert_text @workflow_execution_group_shared2.workflow.name
       assert_text @workflow_execution_group_shared2.metadata['workflow_version']
 
-      assert_button I18n.t(:'workflow_executions.show.create_export_button')
+      assert_button I18n.t(:'workflow_executions.show.create_export_button'), disabled: true
       assert_no_link I18n.t('common.actions.cancel')
       assert_no_link I18n.t('common.actions.edit')
       assert_no_link I18n.t('common.actions.remove')

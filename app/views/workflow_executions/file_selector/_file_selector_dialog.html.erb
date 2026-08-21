@@ -1,7 +1,9 @@
+<%# locals: (open:, file_selector_params:, listing_attachments: @listing_attachments) -%>
+
 <%= render Viral::DialogComponent.new(open: open, id: "file_selector_form_dialog", size: :extra_large) do |dialog| %>
   <% dialog.with_header(title: t(".select_file")) %>
 
-  <% if @listing_attachments.empty? %>
+  <% if listing_attachments.empty? %>
     <div class="empty_state_message mb-2">
       <%= render Viral::EmptyStateComponent.new(
         title: t(".empty.title"),
@@ -49,7 +51,7 @@
               </thead>
 
               <tbody class="overflow-y-auto border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-                <% @listing_attachments.each do |attachment| %>
+                <% listing_attachments.each do |attachment| %>
                   <tr class="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
                     <td class="bg-white p-3 dark:bg-slate-800">
                       <%= form.radio_button "attachment_id",
@@ -100,10 +102,10 @@
         </div>
       </div>
 
-      <% unless @listing_attachments.empty? %>
+      <% unless listing_attachments.empty? %>
         <%= form.submit t(".submit_button"),
-                    class:
-                      "inline-flex items-center justify-center text-sm border cursor-pointer sm:w-auto text-white bg-primary-700 hover:bg-primary-800 rounded-lg px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
+                    tone: :primary,
+                    emphasis: :solid %>
       <% end %>
     <% end %>
   <% end %>

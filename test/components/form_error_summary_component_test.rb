@@ -15,6 +15,12 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
     assert_empty FormErrorSummaryEntryBuilder.new(builder:).call
   end
 
+  test 'entry builder returns no entries when the form object is false' do
+    builder = build_form_builder('deletion', false)
+
+    assert_empty FormErrorSummaryEntryBuilder.new(builder:).call
+  end
+
   test 'component renders one linked entry per invalid field using all messages' do
     user = build_user
     user.errors.add(:email, :blank)

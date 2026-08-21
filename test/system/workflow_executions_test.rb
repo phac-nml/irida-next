@@ -1079,16 +1079,16 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
   test 'can preview workflow execution files' do
     previewable_attachment = attachments(:samples_workflow_execution_completed_output_attachment)
+    preview_label = I18n.t('components.attachments.table_component.preview_aria_label',
+                           name: previewable_attachment.file.filename.to_s)
 
     visit workflow_execution_path(@workflow_execution3)
 
     click_on I18n.t('workflow_executions.show.tabs.files')
 
     within 'tbody' do
-      assert_link I18n.t('components.attachments.table_component.preview_aria_label',
-                         name: previewable_attachment.file.filename.to_s)
-      click_link I18n.t('components.attachments.table_component.preview_aria_label',
-                        name: previewable_attachment.file.filename.to_s)
+      assert_button preview_label
+      click_button preview_label
     end
 
     # Should navigate to attachment preview page

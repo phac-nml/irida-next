@@ -1,3 +1,5 @@
+<%# locals: (minimum_password_length: @minimum_password_length, user: @user) -%>
+
 <div class="w-full">
   <%= render Viral::PageHeaderComponent.new(
     title: t(:"profiles.passwords.update.title"),
@@ -66,11 +68,11 @@
                           },
                           autocomplete: "new-password" %>
 
-      <% if @minimum_password_length %>
+      <% if minimum_password_length %>
         <p id="<%= form.field_id(:password, "hint") %>" class="field-hint">
           <%= t(
             "devise.passwords.edit.password_hint",
-            minimum_password_length: @minimum_password_length,
+            minimum_password_length: minimum_password_length,
           ) %>
         </p>
       <% end %>
@@ -108,11 +110,11 @@
 
     <div class="my-2 flex items-center justify-between">
       <%= form.submit t(:"profiles.passwords.update.submit"),
-                  class: "button button-primary" %>
+                    tone: :primary, emphasis: :solid %>
 
       <p class="field-hint">
         <%= link_to t("profiles.passwords.update.forgot"),
-        profile_password_path(@user),
+        profile_password_path(user),
         class: "link" %>
       </p>
     </div>

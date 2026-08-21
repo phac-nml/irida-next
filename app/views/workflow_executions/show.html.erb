@@ -11,7 +11,7 @@
 end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
   <% component.with_buttons do %>
     <% if @workflow_execution.completed? %>
-      <%= button_to t(".create_export_button"),
+      <%= pathogen_button_to t(".create_export_button"),
         new_data_export_path,
         params: {
           export_type: "analysis",
@@ -23,9 +23,9 @@ end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_e
         data: {
           turbo_stream: true,
         },
-        class: "button button-default" %>
+        tone: :neutral, emphasis: :outline %>
     <% else %>
-      <%= button_to t(".create_export_button"),
+      <%= pathogen_button_to t(".create_export_button"),
         new_data_export_path,
         params: {
           export_type: "analysis",
@@ -37,40 +37,40 @@ end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_e
         data: {
           turbo_stream: true,
         },
-        class:
-          "button button-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300",
+        tone: :neutral,
+        emphasis: :outline,
         disabled: true %>
     <% end %>
 
     <% if @workflow_execution.cancellable? %>
-      <%= button_to t("common.actions.cancel"),
+      <%= pathogen_button_to t("common.actions.cancel"),
         cancel_workflow_execution_path(id: @workflow_execution.id),
         data: {
           turbo_method: :put,
           turbo_confirm: t("workflow_executions.show.cancel_button_confirmation"),
         },
         method: :put,
-        class: "button button-default" %>
+        tone: :neutral, emphasis: :outline %>
     <% end %>
 
     <% if @allowed_to[:update] %>
-      <%= button_to t("common.actions.edit"),
+      <%= pathogen_button_to t("common.actions.edit"),
         edit_workflow_execution_path(id: @workflow_execution.id),
         data: {
           turbo_stream: true,
         },
         method: :get,
-        class: "button button-default" %>
+        tone: :neutral, emphasis: :outline %>
     <% end %>
 
     <% if @workflow_execution.deletable? %>
-      <%= button_to t("common.actions.remove"),
+      <%= pathogen_button_to t("common.actions.remove"),
         destroy_confirmation_workflow_execution_path(@workflow_execution),
         method: :get,
         data: {
           turbo_stream: true,
         },
-        class: "button button-default" %>
+        tone: :neutral, emphasis: :outline %>
     <% end %>
   <% end %>
 <% end %>

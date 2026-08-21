@@ -3,7 +3,7 @@
 class SearchComponentPreview < ViewComponent::Preview
   def default
     render_with_template(locals: {
-                           url: group_members_url(Group.first)
+                           url: Rails.application.routes.url_helpers.group_members_path(Group.first)
                          })
   end
 end

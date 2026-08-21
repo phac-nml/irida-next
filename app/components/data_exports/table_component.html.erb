@@ -82,7 +82,7 @@
 
               <td class="space-x-2 px-3 py-3">
                 <% if data_export.status == 'ready' %>
-                  <%= button_to t('common.actions.download'),
+                  <%= pathogen_button_to t('common.actions.download'),
                   helpers.rails_blob_path(data_export.file),
                   data: {
                     turbo: false,
@@ -97,11 +97,12 @@
                         )
                       ),
                   },
-                  class:
-                    "inline-flex min-h-6 items-center font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+                  tone: :neutral,
+                  emphasis: :ghost,
+                  size: :small %>
                 <% end %>
 
-                <%= button_to t('common.actions.delete'),
+                <%= pathogen_button_to t('common.actions.delete'),
                 helpers.data_export_path(data_export),
                 data: {
                   turbo_method: :delete,
@@ -123,8 +124,9 @@
                       )
                     ),
                 },
-                class:
-                  "inline-flex min-h-6 items-center font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+                tone: :danger,
+                emphasis: :ghost,
+                size: :small %>
               </td>
             <% end %>
           <% end %>

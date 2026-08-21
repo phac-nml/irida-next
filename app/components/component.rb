@@ -9,6 +9,7 @@ class Component < ViewComponent::Base
   include JsonHelper
   include Pathogen::ViewHelper
   include Pathogen::FormHelper
+  include Pathogen::ButtonToHelper
   include Pathogen::FormTagHelper
   include IconHelper
 

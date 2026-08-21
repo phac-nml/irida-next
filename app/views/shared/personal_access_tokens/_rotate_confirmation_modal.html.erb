@@ -1,3 +1,5 @@
+<%# locals: (open:, personal_access_token:, bot_account:, rotate_path:) -%>
+
 <%= render Viral::DialogComponent.new(open: open, id: 'rotate_confirmation_dialog') do |dialog| %>
   <% dialog.with_header(title: t("personal_access_tokens.rotate_confirmation.title")) %>
 
@@ -17,7 +19,7 @@
               action:"turbo:submit-end->viral--dialog#close"
             }
           ) do |form| %>
-      <%= form.submit t('personal_access_tokens.rotate_confirmation.submit_button'), class: "button button-primary" %>
+      <%= form.submit t('personal_access_tokens.rotate_confirmation.submit_button'), tone: :danger, emphasis: :solid %>
     <% end %>
   </div>
 <% end %>

@@ -1,4 +1,4 @@
-<%= button_to t('common.actions.remove'),
+<%= pathogen_button_to t('common.actions.remove'),
 group_member_path(namespace, member),
 data: {
   turbo_method: :delete,
@@ -12,5 +12,6 @@ aria: {
       member: member.user.email,
     ),
 },
-class:
-  "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+tone: :danger,
+emphasis: :ghost,
+size: :small %>

@@ -6,7 +6,7 @@ module MembersHelper
     if member.namespace_id == namespace.id
       { label: I18n.t('activerecord.models.member.direct') }
     else
-      { inherited_namespace_path: group_url(member.namespace),
+      { inherited_namespace_path: resolved_group_url(member.namespace),
         label: member.namespace.name }
     end
   end
@@ -15,8 +15,18 @@ module MembersHelper
     if namespace_group_link.namespace == namespace
       { label: I18n.t('activerecord.models.namespace_group_link.direct') }
     else
-      { inherited_namespace_path: group_url(namespace_group_link.namespace),
+      { inherited_namespace_path: resolved_group_url(namespace_group_link.namespace),
         label: namespace_group_link.namespace.name }
+    end
+  end
+
+  private
+
+  def resolved_group_url(namespace)
+    if respond_to?(:helpers)
+      helpers.group_url(namespace)
+    else
+      group_url(namespace)
     end
   end
 end

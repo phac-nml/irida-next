@@ -38,7 +38,7 @@
         classes: "flex justify-start"
       ) do |row| %>
       <% unless row.disabled %>
-        <%= button_to t("common.actions.edit"),
+        <%= pathogen_button_to t("common.actions.edit"),
         edit_namespace_project_automated_workflow_execution_path(
           @project.parent,
           @project,
@@ -55,11 +55,12 @@
               name: (row[:name].nil? ? row[:id] : row[:name]),
             ),
         },
-        class:
-          "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer mr-2" %>
+        tone: :neutral,
+        emphasis: :ghost,
+        size: :small %>
       <% end %>
 
-      <%= button_to t("common.actions.delete"),
+      <%= pathogen_button_to t("common.actions.delete"),
       namespace_project_automated_workflow_execution_path(
         @project.parent,
         @project,
@@ -78,8 +79,9 @@
             name: (row[:name].nil? ? row[:id] : row[:name]),
           ),
       },
-      class:
-        "font-medium text-blue-600 underline dark:text-blue-400 hover:decoration-2 cursor-pointer" %>
+      tone: :danger,
+      emphasis: :ghost,
+      size: :small %>
     <% end %>
   <% end %>
 <% else %>
