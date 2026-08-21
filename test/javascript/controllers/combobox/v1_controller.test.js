@@ -39,18 +39,37 @@ vi.mock("utilities/floating_dropdown", () => ({
   },
 }));
 
-function option({ id, value, text, disabled = false }) {
+function option({ id, value, text, label = text, disabled = false }) {
   return `
     <div
       id="${id}"
       role="option"
       data-value="${value}"
+      data-label="${label}"
       ${disabled ? 'aria-disabled="true"' : ""}
     >${text}</div>
   `;
 }
 
-function renderFixture({ disabled = false } = {}) {
+function renderFixture({
+  disabled = false,
+  hiddenValue = "",
+  comboboxValue = "",
+  optionsHtml,
+} = {}) {
+  const renderedOptions =
+    optionsHtml ||
+    [
+      option({ id: "option-alpha", value: "alpha", text: "Alpha" }),
+      option({
+        id: "option-disabled",
+        value: "disabled",
+        text: "Disabled",
+        disabled: true,
+      }),
+      option({ id: "option-bravo", value: "bravo", text: "Bravo" }),
+    ].join("\n");
+
   document.body.innerHTML = `
     <div
       data-controller="combobox--v1"
@@ -62,7 +81,7 @@ function renderFixture({ disabled = false } = {}) {
     >
       <input
         type="hidden"
-        value=""
+        value="${hiddenValue}"
         data-combobox--v1-target="hidden"
       >
       <div>
@@ -73,6 +92,7 @@ function renderFixture({ disabled = false } = {}) {
           aria-autocomplete="list"
           aria-controls="field_listbox"
           aria-expanded="false"
+          value="${comboboxValue}"
           ${disabled ? 'aria-disabled="true" readonly' : ""}
           data-combobox--v1-target="combobox"
         >
@@ -99,9 +119,7 @@ function renderFixture({ disabled = false } = {}) {
           role="listbox"
           data-combobox--v1-target="listbox"
         >
-          ${option({ id: "option-alpha", value: "alpha", text: "Alpha" })}
-          ${option({ id: "option-disabled", value: "disabled", text: "Disabled", disabled: true })}
-          ${option({ id: "option-bravo", value: "bravo", text: "Bravo" })}
+          ${renderedOptions}
         </div>
         <div
           role="status"
@@ -374,5 +392,61 @@ describe("combobox v1 controller", () => {
     expect(hidden()).toHaveValue("");
     expect(combobox()).toHaveAttribute("aria-disabled", "true");
     expect(combobox()).not.toHaveAttribute("disabled");
+  });
+
+  it("initializes from hidden data-value when labels are duplicated", async () => {
+    renderFixture({
+      hiddenValue: "bravo-2",
+      comboboxValue: "Bravo",
+      optionsHtml: [
+        option({ id: "option-bravo-1", value: "bravo-1", text: "Bravo" }),
+        option({ id: "option-bravo-2", value: "bravo-2", text: "Bravo" }),
+      ].join("\n"),
+    });
+
+    const hiddenChange = vi.fn();
+    const comboboxChange = vi.fn();
+    hidden().addEventListener("change", hiddenChange);
+    combobox().addEventListener("change", comboboxChange);
+
+    application = await startController();
+
+    expect(hidden()).toHaveValue("bravo-2");
+    expect(combobox()).toHaveValue("Bravo");
+    expect(hiddenChange).not.toHaveBeenCalled();
+    expect(comboboxChange).not.toHaveBeenCalled();
+  });
+
+  it("keeps selected value and avoids no-results when data-label differs from slot text", async () => {
+    renderFixture({
+      hiddenValue: "alpha",
+      optionsHtml: [
+        option({
+          id: "option-alpha",
+          value: "alpha",
+          label: "Alpha Label",
+          text: "Slot Alpha",
+        }),
+        option({ id: "option-bravo", value: "bravo", text: "Bravo" }),
+      ].join("\n"),
+    });
+
+    application = await startController();
+
+    expect(hidden()).toHaveValue("alpha");
+    expect(combobox()).toHaveValue("Alpha Label");
+    expect(noResults()).toHaveAttribute("hidden");
+
+    focusCombobox();
+    keydown("ArrowDown", { altKey: true });
+
+    expect(combobox()).toHaveAttribute("aria-expanded", "true");
+    expect(noResults()).toHaveAttribute("hidden");
+    expect(listbox()).not.toHaveAttribute("hidden");
+    expect(listbox().querySelectorAll('[role="option"]').length).toBe(1);
+    expect(listbox().querySelector('[role="option"]')).toHaveAttribute(
+      "data-value",
+      "alpha",
+    );
   });
 });

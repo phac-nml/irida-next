@@ -11,28 +11,71 @@ export function isComboboxDisabled(combobox) {
 }
 
 export function getLowercaseContent(node) {
-  return node.textContent.toLowerCase();
+  const label = node.getAttribute?.("data-label");
+  // For slot options, filtering is based on data-label (semantic label), not rich rendered text.
+  const content = label ? label : node.textContent;
+  return content.toLowerCase();
 }
 
 export function highlightOption(option, filter) {
   if (!filter) {
     return option;
   }
+
   const escape = filter.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const regex = new RegExp(`(${escape})`, "gi");
-  const text = option.textContent;
-  const parts = text.split(regex);
-  option.innerHTML = "";
-  parts.forEach((part) => {
-    if (regex.test(part)) {
+  const regex = new RegExp(escape, "gi");
+
+  // Highlight only text nodes so existing child elements remain untouched.
+  const walker = document.createTreeWalker(option, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  let currentNode = walker.nextNode();
+
+  while (currentNode) {
+    textNodes.push(currentNode);
+    currentNode = walker.nextNode();
+  }
+
+  textNodes.forEach((textNode) => {
+    const text = textNode.nodeValue;
+    if (!text) {
+      return;
+    }
+
+    regex.lastIndex = 0;
+    const matches = [...text.matchAll(regex)];
+    if (matches.length === 0) {
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    let lastIndex = 0;
+
+    matches.forEach((match) => {
+      const index = match.index;
+      if (index === undefined) {
+        return;
+      }
+
+      if (index > lastIndex) {
+        fragment.appendChild(
+          document.createTextNode(text.slice(lastIndex, index)),
+        );
+      }
+
       const mark = document.createElement("mark");
       mark.className = "bg-primary-300 dark:bg-primary-600 font-semibold";
-      mark.textContent = part;
-      option.appendChild(mark);
-    } else {
-      option.appendChild(document.createTextNode(part));
+      mark.textContent = match[0];
+      fragment.appendChild(mark);
+      lastIndex = index + match[0].length;
+    });
+
+    if (lastIndex < text.length) {
+      fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
     }
+
+    textNode.replaceWith(fragment);
   });
+
   return option;
 }
 
