@@ -55,6 +55,12 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     policy = WorkflowExecutionPolicy.new(workflow_execution, user: user_incorrect_permissions)
 
     assert_not policy.apply(:create?)
+
+    workflow_execution.namespace.archived_at = Time.zone.now
+    workflow_execution.namespace.save!
+
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
+    assert_not policy.apply(:create?)
   end
 
   test 'update?' do

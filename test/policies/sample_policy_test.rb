@@ -11,6 +11,13 @@ class SamplePolicyTest < ActiveSupport::TestCase
 
   test '#destroy_attachment?' do
     assert @policy.apply(:destroy_attachment?)
+
+    @sample.project.namespace.archived_at = Time.zone.now
+    @sample.project.namespace.save!
+
+    policy = SamplePolicy.new(@sample, user: @user)
+
+    assert_not policy.apply(:destroy_attachment?)
   end
 
   test 'scope' do
@@ -47,6 +54,49 @@ class SamplePolicyTest < ActiveSupport::TestCase
     end
 
     assert_equal projects_samples_count, scoped_samples.count
+  end
+
+  test 'scope doesn\'t include samples from archived projects' do
+    group_one = groups(:group_one)
+    policy = SamplePolicy.new(group_one, user: @user)
+    scoped_samples = policy.apply_scope(Sample, type: :relation, name: :namespace_samples,
+                                                scope_options: { namespace: group_one })
+
+    projects_samples_count = 0
+    group_self_and_descendants = group_one.self_and_descendants
+    archived_projects_samples_count = 0
+
+    # Sample counts from projects belonging to group and it's descendants
+    group_self_and_descendants.each_with_index do |group, index|
+      group.project_namespaces.first.update(archived_at: Time.current) if index.zero?
+
+      group.project_namespaces.each do |project_namespace|
+        if project_namespace.archived_at.present?
+          archived_projects_samples_count += project_namespace.project.samples.count
+        end
+
+        projects_samples_count += project_namespace.project.samples.count
+      end
+    end
+
+    namespace_group_links = NamespaceGroupLink.where(group: group_self_and_descendants)
+
+    # Sample counts from projects belonging to group and it's descendants via namespace group links
+    namespace_group_links.each do |namespace_group_link|
+      if namespace_group_link.namespace_type == Namespaces::ProjectNamespace.sti_name
+        projects_samples_count += namespace_group_link.namespace.project.samples.count
+      else
+        group_self_and_descendants = namespace_group_link.namespace.self_and_descendants
+
+        group_self_and_descendants.each do |group|
+          group.project_namespaces.each do |project_namespace|
+            projects_samples_count += project_namespace.project.samples.count
+          end
+        end
+      end
+    end
+
+    assert_equal (projects_samples_count - archived_projects_samples_count), scoped_samples.count
   end
 
   test 'scope includes samples from linked projects and projects from linked groups' do
