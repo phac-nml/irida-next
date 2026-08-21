@@ -15,9 +15,8 @@ export default class extends Controller {
   static values = {
     fieldName: String,
     unavailableLabel: String,
+    sampleCount: Number,
   };
-
-  #sampleCount;
 
   connect() {
     this.boundAmendForm = this.amendForm.bind(this);
@@ -32,9 +31,6 @@ export default class extends Controller {
 
     document.addEventListener("turbo:submit-end", preventEscapeListener);
 
-    this.#sampleCount = this.hasSelectionOutlet
-      ? this.selectionOutlet.getStoredItemsCount()
-      : 0;
     this.updateWorkflowAvailability();
   }
 
@@ -125,14 +121,14 @@ export default class extends Controller {
       10,
     );
 
-    if (minSamplesConfigured && this.#sampleCount < minimumSamples) {
+    if (minSamplesConfigured && this.sampleCountValue < minimumSamples) {
       return workflow.dataset.workflowSelectionMinSamplesMessage;
     }
 
     if (
       maxSamplesConfigured &&
       maximumSamples > 0 &&
-      this.#sampleCount > maximumSamples
+      this.sampleCountValue > maximumSamples
     ) {
       return workflow.dataset.workflowSelectionMaxSamplesMessage;
     }
@@ -210,7 +206,7 @@ export default class extends Controller {
     const params = formDataToJsonParams(formData);
 
     // add sample_ids under the fieldNameValue key to the params
-    normalizeParams(params, this.fieldNameValue, this.#sampleCount, 0);
+    normalizeParams(params, this.fieldNameValue, this.sampleCountValue, 0);
 
     return params;
   }
