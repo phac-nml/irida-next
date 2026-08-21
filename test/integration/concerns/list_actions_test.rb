@@ -15,7 +15,7 @@ module Concerns
       non_pe_attachment = attachments(:attachmentG)
       post list_namespace_project_sample_attachments_path(namespace, project, sample, format: :turbo_stream), params: {
         page: 1,
-        attachment_ids: ["[#{pe_fwd_attachment.id}, #{pe_rev_attachment.id}]", non_pe_attachment.id],
+        attachment_ids: [pe_fwd_attachment.id, pe_rev_attachment.id, non_pe_attachment.id],
         list_class: 'attachment'
       }
       assert_response :success
