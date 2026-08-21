@@ -22,7 +22,7 @@
   <% end %>
 
   <div class="mt-2 flex flex-col gap-2">
-    <% if @has_attachments %>
+    <% if @has_attachments && !Flipper.enabled?(:attachments_advanced_search) %>
       <div class="mb-2 flex justify-end">
         <%= render SearchComponent.new(
           query: @q,

@@ -1,8 +1,6 @@
 <%# locals: (allowed_to:, attachments:, has_attachments:, pagy:, q:, results_message: @results_message, search:, search_url:, workflow_execution:) -%>
 
-<% attachments_advanced_search = Flipper.enabled?(:attachments_advanced_search) %>
-
-<% if attachments_advanced_search %>
+<% if Flipper.enabled?(:attachments_advanced_search) %>
   <div role="status" class="sr-only"><%= results_message %></div>
 
   <%= form_with model: search, html: { role: "search", class: "mb-2 flex justify-end gap-2" }, scope: :q, url: search_url, method: :get,
