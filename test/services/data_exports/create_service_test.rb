@@ -538,5 +538,72 @@ module DataExports
                      data_export.errors.full_messages.to_sentence
       end
     end
+
+    test 'accepts exports below the configured source size limit and enqueues job' do
+      valid_params = {
+        'export_type' => 'sample',
+        'export_parameters' => {
+          'ids' => [@sample1.id],
+          'namespace_id' => @project1.namespace.id,
+          'attachment_formats' => Attachment::FORMAT_REGEX.keys
+        }
+      }
+
+      max_bytes = Irida::CurrentSettings.max_data_export_size_gigabytes.gigabytes
+      DataExport.any_instance.stubs(:source_size_bytes).returns(max_bytes - 1)
+
+      assert_enqueued_jobs(1, only: DataExports::CreateJob) do
+        assert_difference -> { DataExport.count } => 1 do
+          DataExports::CreateService.new(@user, valid_params).execute
+        end
+      end
+    end
+
+    test 'blocks exports at the configured source size limit' do
+      valid_params = {
+        'export_type' => 'sample',
+        'export_parameters' => {
+          'ids' => [@sample1.id],
+          'namespace_id' => @project1.namespace.id,
+          'attachment_formats' => Attachment::FORMAT_REGEX.keys
+        }
+      }
+
+      max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
+      DataExport.any_instance.stubs(:source_size_bytes).returns(max_gigabytes.gigabytes)
+
+      assert_enqueued_jobs(0, only: DataExports::CreateJob) do
+        assert_no_difference -> { DataExport.count } do
+          data_export = DataExports::CreateService.new(@user, valid_params).execute
+
+          assert_equal I18n.t('services.data_exports.create.max_data_export_size_exceeded',
+                              max_size_gigabytes: max_gigabytes),
+                       data_export.errors.full_messages.to_sentence
+        end
+      end
+    end
+
+    test 'blocks exports above the configured source size limit' do
+      valid_params = {
+        'export_type' => 'analysis',
+        'export_parameters' => {
+          'ids' => [@workflow_execution1.id],
+          'analysis_type' => 'user'
+        }
+      }
+
+      max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
+      DataExport.any_instance.stubs(:source_size_bytes).returns(max_gigabytes.gigabytes + 1)
+
+      assert_enqueued_jobs(0, only: DataExports::CreateJob) do
+        assert_no_difference -> { DataExport.count } do
+          data_export = DataExports::CreateService.new(@user, valid_params).execute
+
+          assert_equal I18n.t('services.data_exports.create.max_data_export_size_exceeded',
+                              max_size_gigabytes: max_gigabytes),
+                       data_export.errors.full_messages.to_sentence
+        end
+      end
+    end
   end
 end
