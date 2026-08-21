@@ -292,6 +292,70 @@ module Dashboard
       end
     end
 
+    test 'should update samples count after a sample transfer v2' do
+      Flipper.enable(:v2_sample_transfer)
+
+      visit dashboard_projects_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+
+      assert_equal 3, @project.samples.size
+
+      # Look for the samples count display in the row contents
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
+      end
+
+      visit namespace_project_samples_url(@group1, @project)
+
+      find("input[type='checkbox'][id='#{dom_id(@sample1, :checkbox)}']").click
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+
+      within('div[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('samples.transfers.dialog.description.singular')
+        within %(turbo-frame[id="list_selections"]) do
+          assert_text @sample1.name
+        end
+        find('input.select2-input').click
+        find("li[data-value='#{@project2.id}']").click
+        click_on I18n.t('samples.transfers.dialog.submit_button')
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        perform_enqueued_jobs only: [::Samples::TransferJobV2]
+        assert_performed_jobs 1
+      end
+
+      visit dashboard_projects_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+
+      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.namespace.name
+      find('input.t-search-component').send_keys(:return)
+
+      assert_text @project.namespace.name
+      assert_no_text @project2.namespace.name
+      assert_equal 2, @project.reload.samples.size
+
+      # Look for the updated samples count
+      within("##{dom_id(@project)}") do
+        assert_text @project.samples.size.to_s
+      end
+
+      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project2.namespace.name
+      find('input.t-search-component').send_keys(:return)
+
+      assert_text @project2.namespace.name
+      assert_no_text @project.namespace.name
+      assert_equal 21, @project2.reload.samples.size
+
+      # Look for the updated samples count
+      within("##{dom_id(@project2)}") do
+        assert_text @project2.samples.size.to_s
+      end
+    ensure
+      Flipper.disable(:v2_sample_transfer)
+    end
+
     test 'should update samples count after a sample clone' do
       visit dashboard_projects_url
 
