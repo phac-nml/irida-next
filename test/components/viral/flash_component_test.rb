@@ -21,7 +21,7 @@ module Viral
       render_inline(Viral::FlashComponent.new(type: :error, data: message))
 
       assert_text message
-      assert_selector "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']"
+      assert_selector "'][aria-live='assertive'][data-viral--flash-type-value='error']"
       assert_selector 'div.text-red-500.bg-red-100 svg.x-circle-icon'
       assert_selector 'div[aria-hidden="true"]' # Icon container hidden from screen readers
       assert_selector 'span.sr-only', text: I18n.t('common.statuses.error')

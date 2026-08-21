@@ -25,6 +25,14 @@ module Members
                                         namespace_type: namespace.class.model_name.human)
       end
 
+      if member.user&.project_bot?
+        namespace_bot = NamespaceBot.find_by(user: member.user)
+        if namespace_bot.namespace != member.namespace
+          raise MemberCreateError,
+                'Project bot user cannot be added as a member to a different namespace than the one it was created for'
+        end
+      end
+
       if member.valid?
         has_previous_access = Member.effective_access_level(namespace,
                                                             member.user) > Member::AccessLevel::NO_ACCESS
