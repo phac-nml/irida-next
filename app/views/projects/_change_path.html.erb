@@ -1,7 +1,7 @@
 <%# locals: (md: @md, project: @project) -%>
 
 <%= render Viral::CardComponent.new do |card| %>
-  <%= card.with_header(title: t(:"projects.edit.advanced.path.title")) %>
+  <% card.with_header(title: t(:"projects.edit.advanced.path.title")) %>
 
   <% card.with_section do %>
     <%= form_with(model: project, url: namespace_project_path, method: :patch, html: {novalidate: true}) do |form| %>
