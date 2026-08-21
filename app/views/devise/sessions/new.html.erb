@@ -31,7 +31,7 @@
                     },
                     params: params,
                     form_class: "w-full",
-                    tone: :primary, emphasis: :solid, block: true,
+                    tone: :neutral, emphasis: :outline, block: true,
                     text: t(".omniauth", provider: provider_text) do |button| %>
             <% button.with_leading_visual do %>
               <% if Rails.configuration.auth_config["#{provider}_icon"] %>
