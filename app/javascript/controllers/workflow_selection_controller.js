@@ -19,8 +19,6 @@ export default class extends Controller {
     sampleCount: Number,
   };
 
-  #workflowsRenderedCount = 0;
-
   connect() {
     this.boundAmendForm = this.amendForm.bind(this);
     this.boundOnSuccess = this.onSuccess.bind(this);
@@ -50,9 +48,7 @@ export default class extends Controller {
   }
 
   workflowTargetConnected() {
-    this.#workflowsRenderedCount += 1;
-
-    if (this.#workflowsRenderedCount == this.workflowsCountValue) {
+    if (this.workflowTargets.length === this.workflowsCountValue) {
       this.updateWorkflowAvailability();
     }
   }
@@ -94,13 +90,10 @@ export default class extends Controller {
   }
 
   updateWorkflowAvailability() {
-    const workflowsByState = [];
-
-    this.workflowTargets.forEach((workflow) => {
-      const isDisabled = workflow.getAttribute("aria-disabled") === "true";
-
-      workflowsByState.push({ workflow, isDisabled });
-    });
+    const workflowsByState = this.workflowTargets.map((workflow) => ({
+      workflow,
+      isDisabled: workflow.getAttribute("aria-disabled") === "true",
+    }));
 
     this.reorderWorkflows(workflowsByState);
   }
