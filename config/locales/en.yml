@@ -493,8 +493,12 @@ en:
     groups:
       index:
         create_group_button: New group
-        no_groups_description: You currently have no groups.
-        no_groups_title: No groups
+        no_groups_description: You have no private groups.
+        no_groups_title: No private groups
+        no_public_groups_description: You have no public groups.
+        no_public_groups_title: No public groups
+        private: Private
+        public: Public
         search:
           placeholder: Search groups
         sorting:
@@ -504,9 +508,12 @@ en:
           name_desc: Name, descending
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
+        tabs_label: Groups navigation
         title: Groups
-        treegrid:
-          aria_label: Groups listing
+      treegrid:
+        aria_label:
+          private: Private groups listing
+          public: Public groups listing
     projects:
       index:
         all: All

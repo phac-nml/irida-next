@@ -623,12 +623,21 @@ class GroupsTest < ApplicationSystemTestCase
     fill_in I18n.t('groups.show.search.placeholder'), with: 'subgroup'
     find('input.t-search-component').send_keys(:return)
 
-    within('div.treegrid-container') do
-      assert_selector 'div.treegrid-row', count: 3
+    # Wait for search results and flat list rendering by verifying groups appear
+    # and their rows no longer have expand buttons
+    within("#group_#{subgroup12a.id}") do
       assert_text subgroup12a.name
+      assert_no_selector 'button[data-action*="toggle-expand"]'
+    end
+
+    within("#group_#{subgroup12b.id}") do
       assert_text subgroup12b.name
+      assert_no_selector 'button[data-action*="toggle-expand"]'
+    end
+
+    within("#group_#{subgroup12aa.id}") do
       assert_text subgroup12aa.name
-      assert_no_selector 'svg.caret-right-icon'
+      assert_no_selector 'button[data-action*="toggle-expand"]'
     end
   end
 
@@ -748,6 +757,35 @@ class GroupsTest < ApplicationSystemTestCase
 
     within("#group_#{subgroup1.id}-samples-count") do
       assert_text subgroup1.aggregated_samples_count
+    end
+  end
+
+  test 'should display shared public group on the shared namespaces tab for a private group' do
+    # Create a new private group
+    valid_params = { name: 'New Private Group', path: 'new-private-group', parent_id: nil }
+    new_group = Groups::CreateService.new(@user, valid_params).execute
+
+    # Share the public group with the new group
+    public_group = groups(:public_group1)
+    GroupLinks::GroupLinkService.new(
+      @user,
+      public_group,
+      {
+        group_id: new_group.id,
+        group_access_level: Member::AccessLevel::GUEST
+      }
+    ).execute
+
+    visit group_url(new_group)
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
+
+    assert_selector 'button[aria-selected="true"]', text: I18n.t(:'groups.show.tabs.shared_namespaces')
+
+    within('div.treegrid-container') do
+      assert_selector 'div.treegrid-row', count: 1
+      within("#group_#{public_group.id}") do
+        assert_text public_group.name
+      end
     end
   end
 end
