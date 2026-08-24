@@ -24,10 +24,6 @@ module Groups
 
     protected
 
-    def members_path
-      group_members_path
-    end
-
     def context_crumbs
       super
       case action_name

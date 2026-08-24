@@ -120,6 +120,53 @@ module Projects
       end
     end
 
+    test 'should apply default sort and support sorting project members' do
+      sign_in @user
+
+      owner_emails = [members(:project_two_member_james_doe).user.email,
+                      members(:project_two_member_john_doe).user.email]
+
+      get namespace_project_members_path(@namespace, @project, format: :turbo_stream)
+      assert_response :success
+      assert_sort_state(1, 'ascending')
+      assert_first_rows_include(@member_james.user.email, @member_jean.user.email,
+                                row_scope: '#members-table-body')
+
+      get namespace_project_members_path(@namespace, @project, format: :turbo_stream,
+                                                               members_q: { s: 'user_email desc' })
+      assert_response :success
+      assert_sort_state(1, 'descending')
+      assert_first_rows_include(@member_ryan.user.email, @member_john.user.email,
+                                row_scope: '#members-table-body')
+
+      get namespace_project_members_path(@namespace, @project, format: :turbo_stream,
+                                                               members_q: { s: 'access_level asc' })
+      assert_response :success
+      assert_sort_state(2, 'ascending')
+      member_emails = Nokogiri::HTML(response.body).css('#members-table-body tr td:first-child').filter_map do |node| # rubocop:disable Rails/ResponseParsedBody
+        node.text[/[A-Za-z0-9_.+-]+@[A-Za-z0-9\-.]+/]
+      end
+      assert_equal @member_ryan.user.email, member_emails.first
+      assert_includes owner_emails, member_emails.last
+
+      get namespace_project_members_path(@namespace, @project, format: :turbo_stream,
+                                                               members_q: { s: 'access_level desc' })
+      assert_response :success
+      assert_sort_state(2, 'descending')
+      member_emails = Nokogiri::HTML(response.body).css('#members-table-body tr td:first-child').filter_map do |node| # rubocop:disable Rails/ResponseParsedBody
+        node.text[/[A-Za-z0-9_.+-]+@[A-Za-z0-9\-.]+/]
+      end
+      assert_includes owner_emails, member_emails.first
+      assert_equal @member_ryan.user.email, member_emails.last
+
+      get namespace_project_members_path(@namespace, @project, format: :turbo_stream,
+                                                               members_q: { s: 'expires_at asc' })
+      assert_response :success
+      assert_sort_state(5, 'ascending')
+      assert_first_rows_include(@member_joan.user.email, @member_ryan.user.email,
+                                row_scope: '#members-table-body')
+    end
+
     test 'cannot access project members without proper access' do
       sign_in users(:david_doe)
 
@@ -156,6 +203,76 @@ module Projects
       end
 
       assert_response :success
+    end
+
+    test 'cannot add a member to the project with invalid expiration date' do
+      sign_in @user
+      user_to_add = users(:jane_doe)
+
+      get namespace_project_members_path(@namespace, @project)
+      assert_response :success
+
+      assert_select 'turbo-frame#new_member_dialog' do
+        get new_namespace_project_member_path(@namespace, @project)
+        assert_response :success
+
+        assert_select 'div#new-member-dialog' do
+          assert_select 'h1', text: 'Add New Member'
+        end
+      end
+
+      invalid_expiry_date = '2025-01-01'
+
+      assert_no_difference -> { @project.namespace.project_members.count } do
+        post namespace_project_members_path(@namespace, @project),
+             params: { member: {
+               user_id: user_to_add.id,
+               namespace_id: @project.namespace.id,
+               created_by_id: @user.id,
+               access_level: Member::AccessLevel::ANALYST,
+               expires_at: invalid_expiry_date
+             } },
+             as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
+
+      assert_select 'a',
+                    text: /#{I18n.t('errors.messages.date_greater_than', date: Time.zone.today)}/
+      assert_select "div[class='form-field invalid']"
+    end
+
+    test 'cannot add a member to the project with invalid user id' do
+      sign_in @user
+      user_to_add_id = 'abc3-12d4-sdf3-1234'
+
+      get namespace_project_members_path(@namespace, @project)
+      assert_response :success
+
+      assert_select 'turbo-frame#new_member_dialog' do
+        get new_namespace_project_member_path(@namespace, @project)
+        assert_response :success
+
+        assert_select 'div#new-member-dialog' do
+          assert_select 'h1', text: 'Add New Member'
+        end
+      end
+
+      assert_no_difference -> { @project.namespace.project_members.count } do
+        post namespace_project_members_path(@namespace, @project),
+             params: { member: {
+               user_id: user_to_add_id,
+               created_by_id: @user.id,
+               access_level: Member::AccessLevel::ANALYST
+             } },
+             as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
+
+      assert_select 'a', text: 'User must exist'
+
+      assert_select "div[class='form-field invalid']"
     end
 
     test 'can remove a member from the project' do
@@ -210,6 +327,16 @@ module Projects
           end
         end
       end
+    end
+
+    test 'cannot remove a member with with insufficient permissions' do
+      sign_in users(:joan_doe)
+
+      assert_no_difference -> { @project.namespace.project_members.count } do
+        delete namespace_project_member_path(@namespace, @project, @member_james), as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
     end
 
     test 'can leave a project that is under a user namespace where user is the only owner "member" of the project' do
@@ -331,18 +458,6 @@ module Projects
       assert_select 'a', text: /#{text}/
     end
 
-    # test 'can see the list of namespace group links' do
-    #   sign_in @user
-    #   namespace_group_link = namespace_group_links(:namespace_group_link3)
-
-    #   get namespace_project_members_path(namespace_group_link.namespace.parent,
-    #                                      namespace_group_link.namespace.project), params: { tab: 'groups' }
-
-    #   assert_response :success
-    #   assert_includes response.body, I18n.t(:'projects.members.index.title')
-    #   assert_includes response.body, I18n.t(:'groups.table_component.group_name')
-    # end
-
     test 'can update member expiration' do
       sign_in @user
       project = projects(:project22)
@@ -366,6 +481,42 @@ module Projects
                       "#{I18n.t('common.statuses.success')}: #{I18n.t(:'concerns.membership_actions.update.success',
                                                                       user_email: project_member.user.email)}"
       end
+    end
+
+    test 'invalid expiration date should not update member expiration' do
+      sign_in @user
+      project = projects(:project22)
+      namespace = groups(:group_five)
+      project_member = members(:project_twenty_two_member_michelle_doe)
+      invalid_expiry_date = '2025-01-01'
+
+      get edit_namespace_project_member_path(namespace, project, project_member), as: :turbo_stream
+      assert_response :success
+
+      patch namespace_project_member_path(namespace, project, project_member), params: {
+        member: {
+          expires_at: invalid_expiry_date
+        }, format: :turbo_stream
+      }
+      assert_response :unprocessable_content
+
+      assert_select 'a',
+                    text: /#{I18n.t('errors.messages.date_greater_than', date: Time.zone.today)}/
+      assert_select "div[class='form-field invalid']"
+
+      invalid_expiry_date = 'invalid_date'
+
+      patch namespace_project_member_path(namespace, project, project_member), params: {
+        member: {
+          expires_at: invalid_expiry_date
+        }, format: :turbo_stream
+      }
+      assert_response :unprocessable_content
+
+      text = "#{I18n.t('activerecord.attributes.member.expires_at')} #{I18n.t('common.date.errors.invalid_input')}"
+
+      assert_select 'a', text: text
+      assert_select "div[class='form-field invalid']"
     end
 
     test 'cannot update membership' do

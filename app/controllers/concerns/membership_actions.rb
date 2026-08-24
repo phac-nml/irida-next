@@ -175,10 +175,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   protected
 
-  def members_path
-    raise NotImplementedError
-  end
-
   def member_namespace
     raise NotImplementedError
   end

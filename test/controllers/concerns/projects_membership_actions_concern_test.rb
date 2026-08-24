@@ -206,7 +206,7 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                                     namespace_id: project_member.namespace.id).access_level,
                      Member::AccessLevel::ANALYST
 
-    assert_response :bad_request
+    assert_response :unprocessable_content
   end
 
   test 'update project member access role to non existent access level' do
@@ -227,6 +227,6 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
                                     namespace_id: project_member.namespace.id).access_level,
                      100_000
 
-    assert_response :bad_request
+    assert_response :unprocessable_content
   end
 end
