@@ -1,6 +1,8 @@
+<%# locals: (open:, closable:, broadcast_target: @broadcast_target, namespace: @namespace, projects: @projects) -%>
+
 <%= render Viral::DialogComponent.new(open: open, size: :large, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t("samples.transfers.dialog.title")) %>
-  <%= turbo_stream_from @broadcast_target %>
+  <%= turbo_stream_from broadcast_target %>
 
   <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
     <div
@@ -44,7 +46,7 @@
 
         <%= render partial: "shared/form/required_field_legend" %>
 
-        <%= form_for(:transfer, url: samples_transfer_path(namespace_id: @namespace.id), method: :post,
+        <%= form_for(:transfer, url: samples_transfer_path(namespace_id: namespace.id), method: :post,
               data: {
                 controller: "form--json-submission",
                 "form--json-submission-selection-outlet": '#samples-table',
@@ -53,7 +55,7 @@
                 "form--json-submission-target": "form",
               }
             ) do |form| %>
-          <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>">
+          <input type="hidden" name="broadcast_target" value="<%= broadcast_target %>">
 
           <div class="grid gap-4">
             <div class="form-field">
@@ -68,7 +70,7 @@
                            required: true,
                          } %>
 
-              <% if @projects.empty? %>
+              <% if projects.empty? %>
                 <input
                   disabled
                   placeholder="<%= t("samples.transfers.dialog.no_available_projects") %>"
@@ -81,7 +83,7 @@
                 >
               <% else %>
                 <%= render Select2Component.new(form:, name: :new_project_id, required: true, id: form_id, placeholder: t("samples.transfers.dialog.select_project")) do |select| %>
-                  <% @projects.each do |project| %>
+                  <% projects.each do |project| %>
                     <% select.with_option(
                       value: project.id,
                       label: project.name,
@@ -106,7 +108,8 @@
 
             <div>
               <%= form.submit t("samples.transfers.dialog.submit_button"),
-                          class: "button button-primary",
+                            tone: :primary,
+                            emphasis: :solid,
                           disabled: true,
                           data:
                           if Flipper.enabled?(:v2_select2, Current.user)

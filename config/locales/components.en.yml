@@ -217,6 +217,8 @@ en:
       dropdown:
         aria_label: Breadcrumb dropdown
       navigation_aria_label: Breadcrumb navigation
+    cancel_button:
+      cancel: Cancel
     clipboard:
       copied: Copied!
     confirmation:

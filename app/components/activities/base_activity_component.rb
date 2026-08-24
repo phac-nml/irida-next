@@ -23,18 +23,15 @@ module Activities
         'dark:focus-visible:outline-white! focus-visible:outline-solid!'
     end
 
-    def more_details_button_classes
-      'button button-default'
-    end
-
     def more_details_button(dialog_type, descriptive_text)
-      button_to t(:'components.activity.more_details'),
-                helpers.activity_path(@activity[:id]),
-                params: { dialog_type: dialog_type },
-                data: { turbo_stream: true },
-                method: :get,
-                class: more_details_button_classes,
-                title: descriptive_text
+      pathogen_button_to t(:'components.activity.more_details'),
+                         helpers.activity_path(@activity[:id]),
+                         params: { dialog_type: dialog_type },
+                         data: { turbo_stream: true },
+                         method: :get,
+                         tone: :neutral,
+                         emphasis: :outline,
+                         title: descriptive_text
     end
   end
 end

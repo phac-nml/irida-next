@@ -9,7 +9,7 @@
 ) do |component| %>
   <%= component.with_buttons do %>
     <% if @allowed_to[:export_data] && @has_workflow_executions %>
-      <%= button_to t("groups.workflow_executions.index.create_export_button"),
+      <%= pathogen_button_to t("groups.workflow_executions.index.create_export_button"),
       new_data_export_path,
       params: {
         export_type: "analysis",
@@ -22,7 +22,7 @@
         controller: "action-button",
         action_button_required_value: 1,
       },
-      class: "button button-default action-button" %>
+      tone: :neutral, emphasis: :outline, class: "action-button" %>
     <% end %>
   <% end %>
 <% end %>

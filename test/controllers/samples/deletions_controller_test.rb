@@ -285,6 +285,7 @@ module Samples
 
       assert_response :unprocessable_content
       assert_match 'Reason is too long', response.body
+      assert_match 'form-error-summary', response.body
       Flipper.disable(:sample_deletion_reason)
     end
   end

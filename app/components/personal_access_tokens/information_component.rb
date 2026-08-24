@@ -14,15 +14,15 @@ module PersonalAccessTokens
     end
 
     def statistic_button(type, count)
-      button_to t("personal_access_tokens.information_component.view_#{type}"),
-                helpers.list_profile_personal_access_tokens_path,
-                data: { 'turbo-stream': true },
-                params: { type: type },
-                method: :get,
-                type: :button,
-                disabled: count.zero?,
-                class:
-                  'button button-default'
+      pathogen_button_to t("personal_access_tokens.information_component.view_#{type}"),
+                         helpers.list_profile_personal_access_tokens_path,
+                         data: { 'turbo-stream': true },
+                         params: { type: type },
+                         method: :get,
+                         type: :button,
+                         disabled: count.zero?,
+                         tone: :neutral,
+                         emphasis: :outline
     end
   end
 end

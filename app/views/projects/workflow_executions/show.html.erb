@@ -12,7 +12,7 @@
     <div class="mb-2 flex flex-col space-y-2 @lg:justify-between @lg:space-x-1 @xl:flex-row">
       <% if @allowed_to[:export_data] %>
         <% if @workflow_execution.completed? %>
-          <%= button_to t("projects.workflow_executions.show.create_export_button"),
+          <%= pathogen_button_to t("projects.workflow_executions.show.create_export_button"),
           new_data_export_path,
           params: {
             export_type: "analysis",
@@ -25,9 +25,9 @@
           data: {
             turbo_stream: true,
           },
-          class: "button button-default w-full" %>
+          tone: :neutral, emphasis: :outline, block: true %>
         <% else %>
-          <%= button_to t("projects.workflow_executions.show.create_export_button"),
+          <%= pathogen_button_to t("projects.workflow_executions.show.create_export_button"),
           new_data_export_path,
           params: {
             export_type: "analysis",
@@ -40,14 +40,15 @@
           data: {
             turbo_stream: true,
           },
-          class:
-            "button button-default w-full pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300",
+          tone: :neutral,
+          emphasis: :outline,
+          block: true,
           disabled: true %>
         <% end %>
       <% end %>
 
       <% if @workflow_execution.cancellable? && @allowed_to[:cancel] %>
-        <%= button_to t("common.actions.cancel"),
+        <%= pathogen_button_to t("common.actions.cancel"),
         cancel_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
@@ -59,11 +60,11 @@
             t("projects.workflow_executions.show.cancel_button_confirmation"),
         },
         method: :put,
-        class: "button button-default w-full" %>
+        tone: :neutral, emphasis: :outline, block: true %>
       <% end %>
 
       <% if @allowed_to[:update] %>
-        <%= button_to t("common.actions.edit"),
+        <%= pathogen_button_to t("common.actions.edit"),
         edit_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
@@ -73,11 +74,11 @@
           turbo_stream: true,
         },
         method: :get,
-        class: "button button-default w-full" %>
+        tone: :neutral, emphasis: :outline, block: true %>
       <% end %>
 
       <% if @workflow_execution.deletable? && @allowed_to[:destroy] %>
-        <%= button_to t("common.actions.remove"),
+        <%= pathogen_button_to t("common.actions.remove"),
         destroy_confirmation_namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
@@ -87,7 +88,7 @@
           turbo_stream: true,
         },
         method: :get,
-        class: "button button-default w-full" %>
+        tone: :neutral, emphasis: :outline, block: true %>
       <% end %>
     </div>
   <% end %>

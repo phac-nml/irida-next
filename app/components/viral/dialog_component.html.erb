@@ -17,14 +17,14 @@
 
         <% if render_footer? %>
           <div class="flex items-center space-x-2 rounded-b-lg border-t border-slate-200 p-5 dark:border-slate-600">
-            <% if primary_action? %>
-              <%= primary_action %>
-            <% end %>
-
             <% if secondary_actions? %>
               <% secondary_actions.each do |action| %>
                 <%= action %>
               <% end %>
+            <% end %>
+
+            <% if primary_action? %>
+              <%= primary_action %>
             <% end %>
           </div>
         <% end %>

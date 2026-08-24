@@ -24,9 +24,9 @@ class FormErrorSummaryEntryBuilder
     end
   end
 
-  def initialize(builder:, errors: builder.object&.errors, target_overrides: {}, attribute_overrides: {})
+  def initialize(builder:, errors: nil, target_overrides: {}, attribute_overrides: {})
     @builder = builder
-    @errors = errors
+    @errors = errors || errors_from(builder)
     @target_overrides = target_overrides.to_h.transform_keys(&:to_s)
     @attribute_overrides = attribute_overrides.to_h.transform_keys(&:to_s)
   end
@@ -49,6 +49,11 @@ class FormErrorSummaryEntryBuilder
   private
 
   attr_reader :builder, :errors, :target_overrides, :attribute_overrides
+
+  def errors_from(builder)
+    object = builder.object
+    object.errors if object.respond_to?(:errors)
+  end
 
   def message_for(attribute)
     return errors.full_messages_for(attribute).to_sentence if attribute_overrides[attribute.to_s].blank?

@@ -44,17 +44,18 @@
     <p class="text-slate-600 dark:text-slate-400"><%= t(:"groups.edit.advanced.delete.description") %></p>
 
     <div class="mt-4">
-      <%= button_to t(:"groups.edit.advanced.delete.submit"),
+      <%= pathogen_button_to t(:"groups.edit.advanced.delete.submit"),
       @group,
       method: :delete,
+      tone: :danger,
+      emphasis: :solid,
       form: {
         data: {
           turbo_confirm: "",
           turbo_content: ".confirm-delete",
           confirm_value: @group.path,
         }
-      },
-      class: "button button-destructive" %>
+      } %>
     </div>
   <% end %>
 <% end %>

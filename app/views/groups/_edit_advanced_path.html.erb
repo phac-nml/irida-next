@@ -1,8 +1,10 @@
+<%# locals: (group: @group, md: @md) -%>
+
 <%= render Viral::CardComponent.new do |card| %>
   <% card.with_header(title: t(:"groups.edit.advanced.path.title")) %>
 
   <% card.with_section do %>
-    <%= form_with(model: @group, url: group_path, method: :patch, html: { novalidate: true }) do |form| %>
+    <%= form_with(model: group, url: group_path, method: :patch, html: { novalidate: true }) do |form| %>
       <div class="grid gap-4">
         <%= form_error_summary(form,  include: %i[path]) %>
 
@@ -12,7 +14,7 @@
 
         <%= render partial: "shared/form/required_field_legend" %>
 
-        <% invalid_path = @group.errors.include?(:path) %>
+        <% invalid_path = group.errors.include?(:path) %>
 
         <div class="form-field <%= 'invalid' if invalid_path %>">
           <div class="@container">
@@ -25,12 +27,12 @@
                   text-sm font-medium text-ellipsis whitespace-nowrap text-slate-700 @md:!rounded-r-none
                   @md:border-r-0 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300
                 "
-                aria-label="<%= root_url %><%= @group&.parent&.full_path %>"
                 role="group"
+                aria-label="<%= root_url %><%= group&.parent&.full_path %>"
               >
-                <% if @group.parent %>
+                <% if group.parent %>
                   <%= root_url %>
-                  <span class="font-bold"><%= @group.parent.full_path + "/" %></span>
+                  <span class="font-bold"><%= group.parent.full_path + "/" %></span>
                 <% else %>
                   <%= root_url %>
                 <% end %>
@@ -40,9 +42,9 @@
                 <%= form.text_field :path,
                                 pattern: Irida::PathRegex::PATH_REGEX_STR,
                                 required: true,
-                                title: @group.path,
+                                title: group.path,
                                 class:
-                                  "text-ellipsis overflow-hidden border-slate-300 text-slate-800 sm:text-sm rounded-r-lg @md:!rounded-l-none",
+                                  "text-ellipsis overflow-hidden border-slate-300 text-slate-800 sm:text-sm rounded-r-lg md:!rounded-l-none",
                                  aria: {
                                    describedby: [
                                      invalid_path ? form.field_id(:path, "error") : nil,
@@ -57,7 +59,7 @@
             <% if invalid_path %>
               <%= render "shared/form/field_errors",
               id: form.field_id(:path, "error"),
-              errors: @group.errors.full_messages_for(:path) %>
+              errors: group.errors.full_messages_for(:path) %>
             <% end %>
 
             <span id="<%= form.field_id(:path, "hint") %>" class="field-hint">
@@ -71,7 +73,9 @@
                       data: {
                         turbo_frame: "_top",
                       },
-                      class: "button button-destructive inline-block" %>
+                        tone: :danger,
+                        emphasis: :solid,
+                        class: "inline-block" %>
         </div>
       </div>
     <% end %>

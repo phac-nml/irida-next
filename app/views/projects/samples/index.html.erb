@@ -10,11 +10,27 @@
   subtitle: t(".subtitle", puid: @project.puid)) do |component| %>
     <% component.with_buttons do %>
       <% if @allowed_to[:submit_workflow] && @has_samples && @pipelines_enabled %>
-        <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @project.namespace.id }, method: :get,
-        data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
-                  class: "button button-default action-button cursor-pointer" do %>
-          <%= icon(:rocket_launch, size: :sm) %>
-          <span class="ml-2"><%= t(:".workflows.button_sr") %></span>
+        <%= form_with url: pipeline_selection_workflow_executions_submissions_path,
+        method: :get,
+        data: { turbo_stream: true },
+        class: "contents" do %>
+          <%= hidden_field_tag :namespace_id, @project.namespace.id %>
+
+          <%= render Pathogen::Button.new(
+            type: :submit,
+            tone: :neutral,
+            emphasis: :outline,
+            text: t(:".workflows.button_sr"),
+            data: {
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class: "action-button"
+          ) do |button| %>
+            <% button.with_leading_visual do %>
+              <%= icon(:rocket_launch, size: :sm) %>
+            <% end %>
+          <% end %>
         <% end %>
       <% end %>
 

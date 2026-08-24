@@ -1,4 +1,6 @@
-<%= form_with(model: @transfer_form, url: group_transfer_path, method: :put, class: "grid gap-4", id: "edit_advanced_transfer_form",
+<%# locals: (confirm_value:, authorized_namespaces: @authorized_namespaces, transfer_form: @transfer_form) -%>
+
+<%= form_with(model: transfer_form, url: group_transfer_path, method: :put, class: "grid gap-4", id: "edit_advanced_transfer_form",
 data: {
   turbo_confirm: "",
   turbo_content: ".confirm-transfer",
@@ -7,7 +9,7 @@ data: {
 }) do |form| %>
   <%= render partial: "shared/form/required_field_legend" %>
 
-  <% invalid_new_parent_id = @transfer_form.errors.include?(:new_parent_id) %>
+  <% invalid_new_parent_id = transfer_form.errors.include?(:new_parent_id) %>
 
   <div class="form-field <%= 'invalid' if invalid_new_parent_id %>">
     <%= form_error_summary(form) %>
@@ -20,7 +22,7 @@ data: {
                  required: true,
                } %>
 
-    <% if @authorized_namespaces.empty? %>
+    <% if authorized_namespaces.empty? %>
       <input
         disabled
         placeholder="<%= t(:"groups.edit.advanced.transfer.no_available_namespaces") %>"
@@ -33,7 +35,7 @@ data: {
       >
     <% else %>
       <%= render Select2Component.new(form:, name: :new_parent_id, id: form.field_id(:new_parent_id), placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
-        <% @authorized_namespaces.each do |namespace| %>
+        <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
                       label: namespace.name,
@@ -56,13 +58,15 @@ data: {
     <% if invalid_new_parent_id %>
       <%= render "shared/form/field_errors",
               id: form.field_id(:new_parent_id, "error"),
-              errors: @transfer_form.errors.full_messages_for(:new_parent_id) %>
+              errors: transfer_form.errors.full_messages_for(:new_parent_id) %>
     <% end %>
   </div>
 
   <div>
     <%= form.submit t("groups.edit.advanced.transfer.submit"),
-                class: "button button-destructive inline-block",
+                tone: :danger,
+                emphasis: :outline,
+                class: "inline-block",
                 disabled: true,
                 data:
                 if Flipper.enabled?(:v2_select2, Current.user)

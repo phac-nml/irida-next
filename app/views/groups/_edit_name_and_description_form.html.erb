@@ -1,3 +1,5 @@
+<%# locals: (group:, authorized_namespaces:) -%>
+
 <%= form_with(model: group, url: group_path, method: :patch, html: { novalidate: true }) do |form| %>
   <div class="grid gap-4">
     <%= render partial: "form_fields",
@@ -6,8 +8,9 @@
       group: group,
       authorized_namespaces: authorized_namespaces,
     } %>
+
     <div>
-      <%= form.submit t(:"groups.edit.details.submit"), class: "button button-primary" %>
+      <%= form.submit t(:"groups.edit.details.submit"), tone: :primary, emphasis: :solid %>
     </div>
   </div>
 <% end %>

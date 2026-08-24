@@ -1,3 +1,5 @@
+<%# locals: (open:, bot_account:) -%>
+
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(title: t("bots.destroy_confirmation.title")) %>
 
@@ -16,7 +18,8 @@
             }
           ) do |form| %>
       <%= form.submit t("bots.destroy_confirmation.submit_button"),
-                  class: "button button-destructive",
+                  tone: :danger,
+                  emphasis: :solid,
                   data: {
                     action: "click->token#removeTokenPanel",
                   } %>

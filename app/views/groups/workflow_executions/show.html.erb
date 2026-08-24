@@ -12,7 +12,7 @@
     <div class="mb-2 flex flex-col space-y-2 @lg:justify-between @lg:space-x-1 @xl:flex-row">
       <% if @allowed_to[:export_data] %>
         <% if @workflow_execution.completed? %>
-          <%= button_to t("groups.workflow_executions.show.create_export_button"),
+          <%= pathogen_button_to t("groups.workflow_executions.show.create_export_button"),
           new_data_export_path,
           params: {
             export_type: "analysis",
@@ -25,9 +25,9 @@
           data: {
             turbo_stream: true,
           },
-          class: "button button-default w-full" %>
+          tone: :neutral, emphasis: :outline, block: true %>
         <% else %>
-          <%= button_to t("groups.workflow_executions.show.create_export_button"),
+          <%= pathogen_button_to t("groups.workflow_executions.show.create_export_button"),
           new_data_export_path,
           params: {
             export_type: "analysis",
@@ -40,13 +40,15 @@
           data: {
             turbo_stream: true,
           },
-          class:
-            "button button-default w-full pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300" %>
+          tone: :neutral,
+          emphasis: :outline,
+          block: true,
+          disabled: true %>
         <% end %>
       <% end %>
 
       <% if @workflow_execution.cancellable? && @allowed_to[:cancel] %>
-        <%= button_to t("common.actions.cancel"),
+        <%= pathogen_button_to t("common.actions.cancel"),
         cancel_group_workflow_execution_path(@namespace, @workflow_execution.id),
         data: {
           turbo_method: :put,
@@ -54,21 +56,21 @@
             t("groups.workflow_executions.show.cancel_button_confirmation"),
         },
         method: :put,
-        class: "button button-default w-full" %>
+        tone: :neutral, emphasis: :outline, block: true %>
       <% end %>
 
       <% if @allowed_to[:update] %>
-        <%= button_to t("common.actions.edit"),
+        <%= pathogen_button_to t("common.actions.edit"),
         edit_group_workflow_execution_path(@namespace, @workflow_execution),
         method: :get,
         data: {
           turbo_stream: true,
         },
-        class: "button button-default w-full" %>
+        tone: :neutral, emphasis: :outline, block: true %>
       <% end %>
 
       <% if @workflow_execution.deletable? && @allowed_to[:destroy] %>
-        <%= button_to t("common.actions.remove"),
+        <%= pathogen_button_to t("common.actions.remove"),
         group_workflow_execution_path(@namespace, @workflow_execution, redirect: true),
         data: {
           turbo_method: :delete,
@@ -76,7 +78,7 @@
             t("groups.workflow_executions.show.remove_button_confirmation"),
         },
         method: :delete,
-        class: "button button-default w-full" %>
+        tone: :neutral, emphasis: :outline, block: true %>
       <% end %>
     </div>
   <% end %>

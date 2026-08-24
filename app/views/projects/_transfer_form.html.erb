@@ -1,13 +1,15 @@
-<%= form_with(model: @transfer_form, url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
+<%# locals: (authorized_namespaces: @authorized_namespaces, project: @project, transfer_form: @transfer_form) -%>
+
+<%= form_with(model: transfer_form, url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
               data:
               if Flipper.enabled?(:v2_select2, Current.user)
-                { turbo_confirm: "", turbo_content: ".confirm-transfer", confirm_value: @project.name, controller: "select2--v2" }
+                { turbo_confirm: "", turbo_content: ".confirm-transfer", confirm_value: project.name, controller: "select2--v2" }
               else
-                { turbo_confirm: "", turbo_content: ".confirm-transfer", confirm_value: @project.name, controller: "select2--v1" }
+                { turbo_confirm: "", turbo_content: ".confirm-transfer", confirm_value: project.name, controller: "select2--v1" }
               end) do |form| %>
   <div class="mb-2"><%= render partial: "shared/form/required_field_legend" %></div>
 
-  <% invalid_new_namespace_id = @transfer_form.errors.include?(:new_namespace_id) %>
+  <% invalid_new_namespace_id = transfer_form.errors.include?(:new_namespace_id) %>
 
   <div class="form-field <%= 'invalid' if invalid_new_namespace_id %>">
     <%= form_error_summary(form) %>
@@ -16,7 +18,7 @@
                    class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
                    data: { required: true } %>
 
-    <% if @authorized_namespaces.empty? %>
+    <% if authorized_namespaces.empty? %>
       <input
         disabled
         placeholder="<%= t(:"projects.edit.advanced.transfer.no_available_namespaces") %>"
@@ -29,7 +31,7 @@
       >
     <% else %>
       <%= render Select2Component.new(form:, name: :new_namespace_id, id: form.field_id(:new_namespace_id), placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
-        <% @authorized_namespaces.each do |namespace| %>
+        <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
                       label: namespace.name,
@@ -52,13 +54,14 @@
     <% if invalid_new_namespace_id %>
       <%= render "shared/form/field_errors",
               id: form.field_id(:new_namespace_id, "error"),
-              errors: @transfer_form.errors.full_messages_for(:new_namespace_id) %>
+              errors: transfer_form.errors.full_messages_for(:new_namespace_id) %>
     <% end %>
   </div>
 
   <div>
     <%= form.submit t(:"projects.edit.advanced.transfer.submit"),
-                class: "button button-destructive",
+                tone: :danger,
+                emphasis: :outline,
                 disabled: "disabled",
                 data:
                 if Flipper.enabled?(:v2_select2, Current.user)
