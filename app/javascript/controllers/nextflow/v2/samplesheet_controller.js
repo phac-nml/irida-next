@@ -950,7 +950,11 @@ export default class extends Controller {
     // to prevent browser timeouts on large (10k+) sample requests, samples will be chunked and batched into
     // 1000 sample requests
     if (this.hasSelectionOutlet) {
+      console.log("hihihhi");
+      console.log(this.hasSelectionOutlet);
       this.#selectedSamples = this.selectionOutlet.getOrCreateStoredItems();
+      console.log("SELECTED SAMPLES");
+      console.log(this.#selectedSamples);
       if (this.#selectedSamples.length !== 0) {
         this.#resetAttributes();
         this.#chunkedSelectedSamples = this.#chunkSamples();
