@@ -245,16 +245,22 @@ module WorkflowExecutions
       end
     end
 
-    test 'samplesheet request' do
+    test 'can get nextflow samplesheet' do
       sign_in users(:john_doe)
-      sample1 = samples(:sample1)
       post workflow_executions_submissions_path(namespace_id: projects(:project1).namespace.id,
                                                 pipeline_id: 'phac-nml/iridanextexample',
                                                 workflow_version: '1.0.3',
-                                                samples: [sample1.id], format: :turbo_stream)
-
+                                                sample_count: 1, format: :turbo_stream)
       assert_response :success
+
       assert_select 'h1', 'phac-nml/iridanextexample'
+
+      assert_select 'label', "#{I18n.t('components.nextflow_component.name.label.required')} *"
+      assert_select 'input[id="workflow_execution_name"][type="text"]'
+      assert_select 'div', I18n.t('components.nextflow_component.loading_samplesheet.one')
+      assert_select 'span', I18n.t(:'components.nextflow.verifying_update_samples')
+      assert_select 'label', I18n.t(:'components.nextflow.email_notification')
+      assert_select 'label', I18n.t(:"components.nextflow.shared_with.#{projects(:project1).namespace.type.downcase}")
     end
 
     # TODO: Look into recreating this

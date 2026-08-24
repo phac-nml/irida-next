@@ -58,8 +58,6 @@ module WorkflowExecutions
       user = users(:john_doe)
       login_as user
 
-      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: user.locale))
 
