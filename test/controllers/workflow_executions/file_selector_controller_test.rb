@@ -48,11 +48,6 @@ module WorkflowExecutions
         namespace_id: groups(:snvphyl_group).id
       }
     end
-    test 'new file selection with fastq params' do
-      get new_workflow_executions_file_selector_path(file_selector: @expected_fastq_params, format: :turbo_stream)
-
-      assert_response :ok
-    end
 
     test 'create file selection with fastq params' do
       attachment = attachments(:attachmentPEFWD43)

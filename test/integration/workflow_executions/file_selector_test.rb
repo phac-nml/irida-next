@@ -8,19 +8,20 @@ module WorkflowExecutions
 
     test 'fastq_1 displays both forward and non-pe files' do
       sample = samples(:sampleB)
+      selected_attachment = attachments(:attachmentPEFWD3)
       sign_in users(:jane_doe)
       get new_workflow_executions_file_selector_path(
         params: {
           file_selector: { attachable_id: sample.id, attachable_type: 'Sample',
                            pattern: '^\\S+\\.f(ast)?q(\\.gz)?$',
                            property: 'fastq_1',
-                           selected_id: attachments(:attachmentPEFWD3).id,
+                           selected_id: selected_attachment.id,
                            namespace_id: sample.project.namespace.id, required_properties: %w[fastq_1 sample] }
         }
       )
 
       assert_response :success
-      attachments = [attachments(:attachmentPEFWD3), attachments(:attachmentPEFWD2), attachments(:attachmentPEFWD1),
+      attachments = [selected_attachment, attachments(:attachmentPEFWD2), attachments(:attachmentPEFWD1),
                      attachments(:attachmentF), attachments(:attachmentE), attachments(:attachmentD)]
       assert_select 'table' do
         assert_select 'tbody' do
@@ -33,33 +34,39 @@ module WorkflowExecutions
               assert_select 'td' do
                 assert_select 'time[datetime=?]', attachment.created_at.iso8601
               end
+              if attachment == selected_attachment
+                assert_select "input[id='attachment_id_#{attachment.id}'][checked]"
+              else
+                assert_select "input[id='attachment_id_#{attachment.id}'][checked]", count: 0
+              end
             end
-            # no rev files
-            assert_select 'td', text: 'test_file_rev_3.fastq', count: 0
-            assert_select 'td', text: 'test_file_rev_2.fastq', count: 0
-            assert_select 'td', text: 'test_file_rev_1.fastq', count: 0
-            assert_select 'td', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.no_file'), count: 0
           end
+          # no rev files
+          assert_select 'td', text: 'test_file_rev_3.fastq', count: 0
+          assert_select 'td', text: 'test_file_rev_2.fastq', count: 0
+          assert_select 'td', text: 'test_file_rev_1.fastq', count: 0
+          assert_select 'td', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.no_file'), count: 0
         end
       end
     end
 
     test 'fastq_2 displays only rev attachments' do
       sample = samples(:sampleB)
+      selected_attachment = attachments(:attachmentPEREV3)
       sign_in users(:jane_doe)
       get new_workflow_executions_file_selector_path(
         params: {
           file_selector: { attachable_id: sample.id, attachable_type: 'Sample',
                            pattern: '^\\S+\\.f(ast)?q(\\.gz)?$',
                            property: 'fastq_2',
-                           selected_id: attachments(:attachmentPEREV3).id,
+                           selected_id: selected_attachment.id,
                            namespace_id: sample.project.namespace.id, required_properties: %w[fastq_1 sample] }
         }
       )
 
       assert_response :success
 
-      attachments = [attachments(:attachmentPEREV3), attachments(:attachmentPEREV2), attachments(:attachmentPEREV1)]
+      attachments = [selected_attachment, attachments(:attachmentPEREV2), attachments(:attachmentPEREV1)]
       assert_select 'table' do
         assert_select 'tbody' do
           attachments.each do |attachment|
@@ -71,6 +78,11 @@ module WorkflowExecutions
               assert_select 'td' do
                 assert_select 'time[datetime=?]', attachment.created_at.iso8601
               end
+              if attachment == selected_attachment
+                assert_select "input[id='attachment_id_#{attachment.id}'][checked]"
+              else
+                assert_select "input[id='attachment_id_#{attachment.id}'][checked]", count: 0
+              end
             end
           end
           # no fwd or non-pe files
@@ -80,6 +92,7 @@ module WorkflowExecutions
           assert_select 'td', text: 'test_file_14.fastq.gz', count: 0
           assert_select 'td', text: 'test_file_2.fastq.gz', count: 0
           assert_select 'td', text: 'test_file_D.fastq', count: 0
+          # not a required property so No File option available
           assert_select 'td', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.no_file')
         end
       end
