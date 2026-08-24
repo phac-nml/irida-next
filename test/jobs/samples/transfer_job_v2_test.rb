@@ -4,7 +4,7 @@ require 'active_job/continuation/test_helper'
 require 'test_helper'
 
 module Samples
-  class TransferJobTest < ActiveJob::TestCase
+  class TransferJobV2Test < ActiveJob::TestCase
     include ActiveJob::Continuation::TestHelper
 
     def setup # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
