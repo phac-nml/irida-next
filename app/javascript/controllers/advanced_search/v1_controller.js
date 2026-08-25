@@ -179,15 +179,19 @@ export default class AdvancedSearchController extends Controller {
     if (!condition || !group) {
       return;
     }
-    const value = this.#getValueInput(condition);
+    const value = this.#resetAndGetValueInput(condition);
     const groupIndex = this.#groupElements().indexOf(group);
     const conditionIndex = this.#conditionElements(group).indexOf(condition);
     if (!value || groupIndex < 0 || conditionIndex < 0) {
       return;
     }
     if (operator === "" || operator.includes("exists")) {
-      value.classList.add(...this.#hiddenClasses);
-      value.querySelectorAll("input").forEach((input) => {
+      value.outerHTML = this.valueTemplateTarget.innerHTML
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+      const updatedValue = condition.querySelector(".value");
+      updatedValue.classList.add(...this.#hiddenClasses);
+      updatedValue.querySelectorAll("input").forEach((input) => {
         input.value = "";
       });
     } else {
@@ -206,7 +210,7 @@ export default class AdvancedSearchController extends Controller {
           .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
 
         const updatedCondition = this.#conditionElements(group)[conditionIndex];
-        const updatedValue = this.#getValueInput(updatedCondition);
+        const updatedValue = updatedCondition?.querySelector(".value");
         updatedValue?.classList.remove(...this.#hiddenClasses);
         this.#updateValueFieldForEnum(
           updatedValue,
@@ -254,7 +258,7 @@ export default class AdvancedSearchController extends Controller {
     condition.dataset.advancedSearchSelectedField = selectedField;
     this.#updateOperatorDropdown(condition, selectedField);
 
-    const value = this.#getValueInput(condition);
+    const value = this.#resetAndGetValueInput(condition);
     if (value) {
       this.#clearValueInputs(value);
       value.classList.add(...this.#hiddenClasses);
@@ -590,7 +594,7 @@ export default class AdvancedSearchController extends Controller {
     });
   }
 
-  #getValueInput(condition) {
+  #resetAndGetValueInput(condition) {
     if (!condition) return null;
     const values = condition.querySelectorAll(".value");
     if (values.length === 0) {
