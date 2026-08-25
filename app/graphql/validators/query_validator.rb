@@ -2,7 +2,7 @@
 
 module Validators
   # Query Validator
-  class QueryValidator < BaseValidator # rubocop:disable GraphQL/ObjectDescription
+  class QueryValidator < BaseValidator
     include QueryConcern
 
     def validate(_object, context, value)

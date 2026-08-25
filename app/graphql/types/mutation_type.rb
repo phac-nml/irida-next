@@ -5,17 +5,17 @@ module Types
   class MutationType < Types::BaseObject
     description 'The mutation root of this schema'
 
-    field :attach_files_to_group, mutation: Mutations::AttachFilesToGroup # rubocop:disable GraphQL/FieldDescription
-    field :attach_files_to_project, mutation: Mutations::AttachFilesToProject # rubocop:disable GraphQL/FieldDescription
-    field :attach_files_to_sample, mutation: Mutations::AttachFilesToSample # rubocop:disable GraphQL/FieldDescription, GraphQL/ExtractType
-    field :bulk_update_sample_metadata, mutation: Mutations::BulkUpdateSampleMetadata # rubocop:disable GraphQL/FieldDescription
-    field :copy_samples, mutation: Mutations::CloneSamples # rubocop:disable GraphQL/FieldDescription
-    field :create_direct_upload, mutation: Mutations::CreateDirectUpload # rubocop:disable GraphQL/FieldDescription
-    field :create_group, mutation: Mutations::CreateGroup # rubocop:disable GraphQL/FieldDescription
-    field :create_project, mutation: Mutations::CreateProject # rubocop:disable GraphQL/FieldDescription
-    field :create_sample, mutation: Mutations::CreateSample # rubocop:disable GraphQL/FieldDescription,GraphQL/ExtractType
-    field :submit_workflow_execution, mutation: Mutations::SubmitWorkflowExecution # rubocop:disable GraphQL/FieldDescription
-    field :transfer_samples, mutation: Mutations::TransferSamples # rubocop:disable GraphQL/FieldDescription
-    field :update_sample_metadata, mutation: Mutations::UpdateSampleMetadata # rubocop:disable GraphQL/FieldDescription
+    field :attach_files_to_group, mutation: Mutations::AttachFilesToGroup
+    field :attach_files_to_project, mutation: Mutations::AttachFilesToProject
+    field :attach_files_to_sample, mutation: Mutations::AttachFilesToSample # rubocop:disable GraphQL/ExtractType
+    field :bulk_update_sample_metadata, mutation: Mutations::BulkUpdateSampleMetadata
+    field :copy_samples, mutation: Mutations::CloneSamples
+    field :create_direct_upload, mutation: Mutations::CreateDirectUpload
+    field :create_group, mutation: Mutations::CreateGroup
+    field :create_project, mutation: Mutations::CreateProject
+    field :create_sample, mutation: Mutations::CreateSample # rubocop:disable GraphQL/ExtractType
+    field :submit_workflow_execution, mutation: Mutations::SubmitWorkflowExecution
+    field :transfer_samples, mutation: Mutations::TransferSamples
+    field :update_sample_metadata, mutation: Mutations::UpdateSampleMetadata
   end
 end

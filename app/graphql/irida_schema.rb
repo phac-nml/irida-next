@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # IridaSchema
-class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
+class IridaSchema < GraphQL::Schema
   query Types::QueryType
   mutation Types::MutationType
 

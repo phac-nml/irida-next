@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Query Concern
-module QueryConcern # rubocop:disable GraphQL/ObjectDescription
+module QueryConcern
   include ActiveSupport::Concern
 
   def params(context, project_id, group_id, filter, order_by)

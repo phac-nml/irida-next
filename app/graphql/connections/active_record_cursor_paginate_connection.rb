@@ -7,7 +7,7 @@ module Connections
   # It extends the GraphQL::Pagination::Connection class to provide custom pagination logic.
   # It supports both forward and backward pagination using `first`, `last`, `after`, and `before` arguments.
   # It also allows sorting based on specified fields and directions.
-  class ActiveRecordCursorPaginateConnection < GraphQL::Pagination::Connection # rubocop:disable GraphQL/ObjectDescription,Metrics/ClassLength
+  class ActiveRecordCursorPaginateConnection < GraphQL::Pagination::Connection # rubocop:disable Metrics/ClassLength
     # @return [String, nil] the client-provided cursor. `""` and `"null"` is treated as `nil`.
     def before
       if defined?(@before)

@@ -2,7 +2,7 @@
 
 module Types
   # Sample Filter Type
-  class SampleFilterType < BaseRansackFilterInputObject # rubocop:disable GraphQL/ObjectDescription
+  class SampleFilterType < BaseRansackFilterInputObject
     argument :name_or_puid_cont, String, required: false, camelize: false,
                                          description: 'Filter samples which contains name or puid'
 
