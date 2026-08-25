@@ -7,10 +7,13 @@ Rails:
 
 AllCops:
   Exclude:
+    - ".devenv/**/*"
+    - "db/schema.rb"
+    - "db/jobs_schema.rb"
+    - "node_modules/**/*"
+    - "tmp/**/*"
     - "vendor/**/*"
     - "**/bin/**/**"
-    - "**/db/schema.rb"
-    - "**/db/jobs_schema.rb"
     - "**/test/test_helpers/w3c_validation_helpers.rb"
   TargetRubyVersion: "3.3"
   NewCops: enable

@@ -2,7 +2,7 @@
 
 module Types
   # Attachment Filter Input Type
-  class AttachmentFilterInputType < BaseRansackFilterInputObject # rubocop:disable GraphQL/ObjectDescription
+  class AttachmentFilterInputType < BaseRansackFilterInputObject
     graphql_name 'AttachmentFilter'
     Attachment.ransackable_attributes.excluding(DEFAULT_EXCLUDED_ATTRIBUTES).each do |attr|
       default_predicate_keys.map do |key|

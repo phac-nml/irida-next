@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Concern for keeping track of the last 5 used ips personal access token
-module LastUsedIpConcern # rubocop:disable GraphQL/ObjectDescription
+module LastUsedIpConcern
   include ActiveSupport::Concern
 
   # Adds the given IP address to the list of last used ips for the given personal access token,
