@@ -171,4 +171,17 @@ class NamespaceTest < ActiveSupport::TestCase
 
     Namespace.transfer_samples_count_delta(old_parent, new_parent, sample_count)
   end
+
+  test 'destroying and restoring project namespace with nil samples_count does not raise an error' do
+    project_namespace = namespaces_project_namespaces(:john_doe_project3_namespace)
+    project_namespace.update_column(:samples_count, nil) # rubocop:disable Rails/SkipsModelValidations
+
+    assert_nothing_raised do
+      project_namespace.destroy
+    end
+
+    assert_nothing_raised do
+      Namespace.restore(project_namespace.id, recursive: true)
+    end
+  end
 end

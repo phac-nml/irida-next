@@ -477,7 +477,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return if parent.nil?
 
     # Decrement group ancestors by this namespace's current sample count
-    parent.propagate_samples_count_delta(-samples_count) if samples_count.positive?
+    parent.propagate_samples_count_delta(-samples_count) if samples_count&.positive?
   end
 
   # Propagate sample count increments when namespace is restored.
@@ -486,7 +486,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return if parent.nil?
 
     # Increment group ancestors by this namespace's current sample count
-    parent.propagate_samples_count_delta(samples_count) if samples_count.positive?
+    parent.propagate_samples_count_delta(samples_count) if samples_count&.positive?
   end
 
   # Transfer sample counts when namespace parent changes (e.g., project or group transfer).
