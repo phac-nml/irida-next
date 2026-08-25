@@ -104,4 +104,15 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
     assert @namespace.nil?
     assert @member.nil?
   end
+
+  test 'available_bots returns none for non project/group namespaces' do
+    sign_in users(:john_doe)
+
+    @controller = TestMemberClassController.new
+    @controller.instance_variable_set(:@namespace, namespaces_user_namespaces(:john_doe_namespace))
+
+    available_bots = @controller.send(:available_bots)
+
+    assert_equal User.none, available_bots
+  end
 end

@@ -315,6 +315,31 @@ module Groups
       end
     end
 
+    test 'cannot remove themselves when they are the only group member' do
+      user = users(:david_doe)
+      sign_in user
+      group = groups(:david_doe_group_four)
+      group_member = members(:group_four_member_david_doe)
+
+      get group_members_path(group)
+      assert_response :success
+
+      assert_no_difference -> { group.group_members.count } do
+        delete group_member_path(group, group_member), as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
+
+      expected_error = I18n.t(
+        'activerecord.errors.models.member.destroy.last_member_self',
+        namespace_type: group.class.model_name.human
+      )
+
+      assert_select "div[role='alert'][aria-live='assertive']" do
+        assert_select 'div', text: /#{Regexp.escape(expected_error)}/
+      end
+    end
+
     test 'cannot remove a member from the group with insufficient permissions' do
       sign_in users(:joan_doe)
 
