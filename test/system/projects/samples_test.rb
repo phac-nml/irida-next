@@ -3912,6 +3912,47 @@ module Projects
       Flipper.disable(:advanced_search_metadata_operators)
     end
 
+    test 'advanced search filter works after de-selecting between operator' do
+      Flipper.enable(:advanced_search_metadata_operators)
+      ### SETUP START ###
+      user = users(:metadata_doe)
+      login_as user
+      sample61 = samples(:sample61)
+      sample62 = samples(:sample62)
+      sample63 = samples(:sample63)
+      project = projects(:projectMetadata)
+      namespace = groups(:group_metadata)
+      visit namespace_project_samples_url(namespace, project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: user.locale))
+      assert_selector 'table tbody tr th', text: sample61.puid
+      assert_selector 'table tbody tr th', text: sample62.puid
+      assert_selector 'table tbody tr th', text: sample63.puid
+
+      ### SETUP END ###
+
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
+        within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
+          find("input[role='combobox']").send_keys('example_date', :enter)
+          find("select[name$='[operator]']").find("option[value='date_between']").select_option
+          find("select[name$='[operator]']").find("option[value='date_exists']").select_option
+        end
+      end
+      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+
+      assert_selector 'table tbody tr', count: 3
+      assert_selector 'table tbody tr th', text: sample61.puid
+      assert_selector 'table tbody tr th', text: sample62.puid
+      assert_selector 'table tbody tr th', text: sample63.puid
+      ### actions and VERIFY END ###
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
     test 'can update metadata value that is not from an analysis' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
