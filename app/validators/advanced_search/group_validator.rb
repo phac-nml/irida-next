@@ -88,6 +88,7 @@ module AdvancedSearch
     def validate_fields(group) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
       group.conditions.each_with_index do |condition, condition_index|
         validate_blank_inputs(condition)
+
         validate_field(condition) if condition.field.present?
         validate_operator_type(condition) if Flipper.enabled?(:advanced_search_metadata_operators)
 
@@ -192,6 +193,9 @@ module AdvancedSearch
 
     def validate_numeric(condition)
       Array(condition.value).each_with_index do |number, index|
+        # avoid adding format error if value is empty
+        next if number.blank?
+
         error_key = if condition.value.is_a?(Array)
                       index.zero? ? :from_value : :to_value
                     else
@@ -205,6 +209,9 @@ module AdvancedSearch
 
     def validate_date(condition)
       Array(condition.value).each_with_index do |date, index|
+        # avoid adding format error if value is empty
+        next if date.blank?
+
         error_key = if condition.value.is_a?(Array)
                       index.zero? ? :from_value : :to_value
                     else
@@ -251,7 +258,7 @@ module AdvancedSearch
     end
 
     def validate_between_values(condition) # rubocop:disable Metrics/AbcSize
-      # skip further validation if value is blank or invalid format
+      # skip further validation if value is invalid format
       return if condition.errors[:from_value].any? || condition.errors[:to_value].any?
 
       unless condition.value.is_a?(Array) && condition.value.length == 2
