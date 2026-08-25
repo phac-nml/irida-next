@@ -185,51 +185,47 @@ export default class AdvancedSearchController extends Controller {
     if (!value || groupIndex < 0 || conditionIndex < 0) {
       return;
     }
-    if (operator === "" || operator.includes("exists")) {
-      value.outerHTML = this.valueTemplateTarget.innerHTML
+
+    const selectedField = this.#selectedConditionField(condition);
+    if (Object.hasOwn(this.enumFieldsValue, selectedField)) {
+      const templateTarget = [
+        "in",
+        "not_in",
+        "text_in",
+        "text_not_in",
+      ].includes(operator)
+        ? this.listSelectValueTemplateTarget
+        : this.selectValueTemplateTarget;
+      value.outerHTML = templateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
-      const updatedValue = condition.querySelector(".value");
-      updatedValue.classList.add(...this.#hiddenClasses);
-      updatedValue.querySelectorAll("input").forEach((input) => {
-        input.value = "";
-      });
-    } else {
-      const selectedField = this.#selectedConditionField(condition);
-      if (Object.hasOwn(this.enumFieldsValue, selectedField)) {
-        const templateTarget = [
-          "in",
-          "not_in",
-          "text_in",
-          "text_not_in",
-        ].includes(operator)
-          ? this.listSelectValueTemplateTarget
-          : this.selectValueTemplateTarget;
-        value.outerHTML = templateTarget.innerHTML
-          .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-          .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
 
-        const updatedCondition = this.#conditionElements(group)[conditionIndex];
-        const updatedValue = updatedCondition?.querySelector(".value");
-        updatedValue?.classList.remove(...this.#hiddenClasses);
-        this.#updateValueFieldForEnum(
-          updatedValue,
-          updatedCondition,
-          selectedField,
-          operator,
-        );
+      const updatedCondition = this.#conditionElements(group)[conditionIndex];
+      const updatedValue = updatedCondition?.querySelector(".value");
+      updatedValue?.classList.remove(...this.#hiddenClasses);
+      this.#updateValueFieldForEnum(
+        updatedValue,
+        updatedCondition,
+        selectedField,
+        operator,
+      );
+    } else {
+      let templateTarget;
+      if (["in", "not_in", "text_in", "text_not_in"].includes(operator)) {
+        templateTarget = this.listValueTemplateTarget;
+      } else if (operator.includes("between")) {
+        templateTarget = this.betweenValueTemplateTarget;
       } else {
-        let templateTarget;
-        if (["in", "not_in", "text_in", "text_not_in"].includes(operator)) {
-          templateTarget = this.listValueTemplateTarget;
-        } else if (operator.includes("between")) {
-          templateTarget = this.betweenValueTemplateTarget;
-        } else {
-          templateTarget = this.valueTemplateTarget;
-        }
-        value.outerHTML = templateTarget.innerHTML
-          .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-          .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+        templateTarget = this.valueTemplateTarget;
+      }
+      value.outerHTML = templateTarget.innerHTML
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+
+      if (operator === "" || operator.includes("exists")) {
+        const updatedValue = condition.querySelector(".value");
+        updatedValue.classList.add(...this.#hiddenClasses);
+        updatedValue.querySelectorAll("input").value = "";
       }
     }
   }
