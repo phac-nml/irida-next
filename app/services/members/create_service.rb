@@ -29,7 +29,7 @@ module Members
         namespace_bot = NamespaceBot.find_by(user: member.user)
         if namespace_bot.namespace != member.namespace
           raise MemberCreateError,
-                'Project bot user cannot be added as a member to a different namespace than the one it was created for'
+                I18n.t('services.members.create.bot_namespace_mismatch')
         end
       end
 

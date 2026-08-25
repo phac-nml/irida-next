@@ -67,7 +67,7 @@ module Projects
         end
       end
       assert_select 'turbo-stream[action="update"][target="members_pagination"]' do
-        assert_select 'span', text: 'Next'
+        assert_select 'span', text: I18n.t('components.viral.pagy.pagination_component.next')
         assert_select 'span[class="pagy info"]',
                       text: "Displaying items 1-#{PAGE_SIZE} of #{members_count} in total"
       end
@@ -86,7 +86,7 @@ module Projects
           assert_select 'table' do
             assert_select 'tbody' do
               assert_select 'tr', count: parent_namespace.group_members.count
-              assert_select 'td:nth-child(3) > div > a', text: 'Direct member', count: 0
+              assert_select 'td:nth-child(3) > div > a', text: I18n.t('activerecord.models.member.direct'), count: 0
               assert_select 'td:nth-child(3) > div > a', text: parent_namespace.name,
                                                          count: parent_namespace.group_members.count
             end
@@ -112,7 +112,7 @@ module Projects
                 assert_select 'td:nth-child(2)',
                               I18n.t("members.access_levels.level_#{project_member.access_level}")
                 assert_select 'td:nth-child(3)', text: parent_namespace.name, count: 0
-                assert_select 'td:nth-child(3)', text: 'Direct member', count: 1
+                assert_select 'td:nth-child(3)', text: I18n.t('activerecord.models.member.direct'), count: 1
               end
             end
           end

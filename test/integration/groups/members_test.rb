@@ -45,7 +45,7 @@ module Groups
         end
       end
       assert_select 'turbo-stream[action="update"][target="members_pagination"]' do
-        assert_select 'span', text: 'Next'
+        assert_select 'span', text: I18n.t('components.viral.pagy.pagination_component.next')
       end
     end
 
@@ -83,7 +83,7 @@ module Groups
           assert_select 'table' do
             assert_select 'tbody' do
               assert_select "tr#member_#{subgroup_member.id}" do
-                assert_select 'td:nth-child(3)', text: 'Direct member', count: 1
+                assert_select 'td:nth-child(3)', text: I18n.t('activerecord.models.member.direct'), count: 1
               end
             end
           end
