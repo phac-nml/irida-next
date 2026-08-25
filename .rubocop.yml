@@ -15,7 +15,7 @@ AllCops:
     - "vendor/**/*"
     - "**/bin/**/**"
     - "**/test/test_helpers/w3c_validation_helpers.rb"
-  TargetRubyVersion: "3.3"
+  TargetRubyVersion: "3.4"
   NewCops: enable
 
 # https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsblocklength
