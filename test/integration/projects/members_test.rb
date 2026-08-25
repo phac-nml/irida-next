@@ -187,7 +187,7 @@ module Projects
         assert_response :success
 
         assert_select 'div#new-member-dialog' do
-          assert_select 'h1', text: 'Add New Member'
+          assert_select 'h1', text: I18n.t('projects.members.new.title')
         end
       end
 
@@ -203,6 +203,31 @@ module Projects
       end
 
       assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: #{I18n.t(:'concerns.membership_actions.create.success',
+                                                                      user: user_to_add.email)}"
+      end
+    end
+
+    test 'can not add a member to the project due to insufficient permissions' do
+      sign_in users(:ryan_doe)
+      user_to_add = users(:jane_doe)
+
+      get namespace_project_members_path(@namespace, @project)
+      assert_response :success
+
+      assert_no_difference -> { @project.namespace.project_members.count } do
+        post namespace_project_members_path(@namespace, @project), params: {
+          member: {
+            user_id: user_to_add.id,
+            access_level: Member::AccessLevel::ANALYST
+          }
+        }
+      end
+
+      assert_response :unauthorized
     end
 
     test 'cannot add a member to the project with invalid expiration date' do
@@ -217,7 +242,7 @@ module Projects
         assert_response :success
 
         assert_select 'div#new-member-dialog' do
-          assert_select 'h1', text: 'Add New Member'
+          assert_select 'h1', text: I18n.t('projects.members.new.title')
         end
       end
 
@@ -254,7 +279,7 @@ module Projects
         assert_response :success
 
         assert_select 'div#new-member-dialog' do
-          assert_select 'h1', text: 'Add New Member'
+          assert_select 'h1', text: I18n.t('projects.members.new.title')
         end
       end
 
@@ -270,9 +295,32 @@ module Projects
 
       assert_response :unprocessable_content
 
-      assert_select 'a', text: 'User must exist'
+      assert_select 'a', text:
+            I18n.t(:'errors.format',
+                   attribute: Member.human_attribute_name(:user_id),
+                   message: I18n.t(:'errors.messages.required'))
 
       assert_select "div[class='form-field invalid']"
+    end
+
+    test 'invalid member create focuses the summary and linked custom control' do
+      sign_in @user
+
+      get namespace_project_members_path(@namespace, @project)
+      assert_response :success
+
+      I18n.t(:'errors.format',
+             attribute: Member.human_attribute_name(:user_id),
+             message: I18n.t(:'errors.messages.required'))
+
+      post namespace_project_members_path(@namespace, @project),
+           params: { member: {
+             access_level: Member::AccessLevel::ANALYST
+           } },
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_select 'turbo-stream[action="update"][target="flashes"]', count: 0
     end
 
     test 'can remove a member from the project' do
@@ -383,25 +431,6 @@ module Projects
                         'concerns.membership_actions.destroy.leave_success', name: @project.name
                       )}"
       end
-    end
-
-    test 'can not add a member to the project' do
-      sign_in users(:ryan_doe)
-      user_to_add = users(:jane_doe)
-
-      get namespace_project_members_path(@namespace, @project)
-      assert_response :success
-
-      assert_no_difference -> { @project.namespace.project_members.count } do
-        post namespace_project_members_path(@namespace, @project), params: {
-          member: {
-            user_id: user_to_add.id,
-            access_level: Member::AccessLevel::ANALYST
-          }
-        }
-      end
-
-      assert_response :unauthorized
     end
 
     test 'can update member\'s access level to another access level' do
@@ -551,7 +580,7 @@ module Projects
         assert_response :success
 
         assert_select 'div#new-member-dialog' do
-          assert_select 'h1', text: 'Add New Member'
+          assert_select 'h1', text: I18n.t('projects.members.new.title')
         end
       end
 
@@ -590,7 +619,7 @@ module Projects
         assert_response :success
 
         assert_select 'div#new-member-dialog' do
-          assert_select 'h1', text: 'Add New Member'
+          assert_select 'h1', text: I18n.t('projects.members.new.title')
         end
       end
 

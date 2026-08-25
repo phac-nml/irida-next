@@ -155,7 +155,7 @@ module Groups
         assert_response :success
 
         assert_select 'div#new-member-dialog' do
-          assert_select 'h1', text: 'Add New Member'
+          assert_select 'h1', text: I18n.t('groups.members.new.title')
         end
       end
 
@@ -171,6 +171,93 @@ module Groups
       end
 
       assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: #{I18n.t(:'concerns.membership_actions.create.success',
+                                                                      user: user_to_add.email)}"
+      end
+    end
+
+    test 'can not add a member to the group due to insufficient permissions' do
+      sign_in users(:ryan_doe)
+
+      get group_members_path(@group)
+      assert_response :success
+
+      assert_select 'button', text: I18n.t(:'groups.members.index.add'), count: 0
+    end
+
+    test 'cannot add a member to the group with invalid expiration date' do
+      sign_in @user
+      user_to_add = users(:jane_doe)
+
+      get group_members_path(@group)
+      assert_response :success
+
+      assert_select 'turbo-frame#new_member_dialog' do
+        get new_group_member_path(@group)
+        assert_response :success
+
+        assert_select 'div#new-member-dialog' do
+          assert_select 'h1', text: I18n.t('groups.members.new.title')
+        end
+      end
+
+      invalid_expiry_date = '2025-01-01'
+
+      assert_no_difference -> { @group.group_members.count } do
+        post group_members_path(@group),
+             params: { member: {
+               user_id: user_to_add.id,
+               created_by_id: @user.id,
+               access_level: Member::AccessLevel::ANALYST,
+               expires_at: invalid_expiry_date
+             } },
+             as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
+
+      assert_select 'a',
+                    text: /#{I18n.t('errors.messages.date_greater_than', date: Time.zone.today)}/
+      assert_select "div[class='form-field invalid']"
+    end
+
+    test 'cannot add a member to the group with invalid user id' do
+      sign_in @user
+      user_to_add_id = 'abc3-12d4-sdf3-1234'
+
+      get group_members_path(@group)
+      assert_response :success
+
+      assert_select 'turbo-frame#new_member_dialog' do
+        get new_group_member_path(@group)
+        assert_response :success
+
+        assert_select 'div#new-member-dialog' do
+          assert_select 'h1', text: I18n.t('groups.members.new.title')
+        end
+      end
+
+      assert_no_difference -> { @group.group_members.count } do
+        post group_members_path(@group),
+             params: { member: {
+               user_id: user_to_add_id,
+               created_by_id: @user.id,
+               access_level: Member::AccessLevel::ANALYST
+             } },
+             as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
+
+      assert_select 'a',
+                    text: I18n.t(:'errors.format',
+                                 attribute: Member.human_attribute_name(:user_id),
+                                 message: I18n.t(:'errors.messages.required'))
+
+      assert_select "div[class='form-field invalid']"
     end
 
     test 'invalid member create focuses the summary and linked custom control' do
@@ -236,84 +323,6 @@ module Groups
       end
 
       assert_response :unprocessable_content
-    end
-
-    test 'can not add a member to the group' do
-      sign_in users(:ryan_doe)
-
-      get group_members_path(@group)
-      assert_response :success
-
-      assert_select 'button', text: I18n.t(:'groups.members.index.add'), count: 0
-    end
-
-    test 'cannot add a member to the group with invalid expiration date' do
-      sign_in @user
-      user_to_add = users(:jane_doe)
-
-      get group_members_path(@group)
-      assert_response :success
-
-      assert_select 'turbo-frame#new_member_dialog' do
-        get new_group_member_path(@group)
-        assert_response :success
-
-        assert_select 'div#new-member-dialog' do
-          assert_select 'h1', text: 'Add New Member'
-        end
-      end
-
-      invalid_expiry_date = '2025-01-01'
-
-      assert_no_difference -> { @group.group_members.count } do
-        post group_members_path(@group),
-             params: { member: {
-               user_id: user_to_add.id,
-               created_by_id: @user.id,
-               access_level: Member::AccessLevel::ANALYST,
-               expires_at: invalid_expiry_date
-             } },
-             as: :turbo_stream
-      end
-
-      assert_response :unprocessable_content
-
-      assert_select 'a',
-                    text: /#{I18n.t('errors.messages.date_greater_than', date: Time.zone.today)}/
-      assert_select "div[class='form-field invalid']"
-    end
-
-    test 'cannot add a member to the group with invalid user id' do
-      sign_in @user
-      user_to_add_id = 'abc3-12d4-sdf3-1234'
-
-      get group_members_path(@group)
-      assert_response :success
-
-      assert_select 'turbo-frame#new_member_dialog' do
-        get new_group_member_path(@group)
-        assert_response :success
-
-        assert_select 'div#new-member-dialog' do
-          assert_select 'h1', text: 'Add New Member'
-        end
-      end
-
-      assert_no_difference -> { @group.group_members.count } do
-        post group_members_path(@group),
-             params: { member: {
-               user_id: user_to_add_id,
-               created_by_id: @user.id,
-               access_level: Member::AccessLevel::ANALYST
-             } },
-             as: :turbo_stream
-      end
-
-      assert_response :unprocessable_content
-
-      assert_select 'a', text: 'User must exist'
-
-      assert_select "div[class='form-field invalid']"
     end
 
     test 'can update member\'s access level to another access level' do
@@ -470,7 +479,7 @@ module Groups
         assert_response :success
 
         assert_select 'div#new-member-dialog' do
-          assert_select 'h1', text: 'Add New Member'
+          assert_select 'h1', text: I18n.t('groups.members.new.title')
         end
       end
 
@@ -486,6 +495,8 @@ module Groups
       end
 
       assert_response :unprocessable_entity
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']", count: 0
     end
 
     test 'can search members by username' do
@@ -498,7 +509,7 @@ module Groups
         assert_select 'template' do
           assert_select 'table' do
             assert_select 'tbody' do
-              assert_select 'tr', count: 5
+              assert_select 'tr', count: 6
             end
           end
         end
