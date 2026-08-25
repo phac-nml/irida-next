@@ -11,8 +11,6 @@ class AdvancedSearchCondition
   attribute :operator
   attribute :value
 
-  attr_accessor :value
-
   def empty?
     field.blank? && operator.blank? && value_empty?
   end

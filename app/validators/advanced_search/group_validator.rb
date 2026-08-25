@@ -251,6 +251,9 @@ module AdvancedSearch
     end
 
     def validate_between_values(condition) # rubocop:disable Metrics/AbcSize
+      # skip further validation if value is blank or invalid format
+      return if condition.errors[:from_value].any? || condition.errors[:to_value].any?
+
       unless condition.value.is_a?(Array) && condition.value.length == 2
         condition.errors.add :value, :invalid_between_value
         return
