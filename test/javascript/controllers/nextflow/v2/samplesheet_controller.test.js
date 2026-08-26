@@ -2,7 +2,6 @@ import { Application } from "@hotwired/stimulus";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import SamplesheetController from "../../../../../app/javascript/controllers/nextflow/v2/samplesheet_controller.js";
 import SelectionController from "../../../../../app/javascript/controllers/selection_controller.js";
-import merge from "deepmerge";
 
 const setupSamplesheetAttributes = (samples) => {
   renderFixture();
@@ -107,6 +106,50 @@ const assertTableData = (allSamples, expectedSamples) => {
     });
 };
 
+// using getter functions as we will need to re-query these items throughout tests and state changes
+const getPreviousBtn = () =>
+  document.querySelector(
+    '[data-nextflow--v2--samplesheet-target="previousBtn"]',
+  );
+const getNextBtn = () =>
+  document.querySelector('[data-nextflow--v2--samplesheet-target="nextBtn"]');
+const getPageNum = () =>
+  document.querySelector('[data-nextflow--v2--samplesheet-target="pageNum"]');
+
+const assertPaginationState = (previousDisabled, nextDisabled, currentPage) => {
+  expect(getPreviousBtn().disabled).toBe(previousDisabled);
+  expect(getNextBtn().disabled).toBe(nextDisabled);
+  expect(getPageNum().value).toBe(currentPage);
+};
+
+const assertPaginationOptions = (expectedPresent, expectedAbsent = []) => {
+  const values = [...getPageNum().options].map((option) => option.value);
+
+  expectedPresent.forEach((value) => {
+    expect(values).toContain(value);
+  });
+
+  expectedAbsent?.forEach((value) => {
+    expect(values).not.toContain(value);
+  });
+};
+
+const applyFilter = async (value) => {
+  const filter = document.querySelector("#samplesheet-filter");
+  filter.value = value;
+
+  filter.dispatchEvent(
+    new KeyboardEvent("keydown", {
+      key: "Enter",
+      code: "Enter",
+      bubbles: true,
+    }),
+  );
+
+  await new Promise((resolve) => setTimeout(resolve, 60));
+};
+
+/* eslint-disable no-useless-escape */
 function renderFixture() {
   document.body.innerHTML = `
     <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-automated-workflow-value="false" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
@@ -187,7 +230,7 @@ function renderFixture() {
 
             <input id="samplesheet-filter" data-nextflow--v2--samplesheet-target="filter" data-action="keydown.enter-&gt;nextflow--v2--samplesheet#filter" type="search" placeholder="Search by PUID or name" autocomplete="off">
 
-            <button data-nextflow--v2--samplesheet-target="filterClearButton" data-action="click-&gt;nextflow--v2--samplesheet#clearFilter" type="button" aria-label="Clear search">
+            <button data-nextflow--v2--samplesheet-target="filterClearButton" class="hidden" data-action="click-&gt;nextflow--v2--samplesheet#clearFilter" type="button" aria-label="Clear search">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
                 <rect width="256" height="256" fill="none"></rect>
                 <line x1="200" y1="56" x2="56" y2="200" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
@@ -508,6 +551,7 @@ function renderFixture() {
   ></div>
   `;
 }
+/* eslint-enable no-useless-escape */
 
 async function startController() {
   const application = Application.start();
@@ -559,93 +603,113 @@ describe("nextflow v2 samplesheet controller", () => {
     setupSamplesheetAttributes(allSamples);
     application = await startController();
 
-    const previousBtn = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="previousBtn"]',
-    );
-    const nextBtn = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="nextBtn"]',
-    );
-    const pageNum = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="pageNum"]',
-    );
-    const tableBody = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="tableBody"]',
-    );
+    expect(getPreviousBtn()).not.toBeNull();
+    expect(getPageNum()).not.toBeNull();
+    expect(getNextBtn()).not.toBeNull();
+    assertPaginationOptions(["1", "2", "3"]);
 
-    expect(previousBtn).not.toBeNull();
-    expect(pageNum).not.toBeNull();
-    expect(nextBtn).not.toBeNull();
-
-    expect(previousBtn.disabled).toBe(true);
-    expect(nextBtn.disabled).toBe(false);
-
-    expect(pageNum.options).toHaveLength(3);
-    expect([...pageNum.options].map((option) => option.value)).toEqual([
-      "1",
-      "2",
-      "3",
-    ]);
-    expect(pageNum.value).toBe("1");
-
+    assertPaginationState(true, false, "1");
     assertTableData(allSamples, range(1, 5));
 
     // change pages by clicking next/previous buttons
-    nextBtn.click();
+    getNextBtn().click();
 
-    expect(previousBtn.disabled).toBe(false);
-    expect(nextBtn.disabled).toBe(false);
-    expect(pageNum.value).toBe("2");
-
+    assertPaginationState(false, false, "2");
     assertTableData(allSamples, range(6, 10));
 
-    nextBtn.click();
+    getNextBtn().click();
 
-    expect(previousBtn.disabled).toBe(false);
-    expect(nextBtn.disabled).toBe(true);
-    expect(pageNum.value).toBe("3");
-
+    assertPaginationState(false, true, "3");
     assertTableData(allSamples, [11]);
 
-    previousBtn.click();
+    getPreviousBtn().click();
 
-    expect(previousBtn.disabled).toBe(false);
-    expect(nextBtn.disabled).toBe(false);
-    expect(pageNum.value).toBe("2");
-
+    assertPaginationState(false, false, "2");
     assertTableData(allSamples, range(6, 10));
 
-    previousBtn.click();
+    getPreviousBtn().click();
 
-    expect(previousBtn.disabled).toBe(true);
-    expect(nextBtn.disabled).toBe(false);
-    expect(pageNum.value).toBe("1");
-
+    assertPaginationState(true, false, "1");
     assertTableData(allSamples, range(1, 5));
 
     // change pages using select dropdown
-    pageNum.value = "2";
-    pageNum.dispatchEvent(new Event("change", { bubbles: true }));
+    getPageNum().value = "2";
+    getPageNum().dispatchEvent(new Event("change", { bubbles: true }));
 
-    expect(previousBtn.disabled).toBe(false);
-    expect(nextBtn.disabled).toBe(false);
-    expect(pageNum.value).toBe("2");
-
+    assertPaginationState(false, false, "2");
     assertTableData(allSamples, range(6, 10));
 
-    pageNum.value = "3";
-    pageNum.dispatchEvent(new Event("change", { bubbles: true }));
+    getPageNum().value = "3";
+    getPageNum().dispatchEvent(new Event("change", { bubbles: true }));
 
-    expect(previousBtn.disabled).toBe(false);
-    expect(nextBtn.disabled).toBe(true);
-    expect(pageNum.value).toBe("3");
-
+    assertPaginationState(false, true, "3");
     assertTableData(allSamples, [11]);
 
-    pageNum.value = "1";
-    pageNum.dispatchEvent(new Event("change", { bubbles: true }));
+    getPageNum().value = "1";
+    getPageNum().dispatchEvent(new Event("change", { bubbles: true }));
 
-    expect(previousBtn.disabled).toBe(true);
-    expect(nextBtn.disabled).toBe(false);
-    expect(pageNum.value).toBe("1");
+    assertPaginationState(true, false, "1");
+    assertTableData(allSamples, range(1, 5));
+  });
+
+  it("filtering", async () => {
+    const allSamples = [1, 2, 3, 4, 5, 6, 7, 10, 11, 21, 100, 199];
+    setupSamplesheetAttributes(allSamples);
+    application = await startController();
+
+    const clearButton = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="filterClearButton"]',
+    );
+
+    assertPaginationOptions(["1", "2", "3"]);
+
+    assertPaginationState(true, false, "1");
+    expect(clearButton).toHaveClass("hidden");
+
+    getNextBtn().click();
+    getNextBtn().click();
+
+    assertPaginationState(false, true, "3");
+
+    await applyFilter("1");
+
+    expect(clearButton).not.toHaveClass("hidden");
+
+    assertPaginationOptions(["1", "2"], ["3"]);
+
+    assertPaginationState(true, false, "1");
+
+    assertTableData(allSamples, [1, 10, 11, 21, 100]);
+
+    getNextBtn().click();
+
+    assertPaginationState(false, true, "2");
+
+    assertTableData(allSamples, [199]);
+
+    await applyFilter("");
+
+    assertPaginationOptions(["1", "2", "3"]);
+
+    assertPaginationState(true, false, "1");
+    expect(clearButton).toHaveClass("hidden");
+
+    await applyFilter("2");
+
+    expect(getPreviousBtn()).toBeNull();
+    expect(getPageNum()).toBeNull();
+    expect(getNextBtn()).toBeNull();
+
+    expect(clearButton).not.toHaveClass("hidden");
+
+    assertTableData(allSamples, [2, 21]);
+
+    clearButton.click();
+
+    await new Promise((resolve) => setTimeout(resolve, 60));
+
+    assertPaginationState(true, false, "1");
+
+    assertPaginationOptions(["1", "2", "3"]);
   });
 });
