@@ -1985,6 +1985,7 @@ fr:
         invalid_namespace_type: Type d’espace de noms non valide
     members:
       create:
+        bot_namespace_mismatch: L’utilisateur bot du projet ne peut pas être ajouté en tant que membre à un espace de noms différent de celui pour lequel il a été créé
         role_not_allowed: Un responsable ne peut ajouter des membres au %{namespace_type} %{namespace_name} que jusqu’au rôle de responsable
       destroy:
         role_not_allowed: Un responsable ne peut retirer un membre que jusqu’au rôle de responsable

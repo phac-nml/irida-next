@@ -24,10 +24,6 @@ module Projects
 
     protected
 
-    def members_path
-      namespace_project_members_path
-    end
-
     def context_crumbs
       super
       case action_name

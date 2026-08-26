@@ -60,7 +60,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
     Members::DestroyService.new(@member, @namespace, current_user).execute
-
     if @member.deleted?
       if current_user == @member.user
         flash[:success] = t('concerns.membership_actions.destroy.leave_success', name: @namespace.name)
@@ -116,7 +115,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
         end
       else
         format.turbo_stream do
-          render status: :bad_request
+          render status: :unprocessable_content
         end
       end
     end
@@ -146,18 +145,21 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   end
 
   def available_bots # rubocop:disable Metrics/AbcSize
-    if @namespace.type == Namespaces::ProjectNamespace.sti_name
+    member_user_ids = Member.select(:user_id).where(namespace: @namespace)
+    namespace_type = @namespace.type
+
+    return User.none unless [Namespaces::ProjectNamespace.sti_name, Group.sti_name].include?(namespace_type)
+
+    if namespace_type == Namespaces::ProjectNamespace.sti_name
       @namespace.bots.without_automation_bots.where.not(
-        id: Member.select(:user_id).where(namespace: @namespace)
+        id: member_user_ids
       ).or(
         User.bots.without_automation_bots.where(user_type: User.user_types[:group_bot])
-            .where.not(id: Member.select(:user_id).where(namespace: @namespace))
+            .where.not(id: member_user_ids)
       )
-    elsif @namespace.type == Group.sti_name
+    elsif namespace_type == Group.sti_name
       User.bots.without_automation_bots.where(user_type: User.user_types[:group_bot])
-          .where.not(id: Member.select(:user_id).where(namespace: @namespace))
-    else
-      User.none
+          .where.not(id: member_user_ids)
     end
   end
 
@@ -174,10 +176,6 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
   end
 
   protected
-
-  def members_path
-    raise NotImplementedError
-  end
 
   def member_namespace
     raise NotImplementedError

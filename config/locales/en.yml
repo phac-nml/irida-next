@@ -1981,6 +1981,7 @@ en:
         invalid_namespace_type: Invalid namespace type
     members:
       create:
+        bot_namespace_mismatch: Project bot user cannot be added as a member to a different namespace than the one it was created for
         role_not_allowed: A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role
       destroy:
         role_not_allowed: A maintainer can only remove a member up to the Maintainer role

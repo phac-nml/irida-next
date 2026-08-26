@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class TestClassController < ApplicationController
+class TestShareClassController < ApplicationController
   include ShareActions
 
   def create
@@ -32,7 +32,7 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling create on the controller with group_links_path not implemented' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestShareClassController.new
     assert_raises(NotImplementedError) do
       @controller.create
     end
@@ -41,7 +41,7 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling destroy on the controller with group_links_path not implemented' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestShareClassController.new
     assert_raises(NotImplementedError) do
       @controller.destroy
     end
@@ -50,7 +50,7 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling update on the controller with group_links_path not implemented' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestShareClassController.new
     assert_raises(NotImplementedError) do
       @controller.update
     end
@@ -59,7 +59,7 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling index should not result in an error' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestShareClassController.new
     @controller.index
 
     assert @namespace.nil?
@@ -69,7 +69,7 @@ class ShareActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling group_link_namespace should result in an error' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestShareClassController.new
     assert_raises(NotImplementedError) do
       @controller.send(:group_link_namespace)
     end

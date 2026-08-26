@@ -2,20 +2,16 @@
 
 require 'test_helper'
 
-class TestClassController < ApplicationController
+class TestMemberClassController < ApplicationController
   include MembershipActions
 
   def index; end
 
   def new; end
 
-  def create
-    redirect_to members_path
-  end
+  def create; end
 
-  def destroy
-    redirect_to members_path
-  end
+  def destroy; end
 
   private
 
@@ -36,29 +32,27 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling create on the controller with members_path not implemented' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
-    assert_raises(NotImplementedError) do
-      @controller.create
-      assert @namespace.nil?
-      assert @member.nil?
-    end
+    @controller = TestMemberClassController.new
+    @controller.create
+
+    assert @namespace.nil?
+    assert @member.nil?
   end
 
   test 'calling destroy on the controller with members_path not implemented' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
-    assert_raises(NotImplementedError) do
-      @controller.destroy
-      assert @namespace.nil?
-      assert @member.nil?
-    end
+    @controller = TestMemberClassController.new
+    @controller.destroy
+
+    assert @namespace.nil?
+    assert @member.nil?
   end
 
   test 'calling index should not result in an error' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestMemberClassController.new
     @controller.index
 
     assert @namespace.nil?
@@ -68,7 +62,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling new should not result in an error' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestMemberClassController.new
     @controller.new
 
     assert @namespace.nil?
@@ -78,7 +72,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling member_namespace should result in an error' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestMemberClassController.new
     assert_raises(NotImplementedError) do
       @controller.send(:member_namespace)
     end
@@ -90,7 +84,7 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling authorize_view_members should result in an error' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestMemberClassController.new
     assert_raises(NotImplementedError) do
       @controller.send(:authorize_view_members)
     end
@@ -102,12 +96,23 @@ class MembershipActionsConcernTest < ActionDispatch::IntegrationTest
   test 'calling authorize_modify_members should result in an error' do
     sign_in users(:john_doe)
 
-    @controller = TestClassController.new
+    @controller = TestMemberClassController.new
     assert_raises(NotImplementedError) do
       @controller.send(:authorize_modify_members)
     end
 
     assert @namespace.nil?
     assert @member.nil?
+  end
+
+  test 'available_bots returns none for non project/group namespaces' do
+    sign_in users(:john_doe)
+
+    @controller = TestMemberClassController.new
+    @controller.instance_variable_set(:@namespace, namespaces_user_namespaces(:john_doe_namespace))
+
+    available_bots = @controller.send(:available_bots)
+
+    assert_equal User.none, available_bots
   end
 end
