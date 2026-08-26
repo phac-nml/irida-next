@@ -21,9 +21,16 @@ module Samples
       @broadcast_target = params[:broadcast_target]
       new_project_id = transfer_params[:new_project_id]
       sample_ids = transfer_params[:sample_ids]
-      Samples::TransferJob.set(wait_until: 1.second.from_now).perform_later(@namespace, current_user,
-                                                                            new_project_id,
-                                                                            sample_ids, @broadcast_target)
+
+      job = if Flipper.enabled?(:v2_sample_transfer)
+              Samples::TransferJobV2
+            else
+              Samples::TransferJob
+            end
+
+      job.set(wait_until: 1.second.from_now).perform_later(
+        @namespace, current_user, new_project_id, sample_ids, @broadcast_target
+      )
 
       render status: :ok
     end

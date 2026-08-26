@@ -40,7 +40,8 @@ module Samples
 
       validate(sample_ids, 'transfer', new_project_id)
 
-      authorize_new_project(new_project_id, :transfer_sample_into_project?)
+      @new_project = Project.find_by(id: new_project_id)
+      authorize_new_project(@new_project, :transfer_sample_into_project?)
 
       if Member.effective_access_level(@namespace, current_user) == Member::AccessLevel::MAINTAINER
         validate_maintainer_sample_transfer
