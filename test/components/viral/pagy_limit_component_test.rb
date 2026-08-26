@@ -3,7 +3,7 @@
 require 'view_component_test_case'
 
 module Viral
-  class PagyLimitComponentPreviewTest < ViewComponentTestCase
+  class PagyLimitComponentTest < ViewComponentTestCase
     test 'renders default' do
       render_preview(:default)
 
