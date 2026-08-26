@@ -181,14 +181,14 @@ function renderFixture() {
         <input aria-required="true" type="text" name="workflow_execution[name]" id="workflow_execution_name">
 
         <div id="workflow_execution_name_error">
-          <span>
+          <span class="hidden">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
               <rect width="256" height="256" fill="none"></rect>
               <line x1="160" y1="96" x2="96" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
               <line x1="96" y1="96" x2="160" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
               <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
             </svg>
-            <span></span>
+            <span class="grow"></span>
           </span>
         </div>
 
@@ -711,5 +711,39 @@ describe("nextflow v2 samplesheet controller", () => {
     assertPaginationState(true, false, "1");
 
     assertPaginationOptions(["1", "2", "3"]);
+  });
+
+  it("can't submit without name", async () => {
+    setupSamplesheetAttributes(range(1, 5));
+    application = await startController();
+    const submitBtn = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="submit"]',
+    );
+
+    const errorMessageContainer = document.querySelector(
+      "#workflow_execution_name_error",
+    );
+
+    const formFieldErrorMessage = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    );
+
+    expect(errorMessageContainer.textContent).not.toContain(
+      "Name is required. Please enter a name for the workflow execution.",
+    );
+
+    expect(formFieldErrorMessage.textContent).not.toContain(
+      "Please review the following problems:",
+    );
+
+    submitBtn.click();
+
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    expect(errorMessageContainer.textContent).toContain(
+      "Name is required. Please enter a name for the workflow execution.",
+    );
+    expect(formFieldErrorMessage.textContent).toContain(
+      "Please review the following problems:",
+    );
   });
 });
