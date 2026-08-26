@@ -151,7 +151,6 @@ export default class extends Controller {
   }
 
   getOrCreateStoredItems() {
-    console.log("in getorcreate");
     const storedItems = this.#readStoredItems();
     if (storedItems) {
       return storedItems;
@@ -340,8 +339,6 @@ export default class extends Controller {
   }
 
   #readStoredItems() {
-    console.log(this.#getStorageKey());
-    console.log(sessionStorage.getItem(this.#getStorageKey()));
     try {
       const storedItems = JSON.parse(
         sessionStorage.getItem(this.#getStorageKey()),
