@@ -10,7 +10,7 @@ class TransferSamplesMutationTest < ActiveSupport::TestCase
           path
           message
         }
-        samples
+        jobId
       }
     }
   GRAPHQL
@@ -22,7 +22,20 @@ class TransferSamplesMutationTest < ActiveSupport::TestCase
           path
           message
         }
+        jobId
+      }
+    }
+  GRAPHQL
+
+  SAMPLE_TRANSFER_JOB_QUERY = <<~GRAPHQL
+    query($jobId: ID!) {
+      sampleTransferJob(jobId: $jobId) {
         samples
+        status
+        errors {
+          path
+          message
+        }
       }
     }
   GRAPHQL
@@ -31,6 +44,22 @@ class TransferSamplesMutationTest < ActiveSupport::TestCase
     @user = users(:john_doe)
     @api_scope_token = personal_access_tokens(:john_doe_valid_pat)
     @read_api_scope_token = personal_access_tokens(:john_doe_valid_read_pat)
+
+    # Store the original adapter settings to restore later
+    @original_adapter = ActiveJob::Base.queue_adapter
+    @original_execution_mode = GoodJob.configuration.execution_mode
+    # Force the live GoodJob adapter
+    ActiveJob::Base.queue_adapter = :good_job
+    # Force GoodJob to use the database queue without inline execution
+    GoodJob.configuration.instance_variable_set(:@execution_mode, :external)
+  end
+
+  teardown do
+    # Clean up jobs created during the test
+    GoodJob::Job.delete_all
+    # Restore original global configurations
+    GoodJob.configuration.instance_variable_set(:@execution_mode, @original_execution_mode)
+    ActiveJob::Base.queue_adapter = @original_adapter
   end
 
   test 'transferSamples mutation should work with valid params, project global ids, and api scope token' do
@@ -40,18 +69,27 @@ class TransferSamplesMutationTest < ActiveSupport::TestCase
     p1_sample_count = project1.samples.count
     p2_sample_count = project2.samples.count
 
-    result = IridaSchema.execute(TRANSFER_SAMPLE_USING_PROJECT_ID_MUTATION,
-                                 context: { current_user: @user, token: @api_scope_token },
-                                 variables: { projectId: project1.to_global_id.to_s,
-                                              newProjectId: project2.to_global_id.to_s,
-                                              sampleIds: [
-                                                project1.samples[0].to_global_id.to_s,
-                                                project1.samples[1].to_global_id.to_s
-                                              ] })
+    job_queue_result = IridaSchema.execute(TRANSFER_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                           context: { current_user: @user, token: @api_scope_token },
+                                           variables: { projectId: project1.to_global_id.to_s,
+                                                        newProjectId: project2.to_global_id.to_s,
+                                                        sampleIds: [
+                                                          project1.samples[0].to_global_id.to_s,
+                                                          project1.samples[1].to_global_id.to_s
+                                                        ] })
+
+    assert_nil job_queue_result['errors'], 'should work and have no errors.'
+    job_id = job_queue_result['data']['transferSamples']['jobId']
+
+    result = IridaSchema.execute(
+      SAMPLE_TRANSFER_JOB_QUERY,
+      context: { current_user: @user, token: @api_scope_token },
+      variables: { jobId: job_id }
+    )
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['transferSamples']
+    data = result['data']['sampleTransferJob']
 
     assert_not_empty data, 'transferSample should be populated when no authorization errors'
     assert_empty data['errors']
