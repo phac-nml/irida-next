@@ -4,6 +4,109 @@ import SamplesheetController from "../../../../../app/javascript/controllers/nex
 import SelectionController from "../../../../../app/javascript/controllers/selection_controller.js";
 import merge from "deepmerge";
 
+const setupSamplesheetAttributes = (samples) => {
+  renderFixture();
+
+  const sampleAttributesContainer =
+    document.getElementById("sample_attributes");
+
+  if (!sampleAttributesContainer) {
+    throw new Error("Missing #sample_attributes fixture");
+  }
+
+  sessionStorage.setItem("selection-test-key", createSampleIds(samples));
+
+  sampleAttributesContainer.insertAdjacentHTML(
+    "afterbegin",
+    `<div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="sampleAttributes"
+      data-allowed-to-update-samples="true"
+      data-sample-attributes='${createSampleAttributes(samples)}'
+    ></div>
+    <div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="fileAttributes"
+    >
+      ${createFileAttributes(samples)}
+    </div>`,
+  );
+};
+
+const range = (start, end) =>
+  Array.from({ length: end - start + 1 }, (_, i) => start + i);
+
+const createSampleIds = (samples) => {
+  return JSON.stringify(samples.map((n) => `sample-${n}-id`));
+};
+
+const createSampleAttributes = (samples) => {
+  return JSON.stringify(
+    Object.fromEntries(
+      samples.map((n) => [
+        `sample-${n}-id`,
+        {
+          sample_id: `sample-${n}-id`,
+          samplesheet_params: {
+            sample: `SAMPLE-PUID-${n}`,
+            fastq_1: `gid://irida/Attachment/sample-${n}-fastq-1`,
+            fastq_2: `gid://irida/Attachment/sample-${n}-fastq-2`,
+          },
+        },
+      ]),
+    ),
+  );
+};
+
+const createFileAttributes = (samples) => {
+  return JSON.stringify(
+    Object.fromEntries(
+      samples.map((n) => [
+        `sample-${n}-id`,
+        {
+          fastq_1: {
+            filename: `sample_${n}_fastq_1.fastq.gz`,
+            attachment_id: `sample-${n}-fastq-1-id`,
+          },
+          fastq_2: {
+            filename: `sample_${n}_fastq_2.fastq.gz`,
+            attachment_id: `sample-${n}-fastq-2-id`,
+          },
+        },
+      ]),
+    ),
+  );
+};
+
+// verify the expectedSamples exist on the table, with their respective files, and all other samples do not exist
+const assertTableData = (allSamples, expectedSamples) => {
+  const tableBody = document.querySelector(
+    '[data-nextflow--v2--samplesheet-target="tableBody"]',
+  );
+
+  const rows = [...tableBody.querySelectorAll("tr")].map((row) =>
+    [...row.querySelectorAll("th, td")].map((cell) => cell.textContent.trim()),
+  );
+
+  const expectedRows = expectedSamples.map((n) => [
+    `SAMPLE-PUID-${n}`,
+    `sample_${n}_fastq_1.fastq.gz`,
+    `sample_${n}_fastq_2.fastq.gz`,
+  ]);
+
+  expect(rows).toEqual(expectedRows);
+
+  const displayedValues = rows.flat();
+
+  allSamples
+    .filter((n) => !expectedSamples.includes(n))
+    .forEach((n) => {
+      expect(displayedValues).not.toContain(`SAMPLE-PUID-${n}`);
+      expect(displayedValues).not.toContain(`sample_${n}_fastq_1.fastq.gz`);
+      expect(displayedValues).not.toContain(`sample_${n}_fastq_2.fastq.gz`);
+    });
+};
+
 function renderFixture() {
   document.body.innerHTML = `
     <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-automated-workflow-value="false" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
@@ -428,35 +531,121 @@ describe("nextflow v2 samplesheet controller", () => {
     vi.useRealTimers();
   });
 
-  it("sets each listbox as the tab stop without an active descendant until focus", async () => {
-    sessionStorage.setItem(
-      "selection-test-key",
-      '["sample-1-id","sample-2-id"]',
-    );
-    renderFixture();
-    const sampleAttributesContainer =
-      document.getElementById("sample_attributes");
-    sampleAttributesContainer.insertAdjacentHTML(
-      "afterbegin",
-      `<div
-        class="hidden"
-        data-nextflow--v2--samplesheet-target="sampleAttributes"
-        data-allowed-to-update-samples="true"
-        data-sample-attributes='{"sample-1-id":{"sample_id":"sample-1-id","samplesheet_params":{"sample":"SAMPLE-PUID-1","fastq_1":"gid://irida/Attachment/sample-1-fastq-1","fastq_2":"gid://irida/Attachment/sample-1-fastq-2"}},"sample-2-id":{"sample_id":"sample-2-id","samplesheet_params":{"sample":"SAMPLE-PUID-2","fastq_1":"gid://irida/Attachment/sample-2-fastq-1","fastq_2":"gid://irida/Attachment/sample-2-fastq-1"}}}'
-      ></div>
-      <div class="hidden" data-nextflow--v2--samplesheet-target="fileAttributes">{"sample-1-id":{"fastq_1":{"filename":"sample_1_fastq_1.fastq.gz","attachment_id":"sample-1-fastq-1-id"},"fastq_2":{"filename":"sample_1_fastq_2.fastq.gz","attachment_id":"sample-1-fastq-1-id"}},"sample-2-id":{"fastq_1":{"filename":"sample_2_fastq_1.fastq.gz","attachment_id":"sample-2-fastq-1-id"},"fastq_2":{"filename":"sample_2_fastq_2.fastq.gz","attachment_id":"sample-2-fastq-2-id"}}}</div>
-      `,
-    );
+  it("no pagination with 5 samples", async () => {
+    setupSamplesheetAttributes(range(1, 5));
     application = await startController();
 
-    // expect(list("available-list")).toHaveAttribute("tabindex", "0");
-    // expect(list("available-list")).not.toHaveAttribute("aria-activedescendant");
-    // expect(list("selected-list")).not.toHaveAttribute("aria-activedescendant");
+    expect(
+      document.querySelector(
+        '[data-nextflow--v2--samplesheet-target="previousBtn"]',
+      ),
+    ).toBeNull();
 
-    // list("available-list").focus();
-    // expect(activeId(list("available-list"))).toBe("available-alpha");
+    expect(
+      document.querySelector(
+        '[data-nextflow--v2--samplesheet-target="pageNum"]',
+      ),
+    ).toBeNull();
 
-    // list("selected-list").focus();
-    // expect(activeId(list("selected-list"))).toBe("selected-two");
+    expect(
+      document.querySelector(
+        '[data-nextflow--v2--samplesheet-target="nextBtn"]',
+      ),
+    ).toBeNull();
+  });
+
+  it("pagination change states", async () => {
+    const allSamples = range(1, 11);
+    setupSamplesheetAttributes(allSamples);
+    application = await startController();
+
+    const previousBtn = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="previousBtn"]',
+    );
+    const nextBtn = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="nextBtn"]',
+    );
+    const pageNum = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="pageNum"]',
+    );
+    const tableBody = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="tableBody"]',
+    );
+
+    expect(previousBtn).not.toBeNull();
+    expect(pageNum).not.toBeNull();
+    expect(nextBtn).not.toBeNull();
+
+    expect(previousBtn.disabled).toBe(true);
+    expect(nextBtn.disabled).toBe(false);
+
+    expect(pageNum.options).toHaveLength(3);
+    expect([...pageNum.options].map((option) => option.value)).toEqual([
+      "1",
+      "2",
+      "3",
+    ]);
+    expect(pageNum.value).toBe("1");
+
+    assertTableData(allSamples, range(1, 5));
+
+    // change pages by clicking next/previous buttons
+    nextBtn.click();
+
+    expect(previousBtn.disabled).toBe(false);
+    expect(nextBtn.disabled).toBe(false);
+    expect(pageNum.value).toBe("2");
+
+    assertTableData(allSamples, range(6, 10));
+
+    nextBtn.click();
+
+    expect(previousBtn.disabled).toBe(false);
+    expect(nextBtn.disabled).toBe(true);
+    expect(pageNum.value).toBe("3");
+
+    assertTableData(allSamples, [11]);
+
+    previousBtn.click();
+
+    expect(previousBtn.disabled).toBe(false);
+    expect(nextBtn.disabled).toBe(false);
+    expect(pageNum.value).toBe("2");
+
+    assertTableData(allSamples, range(6, 10));
+
+    previousBtn.click();
+
+    expect(previousBtn.disabled).toBe(true);
+    expect(nextBtn.disabled).toBe(false);
+    expect(pageNum.value).toBe("1");
+
+    assertTableData(allSamples, range(1, 5));
+
+    // change pages using select dropdown
+    pageNum.value = "2";
+    pageNum.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(previousBtn.disabled).toBe(false);
+    expect(nextBtn.disabled).toBe(false);
+    expect(pageNum.value).toBe("2");
+
+    assertTableData(allSamples, range(6, 10));
+
+    pageNum.value = "3";
+    pageNum.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(previousBtn.disabled).toBe(false);
+    expect(nextBtn.disabled).toBe(true);
+    expect(pageNum.value).toBe("3");
+
+    assertTableData(allSamples, [11]);
+
+    pageNum.value = "1";
+    pageNum.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(previousBtn.disabled).toBe(true);
+    expect(nextBtn.disabled).toBe(false);
+    expect(pageNum.value).toBe("1");
   });
 });
