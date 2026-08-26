@@ -45,7 +45,7 @@ module ActiveSupport
     end
 
     # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors)
+    parallelize(workers: :number_of_processors) unless ENV['RUBY_LSP_TEST_RUNNER']
 
     Minitest.after_run do
       FileUtils.rm_rf(ActiveStorage::Blob.service.root)
