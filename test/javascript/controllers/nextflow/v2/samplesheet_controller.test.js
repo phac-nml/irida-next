@@ -64,12 +64,12 @@ function renderFixture() {
       <div id="samplesheet_message" data-nextflow--v2--samplesheet-target="samplesheetMessagesContainer"></div>
 
       <div id="samplesheet">
-        <div class="hidden" data-nextflow--v2--samplesheet-target="samplesheetProperties" data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\S+$&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\S+\\.f(ast)?q(\\.gz)?$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'&quot;,&quot;anyOf&quot;:[{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\S+\\.f(ast)?q(\\.gz)?$&quot;},{&quot;type&quot;:&quot;string&quot;,&quot;maxLength&quot;:0}],&quot;required&quot;:false,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;pattern&quot;:&quot;^\\S+\\.f(ast)?q(\\.gz)?$&quot;,&quot;autopopulate&quot;:true}}"></div>
+  <div
+    class="hidden"
+    data-nextflow--v2--samplesheet-target="samplesheetProperties"
+    data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+\\\\.f(ast)?q(\\\\.gz)?$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'&quot;,&quot;anyOf&quot;:[{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+\\\\.f(ast)?q(\\\\.gz)?$&quot;},{&quot;type&quot;:&quot;string&quot;,&quot;maxLength&quot;:0}],&quot;required&quot;:false,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;pattern&quot;:&quot;^\\\\S+\\\\.f(ast)?q(\\\\.gz)?$&quot;,&quot;autopopulate&quot;:true}}"
+  ></div>
         <turbo-frame id="sample_attributes">
-        <div class="hidden"
-        data-nextflow--v2--samplesheet-target="sampleAttributes"
-        data-allowed-to-update-samples="true"
-        data-sample-attributes="{&quot;ac87b612-e5ce-484c-8449-11390df1b3de&quot;:{&quot;sample_id&quot;:&quot;ac87b612-e5ce-484c-8449-11390df1b3de&quot;,&quot;samplesheet_params&quot;:{&quot;sample&quot;:&quot;INXT_SAM_A2IGSHAR5Z&quot;,&quot;fastq_1&quot;:&quot;gid://irida/Attachment/770c8bb0-11cf-4025-a526-0070f24ca162&quot;,&quot;fastq_2&quot;:&quot;gid://irida/Attachment/3c30de70-964b-4f1b-9265-8b4c22e03c7c&quot;}},&quot;7e0a8f15-5666-44cf-a14a-d07bcdefe91a&quot;:{&quot;sample_id&quot;:&quot;7e0a8f15-5666-44cf-a14a-d07bcdefe91a&quot;,&quot;samplesheet_params&quot;:{&quot;sample&quot;:&quot;INXT_SAM_A2IGSHAR52&quot;,&quot;fastq_1&quot;:&quot;gid://irida/Attachment/d2bd48c0-d01a-4cde-ad8b-b13c5ca94bd6&quot;,&quot;fastq_2&quot;:&quot;gid://irida/Attachment/8d0fde52-4a53-4789-99a0-3fe53a64b546&quot;}},&quot;1539e32f-a1bc-44ac-9975-1f7f049e9f53&quot;:{&quot;sample_id&quot;:&quot;1539e32f-a1bc-44ac-9975-1f7f049e9f53&quot;,&quot;samplesheet_params&quot;:{&quot;sample&quot;:&quot;INXT_SAM_A2IGSHAJCU&quot;,&quot;fastq_1&quot;:&quot;gid://irida/Attachment/a60fc2d3-ad55-492d-935c-75a9b553c1de&quot;,&quot;fastq_2&quot;:&quot;gid://irida/Attachment/ca65c135-864f-48f4-ad2c-1189eb71e5d5&quot;}},&quot;3cb70fba-f0c0-4417-a1cf-f071705cedea&quot;:{&quot;sample_id&quot;:&quot;3cb70fba-f0c0-4417-a1cf-f071705cedea&quot;,&quot;samplesheet_params&quot;:{&quot;sample&quot;:&quot;INXT_SAM_A2IGSHAR53&quot;,&quot;fastq_1&quot;:&quot;gid://irida/Attachment/60758ba0-f12e-4efc-b58e-27ccc44dd6a7&quot;,&quot;fastq_2&quot;:&quot;gid://irida/Attachment/0c21d128-2330-4fc0-b322-b290adcdb26c&quot;}},&quot;fdfd9654-7def-4fd8-beef-107082955d9c&quot;:{&quot;sample_id&quot;:&quot;fdfd9654-7def-4fd8-beef-107082955d9c&quot;,&quot;samplesheet_params&quot;:{&quot;sample&quot;:&quot;INXT_SAM_A2IGSHAEWX&quot;,&quot;fastq_1&quot;:&quot;gid://irida/Attachment/26d29e63-ee46-45de-a740-1064a884725a&quot;,&quot;fastq_2&quot;:&quot;gid://irida/Attachment/78e54500-cab9-4053-9c99-87211311557f&quot;}}}"></div>
         </turbo-frame>
 
         <div>
@@ -244,7 +244,20 @@ function renderFixture() {
           <input value="b3d29210-cefc-4b22-ad8e-c44c332b6c40" type="hidden" name="namespace_id" id="namespace_id">
         </form>
       </template>
+      <div class="flex justify-center" id="samplesheet-spinner" data-nextflow--v2--samplesheet-target="samplesheetSpinner">
+                    <div class="
+                        flex w-full max-w-xs items-center space-x-2 rounded-lg bg-white p-4 text-gray-500
+                        rtl:space-x-reverse rtl:divide-x-reverse dark:divide-gray-700 dark:bg-gray-800
+                        dark:text-gray-400
+                      ">
+                      <svg xmlns="http://www.w3.org/2000/svg" stroke-width="4" viewBox="0 0 24 24" class="text-primary-600 dark:text-primary-500 fill-primary-600 dark:fill-primary-500 size-6 faded-spinner-icon"><style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+<g style="transform-origin:center;animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" style="opacity:.25"></circle><path fill="none" stroke="currentColor" stroke-linecap="round" d="M12 2a10 10 0 0 1 10 10" style="opacity:.75"></path></g></svg>
 
+                      <span class="text-sm font-normal">
+                        Processing samplesheet
+                      </span>
+                    </div>
+                  </div>
       <div>
         <label for="workflow_execution_workflow_params_project_name">
           The name of the project.
@@ -286,12 +299,19 @@ function renderFixture() {
       </div>
     </div>
 
-    <div aria-hidden="false">
-      <input name="workflow_execution[update_samples]" type="hidden" value="0">
-      <input data-nextflow--v2--samplesheet-target="updateSamplesCheckbox" type="checkbox" value="1" name="workflow_execution[update_samples]" id="workflow_execution_update_samples" aria-disabled="false">
+    <div class="mb-4 flex" id="update-samples-spinner" data-nextflow--v2--samplesheet-target="updateSamplesSpinner">
+          <div class="
+              flex w-full items-center space-x-2 rounded-lg bg-white pr-4 text-gray-500 rtl:space-x-reverse
+              rtl:divide-x-reverse dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-400
+            " role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" stroke-width="4" viewBox="0 0 24 24" class="text-primary-600 dark:text-primary-500 fill-primary-600 dark:fill-primary-500 size-6 faded-spinner-icon"><style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+<g style="transform-origin:center;animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" style="opacity:.25"></circle><path fill="none" stroke="currentColor" stroke-linecap="round" d="M12 2a10 10 0 0 1 10 10" style="opacity:.75"></path></g></svg>
 
-      <label for="workflow_execution_update_samples" data-nextflow--v2--samplesheet-target="updateSamplesLabel">Update samples with analysis results</label>
-    </div>
+            <span class="text-sm font-medium text-slate-900 dark:text-white">
+              Verifying if you're authorized to update samples with analysis results
+            </span>
+          </div>
+        </div>
 
     <div>
       <input name="workflow_execution[email_notification]" type="hidden" value="0">
@@ -394,20 +414,13 @@ async function startController() {
   return application;
 }
 
-describe("sortable lists two-lists selection controller", () => {
+describe("nextflow v2 samplesheet controller", () => {
   let application;
 
   beforeEach(() => {
     window.requestAnimationFrame = (callback) => setTimeout(callback, 0);
     localStorage.clear();
-
-    // localStorage.setItem(
-    //   "selection-test-key",
-    //   JSON.stringify([
-    //     "ac87b612-e5ce-484c-8449-11390df1b3de",
-    //     "7e0a8f15-5666-44cf-a14a-d07bcdefe91a",
-    //   ]),
-    // );
+    Element.prototype.scrollIntoView = vi.fn();
   });
 
   afterEach(() => {
@@ -418,10 +431,22 @@ describe("sortable lists two-lists selection controller", () => {
   it("sets each listbox as the tab stop without an active descendant until focus", async () => {
     sessionStorage.setItem(
       "selection-test-key",
-      '["ac87b612-e5ce-484c-8449-11390df1b3de","7e0a8f15-5666-44cf-a14a-d07bcdefe91a"]',
+      '["sample-1-id","sample-2-id"]',
     );
     renderFixture();
-
+    const sampleAttributesContainer =
+      document.getElementById("sample_attributes");
+    sampleAttributesContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div
+        class="hidden"
+        data-nextflow--v2--samplesheet-target="sampleAttributes"
+        data-allowed-to-update-samples="true"
+        data-sample-attributes='{"sample-1-id":{"sample_id":"sample-1-id","samplesheet_params":{"sample":"SAMPLE-PUID-1","fastq_1":"gid://irida/Attachment/sample-1-fastq-1","fastq_2":"gid://irida/Attachment/sample-1-fastq-2"}},"sample-2-id":{"sample_id":"sample-2-id","samplesheet_params":{"sample":"SAMPLE-PUID-2","fastq_1":"gid://irida/Attachment/sample-2-fastq-1","fastq_2":"gid://irida/Attachment/sample-2-fastq-1"}}}'
+      ></div>
+      <div class="hidden" data-nextflow--v2--samplesheet-target="fileAttributes">{"sample-1-id":{"fastq_1":{"filename":"sample_1_fastq_1.fastq.gz","attachment_id":"sample-1-fastq-1-id"},"fastq_2":{"filename":"sample_1_fastq_2.fastq.gz","attachment_id":"sample-1-fastq-1-id"}},"sample-2-id":{"fastq_1":{"filename":"sample_2_fastq_1.fastq.gz","attachment_id":"sample-2-fastq-1-id"},"fastq_2":{"filename":"sample_2_fastq_2.fastq.gz","attachment_id":"sample-2-fastq-2-id"}}}</div>
+      `,
+    );
     application = await startController();
 
     // expect(list("available-list")).toHaveAttribute("tabindex", "0");
