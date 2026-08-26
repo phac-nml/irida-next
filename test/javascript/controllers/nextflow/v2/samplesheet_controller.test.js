@@ -747,3 +747,6 @@ describe("nextflow v2 samplesheet controller", () => {
     );
   });
 });
+
+// filter empty state
+// filter click search button
