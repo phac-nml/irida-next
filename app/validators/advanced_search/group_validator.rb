@@ -106,7 +106,7 @@ module AdvancedSearch
       group.errors.add :base, :invalid
     end
 
-    def validate_blank_inputs(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def validate_blank_inputs(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       if condition.field.blank?
         condition.errors.add :field, :blank
         return
@@ -114,7 +114,8 @@ module AdvancedSearch
 
       condition.errors.add :operator, :blank if condition.operator.blank?
 
-      if BETWEEN_OPERATORS.include?(condition.operator) && condition.value.include?('') && condition.value.is_a?(Array)
+      if BETWEEN_OPERATORS.include?(condition.operator) && condition.value.any?(&:blank?) &&
+         condition.value.is_a?(Array)
         condition.errors.add :from_value, :blank if condition.value[0].blank?
 
         condition.errors.add :to_value, :blank if condition.value[1].blank?
