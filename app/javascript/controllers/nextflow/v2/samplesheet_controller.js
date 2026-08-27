@@ -131,9 +131,11 @@ export default class extends Controller {
   #processSamplesheetAttributes() {
     this.sampleAttributesTargets.forEach((sampleAttributesTarget) => {
       const dataAttributes = sampleAttributesTarget.dataset;
+
       const sampleAttributes = JSON.parse(
         dataAttributes.sampleAttributes || "{}",
       );
+
       Object.assign(this.#samplesheetAttributes, sampleAttributes);
 
       const allowedToUpdateSamples = JSON.parse(
@@ -153,6 +155,7 @@ export default class extends Controller {
         this.#fileAttributes,
         JSON.parse(fileAttributeTarget.innerHTML),
       );
+      console.log(fileAttributeTarget);
       fileAttributeTarget.remove();
     });
   }

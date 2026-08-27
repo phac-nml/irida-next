@@ -3,7 +3,7 @@ import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import SamplesheetController from "../../../../../app/javascript/controllers/nextflow/v2/samplesheet_controller.js";
 import SelectionController from "../../../../../app/javascript/controllers/selection_controller.js";
 
-const setupSamplesheetAttributes = (samples) => {
+const setupStandardSamplesheetAttributes = (samples) => {
   renderFixture();
 
   const sampleAttributesContainer =
@@ -576,7 +576,7 @@ describe("nextflow v2 samplesheet controller", () => {
   });
 
   it("no pagination with 5 samples", async () => {
-    setupSamplesheetAttributes(range(1, 5));
+    setupStandardSamplesheetAttributes(range(1, 5));
     application = await startController();
 
     expect(
@@ -600,7 +600,7 @@ describe("nextflow v2 samplesheet controller", () => {
 
   it("pagination change states", async () => {
     const allSamples = range(1, 11);
-    setupSamplesheetAttributes(allSamples);
+    setupStandardSamplesheetAttributes(allSamples);
     application = await startController();
 
     expect(getPreviousBtn()).not.toBeNull();
@@ -654,7 +654,7 @@ describe("nextflow v2 samplesheet controller", () => {
 
   it("filtering", async () => {
     const allSamples = [1, 2, 3, 4, 5, 6, 7, 10, 11, 21, 100, 199];
-    setupSamplesheetAttributes(allSamples);
+    setupStandardSamplesheetAttributes(allSamples);
     application = await startController();
 
     const clearButton = document.querySelector(
@@ -720,6 +720,7 @@ describe("nextflow v2 samplesheet controller", () => {
 
     assertPaginationOptions(["1", "2", "3"]);
 
+    // test empty no samples found filter state with filter button click
     expect(emptyState).toHaveClass("hidden");
     document.querySelector("#samplesheet-filter").value = "invalid filter";
     filterButton.click();
@@ -732,7 +733,7 @@ describe("nextflow v2 samplesheet controller", () => {
   });
 
   it("can't submit without name", async () => {
-    setupSamplesheetAttributes(range(1, 5));
+    setupStandardSamplesheetAttributes(range(1, 5));
     application = await startController();
     const submitBtn = document.querySelector(
       '[data-nextflow--v2--samplesheet-target="submit"]',
@@ -762,6 +763,134 @@ describe("nextflow v2 samplesheet controller", () => {
     );
     expect(formFieldErrorMessage.textContent).toContain(
       "Please review the following problems:",
+    );
+  });
+
+  it("can't submit without name", async () => {
+    setupStandardSamplesheetAttributes(range(1, 5));
+    application = await startController();
+    const submitBtn = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="submit"]',
+    );
+
+    const errorMessageContainer = document.querySelector(
+      "#workflow_execution_name_error",
+    );
+
+    const formFieldErrorMessage = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    );
+
+    expect(errorMessageContainer.textContent).not.toContain(
+      "Name is required. Please enter a name for the workflow execution.",
+    );
+
+    expect(formFieldErrorMessage.textContent).not.toContain(
+      "Please review the following problems:",
+    );
+
+    submitBtn.click();
+
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    expect(errorMessageContainer.textContent).toContain(
+      "Name is required. Please enter a name for the workflow execution.",
+    );
+    expect(formFieldErrorMessage.textContent).toContain(
+      "Please review the following problems:",
+    );
+  });
+
+  it("empty file selection on required file field validation", async () => {
+    // manually create sampleAttributes with empty file selection
+    const samples = [1, 2];
+    renderFixture();
+    const sampleAttributesContainer =
+      document.getElementById("sample_attributes");
+
+    sessionStorage.setItem("selection-test-key", createSampleIds(samples));
+
+    const fileAttributes = JSON.stringify(
+      Object.fromEntries(
+        samples.map((n) => [
+          `sample-${n}-id`,
+          {
+            fastq_1: {
+              filename: "No File Selected",
+              attachment_id: "",
+            },
+            fastq_2: {
+              filename: "No File Selected",
+              attachment_id: "",
+            },
+          },
+        ]),
+      ),
+    );
+
+    const sampleAttributes = JSON.stringify(
+      Object.fromEntries(
+        samples.map((n) => [
+          `sample-${n}-id`,
+          {
+            sample_id: `sample-${n}-id`,
+            samplesheet_params: {
+              sample: `SAMPLE-PUID-${n}`,
+              fastq_1: "",
+              fastq_2: "",
+            },
+          },
+        ]),
+      ),
+    );
+
+    sampleAttributesContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="sampleAttributes"
+      data-allowed-to-update-samples="true"
+      data-sample-attributes='${sampleAttributes}'
+    ></div>
+    <div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="fileAttributes"
+    >
+      ${fileAttributes}
+    </div>`,
+    );
+    application = await startController();
+
+    const submitBtn = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="submit"]',
+    );
+
+    const samplesheetErrorContainer = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="error"]',
+    );
+
+    const formFieldErrorMessage = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    );
+
+    const nameInput = document.querySelector("#workflow_execution_name");
+
+    expect(samplesheetErrorContainer.textContent).not.toContain(
+      "The following samples are missing required data",
+    );
+
+    nameInput.value = "test name";
+    submitBtn.click();
+
+    await new Promise((resolve) => setTimeout(resolve, 60));
+
+    expect(samplesheetErrorContainer.textContent).toContain(
+      "The following samples are missing required data:",
+    );
+    expect(samplesheetErrorContainer.textContent).toContain(
+      "- SAMPLE-PUID-1: fastq_1",
+    );
+    expect(samplesheetErrorContainer.textContent).toContain(
+      "- SAMPLE-PUID-2: fastq_1",
     );
   });
 });
