@@ -39,22 +39,22 @@ describe("treegrid controller", () => {
   it("initializes the treegrid controller and correctly sets tabindex for each row", async () => {
     document.body.innerHTML = `
       <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+        <div class="treegrid-row" role="row" aria-level="1" aria-expanded="false" tabindex="0" data-treegrid-target="row">
           <div role="gridcell" aria-colindex="1" style="display: contents;">
             <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="-1"></button>
             <div>
               <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
+              <a href="#" tabindex="0">Row 1 Link 1</a>
+              <a href="#" tabindex="0">Row 1 Link 2</a>
             </div>
           </div>
         </div>
-        <div class="treegrid-row" role="row" aria-level="1" tabindex="-1" data-treegrid-target="row">
+        <div class="treegrid-row" role="row" aria-level="1" tabindex="0" data-treegrid-target="row">
           <div role="gridcell" aria-colindex="1" style="display: contents;">
             <div>
               <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
+              <a href="#" tabindex="0">Row 2 Link 1</a>
+              <a href="#" tabindex="0">Row 2 Link 2</a>
             </div>
           </div>
         </div>
@@ -626,7 +626,7 @@ describe("treegrid controller", () => {
   it("collapses the row on Arrow Left when the row is focused and has a toggle button", async () => {
     document.body.innerHTML = `
       <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" aria-expanded="true" tabindex="-1" data-treegrid-target="row">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" aria-expanded="true" tabindex="-1" data-treegrid-target="row">
           <div role="gridcell" aria-colindex="1" style="display: contents;">
             <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Collapse" data-treegrid-target="rowToggle" tabindex="-1"></button>
             <div>
@@ -637,6 +637,15 @@ describe("treegrid controller", () => {
           </div>
         </div>
         <div class="treegrid-row" role="row" aria-level="2" aria-posinset="1" aria-setsize="1" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Child Row 1</span>
+              <a href="#" tabindex="-1">Child Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Child Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
           <div role="gridcell" aria-colindex="1" style="display: contents;">
             <div>
               <span>Child Row 1</span>
@@ -673,6 +682,326 @@ describe("treegrid controller", () => {
     // The row should now be collapsed
     expect(row.getAttribute("aria-expanded")).toBe("false");
     expect(toggleButton.getAttribute("aria-label")).toBe("Expand");
+  });
+
+  it("focuses the first row when home key is pressed", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 2</span>
+              <a href="#" tabindex="-1">Row 2 Link 1</a>
+              <a href="#" tabindex="-1">Row 2 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const rows = document.querySelectorAll(".treegrid-row");
+    expect(rows.length).toBe(2);
+
+    // Focus the second row
+    rows[1].focus();
+    expect(document.activeElement).toBe(rows[1]);
+
+    // Simulate Home key press
+    const homeEvent = new KeyboardEvent("keydown", {
+      key: "Home",
+      bubbles: true,
+      cancelable: true,
+    });
+    rows[1].dispatchEvent(homeEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The first row should now be focused
+    expect(document.activeElement).toBe(rows[0]);
+  });
+
+  it("focuses the first cell in the row when home key is pressed", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const row = document.querySelector(".treegrid-row");
+    expect(row).not.toBeNull();
+
+    // Focus the second link in the row
+    const secondLink = row.querySelectorAll("a")[1];
+    secondLink.focus();
+    expect(document.activeElement).toBe(secondLink);
+
+    // Simulate Home key press
+    const homeEvent = new KeyboardEvent("keydown", {
+      key: "Home",
+      bubbles: true,
+      cancelable: true,
+    });
+    secondLink.dispatchEvent(homeEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The first focusable cell in the row should now be focused (the first link)
+    const firstLink = row.querySelector("a");
+    expect(document.activeElement).toBe(firstLink);
+  });
+
+  it("focuses the last row when end key is pressed", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 2</span>
+              <a href="#" tabindex="-1">Row 2 Link 1</a>
+              <a href="#" tabindex="-1">Row 2 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const rows = document.querySelectorAll(".treegrid-row");
+    expect(rows.length).toBe(2);
+
+    // Focus the first row
+    rows[0].focus();
+    expect(document.activeElement).toBe(rows[0]);
+
+    // Simulate End key press
+    const endEvent = new KeyboardEvent("keydown", {
+      key: "End",
+      bubbles: true,
+      cancelable: true,
+    });
+    rows[0].dispatchEvent(endEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The last row should now be focused
+    expect(document.activeElement).toBe(rows[1]);
+  });
+
+  it("focuses the last cell in the row when end key is pressed", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const row = document.querySelector(".treegrid-row");
+    expect(row).not.toBeNull();
+
+    // Focus the first link in the row
+    const firstLink = row.querySelector("a");
+    firstLink.focus();
+    expect(document.activeElement).toBe(firstLink);
+
+    // Simulate End key press
+    const endEvent = new KeyboardEvent("keydown", {
+      key: "End",
+      bubbles: true,
+      cancelable: true,
+    });
+    firstLink.dispatchEvent(endEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The last focusable cell in the row should now be focused (the second link)
+    const secondLink = row.querySelectorAll("a")[1];
+    expect(document.activeElement).toBe(secondLink);
+  });
+
+  it("focuses the first row when page up key is pressed", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 2</span>
+              <a href="#" tabindex="-1">Row 2 Link 1</a>
+              <a href="#" tabindex="-1">Row 2 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const rows = document.querySelectorAll(".treegrid-row");
+    expect(rows.length).toBe(2);
+
+    // Focus the second row
+    rows[1].focus();
+    expect(document.activeElement).toBe(rows[1]);
+
+    // Simulate Page Up key press
+    const pageUpEvent = new KeyboardEvent("keydown", {
+      key: "PageUp",
+      bubbles: true,
+      cancelable: true,
+    });
+    rows[1].dispatchEvent(pageUpEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The first row should now be focused
+    expect(document.activeElement).toBe(rows[0]);
+  });
+
+  it("focuses the last row when page down key is pressed", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 2</span>
+              <a href="#" tabindex="-1">Row 2 Link 1</a>
+              <a href="#" tabindex="-1">Row 2 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const rows = document.querySelectorAll(".treegrid-row");
+    expect(rows.length).toBe(2);
+
+    // Focus the first row
+    rows[0].focus();
+    expect(document.activeElement).toBe(rows[0]);
+
+    // Simulate Page Down key press
+    const pageDownEvent = new KeyboardEvent("keydown", {
+      key: "PageDown",
+      bubbles: true,
+      cancelable: true,
+    });
+    rows[0].dispatchEvent(pageDownEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The last row should now be focused
+    expect(document.activeElement).toBe(rows[1]);
+  });
+
+  it("keydown event listener does nothing when unhandled key is pressed", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const row = document.querySelector(".treegrid-row");
+    expect(row).not.toBeNull();
+
+    // Focus the row
+    row.focus();
+    expect(document.activeElement).toBe(row);
+
+    // Simulate an unhandled key press (e.g., "A")
+    const unhandledKeyEvent = new KeyboardEvent("keydown", {
+      key: "A",
+      bubbles: true,
+      cancelable: true,
+    });
+    row.dispatchEvent(unhandledKeyEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The row should still be focused
+    expect(document.activeElement).toBe(row);
   });
 
   it("removes event listeners when the controller is disconnected", async () => {
