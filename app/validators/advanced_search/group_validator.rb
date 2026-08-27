@@ -114,8 +114,9 @@ module AdvancedSearch
 
       condition.errors.add :operator, :blank if condition.operator.blank?
 
-      if BETWEEN_OPERATORS.include?(condition.operator) && condition.value.any?(&:blank?) &&
-         condition.value.is_a?(Array)
+      if BETWEEN_OPERATORS.include?(condition.operator) && condition.value.is_a?(Array) &&
+         condition.value.any?(&:blank?)
+
         condition.errors.add :from_value, :blank if condition.value[0].blank?
 
         condition.errors.add :to_value, :blank if condition.value[1].blank?
