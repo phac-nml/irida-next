@@ -13,9 +13,6 @@
         <%= form_with url: pipeline_selection_workflow_executions_submissions_path,
         method: :get,
         data: { turbo_stream: true },
-        form: {
-         id: "launch-workflow-form"
-        },
         class: "contents" do %>
           <%= hidden_field_tag :namespace_id, @project.namespace.id %>
 
@@ -25,7 +22,9 @@
             emphasis: :outline,
             text: t(:".workflows.button_sr"),
             data: {
-              controller: "action-button",
+              controller: "action-button launch-workflow",
+              "launch-workflow-selection-outlet": "#samples-table",
+              action: "click->launch-workflow#appendSelectionCount",
               action_button_required_value: 1,
             },
             class: "action-button"

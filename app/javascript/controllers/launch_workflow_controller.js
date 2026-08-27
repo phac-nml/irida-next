@@ -4,8 +4,9 @@ import { createHiddenInput } from "utilities/form";
 export default class extends Controller {
   static outlets = ["selection"];
 
-  appendSelectionLength() {
-    const form = document.getElementById("launch-workflow-form");
+  appendSelectionCount() {
+    const form = this.element.closest("form");
+
     form.appendChild(
       createHiddenInput(
         "sample_count",
