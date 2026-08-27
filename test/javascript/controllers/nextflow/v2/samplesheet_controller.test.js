@@ -458,7 +458,11 @@ function renderFixture() {
             </span>
           </div>
         </div>
+<div class="hidden" aria-hidden="true">
+          <input name="workflow_execution[update_samples]" type="hidden" value="0"><input data-nextflow--v2--samplesheet-target="updateSamplesCheckbox" type="checkbox" value="1" name="workflow_execution[update_samples]" id="workflow_execution_update_samples">
 
+          <label for="workflow_execution_update_samples" data-nextflow--v2--samplesheet-target="updateSamplesLabel"></label>
+        </div>
     <div>
       <input name="workflow_execution[email_notification]" type="hidden" value="0">
       <input type="checkbox" value="1" name="workflow_execution[email_notification]" id="workflow_execution_email_notification">
@@ -888,5 +892,103 @@ describe("nextflow v2 samplesheet controller", () => {
     expect(samplesheetErrorContainer.textContent).toContain(
       "- SAMPLE-PUID-2: fastq_1",
     );
+  });
+
+  it("update samples is true", async () => {
+    setupStandardSamplesheetAttributes([1]);
+
+    const updateSamplesLabel = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="updateSamplesLabel"]',
+    );
+    const updateSamplesLabelParent = updateSamplesLabel.parentElement;
+    const updateSamplesCheckbox = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="updateSamplesCheckbox"]',
+    );
+
+    expect(updateSamplesLabelParent).toHaveClass("hidden");
+    application = await startController();
+
+    expect(updateSamplesLabelParent).not.toHaveClass("hidden");
+    expect(updateSamplesLabel.innerText).toContain(
+      "Update samples with analysis results",
+    );
+    expect(updateSamplesCheckbox.disabled).toBe(false);
+  });
+
+  it("update samples is false", async () => {
+    // manually create sampleAttributes with empty file selection
+    const samples = [1, 2];
+    renderFixture();
+    const sampleAttributesContainer =
+      document.getElementById("sample_attributes");
+
+    sessionStorage.setItem("selection-test-key", createSampleIds(samples));
+
+    const fileAttributes = JSON.stringify(
+      Object.fromEntries(
+        samples.map((n) => [
+          `sample-${n}-id`,
+          {
+            fastq_1: {
+              filename: "No File Selected",
+              attachment_id: "",
+            },
+            fastq_2: {
+              filename: "No File Selected",
+              attachment_id: "",
+            },
+          },
+        ]),
+      ),
+    );
+
+    const sampleAttributes = JSON.stringify(
+      Object.fromEntries(
+        samples.map((n) => [
+          `sample-${n}-id`,
+          {
+            sample_id: `sample-${n}-id`,
+            samplesheet_params: {
+              sample: `SAMPLE-PUID-${n}`,
+              fastq_1: "",
+              fastq_2: "",
+            },
+          },
+        ]),
+      ),
+    );
+
+    sampleAttributesContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="sampleAttributes"
+      data-allowed-to-update-samples="false"
+      data-sample-attributes='${sampleAttributes}'
+    ></div>
+    <div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="fileAttributes"
+    >
+      ${fileAttributes}
+    </div>`,
+    );
+
+    const updateSamplesLabel = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="updateSamplesLabel"]',
+    );
+    const updateSamplesLabelParent = updateSamplesLabel.parentElement;
+    const updateSamplesCheckbox = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="updateSamplesCheckbox"]',
+    );
+
+    expect(updateSamplesLabelParent).toHaveClass("hidden");
+    application = await startController();
+
+    expect(updateSamplesLabelParent).not.toHaveClass("hidden");
+    expect(updateSamplesLabel.innerText).toContain(
+      "You are not authorized to update samples with analysis results",
+    );
+    expect(updateSamplesCheckbox.disabled).toBe(true);
   });
 });

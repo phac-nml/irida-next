@@ -7,6 +7,43 @@ module WorkflowExecutions
     setup do
       sign_in users(:john_doe)
       @group = groups(:group_one)
+
+      @samplesheet_properties_payload = {
+        sample: {
+          type: 'string',
+          pattern: '^\\S+$',
+          meta: ['id'],
+          unique: true,
+          errorMessage: 'Sample name must be provided and cannot contain spaces',
+          required: true,
+          cell_type: 'sample_cell'
+        },
+        fastq_1: { # rubocop:disable Naming/VariableNumber
+          type: 'string',
+          pattern: '^\\S+\\.f(ast)?q(\\.gz)?$',
+          errorMessage: "FastQ file for reads 1 must be provided, cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'", # rubocop:disable Layout/LineLength
+          required: true,
+          cell_type: 'fastq_cell',
+          autopopulate: true
+        },
+        fastq_2: { # rubocop:disable Naming/VariableNumber
+          errorMessage: "FastQ file for reads 2 cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'", # rubocop:disable Layout/LineLength
+          anyOf: [
+            {
+              type: 'string',
+              pattern: '^\\S+\\.f(ast)?q(\\.gz)?$'
+            },
+            {
+              type: 'string',
+              maxLength: 0
+            }
+          ],
+          required: false,
+          cell_type: 'fastq_cell',
+          pattern: '^\\S+\\.f(ast)?q(\\.gz)?$',
+          autopopulate: true
+        }
+      }.to_json
     end
 
     test 'can view pipeline launch dialog with role >= Analyst at group level' do
@@ -261,6 +298,42 @@ module WorkflowExecutions
       assert_select 'span', I18n.t(:'components.nextflow.verifying_update_samples')
       assert_select 'label', I18n.t(:'components.nextflow.email_notification')
       assert_select 'label', I18n.t(:"components.nextflow.shared_with.#{projects(:project1).namespace.type.downcase}")
+    end
+
+    test 'role analyst cannot update samples' do
+      sign_in users(:michelle_doe)
+
+      post samplesheet_workflow_executions_submissions_path(properties: @samplesheet_properties_payload,
+                                                            sample_ids: [samples(:sample1).id],
+                                                            format: :turbo_stream)
+
+      assert_response :success
+
+      assert_includes response.body, 'data-allowed-to-update-samples="false"'
+    end
+
+    test 'role analyst cannot update samples for a shared project' do
+      sign_in users(:subgroup_sample_actions_doe)
+
+      post samplesheet_workflow_executions_submissions_path(properties: @samplesheet_properties_payload,
+                                                            sample_ids: [samples(:sample71).id],
+                                                            format: :turbo_stream)
+
+      assert_response :success
+
+      assert_includes response.body, 'data-allowed-to-update-samples="false"'
+    end
+
+    test 'role maintainer can update samples' do
+      sign_in users(:john_doe)
+
+      post samplesheet_workflow_executions_submissions_path(properties: @samplesheet_properties_payload,
+                                                            sample_ids: [samples(:sample1).id],
+                                                            format: :turbo_stream)
+
+      assert_response :success
+
+      assert_includes response.body, 'data-allowed-to-update-samples="true"'
     end
   end
 end

@@ -9,8 +9,6 @@ module WorkflowExecutions
     setup do
       @sample22 = samples(:sample22)
       @sample43 = samples(:sample43)
-      @sample44 = samples(:sample44)
-      @sample46 = samples(:sample46)
       @project2 = projects(:project2)
       @project = projects(:project37)
       @group1 = groups(:group_one)
@@ -27,8 +25,6 @@ module WorkflowExecutions
       @attachment_rev2 = attachments(:attachmentPEREV2)
       @attachment_fwd3 = attachments(:attachmentPEFWD3)
       @attachment_rev3 = attachments(:attachmentPEREV3)
-      @attachment_fwd43 = attachments(:attachmentPEFWD43)
-      @attachment_rev43 = attachments(:attachmentPEREV43)
     end
 
     # used by test 'chunked samples request' to create thousands of samples to test chunked retrieval
@@ -490,67 +486,6 @@ module WorkflowExecutions
         end
       end
       ### ACTIONS AND VERIFY END ###
-    end
-
-    test 'analyst cannot update samples with analysis result' do
-      user = users(:michelle_doe)
-      login_as user
-
-      project = projects(:project1)
-      sample = samples(:sample1)
-      Project.reset_counters(project.id, :samples_count)
-
-      visit namespace_project_samples_url(project.namespace.parent, project)
-
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: user.locale))
-
-      check "checkbox_sample_#{sample.id}"
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/iridanextexample', count: 3
-      click_button 'phac-nml/iridanextexample', match: :first
-
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t('workflow_executions.submissions.create.title',
-                                   workflow: 'phac-nml/iridanextexample')
-      assert_selector 'table[data-test-selector="samplesheet-table"]'
-      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
-      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
-                      text: sample.puid, count: 1
-      assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
-    end
-
-    test 'cannot update shared samples with analysis results when shared role is analyst' do
-      group = groups(:subgroup_sample_actions)
-      user = users(:subgroup_sample_actions_doe)
-      sample = samples(:sample71)
-
-      login_as user
-
-      visit group_samples_url(group)
-
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 5, count: 5,
-                                                                                      locale: user.locale))
-
-      check "checkbox_sample_#{sample.id}"
-
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/iridanextexample', count: 3
-      click_button 'phac-nml/iridanextexample', match: :first
-
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t('workflow_executions.submissions.create.title',
-                                   workflow: 'phac-nml/iridanextexample')
-      assert_selector 'table[data-test-selector="samplesheet-table"]'
-      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
-      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
-                      text: sample.puid, count: 1
-
-      assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
     end
 
     test 'default and changed file selection data retained after workflow submitted' do
