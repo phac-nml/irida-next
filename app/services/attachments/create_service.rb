@@ -48,7 +48,13 @@ module Attachments
         if Irida::Pipelines.instance.pipelines.any? &&
            @attachable.instance_of?(Sample) &&
            @attachable.project.namespace.automated_workflow_executions.present?
-          launch_automated_workflow_executions(@pe_attachments&.last)
+
+          if Flipper.enabled?(:automated_workflow_execution_subscriber)
+            Rails.event.notify('attachments.create',
+                               { attachable: @attachable, attachments: @attachments })
+          else
+            launch_automated_workflow_executions(@pe_attachments&.last)
+          end
         end
       end
 
@@ -150,7 +156,7 @@ module Attachments
 
         pe_attachments['reverse'].metadata = pe_attachments['reverse'].metadata.merge(rev_metadata)
 
-        @pe_attachments << paired_ends[key]
+        @pe_attachments << paired_ends[key] if Flipper.disabled?(:automated_workflow_execution_subscriber)
       end
     end
 

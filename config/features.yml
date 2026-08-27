@@ -39,6 +39,15 @@ features:
     name:
       en: "Advanced Search Autocomplete"
       fr: "Saisie semi-automatique de la recherche avancée"
+  automated_workflow_execution_subscriber:
+    admin_manageable: true
+    description:
+      en: "Enable the automated workflow execution subscriber."
+      fr: "Activer le souscripteur d'exécution de flux de travail automatisé."
+    enable_in_development: true
+    name:
+      en: "Automated Workflow Execution Subscriber"
+      fr: "Souscripteur d'exécution de flux de travail automatisé"
   client_linelist_exports_v1:
     admin_manageable: true
     description:
