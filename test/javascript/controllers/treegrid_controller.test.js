@@ -33,6 +33,10 @@ describe("treegrid controller", () => {
   let application;
 
   beforeEach(() => {
+    globalThis.fetch = vi.fn();
+    globalThis.Turbo = {
+      renderStreamMessage: vi.fn(),
+    };
     application = Application.start();
     application.register("treegrid", TreegridController);
   });
@@ -104,7 +108,6 @@ describe("treegrid controller", () => {
         </div>
         <div class="treegrid-row hidden" role="row" aria-level="2" aria-posinset="1" aria-setsize="1" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
           <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="-1"></button>
             <div>
               <span>Sub Row 1</span>
               <a href="#" tabindex="-1">Sub Row 1 Link 1</a>
@@ -143,5 +146,84 @@ describe("treegrid controller", () => {
     expect(row.getAttribute("aria-expanded")).toBe("false");
     expect(toggleButton.getAttribute("aria-label")).toBe("Expand");
     expect(childRow.classList.contains("hidden")).toBe(true);
+  });
+
+  it("does not toggle the row expansion state if the row is not expandable", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const row = document.querySelector(".treegrid-row");
+    expect(row).not.toBeNull();
+    const toggleButton = row.querySelector(".treegrid-row-toggle");
+    expect(toggleButton).toBeNull();
+
+    // Simulate click on the row (should not toggle since there's no toggle button)
+    row.click();
+
+    // Wait for Stimulus mutation observer to process the click action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(row.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("fetches data from the server when toggling a row with a data-toggle-url attribute", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="-1" data-toggle-url="http://localhost/mocked-url"></button>
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const row = document.querySelector(".treegrid-row");
+    const toggleButton = row.querySelector(".treegrid-row-toggle");
+
+    // Mock fetch response
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      text: async () => "<div>Mocked response</div>",
+    });
+
+    // Simulate click to expand the row
+    toggleButton.click();
+
+    // Wait for Stimulus mutation observer to process the click action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(fetch).toHaveBeenCalledWith(
+      "http://localhost/mocked-url?tabindex=0",
+      {
+        credentials: "same-origin",
+        headers: { Accept: "text/vnd.turbo-stream.html" },
+      },
+    );
+
+    expect(globalThis.Turbo.renderStreamMessage).toHaveBeenCalledWith(
+      "<div>Mocked response</div>",
+    );
   });
 });
