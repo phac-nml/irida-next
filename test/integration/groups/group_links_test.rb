@@ -48,6 +48,40 @@ module Groups
       end
     end
 
+    test 'listing group links shows manage buttons for users with permission' do
+      sign_in @user
+
+      get group_group_links_path(@namespace, format: :turbo_stream)
+      assert_response :success
+
+      assert_select 'turbo-stream[action="update"][target="invited_groups"]' do
+        assert_select 'template' do
+          assert_select 'table tbody tr' do
+            # Check for edit buttons (rendered in edit_group_link partial)
+            assert_select "button[aria-label*='#{I18n.t('common.actions.edit')}']"
+            # Check for unlink/delete buttons
+            assert_select 'button', text: I18n.t('groups.group_links.index.unlink'), minimum: 1
+          end
+        end
+      end
+    end
+
+    test 'listing group links does not show manage buttons for users without permission' do
+      sign_in users(:ryan_doe)
+
+      get group_group_links_path(@namespace, format: :turbo_stream)
+      assert_response :success
+
+      assert_select 'turbo-stream[action="update"][target="invited_groups"]' do
+        assert_select 'template' do
+          assert_select 'table tbody tr' do
+            assert_select "button[aria-label*='#{I18n.t('common.actions.edit')}']", count: 0
+            assert_select 'button', text: I18n.t('groups.group_links.index.unlink'), count: 0
+          end
+        end
+      end
+    end
+
     test 'cannot add a group to group link due to insufficient permissions' do
       sign_in users(:ryan_doe)
 
