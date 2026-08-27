@@ -868,10 +868,6 @@ describe("nextflow v2 samplesheet controller", () => {
       '[data-nextflow--v2--samplesheet-target="error"]',
     );
 
-    const formFieldErrorMessage = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
-    );
-
     const nameInput = document.querySelector("#workflow_execution_name");
 
     expect(samplesheetErrorContainer.textContent).not.toContain(
