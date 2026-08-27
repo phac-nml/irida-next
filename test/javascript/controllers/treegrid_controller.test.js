@@ -226,4 +226,200 @@ describe("treegrid controller", () => {
       "<div>Mocked response</div>",
     );
   });
+
+  it("focuses the next row when Arrow Down is pressed", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 2</span>
+              <a href="#" tabindex="-1">Row 2 Link 1</a>
+              <a href="#" tabindex="-1">Row 2 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const rows = document.querySelectorAll(".treegrid-row");
+    expect(rows.length).toBe(2);
+
+    // Focus the first row
+    rows[0].focus();
+    expect(document.activeElement).toBe(rows[0]);
+
+    // Simulate Arrow Down key press
+    const arrowDownEvent = new KeyboardEvent("keydown", {
+      key: "ArrowDown",
+      bubbles: true,
+      cancelable: true,
+    });
+    rows[0].dispatchEvent(arrowDownEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The second row should now be focused
+    expect(document.activeElement).toBe(rows[1]);
+  });
+
+  it("focuses the previous row when Arrow Up is pressed", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 2</span>
+              <a href="#" tabindex="-1">Row 2 Link 1</a>
+              <a href="#" tabindex="-1">Row 2 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const rows = document.querySelectorAll(".treegrid-row");
+    expect(rows.length).toBe(2);
+
+    // Focus the second row
+    rows[1].focus();
+    expect(document.activeElement).toBe(rows[1]);
+
+    // Simulate Arrow Up key press
+    const arrowUpEvent = new KeyboardEvent("keydown", {
+      key: "ArrowUp",
+      bubbles: true,
+      cancelable: true,
+    });
+    rows[1].dispatchEvent(arrowUpEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The first row should now be focused
+    expect(document.activeElement).toBe(rows[0]);
+  });
+
+  it("keeps focus on the first row when Arrow Up is pressed on the first row", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 2</span>
+              <a href="#" tabindex="-1">Row 2 Link 1</a>
+              <a href="#" tabindex="-1">Row 2 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const rows = document.querySelectorAll(".treegrid-row");
+    expect(rows.length).toBe(2);
+
+    // Focus the first row
+    rows[0].focus();
+    expect(document.activeElement).toBe(rows[0]);
+
+    // Simulate Arrow Up key press
+    const arrowUpEvent = new KeyboardEvent("keydown", {
+      key: "ArrowUp",
+      bubbles: true,
+      cancelable: true,
+    });
+    rows[0].dispatchEvent(arrowUpEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The first row should still be focused
+    expect(document.activeElement).toBe(rows[0]);
+  });
+
+  it("keeps focus on the last row when Arrow Down is pressed on the last row", async () => {
+    document.body.innerHTML = `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 1</span>
+              <a href="#" tabindex="-1">Row 1 Link 1</a>
+              <a href="#" tabindex="-1">Row 1 Link 2</a>
+            </div>
+          </div>
+        </div>
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <div>
+              <span>Row 2</span>
+              <a href="#" tabindex="-1">Row 2 Link 1</a>
+              <a href="#" tabindex="-1">Row 2 Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const rows = document.querySelectorAll(".treegrid-row");
+    expect(rows.length).toBe(2);
+
+    // Focus the last row
+    rows[1].focus();
+    expect(document.activeElement).toBe(rows[1]);
+
+    // Simulate Arrow Down key press
+    const arrowDownEvent = new KeyboardEvent("keydown", {
+      key: "ArrowDown",
+      bubbles: true,
+      cancelable: true,
+    });
+    rows[1].dispatchEvent(arrowDownEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The last row should still be focused
+    expect(document.activeElement).toBe(rows[1]);
+  });
 });
