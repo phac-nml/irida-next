@@ -155,7 +155,6 @@ export default class extends Controller {
         this.#fileAttributes,
         JSON.parse(fileAttributeTarget.innerHTML),
       );
-      console.log(fileAttributeTarget);
       fileAttributeTarget.remove();
     });
   }
