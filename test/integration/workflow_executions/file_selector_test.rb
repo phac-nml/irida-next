@@ -12,7 +12,6 @@ module WorkflowExecutions
       @expected_fastq_params = {
         attachable_id: samples(:sample43).id,
         attachable_type: 'Sample',
-        index: 0,
         selected_id: nil,
         property: 'fastq_1',
         required_properties: %w[sample fastq_1],
@@ -23,7 +22,6 @@ module WorkflowExecutions
       @expected_other_params = {
         attachable_id: samples(:sample1).id,
         attachable_type: 'Sample',
-        index: 1,
         selected_id: attachments(:attachment2).id,
         property: 'input',
         required_properties: nil,
@@ -160,7 +158,7 @@ module WorkflowExecutions
       assert_select 'span', I18n.t('workflow_executions.file_selector.file_selector_dialog.empty.description')
     end
 
-    test 'create file selection with fastq params' do
+    test 'create file selection with fastq_1 params' do
       attachment = attachments(:attachmentPEFWD43)
 
       post workflow_executions_file_selector_index_path(
@@ -179,6 +177,36 @@ module WorkflowExecutions
       assert_equal attachment.id, payload['files'][0]['id']
       assert_equal 'fastq_2', payload['files'][1]['property']
       assert_equal attachments(:attachmentPEREV43).id, payload['files'][1]['id']
+    end
+
+    test 'create file selection with fastq_2 params' do
+      attachment = attachments(:attachmentPEREV43)
+
+      post workflow_executions_file_selector_index_path(
+        file_selector:
+        {
+          attachable_id: samples(:sample43).id,
+          attachable_type: 'Sample',
+          selected_id: attachments(:attachmentPEREV43).id,
+          property: 'fastq_2',
+          required_properties: %w[sample fastq_1],
+          pattern: '^\S+\.f(ast)?q(\.gz)?$',
+          namespace_id: projects(:project37).namespace.id
+        },
+        attachment_id: attachment.id,
+        format: :turbo_stream
+      )
+
+      assert_response :ok
+
+      payload = parsed_files_payload
+
+      assert_equal samples(:sample43).id, payload['attachable_id']
+      assert_equal 2, payload['files'].length
+      assert_equal 'fastq_2', payload['files'][0]['property']
+      assert_equal attachment.id, payload['files'][0]['id']
+      assert_equal 'fastq_1', payload['files'][1]['property']
+      assert_equal attachments(:attachmentPEFWD43).id, payload['files'][1]['id']
     end
 
     test 'create project file selection with fastq params' do
