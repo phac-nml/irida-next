@@ -547,7 +547,7 @@ module AdvancedSearch
       record5 = DummyRecord.new(
         groups: [DummyGroup.new(conditions: [DummyCondition.new(field: 'name',
                                                                 operator: 'between',
-                                                                value: ['', ''])])]
+                                                                value: ['', '  '])])]
       )
 
       assert_not record5.valid?
