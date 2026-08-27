@@ -131,11 +131,9 @@ export default class extends Controller {
   #processSamplesheetAttributes() {
     this.sampleAttributesTargets.forEach((sampleAttributesTarget) => {
       const dataAttributes = sampleAttributesTarget.dataset;
-
       const sampleAttributes = JSON.parse(
         dataAttributes.sampleAttributes || "{}",
       );
-
       Object.assign(this.#samplesheetAttributes, sampleAttributes);
 
       const allowedToUpdateSamples = JSON.parse(
@@ -1055,6 +1053,7 @@ export default class extends Controller {
       this.#processFileAttributes();
 
       this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
+
       if (this.#allSampleIds.length !== this.#selectedSamples.length) {
         this.#renderProcessingError();
       } else {
