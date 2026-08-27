@@ -298,7 +298,7 @@ function renderFixture() {
           </div>
         </div>
 
-        <div data-nextflow--v2--samplesheet-target="emptyState">
+        <div data-nextflow--v2--samplesheet-target="emptyState" class="hidden">
           <section role="status" aria-labelledby="empty-state-title-1568576" aria-describedby="empty-state-desc-1568576">
             <div aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
@@ -661,6 +661,14 @@ describe("nextflow v2 samplesheet controller", () => {
       '[data-nextflow--v2--samplesheet-target="filterClearButton"]',
     );
 
+    const filterButton = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="filterSearchButton"]',
+    );
+
+    const emptyState = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="emptyState"]',
+    );
+
     assertPaginationOptions(["1", "2", "3"]);
 
     assertPaginationState(true, false, "1");
@@ -711,6 +719,16 @@ describe("nextflow v2 samplesheet controller", () => {
     assertPaginationState(true, false, "1");
 
     assertPaginationOptions(["1", "2", "3"]);
+
+    expect(emptyState).toHaveClass("hidden");
+    document.querySelector("#samplesheet-filter").value = "invalid filter";
+    filterButton.click();
+    await new Promise((resolve) => setTimeout(resolve, 60));
+
+    expect(getPreviousBtn()).toBeNull();
+    expect(getPageNum()).toBeNull();
+    expect(getNextBtn()).toBeNull();
+    expect(emptyState).not.toHaveClass("hidden");
   });
 
   it("can't submit without name", async () => {
@@ -747,6 +765,3 @@ describe("nextflow v2 samplesheet controller", () => {
     );
   });
 });
-
-// filter empty state
-// filter click search button

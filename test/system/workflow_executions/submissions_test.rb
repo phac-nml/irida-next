@@ -189,43 +189,6 @@ module WorkflowExecutions
       assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
     end
 
-    test 'cannot launch workflow execution (user launched) without a name' do
-      user = users(:john_doe)
-      login_as user
-
-      project = projects(:project1)
-      sample = samples(:sample1)
-      Project.reset_counters(project.id, :samples_count)
-
-      visit namespace_project_samples_url(project.namespace.parent, project)
-
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: user.locale))
-      check "checkbox_sample_#{sample.id}"
-
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/iridanextexample', count: 3
-      click_button 'phac-nml/iridanextexample', match: :first
-
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t('workflow_executions.submissions.create.title',
-                                   workflow: 'phac-nml/iridanextexample')
-      assert_selector 'table[data-test-selector="samplesheet-table"]'
-      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
-      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr:first-child th:first-child',
-                      text: sample.puid, count: 1
-
-      assert_text I18n.t(:'components.nextflow.update_samples')
-      assert_text I18n.t(:'components.nextflow.email_notification')
-      assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
-
-      click_button I18n.t('workflow_executions.submissions.create.submit')
-
-      assert_text I18n.t('components.nextflow_component.name.error')
-    end
-
     test 'samplesheet attachment selection behavior' do
       attachment_b = attachments(:attachmentB)
       attachment_d = attachments(:attachmentD)
@@ -375,74 +338,6 @@ module WorkflowExecutions
       assert_text "- #{@sample44.puid}: fastq_1"
       assert_text "- #{@sample46.puid}: fastq_1"
       ### VERIFY END ###
-    end
-
-    test 'samplesheet pagination' do
-      ### SETUP START ###
-      user = users(:john_doe)
-      login_as user
-      visit namespace_project_samples_url(@group1, @project2)
-      # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
-                                                                                      locale: user.locale))
-      # select samples
-      click_button I18n.t('common.controls.select_all')
-      assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-
-      assert_text 'Samples: 20'
-      assert_selector 'strong[data-selection-target="selected"]', text: '20'
-
-      # launch workflow execution dialog
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/iridanextexample', count: 3
-      click_button 'phac-nml/iridanextexample', match: :first
-
-      ### ACTIONS AND VERIFY START ###
-      # verify dialog rendered
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t('workflow_executions.submissions.create.title',
-                                   workflow: 'phac-nml/iridanextexample')
-      # verify pagination buttons as well as disabled previous state
-      assert_selector 'button[data-action="click->nextflow--v2--samplesheet#previousPage"][disabled]',
-                      text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_selector 'select[data-action="change->nextflow--v2--samplesheet#pageSelected"]', text: '1'
-      within('select[data-action="change->nextflow--v2--samplesheet#pageSelected"]') do
-        # verify only 4 pages exist
-        assert_selector 'option[value="1"]'
-        assert_selector 'option[value="2"]'
-        assert_selector 'option[value="3"]'
-        assert_selector 'option[value="4"]'
-        assert_no_selector 'option[value="5"]'
-      end
-      assert_selector 'button[data-action="click->nextflow--v2--samplesheet#nextPage"]',
-                      text: I18n.t('components.nextflow.samplesheet_component.next')
-
-      # navigate to page 2 of 4
-      click_button I18n.t('components.nextflow.samplesheet_component.next')
-
-      # verify previous button no longer disabled
-      assert_selector 'button[data-action="click->nextflow--v2--samplesheet#previousPage"]',
-                      text: I18n.t('components.nextflow.samplesheet_component.previous')
-      assert_no_selector 'button[data-action="click->nextflow--v2--samplesheet#previousPage"][disabled]',
-                         text: I18n.t('components.nextflow.samplesheet_component.previous')
-      # page dropdown selection updated
-      assert_selector 'select[data-action="change->nextflow--v2--samplesheet#pageSelected"]', text: '2'
-      # navigate to page 3 of 4
-      click_button I18n.t('components.nextflow.samplesheet_component.next')
-
-      assert_selector 'select[data-action="change->nextflow--v2--samplesheet#pageSelected"]', text: '3'
-
-      # test navigating by page dropdown selection
-      select '4', from: I18n.t('components.nextflow.samplesheet_component.page_selection.aria_label')
-
-      assert_selector 'select[data-action="change->nextflow--v2--samplesheet#pageSelected"]', text: '4'
-      # verify next button is disabled on last page
-      assert_selector 'button[data-action="click->nextflow--v2--samplesheet#nextPage"][disabled]',
-                      text: I18n.t('components.nextflow.samplesheet_component.next')
-      ### ACTIONS AND VERIFY END ###
     end
 
     test 'data retained in samplesheet after data and page change' do
