@@ -15,12 +15,14 @@ module AdvancedSearch
                              text_starts_ends_with: %w[text_ends_with text_starts_with] }.freeze
     EXISTS_OPERATORS = %w[exists not_exists date_exists date_not_exists numeric_exists
                           numeric_not_exists].freeze
+    BETWEEN_OPERATORS = %w[between date_between numeric_between text_between].freeze
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
-    METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals].freeze
+    METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals
+                                 date_between].freeze
     METADATA_NUMERIC_OPERATORS = %w[numeric_equals numeric_greater_than_equals numeric_less_than_equals
-                                    numeric_not_equals].freeze
-    NON_METADATA_OPERATORS = %w[= != <= >= contains not_contains in not_in].freeze
+                                    numeric_not_equals numeric_between].freeze
+    NON_METADATA_OPERATORS = %w[= != <= >= contains not_contains in not_in between].freeze
 
     def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       return if empty_search?(record)
@@ -83,13 +85,16 @@ module AdvancedSearch
       groups.all? { |group| Array(group.conditions).empty? }
     end
 
-    def validate_fields(group)
+    def validate_fields(group) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
       group.conditions.each_with_index do |condition, condition_index|
         validate_blank_inputs(condition)
 
         validate_field(condition) if condition.field.present?
         validate_operator_type(condition) if Flipper.enabled?(:advanced_search_metadata_operators)
+
         validate_date_and_numeric_field(condition)
+
+        validate_between_values(condition) if BETWEEN_OPERATORS.include?(condition.operator)
 
         validate_unique_condition(group, condition, condition_index)
 
@@ -101,13 +106,22 @@ module AdvancedSearch
       group.errors.add :base, :invalid
     end
 
-    def validate_blank_inputs(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+    def validate_blank_inputs(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       if condition.field.blank?
         condition.errors.add :field, :blank
         return
       end
 
       condition.errors.add :operator, :blank if condition.operator.blank?
+
+      if BETWEEN_OPERATORS.include?(condition.operator) && condition.value.is_a?(Array) &&
+         condition.value.any?(&:blank?)
+
+        condition.errors.add :from_value, :blank if condition.value[0].blank?
+
+        condition.errors.add :to_value, :blank if condition.value[1].blank?
+        return
+      end
 
       return unless condition.operator.present? && (
         (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) ||
@@ -180,13 +194,37 @@ module AdvancedSearch
     end
 
     def validate_numeric(condition)
-      condition.errors.add :value, :not_a_number unless Float(condition.value, exception: false)
+      Array(condition.value).each_with_index do |number, index|
+        # avoid adding format error if value is empty
+        next if number.blank?
+
+        error_key = if condition.value.is_a?(Array)
+                      index.zero? ? :from_value : :to_value
+                    else
+                      :value
+                    end
+        next if Float(number, exception: false)
+
+        condition.errors.add error_key, :not_a_number
+      end
     end
 
     def validate_date(condition)
-      DateTime.strptime(condition.value, '%Y-%m-%d')
-    rescue StandardError
-      condition.errors.add :value, :not_a_date
+      Array(condition.value).each_with_index do |date, index|
+        # avoid adding format error if value is empty
+        next if date.blank?
+
+        error_key = if condition.value.is_a?(Array)
+                      index.zero? ? :from_value : :to_value
+                    else
+                      :value
+                    end
+        begin
+          DateTime.strptime(date, '%Y-%m-%d')
+        rescue StandardError
+          condition.errors.add error_key, :not_a_date
+        end
+      end
     end
 
     def validate_unique_condition(group, condition, condition_index)
@@ -195,7 +233,7 @@ module AdvancedSearch
       end
 
       if COMBINABLE_OPERATORS.values.flatten.include?(condition.operator)
-        validate_between(condition, common_field_conditions)
+        validate_glteq(condition, common_field_conditions)
       elsif condition.field.present?
         validate_uniqueness(condition, common_field_conditions)
       end
@@ -207,7 +245,7 @@ module AdvancedSearch
       unique_field_condition.errors.add :field, :taken
     end
 
-    def validate_between(unique_field_condition, common_field_conditions)
+    def validate_glteq(unique_field_condition, common_field_conditions)
       return unless common_field_conditions.count == 2
 
       operators = common_field_conditions.map(&:operator).sort
@@ -219,6 +257,27 @@ module AdvancedSearch
 
     def metadata_field?(field)
       METADATA_FIELD_PATTERN.match?(field)
+    end
+
+    def validate_between_values(condition) # rubocop:disable Metrics/AbcSize
+      # skip further validation if value is blank or invalid format
+      return if condition.errors[:from_value].any? || condition.errors[:to_value].any?
+
+      unless condition.value.is_a?(Array) && condition.value.length == 2
+        condition.errors.add :value, :invalid_between_value
+        return
+      end
+
+      value_comparison = if condition.operator == 'numeric_between'
+                           condition.value[0].to_f <=> condition.value[1].to_f
+                         else
+                           condition.value[0].downcase <=> condition.value[1].downcase
+                         end
+
+      return unless value_comparison == 1
+
+      condition.errors.add :from_value, :greater_than_to
+      condition.errors.add :to_value, :lower_than_from
     end
   end
 end

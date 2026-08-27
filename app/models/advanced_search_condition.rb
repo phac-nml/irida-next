@@ -22,4 +22,12 @@ class AdvancedSearchCondition
 
     value.blank?
   end
+
+  def from_value
+    value&.[](0)
+  end
+
+  def to_value
+    value&.[](1)
+  end
 end
