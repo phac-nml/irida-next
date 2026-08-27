@@ -277,69 +277,6 @@ module WorkflowExecutions
       end
     end
 
-    test 'required attachments samplesheet validation' do
-      ### SETUP START ###
-      user = users(:john_doe)
-      login_as user
-      fwd_attachment = attachments(:attachmentPEFWD43)
-      rev_attachment = attachments(:attachmentPEREV43)
-      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: user.locale))
-      # select samples
-      click_button I18n.t('common.controls.select_all')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 3'
-        assert_selector 'strong[data-selection-target="selected"]', text: '3'
-      end
-      # launch workflow execution dialog
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/iridanextexample', count: 3
-      click_button 'phac-nml/iridanextexample', match: :first
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-
-      # verify samples samplesheet loaded
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t('workflow_executions.submissions.create.title',
-                                   workflow: 'phac-nml/iridanextexample')
-      find('input#workflow_execution_name').fill_in with: 'TestExecution'
-      # verify auto selected attachments
-      assert_link "#{@sample43.id}_fastq_1_file_link",
-                  text: fwd_attachment.file.filename.to_s
-      assert_link "#{@sample43.id}_fastq_2_file_link", text: rev_attachment.file.filename.to_s
-
-      assert_link "#{@sample44.id}_fastq_1_file_link",
-                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-      assert_link "#{@sample44.id}_fastq_2_file_link",
-                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-
-      assert_link "#{@sample46.id}_fastq_1_file_link",
-                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-      assert_link "#{@sample46.id}_fastq_2_file_link",
-                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-      # verify error msg has not rendered
-      assert_no_text I18n.t('components.nextflow.samplesheet_component.data_missing_error')
-      click_button I18n.t('workflow_executions.submissions.create.submit')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      # verify error msg rendered
-      assert_selector 'div[data-nextflow--v2--samplesheet-target="error"]'
-      assert_text I18n.t('components.nextflow_component.data_missing_error')
-      assert_text "- #{@sample44.puid}: fastq_1"
-      assert_text "- #{@sample46.puid}: fastq_1"
-      ### VERIFY END ###
-    end
-
     test 'data retained in samplesheet after data and page change' do
       ### SETUP START ###
       user = users(:john_doe)
@@ -416,14 +353,23 @@ module WorkflowExecutions
       ### VERIFY END ###
     end
 
-    test 'samplesheet metadata selection changes samplesheet values' do
+    test 'samplesheet metadata selection changes samplesheet values and retained after workflow submission' do
       ### SETUP START ###
       user = users(:john_doe)
       namespace = groups(:group_twelve)
-      sample32 = samples(:sample32)
       sample33 = samples(:sample33)
       sample34 = samples(:sample34)
       sample35 = samples(:sample35)
+      # required mlst.json file for gasclustering submission
+      sample33.attachments.create!(
+        file: Rails.root.join('test/fixtures/files/s.mlst.json')
+      )
+      sample34.attachments.create!(
+        file: Rails.root.join('test/fixtures/files/s.mlst.json')
+      )
+      sample35.attachments.create!(
+        file: Rails.root.join('test/fixtures/files/s.mlst.json')
+      )
       login_as user
 
       visit group_samples_url(namespace)
@@ -431,11 +377,12 @@ module WorkflowExecutions
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
                                                                                       locale: user.locale))
       # select samples
+      check "checkbox_sample_#{sample33.id}"
+      check "checkbox_sample_#{sample34.id}"
+      check "checkbox_sample_#{sample35.id}"
 
-      click_button I18n.t('common.controls.select_all')
-
-      assert_selector 'input[name="sample_ids[]"]:checked', count: 4
-      assert_selector 'strong[data-selection-target="selected"]', text: 4
+      assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      assert_selector 'strong[data-selection-target="selected"]', text: 3
 
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
@@ -446,86 +393,53 @@ module WorkflowExecutions
       click_button 'phac-nml/gasclustering'
       ### SETUP END ###
 
-      ### ACTIONS START ###
+      ### ACTIONS AND VERIFY START ###
       assert_selector 'h1', text: 'phac-nml/gasclustering'
+      find('input#workflow_execution_name').fill_in with: 'test-workflow'
 
       # check default metadata dropdown selected values
       assert_selector '#field-metadata_1', text: 'metadata_1'
       assert_selector '#field-metadata_2', text: 'metadata_2'
 
-      assert_selector "td[id='#{sample32.id}_metadata_1'] input[type='text']", text: ''
       assert_selector "td[id='#{sample33.id}_metadata_1'] input[type='text']", text: ''
       assert_selector "td[id='#{sample34.id}_metadata_1'] input[type='text']", text: ''
       assert_selector "td[id='#{sample35.id}_metadata_1'] input[type='text']", text: ''
-      assert_selector "td[id='#{sample32.id}_metadata_2'] input[type='text']", text: ''
       assert_selector "td[id='#{sample33.id}_metadata_2'] input[type='text']", text: ''
       assert_selector "td[id='#{sample34.id}_metadata_2'] input[type='text']", text: ''
       assert_selector "td[id='#{sample35.id}_metadata_2'] input[type='text']", text: ''
 
       # change metadata_1 and metadata_2 option selection
       select 'metadatafield1', from: 'metadata_1'
-      select 'metadatafield2', from: 'metadata_2'
-      ### ACTIONS END ###
 
-      ### VERIFY START ###
+      find('input#samplesheet-filter').fill_in with: sample34.name
+      find('input#samplesheet-filter').send_keys :enter
+
+      # assert table is filtered to display sample34 only and previous metadata selection is retained
+      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
+      assert_selector "td[id='#{sample34.id}_metadata_1'] span", text: sample34.metadata['metadatafield1']
+
+      # select metadata field and verify sample34's respective metadata value is loaded in
+      select 'metadatafield2', from: 'metadata_2'
+      assert_selector '#field-metadata_2', text: 'metadatafield2'
+      assert_selector "td[id='#{sample34.id}_metadata_2'] span", text: sample34.metadata['metadatafield2']
+
+      # undo filter and verify other samples' metadata is loaded and retained
+      find('input#samplesheet-filter').fill_in with: ''
+      find('input#samplesheet-filter').send_keys :enter
       # check new metadata dropdown selected values
       assert_selector '#field-metadata_1', text: 'metadatafield1'
       assert_selector '#field-metadata_2', text: 'metadatafield2'
 
       # check metadata values of samples
-      assert_selector "td[id='#{sample32.id}_metadata_1'] span", text: sample32.metadata['metadatafield1']
       assert_selector "td[id='#{sample33.id}_metadata_1'] span", text: sample33.metadata['metadatafield1']
       assert_selector "td[id='#{sample34.id}_metadata_1'] span", text: sample34.metadata['metadatafield1']
       # sample contains no metadata value for this field, stays as text input
       assert_selector "td[id='#{sample35.id}_metadata_1'] input[type='text']", text: ''
 
-      assert_selector "td[id='#{sample32.id}_metadata_2'] span", text: sample32.metadata['metadatafield2']
       assert_selector "td[id='#{sample33.id}_metadata_2'] span", text: sample33.metadata['metadatafield2']
       assert_selector "td[id='#{sample34.id}_metadata_2'] span", text: sample34.metadata['metadatafield2']
       # sample contains no metadata value for this field, stays as text input
       assert_selector "td[id='#{sample35.id}_metadata_2'] input[type='text']", text: ''
-      ### VERIFY END ###
-    end
-
-    test 'samplesheet metadata values retained after workflow submission' do
-      ### SETUP START ###
-      user = users(:john_doe)
-      namespace = groups(:group_twelve)
-      sample32 = samples(:sample32)
-      login_as user
-
-      visit group_samples_url(namespace)
-      # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
-                                                                                      locale: user.locale))
-      # select samples
-      check "checkbox_sample_#{sample32.id}"
-
-      # launch workflow execution dialog
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/gasclustering'
-      click_button 'phac-nml/gasclustering'
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      assert_selector 'h1', text: 'phac-nml/gasclustering'
-
-      find('input#workflow_execution_name').fill_in with: "WE-#{sample32.name}"
-
-      # check default metadata dropdown selected values
-      assert_selector '#field-metadata_1', text: 'metadata_1'
-      assert_selector '#field-metadata_8', text: 'metadata_8'
-
-      # change metadata_1 and metadata_8 option selection
-      select 'metadatafield1', from: 'metadata_1'
-      select 'metadatafield2', from: 'metadata_8'
-
-      # check new metadata dropdown selected values
-      assert_selector '#field-metadata_1', text: 'metadatafield1'
-      assert_selector '#field-metadata_8', text: 'metadatafield2'
 
       # submit pipeline
       click_button I18n.t(:'workflow_executions.submissions.create.submit')
@@ -537,30 +451,45 @@ module WorkflowExecutions
       find('table tbody tr:first-child th:first-child a').click
 
       # verify show page
-      assert_selector 'h1', text: "WE-#{sample32.name}"
+      assert_selector 'h1', text: 'test-workflow'
 
       assert_text I18n.t(:'workflow_executions.show.tabs.params')
       # click parameters tab
       click_button I18n.t(:'workflow_executions.show.tabs.params')
-      ### ACTIONS END ###
 
-      ### VERIFY START ###
       # verify new parameter values
       assert_selector '.metadata_1_header-param input[disabled][value="metadatafield1"]'
       assert_no_selector '.metadata_1_header-param input[disabled][value="metadata_1"]'
 
-      assert_selector '.metadata_8_header-param input[disabled][value="metadatafield2"]'
-      assert_no_selector '.metadata_8_header-param input[disabled][value="metadata_8"]'
+      assert_selector '.metadata_2_header-param input[disabled][value="metadatafield2"]'
+      assert_no_selector '.metadata_2_header-param input[disabled][value="metadata_2"]'
 
       # verify samplesheet values
       click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
       assert_selector 'table'
-      assert_selector 'table tbody tr:first-child td:nth-child(4)', text: sample32.metadata['metadatafield1']
-      (5..10).each do |i|
-        assert_selector "table tbody tr:first-child td:nth-child(#{i})", text: ''
+
+      within 'table tbody tr', text: sample33.puid do
+        assert_selector 'td:nth-child(4)', text: sample33.metadata['metadatafield1']
+        assert_selector 'td:nth-child(5)', text: sample33.metadata['metadatafield2']
+        (6..11).each do |i|
+          assert_selector "td:nth-child(#{i})", text: ''
+        end
       end
-      assert_selector 'table tbody tr:first-child td:last-child', text: sample32.metadata['metadatafield2']
-      ### VERIFY END ###
+
+      within 'table tbody tr', text: sample34.puid do
+        assert_selector 'td:nth-child(4)', text: sample34.metadata['metadatafield1']
+        assert_selector 'td:nth-child(5)', text: sample34.metadata['metadatafield2']
+        (6..11).each do |i|
+          assert_selector "td:nth-child(#{i})", text: ''
+        end
+      end
+
+      within 'table tbody tr', text: sample35.puid do
+        (4..11).each do |i|
+          assert_selector "td:nth-child(#{i})", text: ''
+        end
+      end
+      ### ACTIONS AND VERIFY END ###
     end
 
     test 'analyst cannot update samples with analysis result' do
@@ -624,141 +553,22 @@ module WorkflowExecutions
       assert_text I18n.t('components.nextflow.unauthorized_to_update_samples')
     end
 
-    test 'default selected samplesheet file data retained after workflow submission' do
+    test 'default and changed file selection data retained after workflow submitted' do
+      # tests submission of file data from default selection, PE file selection change and non-PE file selection change
       ### SETUP START ###
-      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
-      # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      check "checkbox_sample_#{@sample_a.id}"
-      check "checkbox_sample_#{@sample_b.id}"
-
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/iridanextexample', count: 3
-      click_button 'phac-nml/iridanextexample', match: :first
-      ### SETUP END ###
-
-      ### ACTIONS AND VERIFY START ###
-      # verify samples samplesheet loaded
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t('workflow_executions.submissions.create.title',
-                                   workflow: 'phac-nml/iridanextexample')
-
-      fill_in 'workflow_execution_name', with: 'a_new_workflow'
-      # verify auto selected attachments
-      assert_link "#{@sample_a.id}_fastq_1_file_link", text: @attachment_c.file.filename.to_s
-      assert_link "#{@sample_a.id}_fastq_2_file_link",
-                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-      assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd3.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2_file_link", text: @attachment_rev3.file.filename.to_s
-
-      click_button I18n.t('workflow_executions.submissions.create.submit')
-
-      assert_selector 'h1', text: I18n.t('shared.workflow_executions.index.title')
-      current_workflow = WorkflowExecution.last
-      assert_equal 'a_new_workflow', current_workflow.name
-      assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
-      click_link current_workflow.id
-
-      assert_selector 'h1', text: current_workflow.name
-      click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
-      if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
-        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s
-        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_fwd3.file.filename.to_s
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: @attachment_rev3.file.filename.to_s
-      else
-        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_fwd3.file.filename.to_s
-        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: @attachment_rev3.file.filename.to_s
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_c.file.filename.to_s
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: ''
-      end
-      ### ACTIONS AND VERIFY END ###
-    end
-
-    test 'samplesheet fastq file data retained after changing file selection after workflow submission' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
-      # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
-      check "checkbox_sample_#{@sample_a.id}"
-      check "checkbox_sample_#{@sample_b.id}"
-
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/iridanextexample', count: 3
-      click_button 'phac-nml/iridanextexample', match: :first
-      ### SETUP END ###
-
-      ### ACTIONS AND VERIFY START ###
-      # verify samples samplesheet loaded
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t('workflow_executions.submissions.create.title',
-                                   workflow: 'phac-nml/iridanextexample')
-
-      fill_in 'workflow_execution_name', with: 'a_new_workflow'
-      # verify auto selected attachments
-      assert_link "#{@sample_a.id}_fastq_1_file_link", text: @attachment_c.file.filename.to_s
-      assert_link "#{@sample_a.id}_fastq_2_file_link",
-                  text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
-      assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd3.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2_file_link", text: @attachment_rev3.file.filename.to_s
-      click_link "#{@sample_b.id}_fastq_1_file_link"
-
-      # verify file selector rendered
-      assert_selector '#file_selector_form_dialog'
-      within('#file_selector_form_dialog') do
-        assert_text 'hihihihiih'
-        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
-        # select new attachment
-        find("#attachment_id_#{@attachment_fwd2.id}").click
-        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
-      end
-
-      # verify file selector dialog closed
-      assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
-      # both attachment fwd and rev3 were replaced with fwd and rev2
-      assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd2.file.filename.to_s
-      assert_link "#{@sample_b.id}_fastq_2_file_link", text: @attachment_rev2.file.filename.to_s
-      click_button I18n.t('workflow_executions.submissions.create.submit')
-
-      assert_selector 'h1', text: I18n.t('shared.workflow_executions.index.title')
-      current_workflow = WorkflowExecution.last
-      assert_equal 'a_new_workflow', current_workflow.name
-      assert_selector 'table tbody tr:first-child th:first-child', text: current_workflow.id
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: current_workflow.name
-      click_link current_workflow.id
-
-      assert_selector 'h1', text: current_workflow.name
-      click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
-      if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
-        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s
-        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_fwd2.file.filename.to_s
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: @attachment_rev2.file.filename.to_s
-      else
-        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_fwd2.file.filename.to_s
-        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: @attachment_rev2.file.filename.to_s
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_c.file.filename.to_s
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: ''
-      end
-      ### ACTIONS AND VERIFY END ###
-    end
-
-    test 'samplesheet fastq file data retained after changing file selection to non-PE after workflow submission' do
-      ### SETUP START ###
+      sample_c = samples(:sampleC)
       attachment_d = attachments(:attachmentD)
+      attachment_fwd5 = attachments(:attachmentPEFWD5)
+      attachment_rev5 = attachments(:attachmentPEREV5)
+      attachment_fwd6 = attachments(:attachmentPEFWD6)
+      attachment_rev6 = attachments(:attachmentPEREV6)
       visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
       # verify samples table loaded
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                                       locale: @user.locale))
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
+      check "checkbox_sample_#{sample_c.id}"
 
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
@@ -772,6 +582,7 @@ module WorkflowExecutions
       assert_selector 'h1.dialog--title',
                       text: I18n.t('workflow_executions.submissions.create.title',
                                    workflow: 'phac-nml/iridanextexample')
+      assert_selector 'label', text: I18n.t('components.nextflow.samplesheet_component.label', sample_count: 3)
 
       fill_in 'workflow_execution_name', with: 'a_new_workflow'
       # verify auto selected attachments
@@ -780,6 +591,10 @@ module WorkflowExecutions
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
       assert_link "#{@sample_b.id}_fastq_1_file_link", text: @attachment_fwd3.file.filename.to_s
       assert_link "#{@sample_b.id}_fastq_2_file_link", text: @attachment_rev3.file.filename.to_s
+      assert_link "#{sample_c.id}_fastq_1_file_link", text: attachment_fwd6.file.filename.to_s
+      assert_link "#{sample_c.id}_fastq_2_file_link", text: attachment_rev6.file.filename.to_s
+
+      # select non-pe file
       click_link "#{@sample_b.id}_fastq_1_file_link"
       # verify file selector rendered
       assert_selector '#file_selector_form_dialog'
@@ -796,6 +611,24 @@ module WorkflowExecutions
       assert_link "#{@sample_b.id}_fastq_1_file_link", text: attachment_d.file.filename.to_s
       assert_link "#{@sample_b.id}_fastq_2_file_link",
                   text: I18n.t('components.nextflow.samplesheet.file_cell_component.no_selected_file')
+
+      # select different PE file
+      click_link "#{sample_c.id}_fastq_1_file_link"
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        # select new attachment
+        find("#attachment_id_#{attachment_fwd5.id}").click
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+      # verify file selector dialog closed
+      assert_no_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+
+      # fastq_1 field changed to auto-selects fastq_2 to rev PE file
+      assert_link "#{sample_c.id}_fastq_1_file_link", text: attachment_fwd5.file.filename.to_s
+      assert_link "#{sample_c.id}_fastq_2_file_link", text: attachment_rev5.file.filename.to_s
+
       click_button I18n.t('workflow_executions.submissions.create.submit')
 
       assert_selector 'h1', text: I18n.t('shared.workflow_executions.index.title')
@@ -807,118 +640,22 @@ module WorkflowExecutions
 
       assert_selector 'h1', text: current_workflow.name
       click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')
-      if has_selector?('table tbody tr:first-child th:first-child', text: @sample_a.puid)
-        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @attachment_c.file.filename.to_s
-        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: attachment_d.file.filename.to_s
-      else
-        assert_selector 'table tbody tr:first-child td:nth-child(2)', text: attachment_d.file.filename.to_s
-        assert_selector 'table tbody tr:first-child td:nth-child(3)', text: ''
-        assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: @attachment_c.file.filename.to_s
+
+      within 'table tbody tr', text: @sample_a.puid do
+        assert_selector 'td:nth-child(2)', text: @attachment_c.file.filename.to_s
+        assert_selector 'td:nth-child(3)', text: ''
       end
-      assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: ''
+
+      within 'table tbody tr', text: @sample_b.puid do
+        assert_selector 'td:nth-child(2)', text: attachment_d.file.filename.to_s
+        assert_selector 'td:nth-child(3)', text: ''
+      end
+
+      within 'table tbody tr', text: sample_c.puid do
+        assert_selector 'td:nth-child(2)', text: attachment_fwd5.file.filename.to_s
+        assert_selector 'td:nth-child(3)', text: attachment_rev5.file.filename.to_s
+      end
       ### ACTIONS AND VERIFY END ###
-    end
-
-    test 'samplesheet metadata change while filtering' do
-      ### SETUP START ###
-      user = users(:metadata_doe)
-      project = projects(:projectMetadata)
-      sample61 = samples(:sample61)
-      sample62 = samples(:sample62)
-      sample63 = samples(:sample63)
-      login_as user
-      visit namespace_project_samples_url(project.namespace.parent, project)
-      # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: user.locale))
-      # select samples
-
-      click_button I18n.t('common.controls.select_all')
-
-      assert_selector 'input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'strong[data-selection-target="selected"]', text: 3
-
-      # launch workflow execution dialog
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/gasclustering'
-      click_button 'phac-nml/gasclustering'
-      ### SETUP END ###
-
-      ### ACTIONS AND VERIFY START ###
-      assert_selector 'h1', text: 'phac-nml/gasclustering'
-
-      # check default metadata dropdown selected values
-      assert_selector '#field-metadata_1', text: 'metadata_1'
-
-      assert_selector "td[id='#{sample61.id}_metadata_1'] input[type='text']", text: ''
-      assert_selector "td[id='#{sample62.id}_metadata_1'] input[type='text']", text: ''
-      assert_selector "td[id='#{sample63.id}_metadata_1'] input[type='text']", text: ''
-      # change metadata_1 and metadata_2 option selection
-      select 'example_float', from: 'metadata_1'
-      # check new metadata dropdown selected values
-      assert_selector '#field-metadata_1', text: 'example_float'
-
-      # check metadata values of samples
-      assert_selector "td[id='#{sample61.id}_metadata_1'] span", text: sample61.metadata['example_float']
-      assert_selector "td[id='#{sample62.id}_metadata_1'] span", text: sample62.metadata['example_float']
-      assert_selector "td[id='#{sample63.id}_metadata_1'] span", text: sample63.metadata['example_float']
-
-      # reset metadata to no/default selection
-      select 'metadata_1', from: 'metadata_1'
-      assert_selector '#field-metadata_1', text: 'metadata_1'
-
-      assert_selector "td[id='#{sample61.id}_metadata_1'] input[type='text']", text: ''
-      assert_selector "td[id='#{sample62.id}_metadata_1'] input[type='text']", text: ''
-      assert_selector "td[id='#{sample63.id}_metadata_1'] input[type='text']", text: ''
-
-      # enter filter
-      find('input#samplesheet-filter').fill_in with: sample62.name
-      find('input#samplesheet-filter').send_keys :enter
-
-      # assert table is filtered to display sample62 only
-      assert_selector 'table[data-test-selector="samplesheet-table"] tbody tr', count: 1
-      assert_selector "td[id='#{sample62.id}_metadata_1'] input[type='text']", text: ''
-
-      # select metadata field and verify sample62's metadata value loads as expected
-      select 'example_float', from: 'metadata_1'
-      assert_selector '#field-metadata_1', text: 'example_float'
-      assert_selector "td[id='#{sample62.id}_metadata_1'] span", text: sample62.metadata['example_float']
-      ### ACTIONS AND VERIFY END ###
-    end
-
-    test 'samples count within samplesheet label' do
-      ### SETUP START ###
-      user = users(:metadata_doe)
-      project = projects(:projectMetadata)
-      login_as user
-      visit namespace_project_samples_url(project.namespace.parent, project)
-      # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: user.locale))
-      # select samples
-
-      click_button I18n.t('common.controls.select_all')
-
-      assert_selector 'input[name="sample_ids[]"]:checked', count: 3
-      assert_selector 'strong[data-selection-target="selected"]', text: 3
-
-      # launch workflow execution dialog
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
-
-      assert_selector 'h1.dialog--title',
-                      text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
-      assert_button text: 'phac-nml/gasclustering'
-      click_button 'phac-nml/gasclustering'
-      ### SETUP END ###
-
-      ### VERIFY START ###
-      assert_selector 'h1', text: 'phac-nml/gasclustering'
-      assert_selector 'label', text: I18n.t('components.nextflow.samplesheet_component.label', sample_count: 3)
-      ### VERIFY END ###
     end
 
     test 'chunked samples request' do
