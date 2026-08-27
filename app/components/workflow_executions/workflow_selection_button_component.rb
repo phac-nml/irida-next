@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module WorkflowExecutions
-  # Component for rendering a table of Samples
+  # Component for rendering selection buttons within launch workflow dialog
   class WorkflowSelectionButtonComponent < Component
     def initialize(workflow:, sample_count:)
       @workflow = workflow
