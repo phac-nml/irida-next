@@ -312,6 +312,8 @@ en:
         samples:
           aria-label: View samples for %{namespace_type} with persistent unique identifier %{namespace_puid}
           tooltip: "%{count} samples in %{namespace_name}"
+        shared_namespaces:
+          public: Public
         subnamespaces:
           aria-label: View subgroups for %{namespace_type} with persistent unique identifier %{namespace_puid}
           tooltip: "%{count} subgroups in %{namespace_name}"
