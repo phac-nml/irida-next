@@ -156,7 +156,7 @@ module Attachments
 
         pe_attachments['reverse'].metadata = pe_attachments['reverse'].metadata.merge(rev_metadata)
 
-        @pe_attachments << paired_ends[key] if Flipper.disabled?(:automated_workflow_execution_subscriber)
+        @pe_attachments << paired_ends[key] unless Flipper.enabled?(:automated_workflow_execution_subscriber)
       end
     end
 
