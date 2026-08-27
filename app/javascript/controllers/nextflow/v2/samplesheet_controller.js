@@ -298,10 +298,8 @@ export default class extends Controller {
       container.setAttribute("aria-hidden", false);
       this.updateSamplesLabelTarget.innerHTML = "";
       if (this.#allowedToUpdateSamples) {
-        console.log("hi?");
         this.updateSamplesLabelTarget.innerText =
           this.allowedToUpdateSamplesStringValue;
-        console.log(this.updateSamplesLabelTarget);
         this.updateSamplesCheckboxTarget.disabled = false;
         this.updateSamplesCheckboxTarget.setAttribute("aria-disabled", "false");
       } else {
