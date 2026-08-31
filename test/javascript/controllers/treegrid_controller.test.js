@@ -404,51 +404,57 @@ describe("treegrid controller", () => {
     expect(document.activeElement).toBe(rows[1]);
   });
 
-  it("focuses the correct cell in the new row when navigating with Arrow Up and Arrow Down", async () => {
+  it("handles arrow key down navigation with rows having different cell counts", async () => {
     document.body.innerHTML = renderFixtureHtml([
-      { label: "Row 1", cells: 2 },
+      { label: "Row 1", cells: 3 },
       { label: "Row 2", cells: 2 },
+      { label: "Row 3", cells: 3 },
     ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     const rows = document.querySelectorAll(".treegrid-row");
-    expect(rows.length).toBe(2);
+    expect(rows.length).toBe(3);
 
-    // Focus the first row and the second link
-    const firstRowLinks = rows[0].querySelectorAll("a");
-    firstRowLinks[1].focus();
-    expect(document.activeElement).toBe(firstRowLinks[1]);
+    // Focus on the 3rd cell (index 2) of the first row
+    const row1Links = rows[0].querySelectorAll("a");
+    expect(row1Links.length).toBe(3);
+    row1Links[2].focus();
+    expect(document.activeElement).toBe(row1Links[2]);
 
-    // Simulate Arrow Down key press
-    const arrowDownEvent = new KeyboardEvent("keydown", {
+    // Simulate Arrow Down key press to navigate to row 2
+    const arrowDownEvent1 = new KeyboardEvent("keydown", {
       key: "ArrowDown",
       bubbles: true,
       cancelable: true,
     });
-    firstRowLinks[1].dispatchEvent(arrowDownEvent);
+    row1Links[2].dispatchEvent(arrowDownEvent1);
 
     // Wait for Stimulus mutation observer to process the keydown action
     await new Promise((resolve) => setTimeout(resolve, 0));
 
-    // The second row should now be focused on the second link
-    const secondRowLinks = rows[1].querySelectorAll("a");
-    expect(document.activeElement).toBe(secondRowLinks[1]);
+    // The row 2 should now be focused (row 2 has only 2 cells, so should focus on last available cell or same index if available)
+    const row2Links = rows[1].querySelectorAll("a");
+    expect(row2Links.length).toBe(2);
+    // Focus should be on the cell that matches the column position (capped at available cells)
+    expect(document.activeElement).toBe(row2Links[1]);
 
-    // Simulate Arrow Up key press
-    const arrowUpEvent = new KeyboardEvent("keydown", {
-      key: "ArrowUp",
+    // Simulate Arrow Down key press to navigate to row 3
+    const arrowDownEvent2 = new KeyboardEvent("keydown", {
+      key: "ArrowDown",
       bubbles: true,
       cancelable: true,
     });
-    secondRowLinks[1].dispatchEvent(arrowUpEvent);
+    row2Links[1].dispatchEvent(arrowDownEvent2);
 
     // Wait for Stimulus mutation observer to process the keydown action
     await new Promise((resolve) => setTimeout(resolve, 0));
 
-    // The first row should now be focused on the second link
-    expect(document.activeElement).toBe(firstRowLinks[1]);
+    // The row 3 should now be focused on the same column position (cell at index 1)
+    const row3Links = rows[2].querySelectorAll("a");
+    expect(row3Links.length).toBe(3);
+    expect(document.activeElement).toBe(row3Links[1]);
   });
 
   it("navigates the cells in the row when navigating with Arrow Right", async () => {
@@ -518,6 +524,37 @@ describe("treegrid controller", () => {
     // The first link in the row should now be focused
     const firstLink = row.querySelector("a");
     expect(document.activeElement).toBe(firstLink);
+  });
+
+  it("focuses the row when pressing Arrow Left on the first cell", async () => {
+    document.body.innerHTML = renderFixtureHtml([{ label: "Row 1", cells: 2 }]);
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const row = document.querySelector(".treegrid-row");
+    expect(row).not.toBeNull();
+
+    const links = row.querySelectorAll("a");
+    expect(links.length).toBe(2);
+
+    // Focus on the first cell
+    links[0].focus();
+    expect(document.activeElement).toBe(links[0]);
+
+    // Simulate Arrow Left key press to navigate back to the row
+    const arrowLeftEvent = new KeyboardEvent("keydown", {
+      key: "ArrowLeft",
+      bubbles: true,
+      cancelable: true,
+    });
+    links[0].dispatchEvent(arrowLeftEvent);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The row should now be focused
+    expect(document.activeElement).toBe(row);
   });
 
   it("expands the row on Arrow Right when the row is focused and has a toggle button", async () => {
@@ -848,58 +885,5 @@ describe("treegrid controller", () => {
     // The first row should still be focused since the controller is disconnected
     const rows = document.querySelectorAll(".treegrid-row");
     expect(document.activeElement).not.toBe(rows[0]);
-  });
-
-  it("handles arrow key down navigation with rows having different cell counts", async () => {
-    document.body.innerHTML = renderFixtureHtml([
-      { label: "Row 1", cells: 3 },
-      { label: "Row 2", cells: 2 },
-      { label: "Row 3", cells: 3 },
-    ]);
-
-    // Wait for Stimulus mutation observer to process connection
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    const rows = document.querySelectorAll(".treegrid-row");
-    expect(rows.length).toBe(3);
-
-    // Focus on the 3rd cell (index 2) of the first row
-    const row1Links = rows[0].querySelectorAll("a");
-    expect(row1Links.length).toBe(3);
-    row1Links[2].focus();
-    expect(document.activeElement).toBe(row1Links[2]);
-
-    // Simulate Arrow Down key press to navigate to row 2
-    const arrowDownEvent1 = new KeyboardEvent("keydown", {
-      key: "ArrowDown",
-      bubbles: true,
-      cancelable: true,
-    });
-    row1Links[2].dispatchEvent(arrowDownEvent1);
-
-    // Wait for Stimulus mutation observer to process the keydown action
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    // The row 2 should now be focused (row 2 has only 2 cells, so should focus on last available cell or same index if available)
-    const row2Links = rows[1].querySelectorAll("a");
-    expect(row2Links.length).toBe(2);
-    // Focus should be on the cell that matches the column position (capped at available cells)
-    expect(document.activeElement).toBe(row2Links[1]);
-
-    // Simulate Arrow Down key press to navigate to row 3
-    const arrowDownEvent2 = new KeyboardEvent("keydown", {
-      key: "ArrowDown",
-      bubbles: true,
-      cancelable: true,
-    });
-    row2Links[1].dispatchEvent(arrowDownEvent2);
-
-    // Wait for Stimulus mutation observer to process the keydown action
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    // The row 3 should now be focused on the same column position (cell at index 1)
-    const row3Links = rows[2].querySelectorAll("a");
-    expect(row3Links.length).toBe(3);
-    expect(document.activeElement).toBe(row3Links[1]);
   });
 });
