@@ -56,6 +56,8 @@ module Attachments
         end
       end
 
+      # Fallback to the old behavior of launching automated workflow executions if the feature flag is not enabled.
+      # This is to ensure that existing functionality continues to work.
       if Irida::Pipelines.instance.pipelines.any? &&
          @attachable.instance_of?(Sample) &&
          @attachable.project.namespace.automated_workflow_executions.present? &&
