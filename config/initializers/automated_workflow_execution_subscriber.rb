@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Subscriber for automated workflow execution events. This subscriber listens for events related to automated workflow
-# executions and triggers the corresponding job to handle the execution.
+# executions and triggers the AutomatedWorkflowExecutions::LaunchJob.
 class AutomatedWorkflowExecutionSubscriber
   PAIRED_END_TYPES = %w[illumina_pe pe].freeze
 
