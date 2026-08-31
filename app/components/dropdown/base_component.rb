@@ -14,7 +14,7 @@ module Dropdown
     }
     # Public: Expose key dropdown configuration
     attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip_text, :styles, :prefix,
-          :trigger_id, :icon_size, :tone, :emphasis, :size, :compact
+                :trigger_id, :icon_size, :tone, :emphasis, :size, :compact
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
