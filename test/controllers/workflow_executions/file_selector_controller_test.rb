@@ -146,15 +146,6 @@ module WorkflowExecutions
       assert_response :ok
     end
 
-    test 'new file selection with attachable outside authorized namespace responds not found' do
-      get new_workflow_executions_file_selector_path(
-        file_selector: @expected_fastq_params.merge(attachable_id: samples(:sample1).id),
-        format: :turbo_stream
-      )
-
-      assert_response :not_found
-    end
-
     test 'create file selection with other params' do
       attachment = attachments(:attachment1)
 

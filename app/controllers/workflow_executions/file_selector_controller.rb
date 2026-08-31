@@ -62,6 +62,7 @@ module WorkflowExecutions
       authorize! @namespace, to: :update_samplesheet_data?
 
       attachable_id = file_selector_params[:attachable_id]
+
       case file_selector_params[:attachable_type]
       when Sample.sti_name
         @attachable = authorized_scope(Sample, type: :relation, as: :namespace_samples,
