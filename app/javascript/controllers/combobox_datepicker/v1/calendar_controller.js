@@ -57,6 +57,7 @@ export default class extends Controller {
 
     this.headerAriaLiveTarget.innerText = `${this.monthSelectTarget.value} ${this.yearTarget.value}`;
     this.#loadCalendar();
+    console.log("loaded?");
   }
 
   setMonths() {
@@ -120,6 +121,7 @@ export default class extends Controller {
     fullCalendar.push(
       ...this.#getNextMonthsDates(fullCalendar[fullCalendar.length - 1]),
     );
+    console.log(fullCalendar);
     this.#fillCalendarWithDates(fullCalendar);
 
     // style date <td> based on if they're inMonth, outOfMonth, today's date, selected date or disabled due to minDate
