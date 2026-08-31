@@ -43,14 +43,35 @@ export default class extends Controller {
   }
 
   connect() {
+    console.log("connect");
+
+    console.log("has min target:", this.hasMinDateTarget);
+    console.log("has max target:", this.hasMaxDateTarget);
+
+    console.log("min target:", this.minDateTarget);
+    console.log("max target:", this.maxDateTarget);
+
+    console.log("min first child:", this.minDateTarget?.firstElementChild);
+
+    console.log("max first child:", this.maxDateTarget?.firstElementChild);
+
+    console.log("min text:", this.minDateTarget?.firstElementChild?.innerText);
+
+    console.log("max text:", this.maxDateTarget?.firstElementChild?.innerText);
+
     if (this.hasMinDateTarget) {
       this.#setMinDate();
     }
+
     if (this.hasMaxDateTarget) {
       this.#setMaxDate();
     }
 
+    console.log("private min:", this.#minDate);
+    console.log("private max:", this.#maxDate);
+
     this.#arrowSvg = this.inputArrowTarget.firstElementChild;
+
     this.idempotentConnect();
   }
 
@@ -108,25 +129,28 @@ export default class extends Controller {
   }
 
   #setMinDate() {
-    this.#minDate = this.minDateTarget.firstElementChild.innerText;
-    this.minDateTarget.remove();
+    this.#minDate = this.minDateTarget.firstElementChild.textContent.trim();
+    // this.minDateTarget.remove();
   }
 
   #setMaxDate() {
-    this.#maxDate = this.maxDateTarget.firstElementChild.innerText;
-    this.maxDateTarget.remove();
+    console.log(this.maxDateTarget);
+    console.log(this.maxDateTarget.firstElementChild.textContent);
+    this.#maxDate = this.maxDateTarget.firstElementChild.textContent.trim();
+    // this.maxDateTarget.remove();
   }
 
   #addCalendarTemplate() {
     try {
       // Don't add calendar if already exists
       if (this.#calendar) return;
-
+      console.log(this.calendarTemplateTarget);
       // Add the calendar template to the DOM
       const calendar = this.calendarTemplateTarget.content.cloneNode(true);
       const containerNode = this.#findCalendarContainer();
+      console.log(calendar);
       containerNode.appendChild(calendar);
-
+      console.log(containerNode);
       // requery calendar so we can manipulate it later. Must use getElementById as target is outside of this controller's
       // scope, and using something like lastElementChild does not work with turbo-stream (eg: members/group-link tables)
       this.#calendar = document.getElementById(this.calendarIdValue);
