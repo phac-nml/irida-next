@@ -45,16 +45,6 @@ module Attachments
 
         create_activities if @include_activity
 
-        if Irida::Pipelines.instance.pipelines.any? &&
-           @attachable.instance_of?(Sample) &&
-           @attachable.project.namespace.automated_workflow_executions.present? &&
-           Flipper.enabled?(:automated_workflow_execution_subscriber)
-
-          Rails.event.notify('attachments.create',
-                             { attachable: @attachable, attachments: @attachments })
-
-        end
-
         true # Return value if successful
       end
 
@@ -63,10 +53,14 @@ module Attachments
       if Irida::Pipelines.instance.pipelines.any? &&
          @attachable.instance_of?(Sample) &&
          @attachable.project.namespace.automated_workflow_executions.present? &&
-         transaction_result &&
-         !Flipper.enabled?(:automated_workflow_execution_subscriber)
+         transaction_result
 
-        launch_automated_workflow_executions(@pe_attachments&.last)
+        if Flipper.enabled?(:automated_workflow_execution_subscriber)
+          Rails.event.notify('attachments.create',
+                             { attachable: @attachable, attachments: @attachments })
+        else
+          launch_automated_workflow_executions(@pe_attachments&.last)
+        end
       end
 
       @attachments
