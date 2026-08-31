@@ -25,6 +25,7 @@ vi.mock("tabbable", async () => {
  * @param {string} rows[].label - Label text for the row (used in span and link text)
  * @param {number} rows[].cells - Number of cells/links to generate for this row
  * @param {boolean} [rows[].expandable=false] - Whether the row has a toggle button
+ * @param {boolean} [rows[].expanded=false] - Whether the row is initially expanded (shows child rows without hidden class)
  * @param {boolean} [rows[].hidden=false] - Whether the row should have the 'hidden' class
  * @param {string} [rows[].toggleUrl] - URL for the toggle button's data-toggle-url attribute
  * @param {Array<Object>} [rows[].childRows] - Nested array of child row configurations
@@ -49,18 +50,20 @@ function renderFixtureHtml(rows) {
   const flatRows = [];
   let isFirstOverall = true;
 
-  function flattenRows(rowsArray, level = 1) {
+  function flattenRows(rowsArray, level = 1, parentExpanded = false) {
     rowsArray.forEach((row) => {
       // Infer expandable from toggleUrl or childRows presence
       const hasToggleUrl = !!row.toggleUrl;
       const hasChildRows = row.childRows && row.childRows.length > 0;
       const expandable = row.expandable ?? (hasToggleUrl || hasChildRows);
+      const expanded = row.expanded ?? false;
 
       const processedRow = {
         label: row.label,
         cells: row.cells,
         expandable,
-        hidden: row.hidden ?? false,
+        expanded,
+        hidden: row.hidden ?? !parentExpanded,
         toggleUrl: row.toggleUrl,
         level,
         isFirstOverall,
@@ -68,14 +71,14 @@ function renderFixtureHtml(rows) {
       isFirstOverall = false;
       flatRows.push(processedRow);
 
-      // Recursively process child rows
+      // Recursively process child rows, passing the expanded state
       if (hasChildRows) {
-        flattenRows(row.childRows, level + 1);
+        flattenRows(row.childRows, level + 1, expanded);
       }
     });
   }
 
-  flattenRows(rows);
+  flattenRows(rows, 1, true);
 
   // Group rows by level and calculate aria-posinset and aria-setsize
   const levelGroups = new Map();
@@ -99,11 +102,13 @@ function renderFixtureHtml(rows) {
       const classes = row.hidden
         ? 'class="treegrid-row hidden"'
         : 'class="treegrid-row"';
-      const ariaExpanded = row.expandable ? 'aria-expanded="false"' : "";
+      const ariaExpanded = row.expandable
+        ? `aria-expanded="${row.expanded ? "true" : "false"}"`
+        : "";
       const initialTabindex = row.isFirstOverall ? "0" : "-1";
 
       const toggleButton = row.expandable
-        ? `<button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="-1"${row.toggleUrl ? ` data-toggle-url="${row.toggleUrl}"` : ""}></button>`
+        ? `<button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="${row.expanded ? "Collapse" : "Expand"}" data-treegrid-target="rowToggle" tabindex="-1"${row.toggleUrl ? ` data-toggle-url="${row.toggleUrl}"` : ""}></button>`
         : "";
 
       const cellTabindex = row.isFirstOverall ? "0" : "-1";
@@ -555,12 +560,14 @@ describe("treegrid controller", () => {
     document.body.innerHTML = renderFixtureHtml([
       {
         label: "Row 1",
+        expanded: true,
         cells: 2,
         childRows: [
           { label: "Child Row 1", cells: 2 },
           { label: "Child Row 2", cells: 2 },
         ],
       },
+      { label: "Row 2", cells: 2 },
     ]);
 
     // Wait for Stimulus mutation observer to process connection
@@ -841,5 +848,58 @@ describe("treegrid controller", () => {
     // The first row should still be focused since the controller is disconnected
     const rows = document.querySelectorAll(".treegrid-row");
     expect(document.activeElement).not.toBe(rows[0]);
+  });
+
+  it("handles arrow key down navigation with rows having different cell counts", async () => {
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 3 },
+      { label: "Row 2", cells: 2 },
+      { label: "Row 3", cells: 3 },
+    ]);
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const rows = document.querySelectorAll(".treegrid-row");
+    expect(rows.length).toBe(3);
+
+    // Focus on the 3rd cell (index 2) of the first row
+    const row1Links = rows[0].querySelectorAll("a");
+    expect(row1Links.length).toBe(3);
+    row1Links[2].focus();
+    expect(document.activeElement).toBe(row1Links[2]);
+
+    // Simulate Arrow Down key press to navigate to row 2
+    const arrowDownEvent1 = new KeyboardEvent("keydown", {
+      key: "ArrowDown",
+      bubbles: true,
+      cancelable: true,
+    });
+    row1Links[2].dispatchEvent(arrowDownEvent1);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The row 2 should now be focused (row 2 has only 2 cells, so should focus on last available cell or same index if available)
+    const row2Links = rows[1].querySelectorAll("a");
+    expect(row2Links.length).toBe(2);
+    // Focus should be on the cell that matches the column position (capped at available cells)
+    expect(document.activeElement).toBe(row2Links[1]);
+
+    // Simulate Arrow Down key press to navigate to row 3
+    const arrowDownEvent2 = new KeyboardEvent("keydown", {
+      key: "ArrowDown",
+      bubbles: true,
+      cancelable: true,
+    });
+    row2Links[1].dispatchEvent(arrowDownEvent2);
+
+    // Wait for Stimulus mutation observer to process the keydown action
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The row 3 should now be focused on the same column position (cell at index 1)
+    const row3Links = rows[2].querySelectorAll("a");
+    expect(row3Links.length).toBe(3);
+    expect(document.activeElement).toBe(row3Links[1]);
   });
 });
