@@ -101,10 +101,8 @@ export default class extends Controller {
       }
     });
 
-    if (newFocusedRow) {
-      newFocusedRow.tabIndex = 0;
-      this.#setTabIndexForElementsInRow(newFocusedRow, 0);
-    }
+    newFocusedRow.tabIndex = 0;
+    this.#setTabIndexForElementsInRow(newFocusedRow, 0);
   }
 
   toggleRow(event) {
