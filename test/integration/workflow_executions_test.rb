@@ -264,124 +264,88 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
                   text: workflow_execution_shared1.workflow.name
   end
 
-  test 'should cancel a new workflow with valid params' do
-    put cancel_workflow_execution_path(@workflow_execution_new), as: :turbo_stream
-    # A new workflow goes directly to the canceled state as ga4gh does not know it exists
-    assert_workflow_execution_cancel_success(@workflow_execution_new, expected_state: 'canceled')
+  test 'should apply workflow cancellation state transitions' do
+    scenarios = [
+      { fixture: :irida_next_example_new, from_state: :initial, expected_state: 'canceled' },
+      { fixture: :irida_next_example_prepared, from_state: :prepared, expected_state: 'canceled' },
+      { fixture: :irida_next_example_submitted, from_state: :submitted, expected_state: 'canceling' },
+      { fixture: :irida_next_example_running, from_state: :running, expected_state: 'canceling' },
+      { fixture: :irida_next_example_completed, from_state: :completed, response: :unprocessable_content }
+    ]
+
+    assert_cancel_state_transitions(
+      cancel_path: ->(workflow_execution) { cancel_workflow_execution_path(workflow_execution) },
+      scenarios:
+    )
   end
 
-  test 'should cancel a prepared workflow with valid params' do
-    workflow_execution = workflow_executions(:irida_next_example_prepared)
+  test 'should apply workflow deletion state transitions' do
+    scenarios = [
+      {
+        fixture: :irida_next_example_prepared,
+        from_state: :prepared,
+        workflow_count_delta: 0,
+        samples_count_delta: 0,
+        response: :unprocessable_content
+      },
+      {
+        fixture: :irida_next_example_submitted,
+        from_state: :submitted,
+        workflow_count_delta: 0,
+        samples_count_delta: 0,
+        response: :unprocessable_content
+      },
+      {
+        fixture: :irida_next_example_completed,
+        from_state: :completed,
+        workflow_count_delta: -1,
+        samples_count_delta: -1,
+        response: :redirect,
+        redirect_to: workflow_executions_path
+      },
+      {
+        fixture: :irida_next_example_error,
+        from_state: :error,
+        workflow_count_delta: -1,
+        samples_count_delta: -1,
+        response: :redirect,
+        redirect_to: workflow_executions_path
+      },
+      {
+        fixture: :irida_next_example_canceling,
+        from_state: :canceling,
+        workflow_count_delta: 0,
+        samples_count_delta: 0,
+        response: :unprocessable_content
+      },
+      {
+        fixture: :irida_next_example_canceled,
+        from_state: :canceled,
+        workflow_count_delta: -1,
+        samples_count_delta: -1,
+        response: :redirect,
+        redirect_to: workflow_executions_path
+      },
+      {
+        fixture: :irida_next_example_running,
+        from_state: :running,
+        workflow_count_delta: 0,
+        samples_count_delta: 0,
+        response: :unprocessable_content
+      },
+      {
+        fixture: :irida_next_example_new,
+        from_state: :initial,
+        workflow_count_delta: 0,
+        samples_count_delta: 0,
+        response: :unprocessable_content
+      }
+    ]
 
-    put cancel_workflow_execution_path(workflow_execution), as: :turbo_stream
-    # A prepared workflow goes directly to the canceled state as ga4gh does not know it exists
-    assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceled')
-  end
-
-  test 'should not delete a prepared workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_prepared)
-    assert workflow_execution.prepared?
-    assert_difference -> { WorkflowExecution.count } => 0,
-                      -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution), as: :turbo_stream
-    end
-    assert_response :unprocessable_content
-  end
-
-  test 'should cancel a submitted workflow with valid params' do
-    workflow_execution = workflow_executions(:irida_next_example_submitted)
-    assert workflow_execution.submitted?
-
-    put cancel_workflow_execution_path(workflow_execution), as: :turbo_stream
-    # A submitted workflow goes to the canceling state as ga4gh must be sent a cancel request
-    assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling')
-  end
-
-  test 'should not delete a submitted workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_submitted)
-    assert workflow_execution.submitted?
-    assert_difference -> { WorkflowExecution.count } => 0,
-                      -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution), as: :turbo_stream
-    end
-    assert_response :unprocessable_content
-  end
-
-  test 'should not cancel a completed workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_completed)
-    assert workflow_execution.completed?
-
-    put cancel_workflow_execution_path(workflow_execution), as: :turbo_stream
-    assert_response :unprocessable_content
-
-    assert workflow_execution.completed?
-  end
-
-  test 'should delete a completed workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_completed)
-    assert workflow_execution.completed?
-    assert_difference -> { WorkflowExecution.count } => -1,
-                      -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(workflow_execution), as: :turbo_stream
-    end
-    assert_response :redirect
-    assert_redirected_to workflow_executions_path
-  end
-
-  test 'should delete an errored workflow' do
-    assert @workflow_execution_error.error?
-    assert_difference -> { WorkflowExecution.count } => -1,
-                      -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(@workflow_execution_error), as: :turbo_stream
-    end
-    assert_response :redirect
-    assert_redirected_to workflow_executions_path
-  end
-
-  test 'should not delete a canceling workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_canceling)
-    assert workflow_execution.canceling?
-    assert_difference -> { WorkflowExecution.count } => 0,
-                      -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(workflow_execution), as: :turbo_stream
-    end
-    assert_response :unprocessable_content
-  end
-
-  test 'should delete a canceled workflow' do
-    assert @workflow_execution_canceled.canceled?
-    assert_difference -> { WorkflowExecution.count } => -1,
-                      -> { SamplesWorkflowExecution.count } => -1 do
-      delete workflow_execution_path(@workflow_execution_canceled), as: :turbo_stream
-    end
-    assert_response :redirect
-    assert_redirected_to workflow_executions_path
-  end
-
-  test 'should not delete a running workflow' do
-    assert @workflow_execution_running.running?
-    assert_difference -> { WorkflowExecution.count } => 0,
-                      -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(@workflow_execution_running), as: :turbo_stream
-    end
-    assert_response :unprocessable_content
-  end
-
-  test 'should cancel a running workflow' do
-    assert @workflow_execution_running.running?
-
-    put cancel_workflow_execution_path(@workflow_execution_running), as: :turbo_stream
-    # A running workflow goes to the canceling state as ga4gh must be sent a cancel request
-    assert_workflow_execution_cancel_success(@workflow_execution_running, expected_state: 'canceling')
-  end
-
-  test 'should not delete a new workflow' do
-    assert @workflow_execution_new.initial?
-    assert_difference -> { WorkflowExecution.count } => 0,
-                      -> { SamplesWorkflowExecution.count } => 0 do
-      delete workflow_execution_path(@workflow_execution_new), as: :turbo_stream
-    end
-    assert_response :unprocessable_content
+    assert_destroy_state_transitions(
+      destroy_path: ->(workflow_execution) { workflow_execution_path(workflow_execution) },
+      scenarios:
+    )
   end
 
   test 'should show workflow execution with summary and tab content' do

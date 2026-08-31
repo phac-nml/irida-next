@@ -160,62 +160,31 @@ module Groups
       assert_response :unauthorized
     end
 
-    test 'should cancel a new workflow with valid params' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_new)
+    test 'should apply group workflow cancellation state transitions' do
+      submitter = users(:james_doe)
+      sign_in submitter
 
-      put cancel_group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
+      scenarios = [
+        { fixture: :workflow_execution_group_shared_new, from_state: :initial, expected_state: 'canceled' },
+        { fixture: :workflow_execution_group_shared_prepared, from_state: :prepared, expected_state: 'canceled' },
+        {
+          fixture: :workflow_execution_group_shared_submitted,
+          from_state: :submitted,
+          expected_state: 'canceling'
+        },
+        { fixture: :workflow_execution_group_shared_running, from_state: :running, expected_state: 'canceling' },
+        {
+          fixture: :workflow_execution_group_shared_completed,
+          from_state: :completed,
+          response: :unprocessable_content
+        }
+      ]
 
-      # A new workflow goes directly to the canceled state as ga4gh does not know it exists
-      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceled',
-                                                                   locale: users(:james_doe).locale)
-    end
-
-    test 'should cancel a prepared workflow with valid params' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_prepared)
-
-      put cancel_group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-
-      # A prepared workflow goes directly to the canceled state as ga4gh does not know it exists
-      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceled',
-                                                                   locale: users(:james_doe).locale)
-    end
-
-    test 'should cancel a submitted workflow with valid params' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_submitted)
-      assert workflow_execution.submitted?
-
-      put cancel_group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-
-      # A submitted workflow goes to the canceling state as ga4gh must be sent a cancel request
-      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling',
-                                                                   locale: users(:james_doe).locale)
-    end
-
-    test 'should not cancel a completed workflow' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
-      assert workflow_execution.completed?
-
-      put cancel_group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-
-      assert_response :unprocessable_content
-
-      assert workflow_execution.completed?
-    end
-
-    test 'should cancel a running workflow' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_running)
-      assert workflow_execution.running?
-
-      put cancel_group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-
-      # A running workflow goes to the canceling state as ga4gh must be sent a cancel request
-      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling',
-                                                                   locale: users(:james_doe).locale)
+      assert_cancel_state_transitions(
+        cancel_path: ->(workflow_execution) { cancel_group_workflow_execution_path(@group, workflow_execution) },
+        scenarios:,
+        locale: submitter.locale
+      )
     end
 
     test 'submitter should be able to update their shared workflow executions name post launch' do
@@ -258,95 +227,75 @@ module Groups
       assert_response :unauthorized
     end
 
-    test 'should not delete a prepared workflow' do
+    test 'should apply group workflow deletion state transitions' do
       sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_prepared)
-      assert workflow_execution.prepared?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-      end
-      assert_response :unprocessable_content
-    end
 
-    test 'should not delete a submitted workflow' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_submitted)
-      assert workflow_execution.submitted?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-      end
-      assert_response :unprocessable_content
-    end
+      scenarios = [
+        {
+          fixture: :workflow_execution_group_shared_prepared,
+          from_state: :prepared,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        },
+        {
+          fixture: :workflow_execution_group_shared_submitted,
+          from_state: :submitted,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        },
+        {
+          fixture: :workflow_execution_group_shared_completed,
+          from_state: :completed,
+          workflow_count_delta: -1,
+          samples_count_delta: -1,
+          response: :redirect,
+          redirect_to: -> { group_workflow_executions_path(@group) }
+        },
+        {
+          fixture: :workflow_execution_group_shared_error,
+          from_state: :error,
+          workflow_count_delta: -1,
+          samples_count_delta: -1,
+          response: :redirect,
+          redirect_to: -> { group_workflow_executions_path(@group) }
+        },
+        {
+          fixture: :workflow_execution_group_shared_canceling,
+          from_state: :canceling,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        },
+        {
+          fixture: :workflow_execution_group_shared_canceled,
+          from_state: :canceled,
+          workflow_count_delta: -1,
+          samples_count_delta: -1,
+          response: :redirect,
+          redirect_to: -> { group_workflow_executions_path(@group) }
+        },
+        {
+          fixture: :workflow_execution_group_shared_running,
+          from_state: :running,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        },
+        {
+          fixture: :workflow_execution_group_shared_new,
+          from_state: :initial,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        }
+      ]
 
-    test 'should delete a completed workflow' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
-      assert workflow_execution.completed?
-      assert_difference -> { WorkflowExecution.count } => -1,
-                        -> { SamplesWorkflowExecution.count } => -1 do
-        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-      end
-      assert_response :redirect
-      assert_redirected_to group_workflow_executions_path
-    end
-
-    test 'should delete an errored workflow' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_error)
-      assert workflow_execution.error?
-      assert_difference -> { WorkflowExecution.count } => -1,
-                        -> { SamplesWorkflowExecution.count } => -1 do
-        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-      end
-      assert_response :redirect
-      assert_redirected_to group_workflow_executions_path
-    end
-
-    test 'should not delete a canceling workflow' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_canceling)
-      assert workflow_execution.canceling?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-      end
-      assert_response :unprocessable_content
-    end
-
-    test 'should delete a canceled workflow' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_canceled)
-      assert workflow_execution.canceled?
-      assert_difference -> { WorkflowExecution.count } => -1,
-                        -> { SamplesWorkflowExecution.count } => -1 do
-        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-      end
-      assert_response :redirect
-      assert_redirected_to group_workflow_executions_path
-    end
-
-    test 'should not delete a running workflow' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_running)
-      assert workflow_execution.running?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-      end
-      assert_response :unprocessable_content
-    end
-
-    test 'should not delete a new workflow' do
-      sign_in users(:james_doe)
-      workflow_execution = workflow_executions(:workflow_execution_group_shared_new)
-      assert workflow_execution.initial?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
-      end
-      assert_response :unprocessable_content
+      assert_destroy_state_transitions(
+        destroy_path: ->(workflow_execution) { group_workflow_execution_path(@group, workflow_execution) },
+        scenarios:
+      )
     end
 
     test 'redirect to project workflow executions page when workflow execution is deleted' do

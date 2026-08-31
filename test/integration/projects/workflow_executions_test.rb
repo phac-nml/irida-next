@@ -123,6 +123,7 @@ module Projects
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_response :success
+      w3c_validate 'Project Workflow Execution Show Page'
     end
 
     test 'should show shared workflow execution with action restrictions and tab content' do
@@ -136,6 +137,7 @@ module Projects
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_response :success
+      w3c_validate 'Project Workflow Execution Show Page'
       assert_select "form[action^='#{new_data_export_path}']", count: 1
       assert_select "form[action='#{cancel_action}']", count: 0
       assert_select "form[action='#{edit_action}']", count: 0
@@ -188,144 +190,92 @@ module Projects
       assert_response :unauthorized
     end
 
-    test 'should cancel a new workflow with valid params' do
-      workflow_execution = workflow_executions(:automated_example_new)
+    test 'should apply project workflow cancellation state transitions' do
+      scenarios = [
+        { fixture: :automated_example_new, from_state: :initial, expected_state: 'canceled' },
+        { fixture: :automated_example_prepared, from_state: :prepared, expected_state: 'canceled' },
+        { fixture: :automated_example_submitted, from_state: :submitted, expected_state: 'canceling' },
+        { fixture: :automated_example_running, from_state: :running, expected_state: 'canceling' },
+        { fixture: :automated_example_completed, from_state: :completed, response: :unprocessable_content }
+      ]
 
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-          as: :turbo_stream
-      # A new workflow goes directly to the canceled state as ga4gh does not know it exists
-      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceled')
+      assert_cancel_state_transitions(
+        cancel_path: lambda { |workflow_execution|
+          cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+        },
+        scenarios:
+      )
     end
 
-    test 'should cancel a prepared workflow with valid params' do
-      workflow_execution = workflow_executions(:automated_example_prepared)
+    test 'should apply project workflow deletion state transitions' do
+      scenarios = [
+        {
+          fixture: :automated_example_prepared,
+          from_state: :prepared,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        },
+        {
+          fixture: :automated_example_submitted,
+          from_state: :submitted,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        },
+        {
+          fixture: :automated_example_completed,
+          from_state: :completed,
+          workflow_count_delta: -1,
+          samples_count_delta: -1,
+          response: :redirect,
+          redirect_to: -> { namespace_project_workflow_executions_path(@namespace, @project) }
+        },
+        {
+          fixture: :automated_example_error,
+          from_state: :error,
+          workflow_count_delta: -1,
+          samples_count_delta: -1,
+          response: :redirect,
+          redirect_to: -> { namespace_project_workflow_executions_path(@namespace, @project) }
+        },
+        {
+          fixture: :automated_example_canceling,
+          from_state: :canceling,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        },
+        {
+          fixture: :automated_example_canceled,
+          from_state: :canceled,
+          workflow_count_delta: -1,
+          samples_count_delta: -1,
+          response: :redirect,
+          redirect_to: -> { namespace_project_workflow_executions_path(@namespace, @project) }
+        },
+        {
+          fixture: :automated_example_running,
+          from_state: :running,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        },
+        {
+          fixture: :automated_example_new,
+          from_state: :initial,
+          workflow_count_delta: 0,
+          samples_count_delta: 0,
+          response: :unprocessable_content
+        }
+      ]
 
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-          as: :turbo_stream
-      # A prepared workflow goes directly to the canceled state as ga4gh does not know it exists
-      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceled')
-    end
-
-    test 'should not delete a prepared workflow' do
-      workflow_execution = workflow_executions(:automated_example_prepared)
-      assert workflow_execution.prepared?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-               as: :turbo_stream
-      end
-      assert_response :unprocessable_content
-    end
-
-    test 'should cancel a submitted workflow with valid params' do
-      workflow_execution = workflow_executions(:automated_example_submitted)
-      assert workflow_execution.submitted?
-
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-          as: :turbo_stream
-      # A submitted workflow goes to the canceling state as ga4gh must be sent a cancel request
-      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling')
-    end
-
-    test 'should not delete a submitted workflow' do
-      workflow_execution = workflow_executions(:automated_example_submitted)
-      assert workflow_execution.submitted?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-               as: :turbo_stream
-      end
-      assert_response :unprocessable_content
-    end
-
-    test 'should not cancel a completed workflow' do
-      workflow_execution = workflow_executions(:automated_example_completed)
-      assert workflow_execution.completed?
-
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-          as: :turbo_stream
-      assert_response :unprocessable_content
-
-      assert workflow_execution.completed?
-    end
-
-    test 'should delete a completed workflow' do
-      workflow_execution = workflow_executions(:automated_example_completed)
-      assert workflow_execution.completed?
-      assert_difference -> { WorkflowExecution.count } => -1,
-                        -> { SamplesWorkflowExecution.count } => -1 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-               as: :turbo_stream
-      end
-      assert_response :redirect
-      assert_redirected_to namespace_project_workflow_executions_path
-    end
-
-    test 'should delete an errored workflow' do
-      workflow_execution = workflow_executions(:automated_example_error)
-      assert workflow_execution.error?
-      assert_difference -> { WorkflowExecution.count } => -1,
-                        -> { SamplesWorkflowExecution.count } => -1 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-               as: :turbo_stream
-      end
-      assert_response :redirect
-      assert_redirected_to namespace_project_workflow_executions_path
-    end
-
-    test 'should not delete a canceling workflow' do
-      workflow_execution = workflow_executions(:automated_example_canceling)
-      assert workflow_execution.canceling?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-               as: :turbo_stream
-      end
-      assert_response :unprocessable_content
-    end
-
-    test 'should delete a canceled workflow' do
-      workflow_execution = workflow_executions(:automated_example_canceled)
-      assert workflow_execution.canceled?
-      assert_difference -> { WorkflowExecution.count } => -1,
-                        -> { SamplesWorkflowExecution.count } => -1 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-               as: :turbo_stream
-      end
-      assert_response :redirect
-      assert_redirected_to namespace_project_workflow_executions_path
-    end
-
-    test 'should not delete a running workflow' do
-      workflow_execution = workflow_executions(:automated_example_running)
-      assert workflow_execution.running?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-               as: :turbo_stream
-      end
-      assert_response :unprocessable_content
-    end
-
-    test 'should cancel a running workflow' do
-      workflow_execution = workflow_executions(:automated_example_running)
-      assert workflow_execution.running?
-
-      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-          as: :turbo_stream
-      # A running workflow goes to the canceling state as ga4gh must be sent a cancel request
-      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling')
-    end
-
-    test 'should not delete a new workflow' do
-      workflow_execution = workflow_executions(:automated_example_new)
-      assert workflow_execution.initial?
-      assert_difference -> { WorkflowExecution.count } => 0,
-                        -> { SamplesWorkflowExecution.count } => 0 do
-        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution),
-               as: :turbo_stream
-      end
-      assert_response :unprocessable_content
+      assert_destroy_state_transitions(
+        destroy_path: lambda { |workflow_execution|
+          namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+        },
+        scenarios:
+      )
     end
 
     test 'redirect to project workflow executions page when workflow execution is deleted' do
