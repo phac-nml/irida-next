@@ -19,6 +19,118 @@ vi.mock("tabbable", async () => {
   };
 });
 
+/**
+ * Generates HTML for treegrid test fixtures
+ * @param {Array<Object>} rows - Array of row configurations supporting nested child rows
+ * @param {string} rows[].label - Label text for the row (used in span and link text)
+ * @param {number} rows[].cells - Number of cells/links to generate for this row
+ * @param {boolean} [rows[].expandable=false] - Whether the row has a toggle button
+ * @param {boolean} [rows[].hidden=false] - Whether the row should have the 'hidden' class
+ * @param {string} [rows[].toggleUrl] - URL for the toggle button's data-toggle-url attribute
+ * @param {Array<Object>} [rows[].childRows] - Nested array of child row configurations
+ * @returns {string} HTML string for the treegrid container with rows
+ *
+ * Example:
+ * renderFixtureHtml([
+ *   {
+ *     label: "Row 1",
+ *     cells: 2,
+ *     expandable: true,
+ *     childRows: [
+ *       { label: "Sub Row 1", cells: 2, hidden: true },
+ *       { label: "Sub Row 2", cells: 2, hidden: true }
+ *     ]
+ *   },
+ *   { label: "Row 2", cells: 3 }
+ * ])
+ */
+function renderFixtureHtml(rows) {
+  // Flatten nested structure into a single array with levels
+  const flatRows = [];
+  let isFirstOverall = true;
+
+  function flattenRows(rowsArray, level = 1) {
+    rowsArray.forEach((row) => {
+      // Infer expandable from toggleUrl or childRows presence
+      const hasToggleUrl = !!row.toggleUrl;
+      const hasChildRows = row.childRows && row.childRows.length > 0;
+      const expandable = row.expandable ?? (hasToggleUrl || hasChildRows);
+
+      const processedRow = {
+        label: row.label,
+        cells: row.cells,
+        expandable,
+        hidden: row.hidden ?? false,
+        toggleUrl: row.toggleUrl,
+        level,
+        isFirstOverall,
+      };
+      isFirstOverall = false;
+      flatRows.push(processedRow);
+
+      // Recursively process child rows
+      if (hasChildRows) {
+        flattenRows(row.childRows, level + 1);
+      }
+    });
+  }
+
+  flattenRows(rows);
+
+  // Group rows by level and calculate aria-posinset and aria-setsize
+  const levelGroups = new Map();
+  flatRows.forEach((row) => {
+    if (!levelGroups.has(row.level)) {
+      levelGroups.set(row.level, []);
+    }
+    levelGroups.get(row.level).push(row);
+  });
+
+  // Add position info to each row
+  flatRows.forEach((row) => {
+    const levelRows = levelGroups.get(row.level);
+    row.posinset = levelRows.indexOf(row) + 1;
+    row.setsize = levelRows.length;
+  });
+
+  // Generate HTML for each row
+  const rowsHtml = flatRows
+    .map((row) => {
+      const classes = row.hidden
+        ? 'class="treegrid-row hidden"'
+        : 'class="treegrid-row"';
+      const ariaExpanded = row.expandable ? 'aria-expanded="false"' : "";
+      const initialTabindex = row.isFirstOverall ? "0" : "-1";
+
+      const toggleButton = row.expandable
+        ? `<button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="-1"${row.toggleUrl ? ` data-toggle-url="${row.toggleUrl}"` : ""}></button>`
+        : "";
+
+      const cellTabindex = row.isFirstOverall ? "0" : "-1";
+      const links = Array.from({ length: row.cells }, (_, i) => {
+        return `<a href="#" tabindex="${cellTabindex}">${row.label} Link ${i + 1}</a>`;
+      }).join("\n              ");
+
+      return `
+        <div ${classes} role="row" aria-level="${row.level}" aria-posinset="${row.posinset}" aria-setsize="${row.setsize}" ${ariaExpanded} tabindex="${initialTabindex}" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            ${toggleButton}
+            <div>
+              <span>${row.label}</span>
+              ${links}
+            </div>
+          </div>
+        </div>`;
+    })
+    .join("\n");
+
+  return `
+      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
+${rowsHtml}
+      </div>
+    `;
+}
+
 describe("treegrid controller", () => {
   let application;
 
@@ -37,29 +149,10 @@ describe("treegrid controller", () => {
   });
 
   it("initializes the treegrid controller and correctly sets tabindex for each row", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-expanded="false" tabindex="0" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="-1"></button>
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="0">Row 1 Link 1</a>
-              <a href="#" tabindex="0">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" tabindex="0" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="0">Row 2 Link 1</a>
-              <a href="#" tabindex="0">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2, childRows: [] },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -84,29 +177,13 @@ describe("treegrid controller", () => {
   });
 
   it("toggles the row expansion state and updates aria attributes and button text", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="-1"></button>
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row hidden" role="row" aria-level="2" aria-posinset="1" aria-setsize="1" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Sub Row 1</span>
-              <a href="#" tabindex="-1">Sub Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Sub Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      {
+        label: "Row 1",
+        cells: 2,
+        childRows: [{ label: "Sub Row 1", cells: 2, hidden: true }],
+      },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -139,19 +216,7 @@ describe("treegrid controller", () => {
   });
 
   it("does not toggle the row expansion state if the row is not expandable", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([{ label: "Row 1", cells: 2 }]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -171,20 +236,13 @@ describe("treegrid controller", () => {
   });
 
   it("fetches data from the server when toggling a row with a data-toggle-url attribute", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="-1" data-toggle-url="http://localhost/mocked-url"></button>
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      {
+        label: "Row 1",
+        cells: 2,
+        toggleUrl: "http://localhost/mocked-url",
+      },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -218,28 +276,10 @@ describe("treegrid controller", () => {
   });
 
   it("focuses the next row when Arrow Down is pressed", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2 },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -267,28 +307,10 @@ describe("treegrid controller", () => {
   });
 
   it("focuses the previous row when Arrow Up is pressed", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2 },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -316,28 +338,10 @@ describe("treegrid controller", () => {
   });
 
   it("keeps focus on the first row when Arrow Up is pressed on the first row", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2 },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -365,28 +369,10 @@ describe("treegrid controller", () => {
   });
 
   it("keeps focus on the last row when Arrow Down is pressed on the last row", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2 },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -414,28 +400,10 @@ describe("treegrid controller", () => {
   });
 
   it("focuses the correct cell in the new row when navigating with Arrow Up and Arrow Down", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2 },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -479,19 +447,7 @@ describe("treegrid controller", () => {
   });
 
   it("navigates the cells in the row when navigating with Arrow Right", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([{ label: "Row 1", cells: 2 }]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -530,19 +486,7 @@ describe("treegrid controller", () => {
   });
 
   it("navigates the cells in the row when navigating with Arrow Left", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([{ label: "Row 1", cells: 2 }]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -572,29 +516,13 @@ describe("treegrid controller", () => {
   });
 
   it("expands the row on Arrow Right when the row is focused and has a toggle button", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="-1"></button>
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row hidden" role="row" aria-level="2" aria-posinset="1" aria-setsize="1" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Child Row 1</span>
-              <a href="#" tabindex="-1">Child Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Child Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      {
+        label: "Row 1",
+        cells: 2,
+        childRows: [{ label: "Child Row 1", cells: 2, hidden: true }],
+      },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -624,38 +552,16 @@ describe("treegrid controller", () => {
   });
 
   it("collapses the row on Arrow Left when the row is focused and has a toggle button", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" aria-expanded="true" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Collapse" data-treegrid-target="rowToggle" tabindex="-1"></button>
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="2" aria-posinset="1" aria-setsize="1" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Child Row 1</span>
-              <a href="#" tabindex="-1">Child Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Child Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Child Row 1</span>
-              <a href="#" tabindex="-1">Child Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Child Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      {
+        label: "Row 1",
+        cells: 2,
+        childRows: [
+          { label: "Child Row 1", cells: 2 },
+          { label: "Child Row 2", cells: 2 },
+        ],
+      },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -685,28 +591,10 @@ describe("treegrid controller", () => {
   });
 
   it("focuses the first row when home key is pressed", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2 },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -734,19 +622,7 @@ describe("treegrid controller", () => {
   });
 
   it("focuses the first cell in the row when home key is pressed", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([{ label: "Row 1", cells: 2 }]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -776,28 +652,10 @@ describe("treegrid controller", () => {
   });
 
   it("focuses the last row when end key is pressed", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2 },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -825,19 +683,7 @@ describe("treegrid controller", () => {
   });
 
   it("focuses the last cell in the row when end key is pressed", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([{ label: "Row 1", cells: 2 }]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -867,28 +713,10 @@ describe("treegrid controller", () => {
   });
 
   it("focuses the first row when page up key is pressed", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2 },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -916,28 +744,10 @@ describe("treegrid controller", () => {
   });
 
   it("focuses the last row when page down key is pressed", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="2" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 2</span>
-              <a href="#" tabindex="-1">Row 2 Link 1</a>
-              <a href="#" tabindex="-1">Row 2 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([
+      { label: "Row 1", cells: 2 },
+      { label: "Row 2", cells: 2 },
+    ]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -965,19 +775,7 @@ describe("treegrid controller", () => {
   });
 
   it("keydown event listener does nothing when unhandled key is pressed", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([{ label: "Row 1", cells: 2 }]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -1005,19 +803,7 @@ describe("treegrid controller", () => {
   });
 
   it("removes event listeners when the controller is disconnected", async () => {
-    document.body.innerHTML = `
-      <div class="treegrid-container" role="treegrid" aria-readonly="true" data-controller="treegrid" data-treegrid-expand-text-value="Expand" data-treegrid-collapse-text-value="Collapse">
-        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="2" aria-expanded="false" tabindex="-1" data-treegrid-target="row">
-          <div role="gridcell" aria-colindex="1" style="display: contents;">
-            <div>
-              <span>Row 1</span>
-              <a href="#" tabindex="-1">Row 1 Link 1</a>
-              <a href="#" tabindex="-1">Row 1 Link 2</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    document.body.innerHTML = renderFixtureHtml([{ label: "Row 1", cells: 2 }]);
 
     // Wait for Stimulus mutation observer to process connection
     await new Promise((resolve) => setTimeout(resolve, 0));
