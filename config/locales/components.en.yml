@@ -435,6 +435,15 @@ en:
             up: Alt+ArrowUp
           required: Required
           up: Up
+      v2:
+        component:
+          keyboard_instructions: Use Tab to move between lists and actions. Use Space to select list items, then use Add, Remove, Up, and Down actions to move or reorder selected items.
+          no_template: No template
+        list_component:
+          add: Add
+          down: Down
+          required: Required
+          up: Up
     token:
       copied: Copied!
       copy: Copy to clipboard

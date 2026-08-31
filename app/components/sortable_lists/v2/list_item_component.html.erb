@@ -1,0 +1,22 @@
+<li class="border-b border-slate-200 px-4 py-2 last:border-b-0 dark:border-slate-600">
+  <% if interactive %>
+    <label
+      for="<%= checkbox_id %>"
+      class="flex cursor-pointer items-center gap-3 py-1 text-sm text-slate-900 dark:text-white"
+    >
+      <input
+        id="<%= checkbox_id %>"
+        type="checkbox"
+        value="<%= list_item %>"
+        class="
+          h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-600 dark:border-slate-600
+          dark:bg-slate-700
+        "
+      >
+
+      <span><%= list_item %></span>
+    </label>
+  <% else %>
+    <span class="block py-1 text-sm text-slate-900 dark:text-white"><%= list_item %></span>
+  <% end %>
+</li>

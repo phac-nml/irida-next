@@ -1,0 +1,78 @@
+<fieldset class="<%= @system_arguments[:container_classes] %>">
+  <legend id="<%= id %>-list-label" class="mb-1">
+    <%= title %>
+
+    <% if aria_required %>
+      <span id="<%= id %>-required" class="sr-only">
+        <%= t('components.sortable_lists.v2.list_component.required') %>
+      </span>
+      <span class="text-sm text-slate-500 dark:text-slate-300">
+        <span class="mr-1 text-red-500 dark:text-red-500" aria-hidden="true"> *</span>
+      </span>
+    <% end %>
+  </legend>
+
+  <ul
+    id="<%= id %>"
+    class="<%= @system_arguments[:list_classes] %>"
+    aria-labelledby="<%= id %>-list-label"
+    aria-describedby="<%= described_by_ids %>"
+    aria-required="<%= aria_required %>"
+    data-title="<%= title %>"
+    <% if interactive %>
+      data-action="change->sortable-lists--v2--two-lists-selection#handleSelectionChange"
+    <% end %>
+  >
+    <%= render SortableLists::V2::ListItemComponent.with_collection(list_items, list_id: id, interactive:) %>
+  </ul>
+
+  <% if interactive %>
+    <div class="mt-1" role="group" aria-label="<%= t('common.labels.actions') %>">
+      <% if available_list %>
+        <button
+          type="button"
+          class="button button-default"
+          disabled
+          aria-controls="<%= add_remove_controls %>"
+          data-action="click->sortable-lists--v2--two-lists-selection#addSelectionByAddButton"
+          data-sortable-lists--v2--two-lists-selection-target="addButton"
+        >
+          <%= t('components.sortable_lists.v2.list_component.add') %>
+        </button>
+      <% end %>
+
+      <% if selected_list %>
+        <button
+          type="button"
+          class="button button-default"
+          disabled
+          aria-controls="<%= add_remove_controls %>"
+          data-action="click->sortable-lists--v2--two-lists-selection#removeSelectionByRemoveButton"
+          data-sortable-lists--v2--two-lists-selection-target="removeButton"
+        >
+          <%= t('common.actions.remove') %>
+        </button>
+        <button
+          type="button"
+          class="button button-default"
+          disabled
+          aria-controls="<%= id %>"
+          data-action="click->sortable-lists--v2--two-lists-selection#moveSelection"
+          data-sortable-lists--v2--two-lists-selection-target="upButton"
+        >
+          <%= t('components.sortable_lists.v2.list_component.up') %>
+        </button>
+        <button
+          type="button"
+          class="button button-default"
+          disabled
+          aria-controls="<%= id %>"
+          data-action="click->sortable-lists--v2--two-lists-selection#moveSelection"
+          data-sortable-lists--v2--two-lists-selection-target="downButton"
+        >
+          <%= t('components.sortable_lists.v2.list_component.down') %>
+        </button>
+      <% end %>
+    </div>
+  <% end %>
+</fieldset>

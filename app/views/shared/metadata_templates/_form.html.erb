@@ -1,10 +1,22 @@
-<div
-  data-controller="sortable-lists--v1--two-lists-selection"
-  data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
-  data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
-  data-sortable-lists--v1--two-lists-selection-field-name-value="metadata_template[fields][]"
-  class="font-normal text-slate-500 dark:text-slate-400"
->
+<% sortable_lists_v2_enabled = Flipper.enabled?(:v2_sortable_lists, Current.user) %>
+<% sortable_lists_controller = sortable_lists_v2_enabled ? 'sortable-lists--v2--two-lists-selection' : 'sortable-lists--v1--two-lists-selection' %>
+<% sortable_lists_version = sortable_lists_v2_enabled ? :v2 : :v1 %>
+<% sortable_lists_submit_action = "click->#{sortable_lists_controller}#constructParams" %>
+
+<% sortable_lists_data_attributes = {
+  controller: sortable_lists_controller,
+  "#{sortable_lists_controller}-selected-list-value": 'selected-list',
+  "#{sortable_lists_controller}-available-list-value": 'available-list',
+  "#{sortable_lists_controller}-field-name-value": 'metadata_template[fields][]',
+} %>
+
+<% sortable_lists_submit_data = {
+  turbo_frame: '_top',
+  action: sortable_lists_submit_action,
+  "#{sortable_lists_controller}-target": 'submitBtn',
+} %>
+
+<%= tag.div(data: sortable_lists_data_attributes, class: 'font-normal text-slate-500 dark:text-slate-400') do %>
   <%= form_for(@metadata_template, url: template_path, method:, html: { novalidate: true }) do |form| %>
     <%= form_error_summary(form, target_overrides: { fields: "selected-list" }) %>
     <%= render partial: "shared/form/required_field_legend" %>
@@ -100,11 +112,13 @@
           },
         ) %>
 
-        <%= render SortableListsComponent.new do |sortable_lists| %>
+        <%= render SortableListsComponent.new(version: sortable_lists_version) do |sortable_lists| %>
           <%= sortable_lists.with_list(
             id: "available-list",
             title: t("metadata_templates.form.available_list_title"),
             list_items: @available_metadata_fields,
+            list_role: :available,
+            counterpart_list_id: 'selected-list',
             describedby: available_fields_describedby,
           ) %>
 
@@ -112,6 +126,8 @@
             id: "selected-list",
             title: t("metadata_templates.form.selected_list_title"),
             list_items: @current_template_fields,
+            list_role: :selected,
+            counterpart_list_id: 'available-list',
             required: true,
             describedby: selected_fields_describedby,
           ) %>
@@ -124,20 +140,15 @@
         <% end %>
       </section>
 
-      <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
+      <%= tag.div(nil, class: 'hidden', data: { "#{sortable_lists_controller}-target": 'field' }) %>
 
       <div class="mt-4">
         <%= form.button submit_button_text,
                     type: :submit,
-                    data: {
-                      turbo_frame: "_top",
-                      action:
-                        "click->sortable-lists--v1--two-lists-selection#constructParams",
-                      "sortable-lists--v1--two-lists-selection-target": "submitBtn",
-                    },
+                    data: sortable_lists_submit_data,
                     class: "button button-primary",
                     disabled: true %>
       </div>
     </div>
   <% end %>
-</div>
+<% end %>
