@@ -742,7 +742,6 @@ module Projects
 
         assert_select 'turbo-stream[target="sample_modal"]' do
           assert_select 'h1', I18n.t('projects.samples.attachments.concatenations.modal.title')
-
           assert_select 'form' do
             assert_select 'input[name="concatenation_form[basename]"]'
             assert_select 'input[name="concatenation_form[delete_originals]"]'

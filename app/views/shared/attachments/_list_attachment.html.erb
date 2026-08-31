@@ -1,0 +1,36 @@
+<%# locals: (attachment:) -%>
+
+<tr class="border-b border-slate-200 py-2 text-slate-500 last:border-b-0 dark:border-slate-700 dark:text-slate-400">
+  <td class="px-3 py-2">
+    <%= attachment.puid %>
+  </td>
+
+  <td class="px-3 py-2">
+    <div class="flex items-center font-sans">
+      <% if attachment.metadata['associated_attachment_id'].present? && attachment.metadata['direction'] == 'forward' %>
+        <%= icon(:arrow_right, size: :sm, class: "ml-0 mr-2") %>
+      <% elsif attachment.metadata['associated_attachment_id'].present? %>
+        <%= icon(:arrow_left, size: :sm, class: "ml-0 mr-2") %>
+      <% else %>
+        <%= icon(Attachment.icon, size: :sm, class: "ml-0 mr-2") %>
+      <% end %>
+
+      <span class="font-normal text-slate-900 dark:text-slate-100"><%= attachment.file.filename.to_s %></span>
+    </div>
+  </td>
+
+  <td class="px-3 py-2">
+    <%= render Viral::PillComponent.new(
+      text: attachment.metadata["format"],
+      color: find_pill_color_for_attachment(attachment, "format"),
+    ) %>
+  </td>
+
+  <td class="px-3 py-2">
+    <%= number_to_human_size(attachment.file.blob.byte_size) %>
+  </td>
+
+  <td class="px-3 py-2">
+    <%= local_date(attachment.created_at, :long) %>
+  </td>
+</tr>

@@ -16,12 +16,13 @@ export default class extends Controller {
     singularDescription: String,
     pluralDescription: String,
     nonZeroHeader: String,
+    separatePeAttachments: { type: Boolean, default: false },
   };
 
   #page = 1;
 
   connect() {
-    this.allIds = this.selectionOutlet.getOrCreateStoredItems();
+    this.allIds = this.#parseIds();
     this.numSelected = this.allIds.length;
     this.#makePagedHiddenInputs();
     this.#replaceDescriptionPlaceholder();
@@ -34,6 +35,25 @@ export default class extends Controller {
 
     // Add data-connected attribute
     this.element.setAttribute("data-connected", true);
+  }
+
+  #parseIds() {
+    const ids = this.selectionOutlet.getOrCreateStoredItems();
+    if (this.separatePeAttachmentsValue) {
+      // handles flattening attachment ids where PE files come in as a stringified nested array and need further parsing
+      // PE files are outputted as individual ids
+      const flattenedPeIds = ids.flatMap((item) => {
+        try {
+          const parsed = JSON.parse(item);
+          return Array.isArray(parsed) ? parsed : [item];
+        } catch {
+          return [item];
+        }
+      });
+      return flattenedPeIds;
+    } else {
+      return ids;
+    }
   }
 
   scroll() {

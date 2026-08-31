@@ -16,7 +16,9 @@ module Projects
           render turbo_stream: turbo_stream.update('sample_modal',
                                                    partial: 'modal',
                                                    locals: {
-                                                     open: true
+                                                     open: true,
+                                                     concatenation_form: @concatenation_form,
+                                                     sample: @sample
                                                    }), status: :ok
         end
 
@@ -26,7 +28,8 @@ module Projects
           @concatenation_form = ::ConcatenationForm.new(concatenation_params.merge(attachable_id: @sample.id,
                                                                                    attachable_type: @sample.class.name))
 
-          @concatenated_attachments = ::Attachments::ConcatenationService.new(current_user, @concatenation_form).execute
+          @concatenated_attachments = ::Attachments::ConcatenationService.new(current_user,
+                                                                              @concatenation_form).execute
 
           if @concatenation_form.errors.empty?
             render status: :ok, locals: { type: :success, message: t('.success') }

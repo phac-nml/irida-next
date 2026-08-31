@@ -2,7 +2,9 @@
   "sample_modal",
   partial: "modal",
   locals: {
-    open: @concatenation_form.errors.any?
+    open: @concatenation_form.errors.any?,
+    concatenation_form: @concatenation_form,
+    sample: @sample
   },
 ) %>
 

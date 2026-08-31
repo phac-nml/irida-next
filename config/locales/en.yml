@@ -1738,6 +1738,10 @@ en:
             basename_help: The base filename can contain only letters, digits, '-', '.', and '_'
             success: Files were successfully concatenated.
           modal:
+            description:
+              plural: 'The following COUNT_PLACEHOLDER files were selected for concatenation:'
+              singular: 'The following file was selected for concatenation:'
+              zero: No files were selected for concatenation
             submit_button: Concatenate
             title: Concatenate Files
         create:
@@ -1753,7 +1757,11 @@ en:
             partial_success: Some files were successfully deleted.
             success: Files were successfully deleted.
           modal:
-            description: 'The following files were selected for deletion:'
+            description:
+              plural: 'The following COUNT_PLACEHOLDER files were selected for deletion:'
+              singular: 'The following file was selected for deletion:'
+              zero: No files were selected for deletion
+            spinner: Deleting files. This may take a while...
             title: Delete Files
         destroy:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
