@@ -30,7 +30,7 @@ module Attachments
     def execute # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity,Metrics/MethodLength
       attachable_authorization
 
-      ActiveRecord::Base.transaction do
+      transaction_result = ActiveRecord::Base.transaction do
         valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
 
         identify_illumina_paired_end_files(valid_fastq_attachments) if valid_fastq_attachments.many?
@@ -54,6 +54,8 @@ module Attachments
                              { attachable: @attachable, attachments: @attachments })
 
         end
+
+        true # Return value if successful
       end
 
       # Fallback to the old behavior of launching automated workflow executions if the feature flag is not enabled.
@@ -61,6 +63,7 @@ module Attachments
       if Irida::Pipelines.instance.pipelines.any? &&
          @attachable.instance_of?(Sample) &&
          @attachable.project.namespace.automated_workflow_executions.present? &&
+         transaction_result &&
          !Flipper.enabled?(:automated_workflow_execution_subscriber)
 
         launch_automated_workflow_executions(@pe_attachments&.last)
