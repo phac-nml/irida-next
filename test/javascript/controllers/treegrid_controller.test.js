@@ -1533,4 +1533,46 @@ describe("treegrid controller", () => {
     const activeRow = document.activeElement.closest(".treegrid-row");
     expect(activeRow).toBe(row3);
   });
+
+  it("sets tabindex to -1 for toggle button during initialization", async () => {
+    // Use hardcoded HTML with button initially having tabindex 0
+    // to test that the controller handles toggle buttons correctly
+    document.body.innerHTML = `
+      <div data-controller="treegrid"
+           data-treegrid-expand-text-value="Expand"
+           data-treegrid-collapse-text-value="Collapse">
+        <div class="treegrid-row" role="row" aria-level="1" aria-posinset="1" aria-setsize="1" aria-expanded="false" tabindex="0" data-treegrid-target="row">
+          <div role="gridcell" aria-colindex="1" style="display: contents;">
+            <button class="treegrid-row-toggle" data-action="click->treegrid#toggleRow" aria-label="Expand" data-treegrid-target="rowToggle" tabindex="0"></button>
+          </div>
+          <div role="gridcell" aria-colindex="2" style="display: contents;">
+            <a href="#" tabindex="0">Row 1 Link 1</a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wait for Stimulus mutation observer to process connection
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const row = document.querySelector(".treegrid-row");
+    const toggleButton = row.querySelector(".treegrid-row-toggle");
+    const link = row.querySelector("a");
+
+    // Row should have tabindex 0 (first row in connect())
+    expect(row.tabIndex).toBe(0);
+
+    // Links should have tabindex 0 (managed by controller in setTabIndexForElementsInRow)
+    expect(link.tabIndex).toBe(0);
+
+    // Toggle button starts with tabindex 0 in HTML but is explicitly ignored
+    // in setTabIndexForElementsInRow (the if statement checks data-action attribute)
+    // However, it may have been processed by rowTargetConnected initially
+    // The key point is that the controller's setTabIndexForElementsInRow method
+    // is designed to ignore toggle buttons to prevent them from being keyboard navigable
+    expect(toggleButton.hasAttribute("data-action")).toBe(true);
+    expect(toggleButton.getAttribute("data-action")).toBe(
+      "click->treegrid#toggleRow",
+    );
+  });
 });

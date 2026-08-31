@@ -228,7 +228,6 @@ export default class extends Controller {
     } else {
       let currentRowIndex = this.rowTargets.indexOf(row);
       const currentLevel = this.#getLevel(row);
-      let didChange;
       const doExpandLevel = [];
       doExpandLevel[currentLevel + 1] = doExpand;
 
@@ -252,15 +251,12 @@ export default class extends Controller {
           } else {
             nextRow.classList.remove("hidden");
           }
-          didChange = true;
         }
       }
-      if (didChange) {
-        this.#setAriaExpanded(row, doExpand);
-        this.#setToggleButtonText(toggleButton, doExpand);
+      this.#setAriaExpanded(row, doExpand);
+      this.#setToggleButtonText(toggleButton, doExpand);
 
-        return true;
-      }
+      return true;
     }
   }
 
@@ -289,6 +285,8 @@ export default class extends Controller {
         // ignore toggle buttons
         if (el.getAttribute("data-action") !== "click->treegrid#toggleRow") {
           el.tabIndex = tabIndex;
+        } else {
+          el.tabIndex = -1;
         }
       });
     }
