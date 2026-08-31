@@ -30,7 +30,7 @@ module WorkflowExecutions
                       min_samples: @workflow.minimum_samples)
       end
 
-      return unless @max_samples_configured && @sample_count > maximum_samples
+      return unless @max_samples_configured && @sample_count > @workflow.maximum_samples.to_i
 
       I18n.t('shared.workflow_executions.sample_limits.max_samples_exceeded', max_samples: @workflow.maximum_samples)
     end
@@ -40,14 +40,6 @@ module WorkflowExecutions
         @workflow.minimum_samples.to_i
       else
         0
-      end
-    end
-
-    def maximum_samples
-      if @max_samples_configured
-        @workflow.maximum_samples.to_i
-      else
-        -1
       end
     end
   end

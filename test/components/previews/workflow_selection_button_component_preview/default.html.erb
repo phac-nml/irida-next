@@ -1,0 +1,26 @@
+<%= render WorkflowExecutions::WorkflowSelectionButtonComponent.new(workflow:
+Irida::Pipeline.new('test/pipeline',
+                                   { 'name' => 'Test Pipeline 1', 'description' => 'A test pipeline 1',
+                                     'url' => 'http://example.com' },
+                                   { 'name' => '1.0.3' },
+                                   nil,
+                                   nil,
+                                   unknown: true), sample_count:4) %>
+
+<%= render WorkflowExecutions::WorkflowSelectionButtonComponent.new(workflow:
+Irida::Pipeline.new('test/pipeline',
+                                   { 'name' => 'Test Pipeline 2', 'description' => 'A test pipeline 2',
+                                     'url' => 'http://example.com' },
+                                   { 'name' => '1.0.2' },
+                                   nil,
+                                   nil,
+                                   unknown: true), sample_count:4) %>
+
+<%= render WorkflowExecutions::WorkflowSelectionButtonComponent.new(workflow:
+Irida::Pipeline.new('test/pipeline',
+                                   { 'name' => 'Test Pipeline 3', 'description' => 'A test pipeline 3',
+                                     'url' => 'http://example.com' },
+                                   { 'name' => '1.0.1' },
+                                   nil,
+                                   nil,
+                                   unknown: true), sample_count:4) %>
