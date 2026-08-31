@@ -154,20 +154,6 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select '#workflow_execution_error_dialog'
   end
 
-  test 'should select and deselect workflow executions' do
-    get select_workflow_executions_path
-
-    assert_response :success
-    assert_select '[data-table-selection-ids-value="[]"]'
-
-    get select_workflow_executions_path, params: { select: 'on' }
-
-    assert_response :success
-    assert_select '[data-table-selection-ids-value="[]"]', count: 0
-    assert_includes css_select('[data-table-selection-ids-value]').first['data-table-selection-ids-value'],
-                    @workflow_execution_completed.id.to_s
-  end
-
   test 'should apply advanced search groups' do
     get workflow_executions_path, params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
 

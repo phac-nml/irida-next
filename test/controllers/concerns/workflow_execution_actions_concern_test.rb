@@ -111,6 +111,39 @@ class WorkflowExecutionActionsConcernTest < ActiveSupport::TestCase
     assert_nil controller.instance_variable_get(:@samplesheet_headers)
   end
 
+  test 'select keeps an empty selection when select parameter is blank' do
+    controller = implemented_controller
+    controller.instance_variable_set(:@namespace, nil)
+    controller.define_singleton_method(:authorize!) { |_namespace, to:| to == :view_workflow_executions? }
+    controller.define_singleton_method(:params) { { select: '' } }
+
+    controller.select
+
+    assert_equal [], controller.instance_variable_get(:@workflow_executions)
+  end
+
+  test 'select loads ids when select parameter is present' do
+    controller = implemented_controller
+    controller.instance_variable_set(:@namespace, nil)
+    controller.define_singleton_method(:authorize!) { |_namespace, to:| to == :view_workflow_executions? }
+    controller.define_singleton_method(:params) { { select: 'on' } }
+
+    selected_workflow = Struct.new(:id).new(123)
+    query_results = Object.new
+    query_results.define_singleton_method(:select) { |_field| [selected_workflow] }
+
+    query = Object.new
+    query.define_singleton_method(:results) { query_results }
+
+    controller.define_singleton_method(:workflow_execution_query) { query }
+
+    controller.select
+
+    workflow_executions = controller.instance_variable_get(:@workflow_executions)
+    assert_equal 1, workflow_executions.size
+    assert_equal 123, workflow_executions.first.id
+  end
+
   private
 
   def implemented_controller
