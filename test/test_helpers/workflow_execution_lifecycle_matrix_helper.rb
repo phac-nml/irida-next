@@ -1,50 +1,61 @@
 # frozen_string_literal: true
 
 module WorkflowExecutionLifecycleMatrixHelper
-  def assert_cancel_state_transitions(cancel_path:, scenarios:, locale: I18n.locale)
-    scenarios.each do |scenario|
-      workflow_execution = workflow_executions(scenario.fetch(:fixture))
-      from_state = scenario.fetch(:from_state)
+  CANCEL_OUTCOMES = {
+    'initial' => { expected_state: 'canceled' },
+    'prepared' => { expected_state: 'canceled' },
+    'submitted' => { expected_state: 'canceling' },
+    'running' => { expected_state: 'canceling' },
+    'completed' => { response: :unprocessable_content }
+  }.freeze
 
-      assert workflow_execution.public_send("#{from_state}?")
+  DESTROY_BLOCKED = { workflow_count_delta: 0, samples_count_delta: 0, response: :unprocessable_content }.freeze
+  DESTROY_ALLOWED = { workflow_count_delta: -1, samples_count_delta: -1, response: :redirect }.freeze
+  DESTROY_OUTCOMES = {
+    'initial' => DESTROY_BLOCKED,
+    'prepared' => DESTROY_BLOCKED,
+    'submitted' => DESTROY_BLOCKED,
+    'running' => DESTROY_BLOCKED,
+    'canceling' => DESTROY_BLOCKED,
+    'completed' => DESTROY_ALLOWED,
+    'error' => DESTROY_ALLOWED,
+    'canceled' => DESTROY_ALLOWED
+  }.freeze
+
+  def assert_cancel_state_transitions(cancel_path:, fixtures:, locale: I18n.locale)
+    fixtures.each do |fixture|
+      workflow_execution = workflow_executions(fixture)
+      from_state = workflow_execution.state
+      outcome = CANCEL_OUTCOMES.fetch(from_state)
 
       put cancel_path.call(workflow_execution), as: :turbo_stream
 
-      expected_state = scenario[:expected_state]
+      expected_state = outcome[:expected_state]
       if expected_state.present?
         assert_workflow_execution_cancel_success(workflow_execution, expected_state:, locale:)
       else
-        assert_response scenario.fetch(:response)
-        assert_equal from_state.to_s, workflow_execution.reload.state
+        assert_response outcome.fetch(:response)
+        assert_equal from_state, workflow_execution.reload.state
       end
     end
   end
 
-  def assert_destroy_state_transitions(destroy_path:, scenarios:)
-    scenarios.each do |scenario|
-      workflow_execution = workflow_executions(scenario.fetch(:fixture))
-      from_state = scenario.fetch(:from_state)
+  def assert_destroy_state_transitions(destroy_path:, fixtures:, redirect_to: nil)
+    fixtures.each do |fixture|
+      workflow_execution = workflow_executions(fixture)
+      outcome = DESTROY_OUTCOMES.fetch(workflow_execution.state)
 
-      assert workflow_execution.public_send("#{from_state}?")
-
-      assert_difference -> { WorkflowExecution.count } => scenario.fetch(:workflow_count_delta),
-                        -> { SamplesWorkflowExecution.count } => scenario.fetch(:samples_count_delta) do
+      assert_difference -> { WorkflowExecution.count } => outcome.fetch(:workflow_count_delta),
+                        -> { SamplesWorkflowExecution.count } => outcome.fetch(:samples_count_delta) do
         delete destroy_path.call(workflow_execution), as: :turbo_stream
       end
 
-      assert_response scenario.fetch(:response)
-
-      assert_scenario_redirect(scenario)
+      assert_response outcome.fetch(:response)
+      assert_redirected_to resolve_redirect_target(redirect_to) if outcome[:response] == :redirect
     end
   end
 
   private
-
-  def assert_scenario_redirect(scenario)
-    return if scenario[:redirect_to].blank?
-
-    assert_redirected_to resolve_redirect_target(scenario[:redirect_to])
-  end
 
   def resolve_redirect_target(target)
     target.respond_to?(:call) ? instance_exec(&target) : target

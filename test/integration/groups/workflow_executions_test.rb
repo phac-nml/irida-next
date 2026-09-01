@@ -64,7 +64,7 @@ module Groups
                                 row_scope: '#workflow-executions-table table tbody')
     end
 
-    test 'should not show a listing of workflow executions for the group' do
+    test 'should not show a listing of group workflow executions for a non-group member' do
       sign_in users(:micha_doe)
 
       get group_workflow_executions_path(@group)
@@ -93,6 +93,7 @@ module Groups
       get group_workflow_execution_path(@group, @workflow_execution)
 
       assert_response :success
+      assert_select 'h1', text: @workflow_execution.name
     end
 
     test 'should show shared-by-other-user group workflow with action restrictions and tab content' do
@@ -125,6 +126,7 @@ module Groups
       get group_workflow_execution_path(@group, deletable_workflow_execution)
 
       assert_response :success
+      assert_select 'h1', text: deletable_workflow_execution.name
       assert_select 'button', text: I18n.t('common.actions.remove', locale: locale), count: 0
     end
 
@@ -164,25 +166,15 @@ module Groups
       submitter = users(:james_doe)
       sign_in submitter
 
-      scenarios = [
-        { fixture: :workflow_execution_group_shared_new, from_state: :initial, expected_state: 'canceled' },
-        { fixture: :workflow_execution_group_shared_prepared, from_state: :prepared, expected_state: 'canceled' },
-        {
-          fixture: :workflow_execution_group_shared_submitted,
-          from_state: :submitted,
-          expected_state: 'canceling'
-        },
-        { fixture: :workflow_execution_group_shared_running, from_state: :running, expected_state: 'canceling' },
-        {
-          fixture: :workflow_execution_group_shared_completed,
-          from_state: :completed,
-          response: :unprocessable_content
-        }
-      ]
-
       assert_cancel_state_transitions(
         cancel_path: ->(workflow_execution) { cancel_group_workflow_execution_path(@group, workflow_execution) },
-        scenarios:,
+        fixtures: %i[
+          workflow_execution_group_shared_new
+          workflow_execution_group_shared_prepared
+          workflow_execution_group_shared_submitted
+          workflow_execution_group_shared_running
+          workflow_execution_group_shared_completed
+        ],
         locale: submitter.locale
       )
     end
@@ -230,71 +222,19 @@ module Groups
     test 'should apply group workflow deletion state transitions' do
       sign_in users(:james_doe)
 
-      scenarios = [
-        {
-          fixture: :workflow_execution_group_shared_prepared,
-          from_state: :prepared,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        },
-        {
-          fixture: :workflow_execution_group_shared_submitted,
-          from_state: :submitted,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        },
-        {
-          fixture: :workflow_execution_group_shared_completed,
-          from_state: :completed,
-          workflow_count_delta: -1,
-          samples_count_delta: -1,
-          response: :redirect,
-          redirect_to: -> { group_workflow_executions_path(@group) }
-        },
-        {
-          fixture: :workflow_execution_group_shared_error,
-          from_state: :error,
-          workflow_count_delta: -1,
-          samples_count_delta: -1,
-          response: :redirect,
-          redirect_to: -> { group_workflow_executions_path(@group) }
-        },
-        {
-          fixture: :workflow_execution_group_shared_canceling,
-          from_state: :canceling,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        },
-        {
-          fixture: :workflow_execution_group_shared_canceled,
-          from_state: :canceled,
-          workflow_count_delta: -1,
-          samples_count_delta: -1,
-          response: :redirect,
-          redirect_to: -> { group_workflow_executions_path(@group) }
-        },
-        {
-          fixture: :workflow_execution_group_shared_running,
-          from_state: :running,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        },
-        {
-          fixture: :workflow_execution_group_shared_new,
-          from_state: :initial,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        }
-      ]
-
       assert_destroy_state_transitions(
         destroy_path: ->(workflow_execution) { group_workflow_execution_path(@group, workflow_execution) },
-        scenarios:
+        fixtures: %i[
+          workflow_execution_group_shared_prepared
+          workflow_execution_group_shared_submitted
+          workflow_execution_group_shared_completed
+          workflow_execution_group_shared_error
+          workflow_execution_group_shared_canceling
+          workflow_execution_group_shared_canceled
+          workflow_execution_group_shared_running
+          workflow_execution_group_shared_new
+        ],
+        redirect_to: -> { group_workflow_executions_path(@group) }
       )
     end
 

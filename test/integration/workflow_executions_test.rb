@@ -265,86 +265,32 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test 'should apply workflow cancellation state transitions' do
-    scenarios = [
-      { fixture: :irida_next_example_new, from_state: :initial, expected_state: 'canceled' },
-      { fixture: :irida_next_example_prepared, from_state: :prepared, expected_state: 'canceled' },
-      { fixture: :irida_next_example_submitted, from_state: :submitted, expected_state: 'canceling' },
-      { fixture: :irida_next_example_running, from_state: :running, expected_state: 'canceling' },
-      { fixture: :irida_next_example_completed, from_state: :completed, response: :unprocessable_content }
-    ]
-
     assert_cancel_state_transitions(
       cancel_path: ->(workflow_execution) { cancel_workflow_execution_path(workflow_execution) },
-      scenarios:
+      fixtures: %i[
+        irida_next_example_new
+        irida_next_example_prepared
+        irida_next_example_submitted
+        irida_next_example_running
+        irida_next_example_completed
+      ]
     )
   end
 
   test 'should apply workflow deletion state transitions' do
-    scenarios = [
-      {
-        fixture: :irida_next_example_prepared,
-        from_state: :prepared,
-        workflow_count_delta: 0,
-        samples_count_delta: 0,
-        response: :unprocessable_content
-      },
-      {
-        fixture: :irida_next_example_submitted,
-        from_state: :submitted,
-        workflow_count_delta: 0,
-        samples_count_delta: 0,
-        response: :unprocessable_content
-      },
-      {
-        fixture: :irida_next_example_completed,
-        from_state: :completed,
-        workflow_count_delta: -1,
-        samples_count_delta: -1,
-        response: :redirect,
-        redirect_to: workflow_executions_path
-      },
-      {
-        fixture: :irida_next_example_error,
-        from_state: :error,
-        workflow_count_delta: -1,
-        samples_count_delta: -1,
-        response: :redirect,
-        redirect_to: workflow_executions_path
-      },
-      {
-        fixture: :irida_next_example_canceling,
-        from_state: :canceling,
-        workflow_count_delta: 0,
-        samples_count_delta: 0,
-        response: :unprocessable_content
-      },
-      {
-        fixture: :irida_next_example_canceled,
-        from_state: :canceled,
-        workflow_count_delta: -1,
-        samples_count_delta: -1,
-        response: :redirect,
-        redirect_to: workflow_executions_path
-      },
-      {
-        fixture: :irida_next_example_running,
-        from_state: :running,
-        workflow_count_delta: 0,
-        samples_count_delta: 0,
-        response: :unprocessable_content
-      },
-      {
-        fixture: :irida_next_example_new,
-        from_state: :initial,
-        workflow_count_delta: 0,
-        samples_count_delta: 0,
-        response: :unprocessable_content
-      }
-    ]
-
     assert_destroy_state_transitions(
       destroy_path: ->(workflow_execution) { workflow_execution_path(workflow_execution) },
-      scenarios:
+      fixtures: %i[
+        irida_next_example_prepared
+        irida_next_example_submitted
+        irida_next_example_completed
+        irida_next_example_error
+        irida_next_example_canceling
+        irida_next_example_canceled
+        irida_next_example_running
+        irida_next_example_new
+      ],
+      redirect_to: workflow_executions_path
     )
   end
 

@@ -191,90 +191,36 @@ module Projects
     end
 
     test 'should apply project workflow cancellation state transitions' do
-      scenarios = [
-        { fixture: :automated_example_new, from_state: :initial, expected_state: 'canceled' },
-        { fixture: :automated_example_prepared, from_state: :prepared, expected_state: 'canceled' },
-        { fixture: :automated_example_submitted, from_state: :submitted, expected_state: 'canceling' },
-        { fixture: :automated_example_running, from_state: :running, expected_state: 'canceling' },
-        { fixture: :automated_example_completed, from_state: :completed, response: :unprocessable_content }
-      ]
-
       assert_cancel_state_transitions(
         cancel_path: lambda { |workflow_execution|
           cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
         },
-        scenarios:
+        fixtures: %i[
+          automated_example_new
+          automated_example_prepared
+          automated_example_submitted
+          automated_example_running
+          automated_example_completed
+        ]
       )
     end
 
     test 'should apply project workflow deletion state transitions' do
-      scenarios = [
-        {
-          fixture: :automated_example_prepared,
-          from_state: :prepared,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        },
-        {
-          fixture: :automated_example_submitted,
-          from_state: :submitted,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        },
-        {
-          fixture: :automated_example_completed,
-          from_state: :completed,
-          workflow_count_delta: -1,
-          samples_count_delta: -1,
-          response: :redirect,
-          redirect_to: -> { namespace_project_workflow_executions_path(@namespace, @project) }
-        },
-        {
-          fixture: :automated_example_error,
-          from_state: :error,
-          workflow_count_delta: -1,
-          samples_count_delta: -1,
-          response: :redirect,
-          redirect_to: -> { namespace_project_workflow_executions_path(@namespace, @project) }
-        },
-        {
-          fixture: :automated_example_canceling,
-          from_state: :canceling,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        },
-        {
-          fixture: :automated_example_canceled,
-          from_state: :canceled,
-          workflow_count_delta: -1,
-          samples_count_delta: -1,
-          response: :redirect,
-          redirect_to: -> { namespace_project_workflow_executions_path(@namespace, @project) }
-        },
-        {
-          fixture: :automated_example_running,
-          from_state: :running,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        },
-        {
-          fixture: :automated_example_new,
-          from_state: :initial,
-          workflow_count_delta: 0,
-          samples_count_delta: 0,
-          response: :unprocessable_content
-        }
-      ]
-
       assert_destroy_state_transitions(
         destroy_path: lambda { |workflow_execution|
           namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
         },
-        scenarios:
+        fixtures: %i[
+          automated_example_prepared
+          automated_example_submitted
+          automated_example_completed
+          automated_example_error
+          automated_example_canceling
+          automated_example_canceled
+          automated_example_running
+          automated_example_new
+        ],
+        redirect_to: -> { namespace_project_workflow_executions_path(@namespace, @project) }
       )
     end
 
