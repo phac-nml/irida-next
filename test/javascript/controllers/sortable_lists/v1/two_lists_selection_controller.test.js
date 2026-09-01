@@ -41,6 +41,9 @@ function renderFixture({
     option("selected-three", "Three"),
   ],
   templateSelector = false,
+  submit = false,
+  ariaLive = true,
+  titles = true,
 } = {}) {
   document.body.innerHTML = `
     <div
@@ -57,6 +60,7 @@ function renderFixture({
             >
               <option value="none">None</option>
               <option value="custom" data-fields='["Template only"]'>Custom</option>
+              <option value="existing" data-fields='["Alpha","Beta"]'>Existing</option>
             </select>`
           : ""
       }
@@ -69,7 +73,7 @@ function renderFixture({
         aria-required="false"
         aria-multiselectable="true"
         data-action="focus->sortable-lists--v1--two-lists-selection#handleListFocus blur->sortable-lists--v1--two-lists-selection#handleListBlur keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput"
-        data-title="Available list"
+        ${titles ? 'data-title="Available list"' : ""}
         >${available.join("")}</ul>
       <button
         type="button"
@@ -87,7 +91,7 @@ function renderFixture({
         aria-required="true"
         aria-multiselectable="true"
         data-action="focus->sortable-lists--v1--two-lists-selection#handleListFocus blur->sortable-lists--v1--two-lists-selection#handleListBlur keydown->sortable-lists--v1--two-lists-selection#handleKeyboardInput"
-        data-title="Selected list"
+        ${titles ? 'data-title="Selected list"' : ""}
         >${selected.join("")}</ul>
       <button
         type="button"
@@ -110,11 +114,30 @@ function renderFixture({
         data-sortable-lists--v1--two-lists-selection-target="downButton"
         data-action="click->sortable-lists--v1--two-lists-selection#moveSelection"
       >Down</button>
-      <div
-        aria-live="polite"
-        data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"
-        data-translations='${translations}'
-      ></div>
+      ${
+        submit
+          ? `<div
+              class="hidden"
+              data-sortable-lists--v1--two-lists-selection-target="field"
+            ></div>
+            <button
+              type="submit"
+              disabled
+              aria-disabled="true"
+              data-sortable-lists--v1--two-lists-selection-target="submitBtn"
+              data-action="click->sortable-lists--v1--two-lists-selection#constructParams"
+            >Submit</button>`
+          : ""
+      }
+      ${
+        ariaLive
+          ? `<div
+              aria-live="polite"
+              data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"
+              data-translations='${translations}'
+            ></div>`
+          : ""
+      }
       <template data-sortable-lists--v1--two-lists-selection-target="checkmarkTemplate">
         <span>✓</span>
       </template>
@@ -136,6 +159,24 @@ function keydown(list, key, options = {}) {
       cancelable: true,
       ...options,
     }),
+  );
+}
+
+function click(node, options = {}) {
+  node.dispatchEvent(
+    new MouseEvent("click", { bubbles: true, cancelable: true, ...options }),
+  );
+}
+
+function target(name) {
+  return document.querySelector(
+    `[data-sortable-lists--v1--two-lists-selection-target="${name}"]`,
+  );
+}
+
+function fieldValues() {
+  return Array.from(target("field").querySelectorAll("input")).map(
+    (input) => input.value,
   );
 }
 
@@ -173,6 +214,21 @@ async function startController() {
   );
   await Promise.resolve();
   return application;
+}
+
+function controllerInstance(app) {
+  return app.getControllerForElementAndIdentifier(
+    document.querySelector(
+      '[data-controller~="sortable-lists--v1--two-lists-selection"]',
+    ),
+    "sortable-lists--v1--two-lists-selection",
+  );
+}
+
+function itemTexts(id) {
+  return Array.from(list(id).querySelectorAll("li")).map(
+    (item) => item.lastElementChild.textContent,
+  );
 }
 
 describe("sortable lists two-lists selection controller", () => {
@@ -498,5 +554,580 @@ describe("sortable lists two-lists selection controller", () => {
     );
     expect(document.activeElement).toBe(addButton);
     expect(addButton).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("builds hidden inputs for the selected list when submitting", async () => {
+    renderFixture({ submit: true });
+    application = await startController();
+
+    const submitBtn = target("submitBtn");
+    submitBtn.setAttribute("aria-disabled", "false");
+    click(submitBtn);
+
+    expect(fieldValues()).toEqual(["One", "Two", "Three"]);
+  });
+
+  it("blocks submit clicks while the submit button is aria-disabled", async () => {
+    renderFixture({ submit: true });
+    application = await startController();
+
+    const submitBtn = target("submitBtn");
+    submitBtn.setAttribute("aria-disabled", "true");
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+    submitBtn.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  it("allows submit clicks once the submit button is enabled", async () => {
+    renderFixture({ submit: true });
+    application = await startController();
+
+    const submitBtn = target("submitBtn");
+    submitBtn.setAttribute("aria-disabled", "false");
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+    submitBtn.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it("stops guarding submit clicks after the controller disconnects", async () => {
+    renderFixture({ submit: true });
+    application = await startController();
+
+    const submitBtn = target("submitBtn");
+    submitBtn.setAttribute("aria-disabled", "true");
+    controllerInstance(application).disconnect();
+
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+    submitBtn.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it("toggles the native submit disabled state with the required list contents", async () => {
+    renderFixture({ submit: true, selected: [] });
+    application = await startController();
+
+    const submitBtn = target("submitBtn");
+    expect(submitBtn.disabled).toBe(true);
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, " ");
+    keydown(availableList, "Enter");
+
+    expect(submitBtn.disabled).toBe(false);
+  });
+
+  it("toggles selection on click and tracks the active option", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    const alpha = document.getElementById("available-alpha");
+
+    click(alpha);
+    expect(selectedIds(availableList)).toEqual(["available-alpha"]);
+    expect(activeId(availableList)).toBe("available-alpha");
+
+    click(alpha);
+    expect(selectedIds(availableList)).toEqual([]);
+  });
+
+  it("selects a range from the last clicked option on shift-click", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    click(document.getElementById("available-alpha"));
+    click(document.getElementById("available-gamma"), { shiftKey: true });
+
+    expect(selectedIds(availableList)).toEqual([
+      "available-alpha",
+      "available-beta",
+      "available-alpine",
+      "available-gamma",
+    ]);
+  });
+
+  it("selects from the top of the list on shift-click without a prior click", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    click(document.getElementById("available-alpine"), { shiftKey: true });
+
+    expect(selectedIds(availableList)).toEqual([
+      "available-alpha",
+      "available-beta",
+      "available-alpine",
+    ]);
+  });
+
+  it("ignores clicks that are not on a listbox option", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    controllerInstance(application).handleClick({ target: document.body });
+
+    expect(selectedIds(availableList)).toEqual([]);
+    expect(activeOptionIds(availableList)).toEqual([]);
+  });
+
+  it("reorders a selected item with the up and down buttons", async () => {
+    renderFixture();
+    application = await startController();
+
+    const selectedList = list("selected-list");
+    selectedList.focus();
+    keydown(selectedList, "ArrowDown");
+    keydown(selectedList, " ");
+
+    click(target("downButton"));
+    expect(optionIds(selectedList)).toEqual([
+      "selected-one",
+      "selected-three",
+      "selected-two",
+    ]);
+
+    click(target("upButton"));
+    expect(optionIds(selectedList)).toEqual([
+      "selected-one",
+      "selected-two",
+      "selected-three",
+    ]);
+  });
+
+  it("ignores move button clicks while the button is disabled", async () => {
+    renderFixture();
+    application = await startController();
+
+    const upButton = target("upButton");
+    expect(upButton).toHaveAttribute("aria-disabled", "true");
+
+    click(upButton);
+    expect(optionIds(list("selected-list"))).toEqual([
+      "selected-one",
+      "selected-two",
+      "selected-three",
+    ]);
+  });
+
+  it("does nothing when a move button has no option to swap with", async () => {
+    renderFixture();
+    application = await startController();
+
+    const selectedList = list("selected-list");
+    selectedList.focus();
+    keydown(selectedList, " ");
+
+    const upButton = target("upButton");
+    upButton.setAttribute("aria-disabled", "false");
+    click(upButton);
+
+    expect(optionIds(selectedList)).toEqual([
+      "selected-one",
+      "selected-two",
+      "selected-three",
+    ]);
+  });
+
+  it("reconciles the lists when metadata is pushed dynamically", async () => {
+    renderFixture({
+      available: [
+        option("available-foo", "foo"),
+        option("available-extra", "extra"),
+      ],
+      selected: [
+        option("selected-keep", "keep"),
+        option("selected-drop", "drop"),
+      ],
+    });
+    application = await startController();
+
+    controllerInstance(application).updateMetadataListing({
+      detail: { content: { metadata: ["foo", "keep", "new"] } },
+    });
+
+    expect(itemTexts("available-list")).toEqual(["foo"]);
+    expect(itemTexts("selected-list")).toEqual(["keep", "new"]);
+  });
+
+  it("logs and returns when the template selection target is missing", async () => {
+    renderFixture();
+    application = await startController();
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    controllerInstance(application).setTemplate({ target: null });
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      "Template selection target not found",
+    );
+  });
+
+  it("logs and returns when no template option is selected", async () => {
+    renderFixture();
+    application = await startController();
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const emptySelect = document.createElement("select");
+    controllerInstance(application).setTemplate({ target: emptySelect });
+
+    expect(errorSpy).toHaveBeenCalledWith("No template option selected");
+  });
+
+  it("logs the caught error when template fields are malformed", async () => {
+    renderFixture();
+    application = await startController();
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const select = document.createElement("select");
+    const brokenOption = document.createElement("option");
+    brokenOption.value = "custom";
+    brokenOption.dataset.fields = "{not valid json";
+    select.append(brokenOption);
+    select.selectedIndex = 0;
+
+    controllerInstance(application).setTemplate({ target: select });
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      "Error setting template:",
+      expect.any(Error),
+    );
+  });
+
+  it("ignores keyboard input dispatched on non-listbox elements", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    controllerInstance(application).handleKeyboardInput({
+      target: document.body,
+    });
+
+    expect(selectedIds(availableList)).toEqual([]);
+  });
+
+  it("does not move items when Enter/Delete target the wrong list", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    const selectedList = list("selected-list");
+
+    selectedList.focus();
+    keydown(selectedList, " ");
+    keydown(selectedList, "Enter");
+    expect(optionIds(selectedList)).toContain("selected-one");
+
+    availableList.focus();
+    keydown(availableList, " ");
+    keydown(availableList, "Delete");
+    expect(optionIds(availableList)).toContain("available-alpha");
+  });
+
+  it("ignores add and remove button clicks while they are disabled", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    const selectedList = list("selected-list");
+
+    click(target("addButton"));
+    click(target("removeButton"));
+
+    expect(optionIds(availableList)).toEqual([
+      "available-alpha",
+      "available-beta",
+      "available-alpine",
+      "available-gamma",
+    ]);
+    expect(optionIds(selectedList)).toEqual([
+      "selected-one",
+      "selected-two",
+      "selected-three",
+    ]);
+  });
+
+  it("treats moving an empty selection as a no-op", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, "Enter");
+
+    expect(optionIds(availableList)).toEqual([
+      "available-alpha",
+      "available-beta",
+      "available-alpine",
+      "available-gamma",
+    ]);
+  });
+
+  it("searches upward for the next focus target when trailing options are selected", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, "ArrowDown");
+    keydown(availableList, " ");
+    keydown(availableList, "ArrowDown");
+    keydown(availableList, " ");
+    keydown(availableList, "ArrowDown");
+    keydown(availableList, " ");
+    keydown(availableList, "Enter");
+
+    expect(activeId(availableList)).toBe("available-alpha");
+  });
+
+  it("clears focus when every option is moved out of a list", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, "End");
+    keydown(availableList, "a", { ctrlKey: true });
+    keydown(availableList, "Enter");
+
+    expect(optionIds(availableList)).toEqual([]);
+    expect(availableList).toHaveAttribute("aria-activedescendant", "");
+
+    keydown(availableList, "Enter");
+    expect(optionIds(availableList)).toEqual([]);
+  });
+
+  it("anchors a shift-space range on the current option when no anchor exists", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, "ArrowDown");
+    keydown(availableList, " ", { shiftKey: true });
+
+    expect(selectedIds(availableList)).toEqual(["available-beta"]);
+  });
+
+  it("skips the aria-live announcement when no live region is present", async () => {
+    renderFixture({ ariaLive: false });
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, " ");
+    keydown(availableList, "Enter");
+
+    expect(optionIds(list("selected-list"))).toContain("available-alpha");
+  });
+
+  it("applies a template that matches existing available options", async () => {
+    renderFixture({ templateSelector: true });
+    application = await startController();
+
+    const selector = target("templateSelector");
+    selector.value = "existing";
+    selector.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(itemTexts("selected-list")).toEqual(["Alpha", "Beta"]);
+    expect(itemTexts("available-list")).toEqual([
+      "Alpine",
+      "Gamma",
+      "One",
+      "Two",
+      "Three",
+    ]);
+  });
+
+  it("resets every item to the available list for the none template", async () => {
+    renderFixture({ templateSelector: true });
+    application = await startController();
+
+    const selector = target("templateSelector");
+    selector.value = "existing";
+    selector.dispatchEvent(new Event("change", { bubbles: true }));
+    selector.value = "none";
+    selector.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(itemTexts("selected-list")).toEqual([]);
+    expect(itemTexts("available-list")).toEqual([
+      "Alpha",
+      "Beta",
+      "Alpine",
+      "Gamma",
+      "One",
+      "Two",
+      "Three",
+    ]);
+  });
+
+  it("defaults the selection list to the event target", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    controllerInstance(application).handleSelection({ target: availableList });
+
+    expect(selectedIds(availableList)).toEqual(["available-alpha"]);
+  });
+
+  it("reorders a selected item downward with Alt+ArrowDown", async () => {
+    renderFixture({
+      selected: [
+        option("selected-one", "One", true),
+        option("selected-two", "Two"),
+        option("selected-three", "Three"),
+      ],
+    });
+    application = await startController();
+
+    const selectedList = list("selected-list");
+    selectedList.focus();
+    keydown(selectedList, "ArrowDown", { altKey: true });
+
+    expect(optionIds(selectedList)).toEqual([
+      "selected-two",
+      "selected-one",
+      "selected-three",
+    ]);
+    expect(activeId(selectedList)).toBe("selected-one");
+  });
+
+  it("tolerates lists without a data-title attribute", async () => {
+    renderFixture({ titles: false });
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, " ");
+    keydown(availableList, "Enter");
+
+    expect(optionIds(list("selected-list"))).toContain("available-alpha");
+  });
+
+  it("scrolls the active option into view when the browser supports it", async () => {
+    renderFixture();
+    application = await startController();
+
+    const scrollSpy = vi.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollSpy;
+
+    try {
+      list("available-list").focus();
+      expect(scrollSpy).toHaveBeenCalled();
+    } finally {
+      delete window.HTMLElement.prototype.scrollIntoView;
+    }
+  });
+
+  it("ignores arrow navigation on an empty listbox", async () => {
+    renderFixture({ available: [], selected: [] });
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, "ArrowDown");
+    keydown(availableList, " ");
+
+    expect(availableList).toHaveAttribute("aria-activedescendant", "");
+  });
+
+  it("searches downward past selected options for the next focus target", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, "ArrowDown");
+    keydown(availableList, " ");
+    keydown(availableList, "ArrowUp");
+    keydown(availableList, " ");
+    keydown(availableList, "Enter");
+
+    expect(activeId(availableList)).toBe("available-alpine");
+  });
+
+  it("falls back to upward search when trailing siblings are all selected", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, "End");
+    keydown(availableList, " ");
+    keydown(availableList, "ArrowUp");
+    keydown(availableList, " ");
+    keydown(availableList, "Enter");
+
+    expect(activeId(availableList)).toBe("available-beta");
+  });
+
+  it("does nothing when the configured lists are missing", async () => {
+    document.body.innerHTML = `
+      <div
+        data-controller="sortable-lists--v1--two-lists-selection"
+        data-sortable-lists--v1--two-lists-selection-selected-list-value="missing-selected"
+        data-sortable-lists--v1--two-lists-selection-available-list-value="missing-available"
+        data-sortable-lists--v1--two-lists-selection-field-name-value="fields[]"
+      ></div>
+    `;
+
+    application = await startController();
+
+    expect(document.getElementById("missing-available")).toBeNull();
+  });
+
+  it("disconnects cleanly when there is no submit button", async () => {
+    renderFixture();
+    application = await startController();
+
+    expect(() => controllerInstance(application).disconnect()).not.toThrow();
+  });
+
+  it("ignores keys without a handler that are not printable", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, "Escape");
+
+    expect(selectedIds(availableList)).toEqual([]);
+  });
+
+  it("does nothing when the down button has no lower option", async () => {
+    renderFixture();
+    application = await startController();
+
+    const selectedList = list("selected-list");
+    selectedList.focus();
+    keydown(selectedList, "End");
+    keydown(selectedList, " ");
+
+    const downButton = target("downButton");
+    downButton.setAttribute("aria-disabled", "false");
+    click(downButton);
+
+    expect(optionIds(selectedList)).toEqual([
+      "selected-one",
+      "selected-two",
+      "selected-three",
+    ]);
+  });
+
+  it("keeps the active option when type-ahead finds no match", async () => {
+    renderFixture();
+    application = await startController();
+
+    const availableList = list("available-list");
+    availableList.focus();
+    keydown(availableList, "z");
+
+    expect(activeId(availableList)).toBe("available-alpha");
   });
 });
