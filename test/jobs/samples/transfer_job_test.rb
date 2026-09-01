@@ -18,7 +18,7 @@ module Samples
       sample_ids = [@sample1.id, @sample2.id]
 
       assert_difference -> { @new_project.reload.samples.count } => 2 do
-        Samples::TransferJob.perform_now(project.namespace, @john_doe, @new_project.id, sample_ids, broadcast_target)
+        Samples::TransferJob.perform_now(@project.namespace, @john_doe, @new_project.id, sample_ids, broadcast_target)
       end
 
       turbo_streams = capture_turbo_stream_broadcasts broadcast_target
