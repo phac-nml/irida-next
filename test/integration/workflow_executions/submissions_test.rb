@@ -76,7 +76,7 @@ module WorkflowExecutions
         assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_text[3].text.squish
         assert_equal I18n.t('workflow_executions.submissions.pipeline_selection.unavailable'),
                      workflow_selection_text[4].text.squish
-        assert_equal disabled_button_text, workflow_selection_text[4].text.squish
+        assert_equal disabled_button_text, workflow_selection_text[5].text.squish
       end
       assert_select 'button[aria-disabled="true"]', disabled_button_text
     end
