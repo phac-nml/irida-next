@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module WorkflowExecutions
-  # Component for rendering selection buttons within launch workflow dialog
+  # Component for rendering and organizing the workflow selection buttons
   class WorkflowSelectionComponent < Component
     def initialize(workflows:, namespace_id:, sample_count:)
       @workflows = workflows
