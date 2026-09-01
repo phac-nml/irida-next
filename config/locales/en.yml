@@ -1565,6 +1565,12 @@ en:
         search_form_title: Search for samples to trigger
         subtitle: Provide search parameters to select samples for this automated pipeline
         title: Trigger Automated Pipeline
+      trigger_modal:
+        name: Name
+        search_form_title: Search for samples to trigger
+        title: Trigger Automated Pipeline
+        version: Version
+        workflow_name: Workflow Name
     bots:
       index:
         access_token_section:

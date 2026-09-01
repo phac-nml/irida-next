@@ -17,6 +17,11 @@
         </div>
 
         <div class="flex justify-between">
+          <dt class="font-semibold text-gray-700"><%= t(".workflow_name") %></dt>
+          <dd class="text-gray-900"><%= automated_workflow_execution.workflow.name %></dd>
+        </div>
+
+        <div class="flex justify-between">
           <dt class="font-semibold text-gray-700"><%= t(".version") %></dt>
           <dd class="text-gray-900"><%= automated_workflow_execution.metadata["workflow_version"] %></dd>
         </div>
