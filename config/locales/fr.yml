@@ -92,6 +92,7 @@ fr:
         user_id: Utilisateur
       metadata_template:
         description: Description
+        fields: Champs de métadonnées
         name: Nom
       namespaces/project_namespace:
         description: Description
