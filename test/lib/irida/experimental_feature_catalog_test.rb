@@ -22,6 +22,7 @@ module Irida
         v2_prefixed_select2
         v2_sample_transfer
         v2_select2
+        v2_sortable_lists
       ], entries.pluck(:key)
     end
 
