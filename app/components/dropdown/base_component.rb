@@ -14,7 +14,7 @@ module Dropdown
     }
     # Public: Expose key dropdown configuration
     attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip_text, :styles, :prefix,
-                :trigger_id, :icon_size, :tone, :emphasis, :size
+                :trigger_id, :icon_size, :tone, :emphasis, :size, :compact
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -28,6 +28,7 @@ module Dropdown
     # @param tooltip [String] Optional tooltip for the button
     # @param icon [String] Optional icon name
     # @param caret [Boolean] Show dropdown caret icon
+    # @param compact [Boolean] Toolbar-density trigger: tighter icon/label/caret pairing
     # @param trigger [Symbol] :click or :hover (default :click)
     # @param skidding [Integer] Popper.js skidding offset
     # @param distance [Integer] Popper.js distance offset
@@ -39,6 +40,36 @@ module Dropdown
       @params = params
       set_basic_attributes
       set_system_arguments
+    end
+
+    def leading_icon_classes
+      class_names(
+        'size-5' => icon_size.nil? && !compact?,
+        'mr-2' => label.present? && !compact?
+      )
+    end
+
+    def caret_wrapper_classes
+      class_names('inline-flex flex-none', compact? ? nil : 'ml-2')
+    end
+
+    def leading_icon_size
+      return icon_size if icon_size.present?
+      return :xs if compact?
+
+      nil
+    end
+
+    def caret_icon_size
+      compact? ? :xs : :sm
+    end
+
+    def compact?
+      compact
+    end
+
+    def wrapper_classes
+      class_names('flex', 'max-sm:grow' => !compact?)
     end
 
     private
@@ -61,6 +92,7 @@ module Dropdown
       @emphasis = @params.fetch(:emphasis, :outline)
       @size = @params[:size] || :medium
       @caret = @params[:caret]
+      @compact = @params.fetch(:compact, false)
       @skidding = @params[:skidding] || 0
     end
 

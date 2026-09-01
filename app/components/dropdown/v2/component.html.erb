@@ -1,4 +1,4 @@
-<%= tag.div(class: "flex max-sm:grow",
+<%= tag.div(class: wrapper_classes,
             data: {
               controller: tooltip? ? "pathogen--tooltip dropdown--v2" : "dropdown--v2",
               "dropdown--v2-distance-value": distance,
@@ -15,15 +15,17 @@
       <% button.with_leading_visual do %>
         <%= icon(
           icon_name,
-          size: icon_size,
-          class: class_names({ "size-5": icon_size.nil? }),
+          size: leading_icon_size,
+          class: leading_icon_classes,
         ) %>
       <% end %>
     <% end %>
 
     <% if caret %>
       <% button.with_trailing_visual do %>
-        <span data-dropdown--v2-target="caret" class="inline-flex flex-none"><%= icon(:caret_down, size: :sm) %></span>
+        <span data-dropdown--v2-target="caret" class="<%= caret_wrapper_classes %>">
+          <%= icon(:caret_down, size: caret_icon_size) %>
+        </span>
       <% end %>
     <% end %>
 
