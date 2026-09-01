@@ -946,7 +946,6 @@ export default class extends Controller {
   samplesheetPropertiesTargetConnected() {
     this.#samplesheetProperties =
       this.samplesheetPropertiesTarget.dataset.properties;
-
     // to prevent browser timeouts on large (10k+) sample requests, samples will be chunked and batched into
     // 1000 sample requests
     if (this.hasSelectionOutlet) {
@@ -1046,9 +1045,12 @@ export default class extends Controller {
     if (this.#currentChunkedCounter < this.#chunkedSelectedSamples.length) {
       this.#submitSamplesheetParams(this.#currentChunkedCounter);
     } else {
+      const value = document.querySelector(
+        '[data-nextflow--v2--samplesheet-target="samplesheetProperties"]',
+      ).dataset.properties;
       this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
       // // clear the now unnecessary DOM element
-      this.samplesheetPropertiesTarget.remove();
+      // this.samplesheetPropertiesTarget.remove();
       this.#processSamplesheetAttributes();
       this.#processFileAttributes();
 

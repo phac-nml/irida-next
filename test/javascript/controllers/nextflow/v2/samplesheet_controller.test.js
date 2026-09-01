@@ -50,6 +50,8 @@ const createSampleAttributes = (samples) => {
             sample: `SAMPLE-PUID-${n}`,
             fastq_1: `gid://irida/Attachment/sample-${n}-fastq-1`,
             fastq_2: `gid://irida/Attachment/sample-${n}-fastq-2`,
+            metadata_1: "",
+            sample_name: `SAMPLE NAME ${n}`,
           },
         },
       ]),
@@ -89,6 +91,8 @@ const assertTableData = (allSamples, expectedSamples) => {
 
   const expectedRows = expectedSamples.map((n) => [
     `SAMPLE-PUID-${n}`,
+    `SAMPLE NAME ${n}`,
+    `sample-${n}-id_metadata_1`,
     `sample_${n}_fastq_1.fastq.gz`,
     `sample_${n}_fastq_2.fastq.gz`,
   ]);
@@ -101,6 +105,8 @@ const assertTableData = (allSamples, expectedSamples) => {
     .filter((n) => !expectedSamples.includes(n))
     .forEach((n) => {
       expect(displayedValues).not.toContain(`SAMPLE-PUID-${n}`);
+      expect(displayedValues).not.toContain(`SAMPLE NAME ${n}`);
+      expect(displayedValues).not.toContain(`sample-${n}-id_metadata_1`);
       expect(displayedValues).not.toContain(`sample_${n}_fastq_1.fastq.gz`);
       expect(displayedValues).not.toContain(`sample_${n}_fastq_2.fastq.gz`);
     });
@@ -210,10 +216,10 @@ function renderFixture() {
       <div id="samplesheet_message" data-nextflow--v2--samplesheet-target="samplesheetMessagesContainer"></div>
 
       <div id="samplesheet">
-  <div
-    class="hidden"
-    data-nextflow--v2--samplesheet-target="samplesheetProperties"
-    data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+\\\\.f(ast)?q(\\\\.gz)?$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have the extension: '.fq', '.fastq', '.fq.gz' or '.fastq.gz'&quot;,&quot;anyOf&quot;:[{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+\\\\.f(ast)?q(\\\\.gz)?$&quot;},{&quot;type&quot;:&quot;string&quot;,&quot;maxLength&quot;:0}],&quot;required&quot;:false,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;pattern&quot;:&quot;^\\\\S+\\\\.f(ast)?q(\\\\.gz)?$&quot;,&quot;autopopulate&quot;:true}}"
+ <div
+  class="hidden"
+  data-nextflow--v2--samplesheet-target="samplesheetProperties"
+  data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;irida_id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces.&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;sample_name&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;errorMessage&quot;:&quot;Sample name is optional, if provided will replace sample for filenames and outputs&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;sample_name_cell&quot;,&quot;pattern&quot;:null},&quot;metadata_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;metadata_1&quot;],&quot;errorMessage&quot;:&quot;Metadata associated with the sample (metadata_1).&quot;,&quot;default&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;^[^\\\\n\\\\t\\\&quot;]+$&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;metadata_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true}}"
   ></div>
         <turbo-frame id="sample_attributes">
         </turbo-frame>
@@ -273,14 +279,49 @@ function renderFixture() {
                   <th>
                     <div>
                       sample
-                      <span>(Required)</span>
+                      <span>
+                        (Required)
+                      </span>
                     </div>
                   </th>
 
                   <th>
                     <div>
+                      sample_name
+                    </div>
+                  </th>
+
+                  <th>
+                    <label for="field-metadata_1">metadata_1</label>
+
+                    <select
+                      name="field"
+                      id="field-metadata_1"
+                      data-action="change-&gt;nextflow--v2--samplesheet#handleMetadataSelection"
+                      data-metadata-header="metadata_1"
+                    >
+                      <option value="" label=" "></option>
+                      <option selected="selected" value="metadata_1">metadata_1 (default)</option>
+                      <option value="WGS_id">WGS_id</option>
+                      <option value="age">age</option>
+                      <option value="country">country</option>
+                      <option value="earliest_date">earliest_date</option>
+                      <option value="food">food</option>
+                      <option value="gender">gender</option>
+                      <option value="insdc_accession">insdc_accession</option>
+                      <option value="ncbi_accession">ncbi_accession</option>
+                      <option value="onset">onset</option>
+                      <option value="patient_age">patient_age</option>
+                      <option value="patient_sex">patient_sex</option>
+                    </select>
+                  </th>
+
+                  <th>
+                    <div>
                       fastq_1
-                      <span>(Required)</span>
+                      <span>
+                        (Required)
+                      </span>
                     </div>
                   </th>
 
@@ -841,6 +882,8 @@ describe("nextflow v2 samplesheet controller", () => {
               sample: `SAMPLE-PUID-${n}`,
               fastq_1: "",
               fastq_2: "",
+              metadata_1: "",
+              sample_name: `SAMPLE NAME ${n}`,
             },
           },
         ]),
@@ -952,6 +995,8 @@ describe("nextflow v2 samplesheet controller", () => {
               sample: `SAMPLE-PUID-${n}`,
               fastq_1: "",
               fastq_2: "",
+              metadata_1: "",
+              sample_name: `SAMPLE NAME ${n}`,
             },
           },
         ]),
