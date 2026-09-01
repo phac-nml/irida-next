@@ -5,64 +5,60 @@
 ) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
 
-  <%= dialog.with_content do %>
-    <div class="space-y-6">
-      <div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
-        <dl class="space-y-3">
-          <div class="flex justify-between">
-            <dt class="font-semibold text-gray-700"><%= t(".name") %></dt>
+  <div class="space-y-6">
+    <div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+      <dl class="space-y-3">
+        <div class="flex justify-between">
+          <dt class="font-semibold text-gray-700"><%= t(".name") %></dt>
 
-            <dd class="text-gray-900">
-              <%= automated_workflow_execution.name.presence || automated_workflow_execution.id %>
-            </dd>
-          </div>
+          <dd class="text-gray-900">
+            <%= automated_workflow_execution.name.presence || automated_workflow_execution.id %>
+          </dd>
+        </div>
 
-          <div class="flex justify-between">
-            <dt class="font-semibold text-gray-700"><%= t(".version") %></dt>
-            <dd class="text-gray-900"><%= automated_workflow_execution.metadata["workflow_version"] %></dd>
-          </div>
-        </dl>
-      </div>
-
-      <div>
-        <h3 class="mb-4 text-sm font-semibold text-gray-900"><%= t(".search_form_title") %></h3>
-
-        <%= form_with model: query, html: { role: "search" }, scope: :q, url: launch_namespace_project_automated_workflow_execution_path(
-          @project.parent,
-          @project,
-          automated_workflow_execution
-        ), method: :post, data: {
-          turbo_action: 'replace',
-          controller: "form--json-submission",
-          "form--json-submission-target": "form",
-        }, local: true do |f| %>
-          <%= hidden_field_tag :automated_workflow_execution_id, automated_workflow_execution.id %>
-
-          <%= render AdvancedSearchComponent.new(
-            form: f,
-            search: query,
-            fields: advanced_search_fields,
-            open: query.errors.any?,
-            status: query.advanced_query?,
-          ) %>
-
-          <div class="mt-6 flex gap-3">
-            <%= link_to t("common.actions.cancel"),
-              namespace_project_automated_workflow_executions_path(
-                @project.parent,
-                @project
-              ),
-              data: {
-                turbo_stream: true,
-              },
-              method: :get,
-              class: "px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50" %>
-
-            <%= f.submit t("common.actions.trigger"),
-              class: "px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" %>
-          </div>
-        <% end %>
-      </div>
+        <div class="flex justify-between">
+          <dt class="font-semibold text-gray-700"><%= t(".version") %></dt>
+          <dd class="text-gray-900"><%= automated_workflow_execution.metadata["workflow_version"] %></dd>
+        </div>
+      </dl>
     </div>
-  <% end %>
+
+    <div>
+      <h3 class="mb-4 text-sm font-semibold text-gray-900"><%= t(".search_form_title") %></h3>
+
+      <%= form_with model: query, html: { role: "search" }, scope: :q, url: launch_namespace_project_automated_workflow_execution_path(
+        @project.parent,
+        @project,
+        automated_workflow_execution
+      ), method: :post, data: {
+        turbo_action: 'replace',
+        controller: "form--json-submission",
+        "form--json-submission-target": "form",
+      }, local: true do |f| %>
+        <%= render AdvancedSearchComponent.new(
+          form: f,
+          search: query,
+          fields: advanced_search_fields,
+          open: query.errors.any?,
+          status: query.advanced_query?,
+        ) %>
+
+        <div class="mt-6 flex gap-3">
+          <%= link_to t("common.actions.cancel"),
+            namespace_project_automated_workflow_executions_path(
+              @project.parent,
+              @project
+            ),
+            data: {
+              turbo_stream: true,
+            },
+            method: :get,
+            class: "px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50" %>
+
+          <%= f.submit t("common.actions.trigger"),
+            class: "px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 <% end %>
