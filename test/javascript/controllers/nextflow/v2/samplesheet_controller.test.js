@@ -1132,7 +1132,7 @@ describe("nextflow v2 samplesheet controller", () => {
     );
     const metadataPayload = {};
 
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 2; i <= 10; i++) {
       const sampleId = `sample-${i}-id`;
 
       metadataPayload[sampleId] = {
@@ -1157,27 +1157,46 @@ describe("nextflow v2 samplesheet controller", () => {
       ></div>`,
     );
 
-    await Promise.resolve(); // await DOM to process and render changes
+    await Promise.resolve();
+
+    // also test manually inputting into metadata input
+    const sample1MetadataInput = document.getElementById(
+      "sample-1-id_metadata_1_input",
+    );
+
+    sample1MetadataInput.value = "manual value 1";
+
+    sample1MetadataInput.dispatchEvent(
+      new Event("change", {
+        bubbles: true,
+      }),
+    );
 
     for (let i = 1; i <= 5; i++) {
-      // get each specific row determined by PUID and verify the corresponding metadata value is correct
-      const sampleRow = Array.from(document.querySelectorAll("tr")).find((row) =>
-        row.textContent?.includes(`SAMPLE-PUID-${i}`),
+      const sampleRow = Array.from(document.querySelectorAll("tr")).find(
+        (row) => row.textContent?.includes(`SAMPLE-PUID-${i}`),
       );
 
       expect(sampleRow).toBeTruthy();
-
-      expect(sampleRow.querySelector('[id$="_metadata_1"]')).toHaveTextContent(
-        `metadata-value-${i}`,
-      );
+      // specific case for sample-1
+      if (i === 1) {
+        expect(
+          sampleRow.querySelector('[id$="_metadata_1_input"]'),
+        ).toHaveValue("manual value 1");
+      } else {
+        // get each specific row determined by PUID and verify the corresponding metadata value is correct
+        expect(
+          sampleRow.querySelector('[id$="_metadata_1"]'),
+        ).toHaveTextContent(`metadata-value-${i}`);
+      }
     }
 
     getNextBtn().click();
 
     for (let i = 6; i <= 10; i++) {
       // verify samples that were not on the samplesheet when metadata payload was parsed still have updated values
-      const sampleRow = Array.from(document.querySelectorAll("tr")).find((row) =>
-        row.textContent?.includes(`SAMPLE-PUID-${i}`),
+      const sampleRow = Array.from(document.querySelectorAll("tr")).find(
+        (row) => row.textContent?.includes(`SAMPLE-PUID-${i}`),
       );
 
       expect(sampleRow).toBeTruthy();

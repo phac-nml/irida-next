@@ -558,8 +558,6 @@ export default class extends Controller {
     fileLink.id = linkId;
     fileLink.textContent = filename;
     // Append to cell
-    console.log(cell.id);
-    console.log(this.#fileAttributes);
     cell.appendChild(fileContent);
   }
 
@@ -1083,6 +1081,6 @@ export default class extends Controller {
       this.#updateFileData(files);
     }
 
-    // this.dataPayloadTarget.remove();
+    this.dataPayloadTarget.remove();
   }
 }
