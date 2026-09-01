@@ -1,0 +1,56 @@
+<div class="space-y-4">
+  <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+    <%= t("components.advanced_search_component.v1.description") %>
+  </p>
+
+  <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+    <% if Flipper.enabled?(:advanced_search_metadata_operators) %>
+      <%= t("components.advanced_search_component.v1.rules.metadata_operators") %>
+    <% else %>
+      <%= t("components.advanced_search_component.v1.rules.standard_operators") %>
+    <% end %>
+  </p>
+
+  <%= helpers.form_error_summary(@form) %>
+
+  <div class="mb-4"><%= render partial: "shared/form/required_field_legend" %></div>
+
+  <div class="space-y-4" data-advanced-search--v1-target="searchGroupsContainer"></div>
+
+  <div class="flex justify-end space-x-2">
+    <%= render Viral::ButtonComponent.new(data: { action: "advanced-search--v1#addGroup" }) do %>
+      <%= t("components.advanced_search_component.v1.add_group_button") %>
+    <% end %>
+  </div>
+
+  <template data-advanced-search--v1-target="searchGroupsTemplate">
+    <% @search.groups.each_with_index do |group, group_index| %>
+      <%= render AdvancedSearch::V1::GroupComponent.new(
+        form: @form,
+        group: group,
+        group_index: group_index,
+        group_number: group_index + 1,
+        show_remove_group_button: @search.groups.count > 1,
+        fields: @fields,
+        operations: @operations,
+      ) %>
+    <% end %>
+  </template>
+</div>
+
+<template data-advanced-search--v1-target="listValueTemplate">
+  <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>
+    <% condition = @search_condition_class.new(field: "__FIELD_PLACEHOLDER__", operator: "in") %>
+
+    <%= group_form.fields_for :conditions, condition, child_index: "CONDITION_INDEX_PLACEHOLDER" do |conditions_form| %>
+      <%= render AdvancedSearch::V1::ValueComponent.new(
+        conditions_form: conditions_form,
+        group_index: "GROUP_INDEX_PLACEHOLDER",
+        condition: condition,
+        condition_index: "CONDITION_INDEX_PLACEHOLDER",
+      ) %>
+    <% end %>
+  <% end %>
+</template>
+
+<template data-advanced-search--v1-target="listSelectValueTemplate"></template>

@@ -40,12 +40,10 @@
         controller: "form--json-submission",
         "form--json-submission-target": "form",
       }, local: true do |f| %>
-        <%= render AdvancedSearchComponent.new(
+        <%= render AdvancedSearchFormComponent.new(
           form: f,
           search: query,
           fields: advanced_search_fields,
-          open: query.errors.any?,
-          status: query.advanced_query?,
         ) %>
 
         <div class="mt-6 flex gap-3">
