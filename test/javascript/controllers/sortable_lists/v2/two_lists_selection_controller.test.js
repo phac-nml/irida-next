@@ -32,7 +32,11 @@ function renderFixture({
   available = [listItem("Alpha"), listItem("Beta")],
   selected = [listItem("One"), listItem("Two")],
   withTemplateSelector = true,
+  withListTitles = true,
 } = {}) {
+  const availableTitle = withListTitles ? 'data-title="Available"' : "";
+  const selectedTitle = withListTitles ? 'data-title="Selected"' : "";
+
   document.body.innerHTML = `
     <div
       data-controller="sortable-lists--v2--two-lists-selection"
@@ -53,8 +57,8 @@ function renderFixture({
       }
       <ul
         id="available-list"
-        data-title="Available"
-        aria-required="false"
+        ${availableTitle}
+        data-required="false"
         data-action="change->sortable-lists--v2--two-lists-selection#handleSelectionChange"
       >
         ${available.join("")}
@@ -67,8 +71,8 @@ function renderFixture({
 
       <ul
         id="selected-list"
-        data-title="Selected"
-        aria-required="true"
+        ${selectedTitle}
+        data-required="true"
         data-action="change->sortable-lists--v2--two-lists-selection#handleSelectionChange"
       >
         ${selected.join("")}
@@ -128,6 +132,15 @@ function check(listId, value) {
   checkbox.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
+function uncheck(listId, value) {
+  const checkbox = Array.from(
+    document.querySelectorAll(`#${listId} input[type="checkbox"]`),
+  ).find((item) => item.value === value);
+
+  checkbox.checked = false;
+  checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
 async function startController() {
   const application = Application.start();
   application.register(
@@ -149,6 +162,14 @@ function getController(application) {
   );
 }
 
+function expectAriaDisabled(element) {
+  expect(element).toHaveAttribute("aria-disabled", "true");
+}
+
+function expectAriaEnabled(element) {
+  expect(element).toHaveAttribute("aria-disabled", "false");
+}
+
 describe("sortable lists v2 two-lists selection controller", () => {
   let application;
 
@@ -164,26 +185,26 @@ describe("sortable lists v2 two-lists selection controller", () => {
     renderFixture();
     application = await startController();
 
-    expect(
+    expectAriaDisabled(
       document.querySelector(
         '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
       ),
-    ).toBeDisabled();
-    expect(
+    );
+    expectAriaDisabled(
       document.querySelector(
         '[data-sortable-lists--v2--two-lists-selection-target="removeButton"]',
       ),
-    ).toBeDisabled();
-    expect(
+    );
+    expectAriaDisabled(
       document.querySelector(
         '[data-sortable-lists--v2--two-lists-selection-target="upButton"]',
       ),
-    ).toBeDisabled();
-    expect(
+    );
+    expectAriaDisabled(
       document.querySelector(
         '[data-sortable-lists--v2--two-lists-selection-target="downButton"]',
       ),
-    ).toBeDisabled();
+    );
     expect(
       document.querySelector(
         '[data-sortable-lists--v2--two-lists-selection-target="submitBtn"]',
@@ -317,7 +338,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
 
     availableCheckbox.focus();
     await user.keyboard("[Space]");
-    expect(addButton).not.toBeDisabled();
+    expectAriaEnabled(addButton);
 
     addButton.focus();
     await user.keyboard("[Enter]");
@@ -328,10 +349,220 @@ describe("sortable lists v2 two-lists selection controller", () => {
     );
     movedCheckbox.focus();
     await user.keyboard("[Space]");
-    expect(removeButton).not.toBeDisabled();
+    expectAriaEnabled(removeButton);
 
     removeButton.focus();
     await user.keyboard("[Space]");
     expect(checkboxValues("available-list")).toEqual(["Beta", "Alpha"]);
+  });
+
+  it("moves focus to the transferred item after a move", async () => {
+    renderFixture({ withTemplateSelector: false });
+    application = await startController();
+
+    check("available-list", "Alpha");
+    document
+      .querySelector(
+        '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
+      )
+      .click();
+
+    const movedCheckbox = document.querySelector(
+      '#selected-list input[type="checkbox"][value="Alpha"]',
+    );
+
+    expect(document.activeElement).toBe(movedCheckbox);
+  });
+
+  it("moves focus to the reordered item when the control becomes unavailable", async () => {
+    renderFixture({
+      selected: [listItem("One"), listItem("Two"), listItem("Three")],
+      withTemplateSelector: false,
+    });
+    application = await startController();
+
+    check("selected-list", "Two");
+    const upButton = document.querySelector(
+      '[data-sortable-lists--v2--two-lists-selection-target="upButton"]',
+    );
+
+    upButton.click();
+
+    expect(checkboxValues("selected-list")).toEqual(["Two", "One", "Three"]);
+    expectAriaDisabled(upButton);
+
+    const movedCheckbox = document.querySelector(
+      '#selected-list input[type="checkbox"][value="Two"]',
+    );
+
+    expect(document.activeElement).toBe(movedCheckbox);
+  });
+
+  it("restores original values when the none template is selected", async () => {
+    renderFixture();
+    application = await startController();
+
+    const selector = document.querySelector(
+      '[data-sortable-lists--v2--two-lists-selection-target="templateSelector"]',
+    );
+
+    selector.value = "template-1";
+    selector.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(checkboxValues("selected-list")).toEqual(["Beta", "Template only"]);
+
+    selector.value = "none";
+    selector.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(checkboxValues("available-list")).toEqual([
+      "Alpha",
+      "Beta",
+      "One",
+      "Two",
+    ]);
+    expect(checkboxValues("selected-list")).toEqual([]);
+    expect(selector.value).toBe("none");
+  });
+
+  it("does not reorder unless exactly one interior selected value is checked", async () => {
+    renderFixture({
+      selected: [listItem("One"), listItem("Two"), listItem("Three")],
+    });
+    application = await startController();
+
+    const upButton = document.querySelector(
+      '[data-sortable-lists--v2--two-lists-selection-target="upButton"]',
+    );
+    const downButton = document.querySelector(
+      '[data-sortable-lists--v2--two-lists-selection-target="downButton"]',
+    );
+    const controller = getController(application);
+
+    controller.moveSelection({ target: upButton });
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two", "Three"]);
+    expectAriaDisabled(upButton);
+    expectAriaDisabled(downButton);
+
+    check("selected-list", "One");
+    check("selected-list", "Three");
+    expectAriaDisabled(upButton);
+    expectAriaDisabled(downButton);
+    controller.moveSelection({ target: upButton });
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two", "Three"]);
+  });
+
+  it("does not move the first selected value up or the last selected value down", async () => {
+    renderFixture({
+      selected: [listItem("One"), listItem("Two"), listItem("Three")],
+    });
+    application = await startController();
+
+    const upButton = document.querySelector(
+      '[data-sortable-lists--v2--two-lists-selection-target="upButton"]',
+    );
+    const downButton = document.querySelector(
+      '[data-sortable-lists--v2--two-lists-selection-target="downButton"]',
+    );
+    const controller = getController(application);
+
+    check("selected-list", "One");
+    expectAriaDisabled(upButton);
+    expectAriaEnabled(downButton);
+    controller.moveSelection({ target: upButton });
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two", "Three"]);
+
+    uncheck("selected-list", "One");
+    check("selected-list", "Three");
+    expectAriaEnabled(upButton);
+    expectAriaDisabled(downButton);
+    controller.moveSelection({ target: downButton });
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two", "Three"]);
+  });
+
+  it("does not move values when add or remove is invoked with no checked items", async () => {
+    renderFixture();
+    application = await startController();
+
+    const controller = getController(application);
+    controller.addSelectionByAddButton();
+    controller.removeSelectionByRemoveButton();
+
+    expect(checkboxValues("available-list")).toEqual(["Alpha", "Beta"]);
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two"]);
+  });
+
+  it("ignores metadata listing updates that are not an array", async () => {
+    renderFixture({ withTemplateSelector: false });
+    application = await startController();
+
+    const controller = getController(application);
+    controller.updateMetadataListing({ detail: { content: {} } });
+    controller.updateMetadataListing({
+      detail: { content: { metadata: "Beta" } },
+    });
+
+    expect(checkboxValues("available-list")).toEqual(["Alpha", "Beta"]);
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two"]);
+  });
+
+  it("disables required submit and resets the template when the selected list is empty", async () => {
+    renderFixture({ selected: [] });
+    application = await startController();
+
+    expect(
+      document.querySelector(
+        '[data-sortable-lists--v2--two-lists-selection-target="submitBtn"]',
+      ),
+    ).toBeDisabled();
+    expect(
+      document.querySelector(
+        '[data-sortable-lists--v2--two-lists-selection-target="templateSelector"]',
+      ).value,
+    ).toBe("none");
+  });
+
+  it("announces when multiple checked values move between lists", async () => {
+    renderFixture();
+    application = await startController();
+
+    check("available-list", "Alpha");
+    check("available-list", "Beta");
+    document
+      .querySelector(
+        '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
+      )
+      .click();
+
+    expect(checkboxValues("available-list")).toEqual([]);
+    expect(checkboxValues("selected-list")).toEqual([
+      "One",
+      "Two",
+      "Alpha",
+      "Beta",
+    ]);
+    expect(
+      document.querySelector(
+        '[data-sortable-lists--v2--two-lists-selection-target="ariaLiveUpdate"]',
+      ),
+    ).toHaveTextContent(
+      "The following items were moved to Selected: Alpha and Beta",
+    );
+  });
+
+  it("announces moves without list titles when data-title is missing", async () => {
+    renderFixture({ withListTitles: false, withTemplateSelector: false });
+    application = await startController();
+
+    check("available-list", "Alpha");
+    document
+      .querySelector(
+        '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
+      )
+      .click();
+
+    expect(
+      document.querySelector(
+        '[data-sortable-lists--v2--two-lists-selection-target="ariaLiveUpdate"]',
+      ),
+    ).toHaveTextContent("The following item was moved to : Alpha");
   });
 });
