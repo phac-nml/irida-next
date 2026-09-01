@@ -1036,4 +1036,155 @@ describe("nextflow v2 samplesheet controller", () => {
     );
     expect(updateSamplesCheckbox.disabled).toBe(true);
   });
+
+  it("samplesheet updates file selection upon receiving payload, and retains the data during pagination", async () => {
+    const allSamples = range(1, 11);
+    setupStandardSamplesheetAttributes(allSamples);
+    application = await startController();
+
+    assertTableData(allSamples, range(1, 5));
+    const samplesheetPayloadContainer = document.getElementById(
+      "samplesheet-payload-container",
+    );
+    const filesPayload = JSON.stringify({
+      files: [
+        {
+          filename: "new-fastq-1.fastq.gz",
+          global_id: "new-fastq-1-global-id",
+          id: "new-fastq-1-id",
+          property: "fastq_1",
+        },
+        {
+          filename: "new-fastq-2.fastq.gz",
+          global_id: "new-fastq-2-global-id",
+          id: "new-fastq-2-id",
+          property: "fastq_2",
+        },
+      ],
+      attachable_id: "sample-1-id",
+    });
+    const escapedFilesPayload = filesPayload.replaceAll('"', "&quot;");
+    samplesheetPayloadContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div
+        hidden
+        data-files="${escapedFilesPayload}"
+        data-nextflow--v2--samplesheet-target="dataPayload"
+        data-payload-type="files"
+      ></div>`,
+    );
+
+    await Promise.resolve(); // await DOM to process and render changes
+
+    // specifically grab sample-1's row so we're asserting the correct file cells
+    let sample1Row = Array.from(document.querySelectorAll("tr")).find((row) =>
+      row.textContent?.includes("SAMPLE-PUID-1"),
+    );
+
+    expect(sample1Row).toBeTruthy();
+
+    expect(sample1Row.querySelector('[id$="_fastq_1"]')).toHaveTextContent(
+      "new-fastq-1.fastq.gz",
+    );
+
+    expect(sample1Row.querySelector('[id$="_fastq_2"]')).toHaveTextContent(
+      "new-fastq-2.fastq.gz",
+    );
+
+    getNextBtn().click();
+    assertTableData(allSamples, range(6, 10));
+
+    // file names don't appear on new page
+    expect(
+      document.querySelector('[data-test-selector="samplesheet-table"]'),
+    ).not.toHaveTextContent("new-fastq-1.fastq.gz");
+
+    expect(
+      document.querySelector('[data-test-selector="samplesheet-table"]'),
+    ).not.toHaveTextContent("new-fastq-2.fastq.gz");
+
+    getPreviousBtn().click();
+
+    // re-assert that sample-1 contains new file names
+    sample1Row = Array.from(document.querySelectorAll("tr")).find((row) =>
+      row.textContent?.includes("SAMPLE-PUID-1"),
+    );
+
+    expect(sample1Row).toBeTruthy();
+
+    expect(sample1Row.querySelector('[id$="_fastq_1"]')).toHaveTextContent(
+      "new-fastq-1.fastq.gz",
+    );
+
+    expect(sample1Row.querySelector('[id$="_fastq_2"]')).toHaveTextContent(
+      "new-fastq-2.fastq.gz",
+    );
+  });
+
+  it("samplesheet updates metadata upon receiving payload, and retains the data during pagination", async () => {
+    const allSamples = range(1, 10);
+    setupStandardSamplesheetAttributes(allSamples);
+    application = await startController();
+
+    assertTableData(allSamples, range(1, 5));
+    const samplesheetPayloadContainer = document.getElementById(
+      "samplesheet-payload-container",
+    );
+    const metadataPayload = {};
+
+    for (let i = 1; i <= 10; i++) {
+      const sampleId = `sample-${i}-id`;
+
+      metadataPayload[sampleId] = {
+        sample_id: sampleId,
+        samplesheet_params: {
+          metadata_1: `metadata-value-${i}`,
+        },
+      };
+    }
+
+    const escapedMetadataPayload = JSON.stringify(metadataPayload).replaceAll(
+      '"',
+      "&quot;",
+    );
+    samplesheetPayloadContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div
+        data-metadata='${escapedMetadataPayload}'
+        data-headers='["metadata_1"]'
+        data-nextflow--v2--samplesheet-target="dataPayload"
+        data-payload-type="metadata"
+      ></div>`,
+    );
+
+    await Promise.resolve(); // await DOM to process and render changes
+
+    for (let i = 1; i <= 5; i++) {
+      // get each specific row determined by PUID and verify the corresponding metadata value is correct
+      const sampleRow = Array.from(document.querySelectorAll("tr")).find((row) =>
+        row.textContent?.includes(`SAMPLE-PUID-${i}`),
+      );
+
+      expect(sampleRow).toBeTruthy();
+
+      expect(sampleRow.querySelector('[id$="_metadata_1"]')).toHaveTextContent(
+        `metadata-value-${i}`,
+      );
+    }
+
+    getNextBtn().click();
+
+    for (let i = 6; i <= 10; i++) {
+      // verify samples that were not on the samplesheet when metadata payload was parsed still have updated values
+      const sampleRow = Array.from(document.querySelectorAll("tr")).find((row) =>
+        row.textContent?.includes(`SAMPLE-PUID-${i}`),
+      );
+
+      expect(sampleRow).toBeTruthy();
+
+      expect(sampleRow.querySelector('[id$="_metadata_1"]')).toHaveTextContent(
+        `metadata-value-${i}`,
+      );
+    }
+  });
 });
