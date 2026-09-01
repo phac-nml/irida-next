@@ -140,7 +140,7 @@ module Projects
               assert_selector 'td:nth-child(2)', text: attachment.file.filename.to_s
               assert_selector 'td:nth-child(3)', text: attachment.metadata['format']
               assert_selector 'td:nth-child(4)', text: number_to_human_size(attachment.file.byte_size)
-              assert_selector 'td:last-child', text: attachment.created_at.strftime('%B %-d, %Y')
+              assert_selector 'td:last-child', text: attachment.created_at.strftime('%B %d, %Y')
             end
           end
           click_on I18n.t('common.actions.delete')
