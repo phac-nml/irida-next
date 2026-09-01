@@ -129,7 +129,7 @@ module Projects
       click_on I18n.t('projects.metadata_templates.index.new_button')
 
       assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
-      assert_selector "[data-controller='sortable-lists--v2--two-lists-selection']"
+      assert_selector "[data-controller='sortable-list-v2']"
 
       project.namespace.metadata_fields.each do |field|
         check field

@@ -20,7 +20,7 @@
     data-required="<%= aria_required %>"
     data-title="<%= title %>"
     <% if interactive %>
-      data-action="change->sortable-lists--v2--two-lists-selection#handleSelectionChange"
+      data-action="change->sortable-list-v2#handleSelectionChange"
     <% end %>
   >
     <%= render SortableLists::V2::ListItemComponent.with_collection(list_items, list_id: id, interactive:) %>
@@ -41,8 +41,8 @@
           class="button button-default"
           aria-disabled="true"
           aria-controls="<%= add_remove_controls %>"
-          data-action="click->sortable-lists--v2--two-lists-selection#addSelectionByAddButton"
-          data-sortable-lists--v2--two-lists-selection-target="addButton"
+          data-action="click->sortable-list-v2#addSelectionByAddButton"
+          data-sortable-list-v2-target="addButton"
         >
           <%= t('components.sortable_lists.v2.list_component.add') %>
         </button>
@@ -54,8 +54,8 @@
           class="button button-default"
           aria-disabled="true"
           aria-controls="<%= add_remove_controls %>"
-          data-action="click->sortable-lists--v2--two-lists-selection#removeSelectionByRemoveButton"
-          data-sortable-lists--v2--two-lists-selection-target="removeButton"
+          data-action="click->sortable-list-v2#removeSelectionByRemoveButton"
+          data-sortable-list-v2-target="removeButton"
         >
           <%= t('common.actions.remove') %>
         </button>
@@ -64,8 +64,8 @@
           class="button button-default"
           aria-disabled="true"
           aria-controls="<%= id %>"
-          data-action="click->sortable-lists--v2--two-lists-selection#moveSelection"
-          data-sortable-lists--v2--two-lists-selection-target="upButton"
+          data-action="click->sortable-list-v2#moveSelection"
+          data-sortable-list-v2-target="upButton"
         >
           <%= t('components.sortable_lists.v2.list_component.up') %>
         </button>
@@ -74,8 +74,8 @@
           class="button button-default"
           aria-disabled="true"
           aria-controls="<%= id %>"
-          data-action="click->sortable-lists--v2--two-lists-selection#moveSelection"
-          data-sortable-lists--v2--two-lists-selection-target="downButton"
+          data-action="click->sortable-list-v2#moveSelection"
+          data-sortable-list-v2-target="downButton"
         >
           <%= t('components.sortable_lists.v2.list_component.down') %>
         </button>

@@ -28,8 +28,8 @@
       options_for_select(template_options),
       id: template_selector_id,
       data: {
-        action: 'sortable-lists--v2--two-lists-selection#setTemplate',
-        'sortable-lists--v2--two-lists-selection-target': 'templateSelector'
+        action: 'sortable-list-v2#setTemplate',
+        'sortable-list-v2-target': 'templateSelector'
       },
       aria: { controls: list_ids },
       class: 'block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400'
@@ -54,10 +54,10 @@
     class="sr-only"
     aria-live="polite"
     role="status"
-    data-sortable-lists--v2--two-lists-selection-target="ariaLiveUpdate"
+    data-sortable-list-v2-target="ariaLiveUpdate"
     data-translations="<%= aria_live_translations %>"
   ></div>
-  <template data-sortable-lists--v2--two-lists-selection-target="itemTemplate">
+  <template data-sortable-list-v2-target="itemTemplate">
     <%= render SortableLists::V2::ListItemComponent.new(list_item: '', list_id: 'template-list', interactive: true) %>
   </template>
 <% end %>

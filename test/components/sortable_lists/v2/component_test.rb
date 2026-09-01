@@ -120,7 +120,7 @@ module SortableLists
         assert_no_selector 'select#template-selector'
         assert_no_selector 'input[type="checkbox"]'
         assert_selector 'ul#list span', text: 'One'
-        assert_no_selector "[data-sortable-lists--v2--two-lists-selection-target='ariaLiveUpdate']"
+        assert_no_selector "[data-sortable-list-v2-target='ariaLiveUpdate']"
       end
 
       test 'renders title and description when provided' do
@@ -172,7 +172,7 @@ module SortableLists
 
         assert_no_selector 'ul#available-list input[type="checkbox"]'
         assert_selector 'ul#available-list span', text: 'Alpha'
-        assert_no_selector '[data-sortable-lists--v2--two-lists-selection-target="addButton"]'
+        assert_no_selector '[data-sortable-list-v2-target="addButton"]'
         assert_selector 'ul#selected-list input[type="checkbox"]', count: 1
         assert_selector 'button', text: I18n.t('common.actions.remove')
       end

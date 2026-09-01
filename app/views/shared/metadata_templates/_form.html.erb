@@ -1,5 +1,5 @@
 <% sortable_lists_v2_enabled = Flipper.enabled?(:v2_sortable_lists, Current.user) %>
-<% sortable_lists_controller = sortable_lists_v2_enabled ? 'sortable-lists--v2--two-lists-selection' : 'sortable-lists--v1--two-lists-selection' %>
+<% sortable_lists_controller = sortable_lists_v2_enabled ? 'sortable-list-v2' : 'sortable-lists--v1--two-lists-selection' %>
 <% sortable_lists_version = sortable_lists_v2_enabled ? :v2 : :v1 %>
 <% sortable_lists_submit_action = "click->#{sortable_lists_controller}#constructParams" %>
 

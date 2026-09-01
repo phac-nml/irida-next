@@ -1,7 +1,7 @@
 import { Application } from "@hotwired/stimulus";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import SortableListsController from "../../../../../app/javascript/controllers/sortable_lists/v2/two_lists_selection_controller.js";
+import SortableListsController from "../../../app/javascript/controllers/sortable_list_v2_controller.js";
 
 const translations = JSON.stringify({
   move_down:
@@ -39,16 +39,16 @@ function renderFixture({
 
   document.body.innerHTML = `
     <div
-      data-controller="sortable-lists--v2--two-lists-selection"
-      data-sortable-lists--v2--two-lists-selection-selected-list-value="selected-list"
-      data-sortable-lists--v2--two-lists-selection-available-list-value="available-list"
-      data-sortable-lists--v2--two-lists-selection-field-name-value="fields[]"
+      data-controller="sortable-list-v2"
+      data-sortable-list-v2-selected-list-value="selected-list"
+      data-sortable-list-v2-available-list-value="available-list"
+      data-sortable-list-v2-field-name-value="fields[]"
     >
       ${
         withTemplateSelector
           ? `<select
-              data-sortable-lists--v2--two-lists-selection-target="templateSelector"
-              data-action="sortable-lists--v2--two-lists-selection#setTemplate"
+              data-sortable-list-v2-target="templateSelector"
+              data-action="sortable-list-v2#setTemplate"
             >
               <option value="none">None</option>
               <option value="template-1" data-fields='["Beta", "Template only"]'>Template 1</option>
@@ -59,50 +59,50 @@ function renderFixture({
         id="available-list"
         ${availableTitle}
         data-required="false"
-        data-action="change->sortable-lists--v2--two-lists-selection#handleSelectionChange"
+        data-action="change->sortable-list-v2#handleSelectionChange"
       >
         ${available.join("")}
       </ul>
       <button
         type="button"
-        data-sortable-lists--v2--two-lists-selection-target="addButton"
-        data-action="click->sortable-lists--v2--two-lists-selection#addSelectionByAddButton"
+        data-sortable-list-v2-target="addButton"
+        data-action="click->sortable-list-v2#addSelectionByAddButton"
       >Add</button>
 
       <ul
         id="selected-list"
         ${selectedTitle}
         data-required="true"
-        data-action="change->sortable-lists--v2--two-lists-selection#handleSelectionChange"
+        data-action="change->sortable-list-v2#handleSelectionChange"
       >
         ${selected.join("")}
       </ul>
       <button
         type="button"
-        data-sortable-lists--v2--two-lists-selection-target="removeButton"
-        data-action="click->sortable-lists--v2--two-lists-selection#removeSelectionByRemoveButton"
+        data-sortable-list-v2-target="removeButton"
+        data-action="click->sortable-list-v2#removeSelectionByRemoveButton"
       >Remove</button>
       <button
         type="button"
-        data-sortable-lists--v2--two-lists-selection-target="upButton"
-        data-action="click->sortable-lists--v2--two-lists-selection#moveSelection"
+        data-sortable-list-v2-target="upButton"
+        data-action="click->sortable-list-v2#moveSelection"
       >Up</button>
       <button
         type="button"
-        data-sortable-lists--v2--two-lists-selection-target="downButton"
-        data-action="click->sortable-lists--v2--two-lists-selection#moveSelection"
+        data-sortable-list-v2-target="downButton"
+        data-action="click->sortable-list-v2#moveSelection"
       >Down</button>
       <button
         type="submit"
-        data-sortable-lists--v2--two-lists-selection-target="submitBtn"
+        data-sortable-list-v2-target="submitBtn"
       >Submit</button>
-      <div data-sortable-lists--v2--two-lists-selection-target="field"></div>
+      <div data-sortable-list-v2-target="field"></div>
       <div
         aria-live="polite"
-        data-sortable-lists--v2--two-lists-selection-target="ariaLiveUpdate"
+        data-sortable-list-v2-target="ariaLiveUpdate"
         data-translations='${translations}'
       ></div>
-      <template data-sortable-lists--v2--two-lists-selection-target="itemTemplate">
+      <template data-sortable-list-v2-target="itemTemplate">
         <li class="border-b border-slate-200 px-4 py-2 last:border-b-0 dark:border-slate-600">
           <label class="flex cursor-pointer items-center gap-3 py-1 text-sm text-slate-900 dark:text-white">
             <input
@@ -143,22 +143,17 @@ function uncheck(listId, value) {
 
 async function startController() {
   const application = Application.start();
-  application.register(
-    "sortable-lists--v2--two-lists-selection",
-    SortableListsController,
-  );
+  application.register("sortable-list-v2", SortableListsController);
   await Promise.resolve();
   return application;
 }
 
 function getController(application) {
-  const root = document.querySelector(
-    '[data-controller="sortable-lists--v2--two-lists-selection"]',
-  );
+  const root = document.querySelector('[data-controller="sortable-list-v2"]');
 
   return application.getControllerForElementAndIdentifier(
     root,
-    "sortable-lists--v2--two-lists-selection",
+    "sortable-list-v2",
   );
 }
 
@@ -186,29 +181,19 @@ describe("sortable lists v2 two-lists selection controller", () => {
     application = await startController();
 
     expectAriaDisabled(
-      document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
-      ),
+      document.querySelector('[data-sortable-list-v2-target="addButton"]'),
     );
     expectAriaDisabled(
-      document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="removeButton"]',
-      ),
+      document.querySelector('[data-sortable-list-v2-target="removeButton"]'),
     );
     expectAriaDisabled(
-      document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="upButton"]',
-      ),
+      document.querySelector('[data-sortable-list-v2-target="upButton"]'),
     );
     expectAriaDisabled(
-      document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="downButton"]',
-      ),
+      document.querySelector('[data-sortable-list-v2-target="downButton"]'),
     );
     expect(
-      document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="submitBtn"]',
-      ),
+      document.querySelector('[data-sortable-list-v2-target="submitBtn"]'),
     ).not.toBeDisabled();
   });
 
@@ -218,17 +203,13 @@ describe("sortable lists v2 two-lists selection controller", () => {
 
     check("available-list", "Alpha");
     document
-      .querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
-      )
+      .querySelector('[data-sortable-list-v2-target="addButton"]')
       .click();
 
     expect(checkboxValues("available-list")).toEqual(["Beta"]);
     expect(checkboxValues("selected-list")).toEqual(["One", "Two", "Alpha"]);
     expect(
-      document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="ariaLiveUpdate"]',
-      ),
+      document.querySelector('[data-sortable-list-v2-target="ariaLiveUpdate"]'),
     ).toHaveTextContent("The following item was moved to Selected: Alpha");
   });
 
@@ -238,9 +219,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
 
     check("selected-list", "One");
     document
-      .querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="removeButton"]',
-      )
+      .querySelector('[data-sortable-list-v2-target="removeButton"]')
       .click();
 
     expect(checkboxValues("available-list")).toEqual(["Alpha", "Beta", "One"]);
@@ -255,10 +234,10 @@ describe("sortable lists v2 two-lists selection controller", () => {
 
     check("selected-list", "Two");
     const upButton = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="upButton"]',
+      '[data-sortable-list-v2-target="upButton"]',
     );
     const downButton = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="downButton"]',
+      '[data-sortable-list-v2-target="downButton"]',
     );
 
     upButton.click();
@@ -273,7 +252,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
     application = await startController();
 
     const selector = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="templateSelector"]',
+      '[data-sortable-list-v2-target="templateSelector"]',
     );
 
     selector.value = "template-1";
@@ -292,9 +271,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
 
     check("selected-list", "Template only");
     document
-      .querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="removeButton"]',
-      )
+      .querySelector('[data-sortable-list-v2-target="removeButton"]')
       .click();
 
     expect(selector.value).toBe("none");
@@ -312,7 +289,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
 
     const hiddenValues = Array.from(
       document.querySelectorAll(
-        '[data-sortable-lists--v2--two-lists-selection-target="field"] input[type="hidden"]',
+        '[data-sortable-list-v2-target="field"] input[type="hidden"]',
       ),
     ).map((input) => input.value);
 
@@ -330,10 +307,10 @@ describe("sortable lists v2 two-lists selection controller", () => {
       '#available-list input[type="checkbox"][value="Alpha"]',
     );
     const addButton = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
+      '[data-sortable-list-v2-target="addButton"]',
     );
     const removeButton = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="removeButton"]',
+      '[data-sortable-list-v2-target="removeButton"]',
     );
 
     availableCheckbox.focus();
@@ -362,9 +339,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
 
     check("available-list", "Alpha");
     document
-      .querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
-      )
+      .querySelector('[data-sortable-list-v2-target="addButton"]')
       .click();
 
     const movedCheckbox = document.querySelector(
@@ -383,7 +358,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
 
     check("selected-list", "Two");
     const upButton = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="upButton"]',
+      '[data-sortable-list-v2-target="upButton"]',
     );
 
     upButton.click();
@@ -403,7 +378,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
     application = await startController();
 
     const selector = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="templateSelector"]',
+      '[data-sortable-list-v2-target="templateSelector"]',
     );
 
     selector.value = "template-1";
@@ -430,10 +405,10 @@ describe("sortable lists v2 two-lists selection controller", () => {
     application = await startController();
 
     const upButton = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="upButton"]',
+      '[data-sortable-list-v2-target="upButton"]',
     );
     const downButton = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="downButton"]',
+      '[data-sortable-list-v2-target="downButton"]',
     );
     const controller = getController(application);
 
@@ -457,10 +432,10 @@ describe("sortable lists v2 two-lists selection controller", () => {
     application = await startController();
 
     const upButton = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="upButton"]',
+      '[data-sortable-list-v2-target="upButton"]',
     );
     const downButton = document.querySelector(
-      '[data-sortable-lists--v2--two-lists-selection-target="downButton"]',
+      '[data-sortable-list-v2-target="downButton"]',
     );
     const controller = getController(application);
 
@@ -509,13 +484,11 @@ describe("sortable lists v2 two-lists selection controller", () => {
     application = await startController();
 
     expect(
-      document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="submitBtn"]',
-      ),
+      document.querySelector('[data-sortable-list-v2-target="submitBtn"]'),
     ).toBeDisabled();
     expect(
       document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="templateSelector"]',
+        '[data-sortable-list-v2-target="templateSelector"]',
       ).value,
     ).toBe("none");
   });
@@ -527,9 +500,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
     check("available-list", "Alpha");
     check("available-list", "Beta");
     document
-      .querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
-      )
+      .querySelector('[data-sortable-list-v2-target="addButton"]')
       .click();
 
     expect(checkboxValues("available-list")).toEqual([]);
@@ -540,9 +511,7 @@ describe("sortable lists v2 two-lists selection controller", () => {
       "Beta",
     ]);
     expect(
-      document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="ariaLiveUpdate"]',
-      ),
+      document.querySelector('[data-sortable-list-v2-target="ariaLiveUpdate"]'),
     ).toHaveTextContent(
       "The following items were moved to Selected: Alpha and Beta",
     );
@@ -554,15 +523,11 @@ describe("sortable lists v2 two-lists selection controller", () => {
 
     check("available-list", "Alpha");
     document
-      .querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="addButton"]',
-      )
+      .querySelector('[data-sortable-list-v2-target="addButton"]')
       .click();
 
     expect(
-      document.querySelector(
-        '[data-sortable-lists--v2--two-lists-selection-target="ariaLiveUpdate"]',
-      ),
+      document.querySelector('[data-sortable-list-v2-target="ariaLiveUpdate"]'),
     ).toHaveTextContent("The following item was moved to : Alpha");
   });
 });
