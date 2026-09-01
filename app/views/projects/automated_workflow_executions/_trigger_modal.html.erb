@@ -31,6 +31,12 @@
     <div>
       <h3 class="mb-4 text-sm font-semibold text-gray-900"><%= t(".search_form_title") %></h3>
 
+      <% advanced_search_form = AdvancedSearchFormComponent.new(
+        form: nil,
+        search: query,
+        fields: advanced_search_fields,
+      ) %>
+
       <%= form_with model: query, html: { role: "search" }, scope: :q, url: launch_namespace_project_automated_workflow_execution_path(
         @project.parent,
         @project,
@@ -40,11 +46,23 @@
         controller: "form--json-submission",
         "form--json-submission-target": "form",
       }, local: true do |f| %>
-        <%= render AdvancedSearchFormComponent.new(
-          form: f,
-          search: query,
-          fields: advanced_search_fields,
-        ) %>
+        <%= tag.div(
+          id: "advanced-search",
+          data: {
+            controller: "advanced-search--v1",
+            "advanced-search--v1-has-errors-value": query.errors.any?,
+            "advanced-search--v1-list-input-outlet": ".list-input",
+            "advanced-search--v1-enum-fields-value": json_escape_data(advanced_search_fields.fetch(:enum_fields, {})),
+            "advanced-search--v1-enum-operations-value": json_escape_data(advanced_search_form.enum_operations),
+            "advanced-search--v1-operations-value": json_escape_data(advanced_search_form.operations),
+          },
+        ) do %>
+          <%= render AdvancedSearchFormComponent.new(
+            form: f,
+            search: query,
+            fields: advanced_search_fields,
+          ) %>
+        <% end %>
 
         <div class="mt-6 flex gap-3">
           <%= link_to t("common.actions.cancel"),
