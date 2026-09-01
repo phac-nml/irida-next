@@ -38,7 +38,12 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       end
 
       if Irida::Pipelines.instance.pipelines.any?
-        resources :automated_workflow_executions
+        resources :automated_workflow_executions do
+          member do
+            get :trigger
+            post :launch
+          end
+        end
 
         resources :workflow_executions, only: %i[index destroy show edit update] do
           member do

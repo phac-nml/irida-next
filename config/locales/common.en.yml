@@ -10,8 +10,12 @@ en:
       save: Save changes
       select: Select
       share: Share
+      trigger: Trigger
       update: Update
       upload: Upload
+    alerts:
+      error: Error
+      success: Success
     controls:
       close: Close
       confirm: Confirm

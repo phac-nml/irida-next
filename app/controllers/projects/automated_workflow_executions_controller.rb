@@ -4,10 +4,11 @@ module Projects
   # Controller actions for Automated Workflow Executions
   class AutomatedWorkflowExecutionsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include BreadcrumbNavigation
+    include Metadata
 
     before_action :namespace
     before_action :automated_workflow_executions, only: %i[index update]
-    before_action :automated_workflow_execution, only: %i[edit update destroy show]
+    before_action :automated_workflow_execution, only: %i[edit update destroy show trigger launch]
     before_action :available_automated_workflows, only: %i[new edit]
     before_action :current_page, only: %i[index show]
     before_action :page_title
@@ -112,6 +113,63 @@ module Projects
       end
     end
 
+    def trigger
+      authorize! @namespace, to: :submit_workflow?
+
+      @query = Sample::Query.new({ project_ids: [@project.id], request: })
+      advanced_search_fields(@project.namespace)
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok
+        end
+      end
+    end
+
+    def launch # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      authorize! @namespace, to: :submit_workflow?
+
+      @search_params = trigger_launch_params.merge({ project_ids: [@project.id] })
+      @query = Sample::Query.new(@search_params.merge({ request: }))
+
+      unless @query.valid?
+        respond_to do |format|
+          format.turbo_stream do
+            render 'trigger', status: :unprocessable_content
+          end
+        end
+        return
+      end
+
+      unless @query.advanced_query?
+        respond_to do |format|
+          format.turbo_stream do
+            render status: :unprocessable_content,
+                   locals: {
+                     type: 'alert',
+                     message: t('.error.no_search_params')
+                   }
+          end
+        end
+        return
+      end
+
+      samples = @query.results
+      launch_workflow_for_samples(samples)
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok,
+                 locals: {
+                   type: 'success',
+                   message: t('.success',
+                              workflow_name: @automated_workflow_execution.workflow.name,
+                              sample_count: samples.count)
+                 }
+        end
+      end
+    end
+
     private
 
     def current_page
@@ -122,6 +180,46 @@ module Projects
       params.expect(
         workflow_execution: [:name, :email_notification, :update_samples, { metadata: {}, workflow_params: {} }]
       )
+    end
+
+    def trigger_launch_params
+      params.expect(q: [:sort, :name_or_puid_cont, :groups_attributes, { groups_attributes: {} }])
+    end
+
+    def launch_workflow_for_samples(samples)
+      samples.each do |sample|
+        pe_attachment_pair = find_newest_pe_attachment_pair(sample)
+        next if pe_attachment_pair.blank?
+
+        AutomatedWorkflowExecutions::LaunchService.new(
+          @automated_workflow_execution,
+          sample,
+          pe_attachment_pair,
+          current_user
+        ).execute
+      end
+    end
+
+    def find_newest_pe_attachment_pair(sample)
+      fastq_attachments = sample.attachments
+                                .where(Attachment.metadata_arel_node('format').eq('fastq'))
+                                .recent
+
+      paired_attachments = fastq_attachments.with_associated_attachment
+
+      return unless paired_attachments.any?
+
+      newest_forward = paired_attachments.with_direction('forward').first
+      return unless newest_forward
+
+      newest_reverse = paired_attachments.find_by(id: newest_forward.metadata['associated_attachment_id'])
+
+      return unless newest_reverse
+
+      {
+        'forward' => newest_forward,
+        'reverse' => newest_reverse
+      }
     end
 
     protected

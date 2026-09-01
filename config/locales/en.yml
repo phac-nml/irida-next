@@ -1524,6 +1524,7 @@ en:
         delete_aria_label: 'Delete automated pipeline: %{name}'
         delete_confirm: Are you sure that you want to delete this automated pipeline?
         edit_aria_label: 'Edit automated pipeline: %{name}'
+        trigger_aria_label: 'Trigger automated pipeline: %{name}'
       create:
         error: Could not create an automated pipeline for %{workflow_name}
         success: Automated pipeline for %{workflow_name} was successfully created
@@ -1538,6 +1539,10 @@ en:
         add_new_automated_workflow_execution: New automated pipeline
         subtitle: Setup automated pipelines to launch when paired-end data is uploaded to the project
         title: Automated Pipelines
+      launch:
+        error:
+          no_search_params: Please provide search parameters to trigger the automated pipeline
+        success: Triggered automated pipeline %{workflow_name} for %{sample_count} sample(s)
       new_automated_workflow_execution_modal:
         title: "%{workflow} parameters"
       pipeline_selection_modal:
@@ -1555,6 +1560,11 @@ en:
           updated_at: Updated
           workflow_name: Workflow Name
           workflow_version: Workflow Version
+      trigger:
+        name: Name
+        search_form_title: Search for samples to trigger
+        subtitle: Provide search parameters to select samples for this automated pipeline
+        title: Trigger Automated Pipeline
     bots:
       index:
         access_token_section:
