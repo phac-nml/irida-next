@@ -1,4 +1,4 @@
-<%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": "sample_count", "workflow-selection-unavailable-label-value": t("workflow_executions.submissions.pipeline_selection.unavailable"), "workflow-selection-workflows-count-value": @workflows.count, "workflow-selection-sample-count-value": @sample_count }) do %>
+<%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": "sample_count", "workflow-selection-sample-count-value": @sample_count }) do %>
   <%= form_with url: helpers.workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
     <%= form.hidden_field :pipeline_id,
                         data: {
@@ -13,9 +13,26 @@
     <%= form.hidden_field :namespace_id, value: @namespace_id %>
 
     <ul class="space-y-2">
-      <%# workflows.each do |_, workflow| %>
-      <%#= render WorkflowExecutions::WorkflowSelectionButtonComponent.new(workflow:, sample_count:) %>
-      <%# end %>
+      <% @organized_workflows[:available].each do |available_workflow| %>
+        <li>
+          <%= render WorkflowExecutions::WorkflowSelection::ButtonComponent.new(workflow: available_workflow) %>
+        </li>
+      <% end %>
+
+      <% if @organized_workflows[:unavailable].any? %>
+        <li class="pt-2">
+          <div class="flex items-center gap-2 text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">
+            <span class="h-px flex-1 bg-slate-200 dark:bg-slate-700"></span>
+            <span><%= t("workflow_executions.submissions.pipeline_selection.unavailable") %></span>
+            <span class="h-px flex-1 bg-slate-200 dark:bg-slate-700"></span>
+          </div>
+        </li>
+        <% @organized_workflows[:unavailable].each do |unavailable_workflow| %>
+          <li>
+            <%= render WorkflowExecutions::WorkflowSelection::ButtonComponent.new(workflow: unavailable_workflow[:workflow], disabled_message: unavailable_workflow[:message]) %>
+          </li>
+        <% end %>
+      <% end %>
     </ul>
   <% end %>
 <% end %>

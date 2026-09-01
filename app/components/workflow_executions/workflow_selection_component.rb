@@ -9,21 +9,16 @@ module WorkflowExecutions
       @sample_count = sample_count.to_i
       @organized_workflows = { available: [], unavailable: [] }
       organize_workflows
-      puts @organized_workflows
     end
 
     private
 
-    def organize_workflows
-      @workflows.each do |_, workflow|
-        puts 'engpdfdfdeagaegdfdfeawg'
-        puts @workflows
-        puts workflow
+    def organize_workflows # rubocop:disable Metrics/MethodLength
+      @workflows.each do |_, workflow| # rubocop:disable Style/HashEachMethods
         min_samples_configured = workflow.min_samples_limit_configured?
         max_samples_configured = workflow.max_samples_limit_configured?
-        next unless min_samples_configured || max_samples_configured
-
         message = ''
+
         if min_samples_configured && @sample_count < minimum_samples(min_samples_configured, workflow)
           message = I18n.t('shared.workflow_executions.sample_limits.min_samples_required',
                            min_samples: workflow.minimum_samples)
@@ -31,7 +26,7 @@ module WorkflowExecutions
 
         if max_samples_configured && @sample_count > workflow.maximum_samples.to_i
           message = I18n.t('shared.workflow_executions.sample_limits.max_samples_exceeded',
-                           max_samples: @workflow.maximum_samples)
+                           max_samples: workflow.maximum_samples)
         end
 
         if message.blank?

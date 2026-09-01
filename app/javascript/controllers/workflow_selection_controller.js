@@ -14,8 +14,6 @@ export default class extends Controller {
   static outlets = ["selection"];
   static values = {
     fieldName: String,
-    unavailableLabel: String,
-    workflowsCount: Number,
     sampleCount: Number,
   };
 
@@ -47,12 +45,6 @@ export default class extends Controller {
     this.removeEscapeListener();
   }
 
-  workflowTargetConnected() {
-    if (this.workflowTargets.length === this.workflowsCountValue) {
-      this.updateWorkflowAvailability();
-    }
-  }
-
   amendForm(event) {
     const formData = new FormData(this.formTarget);
     event.detail.fetchOptions.body = JSON.stringify(this.#toJson(formData));
@@ -77,6 +69,7 @@ export default class extends Controller {
   }
 
   selectWorkflow(event) {
+    console.log("select!");
     if (event.currentTarget.getAttribute("aria-disabled") === "true") {
       return;
     }
@@ -87,77 +80,6 @@ export default class extends Controller {
     this.workflowVersionTarget.value = params.workflowversion;
 
     this.formTarget.requestSubmit();
-  }
-
-  updateWorkflowAvailability() {
-    const workflowsByState = this.workflowTargets.map((workflow) => ({
-      workflow,
-      isDisabled: workflow.getAttribute("aria-disabled") === "true",
-    }));
-
-    this.reorderWorkflows(workflowsByState);
-  }
-
-  reorderWorkflows(workflowsByState) {
-    if (workflowsByState.length === 0) {
-      return;
-    }
-
-    const list = workflowsByState[0].workflow.closest("ul");
-    if (!list) {
-      return;
-    }
-
-    const enabledRows = [];
-    const disabledRows = [];
-
-    workflowsByState.forEach(({ workflow, isDisabled }) => {
-      const row = workflow.closest("li");
-      if (!row) {
-        return;
-      }
-
-      if (isDisabled) {
-        disabledRows.push(row);
-      } else {
-        enabledRows.push(row);
-      }
-    });
-
-    list
-      .querySelectorAll("[data-workflow-selection-divider]")
-      .forEach((divider) => divider.remove());
-
-    enabledRows.forEach((row) => list.appendChild(row));
-
-    if (disabledRows.length > 0) {
-      list.appendChild(this.createUnavailableDivider());
-      disabledRows.forEach((row) => list.appendChild(row));
-    }
-  }
-
-  createUnavailableDivider() {
-    const divider = document.createElement("li");
-    divider.dataset.workflowSelectionDivider = "true";
-    divider.className = "pt-2";
-
-    const container = document.createElement("div");
-    container.className =
-      "flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400";
-
-    const leadingRule = document.createElement("span");
-    leadingRule.className = "h-px flex-1 bg-slate-200 dark:bg-slate-700";
-
-    const label = document.createElement("span");
-    label.textContent = this.unavailableLabelValue;
-
-    const trailingRule = document.createElement("span");
-    trailingRule.className = "h-px flex-1 bg-slate-200 dark:bg-slate-700";
-
-    container.append(leadingRule, label, trailingRule);
-    divider.appendChild(container);
-
-    return divider;
   }
 
   #toJson(formData) {
