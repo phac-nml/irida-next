@@ -440,6 +440,7 @@ en:
           keyboard_instructions: Use Tab to move between lists and actions. Use Space to select list items, then use Add, Remove, Up, and Down actions to move or reorder selected items.
           no_template: No template
         list_component:
+          actions: "%{title} actions"
           add: Add
           down: Down
           required: Required

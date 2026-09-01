@@ -440,6 +440,7 @@ fr:
           keyboard_instructions: Utilisez Tab pour naviguer entre les listes et les actions. Utilisez Espace pour sélectionner des éléments dans une liste, puis utilisez Ajouter, Supprimer, Haut et Bas pour déplacer ou réordonner les éléments sélectionnés.
           no_template: Pas de modèle
         list_component:
+          actions: Actions pour %{title}
           add: Ajouter
           down: Bas
           required: Obligatoire

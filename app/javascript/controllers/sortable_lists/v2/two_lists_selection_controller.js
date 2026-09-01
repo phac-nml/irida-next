@@ -81,9 +81,8 @@ export default class extends Controller {
       if (existingItem) {
         this.selectedList.append(existingItem);
       } else {
-        this.selectedList.append(
-          this.#buildListItem(field, this.selectedList.id),
-        );
+        const item = this.#buildListItem(field, this.selectedList.id);
+        if (item) this.selectedList.append(item);
       }
     });
 
@@ -91,21 +90,38 @@ export default class extends Controller {
   }
 
   addSelectionByAddButton() {
+    if (
+      !this.hasAddButtonTarget ||
+      this.#buttonDisabled(this.addButtonTarget)
+    ) {
+      return;
+    }
+
     this.#moveCheckedOptions(this.availableList, this.selectedList);
   }
 
   removeSelectionByRemoveButton() {
+    if (
+      !this.hasRemoveButtonTarget ||
+      this.#buttonDisabled(this.removeButtonTarget)
+    ) {
+      return;
+    }
+
     this.#moveCheckedOptions(this.selectedList, this.availableList);
   }
 
   moveSelection(event) {
     if (!this.hasUpButtonTarget || !this.hasDownButtonTarget) return;
 
+    const isMoveUp = event.target === this.upButtonTarget;
+    const activeButton = isMoveUp ? this.upButtonTarget : this.downButtonTarget;
+    if (this.#buttonDisabled(activeButton)) return;
+
     const checkedItems = this.#checkedListItems(this.selectedList);
     if (checkedItems.length !== 1) return;
 
     const selectedItem = checkedItems[0];
-    const isMoveUp = event.target === this.upButtonTarget;
     const targetItem = isMoveUp
       ? selectedItem.previousElementSibling
       : selectedItem.nextElementSibling;
@@ -131,6 +147,13 @@ export default class extends Controller {
     );
 
     this.#checkStates();
+
+    // Keep focus on the reorder control while it stays actionable; otherwise move
+    // focus to the reordered item so keyboard users are not stranded on a
+    // now-unavailable button.
+    if (this.#buttonDisabled(activeButton)) {
+      this.#focusListItem(selectedItem);
+    }
   }
 
   updateMetadataListing({ detail: { content } }) {
@@ -162,6 +185,7 @@ export default class extends Controller {
     const selectedItems = this.#checkedListItems(sourceList);
     if (selectedItems.length === 0) return;
 
+    const [firstMovedItem] = selectedItems;
     const movedValues = [];
     selectedItems.forEach((item) => {
       const checkbox = item.querySelector('input[type="checkbox"]');
@@ -184,6 +208,10 @@ export default class extends Controller {
     );
 
     this.#checkStates();
+
+    // Move focus to the transferred item in its destination list so keyboard and
+    // screen reader users are not stranded on the now-disabled trigger button.
+    this.#focusListItem(firstMovedItem);
   }
 
   #checkStates() {
@@ -224,8 +252,7 @@ export default class extends Controller {
     }
 
     if (this.hasSubmitBtnTarget) {
-      const isRequired =
-        this.selectedList.getAttribute("aria-required") === "true";
+      const isRequired = this.selectedList.dataset.required === "true";
       this.submitBtnTarget.disabled = isRequired && selectedValues.length === 0;
     }
 
@@ -255,8 +282,17 @@ export default class extends Controller {
   }
 
   #setButtonState(button, isDisabled) {
-    button.disabled = isDisabled;
+    // Use aria-disabled (not the native disabled attribute) so the control stays
+    // focusable and discoverable; activation is prevented in the action handlers.
     button.setAttribute("aria-disabled", isDisabled ? "true" : "false");
+  }
+
+  #buttonDisabled(button) {
+    return !button || button.getAttribute("aria-disabled") === "true";
+  }
+
+  #focusListItem(item) {
+    item?.querySelector('input[type="checkbox"]')?.focus();
   }
 
   #collectAllValues() {
@@ -297,33 +333,33 @@ export default class extends Controller {
 
   #renderValues(list, values) {
     list.replaceChildren(
-      ...values.map((value) => this.#buildListItem(value, list.id)),
+      ...values
+        .map((value) => this.#buildListItem(value, list.id))
+        .filter(Boolean),
     );
   }
 
   #buildListItem(value, listId) {
-    if (this.hasItemTemplateTarget) {
-      const item = this.itemTemplateTarget.content
-        .querySelector("li")
-        ?.cloneNode(true);
-      const label = item?.querySelector("label");
-      const checkbox = item?.querySelector('input[type="checkbox"]');
-      const text = label?.querySelector("span");
+    if (!this.hasItemTemplateTarget) return null;
 
-      if (item && label && checkbox && text) {
-        const checkboxId = this.#buildCheckboxId(listId);
+    const item = this.itemTemplateTarget.content
+      .querySelector("li")
+      ?.cloneNode(true);
+    const label = item?.querySelector("label");
+    const checkbox = item?.querySelector('input[type="checkbox"]');
+    const text = label?.querySelector("span");
 
-        label.setAttribute("for", checkboxId);
-        checkbox.id = checkboxId;
-        checkbox.value = value;
-        checkbox.checked = false;
-        text.textContent = value;
+    if (!item || !label || !checkbox || !text) return null;
 
-        return item;
-      }
-    }
+    const checkboxId = this.#buildCheckboxId(listId);
 
-    return this.#buildListItemFallback(value, listId);
+    label.setAttribute("for", checkboxId);
+    checkbox.id = checkboxId;
+    checkbox.value = value;
+    checkbox.checked = false;
+    text.textContent = value;
+
+    return item;
   }
 
   #buildCheckboxId(listId) {
@@ -333,32 +369,6 @@ export default class extends Controller {
         : Math.random().toString(16).slice(2);
 
     return `${listId}-item-${uniqueId}`;
-  }
-
-  #buildListItemFallback(value, listId) {
-    const item = document.createElement("li");
-    item.className =
-      "border-b border-slate-200 px-4 py-2 last:border-b-0 dark:border-slate-600";
-
-    const label = document.createElement("label");
-    label.className =
-      "flex cursor-pointer items-center gap-3 py-1 text-sm text-slate-900 dark:text-white";
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    const checkboxId = this.#buildCheckboxId(listId);
-    checkbox.id = checkboxId;
-    checkbox.value = value;
-    checkbox.className =
-      "h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-600 dark:border-slate-600 dark:bg-slate-700";
-    label.setAttribute("for", checkboxId);
-
-    const text = document.createElement("span");
-    text.textContent = value;
-
-    label.append(checkbox, text);
-    item.append(label);
-    return item;
   }
 
   #ensureAriaLiveReady() {
