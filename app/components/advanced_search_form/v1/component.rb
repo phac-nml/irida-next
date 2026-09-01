@@ -15,6 +15,12 @@ module AdvancedSearchForm
         @search_condition_class = @search.search_group_class.condition_class
       end
 
+      def enum_operations
+        enum_operation_options
+      end
+
+      attr_reader :operations
+
       private
 
       def normalized_fields(fields:, sample_fields:, metadata_fields:)
