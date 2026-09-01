@@ -1,9 +1,0 @@
-<%= render WorkflowExecutions::WorkflowSelectionButtonComponent.new(workflow:
-Irida::Pipeline.new('test/pipeline',
-                                   { 'name' => 'Test Pipeline 1', 'description' => 'A test pipeline 1',
-                                     'url' => 'http://example.com' },
-                                   { 'name' => '1.0.3',
-                                   'settings' => {'min_samples' => 5, 'max_samples' => 10} },
-                                   nil,
-                                   nil,
-                                   unknown: true), sample_count: 12) %>

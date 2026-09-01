@@ -69,7 +69,6 @@ export default class extends Controller {
   }
 
   selectWorkflow(event) {
-    console.log("select!");
     if (event.currentTarget.getAttribute("aria-disabled") === "true") {
       return;
     }
