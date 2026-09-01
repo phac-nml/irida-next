@@ -16,18 +16,19 @@ module WorkflowExecutions
       assert_select 'h1', I18n.t('workflow_executions.submissions.pipeline_selection.title')
 
       # verify ordering
-      assert_select 'button[data-workflow-selection-target="workflow"]', 5 do |workflow_selection_button|
+      assert_select 'li', 5 do |workflow_selection_text|
         assert_equal 'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
-                     workflow_selection_button[0].text.squish
+                     workflow_selection_text[0].text.squish
         assert_equal 'phac-nml/iridanextexample 1.0.3 IRIDA Next Example Pipeline',
-                     workflow_selection_button[1].text.squish
+                     workflow_selection_text[1].text.squish
         assert_equal 'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline',
-                     workflow_selection_button[2].text.squish
+                     workflow_selection_text[2].text.squish
         assert_equal 'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline',
-                     workflow_selection_button[3].text.squish
-        assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_button[4].text.squish
+                     workflow_selection_text[3].text.squish
+        assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_text[4].text.squish
       end
 
+      # no disabled buttons or Unavailable divider
       assert_select 'button[aria-disabled="true"]', count: 0
       assert_select 'span', text: I18n.t('workflow_executions.submissions.pipeline_selection.unavailable'), count: 0
     end
@@ -40,19 +41,20 @@ module WorkflowExecutions
       assert_response :success
       assert_select 'h1', I18n.t('workflow_executions.submissions.pipeline_selection.title')
 
-      # verify ordering
-      assert_select 'button[data-workflow-selection-target="workflow"]', 5 do |workflow_selection_button|
+      # verify button text and ordering (includes Unavailable divider)
+      assert_select 'li', 6 do |workflow_selection_text|
         assert_equal 'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
-                     workflow_selection_button[0].text.squish
+                     workflow_selection_text[0].text.squish
         assert_equal 'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline',
-                     workflow_selection_button[1].text.squish
+                     workflow_selection_text[1].text.squish
         assert_equal 'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline',
-                     workflow_selection_button[2].text.squish
-        assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_button[3].text.squish
-        assert_equal disabled_button_text, workflow_selection_button[4].text.squish
+                     workflow_selection_text[2].text.squish
+        assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_text[3].text.squish
+        assert_equal I18n.t('workflow_executions.submissions.pipeline_selection.unavailable'),
+                     workflow_selection_text[4].text.squish
+        assert_equal disabled_button_text, workflow_selection_text[5].text.squish
       end
       assert_select 'button[aria-disabled="true"]', disabled_button_text
-      assert_select 'span', text: I18n.t('workflow_executions.submissions.pipeline_selection.unavailable'), count: 1
     end
 
     test 'pipeline selection request with maximum samples error' do
@@ -63,19 +65,20 @@ module WorkflowExecutions
       assert_response :success
       assert_select 'h1', I18n.t('workflow_executions.submissions.pipeline_selection.title')
 
-      # verify ordering
-      assert_select 'button[data-workflow-selection-target="workflow"]', 5 do |workflow_selection_button|
+      # verify button text and ordering (includes Unavailable divider)
+      assert_select 'li', 6 do |workflow_selection_text|
         assert_equal 'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
-                     workflow_selection_button[0].text.squish
+                     workflow_selection_text[0].text.squish
         assert_equal 'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline',
-                     workflow_selection_button[1].text.squish
+                     workflow_selection_text[1].text.squish
         assert_equal 'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline',
-                     workflow_selection_button[2].text.squish
-        assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_button[3].text.squish
-        assert_equal disabled_button_text, workflow_selection_button[4].text.squish
+                     workflow_selection_text[2].text.squish
+        assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_text[3].text.squish
+        assert_equal I18n.t('workflow_executions.submissions.pipeline_selection.unavailable'),
+                     workflow_selection_text[4].text.squish
+        assert_equal disabled_button_text, workflow_selection_text[4].text.squish
       end
       assert_select 'button[aria-disabled="true"]', disabled_button_text
-      assert_select 'span', text: I18n.t('workflow_executions.submissions.pipeline_selection.unavailable'), count: 1
     end
   end
 end
