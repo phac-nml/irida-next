@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
+class MetadataTemplatesActionsTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
@@ -128,6 +128,20 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
   end
 
+  test 'group metadata templates update renders translated error when service fails with no model errors' do
+    MetadataTemplates::UpdateService.any_instance.stubs(:execute).returns(false)
+
+    metadata_template_params = { metadata_template: { name: 'Valid Name', fields: %w[field1] } }
+    put group_metadata_template_path(
+      @group, @group_metadata_template, format: :turbo_stream
+    ), params: metadata_template_params
+
+    assert_response :unprocessable_content
+    assert_select "div[data-controller='viral--flash']",
+                  text: /#{Regexp.escape(I18n.t('concerns.metadata_template_actions.update.error',
+                                                template_name: @group_metadata_template.name))}/
+  end
+
   test 'group metadata templates destroy' do
     delete group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
 
@@ -139,6 +153,17 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     delete group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
 
     assert_response :unauthorized
+  end
+
+  test 'group metadata templates destroy renders error from error_message when not deleted' do
+    metadata_template = metadata_templates(:group_one_metadata_template0)
+    MetadataTemplates::DestroyService.any_instance.stubs(:execute).returns(nil)
+    Groups::MetadataTemplatesController.any_instance.stubs(:error_message).returns('Destroy failed from error_message')
+
+    delete group_metadata_template_path(@group, metadata_template, format: :turbo_stream)
+
+    assert_response :unprocessable_content
+    assert_select "div[data-controller='viral--flash']", text: /Destroy failed from error_message/
   end
 
   test 'project metadata templates index' do
@@ -300,6 +325,21 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test 'project metadata templates update renders translated error when service fails with no model errors' do
+    MetadataTemplates::UpdateService.any_instance.stubs(:execute).returns(false)
+
+    metadata_template_params = { metadata_template: { name: 'Valid Name', fields: %w[field1] } }
+    put namespace_project_metadata_template_path(
+      @project_namespace.parent,
+      @project, @project_metadata_template, format: :turbo_stream
+    ), params: metadata_template_params
+
+    assert_response :unprocessable_content
+    assert_select "div[data-controller='viral--flash']",
+                  text: /#{Regexp.escape(I18n.t('concerns.metadata_template_actions.update.error',
+                                                template_name: @project_metadata_template.name))}/
+  end
+
   test 'project metadata templates destroy' do
     delete namespace_project_metadata_template_path(
       @project_namespace.parent,
@@ -319,6 +359,22 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     )
 
     assert_response :unauthorized
+  end
+
+  test 'project metadata templates destroy renders error from error_message when not deleted' do
+    MetadataTemplates::DestroyService.any_instance.stubs(:execute).returns(nil)
+    Projects::MetadataTemplatesController.any_instance.stubs(:error_message)
+                                         .returns('Destroy failed from error_message')
+
+    delete namespace_project_metadata_template_path(
+      @project_namespace.parent,
+      @project,
+      @project_metadata_template,
+      format: :turbo_stream
+    )
+
+    assert_response :unprocessable_content
+    assert_select "div[data-controller='viral--flash']", text: /Destroy failed from error_message/
   end
 
   test 'group metadata templates list with none template' do
@@ -402,5 +458,29 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
     # Verify the response includes the sorted and paginated content
     assert_includes @response.body, 'turbo-stream'
+  end
+
+  test 'metadata_templates_path raises NotImplementedError when not overridden' do
+    controller_class = Class.new(ApplicationController) do
+      include MetadataTemplateActions
+    end
+
+    assert_raises(NotImplementedError) do
+      controller_class.new.send(:metadata_templates_path)
+    end
+  end
+
+  test 'groups metadata templates controller metadata_templates_path delegates to group route helper' do
+    controller = Groups::MetadataTemplatesController.new
+    controller.stubs(:group_metadata_templates_path).returns('/groups/group-one/metadata_templates')
+
+    assert_equal '/groups/group-one/metadata_templates', controller.send(:metadata_templates_path)
+  end
+
+  test 'projects metadata templates controller metadata_templates_path delegates to project route helper' do
+    controller = Projects::MetadataTemplatesController.new
+    controller.stubs(:namespace_project_metadata_templates_path).returns('/projects/project-one/metadata_templates')
+
+    assert_equal '/projects/project-one/metadata_templates', controller.send(:metadata_templates_path)
   end
 end
