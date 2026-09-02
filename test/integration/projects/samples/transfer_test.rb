@@ -178,6 +178,24 @@ module Projects
         end
       end
 
+      test 'dialog close button hidden during transfer samples with v2_select2' do
+        Flipper.enable(:v2_select2)
+        assert_samples_page(@project, 3)
+        get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_transfer_dialog
+        end
+        post_transfer
+        assert_response :success
+        assert_select 'turbo-stream[action="update"][target="transfer_samples_dialog_content"]' do
+          assert_select '[role="progressbar"]'
+          assert_select 'button.dialog--close', count: 0
+        end
+      ensure
+        Flipper.disable(:v2_select2)
+      end
+
       test 'should not transfer samples with session storage cleared' do
         assert_samples_page(@project, 3)
         assert_transfer_enqueued(::Samples::TransferJob, sample_ids: [])
@@ -249,6 +267,25 @@ module Projects
         end
       ensure
         Flipper.disable(:v2_sample_transfer)
+      end
+
+      test 'dialog close button hidden during transfer samples v2 with v2_select2' do
+        Flipper.enable(:v2_sample_transfer)
+        Flipper.enable(:v2_select2)
+        assert_samples_page(@project, 3)
+        get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_transfer_dialog
+        end
+        post_transfer
+        assert_response :success
+        assert_select 'turbo-stream[action="update"][target="transfer_samples_dialog_content"]' do
+          assert_select 'button.dialog--close', count: 0
+        end
+      ensure
+        Flipper.disable(:v2_sample_transfer)
+        Flipper.disable(:v2_select2)
       end
 
       test 'should not transfer samples with session storage cleared v2' do
