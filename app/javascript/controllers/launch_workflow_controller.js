@@ -15,6 +15,5 @@ export default class extends Controller {
         this.selectionOutlet.getOrCreateStoredItems().length,
       ),
     );
-    console.log(form);
   }
 }
