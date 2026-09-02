@@ -201,7 +201,7 @@ module Projects
           @automated_workflow_execution,
           sample,
           pe_attachment_pair,
-          current_user
+          @project.namespace.automation_bot
         ).execute
       end
     end
