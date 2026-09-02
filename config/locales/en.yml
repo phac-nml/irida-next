@@ -2,6 +2,8 @@
 en:
   activemodel:
     attributes:
+      automated_workflow_executions/trigger_form:
+        q: Search criteria
       concatenation_form:
         attachment_ids: Files
         basename: Base filename
@@ -51,6 +53,11 @@ en:
               lower_than_from: must be greater than From value
             value:
               invalid_between_value: must be an array with two values
+        automated_workflow_executions/trigger_form:
+          attributes:
+            q:
+              no_samples_found: Search did not return any samples to trigger on
+              no_search_params: No search parameters were provided
         concatenation_form:
           attributes:
             attachment_ids:
@@ -81,8 +88,6 @@ en:
       attachment:
         file: File
         metadata: Metadata
-      automated_workflow_executions/trigger_form:
-        q: Search criteria
       group:
         description: Description
         name: Group name
@@ -159,11 +164,6 @@ en:
           attributes:
             file:
               checksum_uniqueness: checksum matches existing file
-        automated_workflow_executions/trigger_form:
-          attributes:
-            q:
-              no_samples_found: Search did not return any samples to trigger on
-              no_search_params: No search parameters were provided
         data_export:
           attributes:
             export_parameters:
