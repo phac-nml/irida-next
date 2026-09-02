@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus";
-import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import SortableListsController from "../../../../../app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js";
 
 const translations = JSON.stringify({
@@ -234,10 +234,6 @@ function itemTexts(id) {
 describe("sortable lists two-lists selection controller", () => {
   let application;
 
-  beforeEach(() => {
-    window.requestAnimationFrame = (callback) => setTimeout(callback, 0);
-  });
-
   afterEach(() => {
     application?.stop();
     vi.useRealTimers();
@@ -444,9 +440,7 @@ describe("sortable lists two-lists selection controller", () => {
 
     const availableList = list("available-list");
     const selectedList = list("selected-list");
-    const selector = document.querySelector(
-      '[data-sortable-lists--v1--two-lists-selection-target="templateSelector"]',
-    );
+    const selector = target("templateSelector");
 
     selector.value = "custom";
     selector.dispatchEvent(new Event("change", { bubbles: true }));
@@ -495,11 +489,9 @@ describe("sortable lists two-lists selection controller", () => {
     ]);
     expect(activeId(selectedList)).toBe("selected-two");
     vi.runAllTimers();
-    expect(
-      document.querySelector(
-        '[data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"]',
-      ),
-    ).toHaveTextContent("Two was moved up to position 1 in Selected list.");
+    expect(target("ariaLiveUpdate")).toHaveTextContent(
+      "Two was moved up to position 1 in Selected list.",
+    );
   });
 
   it("announces each add and remove action via the aria-live region", async () => {
@@ -512,15 +504,9 @@ describe("sortable lists two-lists selection controller", () => {
 
     const availableList = list("available-list");
     const selectedList = list("selected-list");
-    const addButton = document.querySelector(
-      '[data-sortable-lists--v1--two-lists-selection-target="addButton"]',
-    );
-    const removeButton = document.querySelector(
-      '[data-sortable-lists--v1--two-lists-selection-target="removeButton"]',
-    );
-    const ariaLive = document.querySelector(
-      '[data-sortable-lists--v1--two-lists-selection-target="ariaLiveUpdate"]',
-    );
+    const addButton = target("addButton");
+    const removeButton = target("removeButton");
+    const ariaLive = target("ariaLiveUpdate");
 
     availableList.focus();
     keydown(availableList, " ");
