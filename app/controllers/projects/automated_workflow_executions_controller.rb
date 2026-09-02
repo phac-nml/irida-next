@@ -115,6 +115,7 @@ module Projects
 
     def trigger
       authorize! @namespace, to: :submit_workflow?
+      not_found unless Flipper.enabled?(:trigger_automated_workflow_execution)
 
       @query = Sample::Query.new({ project_ids: [@project.id], request: })
       advanced_search_fields(@project.namespace)
@@ -128,6 +129,7 @@ module Projects
 
     def launch # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       authorize! @namespace, to: :submit_workflow?
+      not_found unless Flipper.enabled?(:trigger_automated_workflow_execution)
 
       @search_params = trigger_launch_params.merge({ project_ids: [@project.id] })
       @query = Sample::Query.new(@search_params.merge({ request: }))

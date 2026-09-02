@@ -37,26 +37,28 @@
     <% table.with_column(t(".headers.actions"),
         classes: "flex justify-start"
       ) do |row| %>
-      <%= pathogen_button_to t("common.actions.trigger"),
-      trigger_namespace_project_automated_workflow_execution_path(
-        @project.parent,
-        @project,
-        row,
-      ),
-      data: {
-        turbo_stream: true,
-      },
-      method: :get,
-      aria: {
-        label:
-          t(
-            :"projects.automated_workflow_executions.actions.trigger_aria_label",
-            name: (row[:name].nil? ? row[:id] : row[:name]),
-          ),
-      },
-      tone: :primary,
-      emphasis: :ghost,
-      size: :small %>
+      <% if Flipper.enabled?(:trigger_automated_workflow_execution) %>
+        <%= pathogen_button_to t("common.actions.trigger"),
+        trigger_namespace_project_automated_workflow_execution_path(
+          @project.parent,
+          @project,
+          row,
+        ),
+        data: {
+          turbo_stream: true,
+        },
+        method: :get,
+        aria: {
+          label:
+            t(
+              :"projects.automated_workflow_executions.actions.trigger_aria_label",
+              name: (row[:name].nil? ? row[:id] : row[:name]),
+            ),
+        },
+        tone: :primary,
+        emphasis: :ghost,
+        size: :small %>
+      <% end %>
 
       <% unless row.disabled %>
         <%= pathogen_button_to t("common.actions.edit"),

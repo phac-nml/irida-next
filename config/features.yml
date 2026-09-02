@@ -92,6 +92,17 @@ features:
     name:
       en: "Sample Deletion Reason"
       fr: "Raison de suppression d'échantillon"
+  trigger_automated_workflow_execution:
+    admin_manageable: true
+    description:
+      en: "Enable manual triggering of automated workflow executions with advanced\
+        \ search."
+      fr: "Activer le déclenchement manuel des exécutions de flux de travail automatisés\
+        \ avec une recherche avancée."
+    enable_in_development: true
+    name:
+      en: "Trigger Automated Workflow Execution"
+      fr: "Déclencher l'exécution de flux de travail automatisés"
   v2_dropdown:
     admin_manageable: true
     description:
