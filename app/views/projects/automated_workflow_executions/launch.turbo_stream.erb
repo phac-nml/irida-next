@@ -1,9 +1,11 @@
-<%= turbo_stream.update "automated_workflow_execution_modal" do %>
-  <%= render Viral::AlertComponent.new(
-    title: type == 'success' ? t("common.alerts.success") : t("common.alerts.error"),
-    description: message,
-    type: type
-  ) %>
+<%= turbo_stream.append "flashes" do %>
+  <%= render Viral::FlashComponent.new(type:, data: message) %>
 <% end %>
 
-<%= turbo_stream.update "automated_workflow_executions_table", src: namespace_project_automated_workflow_executions_path(format: :turbo_stream) %>
+<%= turbo_stream.update "automated_workflow_execution_modal" do %>
+  <%= render Viral::DialogComponent.new(
+    id: "automated_workflow_execution_modal",
+    size: :large,
+    open: false
+  ) %>
+<% end %>
