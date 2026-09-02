@@ -1,3 +1,3 @@
 <%= turbo_stream.update "automated_workflow_execution_modal" do %>
-  <%= render "trigger_modal", automated_workflow_execution: @automated_workflow_execution, query: @query, advanced_search_fields: @advanced_search_fields, error_message: @error_message %>
+  <%= render "trigger_modal", automated_workflow_execution: @automated_workflow_execution, query: @query, advanced_search_fields: @advanced_search_fields, trigger_form: @trigger_form, project: @project %>
 <% end %>

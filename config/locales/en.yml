@@ -84,6 +84,8 @@ en:
       attachment:
         file: File
         metadata: Metadata
+      automated_workflow_executions/trigger_form:
+        q: Search criteria
       group:
         description: Description
         name: Group name
@@ -161,6 +163,11 @@ en:
           attributes:
             file:
               checksum_uniqueness: checksum matches existing file
+        automated_workflow_executions/trigger_form:
+          attributes:
+            q:
+              no_samples_found: Search did not return any samples to trigger on
+              no_search_params: No search parameters were provided
         data_export:
           attributes:
             export_parameters:

@@ -1,3 +1,5 @@
+<%# locals: (automated_workflow_execution:, query:, advanced_search_fields:, trigger_form:, project:) -%>
+
 <%= render Viral::DialogComponent.new(
   id: "trigger_automated_workflow_execution_dialog",
   size: :large,
@@ -28,9 +30,13 @@
       </dl>
     </div>
 
-    <% if error_message.present? %>
+    <% if trigger_form&.errors.present? %>
       <div class="rounded-lg border-l-4 border-red-500 bg-red-50 p-4">
-        <p class="text-sm text-red-700"><%= error_message %></p>
+        <ul class="text-sm text-red-700">
+          <% trigger_form.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
       </div>
     <% end %>
 
@@ -44,8 +50,8 @@
       ) %>
 
       <%= form_with model: query, html: { role: "search" }, scope: :q, url: launch_namespace_project_automated_workflow_execution_path(
-        @project.parent,
-        @project,
+       project.parent,
+       project,
         automated_workflow_execution
       ), method: :post, data: {
         turbo_action: 'replace',
@@ -72,14 +78,10 @@
         <% end %>
 
         <div class="mt-6 flex gap-3">
-          <%= render Viral::ButtonComponent.new(
-            data: { action: "viral--dialog#close" }
-          ) do %>
-            <%= t("common.actions.cancel") %>
-          <% end %>
+          <%= render CancelButtonComponent.new(data: { action: "click->viral--dialog#close" }) %>
 
           <%= f.submit t("common.actions.trigger"),
-            class: "px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" %>
+            tone: :primary, emphasis: :solid %>
         </div>
       <% end %>
     </div>
