@@ -44,9 +44,9 @@ module MetadataTemplates
         MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
 
-      expected_message = "Fields #{I18n.t('activerecord.errors.models.metadata_template.attributes.fields.min_items',
-                                          min: 1)}"
-      assert new_template.errors.full_messages.include?(expected_message)
+      assert_includes new_template.errors[:fields], I18n.t('errors.messages.blank')
+      assert_includes new_template.errors[:fields],
+                      I18n.t('activerecord.errors.models.metadata_template.attributes.fields.min_items', min: 1)
     end
 
     test 'raises unauthorized error when user lacks permission' do
@@ -114,9 +114,9 @@ module MetadataTemplates
         MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
 
-      expected_message = "Fields #{I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid',
-                                          error_type: 'array')}"
-      assert new_template.errors.full_messages.include?(expected_message)
+      assert_includes new_template.errors[:fields],
+                      I18n.t('activerecord.errors.models.metadata_template.attributes.fields.invalid',
+                             error_type: 'array')
     end
 
     test 'prevents duplicate template names within same namespace' do
