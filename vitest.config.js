@@ -38,8 +38,18 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
-      include: ["app/javascript/**/*.{js,ts}"],
-      all: true,
+      // Measure the whole JS surface so uncovered files stay visible.
+      include: ["app/javascript/**/*.js"],
+      // Ratchet allowlist: add a file/glob here once it reaches full coverage.
+      thresholds: {
+        "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js":
+          {
+            statements: 100,
+            branches: 100,
+            functions: 100,
+            lines: 100,
+          },
+      },
     },
   },
 });

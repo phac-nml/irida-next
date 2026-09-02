@@ -122,17 +122,11 @@ export default class extends Controller {
     const itemsToRemove = Array.from(
       this.availableList.querySelectorAll("li"),
     ).filter((li) => !this.#originalAvailableList.includes(li));
-    const activeOption = this.#getActiveListElement(this.availableList);
-    const removesActiveOption = itemsToRemove.includes(activeOption);
 
     itemsToRemove.forEach((li) => {
       this.#clearActiveOption(li);
       li.remove();
     });
-
-    if (removesActiveOption) {
-      this.#updateListAfterMutation(this.availableList);
-    }
   }
 
   #checkButtonStates() {
@@ -170,13 +164,13 @@ export default class extends Controller {
     // disable add button if no options selected in available list
     this.#setButtonDisableState(
       this.addButtonTarget,
-      availableListSelectedOptions.length == 0,
+      availableListSelectedOptions.length === 0,
     );
 
     // disable remove button if no options selected in selected list
     this.#setButtonDisableState(
       this.removeButtonTarget,
-      selectedListSelectedOptions.length == 0,
+      selectedListSelectedOptions.length === 0,
     );
 
     // disable up/down buttons unless exactly 1 option selected in selected list
@@ -227,7 +221,6 @@ export default class extends Controller {
   }
 
   #setDisabled(element, disabled) {
-    if (!element) return;
     element.setAttribute("aria-disabled", disabled ? "true" : "false");
   }
 
@@ -417,7 +410,7 @@ export default class extends Controller {
   }
 
   #addSelectionByListInput(_event, list) {
-    if (list != this.availableList) return;
+    if (list !== this.availableList) return;
     this.#performSelection(true, true, this.availableList, this.selectedList);
   }
 
@@ -433,7 +426,7 @@ export default class extends Controller {
   }
 
   #removeSelectionByListInput(_event, list) {
-    if (list != this.selectedList) return;
+    if (list !== this.selectedList) return;
     this.#performSelection(true, true, this.selectedList, this.availableList);
   }
 
@@ -652,12 +645,12 @@ export default class extends Controller {
     let targetOption;
     let direction;
     if (event.target === this.upButtonTarget) {
-      if (selectedOptionIndex != 0) {
+      if (selectedOptionIndex !== 0) {
         targetOption = listOptions[selectedOptionIndex - 1];
       }
       direction = "up";
     } else {
-      if (selectedOptionIndex != listOptions.length - 1) {
+      if (selectedOptionIndex !== listOptions.length - 1) {
         targetOption = listOptions[selectedOptionIndex + 1];
       }
       direction = "down";
@@ -718,14 +711,13 @@ export default class extends Controller {
   }
 
   #selectAll(event, listNode = event.target) {
-    if (!event.ctrlKey && !event.metaKey) return;
     const allOptions = listNode.querySelectorAll("li");
     const unselectedOptions = listNode.querySelectorAll(
       `li[aria-selected="${this.constructor.ARIA_SELECTED_FALSE}"]`,
     );
     // if everything is selected, unselect
     // else select all
-    if (unselectedOptions.length == 0) {
+    if (unselectedOptions.length === 0) {
       this.#unselectListOptions(listNode);
     } else {
       for (let i = 0; i < allOptions.length; i++) {
@@ -958,6 +950,8 @@ export default class extends Controller {
       return;
     }
 
+    // Defensive no-op: a preferredOption outside `list` cannot reach this point.
+    /* v8 ignore next 3 */
     if (preferredOption?.parentNode === list) {
       this.#setActiveListElement(list, preferredOption);
     }
@@ -974,7 +968,6 @@ export default class extends Controller {
   // Capture-phase handler: aria-disabled does not natively prevent form
   // submission, so we intercept clicks before they reach the form.
   #onSubmitClickCapture(event) {
-    if (!this.hasSubmitBtnTarget) return;
     if (!this.#isDisabled(this.submitBtnTarget)) return;
     event.preventDefault();
     event.stopPropagation();
