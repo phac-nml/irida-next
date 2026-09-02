@@ -193,5 +193,49 @@ module Projects
 
       assert_response :unauthorized
     end
+
+    test 'find_newest_pe_attachment_pair returns newest paired-end FASTQ attachments' do
+      sample = samples(:sampleB)
+      controller = Projects::AutomatedWorkflowExecutionsController.new
+
+      result = controller.send(:find_newest_pe_attachment_pair, sample)
+
+      assert_not_nil result
+      assert result.key?('forward')
+      assert result.key?('reverse')
+
+      forward_attachment = result['forward']
+      reverse_attachment = result['reverse']
+
+      assert_equal 'forward', forward_attachment.metadata['direction']
+      assert_equal 'reverse', reverse_attachment.metadata['direction']
+      assert_equal 'fastq', forward_attachment.metadata['format']
+      assert_equal 'fastq', reverse_attachment.metadata['format']
+      assert_equal forward_attachment.metadata['associated_attachment_id'],
+                   reverse_attachment.id.to_s
+      assert_equal reverse_attachment.metadata['associated_attachment_id'],
+                   forward_attachment.id.to_s
+    end
+
+    test 'find_newest_pe_attachment_pair returns newest pair when multiple exist' do
+      sample = samples(:sampleB)
+      controller = Projects::AutomatedWorkflowExecutionsController.new
+
+      result = controller.send(:find_newest_pe_attachment_pair, sample)
+
+      # Should return attachmentPEFWD3 (created 2 hours ago) not attachmentPEFWD2 (3 hours ago)
+      forward_attachment = result['forward']
+
+      assert_equal 'INXT_ATT_AAAAAAAAAH', forward_attachment.puid
+    end
+
+    test 'find_newest_pe_attachment_pair returns nil when no paired attachments exist' do
+      sample = samples(:sample1)
+      controller = Projects::AutomatedWorkflowExecutionsController.new
+
+      result = controller.send(:find_newest_pe_attachment_pair, sample)
+
+      assert_nil result
+    end
   end
 end

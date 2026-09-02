@@ -200,19 +200,26 @@ module Projects
       end
     end
 
+    # rubocop:disable Metrics/MethodLength
     def find_newest_pe_attachment_pair(sample)
       fastq_attachments = sample.attachments
                                 .where(Attachment.metadata_arel_node('format').eq('fastq'))
-                                .recent
 
-      paired_attachments = fastq_attachments.with_associated_attachment
+      forward_attachments = fastq_attachments.with_direction('forward', include_nils: true)
+                                             .select(
+                                               'DISTINCT ON (attachable_id) attachments.*, ' \
+                                               'active_storage_blobs.filename as filename'
+                                             )
+                                             .order(:attachable_id)
+                                             .prefer_associated_attachment
+                                             .recent
+                                             .joins(:file_blob)
 
-      return unless paired_attachments.any?
-
-      newest_forward = paired_attachments.with_direction('forward').first
+      newest_forward = forward_attachments.first
       return unless newest_forward
 
-      newest_reverse = paired_attachments.find_by(id: newest_forward.metadata['associated_attachment_id'])
+      newest_reverse = Attachment.joins(:file_blob)
+                                 .find_by(id: newest_forward.metadata['associated_attachment_id'])
 
       return unless newest_reverse
 
@@ -221,6 +228,7 @@ module Projects
         'reverse' => newest_reverse
       }
     end
+    # rubocop:enable Metrics/MethodLength
 
     protected
 
