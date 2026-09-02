@@ -10,7 +10,7 @@ module Nextflow
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(url:, sample_count:, workflow:, fields:, namespace_id:, instance: nil)
-        @sample_count = sample_count
+        @sample_count = sample_count.to_i
         @automated_workflow = @sample_count.nil? || @sample_count.zero?
         @namespace_id = namespace_id
         @url = url

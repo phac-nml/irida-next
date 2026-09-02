@@ -488,4 +488,59 @@ class PipelinesTest < ActiveSupport::TestCase
     assert_not pipeline.min_samples_limit_configured?
     assert_not pipeline.max_samples_limit_configured?
   end
+
+  test 'sample_limit_message exceed max samples limit' do
+    max_samples = 5
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      settings: {
+        max_samples:
+      }
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_equal I18n.t('shared.workflow_executions.sample_limits.max_samples_exceeded',
+                        max_samples:), pipeline.sample_limit_message(6)
+  end
+
+  test 'nil sample_limit_message when not exceeding max samples limit' do
+    max_samples = 5
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      settings: {
+        max_samples:
+      }
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_nil pipeline.sample_limit_message(5)
+  end
+
+  test 'nil sample_limit_message when not under min samples limit' do
+    min_samples = 2
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      settings: {
+        min_samples:
+      }
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { 'name' => '1.0.3' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert_nil pipeline.sample_limit_message(2)
+  end
 end

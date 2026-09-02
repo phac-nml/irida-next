@@ -1,4 +1,4 @@
-<%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table", "workflow-selection-field-name-value": "sample_count", "workflow-selection-sample-count-value": @sample_count }) do %>
+<%= render Viral::BaseComponent.new(tag: 'div', data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table" }) do %>
   <%= form_with url: helpers.workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
     <%= form.hidden_field :pipeline_id,
                         data: {
@@ -11,6 +11,7 @@
                         } %>
 
     <%= form.hidden_field :namespace_id, value: @namespace_id %>
+    <%= form.hidden_field :sample_count, value: @sample_count %>
 
     <ul class="space-y-2">
       <% @organized_workflows[:available].each do |available_workflow| %>

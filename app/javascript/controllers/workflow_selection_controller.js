@@ -12,10 +12,6 @@ function preventEscapeListener(event) {
 export default class extends Controller {
   static targets = ["workflow", "pipelineId", "workflowVersion", "form"];
   static outlets = ["selection"];
-  static values = {
-    fieldName: String,
-    sampleCount: Number,
-  };
 
   connect() {
     this.boundAmendForm = this.amendForm.bind(this);
@@ -47,7 +43,9 @@ export default class extends Controller {
 
   amendForm(event) {
     const formData = new FormData(this.formTarget);
-    event.detail.fetchOptions.body = JSON.stringify(this.#toJson(formData));
+    event.detail.fetchOptions.body = JSON.stringify(
+      formDataToJsonParams(formData),
+    );
     event.detail.fetchOptions.headers["Content-Type"] = "application/json";
 
     event.detail.resume();
@@ -79,14 +77,5 @@ export default class extends Controller {
     this.workflowVersionTarget.value = params.workflowversion;
 
     this.formTarget.requestSubmit();
-  }
-
-  #toJson(formData) {
-    const params = formDataToJsonParams(formData);
-
-    // add sample_ids under the fieldNameValue key to the params
-    normalizeParams(params, this.fieldNameValue, this.sampleCountValue, 0);
-
-    return params;
   }
 }
