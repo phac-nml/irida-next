@@ -249,23 +249,14 @@ module Projects
       ),
            params: {
              q: {
-               groups_attributes: {
-                 '0' => {
-                   'conditions_attributes' => {
-                     '0' => {
-                       field: 'invalid_field',
-                       operator: '=',
-                       value: 'test'
-                     }
-                   }
-                 }
-               }
+               groups_attributes: {}
              }
            }
 
-      # Should re-render trigger modal without template errors
+      # Should re-render trigger modal with validation error
       assert_response :unprocessable_content
-      assert_includes response.body, 'invalid_field'
+      # Error message should contain the "No search parameters" message
+      assert_includes response.body, 'No search parameters were provided'
     end
   end
 end

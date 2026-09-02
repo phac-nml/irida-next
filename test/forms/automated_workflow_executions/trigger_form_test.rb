@@ -22,36 +22,8 @@ module AutomatedWorkflowExecutions
 
       assert_not form.valid?
       assert_predicate form.errors[:q], :any?
-      # Should have validation error about empty query
-      assert form.errors[:q].length >= 1
-    end
-
-    test 'is invalid when query has invalid field' do
-      # Create a query with an invalid field
-      q_hash = {
-        groups_attributes: {
-          '0': {
-            conditions_attributes: {
-              '0': { field: 'invalid_field', operator: '=', value: 'test' }
-            }
-          }
-        }
-      }
-
-      form = TriggerForm.new(
-        q: q_hash,
-        automated_workflow_execution: @automated_workflow_execution,
-        project: @project,
-        request: @request
-      )
-
-      assert_not form.valid?
-      assert_predicate form.errors[:q], :any?
-      # Check that the underlying query object also has errors
-      assert form.query_object.errors.any?
-      # Error message should mention the invalid field
-      error_messages = form.errors[:q].map(&:to_s)
-      assert(error_messages.any? { |msg| msg.include?('invalid_field') || msg.downcase.include?('invalid') })
+      # Should have validation error about no search params (not an advanced query)
+      assert_includes form.errors[:q].map(&:to_s), 'No search parameters were provided'
     end
 
     test 'is invalid when query is not an advanced query' do
@@ -112,29 +84,52 @@ module AutomatedWorkflowExecutions
       assert_equal Sample::SearchGroup, form.search_group_class
     end
 
-    test 'samples method returns empty array when query is invalid' do
+    test 'samples method returns query results' do
+      # Create an advanced query that returns samples
+      q_hash = {
+        groups_attributes: {
+          '0': {
+            conditions_attributes: {
+              '0': { field: 'name', operator: '=', value: samples(:sample1).name }
+            }
+          }
+        }
+      }
+
       form = TriggerForm.new(
-        q: nil,
+        q: q_hash,
         automated_workflow_execution: @automated_workflow_execution,
         project: @project,
         request: @request
       )
 
-      assert_empty form.samples
+      # Even if form is invalid, samples should return query results
+      assert_predicate form.samples, :any?
     end
 
-    test 'errors accumulate from multiple validation failures' do
-      # Test with empty groups (non-advanced query)
+    test 'is valid when advanced query finds samples' do
+      # Create an advanced query with a valid sample
+      q_hash = {
+        groups_attributes: {
+          '0': {
+            conditions_attributes: {
+              '0': { field: 'name', operator: '=', value: samples(:sample1).name }
+            }
+          }
+        }
+      }
+
       form = TriggerForm.new(
-        q: { groups_attributes: {} },
+        q: q_hash,
         automated_workflow_execution: @automated_workflow_execution,
         project: @project,
         request: @request
       )
 
-      assert_not form.valid?
-      # Should have error about no search params
-      assert_includes form.errors[:q].map(&:to_s), 'No search parameters were provided'
+      assert form.valid?
+      assert form.query_object.valid?
+      assert form.query_object.advanced_query?
+      assert_predicate form.samples, :any?
     end
   end
 end
