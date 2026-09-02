@@ -265,6 +265,7 @@ module Projects
 
       # Should re-render trigger modal without template errors
       assert_response :unprocessable_content
+      assert_includes response.body, 'invalid_field'
     end
   end
 end

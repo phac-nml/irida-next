@@ -8,7 +8,7 @@ module AutomatedWorkflowExecutions
 
     attr_accessor :automated_workflow_execution, :project, :request
 
-    attribute :q, :string
+    attribute :q
 
     validate :query_must_be_valid
     validate :query_must_be_advanced_query
@@ -22,11 +22,15 @@ module AutomatedWorkflowExecutions
       Sample::SearchGroup
     end
 
+    def query_object
+      query
+    end
+
     private
 
     def query
       @query ||= Sample::Query.new(
-        q_params.merge(
+        (q || {}).merge(
           project_ids: [project.id],
           request:
         )
@@ -39,14 +43,6 @@ module AutomatedWorkflowExecutions
 
     def query_advanced?
       @query_advanced ||= query.advanced_query?
-    end
-
-    def q_params
-      return {} if q.blank?
-
-      JSON.parse(q, symbolize_names: true)
-    rescue JSON::ParserError
-      {}
     end
 
     def query_must_be_valid

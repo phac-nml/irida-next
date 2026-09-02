@@ -123,7 +123,7 @@ module Projects
         request:
       )
 
-      @query = Sample::Query.new({ project_ids: [@project.id], request: })
+      @query = @trigger_form.query_object
       advanced_search_fields(@project.namespace)
 
       respond_to do |format|
@@ -138,32 +138,33 @@ module Projects
       not_found unless Flipper.enabled?(:trigger_automated_workflow_execution)
 
       @trigger_form = AutomatedWorkflowExecutions::TriggerForm.new(
-        q: trigger_launch_params[:q]&.to_json,
+        q: trigger_launch_params,
         automated_workflow_execution: @automated_workflow_execution,
         project: @project,
         request:
       )
 
-      unless @trigger_form.valid?
-        handle_trigger_form_errors
-        return
+      respond_to do |format|
+        format.turbo_stream do
+          if @trigger_form.valid?
+            @samples = @trigger_form.samples
+            launch_workflow_for_samples(@samples)
+            render 'launch', status: :ok, locals: {
+              type: 'success',
+              message: t('.success',
+                         workflow_name: @automated_workflow_execution.workflow.name,
+                         sample_count: @samples.count)
+            }
+          else
+            @query = @trigger_form.query_object
+            advanced_search_fields(@project.namespace)
+            render 'trigger', status: :unprocessable_content
+          end
+        end
       end
-
-      @samples = @trigger_form.samples
-      launch_workflow_for_samples(@samples)
-
-      render 'launch', status: :ok, formats: [:turbo_stream],
-                       locals: { type: 'success', message: t('.success',
-                                                             workflow_name: @automated_workflow_execution.workflow.name,
-                                                             sample_count: @samples.count) }
     end
 
     private
-
-    def handle_trigger_form_errors
-      advanced_search_fields(@project.namespace)
-      render 'trigger', status: :unprocessable_content, formats: [:turbo_stream]
-    end
 
     def current_page
       @current_page = t(:'projects.sidebar.automated_workflow_executions')
@@ -176,7 +177,7 @@ module Projects
     end
 
     def trigger_launch_params
-      params.expect(q: [:sort, :name_or_puid_cont, :groups_attributes, { groups_attributes: {} }])
+      params.fetch(:q, {}).permit(:groups_attributes, { groups_attributes: {} })
     end
 
     def launch_workflow_for_samples(samples)
