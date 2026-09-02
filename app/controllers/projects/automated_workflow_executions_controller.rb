@@ -115,6 +115,13 @@ module Projects
 
     def trigger
       authorize! @namespace, to: :submit_workflow?
+      not_found unless Flipper.enabled?(:trigger_automated_workflow_execution)
+
+      @trigger_form = AutomatedWorkflowExecutions::TriggerForm.new(
+        automated_workflow_execution: @automated_workflow_execution,
+        project: @project,
+        request:
+      )
 
       @query = Sample::Query.new({ project_ids: [@project.id], request: })
       advanced_search_fields(@project.namespace)
@@ -126,34 +133,23 @@ module Projects
       end
     end
 
-    def launch # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def launch # rubocop:disable Metrics/MethodLength
       authorize! @namespace, to: :submit_workflow?
       not_found unless Flipper.enabled?(:trigger_automated_workflow_execution)
 
-      @search_params = trigger_launch_params.merge({ project_ids: [@project.id] })
-      @query = Sample::Query.new(@search_params.merge({ request: }))
+      @trigger_form = AutomatedWorkflowExecutions::TriggerForm.new(
+        q: trigger_launch_params[:q]&.to_json,
+        automated_workflow_execution: @automated_workflow_execution,
+        project: @project,
+        request:
+      )
 
-      unless @query.valid?
-        advanced_search_fields(@project.namespace)
-        render 'trigger', status: :unprocessable_content, formats: [:turbo_stream]
+      unless @trigger_form.valid?
+        handle_trigger_form_errors
         return
       end
 
-      unless @query.advanced_query?
-        render 'launch', status: :unprocessable_content, formats: [:turbo_stream],
-                         locals: { type: 'alert', message: t('.error.no_search_params') }
-        return
-      end
-
-      @samples = @query.results
-
-      if @samples.blank?
-        @error_message = t('.error.no_samples_found')
-        advanced_search_fields(@project.namespace)
-        render 'trigger', status: :unprocessable_content, formats: [:turbo_stream]
-        return
-      end
-
+      @samples = @trigger_form.samples
       launch_workflow_for_samples(@samples)
 
       render 'launch', status: :ok, formats: [:turbo_stream],
@@ -163,6 +159,11 @@ module Projects
     end
 
     private
+
+    def handle_trigger_form_errors
+      advanced_search_fields(@project.namespace)
+      render 'trigger', status: :unprocessable_content, formats: [:turbo_stream]
+    end
 
     def current_page
       @current_page = t(:'projects.sidebar.automated_workflow_executions')
