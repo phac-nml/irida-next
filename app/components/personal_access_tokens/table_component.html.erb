@@ -57,7 +57,7 @@
 
     <% if !@actions.empty? %>
       <% table.with_column(t("personal_access_tokens.table.header.action"),
-          classes: "flex justify-start"
+          classes: "flex justify-start gap-1"
         ) do |row| %>
         <% if @actions[:revoke] %>
           <%= pathogen_button_to t("personal_access_tokens.table.revoke"),
@@ -68,7 +68,7 @@
             label: t(:"personal_access_tokens.table.revoke_aria_label", name: row[:name]),
           },
           tone: :danger,
-          emphasis: :ghost,
+          emphasis: :outline,
           size: :small %>
         <% end %>
 
@@ -81,7 +81,7 @@
             label: t(:"personal_access_tokens.table.rotate_aria_label", name: row[:name]),
           },
           tone: :neutral,
-          emphasis: :ghost,
+          emphasis: :outline,
           size: :small %>
         <% end %>
       <% end %>
