@@ -55,6 +55,7 @@
             "advanced-search--v1-enum-fields-value": json_escape_data(advanced_search_fields.fetch(:enum_fields, {})),
             "advanced-search--v1-enum-operations-value": json_escape_data(advanced_search_form.enum_operations),
             "advanced-search--v1-operations-value": json_escape_data(advanced_search_form.operations),
+            "advanced-search--v1-open-value": true,
           },
         ) do %>
           <%= render AdvancedSearchFormComponent.new(
