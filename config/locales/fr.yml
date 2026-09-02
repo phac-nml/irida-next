@@ -1542,6 +1542,11 @@ fr:
         add_new_automated_workflow_execution: Nouveau pipeline automatisé
         subtitle: Configurer des pipelines automatisés à lancer lorsque les données jumelées sont téléchargées dans le projet
         title: Pipelines automatisés
+      launch:
+        error:
+          no_samples_found: Aucun échantillon trouvé correspondant aux critères de recherche fournis
+          no_search_params: Veuillez fournir les paramètres de recherche pour déclencher le pipeline automatisé
+        success: Pipeline automatisé %{workflow_name} déclenché pour %{sample_count} exemple(s)
       new_automated_workflow_execution_modal:
         title: Paramètres %{workflow}
       pipeline_selection_modal:

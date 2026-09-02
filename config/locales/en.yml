@@ -1541,6 +1541,7 @@ en:
         title: Automated Pipelines
       launch:
         error:
+          no_samples_found: No samples found matching the provided search criteria
           no_search_params: Please provide search parameters to trigger the automated pipeline
         success: Triggered automated pipeline %{workflow_name} for %{sample_count} sample(s)
       new_automated_workflow_execution_modal:

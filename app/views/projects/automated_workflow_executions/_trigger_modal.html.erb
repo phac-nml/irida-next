@@ -28,6 +28,12 @@
       </dl>
     </div>
 
+    <% if error_message.present? %>
+      <div class="rounded-lg border-l-4 border-red-500 bg-red-50 p-4">
+        <p class="text-sm text-red-700"><%= error_message %></p>
+      </div>
+    <% end %>
+
     <div>
       <h3 class="mb-4 text-sm font-semibold text-gray-900"><%= t(".search_form_title") %></h3>
 
@@ -66,17 +72,14 @@
         <% end %>
 
         <div class="mt-6 flex gap-3">
-          <%= render Pathogen::Button.new(
-            type: :button,
-            tone: :neutral,
-            emphasis: :outline,
-            text: t("common.actions.cancel"),
-            data: { action: "click->viral--dialog#close" }
-          ) %>
+          <%= render Viral::ButtonComponent.new(
+            data: { action: "viral--dialog#close" }
+          ) do %>
+            <%= t("common.actions.cancel") %>
+          <% end %>
 
           <%= f.submit t("common.actions.trigger"),
-                      tone: :primary,
-                      emphasis: :solid %>
+            class: "px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" %>
         </div>
       <% end %>
     </div>
