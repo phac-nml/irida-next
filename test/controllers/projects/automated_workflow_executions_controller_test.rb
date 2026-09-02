@@ -237,5 +237,34 @@ module Projects
 
       assert_nil result
     end
+
+    test 'launch re-renders trigger modal with errors on validation failure' do
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+
+      post launch_namespace_project_automated_workflow_execution_path(
+        @namespace,
+        @project,
+        automated_workflow_execution,
+        format: :turbo_stream
+      ),
+           params: {
+             q: {
+               groups_attributes: {
+                 '0' => {
+                   'conditions_attributes' => {
+                     '0' => {
+                       field: 'invalid_field',
+                       operator: '=',
+                       value: 'test'
+                     }
+                   }
+                 }
+               }
+             }
+           }
+
+      # Should re-render trigger modal without template errors
+      assert_response :unprocessable_content
+    end
   end
 end

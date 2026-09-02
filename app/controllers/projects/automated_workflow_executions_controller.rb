@@ -133,6 +133,7 @@ module Projects
       @query = Sample::Query.new(@search_params.merge({ request: }))
 
       unless @query.valid?
+        advanced_search_fields(@project.namespace)
         respond_to do |format|
           format.turbo_stream do
             render 'trigger', status: :unprocessable_content
