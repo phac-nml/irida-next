@@ -65,16 +65,11 @@
         <% end %>
 
         <div class="mt-6 flex gap-3">
-          <%= link_to t("common.actions.cancel"),
-            namespace_project_automated_workflow_executions_path(
-              @project.parent,
-              @project
-            ),
-            data: {
-              turbo_stream: true,
-            },
-            method: :get,
-            class: "px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50" %>
+          <%= render Viral::ButtonComponent.new(
+            data: { action: "viral--dialog#close" }
+          ) do %>
+            <%= t("common.actions.cancel") %>
+          <% end %>
 
           <%= f.submit t("common.actions.trigger"),
             class: "px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" %>
