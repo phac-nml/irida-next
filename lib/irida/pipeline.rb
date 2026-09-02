@@ -175,6 +175,20 @@ module Irida
       nil
     end
 
+    def sample_limit_message(sample_count)
+      min_samples_configured = min_samples_limit_configured?
+      max_samples_configured = max_samples_limit_configured?
+
+      if min_samples_configured && sample_count < minimum_samples
+        I18n.t('shared.workflow_executions.sample_limits.min_samples_required',
+               min_samples: minimum_samples)
+
+      elsif max_samples_configured && sample_count > maximum_samples
+        I18n.t('shared.workflow_executions.sample_limits.max_samples_exceeded',
+               max_samples: maximum_samples)
+      end
+    end
+
     private
 
     def text_for(value)
