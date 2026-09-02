@@ -162,21 +162,26 @@ module Groups
       assert_response :unauthorized
     end
 
-    test 'should apply group workflow cancellation state transitions' do
+    test 'submitter should cancel a shared group workflow execution in a cancelable state' do
       submitter = users(:james_doe)
       sign_in submitter
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_submitted)
 
-      assert_cancel_state_transitions(
-        cancel_path: ->(workflow_execution) { cancel_group_workflow_execution_path(@group, workflow_execution) },
-        fixtures: %i[
-          workflow_execution_group_shared_new
-          workflow_execution_group_shared_prepared
-          workflow_execution_group_shared_submitted
-          workflow_execution_group_shared_running
-          workflow_execution_group_shared_completed
-        ],
-        locale: submitter.locale
-      )
+      put cancel_group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
+
+      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling',
+                                                                   locale: submitter.locale)
+    end
+
+    test 'submitter should not cancel a shared group workflow execution in a non-cancelable state' do
+      submitter = users(:james_doe)
+      sign_in submitter
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
+
+      put cancel_group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_equal 'completed', workflow_execution.reload.state
     end
 
     test 'submitter should be able to update their shared workflow executions name post launch' do
@@ -219,33 +224,29 @@ module Groups
       assert_response :unauthorized
     end
 
-    test 'should apply group workflow deletion state transitions' do
-      sign_in users(:james_doe)
-
-      assert_destroy_state_transitions(
-        destroy_path: ->(workflow_execution) { group_workflow_execution_path(@group, workflow_execution) },
-        fixtures: %i[
-          workflow_execution_group_shared_prepared
-          workflow_execution_group_shared_submitted
-          workflow_execution_group_shared_completed
-          workflow_execution_group_shared_error
-          workflow_execution_group_shared_canceling
-          workflow_execution_group_shared_canceled
-          workflow_execution_group_shared_running
-          workflow_execution_group_shared_new
-        ],
-        redirect_to: -> { group_workflow_executions_path(@group) }
-      )
-    end
-
-    test 'redirect to project workflow executions page when workflow execution is deleted' do
+    test 'submitter should destroy a shared group workflow execution in a deletable state' do
       sign_in users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_canceled)
 
-      delete group_workflow_execution_path(@group, workflow_execution, redirect: true), as: :turbo_stream
-      assert_response :redirect
+      assert_difference -> { WorkflowExecution.count } => -1,
+                        -> { SamplesWorkflowExecution.count } => -1 do
+        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
+      end
 
+      assert_response :redirect
       assert_redirected_to group_workflow_executions_path(@group)
+    end
+
+    test 'submitter should not destroy a shared group workflow execution in a non-deletable state' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_running)
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        delete group_workflow_execution_path(@group, workflow_execution), as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
     end
 
     test 'accessing workflow executions index on invalid page causes pagy overflow redirect at group level' do

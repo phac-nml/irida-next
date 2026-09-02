@@ -190,48 +190,44 @@ module Projects
       assert_response :unauthorized
     end
 
-    test 'should apply project workflow cancellation state transitions' do
-      assert_cancel_state_transitions(
-        cancel_path: lambda { |workflow_execution|
-          cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
-        },
-        fixtures: %i[
-          automated_example_new
-          automated_example_prepared
-          automated_example_submitted
-          automated_example_running
-          automated_example_completed
-        ]
-      )
+    test 'should cancel a project workflow execution in a cancelable state' do
+      workflow_execution = workflow_executions(:automated_example_submitted)
+
+      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution), as: :turbo_stream
+
+      assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling')
     end
 
-    test 'should apply project workflow deletion state transitions' do
-      assert_destroy_state_transitions(
-        destroy_path: lambda { |workflow_execution|
-          namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
-        },
-        fixtures: %i[
-          automated_example_prepared
-          automated_example_submitted
-          automated_example_completed
-          automated_example_error
-          automated_example_canceling
-          automated_example_canceled
-          automated_example_running
-          automated_example_new
-        ],
-        redirect_to: -> { namespace_project_workflow_executions_path(@namespace, @project) }
-      )
+    test 'should not cancel a project workflow execution in a non-cancelable state' do
+      workflow_execution = workflow_executions(:automated_example_completed)
+
+      put cancel_namespace_project_workflow_execution_path(@namespace, @project, workflow_execution), as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_equal 'completed', workflow_execution.reload.state
     end
 
-    test 'redirect to project workflow executions page when workflow execution is deleted' do
+    test 'should destroy a project workflow execution in a deletable state' do
       workflow_execution = workflow_executions(:automated_example_canceled)
 
-      delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution, redirect: true),
-             as: :turbo_stream
-      assert_response :redirect
+      assert_difference -> { WorkflowExecution.count } => -1,
+                        -> { SamplesWorkflowExecution.count } => -1 do
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution), as: :turbo_stream
+      end
 
+      assert_response :redirect
       assert_redirected_to namespace_project_workflow_executions_path(@namespace, @project)
+    end
+
+    test 'should not destroy a project workflow execution in a non-deletable state' do
+      workflow_execution = workflow_executions(:automated_example_running)
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        delete namespace_project_workflow_execution_path(@namespace, @project, workflow_execution), as: :turbo_stream
+      end
+
+      assert_response :unprocessable_content
     end
 
     test 'analyst or higher access level can update workflow execution name post launch' do

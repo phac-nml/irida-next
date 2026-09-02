@@ -264,34 +264,44 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
                   text: workflow_execution_shared1.workflow.name
   end
 
-  test 'should apply workflow cancellation state transitions' do
-    assert_cancel_state_transitions(
-      cancel_path: ->(workflow_execution) { cancel_workflow_execution_path(workflow_execution) },
-      fixtures: %i[
-        irida_next_example_new
-        irida_next_example_prepared
-        irida_next_example_submitted
-        irida_next_example_running
-        irida_next_example_completed
-      ]
-    )
+  test 'should cancel a workflow execution in a cancelable state' do
+    workflow_execution = workflow_executions(:irida_next_example_submitted)
+
+    put cancel_workflow_execution_path(workflow_execution), as: :turbo_stream
+
+    assert_workflow_execution_cancel_success(workflow_execution, expected_state: 'canceling')
   end
 
-  test 'should apply workflow deletion state transitions' do
-    assert_destroy_state_transitions(
-      destroy_path: ->(workflow_execution) { workflow_execution_path(workflow_execution) },
-      fixtures: %i[
-        irida_next_example_prepared
-        irida_next_example_submitted
-        irida_next_example_completed
-        irida_next_example_error
-        irida_next_example_canceling
-        irida_next_example_canceled
-        irida_next_example_running
-        irida_next_example_new
-      ],
-      redirect_to: workflow_executions_path
-    )
+  test 'should not cancel a workflow execution in a non-cancelable state' do
+    workflow_execution = workflow_executions(:irida_next_example_completed)
+
+    put cancel_workflow_execution_path(workflow_execution), as: :turbo_stream
+
+    assert_response :unprocessable_content
+    assert_equal 'completed', workflow_execution.reload.state
+  end
+
+  test 'should destroy a workflow execution in a deletable state' do
+    workflow_execution = workflow_executions(:irida_next_example_canceled)
+
+    assert_difference -> { WorkflowExecution.count } => -1,
+                      -> { SamplesWorkflowExecution.count } => -1 do
+      delete workflow_execution_path(workflow_execution), as: :turbo_stream
+    end
+
+    assert_response :redirect
+    assert_redirected_to workflow_executions_path
+  end
+
+  test 'should not destroy a workflow execution in a non-deletable state' do
+    workflow_execution = workflow_executions(:irida_next_example_running)
+
+    assert_no_difference -> { WorkflowExecution.count },
+                         -> { SamplesWorkflowExecution.count } do
+      delete workflow_execution_path(workflow_execution), as: :turbo_stream
+    end
+
+    assert_response :unprocessable_content
   end
 
   test 'should show workflow execution with summary and tab content' do
