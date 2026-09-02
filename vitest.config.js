@@ -11,6 +11,7 @@ export default defineConfig({
     alias: {
       controllers: resolve(jsRoot, "controllers"),
       debounce: resolve("vendor/javascript/debounce.js"),
+      tabbable: resolve("vendor/javascript/tabbable.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
       "utilities/focus": resolve(jsRoot, "utilities/focus.js"),
@@ -34,5 +35,11 @@ export default defineConfig({
     passWithNoTests: true,
     clearMocks: true,
     restoreMocks: true,
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "html"],
+      include: ["app/javascript/**/*.{js,ts}"],
+      all: true,
+    },
   },
 });
