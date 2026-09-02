@@ -5,8 +5,10 @@
 class AutomatedWorkflowExecutionSubscriber
   PAIRED_END_TYPES = %w[illumina_pe pe].freeze
 
-  def emit(event)
+  def emit(event) # rubocop:disable Metrics/AbcSize
     return unless event[:name] == 'attachments.create'
+    return unless Irida::Pipelines.instance.pipelines.any? &&
+                  event[:payload][:attachable].instance_of?(Sample)
 
     attachable = event[:payload][:attachable]
     attachments = event[:payload][:attachments]
@@ -15,6 +17,8 @@ class AutomatedWorkflowExecutionSubscriber
 
     paired_end = paired_end_attachments(attachments)
     return unless paired_end.any?
+
+    return if event[:payload][:attachable].project.namespace.automated_workflow_executions.blank?
 
     # Trigger the automated workflow execution
     AutomatedWorkflowExecutions::LaunchJob.perform_later(attachable, paired_end.last)

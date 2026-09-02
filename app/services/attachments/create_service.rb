@@ -50,15 +50,14 @@ module Attachments
 
       # Fallback to the old behavior of launching automated workflow executions if the feature flag is not enabled.
       # This is to ensure that existing functionality continues to work.
-      if Irida::Pipelines.instance.pipelines.any? &&
-         @attachable.instance_of?(Sample) &&
-         @attachable.project.namespace.automated_workflow_executions.present? &&
-         transaction_result
+      if transaction_result
 
         if Flipper.enabled?(:automated_workflow_execution_subscriber)
           Rails.event.notify('attachments.create',
                              { attachable: @attachable, attachments: @attachments })
-        else
+        elsif Irida::Pipelines.instance.pipelines.any? &&
+              @attachable.instance_of?(Sample) &&
+              @attachable.project.namespace.automated_workflow_executions.present?
           launch_automated_workflow_executions(@pe_attachments&.last)
         end
       end
