@@ -66,14 +66,17 @@
         <% end %>
 
         <div class="mt-6 flex gap-3">
-          <%= render Viral::ButtonComponent.new(
-            data: { action: "viral--dialog#close" }
-          ) do %>
-            <%= t("common.actions.cancel") %>
-          <% end %>
+          <%= render Pathogen::Button.new(
+            type: :button,
+            tone: :neutral,
+            emphasis: :outline,
+            text: t("common.actions.cancel"),
+            data: { action: "click->viral--dialog#close" }
+          ) %>
 
           <%= f.submit t("common.actions.trigger"),
-            class: "px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" %>
+                      tone: :primary,
+                      emphasis: :solid %>
         </div>
       <% end %>
     </div>
