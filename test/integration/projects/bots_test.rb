@@ -4,8 +4,6 @@ require 'test_helper'
 
 module Projects
   class BotsTest < ActionDispatch::IntegrationTest
-    include ActionView::Helpers::SanitizeHelper
-
     test 'can view bot listings for a project with proper access' do
       sign_in users(:john_doe)
       namespace = groups(:group_one)

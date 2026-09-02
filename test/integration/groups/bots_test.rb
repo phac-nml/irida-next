@@ -4,8 +4,6 @@ require 'test_helper'
 
 module Groups
   class BotsTest < ActionDispatch::IntegrationTest
-    include ActionView::Helpers::SanitizeHelper
-
     test 'can view bot listings for a group with proper access' do
       sign_in users(:john_doe)
       group = groups(:group_one)
