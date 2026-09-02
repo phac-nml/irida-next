@@ -35,7 +35,7 @@
     <% end %>
 
     <% table.with_column(t(".headers.actions"),
-        classes: "flex justify-start"
+        classes: "flex justify-start gap-1"
       ) do |row| %>
       <% unless row.disabled %>
         <%= pathogen_button_to t("common.actions.edit"),
