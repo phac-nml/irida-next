@@ -46,6 +46,10 @@ function renderFixtureHtml({
       <span data-selection-target="status" class="sr-only" aria-live="polite"></span>
       <input
         type="checkbox"
+        data-selection-target="selectPage"
+      />
+      <input
+        type="checkbox"
         value="1"
         data-selection-target="rowSelection"
       />
@@ -169,5 +173,47 @@ describe("selection controller", () => {
     );
 
     setItemSpy.mockRestore();
+  });
+
+  it("selects and deselects every row on the page via the page checkbox", async () => {
+    application = await startController({ maxSelection: 5 });
+    const controller = controllerFor(application);
+
+    controller.togglePage({ target: { checked: true } });
+
+    expect(controller.rowSelectionTargets.every((row) => row.checked)).toBe(
+      true,
+    );
+    expect(controller.selectedTarget.innerText).toBe(3);
+    expect(controller.selectPageTarget.checked).toBe(true);
+    expect(sessionStorage.getItem("selection-test-key")).toBe('["1","2","3"]');
+
+    controller.togglePage({ target: { checked: false } });
+
+    expect(controller.rowSelectionTargets.some((row) => row.checked)).toBe(
+      false,
+    );
+    expect(controller.selectedTarget.innerText).toBe(0);
+    expect(controller.selectPageTarget.checked).toBe(false);
+    expect(sessionStorage.getItem("selection-test-key")).toBe("[]");
+  });
+
+  it("restores the persisted selection after a Turbo morph", async () => {
+    sessionStorage.setItem("selection-test-key", '["2"]');
+
+    application = await startController({ maxSelection: 5 });
+    const controller = controllerFor(application);
+
+    const persistedRow = controller.rowSelectionTargets.find(
+      (row) => row.value === "2",
+    );
+    expect(persistedRow.checked).toBe(true);
+
+    // Simulate a partial page replacement clearing the checkbox state
+    persistedRow.checked = false;
+    document.dispatchEvent(new Event("turbo:morph"));
+
+    expect(persistedRow.checked).toBe(true);
+    expect(controller.selectedTarget.innerText).toBe(1);
   });
 });
