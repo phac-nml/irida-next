@@ -18,6 +18,10 @@ module AutomatedWorkflowExecutions
       @samples ||= query_valid? && query_advanced? ? @query.results : []
     end
 
+    def search_group_class
+      Sample::SearchGroup
+    end
+
     private
 
     def query
