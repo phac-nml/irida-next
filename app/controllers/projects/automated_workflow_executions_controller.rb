@@ -144,23 +144,17 @@ module Projects
         request:
       )
 
-      respond_to do |format|
-        format.turbo_stream do
-          if @trigger_form.valid?
-            @samples = @trigger_form.samples
-            launch_workflow_for_samples(@samples)
-            render 'launch', status: :ok, locals: {
-              type: 'success',
-              message: t('.success',
-                         workflow_name: @automated_workflow_execution.workflow.name,
-                         sample_count: @samples.count)
-            }
-          else
-            @query = @trigger_form.query_object
-            advanced_search_fields(@project.namespace)
-            render 'trigger', status: :unprocessable_content
-          end
-        end
+      if @trigger_form.valid?
+        @samples = @trigger_form.samples
+        launch_workflow_for_samples(@samples)
+        flash[:success] = t('.success',
+                            workflow_name: @automated_workflow_execution.workflow.name,
+                            sample_count: @samples.count)
+        redirect_to namespace_project_workflow_executions_path(@project.parent, @project)
+      else
+        @query = @trigger_form.query_object
+        advanced_search_fields(@project.namespace)
+        render 'trigger', status: :unprocessable_content, formats: :turbo_stream
       end
     end
 

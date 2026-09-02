@@ -77,7 +77,7 @@
           <%= render CancelButtonComponent.new(data: { action: "click->viral--dialog#close" }) %>
 
           <%= f.submit t("common.actions.trigger"),
-            tone: :primary, emphasis: :solid %>
+            tone: :primary, emphasis: :solid, data: { turbo_frame: "_top" } %>
         </div>
       <% end %>
     </div>

@@ -258,5 +258,35 @@ module Projects
       # Error message should contain the "No search parameters" message
       assert_includes response.body, 'No search parameters were provided'
     end
+
+    test 'launch redirects to workflow executions on success' do
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+      sample = samples(:sample1)
+
+      post launch_namespace_project_automated_workflow_execution_path(
+        @namespace,
+        @project,
+        automated_workflow_execution,
+        format: :turbo_stream
+      ),
+           params: {
+             q: {
+               groups_attributes: {
+                 '0' => {
+                   'conditions_attributes' => {
+                     '0' => {
+                       field: 'name',
+                       operator: '=',
+                       value: sample.name
+                     }
+                   }
+                 }
+               }
+             }
+           }
+
+      # Should redirect to workflow executions listing
+      assert_redirected_to namespace_project_workflow_executions_path(@namespace, @project)
+    end
   end
 end
