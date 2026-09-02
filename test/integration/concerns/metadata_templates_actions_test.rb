@@ -12,6 +12,12 @@ class MetadataTemplatesActionsTest < ActionDispatch::IntegrationTest
     @project_namespace = @project.namespace
     @group_metadata_template = metadata_templates(:valid_group_metadata_template)
     @project_metadata_template = metadata_templates(:valid_metadata_template)
+    @sorted_group = groups(:group_two)
+    @group_metadata_template1 = metadata_templates(:group_two_metadata_template1)
+    @group_metadata_template2 = metadata_templates(:group_two_metadata_template2)
+    @sorted_project = projects(:john_doe_project2)
+    @project_metadata_template1 = metadata_templates(:project2_metadata_template1)
+    @project_metadata_template2 = metadata_templates(:project2_metadata_template2)
   end
 
   test 'group metadata templates index' do
@@ -411,11 +417,41 @@ class MetadataTemplatesActionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'group metadata templates index with pagination and sorting' do
-    get group_metadata_templates_path(@group, params: { q: { s: 'name desc' }, page: 2, limit: 1 })
-
+    get group_metadata_templates_path(@sorted_group)
     assert_response :success
-    # Verify the response includes the sorted and paginated content
-    assert_includes @response.body, 'turbo-stream'
+    assert_sort_state(1, 'ascending')
+    assert_first_rows_include(@group_metadata_template1.name, @group_metadata_template2.name)
+
+    get group_metadata_templates_path(@sorted_group, params: { q: { s: 'name desc' } })
+    assert_response :success
+    assert_sort_state(1, 'descending')
+    assert_first_rows_include(@group_metadata_template2.name, @group_metadata_template1.name)
+
+    get group_metadata_templates_path(@sorted_group, params: { q: { s: 'created_by_email asc' } })
+    assert_response :success
+    assert_sort_state(3, 'ascending')
+    assert_first_rows_include(@group_metadata_template1.name, @group_metadata_template2.name)
+
+    get group_metadata_templates_path(@sorted_group, params: { q: { s: 'created_by_email desc' } })
+    assert_response :success
+    assert_sort_state(3, 'descending')
+    assert_first_rows_include(@group_metadata_template2.name, @group_metadata_template1.name)
+  end
+
+  test 'accessing metadata templates index on invalid page causes pagy overflow redirect at group level' do
+    # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
+    # The rescue_from handler should redirect to first page with page=1 and limit=20
+    get group_metadata_templates_path(@group, page: 50)
+
+    # Should be redirected to first page
+    assert_response :redirect
+    # Check both page and limit are in the redirect URL (order may vary)
+    assert_match(/page=1/, response.location)
+    assert_match(/limit=20/, response.location)
+
+    # Follow the redirect and verify it's successful
+    follow_redirect!
+    assert_response :success
   end
 
   test 'project metadata templates list with none template' do
@@ -452,12 +488,44 @@ class MetadataTemplatesActionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'project metadata templates index with pagination and sorting' do
-    get namespace_project_metadata_templates_path(@project_namespace.parent, @project,
-                                                  params: { q: { s: 'name desc' }, page: 2, limit: 1 })
-
+    get namespace_project_metadata_templates_path(@sorted_project.namespace.parent, @sorted_project)
     assert_response :success
-    # Verify the response includes the sorted and paginated content
-    assert_includes @response.body, 'turbo-stream'
+    assert_sort_state(1, 'ascending')
+    assert_first_rows_include(@project_metadata_template1.name, @project_metadata_template2.name)
+
+    get namespace_project_metadata_templates_path(@sorted_project.namespace.parent, @sorted_project,
+                                                  params: { q: { s: 'name desc' } })
+    assert_response :success
+    assert_sort_state(1, 'descending')
+    assert_first_rows_include(@project_metadata_template2.name, @project_metadata_template1.name)
+
+    get namespace_project_metadata_templates_path(@sorted_project.namespace.parent, @sorted_project,
+                                                  params: { q: { s: 'created_by_email asc' } })
+    assert_response :success
+    assert_sort_state(3, 'ascending')
+    assert_first_rows_include(@project_metadata_template2.name, @project_metadata_template1.name)
+
+    get namespace_project_metadata_templates_path(@sorted_project.namespace.parent, @sorted_project,
+                                                  params: { q: { s: 'created_by_email desc' } })
+    assert_response :success
+    assert_sort_state(3, 'descending')
+    assert_first_rows_include(@project_metadata_template1.name, @project_metadata_template2.name)
+  end
+
+  test 'accessing metadata templates index on invalid page causes pagy overflow redirect at project level' do
+    # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
+    # The rescue_from handler should redirect to first page with page=1 and limit=20
+    get namespace_project_metadata_templates_path(@project_namespace.parent, @project_namespace.project, page: 50)
+
+    # Should be redirected to first page
+    assert_response :redirect
+    # Check both page and limit are in the redirect URL (order may vary)
+    assert_match(/page=1/, response.location)
+    assert_match(/limit=20/, response.location)
+
+    # Follow the redirect and verify it's successful
+    follow_redirect!
+    assert_response :success
   end
 
   test 'metadata_templates_path raises NotImplementedError when not overridden' do
