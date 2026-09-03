@@ -23,35 +23,29 @@ module Projects
       end
 
       test 'should get new for group if maintainer' do
-        user = users(:joan_doe)
-        login_as user
+        sign_in users(:joan_doe)
 
         get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
         assert_response :success
       end
 
       test 'should not get new for group if access level less than a maintainer' do
-        user = users(:ryan_doe)
-        login_as user
+        sign_in users(:ryan_doe)
 
         get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
         assert_response :unauthorized
       end
 
-      test 'should enqueue a Samples::TransferJob for group' do
-        assert_enqueued_jobs 1, only: ::Samples::TransferJob do
-          post_transfer(sample_ids: [@sample1.id, @sample2.id], destination: @project2)
-        end
-      end
+      [[::Samples::TransferJob, false], [::Samples::TransferJobV2, true]].each do |job_class, v2|
+        test "should enqueue a #{job_class.name} for group" do
+          Flipper.enable(:v2_sample_transfer) if v2
 
-      test 'should enqueue a Samples::TransferJobV2 for group' do
-        Flipper.enable(:v2_sample_transfer)
+          assert_enqueued_jobs 1, only: job_class do
+            post_transfer(sample_ids: [@sample1.id, @sample2.id], destination: @project2)
+          end
 
-        assert_enqueued_jobs 1, only: ::Samples::TransferJobV2 do
-          post_transfer(sample_ids: [@sample1.id, @sample2.id], destination: @project2)
+          Flipper.disable(:v2_sample_transfer) if v2
         end
-      ensure
-        Flipper.disable(:v2_sample_transfer)
       end
 
       test 'should get new for project if owner' do
@@ -60,41 +54,29 @@ module Projects
       end
 
       test 'should not get new for project if non-owner' do
-        user = users(:micha_doe)
-        login_as user
+        sign_in users(:micha_doe)
 
         get new_samples_transfer_path(namespace_id: @project.namespace.id, format: :turbo_stream)
         assert_response :unauthorized
       end
 
-      test 'should enqueue a Samples::TransferJob for project' do
-        assert_enqueued_jobs 1, only: ::Samples::TransferJob do
-          post samples_transfer_path(namespace_id: @project.namespace.id, format: :turbo_stream),
-               params: {
-                 transfer: {
-                   new_project_id: @project2.id,
-                   sample_ids: [@sample1.id, @sample2.id]
-                 },
-                 broadcast_target: 'a_broadcast_target'
-               }
-        end
-      end
+      [[::Samples::TransferJob, false], [::Samples::TransferJobV2, true]].each do |job_class, v2|
+        test "should enqueue a #{job_class.name} for project" do
+          Flipper.enable(:v2_sample_transfer) if v2
 
-      test 'should enqueue a Samples::TransferJobV2 for project' do
-        Flipper.enable(:v2_sample_transfer)
+          assert_enqueued_jobs 1, only: job_class do
+            post samples_transfer_path(namespace_id: @project.namespace.id, format: :turbo_stream),
+                 params: {
+                   transfer: {
+                     new_project_id: @project2.id,
+                     sample_ids: [@sample1.id, @sample2.id]
+                   },
+                   broadcast_target: 'a_broadcast_target'
+                 }
+          end
 
-        assert_enqueued_jobs 1, only: ::Samples::TransferJobV2 do
-          post samples_transfer_path(namespace_id: @project.namespace.id, format: :turbo_stream),
-               params: {
-                 transfer: {
-                   new_project_id: @project2.id,
-                   sample_ids: [@sample1.id, @sample2.id]
-                 },
-                 broadcast_target: 'a_broadcast_target'
-               }
+          Flipper.disable(:v2_sample_transfer) if v2
         end
-      ensure
-        Flipper.disable(:v2_sample_transfer)
       end
 
       test 'transfer dialog sample listing' do
@@ -141,59 +123,59 @@ module Projects
         end
       end
 
-      test 'transfer samples' do
-        assert_samples_page(@project2, 20)
-        assert_samples_page(@project, 3)
-        get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
-        assert_response :success
-        assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_transfer_dialog
-        end
-        post_list(@project.samples.ids)
+      [[::Samples::TransferJob, false], [::Samples::TransferJobV2, true]].each do |job_class, v2|
+        test "transfer samples with #{job_class.name}" do
+          Flipper.enable(:v2_sample_transfer) if v2
 
-        assert_transfer_enqueued(::Samples::TransferJob)
-        assert_difference(-> { @project2.samples.count }, 3) do
-          perform_enqueued_jobs only: [::Samples::TransferJob]
-        end
+          assert_samples_page(@project2, 20)
+          assert_samples_page(@project, 3)
+          get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
+          assert_response :success
+          assert_select 'turbo-stream[target="samples_dialog"]' do
+            assert_transfer_dialog
+          end
+          post_list(@project.samples.ids)
 
-        assert_empty @project.samples.where(id: [@sample1.id, @sample2.id, @sample30.id])
-        assert_samples_page(@project2, 23)
-        [@sample1, @sample2, @sample30].each do |sample|
-          assert_select "tbody#samples-table-body tr##{dom_id(sample)}", count: 1
+          assert_transfer_enqueued(job_class)
+          assert_difference(-> { @project2.samples.count }, 3) do
+            perform_enqueued_jobs only: [job_class]
+          end
+
+          assert_empty @project.samples.where(id: [@sample1.id, @sample2.id, @sample30.id])
+          assert_samples_page(@project2, 23)
+          [@sample1, @sample2, @sample30].each do |sample|
+            assert_select "tbody#samples-table-body tr##{dom_id(sample)}", count: 1
+          end
+
+          Flipper.disable(:v2_sample_transfer) if v2
         end
       end
 
-      test 'dialog close button hidden during transfer samples' do
-        assert_samples_page(@project, 3)
-        get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
-        assert_response :success
-        assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_transfer_dialog
-        end
-        post_transfer
-        assert_response :success
-        assert_select 'turbo-stream[action="update"][target="transfer_samples_dialog_content"]' do
-          assert_select '[role="progressbar"]'
-          assert_select 'button.dialog--close', count: 0
-        end
-      end
+      [
+        [::Samples::TransferJob, false, false], [::Samples::TransferJobV2, true, false],
+        [::Samples::TransferJob, false, true], [::Samples::TransferJobV2, true, true]
+      ].each do |job_class, v2_job, v2_select|
+        v2_select_text = v2_select ? 'with v2_select2' : 'with v1_select2'
+        test "dialog close button hidden during transfer samples with #{job_class.name} and #{v2_select_text}" do
+          Flipper.enable(:v2_sample_transfer) if v2_job
+          Flipper.enable(:v2_select2) if v2_select
 
-      test 'dialog close button hidden during transfer samples with v2_select2' do
-        Flipper.enable(:v2_select2)
-        assert_samples_page(@project, 3)
-        get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
-        assert_response :success
-        assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_transfer_dialog
+          assert_samples_page(@project, 3)
+          get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
+          assert_response :success
+          assert_select 'turbo-stream[target="samples_dialog"]' do
+            assert_transfer_dialog
+          end
+          post_transfer
+          assert_response :success
+          assert_select 'turbo-stream[action="update"][target="transfer_samples_dialog_content"]' do
+            assert_select '[role="progressbar"]'
+            assert_select 'button.dialog--close', count: 0
+          end
+
+          Flipper.disable(:v2_sample_transfer) if v2_job
+          Flipper.disable(:v2_select2) if v2_select
         end
-        post_transfer
-        assert_response :success
-        assert_select 'turbo-stream[action="update"][target="transfer_samples_dialog_content"]' do
-          assert_select '[role="progressbar"]'
-          assert_select 'button.dialog--close', count: 0
-        end
-      ensure
-        Flipper.disable(:v2_select2)
       end
 
       test 'should not transfer samples with session storage cleared' do
@@ -232,60 +214,6 @@ module Projects
         assert_not @project.samples.exists?(@sample1.id)
         assert_samples_page(@project2, 21)
         assert_select 'tbody#samples-table-body input[name="sample_ids[]"][checked]', count: 0
-      end
-
-      test 'transfer samples v2' do
-        Flipper.enable(:v2_sample_transfer)
-        assert_samples_page(@project2, 20)
-        assert_samples_page(@project, 3)
-        assert_transfer_enqueued(::Samples::TransferJobV2)
-        assert_difference(-> { @project2.samples.count }, 3) do
-          perform_enqueued_jobs only: [::Samples::TransferJobV2]
-        end
-
-        assert_empty @project.samples.where(id: [@sample1.id, @sample2.id, @sample30.id])
-        assert_samples_page(@project2, 23)
-        [@sample1, @sample2, @sample30].each do |sample|
-          assert_select "tbody#samples-table-body tr##{dom_id(sample)}", count: 1
-        end
-      ensure
-        Flipper.disable(:v2_sample_transfer)
-      end
-
-      test 'dialog close button hidden during transfer samples v2' do
-        Flipper.enable(:v2_sample_transfer)
-        assert_samples_page(@project, 3)
-        get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
-        assert_response :success
-        assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_transfer_dialog
-        end
-        post_transfer
-        assert_response :success
-        assert_select 'turbo-stream[action="update"][target="transfer_samples_dialog_content"]' do
-          assert_select 'button.dialog--close', count: 0
-        end
-      ensure
-        Flipper.disable(:v2_sample_transfer)
-      end
-
-      test 'dialog close button hidden during transfer samples v2 with v2_select2' do
-        Flipper.enable(:v2_sample_transfer)
-        Flipper.enable(:v2_select2)
-        assert_samples_page(@project, 3)
-        get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
-        assert_response :success
-        assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_transfer_dialog
-        end
-        post_transfer
-        assert_response :success
-        assert_select 'turbo-stream[action="update"][target="transfer_samples_dialog_content"]' do
-          assert_select 'button.dialog--close', count: 0
-        end
-      ensure
-        Flipper.disable(:v2_sample_transfer)
-        Flipper.disable(:v2_select2)
       end
 
       test 'should not transfer samples with session storage cleared v2' do
@@ -336,14 +264,14 @@ module Projects
       end
 
       test 'sample transfer button should not be available for maintainer of a user namespace project' do
-        login_as users(:micha_doe)
+        sign_in users(:micha_doe)
         namespace = projects(:projectUser31).namespace
         get new_samples_transfer_path(namespace_id: namespace.id, format: :turbo_stream)
         assert_response :unauthorized
       end
 
       test 'sample transfer project listing should be empty for maintainer if no other projects in hierarchy' do
-        login_as users(:user28)
+        sign_in users(:user28)
         namespace = projects(:projectHotel).namespace
         get new_samples_transfer_path(namespace_id: namespace.id, format: :turbo_stream)
         assert_response :success
@@ -395,7 +323,13 @@ module Projects
         end
       end
 
-      def assert_no_transfer_progress_or_selection(job_class) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def assert_no_transfer_progress_or_selection(job_class)
+        completion_broadcast = assert_no_transfer_progress_and_capture_broadcasts(job_class)
+
+        assert_broadcasts_content(completion_broadcast)
+      end
+
+      def assert_no_transfer_progress_and_capture_broadcasts(job_class)
         broadcasts = nil
         assert_difference -> { @project.samples.where(id: [@sample1.id, @sample2.id, @sample30.id]).count } => 0,
                           -> { @project2.samples.count } => 0 do
@@ -406,9 +340,13 @@ module Projects
           end
         end
 
-        completion_broadcast = broadcasts.find do |message|
+        # return completion_broadcast for further assertions
+        broadcasts.find do |message|
           message['action'] == 'replace' && message['target'] == 'transfer_samples_dialog_content'
         end
+      end
+
+      def assert_broadcasts_content(completion_broadcast)
         assert_not_nil completion_broadcast
 
         broadcast = Nokogiri::HTML::DocumentFragment.parse(completion_broadcast.to_html)
