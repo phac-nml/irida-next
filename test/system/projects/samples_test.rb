@@ -1653,15 +1653,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      actions_dropdown = find("button[aria-label='#{I18n.t('shared.samples.actions_dropdown.label')}']",
-                              visible: :visible)
-      actions_dropdown.trigger('click')
-
-      menu_id = actions_dropdown[:'aria-controls']
-      assert_selector "ul##{menu_id}[role='menu']:not([hidden])"
-      within("ul##{menu_id}[role='menu']:not([hidden])") do
-        find(:link_or_button, I18n.t('shared.samples.actions_dropdown.import_metadata'), visible: :all).trigger('click')
-      end
+      import_metadata_label = I18n.t('shared.samples.actions_dropdown.import_metadata')
+      find(:button, import_metadata_label, visible: :all, match: :first).trigger('click')
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
@@ -1718,15 +1711,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      actions_dropdown = find("button[aria-label='#{I18n.t('shared.samples.actions_dropdown.label')}']",
-                              visible: :visible)
-      actions_dropdown.trigger('click')
-
-      menu_id = actions_dropdown[:'aria-controls']
-      assert_selector "ul##{menu_id}[role='menu']:not([hidden])"
-      within("ul##{menu_id}[role='menu']:not([hidden])") do
-        find(:link_or_button, I18n.t('shared.samples.actions_dropdown.import_metadata'), visible: :all).trigger('click')
-      end
+      import_metadata_label = I18n.t('shared.samples.actions_dropdown.import_metadata')
+      find(:button, import_metadata_label, visible: :all, match: :first).trigger('click')
 
       assert_selector 'dialog h1', text: I18n.t(:'shared.samples.metadata.file_imports.dialog.title')
       attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
