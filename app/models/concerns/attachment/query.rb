@@ -11,7 +11,7 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
 
   self.enum_metadata_fields = Attachment::FieldConfiguration::ENUM_METADATA_FIELDS
 
-  attribute :attachable
+  attribute :attachables, default: -> { [] }
   attribute :puid_or_file_blob_filename_cont, :string
   attribute :groups, default: -> { [] }
 
@@ -25,7 +25,7 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
 
   def search_scope
     return scope if scope.present?
-    return attachable_attachments_scope if attachable.present?
+    return attachable_attachments_scope if attachables.any?
 
     super
   end
@@ -35,10 +35,12 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
   end
 
   def advanced_query_scope
-    search_scope.merge(advanced_query_groups)
+    normalize_sort_scope(search_scope).merge(advanced_query_groups)
   end
 
   def apply_sort(scope)
+    scope = normalize_sort_scope(scope)
+
     return scope unless column.present? && direction.present?
 
     case column
@@ -67,15 +69,21 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
     super
   end
 
-  def attachable_attachments_scope
-    if attachable.instance_of?(WorkflowExecution)
-      Attachment.where(attachable: attachable)
-                .or(Attachment.where(attachable: attachable.samples_workflow_executions))
-    elsif filter_requested?
-      attachable.attachments.all
-    else
-      attachable.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+  def attachable_attachments_scope # rubocop:disable Metrics/AbcSize
+    attachments = []
+    attachables.each do |attachable|
+      if attachables.size == 1 && attachable.instance_of?(WorkflowExecution)
+        attachments << Attachment.where(attachable: attachable)
+                                 .or(Attachment.where(attachable: attachable.samples_workflow_executions))
+      elsif filter_requested?
+        attachments.concat(attachable.attachments.all)
+      else
+        attachments.concat(
+          attachable.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+        )
+      end
     end
+    attachments
   end
 
   def normalize_condition_field(condition)
