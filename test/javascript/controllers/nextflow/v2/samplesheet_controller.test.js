@@ -52,6 +52,7 @@ const createSampleAttributes = (samples) => {
             fastq_2: `gid://irida/Attachment/sample-${n}-fastq-2`,
             metadata_1: "",
             sample_name: `SAMPLE NAME ${n}`,
+            fastmatch_category: "",
           },
         },
       ]),
@@ -85,16 +86,25 @@ const assertTableData = (allSamples, expectedSamples) => {
     '[data-nextflow--v2--samplesheet-target="tableBody"]',
   );
 
+  const getCellValue = (cell) => {
+    const control = cell.querySelector("input, select");
+    if (control) {
+      return control.value.trim();
+    }
+    return cell.textContent.trim();
+  };
+
   const rows = [...tableBody.querySelectorAll("tr")].map((row) =>
-    [...row.querySelectorAll("th, td")].map((cell) => cell.textContent.trim()),
+    [...row.querySelectorAll("th, td")].map(getCellValue),
   );
 
   const expectedRows = expectedSamples.map((n) => [
     `SAMPLE-PUID-${n}`,
     `SAMPLE NAME ${n}`,
-    `sample-${n}-id_metadata_1`,
+    "", // empty text input for metadata
     `sample_${n}_fastq_1.fastq.gz`,
     `sample_${n}_fastq_2.fastq.gz`,
+    "", // empty select option value for dropdown
   ]);
 
   expect(rows).toEqual(expectedRows);
@@ -219,7 +229,7 @@ function renderFixture() {
  <div
   class="hidden"
   data-nextflow--v2--samplesheet-target="samplesheetProperties"
-  data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;irida_id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces.&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;sample_name&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;errorMessage&quot;:&quot;Sample name is optional, if provided will replace sample for filenames and outputs&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;sample_name_cell&quot;,&quot;pattern&quot;:null},&quot;metadata_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;metadata_1&quot;],&quot;errorMessage&quot;:&quot;Metadata associated with the sample (metadata_1).&quot;,&quot;default&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;^[^\\\\n\\\\t\\\&quot;]+$&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;metadata_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true}}"
+  data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;irida_id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces.&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;sample_name&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;errorMessage&quot;:&quot;Sample name is optional, if provided will replace sample for filenames and outputs&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;sample_name_cell&quot;,&quot;pattern&quot;:null},&quot;metadata_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;metadata_1&quot;],&quot;errorMessage&quot;:&quot;Metadata associated with the sample (metadata_1).&quot;,&quot;default&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;^[^\\\\n\\\\t\\\&quot;]+$&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;metadata_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastmatch_category&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;errorMessage&quot;:&quot;Has to be either query or reference&quot;,&quot;cell_type&quot;:&quot;dropdown_cell&quot;,&quot;enum&quot;:[&quot;query&quot;,&quot;reference&quot;]}}"
   ></div>
         <turbo-frame id="sample_attributes">
         </turbo-frame>
@@ -1205,5 +1215,78 @@ describe("nextflow v2 samplesheet controller", () => {
         `metadata-value-${i}`,
       );
     }
+  });
+
+  it("samplesheet select dropdown value change", async () => {
+    const allSamples = range(1, 10);
+    const targetSamples = [1, 5];
+    setupStandardSamplesheetAttributes(allSamples);
+    application = await startController();
+
+    assertTableData(allSamples, range(1, 5));
+
+    // change a couple dropdown
+    [1, 5].forEach((sampleNum) => {
+      const dropdownCell = document.getElementById(
+        `sample-${sampleNum}-id_fastmatch_category_dropdown`,
+      );
+      dropdownCell.value = sampleNum === 1 ? "query" : "reference";
+
+      dropdownCell.dispatchEvent(
+        new Event("change", {
+          bubbles: true,
+        }),
+      );
+    });
+
+    // change page forward and back to verify if content is saved
+    getNextBtn().click();
+    getPreviousBtn().click();
+
+    for (let i = 1; i <= 5; i++) {
+      const dropdownCell = document.getElementById(
+        `sample-${i}-id_fastmatch_category_dropdown`,
+      );
+      let expectedValue = "";
+      if (i === 1) {
+        expectedValue = "query";
+      } else if (i === 5) {
+        expectedValue = "reference";
+      }
+
+      expect(dropdownCell).toHaveValue(expectedValue);
+    }
+  });
+
+  it("formData of metadata submission upon metadata selection", async () => {
+    const allSamples = range(1, 10);
+    setupStandardSamplesheetAttributes(allSamples);
+
+    application = await startController();
+    let submittedForm;
+
+    const requestSubmit = vi
+      .spyOn(HTMLFormElement.prototype, "requestSubmit")
+      .mockImplementation(function () {
+        submittedForm = this;
+      });
+
+    const metadataSelect = document.querySelector("#field-metadata_1");
+
+    metadataSelect.value = "age";
+    metadataSelect.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(requestSubmit).toHaveBeenCalledOnce();
+    expect(submittedForm).toBeInstanceOf(HTMLFormElement);
+
+    const formData = new FormData(submittedForm);
+
+    expect(formData.get("metadata_fields")).toBe('{"metadata_1":"age"}');
+
+    expect(formData.get("sample_ids")).toBe(
+      "sample-1-id,sample-2-id,sample-3-id,sample-4-id,sample-5-id,sample-6-id,sample-7-id,sample-8-id,sample-9-id,sample-10-id",
+    );
+
+    requestSubmit.mockRestore();
   });
 });
