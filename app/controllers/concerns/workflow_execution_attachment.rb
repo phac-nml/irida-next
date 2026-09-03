@@ -7,7 +7,7 @@ module WorkflowExecutionAttachment
 
   def list_workflow_execution_attachments
     all_attachments = load_attachments
-    @query = attachments_query(all_attachments)
+    @query = attachments_query(@workflow_execution)
     @has_attachments = all_attachments.any?
     @search_params = attachment_search_params
 
@@ -19,8 +19,8 @@ module WorkflowExecutionAttachment
 
   private
 
-  def attachments_query(scope)
-    Attachment::Query.new(attachment_search_params.merge(request:, scope:))
+  def attachments_query(attachable)
+    Attachment::Query.new(attachment_search_params.merge(request:, attachable:))
   end
 
   def load_attachments
