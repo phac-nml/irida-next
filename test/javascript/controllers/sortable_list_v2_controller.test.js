@@ -33,56 +33,69 @@ function renderFixture({
   selected = [listItem("One"), listItem("Two")],
   withTemplateSelector = true,
   withListTitles = true,
+  withLists = true,
+  withField = true,
+  withAddButton = true,
+  withRemoveButton = true,
+  withReorderButtons = true,
+  withSubmit = true,
+  withAriaLive = true,
+  withItemTemplate = true,
+  emptyItemTemplate = false,
 } = {}) {
   const availableTitle = withListTitles ? 'data-title="Available"' : "";
   const selectedTitle = withListTitles ? 'data-title="Selected"' : "";
 
-  document.body.innerHTML = `
-    <div
-      data-controller="sortable-list-v2"
-      data-sortable-list-v2-selected-list-value="selected-list"
-      data-sortable-list-v2-available-list-value="available-list"
-      data-sortable-list-v2-field-name-value="fields[]"
-    >
-      ${
-        withTemplateSelector
-          ? `<select
-              data-sortable-list-v2-target="templateSelector"
-              data-action="sortable-list-v2#setTemplate"
-            >
-              <option value="none">None</option>
-              <option value="template-1" data-fields='["Beta", "Template only"]'>Template 1</option>
-            </select>`
-          : ""
-      }
-      <ul
+  const templateSelectorHtml = withTemplateSelector
+    ? `<select
+        data-sortable-list-v2-target="templateSelector"
+        data-action="sortable-list-v2#setTemplate"
+      >
+        <option value="none">None</option>
+        <option value="template-1" data-fields='["Beta", "Template only"]'>Template 1</option>
+      </select>`
+    : "";
+
+  const availableListHtml = withLists
+    ? `<ul
         id="available-list"
         ${availableTitle}
         data-required="false"
         data-action="change->sortable-list-v2#handleSelectionChange"
       >
         ${available.join("")}
-      </ul>
-      <button
+      </ul>`
+    : "";
+
+  const addButtonHtml = withAddButton
+    ? `<button
         type="button"
         data-sortable-list-v2-target="addButton"
         data-action="click->sortable-list-v2#addSelectionByAddButton"
-      >Add</button>
+      >Add</button>`
+    : "";
 
-      <ul
+  const selectedListHtml = withLists
+    ? `<ul
         id="selected-list"
         ${selectedTitle}
         data-required="true"
         data-action="change->sortable-list-v2#handleSelectionChange"
       >
         ${selected.join("")}
-      </ul>
-      <button
+      </ul>`
+    : "";
+
+  const removeButtonHtml = withRemoveButton
+    ? `<button
         type="button"
         data-sortable-list-v2-target="removeButton"
         data-action="click->sortable-list-v2#removeSelectionByRemoveButton"
-      >Remove</button>
-      <button
+      >Remove</button>`
+    : "";
+
+  const reorderButtonsHtml = withReorderButtons
+    ? `<button
         type="button"
         data-sortable-list-v2-target="upButton"
         data-action="click->sortable-list-v2#moveSelection"
@@ -91,19 +104,33 @@ function renderFixture({
         type="button"
         data-sortable-list-v2-target="downButton"
         data-action="click->sortable-list-v2#moveSelection"
-      >Down</button>
-      <button
+      >Down</button>`
+    : "";
+
+  const submitButtonHtml = withSubmit
+    ? `<button
         type="submit"
         data-sortable-list-v2-target="submitBtn"
-      >Submit</button>
-      <div data-sortable-list-v2-target="field"></div>
-      <div
+      >Submit</button>`
+    : "";
+
+  const fieldHtml = withField
+    ? `<div data-sortable-list-v2-target="field"></div>`
+    : "";
+
+  const ariaLiveHtml = withAriaLive
+    ? `<div
         aria-live="polite"
         data-sortable-list-v2-target="ariaLiveUpdate"
         data-translations='${translations}'
-      ></div>
-      <template data-sortable-list-v2-target="itemTemplate">
-        <li class="border-b border-slate-200 px-4 py-2 last:border-b-0 dark:border-slate-600">
+      ></div>`
+    : "";
+
+  const itemTemplateHtml = withItemTemplate
+    ? `<template data-sortable-list-v2-target="itemTemplate">${
+        emptyItemTemplate
+          ? ""
+          : `<li class="border-b border-slate-200 px-4 py-2 last:border-b-0 dark:border-slate-600">
           <label class="flex cursor-pointer items-center gap-3 py-1 text-sm text-slate-900 dark:text-white">
             <input
               type="checkbox"
@@ -111,8 +138,27 @@ function renderFixture({
             >
             <span></span>
           </label>
-        </li>
-      </template>
+        </li>`
+      }</template>`
+    : "";
+
+  document.body.innerHTML = `
+    <div
+      data-controller="sortable-list-v2"
+      data-sortable-list-v2-selected-list-value="selected-list"
+      data-sortable-list-v2-available-list-value="available-list"
+      data-sortable-list-v2-field-name-value="fields[]"
+    >
+      ${templateSelectorHtml}
+      ${availableListHtml}
+      ${addButtonHtml}
+      ${selectedListHtml}
+      ${removeButtonHtml}
+      ${reorderButtonsHtml}
+      ${submitButtonHtml}
+      ${fieldHtml}
+      ${ariaLiveHtml}
+      ${itemTemplateHtml}
     </div>
   `;
 }
@@ -529,5 +575,254 @@ describe("sortable lists v2 two-lists selection controller", () => {
     expect(
       document.querySelector('[data-sortable-list-v2-target="ariaLiveUpdate"]'),
     ).toHaveTextContent("The following item was moved to : Alpha");
+  });
+
+  it("does nothing when the configured lists are missing", async () => {
+    renderFixture({ withLists: false });
+    application = await startController();
+
+    const controller = getController(application);
+
+    expect(() => controller.handleSelectionChange()).not.toThrow();
+    expect(document.getElementById("available-list")).toBeNull();
+    expect(document.getElementById("selected-list")).toBeNull();
+  });
+
+  it("skips param construction without a field target", async () => {
+    renderFixture({ withField: false, withTemplateSelector: false });
+    application = await startController();
+
+    const controller = getController(application);
+
+    expect(() => controller.constructParams()).not.toThrow();
+    expect(
+      document.querySelectorAll('[data-sortable-list-v2-target="field"]'),
+    ).toHaveLength(0);
+  });
+
+  it("ignores template events without a usable option", async () => {
+    renderFixture();
+    application = await startController();
+
+    const controller = getController(application);
+    const emptySelect = document.createElement("select");
+
+    controller.setTemplate({ target: null });
+    controller.setTemplate({ target: emptySelect });
+
+    expect(checkboxValues("available-list")).toEqual(["Alpha", "Beta"]);
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two"]);
+  });
+
+  it("treats a template option without fields as an empty selection", async () => {
+    renderFixture();
+    application = await startController();
+
+    const selector = document.querySelector(
+      '[data-sortable-list-v2-target="templateSelector"]',
+    );
+    const option = document.createElement("option");
+    option.value = "template-empty";
+    option.textContent = "Empty";
+    selector.append(option);
+
+    selector.value = "template-empty";
+    selector.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(checkboxValues("selected-list")).toEqual([]);
+    expect(checkboxValues("available-list")).toEqual([
+      "Alpha",
+      "Beta",
+      "One",
+      "Two",
+    ]);
+  });
+
+  it("skips items it cannot rebuild when no item template is available", async () => {
+    renderFixture({ withItemTemplate: false });
+    application = await startController();
+
+    const selector = document.querySelector(
+      '[data-sortable-list-v2-target="templateSelector"]',
+    );
+
+    selector.value = "template-1";
+    selector.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(checkboxValues("available-list")).toEqual([]);
+    expect(checkboxValues("selected-list")).toEqual([]);
+  });
+
+  it("skips items the empty item template cannot build", async () => {
+    renderFixture({ emptyItemTemplate: true, withTemplateSelector: false });
+    application = await startController();
+
+    const controller = getController(application);
+    controller.updateMetadataListing({
+      detail: { content: { metadata: ["Gamma"] } },
+    });
+
+    expect(checkboxValues("available-list")).toEqual([]);
+    expect(checkboxValues("selected-list")).toEqual([]);
+  });
+
+  it("no-ops the disabled action targets when their buttons are absent", async () => {
+    renderFixture({
+      withAddButton: false,
+      withRemoveButton: false,
+      withReorderButtons: false,
+      withSubmit: false,
+      withTemplateSelector: false,
+    });
+    application = await startController();
+
+    const controller = getController(application);
+
+    check("available-list", "Alpha");
+    controller.addSelectionByAddButton();
+    controller.removeSelectionByRemoveButton();
+    controller.moveSelection({ target: null });
+
+    expect(checkboxValues("available-list")).toEqual(["Alpha", "Beta"]);
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two"]);
+  });
+
+  it("guards reordering when an enabled control has no single target", async () => {
+    renderFixture({
+      selected: [listItem("One"), listItem("Two"), listItem("Three")],
+      withTemplateSelector: false,
+    });
+    application = await startController();
+
+    const controller = getController(application);
+    const upButton = document.querySelector(
+      '[data-sortable-list-v2-target="upButton"]',
+    );
+
+    // Force the control enabled to reach the internal guards that the disabled
+    // state would normally short-circuit.
+    upButton.setAttribute("aria-disabled", "false");
+    controller.moveSelection({ target: upButton });
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two", "Three"]);
+
+    // Exactly one checked item, but it is already at the edge (no target).
+    check("selected-list", "One");
+    upButton.setAttribute("aria-disabled", "false");
+    controller.moveSelection({ target: upButton });
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two", "Three"]);
+  });
+
+  it("does not move anything when an enabled add button has no checked items", async () => {
+    renderFixture({ withTemplateSelector: false });
+    application = await startController();
+
+    const controller = getController(application);
+    const addButton = document.querySelector(
+      '[data-sortable-list-v2-target="addButton"]',
+    );
+
+    // Force the button enabled even though nothing is checked to exercise the
+    // guard inside the move routine.
+    addButton.setAttribute("aria-disabled", "false");
+    controller.addSelectionByAddButton();
+
+    expect(checkboxValues("available-list")).toEqual(["Alpha", "Beta"]);
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two"]);
+  });
+
+  it("keeps focus on the reorder control while further moves stay possible", async () => {
+    renderFixture({
+      selected: [
+        listItem("One"),
+        listItem("Two"),
+        listItem("Three"),
+        listItem("Four"),
+      ],
+      withTemplateSelector: false,
+    });
+    application = await startController();
+
+    check("selected-list", "Two");
+    const downButton = document.querySelector(
+      '[data-sortable-list-v2-target="downButton"]',
+    );
+
+    downButton.focus();
+    downButton.click();
+
+    expect(checkboxValues("selected-list")).toEqual([
+      "One",
+      "Three",
+      "Two",
+      "Four",
+    ]);
+    expectAriaEnabled(downButton);
+    // Focus is left on the still-actionable control rather than the moved item.
+    expect(document.activeElement).toBe(downButton);
+  });
+
+  it("dedupes values shared between both lists when tracking originals", async () => {
+    renderFixture({
+      available: [listItem("Alpha"), listItem("Shared")],
+      selected: [listItem("Shared"), listItem("Two")],
+      withTemplateSelector: false,
+    });
+    application = await startController();
+
+    const selector = document.querySelector(
+      '[data-sortable-list-v2-target="templateSelector"]',
+    );
+
+    expect(selector).toBeNull();
+    expect(checkboxValues("available-list")).toEqual(["Alpha", "Shared"]);
+    expect(checkboxValues("selected-list")).toEqual(["Shared", "Two"]);
+  });
+
+  it("falls back to a random id when crypto.randomUUID is unavailable", async () => {
+    renderFixture();
+    application = await startController();
+
+    const originalRandomUUID = crypto.randomUUID;
+    Object.defineProperty(crypto, "randomUUID", {
+      value: undefined,
+      configurable: true,
+    });
+
+    try {
+      const selector = document.querySelector(
+        '[data-sortable-list-v2-target="templateSelector"]',
+      );
+
+      selector.value = "template-1";
+      selector.dispatchEvent(new Event("change", { bubbles: true }));
+    } finally {
+      Object.defineProperty(crypto, "randomUUID", {
+        value: originalRandomUUID,
+        configurable: true,
+      });
+    }
+
+    const templateOnlyCheckbox = document.querySelector(
+      '#selected-list input[type="checkbox"][value="Template only"]',
+    );
+
+    expect(templateOnlyCheckbox).not.toBeNull();
+    expect(templateOnlyCheckbox.id).toMatch(/^selected-list-item-/);
+  });
+
+  it("moves values silently when no aria-live region is present", async () => {
+    renderFixture({ withAriaLive: false, withTemplateSelector: false });
+    application = await startController();
+
+    check("available-list", "Alpha");
+    document
+      .querySelector('[data-sortable-list-v2-target="addButton"]')
+      .click();
+
+    expect(checkboxValues("available-list")).toEqual(["Beta"]);
+    expect(checkboxValues("selected-list")).toEqual(["One", "Two", "Alpha"]);
+    expect(
+      document.querySelector('[data-sortable-list-v2-target="ariaLiveUpdate"]'),
+    ).toBeNull();
   });
 });

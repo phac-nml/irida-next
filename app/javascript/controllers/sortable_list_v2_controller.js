@@ -189,6 +189,9 @@ export default class extends Controller {
     const movedValues = [];
     selectedItems.forEach((item) => {
       const checkbox = item.querySelector('input[type="checkbox"]');
+      // Defensive no-op: checked items are derived from their checkbox, so the
+      // enclosing <li> always contains one.
+      /* v8 ignore next */
       if (!checkbox) return;
 
       movedValues.push(checkbox.value);
