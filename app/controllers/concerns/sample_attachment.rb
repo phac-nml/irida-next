@@ -25,7 +25,7 @@ module SampleAttachment
   end
 
   def attachments_query(attachable)
-    Attachment::Query.new(attachment_search_params.merge(request:, attachable:))
+    Attachment::Query.new(attachment_search_params.merge(request:, attachables: [attachable]))
   end
 
   def load_attachments
