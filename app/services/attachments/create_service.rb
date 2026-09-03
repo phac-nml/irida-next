@@ -30,7 +30,7 @@ module Attachments
     def execute # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity,Metrics/MethodLength
       attachable_authorization
 
-      ActiveRecord::Base.transaction do
+      transaction_result = ActiveRecord::Base.transaction do
         valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
 
         identify_illumina_paired_end_files(valid_fastq_attachments) if valid_fastq_attachments.many?
@@ -45,9 +45,19 @@ module Attachments
 
         create_activities if @include_activity
 
-        if Irida::Pipelines.instance.pipelines.any? &&
-           @attachable.instance_of?(Sample) &&
-           @attachable.project.namespace.automated_workflow_executions.present?
+        true # Return value if successful
+      end
+
+      # Fallback to the old behavior of launching automated workflow executions if the feature flag is not enabled.
+      # This is to ensure that existing functionality continues to work.
+      if transaction_result
+
+        if Flipper.enabled?(:automated_workflow_execution_subscriber)
+          Rails.event.notify('attachments.create',
+                             { attachable: @attachable, attachments: @attachments })
+        elsif Irida::Pipelines.instance.pipelines.any? &&
+              @attachable.instance_of?(Sample) &&
+              @attachable.project.namespace.automated_workflow_executions.present?
           launch_automated_workflow_executions(@pe_attachments&.last)
         end
       end
@@ -150,7 +160,7 @@ module Attachments
 
         pe_attachments['reverse'].metadata = pe_attachments['reverse'].metadata.merge(rev_metadata)
 
-        @pe_attachments << paired_ends[key]
+        @pe_attachments << paired_ends[key] unless Flipper.enabled?(:automated_workflow_execution_subscriber)
       end
     end
 

@@ -333,6 +333,25 @@ module Attachments
       assert_enqueued_with(job: AutomatedWorkflowExecutions::LaunchJob)
     end
 
+    test 'emits attachments.create event when uploading pair end data if the automated_workflow_execution_subscriber feature flag is enabled' do # rubocop:disable Layout/LineLength
+      Flipper.enable(:automated_workflow_execution_subscriber)
+      sample = samples(:sampleA)
+      params = { files: [@testsample_illumina_pe_fwd_blob, @testsample_illumina_pe_rev_blob] }
+      created_attachments = []
+
+      assert_difference -> { Attachment.count } => 2 do
+        assert_enqueued_with(job: AutomatedWorkflowExecutions::LaunchJob) do
+          assert_event_reported('attachments.create',
+                                payload: { attachable: sample,
+                                           attachments: created_attachments }) do
+                                             Attachments::CreateService.new(users(:jeff_doe), sample, params).execute
+                                             created_attachments.replace(sample.attachments.last(2))
+                                           end
+        end
+      end
+      Flipper.disable(:automated_workflow_execution_subscriber)
+    end
+
     test 'doesn\'t queue a AutomatedWorkflowExecutions::LaunchJob when uploading single end data to a Sample whose Project has AutomatedWorkflowExections configured' do # rubocop:disable Layout/LineLength
       sample = samples(:sampleA)
       params = { files: [@testsample_illumina_pe_fwd_blob] }
