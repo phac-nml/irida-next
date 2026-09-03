@@ -1042,9 +1042,6 @@ export default class extends Controller {
     if (this.#currentChunkedCounter < this.#chunkedSelectedSamples.length) {
       this.#submitSamplesheetParams(this.#currentChunkedCounter);
     } else {
-      const value = document.querySelector(
-        '[data-nextflow--v2--samplesheet-target="samplesheetProperties"]',
-      ).dataset.properties;
       this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
 
       // // clear the now unnecessary DOM element

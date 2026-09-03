@@ -1201,7 +1201,6 @@ describe("nextflow v2 samplesheet controller", () => {
 
   it("samplesheet select dropdown value change", async () => {
     const allSamples = range(1, 10);
-    const targetSamples = [1, 5];
     setupStandardSamplesheetAttributes(allSamples);
     application = await startController();
 
@@ -1282,9 +1281,6 @@ describe("nextflow v2 samplesheet controller", () => {
     setupStandardSamplesheetAttributes(allSamples);
 
     application = await startController();
-    const form = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="form"]',
-    );
 
     const nameInput = document.querySelector("#workflow_execution_name");
     nameInput.value = "a test name";
