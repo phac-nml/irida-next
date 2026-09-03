@@ -356,7 +356,6 @@ export default class extends Controller {
     if (this.hasSamplesheetSpinnerTarget) {
       this.samplesheetSpinnerTarget.remove();
     }
-
     this.#enableErrorState(this.processingErrorValue);
   }
 
@@ -502,6 +501,7 @@ export default class extends Controller {
   #insertDropdownContent(cell, columnName, sampleId, options) {
     const name = `${sampleId}_${columnName}`;
     const id = `${sampleId}_${columnName}_dropdown`;
+
     const dropdownContent = this.dropdownTemplateTarget.content.cloneNode(true);
     const selectNode = dropdownContent.querySelector("select");
     selectNode.setAttribute("aria-label", columnName);
@@ -556,6 +556,7 @@ export default class extends Controller {
     fileLink.setAttribute("href", href);
     fileLink.id = linkId;
     fileLink.textContent = filename;
+
     // Append to cell
     cell.appendChild(fileContent);
   }
@@ -803,6 +804,7 @@ export default class extends Controller {
       const metadataParameter = this.element.querySelector(
         `input[data-metadata-header-name="${columnName}"]`,
       );
+
       if (metadataParameter && metadataParameter.value !== metadataField) {
         metadataParameter.value = metadataField;
       }
@@ -1050,7 +1052,6 @@ export default class extends Controller {
       this.#processFileAttributes();
 
       this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
-
       if (this.#allSampleIds.length !== this.#selectedSamples.length) {
         this.#renderProcessingError();
       } else {
