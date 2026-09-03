@@ -11,4 +11,11 @@ module SamplesTableHelper
       end
     end
   end
+
+  def assert_samples_data_grid(locale: I18n.locale)
+    assert_select '#samples-table.samples-data-grid.pvc-data-grid.pvc-data-grid--fill'
+    assert_select '#samples-table table[role="grid"]'
+    assert_select 'th[data-sticky-cell]', text: /#{Regexp.escape(I18n.t('samples.table_component.puid', locale:))}/i
+    assert_select 'th[data-sticky-cell]', text: /#{Regexp.escape(I18n.t('samples.table_component.name', locale:))}/i
+  end
 end
