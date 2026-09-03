@@ -803,7 +803,6 @@ export default class extends Controller {
       const metadataParameter = this.element.querySelector(
         `input[data-metadata-header-name="${columnName}"]`,
       );
-
       if (metadataParameter && metadataParameter.value !== metadataField) {
         metadataParameter.value = metadataField;
       }
@@ -878,7 +877,6 @@ export default class extends Controller {
     const params = formDataToJsonParams(compactFormData);
     params["workflow_execution"]["samples_workflow_executions_attributes"] =
       Object.values(this.#samplesheetAttributes);
-    console.log(params);
     return params;
   }
 

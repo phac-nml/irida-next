@@ -214,7 +214,7 @@ function renderFixture() {
       </div>
     </section>
 
-    <input value="b3d29210-cefc-4b22-ad8e-c44c332b6c40" type="hidden" name="workflow_execution[namespace_id]" id="workflow_execution_namespace_id">
+    <input value="a_namespace_id" type="hidden" name="workflow_execution[namespace_id]" id="workflow_execution_namespace_id">
 
     <input value="phac-nml/iridanextexample" type="hidden" name="workflow_execution[metadata][pipeline_id]" id="workflow_execution_metadata_pipeline_id">
     <input value="1.0.3" type="hidden" name="workflow_execution[metadata][workflow_version]" id="workflow_execution_metadata_workflow_version">
@@ -305,6 +305,7 @@ function renderFixture() {
                     <label for="field-metadata_1">metadata_1</label>
 
                     <select
+                      class="metadata_field-header"
                       name="field"
                       id="field-metadata_1"
                       data-action="change-&gt;nextflow--v2--samplesheet#handleMetadataSelection"
@@ -438,7 +439,7 @@ function renderFixture() {
       <template data-nextflow--v2--samplesheet-target="metadataHeaderForm">
         <form action="/-/workflow_executions/metadata/fields" accept-charset="UTF-8" method="post">
           <input type="hidden" name="authenticity_token" value="nmzk_Fz82ZdmFqaMt7hu-6a0Bcp20H9nOfz8A9JDHUS7wUPV8FVsfHMx9HMPDlhdRC7HqFqadZ_bbvg_uFvmQg">
-          <input value="b3d29210-cefc-4b22-ad8e-c44c332b6c40" type="hidden" name="namespace_id" id="namespace_id">
+          <input value="a_namespace_id" type="hidden" name="namespace_id" id="namespace_id">
         </form>
       </template>
       <div class="flex justify-center" id="samplesheet-spinner" data-nextflow--v2--samplesheet-target="samplesheetSpinner">
@@ -604,6 +605,21 @@ function renderFixture() {
       data-selection-limit-message-value="test limit message"
       data-selection-storage-limit-message-value="test storaget lmimit message"
   ></div>
+
+<div>
+  <span>
+    --metadata_1_header
+  </span>
+  <input
+    placeholder=""
+    value="metadata_1"
+    pattern="^[^\n\t&quot;]+$"
+    data-metadata-header-name="metadata_1"
+    type="text"
+    name="workflow_execution[workflow_params][metadata_1_header]"
+    id="workflow_execution_workflow_params_metadata_1_header"
+  >
+</div>
   `;
 }
 /* eslint-enable no-useless-escape */
@@ -1237,11 +1253,16 @@ describe("nextflow v2 samplesheet controller", () => {
         submittedForm = this;
       });
 
+    const metadataParamsHeader = document.getElementById(
+      "workflow_execution_workflow_params_metadata_1_header",
+    );
     const metadataSelect = document.querySelector("#field-metadata_1");
 
+    expect(metadataParamsHeader).toHaveValue("metadata_1");
     metadataSelect.value = "age";
     metadataSelect.dispatchEvent(new Event("change", { bubbles: true }));
 
+    expect(metadataParamsHeader).toHaveValue("age");
     expect(requestSubmit).toHaveBeenCalledOnce();
     expect(submittedForm).toBeInstanceOf(HTMLFormElement);
 
@@ -1366,7 +1387,6 @@ describe("nextflow v2 samplesheet controller", () => {
     await new Promise((resolve) => setTimeout(resolve, 60));
     expect(fetchOptions.headers["Content-Type"]).toBe("application/json");
     const body = JSON.parse(fetchOptions.body);
-    console.log(body.workflow_execution.samples_workflow_executions_attributes);
     expect(
       body.workflow_execution.samples_workflow_executions_attributes,
     ).toEqual(
@@ -1396,8 +1416,6 @@ describe("nextflow v2 samplesheet controller", () => {
       ]),
     );
     expect(body.workflow_execution.name).toEqual("a test name");
-    expect(body.workflow_execution.namespace_id).toEqual(
-      "b3d29210-cefc-4b22-ad8e-c44c332b6c40",
-    );
+    expect(body.workflow_execution.namespace_id).toEqual("a_namespace_id");
   });
 });
