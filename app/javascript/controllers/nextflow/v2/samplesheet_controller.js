@@ -878,6 +878,7 @@ export default class extends Controller {
     const params = formDataToJsonParams(compactFormData);
     params["workflow_execution"]["samples_workflow_executions_attributes"] =
       Object.values(this.#samplesheetAttributes);
+    console.log(params);
     return params;
   }
 
