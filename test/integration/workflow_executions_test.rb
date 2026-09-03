@@ -14,7 +14,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     @workflow_execution_new = workflow_executions(:irida_next_example_new)
   end
 
-  test 'should render global workflow execution listing content and server-side row visibility' do
+  test 'should render user workflow execution listing content and server-side row visibility' do
     shared_workflow = workflow_executions(:workflow_execution_shared1)
     other_users_shared_workflow = workflow_executions(:workflow_execution_shared2)
 
@@ -38,7 +38,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
                   text: I18n.t('common.actions.cancel'), count: 1
   end
 
-  test 'should filter global workflow execution listing by id or name' do
+  test 'should filter user workflow execution listing by id or name' do
     workflow_execution = workflow_executions(:workflow_execution_existing)
     other_workflow_execution = workflow_executions(:workflow_execution_valid)
 
@@ -76,7 +76,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select '[role=status]', text: I18n.t('components.search.results_message.zero', search_term: missing_term)
   end
 
-  test 'should paginate global workflow executions' do
+  test 'should paginate user workflow executions' do
     get workflow_executions_path, params: { page: 2 }
 
     assert_response :success
@@ -389,7 +389,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select '#files-panel-content #pagy-limit-select option[value="10"][selected]'
   end
 
-  test 'should render shared workflow actions for submitter in global show page' do
+  test 'should render shared workflow actions for submitter in user show page' do
     workflow_execution = workflow_executions(:workflow_execution_shared1)
 
     get workflow_execution_path(workflow_execution)
@@ -452,7 +452,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal 'running', @workflow_execution_running.reload.state
   end
 
-  test 'redirect to global workflow executions page when workflow execution is deleted' do
+  test 'redirect to user workflow executions page when workflow execution is deleted' do
     workflow_execution = workflow_executions(:irida_next_example_completed)
 
     delete workflow_execution_path(workflow_execution, redirect: true), as: :turbo_stream
@@ -613,7 +613,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
   end
 
-  test 'accessing workflow executions index on invalid page causes pagy overflow redirect at global level' do
+  test 'accessing workflow executions index on invalid page causes pagy overflow redirect at user level' do
     # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
     # The rescue_from handler should redirect to first page with page=1 and limit=20
     get workflow_executions_path(page: 50)
