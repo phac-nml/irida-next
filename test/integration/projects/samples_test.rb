@@ -10,9 +10,7 @@ module Projects
       @user = users(:john_doe)
       sign_in @user
       @sample1 = samples(:sample1)
-      @sample2 = samples(:sample2)
       @project = projects(:project1)
-      @project2 = projects(:project2)
       @namespace = groups(:group_one)
     end
 
@@ -33,10 +31,7 @@ module Projects
       get namespace_project_samples_url(@namespace, @project)
 
       assert_response :success
-      assert_select '#samples-table.samples-data-grid.pvc-data-grid.pvc-data-grid--fill'
-      assert_select '#samples-table table[role="grid"]'
-      assert_select 'th[data-sticky-cell]', text: /#{Regexp.escape(I18n.t('samples.table_component.puid'))}/i
-      assert_select 'th[data-sticky-cell]', text: /#{Regexp.escape(I18n.t('samples.table_component.name'))}/i
+      assert_samples_data_grid
     ensure
       Flipper.disable(:data_grid_samples_table)
     end
@@ -45,12 +40,13 @@ module Projects
       get namespace_project_samples_url(@namespace, @project)
 
       assert_response :success
+      assert_select '#samples-table[data-controller~=?]', 'selection'
       assert_select 'button#select-all-button'
       assert_select 'button#deselect-all-button'
       assert_select 'form#select-all-form'
       assert_select 'form#deselect-all-form'
-      assert_select 'input#select-page'
-      assert_select "input##{dom_id(@sample1, :checkbox)}"
+      assert_select 'input#select-page[data-selection-target=?]', 'selectPage'
+      assert_select "input##{dom_id(@sample1, :checkbox)}[data-selection-target=?]", 'rowSelection'
     end
 
     test 'user with role < Analyst does not see select and deselect controls' do
@@ -82,7 +78,8 @@ module Projects
       get namespace_project_samples_url(@namespace, @project)
 
       assert_response :success
-      assert_select 'span', text: I18n.t('projects.samples.index.workflows.button_sr'), count: 0
+      assert_select 'span',
+                    text: /#{Regexp.escape(I18n.t('projects.samples.index.workflows.button_sr'))}/, count: 0
     end
 
     test 'user with role >= Analyst sees the sample actions dropdown' do

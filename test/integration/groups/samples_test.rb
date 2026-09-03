@@ -39,10 +39,7 @@ module Groups
       get group_samples_url(@group)
 
       assert_response :success
-      assert_select '#samples-table.samples-data-grid.pvc-data-grid.pvc-data-grid--fill'
-      assert_select '#samples-table table[role="grid"]'
-      assert_select 'th[data-sticky-cell]', text: /#{Regexp.escape(I18n.t('samples.table_component.puid'))}/i
-      assert_select 'th[data-sticky-cell]', text: /#{Regexp.escape(I18n.t('samples.table_component.name'))}/i
+      assert_samples_data_grid
     ensure
       Flipper.disable(:data_grid_samples_table)
     end
@@ -63,7 +60,7 @@ module Groups
       get group_samples_url(@group)
 
       assert_response :success
-      assert_select 'span', text: I18n.t('projects.samples.index.workflows.button_sr')
+      assert_select 'span', text: /#{Regexp.escape(I18n.t('projects.samples.index.workflows.button_sr'))}/
     end
 
     test 'user with role < Analyst does not see the workflow execution link' do
@@ -72,7 +69,8 @@ module Groups
       get group_samples_url(@group)
 
       assert_response :success
-      assert_select 'span', text: I18n.t('projects.samples.index.workflows.button_sr'), count: 0
+      assert_select 'span',
+                    text: /#{Regexp.escape(I18n.t('projects.samples.index.workflows.button_sr'))}/, count: 0
     end
 
     test 'user with role >= Analyst sees the sample actions dropdown' do
