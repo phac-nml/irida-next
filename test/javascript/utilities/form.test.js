@@ -138,5 +138,12 @@ describe("form", () => {
       // empty array; assert it reaches the branch rather than silently passing.
       expect(() => normalizeParams({}, "x[][y]", "val", 0)).toThrow();
     });
+
+    it("throws when x[][y] targets an existing non-array value", () => {
+      const params = { x: "already a string" };
+      expect(() => normalizeParams(params, "x[][y]", "val", 0)).toThrow(
+        ParameterTypeError,
+      );
+    });
   });
 });

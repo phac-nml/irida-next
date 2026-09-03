@@ -52,6 +52,7 @@ export function highlightOption(option, filter) {
 
     matches.forEach((match) => {
       const index = match.index;
+      /* v8 ignore next 3 -- matchAll always yields an index; defensive guard */
       if (index === undefined) {
         return;
       }

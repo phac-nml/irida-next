@@ -95,6 +95,31 @@ export default defineConfig({
           functions: 100,
           lines: 100,
         },
+        "app/javascript/utilities/form.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/experimental_feature_toggle_controller.js":
+          {
+            statements: 100,
+            branches: 100,
+            functions: 100,
+            lines: 100,
+          },
+        "app/javascript/controllers/combobox/utils.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/combobox/v1_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
       },
     },
   },
