@@ -1,4 +1,4 @@
-<%# locals: (open:, analysis_type:, namespace_id:, selected: @selected) -%>
+<%# locals: (open:, analysis_type:, namespace_id: nil, workflow_execution:, selected: false) %>
 
 <%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
@@ -12,6 +12,8 @@
     data-infinite-scroll-non-zero-header-value="<%= t(".selection_count.non_zero") %>"
     class="font-normal text-slate-500 dark:text-slate-400"
   >
+    <%= render "data_exports/dialog_errors" %>
+
     <%= form_with(
       url: list_data_exports_path(list_class: 'workflow_execution'),
       data: { "infinite-scroll-target": "pageForm" }

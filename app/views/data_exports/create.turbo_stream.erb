@@ -1,9 +1,14 @@
-<% if export_type == 'analysis' %>
-  <%= turbo_stream.update "export_dialog", "" %>
+<% if keep_dialog_open %>
+  <%= turbo_stream.update "data-export-dialog-errors" do %>
+    <%= render Viral::AlertComponent.new(type:, message:, classes: "mb-2") %>
+  <% end %>
 <% else %>
-  <%= turbo_stream.update "samples_dialog", "" %>
-<% end %>
-
-<%= turbo_stream.append "flashes" do %>
-  <%= render Viral::FlashComponent.new(type:, data: message) %>
+  <% if export_type == 'analysis' %>
+    <%= turbo_stream.update "export_dialog", "" %>
+  <% else %>
+    <%= turbo_stream.update "samples_dialog", "" %>
+  <% end %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= render Viral::FlashComponent.new(type:, data: message) %>
+  <% end %>
 <% end %>

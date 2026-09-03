@@ -6,6 +6,8 @@ class ApplicationSetting < ApplicationRecord
   USER_OPT_IN_FEATURES_JSON_SCHEMA = Rails.root.join('config/schemas/user_opt_in_features.json')
 
   validate :only_one_instance, on: :create
+  validates :max_data_export_size_gigabytes,
+            numericality: { only_integer: true, greater_than: 0 }
   validates :user_opt_in_features,
             json: { message: ->(errors) { errors }, schema: USER_OPT_IN_FEATURES_JSON_SCHEMA }
 
@@ -19,7 +21,8 @@ class ApplicationSetting < ApplicationRecord
       password_authentication_enabled: true,
       cleanup_inactive_access_tokens_after_days: 30,
       require_personal_access_token_expiry: false,
-      max_personal_access_token_lifetime_in_days: 365
+      max_personal_access_token_lifetime_in_days: 365,
+      max_data_export_size_gigabytes: 30
     }
   end
 
