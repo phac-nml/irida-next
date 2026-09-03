@@ -214,8 +214,8 @@ module Members
 
       project_member.create_logidze_snapshot!
 
-      assert_equal 1,  project_member.log_data.version
-      assert_equal 1,  project_member.log_data.size
+      assert_equal 1, project_member.log_data.version
+      assert_equal 1, project_member.log_data.size
       assert_equal user.id, project_member.at(version: 1).user_id
       assert_equal Member::AccessLevel::OWNER, project_member.at(version: 1).access_level
     end

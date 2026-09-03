@@ -8,7 +8,7 @@ module Nextflow
 
       attr_reader :url, :workflow, :metadata_fields, :sample_count, :namespace_id, :instance, :automated_workflow
 
-      # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable-next Metrics/ParameterLists
       def initialize(url:, sample_count:, workflow:, fields:, namespace_id:, instance: nil)
         @sample_count = sample_count.to_i
         @automated_workflow = @sample_count.nil? || @sample_count.zero?
@@ -19,7 +19,6 @@ module Nextflow
         @instance = instance
         @namespace_type = namespace_type(namespace_id)
       end
-      # rubocop:enable Metrics/ParameterLists
 
       def namespace_type(namespace_id)
         namespace = Namespace.find_by(id: namespace_id)

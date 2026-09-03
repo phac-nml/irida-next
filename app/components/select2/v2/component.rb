@@ -10,7 +10,7 @@ module Select2
       renders_many :options, Select2::V2::OptionComponent
       renders_one  :empty_state
 
-      # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable-next Metrics/ParameterLists
       def initialize(form:, name:, id:, placeholder: '', required: true, selected_value: '',
                      aria_invalid: false, field_hint: false)
         @form = form
@@ -24,7 +24,6 @@ module Select2
         @field_hint = field_hint
         @aria_describedby = construct_aria_describedby
       end
-      # rubocop:enable Metrics/ParameterLists
 
       def construct_aria_describedby
         constructed_aria_describedby = []

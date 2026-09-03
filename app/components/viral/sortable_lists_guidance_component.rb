@@ -13,7 +13,7 @@ module Viral
   class SortableListsGuidanceComponent < Viral::Component
     attr_reader :title, :instructions, :keyboard_help, :available, :selected, :id_prefix
 
-    # rubocop:disable Metrics/ParameterLists
+    # rubocop:disable-next Metrics/ParameterLists
     def initialize(title:, instructions:, keyboard_help:, available:, selected:, id_prefix: nil)
       @title = title
       @instructions = instructions
@@ -22,7 +22,6 @@ module Viral
       @selected = { icon: :list_bullets }.merge(selected)
       @id_prefix = id_prefix || "sortable-lists-guidance-#{SecureRandom.hex(4)}"
     end
-    # rubocop:enable Metrics/ParameterLists
 
     def available_description_id
       "#{id_prefix}-available-description"

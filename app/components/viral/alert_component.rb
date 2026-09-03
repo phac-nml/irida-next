@@ -56,7 +56,7 @@ module Viral
     # @param auto_dismiss [Boolean] whether to render a progress bar that a Stimulus controller can manage
     # @param auto_dismiss_duration [Integer] Manually set how long the alert takes to dismiss itself (in milliseconds)
     # @param system_arguments [Hash] additional HTML attributes (classes are merged)
-    # rubocop:disable Metrics/ParameterLists
+    # rubocop:disable-next Metrics/ParameterLists
     def initialize(type: TYPE_DEFAULT, message: nil, dismissible: true, auto_dismiss: false,
                    auto_dismiss_duration: 5000, announce_alert: true, **system_arguments)
       # Normalize to canonical string type for styling and iconography
@@ -75,7 +75,6 @@ module Viral
       @system_arguments[:'aria-live'] = 'assertive'
       @system_arguments[:'aria-atomic'] = 'true'
     end
-    # rubocop:enable Metrics/ParameterLists
 
     # Compose safe HTML attributes for the outer wrapper, including Stimulus data attributes.
     #

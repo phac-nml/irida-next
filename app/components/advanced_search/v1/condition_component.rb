@@ -4,7 +4,7 @@ module AdvancedSearch
   module V1
     # Component for rendering an advanced search condition
     class ConditionComponent < ::Component
-      # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable-next Metrics/ParameterLists
       def initialize(groups_form:, group_index:, condition:, condition_index:, condition_number:, fields: {},
                      operations: [])
         @groups_form = groups_form
@@ -15,7 +15,6 @@ module AdvancedSearch
         @fields = fields
         @operations = operations
       end
-      # rubocop:enable Metrics/ParameterLists
 
       def value_options
         return nil unless enum_field?

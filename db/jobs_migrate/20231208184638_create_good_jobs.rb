@@ -2,7 +2,7 @@
 
 # Migration to create jobs
 class CreateGoodJobs < ActiveRecord::Migration[7.1]
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable-next Metrics/MethodLength, Metrics/AbcSize
   def change
     # Uncomment for Postgres v12 or earlier to enable gen_random_uuid() support
     # enable_extension 'pgcrypto'
@@ -92,5 +92,4 @@ class CreateGoodJobs < ActiveRecord::Migration[7.1]
     add_index :good_job_executions, %i[active_job_id created_at],
               name: :index_good_job_executions_on_active_job_id_and_created_at
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 end

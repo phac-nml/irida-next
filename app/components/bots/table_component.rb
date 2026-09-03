@@ -7,7 +7,7 @@ module Bots
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
-    # rubocop: disable Metrics/ParameterLists
+    # rubocop: disable-next Metrics/ParameterLists
     def initialize(
       bot_accounts,
       namespace,
@@ -23,7 +23,6 @@ module Bots
       @empty = empty
       @system_arguments = system_arguments
     end
-    # rubocop: enable Metrics/ParameterLists
 
     private
 

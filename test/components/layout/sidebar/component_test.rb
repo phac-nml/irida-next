@@ -200,9 +200,8 @@ module Layout
 
         # Collect all tooltip IDs from buttons with tooltips
         buttons = page.all('button[data-pathogen--tooltip-target="trigger"]')
-        # rubocop:disable Rails/Pluck
+        # rubocop:disable-next Rails/Pluck
         tooltip_ids = buttons.map { |button| button['aria-describedby'] }
-        # rubocop:enable Rails/Pluck
 
         # All IDs should be present
         assert tooltip_ids.all?(&:present?), 'All tooltip buttons should have aria-describedby'

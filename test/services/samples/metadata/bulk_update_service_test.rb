@@ -52,11 +52,11 @@ module Samples
 
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield3' => 1, 'metadatafield4' => 1 },
                      @project31.namespace.reload.metadata_summary)
-        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield3' => 1, 'metadatafield4' => 1  },
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2, 'metadatafield3' => 1, 'metadatafield4' => 1 },
                      @subgroup12aa.reload.metadata_summary)
-        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadatafield3' => 1, 'metadatafield4' => 1  },
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3, 'metadatafield3' => 1, 'metadatafield4' => 1 },
                      @subgroup12a.reload.metadata_summary)
-        assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4, 'metadatafield3' => 1, 'metadatafield4' => 1  },
+        assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4, 'metadatafield3' => 1, 'metadatafield4' => 1 },
                      @group12.reload.metadata_summary)
       end
 

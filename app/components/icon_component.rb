@@ -16,7 +16,7 @@ class IconComponent < Component
   }.freeze
   attr_reader :icon_name, :color, :size, :variant, :rails_icons_options
 
-  # rubocop:disable Metrics/ParameterLists
+  # rubocop:disable-next Metrics/ParameterLists
   def initialize(icon_name, color: :default, size: :md, variant: nil, library: nil, **options)
     @icon_name = normalize_icon_name(icon_name)
     @color = validate_color(color)
@@ -25,7 +25,6 @@ class IconComponent < Component
     @rails_icons_options = build_rails_icons_options(variant, library, options)
     apply_styling
   end
-  # rubocop:enable Metrics/ParameterLists
 
   def call
     IconRenderer.clean_html(native_rails_icon(icon_name, **rails_icons_options))

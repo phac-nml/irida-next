@@ -10,7 +10,7 @@ module Attachments
     METADATA_COLUMNS = %w[format type].freeze
     FILE_DATA_COLUMNS = %w[filename byte_size].freeze
 
-    # rubocop:disable Naming/MethodParameterName,Metrics/ParameterLists
+    # rubocop:disable-next Naming/MethodParameterName,Metrics/ParameterLists
     def initialize(
       attachments,
       pagy,
@@ -42,7 +42,6 @@ module Attachments
       # 📝 Set the columns to be displayed in the table.
       @columns = columns
     end
-    # rubocop:enable Naming/MethodParameterName,Metrics/ParameterLists
 
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|

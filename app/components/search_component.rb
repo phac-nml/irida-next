@@ -6,7 +6,7 @@ require 'ransack/helpers/form_helper'
 class SearchComponent < Component
   include Ransack::Helpers::FormHelper
 
-  # rubocop:disable Metrics/ParameterLists
+  # rubocop:disable-next Metrics/ParameterLists
   def initialize(query:, url:, search_attribute:, label:, placeholder:, total_count:, value: nil,
                  search_field_arguments: {}, data: { turbo_action: 'replace' }, **kwargs)
     @query = query
@@ -21,7 +21,6 @@ class SearchComponent < Component
     @search_field_arguments = search_field_arguments
     @search_key = @kwargs.fetch(:as, :q)
   end
-  # rubocop:enable Metrics/ParameterLists
 
   def kwargs
     @kwargs.tap do |args|
