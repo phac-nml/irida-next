@@ -72,7 +72,7 @@ module Projects
       end
     end
 
-    def update
+    def update # rubocop:disable Metrics/MethodLength
       updated = AutomatedWorkflowExecutions::UpdateService.new(@automated_workflow_execution,
                                                                current_user,
                                                                automated_workflow_execution_params).execute
@@ -80,9 +80,15 @@ module Projects
       respond_to do |format|
         format.turbo_stream do
           if updated
-            render status: :ok
+            render status: :ok, locals: { type: 'success',
+                                          message: t('.success',
+                                                     workflow_name: @automated_workflow_execution.workflow.name) }
           else
-            render status: :unprocessable_content
+            render status: :unprocessable_content, locals: {
+              type: 'alert',
+              message: t('.error',
+                         workflow_name: @automated_workflow_execution.workflow.name)
+            }
           end
         end
       end
