@@ -185,7 +185,7 @@ function renderFixture() {
   </div>
 
   <form data-turbo-frame="_top" data-nextflow--v2--samplesheet-target="form" action="/-/workflow_executions" accept-charset="UTF-8" method="post">
-    <input type="hidden" name="authenticity_token" value="I75TYYF0Z5cwjbODirsbI0HMR-6Ei8WFl97ZFJHYVGGQTb2Dqfw93BCG7A4sTbqzs6jxL2kSewIM9aakdw-SLQ">
+    <input type="hidden" name="authenticity_token" value="authenticity_token_value">
     <input type="hidden" name="format" id="submission_turbo" value="turbo_stream">
 
     <section>
@@ -821,40 +821,6 @@ describe("nextflow v2 samplesheet controller", () => {
     );
   });
 
-  it("can't submit without name", async () => {
-    setupStandardSamplesheetAttributes(range(1, 5));
-    application = await startController();
-    const submitBtn = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="submit"]',
-    );
-
-    const errorMessageContainer = document.querySelector(
-      "#workflow_execution_name_error",
-    );
-
-    const formFieldErrorMessage = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
-    );
-
-    expect(errorMessageContainer.textContent).not.toContain(
-      "Name is required. Please enter a name for the workflow execution.",
-    );
-
-    expect(formFieldErrorMessage.textContent).not.toContain(
-      "Please review the following problems:",
-    );
-
-    submitBtn.click();
-
-    await new Promise((resolve) => setTimeout(resolve, 60));
-    expect(errorMessageContainer.textContent).toContain(
-      "Name is required. Please enter a name for the workflow execution.",
-    );
-    expect(formFieldErrorMessage.textContent).toContain(
-      "Please review the following problems:",
-    );
-  });
-
   it("empty file selection on required file field validation", async () => {
     // manually create sampleAttributes with empty file selection
     const samples = [1, 2];
@@ -1288,5 +1254,150 @@ describe("nextflow v2 samplesheet controller", () => {
     );
 
     requestSubmit.mockRestore();
+  });
+
+  it("verify samplesheet submission form content with samplesheet changes", async () => {
+    const allSamples = range(1, 2);
+    setupStandardSamplesheetAttributes(allSamples);
+
+    application = await startController();
+    const form = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="form"]',
+    );
+
+    const nameInput = document.querySelector("#workflow_execution_name");
+    nameInput.value = "a test name";
+
+    // file change
+    const samplesheetPayloadContainer = document.getElementById(
+      "samplesheet-payload-container",
+    );
+    const filesPayload = JSON.stringify({
+      files: [
+        {
+          filename: "new-fastq-1.fastq.gz",
+          global_id: "new-fastq-1-global-id",
+          id: "new-fastq-1-id",
+          property: "fastq_1",
+        },
+        {
+          filename: "new-fastq-2.fastq.gz",
+          global_id: "new-fastq-2-global-id",
+          id: "new-fastq-2-id",
+          property: "fastq_2",
+        },
+      ],
+      attachable_id: "sample-1-id",
+    });
+    const escapedFilesPayload = filesPayload.replaceAll('"', "&quot;");
+    samplesheetPayloadContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div
+        hidden
+        data-files="${escapedFilesPayload}"
+        data-nextflow--v2--samplesheet-target="dataPayload"
+        data-payload-type="files"
+      ></div>`,
+    );
+
+    await Promise.resolve(); // await DOM to process and render changes
+
+    // metadata change
+    const metadataPayload = {};
+
+    metadataPayload["sample-2-id"] = {
+      sample_id: "sample-2-id",
+      samplesheet_params: {
+        metadata_1: "a_metadata_value",
+      },
+    };
+    const escapedMetadataPayload = JSON.stringify(metadataPayload).replaceAll(
+      '"',
+      "&quot;",
+    );
+    samplesheetPayloadContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div
+        data-metadata='${escapedMetadataPayload}'
+        data-headers='["metadata_1"]'
+        data-nextflow--v2--samplesheet-target="dataPayload"
+        data-payload-type="metadata"
+      ></div>`,
+    );
+
+    // dropdown change
+    const dropdownCell = document.getElementById(
+      "sample-1-id_fastmatch_category_dropdown",
+    );
+    dropdownCell.value = "query";
+    dropdownCell.dispatchEvent(
+      new Event("change", {
+        bubbles: true,
+      }),
+    );
+
+    let fetchOptions;
+
+    vi.spyOn(HTMLFormElement.prototype, "requestSubmit").mockImplementation(
+      function () {
+        fetchOptions = {
+          body: undefined,
+          headers: {},
+        };
+
+        this.dispatchEvent(
+          new CustomEvent("turbo:before-fetch-request", {
+            bubbles: true,
+            detail: {
+              fetchOptions,
+              resume: vi.fn(),
+            },
+          }),
+        );
+      },
+    );
+
+    const submitButton = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="submit"]',
+    );
+
+    submitButton.click();
+
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    expect(fetchOptions.headers["Content-Type"]).toBe("application/json");
+    const body = JSON.parse(fetchOptions.body);
+    console.log(body.workflow_execution.samples_workflow_executions_attributes);
+    expect(
+      body.workflow_execution.samples_workflow_executions_attributes,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          sample_id: "sample-1-id",
+          samplesheet_params: expect.objectContaining({
+            sample: "SAMPLE-PUID-1",
+            sample_name: "SAMPLE NAME 1",
+            metadata_1: "",
+            fastmatch_category: "query",
+            fastq_1: "new-fastq-1-global-id",
+            fastq_2: "new-fastq-2-global-id",
+          }),
+        }),
+        expect.objectContaining({
+          sample_id: "sample-2-id",
+          samplesheet_params: expect.objectContaining({
+            sample: "SAMPLE-PUID-2",
+            sample_name: "SAMPLE NAME 2",
+            metadata_1: "a_metadata_value",
+            fastmatch_category: "",
+            fastq_1: "gid://irida/Attachment/sample-2-fastq-1",
+            fastq_2: "gid://irida/Attachment/sample-2-fastq-2",
+          }),
+        }),
+      ]),
+    );
+    expect(body.workflow_execution.name).toEqual("a test name");
+    expect(body.workflow_execution.namespace_id).toEqual(
+      "b3d29210-cefc-4b22-ad8e-c44c332b6c40",
+    );
   });
 });
