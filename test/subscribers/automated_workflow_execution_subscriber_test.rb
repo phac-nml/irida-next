@@ -64,5 +64,66 @@ module Subscribers
         @subscriber.emit(event)
       end
     end
+
+    test 'emit does not trigger AutomatedWorkflowExecutions::LaunchJob when the event name is not attachments.create' do
+      event = {
+        name: 'attachments.update',
+        payload: {
+          attachable: @attachable,
+          attachments: [@forward_attachment, @reverse_attachment]
+        }
+      }
+
+      assert_no_enqueued_jobs do
+        @subscriber.emit(event)
+      end
+    end
+
+    test 'emit does not trigger AutomatedWorkflowExecutions::LaunchJob when the attachable is not a Sample' do
+      project = projects(:project1)
+      event = {
+        name: 'attachments.create',
+        payload: {
+          attachable: project.namespace,
+          attachments: [@forward_attachment, @reverse_attachment]
+        }
+      }
+
+      assert_no_enqueued_jobs do
+        @subscriber.emit(event)
+      end
+    end
+
+    test 'emit does not trigger AutomatedWorkflowExecutions::LaunchJob when the attachable project namespace has no automated workflow executions' do # rubocop:disable Layout/LineLength
+      attachable = samples(:sample3)
+
+      event = {
+        name: 'attachments.create',
+        payload: {
+          attachable: attachable,
+          attachments: [@forward_attachment, @reverse_attachment]
+        }
+      }
+
+      assert_no_enqueued_jobs do
+        @subscriber.emit(event)
+      end
+    end
+
+    test 'emit does not trigger AutomatedWorkflowExecutions::LaunchJob when pipelines are not configured' do
+      Irida::Pipelines.instance.stubs(:pipelines).returns([])
+
+      event = {
+        name: 'attachments.create',
+        payload: {
+          attachable: @attachable,
+          attachments: [@forward_attachment, @reverse_attachment]
+        }
+      }
+
+      assert_no_enqueued_jobs do
+        @subscriber.emit(event)
+      end
+    end
   end
 end

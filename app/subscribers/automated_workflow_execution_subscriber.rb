@@ -18,7 +18,7 @@ class AutomatedWorkflowExecutionSubscriber
     paired_end = paired_end_attachments(attachments)
     return unless paired_end.any?
 
-    return if event[:payload][:attachable].project.namespace.automated_workflow_executions.blank?
+    return if attachable.project.namespace.automated_workflow_executions.blank?
 
     # Trigger the automated workflow execution
     AutomatedWorkflowExecutions::LaunchJob.perform_later(attachable, paired_end.last)
