@@ -7,7 +7,7 @@ module MetadataTemplates
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
-    # rubocop:disable Naming/MethodParameterName
+    # rubocop:disable-next Naming/MethodParameterName
     def initialize(metadata_templates, namespace, pagy, q, row_actions)
       @namespace = namespace
       @metadata_templates = metadata_templates
@@ -17,7 +17,6 @@ module MetadataTemplates
       @renders_row_actions = @row_actions.any? { |_key, value| value }
       @columns = columns
     end
-    # rubocop:enable Naming/MethodParameterName
 
     def wrapper_arguments
       {

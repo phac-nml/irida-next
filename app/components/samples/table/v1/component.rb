@@ -15,7 +15,7 @@ module Samples
         # Target maximum number of table cells (rows x columns) for optimal performance
         TARGET_MAX_CELLS = 2000
 
-        # rubocop:disable Metrics/ParameterLists
+        # rubocop:disable-next Metrics/ParameterLists
         def initialize(
           samples,
           namespace,
@@ -46,7 +46,6 @@ module Samples
 
           @columns = columns
         end
-        # rubocop:enable Metrics/ParameterLists
 
         def before_render
           return unless @show_metadata_fields_size_warning

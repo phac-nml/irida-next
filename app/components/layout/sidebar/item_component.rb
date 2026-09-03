@@ -57,7 +57,7 @@ module Layout
       # @param badge [String, Numeric, nil] optional badge to display next to the label (default: nil)
       # @param selected [Boolean] whether the item is in a selected/active state (default: false)
       # @param system_arguments [Hash] additional HTML attributes to be included in the root element
-      # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable-next Metrics/ParameterLists
       def initialize(
         url:,
         label:,
@@ -75,7 +75,6 @@ module Layout
         @avatar = avatar
         @system_arguments = system_arguments
       end
-      # rubocop:enable Metrics/ParameterLists
 
       # Renders the icon with appropriate styling based on the item's state
       #

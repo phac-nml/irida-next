@@ -3,7 +3,7 @@
 module Dropdown
   # Base component to be inherited from by versioned dropdown implementations.
   # Contains shared logic for handling dropdown configuration, system arguments, and tooltip wiring.
-  # rubocop:disable Metrics/ClassLength
+  # rubocop:disable-next Metrics/ClassLength
   class BaseComponent < ::Component
     renders_many :items, types: {
       default: { renders: Dropdown::ItemComponent, as: :item },
@@ -280,5 +280,4 @@ module Dropdown
       "#{existing} #{id}"
     end
   end
-  # rubocop:enable Metrics/ClassLength
 end

@@ -19,7 +19,7 @@ module Activities
     end
 
     def project_crud_action?
-      @activity[:key].include?('group.projects.create') ||  @activity[:key].include?('group.projects.destroy')
+      @activity[:key].include?('group.projects.create') || @activity[:key].include?('group.projects.destroy')
     end
 
     def project_namespace_transfer_action?

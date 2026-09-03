@@ -10,7 +10,7 @@ module WorkflowExecutions
     # 🧊 Fields within the 'metadata' JSONB column that require prefixing for sorting.
     METADATA_FIELDS = %i[workflow_name workflow_version].freeze
 
-    # rubocop:disable Naming/MethodParameterName,Metrics/ParameterLists
+    # rubocop:disable-next Naming/MethodParameterName,Metrics/ParameterLists
     def initialize(
       workflow_executions,
       pagy,
@@ -37,7 +37,6 @@ module WorkflowExecutions
 
       @columns = columns
     end
-    # rubocop:enable Naming/MethodParameterName,Metrics/ParameterLists
 
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|

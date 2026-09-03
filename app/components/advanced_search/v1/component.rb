@@ -6,7 +6,7 @@ module AdvancedSearch
     class Component < ::Component
       # @param sample_fields [Array] @deprecated Use fields: instead
       # @param metadata_fields [Array] @deprecated Use fields: instead
-      # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable-next Metrics/ParameterLists
       def initialize(form:, search:, fields: nil, sample_fields: [], metadata_fields: [], open: false, status: true)
         @form = form
         @search = search
@@ -17,7 +17,6 @@ module AdvancedSearch
         @search_group_class = @search.search_group_class
         @search_condition_class = @search.search_group_class.condition_class
       end
-      # rubocop:enable Metrics/ParameterLists
 
       private
 

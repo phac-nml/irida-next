@@ -80,7 +80,7 @@ class NextflowComponentTest < ViewComponentTestCase
       instance: with_values_instance
     )
 
-    # rubocop:disable Layout/LineLength
+    # rubocop:disable-next Layout/LineLength
     assert_selector 'form' do
       assert_selector ' input[name="workflow_execution[name]"][value="Test Instance"]', count: 1
       assert_selector 'input[name="workflow_execution[workflow_params][kraken2_db]"][value="PATH_TO_DB"]', count: 1
@@ -93,7 +93,6 @@ class NextflowComponentTest < ViewComponentTestCase
       assert_no_selector 'input[type="radio"][name="workflow_execution[workflow_params][skip_depth_sampling]"][value="true"][checked="checked"]'
       assert_no_selector 'input[type=checkbox][name="workflow_execution[shared_with_namespace]"]'
     end
-    # rubocop:enable Layout/LineLength
   end
 
   private

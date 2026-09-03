@@ -35,7 +35,7 @@ class MetadataTemplate < ApplicationRecord
     %w[created_by namespace]
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+  # rubocop:disable-next Metrics/CyclomaticComplexity, Metrics/MethodLength
   def self.format_json_error(error)
     case error['type']
     when 'maxItems'
@@ -58,7 +58,6 @@ class MetadataTemplate < ApplicationRecord
              error_type: error['type'] || 'unknown')
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength
 
   private
 

@@ -5,7 +5,7 @@ module Samples
     module V2
       # Data-grid samples table implementation.
       class Component < ::Component # rubocop:disable Metrics/ClassLength
-        # rubocop:disable Metrics/ParameterLists
+        # rubocop:disable-next Metrics/ParameterLists
         def initialize(
           samples,
           namespace,
@@ -33,7 +33,6 @@ module Samples
 
           @columns = columns
         end
-        # rubocop:enable Metrics/ParameterLists
 
         def data_grid_arguments
           base_args = @system_arguments.dup

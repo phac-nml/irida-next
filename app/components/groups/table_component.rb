@@ -7,7 +7,7 @@ module Groups
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
-    # rubocop:disable Naming/MethodParameterName,Metrics/ParameterLists
+    # rubocop:disable-next Naming/MethodParameterName,Metrics/ParameterLists
     def initialize(
       namespace_group_links,
       namespace,
@@ -27,7 +27,6 @@ module Groups
 
       @columns = columns
     end
-    # rubocop:enable Naming/MethodParameterName,Metrics/ParameterLists
 
     def wrapper_arguments
       {

@@ -8,7 +8,7 @@ module Members
     include Ransack::Helpers::FormHelper
     include MembersHelper
 
-    # rubocop:disable Naming/MethodParameterName, Metrics/ParameterLists
+    # rubocop:disable-next Naming/MethodParameterName, Metrics/ParameterLists
     def initialize(namespace, members, access_levels, q, has_members, current_user, abilities = {})
       @namespace = namespace
       @members = members
@@ -19,7 +19,6 @@ module Members
       @abilities = abilities
       @columns = columns
     end
-    # rubocop:enable Naming/MethodParameterName, Metrics/ParameterLists
 
     def wrapper_arguments
       {
