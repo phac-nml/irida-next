@@ -229,7 +229,7 @@ function renderFixture() {
  <div
   class="hidden"
   data-nextflow--v2--samplesheet-target="samplesheetProperties"
-  data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;irida_id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces.&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;sample_name&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;errorMessage&quot;:&quot;Sample name is optional, if provided will replace sample for filenames and outputs&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;sample_name_cell&quot;,&quot;pattern&quot;:null},&quot;metadata_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;metadata_1&quot;],&quot;errorMessage&quot;:&quot;Metadata associated with the sample (metadata_1).&quot;,&quot;default&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;^[^\\\\n\\\\t\\\&quot;]+$&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;metadata_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastmatch_category&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;errorMessage&quot;:&quot;Has to be either query or reference&quot;,&quot;cell_type&quot;:&quot;dropdown_cell&quot;,&quot;enum&quot;:[&quot;query&quot;,&quot;reference&quot;]}}"
+  data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;irida_id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces.&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;sample_name&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;errorMessage&quot;:&quot;Sample name is optional, if provided will replace sample for filenames and outputs&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;sample_name_cell&quot;,&quot;pattern&quot;:null},&quot;metadata_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;metadata_1&quot;],&quot;errorMessage&quot;:&quot;Metadata associated with the sample (metadata_1).&quot;,&quot;default&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;^[^\\\\n\\\\t\\\&quot;]+$&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;metadata_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastmatch_category&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;errorMessage&quot;:&quot;Has to be either query or reference&quot;,&quot;cell_type&quot;:&quot;dropdown_cell&quot;,&quot;enum&quot;:[&quot;query&quot;,&quot;reference&quot;]}}"
   ></div>
         <turbo-frame id="sample_attributes">
         </turbo-frame>
@@ -922,10 +922,10 @@ describe("nextflow v2 samplesheet controller", () => {
       "The following samples are missing required data:",
     );
     expect(samplesheetErrorContainer.textContent).toContain(
-      "- SAMPLE-PUID-1: fastq_1",
+      "- SAMPLE-PUID-1: fastq_1, fastq_2",
     );
     expect(samplesheetErrorContainer.textContent).toContain(
-      "- SAMPLE-PUID-2: fastq_1",
+      "- SAMPLE-PUID-2: fastq_1, fastq_2",
     );
   });
 
@@ -1413,5 +1413,36 @@ describe("nextflow v2 samplesheet controller", () => {
     );
     expect(body.workflow_execution.name).toEqual("a test name");
     expect(body.workflow_execution.namespace_id).toEqual("a_namespace_id");
+  });
+
+  it("unaligned selection ids and sample attributes id cause error", async () => {
+    renderFixture();
+    sessionStorage.setItem("selection-test-key", createSampleIds([1, 2]));
+    const sampleAttributesContainer =
+      document.getElementById("sample_attributes");
+    sampleAttributesContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="sampleAttributes"
+      data-allowed-to-update-samples="true"
+      data-sample-attributes='${createSampleAttributes([1])}'
+    ></div>
+    <div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="fileAttributes"
+    >
+      ${createFileAttributes([1])}
+    </div>`,
+    );
+    application = await startController();
+
+    const errorMessage = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="errorMessage"]',
+    );
+
+    expect(errorMessage).toHaveTextContent(
+      "An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples.",
+    );
   });
 });
