@@ -35,5 +35,16 @@ class ProjectsTest < ActionDispatch::IntegrationTest
          params: { projects_transfer_form: { new_namespace_id: 'invalid-id' } }, as: :turbo_stream
 
     assert_response :unprocessable_content
+    assert_match I18n.t(:'projects.edit.advanced.transfer.empty_state'), response.body
+  end
+
+  test 'should render unprocessable_content when transfer to namespace with same project name' do
+    project2 = projects(:project2)
+    post namespace_project_transfer_path(project2.namespace.parent, project2),
+         params: { projects_transfer_form: { new_namespace_id: @namespace.id } }, as: :turbo_stream
+
+    assert_response :unprocessable_content
+    assert_match I18n.t(:'activemodel.errors.models.projects/transfer_form.attributes.new_namespace_id.project_exists'),
+                 response.body
   end
 end
