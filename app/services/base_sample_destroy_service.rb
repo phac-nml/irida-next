@@ -18,7 +18,7 @@ class BaseSampleDestroyService < BaseService
 
     if Flipper.enabled?(:prevent_sample_deletions_and_transfers_with_active_workflows)
       sample_ids = @sample_ids || [@sample.id]
-      validate_no_active_workflow_executions(sample_ids)
+      validate_no_active_workflow_executions_for_action(sample_ids, action_type: 'destroy', error_class: DestroyError)
     end
 
     destroy_samples
@@ -28,23 +28,6 @@ class BaseSampleDestroyService < BaseService
   end
 
   private
-
-  # Validate that samples do not have active workflow executions.
-  #
-  # Prevents transferring samples that are currently being used in a workflow execution.
-  # Active workflow states are: initial, prepared, submitted, running.
-  #
-  # @param sample_ids [Array<Integer>] IDs of samples to check
-  # @raise [DestroyError] if any samples have active workflow executions
-  def validate_no_active_workflow_executions(sample_ids)
-    active_workflow_sample_puids = active_workflow_execution_sample_puids(sample_ids)
-
-    return if active_workflow_sample_puids.empty?
-
-    raise DestroyError,
-          I18n.t('services.samples.destroy.active_workflow_executions',
-                 sample_puids: active_workflow_sample_puids.join(', '))
-  end
 
   def update_metadata_summary(sample)
     sample.project.namespace.update_metadata_summary_by_sample_deletion(sample)

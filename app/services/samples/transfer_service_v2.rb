@@ -31,6 +31,11 @@ module Samples
 
       validate(sample_ids, 'transfer', new_project.id)
 
+      if Flipper.enabled?(:prevent_sample_deletions_and_transfers_with_active_workflows)
+        validate_no_active_workflow_executions_for_action(sample_ids, action_type: 'transfer',
+                                                                      error_class: TransferError)
+      end
+
       authorize_new_project(new_project, :transfer_sample_into_project?)
 
       if Member.effective_access_level(@namespace, current_user) == Member::AccessLevel::MAINTAINER # rubocop:disable Style/GuardClause
