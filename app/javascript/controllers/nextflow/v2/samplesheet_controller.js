@@ -502,7 +502,6 @@ export default class extends Controller {
   #insertDropdownContent(cell, columnName, sampleId, options) {
     const name = `${sampleId}_${columnName}`;
     const id = `${sampleId}_${columnName}_dropdown`;
-
     const dropdownContent = this.dropdownTemplateTarget.content.cloneNode(true);
     const selectNode = dropdownContent.querySelector("select");
     selectNode.setAttribute("aria-label", columnName);
@@ -1048,8 +1047,9 @@ export default class extends Controller {
         '[data-nextflow--v2--samplesheet-target="samplesheetProperties"]',
       ).dataset.properties;
       this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
+
       // // clear the now unnecessary DOM element
-      // this.samplesheetPropertiesTarget.remove();
+      this.samplesheetPropertiesTarget.remove();
       this.#processSamplesheetAttributes();
       this.#processFileAttributes();
 
