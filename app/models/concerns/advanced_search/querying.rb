@@ -73,7 +73,9 @@ module AdvancedSearch
       search_scope.where(filter_column => filter_ids)
     end
 
-    def apply_sort(scope)
+    def apply_sort(scope) # rubocop:disable Metrics/AbcSize
+      scope = normalize_sort_scope(scope)
+
       return scope unless column.present? && direction.present?
 
       ordered_scope = if column.starts_with?('metadata.')
@@ -87,6 +89,20 @@ module AdvancedSearch
       return ordered_scope if column == 'id'
 
       ordered_scope.order(id: direction)
+    end
+
+    def normalize_sort_scope(scope)
+      return scope unless scope.is_a?(Array)
+
+      ids = scope.flat_map do |entry|
+        if entry.is_a?(ActiveRecord::Relation)
+          entry.ids
+        elsif entry.respond_to?(:id)
+          entry.id
+        end
+      end.compact.uniq
+
+      model_class.where(id: ids)
     end
 
     def search_scope
