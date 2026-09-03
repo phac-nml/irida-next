@@ -41,7 +41,11 @@ module Samples
       validate(sample_ids, 'transfer', new_project_id)
 
       if Flipper.enabled?(:prevent_sample_deletions_and_transfers_with_active_workflows)
-        validate_no_active_workflow_executions(sample_ids)
+        validate_no_active_workflow_executions_for_action(
+          sample_ids,
+          action_type: 'transfer',
+          error_class: TransferError
+        )
       end
 
       @new_project = Project.find_by(id: new_project_id)
@@ -55,23 +59,6 @@ module Samples
     rescue BaseSampleService::BaseError, TransferService::TransferError => e
       @namespace.errors.add(:base, e.message)
       []
-    end
-
-    # Validate that samples do not have active workflow executions.
-    #
-    # Prevents transferring samples that are currently being used in a workflow execution.
-    # Active workflow states are: initial, prepared, submitted, running.
-    #
-    # @param sample_ids [Array<Integer>] IDs of samples to check
-    # @raise [TransferError] if any samples have active workflow executions
-    def validate_no_active_workflow_executions(sample_ids)
-      active_workflow_sample_puids = active_workflow_execution_sample_puids(sample_ids)
-
-      return if active_workflow_sample_puids.empty?
-
-      raise TransferError,
-            I18n.t('services.samples.transfer.active_workflow_executions',
-                   sample_puids: active_workflow_sample_puids.join(', '))
     end
 
     # Validate that a maintainer can transfer samples between projects.
