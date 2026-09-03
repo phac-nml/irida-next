@@ -11,6 +11,7 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
 
   self.enum_metadata_fields = Attachment::FieldConfiguration::ENUM_METADATA_FIELDS
 
+  attribute :attachable
   attribute :puid_or_file_blob_filename_cont, :string
   attribute :groups, default: -> { [] }
 
@@ -21,6 +22,13 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
   end
 
   private
+
+  def search_scope
+    return scope if scope.present?
+    return attachable_attachments_scope if attachable.present?
+
+    super
+  end
 
   def filtered_scope
     search_scope
@@ -59,6 +67,17 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
     super
   end
 
+  def attachable_attachments_scope
+    if attachable.instance_of?(WorkflowExecution)
+      Attachment.where(attachable: attachable)
+                .or(Attachment.where(attachable: attachable.samples_workflow_executions))
+    elsif filter_requested?
+      attachable.attachments.all
+    else
+      attachable.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+    end
+  end
+
   def normalize_condition_field(condition)
     return 'puid' if condition.field == 'id'
 
@@ -73,5 +92,9 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
     {
       puid_or_file_blob_filename_cont: puid_or_file_blob_filename_cont
     }.compact
+  end
+
+  def filter_requested?
+    puid_or_file_blob_filename_cont.present?
   end
 end
