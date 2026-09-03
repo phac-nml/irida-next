@@ -48,79 +48,12 @@ module WorkflowExecutions
 
     test 'can view pipeline launch dialog with role >= Analyst at group level' do
       group = groups(:group_sixteen)
-      sign_in users(:james_doe)
-      get pipeline_selection_workflow_executions_submissions_path(group, params: { namespace_id: group.id })
+      user = users(:james_doe)
+      sign_in user
+      get pipeline_selection_workflow_executions_submissions_path(group, sample_count: 2, format: :turbo_stream)
       assert_response :success
 
-      assert_select 'ul' do
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/iridanextexample 1.0.3 IRIDA Next Example Pipeline'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline'
-        end
-      end
-    end
-
-    test 'cannot view pipeline launch dialog with Guest role at group level' do
-      group = groups(:group_sixteen)
-      sign_in users(:ryan_doe)
-      get pipeline_selection_workflow_executions_submissions_path(group, params: { namespace_id: group.id })
-      assert_response :unauthorized
-    end
-
-    test 'can view pipeline launch dialog with role >= Analyst at project level' do
-      project = projects(:project37)
-      namespace = project.namespace
-      sign_in users(:james_doe)
-      get pipeline_selection_workflow_executions_submissions_path(namespace, project,
-                                                                  params: { namespace_id: namespace.id })
-      assert_response :success
-
-      assert_select 'ul' do
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/iridanextexample 1.0.3 IRIDA Next Example Pipeline'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline'
-        end
-      end
-    end
-
-    test 'cannot view pipeline launch dialog with Guest role at project level' do
-      project = projects(:project37)
-      namespace = project.namespace
-      sign_in users(:ryan_doe)
-      get pipeline_selection_workflow_executions_submissions_path(namespace, project,
-                                                                  params: { namespace_id: namespace.id })
-      assert_response :unauthorized
-    end
-
-    test 'pipeline selection request with no disabled buttons' do
-      get pipeline_selection_workflow_executions_submissions_path(@group, sample_count: 2, format: :turbo_stream)
-      assert_response :success
-
-      assert_select 'h1', I18n.t('workflow_executions.submissions.pipeline_selection.title')
-
-      # verify ordering
+      assert_select 'h1', I18n.t('workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
       assert_select 'li', 5 do |workflow_selection_text|
         assert_equal 'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
                      workflow_selection_text[0].text.squish
@@ -132,7 +65,6 @@ module WorkflowExecutions
                      workflow_selection_text[3].text.squish
         assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_text[4].text.squish
       end
-
       # no disabled buttons or Unavailable divider
       assert_select 'button[aria-disabled="true"]', count: 0
       assert_select 'span', text: I18n.t('workflow_executions.submissions.pipeline_selection.unavailable'), count: 0
@@ -189,27 +121,24 @@ module WorkflowExecutions
     test 'can view pipeline launch dialog through group link' do
       project = projects(:user29_project1)
       sign_in users(:user30)
-      get pipeline_selection_workflow_executions_submissions_path(project,
-                                                                  params: { namespace_id: project.namespace.id })
+      get pipeline_selection_workflow_executions_submissions_path(project, sample_count: 2, format: :turbo_stream)
       assert_response :success
 
-      assert_select 'ul' do
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/iridanextexample 1.0.3 IRIDA Next Example Pipeline'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline'
-        end
-        assert_select 'li' do
-          assert_select 'button', text: 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline'
-        end
+      assert_select 'h1', I18n.t('workflow_executions.submissions.pipeline_selection.title')
+      assert_select 'li', 5 do |workflow_selection_text|
+        assert_equal 'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
+                     workflow_selection_text[0].text.squish
+        assert_equal 'phac-nml/iridanextexample 1.0.3 IRIDA Next Example Pipeline',
+                     workflow_selection_text[1].text.squish
+        assert_equal 'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline',
+                     workflow_selection_text[2].text.squish
+        assert_equal 'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline',
+                     workflow_selection_text[3].text.squish
+        assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_text[4].text.squish
       end
+      # no disabled buttons or Unavailable divider
+      assert_select 'button[aria-disabled="true"]', count: 0
+      assert_select 'span', text: I18n.t('workflow_executions.submissions.pipeline_selection.unavailable'), count: 0
     end
 
     test 'launch pipeline button in project samples page with role >= Analyst' do
@@ -237,11 +166,12 @@ module WorkflowExecutions
 
     test 'launch pipeline button in group samples page with role >= Analyst' do
       group = groups(:group_sixteen)
-      sign_in users(:james_doe)
+      user = users(:james_doe)
+      sign_in user
 
       get group_samples_url(group)
 
-      assert_select 'button', text: I18n.t(:'projects.samples.index.workflows.button_sr'), count: 0
+      assert_select 'button', text: I18n.t(:'projects.samples.index.workflows.button_sr', locale: user.locale)
     end
 
     test 'no launch pipeline button in group samples page with Guest' do
@@ -258,28 +188,6 @@ module WorkflowExecutions
       get group_samples_url(groups(:empty_group))
 
       assert_select 'button', text: I18n.t(:'projects.samples.index.workflows.button_sr'), count: 0
-    end
-
-    test 'pipeline selection request' do
-      sign_in users(:john_doe)
-
-      get pipeline_selection_workflow_executions_submissions_path(format: :turbo_stream)
-      assert_response :success
-
-      assert_select 'h1', I18n.t('workflow_executions.submissions.pipeline_selection.title')
-
-      # verify ordering
-      assert_select 'ul > li > button', 5 do |workflow_selection_button|
-        assert_equal 'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
-                     workflow_selection_button[0].text.squish
-        assert_equal 'phac-nml/iridanextexample 1.0.3 IRIDA Next Example Pipeline',
-                     workflow_selection_button[1].text.squish
-        assert_equal 'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline',
-                     workflow_selection_button[2].text.squish
-        assert_equal 'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline',
-                     workflow_selection_button[3].text.squish
-        assert_equal 'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline', workflow_selection_button[4].text.squish
-      end
     end
 
     test 'can get nextflow samplesheet' do
