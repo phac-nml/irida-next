@@ -97,5 +97,46 @@ describe("form", () => {
       const result = normalizeParams(params, "key", "value", 0);
       expect(result).toBe(params);
     });
+
+    it("ignores an empty name (returns early on empty key)", () => {
+      const params = {};
+      normalizeParams(params, "", "val", 0);
+      expect(params).toEqual({});
+    });
+
+    it("concatenates array values for ids[]", () => {
+      const params = {};
+      normalizeParams(params, "ids[]", ["1", "2"], 0);
+      expect(params.ids).toEqual(["1", "2"]);
+    });
+
+    it("stores a trailing-bracket key verbatim", () => {
+      const params = {};
+      normalizeParams(params, "foo[", "val", 0);
+      expect(params["foo["]).toBe("val");
+    });
+
+    it("treats a malformed nested name at depth > 0 as a plain key", () => {
+      const params = {};
+      normalizeParams(params, "plain", "val", 1);
+      expect(params.plain).toBe("val");
+    });
+
+    it("returns a single-element array for a bare [] at depth > 0", () => {
+      expect(normalizeParams({}, "[]", "val", 1)).toEqual(["val"]);
+    });
+
+    it("throws when a hash is expected but an array already exists", () => {
+      const params = { a: ["1"] };
+      expect(() => normalizeParams(params, "a[b]", "val", 0)).toThrow(
+        ParameterTypeError,
+      );
+    });
+
+    it("enters the x[][y] array-of-hash branch", () => {
+      // The x[][y] handling is legacy Rack-derived code that throws on an
+      // empty array; assert it reaches the branch rather than silently passing.
+      expect(() => normalizeParams({}, "x[][y]", "val", 0)).toThrow();
+    });
   });
 });

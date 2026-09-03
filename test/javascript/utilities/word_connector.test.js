@@ -14,6 +14,12 @@ describe("word_connector", () => {
       expect(connectedWords).toBe("word1");
     });
 
+    it("empty array", () => {
+      const connectedWords = wordConnector.connectWords([]);
+
+      expect(connectedWords).toBe("");
+    });
+
     it("two words", () => {
       const connectedWords = wordConnector.connectWords(["word1", "word2"]);
 
@@ -45,6 +51,22 @@ describe("word_connector", () => {
       const connectedWords = wordConnector.connectWords("word1, word2, word3");
 
       expect(connectedWords).toBe("word1, word2, word3");
+    });
+  });
+
+  describe("default connectors", () => {
+    const defaultConnector = new WordConnector({});
+
+    it("uses the default two-word connector", () => {
+      expect(defaultConnector.connectWords(["word1", "word2"])).toBe(
+        "word1 and word2",
+      );
+    });
+
+    it("uses the default words and last-word connectors", () => {
+      expect(defaultConnector.connectWords(["word1", "word2", "word3"])).toBe(
+        "word1, word2, and word3",
+      );
     });
   });
 });
