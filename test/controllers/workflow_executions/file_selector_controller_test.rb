@@ -146,15 +146,6 @@ module WorkflowExecutions
       assert_response :ok
     end
 
-    test 'new file selection with attachable outside authorized namespace responds not found' do
-      get new_workflow_executions_file_selector_path(
-        file_selector: @expected_fastq_params.merge(attachable_id: samples(:sample1).id),
-        format: :turbo_stream
-      )
-
-      assert_response :not_found
-    end
-
     test 'create file selection with other params' do
       attachment = attachments(:attachment1)
 
@@ -194,6 +185,34 @@ module WorkflowExecutions
       )
 
       assert_response :unauthorized
+    end
+
+    test 'new file selection with invalid attachable_id and attachable type Sample' do
+      get new_workflow_executions_file_selector_path(
+        file_selector: @expected_fastq_params.merge(attachable_id: 'invalid id'),
+        format: :turbo_stream
+      )
+
+      assert_response :not_found
+    end
+
+    test 'new file selection with invalid attachable_id and attachable type Namespace' do
+      sign_in users(:snvphyl_user)
+      get new_workflow_executions_file_selector_path(
+        file_selector: @project_ref_params.merge(attachable_id: 'invalid id'),
+        format: :turbo_stream
+      )
+
+      assert_response :not_found
+    end
+
+    test 'new file selection with invalid attachable_type' do
+      get new_workflow_executions_file_selector_path(
+        file_selector: @expected_fastq_params.merge(attachable_type: 'invalid type'),
+        format: :turbo_stream
+      )
+
+      assert_response :not_found
     end
 
     private

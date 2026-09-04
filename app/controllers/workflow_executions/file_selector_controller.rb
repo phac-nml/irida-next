@@ -62,11 +62,13 @@ module WorkflowExecutions
       authorize! @namespace, to: :update_samplesheet_data?
 
       attachable_id = file_selector_params[:attachable_id]
+
       case file_selector_params[:attachable_type]
       when Sample.sti_name
-        @attachable = Sample.joins(:project)
-                            .where(projects: { namespace_id: authorized_namespace_ids })
-                            .find(attachable_id)
+        @attachable = authorized_scope(Sample, type: :relation, as: :namespace_samples,
+                                               scope_options: { namespace: @namespace })
+                      .find(attachable_id)
+
       when Namespaces::ProjectNamespace.sti_name, Group.sti_name
         @attachable = Namespace.where(id: authorized_namespace_ids)
                                .where(type: file_selector_params[:attachable_type])
