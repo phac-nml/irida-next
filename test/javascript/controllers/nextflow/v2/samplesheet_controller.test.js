@@ -162,7 +162,7 @@ const applyFilter = async (value) => {
     }),
   );
 
-  await new Promise((resolve) => setTimeout(resolve, 60));
+  vi.advanceTimersByTime(60);
 };
 
 /* eslint-disable no-useless-escape */
@@ -639,6 +639,7 @@ describe("nextflow v2 samplesheet controller", () => {
     window.requestAnimationFrame = (callback) => setTimeout(callback, 0);
     localStorage.clear();
     Element.prototype.scrollIntoView = vi.fn();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
@@ -785,7 +786,7 @@ describe("nextflow v2 samplesheet controller", () => {
 
     clearButton.click();
 
-    await new Promise((resolve) => setTimeout(resolve, 60));
+    vi.advanceTimersByTime(60);
 
     assertPaginationState(true, false, "1");
 
@@ -795,7 +796,7 @@ describe("nextflow v2 samplesheet controller", () => {
     expect(emptyState).toHaveClass("hidden");
     document.querySelector("#samplesheet-filter").value = "invalid filter";
     filterButton.click();
-    await new Promise((resolve) => setTimeout(resolve, 60));
+    vi.advanceTimersByTime(60);
 
     expect(getPreviousBtn()).toBeNull();
     expect(getPageNum()).toBeNull();
@@ -828,7 +829,7 @@ describe("nextflow v2 samplesheet controller", () => {
 
     submitBtn.click();
 
-    await new Promise((resolve) => setTimeout(resolve, 60));
+    vi.advanceTimersByTime(60);
     expect(errorMessageContainer.textContent).toContain(
       "Name is required. Please enter a name for the workflow execution.",
     );
@@ -916,7 +917,7 @@ describe("nextflow v2 samplesheet controller", () => {
     nameInput.value = "test name";
     submitBtn.click();
 
-    await new Promise((resolve) => setTimeout(resolve, 60));
+    vi.advanceTimersByTime(60);
 
     expect(samplesheetErrorContainer.textContent).toContain(
       "The following samples are missing required data:",
@@ -1342,6 +1343,8 @@ describe("nextflow v2 samplesheet controller", () => {
       ></div>`,
     );
 
+    await Promise.resolve(); // await DOM to process and render changes
+
     // dropdown change
     const dropdownCell = document.getElementById(
       "sample-1-id_fastmatch_category_dropdown",
@@ -1380,7 +1383,8 @@ describe("nextflow v2 samplesheet controller", () => {
 
     submitButton.click();
 
-    await new Promise((resolve) => setTimeout(resolve, 60));
+    vi.advanceTimersByTime(60);
+
     expect(fetchOptions.headers["Content-Type"]).toBe("application/json");
     const body = JSON.parse(fetchOptions.body);
     expect(
