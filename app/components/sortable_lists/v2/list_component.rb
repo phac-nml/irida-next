@@ -7,7 +7,7 @@ module SortableLists
       attr_reader :id, :title, :list_items, :required, :available_list, :selected_list, :instructions_id,
                   :list_role, :counterpart_list_id, :interactive
 
-      # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable-next Metrics/ParameterLists
       def initialize(
         id: nil,
         title: nil,
@@ -32,7 +32,6 @@ module SortableLists
         @system_arguments = build_system_arguments(system_arguments)
         @available_list, @selected_list = list_membership(@list_role)
       end
-      # rubocop:enable Metrics/ParameterLists
 
       def add_remove_controls
         [id, resolved_counterpart_list_id].compact.join(' ')

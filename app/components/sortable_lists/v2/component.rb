@@ -23,7 +23,7 @@ module SortableLists
         )
       }
 
-      # rubocop:disable Metrics/ParameterLists
+      # rubocop:disable-next Metrics/ParameterLists
       def initialize(title: nil, description: nil, templates: [], template_label: nil, required: false,
                      interactive: true)
         @title = title
@@ -36,7 +36,6 @@ module SortableLists
         @template_selector_id = "#{@instructions_id}-template-selector"
         @aria_live_translations = load_translations
       end
-      # rubocop:enable Metrics/ParameterLists
 
       private
 
