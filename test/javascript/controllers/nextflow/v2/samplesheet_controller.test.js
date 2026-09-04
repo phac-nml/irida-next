@@ -53,6 +53,7 @@ const createSampleAttributes = (samples) => {
             metadata_1: "",
             sample_name: `SAMPLE NAME ${n}`,
             fastmatch_category: "",
+            an_input_cell: "",
           },
         },
       ]),
@@ -105,6 +106,7 @@ const assertTableData = (allSamples, expectedSamples) => {
     `sample_${n}_fastq_1.fastq.gz`,
     `sample_${n}_fastq_2.fastq.gz`,
     "", // empty select option value for dropdown
+    "",
   ]);
 
   expect(rows).toEqual(expectedRows);
@@ -181,7 +183,7 @@ function renderSamplesheetProperties() {
     `<div
           class="hidden"
           data-nextflow--v2--samplesheet-target="samplesheetProperties"
-          data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;irida_id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces.&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;sample_name&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;errorMessage&quot;:&quot;Sample name is optional, if provided will replace sample for filenames and outputs&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;sample_name_cell&quot;,&quot;pattern&quot;:null},&quot;metadata_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;metadata_1&quot;],&quot;errorMessage&quot;:&quot;Metadata associated with the sample (metadata_1).&quot;,&quot;default&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;^[^\\\\n\\\\t\\\&quot;]+$&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;metadata_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastmatch_category&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;errorMessage&quot;:&quot;Has to be either query or reference&quot;,&quot;cell_type&quot;:&quot;dropdown_cell&quot;,&quot;enum&quot;:[&quot;query&quot;,&quot;reference&quot;]}}"
+          data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;irida_id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces.&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;sample_name&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;errorMessage&quot;:&quot;Sample name is optional, if provided will replace sample for filenames and outputs&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;sample_name_cell&quot;,&quot;pattern&quot;:null},&quot;metadata_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;metadata_1&quot;],&quot;errorMessage&quot;:&quot;Metadata associated with the sample (metadata_1).&quot;,&quot;default&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;^[^\\\\n\\\\t\\\&quot;]+$&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;metadata_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastmatch_category&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;errorMessage&quot;:&quot;Has to be either query or reference&quot;,&quot;cell_type&quot;:&quot;dropdown_cell&quot;,&quot;enum&quot;:[&quot;query&quot;,&quot;reference&quot;]},&quot;an_input_cell&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;default&quot;:&quot;&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;input_cell&quot;}}"
         ></div>`,
   );
 }
@@ -631,7 +633,7 @@ function renderBaseFixture() {
 
   <template data-nextflow--v2--samplesheet-target="samplesheetParamsFormTemplate">
     <form action="/-/workflow_executions/submissions/samplesheet" accept-charset="UTF-8" method="post">
-      <input type="hidden" name="authenticity_token" value="f8UGC6O6puKbpX_slk0n2j28NoMuktoMEr9wzm8witWOWrjDgMKV2xfEO05eb1XWC__rdSyP5wBcdJUvp8jG9A">
+      <input type="hidden" name="authenticity_token" value="an_authenticity_token">
     </form>
   </template>
 
@@ -1293,6 +1295,32 @@ describe("nextflow v2 samplesheet controller", () => {
     }
   });
 
+  it("samplesheet select dropdown value change", async () => {
+    const allSamples = range(1, 10);
+    setupStandardSamplesheetAttributes(allSamples);
+    application = await startController();
+
+    assertTableData(allSamples, range(1, 5));
+
+    // change a couple dropdown
+    const inputCell = document.getElementById(
+      `sample-1-id_an_input_cell_input`,
+    );
+    inputCell.value = "test input";
+
+    inputCell.dispatchEvent(
+      new Event("change", {
+        bubbles: true,
+      }),
+    );
+
+    // change page forward and back to verify if content is saved
+    getNextBtn().click();
+    getPreviousBtn().click();
+
+    expect(inputCell).toHaveValue("test input");
+  });
+
   it("formData of metadata submission upon metadata selection", async () => {
     const allSamples = range(1, 10);
     setupStandardSamplesheetAttributes(allSamples);
@@ -1316,6 +1344,7 @@ describe("nextflow v2 samplesheet controller", () => {
     metadataSelect.value = "age";
     metadataSelect.dispatchEvent(new Event("change", { bubbles: true }));
 
+    expect(metadataParamsHeader).toHaveClass("ring-primary-500");
     expect(metadataParamsHeader).toHaveValue("age");
     expect(requestSubmit).toHaveBeenCalledOnce();
     expect(submittedForm).toBeInstanceOf(HTMLFormElement);
@@ -1329,6 +1358,9 @@ describe("nextflow v2 samplesheet controller", () => {
     );
 
     requestSubmit.mockRestore();
+
+    vi.advanceTimersByTime(1010);
+    expect(metadataParamsHeader).not.toHaveClass("ring-primary-500");
   });
 
   it("verify samplesheet submission form content with samplesheet changes", async () => {
@@ -1502,5 +1534,228 @@ describe("nextflow v2 samplesheet controller", () => {
     expect(errorMessage).toHaveTextContent(
       "An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples.",
     );
+  });
+
+  it("queued metadata changes", async () => {
+    const allSamples = range(1, 10);
+    sessionStorage.setItem("selection-test-key", createSampleIds(allSamples));
+
+    renderBaseFixture();
+    renderSamplesheetProperties();
+    renderTable();
+    renderTemplates();
+    renderSelectionOutlet();
+    renderMetadataParamsHeader();
+
+    application = await startController();
+
+    let submittedForm;
+    let fetchOptions;
+
+    const requestSubmit = vi
+      .spyOn(HTMLFormElement.prototype, "requestSubmit")
+      .mockImplementation(function () {
+        submittedForm = this;
+
+        fetchOptions = {
+          body: undefined,
+          headers: {},
+        };
+
+        this.dispatchEvent(
+          new CustomEvent("turbo:before-fetch-request", {
+            bubbles: true,
+            detail: {
+              fetchOptions,
+              resume: vi.fn(),
+            },
+          }),
+        );
+      });
+
+    const metadataParamsHeader = document.getElementById(
+      "workflow_execution_workflow_params_metadata_1_header",
+    );
+    const metadataSelect = document.querySelector("#field-metadata_1");
+
+    expect(metadataParamsHeader).toHaveValue("metadata_1");
+
+    metadataSelect.value = "age";
+    metadataSelect.dispatchEvent(new Event("change", { bubbles: true }));
+
+    // The metadata change is queued because sample attributes aren't available yet.
+    expect(requestSubmit).not.toHaveBeenCalled();
+
+    const sampleAttributesContainer =
+      document.getElementById("sample_attributes");
+
+    sampleAttributesContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="sampleAttributes"
+      data-allowed-to-update-samples="true"
+      data-sample-attributes='${createSampleAttributes(allSamples)}'
+    ></div>
+    <div
+      class="hidden"
+      data-nextflow--v2--samplesheet-target="fileAttributes"
+    >
+      ${createFileAttributes(allSamples)}
+    </div>`,
+    );
+
+    await Promise.resolve();
+
+    expect(metadataParamsHeader).toHaveValue("age");
+
+    // Submission now happens once the sample attributes are available.
+    expect(requestSubmit).toHaveBeenCalledOnce();
+    expect(submittedForm).toBeInstanceOf(HTMLFormElement);
+
+    // Verify the Turbo request was configured correctly.
+    expect(fetchOptions.headers).toEqual({
+      "Content-Type": "application/json",
+    });
+
+    const body = JSON.parse(fetchOptions.body);
+
+    expect(JSON.parse(body.metadata_fields)).toEqual({
+      metadata_1: "age",
+    });
+
+    expect(body.sample_ids).toBe(
+      "sample-1-id,sample-2-id,sample-3-id,sample-4-id,sample-5-id,sample-6-id,sample-7-id,sample-8-id,sample-9-id,sample-10-id",
+    );
+
+    requestSubmit.mockRestore();
+  });
+
+  it("no selection outlet results in processing error", async () => {
+    renderBaseFixture();
+    renderSamplesheetProperties();
+
+    application = await startController();
+
+    const errorMessage = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="errorMessage"]',
+    );
+
+    expect(errorMessage).toHaveTextContent(
+      "An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples.",
+    );
+  });
+
+  it("renders the Turbo response when fetching sample attributes", async () => {
+    globalThis.fetch = vi.fn();
+    globalThis.Turbo = {
+      renderStreamMessage: vi.fn(),
+    };
+    const allSamples = range(1, 2);
+    setupStandardSamplesheetAttributes(allSamples);
+
+    const html = `
+    <turbo-stream action="update" target="sample_attributes">
+      <template>
+        <div>Sample attributes</div>
+      </template>
+    </turbo-stream>
+  `;
+
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(html, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/vnd.turbo-stream.html",
+        },
+      }),
+    );
+
+    application = await startController();
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledOnce();
+
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        "http://localhost:3000/-/workflow_executions/submissions/samplesheet",
+      );
+
+      expect(fetchMock.mock.calls[0][1]).toMatchObject({
+        credentials: "same-origin",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "text/vnd.turbo-stream.html",
+        },
+      });
+
+      const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+
+      expect(body).toMatchObject({
+        authenticity_token: "an_authenticity_token",
+        sample_ids: ["sample-1-id", "sample-2-id"],
+      });
+
+      expect(JSON.parse(body.properties)).toMatchObject({
+        sample: {
+          type: "string",
+          meta: ["irida_id"],
+          unique: true,
+          required: true,
+          cell_type: "sample_cell",
+        },
+        metadata_1: {
+          type: "string",
+          meta: ["metadata_1"],
+          default: "",
+          required: false,
+          cell_type: "metadata_cell",
+        },
+        an_input_cell: {
+          type: "string",
+          default: "",
+          required: false,
+          cell_type: "input_cell",
+        },
+      });
+    });
+  });
+
+  it("fetch sample attributes error state", async () => {
+    const allSamples = range(1, 2);
+    setupStandardSamplesheetAttributes(allSamples);
+
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      text: vi.fn(),
+    });
+
+    application = await startController();
+
+    const renderStreamMessageMock = vi
+      .spyOn(globalThis.Turbo, "renderStreamMessage")
+      .mockImplementation(() => {});
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledOnce();
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "http://localhost:3000/-/workflow_executions/submissions/samplesheet",
+      expect.objectContaining({
+        credentials: "same-origin",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "text/vnd.turbo-stream.html",
+        },
+      }),
+    );
+
+    expect(renderStreamMessageMock).not.toHaveBeenCalled();
+
+    fetchMock.mockRestore();
+    renderStreamMessageMock.mockRestore();
   });
 });
