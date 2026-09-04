@@ -2,6 +2,8 @@
 
 # Service used to Delete Samples
 class BaseSampleDestroyService < BaseService
+  include Samples::ActiveWorkflowExecutionGuard
+
   class DestroyError < StandardError; end
 
   attr_accessor :sample, :sample_ids, :namespace
