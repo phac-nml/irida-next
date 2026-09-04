@@ -1551,6 +1551,9 @@ en:
           updated_at: Updated
           workflow_name: Workflow Name
           workflow_version: Workflow Version
+      update:
+        error: Could not update automated pipeline for %{workflow_name}
+        success: Automated pipeline for %{workflow_name} was successfully updated
     bots:
       index:
         add_new_bot: New bot account

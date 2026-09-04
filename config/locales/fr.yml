@@ -1555,6 +1555,9 @@ fr:
           updated_at: Mis à jour
           workflow_name: Nom du flux de travail
           workflow_version: Version du flux de travail
+      update:
+        error: Impossible de mettre à jour le pipeline automatisé pour %{workflow_name}
+        success: Le pipeline automatisé pour %{workflow_name} a été mis à jour avec succès
     bots:
       index:
         add_new_bot: Nouveau compte de bot

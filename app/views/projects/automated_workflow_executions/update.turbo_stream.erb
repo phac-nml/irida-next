@@ -1,3 +1,7 @@
 <%= turbo_stream.update "automated_workflow_executions_table", partial: "table" %>
 
 <%= turbo_stream.update "automated_workflow_execution_modal" %>
+
+<%= turbo_stream.append "flashes" do %>
+  <%= render Viral::FlashComponent.new(type:, data: message) %>
+<% end %>
