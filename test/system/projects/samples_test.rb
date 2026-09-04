@@ -668,6 +668,71 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'prevent sample transfer during active workflow execution' do
+      ### SETUP START ###
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      samples = @project.samples.pluck(:puid, :name)
+      # show destination project has 20 samples prior to transfer
+      visit namespace_project_samples_url(@namespace, @project2)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                                      locale: @user.locale))
+      # originating project has 3 samples prior to transfer
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select all 3 samples
+      click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
+      assert_selector 'table tfoot tr', text: 'Samples: 3'
+      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+
+      assert_selector 'dialog h1', text: I18n.t('samples.transfers.dialog.title')
+      within('#list_selections') do
+        samples.each do |sample|
+          # additional asserts to help prevent select2 actions below from flaking
+          assert_text sample[0]
+          assert_text sample[1]
+        end
+      end
+      # select destination project
+      find('input.select2-input').click
+      find("li[data-value='#{@project2.id}']").click
+      click_on I18n.t('samples.transfers.dialog.submit_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+
+      perform_enqueued_jobs only: [::Samples::TransferJob]
+      assert_performed_jobs 1
+      assert_no_text I18n.t('shared.progress_bar.in_progress')
+      # error msg
+      assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
+      error_parts = I18n.t('services.samples.transfer.active_workflow_executions',
+                           sample_puids: @sample1.puid).split(':')
+      error_parts.each do |part|
+        assert_text part
+      end
+      click_button I18n.t('shared.samples.errors.ok_button')
+
+      assert_no_selector 'dialog[open]'
+      # samples remain in originating project
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+
+      samples.each do |sample|
+        assert_selector 'table tbody tr th:first-child', text: sample[0]
+        assert_selector 'table tbody tr td:nth-child(2)', text: sample[1]
+      end
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      ### VERIFY END ###
+    end
+
     test 'dialog close button hidden during transfer samples' do
       ### SETUP START ###
       samples = @project.samples.pluck(:puid, :name)
@@ -3255,6 +3320,55 @@ module Projects
         assert_text I18n.t('projects.samples.index.no_associated_samples')
       end
       Flipper.disable(:sample_deletion_reason)
+    end
+
+    test 'prevent sample deletion during active workflow execution' do
+      ### SETUP START ###
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+      assert_selector 'table tbody tr th', text: @sample1.puid
+      assert_selector 'table tbody tr th', text: @sample2.puid
+      assert_selector 'table tbody tr th', text: @sample30.puid
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t('common.controls.select_all')
+      assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 3
+      assert_selector 'table tfoot tr', text: 'Samples: 3'
+      assert_selector 'table tfoot tr strong[data-selection-target="selected"]', text: '3'
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
+
+      assert_selector 'dialog h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      assert_selector 'form[data-infinite-scroll-target="pageForm"]'
+      sleep 1
+      click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # error msg
+      assert_text I18n.t('samples.deletions.create.error')
+      error_parts = I18n.t('services.samples.destroy.active_workflow_executions',
+                           sample_puids: @sample1.puid).split(':')
+      error_parts.each do |part|
+        assert_text part
+      end
+      click_button I18n.t('shared.samples.errors.ok_button')
+
+      assert_no_selector 'dialog[open]'
+      # samples remain in originating project
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                                      locale: @user.locale))
+
+      samples.each do |sample|
+        assert_selector 'table tbody tr th:first-child', text: sample[0]
+        assert_selector 'table tbody tr td:nth-child(2)', text: sample[1]
+      end
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      ### VERIFY END ###
     end
 
     test 'filter samples with advanced search' do

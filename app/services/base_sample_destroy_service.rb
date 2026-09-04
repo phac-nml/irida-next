@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 # Service used to Delete Samples
-class BaseSampleDestroyService < BaseService
+class BaseSampleDestroyService < BaseSampleService
+  class DestroyError < StandardError; end
+
   attr_accessor :sample, :sample_ids, :namespace
 
   def initialize(namespace, user = nil, params = {})
-    super(user, params)
+    super
     @namespace = namespace
     @sample = params[:sample] if params[:sample]
     @sample_ids = params[:sample_ids] if params[:sample_ids]
@@ -14,7 +16,15 @@ class BaseSampleDestroyService < BaseService
   def execute
     authorize! (namespace.group_namespace? ? namespace : namespace.project), to: :destroy_sample?
 
+    if Flipper.enabled?(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      sample_ids = @sample_ids || [@sample.id]
+      validate_no_active_workflow_executions_for_action(sample_ids, action_type: 'destroy', error_class: DestroyError)
+    end
+
     destroy_samples
+  rescue BaseSampleDestroyService::DestroyError => e
+    namespace.errors.add(:base, e.message)
+    0
   end
 
   private

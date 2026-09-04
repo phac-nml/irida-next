@@ -41,6 +41,26 @@ module Samples
 
     def teardown
       Flipper.disable(:v2_sample_transfer)
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+    end
+
+    test 'prevents transfer when sample has active workflow executions' do
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+
+      assert_no_changes -> { @sample1.reload.project.id } do
+        result = Samples::TransferJobV2.perform_now(
+          @current_project.namespace,
+          @john_doe,
+          @new_project.id,
+          [@sample1.id]
+        )
+
+        assert_empty result
+      end
+
+      assert_includes @current_project.namespace.errors.full_messages,
+                      I18n.t('services.samples.transfer.active_workflow_executions',
+                             sample_puids: @sample1.puid)
     end
 
     test 'transfer project samples with permission' do

@@ -7,6 +7,7 @@ module Samples
     def setup
       @john_doe = users(:john_doe)
       @group = groups(:group_one)
+      @project = projects(:project1)
       @new_project = projects(:project2)
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
@@ -15,10 +16,9 @@ module Samples
     test 'cloning samples while authorized results in a broadcasted success message and log data with correct responsible id' do # rubocop:disable Layout/LineLength
       broadcast_target = SecureRandom.uuid
       sample_ids = [@sample1.id, @sample2.id]
-      project = projects(:project1)
 
       assert_difference -> { @new_project.reload.samples.count } => 2 do
-        Samples::TransferJob.perform_now(project.namespace, @john_doe, @new_project.id, sample_ids, broadcast_target)
+        Samples::TransferJob.perform_now(@project.namespace, @john_doe, @new_project.id, sample_ids, broadcast_target)
       end
 
       turbo_streams = capture_turbo_stream_broadcasts broadcast_target
