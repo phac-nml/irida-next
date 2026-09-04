@@ -67,17 +67,15 @@ module WorkflowExecutions
       when Sample.sti_name
         @attachable = authorized_scope(Sample, type: :relation, as: :namespace_samples,
                                                scope_options: { namespace: @namespace })
-                      .where(id: attachable_id).first
+                      .find(attachable_id)
 
       when Namespaces::ProjectNamespace.sti_name, Group.sti_name
         @attachable = Namespace.where(id: authorized_namespace_ids)
                                .where(type: file_selector_params[:attachable_type])
                                .find(attachable_id)
+      else
+        raise ActiveRecord::RecordNotFound
       end
-
-      return unless @attachable.nil?
-
-      raise ActiveRecord::RecordNotFound
     end
 
     def attachments
