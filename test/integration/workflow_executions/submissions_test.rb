@@ -193,12 +193,12 @@ module WorkflowExecutions
     test 'can get nextflow samplesheet' do
       sign_in users(:john_doe)
       post workflow_executions_submissions_path(namespace_id: projects(:project1).namespace.id,
-                                                pipeline_id: 'phac-nml/iridanextexample',
-                                                workflow_version: '1.0.3',
+                                                pipeline_id: 'phac-nml/snvphylnfc',
+                                                workflow_version: '2.4.0',
                                                 sample_count: 1, format: :turbo_stream)
       assert_response :success
 
-      assert_select 'h1', 'phac-nml/iridanextexample'
+      assert_select 'h1', 'phac-nml/snvphylnfc'
 
       assert_select 'label', "#{I18n.t('components.nextflow_component.name.label.required')} *"
       assert_select 'input[id="workflow_execution_name"][type="text"]'
@@ -206,6 +206,13 @@ module WorkflowExecutions
       assert_select 'span', I18n.t(:'components.nextflow.verifying_update_samples')
       assert_select 'label', I18n.t(:'components.nextflow.email_notification')
       assert_select 'label', I18n.t(:"components.nextflow.shared_with.#{projects(:project1).namespace.type.downcase}")
+      assert_select 'select#field-metadata_1' do
+        assert_select 'option', count: 4
+        assert_select 'option[value=""]', label: ' '
+        assert_select 'option[value="metadata_1"][selected]', text: 'metadata_1 (default)'
+        assert_select 'option[value="metadatafield1"]', text: 'metadatafield1'
+        assert_select 'option[value="metadatafield2"]', text: 'metadatafield2'
+      end
     end
 
     test 'role analyst cannot update samples' do
