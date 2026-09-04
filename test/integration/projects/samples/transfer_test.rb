@@ -57,19 +57,6 @@ module Projects
         end
 
         post_list(@project.samples.ids)
-
-        # post list_samples_path(format: :turbo_stream),
-        #      params: { page: 1, sample_ids: @project.samples.ids, list_class: 'sample' },
-        #      as: :turbo_stream
-        # assert_response :success
-        # assert_select 'turbo-stream[action="append"][target="list_selections"]' do
-        #   assert_select 'template' do
-        #     @project.samples.each do |sample|
-        #       assert_select 'p', text: /#{Regexp.escape(sample.name)}/
-        #       assert_select 'p', text: /#{Regexp.escape(sample.puid)}/
-        #     end
-        #   end
-        # end
       end
 
       test 'transfer dialog with plural description' do
@@ -160,74 +147,48 @@ module Projects
         Flipper.disable(:v2_sample_transfer) if v2
       end
 
-      test 'transfer samples with and without same name in destination project' do
-        destination = projects(:project25)
-        assert_samples_page(destination, 2)
-        assert_samples_page(@project, 3)
-        assert_transfer_enqueued(::Samples::TransferJob, destination:)
-        perform_enqueued_jobs only: [::Samples::TransferJob]
+      [[::Samples::TransferJob, false], [::Samples::TransferJobV2, true]].each do |job_class, v2| # rubocop:disable Style/CombinableLoops
+        test "transfer samples with and without same name in destination project for #{job_class.name}" do
+          Flipper.enable(:v2_sample_transfer) if v2
 
-        assert_not @project.samples.exists?(@sample1.id)
-        assert_not @project.samples.exists?(@sample2.id)
-        assert @project.samples.exists?(@sample30.id)
-        assert destination.samples.exists?(@sample1.id)
-        assert destination.samples.exists?(@sample2.id)
-        assert_samples_page(destination, 4)
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 1
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 1
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample30)}", count: 0
-      end
+          destination = projects(:project25)
+          assert_samples_page(destination, 2)
+          assert_samples_page(@project, 3)
+          assert_transfer_enqueued(job_class, destination:)
+          perform_enqueued_jobs only: [job_class]
 
-      test 'updating sample selection during transfer samples' do
-        assert_samples_page(@project2, 20)
-        assert_samples_page(@project, 3)
-        assert_transfer_enqueued(::Samples::TransferJob, sample_ids: [@sample1.id])
-        assert_difference -> { @project.samples.count } => -1,
-                          -> { @project2.samples.count } => 1 do
-          perform_enqueued_jobs only: [::Samples::TransferJob]
+          assert_not @project.samples.exists?(@sample1.id)
+          assert_not @project.samples.exists?(@sample2.id)
+          assert @project.samples.exists?(@sample30.id)
+          assert destination.samples.exists?(@sample1.id)
+          assert destination.samples.exists?(@sample2.id)
+          assert_samples_page(destination, 4)
+          assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 1
+          assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 1
+          assert_select "tbody#samples-table-body tr##{dom_id(@sample30)}", count: 0
+        ensure
+          Flipper.disable(:v2_sample_transfer) if v2
         end
-
-        assert_not @project.samples.exists?(@sample1.id)
-        assert_samples_page(@project2, 21)
-        assert_select 'tbody#samples-table-body input[name="sample_ids[]"][checked]', count: 0
       end
 
-      test 'transfer samples with and without same name in destination project v2' do
-        Flipper.enable(:v2_sample_transfer)
-        destination = projects(:project25)
-        assert_samples_page(destination, 2)
-        assert_samples_page(@project, 3)
-        assert_transfer_enqueued(::Samples::TransferJobV2, destination:)
-        perform_enqueued_jobs only: [::Samples::TransferJobV2]
+      [[::Samples::TransferJob, false], [::Samples::TransferJobV2, true]].each do |job_class, v2| # rubocop:disable Style/CombinableLoops
+        test "updating sample selection during transfer samples for #{job_class.name}" do
+          Flipper.enable(:v2_sample_transfer) if v2
 
-        assert_not @project.samples.exists?(@sample1.id)
-        assert_not @project.samples.exists?(@sample2.id)
-        assert @project.samples.exists?(@sample30.id)
-        assert destination.samples.exists?(@sample1.id)
-        assert destination.samples.exists?(@sample2.id)
-        assert_samples_page(destination, 4)
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 1
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 1
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample30)}", count: 0
-      ensure
-        Flipper.disable(:v2_sample_transfer)
-      end
+          assert_samples_page(@project2, 20)
+          assert_samples_page(@project, 3)
+          assert_transfer_enqueued(job_class, sample_ids: [@sample1.id])
+          assert_difference -> { @project.samples.count } => -1,
+                            -> { @project2.samples.count } => 1 do
+            perform_enqueued_jobs only: [job_class]
+          end
 
-      test 'updating sample selection during transfer samples v2' do
-        Flipper.enable(:v2_sample_transfer)
-        assert_samples_page(@project2, 20)
-        assert_samples_page(@project, 3)
-        assert_transfer_enqueued(::Samples::TransferJobV2, sample_ids: [@sample1.id])
-        assert_difference -> { @project.samples.count } => -1,
-                          -> { @project2.samples.count } => 1 do
-          perform_enqueued_jobs only: [::Samples::TransferJobV2]
+          assert_not @project.samples.exists?(@sample1.id)
+          assert_samples_page(@project2, 21)
+          assert_select 'tbody#samples-table-body input[name="sample_ids[]"][checked]', count: 0
+        ensure
+          Flipper.disable(:v2_sample_transfer) if v2
         end
-
-        assert_not @project.samples.exists?(@sample1.id)
-        assert_samples_page(@project2, 21)
-        assert_select 'tbody#samples-table-body input[name="sample_ids[]"][checked]', count: 0
-      ensure
-        Flipper.disable(:v2_sample_transfer)
       end
 
       test 'sample transfer button should not be available for maintainer of a user namespace project' do

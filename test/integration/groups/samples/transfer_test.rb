@@ -134,66 +134,44 @@ module Groups
         end
       end
 
-      test 'should not transfer samples with session storage cleared' do
-        assert_samples_page(@group, 26)
-        assert_transfer_enqueued(::Samples::TransferJob, sample_ids: [], destination: @project4)
-        assert_no_transfer_progress_or_selection(::Samples::TransferJob)
-      end
+      [[::Samples::TransferJob, false], [::Samples::TransferJobV2, true]].each do |job_class, v2|
+        test "should not transfer samples with session storage cleared for #{job_class.name}" do
+          Flipper.enable(:v2_sample_transfer) if v2
 
-      test 'transfer samples with and without same name in destination project' do
-        assert_samples_page(@group, 26)
-        assert_project_samples_page(@project4, 2)
-        get new_samples_transfer_path(namespace_id: @group.id, format: :turbo_stream)
-        assert_response :success
-        assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_transfer_dialog
+          assert_samples_page(@group, 26)
+          assert_transfer_enqueued(job_class, sample_ids: [], destination: @project4)
+          assert_no_transfer_progress_or_selection(job_class)
+        ensure
+          Flipper.disable(:v2_sample_transfer) if v2
         end
-        post_list(group_sample_ids)
-        assert_transfer_enqueued(::Samples::TransferJob, destination: @project4)
-        perform_enqueued_jobs only: [::Samples::TransferJob]
-
-        assert_samples_page(@group, 2)
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 0
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 0
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample28)}", count: 1
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample29)}", count: 1
-        assert_project_samples_page(@project4, 26, sort: 'puid asc')
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 1
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 1
       end
 
-      test 'should not transfer samples with session storage cleared v2' do
-        Flipper.enable(:v2_sample_transfer)
-        assert_samples_page(@group, 26)
-        assert_transfer_enqueued(::Samples::TransferJobV2, sample_ids: [], destination: @project4)
-        assert_no_transfer_progress_or_selection(::Samples::TransferJobV2)
-      ensure
-        Flipper.disable(:v2_sample_transfer)
-      end
+      [[::Samples::TransferJob, false], [::Samples::TransferJobV2, true]].each do |job_class, v2| # rubocop:disable Style/CombinableLoops
+        test "transfer samples with and without same name in destination project for #{job_class.name}" do
+          Flipper.enable(:v2_sample_transfer) if v2
 
-      test 'transfer samples with and without same name in destination project v2' do
-        Flipper.enable(:v2_sample_transfer)
-        assert_samples_page(@group, 26)
-        assert_project_samples_page(@project4, 2)
-        get new_samples_transfer_path(namespace_id: @group.id, format: :turbo_stream)
-        assert_response :success
-        assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_transfer_dialog
+          assert_samples_page(@group, 26)
+          assert_project_samples_page(@project4, 2)
+          get new_samples_transfer_path(namespace_id: @group.id, format: :turbo_stream)
+          assert_response :success
+          assert_select 'turbo-stream[target="samples_dialog"]' do
+            assert_transfer_dialog
+          end
+          post_list(group_sample_ids)
+          assert_transfer_enqueued(job_class, destination: @project4)
+          perform_enqueued_jobs only: [job_class]
+
+          assert_samples_page(@group, 2)
+          assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 0
+          assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 0
+          assert_select "tbody#samples-table-body tr##{dom_id(@sample28)}", count: 1
+          assert_select "tbody#samples-table-body tr##{dom_id(@sample29)}", count: 1
+          assert_project_samples_page(@project4, 26, sort: 'puid asc')
+          assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 1
+          assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 1
+        ensure
+          Flipper.disable(:v2_sample_transfer) if v2
         end
-        post_list(group_sample_ids)
-        assert_transfer_enqueued(::Samples::TransferJobV2, destination: @project4)
-        perform_enqueued_jobs only: [::Samples::TransferJobV2]
-
-        assert_samples_page(@group, 2)
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 0
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 0
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample28)}", count: 1
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample29)}", count: 1
-        assert_project_samples_page(@project4, 26, sort: 'puid asc')
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 1
-        assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 1
-      ensure
-        Flipper.disable(:v2_sample_transfer)
       end
 
       test 'sample transfer project listing should be empty for maintainer if no other projects in hierarchy' do
