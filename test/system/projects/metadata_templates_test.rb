@@ -120,6 +120,39 @@ module Projects
       assert_selector 'button', text: I18n.t('projects.metadata_templates.index.new_button'), focused: true
     end
 
+    test 'maintainer or higher can create a template when sortable lists v2 is enabled' do
+      Flipper.enable(:v2_sortable_lists, @user)
+      project = projects(:project1)
+
+      visit namespace_project_metadata_templates_url(project.namespace.parent, project)
+
+      click_on I18n.t('projects.metadata_templates.index.new_button')
+
+      assert_selector 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+      assert_selector "[data-controller='sortable-list-v2']"
+
+      project.namespace.metadata_fields.each do |field|
+        check field
+      end
+
+      click_button I18n.t('components.sortable_lists.v2.list_component.add')
+
+      assert_selector 'ul#available-list input[type="checkbox"]', count: 0
+      assert_selector 'ul#selected-list input[type="checkbox"]', count: project.namespace.metadata_fields.count
+
+      find('input#metadata_template_name').fill_in with: 'Project Template V2'
+      click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
+
+      assert_text I18n.t(
+        :'concerns.metadata_template_actions.create.success',
+        template_name: 'Project Template V2'
+      )
+
+      assert_selector 'table tbody tr td:nth-child(1)', text: 'Project Template V2'
+    ensure
+      Flipper.disable(:v2_sortable_lists, @user)
+    end
+
     test 'cannot create a template with no fields selected' do
       project = projects(:project1)
 

@@ -5,6 +5,8 @@ class SortableListsComponentPreview < ViewComponent::Preview
 
   def two_lists; end
 
+  def two_lists_v2; end
+
   def three_lists; end
 
   def three_lists_without_grouping; end

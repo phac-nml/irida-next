@@ -1,0 +1,63 @@
+<% list_ids = lists.select(&:interactive).map(&:id).join(' ') %>
+
+<% if title.present? || description.present? %>
+  <div>
+    <% if title.present? %>
+      <div class="block text-sm font-medium text-slate-900 dark:text-white"><%= title %></div>
+    <% end %>
+
+    <% if description.present? %>
+      <div class="text-base leading-relaxed font-medium text-slate-500 dark:text-slate-400"><%= description %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if interactive && templates.any? %>
+  <div class="mb-4">
+    <label for="<%= template_selector_id %>" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+      <%= template_label %>
+    </label>
+
+    <% template_options = [
+      [t('components.sortable_lists.v2.component.no_template'), 'none']
+    ] + templates.map do |template|
+      [template[:name], template[:id], { 'data-fields': template[:fields] }]
+    end %>
+
+    <%= tag.select(
+      options_for_select(template_options),
+      id: template_selector_id,
+      data: {
+        action: 'sortable-list-v2#setTemplate',
+        'sortable-list-v2-target': 'templateSelector'
+      },
+      aria: { controls: list_ids },
+      class: 'block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400'
+    ) %>
+  </div>
+<% end %>
+
+<% if interactive %>
+  <p id="<%= instructions_id %>" class="sr-only">
+    <%= t('components.sortable_lists.v2.component.keyboard_instructions') %>
+  </p>
+<% end %>
+
+<div class="grid gap-2 max-sm:grid-cols-1 sm:grid-cols-2">
+  <% lists.each do |list| %>
+    <%= list %>
+  <% end %>
+</div>
+
+<% if interactive %>
+  <div
+    class="sr-only"
+    aria-live="polite"
+    role="status"
+    data-sortable-list-v2-target="ariaLiveUpdate"
+    data-translations="<%= aria_live_translations %>"
+  ></div>
+  <template data-sortable-list-v2-target="itemTemplate">
+    <%= render SortableLists::V2::ListItemComponent.new(list_item: '', list_id: 'template-list', interactive: true) %>
+  </template>
+<% end %>

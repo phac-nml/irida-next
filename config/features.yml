@@ -137,3 +137,12 @@ features:
     name:
       en: "Version 2 Select"
       fr: "Sélecteur version 2"
+  v2_sortable_lists:
+    admin_manageable: true
+    description:
+      en: "Enable the new v2 sortable lists component in the UI."
+      fr: "Activer le nouveau composant de listes triables version 2 dans l'interface."
+    enable_in_development: false
+    name:
+      en: "Version 2 Sortable Lists"
+      fr: "Listes triables version 2"
