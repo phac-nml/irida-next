@@ -5,20 +5,16 @@
 <%= render Viral::DialogComponent.new(open: open, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
 
-  <% if errors.present? %>
-    <%= render partial: 'shared/samples/errors',
-                  locals: {
-                    type: :alert,
-                    message: I18n.t('samples.deletions.create.error'),
-                    errors: errors
-                  } %>
-  <% else %>
+  <%= render "shared/samples/error_state_gate",
+             errors: errors,
+             type: :alert,
+             message: t("samples.deletions.create.error") do %>
     <div
       data-controller="infinite-scroll"
       data-infinite-scroll-selection-outlet="#samples-table"
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
-      data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
-      data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
+      data-infinite-scroll-singular-description-value="<%= t("samples.deletions.destroy_multiple_confirmation_dialog.description.singular") %>"
+      data-infinite-scroll-plural-description-value="<%= t("samples.deletions.destroy_multiple_confirmation_dialog.description.plural") %>"
     >
       <%= form_with(
         url: list_samples_path(list_class: 'sample'),
@@ -29,11 +25,13 @@
 
       <div class="grid gap-4">
         <p data-infinite-scroll-target="summary" class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-          <%= t(".description.zero") %>
+          <%= t("samples.deletions.destroy_multiple_confirmation_dialog.description.zero") %>
         </p>
 
         <div>
-          <div class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"><%= t(".samples") %></div>
+          <div class="mb-1 block text-sm font-medium text-slate-900 dark:text-white">
+            <%= t("samples.deletions.destroy_multiple_confirmation_dialog.samples") %>
+          </div>
 
           <div
             class="
@@ -93,12 +91,12 @@
             <% end %>
 
             <div>
-              <%= form.submit t(".submit_button"),
+              <%= form.submit t("samples.deletions.destroy_multiple_confirmation_dialog.submit_button"),
             tone: :danger,
             emphasis: :solid,
             data: {
               "spinner-target": "submit",
-              "turbo-submits-with": t(:".loading"),
+              "turbo-submits-with": t("samples.deletions.destroy_multiple_confirmation_dialog.loading"),
             } %>
             </div>
           </div>
@@ -115,7 +113,7 @@
       >
         <div class="grid place-items-center">
           <%= icon :faded_spinner, library: "animated" %>
-          <span class="text-black dark:text-white"><%= t(:".spinner") %>.</span>
+          <span class="text-black dark:text-white"><%= t("samples.deletions.destroy_multiple_confirmation_dialog.spinner") %>.</span>
         </div>
       </div>
     </div>

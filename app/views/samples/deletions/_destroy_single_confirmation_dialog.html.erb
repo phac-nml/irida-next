@@ -5,21 +5,17 @@
 <%= render Viral::DialogComponent.new(open: open, size: :large, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
 
-  <% if errors.present? %>
-    <%= render partial: 'shared/samples/errors',
-                  locals: {
-                    type: :alert,
-                    message: I18n.t('samples.deletions.create.error'),
-                    errors: errors
-                  } %>
-  <% else %>
+  <%= render "shared/samples/error_state_gate",
+             errors: errors,
+             type: :alert,
+             message: t("samples.deletions.create.error") do %>
     <div
       data-controller="selection"
       data-selection-storage-key-value="<%= request.base_url %><%= namespace_project_samples_path(namespace.parent, namespace.project) %>"
       class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400"
     >
       <p class="mb-4">
-        <%= t(".description", sample_name: sample.name) %>
+        <%= t("samples.deletions.destroy_single_confirmation_dialog.description", sample_name: sample.name) %>
       </p>
 
       <%= form_for(sample_deletion_form || :deletion, as: :deletion,
