@@ -66,14 +66,16 @@ module WorkflowExecutions
       assert_select 'table' do
         assert_select 'tbody' do
           attachments.each do |attachment|
-            assert_select 'tr' do
+            assert_select "tr#attachment_#{attachment.id}" do
               assert_select 'td', text: attachment.file.filename.to_s
               assert_select 'td', text: attachment.metadata['format']
               assert_select 'td', text: attachment.metadata['type']
-              assert_select 'td', number_to_human_size(attachment.file.byte_size)
+              assert_select 'td', text: number_to_human_size(attachment.file.byte_size)
+
               assert_select 'td' do
                 assert_select 'time[datetime=?]', attachment.created_at.iso8601
               end
+
               if attachment == selected_attachment
                 assert_select "input[id='attachment_id_#{attachment.id}'][checked]"
               else
@@ -110,14 +112,16 @@ module WorkflowExecutions
       assert_select 'table' do
         assert_select 'tbody' do
           attachments.each do |attachment|
-            assert_select 'tr' do
+            assert_select "tr#attachment_#{attachment.id}" do
               assert_select 'td', text: attachment.file.filename.to_s
               assert_select 'td', text: attachment.metadata['format']
               assert_select 'td', text: attachment.metadata['type']
-              assert_select 'td', number_to_human_size(attachment.file.byte_size)
+              assert_select 'td', text: number_to_human_size(attachment.file.byte_size)
+
               assert_select 'td' do
                 assert_select 'time[datetime=?]', attachment.created_at.iso8601
               end
+
               if attachment == selected_attachment
                 assert_select "input[id='attachment_id_#{attachment.id}'][checked]"
               else
