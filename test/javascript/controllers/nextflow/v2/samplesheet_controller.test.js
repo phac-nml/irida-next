@@ -4,7 +4,7 @@ import SamplesheetController from "../../../../../app/javascript/controllers/nex
 import SelectionController from "../../../../../app/javascript/controllers/selection_controller.js";
 
 const setupStandardSamplesheetAttributes = (samples) => {
-  renderFixture();
+  renderFullFixture();
 
   const sampleAttributesContainer =
     document.getElementById("sample_attributes");
@@ -165,82 +165,33 @@ const applyFilter = async (value) => {
   vi.advanceTimersByTime(60);
 };
 
+function renderFullFixture() {
+  renderBaseFixture();
+  renderSamplesheetProperties();
+  renderTable();
+  renderTemplates();
+  renderSelectionOutlet();
+}
+
 /* eslint-disable no-useless-escape */
-function renderFixture() {
-  document.body.innerHTML = `
-    <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-automated-workflow-value="false" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
-  <h1>
-    phac-nml/iridanextexample
-  </h1>
+function renderSamplesheetProperties() {
+  const samplesheet = document.getElementById("samplesheet");
+  samplesheet.insertAdjacentHTML(
+    "afterbegin",
+    `<div
+          class="hidden"
+          data-nextflow--v2--samplesheet-target="samplesheetProperties"
+          data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;irida_id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces.&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;sample_name&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;errorMessage&quot;:&quot;Sample name is optional, if provided will replace sample for filenames and outputs&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;sample_name_cell&quot;,&quot;pattern&quot;:null},&quot;metadata_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;metadata_1&quot;],&quot;errorMessage&quot;:&quot;Metadata associated with the sample (metadata_1).&quot;,&quot;default&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;^[^\\\\n\\\\t\\\&quot;]+$&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;metadata_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastmatch_category&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;errorMessage&quot;:&quot;Has to be either query or reference&quot;,&quot;cell_type&quot;:&quot;dropdown_cell&quot;,&quot;enum&quot;:[&quot;query&quot;,&quot;reference&quot;]}}"
+        ></div>`,
+  );
+}
+/* eslint-enable no-useless-escape */
 
-  <p>IRIDA Next Example Pipeline</p>
-  <turbo-frame id="workflow_execution_errors"></turbo-frame>
-
-  <div role="alert" aria-live="assertive" aria-atomic="true" data-nextflow--v2--samplesheet-target="formFieldError">
-    <div>
-      <div>
-        <div data-nextflow--v2--samplesheet-target="formFieldErrorMessage"></div>
-      </div>
-    </div>
-  </div>
-
-  <form data-turbo-frame="_top" data-nextflow--v2--samplesheet-target="form" action="/-/workflow_executions" accept-charset="UTF-8" method="post">
-    <input type="hidden" name="authenticity_token" value="authenticity_token_value">
-    <input type="hidden" name="format" id="submission_turbo" value="turbo_stream">
-
-    <section>
-      <div id="workflow_execution_name_field">
-        <label for="workflow_execution_name">
-          Name <abbr class="req" title="required" aria-hidden="true">*</abbr>
-        </label>
-
-        <input aria-required="true" type="text" name="workflow_execution[name]" id="workflow_execution_name">
-
-        <div id="workflow_execution_name_error">
-          <span class="hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
-              <rect width="256" height="256" fill="none"></rect>
-              <line x1="160" y1="96" x2="96" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
-              <line x1="96" y1="96" x2="160" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
-              <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
-            </svg>
-            <span class="grow"></span>
-          </span>
-        </div>
-
-        <p id="workflow_execution_name_hint">
-          A custom name will make it easier to search for this in the future.
-        </p>
-      </div>
-    </section>
-
-    <input value="a_namespace_id" type="hidden" name="workflow_execution[namespace_id]" id="workflow_execution_namespace_id">
-
-    <input value="phac-nml/iridanextexample" type="hidden" name="workflow_execution[metadata][pipeline_id]" id="workflow_execution_metadata_pipeline_id">
-    <input value="1.0.3" type="hidden" name="workflow_execution[metadata][workflow_version]" id="workflow_execution_metadata_workflow_version">
-
-    <h2>Input/output options</h2>
-    <p>Define where the pipeline should find input data and save output data.</p>
-
-    <div>
-      <div id="samplesheet_message" data-nextflow--v2--samplesheet-target="samplesheetMessagesContainer"></div>
-
-      <div id="samplesheet">
- <div
-  class="hidden"
-  data-nextflow--v2--samplesheet-target="samplesheetProperties"
-  data-properties="{&quot;sample&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;pattern&quot;:&quot;^\\\\S+$&quot;,&quot;meta&quot;:[&quot;irida_id&quot;],&quot;unique&quot;:true,&quot;errorMessage&quot;:&quot;Sample name must be provided and cannot contain spaces.&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;sample_cell&quot;},&quot;sample_name&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;id&quot;],&quot;errorMessage&quot;:&quot;Sample name is optional, if provided will replace sample for filenames and outputs&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;sample_name_cell&quot;,&quot;pattern&quot;:null},&quot;metadata_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;meta&quot;:[&quot;metadata_1&quot;],&quot;errorMessage&quot;:&quot;Metadata associated with the sample (metadata_1).&quot;,&quot;default&quot;:&quot;&quot;,&quot;pattern&quot;:&quot;^[^\\\\n\\\\t\\\&quot;]+$&quot;,&quot;required&quot;:false,&quot;cell_type&quot;:&quot;metadata_cell&quot;},&quot;fastq_1&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastq_2&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;file-path&quot;,&quot;exists&quot;:true,&quot;pattern&quot;:&quot;^([\\\\S\\\\s]*\\\\/)?[^\\\\s\\\\/]+\\\\.f(ast)?q\\\\.gz$&quot;,&quot;errorMessage&quot;:&quot;FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'&quot;,&quot;required&quot;:true,&quot;cell_type&quot;:&quot;fastq_cell&quot;,&quot;autopopulate&quot;:true},&quot;fastmatch_category&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;errorMessage&quot;:&quot;Has to be either query or reference&quot;,&quot;cell_type&quot;:&quot;dropdown_cell&quot;,&quot;enum&quot;:[&quot;query&quot;,&quot;reference&quot;]}}"
-  ></div>
-        <turbo-frame id="sample_attributes">
-        </turbo-frame>
-
-        <div>
-          <label>
-            Samples (5)
-          </label>
-
-          <div>
-            <label for="samplesheet-filter">
+function renderFilter() {
+  const filterContainer = document.getElementById("data-test-filter-container");
+  filterContainer.insertAdjacentHTML(
+    "afterbegin",
+    `<label for="samplesheet-filter">
               Search by PUID or name
             </label>
 
@@ -260,30 +211,15 @@ function renderFixture() {
                 <circle cx="112" cy="112" r="80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
                 <line x1="168.57" y1="168.57" x2="224" y2="224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
               </svg>
-            </button>
-          </div>
-        </div>
+            </button>`,
+  );
+}
 
-        <div role="alert" aria-live="assertive" aria-atomic="true" data-nextflow--v2--samplesheet-target="error">
-          <div>
-            <div>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-                <rect width="256" height="256" fill="none"></rect>
-                <line x1="160" y1="96" x2="96" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
-                <line x1="96" y1="96" x2="160" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
-                <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
-              </svg>
-            </div>
-
-            <div>
-              <div data-nextflow--v2--samplesheet-target="errorMessage"></div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div>
-            <table data-test-selector="samplesheet-table" data-controller="table" data-action="focusin-&gt;table#handleCellFocus">
+function renderTable() {
+  const tableContainer = document.getElementById("data-test-table-container");
+  tableContainer.insertAdjacentHTML(
+    "afterbegin",
+    ` <table data-test-selector="samplesheet-table" data-controller="table" data-action="focusin-&gt;table#handleCellFocus">
               <thead>
                 <tr>
                   <th>
@@ -346,34 +282,17 @@ function renderFixture() {
 
               <tbody data-nextflow--v2--samplesheet-target="tableBody">
               </tbody>
-            </table>
-          </div>
-        </div>
+            </table>`,
+  );
+}
 
-        <div data-nextflow--v2--samplesheet-target="emptyState" class="hidden">
-          <section role="status" aria-labelledby="empty-state-title-1568576" aria-describedby="empty-state-desc-1568576">
-            <div aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-                <rect width="256" height="256" fill="none"></rect>
-                <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
-              </svg>
-            </div>
-
-            <h2 id="empty-state-title-1568576">
-              No items found
-            </h2>
-
-            <div id="empty-state-desc-1568576">
-              <span>No items found matching your search</span>
-            </div>
-          </section>
-        </div>
-
-        <div data-nextflow--v2--samplesheet-target="paginationContainer"></div>
-        <turbo-frame id="samplesheet-payload-container"></turbo-frame>
-      </div>
-
-      <template data-nextflow--v2--samplesheet-target="trTemplate">
+function renderTemplates() {
+  const samplesheetContainer = document.getElementById(
+    "data-test-samplesheet-container",
+  );
+  samplesheetContainer.insertAdjacentHTML(
+    "afterbegin",
+    `<template data-nextflow--v2--samplesheet-target="trTemplate">
         <tr></tr>
       </template>
 
@@ -441,7 +360,163 @@ function renderFixture() {
           <input type="hidden" name="authenticity_token" value="nmzk_Fz82ZdmFqaMt7hu-6a0Bcp20H9nOfz8A9JDHUS7wUPV8FVsfHMx9HMPDlhdRC7HqFqadZ_bbvg_uFvmQg">
           <input value="a_namespace_id" type="hidden" name="namespace_id" id="namespace_id">
         </form>
-      </template>
+      </template>`,
+  );
+}
+
+function renderSelectionOutlet() {
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `  <div
+    hidden
+    id="samples-table"
+    data-controller="selection"
+    data-selection-storage-key-value="selection-test-key"
+    data-selection-max-selection-value="1000"
+    data-selection-limit-message-value="test limit message"
+    data-selection-storage-limit-message-value="test storage limit message"
+  ></div>`,
+  );
+}
+
+function renderMetadataParamsHeader() {
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `<div>
+  <span>
+    --metadata_1_header
+  </span>
+  <input
+    placeholder=""
+    value="metadata_1"
+    pattern="^[^\n\t&quot;]+$"
+    data-metadata-header-name="metadata_1"
+    type="text"
+    name="workflow_execution[workflow_params][metadata_1_header]"
+    id="workflow_execution_workflow_params_metadata_1_header"
+  >
+</div>`,
+  );
+}
+
+/* eslint-disable no-useless-escape */
+function renderBaseFixture() {
+  document.body.innerHTML = `
+    <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-automated-workflow-value="false" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
+  <h1>
+    phac-nml/iridanextexample
+  </h1>
+
+  <p>IRIDA Next Example Pipeline</p>
+  <turbo-frame id="workflow_execution_errors"></turbo-frame>
+
+  <div role="alert" aria-live="assertive" aria-atomic="true" data-nextflow--v2--samplesheet-target="formFieldError">
+    <div>
+      <div>
+        <div data-nextflow--v2--samplesheet-target="formFieldErrorMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <form data-turbo-frame="_top" data-nextflow--v2--samplesheet-target="form" action="/-/workflow_executions" accept-charset="UTF-8" method="post">
+    <input type="hidden" name="authenticity_token" value="authenticity_token_value">
+    <input type="hidden" name="format" id="submission_turbo" value="turbo_stream">
+
+    <section>
+      <div id="workflow_execution_name_field">
+        <label for="workflow_execution_name">
+          Name <abbr class="req" title="required" aria-hidden="true">*</abbr>
+        </label>
+
+        <input aria-required="true" type="text" name="workflow_execution[name]" id="workflow_execution_name">
+
+        <div id="workflow_execution_name_error">
+          <span class="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
+              <rect width="256" height="256" fill="none"></rect>
+              <line x1="160" y1="96" x2="96" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
+              <line x1="96" y1="96" x2="160" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
+              <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
+            </svg>
+            <span class="grow"></span>
+          </span>
+        </div>
+
+        <p id="workflow_execution_name_hint">
+          A custom name will make it easier to search for this in the future.
+        </p>
+      </div>
+    </section>
+
+    <input value="a_namespace_id" type="hidden" name="workflow_execution[namespace_id]" id="workflow_execution_namespace_id">
+
+    <input value="phac-nml/iridanextexample" type="hidden" name="workflow_execution[metadata][pipeline_id]" id="workflow_execution_metadata_pipeline_id">
+    <input value="1.0.3" type="hidden" name="workflow_execution[metadata][workflow_version]" id="workflow_execution_metadata_workflow_version">
+
+    <h2>Input/output options</h2>
+    <p>Define where the pipeline should find input data and save output data.</p>
+
+    <div id="data-test-samplesheet-container">
+      <div id="samplesheet_message" data-nextflow--v2--samplesheet-target="samplesheetMessagesContainer"></div>
+
+      <div id="samplesheet">
+        <turbo-frame id="sample_attributes"></turbo-frame>
+
+        <div>
+          <label>
+            Samples (5)
+          </label>
+
+          <div id="data-test-filter-container">
+          </div>
+        </div>
+
+        <div role="alert" aria-live="assertive" aria-atomic="true" data-nextflow--v2--samplesheet-target="error">
+          <div>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                <rect width="256" height="256" fill="none"></rect>
+                <line x1="160" y1="96" x2="96" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
+                <line x1="96" y1="96" x2="160" y2="160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
+                <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
+              </svg>
+            </div>
+
+            <div>
+              <div data-nextflow--v2--samplesheet-target="errorMessage"></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div id="data-test-table-container">
+          </div>
+        </div>
+
+        <div data-nextflow--v2--samplesheet-target="emptyState" class="hidden">
+          <section role="status" aria-labelledby="empty-state-title-1568576" aria-describedby="empty-state-desc-1568576">
+            <div aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                <rect width="256" height="256" fill="none"></rect>
+                <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
+              </svg>
+            </div>
+
+            <h2 id="empty-state-title-1568576">
+              No items found
+            </h2>
+
+            <div id="empty-state-desc-1568576">
+              <span>No items found matching your search</span>
+            </div>
+          </section>
+        </div>
+
+        <div data-nextflow--v2--samplesheet-target="paginationContainer"></div>
+        <turbo-frame id="samplesheet-payload-container"></turbo-frame>
+      </div>
+
+
       <div class="flex justify-center" id="samplesheet-spinner" data-nextflow--v2--samplesheet-target="samplesheetSpinner">
                     <div class="
                         flex w-full max-w-xs items-center space-x-2 rounded-lg bg-white p-4 text-gray-500
@@ -596,30 +671,6 @@ function renderFixture() {
     </div>
   </template>
 </div>
-<div
-    hidden
-    id="samples-table"
-    data-controller="selection"
-    data-selection-storage-key-value="selection-test-key"
-      data-selection-max-selection-value="1000"
-      data-selection-limit-message-value="test limit message"
-      data-selection-storage-limit-message-value="test storaget lmimit message"
-  ></div>
-
-<div>
-  <span>
-    --metadata_1_header
-  </span>
-  <input
-    placeholder=""
-    value="metadata_1"
-    pattern="^[^\n\t&quot;]+$"
-    data-metadata-header-name="metadata_1"
-    type="text"
-    name="workflow_execution[workflow_params][metadata_1_header]"
-    id="workflow_execution_workflow_params_metadata_1_header"
-  >
-</div>
   `;
 }
 /* eslint-enable no-useless-escape */
@@ -727,6 +778,8 @@ describe("nextflow v2 samplesheet controller", () => {
   it("filtering", async () => {
     const allSamples = [1, 2, 3, 4, 5, 6, 7, 10, 11, 21, 100, 199];
     setupStandardSamplesheetAttributes(allSamples);
+    renderFilter();
+
     application = await startController();
 
     const clearButton = document.querySelector(
@@ -841,7 +894,7 @@ describe("nextflow v2 samplesheet controller", () => {
   it("empty file selection on required file field validation", async () => {
     // manually create sampleAttributes with empty file selection
     const samples = [1, 2];
-    renderFixture();
+    renderFullFixture();
     const sampleAttributesContainer =
       document.getElementById("sample_attributes");
 
@@ -954,7 +1007,7 @@ describe("nextflow v2 samplesheet controller", () => {
   it("update samples is false", async () => {
     // manually create sampleAttributes with empty file selection
     const samples = [1, 2];
-    renderFixture();
+    renderFullFixture();
     const sampleAttributesContainer =
       document.getElementById("sample_attributes");
 
@@ -1243,6 +1296,7 @@ describe("nextflow v2 samplesheet controller", () => {
   it("formData of metadata submission upon metadata selection", async () => {
     const allSamples = range(1, 10);
     setupStandardSamplesheetAttributes(allSamples);
+    renderMetadataParamsHeader();
 
     application = await startController();
     let submittedForm;
@@ -1420,7 +1474,7 @@ describe("nextflow v2 samplesheet controller", () => {
   });
 
   it("unaligned selection ids and sample attributes id cause error", async () => {
-    renderFixture();
+    renderFullFixture();
     sessionStorage.setItem("selection-test-key", createSampleIds([1, 2]));
     const sampleAttributesContainer =
       document.getElementById("sample_attributes");
