@@ -10,8 +10,9 @@
     <%= render Viral::FlashComponent.new(type:, data: message) %>
   <% end %>
   <%= turbo_stream.replace "access-token-section",
-                       partial: "access_token_section",
+                       partial: "shared/personal_access_tokens/access_token_section",
                        locals: {
+                         type: "groups",
                          bot_account_name: @bot_account.user.email,
                          token: personal_access_token.token,
                        } %>

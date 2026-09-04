@@ -878,10 +878,6 @@ fr:
           title: Aucun fichier
     bots:
       index:
-        access_token_section:
-          aria_label: Jeton d’accès personnel, copier dans le presse-papiers
-          description: Assurez-vous de l’enregistrer – vous ne pourrez plus y accéder.
-          label: Nouveau jeton d’accès personnel pour %{bot_name}
         add_new_bot: Nouveau compte de bot
         bot_listing:
           generate_personal_access_token_modal:
@@ -1561,10 +1557,6 @@ fr:
           workflow_version: Version du flux de travail
     bots:
       index:
-        access_token_section:
-          aria_label: Jeton d’accès personnel, copier dans le presse-papiers
-          description: Assurez-vous de l’enregistrer – vous ne pourrez plus y accéder.
-          label: Nouveau jeton d’accès personnel pour %{bot_name}
         add_new_bot: Nouveau compte de bot
         bot_listing:
           generate_personal_access_token_modal:
@@ -2084,6 +2076,11 @@ fr:
         loading: Chargement...
       samples_list_skeleton:
         loading: Chargement...
+    personal_access_tokens:
+      access_token_section:
+        aria_label: Jeton d'accès personnel, copier dans le presse-papiers
+        description: Assurez-vous de le sauvegarder - vous ne pourrez plus y accéder par la suite.
+        label: Nouveau jeton d'accès personnel pour %{bot_name}
     progress_bar:
       in_progress: Action en cours Ne pas actualiser la page
     samples:
