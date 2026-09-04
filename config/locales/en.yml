@@ -876,10 +876,6 @@ en:
           title: No Files
     bots:
       index:
-        access_token_section:
-          aria_label: Personal access token, copy to clipboard
-          description: Make sure you save it - you won't be able to access it again.
-          label: New personal access token for %{bot_name}
         add_new_bot: New bot account
         bot_listing:
           generate_personal_access_token_modal:
@@ -1557,10 +1553,6 @@ en:
           workflow_version: Workflow Version
     bots:
       index:
-        access_token_section:
-          aria_label: Personal access token, copy to clipboard
-          description: Make sure you save it - you won't be able to access it again.
-          label: New personal access token for %{bot_name}
         add_new_bot: New bot account
         bot_listing:
           generate_personal_access_token_modal:
@@ -2081,6 +2073,11 @@ en:
         loading: Loading...
       samples_list_skeleton:
         loading: Loading...
+    personal_access_tokens:
+      access_token_section:
+        aria_label: Personal access token, copy to clipboard
+        description: Make sure you save it - you won't be able to access it again.
+        label: New personal access token for %{bot_name}
     progress_bar:
       in_progress: Action in progress. Please do not refresh the page.
     samples:
