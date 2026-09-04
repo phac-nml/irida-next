@@ -180,7 +180,7 @@ module Groups
         get new_samples_transfer_path(namespace_id: namespace.id, format: :turbo_stream)
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_transfer_dialog
+          assert_select '[data-select2--v1-target="empty"], [data-select2--v2-target="empty"]', count: 1
         end
       end
 
