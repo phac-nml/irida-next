@@ -101,6 +101,30 @@ export default defineConfig({
           functions: 100,
           lines: 100,
         },
+        "app/javascript/utilities/dialog.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/utilities/flash.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/utilities/focus.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/utilities/refresh.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
         "app/javascript/controllers/experimental_feature_toggle_controller.js":
           {
             statements: 100,
