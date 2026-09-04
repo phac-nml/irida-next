@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class MetadataTemplatesTest < ActionDispatch::IntegrationTest
+class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
   test 'metadata_templates_path raises NotImplementedError when not overridden' do
     controller_class = Class.new(ApplicationController) do
       include MetadataTemplateActions
