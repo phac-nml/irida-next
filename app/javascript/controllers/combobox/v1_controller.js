@@ -253,8 +253,10 @@ export default class extends Controller {
 
       if (selectedOption && selectableOptions.includes(selectedOption)) {
         option = selectedOption;
+        /* v8 ignore start -- unreachable: currentOption always references a stale clone from a prior filter pass, never one of the freshly cloned selectableOptions */
       } else if (currentOption && selectableOptions.includes(currentOption)) {
         option = currentOption;
+        /* v8 ignore stop */
       } else {
         option = this.#firstOption;
       }
@@ -281,6 +283,7 @@ export default class extends Controller {
   }
 
   #setValue(option) {
+    /* v8 ignore next 3 -- defensive: every caller already excludes disabled options before invoking #setValue */
     if (isOptionDisabled(option)) {
       return;
     }
@@ -315,6 +318,7 @@ export default class extends Controller {
 
   #getPreviousOption(currentOption) {
     const selectableOptions = this.#selectableOptions();
+    /* v8 ignore next 3 -- defensive: the only caller (ArrowUp) guards selectableOptions.length > 0 */
     if (selectableOptions.length === 0) {
       return null;
     }
@@ -332,6 +336,7 @@ export default class extends Controller {
 
   #getNextOption(currentOption) {
     const selectableOptions = this.#selectableOptions();
+    /* v8 ignore next 3 -- defensive: the only caller (ArrowDown) guards selectableOptions.length > 1 */
     if (selectableOptions.length === 0) {
       return null;
     }

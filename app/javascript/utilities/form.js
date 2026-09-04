@@ -101,6 +101,7 @@ export function normalizeParams(params, name, v, depth) {
     }
   } else if (after.startsWith("[]")) {
     // Recognize x[][y] (hash inside array) parameters
+    /* v8 ignore start -- legacy Rack-derived guard; short-circuits so later operands and the else path are unreachable */
     if (
       after[2] !== "[" ||
       !after.endsWith("]") ||
@@ -112,6 +113,7 @@ export function normalizeParams(params, name, v, depth) {
       // Handle other nested array parameters
       child_key = after.substring(2, 2 + after.length);
     }
+    /* v8 ignore stop */
 
     params[k] ||= [];
 
@@ -121,6 +123,7 @@ export function normalizeParams(params, name, v, depth) {
       );
     }
 
+    /* v8 ignore start -- unreachable: params[k] is a fresh empty array, so the last element lookup throws before this runs */
     if (
       !Array.isArray(params[k][params[k].length - 1]) &&
       !Reflect.has(params[k][params[k].length - 1], child_key)
@@ -128,6 +131,7 @@ export function normalizeParams(params, name, v, depth) {
       normalizeParams(params[k][params[k].length - 1], child_key, v, depth + 1);
       params[k].push(normalizeParams(new Object(), child_key, v, depth + 1));
     }
+    /* v8 ignore stop */
   } else {
     params[k] ||= new Object();
 

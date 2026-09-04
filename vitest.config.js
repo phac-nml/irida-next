@@ -40,6 +40,16 @@ export default defineConfig({
       reporter: ["text", "json", "html"],
       // Measure the whole JS surface so uncovered files stay visible.
       include: ["app/javascript/**/*.js"],
+      // Bootstrapping and Web Worker entry modules run on import or in a worker
+      // context and are not meaningfully unit-testable; exclude from measurement.
+      exclude: [
+        "app/javascript/application.js",
+        "app/javascript/active_admin_navigation.js",
+        "app/javascript/controllers/index.js",
+        "app/javascript/controllers/application.js",
+        "app/javascript/controllers/combobox_datepicker/constants.js",
+        "app/javascript/workers/**/*.js",
+      ],
       // Ratchet allowlist: add a file/glob here once it reaches full coverage.
       thresholds: {
         "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js":
@@ -50,6 +60,61 @@ export default defineConfig({
             lines: 100,
           },
         "app/javascript/controllers/workflow_selection_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/treegrid_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/utilities/collection.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/utilities/live_region.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/utilities/message_formatter.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/utilities/word_connector.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/utilities/form.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/experimental_feature_toggle_controller.js":
+          {
+            statements: 100,
+            branches: 100,
+            functions: 100,
+            lines: 100,
+          },
+        "app/javascript/controllers/combobox/utils.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/combobox/v1_controller.js": {
           statements: 100,
           branches: 100,
           functions: 100,
