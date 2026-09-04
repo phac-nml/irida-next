@@ -16,8 +16,6 @@ module Samples
   #   service = Samples::TransferServiceV2.new(namespace, user)
   #   transferred_ids = service.execute(new_project_id, sample_ids, broadcast_target)
   class TransferServiceV2 < BaseSampleService # rubocop:disable Metrics/ClassLength
-    include Samples::ActiveWorkflowExecutionGuard
-
     class TransferError < StandardError
     end
 

@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 # Service used to Delete Samples
-class BaseSampleDestroyService < BaseService
-  include Samples::ActiveWorkflowExecutionGuard
-
+class BaseSampleDestroyService < BaseSampleService
   class DestroyError < StandardError; end
 
   attr_accessor :sample, :sample_ids, :namespace
 
   def initialize(namespace, user = nil, params = {})
-    super(user, params)
+    super
     @namespace = namespace
     @sample = params[:sample] if params[:sample]
     @sample_ids = params[:sample_ids] if params[:sample_ids]
