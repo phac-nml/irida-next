@@ -43,7 +43,7 @@ Navigate in your browser to [http://localhost:3000](http://localhost:3000)
 ### Test
 
 ```bash
-bin/rails test:all
+bin/rails test; bin/rails test:system
 ```
 
 ### Running tests headful
