@@ -21,13 +21,33 @@ module Projects
 
       assert_response :success
 
-      w3c_validate 'Project Metadata Templates Page'
+      assert_select 'h1', text: I18n.t('projects.metadata_templates.index.title')
+      assert_select 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
+
+      assert_select 'table thead tr th', count: 6
+      assert_select 'table tbody tr', count: @project.namespace.metadata_templates.count
+
+      @project.namespace.metadata_templates.each do |metadata_template|
+        assert_select 'table tbody tr td:nth-child(1)', text: metadata_template.name
+      end
     end
 
     test 'project metadata templates new' do
       get new_namespace_project_metadata_template_path(@project_namespace.parent, @project, format: :turbo_stream)
 
       assert_response :success
+
+      assert_select 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+      assert_select 'dialog h2', text: I18n.t('metadata_templates.form.details_heading')
+      assert_select 'dialog h2', text: I18n.t('metadata_templates.form.metadata')
+
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
+      assert_select "ul[aria-labelledby='#{available_label_id}'] li", count: @project.namespace.metadata_fields.count
+      assert_select "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
+      @project.namespace.metadata_fields.each do |field|
+        assert_select "ul[aria-labelledby='#{available_label_id}'] li", text: field
+      end
     end
 
     test 'project metadata templates new unauthorized' do
@@ -35,6 +55,10 @@ module Projects
       get new_namespace_project_metadata_template_path(@project_namespace.parent, @project, format: :turbo_stream)
 
       assert_response :unauthorized
+
+      assert_includes @response.body,
+                      I18n.t('action_policy.policy.namespaces/project_namespace.create_metadata_templates?',
+                             name: @project.name)
     end
 
     test 'project metadata templates edit' do
@@ -43,6 +67,23 @@ module Projects
                                                         format: :turbo_stream)
 
       assert_response :success
+
+      assert_select 'dialog h1', text: I18n.t('metadata_templates.edit_template_dialog.title')
+      assert_select "input[value='#{@project_metadata_template.name}']"
+      assert_select 'textarea', text: @project_metadata_template.description
+
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
+      assert_select "ul[aria-labelledby='#{available_label_id}'] li",
+                    count: @project.namespace.metadata_fields.count - @project_metadata_template.fields.count
+      assert_select "ul[aria-labelledby='#{selected_label_id}'] li", count: @project_metadata_template.fields.count
+
+      unselected_fields = @project.namespace.metadata_fields.reject do |field|
+        @project_metadata_template.fields.include? field
+      end
+      unselected_fields.each do |field|
+        assert_select "ul[aria-labelledby='#{available_label_id}'] li", text: field
+      end
     end
 
     test 'project metadata templates edit unauthorized' do
@@ -52,13 +93,8 @@ module Projects
                                                         format: :turbo_stream)
 
       assert_response :unauthorized
-    end
 
-    test 'project metadata templates show' do
-      get namespace_project_metadata_template_path(@project_namespace.parent,
-                                                   @project, @project_metadata_template, format: :turbo_stream)
-
-      assert_response :success
+      assert_includes @response.body, I18n.t('action_policy.unauthorized')
     end
 
     test 'project metadata templates create' do
@@ -69,6 +105,9 @@ module Projects
       ), params: metadata_template_params
 
       assert_response :success
+
+      assert_includes @response.body, I18n.t('concerns.metadata_template_actions.create.success',
+                                             template_name: 'Newest template')
     end
 
     test 'project metadata templates create error' do
@@ -80,7 +119,13 @@ module Projects
 
       assert_response :unprocessable_content
 
-      metadata_template_params = { metadata_template: { fields: %w[field1 field5] } }
+      assert_select 'a', text:
+            I18n.t(:'errors.format',
+                   attribute: MetadataTemplate.human_attribute_name(:name),
+                   message: I18n.t(:'errors.messages.blank'))
+      assert_select "div[class='form-field invalid']"
+
+      metadata_template_params = { metadata_template: { name: 'Newest template', fields: [] } }
       post namespace_project_metadata_templates_path(
         @project_namespace.parent,
         @project, format: :turbo_stream
@@ -88,21 +133,10 @@ module Projects
 
       assert_response :unprocessable_content
 
-      metadata_template_params = { metadata_template: { fields: [] } }
-      post namespace_project_metadata_templates_path(
-        @project_namespace.parent,
-        @project, format: :turbo_stream
-      ), params: metadata_template_params
-
-      assert_response :unprocessable_content
-
-      metadata_template_params = { metadata_template: { fields: nil } }
-      post namespace_project_metadata_templates_path(
-        @project_namespace.parent,
-        @project, format: :turbo_stream
-      ), params: metadata_template_params
-
-      assert_response :bad_request
+      assert_select 'a', text:
+            I18n.t(:'errors.format',
+                   attribute: MetadataTemplate.human_attribute_name(:fields),
+                   message: I18n.t('activerecord.errors.models.metadata_template.attributes.fields.min_length', min: 1))
     end
 
     test 'project metadata templates create unauthorized' do
@@ -114,28 +148,35 @@ module Projects
       ), params: metadata_template_params
 
       assert_response :unauthorized
-    end
 
-    test 'project metadata templates create with invalid params' do
-      metadata_template_params = { metadata_template: { name: '', fields: [] } }
-      post namespace_project_metadata_templates_path(@project_namespace.parent, @project, format: :turbo_stream),
-           params: metadata_template_params
-
-      assert_response :unprocessable_content
+      assert_includes @response.body,
+                      I18n.t('action_policy.policy.namespaces/project_namespace.create_metadata_templates?',
+                             name: @project.name)
     end
 
     test 'project metadata templates update' do
-      metadata_template_params = { metadata_template: { name: 'This is the new template', fields: %w[field6 field10] } }
+      new_name = 'This is the new template'
+      metadata_template_params = { metadata_template: { name: new_name, fields: %w[field6 field10] } }
       put namespace_project_metadata_template_path(
         @project_namespace.parent,
         @project, @project_metadata_template, format: :turbo_stream
       ), params: metadata_template_params
 
       assert_response :success
+
+      assert_includes @response.body, I18n.t(
+        :'concerns.metadata_template_actions.update.success',
+        template_name: new_name
+      )
+
+      assert_select "tr#metadata_template_#{@project_metadata_template.id}" do
+        assert_select 'td', text: new_name
+        assert_select 'button', text: I18n.t('common.actions.edit'), focused: true
+      end
     end
 
     test 'project metadata templates update error' do
-      metadata_template_params = { metadata_template: { name: nil } }
+      metadata_template_params = { metadata_template: { name: '', fields: %w[field1 field5] } }
       put namespace_project_metadata_template_path(
         @project_namespace.parent,
         @project, @project_metadata_template, format: :turbo_stream
@@ -143,25 +184,24 @@ module Projects
 
       assert_response :unprocessable_content
 
-      metadata_template_params = { metadata_template: { fields: [] } }
+      assert_select 'a', text:
+            I18n.t(:'errors.format',
+                   attribute: MetadataTemplate.human_attribute_name(:name),
+                   message: I18n.t(:'errors.messages.blank'))
+      assert_select "div[class='form-field invalid']"
+
+      metadata_template_params = { metadata_template: { name: 'Newest template', fields: [] } }
       put namespace_project_metadata_template_path(
         @project_namespace.parent,
         @project, @project_metadata_template, format: :turbo_stream
       ), params: metadata_template_params
 
       assert_response :unprocessable_content
-    end
 
-    test 'project metadata templates update with invalid params' do
-      metadata_template_params = { metadata_template: { name: '', fields: [] } }
-      put namespace_project_metadata_template_path(
-        @project_namespace.parent,
-        @project,
-        @project_metadata_template,
-        format: :turbo_stream
-      ), params: metadata_template_params
-
-      assert_response :unprocessable_content
+      assert_select 'a', text:
+            I18n.t(:'errors.format',
+                   attribute: MetadataTemplate.human_attribute_name(:fields),
+                   message: I18n.t('activerecord.errors.models.metadata_template.attributes.fields.min_length', min: 1))
     end
 
     test 'project metadata templates update unauthorized' do
@@ -173,6 +213,10 @@ module Projects
       ), params: metadata_template_params
 
       assert_response :unauthorized
+
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div', "#{I18n.t('common.statuses.error')}: #{I18n.t('action_policy.unauthorized')}"
+      end
     end
 
     test 'project metadata templates update renders translated error when service fails with no model errors' do
@@ -185,9 +229,11 @@ module Projects
       ), params: metadata_template_params
 
       assert_response :unprocessable_content
-      assert_select "div[data-controller='viral--flash']",
-                    text: /#{Regexp.escape(I18n.t('concerns.metadata_template_actions.update.error',
-                                                  template_name: @project_metadata_template.name))}/
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t('concerns.metadata_template_actions.update.error',
+                                                                    template_name: @project_metadata_template.name)}"
+      end
     end
 
     test 'project metadata templates destroy' do
@@ -198,6 +244,11 @@ module Projects
       )
 
       assert_response :success
+
+      assert_includes @response.body, I18n.t(
+        :'concerns.metadata_template_actions.destroy.success',
+        template_name: @project_metadata_template.name
+      )
     end
 
     test 'project metadata templates destroy unauthorized' do
@@ -209,6 +260,10 @@ module Projects
       )
 
       assert_response :unauthorized
+
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div', "#{I18n.t('common.statuses.error')}: #{I18n.t('action_policy.unauthorized')}"
+      end
     end
 
     test 'project metadata templates destroy renders error from error_message when not deleted' do

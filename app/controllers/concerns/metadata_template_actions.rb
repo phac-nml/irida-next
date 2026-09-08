@@ -7,7 +7,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   included do
     before_action proc { namespace }
-    before_action proc { metadata_template }, only: %i[destroy edit show update]
+    before_action proc { metadata_template }, only: %i[destroy edit update]
     before_action proc { metadata_template_fields }, only: %i[create new edit update]
     before_action proc { metadata_templates_ancestral }, only: %i[list]
     before_action proc { view_authorizations }, only: %i[index update]
@@ -34,16 +34,6 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def edit
     authorize! @metadata_template, to: :update_metadata_template?
-
-    respond_to do |format|
-      format.turbo_stream do
-        render status: :ok
-      end
-    end
-  end
-
-  def show
-    authorize! @namespace, to: :view_metadata_templates?
 
     respond_to do |format|
       format.turbo_stream do
