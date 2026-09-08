@@ -1,11 +1,17 @@
+# yaml-language-server: $schema=https://devenv.sh/devenv.schema.json
 inputs:
   nextflow-pin:
     url: github:nixos/nixpkgs/1f6deaff6d3c8546398eadc710c3fb6fbcaf45e4
   nixpkgs:
     url: github:cachix/devenv-nixpkgs/rolling
-  nixpkgs-ruby:
+  nixpkgs-python:
+    url: github:cachix/nixpkgs-python
     inputs:
       nixpkgs:
         follows: nixpkgs
+  nixpkgs-ruby:
     url: github:bobvanderlinden/nixpkgs-ruby
-strictPorts: true
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+strict_ports: true
