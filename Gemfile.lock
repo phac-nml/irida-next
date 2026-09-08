@@ -73,7 +73,7 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    active_storage_validations (4.1.0)
+    active_storage_validations (4.1.1)
       activejob (>= 7.0.1)
       activemodel (>= 7.0.1)
       activestorage (>= 7.0.1)
@@ -841,6 +841,7 @@ DEPENDENCIES
   i18n-tasks (~> 1.1.2)
   importmap-rails
   jbuilder
+  json (< 3.0)
   lefthook (~> 2.1)
   listen
   local_time (~> 3.0, >= 3.0.2)
