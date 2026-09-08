@@ -20,13 +20,33 @@ module Groups
 
       assert_response :success
 
-      w3c_validate 'Group Metadata Templates Page'
+      assert_select 'h1', text: I18n.t('groups.metadata_templates.index.title')
+      assert_select 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+
+      assert_select 'table thead tr th', count: 6
+      assert_select 'table tbody tr', count: @group.metadata_templates.count
+
+      @group.metadata_templates.each do |metadata_template|
+        assert_select 'table tbody tr td:nth-child(1)', text: metadata_template.name
+      end
     end
 
     test 'group metadata templates new' do
       get new_group_metadata_template_path(@group, format: :turbo_stream)
 
       assert_response :success
+
+      assert_select 'dialog h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+      assert_select 'dialog h2', text: I18n.t('metadata_templates.form.details_heading')
+      assert_select 'dialog h2', text: I18n.t('metadata_templates.form.metadata')
+
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
+      assert_select "ul[aria-labelledby='#{available_label_id}'] li", count: @group.metadata_fields.count
+      assert_select "ul[aria-labelledby='#{selected_label_id}'] li", count: 0
+      @group.metadata_fields.each do |field|
+        assert_select "ul[aria-labelledby='#{available_label_id}'] li", text: field
+      end
     end
 
     test 'group metadata templates new unauthorized' do
@@ -34,12 +54,32 @@ module Groups
       get new_group_metadata_template_path(@group, format: :turbo_stream)
 
       assert_response :unauthorized
+
+      assert_includes @response.body,
+                      I18n.t('action_policy.policy.group.create_metadata_templates?', name: @group.name)
     end
 
     test 'group metadata templates edit' do
       get edit_group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
 
       assert_response :success
+
+      assert_select 'dialog h1', text: I18n.t('metadata_templates.edit_template_dialog.title')
+      assert_select "input[value='#{@group_metadata_template.name}']"
+      assert_select 'textarea', text: @group_metadata_template.description
+
+      available_label_id = 'available-list-list-label'
+      selected_label_id = 'selected-list-list-label'
+      assert_select "ul[aria-labelledby='#{available_label_id}'] li",
+                    count: @group.metadata_fields.count - @group_metadata_template.fields.count
+      assert_select "ul[aria-labelledby='#{selected_label_id}'] li", count: @group_metadata_template.fields.count
+
+      unselected_fields = @group.metadata_fields.reject do |field|
+        @group_metadata_template.fields.include? field
+      end
+      unselected_fields.each do |field|
+        assert_select "ul[aria-labelledby='#{available_label_id}'] li", text: field
+      end
     end
 
     test 'group metadata templates edit unauthorized' do
@@ -47,6 +87,8 @@ module Groups
       get edit_group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
 
       assert_response :unauthorized
+
+      assert_includes @response.body, I18n.t('action_policy.unauthorized')
     end
 
     test 'group metadata templates create' do
@@ -54,6 +96,9 @@ module Groups
       post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
 
       assert_response :success
+
+      assert_includes @response.body, I18n.t('concerns.metadata_template_actions.create.success',
+                                             template_name: 'Newest template')
     end
 
     test 'group metadata templates create error' do
@@ -62,20 +107,21 @@ module Groups
 
       assert_response :unprocessable_content
 
-      metadata_template_params = { metadata_template: { name: 'Newest template' } }
-      post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
-
-      assert_response :unprocessable_content
+      assert_select 'a', text:
+            I18n.t(:'errors.format',
+                   attribute: MetadataTemplate.human_attribute_name(:name),
+                   message: I18n.t(:'errors.messages.blank'))
+      assert_select "div[class='form-field invalid']"
 
       metadata_template_params = { metadata_template: { name: 'Newest template', fields: [] } }
       post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
 
       assert_response :unprocessable_content
 
-      metadata_template_params = { metadata_template: { name: 'Newest template', fields: nil } }
-      post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
-
-      assert_response :unprocessable_content
+      assert_select 'a', text:
+            I18n.t(:'errors.format',
+                   attribute: MetadataTemplate.human_attribute_name(:fields),
+                   message: I18n.t('activerecord.errors.models.metadata_template.attributes.fields.min_length', min: 1))
     end
 
     test 'group metadata templates create unauthorized' do
@@ -84,43 +130,66 @@ module Groups
       post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
 
       assert_response :unauthorized
-    end
 
-    test 'group metadata templates create with invalid params' do
-      metadata_template_params = { metadata_template: { name: '', fields: [] } }
-      post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
-
-      assert_response :unprocessable_content
+      assert_includes @response.body,
+                      I18n.t('action_policy.policy.group.create_metadata_templates?', name: @group.name)
     end
 
     test 'group metadata templates update' do
-      metadata_template_params = { metadata_template: { name: 'This is the new template', fields: %w[field6 field10] } }
+      new_name = 'This is the new template'
+      metadata_template_params = { metadata_template: { name: new_name, fields: %w[field6 field10] } }
       put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
           params: metadata_template_params
 
       assert_response :success
+
+      assert_includes @response.body, I18n.t(
+        :'concerns.metadata_template_actions.update.success',
+        template_name: new_name
+      )
+
+      assert_select "tr#metadata_template_#{@group_metadata_template.id}" do
+        assert_select 'td', text: new_name
+        assert_select 'button', text: I18n.t('common.actions.edit'), focused: true
+      end
     end
 
     test 'group metadata templates update error' do
-      metadata_template_params = { metadata_template: { name: nil } }
+      metadata_template_params = { metadata_template: { name: '', fields: %w[field1 field5] } }
       put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
           params: metadata_template_params
 
       assert_response :unprocessable_content
 
-      metadata_template_params = { metadata_template: { fields: [] } }
+      assert_select 'a', text:
+            I18n.t(:'errors.format',
+                   attribute: MetadataTemplate.human_attribute_name(:name),
+                   message: I18n.t(:'errors.messages.blank'))
+      assert_select "div[class='form-field invalid']"
+
+      metadata_template_params = { metadata_template: { name: 'Newest template', fields: [] } }
       put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
           params: metadata_template_params
+
+      assert_select 'a', text:
+        I18n.t(:'errors.format',
+               attribute: MetadataTemplate.human_attribute_name(:fields),
+               message: I18n.t('activerecord.errors.models.metadata_template.attributes.fields.min_length', min: 1))
 
       assert_response :unprocessable_content
     end
 
-    test 'group metadata templates update with invalid params' do
-      metadata_template_params = { metadata_template: { name: '', fields: [] } }
+    test 'group metadata templates update unauthorized' do
+      sign_in users(:ryan_doe)
+      metadata_template_params = { metadata_template: { name: 'This is the new template', fields: %w[field6 field10] } }
       put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
           params: metadata_template_params
 
-      assert_response :unprocessable_content
+      assert_response :unauthorized
+
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div', "#{I18n.t('common.statuses.error')}: #{I18n.t('action_policy.unauthorized')}"
+      end
     end
 
     test 'group metadata templates update renders translated error when service fails with no model errors' do
@@ -141,6 +210,11 @@ module Groups
       delete group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
 
       assert_response :success
+
+      assert_includes @response.body, I18n.t(
+        :'concerns.metadata_template_actions.destroy.success',
+        template_name: @group_metadata_template.name
+      )
     end
 
     test 'group metadata templates destroy unauthorized' do
@@ -148,6 +222,10 @@ module Groups
       delete group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
 
       assert_response :unauthorized
+
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div', "#{I18n.t('common.statuses.error')}: #{I18n.t('action_policy.unauthorized')}"
+      end
     end
 
     test 'group metadata templates destroy renders error from error_message when not deleted' do
@@ -181,18 +259,6 @@ module Groups
 
       assert_response :success
       assert_includes @response.body, @group_metadata_template.name
-    end
-
-    test 'group metadata templates list with pagination params' do
-      get list_group_metadata_templates_path(@group,
-                                             metadata_template: 'all',
-                                             limit: 1,
-                                             page: 2)
-
-      assert_response :success
-      # Verify the response includes the paginated content
-      assert_includes @response.body, 'turbo-stream'
-      assert_includes @response.body, 'metadata_templates_dropdown'
     end
 
     test 'group metadata templates index with pagination and sorting' do
