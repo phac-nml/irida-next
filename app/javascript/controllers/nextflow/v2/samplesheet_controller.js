@@ -356,7 +356,6 @@ export default class extends Controller {
     if (this.hasSamplesheetSpinnerTarget) {
       this.samplesheetSpinnerTarget.remove();
     }
-
     this.#enableErrorState(this.processingErrorValue);
   }
 
@@ -946,7 +945,6 @@ export default class extends Controller {
   samplesheetPropertiesTargetConnected() {
     this.#samplesheetProperties =
       this.samplesheetPropertiesTarget.dataset.properties;
-
     // to prevent browser timeouts on large (10k+) sample requests, samples will be chunked and batched into
     // 1000 sample requests
     if (this.hasSelectionOutlet) {
@@ -1047,13 +1045,13 @@ export default class extends Controller {
       this.#submitSamplesheetParams(this.#currentChunkedCounter);
     } else {
       this.#samplesheetProperties = JSON.parse(this.#samplesheetProperties);
+
       // // clear the now unnecessary DOM element
       this.samplesheetPropertiesTarget.remove();
       this.#processSamplesheetAttributes();
       this.#processFileAttributes();
 
       this.#allSampleIds = Object.keys(this.#samplesheetAttributes);
-
       if (this.#allSampleIds.length !== this.#selectedSamples.length) {
         this.#renderProcessingError();
       } else {

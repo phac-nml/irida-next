@@ -52,7 +52,10 @@
 
               <tbody class="overflow-y-auto border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
                 <% listing_attachments.each do |attachment| %>
-                  <tr class="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+                  <tr
+                    id="attachment_<%= attachment[:id] %>"
+                    class="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800"
+                  >
                     <td class="bg-white p-3 dark:bg-slate-800">
                       <%= form.radio_button "attachment_id",
                                         attachment[:id],
