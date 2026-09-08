@@ -810,5 +810,25 @@ module Samples
       assert_equal project31_count_before - 1, @project31.samples_count
       assert_equal project30_count_before + 1, @project30.samples_count
     end
+
+    test 'does not transfer project samples with active workflow execution' do
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+
+      @sample_transfer_params = { new_project_id: @new_project.id,
+                                  sample_ids: [@sample1.id, @sample2.id] }
+
+      assert_no_changes -> { @sample1.reload.project_id } do
+        Samples::TransferService.new(@current_project.namespace, @john_doe).execute(
+          @sample_transfer_params[:new_project_id],
+          @sample_transfer_params[:sample_ids]
+        )
+      end
+
+      assert_includes @current_project.namespace.errors.full_messages,
+                      I18n.t('services.samples.transfer.active_workflow_executions',
+                             sample_puids: @sample1.puid)
+
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+    end
   end
 end
