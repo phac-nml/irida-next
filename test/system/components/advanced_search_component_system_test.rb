@@ -4,6 +4,9 @@ require 'application_system_test_case'
 
 class AdvancedSearchComponentSystemTest < ApplicationSystemTestCase
   def setup
+    # This suite covers the V1 advanced search UI. The test env enables all flags by default,
+    # so V2 must be explicitly disabled to keep these assertions on the V1 implementation.
+    Flipper.disable(:advanced_search_v2)
     Flipper.enable(:advanced_search_with_auto_complete)
   end
 
