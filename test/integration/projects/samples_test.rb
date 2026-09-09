@@ -160,8 +160,6 @@ module Projects
       assert_match I18n.t('projects.samples.index.no_associated_samples'), response.body
     end
 
-    # Successful advanced search is exercised through GET on the index (the bookmarkable q-params
-    # entrypoint); validation failures go through the POST search action that renders a turbo_stream.
     test 'advanced search filters samples by a metadata field' do
       sample30 = samples(:sample30)
 
@@ -258,8 +256,6 @@ module Projects
     end
   end
 
-  # Metadata-typed advanced search coverage shares the metadata_doe fixtures, so it lives in a
-  # dedicated class whose setup signs in and resolves the metadata namespace/project once.
   class MetadataSamplesTest < ActionDispatch::IntegrationTest
     include ActionView::RecordIdentifier
 
@@ -315,7 +311,6 @@ module Projects
 
     private
 
-    # Asserts a two-condition "between" advanced search on @project returns only @sample62.
     def assert_between_filter(field:, operators:, low:, high:)
       get namespace_project_samples_url(@namespace, @project),
           params: samples_advanced_search_params(
