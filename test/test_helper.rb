@@ -60,7 +60,6 @@ module ActiveSupport
     include ActionPolicy::TestHelper
     include ArrayHelpers
     include WorkflowExecutionAdvancedSearchHelper
-    include SamplesTableHelper
     include IPTestHelpers
     include ActiveJob::TestHelper
     include ActionMailer::TestHelper
@@ -71,4 +70,10 @@ module ActiveSupport
 
     PublicActivity.enabled = true
   end
+end
+
+class ActionDispatch::IntegrationTest # rubocop:disable Style/ClassAndModuleChildren
+  # Shared samples-table assertions rely on assert_select, so scope them to
+  # request-level tests rather than the whole ActiveSupport::TestCase base.
+  include SamplesTableHelper
 end

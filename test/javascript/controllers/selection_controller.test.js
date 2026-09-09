@@ -50,16 +50,19 @@ function renderFixtureHtml({
       />
       <input
         type="checkbox"
+        id="checkbox_1"
         value="1"
         data-selection-target="rowSelection"
       />
       <input
         type="checkbox"
+        id="checkbox_2"
         value="2"
         data-selection-target="rowSelection"
       />
       <input
         type="checkbox"
+        id="checkbox_3"
         value="3"
         data-selection-target="rowSelection"
       />
@@ -184,7 +187,7 @@ describe("selection controller", () => {
     expect(controller.rowSelectionTargets.every((row) => row.checked)).toBe(
       true,
     );
-    expect(controller.selectedTarget.innerText).toBe(3);
+    expect(controller.selectedTarget.textContent).toBe("3");
     expect(controller.selectPageTarget.checked).toBe(true);
     expect(sessionStorage.getItem("selection-test-key")).toBe('["1","2","3"]');
 
@@ -193,7 +196,7 @@ describe("selection controller", () => {
     expect(controller.rowSelectionTargets.some((row) => row.checked)).toBe(
       false,
     );
-    expect(controller.selectedTarget.innerText).toBe(0);
+    expect(controller.selectedTarget.textContent).toBe("0");
     expect(controller.selectPageTarget.checked).toBe(false);
     expect(sessionStorage.getItem("selection-test-key")).toBe("[]");
   });
@@ -214,6 +217,39 @@ describe("selection controller", () => {
     document.dispatchEvent(new Event("turbo:morph"));
 
     expect(persistedRow.checked).toBe(true);
-    expect(controller.selectedTarget.innerText).toBe(1);
+    expect(controller.selectedTarget.textContent).toBe("1");
+  });
+
+  it("selects a contiguous range on shift-click", async () => {
+    application = await startController({ maxSelection: 5 });
+    const controller = controllerFor(application);
+    const [row1, , row3] = controller.rowSelectionTargets;
+
+    // First click establishes the range anchor
+    row1.checked = true;
+    controller.toggle({ target: row1, shiftKey: false });
+
+    // Shift-click the third row selects every row between the anchor and target
+    row3.checked = true;
+    controller.toggle({ target: row3, shiftKey: true });
+
+    expect(controller.rowSelectionTargets.every((row) => row.checked)).toBe(
+      true,
+    );
+    expect(controller.selectedTarget.textContent).toBe("3");
+    expect(sessionStorage.getItem("selection-test-key")).toBe('["1","2","3"]');
+  });
+
+  it("shift-click without an anchor toggles only the clicked row", async () => {
+    application = await startController({ maxSelection: 5 });
+    const controller = controllerFor(application);
+    const [, , row3] = controller.rowSelectionTargets;
+
+    // No prior selection, so there is no stored anchor to build a range from
+    row3.checked = true;
+    controller.toggle({ target: row3, shiftKey: true });
+
+    expect(controller.selectedTarget.textContent).toBe("1");
+    expect(sessionStorage.getItem("selection-test-key")).toBe('["3"]');
   });
 });

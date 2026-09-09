@@ -56,72 +56,49 @@ module Groups
       assert_select "table tbody tr##{dom_id(@sample1)} td:nth-child(2)", text: /#{Regexp.escape(@sample1.name)}/
     end
 
-    test 'user with role >= Analyst sees the workflow execution link' do
-      get group_samples_url(@group)
+    test 'workflow execution link visibility by role' do
+      [[@user, true], [users(:ryan_doe), false]].each do |user, present|
+        sign_in user
 
-      assert_response :success
-      assert_select 'span', text: /#{Regexp.escape(I18n.t('projects.samples.index.workflows.button_sr'))}/
+        get group_samples_url(@group)
+
+        assert_response :success
+        assert_workflow_execution_link(present:, locale: user.locale)
+      end
     end
 
-    test 'user with role < Analyst does not see the workflow execution link' do
-      sign_in users(:ryan_doe)
+    test 'sample actions dropdown visibility by role' do
+      [[@user, true], [users(:ryan_doe), false]].each do |user, present|
+        sign_in user
 
-      get group_samples_url(@group)
+        get group_samples_url(@group)
 
-      assert_response :success
-      assert_select 'span',
-                    text: /#{Regexp.escape(I18n.t('projects.samples.index.workflows.button_sr'))}/, count: 0
+        assert_response :success
+        assert_actions_dropdown(present:, locale: user.locale)
+      end
     end
 
-    test 'user with role >= Analyst sees the sample actions dropdown' do
-      get group_samples_url(@group)
+    test 'clone samples action visibility by role' do
+      [[@user, true], [users(:ryan_doe), false]].each do |user, present|
+        sign_in user
 
-      assert_response :success
-      assert_select 'button[aria-label=?]', I18n.t('shared.samples.actions_dropdown.label')
+        get group_samples_url(@group)
+
+        assert_response :success
+        assert_actions_menu_item('clone', present:, locale: user.locale)
+      end
     end
 
-    test 'user with role < Analyst does not see the sample actions dropdown' do
-      sign_in users(:ryan_doe)
+    test 'delete samples action visibility by role' do
+      [[@user, true], [users(:joan_doe), false]].each do |user, present|
+        sign_in user
 
-      get group_samples_url(@group)
+        get group_samples_url(@group)
 
-      assert_response :success
-      assert_select 'button[aria-label=?]', I18n.t('shared.samples.actions_dropdown.label'), count: 0
-    end
-
-    test 'user with role >= Maintainer sees the clone samples action' do
-      get group_samples_url(@group)
-
-      assert_response :success
-      assert_select 'button[role="menuitem"]', text: I18n.t('shared.samples.actions_dropdown.clone')
-    end
-
-    test 'user with role < Maintainer does not see the clone samples action' do
-      sign_in users(:ryan_doe)
-
-      get group_samples_url(@group)
-
-      assert_response :success
-      assert_select 'button[role="menuitem"]', text: I18n.t('shared.samples.actions_dropdown.clone'), count: 0
-    end
-
-    test 'user with role == Owner sees the delete samples action' do
-      get group_samples_url(@group)
-
-      assert_response :success
-      assert_select 'button[role="menuitem"]', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
-    end
-
-    test 'user with role < Owner does not see the delete samples action' do
-      user = users(:joan_doe)
-      sign_in user
-
-      get group_samples_url(@group)
-
-      assert_response :success
-      assert_select 'button[aria-label=?]', I18n.t('shared.samples.actions_dropdown.label', locale: user.locale)
-      assert_select 'button[role="menuitem"]',
-                    text: I18n.t('shared.samples.actions_dropdown.delete_samples', locale: user.locale), count: 0
+        assert_response :success
+        assert_actions_dropdown(present: true, locale: user.locale)
+        assert_actions_menu_item('delete_samples', present:, locale: user.locale)
+      end
     end
 
     test 'cannot access group samples without authorization' do
