@@ -16,7 +16,7 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
     else
       table_for entries, class: 'index_table' do # rubocop:disable Metrics/BlockLength
         column I18n.t('active_admin.feature_flags.columns.feature') do |entry|
-          div do
+          div class: 'max-w-md' do
             div entry[:name], class: 'font-semibold text-gray-900 dark:text-gray-100'
             div entry[:description], class: 'text-sm text-gray-500 dark:text-gray-400'
           end
@@ -47,18 +47,18 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
           div class: 'flex flex-col items-start gap-2' do
             global = global_toggle_for(entry)
             link_to global[:label], global[:path],
-                    class: 'action-item-button',
+                    class: 'action-item-button whitespace-nowrap',
                     method: :patch,
                     data: { confirm: global[:confirm] }
 
             opt_in = opt_in_toggle_for(entry)
             if opt_in[:disabled]
               span opt_in[:label],
-                   class: 'text-sm text-gray-500 dark:text-gray-400 cursor-not-allowed',
+                   class: 'text-sm text-gray-500 dark:text-gray-400 cursor-not-allowed whitespace-nowrap',
                    title: opt_in[:disabled_reason]
             else
               link_to opt_in[:label], opt_in[:path],
-                      class: 'action-item-button',
+                      class: 'action-item-button whitespace-nowrap',
                       method: :patch,
                       data: { confirm: opt_in[:confirm] }
             end
