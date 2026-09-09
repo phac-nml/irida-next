@@ -90,18 +90,24 @@ module Projects
         end
       end
 
-      test 'dialog close button hidden while cloning samples' do
-        assert_samples_page(@project, 3)
-        get new_samples_clone_path(namespace_id: @namespace.id, format: :turbo_stream)
-        assert_response :success
-        assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_clone_dialog
-        end
-        post_clone
-        assert_response :success
-        assert_select 'turbo-stream[action="update"][target="clone_samples_dialog_content"]' do
-          assert_select '[role="progressbar"]'
-          assert_select 'button.dialog--close', count: 0
+      [false, true].each do |v2_select|
+        v2_select_text = v2_select ? 'with v2_select2' : 'with v1_select2'
+        test "dialog close button hidden while cloning samples #{v2_select_text}" do
+          Flipper.enable(:v2_select2) if v2_select
+          assert_samples_page(@project, 3)
+          get new_samples_clone_path(namespace_id: @namespace.id, format: :turbo_stream)
+          assert_response :success
+          assert_select 'turbo-stream[target="samples_dialog"]' do
+            assert_clone_dialog
+          end
+          post_clone
+          assert_response :success
+          assert_select 'turbo-stream[action="update"][target="clone_samples_dialog_content"]' do
+            assert_select '[role="progressbar"]'
+            assert_select 'button.dialog--close', count: 0
+          end
+        ensure
+          Flipper.disable(:v2_select2) if v2_select
         end
       end
 
