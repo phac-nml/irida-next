@@ -117,5 +117,57 @@ module Groups
       assert_select "table tbody tr##{dom_id(@sample1)} td:nth-child(2)", text: /#{Regexp.escape(@sample1.name)}/
       assert_select "table tbody tr##{dom_id(@sample2)}", count: 0
     end
+
+    test 'advanced search filters samples by puid using the in operator' do
+      sample9 = samples(:sample9)
+
+      get group_samples_url(@group),
+          params: samples_advanced_search_params(
+            [[{ field: 'puid', operator: 'in', value: [@sample1.puid, @sample2.puid] }]]
+          )
+
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: 2
+      assert_select "#samples-table table tbody tr##{dom_id(@sample1)}"
+      assert_select "#samples-table table tbody tr##{dom_id(@sample2)}"
+      assert_select "#samples-table table tbody tr##{dom_id(sample9)}", count: 0
+    end
+
+    test 'advanced search filters samples by a metadata field name containing periods' do
+      sample28 = samples(:sample28)
+
+      get group_samples_url(@group),
+          params: samples_advanced_search_params(
+            [[{ field: 'metadata.unique.metadata.field', operator: '=',
+                value: sample28.metadata['unique.metadata.field'] }]]
+          )
+
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: 1
+      assert_select "#samples-table table tbody tr##{dom_id(sample28)}"
+      assert_select "#samples-table table tbody tr##{dom_id(@sample1)}", count: 0
+    end
+
+    test 'advanced search filters samples using the exists operator' do
+      sample28 = samples(:sample28)
+
+      get group_samples_url(@group),
+          params: samples_advanced_search_params(
+            [[{ field: 'metadata.unique.metadata.field', operator: 'exists' }]]
+          )
+
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: 1
+      assert_select "#samples-table table tbody tr##{dom_id(sample28)}"
+    end
+
+    test 'advanced search rejects a submission without a complete condition' do
+      post search_group_samples_url(@group),
+           params: samples_advanced_search_params([[{ field: 'name', operator: 'contains', value: '' }]]),
+           as: :turbo_stream
+
+      assert_response :unprocessable_content
+      assert_match I18n.t('general.form.error_summary.title', count: 1), response.body
+    end
   end
 end
