@@ -2,6 +2,59 @@
 en:
   active_admin:
     dashboard: Dashboard
+    feature_flags:
+      actions:
+        disable_globally: Disable globally
+        disable_globally_confirm: Disable %{name} globally? This clears its gates.
+        disable_opt_in: Disable opt-in
+        disable_opt_in_confirm: Stop offering %{name} as a profile opt-in? This revokes existing opt-ins.
+        enable_globally: Enable globally
+        enable_globally_confirm: Enable %{name} globally for all users?
+        enable_opt_in: Enable opt-in
+        enable_opt_in_confirm: Allow users to opt in to %{name} from their profile?
+        opt_in_locked: Opt-in is unavailable while the feature is enabled globally.
+      columns:
+        actions: Actions
+        feature: Feature
+        gates: Gates
+        global_state: Global state
+        opt_in: Opt-in availability
+      description: Manage admin-manageable experimental features. Enable or disable a feature globally, or make it available for users to opt in from their profile. Use "Manage gates" for advanced Flipper configuration.
+      empty: No admin-manageable features are configured.
+      flash:
+        errors:
+          generic: The feature could not be updated.
+          globally_enabled: Opt-in cannot change while the feature is enabled globally.
+          invalid_availability: Invalid opt-in availability requested.
+          invalid_feature: This feature cannot be managed here.
+          invalid_target_state: Invalid global state requested.
+          mutation_failed: The feature could not be updated. Please try again.
+          unauthorized: You are not authorized to change this feature.
+        global_disabled: Feature disabled globally.
+        global_enabled: Feature enabled globally.
+        no_change: No change was needed.
+        opt_in_disabled: Profile opt-in is now disabled.
+        opt_in_enabled: Profile opt-in is now available.
+      gates:
+        actors:
+          one: "%{count} actor"
+          other: "%{count} actors"
+        groups:
+          one: "%{count} group"
+          other: "%{count} groups"
+        none: No active gates
+        percentage_of_actors: "%{percent}% of actors"
+        percentage_of_time: "%{percent}% of time"
+      manage_gates: Manage gates
+      opt_in:
+        all_users: Available to all users
+        allowlist: Allowlist
+        'false': false
+      state:
+        conditional: Conditional
+        disabled: Disabled
+        enabled: Enabled
+      title: Feature Flags
     logout: Sign out
     site_banners:
       disable: Disable
