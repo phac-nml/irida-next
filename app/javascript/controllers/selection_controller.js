@@ -290,7 +290,7 @@ export default class extends Controller {
 
   #updateCounts(selected, announce) {
     if (this.hasSelectedTarget) {
-      this.selectedTarget.innerText = selected;
+      this.selectedTarget.textContent = String(selected);
     }
     if (announce) {
       this.#announceSelectionStatus(selected);

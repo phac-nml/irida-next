@@ -46,16 +46,23 @@ function renderFixtureHtml({
       <span data-selection-target="status" class="sr-only" aria-live="polite"></span>
       <input
         type="checkbox"
+        data-selection-target="selectPage"
+      />
+      <input
+        type="checkbox"
+        id="checkbox_1"
         value="1"
         data-selection-target="rowSelection"
       />
       <input
         type="checkbox"
+        id="checkbox_2"
         value="2"
         data-selection-target="rowSelection"
       />
       <input
         type="checkbox"
+        id="checkbox_3"
         value="3"
         data-selection-target="rowSelection"
       />
@@ -169,5 +176,80 @@ describe("selection controller", () => {
     );
 
     setItemSpy.mockRestore();
+  });
+
+  it("selects and deselects every row on the page via the page checkbox", async () => {
+    application = await startController({ maxSelection: 5 });
+    const controller = controllerFor(application);
+
+    controller.togglePage({ target: { checked: true } });
+
+    expect(controller.rowSelectionTargets.every((row) => row.checked)).toBe(
+      true,
+    );
+    expect(controller.selectedTarget.textContent).toBe("3");
+    expect(controller.selectPageTarget.checked).toBe(true);
+    expect(sessionStorage.getItem("selection-test-key")).toBe('["1","2","3"]');
+
+    controller.togglePage({ target: { checked: false } });
+
+    expect(controller.rowSelectionTargets.some((row) => row.checked)).toBe(
+      false,
+    );
+    expect(controller.selectedTarget.textContent).toBe("0");
+    expect(controller.selectPageTarget.checked).toBe(false);
+    expect(sessionStorage.getItem("selection-test-key")).toBe("[]");
+  });
+
+  it("restores the persisted selection after a Turbo morph", async () => {
+    sessionStorage.setItem("selection-test-key", '["2"]');
+
+    application = await startController({ maxSelection: 5 });
+    const controller = controllerFor(application);
+
+    const persistedRow = controller.rowSelectionTargets.find(
+      (row) => row.value === "2",
+    );
+    expect(persistedRow.checked).toBe(true);
+
+    // Simulate a partial page replacement clearing the checkbox state
+    persistedRow.checked = false;
+    document.dispatchEvent(new Event("turbo:morph"));
+
+    expect(persistedRow.checked).toBe(true);
+    expect(controller.selectedTarget.textContent).toBe("1");
+  });
+
+  it("selects a contiguous range on shift-click", async () => {
+    application = await startController({ maxSelection: 5 });
+    const controller = controllerFor(application);
+    const [row1, , row3] = controller.rowSelectionTargets;
+
+    // First click establishes the range anchor
+    row1.checked = true;
+    controller.toggle({ target: row1, shiftKey: false });
+
+    // Shift-click the third row selects every row between the anchor and target
+    row3.checked = true;
+    controller.toggle({ target: row3, shiftKey: true });
+
+    expect(controller.rowSelectionTargets.every((row) => row.checked)).toBe(
+      true,
+    );
+    expect(controller.selectedTarget.textContent).toBe("3");
+    expect(sessionStorage.getItem("selection-test-key")).toBe('["1","2","3"]');
+  });
+
+  it("shift-click without an anchor toggles only the clicked row", async () => {
+    application = await startController({ maxSelection: 5 });
+    const controller = controllerFor(application);
+    const [, , row3] = controller.rowSelectionTargets;
+
+    // No prior selection, so there is no stored anchor to build a range from
+    row3.checked = true;
+    controller.toggle({ target: row3, shiftKey: true });
+
+    expect(controller.selectedTarget.textContent).toBe("1");
+    expect(sessionStorage.getItem("selection-test-key")).toBe('["3"]');
   });
 });
