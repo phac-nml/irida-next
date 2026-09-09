@@ -59,7 +59,7 @@ export default defineConfig({
             functions: 100,
             lines: 100,
           },
-        "app/javascript/controllers/sortable_list_v2_controller.js": {
+        "app/javascript/controllers/sortable_lists_v2_controller.js": {
           statements: 100,
           branches: 100,
           functions: 100,
