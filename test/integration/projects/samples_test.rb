@@ -160,6 +160,8 @@ module Projects
       assert_match I18n.t('projects.samples.index.no_associated_samples'), response.body
     end
 
+    # Successful advanced search is exercised through GET on the index (the bookmarkable q-params
+    # entrypoint); validation failures go through the POST search action that renders a turbo_stream.
     test 'advanced search filters samples by a metadata field' do
       sample30 = samples(:sample30)
 
@@ -203,106 +205,6 @@ module Projects
       assert_select "#samples-table table tbody tr##{dom_id(@sample1)}"
       assert_select "#samples-table table tbody tr##{dom_id(sample2)}"
       assert_select "#samples-table table tbody tr##{dom_id(sample30)}", count: 0
-    end
-
-    test 'advanced search filters samples between metadata dates' do
-      sign_in users(:metadata_doe)
-      namespace = groups(:group_metadata)
-      project = projects(:projectMetadata)
-      sample61 = samples(:sample61)
-      sample62 = samples(:sample62)
-      sample63 = samples(:sample63)
-      target_date = Date.parse(sample62.metadata['example_date'])
-
-      get namespace_project_samples_url(namespace, project),
-          params: samples_advanced_search_params(
-            [[{ field: 'metadata.example_date', operator: '>=', value: (target_date - 1).to_s },
-              { field: 'metadata.example_date', operator: '<=', value: (target_date + 1).to_s }]]
-          )
-
-      assert_response :success
-      assert_select '#samples-table table tbody tr', count: 1
-      assert_select "#samples-table table tbody tr##{dom_id(sample62)}"
-      assert_select "#samples-table table tbody tr##{dom_id(sample61)}", count: 0
-      assert_select "#samples-table table tbody tr##{dom_id(sample63)}", count: 0
-    end
-
-    test 'advanced search filters samples between metadata dates using metadata operators' do
-      Flipper.enable(:advanced_search_metadata_operators)
-      sign_in users(:metadata_doe)
-      namespace = groups(:group_metadata)
-      project = projects(:projectMetadata)
-      sample62 = samples(:sample62)
-      target_date = Date.parse(sample62.metadata['example_date'])
-
-      get namespace_project_samples_url(namespace, project),
-          params: samples_advanced_search_params(
-            [[{ field: 'metadata.example_date', operator: 'date_greater_than_equals', value: (target_date - 1).to_s },
-              { field: 'metadata.example_date', operator: 'date_less_than_equals', value: (target_date + 1).to_s }]]
-          )
-
-      assert_response :success
-      assert_select '#samples-table table tbody tr', count: 1
-      assert_select "#samples-table table tbody tr##{dom_id(sample62)}"
-    ensure
-      Flipper.disable(:advanced_search_metadata_operators)
-    end
-
-    test 'advanced search filters samples between metadata floats' do
-      sign_in users(:metadata_doe)
-      namespace = groups(:group_metadata)
-      project = projects(:projectMetadata)
-      sample62 = samples(:sample62)
-      target_float = sample62.metadata['example_float'].to_f
-
-      get namespace_project_samples_url(namespace, project),
-          params: samples_advanced_search_params(
-            [[{ field: 'metadata.example_float', operator: '>=', value: target_float - 0.1 },
-              { field: 'metadata.example_float', operator: '<=', value: target_float + 0.1 }]]
-          )
-
-      assert_response :success
-      assert_select '#samples-table table tbody tr', count: 1
-      assert_select "#samples-table table tbody tr##{dom_id(sample62)}"
-    end
-
-    test 'advanced search filters samples between metadata floats using metadata operators' do
-      Flipper.enable(:advanced_search_metadata_operators)
-      sign_in users(:metadata_doe)
-      namespace = groups(:group_metadata)
-      project = projects(:projectMetadata)
-      sample62 = samples(:sample62)
-      target_float = sample62.metadata['example_float'].to_f
-
-      get namespace_project_samples_url(namespace, project),
-          params: samples_advanced_search_params(
-            [[{ field: 'metadata.example_float', operator: 'numeric_greater_than_equals', value: target_float - 0.1 },
-              { field: 'metadata.example_float', operator: 'numeric_less_than_equals', value: target_float + 0.1 }]]
-          )
-
-      assert_response :success
-      assert_select '#samples-table table tbody tr', count: 1
-      assert_select "#samples-table table tbody tr##{dom_id(sample62)}"
-    ensure
-      Flipper.disable(:advanced_search_metadata_operators)
-    end
-
-    test 'advanced search filters samples between metadata integers' do
-      sign_in users(:metadata_doe)
-      namespace = groups(:group_metadata)
-      project = projects(:projectMetadata)
-      sample62 = samples(:sample62)
-      target_integer = sample62.metadata['example_integer'].to_i
-
-      get namespace_project_samples_url(namespace, project),
-          params: samples_advanced_search_params(
-            [[{ field: 'metadata.example_integer', operator: '>=', value: target_integer - 1 },
-              { field: 'metadata.example_integer', operator: '<=', value: target_integer + 1 }]]
-          )
-
-      assert_response :success
-      assert_select '#samples-table table tbody tr', count: 1
-      assert_select "#samples-table table tbody tr##{dom_id(sample62)}"
     end
 
     test 'advanced search renders results messages' do
@@ -353,6 +255,77 @@ module Projects
       assert_response :unprocessable_content
       assert_match I18n.t('activemodel.errors.models.advanced_search_condition.attributes.field.taken'),
                    response.body
+    end
+  end
+
+  # Metadata-typed advanced search coverage shares the metadata_doe fixtures, so it lives in a
+  # dedicated class whose setup signs in and resolves the metadata namespace/project once.
+  class MetadataSamplesTest < ActionDispatch::IntegrationTest
+    include ActionView::RecordIdentifier
+
+    setup do
+      sign_in users(:metadata_doe)
+      @namespace = groups(:group_metadata)
+      @project = projects(:projectMetadata)
+      @sample62 = samples(:sample62)
+    end
+
+    test 'advanced search filters samples between metadata dates' do
+      target_date = Date.parse(@sample62.metadata['example_date'])
+
+      assert_between_filter(field: 'metadata.example_date', operators: %w[>= <=],
+                            low: (target_date - 1).to_s, high: (target_date + 1).to_s)
+    end
+
+    test 'advanced search filters samples between metadata dates using metadata operators' do
+      Flipper.enable(:advanced_search_metadata_operators)
+      target_date = Date.parse(@sample62.metadata['example_date'])
+
+      assert_between_filter(field: 'metadata.example_date',
+                            operators: %w[date_greater_than_equals date_less_than_equals],
+                            low: (target_date - 1).to_s, high: (target_date + 1).to_s)
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    test 'advanced search filters samples between metadata floats' do
+      target_float = @sample62.metadata['example_float'].to_f
+
+      assert_between_filter(field: 'metadata.example_float', operators: %w[>= <=],
+                            low: target_float - 0.1, high: target_float + 0.1)
+    end
+
+    test 'advanced search filters samples between metadata floats using metadata operators' do
+      Flipper.enable(:advanced_search_metadata_operators)
+      target_float = @sample62.metadata['example_float'].to_f
+
+      assert_between_filter(field: 'metadata.example_float',
+                            operators: %w[numeric_greater_than_equals numeric_less_than_equals],
+                            low: target_float - 0.1, high: target_float + 0.1)
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    test 'advanced search filters samples between metadata integers' do
+      target_integer = @sample62.metadata['example_integer'].to_i
+
+      assert_between_filter(field: 'metadata.example_integer', operators: %w[>= <=],
+                            low: target_integer - 1, high: target_integer + 1)
+    end
+
+    private
+
+    # Asserts a two-condition "between" advanced search on @project returns only @sample62.
+    def assert_between_filter(field:, operators:, low:, high:)
+      get namespace_project_samples_url(@namespace, @project),
+          params: samples_advanced_search_params(
+            [[{ field:, operator: operators.first, value: low },
+              { field:, operator: operators.last, value: high }]]
+          )
+
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: 1
+      assert_select "#samples-table table tbody tr##{dom_id(@sample62)}"
     end
   end
 end
