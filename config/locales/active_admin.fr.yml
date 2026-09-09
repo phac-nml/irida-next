@@ -49,7 +49,7 @@ fr:
       opt_in:
         all_users: Disponible pour tous les utilisateurs
         allowlist: Liste d'autorisation
-        'false': Désactivée
+        'off': Désactivée
       state:
         conditional: Conditionnelle
         disabled: Désactivée

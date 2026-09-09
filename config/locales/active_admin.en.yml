@@ -49,7 +49,7 @@ en:
       opt_in:
         all_users: Available to all users
         allowlist: Allowlist
-        'false': false
+        'off': 'Off'
       state:
         conditional: Conditional
         disabled: Disabled

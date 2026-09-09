@@ -11,11 +11,17 @@ module Admin
     end
 
     test 'system user can view feature flags index' do
+      Flipper.disable(@feature_key)
+
       get admin_feature_flags_path
 
       assert_response :success
       assert_includes response.body, I18n.t('active_admin.feature_flags.title')
       assert_includes response.body, @feature_name
+      assert_includes response.body, I18n.t('active_admin.feature_flags.state.disabled')
+      assert_includes response.body, I18n.t('active_admin.feature_flags.opt_in.off')
+      # Guard against missing i18n keys rendering on the page.
+      assert_no_match(/translation missing/i, response.body)
       # Operational (non admin-manageable) features are not listed.
       assert_not_includes response.body, Irida::ExperimentalFeatureCatalog.fetch('compose_with_retry')[:description]
     end
