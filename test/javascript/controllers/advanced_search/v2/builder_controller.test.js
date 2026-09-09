@@ -213,6 +213,61 @@ describe("advanced-search--v2--builder", () => {
     ]);
   });
 
+  it("removeCondition reindexes the remaining conditions in the group", async () => {
+    application = await startController();
+    const controller = application.getControllerForElementAndIdentifier(
+      builderElement(),
+      "advanced-search--v2--builder",
+    );
+    controller.render();
+    await tick();
+    controller.addGroup();
+    await tick();
+
+    // Second group starts with one condition; add a second, then remove the first.
+    const group = groups()[1];
+    group
+      .querySelector(
+        "button[data-action='advanced-search--v2--builder#addCondition']",
+      )
+      .click();
+    await tick();
+    group
+      .querySelectorAll(
+        "button[data-action='advanced-search--v2--builder#removeCondition']",
+      )[0]
+      .click();
+    await tick();
+
+    expect(conditions(groups()[1])).toHaveLength(1);
+    expect(fieldNames()).toEqual([
+      "q[groups_attributes][0][conditions_attributes][0][field]",
+      "q[groups_attributes][1][conditions_attributes][0][field]",
+    ]);
+  });
+
+  it("re-adds an empty condition when the last one in a group is removed", async () => {
+    application = await startController();
+    const controller = application.getControllerForElementAndIdentifier(
+      builderElement(),
+      "advanced-search--v2--builder",
+    );
+    controller.render();
+    await tick();
+
+    groups()[0]
+      .querySelector(
+        "button[data-action='advanced-search--v2--builder#removeCondition']",
+      )
+      .click();
+    await tick();
+
+    expect(conditions(groups()[0])).toHaveLength(1);
+    expect(fieldNames()).toEqual([
+      "q[groups_attributes][0][conditions_attributes][0][field]",
+    ]);
+  });
+
   it("clearForm replaces the builder with the blank groups_attributes hidden field", async () => {
     application = await startController();
     const controller = application.getControllerForElementAndIdentifier(
