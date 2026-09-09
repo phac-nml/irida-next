@@ -7,6 +7,8 @@ module Groups
     include ActionView::Helpers::SanitizeHelper
 
     def setup
+      # V1 advanced search UI coverage; the test env enables all flags, so disable V2 to stay on V1.
+      Flipper.disable(:advanced_search_v2)
       Flipper.enable(:advanced_search_with_auto_complete)
 
       @user = users(:john_doe)
