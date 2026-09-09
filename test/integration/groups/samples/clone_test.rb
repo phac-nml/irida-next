@@ -151,6 +151,34 @@ module Groups
         post_list([@sample1.id, @sample2.id, @sample30.id])
       end
 
+      test 'empty state of destination project selection for sample cloning' do
+        get new_samples_clone_path(namespace_id: @namespace.id, format: :turbo_stream)
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select '[data-select2--v1-target="empty"], [data-select2--v2-target="empty"]', count: 1
+        end
+      end
+
+      test 'sample clone project listing should be empty for maintainer if no other projects in hierarchy' do
+        sign_in users(:user28)
+        namespace = projects(:projectHotel).namespace
+        get new_samples_clone_path(namespace_id: namespace.id, format: :turbo_stream)
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select "input[placeholder='#{I18n.t('samples.clones.dialog.no_available_projects')}'][disabled]"
+        end
+      end
+
+      test 'no available destination projects to clone samples' do
+        sign_in users(:jean_doe)
+        namespace = projects(:john_doe_project2).namespace
+        get new_samples_clone_path(namespace_id: namespace.id, format: :turbo_stream)
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select "input[placeholder='#{I18n.t('samples.clones.dialog.no_available_projects')}'][disabled]"
+        end
+      end
+
       private
 
       def group_sample_scope
