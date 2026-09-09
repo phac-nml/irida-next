@@ -1,0 +1,60 @@
+<%= tag.div(
+  id: "advanced-search",
+  data: {
+    action: "viral--dialog:close->advanced-search--v2--dialog#close",
+    controller: "advanced-search--v2--dialog",
+    "advanced-search--v2--dialog-advanced-search--v2--builder-outlet": "#advanced-search-builder",
+    "advanced-search--v2--dialog-open-value": @open,
+    "advanced-search--v2--dialog-status-value": @status,
+    "advanced-search--v2--dialog-has-errors-value": @search.errors.any?,
+    "advanced-search--v2--dialog-confirm-close-text-value": t("components.advanced_search_component.v2.confirm_close_text"),
+  },
+) do %>
+  <%= render Viral::DialogComponent.new(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>
+    <% dialog.with_trigger do %>
+      <div class="flex w-full grow flex-row rounded-lg" role="group">
+        <button
+          type="button"
+          class="<%= class_names("button button-default w-full focus-visible:z-10", { "rounded-e-none border-e-0": @status }) %>"
+          data-viral--dialog-target="trigger"
+          data-action="advanced-search--v2--dialog#renderSearch viral--dialog#open"
+          aria-label="<%= t("components.advanced_search_component.v2.title") %>"
+        >
+          <%= t("components.advanced_search_component.v2.title") %>
+        </button>
+
+        <% if @status %>
+          <button
+            type="button"
+            class="button rounded-s-none button-default"
+            data-action="advanced-search--v2--dialog#clearForm filters#submit"
+            aria-label="<%= t("components.advanced_search_component.v2.clear_aria_label") %>"
+          >
+            <%= icon(:x, size: :sm) %>
+          </button>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% dialog.with_header(title: t("components.advanced_search_component.v2.title")) %>
+
+    <%= render AdvancedSearch::V2::BuilderComponent.new(
+      form: @form,
+      search: @search,
+      fields: @fields,
+      sample_fields: @sample_fields,
+      metadata_fields: @metadata_fields,
+      subject: @subject,
+    ) %>
+
+    <% dialog.with_primary_action(
+      "data-action": "viral--dialog#close filters#submit",
+    ) { t("components.advanced_search_component.v2.apply_filter_button") } %>
+
+    <% dialog.with_secondary_action do %>
+      <%= render Viral::ButtonComponent.new(data: { action: "advanced-search--v2--dialog#clearForm viral--dialog#close filters#submit" }) do %>
+        <%= t("components.advanced_search_component.v2.clear_filter_button") %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
