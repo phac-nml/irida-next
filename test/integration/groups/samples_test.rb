@@ -133,6 +133,27 @@ module Groups
       assert_select "#samples-table table tbody tr##{dom_id(sample9)}", count: 0
     end
 
+    test 'advanced search query persists in the session and is reapplied without query params' do
+      sample9 = samples(:sample9)
+
+      # First request stores the advanced search under the group-scoped session key.
+      get group_samples_url(@group),
+          params: samples_advanced_search_params(
+            [[{ field: 'puid', operator: 'in', value: [@sample1.puid, @sample2.puid] }]]
+          )
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: 2
+
+      # A later plain index load (no query params) restores and reapplies the stored query.
+      get group_samples_url(@group)
+
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: 2
+      assert_select "#samples-table table tbody tr##{dom_id(@sample1)}"
+      assert_select "#samples-table table tbody tr##{dom_id(@sample2)}"
+      assert_select "#samples-table table tbody tr##{dom_id(sample9)}", count: 0
+    end
+
     test 'advanced search filters samples by a metadata field name containing periods' do
       sample28 = samples(:sample28)
 
