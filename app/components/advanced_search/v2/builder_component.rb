@@ -22,6 +22,12 @@ module AdvancedSearch
 
       private
 
+      def subject_label
+        return @subject if @subject.present?
+
+        @search.class.model_class_attribute.model_name.human(count: 2).downcase
+      end
+
       def normalized_fields(fields:, sample_fields:, metadata_fields:)
         return fields.symbolize_keys if fields.present?
 
