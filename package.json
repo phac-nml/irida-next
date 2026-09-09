@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^14.6.6",
     "@vitest/coverage-v8": "^4.1.11",
     "axe-core": "^4.13.0",
-    "eslint": "^10.9.1",
+    "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.11.0",
     "jsdom": "^30.0.1",
