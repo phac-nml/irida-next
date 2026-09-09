@@ -13,10 +13,6 @@
     <%= render Pathogen::Typography::Text.new { "Le site Web a été testé conformément aux Règles pour l'accessibilité du contenu Web (WCAG) 2.2 AA, conformément à la norme canadienne d'accessibilité EN 301 549."} %>
 
     <%= render Pathogen::Typography::Text.new { "IRIDA Next est entièrement conforme aux Règles pour l'accessibilité du contenu Web (WCAG) version 2.2 AA." } %>
-
-    <%= render Pathogen::Typography::Text.new { "IRIDA Next est partiellement conforme aux Règles pour l'accessibilité du contenu Web version 2.2 AA. Pour plus de détails, veuillez consulter le rapport de conformité à l'accessibilité (RCA) inclus." } %>
-
-    <%= render Pathogen::Typography::Text.new { "IRIDA Next n'est pas conforme aux Règles pour l'accessibilité du contenu Web version 2.2 AA. Pour plus de détails, veuillez consulter le rapport de conformité à l'accessibilité (RCA) inclus." } %>
   <% end %>
 
   <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
@@ -28,13 +24,11 @@
   <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
     <% section.with_heading { "Préparation de cette déclaration d'accessibilité" } %>
 
-    <%= render Pathogen::Typography::Text.new { "Cette déclaration a été préparée le [date de sa première publication]." } %>
+    <%= render Pathogen::Typography::Text.new { "Cette déclaration a été préparée le 2026-08-15." } %>
 
-    <%= render Pathogen::Typography::Text.new { "Ce site Web a été testé pour la dernière fois le [date] selon la norme WCAG 2.2 AA." } %>
+    <%= render Pathogen::Typography::Text.new { "Ce site Web a été testé pour la dernière fois le 2026-08-11 selon la norme WCAG 2.2 AA." } %>
 
-    <%= render Pathogen::Typography::Text.new { "Le test a été effectué par [ajouter le nom de l'organisation qui a réalisé l'évaluation, ou indiquer que vous avez effectué vos propres tests/évaluations]." } %>
-
-    <%= render Pathogen::Typography::Text.new { "Vous pouvez consulter le rapport complet du test d'accessibilité [ajouter le lien vers le rapport]." } %>
+    <%= render Pathogen::Typography::Text.new { "Le test a été effectué par l'équipe de l'Accessibilité et développement de produits numériques du DGTN de SC/ASPC." } %>
   <% end %>
 
   <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>

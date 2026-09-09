@@ -12,23 +12,14 @@
 
     <%= render Pathogen::Typography::Text.new { "The website has been tested against the Web Content Accessibility Guidelines (WCAG) 2.2 AA standard as per Canada's adopted accessibility standard EN 301 549."} %>
     <%= render Pathogen::Typography::Text.new { "IRIDA Next is fully compliant with the Web Content Accessibility Guidelines (WCAG) version 2.2 AA standard." } %>
-    <%= render Pathogen::Typography::Text.new { "IRIDA Next is partially compliant with the Web Content Accessibility Guidelines version 2.2 AA standard. For more details please see the included Accessibility Conformance Report (ACR)." } %>
-    <%= render Pathogen::Typography::Text.new { "IRIDA Next is not compliant with the Web Content Accessibility Guidelines version 2.2 AA standard. For more details please see the included Accessibility Conformance Report (ACR)." } %>
-  <% end %>
-
-  <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
-    <% section.with_heading { "What we are doing to improve accessibility" } %>
-
-    <%= render Pathogen::Typography::Text.new { "Our accessibility roadmap [add link to roadmap] shows how and when we plan to improve accessibility on this website." } %>
   <% end %>
 
   <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
     <% section.with_heading { "Preparation of this accessibility statement" } %>
 
-    <%= render Pathogen::Typography::Text.new { "This statement was prepared on [date when it was first published]." } %>
-    <%= render Pathogen::Typography::Text.new { "This website was last tested on [date] against the WCAG 2.2 AA standard." } %>
-    <%= render Pathogen::Typography::Text.new { "The test was carried out by [add name of organisation that carried out the assessment, or indicate that you did your own testing/assessment]." } %>
-    <%= render Pathogen::Typography::Text.new { "You can read the full accessibility test report [add link to report]." } %>
+    <%= render Pathogen::Typography::Text.new { "This statement was prepared on 2026-08-15." } %>
+    <%= render Pathogen::Typography::Text.new { "This website was last tested on 2026-08-11 against the WCAG 2.2 AA standard." } %>
+    <%= render Pathogen::Typography::Text.new { "The test was carried out by HC/PHAC DTB Digital Accessibility and Product Development team." } %>
   <% end %>
 
   <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
