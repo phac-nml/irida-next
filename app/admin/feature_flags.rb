@@ -54,7 +54,7 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
             opt_in = opt_in_toggle_for(entry)
             if opt_in[:disabled]
               span opt_in[:label],
-                   class: 'text-sm text-gray-400 cursor-not-allowed',
+                   class: 'text-sm text-gray-500 dark:text-gray-400 cursor-not-allowed',
                    title: opt_in[:disabled_reason]
             else
               link_to opt_in[:label], opt_in[:path],
