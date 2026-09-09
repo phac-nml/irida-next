@@ -107,6 +107,21 @@ features:
     name:
       en: "Sample Deletion Reason"
       fr: "Raison de suppression d'échantillon"
+  prevent_sample_deletions_and_transfers_with_active_workflows:
+    admin_manageable: true
+    description:
+      en:
+        "Prevent sample deletions and transfers if the sample is currently in use\
+        \ by a workflow execution."
+      fr:
+        "Empêcher la suppression et le transfert d'échantillons si l'échantillon\
+        \ est actuellement utilisé par une exécution de flux de travail."
+    enable_in_development: true
+    name:
+      en: "Prevent Sample Deletions and Transfers with Active Workflows"
+      fr:
+        "Empêcher la suppression et le transfert d'échantillons avec des flux de\
+        \ travail actifs"
   v2_dropdown:
     admin_manageable: true
     description:

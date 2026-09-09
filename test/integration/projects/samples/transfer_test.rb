@@ -216,6 +216,45 @@ module Projects
         end
       end
 
+      [[::Samples::TransferJob, false], [::Samples::TransferJobV2, true]].each do |job_class, v2|
+        test "should not transfer samples with active workflow execution for #{job_class.name}" do
+          Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+          Flipper.enable(:v2_sample_transfer) if v2
+
+          post samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream),
+               params: {
+                 transfer: { new_project_id: @project2.id, sample_ids: [@sample1.id] },
+                 broadcast_target: @broadcast_target
+               },
+               as: :turbo_stream
+
+          assert_response :ok
+
+          broadcasts = capture_turbo_stream_broadcasts(@broadcast_target) do
+            perform_enqueued_jobs(only: [job_class])
+          end
+
+          error_broadcast = broadcasts.find do |message|
+            message['action'] == 'replace' && message['target'] == 'transfer_samples_dialog_content'
+          end
+
+          assert_not_nil error_broadcast
+          broadcast_html = error_broadcast.to_html
+          error_parts = I18n.t('services.samples.transfer.active_workflow_executions',
+                               sample_puids: @sample1.puid).split(':')
+          error_parts.each do |part|
+            assert_includes broadcast_html, part
+          end
+
+          # Verify sample was not transferred
+          assert @project.samples.exists?(@sample1.id)
+          assert_not @project2.samples.exists?(@sample1.id)
+        ensure
+          Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+          Flipper.disable(:v2_sample_transfer) if v2
+        end
+      end
+
       private
 
       def assert_samples_page(project, count)

@@ -169,6 +169,20 @@ module Projects
         assert_equal reason, activity.parameters[:reason]
         Flipper.disable(:sample_deletion_reason)
       end
+
+      test 'does not destroy samples with active workflow execution' do
+        Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+
+        assert_no_difference -> { Sample.count } do
+          Projects::Samples::DestroyService.new(@project.namespace, @user, { sample_ids: [@sample1.id] }).execute
+        end
+
+        assert_includes @project.namespace.errors.full_messages,
+                        I18n.t('services.samples.destroy.active_workflow_executions',
+                               sample_puids: @sample1.puid)
+
+        Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      end
     end
   end
 end

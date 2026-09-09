@@ -291,5 +291,25 @@ module Samples
       assert activity
       assert ActivityExtendedDetail.exists?(activity: activity, extended_detail: ext_details)
     end
+
+    test 'authorize_transfer blocks project samples with active workflow execution' do
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+
+      sample_transfer_params = { sample_ids: [@sample1.id] }
+
+      service = Samples::TransferServiceV2.new(@current_project.namespace, @john_doe)
+
+      assert_no_changes -> { @sample1.reload.project_id } do
+        error = assert_raises(Samples::TransferServiceV2::TransferError) do
+          service.authorize_transfer(@new_project, sample_transfer_params[:sample_ids])
+        end
+
+        assert_equal I18n.t('services.samples.transfer.active_workflow_executions',
+                            sample_puids: @sample1.puid),
+                     error.message
+      end
+
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+    end
   end
 end

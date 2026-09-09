@@ -1808,7 +1808,7 @@ module Groups
       assert_selector '#list_selections', text: @sample1.name
       assert_selector '#list_selections', text: @sample1.puid
       assert_selector '#list_selections', text: @sample2.name
-      assert_selector '#list_selections', text: @sample2.name
+      assert_selector '#list_selections', text: @sample2.puid
       # submit
       click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       ### ACTIONS END ###
@@ -1857,6 +1857,57 @@ module Groups
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 24,
                                                                                       locale: @user.locale))
       Flipper.disable(:sample_deletion_reason)
+      ### VERIFY END ###
+    end
+
+    test 'prevent sample deletion during active workflow execution' do
+      ### SETUP START ###
+      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
+
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples for deletion
+      check "checkbox_sample_#{@sample1.id}"
+      check "checkbox_sample_#{@sample2.id}"
+      # click delete samples button
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
+
+      # verify dialog contents
+      assert_selector 'h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+      assert_selector '#list_selections', text: @sample1.name
+      assert_selector '#list_selections', text: @sample1.puid
+      assert_selector '#list_selections', text: @sample2.name
+      assert_selector '#list_selections', text: @sample2.puid
+      # submit
+      click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # error msg
+      assert_text I18n.t('samples.deletions.create.error')
+      error_parts = I18n.t('services.samples.destroy.active_workflow_executions',
+                           sample_puids: @sample1.puid).split(':')
+      error_parts.each do |part|
+        assert_text part
+      end
+      click_button I18n.t('shared.samples.errors.ok_button')
+
+      assert_no_selector 'dialog[open]'
+      # samples remain in originating project
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                                      locale: @user.locale))
+
+      assert_text @sample1.name
+      assert_text @sample1.puid
+      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
       ### VERIFY END ###
     end
 

@@ -29,8 +29,8 @@ module Samples
     # @param broadcast_target [String, nil] optional Turbo broadcast target for progress updates
     #
     # @return [Array<Integer>] IDs of successfully transferred samples
-    # @raise [BaseSampleService::BaseError] on validation or authorization failures
-    def execute(new_project_id, sample_ids, broadcast_target = nil)
+    # @raise [BaseSampleService::BaseError, TransferService::TransferError] on validation or authorization failures
+    def execute(new_project_id, sample_ids, broadcast_target = nil) # rubocop:disable Metrics/MethodLength
       # Authorize if user can transfer samples from the current project
       if @namespace.group_namespace?
         authorize! @namespace, to: :transfer_sample?
@@ -39,6 +39,14 @@ module Samples
       end
 
       validate(sample_ids, 'transfer', new_project_id)
+
+      if Flipper.enabled?(:prevent_sample_deletions_and_transfers_with_active_workflows)
+        validate_no_active_workflow_executions_for_action(
+          sample_ids,
+          action_type: 'transfer',
+          error_class: TransferError
+        )
+      end
 
       @new_project = Project.find_by(id: new_project_id)
       authorize_new_project(@new_project, :transfer_sample_into_project?)
