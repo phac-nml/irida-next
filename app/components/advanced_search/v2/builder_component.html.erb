@@ -9,11 +9,11 @@
   },
 ) do %>
   <div class="space-y-4">
-    <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+    <p class="text-sm leading-relaxed text-[var(--pvc-color-text-muted)]">
       <%= t("components.advanced_search_component.v2.description") %>
     </p>
 
-    <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+    <p class="text-sm leading-relaxed text-[var(--pvc-color-text-muted)]">
       <% if Flipper.enabled?(:advanced_search_metadata_operators) %>
         <%= t("components.advanced_search_component.v2.rules.metadata_operators") %>
       <% else %>
@@ -28,7 +28,12 @@
     <div class="space-y-4" data-advanced-search--v2--builder-target="searchGroupsContainer"></div>
 
     <div class="flex justify-end space-x-2">
-      <%= render Viral::ButtonComponent.new(data: { action: "advanced-search--v2--builder#addGroup" }) do %>
+      <%= render Pathogen::Button.new(
+        type: :button,
+        tone: :primary,
+        emphasis: :outline,
+        data: { action: "advanced-search--v2--builder#addGroup" },
+      ) do %>
         <%= t("components.advanced_search_component.v2.add_group_button") %>
       <% end %>
     </div>

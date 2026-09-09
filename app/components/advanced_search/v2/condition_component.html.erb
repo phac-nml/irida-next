@@ -5,11 +5,13 @@
   data-advanced-search--v2--builder-legend-template="<%= t("components.advanced_search_component.v2.condition", index: "__INDEX__") %>"
   data-advanced-search-selected-field="<%= selected_field %>"
   class="
-    relative flex flex-col space-y-3 rounded-lg border border-slate-300 p-4 pr-14 text-sm text-slate-500
-    dark:border-slate-600 dark:text-slate-400
+    relative flex flex-col space-y-3 rounded-[var(--pvc-radius-panel)] border border-[var(--pvc-color-border)]
+    bg-[var(--pvc-color-surface-muted)] p-4 pr-14 text-sm text-[var(--pvc-color-text-muted)]
   "
 >
-  <legend><%= t("components.advanced_search_component.v2.condition", index: @condition_number) %></legend>
+  <legend class="px-1 font-semibold text-[var(--pvc-color-text)]">
+    <%= t("components.advanced_search_component.v2.condition", index: @condition_number) %>
+  </legend>
 
   <%= @groups_form.fields_for :conditions, @condition, child_index: @condition_index do |conditions_form| %>
     <% invalid_field = @condition.errors.include?(:field) %>
@@ -95,9 +97,10 @@
   <button <%# herb:disable html-no-title-attribute %>
     type="button"
     class="
-      absolute -top-4 right-2 inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg
-      text-slate-400 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-500 dark:hover:bg-slate-700
-      dark:hover:text-white
+      absolute -top-4 right-2 inline-flex h-11 w-11 cursor-pointer items-center justify-center
+      rounded-[var(--pvc-radius-action)] text-[var(--pvc-color-text-muted)] hover:bg-[var(--pvc-color-surface)]
+      hover:text-[var(--pvc-color-danger-strong)] focus-visible:outline-2 focus-visible:outline-offset-2
+      focus-visible:outline-[var(--pvc-color-focus)]
     "
     aria-label="<%= t("components.advanced_search_component.v2.remove_condition_aria_label") %>"
     title="<%= t("components.advanced_search_component.v2.remove_condition_aria_label") %>"
