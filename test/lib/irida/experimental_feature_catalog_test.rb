@@ -11,6 +11,7 @@ module Irida
         accessibility_statement
         advanced_search_disable_standard_operators_for_metadata_in_graphql
         advanced_search_metadata_operators
+        advanced_search_v2
         advanced_search_with_auto_complete
         automated_workflow_execution_subscriber
         client_linelist_exports_v1
