@@ -144,7 +144,7 @@ module Projects
         assert_samples_page(destination, 4, namespace:)
         post_list([@sample1.id, @sample2.id, @sample30.id])
       end
-      # above has been verified
+
       test 'empty state of destination project selection for sample cloning' do
         get new_samples_clone_path(namespace_id: @namespace.id, format: :turbo_stream)
         assert_response :success
