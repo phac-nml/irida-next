@@ -1,3 +1,5 @@
+<%# Temporary v1/v2 bridge (removed when :v2_sortable_lists ships): both controllers expose the same %>
+<%# Stimulus interface — constructParams action, submitBtn/field targets, selected/available/field-name values. %>
 <% sortable_lists_v2_enabled = Flipper.enabled?(:v2_sortable_lists, Current.user) %>
 <% sortable_lists_controller = sortable_lists_v2_enabled ? 'sortable-lists-v2' : 'sortable-lists--v1--two-lists-selection' %>
 <% sortable_lists_version = sortable_lists_v2_enabled ? :v2 : :v1 %>
