@@ -159,9 +159,9 @@ module Groups
         end
       end
 
-      test 'sample clone project listing should be empty for maintainer if no other projects in hierarchy' do
-        sign_in users(:user28)
-        namespace = projects(:projectHotel).namespace
+      test 'sample clone group listing should be empty for maintainer if no other groups in hierarchy' do
+        sign_in users(:clone_test_maintainer_one)
+        namespace = groups(:clone_test_group_one)
         get new_samples_clone_path(namespace_id: namespace.id, format: :turbo_stream)
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
@@ -169,9 +169,9 @@ module Groups
         end
       end
 
-      test 'no available destination projects to clone samples' do
-        sign_in users(:jean_doe)
-        namespace = projects(:john_doe_project2).namespace
+      test 'no available destination groups to clone samples' do
+        sign_in users(:clone_test_maintainer_two)
+        namespace = groups(:clone_test_group_two)
         get new_samples_clone_path(namespace_id: namespace.id, format: :turbo_stream)
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
