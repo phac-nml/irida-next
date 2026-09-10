@@ -62,10 +62,13 @@ export default class AdvancedSearchDialogController extends Controller {
       return;
     }
 
-    if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
+    if (event instanceof KeyboardEvent && event.type === "keydown") {
       event.preventDefault();
       event.stopImmediatePropagation();
-    } else if (!this.#dirty()) {
+      return;
+    }
+
+    if (!this.#dirty()) {
       this.#clear();
     } else if (window.confirm(this.confirmCloseTextValue)) {
       this.#clear();
