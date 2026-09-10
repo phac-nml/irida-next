@@ -16,7 +16,7 @@ module WorkflowExecutions
 
     test 'advanced search filters workflow execution attachments by format metadata field' do
       get workflow_execution_path(@workflow_execution, tab: 'files'),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: @assembly_attachment.metadata['format'] }]]
           )
 
@@ -30,7 +30,7 @@ module WorkflowExecutions
 
     test 'advanced search filters workflow execution attachments by compression metadata field' do
       get workflow_execution_path(@workflow_execution, tab: 'files'),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.compression', operator: '=', value: @assembly_attachment.metadata['compression'] }]]
           )
 
@@ -44,7 +44,7 @@ module WorkflowExecutions
 
     test 'advanced search filters workflow execution attachments by filename' do
       get workflow_execution_path(@workflow_execution, tab: 'files'),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'filename', operator: 'contains',
                 value: @assembly_attachment.file.filename.to_s.split('.').first }]]
           )
@@ -59,7 +59,7 @@ module WorkflowExecutions
 
     test 'advanced search filters workflow execution attachments by puid' do
       get workflow_execution_path(@workflow_execution, tab: 'files'),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'id', operator: '=', value: @assembly_attachment.puid }]]
           )
 
@@ -73,7 +73,7 @@ module WorkflowExecutions
 
     test 'advanced search filters workflow execution attachments by byte size' do
       get workflow_execution_path(@workflow_execution, tab: 'files'),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'byte_size', operator: '>', value: '0' }]]
           )
 
@@ -87,7 +87,7 @@ module WorkflowExecutions
 
     test 'advanced search filters workflow execution attachments using multiple conditions in a group' do
       get workflow_execution_path(@workflow_execution, tab: 'files'),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: @assembly_attachment.metadata['format'] },
               { field: 'metadata.compression', operator: '=', value: @assembly_attachment.metadata['compression'] }]]
           )
@@ -102,7 +102,7 @@ module WorkflowExecutions
 
     test 'advanced search with no results displays correctly' do
       get workflow_execution_path(@workflow_execution, tab: 'files'),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'nonexistent_format' }]]
           )
 
