@@ -268,6 +268,95 @@ describe("advanced-search--v2--builder", () => {
     ]);
   });
 
+  it("replaces enum options without appending duplicates on re-selection", async () => {
+    application = await startController();
+    const controller = application.getControllerForElementAndIdentifier(
+      builderElement(),
+      "advanced-search--v2--builder",
+    );
+    controller.enumFieldsValue = {
+      status: {
+        values: ["draft", "published"],
+        labels: { draft: "Draft", published: "Published" },
+      },
+    };
+    controller.enumOperationsValue = {
+      standard: {
+        Equals: "=",
+        In: "in",
+      },
+    };
+    controller.operationsValue = {
+      standard: {
+        Equals: "=",
+        In: "in",
+      },
+    };
+    controller.render();
+    await tick();
+
+    const group = groups()[0];
+    const condition = document.createElement("fieldset");
+    condition.setAttribute(
+      "data-advanced-search--v2--builder-target",
+      "conditionsContainer",
+    );
+    condition.dataset.advancedSearchSelectedField = "";
+    condition.innerHTML = `
+      <div class="form-field">
+        <select name="q[groups_attributes][0][conditions_attributes][0][field]">
+          <option value=""></option>
+          <option value="status">status</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <select name="q[groups_attributes][0][conditions_attributes][0][operator]">
+          <option value=""></option>
+          <option value="in">in</option>
+        </select>
+      </div>
+      <div class="value form-field">
+        <select name="q[groups_attributes][0][conditions_attributes][0][value][]">
+          <option value=""></option>
+        </select>
+      </div>
+    `;
+    group.appendChild(condition);
+
+    const field = condition.querySelector("[name$='[field]']");
+    const operator = condition.querySelector("[name$='[operator]']");
+    const template = controller.listSelectValueTemplateTarget;
+    template.innerHTML = `
+      <div class="value form-field">
+        <select name="q[groups_attributes][0][conditions_attributes][0][value][]">
+          <option value=""></option>
+        </select>
+      </div>
+    `;
+
+    field.value = "status";
+    controller.handleFieldChange({ target: field });
+    operator.value = "in";
+    controller.handleOperatorChange({ target: operator });
+
+    expect(
+      Array.from(
+        condition.querySelector("select[name$='[value][]']").options,
+      ).map((option) => option.value),
+    ).toEqual(["draft", "published"]);
+
+    field.value = "status";
+    controller.handleFieldChange({ target: field });
+    operator.value = "in";
+    controller.handleOperatorChange({ target: operator });
+
+    expect(
+      Array.from(
+        condition.querySelector("select[name$='[value][]']").options,
+      ).map((option) => option.value),
+    ).toEqual(["draft", "published"]);
+  });
+
   it("clearForm replaces the builder with the blank groups_attributes hidden field", async () => {
     application = await startController();
     const controller = application.getControllerForElementAndIdentifier(
