@@ -11,6 +11,7 @@ export default defineConfig({
     alias: {
       controllers: resolve(jsRoot, "controllers"),
       debounce: resolve("vendor/javascript/debounce.js"),
+      deepmerge: resolve("vendor/javascript/deepmerge.js"),
       tabbable: resolve("vendor/javascript/tabbable.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
@@ -30,6 +31,11 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
+    environmentOptions: {
+      jsdom: {
+        url: "http://localhost:3000/",
+      },
+    },
     include: ["test/javascript/**/*.{test,spec}.{js,ts}"],
     setupFiles: ["./test/javascript/setup.js"],
     passWithNoTests: true,
