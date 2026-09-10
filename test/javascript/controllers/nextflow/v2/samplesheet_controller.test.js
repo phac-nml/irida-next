@@ -688,9 +688,16 @@ async function startController() {
 describe("nextflow v2 samplesheet controller", () => {
   let application;
 
+  const clearStorage = (storage) => {
+    if (storage && typeof storage.clear === "function") {
+      storage.clear();
+    }
+  };
+
   beforeEach(() => {
     window.requestAnimationFrame = (callback) => setTimeout(callback, 0);
-    localStorage.clear();
+    clearStorage(window.localStorage);
+    clearStorage(sessionStorage);
     Element.prototype.scrollIntoView = vi.fn();
     vi.useFakeTimers();
   });
