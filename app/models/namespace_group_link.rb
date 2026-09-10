@@ -48,6 +48,12 @@ class NamespaceGroupLink < ApplicationRecord
     %w[group namespace]
   end
 
+  def self.with_group_access_level(access_level)
+    raise ArgumentError, 'access_level must be provided' if access_level.nil?
+
+    where(group_access_level: access_level)
+  end
+
   def send_access_revoked_emails
     I18n.available_locales.each do |locale|
       user_emails = Member.user_emails(group, locale)

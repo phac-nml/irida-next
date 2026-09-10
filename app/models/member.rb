@@ -119,6 +119,12 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     def icon
       :users_four
     end
+
+    def with_access_level(access_level)
+      raise ArgumentError, 'access_level must be provided' if access_level.nil?
+
+      where(access_level: access_level)
+    end
   end
 
   def validate_namespace
