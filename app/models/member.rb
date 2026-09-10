@@ -228,6 +228,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       def manageable
         [MAINTAINER, OWNER]
       end
+
+      def accessible
+        [GUEST, UPLOADER, ANALYST, MAINTAINER, OWNER]
+      end
     end
   end
 end

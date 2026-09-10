@@ -5,7 +5,7 @@ module Archivable
   extend ActiveSupport::Concern
 
   included do
-    scope :archived, -> { where.not(archived_at: nil) }
+    scope :archived, ->(archived = true) { archived ? where.not(archived_at: nil) : where(archived_at: nil) }
     scope :not_archived, -> { where(archived_at: nil) }
   end
 

@@ -281,7 +281,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     project.namespace.archived_at = Time.zone.now
     project.namespace.save
 
-    scoped_projects = @policy.apply_scope(Project, type: :relation, name: :archived_projects)
+    scoped_projects = @policy.apply_scope(Project, type: :relation, scope_options: { archived: true })
 
     # John doe has access to 1 archived project
     assert_equal 1, scoped_projects.count

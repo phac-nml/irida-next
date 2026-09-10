@@ -344,19 +344,9 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   scope_for :relation do |relation|
-    relation.with(
-      user_groups: relation.where(id: user.members.not_expired.select(:namespace_id),
-                                  public: false).self_and_descendant_ids,
-      linked_groups: relation.where(id: NamespaceGroupLink.not_expired
-                                                          .where(
-                                                            group_id: Group.from('user_groups').select(:id)
-                                                          ).select(:namespace_id), public: false)
-                             .self_and_descendant_ids
-    ).where(
-      Arel.sql(
-        'namespaces.id in (select * from user_groups)
-        or namespaces.id in (select * from linked_groups)'
-      )
+    relation.where(
+      id: authorized_scope(Namespace, type: :relation),
+      public: false
     )
   end
 
@@ -365,7 +355,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
       public_groups: relation.where(public: true).self_and_descendant_ids
     ).where(
       Arel.sql(
-        'namespaces.id in (select * from public_groups)'
+        'namespaces.id in (SELECT id FROM public_groups)'
       )
     )
   end
