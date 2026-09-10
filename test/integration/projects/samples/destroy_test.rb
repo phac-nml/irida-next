@@ -291,6 +291,26 @@ module Projects
         end
       end
 
+      test 'samples listing within delete samples dialog with reason' do
+        Flipper.enable(:sample_deletion_reason)
+        assert_samples_page(@project1_namespace.project, 3)
+        get new_samples_deletions_path,
+            params: {
+              namespace_id: @project1_namespace.id,
+              deletion_type: 'multiple',
+              deletion: {
+                reason: 'cleanup'
+              }
+            }, as: :turbo_stream
+
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'turbo-frame#list_selections'
+        end
+      ensure
+        Flipper.disable(:sample_deletion_reason)
+      end
+
       test 'delete multiple samples with reason' do
         Flipper.enable(:sample_deletion_reason)
         assert_samples_page(@project1_namespace.project, 3)
