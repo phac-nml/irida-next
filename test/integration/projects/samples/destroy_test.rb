@@ -188,6 +188,22 @@ module Projects
         assert_samples_page(@project1_namespace.project, 1)
       end
 
+      test 'delete no samples at project level' do
+        assert_no_difference('Sample.count') do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @project1_namespace.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
+                 }
+               }, as: :turbo_stream
+        end
+        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
+        assert_response :redirect
+        assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
+      end
+
       test 'should not destroy project sample when deletion reason exceeds max length' do
         Flipper.enable(:sample_deletion_reason)
         assert_no_difference('Sample.count') do
