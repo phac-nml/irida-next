@@ -13,8 +13,10 @@ class ProjectsTest < ActionDispatch::IntegrationTest
   end
 
   test 'should redirect with success flash when transfer succeeds' do
-    post namespace_project_transfer_path(@old_namespace, @project),
-         params: { projects_transfer_form: { new_namespace_id: @namespace.id } }, as: :turbo_stream
+    assert_changes -> { @project.namespace.reload.parent }, from: @old_namespace, to: @namespace do
+      post namespace_project_transfer_path(@old_namespace, @project),
+           params: { projects_transfer_form: { new_namespace_id: @namespace.id } }, as: :turbo_stream
+    end
 
     assert_response :redirect
     assert_equal I18n.t('projects.transfer.success', project_name: @project.name), flash[:success]
@@ -24,27 +26,34 @@ class ProjectsTest < ActionDispatch::IntegrationTest
   test 'should not transfer a project to unowned namespace' do
     sign_in users(:david_doe)
 
-    post namespace_project_transfer_path(@old_namespace, @project),
-         params: { projects_transfer_form: { new_namespace_id: @namespace.id } }, as: :turbo_stream
+    assert_no_changes -> { @project.namespace.reload.parent } do
+      post namespace_project_transfer_path(@old_namespace, @project),
+           params: { projects_transfer_form: { new_namespace_id: @namespace.id } }, as: :turbo_stream
+    end
 
     assert_response :unauthorized
+    assert_match(/not authorized to transfer project/i, @response.body)
   end
 
   test 'should render unprocessable_content when transfer fails' do
-    post namespace_project_transfer_path(@old_namespace, @project),
-         params: { projects_transfer_form: { new_namespace_id: 'invalid-id' } }, as: :turbo_stream
+    assert_no_changes -> { @project.namespace.reload.parent } do
+      post namespace_project_transfer_path(@old_namespace, @project),
+           params: { projects_transfer_form: { new_namespace_id: 'invalid-id' } }, as: :turbo_stream
+    end
 
     assert_response :unprocessable_content
-    assert_match I18n.t(:'projects.edit.advanced.transfer.empty_state'), response.body
+    assert_includes @response.body, I18n.t(:'projects.edit.advanced.transfer.empty_state')
   end
 
   test 'should render unprocessable_content when transfer to namespace with same project name' do
     project2 = projects(:project2)
-    post namespace_project_transfer_path(project2.namespace.parent, project2),
-         params: { projects_transfer_form: { new_namespace_id: @namespace.id } }, as: :turbo_stream
+    assert_no_changes -> { @project.namespace.reload.parent } do
+      post namespace_project_transfer_path(project2.namespace.parent, project2),
+           params: { projects_transfer_form: { new_namespace_id: @namespace.id } }, as: :turbo_stream
+    end
 
     assert_response :unprocessable_content
-    assert_match I18n.t(:'activemodel.errors.models.projects/transfer_form.attributes.new_namespace_id.project_exists'),
-                 response.body
+    assert_includes @response.body,
+                    I18n.t(:'activemodel.errors.models.projects/transfer_form.attributes.new_namespace_id.project_exists') # rubocop:disable Layout/LineLength
   end
 end
