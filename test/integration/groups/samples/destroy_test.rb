@@ -187,6 +187,114 @@ module Groups
         assert_match 'form-error-summary', response.body
         Flipper.disable(:sample_deletion_reason)
       end
+
+      test 'delete samples belonging to group' do
+        assert_samples_page(@group1, 26)
+        assert_difference('Sample.count', -2) do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @group1.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: [@sample1.id, @sample2.id]
+                 }
+               }, as: :turbo_stream
+        end
+
+        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_response :redirect
+        assert_samples_page(@group1, 24)
+      end
+
+      test 'delete samples belonging to group with reason' do
+        Flipper.enable(:sample_deletion_reason)
+        assert_samples_page(@group1, 26)
+        assert_difference('Sample.count', -2) do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @group1.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: [@sample1.id, @sample2.id],
+                   reason: 'cleanup'
+                 }
+               }, as: :turbo_stream
+        end
+
+        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_response :redirect
+        assert_samples_page(@group1, 24)
+        Flipper.disable(:sample_deletion_reason)
+      end
+
+      test 'prevent sample deletion during active workflow execution' do
+        Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+        assert_samples_page(@group1, 26)
+        assert_no_difference('Sample.count') do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @group1.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: [@sample1.id, @sample2.id]
+                 }
+               }, as: :turbo_stream
+        end
+        assert_response :unprocessable_content
+        assert_samples_page(@group1, 26)
+      ensure
+        Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      end
+
+      test 'delete group samples with partial success' do
+        sample25 = samples(:sample25)
+        sample28 = samples(:sample28)
+        assert_samples_page(@group1, 26)
+        assert_difference('Sample.count', -1) do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @group1.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: [sample25.id, sample28.id]
+                 }
+               }, as: :turbo_stream
+        end
+        assert_equal I18n.t('samples.deletions.destroy.partial_success', deleted: '1/2'),
+                     flash[:success]
+        assert_equal I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/2'),
+                     flash[:error]
+        assert_response :redirect
+        assert_samples_page(@group1, 25)
+      end
+
+      test 'delete group samples unsuccessfully' do
+        sample28 = samples(:sample28)
+        assert_samples_page(@group1, 26)
+        assert_no_difference('Sample.count') do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @group1.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: [sample28.id]
+                 }
+               }, as: :turbo_stream
+        end
+        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
+        assert_response :redirect
+        assert_samples_page(@group1, 26)
+      end
+
+      private
+
+      def assert_samples_page(group, count)
+        get group_samples_path(group)
+
+        assert_response :success
+        assert_select 'tbody#samples-table-body tr', count: [count, 20].min
+        assert_select 'tfoot', text: /#{I18n.t('samples.table_component.counts.samples')}:\s*#{count}/
+      end
     end
   end
 end
