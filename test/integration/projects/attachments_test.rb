@@ -5,6 +5,7 @@ require 'test_helper'
 module Projects
   class AttachmentsTest < ActionDispatch::IntegrationTest
     include ActionView::Helpers::NumberHelper
+    include AdvancedSearchHelper
 
     test 'can view attachments for a project with proper access' do
       sign_in users(:john_doe)
@@ -302,6 +303,180 @@ module Projects
           assert_select 'th', attachment2.puid
           assert_select 'td', attachment2.file.filename.to_s
         end
+      end
+    end
+
+    test 'advanced search filters attachments by format metadata field' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+
+      get namespace_project_attachments_path(group, project),
+          params: attachments_advanced_search_params(
+            [[{ field: 'metadata.format', operator: '=', value: 'fastq' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}", count: 0
+      end
+    end
+
+    test 'advanced search filters attachments by compression metadata field' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+
+      get namespace_project_attachments_path(group, project),
+          params: attachments_advanced_search_params(
+            [[{ field: 'metadata.compression', operator: '=', value: 'none' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
+    test 'advanced search filters attachments by filename' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+
+      get namespace_project_attachments_path(group, project),
+          params: attachments_advanced_search_params(
+            [[{ field: 'filename', operator: 'contains', value: attachment1.file.filename.to_s }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}", count: 0
+      end
+    end
+
+    test 'advanced search filters attachments by puid' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+
+      get namespace_project_attachments_path(group, project),
+          params: attachments_advanced_search_params(
+            [[{ field: 'id', operator: '=', value: attachment1.puid }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}", count: 0
+      end
+    end
+
+    test 'advanced search filters attachments by byte size' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+
+      get namespace_project_attachments_path(group, project),
+          params: attachments_advanced_search_params(
+            [[{ field: 'byte_size', operator: '>', value: '0' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+      end
+    end
+
+    test 'advanced search filters attachments using multiple conditions in a group' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+
+      get namespace_project_attachments_path(group, project),
+          params: attachments_advanced_search_params(
+            [[{ field: 'metadata.format', operator: '=', value: 'fastq' },
+              { field: 'metadata.compression', operator: '=', value: 'none' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}", count: 0
+      end
+    end
+
+    test 'advanced search filters attachments using multiple groups' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+
+      get namespace_project_attachments_path(group, project),
+          params: attachments_advanced_search_params(
+            [[{ field: 'metadata.format', operator: '=', value: 'fastq' }],
+             [{ field: 'metadata.format', operator: '=', value: 'csv' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
+    test 'advanced search filters attachments by multiple format values' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+
+      get namespace_project_attachments_path(group, project),
+          params: attachments_advanced_search_params(
+            [[{ field: 'metadata.format', operator: 'in', value: %w[fastq csv] }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
+    test 'advanced search with no results displays correctly' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+
+      get namespace_project_attachments_path(group, project),
+          params: attachments_advanced_search_params(
+            [[{ field: 'metadata.format', operator: '=', value: 'nonexistent_format' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 0
       end
     end
   end
