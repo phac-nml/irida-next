@@ -4,6 +4,7 @@
   "type": "module",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@floating-ui/dom": "1.7.5",
     "@herb-tools/formatter": "^0.10.3",
     "@herb-tools/linter": "^0.10.3",
     "@hotwired/stimulus": "^3.2.2",
