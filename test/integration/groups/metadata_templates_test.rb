@@ -92,18 +92,25 @@ module Groups
     end
 
     test 'group metadata templates create' do
-      metadata_template_params = { metadata_template: { name: 'Newest template', fields: %w[field1 field5] } }
-      post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
-
+      new_name = 'Newest template'
+      metadata_template_params = { metadata_template: { name: new_name, fields: %w[field1 field5] } }
+      assert_difference('MetadataTemplate.count', 1) do
+        post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
+      end
       assert_response :success
-
       assert_includes @response.body, I18n.t('concerns.metadata_template_actions.create.success',
-                                             template_name: 'Newest template')
+                                             template_name: new_name)
+
+      get group_metadata_templates_path(@group)
+      assert_response :success
+      assert_select 'table tbody tr td:nth-child(1)', text: new_name
     end
 
     test 'group metadata templates create error' do
       metadata_template_params = { metadata_template: { name: '', fields: %w[field1 field5] } }
-      post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
+      assert_no_difference('MetadataTemplate.count') do
+        post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
+      end
 
       assert_response :unprocessable_content
 
@@ -114,7 +121,9 @@ module Groups
       assert_select "div[class='form-field invalid']"
 
       metadata_template_params = { metadata_template: { name: 'Newest template', fields: [] } }
-      post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
+      assert_no_difference('MetadataTemplate.count') do
+        post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
+      end
 
       assert_response :unprocessable_content
 
@@ -127,7 +136,9 @@ module Groups
     test 'group metadata templates create unauthorized' do
       sign_in users(:ryan_doe)
       metadata_template_params = { metadata_template: { name: 'Newest Template', fields: %w[field1 field5] } }
-      post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
+      assert_no_difference('MetadataTemplate.count') do
+        post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
+      end
 
       assert_response :unauthorized
 
@@ -138,8 +149,10 @@ module Groups
     test 'group metadata templates update' do
       new_name = 'This is the new template'
       metadata_template_params = { metadata_template: { name: new_name, fields: %w[field6 field10] } }
-      put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
-          params: metadata_template_params
+      assert_changes -> { @group_metadata_template.reload.name }, from: @group_metadata_template.name, to: new_name do
+        put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
+            params: metadata_template_params
+      end
 
       assert_response :success
 
@@ -156,8 +169,10 @@ module Groups
 
     test 'group metadata templates update error' do
       metadata_template_params = { metadata_template: { name: '', fields: %w[field1 field5] } }
-      put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
-          params: metadata_template_params
+      assert_no_changes -> { @group_metadata_template.reload } do
+        put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
+            params: metadata_template_params
+      end
 
       assert_response :unprocessable_content
 
@@ -168,8 +183,10 @@ module Groups
       assert_select "div[class='form-field invalid']"
 
       metadata_template_params = { metadata_template: { name: 'Newest template', fields: [] } }
-      put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
-          params: metadata_template_params
+      assert_no_changes -> { @group_metadata_template.reload } do
+        put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
+            params: metadata_template_params
+      end
 
       assert_select 'a', text:
         I18n.t(:'errors.format',
@@ -182,8 +199,10 @@ module Groups
     test 'group metadata templates update unauthorized' do
       sign_in users(:ryan_doe)
       metadata_template_params = { metadata_template: { name: 'This is the new template', fields: %w[field6 field10] } }
-      put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
-          params: metadata_template_params
+      assert_no_changes -> { @group_metadata_template.reload } do
+        put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
+            params: metadata_template_params
+      end
 
       assert_response :unauthorized
 
@@ -196,9 +215,11 @@ module Groups
       MetadataTemplates::UpdateService.any_instance.stubs(:execute).returns(false)
 
       metadata_template_params = { metadata_template: { name: 'Valid Name', fields: %w[field1] } }
-      put group_metadata_template_path(
-        @group, @group_metadata_template, format: :turbo_stream
-      ), params: metadata_template_params
+      assert_no_changes -> { @group_metadata_template.reload } do
+        put group_metadata_template_path(
+          @group, @group_metadata_template, format: :turbo_stream
+        ), params: metadata_template_params
+      end
 
       assert_response :unprocessable_content
       assert_select "div[data-controller='viral--flash']",
@@ -207,7 +228,9 @@ module Groups
     end
 
     test 'group metadata templates destroy' do
-      delete group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
+      assert_difference('MetadataTemplate.count', -1) do
+        delete group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
+      end
 
       assert_response :success
 
@@ -219,7 +242,9 @@ module Groups
 
     test 'group metadata templates destroy unauthorized' do
       sign_in users(:ryan_doe)
-      delete group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
+      assert_no_difference('MetadataTemplate.count') do
+        delete group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
+      end
 
       assert_response :unauthorized
 
@@ -234,7 +259,9 @@ module Groups
       Groups::MetadataTemplatesController.any_instance.stubs(:error_message)
                                          .returns('Destroy failed from error_message')
 
-      delete group_metadata_template_path(@group, metadata_template, format: :turbo_stream)
+      assert_no_difference('MetadataTemplate.count') do
+        delete group_metadata_template_path(@group, metadata_template, format: :turbo_stream)
+      end
 
       assert_response :unprocessable_content
       assert_select "div[data-controller='viral--flash']", text: /Destroy failed from error_message/

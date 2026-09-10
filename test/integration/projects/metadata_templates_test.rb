@@ -98,24 +98,31 @@ module Projects
     end
 
     test 'project metadata templates create' do
-      metadata_template_params = { metadata_template: { name: 'Newest template', fields: %w[field1 field5] } }
-      post namespace_project_metadata_templates_path(
-        @project_namespace.parent,
-        @project, format: :turbo_stream
-      ), params: metadata_template_params
-
+      new_name = 'Newest template'
+      metadata_template_params = { metadata_template: { name: new_name, fields: %w[field1 field5] } }
+      assert_difference('MetadataTemplate.count', 1) do
+        post namespace_project_metadata_templates_path(
+          @project_namespace.parent,
+          @project, format: :turbo_stream
+        ), params: metadata_template_params
+      end
       assert_response :success
-
       assert_includes @response.body, I18n.t('concerns.metadata_template_actions.create.success',
-                                             template_name: 'Newest template')
+                                             template_name: new_name)
+
+      get namespace_project_metadata_templates_path(@project_namespace.parent, @project)
+      assert_response :success
+      assert_select 'table tbody tr td:nth-child(1)', text: new_name
     end
 
     test 'project metadata templates create error' do
       metadata_template_params = { metadata_template: { name: '', fields: %w[field1 field5] } }
-      post namespace_project_metadata_templates_path(
-        @project_namespace.parent,
-        @project, format: :turbo_stream
-      ), params: metadata_template_params
+      assert_no_difference('MetadataTemplate.count') do
+        post namespace_project_metadata_templates_path(
+          @project_namespace.parent,
+          @project, format: :turbo_stream
+        ), params: metadata_template_params
+      end
 
       assert_response :unprocessable_content
 
@@ -126,10 +133,12 @@ module Projects
       assert_select "div[class='form-field invalid']"
 
       metadata_template_params = { metadata_template: { name: 'Newest template', fields: [] } }
-      post namespace_project_metadata_templates_path(
-        @project_namespace.parent,
-        @project, format: :turbo_stream
-      ), params: metadata_template_params
+      assert_no_difference('MetadataTemplate.count') do
+        post namespace_project_metadata_templates_path(
+          @project_namespace.parent,
+          @project, format: :turbo_stream
+        ), params: metadata_template_params
+      end
 
       assert_response :unprocessable_content
 
@@ -142,10 +151,12 @@ module Projects
     test 'project metadata templates create unauthorized' do
       sign_in users(:ryan_doe)
       metadata_template_params = { metadata_template: { name: 'Newest template', fields: %w[field1 field5] } }
-      post namespace_project_metadata_templates_path(
-        @project_namespace.parent,
-        @project, format: :turbo_stream
-      ), params: metadata_template_params
+      assert_no_difference('MetadataTemplate.count') do
+        post namespace_project_metadata_templates_path(
+          @project_namespace.parent,
+          @project, format: :turbo_stream
+        ), params: metadata_template_params
+      end
 
       assert_response :unauthorized
 
@@ -157,10 +168,14 @@ module Projects
     test 'project metadata templates update' do
       new_name = 'This is the new template'
       metadata_template_params = { metadata_template: { name: new_name, fields: %w[field6 field10] } }
-      put namespace_project_metadata_template_path(
-        @project_namespace.parent,
-        @project, @project_metadata_template, format: :turbo_stream
-      ), params: metadata_template_params
+      assert_changes lambda {
+        @project_metadata_template.reload.name
+      }, from: @project_metadata_template.name, to: new_name do
+        put namespace_project_metadata_template_path(
+          @project_namespace.parent,
+          @project, @project_metadata_template, format: :turbo_stream
+        ), params: metadata_template_params
+      end
 
       assert_response :success
 
@@ -177,10 +192,12 @@ module Projects
 
     test 'project metadata templates update error' do
       metadata_template_params = { metadata_template: { name: '', fields: %w[field1 field5] } }
-      put namespace_project_metadata_template_path(
-        @project_namespace.parent,
-        @project, @project_metadata_template, format: :turbo_stream
-      ), params: metadata_template_params
+      assert_no_changes(@project_metadata_template.reload) do
+        put namespace_project_metadata_template_path(
+          @project_namespace.parent,
+          @project, @project_metadata_template, format: :turbo_stream
+        ), params: metadata_template_params
+      end
 
       assert_response :unprocessable_content
 
@@ -191,10 +208,12 @@ module Projects
       assert_select "div[class='form-field invalid']"
 
       metadata_template_params = { metadata_template: { name: 'Newest template', fields: [] } }
-      put namespace_project_metadata_template_path(
-        @project_namespace.parent,
-        @project, @project_metadata_template, format: :turbo_stream
-      ), params: metadata_template_params
+      assert_no_changes(@project_metadata_template.reload) do
+        put namespace_project_metadata_template_path(
+          @project_namespace.parent,
+          @project, @project_metadata_template, format: :turbo_stream
+        ), params: metadata_template_params
+      end
 
       assert_response :unprocessable_content
 
@@ -207,10 +226,12 @@ module Projects
     test 'project metadata templates update unauthorized' do
       sign_in users(:ryan_doe)
       metadata_template_params = { metadata_template: { name: 'This is the new template', fields: %w[field6 field10] } }
-      put namespace_project_metadata_template_path(
-        @project_namespace.parent,
-        @project, @project_metadata_template, format: :turbo_stream
-      ), params: metadata_template_params
+      assert_no_changes(@project_metadata_template.reload) do
+        put namespace_project_metadata_template_path(
+          @project_namespace.parent,
+          @project, @project_metadata_template, format: :turbo_stream
+        ), params: metadata_template_params
+      end
 
       assert_response :unauthorized
 
@@ -223,10 +244,12 @@ module Projects
       MetadataTemplates::UpdateService.any_instance.stubs(:execute).returns(false)
 
       metadata_template_params = { metadata_template: { name: 'Valid Name', fields: %w[field1] } }
-      put namespace_project_metadata_template_path(
-        @project_namespace.parent,
-        @project, @project_metadata_template, format: :turbo_stream
-      ), params: metadata_template_params
+      assert_no_changes(@project_metadata_template.reload) do
+        put namespace_project_metadata_template_path(
+          @project_namespace.parent,
+          @project, @project_metadata_template, format: :turbo_stream
+        ), params: metadata_template_params
+      end
 
       assert_response :unprocessable_content
       assert_select "div[data-viral--flash-type-value='error']" do
@@ -237,11 +260,13 @@ module Projects
     end
 
     test 'project metadata templates destroy' do
-      delete namespace_project_metadata_template_path(
-        @project_namespace.parent,
-        @project, @project_metadata_template,
-        format: :turbo_stream
-      )
+      assert_difference('MetadataTemplate.count', -1) do
+        delete namespace_project_metadata_template_path(
+          @project_namespace.parent,
+          @project, @project_metadata_template,
+          format: :turbo_stream
+        )
+      end
 
       assert_response :success
 
@@ -253,11 +278,13 @@ module Projects
 
     test 'project metadata templates destroy unauthorized' do
       sign_in users(:ryan_doe)
-      delete namespace_project_metadata_template_path(
-        @project_namespace.parent,
-        @project, @project_metadata_template,
-        format: :turbo_stream
-      )
+      assert_no_difference('MetadataTemplate.count') do
+        delete namespace_project_metadata_template_path(
+          @project_namespace.parent,
+          @project, @project_metadata_template,
+          format: :turbo_stream
+        )
+      end
 
       assert_response :unauthorized
 
@@ -271,12 +298,14 @@ module Projects
       Projects::MetadataTemplatesController.any_instance.stubs(:error_message)
                                            .returns('Destroy failed from error_message')
 
-      delete namespace_project_metadata_template_path(
-        @project_namespace.parent,
-        @project,
-        @project_metadata_template,
-        format: :turbo_stream
-      )
+      assert_no_difference('MetadataTemplate.count') do
+        delete namespace_project_metadata_template_path(
+          @project_namespace.parent,
+          @project,
+          @project_metadata_template,
+          format: :turbo_stream
+        )
+      end
 
       assert_response :unprocessable_content
       assert_select "div[data-controller='viral--flash']", text: /Destroy failed from error_message/
