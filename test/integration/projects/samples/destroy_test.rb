@@ -142,6 +142,61 @@ module Projects
         assert_response :success
       end
 
+      test 'singular description within delete samples dialog' do
+        get new_samples_deletions_path,
+            params: {
+              namespace_id: @project1_namespace.id,
+              deletion_type: 'single',
+              sample_id: @sample1.id
+            }, as: :turbo_stream
+
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_single_confirmation_dialog.title')
+        end
+      end
+
+      test 'singular description within delete samples dialog with reason field' do
+        Flipper.enable(:sample_deletion_reason)
+        get new_samples_deletions_path,
+            params: {
+              namespace_id: @project1_namespace.id,
+              deletion_type: 'single',
+              sample_id: @sample1.id
+            }, as: :turbo_stream
+
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_single_confirmation_dialog.title')
+          assert_select 'textarea[name*="reason"]'
+          assert_select 'textarea[name*="reason"][maxlength="500"]'
+        end
+      ensure
+        Flipper.disable(:sample_deletion_reason)
+      end
+
+      test 'singular description within delete samples dialog with invalid reason' do
+        Flipper.enable(:sample_deletion_reason)
+        # Test that the reason field validation error is returned when submitting invalid reason
+        assert_no_difference('Sample.count') do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @project1_namespace.id,
+                 deletion_type: 'single',
+                 deletion: {
+                   sample_ids: [@sample1.id],
+                   reason: 'a' * 501
+                 }
+               }, as: :turbo_stream
+        end
+
+        assert_response :unprocessable_content
+        assert_match 'Reason is too long', response.body
+        assert_match 'form-error-summary', response.body
+      ensure
+        Flipper.disable(:sample_deletion_reason)
+      end
+
       test 'should not get new destroy multiple deletion_type with role < Owner at project level' do
         sign_in users(:joan_doe)
 
@@ -248,21 +303,6 @@ module Projects
         Flipper.disable(:sample_deletion_reason)
       end
 
-      test 'singular description within delete samples dialog' do
-        assert_samples_page(@project1_namespace.project, 3)
-        get new_samples_deletions_path,
-            params: {
-              namespace_id: @project1_namespace.id,
-              deletion_type: 'single',
-              sample_id: @sample1.id
-            }, as: :turbo_stream
-
-        assert_response :success
-        assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_single_confirmation_dialog.title')
-        end
-      end
-
       test 'plural description within delete samples dialog' do
         assert_samples_page(@project1_namespace.project, 3)
         get new_samples_deletions_path,
@@ -275,6 +315,47 @@ module Projects
         assert_select 'turbo-stream[target="samples_dialog"]' do
           assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
         end
+      end
+
+      test 'plural description within delete samples dialog with reason field' do
+        Flipper.enable(:sample_deletion_reason)
+        assert_samples_page(@project1_namespace.project, 3)
+        get new_samples_deletions_path,
+            params: {
+              namespace_id: @project1_namespace.id,
+              deletion_type: 'multiple'
+            }, as: :turbo_stream
+
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+          assert_select 'textarea[name*="reason"]'
+          assert_select 'textarea[name*="reason"][maxlength="500"]'
+        end
+      ensure
+        Flipper.disable(:sample_deletion_reason)
+      end
+
+      test 'plural description within delete samples dialog with invalid reason' do
+        Flipper.enable(:sample_deletion_reason)
+        # Test that the reason field validation error is displayed when submitting
+        assert_no_difference('Sample.count') do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @project1_namespace.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: [@sample1.id, @sample2.id],
+                   reason: 'a' * 501
+                 }
+               }, as: :turbo_stream
+        end
+
+        assert_response :unprocessable_content
+        assert_match 'Reason is too long', response.body
+        assert_match 'form-error-summary', response.body
+      ensure
+        Flipper.disable(:sample_deletion_reason)
       end
 
       test 'samples listing within delete samples dialog' do
