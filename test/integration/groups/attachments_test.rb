@@ -302,7 +302,7 @@ module Groups
       attachment2 = attachments(:group1Attachment2)
 
       get group_attachments_path(group),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'fastq' }]]
           )
 
@@ -321,7 +321,7 @@ module Groups
       attachment2 = attachments(:group1Attachment2)
 
       get group_attachments_path(group),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.compression', operator: '=', value: 'none' }]]
           )
 
@@ -340,7 +340,7 @@ module Groups
       attachment2 = attachments(:group1Attachment2)
 
       get group_attachments_path(group),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'filename', operator: 'contains', value: attachment1.file.filename.to_s }]]
           )
 
@@ -359,7 +359,7 @@ module Groups
       attachment2 = attachments(:group1Attachment2)
 
       get group_attachments_path(group),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'id', operator: '=', value: attachment1.puid }]]
           )
 
@@ -376,7 +376,7 @@ module Groups
       group = groups(:group_one)
 
       get group_attachments_path(group),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'byte_size', operator: '>', value: '0' }]]
           )
 
@@ -393,7 +393,7 @@ module Groups
       attachment2 = attachments(:group1Attachment2)
 
       get group_attachments_path(group),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'fastq' },
               { field: 'metadata.compression', operator: '=', value: 'none' }]]
           )
@@ -413,7 +413,7 @@ module Groups
       attachment2 = attachments(:group1Attachment2)
 
       get group_attachments_path(group),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'fastq' }],
              [{ field: 'metadata.format', operator: '=', value: 'csv' }]]
           )
@@ -433,7 +433,7 @@ module Groups
       attachment2 = attachments(:group1Attachment2)
 
       get group_attachments_path(group),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: 'in', value: %w[fastq csv] }]]
           )
 
@@ -450,7 +450,7 @@ module Groups
       group = groups(:group_one)
 
       get group_attachments_path(group),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'nonexistent_format' }]]
           )
 

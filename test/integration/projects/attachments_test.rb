@@ -314,7 +314,7 @@ module Projects
       attachment2 = attachments(:project1Attachment2)
 
       get namespace_project_attachments_path(group, project),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'fastq' }]]
           )
 
@@ -334,7 +334,7 @@ module Projects
       attachment2 = attachments(:project1Attachment2)
 
       get namespace_project_attachments_path(group, project),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.compression', operator: '=', value: 'none' }]]
           )
 
@@ -354,7 +354,7 @@ module Projects
       attachment2 = attachments(:project1Attachment2)
 
       get namespace_project_attachments_path(group, project),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'filename', operator: 'contains', value: attachment1.file.filename.to_s }]]
           )
 
@@ -374,7 +374,7 @@ module Projects
       attachment2 = attachments(:project1Attachment2)
 
       get namespace_project_attachments_path(group, project),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'id', operator: '=', value: attachment1.puid }]]
           )
 
@@ -392,7 +392,7 @@ module Projects
       group = groups(:group_one)
 
       get namespace_project_attachments_path(group, project),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'byte_size', operator: '>', value: '0' }]]
           )
 
@@ -410,7 +410,7 @@ module Projects
       attachment2 = attachments(:project1Attachment2)
 
       get namespace_project_attachments_path(group, project),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'fastq' },
               { field: 'metadata.compression', operator: '=', value: 'none' }]]
           )
@@ -431,7 +431,7 @@ module Projects
       attachment2 = attachments(:project1Attachment2)
 
       get namespace_project_attachments_path(group, project),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'fastq' }],
              [{ field: 'metadata.format', operator: '=', value: 'csv' }]]
           )
@@ -452,7 +452,7 @@ module Projects
       attachment2 = attachments(:project1Attachment2)
 
       get namespace_project_attachments_path(group, project),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: 'in', value: %w[fastq csv] }]]
           )
 
@@ -470,7 +470,7 @@ module Projects
       group = groups(:group_one)
 
       get namespace_project_attachments_path(group, project),
-          params: attachments_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'nonexistent_format' }]]
           )
 

@@ -734,7 +734,7 @@ module Projects
         attachment2 = attachments(:attachment2)
 
         get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
-            params: attachments_advanced_search_params(
+            params: advanced_search_params(
               [[{ field: 'metadata.format', operator: '=', value: attachment1.metadata['format'] }]]
             )
 
@@ -752,7 +752,7 @@ module Projects
         attachment2 = attachments(:attachment2)
 
         get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
-            params: attachments_advanced_search_params(
+            params: advanced_search_params(
               [[{ field: 'metadata.compression', operator: '=', value: 'none' }]]
             )
 
@@ -770,7 +770,7 @@ module Projects
         attachment2 = attachments(:attachment2)
 
         get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
-            params: attachments_advanced_search_params(
+            params: advanced_search_params(
               [[{ field: 'filename', operator: 'contains', value: attachment1.file.filename.to_s.split('.').first }]]
             )
 
@@ -788,7 +788,7 @@ module Projects
         attachment2 = attachments(:attachment2)
 
         get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
-            params: attachments_advanced_search_params(
+            params: advanced_search_params(
               [[{ field: 'id', operator: '=', value: attachment1.puid }]]
             )
 
@@ -806,7 +806,7 @@ module Projects
         attachment2 = attachments(:attachment2)
 
         get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
-            params: attachments_advanced_search_params(
+            params: advanced_search_params(
               [[{ field: 'byte_size', operator: '>', value: '0' }]]
             )
 
@@ -824,7 +824,7 @@ module Projects
         attachment2 = attachments(:attachment2)
 
         get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
-            params: attachments_advanced_search_params(
+            params: advanced_search_params(
               [[{ field: 'metadata.format', operator: '=', value: attachment1.metadata['format'] },
                 { field: 'metadata.compression', operator: '=', value: 'none' }]]
             )
@@ -840,7 +840,7 @@ module Projects
         sign_in users(:john_doe)
 
         get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
-            params: attachments_advanced_search_params(
+            params: advanced_search_params(
               [[{ field: 'metadata.format', operator: '=', value: 'nonexistent_format' }]]
             )
 
@@ -854,7 +854,7 @@ module Projects
         sign_in users(:micha_doe)
 
         get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
-            params: attachments_advanced_search_params(
+            params: advanced_search_params(
               [[{ field: 'metadata.format', operator: '=', value: 'json' }]]
             )
 
