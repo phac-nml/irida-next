@@ -17,6 +17,7 @@ module Projects
       end
 
       test 'should destroy single sample at project level' do
+        assert_samples_page(@project1_namespace.project, 3)
         assert_difference('Sample.count', -1) do
           post samples_deletions_path,
                params: {
@@ -31,6 +32,7 @@ module Projects
         assert_equal I18n.t('samples.deletions.destroy.success', count: 1), flash[:success]
         assert_response :redirect
         assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
+        assert_samples_page(@project1_namespace.project, 2)
       end
 
       test 'should not destroy single sample at project level with active workflow executions' do
@@ -46,10 +48,12 @@ module Projects
                }, as: :turbo_stream
         end
         assert_response :unprocessable_content
+      ensure
         Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
       end
 
       test 'should destroy multiple samples at project level' do
+        assert_samples_page(@project1_namespace.project, 3)
         assert_difference('Sample.count', -2) do
           post samples_deletions_path,
                params: {
@@ -63,6 +67,7 @@ module Projects
         assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
         assert_response :redirect
         assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
+        assert_samples_page(@project1_namespace.project, 1)
       end
 
       test 'should not destroy multiple samples at project level with active workflow executions' do
@@ -78,6 +83,7 @@ module Projects
                }, as: :turbo_stream
         end
         assert_response :unprocessable_content
+      ensure
         Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
       end
 
@@ -162,6 +168,7 @@ module Projects
       end
 
       test 'partially deleting multiple samples at project level' do
+        assert_samples_page(@project1_namespace.project, 3)
         assert_difference('Sample.count', -2) do
           post samples_deletions_path,
                params: {
@@ -178,6 +185,7 @@ module Projects
                      flash[:error]
         assert_response :redirect
         assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
+        assert_samples_page(@project1_namespace.project, 1)
       end
 
       test 'should not destroy project sample when deletion reason exceeds max length' do
@@ -197,7 +205,175 @@ module Projects
         assert_response :unprocessable_content
         assert_match 'Reason is too long', response.body
         assert_match 'form-error-summary', response.body
+      ensure
         Flipper.disable(:sample_deletion_reason)
+      end
+
+      test 'destroy sample from sample show page' do
+        assert_samples_page(@project1_namespace.project, 3)
+        assert_difference('Sample.count', -1) do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @project1_namespace.id,
+                 deletion_type: 'single',
+                 deletion: {
+                   sample_ids: [@sample1.id]
+                 }
+               }, as: :turbo_stream
+        end
+
+        assert_equal I18n.t('samples.deletions.destroy.success', count: 1), flash[:success]
+        assert_response :redirect
+        assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
+        assert_samples_page(@project1_namespace.project, 2)
+      end
+
+      test 'destroy sample with reason from sample show page' do
+        Flipper.enable(:sample_deletion_reason)
+        assert_samples_page(@project1_namespace.project, 3)
+        assert_difference('Sample.count', -1) do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @project1_namespace.id,
+                 deletion_type: 'single',
+                 deletion: {
+                   sample_ids: [@sample1.id],
+                   reason: 'cleanup'
+                 }
+               }, as: :turbo_stream
+        end
+
+        assert_equal I18n.t('samples.deletions.destroy.success', count: 1), flash[:success]
+        assert_response :redirect
+        assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
+        assert_samples_page(@project1_namespace.project, 2)
+      ensure
+        Flipper.disable(:sample_deletion_reason)
+      end
+
+      test 'singular description within delete samples dialog' do
+        assert_samples_page(@project1_namespace.project, 3)
+        get new_samples_deletions_path,
+            params: {
+              namespace_id: @project1_namespace.id,
+              deletion_type: 'single',
+              sample_id: @sample1.id
+            }, as: :turbo_stream
+
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_single_confirmation_dialog.title')
+        end
+      end
+
+      test 'plural description within delete samples dialog' do
+        assert_samples_page(@project1_namespace.project, 3)
+        get new_samples_deletions_path,
+            params: {
+              namespace_id: @project1_namespace.id,
+              deletion_type: 'multiple'
+            }, as: :turbo_stream
+
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+        end
+      end
+
+      test 'samples listing within delete samples dialog' do
+        assert_samples_page(@project1_namespace.project, 3)
+        get new_samples_deletions_path,
+            params: {
+              namespace_id: @project1_namespace.id,
+              deletion_type: 'multiple'
+            }, as: :turbo_stream
+
+        assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'turbo-frame#list_selections'
+        end
+      end
+
+      test 'delete multiple samples' do
+        assert_samples_page(@project1_namespace.project, 3)
+        assert_difference('Sample.count', -2) do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @project1_namespace.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: [@sample1.id, @sample2.id]
+                 }
+               }, as: :turbo_stream
+        end
+
+        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_response :redirect
+        assert_samples_page(@project1_namespace.project, 1)
+      end
+
+      test 'delete multiple samples with reason' do
+        Flipper.enable(:sample_deletion_reason)
+        assert_samples_page(@project1_namespace.project, 3)
+        assert_difference('Sample.count', -2) do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @project1_namespace.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: [@sample1.id, @sample2.id],
+                   reason: 'cleanup'
+                 }
+               }, as: :turbo_stream
+        end
+
+        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_response :redirect
+        assert_samples_page(@project1_namespace.project, 1)
+      ensure
+        Flipper.disable(:sample_deletion_reason)
+      end
+
+      test 'prevent sample deletion during active workflow execution' do
+        Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+        assert_samples_page(@project1_namespace.project, 3)
+        assert_no_difference('Sample.count') do
+          post samples_deletions_path,
+               params: {
+                 namespace_id: @project1_namespace.id,
+                 deletion_type: 'multiple',
+                 deletion: {
+                   sample_ids: [@sample1.id, @sample2.id]
+                 }
+               }, as: :turbo_stream
+        end
+        assert_response :unprocessable_content
+        assert_samples_page(@project1_namespace.project, 3)
+      ensure
+        Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+      end
+
+      private
+
+      def assert_samples_page(project, count)
+        namespace = project.namespace.parent || project.namespace
+        get namespace_project_samples_path(namespace, project)
+
+        assert_response :success
+        assert_select 'tbody#samples-table-body tr', count: [count, 20].min
+        assert_select 'tfoot', text: /#{I18n.t('samples.table_component.counts.samples')}:\s*#{count}/
+      end
+
+      def assert_destroy_single_dialog
+        assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_single_confirmation_dialog.title')
+        assert_select 'button.dialog--close'
+        assert_select 'button', text: I18n.t('common.actions.remove')
+      end
+
+      def assert_destroy_multiple_dialog
+        assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+        assert_select 'button.dialog--close'
+        assert_select 'button', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       end
     end
   end
