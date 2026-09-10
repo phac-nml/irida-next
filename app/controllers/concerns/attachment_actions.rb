@@ -26,13 +26,6 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
     @results_message = attachments_results_message
 
     setup_ransack_for_attachments_form(all_attachments)
-
-    # @render_individual_attachments = filter_requested?
-    # all_attachments = load_attachments
-    # @has_attachments = all_attachments.any?
-    # @q = all_attachments.ransack(params[:q])
-    # set_default_sort
-    # @pagy, @attachments = pagy_with_metadata_sort(@q.result)
   end
 
   def new
