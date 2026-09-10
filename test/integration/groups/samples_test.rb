@@ -122,7 +122,7 @@ module Groups
       sample9 = samples(:sample9)
 
       get group_samples_url(@group),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'puid', operator: 'in', value: [@sample1.puid, @sample2.puid] }]]
           )
 
@@ -137,7 +137,7 @@ module Groups
       sample28 = samples(:sample28)
 
       get group_samples_url(@group),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.unique.metadata.field', operator: '=',
                 value: sample28.metadata['unique.metadata.field'] }]]
           )
@@ -152,7 +152,7 @@ module Groups
       sample28 = samples(:sample28)
 
       get group_samples_url(@group),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.unique.metadata.field', operator: 'exists' }]]
           )
 
@@ -163,7 +163,7 @@ module Groups
 
     test 'advanced search rejects a submission without a complete condition' do
       post search_group_samples_url(@group),
-           params: samples_advanced_search_params([[{ field: 'name', operator: 'contains', value: '' }]]),
+           params: advanced_search_params([[{ field: 'name', operator: 'contains', value: '' }]]),
            as: :turbo_stream
 
       assert_response :unprocessable_content
