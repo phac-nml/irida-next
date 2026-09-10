@@ -3,10 +3,8 @@
 module Namespaces
   # Namespace for Users
   class UserNamespace < Namespace
-    has_many :project_namespaces,
-             lambda {
-               where(type: Namespaces::ProjectNamespace.sti_name)
-             }, class_name: 'Namespace', foreign_key: :parent_id, inverse_of: :parent, dependent: :destroy
+    has_many :project_namespaces, foreign_key: :parent_id, inverse_of: :parent,
+                                  class_name: 'Namespaces::ProjectNamespace', dependent: :destroy
 
     validate :validate_public_namespace_type, if: -> { public_changed? }
 
