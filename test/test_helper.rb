@@ -24,7 +24,7 @@ require 'mocha/minitest'
 require 'test_helpers/array_helpers'
 require 'test_helpers/workflow_execution_advanced_search_helper'
 require 'test_helpers/samples_table_helper'
-require 'test_helpers/samples_advanced_search_helper'
+require 'test_helpers/advanced_search_helper'
 require 'test_helpers/dashboard_sorting_helper'
 require 'test_helpers/sorting_test_helper'
 require 'test_helpers/w3c_validation_helpers'
@@ -77,5 +77,5 @@ class ActionDispatch::IntegrationTest # rubocop:disable Style/ClassAndModuleChil
   # Shared samples-table assertions rely on assert_select, so scope them to
   # request-level tests rather than the whole ActiveSupport::TestCase base.
   include SamplesTableHelper
-  include SamplesAdvancedSearchHelper
+  include AdvancedSearchHelper
 end
