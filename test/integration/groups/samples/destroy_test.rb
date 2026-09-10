@@ -44,6 +44,7 @@ module Groups
                }, as: :turbo_stream
         end
         assert_response :unprocessable_content
+      ensure
         Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
       end
 
@@ -76,6 +77,7 @@ module Groups
                }, as: :turbo_stream
         end
         assert_response :unprocessable_content
+      ensure
         Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
       end
 
@@ -185,6 +187,7 @@ module Groups
         assert_response :unprocessable_content
         assert_match 'Reason is too long', response.body
         assert_match 'form-error-summary', response.body
+      ensure
         Flipper.disable(:sample_deletion_reason)
       end
 
@@ -224,6 +227,7 @@ module Groups
         assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
         assert_response :redirect
         assert_samples_page(@group1, 24)
+      ensure
         Flipper.disable(:sample_deletion_reason)
       end
 

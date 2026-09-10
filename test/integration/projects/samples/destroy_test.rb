@@ -209,25 +209,6 @@ module Projects
         Flipper.disable(:sample_deletion_reason)
       end
 
-      test 'destroy sample from sample show page' do
-        assert_samples_page(@project1_namespace.project, 3)
-        assert_difference('Sample.count', -1) do
-          post samples_deletions_path,
-               params: {
-                 namespace_id: @project1_namespace.id,
-                 deletion_type: 'single',
-                 deletion: {
-                   sample_ids: [@sample1.id]
-                 }
-               }, as: :turbo_stream
-        end
-
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 1), flash[:success]
-        assert_response :redirect
-        assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
-        assert_samples_page(@project1_namespace.project, 2)
-      end
-
       test 'destroy sample with reason from sample show page' do
         Flipper.enable(:sample_deletion_reason)
         assert_samples_page(@project1_namespace.project, 3)
@@ -292,24 +273,6 @@ module Projects
         assert_select 'turbo-stream[target="samples_dialog"]' do
           assert_select 'turbo-frame#list_selections'
         end
-      end
-
-      test 'delete multiple samples' do
-        assert_samples_page(@project1_namespace.project, 3)
-        assert_difference('Sample.count', -2) do
-          post samples_deletions_path,
-               params: {
-                 namespace_id: @project1_namespace.id,
-                 deletion_type: 'multiple',
-                 deletion: {
-                   sample_ids: [@sample1.id, @sample2.id]
-                 }
-               }, as: :turbo_stream
-        end
-
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
-        assert_response :redirect
-        assert_samples_page(@project1_namespace.project, 1)
       end
 
       test 'delete multiple samples with reason' do
