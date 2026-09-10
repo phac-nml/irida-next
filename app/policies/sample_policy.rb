@@ -33,17 +33,15 @@ class SamplePolicy < ApplicationPolicy
 
     if namespace.type == Namespaces::ProjectNamespace.sti_name
       relation.joins(project: :namespace)
-              .where(project_id: namespace.project.id)
-              .merge(Namespaces::ProjectNamespace.not_archived)
+              .where(project_id: namespace.project.id, namespace: { archived_at: nil })
     elsif namespace.type == Group.sti_name
       relation
         .with(
           direct_group_projects: Project.joins(:namespace)
-                                 .merge(Namespaces::ProjectNamespace.not_archived)
-                                 .where(namespaces: { parent_id: namespace.self_and_descendant_ids }).select(:id),
+                                 .where(namespaces: { archived_at: nil,
+                                                      parent_id: namespace.self_and_descendant_ids }).select(:id),
           linked_group_projects: Project.joins(:namespace)
-          .merge(Namespaces::ProjectNamespace.not_archived)
-          .where(namespace_id: Namespace
+          .where(namespaces: { archived_at: nil }, namespace_id: Namespace
           .where(
             id: NamespaceGroupLink
                 .not_expired
