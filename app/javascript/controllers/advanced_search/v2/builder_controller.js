@@ -198,8 +198,18 @@ export default class AdvancedSearchBuilderController extends Controller {
 
       if (operator === "" || operator.includes("exists")) {
         const updatedValue = condition.querySelector(".value");
+        if (!updatedValue) {
+          return;
+        }
+
         updatedValue.classList.add(...this.#hiddenClasses);
-        updatedValue.querySelectorAll("input").value = "";
+        updatedValue.querySelectorAll("input, select").forEach((element) => {
+          element.value = "";
+
+          if (element.tagName === "SELECT") {
+            element.selectedIndex = -1;
+          }
+        });
       }
     }
   }
@@ -493,6 +503,8 @@ export default class AdvancedSearchBuilderController extends Controller {
       return;
     }
 
+    select.innerHTML = "";
+
     const values = Array.isArray(enumConfig.values) ? enumConfig.values : [];
     const labels =
       enumConfig.labels && typeof enumConfig.labels === "object"
@@ -509,6 +521,8 @@ export default class AdvancedSearchBuilderController extends Controller {
           .replace(/\b\w/g, (char) => char.toUpperCase());
       select.appendChild(option);
     });
+
+    select.value = "";
   }
 
   #serializeFormState(rootElement) {
