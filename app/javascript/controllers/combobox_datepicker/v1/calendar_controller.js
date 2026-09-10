@@ -618,6 +618,8 @@ export default class extends Controller {
 
   // handles ArrowLeft/Right keyboard navigation
   #handleHorizontalNavigation(event, direction) {
+    console.log("handle horizontal!");
+    console.log(direction);
     let targetDate;
     const currentDate = parseInt(event.target.innerText);
 
