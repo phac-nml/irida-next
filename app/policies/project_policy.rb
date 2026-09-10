@@ -206,66 +206,163 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
-  scope_for :relation do |relation| # rubocop:disable Metrics/BlockLength
+  scope_for :relation do |relation, options = {}| # rubocop:disable Metrics/BlockLength
+    access_level = if options.key?(:access_level)
+                     options[:access_level]
+                   else
+                     Member::AccessLevel.all_values_with_owner
+                                        .filter { |level| level != Member::AccessLevel::NO_ACCESS }
+                   end
+
     relation
       .with(
-        personal_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent_id: user.namespace&.id),
-        direct_project_namespaces: Namespaces::ProjectNamespace.not_archived
-        .where(id: user.members.not_expired.select(:namespace_id)),
-        group_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent_id:
-          Namespace.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids.where(
-            type: Group.sti_name
-          )).select(:id),
-        group_linked_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(
-          parent_id: Group.where(id: NamespaceGroupLink.where(group: Group.where(
-            id: user.members.not_expired.joins(:namespace).select(:namespace_id)
-          ).self_and_descendants).not_expired.select(:namespace_id)).self_and_descendants
-        ).select(:id),
-        direct_linked_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(id: NamespaceGroupLink.where(
-          group: Group.where(id: user.members.not_expired.joins(:namespace).select(:namespace_id)).self_and_descendants
-        ).not_expired.select(:namespace_id)).select(:id),
-        public_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(public: true).select(:id)
+        # 1. Accessible namespace IDs for the user based on their memberships
+        accessible_namespace_ids: Namespace
+          .where(id: user.members.not_expired.with_access_level(access_level).select(:namespace_id))
+          .self_and_descendant_ids,
+
+        # 2. User's personal project namespaces
+        personal_project_namespaces: Namespaces::ProjectNamespace
+          .not_archived
+          .where(parent_id: user.namespace&.id)
+          .select(:id),
+
+        # 3. Direct project namespaces the user has access to
+        direct_project_namespaces: Namespaces::ProjectNamespace
+          .not_archived
+          .where(Arel.sql('id IN (SELECT id FROM accessible_namespace_ids)'))
+          .select(:id),
+
+        # 4. Project namespaces the user has access to through groups
+        group_project_namespaces: Namespaces::ProjectNamespace
+          .not_archived
+          .where(Arel.sql('parent_id IN (SELECT id FROM accessible_namespace_ids)'))
+          .select(:id),
+
+        # 5. Accessible linked namespaces for the user based on group links
+        accessible_linked_namespace_ids: Namespace
+          .where(id: NamespaceGroupLink
+            .not_expired
+            .where(Arel.sql('group_id IN (SELECT id FROM accessible_namespace_ids)'))
+            .with_group_access_level(access_level)
+            .select(:namespace_id))
+          .self_and_descendant_ids,
+
+        # 6. Directly linked project namespaces the user has access to
+        direct_linked_project_namespaces: Namespaces::ProjectNamespace
+          .not_archived
+          .where(Arel.sql('id IN (SELECT id FROM accessible_linked_namespace_ids)'))
+          .select(:id),
+
+        # 7. Project namespaces linked through accessible linked namespaces
+        group_linked_project_namespaces: Namespaces::ProjectNamespace
+          .not_archived
+          .where(Arel.sql('parent_id IN (SELECT id FROM accessible_linked_namespace_ids)'))
+          .select(:id),
+
+        # 8. Public project namespaces
+        public_project_namespaces:
+          if access_level.include?(Member::AccessLevel::GUEST)
+            Namespaces::ProjectNamespace
+              .not_archived
+              .where(public: true)
+              .select(:id)
+          else
+            Namespaces::ProjectNamespace.none.select(:id)
+          end
       ).where(
         Arel.sql(
-          'projects.namespace_id in (select id from personal_project_namespaces)
-        or projects.namespace_id in (select id from direct_project_namespaces)
-        or projects.namespace_id in (select id from group_project_namespaces)
-        or projects.namespace_id in (select id from group_linked_project_namespaces)
-        or projects.namespace_id in (select id from direct_linked_project_namespaces)
-        or projects.namespace_id in (select id from public_project_namespaces)'
+          'projects.namespace_id IN (
+            SELECT id FROM personal_project_namespaces
+            UNION ALL
+            SELECT id FROM direct_project_namespaces
+            UNION ALL
+            SELECT id FROM group_project_namespaces
+            UNION ALL
+            SELECT id FROM group_linked_project_namespaces
+            UNION ALL
+            SELECT id FROM direct_linked_project_namespaces
+            UNION ALL
+            SELECT id FROM public_project_namespaces
+          )'
         )
       ).include_route
   end
 
   scope_for :relation, :archived_projects do |relation| # rubocop:disable Metrics/BlockLength
+    access_level = Member::AccessLevel.all_values_with_owner.filter { |level| level != Member::AccessLevel::NO_ACCESS }
+
     relation
       .with(
-        personal_project_namespaces: Namespaces::ProjectNamespace.archived.where(parent_id: user.namespace&.id),
-        direct_project_namespaces: Namespaces::ProjectNamespace.archived.where(
-          id: user.members.not_expired.select(:namespace_id)
-        ),
-        group_project_namespaces: Namespaces::ProjectNamespace.archived.where(parent_id:
-          Namespace.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids.where(
-            type: Group.sti_name
-          )).select(:id),
-        group_linked_project_namespaces: Namespaces::ProjectNamespace.archived.where(
-          parent_id: Group.where(id: NamespaceGroupLink.where(group: Group.where(
-            id: user.members.not_expired.joins(:namespace).select(:namespace_id)
-          ).self_and_descendants).not_expired.select(:namespace_id)).self_and_descendants
-        ).select(:id),
-        direct_linked_project_namespaces: Namespaces::ProjectNamespace.archived.where(id: NamespaceGroupLink.where(
-          group: Group.where(id: user.members.not_expired.joins(:namespace).select(:namespace_id)).self_and_descendants
-        ).not_expired.select(:namespace_id)).select(:id),
-        public_project_namespaces: Namespaces::ProjectNamespace.archived.where(public: true)
-        .select(:id)
+        # 1. Accessible namespace IDs for the user based on their memberships
+        accessible_namespace_ids: Namespace
+          .where(id: user.members.not_expired.with_access_level(access_level).select(:namespace_id))
+          .self_and_descendant_ids,
+
+        # 2. User's personal project namespaces
+        personal_project_namespaces: Namespaces::ProjectNamespace
+          .archived
+          .where(parent_id: user.namespace&.id)
+          .select(:id),
+
+        # 3. Direct project namespaces the user has access to
+        direct_project_namespaces: Namespaces::ProjectNamespace
+          .archived
+          .where(Arel.sql('id IN (SELECT id FROM accessible_namespace_ids)'))
+          .select(:id),
+
+        # 4. Project namespaces the user has access to through groups
+        group_project_namespaces: Namespaces::ProjectNamespace
+          .archived
+          .where(Arel.sql('parent_id IN (SELECT id FROM accessible_namespace_ids)'))
+          .select(:id),
+
+        # 5. Accessible linked namespaces for the user based on group links
+        accessible_linked_namespace_ids: Namespace
+          .where(id: NamespaceGroupLink
+            .not_expired
+            .with_group_access_level(access_level)
+            .where(Arel.sql('group_id IN (SELECT id FROM accessible_namespace_ids)'))
+            .select(:namespace_id))
+          .self_and_descendant_ids,
+
+        # 6. Directly linked project namespaces the user has access to
+        direct_linked_project_namespaces: Namespaces::ProjectNamespace
+          .archived
+          .where(Arel.sql('id IN (SELECT id FROM accessible_linked_namespace_ids)'))
+          .select(:id),
+
+        # 7. Project namespaces linked through accessible linked namespaces
+        group_linked_project_namespaces: Namespaces::ProjectNamespace
+          .archived
+          .where(Arel.sql('parent_id IN (SELECT id FROM accessible_linked_namespace_ids)'))
+          .select(:id),
+
+        # 8. Public project namespaces
+        public_project_namespaces:
+          if access_level.include?(Member::AccessLevel::GUEST)
+            Namespaces::ProjectNamespace
+              .archived
+              .where(public: true)
+              .select(:id)
+          else
+            Namespaces::ProjectNamespace.none.select(:id)
+          end
       ).where(
         Arel.sql(
-          'projects.namespace_id in (select id from personal_project_namespaces)
-        or projects.namespace_id in (select id from direct_project_namespaces)
-        or projects.namespace_id in (select id from group_project_namespaces)
-        or projects.namespace_id in (select id from group_linked_project_namespaces)
-        or projects.namespace_id in (select id from direct_linked_project_namespaces)
-        or projects.namespace_id in (select id from public_project_namespaces)'
+          'projects.namespace_id IN (
+            SELECT id FROM personal_project_namespaces
+            UNION ALL
+            SELECT id FROM direct_project_namespaces
+            UNION ALL
+            SELECT id FROM group_project_namespaces
+            UNION ALL
+            SELECT id FROM group_linked_project_namespaces
+            UNION ALL
+            SELECT id FROM direct_linked_project_namespaces
+            UNION ALL
+            SELECT id FROM public_project_namespaces
+          )'
         )
       ).include_route
   end
@@ -305,51 +402,17 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         ).select(:namespace_id), type: Group.sti_name).self_and_descendant_ids).select(:id)
     ).where(
       Arel.sql(
-        'projects.namespace_id in (select namespace_id from direct_project_namespaces)
-        or projects.namespace_id in (select id from group_project_namespaces)'
+        'projects.namespace_id in (
+          SELECT namespace_id FROM direct_project_namespaces
+          UNION ALL
+          SELECT id FROM group_project_namespaces
+        )'
       )
     ).include_route
   end
 
-  scope_for :relation, :manageable do |relation| # rubocop:disable Metrics/BlockLength
-    relation.with(
-      personal_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent_id: user.namespace&.id),
-      direct_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(id: user.members.not_expired.where(
-        access_level: Member::AccessLevel.manageable
-      ).select(:namespace_id)),
-      group_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(parent: Namespace.where(
-        id: user.members.not_expired.joins(:namespace).where(
-          namespace_id: user.groups.self_and_descendants,
-          access_level: Member::AccessLevel.manageable,
-          namespace: { type: Group.sti_name }
-        ).select(:namespace_id), type: Group.sti_name
-      ).self_and_descendant_ids).select(:id),
-      group_linked_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(id: NamespaceGroupLink.where(
-        group: user.groups.where(id: user.members.not_expired.joins(:namespace)
-                                         .where(access_level: Member::AccessLevel.manageable,
-                                                namespace: { type: Group.sti_name })
-                                         .select(:namespace_id)).self_and_descendants,
-        group_access_level: Member::AccessLevel.manageable
-      ).not_expired.select(:namespace_id)).select(:id),
-      direct_linked_project_namespaces: Namespaces::ProjectNamespace.not_archived.where(
-        parent_id: Group.where(id: NamespaceGroupLink.where(
-          group: user.groups.where(id: user.members.not_expired.joins(:namespace)
-                                           .where(access_level: Member::AccessLevel.manageable,
-                                                  namespace: { type: Group.sti_name })
-                                           .select(:namespace_id)).self_and_descendants,
-          group_access_level: Member::AccessLevel.manageable,
-          namespace_type: Group.sti_name
-        ).not_expired.select(:namespace_id)).self_and_descendant_ids
-      ).select(:id)
-    ).where(
-      Arel.sql(
-        'projects.namespace_id in (select id from personal_project_namespaces)
-        or projects.namespace_id in (select id from direct_project_namespaces)
-        or projects.namespace_id in (select id from group_project_namespaces)
-        or projects.namespace_id in (select id from group_linked_project_namespaces)
-        or projects.namespace_id in (select id from direct_linked_project_namespaces)'
-      )
-    ).include_route
+  scope_for :relation, :manageable do |relation|
+    authorized_scope(relation, type: :relation, scope_options: { access_level: Member::AccessLevel.manageable })
   end
 
   scope_for :relation, :personal do |relation|
@@ -364,7 +427,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
       ).include_route
   end
 
-  scope_for :relation, :group_projects do |relation, options|
+  scope_for :relation, :group_projects do |relation, options| # rubocop:disable Metrics/BlockLength
     group = options[:group]
     minimum_access_level = if options.key?(:minimum_access_level)
                              options[:minimum_access_level]
@@ -387,8 +450,11 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         ).self_and_descendants.where(type: Namespaces::ProjectNamespace.sti_name, archived_at: nil).select(:id)
       ).where(
         Arel.sql(
-          'namespace_id in (select id from direct_group_project_namespaces)
-          or namespace_id in (select id from linked_group_project_namespaces)'
+          'namespace_id IN (
+            SELECT id FROM direct_group_project_namespaces
+            UNION ALL
+            SELECT id FROM linked_group_project_namespaces
+          )'
         )
       )
   end
