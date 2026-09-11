@@ -1052,6 +1052,15 @@ fr:
         new_button: Ajouter un nouveau modèle
         subtitle: Il s’agit de modèles de métadonnées pour le groupe
         title: Modèles de métadonnées
+    new:
+      visibility:
+        private:
+          description: Le groupe et ses groupes et projets descendants ne seront accessibles qu'aux membres.
+          label: Privé
+        public:
+          description: Le groupe et ses groupes et projets descendants seront accessibles à tous les utilisateurs connectés.
+          label: Publique
+        title: Visibilité
     new_subgroup:
       empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
       select_group: Sélectionner un groupe
