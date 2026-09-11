@@ -43,6 +43,15 @@ features:
     name:
       en: "Advanced Search Autocomplete"
       fr: "Saisie semi-automatique de la recherche avancée"
+  attachments_advanced_search:
+    admin_manageable: true
+    description:
+      en: "Enable advanced search functionality for file attachments."
+      fr: "Activer la fonctionnalité de recherche avancée pour les pièces jointes."
+    enable_in_development: true
+    name:
+      en: "Attachments Advanced Search"
+      fr: "Recherche avancée pour les pièces jointes"
   automated_workflow_execution_subscriber:
     admin_manageable: true
     description:
@@ -143,7 +152,8 @@ features:
     admin_manageable: true
     description:
       en: "Enable the new v2 sample transfer functionality."
-      fr: "Activer la nouvelle fonctionnalité de transfert d'échantillons version\
+      fr:
+        "Activer la nouvelle fonctionnalité de transfert d'échantillons version\
         \ 2."
     enable_in_development: true
     name:
