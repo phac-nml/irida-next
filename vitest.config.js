@@ -30,6 +30,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    sequence: { shuffle: true },
     environment: "jsdom",
     environmentOptions: {
       jsdom: {

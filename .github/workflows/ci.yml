@@ -104,8 +104,8 @@ jobs:
           runtime: node@24.14.1
           cache: true
 
-      - name: Run JavaScript tests with shuffled order and coverage
-        run: pnpm run test:js:coverage --sequence.shuffle --sequence.seed=2233
+      - name: Run JavaScript tests
+        run: pnpm run test:js:coverage
 
   test:
     timeout-minutes: 15
