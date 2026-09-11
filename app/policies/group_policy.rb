@@ -347,13 +347,13 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     relation.where(
       id: authorized_scope(Namespace, type: :relation),
       public: false
-    )
+    ).include_route
   end
 
   scope_for :relation, :manageable do |relation|
     relation.where(
       id: authorized_scope(Namespace, type: :relation, as: :manageable, scope_options: { include_route: false })
-    )
+    ).include_route
   end
 
   scope_for :relation, :public_groups do |relation|
@@ -363,6 +363,6 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
       Arel.sql(
         'namespaces.id in (SELECT id FROM public_groups)'
       )
-    )
+    ).include_route
   end
 end
