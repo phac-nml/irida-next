@@ -46,11 +46,13 @@ export default class extends Controller {
     if (this.hasMinDateTarget) {
       this.#setMinDate();
     }
+
     if (this.hasMaxDateTarget) {
       this.#setMaxDate();
     }
 
     this.#arrowSvg = this.inputArrowTarget.firstElementChild;
+
     this.idempotentConnect();
   }
 
@@ -108,12 +110,13 @@ export default class extends Controller {
   }
 
   #setMinDate() {
-    this.#minDate = this.minDateTarget.firstElementChild.innerText;
+    this.#minDate = this.minDateTarget.firstElementChild.textContent.trim();
+    console.log(this.#minDate);
     this.minDateTarget.remove();
   }
 
   #setMaxDate() {
-    this.#maxDate = this.maxDateTarget.firstElementChild.innerText;
+    this.#maxDate = this.maxDateTarget.firstElementChild.textContent.trim();
     this.maxDateTarget.remove();
   }
 
@@ -121,12 +124,10 @@ export default class extends Controller {
     try {
       // Don't add calendar if already exists
       if (this.#calendar) return;
-
       // Add the calendar template to the DOM
       const calendar = this.calendarTemplateTarget.content.cloneNode(true);
       const containerNode = this.#findCalendarContainer();
       containerNode.appendChild(calendar);
-
       // requery calendar so we can manipulate it later. Must use getElementById as target is outside of this controller's
       // scope, and using something like lastElementChild does not work with turbo-stream (eg: members/group-link tables)
       this.#calendar = document.getElementById(this.calendarIdValue);
@@ -165,6 +166,9 @@ export default class extends Controller {
 
   #validateDateWithinBounds(date) {
     let withinBounds = true;
+    if (date === "") {
+      withinBounds = false;
+    }
     if (this.#minDate && this.#minDate > date) {
       withinBounds = false;
     }

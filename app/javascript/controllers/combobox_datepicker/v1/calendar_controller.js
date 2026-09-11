@@ -120,6 +120,7 @@ export default class extends Controller {
     fullCalendar.push(
       ...this.#getNextMonthsDates(fullCalendar[fullCalendar.length - 1]),
     );
+
     this.#fillCalendarWithDates(fullCalendar);
 
     // style date <td> based on if they're inMonth, outOfMonth, today's date, selected date or disabled due to minDate
@@ -252,7 +253,6 @@ export default class extends Controller {
           ? i >= firstCurrentIdx
           : i >= firstCurrentIdx && i < secondOneIdx);
       // 👉 If it's neither prev nor current, it's in the "next" segment.
-
       if (isCurrent) {
         appendCell(
           row,
@@ -493,6 +493,7 @@ export default class extends Controller {
 
   // change calendar via month select dropdown
   changeMonth() {
+    console.log("change month");
     this.#selectedMonthIndex = this.monthsValue.indexOf(
       this.monthSelectTarget.value,
     );
