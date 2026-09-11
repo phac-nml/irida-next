@@ -493,6 +493,7 @@ export default class extends Controller {
 
   // change calendar via month select dropdown
   changeMonth() {
+    console.log("change month");
     this.#selectedMonthIndex = this.monthsValue.indexOf(
       this.monthSelectTarget.value,
     );
@@ -618,8 +619,6 @@ export default class extends Controller {
 
   // handles ArrowLeft/Right keyboard navigation
   #handleHorizontalNavigation(event, direction) {
-    console.log("handle horizontal!");
-    console.log(direction);
     let targetDate;
     const currentDate = parseInt(event.target.innerText);
 
