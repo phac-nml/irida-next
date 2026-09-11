@@ -322,9 +322,10 @@ module Projects
     end
 
     test 'project metadata templates destroy renders error from error_message when not deleted' do
+      error_message = 'Destroy failed from error_message'
       MetadataTemplates::DestroyService.any_instance.stubs(:execute).returns(nil)
       Projects::MetadataTemplatesController.any_instance.stubs(:error_message)
-                                           .returns('Destroy failed from error_message')
+                                           .returns(error_message)
 
       assert_no_difference('MetadataTemplate.count') do
         delete namespace_project_metadata_template_path(
@@ -336,7 +337,9 @@ module Projects
       end
 
       assert_response :unprocessable_content
-      assert_select "div[data-controller='viral--flash']", text: /Destroy failed from error_message/
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div', "#{I18n.t('common.statuses.error')}: #{error_message}"
+      end
     end
 
     test 'project metadata templates list with none template' do
