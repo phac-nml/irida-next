@@ -105,14 +105,18 @@ describe("floating_dropdown", () => {
     expect(trigger.getAttribute("aria-expanded")).toBe("false");
   });
 
-  it("ignores clicks on the trigger and dropdown while visible", () => {
-    const { trigger, dropdown, instance } = buildDropdown();
+  it("stays open when clicking the dropdown or its descendants", () => {
+    const { dropdown, instance } = buildDropdown();
+    const child = document.createElement("button");
+    dropdown.appendChild(child);
 
     instance.show();
-    trigger.click();
     dropdown.click();
+    expect(instance.isVisible()).toBe(true);
+    child.click();
+    expect(instance.isVisible()).toBe(true);
 
-    expect(instance.isVisible()).toBe(false);
+    instance.destroy();
   });
 
   it("updates the floating position with the computed coordinates", async () => {
