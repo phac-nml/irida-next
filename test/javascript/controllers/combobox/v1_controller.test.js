@@ -1,4 +1,4 @@
-import { Application } from "@hotwired/stimulus";
+import { startApplication, stopApplication } from "../../helpers/stimulus.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { announce } from "utilities/live_region";
 import ComboboxController from "../../../../app/javascript/controllers/combobox/v1_controller.js";
@@ -152,7 +152,7 @@ function renderFixture({
 }
 
 async function startController() {
-  const application = Application.start();
+  const application = startApplication();
   application.register("combobox--v1", ComboboxController);
   await Promise.resolve();
   return application;
@@ -244,16 +244,13 @@ describe("combobox v1 controller", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     scrollIntoView = vi.fn();
-    window.HTMLElement.prototype.scrollIntoView = scrollIntoView;
+    vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(
+      scrollIntoView,
+    );
   });
 
   afterEach(async () => {
-    // Remove the controller element and flush microtasks so Stimulus runs
-    // disconnect(), detaching the document-level listeners before the next test.
-    document.body.innerHTML = "";
-    await Promise.resolve();
-    await Promise.resolve();
-    application?.stop();
+    await stopApplication(application);
     vi.useRealTimers();
   });
 

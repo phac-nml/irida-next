@@ -30,6 +30,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    sequence: { shuffle: true },
     environment: "jsdom",
     environmentOptions: {
       jsdom: {
@@ -38,9 +39,9 @@ export default defineConfig({
     },
     include: ["test/javascript/**/*.{test,spec}.{js,ts}"],
     setupFiles: ["./test/javascript/setup.js"],
-    passWithNoTests: true,
     clearMocks: true,
     restoreMocks: true,
+    unstubGlobals: true,
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],

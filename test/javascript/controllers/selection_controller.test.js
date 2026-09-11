@@ -1,10 +1,10 @@
-import { Application } from "@hotwired/stimulus";
+import { startApplication, stopApplication } from "../helpers/stimulus.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import SelectionController from "../../../app/javascript/controllers/selection_controller.js";
 
 async function startController(options = {}) {
   document.body.innerHTML = renderFixtureHtml(options);
-  const application = Application.start();
+  const application = startApplication();
   application.register("selection", SelectionController);
   await Promise.resolve();
   await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -81,8 +81,8 @@ function controllerFor(application) {
 describe("selection controller", () => {
   let application;
 
-  afterEach(() => {
-    application?.stop();
+  afterEach(async () => {
+    await stopApplication(application);
     sessionStorage.clear();
   });
 

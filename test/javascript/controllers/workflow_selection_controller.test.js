@@ -1,4 +1,5 @@
-import { Application, Controller } from "@hotwired/stimulus";
+import { startApplication, stopApplication } from "../helpers/stimulus.js";
+import { Controller } from "@hotwired/stimulus";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import WorkflowSelectionController from "../../../app/javascript/controllers/workflow_selection_controller.js";
 
@@ -11,7 +12,7 @@ class SelectionOutletStubController extends Controller {
 async function startController(options = {}) {
   document.body.innerHTML = renderFixture(options);
 
-  const application = Application.start();
+  const application = startApplication();
   application.register("workflow-selection", WorkflowSelectionController);
   application.register("selection", SelectionOutletStubController);
 
@@ -109,8 +110,8 @@ function dispatchKeydown(key) {
 describe("workflow selection controller", () => {
   let application;
 
-  afterEach(() => {
-    application?.stop();
+  afterEach(async () => {
+    await stopApplication(application);
     document.body.innerHTML = "";
   });
 
@@ -236,7 +237,9 @@ describe("workflow selection controller", () => {
     controller.preventClosingDialog();
     expect(dispatchKeydown("Escape").defaultPrevented).toBe(true);
 
-    controller.disconnect();
+    controller.element.remove();
+    await Promise.resolve();
+    await Promise.resolve();
 
     // Escape handling stops and the form is no longer amended after disconnect.
     expect(dispatchKeydown("Escape").defaultPrevented).toBe(false);
@@ -245,7 +248,5 @@ describe("workflow selection controller", () => {
     const event = dispatchBeforeFetch(form, resume);
     expect(event.detail.fetchOptions.body).toBeUndefined();
     expect(resume).not.toHaveBeenCalled();
-
-    application = undefined;
   });
 });

@@ -105,7 +105,7 @@ jobs:
           cache: true
 
       - name: Run JavaScript tests
-        run: pnpm run test:js
+        run: pnpm run test:js:coverage
 
   test:
     timeout-minutes: 15

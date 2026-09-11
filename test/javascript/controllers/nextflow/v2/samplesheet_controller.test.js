@@ -1,4 +1,7 @@
-import { Application } from "@hotwired/stimulus";
+import {
+  startApplication,
+  stopApplication,
+} from "../../../helpers/stimulus.js";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import SamplesheetController from "../../../../../app/javascript/controllers/nextflow/v2/samplesheet_controller.js";
 import SelectionController from "../../../../../app/javascript/controllers/selection_controller.js";
@@ -678,7 +681,7 @@ function renderBaseFixture() {
 /* eslint-enable no-useless-escape */
 
 async function startController() {
-  const application = Application.start();
+  const application = startApplication();
   application.register("nextflow--v2--samplesheet", SamplesheetController);
   application.register("selection", SelectionController);
   await Promise.resolve();
@@ -695,15 +698,17 @@ describe("nextflow v2 samplesheet controller", () => {
   };
 
   beforeEach(() => {
-    window.requestAnimationFrame = (callback) => setTimeout(callback, 0);
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) =>
+      setTimeout(callback, 0),
+    );
     clearStorage(window.localStorage);
     clearStorage(sessionStorage);
-    Element.prototype.scrollIntoView = vi.fn();
+    vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(() => {});
     vi.useFakeTimers();
   });
 
-  afterEach(() => {
-    application?.stop();
+  afterEach(async () => {
+    await stopApplication(application);
     vi.useRealTimers();
   });
 
@@ -1654,10 +1659,10 @@ describe("nextflow v2 samplesheet controller", () => {
   });
 
   it("renders the Turbo response when fetching sample attributes", async () => {
-    globalThis.fetch = vi.fn();
-    globalThis.Turbo = {
+    vi.stubGlobal("fetch", vi.fn());
+    vi.stubGlobal("Turbo", {
       renderStreamMessage: vi.fn(),
-    };
+    });
     const allSamples = range(1, 2);
     setupStandardSamplesheetAttributes(allSamples);
 
@@ -1729,6 +1734,7 @@ describe("nextflow v2 samplesheet controller", () => {
   });
 
   it("fetch sample attributes error state", async () => {
+    vi.stubGlobal("Turbo", { renderStreamMessage: vi.fn() });
     const allSamples = range(1, 2);
     setupStandardSamplesheetAttributes(allSamples);
 
