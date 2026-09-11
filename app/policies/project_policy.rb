@@ -252,7 +252,10 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   scope_for :relation, :project_samples_transferable do |relation, options|
     obj = options.key?(:group) ? options[:group] : options[:project]
-    if Member.effective_access_level(obj, user) == Member::AccessLevel::MAINTAINER
+    access_level = Member.effective_access_level(obj, user)
+
+    case access_level
+    when Member::AccessLevel::MAINTAINER
       return relation.none if obj.project_namespace? && obj.parent.user_namespace?
 
       top_level_ancestor = if obj.project_namespace?
@@ -267,8 +270,10 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
                                  as: :manageable_without_shared_links)
         .where(namespace: { parent_id: group_and_subgroup_ids })
 
-    else
+    when Member::AccessLevel::OWNER
       authorized_scope(relation, type: :relation, as: :manageable)
+    else
+      relation.none
     end
   end
 

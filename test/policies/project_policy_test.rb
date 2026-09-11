@@ -494,4 +494,71 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert scoped_projects.include?(projects(:projectBravo))
     assert scoped_projects.include?(projects(:projectCharlie))
   end
+
+  test 'project_samples_transferable scope includes all manageable projects for an owner' do
+    user = users(:user27)
+    policy = ProjectPolicy.new(user:)
+
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :project_samples_transferable,
+                                                  scope_options: {
+                                                    project: namespaces_project_namespaces(:user27_project1_namespace)
+                                                  })
+    manageable_scoped_projects = policy.apply_scope(Project, type: :relation, name: :manageable)
+
+    assert_equal manageable_scoped_projects.pluck(:id).sort, scoped_projects.pluck(:id).sort
+    assert_equal manageable_scoped_projects.count, scoped_projects.count
+  end
+
+  test 'project_samples_transferable scope includes all manageable projects under a top-level group for a maintainer' do
+    user = users(:joan_doe)
+    group = groups(:group_one)
+    policy = ProjectPolicy.new(user:)
+
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :project_samples_transferable,
+                                                  scope_options: { group: group })
+
+    manageable_scoped_projects = policy.apply_scope(Project, type: :relation,
+                                                             name: :manageable_without_shared_links)
+                                       .where(namespace: { parent_id: group.self_and_descendant_ids })
+
+    # does not include project outside of group hierarchy that the user has manageble access to
+    assert_not scoped_projects.include?(projects(:project32))
+
+    assert_equal manageable_scoped_projects.pluck(:id).sort, scoped_projects.pluck(:id).sort
+    assert_equal manageable_scoped_projects.count, scoped_projects.count
+  end
+
+  test 'project_samples_transferable scope returns an empty relation for a user with ' \
+       'maintainer access on a personal project' do
+    user = users(:joan_doe)
+    project = namespaces_project_namespaces(:john_doe_project4_namespace)
+    policy = ProjectPolicy.new(user:)
+
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :project_samples_transferable,
+                                                  scope_options: { project: project })
+
+    assert scoped_projects.empty?
+  end
+
+  test 'personal scope returns only projects under the user\'s personal namespace' do
+    user = users(:john_doe)
+    policy = ProjectPolicy.new(user:)
+
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :personal)
+
+    scoped_projects.each do |project|
+      assert_equal user.namespace.id, project.namespace.parent_id
+    end
+  end
+
+  test 'group_projects scope returns empty relation for a user without access to the group' do
+    user = users(:john_doe)
+    group = groups(:group_two)
+    policy = ProjectPolicy.new(user:)
+
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :group_projects,
+                                                  scope_options: { group: group })
+
+    assert scoped_projects.empty?
+  end
 end
