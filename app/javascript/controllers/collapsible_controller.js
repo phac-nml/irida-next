@@ -44,7 +44,9 @@ export default class extends Controller {
     }
 
     // Check if the collapsible item is initially hidden (collapsed)
-    const isInitiallyCollapsed = this.itemTarget.classList.contains("hidden");
+    const isInitiallyCollapsed =
+      this.itemTarget.classList.contains("hidden") ||
+      this.itemTarget.hasAttribute("hidden");
 
     // 🗣️ Set initial ARIA state for screen readers
     this.buttonTarget.setAttribute(
