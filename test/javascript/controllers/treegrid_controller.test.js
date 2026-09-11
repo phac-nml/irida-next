@@ -1,4 +1,4 @@
-import { Application } from "@hotwired/stimulus";
+import { startApplication, stopApplication } from "../helpers/stimulus.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import TreegridController from "../../../app/javascript/controllers/treegrid_controller.js";
@@ -167,14 +167,14 @@ describe("treegrid controller", () => {
   let application;
 
   beforeEach(() => {
-    globalThis.fetch = vi.fn();
-    globalThis.Turbo = {
+    vi.stubGlobal("fetch", vi.fn());
+    vi.stubGlobal("Turbo", {
       renderStreamMessage: vi.fn(),
-    };
+    });
   });
 
-  afterEach(() => {
-    application?.stop();
+  afterEach(async () => {
+    await stopApplication(application);
     document.body.innerHTML = "";
     vi.restoreAllMocks();
   });
@@ -189,7 +189,7 @@ describe("treegrid controller", () => {
       const addSpy = vi.spyOn(element, "addEventListener");
       const removeSpy = vi.spyOn(element, "removeEventListener");
 
-      application = Application.start();
+      application = startApplication();
       application.register("treegrid", TreegridController);
       await flushStimulus();
 
@@ -228,7 +228,7 @@ describe("treegrid controller", () => {
         </div>
       `;
 
-      application = Application.start();
+      application = startApplication();
       application.register("treegrid", TreegridController);
       await flushStimulus();
 
@@ -264,7 +264,7 @@ describe("treegrid controller", () => {
 
   describe("Toggle row button behaviour", () => {
     beforeEach(() => {
-      application = Application.start();
+      application = startApplication();
       application.register("treegrid", TreegridController);
     });
 
@@ -350,7 +350,7 @@ describe("treegrid controller", () => {
 
   describe("keyboard navigation", () => {
     beforeEach(() => {
-      application = Application.start();
+      application = startApplication();
       application.register("treegrid", TreegridController);
     });
 

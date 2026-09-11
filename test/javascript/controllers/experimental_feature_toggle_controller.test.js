@@ -1,4 +1,4 @@
-import { Application } from "@hotwired/stimulus";
+import { startApplication, stopApplication } from "../helpers/stimulus.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ExperimentalFeatureToggleController from "../../../app/javascript/controllers/experimental_feature_toggle_controller.js";
 
@@ -57,7 +57,7 @@ function renderFixture({
 }
 
 async function startController() {
-  const application = Application.start();
+  const application = startApplication();
   application.register(
     "experimental-feature-toggle",
     ExperimentalFeatureToggleController,
@@ -92,8 +92,8 @@ function controllerFor(application) {
 describe("experimental feature toggle controller", () => {
   let application;
 
-  afterEach(() => {
-    application?.stop();
+  afterEach(async () => {
+    await stopApplication(application);
     vi.useRealTimers();
   });
 

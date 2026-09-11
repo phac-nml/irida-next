@@ -1,4 +1,7 @@
-import { Application } from "@hotwired/stimulus";
+import {
+  startApplication,
+  stopApplication,
+} from "../../../helpers/stimulus.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import SortableListsController from "../../../../../app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js";
 
@@ -207,7 +210,7 @@ function activeOptionIds(listbox) {
 }
 
 async function startController() {
-  const application = Application.start();
+  const application = startApplication();
   application.register(
     "sortable-lists--v1--two-lists-selection",
     SortableListsController,
@@ -234,8 +237,8 @@ function itemTexts(id) {
 describe("sortable lists two-lists selection controller", () => {
   let application;
 
-  afterEach(() => {
-    application?.stop();
+  afterEach(async () => {
+    await stopApplication(application);
     vi.useRealTimers();
   });
 
@@ -1027,6 +1030,19 @@ describe("sortable lists two-lists selection controller", () => {
   });
 
   describe("list titles and scrolling", () => {
+    it("updates the active option when scrolling is unavailable", async () => {
+      renderFixture();
+      application = await startController();
+      const availableList = list("available-list");
+      for (const option of availableList.children) {
+        Object.defineProperty(option, "scrollIntoView", { value: undefined });
+      }
+      availableList.focus();
+      expect(activeId(availableList)).toBe("available-alpha");
+      keydown(availableList, "ArrowDown");
+      expect(activeId(availableList)).toBe("available-beta");
+    });
+
     it("tolerates lists without a data-title attribute", async () => {
       renderFixture({ titles: false });
       application = await startController();
@@ -1044,14 +1060,12 @@ describe("sortable lists two-lists selection controller", () => {
       application = await startController();
 
       const scrollSpy = vi.fn();
-      window.HTMLElement.prototype.scrollIntoView = scrollSpy;
+      vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(
+        scrollSpy,
+      );
 
-      try {
-        list("available-list").focus();
-        expect(scrollSpy).toHaveBeenCalled();
-      } finally {
-        delete window.HTMLElement.prototype.scrollIntoView;
-      }
+      list("available-list").focus();
+      expect(scrollSpy).toHaveBeenCalled();
     });
   });
 
