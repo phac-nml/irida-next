@@ -12,6 +12,7 @@ export default defineConfig({
       controllers: resolve(jsRoot, "controllers"),
       debounce: resolve("vendor/javascript/debounce.js"),
       deepmerge: resolve("vendor/javascript/deepmerge.js"),
+      "focus-trap": resolve("vendor/javascript/focus-trap.js"),
       tabbable: resolve("vendor/javascript/tabbable.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
@@ -219,6 +220,24 @@ export default defineConfig({
           lines: 100,
         },
         "app/javascript/controllers/combobox/v1_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/viral/dialog_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/viral/dialog_trigger_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/viral/flash_controller.js": {
           statements: 100,
           branches: 100,
           functions: 100,
