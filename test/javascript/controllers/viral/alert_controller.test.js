@@ -207,6 +207,108 @@ describe("alert controller", () => {
     element.querySelector("button").click();
     expect(createLiveRegion).toHaveBeenCalledOnce();
   });
+  it("reports initialization failure and releases listeners registered before it", async () => {
+    const error = new Error("Countdown scheduling failed");
+    vi.spyOn(globalThis, "setInterval").mockImplementationOnce(() => {
+      throw error;
+    });
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    await mount({ autoDismiss: true });
+    expect(log).toHaveBeenCalledExactlyOnceWith(
+      "❌ Failed to initialize alert controller:",
+      error,
+    );
+    element.remove();
+    await Promise.resolve();
+    interact("mouseleave");
+    key("Escape");
+    expect(vi.getTimerCount()).toBe(0);
+    expect(createLiveRegion).not.toHaveBeenCalled();
+  });
+  it("hides the alert as a fallback when removal fails", async () => {
+    await mount();
+    const error = new Error("Alert removal failed");
+    vi.spyOn(element, "remove").mockImplementationOnce(() => {
+      throw error;
+    });
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    element.querySelector("button").click();
+    expect(element.isConnected).toBe(true);
+    expect(element.style.display).toBe("none");
+    expect(log).toHaveBeenCalledExactlyOnceWith(
+      "❌ Failed to dismiss alert:",
+      error,
+    );
+    expect(announce).toHaveBeenCalledWith("Alert dismissed", {
+      element: region,
+    });
+    await vi.advanceTimersByTimeAsync(3000);
+    expect(region.isConnected).toBe(false);
+  });
+  it("stops the countdown if updating progress fails", async () => {
+    await mount({ autoDismiss: true });
+    const progress = element.querySelector(
+      '[data-viral--alert-target="progressBar"]',
+    );
+    const error = new Error("Progress update failed");
+    vi.spyOn(progress.style, "width", "set").mockImplementationOnce(() => {
+      throw error;
+    });
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    await vi.advanceTimersByTimeAsync(50);
+    expect(log).toHaveBeenCalledExactlyOnceWith(
+      "❌ Auto-dismiss error:",
+      error,
+    );
+    expect(vi.getTimerCount()).toBe(0);
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(element.isConnected).toBe(true);
+    expect(createLiveRegion).not.toHaveBeenCalled();
+  });
+  it("reports a failed announcement cleanup without an unhandled timer error", async () => {
+    await mount();
+    element.querySelector("button").click();
+    const error = new Error("Announcement removal failed");
+    vi.spyOn(region, "remove").mockImplementationOnce(() => {
+      throw error;
+    });
+    const log = vi.spyOn(console, "warn").mockImplementation(() => {});
+    await vi.advanceTimersByTimeAsync(3000);
+    expect(log).toHaveBeenCalledExactlyOnceWith(
+      "⚠️  Failed to remove announcement element:",
+      error,
+    );
+    expect(element.isConnected).toBe(false);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+  it("continues cleanup when removing one listener fails", async () => {
+    await mount({ autoDismiss: true });
+    const error = new Error("Listener removal failed");
+    const removeListener = element.removeEventListener.bind(element);
+    const removal = vi
+      .spyOn(element, "removeEventListener")
+      .mockImplementationOnce(() => {
+        throw error;
+      });
+    const log = vi.spyOn(console, "warn").mockImplementation(() => {});
+    element.remove();
+    await Promise.resolve();
+    expect(log).toHaveBeenCalledExactlyOnceWith(
+      "⚠️  Failed to remove keydown event listener:",
+      error,
+    );
+    expect(removal.mock.calls.map(([type]) => type)).toEqual([
+      "keydown",
+      "mouseenter",
+      "focusin",
+      "mouseleave",
+      "focusout",
+    ]);
+    interact("mouseleave");
+    expect(vi.getTimerCount()).toBe(0);
+    // Undo the injected platform failure so no listener escapes this test.
+    removeListener(...removal.mock.calls[0]);
+  });
   it("still dismisses if the announcement service fails", async () => {
     await mount();
     const error = new Error("Announcement unavailable");
