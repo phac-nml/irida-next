@@ -116,6 +116,34 @@ describe("colour mode controller", () => {
     expect(announce).toHaveBeenCalledWith(expected, expect.any(Object));
     expect(log).toHaveBeenCalledWith("Failed to toggle theme:", error);
   });
+  it("disconnects safely when creating the live region fails during connection", async () => {
+    document.body.innerHTML = '<div data-controller="colour-mode"></div>';
+    element = document.body.firstElementChild;
+    application = startApplication();
+    const error = new Error("Live region creation failed");
+    const report = vi
+      .spyOn(application, "handleError")
+      .mockImplementation(() => {});
+    const createElement = vi
+      .spyOn(document, "createElement")
+      .mockImplementationOnce(() => {
+        throw error;
+      });
+    application.register("colour-mode", ColourModeController);
+    await Promise.resolve();
+    expect(createElement).toHaveBeenCalledWith("div");
+    expect(report).toHaveBeenCalledExactlyOnceWith(
+      error,
+      "Error connecting controller",
+      expect.any(Object),
+    );
+    // Only the expected connection failure is intercepted; teardown errors must fail.
+    report.mockRestore();
+    createElement.mockRestore();
+    element.remove();
+    await Promise.resolve();
+    expect(document.querySelector('[aria-live="polite"]')).toBeNull();
+  });
   it("removes its live region on disconnect and creates just one on reconnect", async () => {
     await mount();
     const region = document.querySelector('[aria-live="polite"]');
