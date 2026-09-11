@@ -228,7 +228,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
             .where(Arel.sql('id IN (SELECT id FROM accessible_namespaces)'))
             .select(:id),
 
-        # 8. Public project namespaces
+        # 3. Public project namespaces
         public_project_namespaces:
           if access_level.include?(Member::AccessLevel::GUEST)
             Namespaces::ProjectNamespace

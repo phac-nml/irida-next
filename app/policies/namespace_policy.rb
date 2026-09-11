@@ -9,14 +9,15 @@ class NamespacePolicy < ApplicationPolicy
                           include_shared_links: true|
     scope = relation
             .with(
+              # 1. The users personal namespace and its descendants
               user_namespaces: Namespace
                 .where(id: user.namespace&.id)
                 .self_and_descendant_ids,
-              # 1. Accessible namespace IDs for the user based on their memberships
+              # 2. Accessible namespace IDs for the user based on their memberships
               accessible_namespaces: Namespace
                 .where(id: user.members.not_expired.with_access_level(access_level).select(:namespace_id))
                 .self_and_descendant_ids,
-              # 5. Accessible linked namespaces for the user based on group links
+              # 3. Accessible linked namespaces for the user based on group links
               accessible_linked_namespaces:
                 if include_shared_links
                   Namespace
