@@ -28,7 +28,8 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
         end
 
         column I18n.t('active_admin.feature_flags.columns.opt_in') do |entry|
-          status_tag I18n.t("active_admin.feature_flags.opt_in.#{entry[:opt_in_state]}")
+          status_tag I18n.t("active_admin.feature_flags.opt_in.#{entry[:opt_in_state]}"),
+                     class: opt_in_state_class(entry[:opt_in_state])
         end
 
         column I18n.t('active_admin.feature_flags.columns.gates') do |entry|
@@ -43,7 +44,7 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
           end
         end
 
-        column I18n.t('active_admin.feature_flags.columns.actions') do |entry|
+        column I18n.t('active_admin.feature_flags.columns.actions') do |entry| # rubocop:disable Metrics/BlockLength
           div class: 'flex flex-col items-start gap-2' do
             global = global_toggle_for(entry)
             text_node link_to global[:label], global[:path],
@@ -53,9 +54,11 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
 
             opt_in = opt_in_toggle_for(entry)
             if opt_in[:disabled]
-              span opt_in[:label],
-                   class: 'text-sm text-gray-500 dark:text-gray-400 cursor-not-allowed whitespace-nowrap',
-                   title: opt_in[:disabled_reason]
+              text_node button_tag(opt_in[:label],
+                                   type: 'button',
+                                   disabled: true,
+                                   class: 'action-item-button whitespace-nowrap',
+                                   title: opt_in[:disabled_reason])
             else
               text_node link_to opt_in[:label], opt_in[:path],
                                 class: 'action-item-button whitespace-nowrap',
@@ -63,7 +66,7 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
                                 data: { confirm: opt_in[:confirm] }
             end
           end
-        end
+        end # rubocop:enable Metrics/BlockLength
       end
     end
   end
@@ -94,7 +97,7 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
 
   controller do # rubocop:disable Metrics/BlockLength
     helper_method :global_toggle_for, :opt_in_toggle_for, :gate_summary_text,
-                  :global_state_class, :flipper_feature_url
+                  :global_state_class, :opt_in_state_class, :flipper_feature_url
 
     def global_toggle_for(entry)
       if entry[:global_state] == 'enabled'
@@ -148,7 +151,19 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
     end
 
     def global_state_class(state)
-      { 'enabled' => 'ok', 'conditional' => 'warning', 'disabled' => 'no' }.fetch(state, 'no')
+      {
+        'enabled' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+        'conditional' => 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300',
+        'disabled' => 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+      }.fetch(state, 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300')
+    end
+
+    def opt_in_state_class(state)
+      {
+        'all_users' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+        'allowlist' => 'bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300',
+        'off' => 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+      }.fetch(state, 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300')
     end
 
     def flipper_feature_url(feature_key)

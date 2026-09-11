@@ -19,7 +19,7 @@ en:
         gates: Gates
         global_state: Global state
         opt_in: Opt-in availability
-      description: Manage admin-manageable experimental features. Enable or disable a feature globally, or make it available for users to opt in from their profile. Use "Manage gates" for advanced Flipper configuration.
+      description: Manage admin-manageable experimental features. Global state controls access for everyone. When a feature is disabled globally, gates can provide access to selected users or groups, while opt-in availability lets users enable the feature from their profile. Use "Manage gates" for advanced Flipper configuration.
       empty: No admin-manageable features are configured.
       flash:
         errors:

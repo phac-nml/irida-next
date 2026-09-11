@@ -20,6 +20,9 @@ module Admin
       assert_includes response.body, @feature_name
       assert_includes response.body, I18n.t('active_admin.feature_flags.state.disabled')
       assert_includes response.body, I18n.t('active_admin.feature_flags.opt_in.off')
+      assert_select 'tr', text: /#{Regexp.escape(@feature_name)}/ do
+        assert_select 'span.status-tag.bg-gray-100.text-gray-700', count: 2
+      end
       # Guard against missing i18n keys rendering on the page.
       assert_no_match(/translation missing/i, response.body)
       # Operational (non admin-manageable) features are not listed.
@@ -45,12 +48,21 @@ module Admin
         get admin_feature_flags_path
 
         target_state = state == 'enabled' ? 'disabled' : 'enabled'
-        assert_select 'a[href=?][data-method="patch"]',
-                      admin_feature_flags_update_global_state_path(feature_key: @feature_key, target_state:), count: 1
-        assert_select 'a[href=?]', "/-/system/flipper/features/#{@feature_key}", count: 1
-        next if state == 'enabled'
+        global_action = target_state == 'disabled' ? 'disable_globally' : 'enable_globally'
+        assert_select 'tr', text: /#{Regexp.escape(@feature_name)}/ do
+          assert_select 'a', text: I18n.t("active_admin.feature_flags.actions.#{global_action}"), count: 1
+          assert_select 'a[href=?]', "/-/system/flipper/features/#{@feature_key}", count: 1
+        end
+        if state == 'enabled'
+          assert_select 'button[disabled]', text: I18n.t('active_admin.feature_flags.actions.enable_opt_in'), count: 1
+          assert_select 'form[action*="update_opt_in_availability"] button:not([disabled])', count: 0
+          next
+        end
 
-        assert_select 'a[href*="update_opt_in_availability"][data-method="patch"]'
+        assert_select 'tr', text: /#{Regexp.escape(@feature_name)}/ do
+          assert_select 'a:not([aria-disabled="true"])',
+                        text: I18n.t('active_admin.feature_flags.actions.enable_opt_in'), count: 1
+        end
       end
     end
 

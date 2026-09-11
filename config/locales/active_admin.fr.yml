@@ -19,7 +19,7 @@ fr:
         gates: Indicateurs
         global_state: État global
         opt_in: Disponibilité de l'adhésion
-      description: Gérer les fonctionnalités expérimentales administrables. Activez ou désactivez une fonctionnalité globalement, ou rendez-la disponible pour que les utilisateurs y adhèrent depuis leur profil. Utilisez « Gérer les indicateurs » pour la configuration avancée de Flipper.
+      description: Gérer les fonctionnalités expérimentales administrables. L'état global contrôle l'accès pour tous les utilisateurs. Lorsqu'une fonctionnalité est désactivée globalement, les indicateurs peuvent en autoriser l'accès à certains utilisateurs ou groupes, tandis que la disponibilité de l'adhésion permet aux utilisateurs de l'activer depuis leur profil. Utilisez « Gérer les indicateurs » pour la configuration avancée de Flipper.
       empty: Aucune fonctionnalité administrable n'est configurée.
       flash:
         errors:
