@@ -38,7 +38,10 @@ export default class extends Controller {
    */
   initializeTheme() {
     try {
-      const theme = localStorage.getItem("theme");
+      const savedTheme = localStorage.getItem("theme");
+      const theme = ["light", "dark"].includes(savedTheme)
+        ? savedTheme
+        : "system";
       const target = this.getTargetForTheme(theme);
       if (target) {
         target.checked = true;
@@ -48,6 +51,7 @@ export default class extends Controller {
       console.error("Failed to initialize theme:", error);
       // Fallback to system preference
       this.systemTarget.checked = true;
+      this.updateTheme("system");
     }
   }
 
