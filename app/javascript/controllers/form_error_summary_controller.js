@@ -22,7 +22,7 @@ export default class extends Controller {
     // Multi-checkbox values typically render as "#{baseId}_<value>".
     const esc =
       window.CSS && typeof window.CSS.escape === "function"
-        ? window.CSS.escape
+        ? (value) => window.CSS.escape(value)
         : (value) => String(value).replace(/[^a-zA-Z0-9_-]/g, "\\$&");
 
     const checkboxLike = document.querySelector(`[id^="${esc(targetId)}_"]`);

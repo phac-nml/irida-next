@@ -113,7 +113,6 @@ export default defineConfig({
           functions: 100,
           lines: 100,
         },
-
         "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js":
           {
             statements: 100,
@@ -219,6 +218,18 @@ export default defineConfig({
           lines: 100,
         },
         "app/javascript/controllers/combobox/v1_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/email_input_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/form_error_summary_controller.js": {
           statements: 100,
           branches: 100,
           functions: 100,
