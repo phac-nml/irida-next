@@ -10,6 +10,10 @@ function preventEscapeListener(event) {
 export default class extends Controller {
   static targets = ["submit"];
 
+  disconnect() {
+    document.removeEventListener("keydown", preventEscapeListener, true);
+  }
+
   submitStart() {
     document.addEventListener("keydown", preventEscapeListener, true);
     document.querySelector(".dialog--close").classList.add("hidden");
