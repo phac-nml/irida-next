@@ -1,0 +1,52 @@
+<fieldset
+  data-advanced-search--v2--builder-target="groupsContainer"
+  data-advanced-search--v2--builder-group-index="<%= @group_index %>"
+  data-advanced-search--v2--builder-legend-template="<%= t("components.advanced_search_component.v2.group", index: "__INDEX__") %>"
+  class="
+    space-y-4 rounded-[var(--pvc-radius-panel)] border border-[var(--pvc-color-border)]
+    bg-[var(--pvc-color-surface)] p-4 text-sm text-[var(--pvc-color-text-muted)]
+  "
+>
+  <legend class="px-1 font-semibold text-[var(--pvc-color-text)]">
+    <%= t("components.advanced_search_component.v2.group", index: @group_number) %>
+  </legend>
+
+  <p class="text-xs text-[var(--pvc-color-text-muted)]">
+    <%= t("components.advanced_search_component.v2.group_match_all") %>
+  </p>
+
+  <%= @form.fields_for :groups, @group, child_index: @group_index do |groups_form| %>
+    <% @group.conditions.each_with_index do |condition, condition_index| %>
+      <%= render AdvancedSearch::V2::ConditionComponent.new(
+        groups_form: groups_form,
+        group_index: @group_index,
+        condition: condition,
+        condition_index: condition_index,
+        condition_number: condition_index + 1,
+        fields: @fields,
+        operations: @operations,
+      ) %>
+    <% end %>
+  <% end %>
+
+  <div class="my-4 flex justify-end gap-2">
+    <%= render Pathogen::Button.new(
+      type: :button,
+      tone: :neutral,
+      emphasis: :outline,
+      data: { action: "advanced-search--v2--builder#addCondition" },
+    ) do %>
+      <%= t("components.advanced_search_component.v2.add_condition_button") %>
+    <% end %>
+
+    <%= render Pathogen::Button.new(
+      type: :button,
+      tone: :danger,
+      emphasis: :ghost,
+      class: class_names("hidden": !@show_remove_group_button),
+      data: { action: "advanced-search--v2--builder#removeGroup" },
+    ) do %>
+      <%= t("components.advanced_search_component.v2.remove_group_button") %>
+    <% end %>
+  </div>
+</fieldset>

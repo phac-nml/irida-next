@@ -12,14 +12,12 @@ features:
     admin_manageable: true
     description:
       en: "Disable using standard operators on metadata fields in GraphQL"
-      fr:
-        "Désactiver l'utilisation des opérateurs standard sur les champs de métadonnées\
+      fr: "Désactiver l'utilisation des opérateurs standard sur les champs de métadonnées\
         \ dans GraphQL"
     enable_in_development: false
     name:
       en: "Advanced Search Disable Standard Operators for Metadata in GraphQL"
-      fr:
-        "Recherche avancée : désactiver les opérateurs standard pour les métadonnées\
+      fr: "Recherche avancée : désactiver les opérateurs standard pour les métadonnées\
         \ dans GraphQL"
   advanced_search_metadata_operators:
     admin_manageable: true
@@ -30,14 +28,22 @@ features:
     name:
       en: "Advanced Search Metadata Operators"
       fr: "Opérateurs de métadonnées pour la recherche avancée"
+  advanced_search_v2:
+    admin_manageable: true
+    description:
+      en: "Enable the V2 advanced search UI (decoupled, reusable query builder)."
+      fr: "Activer l'interface de recherche avancée V2 (générateur de requêtes découplé\
+        \ et réutilisable)."
+    enable_in_development: true
+    name:
+      en: "Advanced Search V2"
+      fr: "Recherche avancée V2"
   advanced_search_with_auto_complete:
     admin_manageable: true
     description:
-      en:
-        "Enable auto-complete suggestions for the field dropdown within the advanced\
+      en: "Enable auto-complete suggestions for the field dropdown within the advanced\
         \ search dialog."
-      fr:
-        "Activer les suggestions de saisie semi-automatique dans la liste des champs\
+      fr: "Activer les suggestions de saisie semi-automatique dans la liste des champs\
         \ de la recherche avancée."
     enable_in_development: true
     name:
@@ -71,8 +77,7 @@ features:
       en: "Client-Side Linelist Imports"
       fr: "Importations de listes linéaires côté client"
   compose_with_retry:
-    description:
-      "Exponentially backoff and retry failed compose operations. This\
+    description: "Exponentially backoff and retry failed compose operations. This\
       \ is intended to mitigate transient errors in the compose process."
     enable_in_development: true
   data_grid_samples_table:
@@ -88,8 +93,7 @@ features:
     admin_manageable: true
     description:
       en: "Enable groups to be marked as public so that all users have access"
-      fr:
-        "Permettre de marquer les groupes comme publics afin que tous les utilisateurs\
+      fr: "Permettre de marquer les groupes comme publics afin que tous les utilisateurs\
         \ y aient accès"
     enable_in_development: true
     name:

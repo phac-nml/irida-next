@@ -1,0 +1,111 @@
+<fieldset
+  data-advanced-search--v2--builder-target="conditionsContainer"
+  data-advanced-search--v2--builder-group-index="<%= @group_index %>"
+  data-advanced-search--v2--builder-condition-index="<%= @condition_index %>"
+  data-advanced-search--v2--builder-legend-template="<%= t("components.advanced_search_component.v2.condition", index: "__INDEX__") %>"
+  data-advanced-search-selected-field="<%= selected_field %>"
+  class="
+    relative flex flex-col space-y-3 rounded-[var(--pvc-radius-panel)] border border-[var(--pvc-color-border)]
+    bg-[var(--pvc-color-surface-muted)] p-4 pr-14 text-sm text-[var(--pvc-color-text-muted)]
+  "
+>
+  <legend class="px-1 font-semibold text-[var(--pvc-color-text)]">
+    <%= t("components.advanced_search_component.v2.condition", index: @condition_number) %>
+  </legend>
+
+  <%= @groups_form.fields_for :conditions, @condition, child_index: @condition_index do |conditions_form| %>
+    <% invalid_field = @condition.errors.include?(:field) %>
+
+    <div class="form-field w-full <%= 'invalid' if invalid_field %>">
+      <%= conditions_form.label :field, data: { required: true } %>
+
+      <% unless Flipper.enabled?(:advanced_search_with_auto_complete, Current.user) %>
+        <%= conditions_form.select :field,
+                               field_options_for_select,
+                               { include_blank: true },
+                               {
+                                 "data-action": "change->advanced-search--v2--builder#handleFieldChange",
+                                 "aria-label": field_label,
+                                 "aria-invalid": invalid_field,
+                                 "aria-describedby": conditions_form.field_id(:field, "error")
+                               } %>
+      <% else %>
+        <%= render ComboboxComponent.new(
+          form: conditions_form,
+          field: :field,
+          options: field_options_for_select,
+          data: {
+            action: "change->advanced-search--v2--builder#handleFieldChange",
+          },
+          aria: {
+            label: field_label,
+            invalid: invalid_field,
+            describedby: conditions_form.field_id(:field, "error")
+          },
+        ) %>
+      <% end %>
+
+      <%= render "shared/form/field_errors",
+      errors: @condition.errors.full_messages_for(:field),
+      id: conditions_form.field_id(:field, "error") %>
+    </div>
+
+    <% invalid_operator = @condition.errors.include?(:operator) %>
+
+    <div class="form-field w-full sm:max-w-xs <%= 'invalid' if invalid_operator %> <%= 'invisible @max-xl:hidden' if @condition.field.blank? %>">
+      <% operators = if enum_field? %>
+        <% options_for_select(
+                               enum_operator_options,
+                               @condition.operator,
+                             ) %>
+      <% elsif Flipper.enabled?(:advanced_search_metadata_operators) && @condition.field.to_s.starts_with?('metadata.') %>
+        <% grouped_options_for_select(metadata_operators, @condition.operator) %>
+      <% else %>
+        <% options_for_select(
+                               @operations['standard'],
+                               @condition.operator,
+                             ) %>
+      <% end %>
+
+      <%= conditions_form.label :operator, data: { required: true } %>
+
+      <%= conditions_form.select :operator,
+                             operators,
+                             { include_blank: true },
+                             {
+                               "data-action": "advanced-search--v2--builder#handleOperatorChange",
+                               "aria-label": operator_label,
+                               "aria-invalid": invalid_operator,
+                               "aria-describedby":
+                                 conditions_form.field_id(:operator, "error"),
+                             } %>
+
+      <%= render "shared/form/field_errors",
+      errors: @condition.errors.full_messages_for(:operator),
+      id: conditions_form.field_id(:operator, "error") %>
+    </div>
+
+    <%= render AdvancedSearch::V2::ValueComponent.new(
+      conditions_form: conditions_form,
+      group_index: @group_index,
+      condition: @condition,
+      condition_index: @condition_index,
+      options: value_options
+    ) %>
+  <% end %>
+
+  <button <%# herb:disable html-no-title-attribute %>
+    type="button"
+    class="
+      absolute -top-4 right-2 inline-flex h-11 w-11 cursor-pointer items-center justify-center
+      rounded-[var(--pvc-radius-action)] text-[var(--pvc-color-text-muted)] hover:bg-[var(--pvc-color-surface)]
+      hover:text-[var(--pvc-color-danger-strong)] focus-visible:outline-2 focus-visible:outline-offset-2
+      focus-visible:outline-[var(--pvc-color-focus)]
+    "
+    aria-label="<%= t("components.advanced_search_component.v2.remove_condition_aria_label") %>"
+    title="<%= t("components.advanced_search_component.v2.remove_condition_aria_label") %>"
+    data-action="advanced-search--v2--builder#removeCondition"
+  >
+    <%= icon(:x, size: :sm) %>
+  </button>
+</fieldset>

@@ -183,6 +183,68 @@ fr:
           metadata_operators: Une seule condition peut être spécifiée par champ dans un groupe, sauf si vous utilisez les opérateurs d'intervalle ('>=' et '<=', « date supérieure ou égale » et « date inférieure ou égale », ou « numérique supérieure ou égale » et « numérique inférieure ou égale »). Pour filtrer par plage de dates, la valeur doit respecter le format « AAAA-MM-JJ ».
           standard_operators: Une seule condition peut être spécifiée par champ dans un groupe, sauf que vous pouvez spécifier deux conditions si vous utilisez les opérateurs '>=' et '<='. Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
         title: Recherche avancée
+      v2:
+        add_condition_button: Ajouter une condition
+        add_group_button: Ajouter un groupe
+        apply_filter_button: Appliquer un filtre
+        clear_aria_label: Terminer la recherche avancée
+        clear_filter_button: Effacer le filtre
+        condition: Condition %{index}
+        confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
+        group: Groupe %{index}
+        group_match_all: Toutes ces conditions doivent correspondre
+        intro: Rechercher les %{subject} correspondant à l'un des groupes suivants.
+        operations:
+          metadata:
+            labels:
+              date: Options de date
+              existence: Options d'existence
+              numeric: Options numériques
+              text: Options de texte
+            operations:
+              date:
+                date_between: date comprise entre
+                date_equals: date est égale à
+                date_exists: date existe
+                date_greater_than_equals: date supérieure ou égale
+                date_less_than_equals: date inférieure ou égale
+                date_not_equals: date différente de
+                date_not_exists: date n'existe pas
+              numeric:
+                numeric_between: numérique compris entre
+                numeric_equals: égal à une valeur numérique
+                numeric_exists: numeric existe
+                numeric_greater_than_equals: numérique supérieur ou égal
+                numeric_less_than_equals: numérique inférieur ou égal
+                numeric_not_equals: différent (numérique)
+                numeric_not_exists: numérique inexistant
+              text:
+                text_between: texte entre
+                text_contains: texte contient
+                text_ends_with: le texte se termine par
+                text_equals: texte est égal à
+                text_in: texte dans
+                text_not_contains: texte ne contient pas
+                text_not_equals: texte n'est pas égal à
+                text_not_in: texte absent de
+                text_starts_with: le texte commence par
+          standard:
+            between: entre
+            contains: contient
+            does_not_contain: ne contient pas
+            ends_with: se termine par
+            equals: "="
+            exists: existe
+            greater_than: ">="
+            in: in (dans)
+            less_than: "<="
+            not_equals: "!="
+            not_exists: n’existe pas
+            not_in: not in (pas dans)
+            starts_with: commence par
+        remove_condition_aria_label: Supprimer la condition
+        remove_group_button: Supprimer le groupe
+        title: Recherche avancée
     attachments:
       dialogs:
         delete_attachment_component:
