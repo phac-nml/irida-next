@@ -158,6 +158,8 @@ ignore_unused:
   - "{action_policy,activemodel,activerecord,date,datetime,devise,errors,helpers,number,support,time}.*"
   - "*.sorting.*"
   - "activity.*"
+  # Built dynamically in app/admin/feature_flags.rb via t("...gates.#{key}", count:)
+  - "active_admin.feature_flags.gates.*"
   - "components.viral.data_table_component.*"
   - "components.workflow_executions.table_component.counts*"
   - "samples.table_component.namespaces.puid"

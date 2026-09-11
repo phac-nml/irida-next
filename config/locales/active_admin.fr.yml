@@ -2,6 +2,60 @@
 fr:
   active_admin:
     dashboard: Tableau de bord
+    feature_flags:
+      actions:
+        disable_globally: Désactiver globalement
+        disable_globally_confirm: Désactiver %{name} globalement? Cela efface ses indicateurs.
+        disable_opt_in: Désactiver l'adhésion
+        disable_opt_in_confirm: Cesser d'offrir %{name} comme adhésion de profil? Cela révoque les adhésions existantes.
+        enable_globally: Activer globalement
+        enable_globally_confirm: Activer %{name} globalement pour tous les utilisateurs?
+        enable_opt_in: Activer l'adhésion
+        enable_opt_in_confirm: Permettre aux utilisateurs d'adhérer à %{name} depuis leur profil?
+        opt_in_locked: L'adhésion est indisponible lorsque la fonctionnalité est activée globalement.
+      columns:
+        actions: Actions
+        feature: Fonctionnalité
+        gates: Indicateurs
+        global_state: État global
+        opt_in: Disponibilité de l'adhésion
+      description: Gérer les fonctionnalités expérimentales administrables. L'état global contrôle l'accès pour tous les utilisateurs. Lorsqu'une fonctionnalité est désactivée globalement, les indicateurs peuvent en autoriser l'accès à certains utilisateurs ou groupes, tandis que la disponibilité de l'adhésion permet aux utilisateurs de l'activer depuis leur profil. Utilisez « Gérer les indicateurs » pour la configuration avancée de Flipper.
+      empty: Aucune fonctionnalité administrable n'est configurée.
+      flash:
+        errors:
+          generic: La fonctionnalité n'a pas pu être mise à jour.
+          globally_enabled: L'adhésion ne peut pas changer lorsque la fonctionnalité est activée globalement.
+          invalid_availability: Disponibilité d'adhésion demandée invalide.
+          invalid_feature: Cette fonctionnalité ne peut pas être gérée ici.
+          invalid_target_state: État global demandé invalide.
+          mutation_failed: La fonctionnalité n'a pas pu être mise à jour. Veuillez réessayer.
+          unauthorized: Vous n'êtes pas autorisé à modifier cette fonctionnalité.
+        global_disabled: "%{name} désactivée globalement."
+        global_enabled: "%{name} activée globalement."
+        no_change: Aucun changement n'était nécessaire pour %{name}.
+        opt_in_disabled: L'adhésion au profil pour %{name} est maintenant désactivée.
+        opt_in_enabled: L'adhésion au profil pour %{name} est maintenant disponible.
+      gates:
+        actors:
+          one: "%{count} acteur"
+          other: "%{count} acteurs"
+        expression: Indicateur d’expression
+        groups:
+          one: "%{count} groupe"
+          other: "%{count} groupes"
+        none: Aucun indicateur actif
+        percentage_of_actors: "%{percent} % des acteurs"
+        percentage_of_time: "%{percent} % du temps"
+      manage_gates: Gérer les indicateurs
+      opt_in:
+        all_users: Disponible pour tous les utilisateurs
+        allowlist: Liste d'autorisation
+        'off': Désactivée
+      state:
+        conditional: Conditionnelle
+        disabled: Désactivée
+        enabled: Activée
+      title: Fonctionnalités
     logout: Déconnexion
     site_banners:
       disable: Désactiver
