@@ -72,6 +72,21 @@ module SystemFeatureFlags
       assert_equal 'disabled', Irida::SystemFeatureFlagsCatalog.global_state(:data_grid_samples_table)
     end
 
+    test 'preserves profile opt-in availability when disabling global state' do
+      Flipper.enable(:data_grid_samples_table)
+
+      with_user_opt_in_features(user_opt_in_feature_config) do |settings|
+        result = UpdateGlobalState.new(
+          feature_key: :data_grid_samples_table,
+          target_state: :disabled,
+          user: @administrator
+        ).execute
+
+        assert result.success?
+        assert_equal 'all_users', settings.reload.opt_in_state(:data_grid_samples_table)
+      end
+    end
+
     test 'returns no-op when already in target state' do
       Flipper.enable(:data_grid_samples_table)
 
