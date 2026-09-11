@@ -39,6 +39,7 @@ fr:
         actors:
           one: "%{count} acteur"
           other: "%{count} acteurs"
+        expression: Indicateur d’expression
         groups:
           one: "%{count} groupe"
           other: "%{count} groupes"

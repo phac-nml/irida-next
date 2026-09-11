@@ -39,6 +39,7 @@ en:
         actors:
           one: "%{count} actor"
           other: "%{count} actors"
+        expression: Expression gate
         groups:
           one: "%{count} group"
           other: "%{count} groups"

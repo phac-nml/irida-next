@@ -35,21 +35,21 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
           div do
             div gate_summary_text(entry[:gate_summary]),
                 class: 'text-sm text-gray-600 dark:text-gray-300'
-            link_to I18n.t('active_admin.feature_flags.manage_gates'),
-                    flipper_feature_url(entry[:key]),
-                    class: 'text-sm text-indigo-600 dark:text-indigo-400',
-                    target: '_blank',
-                    rel: 'noopener'
+            text_node link_to I18n.t('active_admin.feature_flags.manage_gates'),
+                              flipper_feature_url(entry[:key]),
+                              class: 'text-sm text-indigo-600 dark:text-indigo-400',
+                              target: '_blank',
+                              rel: 'noopener'
           end
         end
 
         column I18n.t('active_admin.feature_flags.columns.actions') do |entry|
           div class: 'flex flex-col items-start gap-2' do
             global = global_toggle_for(entry)
-            link_to global[:label], global[:path],
-                    class: 'action-item-button whitespace-nowrap',
-                    method: :patch,
-                    data: { confirm: global[:confirm] }
+            text_node link_to global[:label], global[:path],
+                              class: 'action-item-button whitespace-nowrap',
+                              method: :patch,
+                              data: { confirm: global[:confirm] }
 
             opt_in = opt_in_toggle_for(entry)
             if opt_in[:disabled]
@@ -57,10 +57,10 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
                    class: 'text-sm text-gray-500 dark:text-gray-400 cursor-not-allowed whitespace-nowrap',
                    title: opt_in[:disabled_reason]
             else
-              link_to opt_in[:label], opt_in[:path],
-                      class: 'action-item-button whitespace-nowrap',
-                      method: :patch,
-                      data: { confirm: opt_in[:confirm] }
+              text_node link_to opt_in[:label], opt_in[:path],
+                                class: 'action-item-button whitespace-nowrap',
+                                method: :patch,
+                                data: { confirm: opt_in[:confirm] }
             end
           end
         end
@@ -81,7 +81,7 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
   end
 
   page_action :update_opt_in_availability, method: :patch do
-    available = params[:available].to_s == 'true'
+    available = { 'true' => true, 'false' => false }[params[:available].to_s]
     result = SystemFeatureFlags::UpdateOptInAvailability.new(
       feature_key: params[:feature_key],
       available: available,
@@ -137,7 +137,8 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
         ['actors', 'actors', :count],
         ['groups', 'groups', :count],
         ['percentage_of_actors', 'percentage_of_actors', :percent],
-        ['percentage_of_time', 'percentage_of_time', :percent]
+        ['percentage_of_time', 'percentage_of_time', :percent],
+        ['expression', 'expression', :count]
       ]
       parts = fields.filter_map do |gate_key, i18n_key, arg|
         value = summary[gate_key].to_i
