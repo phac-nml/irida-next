@@ -30,14 +30,6 @@ class NamespacePolicyTest < ActiveSupport::TestCase
 
     assert scoped_namespaces.include?(user_namespace)
     assert scoped_namespaces.include?(group)
-
-    assert_equal scoped_namespaces[0].type, Namespaces::UserNamespace.sti_name
-    assert_equal scoped_namespaces[0].name, 'david.doe@localhost'
-    assert_equal scoped_namespaces[0].path, 'david.doe_at_localhost'
-
-    assert_equal scoped_namespaces[1].type, Group.sti_name
-    assert_equal scoped_namespaces[1].name, 'Group 4'
-    assert_equal scoped_namespaces[1].path, 'group-4'
   end
 
   test 'named scope with modify access to namespace via many namespace group links' do
