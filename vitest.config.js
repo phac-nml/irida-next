@@ -114,7 +114,6 @@ export default defineConfig({
           functions: 100,
           lines: 100,
         },
-
         "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js":
           {
             statements: 100,
@@ -225,18 +224,36 @@ export default defineConfig({
           functions: 100,
           lines: 100,
         },
-        "app/javascript/controllers/viral/dialog_controller.js": {
+        "app/javascript/controllers/layout_controller.js": {
           statements: 100,
           branches: 100,
           functions: 100,
           lines: 100,
         },
-        "app/javascript/controllers/viral/dialog_trigger_controller.js": {
+        "app/javascript/controllers/refresh_controller.js": {
           statements: 100,
           branches: 100,
           functions: 100,
           lines: 100,
         },
+  "app/javascript/controllers/spinner_controller.js": {
+    statements: 100,
+    branches: 100,
+    functions: 100,
+    lines: 100,
+  },
+  "app/javascript/controllers/viral/dialog_controller.js": {
+    statements: 100,
+    branches: 100,
+    functions: 100,
+    lines: 100,
+  },
+  "app/javascript/controllers/viral/dialog_trigger_controller.js": {
+    statements: 100,
+    branches: 100,
+    functions: 100,
+    lines: 100,
+  },
         "app/javascript/controllers/viral/flash_controller.js": {
           statements: 100,
           branches: 100,

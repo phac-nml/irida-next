@@ -43,11 +43,13 @@ export default class extends Controller {
   }
 
   initializeSidebar() {
+    const announcementsEnabled = this.announcementsEnabled;
     // Need to determine the previous state
     if (localStorage.getItem("layout") === "collapsed") {
       this.announcementsEnabled = false;
       this.collapse();
     }
+    this.announcementsEnabled = announcementsEnabled;
 
     this.#setExpandedState(
       !this.layoutContainerTarget.classList.contains("collapsed"),
