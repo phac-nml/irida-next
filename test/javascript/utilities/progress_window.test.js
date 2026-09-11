@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearProgressWindowDismissTimeout,
   dismissProgressWindow,
@@ -7,223 +7,356 @@ import {
   updateProgressWindow,
 } from "../../../app/javascript/utilities/progress_window.js";
 
-const buildController = (overrides = {}) => ({
-  identifier: "samples",
-  _operationId: "abc123",
-  minimumVisibleDurationMsValue: 1000,
-  progressWindowDismissed: false,
-  _progressWindowOpenedAt: null,
-  hasProgressTemplateTarget: false,
-  ...overrides,
-});
+function buildController(overrides = {}) {
+  return {
+    identifier: "samples",
+    progressWindowDismissed: false,
+    _operationId: "abc",
+    _progressWindowOpenedAt: null,
+    _dismissProgressWindowTimeout: null,
+    _progressMsgEl: null,
+    _progressBarEl: null,
+    _progressPctEl: null,
+    minimumVisibleDurationMsValue: 3000,
+    hasProgressTemplateTarget: false,
+    progressTemplateTarget: null,
+    ...overrides,
+  };
+}
 
-beforeEach(() => {
-  document.body.innerHTML = "";
-  vi.useFakeTimers();
-});
+function makeProgressRefs(controller) {
+  const card = document.createElement("div");
+  card.id = `${controller.identifier}-card-${controller._operationId}`;
 
-afterEach(() => {
-  vi.runOnlyPendingTimers();
-  vi.useRealTimers();
-  document.body.innerHTML = "";
-});
+  const message = document.createElement("div");
+  message.dataset[`${controller.identifier}ProgressMessage`] = "true";
+  card.appendChild(message);
 
-describe("progress window utilities", () => {
-  it("returns early when the progress window has already been dismissed", () => {
+  const bar = document.createElement("div");
+  bar.dataset[`${controller.identifier}ProgressBar`] = "true";
+  card.appendChild(bar);
+
+  const percent = document.createElement("div");
+  percent.dataset[`${controller.identifier}ProgressPercent`] = "true";
+  card.appendChild(percent);
+
+  controller._progressMsgEl = message;
+  controller._progressBarEl = bar;
+  controller._progressPctEl = percent;
+
+  const container = document.createElement("div");
+  container.id = `${controller.identifier}-progress-window`;
+  container.appendChild(card);
+  document.body.appendChild(container);
+
+  return { card, container, message, bar, percent };
+}
+
+describe("progress_window", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    document.body.innerHTML = "";
+  });
+
+  it("returns early when the progress window was dismissed", () => {
     const controller = buildController({ progressWindowDismissed: true });
+    const message = document.createElement("div");
+    const bar = document.createElement("div");
+    const percent = document.createElement("div");
 
-    expect(() => updateProgressWindow(controller, "Done", 50)).not.toThrow();
-    expect(clearProgressWindowDismissTimeout(controller)).toBeUndefined();
+    controller._progressMsgEl = message;
+    controller._progressBarEl = bar;
+    controller._progressPctEl = percent;
+
+    updateProgressWindow(controller, "Done", 80, false);
+
+    expect(message.textContent).toBe("");
+    expect(bar.style.width).toBe("");
+    expect(percent.textContent).toBe("");
   });
 
-  it("clamps the progress value and updates the message, bar, and percentage", () => {
+  it("does nothing when there is no operation id to anchor a card", () => {
+    const controller = buildController({ _operationId: null });
+    const message = document.createElement("div");
+
+    updateProgressWindow(controller, "Missing id", 20, false);
+
+    expect(message.textContent).toBe("");
+    expect(
+      document.getElementById(`${controller.identifier}-progress-window`),
+    ).toBeNull();
+  });
+
+  it("updates message, progress bar, and percentage when visible", () => {
     const controller = buildController();
-    controller._progressMsgEl = document.createElement("div");
-    controller._progressBarEl = document.createElement("div");
-    controller._progressPctEl = document.createElement("span");
+    const { message, bar, percent } = makeProgressRefs(controller);
 
-    updateProgressWindow(controller, "Uploading", 150, true);
+    updateProgressWindow(controller, "Processing", 42, false);
 
-    expect(controller._progressMsgEl.textContent).toBe("Uploading");
-    expect(controller._progressMsgEl.getAttribute("role")).toBe("alert");
-    expect(controller._progressMsgEl.hasAttribute("aria-live")).toBe(false);
-    expect(controller._progressBarEl.style.width).toBe("100%");
-    expect(controller._progressBarEl.getAttribute("aria-valuenow")).toBe("100");
-    expect(controller._progressBarEl.getAttribute("aria-label")).toBe(
-      "Uploading",
-    );
-    expect(controller._progressBarEl.classList.contains("bg-red-600")).toBe(
-      true,
-    );
-    expect(controller._progressBarEl.classList.contains("bg-primary-600")).toBe(
-      false,
-    );
-    expect(controller._progressPctEl.textContent).toBe("100%");
+    expect(message.textContent).toBe("Processing");
+    expect(message.getAttribute("aria-live")).toBe("polite");
+    expect(message.getAttribute("role")).toBeNull();
+    expect(bar.style.width).toBe("42%");
+    expect(bar.getAttribute("aria-valuenow")).toBe("42");
+    expect(bar.getAttribute("aria-label")).toBe("Processing");
+    expect(bar.classList.contains("bg-red-600")).toBe(false);
+    expect(bar.classList.contains("bg-primary-600")).toBe(true);
+    expect(percent.textContent).toBe("42%");
   });
 
-  it("creates a progress card when needed and tracks the open timestamp", () => {
-    const template = document.createElement("template");
-    template.innerHTML = `
-      <div>
-        <span data-samples-progress-message>Initial</span>
-        <div data-samples-progress-bar></div>
-        <span data-samples-progress-percent></span>
-      </div>
-    `;
+  it("marks the message as an alert and swaps the bar colors on error", () => {
+    const controller = buildController();
+    const { message, bar, percent } = makeProgressRefs(controller);
 
-    const controller = buildController({
-      hasProgressTemplateTarget: true,
-      progressTemplateTarget: template,
-    });
+    updateProgressWindow(controller, "Failed", 67, true);
+
+    expect(message.getAttribute("role")).toBe("alert");
+    expect(message.getAttribute("aria-live")).toBeNull();
+    expect(bar.style.width).toBe("67%");
+    expect(bar.getAttribute("aria-valuenow")).toBe("67");
+    expect(bar.classList.contains("bg-red-600")).toBe(true);
+    expect(bar.classList.contains("bg-primary-600")).toBe(false);
+    expect(percent.textContent).toBe("67%");
+  });
+
+  it("clamps values into the 0..100 range", () => {
+    const controller = buildController();
+    const { bar, percent } = makeProgressRefs(controller);
+
+    updateProgressWindow(controller, "Out of range", -25, false);
+    expect(bar.getAttribute("aria-valuenow")).toBe("0");
+    expect(percent.textContent).toBe("0%");
+
+    updateProgressWindow(controller, "Top end", 250, false);
+    expect(bar.getAttribute("aria-valuenow")).toBe("100");
+    expect(percent.textContent).toBe("100%");
+  });
+
+  it("uses the current timestamp when openedAt is missing and sets the initial progress to zero", () => {
+    const controller = buildController();
+    const now = new Date("2024-01-01T00:00:00Z").getTime();
+    vi.setSystemTime(now);
+    const { message, bar, percent } = makeProgressRefs(controller);
 
     showProgressWindow(controller, "Starting");
 
-    expect(controller._progressWindowOpenedAt).not.toBeNull();
-    expect(controller._progressMsgEl.textContent).toBe("Starting");
-    expect(controller._progressBarEl.style.width).toBe("0%");
-    expect(document.getElementById("samples-progress-window")).not.toBeNull();
-    expect(document.getElementById("samples-card-abc123")).not.toBeNull();
+    expect(controller._progressWindowOpenedAt).toBe(now);
+    expect(message.textContent).toBe("Starting");
+    expect(bar.style.width).toBe("0%");
+    expect(percent.textContent).toBe("0%");
   });
 
-  it("reuses an existing card and restores refs after a Turbo reconnect", () => {
-    const card = document.createElement("div");
-    card.id = "samples-card-abc123";
-    card.innerHTML = `
-      <span data-samples-progress-message></span>
-      <div data-samples-progress-bar></div>
-      <span data-samples-progress-percent></span>
-    `;
-    document.body.appendChild(card);
-
+  it("reuses the existing opened timestamp when the progress window is already active", () => {
     const controller = buildController({
-      _progressMsgEl: null,
-      _progressBarEl: null,
-      _progressPctEl: null,
+      _progressWindowOpenedAt: 1234,
     });
+    const { message, bar, percent } = makeProgressRefs(controller);
 
-    updateProgressWindow(controller, "Recovered", 40);
+    showProgressWindow(controller, "Still active");
 
-    expect(controller._progressMsgEl).toBe(
-      card.querySelector("[data-samples-progress-message]"),
-    );
-    expect(controller._progressBarEl).toBe(
-      card.querySelector("[data-samples-progress-bar]"),
-    );
-    expect(controller._progressPctEl).toBe(
-      card.querySelector("[data-samples-progress-percent]"),
-    );
+    expect(controller._progressWindowOpenedAt).toBe(1234);
+    expect(message.textContent).toBe("Still active");
+    expect(bar.style.width).toBe("0%");
+    expect(percent.textContent).toBe("0%");
   });
 
-  it("ignores unrelated clicks but dismisses on the dismiss target", () => {
-    const template = document.createElement("template");
-    template.innerHTML = `
-      <div>
-        <span data-samples-progress-message>Working</span>
-        <div data-samples-progress-bar></div>
-        <span data-samples-progress-percent></span>
-        <button type="button" data-samples-dismiss="true">Dismiss</button>
-      </div>
-    `;
-
+  it("schedules a dismissal timeout based on elapsed time and the minimum duration", () => {
     const controller = buildController({
-      hasProgressTemplateTarget: true,
-      progressTemplateTarget: template,
+      _progressWindowOpenedAt: Date.now() - 1000,
+      minimumVisibleDurationMsValue: 3500,
     });
-
-    showProgressWindow(controller, "Working");
-    const otherNode = document.querySelector("[data-samples-progress-message]");
-    const dismissButton = document.querySelector(
-      '[data-samples-dismiss="true"]',
-    );
-
-    otherNode.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    expect(controller.progressWindowDismissed).toBe(false);
-
-    dismissButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    expect(controller.progressWindowDismissed).toBe(true);
-  });
-
-  it("returns early when no operation id is present", () => {
-    const controller = buildController({ _operationId: null });
-
-    expect(() => updateProgressWindow(controller, "No card", 30)).not.toThrow();
-  });
-
-  it("preserves an existing open time and dismisses without an operation id", () => {
-    const controller = buildController({
-      _progressWindowOpenedAt: 12345,
-      _operationId: null,
-    });
-    const container = document.createElement("div");
-    container.id = "samples-progress-window";
-    document.body.appendChild(container);
-
-    showProgressWindow(controller, "Existing");
-
-    expect(controller._progressWindowOpenedAt).toBe(12345);
-
-    dismissProgressWindow(controller);
-
-    expect(controller.progressWindowDismissed).toBe(true);
-    expect(document.getElementById("samples-progress-window")).toBeNull();
-  });
-
-  it("schedules and clears the dismissal timeout", () => {
-    const controller = buildController({
-      _progressWindowOpenedAt: Date.now() - 50,
-      _dismissProgressWindowTimeout: null,
-    });
-    const setTimeoutSpy = vi.spyOn(globalThis, "setTimeout");
+    const dismissSpy = vi.spyOn(globalThis, "setTimeout");
 
     scheduleProgressWindowDismiss(controller);
-    expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
-    expect(controller._dismissProgressWindowTimeout).not.toBeNull();
 
-    vi.advanceTimersByTime(1000);
-    expect(controller.progressWindowDismissed).toBe(true);
+    expect(dismissSpy).toHaveBeenCalledWith(expect.any(Function), 2500);
+    expect(controller._dismissProgressWindowTimeout).not.toBeNull();
+  });
+
+  it("falls back to Date.now when no progress start timestamp exists", () => {
+    const controller = buildController({
+      _progressWindowOpenedAt: null,
+      minimumVisibleDurationMsValue: 2000,
+    });
+    const dismissSpy = vi.spyOn(globalThis, "setTimeout");
+
+    scheduleProgressWindowDismiss(controller);
+
+    expect(dismissSpy).toHaveBeenCalledWith(expect.any(Function), 2000);
+  });
+
+  it("does nothing when clearing a missing dismiss timeout and removes an existing one", () => {
+    const controller = buildController();
 
     clearProgressWindowDismissTimeout(controller);
     expect(controller._dismissProgressWindowTimeout).toBeNull();
 
-    setTimeoutSpy.mockRestore();
+    controller._dismissProgressWindowTimeout = setTimeout(() => {}, 1000);
+    clearProgressWindowDismissTimeout(controller);
+    expect(controller._dismissProgressWindowTimeout).toBeNull();
   });
 
-  it("clamps the dismissal timeout to zero after the minimum visible time has elapsed", () => {
-    const controller = buildController({
-      _progressWindowOpenedAt: Date.now() - 1500,
-      _dismissProgressWindowTimeout: null,
-    });
+  it("does not schedule a new dismissal once the window has already been dismissed", () => {
+    const controller = buildController({ progressWindowDismissed: true });
+    const setTimeoutSpy = vi.spyOn(globalThis, "setTimeout");
 
     scheduleProgressWindowDismiss(controller);
 
-    expect(controller._dismissProgressWindowTimeout).toBeDefined();
-    vi.advanceTimersByTime(0);
-    expect(controller.progressWindowDismissed).toBe(true);
+    expect(setTimeoutSpy).not.toHaveBeenCalled();
   });
 
-  it("removes the progress card and clears controller state when dismissed", () => {
+  it("runs the scheduled dismissal callback when the timeout elapses", () => {
     const controller = buildController({
-      _progressMsgEl: document.createElement("div"),
-      _progressBarEl: document.createElement("div"),
-      _progressPctEl: document.createElement("span"),
-      _dismissProgressWindowTimeout: 123,
+      _progressWindowOpenedAt: Date.now() - 1000,
+      minimumVisibleDurationMsValue: 2000,
     });
+    const { card } = makeProgressRefs(controller);
 
+    scheduleProgressWindowDismiss(controller);
+    vi.advanceTimersByTime(1000);
+
+    expect(controller.progressWindowDismissed).toBe(true);
+    expect(card.isConnected).toBe(false);
+  });
+
+  it("dismisses the progress card and container, then clears controller references", () => {
+    const controller = buildController({
+      _operationId: "abc",
+      identifier: "samples",
+    });
+    const { card, container } = makeProgressRefs(controller);
+    const dismissTimeout = setTimeout(() => {}, 1000);
+    controller._dismissProgressWindowTimeout = dismissTimeout;
+    controller.progressWindowDismissed = false;
+
+    dismissProgressWindow(controller);
+
+    expect(card.isConnected).toBe(false);
+    expect(container.isConnected).toBe(false);
+    expect(controller.progressWindowDismissed).toBe(true);
+    expect(controller._progressWindowOpenedAt).toBeNull();
+    expect(controller._progressMsgEl).toBeNull();
+    expect(controller._progressBarEl).toBeNull();
+    expect(controller._progressPctEl).toBeNull();
+  });
+
+  it("keeps the container when it still has other content", () => {
+    const controller = buildController({ _operationId: "keep" });
     const container = document.createElement("div");
     container.id = "samples-progress-window";
-    const card = document.createElement("div");
-    card.id = "samples-card-abc123";
-    container.appendChild(card);
+    const stale = document.createElement("div");
+    container.appendChild(stale);
     document.body.appendChild(container);
 
     dismissProgressWindow(controller);
 
-    expect(document.getElementById("samples-card-abc123")).toBeNull();
-    expect(document.getElementById("samples-progress-window")).toBeNull();
+    expect(document.getElementById("samples-progress-window")).not.toBeNull();
     expect(controller.progressWindowDismissed).toBe(true);
-    expect(controller._progressMsgEl).toBeNull();
-    expect(controller._progressBarEl).toBeNull();
-    expect(controller._progressPctEl).toBeNull();
-    expect(controller._dismissProgressWindowTimeout).toBeNull();
+  });
+
+  it("skips card removal when no operation id is present", () => {
+    const controller = buildController({ _operationId: null });
+    const container = document.createElement("div");
+    container.id = "samples-progress-window";
+    const stale = document.createElement("div");
+    container.appendChild(stale);
+    document.body.appendChild(container);
+
+    dismissProgressWindow(controller);
+
+    expect(document.getElementById("samples-progress-window")).not.toBeNull();
+    expect(controller.progressWindowDismissed).toBe(true);
+  });
+
+  it("reuses an existing container instead of creating a duplicate one", () => {
+    const controller = buildController({
+      _operationId: "reuse",
+      hasProgressTemplateTarget: false,
+    });
+    const container = document.createElement("div");
+    container.id = "samples-progress-window";
+    document.body.appendChild(container);
+
+    updateProgressWindow(controller, "Reuse container", 5, false);
+
+    expect(document.querySelectorAll("#samples-progress-window")).toHaveLength(
+      1,
+    );
+    expect(document.getElementById("samples-card-reuse")).not.toBeNull();
+  });
+
+  it("recovers cached refs when a card already exists after reconnecting", () => {
+    const controller = buildController({
+      _operationId: "abc",
+      identifier: "samples",
+    });
+    const card = document.createElement("div");
+    card.id = "samples-card-abc";
+    const message = document.createElement("div");
+    message.dataset["samplesProgressMessage"] = "true";
+    const bar = document.createElement("div");
+    bar.dataset["samplesProgressBar"] = "true";
+    const percent = document.createElement("div");
+    percent.dataset["samplesProgressPercent"] = "true";
+    card.append(message, bar, percent);
+    document.body.appendChild(card);
+
+    updateProgressWindow(controller, "Recovered", 10, false);
+
+    expect(controller._progressMsgEl).toBe(message);
+    expect(controller._progressBarEl).toBe(bar);
+    expect(controller._progressPctEl).toBe(percent);
+  });
+
+  it("creates a progress card from the template and removes it when the dismiss button is clicked", () => {
+    const controller = buildController({
+      _operationId: "xyz",
+      hasProgressTemplateTarget: true,
+    });
+    const template = document.createElement("template");
+    template.innerHTML = `
+      <div class="card">
+        <div data-samples-progress-message>Loading</div>
+        <div data-samples-progress-bar></div>
+        <div data-samples-progress-percent>0%</div>
+        <button type="button" data-samples-dismiss="true">Close</button>
+      </div>
+    `;
+    controller.progressTemplateTarget = template;
+
+    updateProgressWindow(controller, "Loading", 0, false);
+    const card = document.getElementById("samples-card-xyz");
+    const dismissButton = card.querySelector('[data-samples-dismiss="true"]');
+
+    dismissButton.click();
+
+    expect(document.getElementById("samples-card-xyz")).toBeNull();
+    expect(controller.progressWindowDismissed).toBe(true);
+  });
+
+  it("ignores clicks on elements that are not the dismiss trigger", () => {
+    const controller = buildController({
+      _operationId: "xyz",
+      hasProgressTemplateTarget: true,
+    });
+    const template = document.createElement("template");
+    template.innerHTML = `
+      <div class="card">
+        <div data-samples-progress-message>Loading</div>
+        <div data-samples-progress-bar></div>
+        <div data-samples-progress-percent>0%</div>
+        <button type="button" data-samples-dismiss="true">Close</button>
+      </div>
+    `;
+    controller.progressTemplateTarget = template;
+
+    updateProgressWindow(controller, "Loading", 0, false);
+    const card = document.getElementById("samples-card-xyz");
+    const message = card.querySelector("[data-samples-progress-message]");
+
+    message.click();
+
+    expect(controller.progressWindowDismissed).toBe(false);
+    expect(document.getElementById("samples-card-xyz")).not.toBeNull();
   });
 });
