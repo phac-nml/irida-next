@@ -34,6 +34,21 @@ export default class extends Controller {
     feedbackDuration: { type: Number, default: 2000 },
   };
 
+  #connection = 0;
+  #feedbackTimeout;
+  #resetFeedback;
+
+  disconnect() {
+    this.#connection += 1;
+    this.#clearFeedback();
+  }
+
+  #clearFeedback() {
+    clearTimeout(this.#feedbackTimeout);
+    this.#resetFeedback?.();
+    this.#resetFeedback = undefined;
+  }
+
   /**
    * 📋 Copy the text content of the source element to the clipboard.
    *
@@ -66,8 +81,10 @@ export default class extends Controller {
       return;
     }
 
+    const connection = this.#connection;
     try {
       await navigator.clipboard.writeText(content);
+      if (connection !== this.#connection) return;
       this.showFeedback();
     } catch (err) {
       console.error("❌ Failed to copy text:", err);
@@ -85,15 +102,22 @@ export default class extends Controller {
    * @private
    */
   showFeedback() {
+    this.#clearFeedback();
+    const icon = this.successIconTarget;
+    const label = this.buttonLabelTarget;
     // Show success state
     this.successIconTarget.classList.remove("hidden");
     this.buttonLabelTarget.classList.add("sr-only");
 
     // Reset after duration
-    setTimeout(() => {
-      this.successIconTarget.classList.add("hidden");
-      this.buttonLabelTarget.classList.remove("sr-only");
-    }, this.feedbackDurationValue);
+    this.#resetFeedback = () => {
+      icon.classList.add("hidden");
+      label.classList.remove("sr-only");
+    };
+    this.#feedbackTimeout = setTimeout(
+      () => this.#clearFeedback(),
+      this.feedbackDurationValue,
+    );
   }
 
   /**
