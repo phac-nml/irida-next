@@ -9,6 +9,7 @@ const jsRoot = resolve(
 const fullCoverageFiles = [
   "app/javascript/controllers/action_button_controller.js",
   "app/javascript/controllers/clipboard_controller.js",
+  "app/javascript/controllers/colour_mode_controller.js",
   "app/javascript/controllers/collapsible_controller.js",
   "app/javascript/controllers/combobox/utils.js",
   "app/javascript/controllers/combobox/v1_controller.js",
