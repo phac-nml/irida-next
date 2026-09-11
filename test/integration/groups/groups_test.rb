@@ -48,6 +48,7 @@ module Groups
 
       assert_select 'h2', text: I18n.t(:'groups.edit.advanced.change_visibility.title')
       assert_select 'p', text: I18n.t(:'groups.edit.advanced.change_visibility.description.public')
+      assert_select 'button[type=submit][disabled]'
 
       created_group = nil
       params = { group: { name: 'New Group 2', path: 'new-group-2', description: 'This is another new group' } }
@@ -66,6 +67,7 @@ module Groups
 
       assert_select 'h2', text: I18n.t(:'groups.edit.advanced.change_visibility.title')
       assert_select 'p', text: I18n.t(:'groups.edit.advanced.change_visibility.description.private')
+      assert_select 'button[type=submit][disabled]'
     end
 
     test 'should not display visibility options when global_groups is disabled' do

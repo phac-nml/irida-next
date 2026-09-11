@@ -18,23 +18,7 @@
           <%= t(:"groups.new.visibility.title") %>
         </div>
 
-        <%= render ::Pathogen::Form::RadioButton.new(
-          form: form,
-          attribute: :public,
-          value: "false",
-          label: t(:"groups.new.visibility.private.label"),
-          help_text: t(:"groups.new.visibility.private.description"),
-          checked: true
-        ) %>
-
-        <%= render ::Pathogen::Form::RadioButton.new(
-          form: form,
-          attribute: :public,
-          value: "true",
-          label: t(:"groups.new.visibility.public.label"),
-          help_text: t(:"groups.new.visibility.public.description"),
-          checked: false
-        ) %>
+        <%= render partial: "visibility_form", locals: { form: form, group: @new_group } %>
       <% end %>
 
       <div class="flex gap-2">
