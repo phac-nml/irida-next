@@ -121,7 +121,7 @@ gem 'fx'
 gem 'paranoia'
 
 # Pin json gem to avoid breaking changes in version 3.x
-gem 'json', '< 3.0'
+gem 'json', '< 4.0'
 
 # Validate json schema's
 gem 'activerecord_json_validator', '~> 3.1.0'
