@@ -9,6 +9,15 @@ const jsRoot = resolve(
 export default defineConfig({
   resolve: {
     alias: {
+      "@sindresorhus/slugify": resolve(
+        "vendor/javascript/@sindresorhus--slugify.js",
+      ),
+      "@sindresorhus/transliterate": resolve(
+        "vendor/javascript/@sindresorhus--transliterate.js",
+      ),
+      "escape-string-regexp": resolve(
+        "vendor/javascript/escape-string-regexp.js",
+      ),
       controllers: resolve(jsRoot, "controllers"),
       debounce: resolve("vendor/javascript/debounce.js"),
       deepmerge: resolve("vendor/javascript/deepmerge.js"),
@@ -59,6 +68,18 @@ export default defineConfig({
       ],
       // Ratchet allowlist: add a file/glob here once it reaches full coverage.
       thresholds: {
+        "app/javascript/controllers/list_input_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/slugify_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
         "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js":
           {
             statements: 100,

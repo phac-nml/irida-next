@@ -1,10 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Key code constants for keyboard events.
-const BACKSPACE = 8; // Represents the backspace key.
-const SPACE = 32; // Represents the spacebar key.
-const COMMA = 188; // Represents the comma key.
-
 export default class extends Controller {
   static targets = ["tags", "template", "input", "count"];
   static outlets = ["selection"];
@@ -27,17 +22,15 @@ export default class extends Controller {
   }
 
   handleInput(event) {
+    if (event.isComposing) return;
     const value = event.target.value.trim();
-    if (event.keyCode === BACKSPACE && value.length === 0) {
+    if (event.key === "Backspace" && value.length === 0) {
       // Handle backspace event when input is empty, otherwise just let
       this.#handleBackspace(event);
-    } else if (
-      value.length === 0 &&
-      (event.keyCode === COMMA || event.keyCode === SPACE)
-    ) {
+    } else if (value.length === 0 && (event.key === "," || event.key === " ")) {
       // Handle when a `,` is entered alone; that is do nothing
       event.preventDefault();
-    } else if (event.keyCode === COMMA) {
+    } else if (event.key === ",") {
       // If a string ends with a coma, directly add the tag
       event.preventDefault();
       this.#clearAndFocus();
@@ -94,11 +87,12 @@ export default class extends Controller {
     }
   }
 
-  #handleBackspace() {
+  #handleBackspace(event) {
     const tags = this.tagsTarget.querySelectorAll("span.search-tag");
     if (tags.length === 0) return;
+    event.preventDefault();
     const last = tags[tags.length - 1];
-    const text = last.querySelector(".label").innerText;
+    const text = last.querySelector(".label").textContent;
     this.tagsTarget.removeChild(last);
     this.inputTarget.value = text;
   }
@@ -127,10 +121,8 @@ export default class extends Controller {
 
   #updateCount() {
     if (this.hasCountTarget) {
-      const count = this.filtersValue.filter(
-        (value) => value.length > 0,
-      ).length;
-      this.countTarget.innerText = count;
+      const count = this.filtersValue.filter(Boolean).length;
+      this.countTarget.textContent = count;
       this.countTarget.classList.toggle("hidden", count === 0);
       this.countTarget.classList.toggle("inline-flex", count > 0);
     }
