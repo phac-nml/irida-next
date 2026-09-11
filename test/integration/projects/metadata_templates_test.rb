@@ -260,6 +260,9 @@ module Projects
     end
 
     test 'project metadata templates destroy' do
+      template_id = @project_metadata_template.id
+      template_name = @project_metadata_template.name
+
       assert_difference('MetadataTemplate.count', -1) do
         delete namespace_project_metadata_template_path(
           @project_namespace.parent,
@@ -270,10 +273,16 @@ module Projects
 
       assert_response :success
 
-      assert_includes @response.body, I18n.t(
-        :'concerns.metadata_template_actions.destroy.success',
-        template_name: @project_metadata_template.name
-      )
+      assert_select "div[data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                        'concerns.metadata_template_actions.destroy.success', template_name: template_name
+                      )}"
+      end
+
+      get namespace_project_metadata_templates_path(@project_namespace.parent, @project)
+      assert_response :success
+      assert_select "tr#metadata_template_#{template_id}", count: 0
     end
 
     test 'project metadata templates destroy unauthorized' do
