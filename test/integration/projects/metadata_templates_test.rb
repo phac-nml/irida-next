@@ -347,7 +347,14 @@ module Projects
       )
 
       assert_response :success
-      assert_includes @response.body, I18n.t('shared.samples.metadata_templates.fields.none')
+      assert_select 'ul#metadata_templates_dropdown' do
+        assert_select "button[type='submit'][value='none'][aria-checked='true']",
+                      text: /#{Regexp.escape(I18n.t('shared.samples.metadata_templates.fields.none'))}/
+        assert_select "button[type='submit'][value='all'][aria-checked='false']",
+                      text: /#{Regexp.escape(I18n.t('shared.samples.metadata_templates.fields.all'))}/
+        assert_select "button[type='submit'][value='#{@project_metadata_template.id}'][aria-checked='false']",
+                      text: /#{@project_metadata_template.name}/
+      end
     end
 
     test 'project metadata templates list with all template' do
@@ -358,7 +365,14 @@ module Projects
       )
 
       assert_response :success
-      assert_includes @response.body, I18n.t('shared.samples.metadata_templates.fields.all')
+      assert_select 'ul#metadata_templates_dropdown' do
+        assert_select "button[type='submit'][value='none'][aria-checked='false']",
+                      text: /#{Regexp.escape(I18n.t('shared.samples.metadata_templates.fields.none'))}/
+        assert_select "button[type='submit'][value='all'][aria-checked='true']",
+                      text: /#{Regexp.escape(I18n.t('shared.samples.metadata_templates.fields.all'))}/
+        assert_select "button[type='submit'][value='#{@project_metadata_template.id}'][aria-checked='false']",
+                      text: /#{@project_metadata_template.name}/
+      end
     end
 
     test 'project metadata templates list with specific template' do
@@ -369,7 +383,14 @@ module Projects
       )
 
       assert_response :success
-      assert_includes @response.body, @project_metadata_template.name
+      assert_select 'ul#metadata_templates_dropdown' do
+        assert_select "button[type='submit'][value='none'][aria-checked='false']",
+                      text: /#{Regexp.escape(I18n.t('shared.samples.metadata_templates.fields.none'))}/
+        assert_select "button[type='submit'][value='all'][aria-checked='false']",
+                      text: /#{Regexp.escape(I18n.t('shared.samples.metadata_templates.fields.all'))}/
+        assert_select "button[type='submit'][value='#{@project_metadata_template.id}'][aria-checked='true']",
+                      text: /#{@project_metadata_template.name}/
+      end
     end
 
     test 'project metadata templates index with pagination and sorting' do
