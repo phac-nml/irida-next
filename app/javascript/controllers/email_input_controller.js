@@ -12,9 +12,11 @@ export default class extends Controller {
   static targets = ["form", "emailField", "errorContainer", "summary"];
 
   static values = {
-    emailMissing: { type: String },
-    emailFormat: { type: String },
+    emailMissing: String,
+    emailFormat: String,
   };
+
+  #submissionFrame;
 
   connect() {
     // Validate required Stimulus values
@@ -34,6 +36,8 @@ export default class extends Controller {
   disconnect() {
     // Clean up event listeners
     this.emailFieldTarget.removeEventListener("input", this.handleInput);
+    this.debouncedValidate?.clear();
+    cancelAnimationFrame(this.#submissionFrame);
   }
 
   /**
@@ -42,9 +46,10 @@ export default class extends Controller {
    */
   submit(event) {
     event.preventDefault();
+    cancelAnimationFrame(this.#submissionFrame);
 
     if (this.validateEmail()) {
-      requestAnimationFrame(() => {
+      this.#submissionFrame = requestAnimationFrame(() => {
         this.formTarget.submit();
       });
     }
@@ -170,10 +175,10 @@ export default class extends Controller {
    * @throws {Error} If a required value is missing
    */
   #validateRequiredValues() {
-    if (this.emailMissingValue === undefined) {
+    if (!this.hasEmailMissingValue) {
       throw new Error("email-missing value is required");
     }
-    if (this.emailFormatValue === undefined) {
+    if (!this.hasEmailFormatValue) {
       throw new Error("email-format value is required");
     }
   }
