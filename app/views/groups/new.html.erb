@@ -13,6 +13,14 @@
         authorized_namespaces: @authorized_namespaces,
       } %>
 
+      <% if Flipper.enabled?(:global_groups) %>
+        <div class="mb-2 text-sm font-semibold text-slate-800 dark:text-white">
+          <%= t(:"groups.new.visibility.title") %>
+        </div>
+
+        <%= render partial: "visibility_form", locals: { form: form, group: @new_group } %>
+      <% end %>
+
       <div class="flex gap-2">
         <%= render CancelButtonComponent.new(href: groups_path) %>
         <%= form.submit t(:"groups.create.submit"), tone: :primary, emphasis: :solid %>

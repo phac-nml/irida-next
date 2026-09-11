@@ -922,12 +922,6 @@ en:
           description:
             private: This group is currently private
             public: This group is currently public
-          private:
-            points_html:
-            - Changing a group to private will change all descendants (groups and projects) to private. Only users with explicit membership will be able to access.
-          public:
-            points_html:
-            - Changing a group to public will change all descendants (groups and projects) to public. All users with and without explicit membership will be able to access.
           submit: Change visibility
           title: Change group visibility
         delete:
@@ -1050,6 +1044,15 @@ en:
         new_button: Add New Template
         subtitle: These are metadata templates for the group
         title: Metadata Templates
+    new:
+      visibility:
+        private:
+          description: The group and its descendant groups and projects will only be accessible to members.
+          label: Private
+        public:
+          description: The group and its descendant groups and projects will be accessible to everyone that is logged in.
+          label: Public
+        title: Visibility
     new_subgroup:
       empty_state: No namespaces are associated with that name or ID
       select_group: Select Group
