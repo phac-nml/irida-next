@@ -60,6 +60,7 @@ export default class extends Controller {
    * @type {number|null}
    */
   #autoDismissInterval = null;
+  #pauseReasons = new Set();
 
   /**
    * 📝 Map to track all event listeners for easy cleanup
@@ -239,6 +240,7 @@ export default class extends Controller {
    * @fires console.error - If countdown encounters an error
    */
   #startAutoDismiss() {
+    this.#clearAutoDismissInterval();
     const duration = this.autoDismissDurationValue; // ⏰ 5 seconds total
     const interval = 50; // 🔄 Update every 50ms for smooth animation
     const steps = duration / interval;
@@ -301,7 +303,8 @@ export default class extends Controller {
    *
    * @private
    */
-  #pauseAutoDismiss() {
+  #pauseAutoDismiss(event) {
+    this.#pauseReasons.add(event.type === "mouseenter" ? "hover" : "focus");
     this.#clearAutoDismissInterval();
   }
 
@@ -313,8 +316,18 @@ export default class extends Controller {
    *
    * @private
    */
-  #resumeAutoDismiss() {
-    const shouldResume = this.autoDismissValue && this.typeValue !== "danger";
+  #resumeAutoDismiss(event) {
+    if (
+      event.type === "focusout" &&
+      this.element.contains(event.relatedTarget)
+    ) {
+      return;
+    }
+    this.#pauseReasons.delete(event.type === "mouseleave" ? "hover" : "focus");
+    const shouldResume =
+      this.autoDismissValue &&
+      this.typeValue !== "danger" &&
+      this.#pauseReasons.size === 0;
 
     if (shouldResume) {
       this.#startAutoDismiss();
@@ -384,6 +397,7 @@ export default class extends Controller {
    * @private
    */
   #cleanup() {
+    this.#pauseReasons.clear();
     this.#clearAutoDismissInterval(); // ⏱️  Stop countdown
     this.#removeAllEventListeners(); // 🎧 Remove event listeners
   }
