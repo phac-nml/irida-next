@@ -21,6 +21,7 @@ export default class extends Controller {
 
   sourceTargetDisconnected(element) {
     element.removeEventListener("message", this.boundMessageHandler, true);
+    this.#ignoreNextRefresh = false;
     this.#clearIgnoreTimeout();
     this.#clearDebounceTimeout();
   }
