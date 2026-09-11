@@ -32,7 +32,13 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unauthorized
-    assert_match(/not authorized to transfer project/i, @response.body)
+    assert_select "div[data-viral--flash-type-value='error']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                      'action_policy.policy.project.transfer?',
+                      name: @project.name
+                    )}"
+    end
   end
 
   test 'should render unprocessable_content when transfer fails' do
@@ -42,7 +48,11 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_includes @response.body, I18n.t(:'projects.edit.advanced.transfer.empty_state')
+    assert_select 'a', text:
+            I18n.t(:'errors.format',
+                   attribute: Projects::TransferForm.human_attribute_name(:new_namespace_id),
+                   message: I18n.t(:'activemodel.errors.models.projects/transfer_form.attributes.new_namespace_id.not_found')) # rubocop:disable Layout/LineLength
+    assert_select "div[class='form-field invalid']"
   end
 
   test 'should render unprocessable_content when transfer to namespace with same project name' do
@@ -53,7 +63,10 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_includes @response.body,
-                    I18n.t(:'activemodel.errors.models.projects/transfer_form.attributes.new_namespace_id.project_exists') # rubocop:disable Layout/LineLength
+    assert_select 'a', text:
+        I18n.t(:'errors.format',
+               attribute: Projects::TransferForm.human_attribute_name(:new_namespace_id),
+               message: I18n.t(:'activemodel.errors.models.projects/transfer_form.attributes.new_namespace_id.project_exists')) # rubocop:disable Layout/LineLength
+    assert_select "div[class='form-field invalid']"
   end
 end
