@@ -166,8 +166,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def authorized_namespaces
-    @authorized_namespaces = authorized_scope(Namespace,
-                                              type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name)
+    @authorized_namespaces = authorized_scope(Group, type: :relation, as: :manageable)
   end
 
   def tab

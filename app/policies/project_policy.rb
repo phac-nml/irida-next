@@ -217,6 +217,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         accessible_namespaces: authorized_scope(
           Namespace, type: :relation,
                      scope_options: { access_level: access_level,
+                                      include_project_namespaces: true,
                                       include_route: false,
                                       include_shared_links: include_shared_links }
         ),
