@@ -73,6 +73,7 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
 
   page_action :update_global_state, method: :patch do
     target_state = params[:target_state].to_s
+    feature_name = Irida::SystemFeatureFlagsCatalog.fetch(params[:feature_key])&.fetch(:name)
     result = SystemFeatureFlags::UpdateGlobalState.new(
       feature_key: params[:feature_key],
       target_state: target_state,
@@ -80,11 +81,12 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
     ).execute
 
     redirect_to admin_feature_flags_path,
-                **feature_flag_flash(result, success_key: "global_#{target_state}")
+                **feature_flag_flash(result, success_key: "global_#{target_state}", feature_name: feature_name)
   end
 
   page_action :update_opt_in_availability, method: :patch do
     available = { 'true' => true, 'false' => false }[params[:available].to_s]
+    feature_name = Irida::SystemFeatureFlagsCatalog.fetch(params[:feature_key])&.fetch(:name)
     result = SystemFeatureFlags::UpdateOptInAvailability.new(
       feature_key: params[:feature_key],
       available: available,
@@ -92,7 +94,9 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
     ).execute
 
     redirect_to admin_feature_flags_path,
-                **feature_flag_flash(result, success_key: available ? 'opt_in_enabled' : 'opt_in_disabled')
+                **feature_flag_flash(result,
+                                     success_key: available ? 'opt_in_enabled' : 'opt_in_disabled',
+                                     feature_name: feature_name)
   end
 
   controller do # rubocop:disable Metrics/BlockLength
@@ -170,11 +174,11 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
       "/-/system/flipper/features/#{feature_key}"
     end
 
-    def feature_flag_flash(result, success_key:)
+    def feature_flag_flash(result, success_key:, feature_name:)
       if result.success?
-        { notice: t("active_admin.feature_flags.flash.#{success_key}") }
+        { notice: t("active_admin.feature_flags.flash.#{success_key}", name: feature_name) }
       elsif result.no_op?
-        { notice: t('active_admin.feature_flags.flash.no_change') }
+        { notice: t('active_admin.feature_flags.flash.no_change', name: feature_name) }
       else
         { alert: t("active_admin.feature_flags.flash.errors.#{result.error}",
                    default: t('active_admin.feature_flags.flash.errors.generic')) }

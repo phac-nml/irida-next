@@ -35,7 +35,7 @@ module Admin
       patch admin_feature_flags_update_global_state_path(feature_key: @feature_key, target_state: 'enabled')
 
       assert_redirected_to admin_feature_flags_path
-      assert_equal I18n.t('active_admin.feature_flags.flash.global_enabled'), flash[:notice]
+      assert_equal I18n.t('active_admin.feature_flags.flash.global_enabled', name: @feature_name), flash[:notice]
       assert_equal 'enabled', Irida::SystemFeatureFlagsCatalog.global_state(@feature_key)
     end
 
@@ -106,7 +106,7 @@ module Admin
       patch admin_feature_flags_update_global_state_path(feature_key: @feature_key, target_state: 'disabled')
 
       assert_redirected_to admin_feature_flags_path
-      assert_equal I18n.t('active_admin.feature_flags.flash.global_disabled'), flash[:notice]
+      assert_equal I18n.t('active_admin.feature_flags.flash.global_disabled', name: @feature_name), flash[:notice]
       assert_equal 'disabled', Irida::SystemFeatureFlagsCatalog.global_state(@feature_key)
     end
 
@@ -115,7 +115,7 @@ module Admin
 
       patch admin_feature_flags_update_global_state_path(feature_key: @feature_key, target_state: 'disabled')
 
-      assert_equal I18n.t('active_admin.feature_flags.flash.no_change'), flash[:notice]
+      assert_equal I18n.t('active_admin.feature_flags.flash.no_change', name: @feature_name), flash[:notice]
     end
 
     test 'system user enables profile opt-in availability' do
@@ -125,7 +125,7 @@ module Admin
         patch admin_feature_flags_update_opt_in_availability_path(feature_key: @feature_key, available: true)
 
         assert_redirected_to admin_feature_flags_path
-        assert_equal I18n.t('active_admin.feature_flags.flash.opt_in_enabled'), flash[:notice]
+        assert_equal I18n.t('active_admin.feature_flags.flash.opt_in_enabled', name: @feature_name), flash[:notice]
         assert_equal 'all_users', settings.reload.opt_in_state(@feature_key)
       end
     end
@@ -136,7 +136,7 @@ module Admin
       with_user_opt_in_features(user_opt_in_feature_config) do |settings|
         patch admin_feature_flags_update_opt_in_availability_path(feature_key: @feature_key, available: false)
 
-        assert_equal I18n.t('active_admin.feature_flags.flash.opt_in_disabled'), flash[:notice]
+        assert_equal I18n.t('active_admin.feature_flags.flash.opt_in_disabled', name: @feature_name), flash[:notice]
         assert_equal 'off', settings.reload.opt_in_state(@feature_key)
       end
     end

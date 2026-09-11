@@ -30,11 +30,11 @@ en:
           invalid_target_state: Invalid global state requested.
           mutation_failed: The feature could not be updated. Please try again.
           unauthorized: You are not authorized to change this feature.
-        global_disabled: Feature disabled globally.
-        global_enabled: Feature enabled globally.
-        no_change: No change was needed.
-        opt_in_disabled: Profile opt-in is now disabled.
-        opt_in_enabled: Profile opt-in is now available.
+        global_disabled: "%{name} disabled globally."
+        global_enabled: "%{name} enabled globally."
+        no_change: No change was needed for %{name}.
+        opt_in_disabled: Profile opt-in for %{name} is now disabled.
+        opt_in_enabled: Profile opt-in for %{name} is now available.
       gates:
         actors:
           one: "%{count} actor"

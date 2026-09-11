@@ -30,11 +30,11 @@ fr:
           invalid_target_state: État global demandé invalide.
           mutation_failed: La fonctionnalité n'a pas pu être mise à jour. Veuillez réessayer.
           unauthorized: Vous n'êtes pas autorisé à modifier cette fonctionnalité.
-        global_disabled: Fonctionnalité désactivée globalement.
-        global_enabled: Fonctionnalité activée globalement.
-        no_change: Aucun changement n'était nécessaire.
-        opt_in_disabled: L'adhésion au profil est maintenant désactivée.
-        opt_in_enabled: L'adhésion au profil est maintenant disponible.
+        global_disabled: "%{name} désactivée globalement."
+        global_enabled: "%{name} activée globalement."
+        no_change: Aucun changement n'était nécessaire pour %{name}.
+        opt_in_disabled: L'adhésion au profil pour %{name} est maintenant désactivée.
+        opt_in_enabled: L'adhésion au profil pour %{name} est maintenant disponible.
       gates:
         actors:
           one: "%{count} acteur"
