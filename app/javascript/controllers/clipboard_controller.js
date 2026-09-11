@@ -21,17 +21,32 @@ export default class extends Controller {
   };
 
   #tooltip;
+  #connection = 0;
+  #feedbackTimeout;
+  #resetFeedback;
+
+  #clearFeedback() {
+    clearTimeout(this.#feedbackTimeout);
+    this.#resetFeedback?.();
+    this.#resetFeedback = undefined;
+  }
 
   disconnect() {
+    this.#connection += 1;
+    this.contentTargetDisconnected();
+  }
+
+  contentTargetDisconnected() {
+    this.#clearFeedback();
     if (this.#tooltip) {
       this.#tooltip.destroy();
       this.#tooltip = null;
     }
   }
 
-  contentTargetConnected() {
-    if (this.hasButtonTarget && this.hasContentTarget) {
-      this.#tooltip = new Tooltip(this.contentTarget, this.buttonTarget, {
+  contentTargetConnected(content) {
+    if (this.hasButtonTarget) {
+      this.#tooltip = new Tooltip(content, this.buttonTarget, {
         placement: "top",
         triggerType: "none",
       });
@@ -51,8 +66,10 @@ export default class extends Controller {
       return;
     }
 
+    const connection = this.#connection;
     try {
-      await navigator.clipboard.writeText(e.target.value);
+      await navigator.clipboard.writeText(e.currentTarget.value);
+      if (connection !== this.#connection) return;
       this.#notify();
     } catch (err) {
       console.error("Failed to copy text: ", err);
@@ -67,7 +84,11 @@ export default class extends Controller {
   #notify() {
     if (!this.#tooltip) return;
 
-    this.#tooltip.show();
+    this.#clearFeedback();
+    const tooltip = this.#tooltip;
+    const button = this.buttonTarget;
+    const ariaLive = this.ariaLiveTarget;
+    tooltip.show();
     this.buttonTarget.setAttribute("disabled", "");
     this.ariaLiveTarget.innerText = this.copiedValue;
     // Change the button to a check mark for 1 second
@@ -89,11 +110,12 @@ export default class extends Controller {
       </svg>
     `;
 
-    setTimeout(() => {
-      this.#tooltip.hide();
-      this.buttonTarget.removeAttribute("disabled");
-      this.buttonTarget.innerHTML = originalContent;
-      this.ariaLiveTarget.innerText = "";
-    }, 1000);
+    this.#resetFeedback = () => {
+      tooltip.hide();
+      button.removeAttribute("disabled");
+      button.innerHTML = originalContent;
+      ariaLive.innerText = "";
+    };
+    this.#feedbackTimeout = setTimeout(() => this.#clearFeedback(), 1000);
   }
 }
