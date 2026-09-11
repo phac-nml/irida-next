@@ -13,27 +13,29 @@
         authorized_namespaces: @authorized_namespaces,
       } %>
 
-      <div class="mb-2 text-sm font-semibold text-slate-800 dark:text-white">
-        <%= t(:"groups.new.visibility.title") %>
-      </div>
+      <% if Flipper.enabled?(:global_groups) %>
+        <div class="mb-2 text-sm font-semibold text-slate-800 dark:text-white">
+          <%= t(:"groups.new.visibility.title") %>
+        </div>
 
-      <%= render ::Pathogen::Form::RadioButton.new(
-        form: form,
-        attribute: :public,
-        value: "false",
-        label: t(:"groups.new.visibility.private.label"),
-        help_text: t(:"groups.new.visibility.private.description"),
-        checked: true
-      ) %>
+        <%= render ::Pathogen::Form::RadioButton.new(
+          form: form,
+          attribute: :public,
+          value: "false",
+          label: t(:"groups.new.visibility.private.label"),
+          help_text: t(:"groups.new.visibility.private.description"),
+          checked: true
+        ) %>
 
-      <%= render ::Pathogen::Form::RadioButton.new(
-        form: form,
-        attribute: :public,
-        value: "true",
-        label: t(:"groups.new.visibility.public.label"),
-        help_text: t(:"groups.new.visibility.public.description"),
-        checked: false
-      ) %>
+        <%= render ::Pathogen::Form::RadioButton.new(
+          form: form,
+          attribute: :public,
+          value: "true",
+          label: t(:"groups.new.visibility.public.label"),
+          help_text: t(:"groups.new.visibility.public.description"),
+          checked: false
+        ) %>
+      <% end %>
 
       <div class="flex gap-2">
         <%= render CancelButtonComponent.new(href: groups_path) %>
