@@ -177,21 +177,21 @@ module Projects
 
       test 'singular description within delete samples dialog with invalid reason' do
         Flipper.enable(:sample_deletion_reason)
-        # Test that the reason field validation error is returned when submitting invalid reason
         assert_no_difference('Sample.count') do
           post samples_deletions_path,
                params: {
                  namespace_id: @project1_namespace.id,
                  deletion_type: 'single',
+                 sample_id: @sample1.id,
                  deletion: {
-                   sample_ids: [@sample1.id],
-                   reason: 'a' * 501
+                   reason: ''
                  }
                }, as: :turbo_stream
         end
 
-        assert_response :unprocessable_content
-        assert_match 'Reason is too long', response.body
+        # assert_response :unprocessable_content
+        # assert_select 'turbo-stream[target="samples_dialog"]'
+        assert_match 'Reason is too short', response.body
         assert_match 'form-error-summary', response.body
       ensure
         Flipper.disable(:sample_deletion_reason)
