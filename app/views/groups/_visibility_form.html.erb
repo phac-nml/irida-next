@@ -1,0 +1,23 @@
+<%# locals: (form:, group:) %>
+
+<div class="mb-4 space-y-2">
+  <%= render ::Pathogen::Form::RadioButton.new(
+          form: form,
+          attribute: :public,
+          value: "false",
+          label: t(:"groups.new.visibility.private.label"),
+          help_text: t(:"groups.new.visibility.private.description"),
+          checked: !group.public?,
+          data: { action: "change->visibility-form#update", visibility_form_target: "visibility" }
+        ) %>
+
+  <%= render ::Pathogen::Form::RadioButton.new(
+          form: form,
+          attribute: :public,
+          value: "true",
+          label: t(:"groups.new.visibility.public.label"),
+          help_text: t(:"groups.new.visibility.public.description"),
+          checked: group.public?,
+          data: { action: "change->visibility-form#update", visibility_form_target: "visibility" }
+        ) %>
+</div>
