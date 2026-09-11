@@ -56,9 +56,13 @@ module Projects
 
       assert_response :unauthorized
 
-      assert_includes @response.body,
-                      I18n.t('action_policy.policy.namespaces/project_namespace.create_metadata_templates?',
-                             name: @project.name)
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                        'action_policy.policy.namespaces/project_namespace.create_metadata_templates?',
+                        name: @project.name
+                      )}"
+      end
     end
 
     test 'project metadata templates edit' do
@@ -94,7 +98,10 @@ module Projects
 
       assert_response :unauthorized
 
-      assert_includes @response.body, I18n.t('action_policy.unauthorized')
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t('action_policy.unauthorized')}"
+      end
     end
 
     test 'project metadata templates create' do
@@ -107,8 +114,13 @@ module Projects
         ), params: metadata_template_params
       end
       assert_response :success
-      assert_includes @response.body, I18n.t('concerns.metadata_template_actions.create.success',
-                                             template_name: new_name)
+
+      assert_select "div[data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                        'concerns.metadata_template_actions.create.success', template_name: new_name
+                      )}"
+      end
 
       get namespace_project_metadata_templates_path(@project_namespace.parent, @project)
       assert_response :success
@@ -160,9 +172,13 @@ module Projects
 
       assert_response :unauthorized
 
-      assert_includes @response.body,
-                      I18n.t('action_policy.policy.namespaces/project_namespace.create_metadata_templates?',
-                             name: @project.name)
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                        'action_policy.policy.namespaces/project_namespace.create_metadata_templates?',
+                        name: @project.name
+                      )}"
+      end
     end
 
     test 'project metadata templates update' do
@@ -179,11 +195,13 @@ module Projects
 
       assert_response :success
 
-      assert_includes @response.body, I18n.t(
-        :'concerns.metadata_template_actions.update.success',
-        template_name: new_name
-      )
-
+      assert_select "div[data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                        'concerns.metadata_template_actions.update.success',
+                        template_name: new_name
+                      )}"
+      end
       assert_select "tr#metadata_template_#{@project_metadata_template.id}" do
         assert_select 'td', text: new_name
         assert_select 'button', text: I18n.t('common.actions.edit'), focused: true
@@ -252,6 +270,7 @@ module Projects
       end
 
       assert_response :unprocessable_content
+
       assert_select "div[data-viral--flash-type-value='error']" do
         assert_select 'div',
                       "#{I18n.t('common.statuses.error')}: #{I18n.t('concerns.metadata_template_actions.update.error',

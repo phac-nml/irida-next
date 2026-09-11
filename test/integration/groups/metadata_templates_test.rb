@@ -55,8 +55,12 @@ module Groups
 
       assert_response :unauthorized
 
-      assert_includes @response.body,
-                      I18n.t('action_policy.policy.group.create_metadata_templates?', name: @group.name)
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                        'action_policy.policy.group.create_metadata_templates?', name: @group.name
+                      )}"
+      end
     end
 
     test 'group metadata templates edit' do
@@ -88,7 +92,10 @@ module Groups
 
       assert_response :unauthorized
 
-      assert_includes @response.body, I18n.t('action_policy.unauthorized')
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t('action_policy.unauthorized')}"
+      end
     end
 
     test 'group metadata templates create' do
@@ -98,8 +105,12 @@ module Groups
         post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
       end
       assert_response :success
-      assert_includes @response.body, I18n.t('concerns.metadata_template_actions.create.success',
-                                             template_name: new_name)
+      assert_select "div[data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                        'concerns.metadata_template_actions.create.success', template_name: new_name
+                      )}"
+      end
 
       get group_metadata_templates_path(@group)
       assert_response :success
@@ -141,9 +152,12 @@ module Groups
       end
 
       assert_response :unauthorized
-
-      assert_includes @response.body,
-                      I18n.t('action_policy.policy.group.create_metadata_templates?', name: @group.name)
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                        'action_policy.policy.group.create_metadata_templates?', name: @group.name
+                      )}"
+      end
     end
 
     test 'group metadata templates update' do
@@ -156,11 +170,12 @@ module Groups
 
       assert_response :success
 
-      assert_includes @response.body, I18n.t(
-        :'concerns.metadata_template_actions.update.success',
-        template_name: new_name
-      )
-
+      assert_select "div[data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                        'concerns.metadata_template_actions.update.success', template_name: new_name
+                      )}"
+      end
       assert_select "tr#metadata_template_#{@group_metadata_template.id}" do
         assert_select 'td', text: new_name
         assert_select 'button', text: I18n.t('common.actions.edit'), focused: true
