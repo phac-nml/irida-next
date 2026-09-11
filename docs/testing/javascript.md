@@ -2,7 +2,10 @@
 
 Run `pnpm run test:js` for fast feedback. Run `pnpm run test:js:coverage`
 before opening a PR; CI runs this command and enforces the existing per-file
-coverage thresholds. Test discovery must find at least one test.
+coverage thresholds. CI also shuffles test order with the fixed seed `2233` so
+failures are reproducible. Run the exact CI command locally with
+`pnpm run test:js:coverage --sequence.shuffle --sequence.seed=2233`.
+Test discovery must find at least one test.
 
 ## Controller fixtures and lifecycle
 
