@@ -55,9 +55,10 @@ class NamespacePolicy < ApplicationPolicy
     scope
   end
 
-  scope_for :relation, :manageable do |relation, include_project_namespaces: false|
+  scope_for :relation, :manageable do |relation, include_project_namespaces: false, include_route: true|
     authorized_scope(relation, type: :relation,
                                scope_options: { access_level: Member::AccessLevel.manageable,
-                                                include_project_namespaces: include_project_namespaces })
+                                                include_project_namespaces: include_project_namespaces,
+                                                include_route: include_route })
   end
 end

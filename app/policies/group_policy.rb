@@ -352,8 +352,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   scope_for :relation, :manageable do |relation|
     relation.where(
-      id: authorized_scope(Namespace, type: :relation, as: :manageable),
-      public: false
+      id: authorized_scope(Namespace, type: :relation, as: :manageable, scope_options: { include_route: false })
     )
   end
 
