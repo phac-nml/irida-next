@@ -695,6 +695,20 @@ describe("combobox_datepicker", () => {
       expect(document.activeElement).toBe(
         document.querySelector('[data-date="2026-05-07"]'),
       );
+
+      input.click();
+      input.click();
+      expect(calendar.hidden).toBe(false);
+      expect(inputArrowSvg).toHaveClass("rotate-180");
+      input.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Tab",
+          code: "Tab",
+          bubbles: true,
+        }),
+      );
+      expect(calendar.hidden).toBe(true);
+      expect(inputArrowSvg).not.toHaveClass("rotate-180");
     });
 
     it("forward and back button functionality", async () => {
@@ -855,6 +869,19 @@ describe("combobox_datepicker", () => {
 
       input.value = "2027-10-10";
       input.dispatchEvent(new Event("change", { bubbles: true }));
+      input.click();
+
+      expect(getMonthSelect().value).toBe("October");
+      expect(getYearInput().value).toBe("2027");
+      expect(getSpecificDateNode("2027-10-10")).toHaveClass("bg-primary-700");
+
+      input.value = "01-01-2026";
+      input.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Enter",
+          bubbles: true,
+        }),
+      );
       input.click();
 
       expect(getMonthSelect().value).toBe("October");

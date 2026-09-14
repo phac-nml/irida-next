@@ -324,12 +324,6 @@ export default class extends Controller {
     }
   }
 
-  // submits the selected date
-  submitDate() {
-    this.element.closest("form").requestSubmit();
-    this.#setSelectedDate();
-  }
-
   // handles filling in the date input with the date
   // use cases:
   // 1. Add the newly selected date from the datepicker
