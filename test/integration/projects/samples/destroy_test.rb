@@ -182,8 +182,8 @@ module Projects
                params: {
                  namespace_id: @project1_namespace.id,
                  deletion_type: 'single',
-                 sample_id: @sample1.id,
                  deletion: {
+                   sample_ids: [@sample1.id],
                    reason: ''
                  }
                }, as: :turbo_stream

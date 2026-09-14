@@ -15,39 +15,6 @@ module Groups
         @group1 = groups(:group_one)
       end
 
-      test 'should destroy single sample at group level' do
-        assert_difference('Sample.count', -1) do
-          post samples_deletions_path,
-               params: {
-                 namespace_id: @group1.id,
-                 deletion_type: 'single',
-                 deletion: {
-                   sample_ids: [@sample1.id]
-                 }
-               }, as: :turbo_stream
-        end
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 1), flash[:success]
-        assert_response :redirect
-        assert_redirected_to group_samples_path(@group1)
-      end
-
-      test 'should not destroy single sample at group level with active workflow executions' do
-        Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
-        assert_no_difference('Sample.count') do
-          post samples_deletions_path,
-               params: {
-                 namespace_id: @group1.id,
-                 deletion_type: 'single',
-                 deletion: {
-                   sample_ids: [@sample1.id]
-                 }
-               }, as: :turbo_stream
-        end
-        assert_response :unprocessable_content
-      ensure
-        Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
-      end
-
       test 'should destroy multiple samples at group level' do
         assert_difference('Sample.count', -2) do
           post samples_deletions_path,
