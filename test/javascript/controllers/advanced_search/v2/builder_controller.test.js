@@ -60,7 +60,27 @@ function groupTemplateInner() {
   `;
 }
 
-function renderFixture({ existingGroups = "" } = {}) {
+function listValueTemplateInner(values = []) {
+  const name = `q[groups_attributes][${G}][conditions_attributes][${C}][value][]`;
+  return `
+    <div class="value form-field">
+      <div data-controller="list-input" data-list-input-filters-value='${JSON.stringify(values)}'>
+        <template data-list-input-target="template">
+          <span class="filter-item search-tag">
+            <input type="hidden" name="${name}">
+            <span class="label"></span>
+            <button type="button" data-action="list-input#remove">Remove value</button>
+          </span>
+        </template>
+        <div data-list-input-target="tags">
+          <input name="${name}" data-list-input-target="input"
+            data-action="paste->list-input#handlePaste">
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderFixture({ existingGroups = "", initialState = [] } = {}) {
   document.body.innerHTML = `
     <div
       data-controller="advanced-search--v2--builder"
@@ -82,6 +102,10 @@ function renderFixture({ existingGroups = "" } = {}) {
       </template>
     </div>
   `;
+  builderElement().setAttribute(
+    "data-advanced-search--v2--builder-initial-state-value",
+    JSON.stringify(initialState),
+  );
 }
 
 async function startController() {
@@ -191,7 +215,7 @@ describe("advanced-search--v2--builder", () => {
     ]);
   });
 
-  it("removeGroup reindexes remaining groups to a contiguous 0-based sequence", async () => {
+  it("removeGroup keeps surviving keys while updating displayed numbers", async () => {
     application = await startController();
     const controller = application.getControllerForElementAndIdentifier(
       builderElement(),
@@ -201,7 +225,7 @@ describe("advanced-search--v2--builder", () => {
     controller.addGroup();
     await tick();
 
-    // Remove the first group; the survivor must reindex from 1 -> 0.
+    // Removing group 0 must not change group 1's control names or IDs.
     groups()[0]
       .querySelector(
         "button[data-action='advanced-search--v2--builder#removeGroup']",
@@ -211,11 +235,18 @@ describe("advanced-search--v2--builder", () => {
 
     expect(groups()).toHaveLength(1);
     expect(fieldNames()).toEqual([
-      "q[groups_attributes][0][conditions_attributes][0][field]",
+      "q[groups_attributes][1][conditions_attributes][0][field]",
     ]);
+    expect(groups()[0].querySelector("legend").textContent).toBe("Group 1");
+    controller.addGroup();
+    expect(fieldNames()).toEqual([
+      "q[groups_attributes][1][conditions_attributes][0][field]",
+      "q[groups_attributes][2][conditions_attributes][0][field]",
+    ]);
+    expect(groups()[1].querySelector("legend").textContent).toBe("Group 2");
   });
 
-  it("removeCondition reindexes the remaining conditions in the group", async () => {
+  it("removeCondition keeps surviving keys while updating displayed numbers", async () => {
     application = await startController();
     const controller = application.getControllerForElementAndIdentifier(
       builderElement(),
@@ -244,8 +275,15 @@ describe("advanced-search--v2--builder", () => {
     expect(conditions(groups()[1])).toHaveLength(1);
     expect(fieldNames()).toEqual([
       "q[groups_attributes][0][conditions_attributes][0][field]",
-      "q[groups_attributes][1][conditions_attributes][0][field]",
+      "q[groups_attributes][1][conditions_attributes][1][field]",
     ]);
+    expect(conditions(group)[0].querySelector("legend").textContent).toBe(
+      "Condition 1",
+    );
+    group.querySelector("button[data-action$='#addCondition']").click();
+    expect(fieldNames().at(-1)).toBe(
+      "q[groups_attributes][1][conditions_attributes][2][field]",
+    );
   });
 
   it("re-adds an empty condition when the last one in a group is removed", async () => {
@@ -266,11 +304,11 @@ describe("advanced-search--v2--builder", () => {
 
     expect(conditions(groups()[0])).toHaveLength(1);
     expect(fieldNames()).toEqual([
-      "q[groups_attributes][0][conditions_attributes][0][field]",
+      "q[groups_attributes][0][conditions_attributes][1][field]",
     ]);
   });
 
-  it("replaces enum options without appending duplicates on re-selection", async () => {
+  it("replaces enum options under surviving keys without appending duplicates", async () => {
     application = await startController();
     const controller = application.getControllerForElementAndIdentifier(
       builderElement(),
@@ -298,59 +336,42 @@ describe("advanced-search--v2--builder", () => {
     await tick();
 
     const group = groups()[0];
-    const condition = document.createElement("fieldset");
-    condition.setAttribute(
-      "data-advanced-search--v2--builder-target",
-      "conditionsContainer",
-    );
-    condition.dataset.advancedSearchSelectedField = "";
-    condition.innerHTML = `
-      <div class="form-field">
-        <select name="q[groups_attributes][0][conditions_attributes][0][field]">
-          <option value=""></option>
-          <option value="status">status</option>
-        </select>
-      </div>
-      <div class="form-field">
-        <select name="q[groups_attributes][0][conditions_attributes][0][operator]">
-          <option value=""></option>
-          <option value="in">in</option>
-        </select>
-      </div>
-      <div class="value form-field">
-        <select name="q[groups_attributes][0][conditions_attributes][0][value][]">
-          <option value=""></option>
-        </select>
-      </div>
-    `;
-    group.appendChild(condition);
+    group.querySelector("button[data-action$='#addCondition']").click();
+    await tick();
+    group.querySelector("button[data-action$='#removeCondition']").click();
+    const condition = conditions(group)[0];
 
     const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="status">Status</option>';
     const operator = condition.querySelector("[name$='[operator]']");
     const template = controller.listSelectValueTemplateTarget;
     template.innerHTML = `
       <div class="value form-field">
-        <select name="q[groups_attributes][0][conditions_attributes][0][value][]">
+        <select multiple name="q[groups_attributes][${G}][conditions_attributes][${C}][value][]">
           <option value=""></option>
         </select>
       </div>
     `;
 
     field.value = "status";
-    controller.handleFieldChange({ target: field });
+    field.dispatchEvent(new Event("change", { bubbles: true }));
     operator.value = "in";
-    controller.handleOperatorChange({ target: operator });
+    operator.dispatchEvent(new Event("change", { bubbles: true }));
 
     expect(
       Array.from(
         condition.querySelector("select[name$='[value][]']").options,
       ).map((option) => option.value),
     ).toEqual(["draft", "published"]);
+    expect(condition.querySelector("select[name$='[value][]']").name).toBe(
+      "q[groups_attributes][0][conditions_attributes][1][value][]",
+    );
 
     field.value = "status";
-    controller.handleFieldChange({ target: field });
+    field.dispatchEvent(new Event("change", { bubbles: true }));
     operator.value = "in";
-    controller.handleOperatorChange({ target: operator });
+    operator.dispatchEvent(new Event("change", { bubbles: true }));
 
     expect(
       Array.from(
@@ -374,6 +395,141 @@ describe("advanced-search--v2--builder", () => {
     ).toBe("");
   });
 
+  it.each([false, true])(
+    "compares hydrated saved list values with the query baseline (removed: %s)",
+    async (removeValues) => {
+      application = await startController();
+      const controller = application.getControllerForElementAndIdentifier(
+        builderElement(),
+        "advanced-search--v2--builder",
+      );
+      controller.render();
+      const condition = conditions(groups()[0])[0];
+      condition
+        .querySelector("option[value='name']")
+        .setAttribute("selected", "");
+      condition.querySelector("[name$='[operator]']").innerHTML =
+        '<option value="in" selected>In</option>';
+      condition.querySelector(".value").outerHTML = listValueTemplateInner([
+        "Canada",
+        "France",
+      ])
+        .replaceAll(G, "0")
+        .replaceAll(C, "0");
+      controller.searchGroupsTemplateTarget.innerHTML =
+        controller.searchGroupsContainerTarget.innerHTML;
+      controller.initialStateValue = [
+        [
+          {
+            field: "name",
+            operator: "in",
+            values: ["Canada", "France"],
+          },
+        ],
+      ];
+      controller.renderExisting();
+      await tick();
+
+      if (removeValues) {
+        controller.searchGroupsContainerTarget
+          .querySelectorAll("button[data-action='list-input#remove']")
+          .forEach((button) => button.click());
+      }
+
+      expect(controller.isDirty()).toBe(removeValues);
+
+      // Restoring server state also reconnects the list-input child controller.
+      controller.renderExisting();
+      await tick();
+      expect(controller.isDirty()).toBe(false);
+    },
+  );
+
+  it("allocates new keys after restoring existing sparse groups and conditions", async () => {
+    const existingGroup = groupTemplateInner()
+      .replaceAll(G, "3")
+      .replace("GROUP_LEGEND_INDEX_PLACEHOLDER", "1")
+      .replace(
+        "<div>",
+        conditionTemplateInner()
+          .replaceAll(G, "3")
+          .replaceAll(C, "7")
+          .replace("CONDITION_LEGEND_INDEX_PLACEHOLDER", "1") + "<div>",
+      );
+    renderFixture({ existingGroups: existingGroup });
+    application = await startController();
+    const controller = application.getControllerForElementAndIdentifier(
+      builderElement(),
+      "advanced-search--v2--builder",
+    );
+    controller.renderExisting();
+    await tick();
+    groups()[0].querySelector("button[data-action$='#addCondition']").click();
+    controller.addGroup();
+
+    expect(fieldNames()).toEqual([
+      "q[groups_attributes][3][conditions_attributes][7][field]",
+      "q[groups_attributes][3][conditions_attributes][8][field]",
+      "q[groups_attributes][4][conditions_attributes][0][field]",
+    ]);
+  });
+
+  it.each([
+    {
+      kind: "scalar",
+      operator: "=",
+      values: [42],
+      inputs: '<input name="value" value="42">',
+    },
+    {
+      kind: "between",
+      operator: "between",
+      values: ["", "20"],
+      inputs:
+        '<input name="value[]" value=""><input name="value[]" value="20">',
+    },
+    {
+      kind: "multiselect",
+      operator: "in",
+      values: ["b", "a", ""],
+      inputs:
+        '<select name="value[]" multiple><option value="a" selected>A</option><option value="b" selected>B</option></select>',
+    },
+  ])(
+    "compares $kind query values with their rendered representation",
+    async ({ kind, operator, values, inputs }) => {
+      application = await startController();
+      const controller = application.getControllerForElementAndIdentifier(
+        builderElement(),
+        "advanced-search--v2--builder",
+      );
+      controller.render();
+      const condition = conditions(groups()[0])[0];
+      const name = "q[groups_attributes][0][conditions_attributes][0]";
+      condition.querySelector("[name$='[field]']").value = "name";
+      condition.querySelector("[name$='[operator]']").innerHTML =
+        `<option value="${operator}">${operator}</option>`;
+      const valueContainer = condition.querySelector(".value");
+      valueContainer.innerHTML = inputs.replaceAll(
+        'name="value',
+        `name="${name}[value]`,
+      );
+      controller.initialStateValue = [[{ field: "name", operator, values }]];
+
+      expect(controller.isDirty()).toBe(false);
+      if (kind === "multiselect") {
+        valueContainer.querySelector("option").selected = false;
+      } else if (kind === "between") {
+        const [from, to] = valueContainer.querySelectorAll("input");
+        from.value = "20";
+        to.value = "";
+      } else {
+        valueContainer.querySelector("input").value = "43";
+      }
+      expect(controller.isDirty()).toBe(true);
+    },
+  );
+
   it.each(["group", "condition"])(
     "keeps newly pasted list values in the surviving condition after removing a %s",
     async (removedNode) => {
@@ -388,22 +544,7 @@ describe("advanced-search--v2--builder", () => {
         "advanced-search--v2--builder",
       );
       controller.operationsValue = { standard: { In: "in" } };
-      const name = `q[groups_attributes][${G}][conditions_attributes][${C}][value][]`;
-      controller.listValueTemplateTarget.innerHTML = `
-        <div class="value form-field">
-          <div data-controller="list-input" data-list-input-filters-value="[]">
-            <template data-list-input-target="template">
-              <span class="filter-item search-tag">
-                <input type="hidden" name="${name}">
-                <span class="label"></span>
-              </span>
-            </template>
-            <div data-list-input-target="tags">
-              <input name="${name}" data-list-input-target="input"
-                data-action="paste->list-input#handlePaste">
-            </div>
-          </div>
-        </div>`;
+      controller.listValueTemplateTarget.innerHTML = listValueTemplateInner();
       controller.render();
       await tick();
       if (removedNode === "group") {
@@ -446,7 +587,9 @@ describe("advanced-search--v2--builder", () => {
         ([key, value]) => key.endsWith("[value][]") && value !== "",
       );
       const expectedName =
-        "q[groups_attributes][0][conditions_attributes][0][value][]";
+        removedNode === "group"
+          ? "q[groups_attributes][1][conditions_attributes][0][value][]"
+          : "q[groups_attributes][0][conditions_attributes][1][value][]";
       expect(values).toEqual([
         [expectedName, "before-removal"],
         [expectedName, "after-removal"],
