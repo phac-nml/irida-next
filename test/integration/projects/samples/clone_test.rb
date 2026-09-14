@@ -30,14 +30,14 @@ module Projects
 
       test 'should enqueue a Samples::CloneJob for project' do
         assert_enqueued_jobs 1, only: ::Samples::CloneJob do
-          post_clone(namespace_id: @project.namespace.id, sample_ids: [@sample1.id, @sample2.id],
+          post_clone(sample_ids: [@sample1.id, @sample2.id],
                      destination: @project2)
         end
       end
 
       test 'clone dialog sample listing' do
         assert_samples_page(@project, 3)
-        get new_samples_clone_path(namespace_id: @namespace.id, format: :turbo_stream)
+        get new_samples_clone_path(namespace_id: @project.namespace.id, format: :turbo_stream)
         assert_response :success
         assert_select 'turbo-stream[action="update"][target="samples_dialog"]' do
           assert_clone_dialog
@@ -48,7 +48,7 @@ module Projects
 
       test 'clone dialog with plural description' do
         assert_samples_page(@project, 3)
-        get new_samples_clone_path(namespace_id: @namespace.id, format: :turbo_stream)
+        get new_samples_clone_path(namespace_id: @project.namespace.id, format: :turbo_stream)
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
           assert_clone_dialog
@@ -59,7 +59,7 @@ module Projects
 
       test 'clone dialog with singular description' do
         assert_samples_page(@project, 3)
-        get new_samples_clone_path(namespace_id: @namespace.id, format: :turbo_stream)
+        get new_samples_clone_path(namespace_id: @project.namespace.id, format: :turbo_stream)
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
           assert_clone_dialog
@@ -71,7 +71,7 @@ module Projects
       test 'clone samples' do
         assert_samples_page(@project2, 20)
         assert_samples_page(@project, 3)
-        get new_samples_clone_path(namespace_id: @namespace.id, format: :turbo_stream)
+        get new_samples_clone_path(namespace_id: @project.namespace.id, format: :turbo_stream)
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
           assert_clone_dialog
@@ -95,7 +95,7 @@ module Projects
         test "dialog close button hidden while cloning samples #{v2_select_text}" do
           Flipper.enable(:v2_select2) if v2_select
           assert_samples_page(@project, 3)
-          get new_samples_clone_path(namespace_id: @namespace.id, format: :turbo_stream)
+          get new_samples_clone_path(namespace_id: @project.namespace.id, format: :turbo_stream)
           assert_response :success
           assert_select 'turbo-stream[target="samples_dialog"]' do
             assert_clone_dialog
@@ -264,7 +264,7 @@ module Projects
         assert_includes broadcast_text, sample.name
       end
 
-      def post_clone(namespace_id: @namespace.id, sample_ids: @project.samples.ids, destination: @project2)
+      def post_clone(namespace_id: @project.namespace.id, sample_ids: @project.samples.ids, destination: @project2)
         post samples_clone_path,
              params: {
                namespace_id:,
