@@ -655,3 +655,21 @@ snvphyl_group:
   puid: INXT_GRP_AAAAAAAACX
   attachments_updated_at: <%= 2.hours.ago %>
   samples_count: 2
+
+clone_test_group_one:
+  <<: *DEFAULTS
+  name: Clone Test Group One
+  path: clone-test-group-one
+  description: Group for testing clone with no available projects
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACY
+  samples_count: 0
+
+clone_test_group_two:
+  <<: *DEFAULTS
+  name: Clone Test Group Two
+  path: clone-test-group-two
+  description: Group for testing clone with no available destination groups
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACZ
+  samples_count: 0

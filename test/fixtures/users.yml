@@ -274,3 +274,15 @@ snvphyl_user:
   email: <%= "snvphyl.user@localhost" %>
   first_name: SNVPhyl
   last_name: User
+
+clone_test_maintainer_one:
+  <<: *DEFAULTS
+  email: <%= "clone.test.maintainer.one@localhost" %>
+  first_name: CloneTestMaintainer
+  last_name: One
+
+clone_test_maintainer_two:
+  <<: *DEFAULTS
+  email: <%= "clone.test.maintainer.two@localhost" %>
+  first_name: CloneTestMaintainer
+  last_name: Two

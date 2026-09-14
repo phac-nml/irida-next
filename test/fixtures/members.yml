@@ -738,3 +738,15 @@ snvphyl_group_member_snvphyl_user:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_group, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
 
+clone_test_group_one_member_clone_test_maintainer_one:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_group_one, :uuid) %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>
+
+clone_test_group_two_member_clone_test_maintainer_two:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_group_two, :uuid) %>
+  access_level: <%= Member::AccessLevel::MAINTAINER %>
+
