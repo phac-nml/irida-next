@@ -37,7 +37,7 @@
       border: true,
     ) %>
 
-    <% if @namespace.public? %>
+    <% if Flipper.enabled?(:global_groups) && @namespace.public? %>
       <%= render Viral::PillComponent.new(
               text: t(:"components.namespace_row.contents_component.shared_namespaces.public"),
               color: :yellow,

@@ -158,7 +158,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def group_params
-    params.expect(group: %i[name path description parent_id public])
+    if Flipper.enabled?(:global_groups)
+      params.expect(group: %i[name path description parent_id public])
+    else
+      params.expect(group: %i[name path description parent_id])
+    end
   end
 
   def group_transfer_params

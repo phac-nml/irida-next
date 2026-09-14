@@ -268,6 +268,12 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.change_visibility.title')
     assert_selector 'p', text: I18n.t('groups.edit.advanced.change_visibility.description.private')
 
+    assert_selector "input[id='group_public_false']:checked", count: 1
+    assert_selector 'button[disabled]', text: I18n.t('groups.edit.advanced.change_visibility.submit')
+    find("label[for='group_public_true']").click
+    assert_selector "input[id='group_public_false']:checked", count: 0
+    assert_selector "input[id='group_public_true']:checked", count: 1
+
     assert_selector 'button', text: I18n.t('groups.edit.advanced.change_visibility.submit')
     click_on I18n.t('groups.edit.advanced.change_visibility.submit')
 
@@ -291,6 +297,12 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.change_visibility.title')
     assert_selector 'p', text: I18n.t('groups.edit.advanced.change_visibility.description.public')
+
+    assert_selector "input[id='group_public_true']:checked", count: 1
+    assert_selector 'button[disabled]', text: I18n.t('groups.edit.advanced.change_visibility.submit')
+    find("label[for='group_public_false']").click
+    assert_selector "input[id='group_public_true']:checked", count: 0
+    assert_selector "input[id='group_public_false']:checked", count: 1
 
     assert_selector 'button', text: I18n.t('groups.edit.advanced.change_visibility.submit')
     click_on I18n.t('groups.edit.advanced.change_visibility.submit')

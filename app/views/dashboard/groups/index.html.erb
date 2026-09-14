@@ -21,11 +21,13 @@
       selected: @tab == "private"
     ) %>
 
-    <% tabs.with_tab(
+    <% if Flipper.enabled?(:global_groups) %>
+      <% tabs.with_tab(
       id: "public-tab",
       label: t(".public"),
       selected: @tab == "public"
     ) %>
+    <% end %>
 
     <% tabs.with_lazy_panel(
       id: "private-panel",
@@ -37,14 +39,16 @@
       <%= render "groups_list", has_groups: @has_groups, q: @q, pagy: @pagy, tab: @tab, groups: @groups, render_flat_list: @render_flat_list %>
     <% end %>
 
-    <% tabs.with_lazy_panel(
+    <% if Flipper.enabled?(:global_groups) %>
+      <% tabs.with_lazy_panel(
       id: "public-panel",
       tab_id: "public-tab",
       frame_id: "public-groups-content",
       src_path: dashboard_groups_url(public: "true"),
       selected: @tab == "public"
     ) do %>
-      <%= render "groups_list", has_groups: @has_groups, q: @q, pagy: @pagy, tab: @tab, groups: @groups, render_flat_list: @render_flat_list, empty_title: t("dashboard.groups.index.no_public_groups_title"), empty_description: t("dashboard.groups.index.no_public_groups_description") %>
+        <%= render "groups_list", has_groups: @has_groups, q: @q, pagy: @pagy, tab: @tab, groups: @groups, render_flat_list: @render_flat_list, empty_title: t("dashboard.groups.index.no_public_groups_title"), empty_description: t("dashboard.groups.index.no_public_groups_description") %>
+      <% end %>
     <% end %>
   <% end %>
 </div>

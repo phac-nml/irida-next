@@ -6,6 +6,12 @@ module Groups
   class GroupsDashboardTest < ActionDispatch::IntegrationTest
     def setup
       @user = users(:alph_abet)
+
+      Flipper.enable(:global_groups)
+    end
+
+    def teardown
+      Flipper.disable(:global_groups)
     end
 
     test 'can see the list of groups' do
@@ -42,6 +48,57 @@ module Groups
         assert_select 'div.treegrid-row', count: 20
         [*('z'..'g')].each do |letter|
           assert_select 'div.treegrid-row', text: /#{Regexp.escape(groups(:"group_#{letter}").name)}/
+        end
+      end
+    end
+
+    test 'can see the list of groups with global groups enabled' do
+      sign_in @user
+
+      get dashboard_groups_path
+      assert_response :success
+      assert_select 'h1', text: I18n.t(:'dashboard.groups.index.title')
+
+      assert_select 'button#public-tab', count: 1
+
+      get dashboard_groups_path(public: true)
+      assert_response :success
+
+      assert_select 'div.treegrid-container' do
+        assert_select 'div.treegrid-row', count: 10
+      end
+
+      assert_select 'div.treegrid-container' do
+        assert_select 'div.treegrid-row', count: 10
+        [*(1..10)].each do |n|
+          assert_select 'div.treegrid-row', text: /#{Regexp.escape(groups(:"public_group#{n}").name)}/
+        end
+      end
+    end
+
+    test 'cannot see public group tab or public groups without membership when global groups are disabled' do
+      Flipper.disable(:global_groups)
+      sign_in @user
+
+      get dashboard_groups_path
+      assert_response :success
+
+      assert_select 'button#public-tab', count: 0
+
+      assert_select 'div.treegrid-container' do
+        assert_select 'div.treegrid-row', count: 20
+        [*(1..10)].each do |n|
+          assert_select 'div.treegrid-row', text: /#{Regexp.escape(groups(:"public_group#{n}").name)}/, count: 0
+        end
+      end
+
+      get dashboard_groups_path(page: 2)
+      assert_response :success
+
+      assert_select 'div.treegrid-container' do
+        assert_select 'div.treegrid-row', count: 6
+        [*(1..10)].each do |n|
+          assert_select 'div.treegrid-row', text: /#{Regexp.escape(groups(:"public_group#{n}").name)}/, count: 0
         end
       end
     end

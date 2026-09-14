@@ -13,9 +13,9 @@
           class: "max-sm:grow",
           value: q.name_or_puid_cont,
           data: {},
-          as: (params[:public] == 'true' ? :public_groups_q : :all_groups_q)
+          as: (Flipper.enabled?(:global_groups) && params[:public] == 'true' ? :public_groups_q : :all_groups_q)
         ) do %>
-        <% if params[:public] == 'true' %>
+        <% if Flipper.enabled?(:global_groups) && params[:public] == 'true' %>
           <input type="hidden" name="public" value="true">
         <% end %>
       <% end %>
