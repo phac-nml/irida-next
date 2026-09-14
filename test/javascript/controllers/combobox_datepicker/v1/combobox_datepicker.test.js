@@ -552,6 +552,15 @@ function assertMonthSelectOptions({ minMonth, maxMonth } = {}) {
   );
 }
 
+function inputControllerInstance(app) {
+  return app.getControllerForElementAndIdentifier(
+    document.querySelector(
+      '[data-controller~="combobox-datepicker--v1--input"]',
+    ),
+    "combobox-datepicker--v1--input",
+  );
+}
+
 async function startController() {
   const application = Application.start();
   application.register("combobox-datepicker--v1--input", InputController);
@@ -590,6 +599,42 @@ describe("combobox_datepicker", () => {
       assertCalendarLayout(getMay2026Dates());
 
       assertMonthSelectOptions();
+    });
+
+    it("datepicker layout in a dialog", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+
+      const main = document.querySelector("main");
+      const datepicker = document.getElementById("test_id-datepicker");
+
+      const dialog = document.createElement("dialog");
+      main.appendChild(dialog);
+      dialog.appendChild(datepicker);
+
+      application = await startController();
+      await vi.runOnlyPendingTimersAsync();
+
+      const calendar = document.getElementById("test_id-calendar");
+
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(calendar).toBeInTheDocument();
+      expect(calendar.parentElement).toBe(dialog);
+
+      expect(getBackButton().getAttribute("aria-disabled")).toBe("false");
+      expect(getForwardButton().getAttribute("aria-disabled")).toBe("false");
+      expect(getMonthSelect().value).toBe("May");
+      expect(getYearInput().value).toBe("2026");
+      // validate today's date has specific styling (green dot under date)
+      expect(getSpecificDateNode("2026-05-07")).toHaveClass(
+        "after:bg-primary-700",
+      );
+      assertCalendarLayout(getMay2026Dates());
+
+      assertMonthSelectOptions();
+
+      openCalendarByInputArrow();
     });
 
     it("show/hide functionality", async () => {
@@ -1276,7 +1321,29 @@ describe("combobox_datepicker", () => {
       expect(getSpecificDateNode("2027-02-07")).toBeNull();
       expect(getSpecificDateNode("2026-05-04")).not.toBeNull();
     });
-    // TODO add direct input of < minDate
+
+    it("direct input of date before minDate doesn't change calendar", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMinDate("2026-04-04");
+      application = await startController();
+      const calendar = document.getElementById("test_id-calendar");
+      const input = document.getElementById("test_id-input");
+
+      expect(getSpecificDateNode("2026-04-01")).toBeNull();
+      expect(input.value).toBe("");
+      expect(getMonthSelect().value).toBe("May");
+      expect(getYearInput().value).toBe("2026");
+
+      input.value = "2026-04-01";
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      input.click();
+
+      expect(getMonthSelect().value).toBe("May");
+      expect(getYearInput().value).toBe("2026");
+      expect(getSpecificDateNode("2026-04-01")).toBeNull();
+      expect(getSpecificDateNode("2026-05-07")).not.toBeNull();
+    });
   });
 
   describe("default datepicker with max date", () => {
@@ -1438,6 +1505,180 @@ describe("combobox_datepicker", () => {
 
       expect(getSpecificDateNode("2027-10-07")).toBeNull();
       expect(getSpecificDateNode("2027-05-04")).not.toBeNull();
+    });
+
+    it("direct input of date past maxDate doesn't change calendar", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMaxDate("2026-06-04");
+      application = await startController();
+      const calendar = document.getElementById("test_id-calendar");
+      const input = document.getElementById("test_id-input");
+
+      expect(getSpecificDateNode("2026-06-10")).toBeNull();
+      expect(input.value).toBe("");
+      expect(getMonthSelect().value).toBe("May");
+      expect(getYearInput().value).toBe("2026");
+
+      input.value = "2026-06-10";
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      input.click();
+
+      expect(getMonthSelect().value).toBe("May");
+      expect(getYearInput().value).toBe("2026");
+      expect(getSpecificDateNode("2026-06-10")).toBeNull();
+      expect(getSpecificDateNode("2026-05-07")).not.toBeNull();
+    });
+  });
+  describe("errors and catches", () => {
+    it("cleans up listeners and the dropdown on disconnect", async () => {
+      renderBaseFixture();
+      application = await startController();
+      const calendar = document.getElementById("test_id-calendar");
+      const input = document.getElementById("test_id-input");
+      expect(calendar).toBeTruthy();
+      inputControllerInstance(application).disconnect();
+      await vi.runOnlyPendingTimersAsync();
+      expect(calendar).not.toBeInTheDocument();
+
+      inputControllerInstance(application).disconnect();
+    });
+
+    it("logs an error when the calendar cannot be found", async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
+      vi.spyOn(document, "getElementById").mockImplementation((id) => {
+        if (id === "test_id-calendar") return null;
+
+        return document.querySelector(`#${id}`);
+      });
+
+      renderBaseFixture();
+
+      application = await startController();
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        "Failed to find calendar after appending to DOM",
+      );
+    });
+
+    it("logs an error when adding the calendar template fails", async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
+      const error = new Error("Something went wrong");
+
+      renderBaseFixture();
+
+      const template = document.querySelector(
+        '[data-combobox-datepicker--v1--input-target="calendarTemplate"]',
+      );
+
+      vi.spyOn(template.content, "cloneNode").mockImplementation(() => {
+        throw error;
+      });
+
+      application = await startController();
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        "Error adding calendar template:",
+        error,
+      );
+
+      vi.restoreAllMocks();
+    });
+
+    it("datepicker within dialog and scrollBy logic", async () => {
+      renderBaseFixture();
+
+      const main = document.querySelector("main");
+      const datepicker = document.getElementById("test_id-datepicker");
+
+      const dialog = document.createElement("dialog");
+      const dialogContents = document.createElement("div");
+      dialogContents.className = "dialog--contents";
+      dialog.appendChild(dialogContents);
+      main.appendChild(dialog);
+      dialog.appendChild(datepicker);
+
+      application = await startController();
+      await vi.runOnlyPendingTimersAsync();
+
+      const calendar = document.getElementById("test_id-calendar");
+
+      expect(calendar).toBeInTheDocument();
+      expect(calendar.parentElement).toBe(dialog);
+
+      // jsdom doesn't calculate layout, so mock the values we need.
+      Object.defineProperty(dialog, "offsetHeight", {
+        configurable: true,
+        value: 500,
+      });
+
+      const focusedElement = document.createElement("button");
+      calendar.appendChild(focusedElement);
+
+      vi.spyOn(focusedElement, "getBoundingClientRect").mockReturnValue({
+        top: 600,
+        height: 50,
+        bottom: 650,
+        left: 0,
+        right: 0,
+        width: 0,
+        x: 0,
+        y: 600,
+        toJSON: () => {},
+      });
+
+      const scrollBy = vi.fn();
+      dialogContents.scrollBy = scrollBy;
+
+      const controller = application.getControllerForElementAndIdentifier(
+        document.getElementById("test_id-datepicker"),
+        "combobox-datepicker--v1--input",
+      );
+
+      controller.handleCalendarFocus({
+        target: focusedElement,
+      });
+
+      await vi.runOnlyPendingTimersAsync(20);
+
+      expect(scrollBy).toHaveBeenCalledWith(0, 600);
+    });
+
+    it("error handling when floatingDropdown hide fails", async () => {
+      const error = new Error("Failed to hide dropdown");
+
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
+      vi.spyOn(FloatingDropdown.prototype, "hide").mockImplementation(() => {
+        throw error;
+      });
+
+      renderBaseFixture();
+      application = await startController();
+
+      await vi.runOnlyPendingTimersAsync();
+
+      const controller = application.getControllerForElementAndIdentifier(
+        document.getElementById("test_id-datepicker"),
+        "combobox-datepicker--v1--input",
+      );
+
+      controller.hideCalendar();
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        "Combobox-Datepicker--V1--InputController error in hideDropdown:",
+        error,
+      );
     });
   });
 });
