@@ -97,6 +97,22 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
                          })
   end
 
+  def v2_list
+    search = Sample::Query.new(
+      groups: [
+        Sample::SearchGroup.new(
+          conditions: [Sample::SearchCondition.new(field: 'metadata.country', operator: 'in', value: %w[Canada Mexico])]
+        )
+      ]
+    )
+    fields = AdvancedSearch::Fields.for_samples(sample_fields: %w[name], metadata_fields: %w[country])
+
+    render_with_template(template: 'advanced_search_component_preview/v2', locals: {
+                           search: search,
+                           advanced_search_fields: fields
+                         })
+  end
+
   private
 
   def workflow_search
