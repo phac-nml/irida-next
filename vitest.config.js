@@ -12,6 +12,7 @@ export default defineConfig({
       controllers: resolve(jsRoot, "controllers"),
       debounce: resolve("vendor/javascript/debounce.js"),
       deepmerge: resolve("vendor/javascript/deepmerge.js"),
+      "focus-trap": resolve("vendor/javascript/focus-trap.js"),
       tabbable: resolve("vendor/javascript/tabbable.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
