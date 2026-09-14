@@ -102,9 +102,9 @@ module Projects
           end
           post_clone
           assert_response :success
+          assert_select 'button.dialog--close', count: 0
           assert_select 'turbo-stream[action="update"][target="clone_samples_dialog_content"]' do
             assert_select '[role="progressbar"]'
-            assert_select 'button.dialog--close', count: 0
           end
         ensure
           Flipper.disable(:v2_select2) if v2_select
