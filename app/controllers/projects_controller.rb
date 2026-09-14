@@ -25,7 +25,8 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def new
     @project = Project.new
-    @project.build_namespace(parent_id: params.fetch(:namespace_id, current_user.namespace.id))
+    parent_id = params[:group_id].presence || params[:namespace_id].presence || current_user.namespace.id
+    @project.build_namespace(parent_id:)
 
     authorize! @project
   end
