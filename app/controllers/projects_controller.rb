@@ -183,8 +183,6 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
                       t('common.labels.details')
                     when 'new'
                       t(:'general.default_sidebar.projects')
-                    when 'history'
-                      t(:'projects.sidebar.history')
                     when 'activity'
                       t(:'projects.sidebar.activity')
                     else
