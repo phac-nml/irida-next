@@ -57,7 +57,6 @@ describe("action button", () => {
     );
     button.remove();
     await Promise.resolve();
-    await Promise.resolve();
     controller.setDisabled(1);
     document.dispatchEvent(new Event("turbo:morph"));
     expect(button).toBeEnabled();
