@@ -54,11 +54,17 @@ ActiveAdmin.register_page 'Feature Flags' do # rubocop:disable Metrics/BlockLeng
 
             opt_in = opt_in_toggle_for(entry)
             if opt_in[:disabled]
-              text_node button_tag(opt_in[:label],
-                                   type: 'button',
-                                   disabled: true,
-                                   class: 'action-item-button whitespace-nowrap',
-                                   title: opt_in[:disabled_reason])
+              reason_id = "feature-flag-#{entry[:key]}-opt-in-disabled-reason"
+              div class: 'flex flex-col items-start gap-1' do
+                text_node button_tag(opt_in[:label],
+                                     type: 'button',
+                                     disabled: true,
+                                     aria: { describedby: reason_id },
+                                     class: 'action-item-button whitespace-nowrap opacity-60 cursor-not-allowed')
+                div opt_in[:disabled_reason],
+                    id: reason_id,
+                    class: 'max-w-56 text-xs text-gray-500 dark:text-gray-400'
+              end
             else
               text_node link_to opt_in[:label], opt_in[:path],
                                 class: 'action-item-button whitespace-nowrap',

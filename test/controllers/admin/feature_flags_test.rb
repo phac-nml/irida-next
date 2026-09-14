@@ -54,7 +54,13 @@ module Admin
           assert_select 'a[href=?]', "/-/system/flipper/features/#{@feature_key}", count: 1
         end
         if state == 'enabled'
-          assert_select 'button[disabled]', text: I18n.t('active_admin.feature_flags.actions.enable_opt_in'), count: 1
+          reason = I18n.t('active_admin.feature_flags.actions.opt_in_locked')
+          reason_id = nil
+          assert_select 'button[disabled][aria-describedby]',
+                        text: I18n.t('active_admin.feature_flags.actions.enable_opt_in'), count: 1 do |buttons|
+            reason_id = buttons.first['aria-describedby']
+          end
+          assert_select "##{reason_id}", text: reason, count: 1
           assert_select 'form[action*="update_opt_in_availability"] button:not([disabled])', count: 0
           next
         end
