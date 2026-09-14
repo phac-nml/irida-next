@@ -53,7 +53,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'h1', text: I18n.t('projects.new.title')
     assert_select 'form' do
       assert_select 'input[name="project[namespace_attributes][name]"]'
-      assert_select "input#namespace-select[value=\"#{group.id}\"]"
+      assert_select "input[name=\"project[namespace_attributes][parent_id]\"][value=\"#{group.id}\"]"
       assert_select 'input[name="project[namespace_attributes][path]"]'
       assert_select 'textarea[name="project[namespace_attributes][description]"]'
       assert_select 'input[type="submit"]', value: I18n.t('projects.new.submit')
