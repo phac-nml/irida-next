@@ -96,7 +96,6 @@ describe("collapsible controller", () => {
     await mount({ attributes: "" });
     root.remove();
     await Promise.resolve();
-    await Promise.resolve();
     document.body.append(root);
     await Promise.resolve();
     expect(target("button")).toHaveAttribute("aria-expanded", "true");
