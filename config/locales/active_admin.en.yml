@@ -2,6 +2,60 @@
 en:
   active_admin:
     dashboard: Dashboard
+    feature_flags:
+      actions:
+        disable_globally: Disable globally
+        disable_globally_confirm: Disable %{name} globally? This clears its gates.
+        disable_opt_in: Disable opt-in
+        disable_opt_in_confirm: Stop offering %{name} as a profile opt-in? This revokes existing opt-ins.
+        enable_globally: Enable globally
+        enable_globally_confirm: Enable %{name} globally for all users?
+        enable_opt_in: Enable opt-in
+        enable_opt_in_confirm: Allow users to opt in to %{name} from their profile?
+        opt_in_locked: Opt-in is unavailable while the feature is enabled globally.
+      columns:
+        actions: Actions
+        feature: Feature
+        gates: Gates
+        global_state: Global state
+        opt_in: Opt-in availability
+      description: Manage admin-manageable experimental features. Global state controls access for everyone. When a feature is disabled globally, gates can provide access to selected users or groups, while opt-in availability lets users enable the feature from their profile. Use "Manage gates" for advanced Flipper configuration.
+      empty: No admin-manageable features are configured.
+      flash:
+        errors:
+          generic: The feature could not be updated.
+          globally_enabled: Opt-in cannot change while the feature is enabled globally.
+          invalid_availability: Invalid opt-in availability requested.
+          invalid_feature: This feature cannot be managed here.
+          invalid_target_state: Invalid global state requested.
+          mutation_failed: The feature could not be updated. Please try again.
+          unauthorized: You are not authorized to change this feature.
+        global_disabled: "%{name} disabled globally."
+        global_enabled: "%{name} enabled globally."
+        no_change: No change was needed for %{name}.
+        opt_in_disabled: Profile opt-in for %{name} is now disabled.
+        opt_in_enabled: Profile opt-in for %{name} is now available.
+      gates:
+        actors:
+          one: "%{count} actor"
+          other: "%{count} actors"
+        expression: Expression gate
+        groups:
+          one: "%{count} group"
+          other: "%{count} groups"
+        none: No active gates
+        percentage_of_actors: "%{percent}% of actors"
+        percentage_of_time: "%{percent}% of time"
+      manage_gates: Manage gates
+      opt_in:
+        all_users: Available to all users
+        allowlist: Allowlist
+        'off': 'Off'
+      state:
+        conditional: Conditional
+        disabled: Disabled
+        enabled: Enabled
+      title: Feature Flags
     logout: Sign out
     site_banners:
       disable: Disable
