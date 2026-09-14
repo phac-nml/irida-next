@@ -76,13 +76,14 @@ module Groups
       end
     end
 
-    test 'cannot see public group tab or public groups without membership when global groups are disabled' do
+    test 'cannot see tabs or public groups without membership when global groups are disabled' do
       Flipper.disable(:global_groups)
       sign_in @user
 
       get dashboard_groups_path
       assert_response :success
 
+      assert_select 'button#private-tab', count: 0
       assert_select 'button#public-tab', count: 0
 
       assert_select 'div.treegrid-container' do

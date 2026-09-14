@@ -507,7 +507,7 @@ fr:
         no_groups_title: Aucun groupe privé
         no_public_groups_description: Vous n'avez aucun groupe public.
         no_public_groups_title: Aucun groupe public
-        private: Privé
+        private: Membre
         public: Publique
         search:
           placeholder: Rechercher des groupes

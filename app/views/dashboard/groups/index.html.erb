@@ -9,37 +9,35 @@
 <% end %>
 
 <div class="flex flex-col">
-  <%= render Pathogen::Tabs.new(
+  <% if Flipper.enabled?(:global_groups) %>
+    <%= render Pathogen::Tabs.new(
     id: "dashboard-groups-tabs",
     label: t(".tabs_label"),
     default_index: 0,
     sync_url: true
   ) do |tabs| %>
-    <% tabs.with_tab(
+      <% tabs.with_tab(
       id: "private-tab",
       label: t(".private"),
       selected: @tab == "private"
     ) %>
 
-    <% if Flipper.enabled?(:global_groups) %>
       <% tabs.with_tab(
       id: "public-tab",
       label: t(".public"),
       selected: @tab == "public"
     ) %>
-    <% end %>
 
-    <% tabs.with_lazy_panel(
+      <% tabs.with_lazy_panel(
       id: "private-panel",
       tab_id: "private-tab",
       frame_id: "private-groups-content",
       src_path: dashboard_groups_url,
       selected: @tab == "private"
     ) do %>
-      <%= render "groups_list", has_groups: @has_groups, q: @q, pagy: @pagy, tab: @tab, groups: @groups, render_flat_list: @render_flat_list %>
-    <% end %>
+        <%= render "groups_list", has_groups: @has_groups, q: @q, pagy: @pagy, tab: @tab, groups: @groups, render_flat_list: @render_flat_list %>
+      <% end %>
 
-    <% if Flipper.enabled?(:global_groups) %>
       <% tabs.with_lazy_panel(
       id: "public-panel",
       tab_id: "public-tab",
@@ -50,5 +48,7 @@
         <%= render "groups_list", has_groups: @has_groups, q: @q, pagy: @pagy, tab: @tab, groups: @groups, render_flat_list: @render_flat_list, empty_title: t("dashboard.groups.index.no_public_groups_title"), empty_description: t("dashboard.groups.index.no_public_groups_description") %>
       <% end %>
     <% end %>
+  <% else %>
+    <%= render "groups_list", has_groups: @has_groups, q: @q, pagy: @pagy, tab: @tab, groups: @groups, render_flat_list: @render_flat_list %>
   <% end %>
 </div>

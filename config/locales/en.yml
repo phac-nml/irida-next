@@ -507,7 +507,7 @@ en:
         no_groups_title: No private groups
         no_public_groups_description: You have no public groups.
         no_public_groups_title: No public groups
-        private: Private
+        private: Member
         public: Public
         search:
           placeholder: Search groups

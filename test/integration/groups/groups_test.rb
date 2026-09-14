@@ -70,19 +70,6 @@ module Groups
       assert_select 'button[type=submit][disabled]'
     end
 
-    test 'should not display visibility options when global_groups is disabled' do
-      Flipper.disable(:global_groups)
-      sign_in @user
-      get new_group_path
-      assert_response :success
-
-      assert_select 'div', text: I18n.t(:'groups.new.visibility.title'), count: 0
-      assert_select 'label', text: I18n.t(:'groups.new.visibility.private.label'), count: 0
-      assert_select 'span', text: I18n.t(:'groups.new.visibility.private.description'), count: 0
-      assert_select 'label', text: I18n.t(:'groups.new.visibility.public.label'), count: 0
-      assert_select 'span', text: I18n.t(:'groups.new.visibility.public.description'), count: 0
-    end
-
     test 'can create a group with global_groups is disabled' do
       Flipper.disable(:global_groups)
       sign_in @user
@@ -104,6 +91,31 @@ module Groups
       assert_response :success
 
       assert_select 'h2', text: I18n.t(:'groups.edit.advanced.change_visibility.title'), count: 0
+    end
+
+    test 'should display visibility options when global_groups is enabled' do
+      sign_in @user
+      get new_group_path
+      assert_response :success
+
+      assert_select 'div', text: I18n.t(:'groups.new.visibility.title')
+      assert_select 'label', text: I18n.t(:'groups.new.visibility.private.label')
+      assert_select 'span', text: I18n.t(:'groups.new.visibility.private.description')
+      assert_select 'label', text: I18n.t(:'groups.new.visibility.public.label')
+      assert_select 'span', text: I18n.t(:'groups.new.visibility.public.description')
+    end
+
+    test 'should not display visibility options when global_groups is disabled' do
+      Flipper.disable(:global_groups)
+      sign_in @user
+      get new_group_path
+      assert_response :success
+
+      assert_select 'div', text: I18n.t(:'groups.new.visibility.title'), count: 0
+      assert_select 'label', text: I18n.t(:'groups.new.visibility.private.label'), count: 0
+      assert_select 'span', text: I18n.t(:'groups.new.visibility.private.description'), count: 0
+      assert_select 'label', text: I18n.t(:'groups.new.visibility.public.label'), count: 0
+      assert_select 'span', text: I18n.t(:'groups.new.visibility.public.description'), count: 0
     end
   end
 end
