@@ -32,6 +32,7 @@ class ComboboxDatepickerComponentPreview < ViewComponent::Preview
     combobox_datepicker(
       id: 'test_id',
       input_name: 'test_input_name',
+      min_date: nil,
       max_date: 364.days.from_now
     )
   end

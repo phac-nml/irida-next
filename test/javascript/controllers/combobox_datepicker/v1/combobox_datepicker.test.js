@@ -108,8 +108,8 @@ function renderBaseFixture() {
               data-action="change-&gt;combobox-datepicker--v1--calendar#changeYear"
               type="number"
               autocomplete="off"
-              max="2027"
-              min="2026"
+              max="9999"
+              min="1"
               aria-label="Select year"
               name="year-select"
             >
@@ -461,7 +461,7 @@ function getJune2026Dates() {
   return expectedJune2026Dates;
 }
 
-function assertCalendarLayout(dates) {
+function assertCalendarLayout(dates, { minDate, maxDate } = {}) {
   const calendar = document.getElementById("test_id-calendar");
   const rows = calendar.querySelectorAll("tbody tr");
 
@@ -474,7 +474,7 @@ function assertCalendarLayout(dates) {
     expect(cells).toHaveLength(7);
     cells.forEach((cell, cellIndex) => {
       const [date, position] = dates[rowIndex][cellIndex];
-      assertCalendarDateNodes(cell, date, position);
+      assertCalendarDateNodes(cell, date, position, minDate, maxDate);
     });
   });
 }
@@ -499,7 +499,10 @@ function assertCalendarDateNodes(
 
   expect(cell).toHaveClass(expectedClass);
 
-  if (minDate && expectedDate < minDate) {
+  if (
+    (minDate && expectedDate < minDate) ||
+    (maxDate && expectedDate > maxDate)
+  ) {
     expect(cell).toHaveAttribute("aria-disabled", "true");
   }
 }
@@ -518,6 +521,35 @@ function openCalendarByInputArrow() {
   document
     .querySelector('[data-combobox-datepicker--v1--input-target="inputArrow"]')
     .click();
+}
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+function assertMonthSelectOptions({ minMonth, maxMonth } = {}) {
+  const monthSelect = getMonthSelect();
+  const minIndex = minMonth ? months.indexOf(minMonth) : 0;
+  const maxIndex = maxMonth ? months.indexOf(maxMonth) : months.length - 1;
+
+  const expectedMonths = months.slice(minIndex, maxIndex + 1);
+  const monthOptions = [...monthSelect.getElementsByTagName("option")];
+
+  expect(monthOptions).toHaveLength(expectedMonths.length);
+  expect(monthOptions.map((month) => month.textContent)).toEqual(
+    expectedMonths,
+  );
 }
 
 async function startController() {
@@ -556,6 +588,8 @@ describe("combobox_datepicker", () => {
         "after:bg-primary-700",
       );
       assertCalendarLayout(getMay2026Dates());
+
+      assertMonthSelectOptions();
     });
 
     it("show/hide functionality", async () => {
@@ -1073,7 +1107,7 @@ describe("combobox_datepicker", () => {
     });
   });
 
-  describe("default datepicker with min or max date", () => {
+  describe("default datepicker with min date", () => {
     it("datepicker layout with min date", async () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
@@ -1087,7 +1121,323 @@ describe("combobox_datepicker", () => {
       expect(getSpecificDateNode("2026-05-07")).toHaveClass(
         "after:bg-primary-700",
       );
+
+      assertMonthSelectOptions({ minMonth: "May" });
+
+      assertCalendarLayout(getMay2026Dates(), { minDate: "2026-05-04" });
+
+      getBackButton().click();
+      expect(getMonthSelect().value).toBe("May");
+      expect(getYearInput().value).toBe("2026");
+      expect(getSpecificDateNode("2026-05-07")).toHaveClass(
+        "after:bg-primary-700",
+      );
       assertCalendarLayout(getMay2026Dates());
+
+      getForwardButton().click();
+      await vi.runOnlyPendingTimersAsync();
+      expect(getMonthSelect().value).toBe("June");
+      expect(getYearInput().value).toBe("2026");
+      expect(getBackButton().getAttribute("aria-disabled")).toBe("false");
+      expect(getForwardButton().getAttribute("aria-disabled")).toBe("false");
+      assertCalendarLayout(getJune2026Dates());
+    });
+
+    it("Home, End and arrow key navigation", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMinDate("2026-05-04");
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "ArrowUp");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "Home");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-04"));
+
+      keypressOnDateNode("2026-05-04", "ArrowLeft");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-04"));
+
+      keypressOnDateNode("2026-05-07", "End");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-09"));
+    });
+
+    it("Page up and down navigation", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMinDate("2026-05-04");
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "PageUp");
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "PageDown");
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-06-07"));
+
+      getSpecificDateNode("2026-06-02").focus();
+      keypressOnDateNode("2026-06-02", "PageUp");
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-04"));
+    });
+
+    it("shift Page up and down navigation", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMinDate("2026-05-04");
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "PageUp", true);
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "PageDown", true);
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2027-05-07"));
+
+      assertMonthSelectOptions();
+      getSpecificDateNode("2027-05-02").focus();
+      keypressOnDateNode("2027-05-02", "PageUp", true);
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-04"));
+
+      assertMonthSelectOptions({ minMonth: "May" });
+    });
+
+    it("arrow navigation when minDate is on a saturday and does not appear on calendar", async () => {
+      vi.setSystemTime(new Date("2026-11-01T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMinDate("2026-11-01");
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      assertMonthSelectOptions({ minMonth: "November" });
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-11-01"));
+
+      keypressOnDateNode("2026-11-01", "ArrowLeft");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-11-01"));
+
+      keypressOnDateNode("2026-11-01", "ArrowUp");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-11-01"));
+    });
+
+    it("navigate back a year through year input onto a month/year before minDate", async () => {
+      vi.setSystemTime(new Date("2027-02-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMinDate("2026-05-04");
+      application = await startController();
+      const yearInput = getYearInput();
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2027-02-07"));
+
+      expect(yearInput.value).toBe("2027");
+      assertMonthSelectOptions();
+
+      yearInput.value = "2026";
+
+      yearInput.dispatchEvent(new Event("change", { bubbles: true }));
+      await vi.runOnlyPendingTimersAsync();
+
+      assertMonthSelectOptions({ minMonth: "May" });
+      expect(yearInput.value).toBe("2026");
+
+      expect(getSpecificDateNode("2027-02-07")).toBeNull();
+      expect(getSpecificDateNode("2026-05-04")).not.toBeNull();
+    });
+    // TODO add direct input of < minDate
+  });
+
+  describe("default datepicker with max date", () => {
+    it("datepicker layout", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMaxDate("2026-06-04");
+      application = await startController();
+
+      expect(getBackButton().getAttribute("aria-disabled")).toBe("false");
+      expect(getForwardButton().getAttribute("aria-disabled")).toBe("false");
+      expect(getMonthSelect().value).toBe("May");
+      expect(getYearInput().value).toBe("2026");
+      expect(getSpecificDateNode("2026-05-07")).toHaveClass(
+        "after:bg-primary-700",
+      );
+
+      assertMonthSelectOptions({ maxMonth: "June" });
+
+      assertCalendarLayout(getMay2026Dates());
+
+      getForwardButton().click();
+      await vi.runOnlyPendingTimersAsync();
+      expect(getMonthSelect().value).toBe("June");
+      expect(getYearInput().value).toBe("2026");
+      assertCalendarLayout(getJune2026Dates());
+
+      getForwardButton().click();
+      await vi.runOnlyPendingTimersAsync();
+      expect(getMonthSelect().value).toBe("June");
+      expect(getYearInput().value).toBe("2026");
+      expect(getBackButton().getAttribute("aria-disabled")).toBe("false");
+      expect(getForwardButton().getAttribute("aria-disabled")).toBe("true");
+      assertCalendarLayout(getJune2026Dates(), { maxDate: "2026-06-04" });
+    });
+
+    it("Home, End and arrow key navigation", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMaxDate("2026-05-08");
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "ArrowDown");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "Home");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-03"));
+
+      keypressOnDateNode("2026-05-03", "End");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+
+      keypressOnDateNode("2026-05-08", "ArrowRight");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+    });
+
+    it("Page up and down navigation", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMaxDate("2026-05-08");
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "PageUp");
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-04-07"));
+
+      getSpecificDateNode("2026-04-30").focus();
+      keypressOnDateNode("2026-04-30", "PageDown");
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+
+      keypressOnDateNode("2026-05-08", "PageDown");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+    });
+
+    it("shift Page up and down navigation", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMaxDate("2026-05-08");
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+
+      keypressOnDateNode("2026-05-07", "PageUp", true);
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2025-05-07"));
+      getSpecificDateNode("2025-05-31").focus();
+      keypressOnDateNode("2025-05-31", "PageDown", true);
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+
+      keypressOnDateNode("2026-05-08", "PageDown", true);
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+    });
+
+    it("arrow navigation when maxDate is on a Sunday and does not appear on calendar", async () => {
+      vi.setSystemTime(new Date("2026-10-31T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMaxDate("2026-10-31");
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-10-31"));
+
+      keypressOnDateNode("2026-10-31", "ArrowRight");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-10-31"));
+
+      keypressOnDateNode("2026-10-31", "ArrowDown");
+
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-10-31"));
+    });
+
+    it("navigate forward a year through year input onto a month/year after maxDate", async () => {
+      vi.setSystemTime(new Date("2026-10-07T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMaxDate("2027-05-04");
+      application = await startController();
+      const yearInput = getYearInput();
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getSpecificDateNode("2026-10-07"));
+
+      expect(yearInput.value).toBe("2026");
+      assertMonthSelectOptions();
+
+      yearInput.value = "2027";
+
+      yearInput.dispatchEvent(new Event("change", { bubbles: true }));
+      await vi.runOnlyPendingTimersAsync();
+
+      assertMonthSelectOptions({ maxMonth: "May" });
+      expect(yearInput.value).toBe("2027");
+
+      expect(getSpecificDateNode("2027-10-07")).toBeNull();
+      expect(getSpecificDateNode("2027-05-04")).not.toBeNull();
     });
   });
 });

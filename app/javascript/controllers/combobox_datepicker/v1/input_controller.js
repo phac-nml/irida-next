@@ -111,7 +111,6 @@ export default class extends Controller {
 
   #setMinDate() {
     this.#minDate = this.minDateTarget.firstElementChild.textContent.trim();
-    console.log(this.#minDate);
     this.minDateTarget.remove();
   }
 

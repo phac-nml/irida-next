@@ -493,7 +493,6 @@ export default class extends Controller {
 
   // change calendar via month select dropdown
   changeMonth() {
-    console.log("change month");
     this.#selectedMonthIndex = this.monthsValue.indexOf(
       this.monthSelectTarget.value,
     );
@@ -521,7 +520,7 @@ export default class extends Controller {
       const date = new Date(dateToVerify);
       const year = date.getUTCFullYear();
       const month = date.getUTCMonth();
-      if (goToEarlierYear) {
+      if (goToEarlierYear && this.#minDate) {
         // verify if minDate is after target MM-YYYY
         if (this.yearTarget.value < year) {
           this.yearTarget.value = year;
