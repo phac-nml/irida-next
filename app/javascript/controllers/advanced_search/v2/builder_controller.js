@@ -24,7 +24,7 @@ const replaceChildrenWithFragment = (element, items) => {
 
 // Host-agnostic advanced search query builder.
 //
-// Owns all client-side node logic (add/remove/reindex groups & conditions,
+// Owns all client-side node logic (add/remove groups & conditions,
 // field/operator/value templating). Knows nothing about its host (dialog, drawer,
 // page); a host adapter drives it through the public methods below via a Stimulus outlet:
 //   render(), renderExisting(), clear(), clearForm(), isDirty()
@@ -47,6 +47,7 @@ export default class AdvancedSearchBuilderController extends Controller {
   static values = {
     enumFields: Object,
     enumOperations: Object,
+    initialState: Array,
     operations: Object,
   };
 
@@ -60,11 +61,13 @@ export default class AdvancedSearchBuilderController extends Controller {
     "data-advanced-search--v2--builder-condition-index";
   #legendTemplateAttribute =
     "data-advanced-search--v2--builder-legend-template";
+  #nextGroupIndex = 0;
+  #nextConditionIndexes = new WeakMap();
 
   // Seed the builder: render existing groups, or a single empty group when none exist.
   render() {
     if (this.searchGroupsTemplateTarget.innerHTML.trim() === "") {
-      this.searchGroupsContainerTarget.innerHTML = "";
+      this.clear();
       this.addGroup();
     } else {
       this.renderExisting();
@@ -73,12 +76,26 @@ export default class AdvancedSearchBuilderController extends Controller {
 
   // Render the server-rendered existing groups into the container (no seeding).
   renderExisting() {
+    this.clear();
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
+    const groups = this.#groupElements();
+    this.#nextGroupIndex = this.#nextIndex(groups, this.#groupIndexAttribute);
+    groups.forEach((group) => {
+      this.#nextConditionIndexes.set(
+        group,
+        this.#nextIndex(
+          this.#conditionElements(group),
+          this.#conditionIndexAttribute,
+        ),
+      );
+    });
   }
 
   clear() {
     this.searchGroupsContainerTarget.innerHTML = "";
+    this.#nextGroupIndex = 0;
+    this.#nextConditionIndexes = new WeakMap();
   }
 
   clearForm() {
@@ -92,9 +109,7 @@ export default class AdvancedSearchBuilderController extends Controller {
       this.searchGroupsContainerTarget,
     );
 
-    const originalContainer = document.createElement("div");
-    originalContainer.innerHTML = this.searchGroupsTemplateTarget.innerHTML;
-    const originalState = this.#serializeFormState(originalContainer);
+    const originalState = this.#serializeQueryState(this.initialStateValue);
 
     return currentState !== originalState;
   }
@@ -121,23 +136,25 @@ export default class AdvancedSearchBuilderController extends Controller {
     if (remainingConditions.length === 0) {
       this.#addConditionToGroup(group);
     } else {
-      this.#reindexGroup(group, this.#groupElements().indexOf(group));
+      this.#updateConditionLegends(group);
       const focusIndex = Math.min(removedIndex, remainingConditions.length - 1);
       this.#focusConditionInput(remainingConditions[focusIndex]);
     }
   }
 
   addGroup() {
-    const groupIndex = this.#groupElements().length;
+    const groupIndex = this.#nextGroupIndex++;
+    const groupNumber = this.#groupElements().length + 1;
 
     this.searchGroupsContainerTarget.insertAdjacentHTML(
       "beforeend",
       this.groupTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-        .replace(/GROUP_LEGEND_INDEX_PLACEHOLDER/g, groupIndex + 1),
+        .replace(/GROUP_LEGEND_INDEX_PLACEHOLDER/g, groupNumber),
     );
 
     const group = this.#groupElements().at(-1);
+    this.#nextConditionIndexes.set(group, 0);
     this.#addConditionToGroup(group);
     this.#toggleRemoveGroupButtons();
   }
@@ -157,7 +174,9 @@ export default class AdvancedSearchBuilderController extends Controller {
     const removedIndex = groups.indexOf(group);
     group.remove();
 
-    this.#reindexAllGroups();
+    this.#groupElements().forEach((remainingGroup, index) => {
+      this.#updateLegend(remainingGroup, index + 1);
+    });
     this.#toggleRemoveGroupButtons();
 
     const remainingGroups = this.#groupElements();
@@ -177,11 +196,13 @@ export default class AdvancedSearchBuilderController extends Controller {
     }
 
     const value = this.#resetAndGetValueInput(condition);
-    const groupIndex = this.#groupElements().indexOf(group);
-    const conditionIndex = this.#conditionElements(group).indexOf(condition);
-    if (!value || groupIndex < 0 || conditionIndex < 0) {
+    if (!value) {
       return;
     }
+    const groupIndex = group.getAttribute(this.#groupIndexAttribute);
+    const conditionIndex = condition.getAttribute(
+      this.#conditionIndexAttribute,
+    );
 
     const selectedField = this.#selectedConditionField(condition);
     if (Object.hasOwn(this.enumFieldsValue, selectedField)) {
@@ -192,12 +213,11 @@ export default class AdvancedSearchBuilderController extends Controller {
         .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
 
-      const updatedCondition = this.#conditionElements(group)[conditionIndex];
-      const updatedValue = updatedCondition?.querySelector(".value");
+      const updatedValue = condition.querySelector(".value");
       updatedValue?.classList.remove(...this.#hiddenClasses);
       this.#updateValueFieldForEnum(
         updatedValue,
-        updatedCondition,
+        condition,
         selectedField,
         operator,
       );
@@ -262,12 +282,14 @@ export default class AdvancedSearchBuilderController extends Controller {
       return;
     }
 
-    const groupIndex = this.#groupElements().indexOf(group);
-    const conditionIndex = this.#conditionElements(group).length;
+    const groupIndex = group.getAttribute(this.#groupIndexAttribute);
+    const conditionIndex = this.#nextConditionIndexes.get(group);
+    this.#nextConditionIndexes.set(group, conditionIndex + 1);
+    const conditionNumber = this.#conditionElements(group).length + 1;
     const newCondition = this.conditionTemplateTarget.innerHTML
       .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
       .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex)
-      .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, conditionIndex + 1);
+      .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, conditionNumber);
 
     const actionsContainer = this.#groupActionsContainer(group);
 
@@ -277,7 +299,6 @@ export default class AdvancedSearchBuilderController extends Controller {
       group.insertAdjacentHTML("beforeend", newCondition);
     }
 
-    this.#reindexGroup(group, groupIndex);
     this.#focusConditionInput(this.#conditionElements(group).at(-1));
   }
 
@@ -299,10 +320,13 @@ export default class AdvancedSearchBuilderController extends Controller {
     return Array.from(group.querySelectorAll(this.#conditionSelector));
   }
 
-  #reindexAllGroups() {
-    this.#groupElements().forEach((group, groupIndex) => {
-      this.#reindexGroup(group, groupIndex);
-    });
+  // Keys identify controls for their lifetime; only legend numbers follow DOM order.
+  #nextIndex(elements, attribute) {
+    return elements.reduce(
+      (nextIndex, element) =>
+        Math.max(nextIndex, Number(element.getAttribute(attribute)) + 1),
+      0,
+    );
   }
 
   #updateOperatorDropdown(condition, selectedField) {
@@ -380,64 +404,10 @@ export default class AdvancedSearchBuilderController extends Controller {
     parentNode.appendChild(optionsFragment);
   }
 
-  #reindexGroup(group, groupIndex) {
-    if (!group || groupIndex < 0) {
-      return;
-    }
-
-    group.setAttribute(this.#groupIndexAttribute, String(groupIndex));
-    this.#updateLegend(group, groupIndex + 1);
-
+  #updateConditionLegends(group) {
     this.#conditionElements(group).forEach((condition, conditionIndex) => {
-      this.#reindexCondition(condition, groupIndex, conditionIndex);
+      this.#updateLegend(condition, conditionIndex + 1);
     });
-  }
-
-  #reindexCondition(condition, groupIndex, conditionIndex) {
-    condition.setAttribute(this.#groupIndexAttribute, String(groupIndex));
-    condition.setAttribute(
-      this.#conditionIndexAttribute,
-      String(conditionIndex),
-    );
-    this.#updateLegend(condition, conditionIndex + 1);
-
-    this.#reindexInputs(condition, groupIndex, conditionIndex);
-    condition.querySelectorAll("template").forEach((template) => {
-      this.#reindexInputs(template.content, groupIndex, conditionIndex);
-    });
-  }
-
-  #reindexInputs(root, groupIndex, conditionIndex) {
-    ["name", "id", "for", "aria-describedby"].forEach((attribute) => {
-      root.querySelectorAll(`[${attribute}]`).forEach((element) => {
-        const currentValue = element.getAttribute(attribute);
-
-        if (!currentValue) {
-          return;
-        }
-
-        const updatedValue = this.#replaceConditionIndex(
-          this.#replaceGroupIndex(currentValue, groupIndex),
-          conditionIndex,
-        );
-
-        if (updatedValue !== currentValue) {
-          element.setAttribute(attribute, updatedValue);
-        }
-      });
-    });
-  }
-
-  #replaceGroupIndex(value, groupIndex) {
-    return value
-      .replace(/(\[groups_attributes\]\[)\d+(\])/g, `$1${groupIndex}$2`)
-      .replace(/(_groups_attributes_)\d+(_)/g, `$1${groupIndex}$2`);
-  }
-
-  #replaceConditionIndex(value, conditionIndex) {
-    return value
-      .replace(/(\[conditions_attributes\]\[)\d+(\])/g, `$1${conditionIndex}$2`)
-      .replace(/(_conditions_attributes_)\d+(_)/g, `$1${conditionIndex}$2`);
   }
 
   #updateLegend(container, index) {
@@ -581,7 +551,29 @@ export default class AdvancedSearchBuilderController extends Controller {
       );
     });
 
-    return JSON.stringify(groups);
+    return this.#serializeQueryState(groups);
+  }
+
+  #serializeQueryState(groups) {
+    return JSON.stringify(
+      groups.map((conditions) =>
+        conditions.map((condition) => {
+          const operator = String(condition.operator ?? "");
+          let values = condition.values.map((value) => String(value ?? ""));
+
+          if (BETWEEN_OPERATORS.test(operator)) {
+            values = [values[0] ?? "", values[1] ?? ""];
+          } else {
+            values = values.filter((value) => value !== "");
+          }
+          if (isListOperator(operator)) {
+            values.sort();
+          }
+
+          return { field: String(condition.field ?? ""), operator, values };
+        }),
+      ),
+    );
   }
 
   #clearValueInputs(valueContainer) {
