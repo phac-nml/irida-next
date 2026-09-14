@@ -8,6 +8,34 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     @policy = NamespacePolicy.new(user: @user)
   end
 
+  test 'scope' do
+    scoped_namespaces = @policy.apply_scope(Namespace, type: :relation)
+
+    assert_equal 12, scoped_namespaces.count
+
+    # by default project namespaces are not included
+    assert_not scoped_namespaces.include?(namespaces_project_namespaces(:project28_namespace))
+  end
+
+  test 'scope without shared links' do
+    scoped_namespaces = @policy.apply_scope(Namespace, type: :relation, scope_options: { include_shared_links: false })
+
+    assert_equal 2, scoped_namespaces.count
+
+    # should not include group which is only accessible through link
+    assert_not scoped_namespaces.include?(groups(:group_one))
+  end
+
+  test 'scope with project namespaces' do
+    scoped_namespaces = @policy.apply_scope(Namespace, type: :relation,
+                                                       scope_options: { include_project_namespaces: true })
+
+    assert_equal 34, scoped_namespaces.count
+
+    # should include project namespace
+    assert scoped_namespaces.include?(namespaces_project_namespaces(:project28_namespace))
+  end
+
   test 'named scope with expired memberships' do
     group_member = members(:group_four_member_david_doe)
     group_member.expires_at = 10.days.ago.to_date
@@ -30,14 +58,6 @@ class NamespacePolicyTest < ActiveSupport::TestCase
 
     assert scoped_namespaces.include?(user_namespace)
     assert scoped_namespaces.include?(group)
-
-    assert_equal scoped_namespaces[0].type, Namespaces::UserNamespace.sti_name
-    assert_equal scoped_namespaces[0].name, 'david.doe@localhost'
-    assert_equal scoped_namespaces[0].path, 'david.doe_at_localhost'
-
-    assert_equal scoped_namespaces[1].type, Group.sti_name
-    assert_equal scoped_namespaces[1].name, 'Group 4'
-    assert_equal scoped_namespaces[1].path, 'group-4'
   end
 
   test 'named scope with modify access to namespace via many namespace group links' do

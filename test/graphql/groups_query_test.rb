@@ -70,7 +70,7 @@ class GroupsQueryTest < ActiveSupport::TestCase
                                                        .where(group: @user.groups.self_and_descendants)
                                                        .not_expired.select(:namespace_id), public: false)
 
-    groups = @user.groups.self_and_descendants.where(public: false).or(groups_via_namespace_group_links)
+    groups = @user.groups.self_and_descendants.or(groups_via_namespace_group_links)
 
     groups_count = groups.uniq.count
 
