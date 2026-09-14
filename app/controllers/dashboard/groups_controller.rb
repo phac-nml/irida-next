@@ -27,7 +27,7 @@ module Dashboard
     private
 
     def build_ransack_query(all_groups)
-      if params[:public] == 'true'
+      if Flipper.enabled?(:global_groups) && params[:public] == 'true'
         all_groups.ransack(params[:public_groups_q], search_key: :public_groups_q)
       else
         all_groups.ransack(params[:all_groups_q], search_key: :all_groups_q)
@@ -35,12 +35,25 @@ module Dashboard
     end
 
     def set_tab_variables
-      @tab = params[:public] == 'true' ? 'public' : 'private'
-      @tab_index = @tab == 'public' ? 1 : 0
+      @tab = if Flipper.enabled?(:global_groups) && params[:public] == 'true'
+               'public'
+             else
+               'private'
+             end
+
+      @tab_index = if Flipper.enabled?(:global_groups)
+                     @tab == 'public' ? 1 : 0
+                   else
+                     0
+                   end
     end
 
     def render_flat_list
-      params_key = params.key?(:public_groups_q) ? :public_groups_q : :all_groups_q
+      params_key = if Flipper.enabled?(:global_groups)
+                     params.key?(:public_groups_q) ? :public_groups_q : :all_groups_q
+                   else
+                     :all_groups_q
+                   end
       @render_flat_list = params.dig(params_key, :name_or_puid_cont).present?
     end
 
@@ -63,10 +76,12 @@ module Dashboard
     end
 
     def authorized_groups
-      if @render_flat_list && params[:public] == 'true'
-        authorized_scope(Group, type: :relation, as: :public_groups)
-      elsif params[:public] == 'true'
-        authorized_scope(Group, type: :relation, as: :public_groups).without_descendants
+      if Flipper.enabled?(:global_groups) && params[:public] == 'true'
+        if @render_flat_list
+          authorized_scope(Group, type: :relation, as: :public_groups)
+        else
+          authorized_scope(Group, type: :relation, as: :public_groups).without_descendants
+        end
       elsif @render_flat_list
         authorized_scope(Group, type: :relation)
       else

@@ -4,60 +4,46 @@
   <% card.with_header(title: t("groups.edit.advanced.change_visibility.title")) %>
 
   <% card.with_section do %>
-    <div>
-      <div class="confirm-change-visibility hidden">
-        <div class="mb-4 flex rounded-lg bg-red-50 p-4 text-red-800 dark:bg-slate-800 dark:text-red-400">
-          <%= icon(:warning_circle) %>
+    <%= form_with(model: group, url: group_path, method: :patch, data: { controller: "visibility-form", action: "submit->visibility-form#updateConfirmationWarning", visibility_form_current_value: group.public?.to_s, turbo_confirm: "", turbo_content: ".confirm-change-visibility", confirm_value: group.path }, html: { novalidate: true }) do |form| %>
+      <div>
+        <div class="confirm-change-visibility hidden">
+          <div class="mb-4 flex rounded-lg bg-red-50 p-4 text-red-800 dark:bg-slate-800 dark:text-red-400">
+            <%= icon(:warning_circle) %>
 
-          <span class="ml-4 flex-1">
-            <%= t(
-              "groups.edit.advanced.change_visibility.confirm.#{!group.public? ? 'public' : 'private' }.warning_html",
-              group_name: group.human_name,
-            ) %>
-          </span>
-        </div>
+            <span class="ml-4 flex-1">
+              <span data-visibility-form-target="publicWarning">
+                <%= t("groups.edit.advanced.change_visibility.confirm.public.warning_html", group_name: group.human_name) %>
+              </span>
 
-        <div class="mb-4">
-          <% t("groups.edit.advanced.change_visibility.confirm.points_html", group: group.path).each do |item| %>
-            <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
-          <% end %>
+              <span class="hidden" data-visibility-form-target="privateWarning">
+                <%= t("groups.edit.advanced.change_visibility.confirm.private.warning_html", group_name: group.human_name) %>
+              </span>
+            </span>
+          </div>
+
+          <div class="mb-4">
+            <% t("groups.edit.advanced.change_visibility.confirm.points_html", group: group.path).each do |item| %>
+              <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
+            <% end %>
+          </div>
         </div>
       </div>
-    </div>
 
-    <p class="mb-2 text-base text-slate-900 dark:text-white">
-      <% if group.public? %>
-        <%= t("groups.edit.advanced.change_visibility.description.public") %>
-      <% else %>
-        <%= t("groups.edit.advanced.change_visibility.description.private") %>
-      <% end %>
-    </p>
-
-    <ul class="mb-4 ml-4 list-inside list-disc space-y-1 text-slate-500 dark:text-slate-400">
-      <% if group.public? %>
-        <% t("groups.edit.advanced.change_visibility.private.points_html").each do |item| %>
-          <li><%= item %></li>
+      <p class="mb-4 text-base text-slate-900 dark:text-white">
+        <% if group.public? %>
+          <%= t("groups.edit.advanced.change_visibility.description.public") %>
+        <% else %>
+          <%= t("groups.edit.advanced.change_visibility.description.private") %>
         <% end %>
-      <% else %>
-        <% t("groups.edit.advanced.change_visibility.public.points_html").each do |item| %>
-          <li><%= item %></li>
-        <% end %>
-      <% end %>
-    </ul>
+      </p>
 
-    <div class="mt-4">
-      <%= pathogen_button_to t("groups.edit.advanced.change_visibility.submit"),
-      group_path,
-      method: :patch,
-      params: { group: { public: !group.public}},
-      form: {
-        data: {
-          turbo_confirm: "",
-          turbo_content: ".confirm-change-visibility",
-          confirm_value: group.path,
-        }
-      },
-      tone: :primary, emphasis: :solid %>
-    </div>
+      <%= render partial: "visibility_form", locals: { form: form, group: group } %>
+
+      <div>
+        <%= form.submit t("groups.edit.advanced.change_visibility.submit"), tone: :primary,
+                            emphasis: :solid, disabled: true,
+                            data: { visibility_form_target: "submit" } %>
+      </div>
+    <% end %>
   <% end %>
 <% end %>

@@ -8,6 +8,11 @@ class GroupMemberTest < ActiveSupport::TestCase
     @group = groups(:group_one)
     @created_by_user = users(:john_doe)
     @user = users(:james_doe)
+    Flipper.enable(:global_groups)
+  end
+
+  def teardown
+    Flipper.disable(:global_groups)
   end
 
   test 'valid group member' do

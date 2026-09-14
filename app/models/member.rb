@@ -64,7 +64,9 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
       access_level = access_level_in_namespace_group_links(user, namespace) if include_group_links && access_level.nil?
 
-      return AccessLevel::GUEST if (access_level.zero? || access_level.nil?) && namespace.public?
+      if (access_level.zero? || access_level.nil?) && Flipper.enabled?(:global_groups) && namespace.public?
+        return AccessLevel::GUEST
+      end
 
       access_level.nil? ? AccessLevel::NO_ACCESS : access_level
     end
