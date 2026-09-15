@@ -4,19 +4,7 @@ import FloatingDropdown from "../../../../../app/javascript/utilities/floating_d
 import InputController from "../../../../../app/javascript/controllers/combobox_datepicker/v1/input_controller.js";
 import CalendarController from "../../../../../app/javascript/controllers/combobox_datepicker/v1/calendar_controller.js";
 
-import {
-  DAYS_IN_MONTH,
-  CALENDAR_CLASSES,
-} from "../../../../../app/javascript/controllers/combobox_datepicker/constants.js";
-
-import {
-  getDayOfWeek,
-  verifyDateIsInMonth,
-  getDateNode,
-  getFirstOfMonthNode,
-  focusDate,
-} from "../../../../../app/javascript/controllers/combobox_datepicker/utils.js";
-
+/* eslint-disable no-useless-escape */
 function renderBaseFixture(locale = "en") {
   document.body.innerHTML = `
   <main>
@@ -236,6 +224,7 @@ function renderBaseFixture(locale = "en") {
 </main>
 `;
 }
+/* eslint-enable no-useless-escape */
 
 function renderMinDate(date) {
   const datepickerContainer = document.getElementById("test_id-datepicker");
@@ -291,7 +280,7 @@ function getYearInput() {
     .querySelector('[data-combobox-datepicker--v1--calendar-target="year"]');
 }
 
-function getSpecificDateNode(date) {
+function getDateNode(date) {
   return document
     .getElementById("test_id-calendar")
     .querySelector(`[data-date="${date}"]`);
@@ -508,7 +497,7 @@ function assertCalendarDateNodes(
 }
 
 function keypressOnDateNode(date, key, shiftKey = false) {
-  getSpecificDateNode(date).dispatchEvent(
+  getDateNode(date).dispatchEvent(
     new KeyboardEvent("keydown", {
       key: key,
       bubbles: true,
@@ -593,9 +582,7 @@ describe("combobox_datepicker", () => {
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
       // validate today's date has specific styling (green dot under date)
-      expect(getSpecificDateNode("2026-05-07")).toHaveClass(
-        "after:bg-primary-700",
-      );
+      expect(getDateNode("2026-05-07")).toHaveClass("after:bg-primary-700");
       assertCalendarLayout(getMay2026Dates());
 
       assertMonthSelectOptions();
@@ -627,9 +614,7 @@ describe("combobox_datepicker", () => {
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
       // validate today's date has specific styling (green dot under date)
-      expect(getSpecificDateNode("2026-05-07")).toHaveClass(
-        "after:bg-primary-700",
-      );
+      expect(getDateNode("2026-05-07")).toHaveClass("after:bg-primary-700");
       assertCalendarLayout(getMay2026Dates());
 
       assertMonthSelectOptions();
@@ -645,10 +630,11 @@ describe("combobox_datepicker", () => {
       // calendar is hidden
       const calendar = document.getElementById("test_id-calendar");
       const input = document.getElementById("test_id-input");
-      const inputArrowButton = document.querySelector(
-        '[data-combobox-datepicker--v1--input-target="inputArrow"]',
-      );
-      const inputArrowSvg = inputArrowButton.querySelector("svg");
+      const inputArrowSvg = document
+        .querySelector(
+          '[data-combobox-datepicker--v1--input-target="inputArrow"]',
+        )
+        .querySelector("svg");
 
       expect(calendar.hidden).toBe(true);
       expect(inputArrowSvg).not.toHaveClass("rotate-180");
@@ -673,9 +659,7 @@ describe("combobox_datepicker", () => {
       );
       expect(calendar.hidden).toBe(false);
       expect(inputArrowSvg).toHaveClass("rotate-180");
-      expect(document.activeElement).toBe(
-        document.querySelector('[data-date="2026-05-07"]'),
-      );
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       // toggle close with Escape on Calendar
       keypressOnDateNode("2026-05-07", "Escape");
@@ -697,12 +681,10 @@ describe("combobox_datepicker", () => {
       expect(inputArrowSvg).not.toHaveClass("rotate-180");
 
       // click arrow button on input, and expect focus on currentDate
-      inputArrowButton.click();
+      openCalendarByInputArrow();
       expect(calendar.hidden).toBe(false);
       expect(inputArrowSvg).toHaveClass("rotate-180");
-      expect(document.activeElement).toBe(
-        document.querySelector('[data-date="2026-05-07"]'),
-      );
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       input.click();
       input.click();
@@ -723,8 +705,6 @@ describe("combobox_datepicker", () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-
-      const calendar = document.getElementById("test_id-calendar");
       const input = document.getElementById("test_id-input");
       const backButton = getBackButton();
       const forwardButton = getForwardButton();
@@ -752,8 +732,6 @@ describe("combobox_datepicker", () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-
-      const calendar = document.getElementById("test_id-calendar");
       const input = document.getElementById("test_id-input");
       const forwardButton = getForwardButton();
       const showTodayButton = document.querySelector(
@@ -787,10 +765,8 @@ describe("combobox_datepicker", () => {
 
       await vi.runOnlyPendingTimersAsync();
 
-      expect(getSpecificDateNode("2026-05-20")).not.toHaveClass(
-        "bg-primary-700",
-      );
-      getSpecificDateNode("2026-05-20").click();
+      expect(getDateNode("2026-05-20")).not.toHaveClass("bg-primary-700");
+      getDateNode("2026-05-20").click();
       expect(calendar.hidden).toBe(true);
       expect(input.value).toBe("2026-05-20");
 
@@ -798,9 +774,9 @@ describe("combobox_datepicker", () => {
       await vi.runOnlyPendingTimersAsync();
       expect(calendar.hidden).toBe(false);
       // must re-query to get accurate class
-      expect(getSpecificDateNode("2026-05-20")).toHaveClass("bg-primary-700");
+      expect(getDateNode("2026-05-20")).toHaveClass("bg-primary-700");
 
-      getSpecificDateNode("2026-05-30").dispatchEvent(
+      getDateNode("2026-05-30").dispatchEvent(
         new KeyboardEvent("keydown", {
           key: "Enter",
           bubbles: true,
@@ -813,12 +789,10 @@ describe("combobox_datepicker", () => {
       input.click();
       await vi.runOnlyPendingTimersAsync();
       expect(calendar.hidden).toBe(false);
-      expect(getSpecificDateNode("2026-05-20")).not.toHaveClass(
-        "bg-primary-700",
-      );
-      expect(getSpecificDateNode("2026-05-30")).toHaveClass("bg-primary-700");
+      expect(getDateNode("2026-05-20")).not.toHaveClass("bg-primary-700");
+      expect(getDateNode("2026-05-30")).toHaveClass("bg-primary-700");
 
-      getSpecificDateNode("2026-05-10").dispatchEvent(
+      getDateNode("2026-05-10").dispatchEvent(
         new KeyboardEvent("keydown", {
           key: " ",
           bubbles: true,
@@ -826,10 +800,8 @@ describe("combobox_datepicker", () => {
       );
 
       await vi.runOnlyPendingTimersAsync();
-      expect(getSpecificDateNode("2026-05-30")).not.toHaveClass(
-        "bg-primary-700",
-      );
-      expect(getSpecificDateNode("2026-05-10")).toHaveClass("bg-primary-700");
+      expect(getDateNode("2026-05-30")).not.toHaveClass("bg-primary-700");
+      expect(getDateNode("2026-05-10")).toHaveClass("bg-primary-700");
       expect(input.value).toBe("2026-05-10");
       expect(calendar.hidden).toBe(false);
     });
@@ -846,14 +818,14 @@ describe("combobox_datepicker", () => {
       input.click();
       await vi.runOnlyPendingTimersAsync();
 
-      getSpecificDateNode("2026-05-10").dispatchEvent(
+      getDateNode("2026-05-10").dispatchEvent(
         new KeyboardEvent("keydown", {
           key: " ",
           bubbles: true,
         }),
       );
 
-      expect(getSpecificDateNode("2026-05-10")).toHaveClass("bg-primary-700");
+      expect(getDateNode("2026-05-10")).toHaveClass("bg-primary-700");
       expect(input.value).toBe("2026-05-10");
       expect(calendar.hidden).toBe(false);
 
@@ -867,10 +839,9 @@ describe("combobox_datepicker", () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
       const input = document.getElementById("test_id-input");
 
-      expect(getSpecificDateNode("2027-10-10")).toBeNull();
+      expect(getDateNode("2027-10-10")).toBeNull();
       expect(input.value).toBe("");
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
@@ -881,7 +852,7 @@ describe("combobox_datepicker", () => {
 
       expect(getMonthSelect().value).toBe("October");
       expect(getYearInput().value).toBe("2027");
-      expect(getSpecificDateNode("2027-10-10")).toHaveClass("bg-primary-700");
+      expect(getDateNode("2027-10-10")).toHaveClass("bg-primary-700");
 
       input.value = "01-01-2026";
       input.dispatchEvent(
@@ -894,15 +865,13 @@ describe("combobox_datepicker", () => {
 
       expect(getMonthSelect().value).toBe("October");
       expect(getYearInput().value).toBe("2027");
-      expect(getSpecificDateNode("2027-10-10")).toHaveClass("bg-primary-700");
+      expect(getDateNode("2027-10-10")).toHaveClass("bg-primary-700");
     });
 
     it("contained tab logic on calendar", async () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
       const backButton = getBackButton();
       const clearSelectionButton = document.querySelector(
         'button[aria-label="Clear date selection"]',
@@ -941,14 +910,12 @@ describe("combobox_datepicker", () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
 
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
 
-      getSpecificDateNode("2026-05-07").dispatchEvent(
+      getDateNode("2026-05-07").dispatchEvent(
         new KeyboardEvent("keydown", {
           key: "ArrowRight",
           bubbles: true,
@@ -956,9 +923,9 @@ describe("combobox_datepicker", () => {
         }),
       );
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-08"));
 
-      getSpecificDateNode("2026-05-08").dispatchEvent(
+      getDateNode("2026-05-08").dispatchEvent(
         new KeyboardEvent("keydown", {
           key: "ArrowLeft",
           bubbles: true,
@@ -966,9 +933,9 @@ describe("combobox_datepicker", () => {
         }),
       );
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
-      getSpecificDateNode("2026-05-07").dispatchEvent(
+      getDateNode("2026-05-07").dispatchEvent(
         new KeyboardEvent("keydown", {
           key: "ArrowDown",
           bubbles: true,
@@ -976,9 +943,9 @@ describe("combobox_datepicker", () => {
         }),
       );
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-14"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-14"));
 
-      getSpecificDateNode("2026-05-14").dispatchEvent(
+      getDateNode("2026-05-14").dispatchEvent(
         new KeyboardEvent("keydown", {
           key: "ArrowUp",
           bubbles: true,
@@ -986,15 +953,13 @@ describe("combobox_datepicker", () => {
         }),
       );
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
     });
 
     it("Home and End navigation", async () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
 
       openCalendarByInputArrow();
 
@@ -1002,37 +967,35 @@ describe("combobox_datepicker", () => {
 
       keypressOnDateNode("2026-05-07", "End");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-09"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-09"));
 
       keypressOnDateNode("2026-05-09", "Home");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-03"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-03"));
 
       // Test bounds of Home/End when part of the week is "outOfMonth"
-      getSpecificDateNode("2026-05-02").focus();
+      getDateNode("2026-05-02").focus();
       keypressOnDateNode("2026-05-02", "Home");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-01"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-01"));
 
       keypressOnDateNode("2026-05-01", "End");
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-02"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-02"));
 
-      getSpecificDateNode("2026-05-31").focus();
+      getDateNode("2026-05-31").focus();
       keypressOnDateNode("2026-05-31", "End");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-31"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-31"));
 
       keypressOnDateNode("2026-05-31", "Home");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-31"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-31"));
     });
 
     it("Page Up and Down navigation", async () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
 
       openCalendarByInputArrow();
 
@@ -1041,36 +1004,34 @@ describe("combobox_datepicker", () => {
       keypressOnDateNode("2026-05-07", "PageDown");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-06-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-06-07"));
 
       keypressOnDateNode("2026-06-07", "PageUp");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       // tests starting on 31st goes to last day of month of next/previous month that is not 31 (eg: May 31 to June 30)
-      getSpecificDateNode("2026-05-31").focus();
+      getDateNode("2026-05-31").focus();
       keypressOnDateNode("2026-05-31", "PageUp");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-04-30"));
+      expect(document.activeElement).toBe(getDateNode("2026-04-30"));
 
       keypressOnDateNode("2026-04-30", "PageDown");
 
       await vi.runOnlyPendingTimersAsync();
 
-      getSpecificDateNode("2026-05-31").focus();
+      getDateNode("2026-05-31").focus();
       keypressOnDateNode("2026-05-31", "PageDown");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-06-30"));
+      expect(document.activeElement).toBe(getDateNode("2026-06-30"));
     });
 
     it("Shift Page Up and Down navigation", async () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
 
       openCalendarByInputArrow();
 
@@ -1079,19 +1040,17 @@ describe("combobox_datepicker", () => {
       keypressOnDateNode("2026-05-07", "PageDown", true);
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2027-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2027-05-07"));
 
       keypressOnDateNode("2027-05-07", "PageUp", true);
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
     });
 
     it("Shift Page Up and Down navigation", async () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
 
       openCalendarByInputArrow();
 
@@ -1100,59 +1059,55 @@ describe("combobox_datepicker", () => {
       keypressOnDateNode("2026-05-07", "PageDown", true);
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2027-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2027-05-07"));
 
       keypressOnDateNode("2027-05-07", "PageUp", true);
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
     });
 
     it("Page up and down navigation for February edge cases including leap year", async () => {
       vi.setSystemTime(new Date("2028-02-29T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
 
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2028-02-29"));
+      expect(document.activeElement).toBe(getDateNode("2028-02-29"));
       keypressOnDateNode("2028-02-29", "PageDown");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2028-03-29"));
+      expect(document.activeElement).toBe(getDateNode("2028-03-29"));
 
       keypressOnDateNode("2028-03-29", "ArrowRight");
       keypressOnDateNode("2028-03-30", "PageUp");
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2028-02-29"));
+      expect(document.activeElement).toBe(getDateNode("2028-02-29"));
       keypressOnDateNode("2028-02-29", "PageUp");
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2028-01-29"));
+      expect(document.activeElement).toBe(getDateNode("2028-01-29"));
       keypressOnDateNode("2028-01-29", "ArrowRight");
       keypressOnDateNode("2028-01-30", "PageDown");
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2028-02-29"));
+      expect(document.activeElement).toBe(getDateNode("2028-02-29"));
       keypressOnDateNode("2028-02-29", "PageDown", true);
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2029-02-28"));
+      expect(document.activeElement).toBe(getDateNode("2029-02-28"));
       keypressOnDateNode("2029-02-28", "PageUp", true);
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2028-02-28"));
+      expect(document.activeElement).toBe(getDateNode("2028-02-28"));
       keypressOnDateNode("2028-02-28", "ArrowRight");
       keypressOnDateNode("2028-02-29", "PageUp", true);
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2027-02-28"));
+      expect(document.activeElement).toBe(getDateNode("2027-02-28"));
     });
 
     it("month select", async () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
       renderBaseFixture();
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
       const monthSelect = getMonthSelect();
       openCalendarByInputArrow();
 
@@ -1171,7 +1126,6 @@ describe("combobox_datepicker", () => {
       renderBaseFixture();
       application = await startController();
       const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
       const yearInput = getYearInput();
       openCalendarByInputArrow();
 
@@ -1198,14 +1152,14 @@ describe("combobox_datepicker", () => {
       keypressOnDateNode("2026-12-31", "ArrowRight");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2027-01-01"));
+      expect(document.activeElement).toBe(getDateNode("2027-01-01"));
       expect(getMonthSelect().value).toBe("January");
       expect(getYearInput().value).toBe("2027");
 
       keypressOnDateNode("2027-01-01", "ArrowUp");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-12-25"));
+      expect(document.activeElement).toBe(getDateNode("2026-12-25"));
       expect(getMonthSelect().value).toBe("December");
       expect(getYearInput().value).toBe("2026");
     });
@@ -1220,7 +1174,7 @@ describe("combobox_datepicker", () => {
       await vi.runOnlyPendingTimersAsync();
 
       // Month is translated and passed in through backend, so in prod May would be mai
-      expect(getSpecificDateNode("2026-05-07")).toHaveAttribute(
+      expect(getDateNode("2026-05-07")).toHaveAttribute(
         "aria-label",
         "7 May, 2026",
       );
@@ -1238,9 +1192,7 @@ describe("combobox_datepicker", () => {
       expect(getForwardButton().getAttribute("aria-disabled")).toBe("false");
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
-      expect(getSpecificDateNode("2026-04-30")).toHaveClass(
-        "after:bg-primary-700",
-      );
+      expect(getDateNode("2026-04-30")).toHaveClass("after:bg-primary-700");
 
       assertMonthSelectOptions({ minMonth: "May" });
 
@@ -1249,9 +1201,7 @@ describe("combobox_datepicker", () => {
       getBackButton().click();
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
-      expect(getSpecificDateNode("2026-04-30")).toHaveClass(
-        "after:bg-primary-700",
-      );
+      expect(getDateNode("2026-04-30")).toHaveClass("after:bg-primary-700");
       assertCalendarLayout(getMay2026Dates());
 
       getForwardButton().click();
@@ -1272,23 +1222,23 @@ describe("combobox_datepicker", () => {
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "ArrowUp");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "Home");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-04"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-04"));
 
       keypressOnDateNode("2026-05-04", "ArrowLeft");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-04"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-04"));
 
       keypressOnDateNode("2026-05-07", "End");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-09"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-09"));
     });
 
     it("Page up and down navigation", async () => {
@@ -1300,23 +1250,23 @@ describe("combobox_datepicker", () => {
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "PageUp");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "PageDown");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-06-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-06-07"));
 
-      getSpecificDateNode("2026-06-02").focus();
+      getDateNode("2026-06-02").focus();
       keypressOnDateNode("2026-06-02", "PageUp");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-04"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-04"));
     });
 
     it("shift Page up and down navigation", async () => {
@@ -1328,24 +1278,24 @@ describe("combobox_datepicker", () => {
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "PageUp", true);
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "PageDown", true);
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2027-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2027-05-07"));
 
       assertMonthSelectOptions();
-      getSpecificDateNode("2027-05-02").focus();
+      getDateNode("2027-05-02").focus();
       keypressOnDateNode("2027-05-02", "PageUp", true);
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-04"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-04"));
 
       assertMonthSelectOptions({ minMonth: "May" });
     });
@@ -1360,15 +1310,15 @@ describe("combobox_datepicker", () => {
 
       await vi.runOnlyPendingTimersAsync();
       assertMonthSelectOptions({ minMonth: "November" });
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-11-01"));
+      expect(document.activeElement).toBe(getDateNode("2026-11-01"));
 
       keypressOnDateNode("2026-11-01", "ArrowLeft");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-11-01"));
+      expect(document.activeElement).toBe(getDateNode("2026-11-01"));
 
       keypressOnDateNode("2026-11-01", "ArrowUp");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-11-01"));
+      expect(document.activeElement).toBe(getDateNode("2026-11-01"));
     });
 
     it("navigate back through year input onto a month/year before minDate", async () => {
@@ -1380,7 +1330,7 @@ describe("combobox_datepicker", () => {
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2027-02-07"));
+      expect(document.activeElement).toBe(getDateNode("2027-02-07"));
 
       expect(yearInput.value).toBe("2027");
       assertMonthSelectOptions();
@@ -1393,8 +1343,8 @@ describe("combobox_datepicker", () => {
       assertMonthSelectOptions({ minMonth: "May" });
       expect(yearInput.value).toBe("2026");
 
-      expect(getSpecificDateNode("2027-02-07")).toBeNull();
-      expect(getSpecificDateNode("2026-05-04")).not.toBeNull();
+      expect(getDateNode("2027-02-07")).toBeNull();
+      expect(getDateNode("2026-05-04")).not.toBeNull();
     });
 
     it("direct input of date before minDate doesn't change calendar", async () => {
@@ -1404,7 +1354,7 @@ describe("combobox_datepicker", () => {
       application = await startController();
       const input = document.getElementById("test_id-input");
 
-      expect(getSpecificDateNode("2026-04-01")).toBeNull();
+      expect(getDateNode("2026-04-01")).toBeNull();
       expect(input.value).toBe("");
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
@@ -1415,8 +1365,8 @@ describe("combobox_datepicker", () => {
 
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
-      expect(getSpecificDateNode("2026-04-01")).toBeNull();
-      expect(getSpecificDateNode("2026-05-07")).not.toBeNull();
+      expect(getDateNode("2026-04-01")).toBeNull();
+      expect(getDateNode("2026-05-07")).not.toBeNull();
 
       input.value = "2026-04-08";
       input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -1424,9 +1374,9 @@ describe("combobox_datepicker", () => {
 
       expect(getMonthSelect().value).toBe("April");
       expect(getYearInput().value).toBe("2026");
-      expect(getSpecificDateNode("2026-05-07")).toBeNull();
-      expect(getSpecificDateNode("2026-04-04")).not.toBeNull();
-      expect(getSpecificDateNode("2026-04-08")).toHaveClass("bg-primary-700");
+      expect(getDateNode("2026-05-07")).toBeNull();
+      expect(getDateNode("2026-04-04")).not.toBeNull();
+      expect(getDateNode("2026-04-08")).toHaveClass("bg-primary-700");
     });
 
     it("show today button when minDate is last day of month on saturday renders next month", async () => {
@@ -1434,14 +1384,13 @@ describe("combobox_datepicker", () => {
       renderBaseFixture();
       renderMinDate("2026-11-01");
       application = await startController();
-      const input = document.getElementById("test_id-input");
       const showTodayButton = document.querySelector(
         'button[aria-label="Show today"]',
       );
       openCalendarByInputArrow();
       await vi.runOnlyPendingTimersAsync();
 
-      expect(getSpecificDateNode("2026-10-31")).toBeNull();
+      expect(getDateNode("2026-10-31")).toBeNull();
       expect(getMonthSelect().value).toBe("November");
       expect(getYearInput().value).toBe("2026");
 
@@ -1463,14 +1412,13 @@ describe("combobox_datepicker", () => {
       renderBaseFixture();
       renderMinDate("2026-03-01");
       application = await startController();
-      const input = document.getElementById("test_id-input");
       const showTodayButton = document.querySelector(
         'button[aria-label="Show today"]',
       );
       openCalendarByInputArrow();
       await vi.runOnlyPendingTimersAsync();
 
-      expect(getSpecificDateNode("2026-02-28")).toBeNull();
+      expect(getDateNode("2026-02-28")).toBeNull();
       expect(getMonthSelect().value).toBe("March");
       expect(getYearInput().value).toBe("2026");
 
@@ -1499,9 +1447,7 @@ describe("combobox_datepicker", () => {
       expect(getForwardButton().getAttribute("aria-disabled")).toBe("false");
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
-      expect(getSpecificDateNode("2026-05-07")).toHaveClass(
-        "after:bg-primary-700",
-      );
+      expect(getDateNode("2026-05-07")).toHaveClass("after:bg-primary-700");
 
       assertMonthSelectOptions({ maxMonth: "June" });
 
@@ -1531,23 +1477,23 @@ describe("combobox_datepicker", () => {
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "ArrowDown");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "Home");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-03"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-03"));
 
       keypressOnDateNode("2026-05-03", "End");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-08"));
 
       keypressOnDateNode("2026-05-08", "ArrowRight");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-08"));
     });
 
     it("Page up and down navigation", async () => {
@@ -1559,22 +1505,22 @@ describe("combobox_datepicker", () => {
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "PageUp");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-04-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-04-07"));
 
-      getSpecificDateNode("2026-04-30").focus();
+      getDateNode("2026-04-30").focus();
       keypressOnDateNode("2026-04-30", "PageDown");
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-08"));
 
       keypressOnDateNode("2026-05-08", "PageDown");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-08"));
     });
 
     it("shift Page up and down navigation", async () => {
@@ -1586,21 +1532,21 @@ describe("combobox_datepicker", () => {
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
 
       keypressOnDateNode("2026-05-07", "PageUp", true);
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2025-05-07"));
-      getSpecificDateNode("2025-05-31").focus();
+      expect(document.activeElement).toBe(getDateNode("2025-05-07"));
+      getDateNode("2025-05-31").focus();
       keypressOnDateNode("2025-05-31", "PageDown", true);
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-08"));
 
       keypressOnDateNode("2026-05-08", "PageDown", true);
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-05-08"));
+      expect(document.activeElement).toBe(getDateNode("2026-05-08"));
     });
 
     it("arrow navigation when maxDate is on a Sunday and does not appear on calendar", async () => {
@@ -1612,15 +1558,15 @@ describe("combobox_datepicker", () => {
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-10-31"));
+      expect(document.activeElement).toBe(getDateNode("2026-10-31"));
 
       keypressOnDateNode("2026-10-31", "ArrowRight");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-10-31"));
+      expect(document.activeElement).toBe(getDateNode("2026-10-31"));
 
       keypressOnDateNode("2026-10-31", "ArrowDown");
 
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-10-31"));
+      expect(document.activeElement).toBe(getDateNode("2026-10-31"));
     });
 
     it("navigate forward a year through year input onto a month/year after maxDate", async () => {
@@ -1632,7 +1578,7 @@ describe("combobox_datepicker", () => {
       openCalendarByInputArrow();
 
       await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getSpecificDateNode("2026-10-07"));
+      expect(document.activeElement).toBe(getDateNode("2026-10-07"));
 
       expect(yearInput.value).toBe("2026");
       assertMonthSelectOptions();
@@ -1645,8 +1591,8 @@ describe("combobox_datepicker", () => {
       assertMonthSelectOptions({ maxMonth: "May" });
       expect(yearInput.value).toBe("2027");
 
-      expect(getSpecificDateNode("2027-10-07")).toBeNull();
-      expect(getSpecificDateNode("2027-05-04")).not.toBeNull();
+      expect(getDateNode("2027-10-07")).toBeNull();
+      expect(getDateNode("2027-05-04")).not.toBeNull();
     });
 
     it("direct input of date past maxDate doesn't change calendar", async () => {
@@ -1654,10 +1600,9 @@ describe("combobox_datepicker", () => {
       renderBaseFixture();
       renderMaxDate("2026-06-04");
       application = await startController();
-      const calendar = document.getElementById("test_id-calendar");
       const input = document.getElementById("test_id-input");
 
-      expect(getSpecificDateNode("2026-06-10")).toBeNull();
+      expect(getDateNode("2026-06-10")).toBeNull();
       expect(input.value).toBe("");
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
@@ -1668,8 +1613,8 @@ describe("combobox_datepicker", () => {
 
       expect(getMonthSelect().value).toBe("May");
       expect(getYearInput().value).toBe("2026");
-      expect(getSpecificDateNode("2026-06-10")).toBeNull();
-      expect(getSpecificDateNode("2026-05-07")).not.toBeNull();
+      expect(getDateNode("2026-06-10")).toBeNull();
+      expect(getDateNode("2026-05-07")).not.toBeNull();
     });
   });
   describe("error and catch handling", () => {
@@ -1677,7 +1622,6 @@ describe("combobox_datepicker", () => {
       renderBaseFixture();
       application = await startController();
       const calendar = document.getElementById("test_id-calendar");
-      const input = document.getElementById("test_id-input");
       expect(calendar).toBeTruthy();
       inputControllerInstance(application).disconnect();
       await vi.runOnlyPendingTimersAsync();
