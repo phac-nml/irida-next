@@ -10,10 +10,6 @@
   },
 ) do %>
   <div class="space-y-4">
-    <p class="text-sm leading-relaxed text-[var(--pvc-color-text-muted)]">
-      <%= t("components.advanced_search_component.v2.intro", subject: subject_label) %>
-    </p>
-
     <%= helpers.form_error_summary(@form) %>
 
     <div class="mb-4"><%= render partial: "shared/form/required_field_legend" %></div>
@@ -27,7 +23,7 @@
         emphasis: :outline,
         data: { action: "advanced-search--v2--builder#addGroup" },
       ) do %>
-        <%= t("components.advanced_search_component.v2.add_group_button") %>
+        <%= t("components.advanced_search_component.v1.add_group_button") %>
       <% end %>
     </div>
 
