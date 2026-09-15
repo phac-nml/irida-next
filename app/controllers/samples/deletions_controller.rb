@@ -84,7 +84,10 @@ module Samples
                                                locals: {
                                                  errors: @namespace.errors.full_messages,
                                                  open: true,
-                                                 closable: false
+                                                 closable: false,
+                                                 sample_deletion_form: @sample_deletion_form,
+                                                 namespace: @namespace,
+                                                 sample: @sample
                                                }), status: :unprocessable_content
     end
 
