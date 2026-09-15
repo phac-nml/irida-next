@@ -49,8 +49,8 @@ export default class extends Controller {
     if (this.hasMaxDateTarget) {
       this.#setMaxDate();
     }
-    this.#arrowSvg = this.inputArrowTarget.firstElementChild;
 
+    this.#arrowSvg = this.inputArrowTarget.firstElementChild;
     this.idempotentConnect();
   }
 
