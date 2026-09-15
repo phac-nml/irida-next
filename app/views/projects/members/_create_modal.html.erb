@@ -8,7 +8,14 @@
   <% end %>
 
   <% if @new_member&.invalid? %>
-    <%= render partial: "form" %>
+    <%= render partial: "form",
+      locals: {
+        access_levels: access_levels,
+        available_users: available_users,
+        namespace: namespace,
+        new_member: new_member,
+        tab: tab,
+      } %>
   <% else %>
     <%= turbo_frame_tag "new_member_dialog_content", src: new_namespace_project_member_path(@namespace.parent, @namespace.project, tab: @tab), loading: :lazy do %>
       <%= render partial: "shared/loading/form" %>

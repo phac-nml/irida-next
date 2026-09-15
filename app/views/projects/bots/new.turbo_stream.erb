@@ -1,6 +1,7 @@
 <%= turbo_stream.update "bot_modal",
                     partial: "bot_modal",
                     locals: {
+                      access_levels: @access_levels,
                       open: true,
                       bot_account: @bot_account,
                     } %>

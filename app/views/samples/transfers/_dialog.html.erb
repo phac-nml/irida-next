@@ -1,4 +1,4 @@
-<%# locals: (open:, closable:, broadcast_target: @broadcast_target, namespace: @namespace, projects: @projects) -%>
+<%# locals: (open:, closable:, broadcast_target:, namespace:, projects:) -%>
 
 <%= render Viral::DialogComponent.new(open: open, size: :large, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t("samples.transfers.dialog.title")) %>

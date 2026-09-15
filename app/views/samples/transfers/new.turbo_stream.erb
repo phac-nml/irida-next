@@ -1,6 +1,9 @@
 <%= turbo_stream.update "samples_dialog",
                     partial: "samples/transfers/dialog",
                     locals: {
+                      broadcast_target: @broadcast_target,
                       open: true,
                       closable: true,
+                      namespace: @namespace,
+                      projects: @projects,
                     } %>

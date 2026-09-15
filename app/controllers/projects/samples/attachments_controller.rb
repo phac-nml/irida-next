@@ -18,7 +18,8 @@ module Projects
                                                  partial: 'new_attachment_modal',
                                                  locals: {
                                                    open: true,
-                                                   attachment: Attachment.new(attachable: @sample)
+                                                   attachment: Attachment.new(attachable: @sample),
+                                                   sample: @sample
                                                  }), status: :ok
       end
 
@@ -51,7 +52,9 @@ module Projects
         render turbo_stream: turbo_stream.update('sample_modal',
                                                  partial: 'delete_attachment_modal',
                                                  locals: {
-                                                   open: true
+                                                   open: true,
+                                                   attachment: @attachment,
+                                                   sample: @sample
                                                  }), status: :ok
       end
 
