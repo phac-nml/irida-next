@@ -375,7 +375,8 @@ export default class extends Controller {
 
     // Keep visual precedence clear: disabled dates should not also look selected/today.
     if (selectedDate && selectedDate.getAttribute("aria-disabled") !== "true") {
-      this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
+      selectedDate.classList.remove(...CALENDAR_CLASSES["IN_MONTH"]);
+      selectedDate.classList.add(...CALENDAR_CLASSES["SELECTED_DATE"]);
       selectedDate.setAttribute("aria-selected", "true");
     }
 
@@ -390,16 +391,6 @@ export default class extends Controller {
     for (let i = lowerBound; i < upperBound; i++) {
       dates[i].setAttribute("aria-disabled", "true");
     }
-  }
-
-  // handles changing the date styling (today, selected and disabled dates)
-  #replaceDateStyling(date, classes) {
-    if (verifyDateIsInMonth(date)) {
-      date.classList.remove(...CALENDAR_CLASSES["IN_MONTH"]);
-    } else {
-      date.classList.remove(...CALENDAR_CLASSES["OUT_OF_MONTH"]);
-    }
-    date.classList.add(...classes);
   }
 
   // set the tab index to a single date
@@ -520,7 +511,7 @@ export default class extends Controller {
       const date = new Date(dateToVerify);
       const year = date.getUTCFullYear();
       const month = date.getUTCMonth();
-      if (goToEarlierYear) {
+      if (goToEarlierYear && this.#minDate) {
         // verify if minDate is after target MM-YYYY
         if (this.yearTarget.value < year) {
           this.yearTarget.value = year;
