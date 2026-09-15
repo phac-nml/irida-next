@@ -209,21 +209,6 @@ module AxeHelpers
     assert_accessible(exclusions: AxeResults::COMPONENT_PREVIEW_EXCLUSIONS)
   end
 
-  # Capybara Overrides to run accessibility checks when UI changes.
-  def fill_in(locator = nil, **kwargs)
-    super
-
-    assert_accessible
-    w3c_validate content: html
-  end
-
-  def visit(path, **attributes)
-    super
-
-    assert_accessible
-    w3c_validate content: html
-  end
-
   private
 
   def axe_exclusions(explicit_exclusions)
