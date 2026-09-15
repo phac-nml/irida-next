@@ -21,7 +21,7 @@
     <% end %>
 
     <%= turbo_frame_tag("group_path_form") do %>
-      <%= render "edit_advanced_path", group: @group, md: @md %>
+      <%= render "edit_advanced_path", group: @group %>
     <% end %>
 
     <% if @allowed_to[:transfer] %>

@@ -17,7 +17,7 @@
     <% end %>
 
     <%= turbo_frame_tag("project_path_form") do %>
-      <%= render "change_path", project: @project, md: @md %>
+      <%= render "change_path", project: @project %>
     <% end %>
 
     <% if @allowed_to[:transfer] %>
