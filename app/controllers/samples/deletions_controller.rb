@@ -79,13 +79,18 @@ module Samples
     end
 
     def render_deletion_errors
+      locals = {
+        errors: @namespace.errors.full_messages,
+        open: true,
+        closable: false,
+        sample_deletion_form: @sample_deletion_form,
+        namespace: @namespace
+      }
+      locals[:sample] = @sample if @sample.present?
+
       render turbo_stream: turbo_stream.update('samples_dialog',
                                                partial: @confirmation_dialog,
-                                               locals: {
-                                                 errors: @namespace.errors.full_messages,
-                                                 open: true,
-                                                 closable: false
-                                               }), status: :unprocessable_content
+                                               locals: locals), status: :unprocessable_content
     end
 
     def redirect_path
