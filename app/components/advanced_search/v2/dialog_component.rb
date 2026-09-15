@@ -10,8 +10,7 @@ module AdvancedSearch
     # AdvancedSearchComponent entrypoint can dispatch to either implementation.
     class DialogComponent < ::Component
       # rubocop:disable-next Metrics/ParameterLists
-      def initialize(form:, search:, fields: nil, sample_fields: [], metadata_fields: [], open: false, status: true,
-                     subject: nil)
+      def initialize(form:, search:, fields: nil, sample_fields: [], metadata_fields: [], open: false, status: true)
         @form = form
         @search = search
         @fields = fields
@@ -19,7 +18,6 @@ module AdvancedSearch
         @metadata_fields = metadata_fields
         @open = open
         @status = status
-        @subject = subject
       end
     end
   end
