@@ -71,6 +71,18 @@ export default defineConfig({
           functions: 100,
           lines: 100,
         },
+        "app/javascript/controllers/clipboard_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/copy_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
         "app/javascript/controllers/action_button_controller.js": {
           statements: 100,
           branches: 100,
@@ -90,6 +102,12 @@ export default defineConfig({
           lines: 100,
         },
         "app/javascript/controllers/metadata_toggle_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/token_controller.js": {
           statements: 100,
           branches: 100,
           functions: 100,
