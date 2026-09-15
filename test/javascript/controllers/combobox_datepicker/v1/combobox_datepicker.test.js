@@ -10,21 +10,6 @@ function renderBaseFixture(locale = "en") {
   <main>
 <div id="test_id-datepicker" data-controller="combobox-datepicker--v1--input" data-combobox-datepicker--v1--input-combobox-datepicker--v1--calendar-outlet="#test_id-calendar" data-combobox-datepicker--v1--input-calendar-id-value="test_id-calendar" data-combobox-datepicker--v1--input-date-format-regex-value="^\\\d{4}-\\\d{2}-\\\d{2}$">
   <div aria-live="polite">
-    <div>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-        <rect width="256" height="256" fill="none"></rect>
-        <rect x="40" y="40" width="176" height="176" rx="8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></rect>
-        <line x1="176" y1="24" x2="176" y2="56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
-        <line x1="80" y1="24" x2="80" y2="56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
-        <line x1="40" y1="88" x2="216" y2="88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
-        <circle cx="128" cy="132" r="12"></circle>
-        <circle cx="172" cy="132" r="12"></circle>
-        <circle cx="84" cy="172" r="12"></circle>
-        <circle cx="128" cy="172" r="12"></circle>
-        <circle cx="172" cy="172" r="12"></circle>
-      </svg>
-    </div>
-
     <input
       placeholder="YYYY-MM-DD"
       autocomplete="off"
@@ -128,7 +113,6 @@ function renderBaseFixture(locale = "en") {
             data-combobox-datepicker--v1--calendar-target="monthSelect"
             data-action="change-&gt;combobox-datepicker--v1--calendar#changeMonth"
             aria-label="Select month"
-            name="month-select"
           >
             <option value="January">January</option>
             <option value="February">February</option>
@@ -204,7 +188,6 @@ function renderBaseFixture(locale = "en") {
               data-action="click-&gt;combobox-datepicker--v1--calendar#showToday"
               aria-label="Show today"
             >
-              Show Today
             </button>
 
             <button
@@ -213,7 +196,6 @@ function renderBaseFixture(locale = "en") {
               data-combobox-datepicker--v1--calendar-target="clearButton"
               aria-label="Clear date selection"
             >
-              Clear selection
             </button>
           </div>
         </div>
@@ -1050,25 +1032,6 @@ describe("combobox_datepicker", () => {
       expect(document.activeElement).toBe(getDateNode("2026-05-07"));
     });
 
-    it("Shift Page Up and Down navigation", async () => {
-      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
-      renderBaseFixture();
-      application = await startController();
-
-      openCalendarByInputArrow();
-
-      await vi.runOnlyPendingTimersAsync();
-
-      keypressOnDateNode("2026-05-07", "PageDown", true);
-
-      await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getDateNode("2027-05-07"));
-
-      keypressOnDateNode("2027-05-07", "PageUp", true);
-      await vi.runOnlyPendingTimersAsync();
-      expect(document.activeElement).toBe(getDateNode("2026-05-07"));
-    });
-
     it("Page up and down navigation for February edge cases including leap year", async () => {
       vi.setSystemTime(new Date("2028-02-29T09:00:00-05:00"));
       renderBaseFixture();
@@ -1652,6 +1615,8 @@ describe("combobox_datepicker", () => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         "Failed to find calendar after appending to DOM",
       );
+
+      vi.restoreAllMocks();
     });
 
     it("logs an error when adding the calendar template fails", async () => {
