@@ -529,7 +529,6 @@ module Projects
     test 'destroy sample with blank reason from sample show page shows validation error' do
       ### SETUP START ###
       Flipper.enable(:sample_deletion_reason)
-      Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
       visit namespace_project_sample_url(@namespace, @project, @sample1)
       # verify header has loaded to prevent flakes
       assert_selector 'h1', text: @sample1.name
@@ -551,7 +550,6 @@ module Projects
       # sample was not deleted
       assert_selector 'h1', text: @sample1.name
       Flipper.disable(:sample_deletion_reason)
-      Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
       ### VERIFY END ###
     end
 
