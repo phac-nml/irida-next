@@ -19,7 +19,7 @@
       </p>
 
       <%= form_for(sample_deletion_form || :deletion, as: :deletion,
-            url: samples_deletions_path(namespace_id: namespace.id, 'destroy[sample_ids]': [sample.id]),
+            url: samples_deletions_path(namespace_id: namespace.id, sample_id: sample.id),
             data: {
               turbo_frame: "_top",
             }
