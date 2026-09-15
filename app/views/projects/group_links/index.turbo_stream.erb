@@ -7,6 +7,10 @@
 <%= turbo_stream.update "new_group_link_dialog",
                     partial: "invite_group_modal",
                     locals: {
+                      access_levels: @access_levels,
+                      namespace: @namespace,
+                      namespace_linkable_groups: @namespace_linkable_groups,
+                      new_group_link: @new_group_link,
                       open: false,
                       tab: "invited_groups",
                     } %>

@@ -32,7 +32,10 @@
         </div>
       </div>
 
-      <%= render "projects/transfer_form", project: @project %>
+      <%= render "projects/transfer_form",
+        authorized_namespaces: authorized_namespaces,
+        project: project,
+        transfer_form: transfer_form %>
     </div>
   <% end %>
 <% end %>

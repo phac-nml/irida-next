@@ -1,4 +1,4 @@
-<%# locals: (open:, access_levels: @access_levels, namespace: @namespace, namespace_group_link: @namespace_group_link, tab: @tab) -%>
+<%# locals: (open:, access_levels:, namespace:, namespace_group_link:, tab:) -%>
 
 <%= render Viral::DialogComponent.new(id: 'edit-group-link-dialog', open: open) do |dialog| %>
   <% dialog.with_header(title: t(:"projects.group_links.edit.title")) %>

@@ -9,6 +9,7 @@
                       partial: "edit_modal",
                       locals: {
                         open: @member.errors.any?,
+                        access_levels: @access_levels,
                         member: @member,
                         namespace: @namespace
                       } %>

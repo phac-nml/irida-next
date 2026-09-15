@@ -11,6 +11,9 @@
   <%= turbo_stream.update "new_group_link_dialog",
                       partial: "invite_group_modal",
                       locals: {
+                        access_levels: @access_levels,
+                        namespace: @namespace,
+                        namespace_linkable_groups: @namespace_linkable_groups,
                         open: @created_namespace_group_link.errors.any?,
                         new_group_link: @created_namespace_group_link,
                         tab: @tab,

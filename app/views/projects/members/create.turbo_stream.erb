@@ -1,7 +1,11 @@
 <%= turbo_stream.update "new_member_dialog",
                     partial: "create_modal",
                     locals: {
+                      access_levels: @access_levels,
+                      available_users: @available_users,
                       open: member.errors.any? ? true : false,
+                      namespace: @namespace,
+                      new_member: @new_member,
                       tab: @tab,
                     } %>
 

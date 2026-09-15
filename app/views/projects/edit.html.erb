@@ -17,11 +17,11 @@
     <% end %>
 
     <%= turbo_frame_tag("project_path_form") do %>
-      <%= render "change_path", project: @project %>
+      <%= render "change_path", project: @project, md: @md %>
     <% end %>
 
     <% if @allowed_to[:transfer] %>
-      <%= render "transfer", project: @project %>
+      <%= render "transfer", project: @project, authorized_namespaces: @authorized_namespaces, transfer_form: @transfer_form %>
     <% end %>
 
     <% if @allowed_to[:destroy] %>

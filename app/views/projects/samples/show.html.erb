@@ -87,6 +87,9 @@
       <%= render partial: "projects/samples/metadata/table",
       locals: {
         sample_metadata: @sample_metadata,
+        sample: @sample,
+        project: @project,
+        allowed_to: @allowed_to
       } %>
     <% end %>
 

@@ -1,3 +1,5 @@
+<%# locals: (open:, new_group_link:, access_levels:, namespace:, namespace_linkable_groups:, tab:) -%>
+
 <%= render Viral::DialogComponent.new(id: 'new-group-link-dialog', open: open) do |dialog| %>
   <% dialog.with_trigger do %>
     <button class="button w-full button-default" data-action="viral--dialog#open">
@@ -8,7 +10,7 @@
   <% dialog.with_header(title: I18n.t("groups.group_links.new.title")) %>
 
   <% if defined?(new_group_link) && new_group_link&.invalid? %>
-    <%= render partial: "form", locals: { new_group_link: new_group_link } %>
+    <%= render partial: "form", locals: { new_group_link: new_group_link, access_levels: access_levels, namespace: namespace, namespace_linkable_groups: namespace_linkable_groups, tab: tab } %>
   <% else %>
     <%= turbo_frame_tag "new_group_link_dialog_content", src: new_group_group_link_path(tab: tab), loading: :lazy do %>
       <%= render partial: "shared/loading/form" %>

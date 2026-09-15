@@ -1,4 +1,4 @@
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
-  <%= render partial: "projects/samples/metadata/form" %>
+  <%= render partial: "projects/samples/metadata/form", locals: { sample: @sample } %>
 <% end %>

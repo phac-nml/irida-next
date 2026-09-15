@@ -21,11 +21,11 @@
     <% end %>
 
     <%= turbo_frame_tag("group_path_form") do %>
-      <%= render "edit_advanced_path", group: @group %>
+      <%= render "edit_advanced_path", group: @group, md: @md %>
     <% end %>
 
     <% if @allowed_to[:transfer] %>
-      <%= render "edit_advanced_transfer", group: @group %>
+      <%= render "edit_advanced_transfer", group: @group, authorized_namespaces: @authorized_namespaces, transfer_form: @transfer_form %>
     <% end %>
 
     <% if Flipper.enabled?(:global_groups, current_user) %>

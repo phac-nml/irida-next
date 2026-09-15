@@ -1,4 +1,4 @@
-<%= turbo_stream.update("sample_modal", partial: "modal", locals: { open: false }) %>
+<%= turbo_stream.update("sample_modal", partial: "modal", locals: { open: false, sample: @sample }) %>
 
 <% messages.each do |message| %>
   <%= turbo_stream.append "flashes" do %>
@@ -9,6 +9,9 @@
 <%= turbo_stream.replace "sample-metadata" do %>
   <%= render partial: "projects/samples/metadata/table",
   locals: {
+    allowed_to: @allowed_to,
+    project: @project,
+    sample: @sample,
     sample_metadata: @sample.metadata_with_provenance,
   } %>
 <% end %>
