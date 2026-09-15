@@ -15,7 +15,7 @@ class ComboboxDatepickerComponentPreview < ViewComponent::Preview
     combobox_datepicker(
       id: 'test_id',
       input_name: 'test_input_name',
-      selected_date: Time.zone.today + 7.days
+      selected_date: '2026-10-01'
     )
   end
 
