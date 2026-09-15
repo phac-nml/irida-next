@@ -571,6 +571,7 @@ export default class extends Controller {
       End: (event) => this.#handleWeekNavigation(event, "end"),
       PageUp: (event) => this.#handleNavigationByPageKeys(event, "up"),
       PageDown: (event) => this.#handleNavigationByPageKeys(event, "down"),
+      Escape: (event) => this.#escapeCalendar(event),
     };
     return handlers[key];
   }
@@ -596,6 +597,14 @@ export default class extends Controller {
   clearSelection() {
     this.comboboxDatepickerV1InputOutlet.setInputValue("");
     this.#hideCalendar();
+  }
+
+  #escapeCalendar(event) {
+    event.stopPropagation(); // avoids dialog escape logic
+
+    if (this.calendarTarget.contains(event.target)) {
+      this.#hideCalendar();
+    }
   }
 
   // handles ArrowLeft/Right keyboard navigation

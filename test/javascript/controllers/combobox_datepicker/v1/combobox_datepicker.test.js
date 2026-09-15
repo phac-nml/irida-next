@@ -620,6 +620,9 @@ describe("combobox_datepicker", () => {
       assertMonthSelectOptions();
 
       openCalendarByInputArrow();
+      expect(calendar.hidden).toBe(false);
+      keypressOnDateNode("2026-05-07", "Escape");
+      expect(calendar.hidden).toBe(true);
     });
 
     it("show/hide functionality", async () => {
