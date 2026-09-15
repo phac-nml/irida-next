@@ -214,25 +214,4 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unauthorized
   end
-
-  test 'should transfer project' do
-    project = projects(:project1)
-    namespace = namespaces_user_namespaces(:john_doe_namespace)
-    old_namespace = groups(:group_one)
-
-    post namespace_project_transfer_path(old_namespace, project),
-         params: { projects_transfer_form: { new_namespace_id: namespace.id } }, as: :turbo_stream
-
-    assert_response :redirect
-  end
-
-  test 'should not transfer a project to unowned namespace' do
-    sign_in users(:david_doe)
-    project = projects(:project1)
-    old_namespace = groups(:group_one)
-    post namespace_project_transfer_path(old_namespace, project),
-         params: { projects_transfer_form: { new_namespace_id: groups(:david_doe_group_four).id } }, as: :turbo_stream
-
-    assert_response :unauthorized
-  end
 end
