@@ -1,4 +1,4 @@
-<%# locals: (attachment:, sample: @sample) -%>
+<%# locals: (attachment:, sample:) -%>
 
 <%= form_with(model: attachment, url: namespace_project_sample_attachments_path(sample_id: sample.id)) do |form| %>
   <%= form.hidden_field :attachable_id %>

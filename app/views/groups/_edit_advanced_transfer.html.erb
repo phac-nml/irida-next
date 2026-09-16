@@ -1,3 +1,5 @@
+<%# locals: (group:, authorized_namespaces:, transfer_form:) -%>
+
 <%= render Viral::CardComponent.new do |card| %>
   <% card.with_header(title: t("groups.edit.advanced.transfer.title")) %>
 
@@ -32,7 +34,7 @@
         </div>
       </div>
 
-      <%= render "edit_advanced_transfer_form", confirm_value: group.path %>
+      <%= render "edit_advanced_transfer_form", confirm_value: group.path, authorized_namespaces: authorized_namespaces, transfer_form: transfer_form %>
     </div>
   <% end %>
 <% end %>

@@ -1,4 +1,4 @@
-<%# locals: (open:, bot_account: @bot_account, personal_access_token: @personal_access_token) -%>
+<%# locals: (open:, bot_account:, personal_access_token:) -%>
 
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(

@@ -9,6 +9,8 @@
                       partial: "edit_modal",
                       locals: {
                         open: @namespace_group_link.errors.any?,
+                        access_levels: @access_levels,
                         namespace_group_link: @namespace_group_link,
-                        namespace: @namespace
+                        namespace: @namespace,
+                        tab: @tab
                       } %>

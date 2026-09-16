@@ -1,4 +1,4 @@
-<%# locals: (open:, access_levels: @access_levels, member: @member, namespace: @namespace) -%>
+<%# locals: (open:, access_levels:, member:, namespace:) -%>
 
 <%= render Viral::DialogComponent.new(id: 'edit-member-dialog', open: open) do |dialog| %>
   <% dialog.with_header(title: t(:"projects.members.edit.title")) %>
