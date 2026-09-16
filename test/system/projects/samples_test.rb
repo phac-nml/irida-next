@@ -546,7 +546,9 @@ module Projects
       ### VERIFY START ###
       # dialog remains open with a validation error instead of erroring out
       assert_selector 'dialog[open]'
-      assert_text "Reason can't be blank"
+      assert_text I18n.t(:'errors.format',
+                         attribute: SampleDeletionForm.human_attribute_name(:reason),
+                         message: I18n.t(:'errors.messages.blank'))
       # sample was not deleted
       assert_selector 'h1', text: @sample1.name
       Flipper.disable(:sample_deletion_reason)
