@@ -39,6 +39,7 @@ module Samples
              params: {
                namespace_id: @group1.id,
                deletion_type: 'single',
+               sample_id: @sample1.id,
                deletion: {
                  sample_ids: [@sample1.id]
                }
@@ -104,6 +105,7 @@ module Samples
              params: {
                namespace_id: @project1_namespace.id,
                deletion_type: 'single',
+               sample_id: @sample1.id,
                deletion: {
                  sample_ids: [@sample1.id]
                }

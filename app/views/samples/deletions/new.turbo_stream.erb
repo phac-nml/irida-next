@@ -1,5 +1,9 @@
-<%= turbo_stream.update "samples_dialog",
-                    partial: @confirmation_dialog,
-                    locals: {
-                      open: true,
-                    } %>
+<% locals = {
+  open: true,
+  sample_deletion_form: @sample_deletion_form,
+  namespace: @namespace
+} %>
+
+<% locals[:sample] = @sample if @sample.present? %>
+
+<%= turbo_stream.update "samples_dialog", partial: @confirmation_dialog, locals: locals %>
