@@ -42,6 +42,7 @@ module Projects
                params: {
                  namespace_id: @project1_namespace.id,
                  deletion_type: 'single',
+                 sample_id: @sample1.id,
                  deletion: {
                    sample_ids: [@sample1.id]
                  }
@@ -182,6 +183,7 @@ module Projects
                params: {
                  namespace_id: @project1_namespace.id,
                  deletion_type: 'single',
+                 sample_id: @sample1.id,
                  deletion: {
                    sample_ids: [@sample1.id],
                    reason: ''
@@ -191,7 +193,7 @@ module Projects
 
         assert_response :unprocessable_content
         assert_select 'turbo-stream[target="samples_dialog"]'
-        assert_match 'Reason is too short', response.body
+        assert_match 'Reason can&#39;t be blank', response.body
         assert_match 'form-error-summary', response.body
       ensure
         Flipper.disable(:sample_deletion_reason)
@@ -288,7 +290,6 @@ module Projects
                params: {
                  namespace_id: @project1_namespace.id,
                  deletion_type: 'single',
-                 #  sample_id: @sample1.id,
                  deletion: {
                    sample_ids: [@sample1.id],
                    reason: 'cleanup'
