@@ -26,6 +26,8 @@ fr:
         value: Valeur
       sample/search_group:
         condition: Condition
+      sample_deletion_form:
+        reason: Raison
       workflow_execution/search_condition:
         field: Champ
         from_value: Valeur de départ

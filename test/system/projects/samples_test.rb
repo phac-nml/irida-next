@@ -526,6 +526,35 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'destroy sample with blank reason from sample show page shows validation error' do
+      ### SETUP START ###
+      Flipper.enable(:sample_deletion_reason)
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+      # verify header has loaded to prevent flakes
+      assert_selector 'h1', text: @sample1.name
+      ### SETUP END ###
+
+      ### ACTIONS START ##
+      click_button I18n.t('common.actions.remove')
+
+      assert_selector 'dialog h1', text: I18n.t(:'samples.deletions.destroy_single_confirmation_dialog.title')
+      within('dialog[open]') do
+        click_button I18n.t('common.actions.remove')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # dialog remains open with a validation error instead of erroring out
+      assert_selector 'dialog[open]'
+      assert_text I18n.t(:'errors.format',
+                         attribute: SampleDeletionForm.human_attribute_name(:reason),
+                         message: I18n.t(:'errors.messages.blank'))
+      # sample was not deleted
+      assert_selector 'h1', text: @sample1.name
+      Flipper.disable(:sample_deletion_reason)
+      ### VERIFY END ###
+    end
+
     test 'filter highlighting for sample name' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
