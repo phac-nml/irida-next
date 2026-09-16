@@ -1,4 +1,4 @@
-<%# locals: (open:, personal_access_token:, bot_account: @bot_account) -%>
+<%# locals: (open:, personal_access_token:, bot_account:) -%>
 
 <%= render Viral::DialogComponent.new(open: open, id: 'revoke_confirmation_dialog') do |dialog| %>
   <% dialog.with_header(title: t("personal_access_tokens.revoke_confirmation.title")) %>

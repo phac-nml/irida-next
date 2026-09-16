@@ -11,7 +11,9 @@ module WorkflowExecutions
     def new
       render turbo_stream: turbo_stream.update('file_selector_dialog',
                                                partial: 'file_selector_dialog',
-                                               locals: { file_selector_params:, open: true }), status: :ok
+                                               locals: { file_selector_params:,
+                                                         listing_attachments: @listing_attachments,
+                                                         open: true }), status: :ok
     end
 
     def create

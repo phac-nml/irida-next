@@ -1,14 +1,16 @@
 <% if @tab != "invited_groups" %>
-
   <%= turbo_stream.update "members", method: "morph", partial: "member_listing" %>
 
   <%= turbo_stream.update "members_pagination", method: "morph", partial: "pagination" %>
-
 <% end %>
 
 <%= turbo_stream.update "new_group_link_dialog",
                     partial: "projects/group_links/invite_group_modal",
                     locals: {
+                      access_levels: @access_levels,
+                      namespace: @namespace,
+                      namespace_linkable_groups: @namespace_linkable_groups,
+                      new_group_link: @new_group_link,
                       open: false,
                       tab: @tab,
                     } %>

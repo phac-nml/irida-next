@@ -1,5 +1,7 @@
 <%= turbo_stream.replace "edit_advanced_transfer_form",
                      partial: "edit_advanced_transfer_form",
                      locals: {
+                       authorized_namespaces: @authorized_namespaces,
                        confirm_value: confirm_value,
+                       transfer_form: @transfer_form,
                      } %>

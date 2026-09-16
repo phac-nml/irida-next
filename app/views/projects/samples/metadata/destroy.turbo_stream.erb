@@ -13,6 +13,8 @@
   <%= turbo_stream.replace "sample-metadata" do %>
     <%= render partial: "projects/samples/metadata/table",
     locals: {
+      allowed_to: @allowed_to,
+      project: @project,
       sample: @sample,
       sample_metadata: @sample.metadata_with_provenance,
     } %>

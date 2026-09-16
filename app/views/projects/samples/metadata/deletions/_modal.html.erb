@@ -1,4 +1,4 @@
-<%# locals: (open:, sample: @sample) -%>
+<%# locals: (open:, sample:) -%>
 
 <%= render Viral::DialogComponent.new(open: open, classes: ["overflow-x-visible"]) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>

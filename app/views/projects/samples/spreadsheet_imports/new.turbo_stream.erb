@@ -1,7 +1,10 @@
 <%= turbo_stream.update "samples_dialog",
                     partial: "shared/samples/spreadsheet_imports/dialog",
                     locals: {
+                      broadcast_target: @broadcast_target,
                       open: true,
                       url: namespace_project_samples_spreadsheet_import_path,
                       closable: true,
+                      group_projects: [],
+                      namespace: @namespace,
                     } %>
