@@ -9,8 +9,8 @@
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "24.0.2",
-      "pnpmVersion": "10.11.0"
+      "version": "24.14.1",
+      "pnpmVersion": "11.22.0"
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/rails/devcontainer/features/activestorage": {},
