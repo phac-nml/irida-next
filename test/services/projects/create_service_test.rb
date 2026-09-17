@@ -32,6 +32,28 @@ module Projects
       end
     end
 
+    test 'skips post-persistence actions when project is not persisted' do
+      invalid_params = { namespace_attributes: { name: 'proj1', path: 'proj1' } }
+      service = Projects::CreateService.new(@user, invalid_params)
+      service.expects(:create_automation_bot).never
+      service.expects(:create_activities).never
+
+      project = service.execute
+
+      assert_not project.persisted?
+    end
+
+    test 'runs post-persistence actions when project is persisted' do
+      valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
+      service = Projects::CreateService.new(@user, valid_params)
+      service.expects(:create_automation_bot).once
+      service.expects(:create_activities).once
+
+      project = service.execute
+
+      assert_predicate project, :persisted?
+    end
+
     test 'create project with valid params but incorrect permissions under user namespace' do
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
       user = users(:steve_doe)
@@ -133,6 +155,28 @@ module Projects
       project = Projects::CreateService.new(@user, valid_params).execute
 
       assert project.namespace.public?
+    end
+
+    test 'adds project creation errors to the project namespace' do
+      error_message = 'Project could not be created'
+      service = Projects::CreateService.new(@user, namespace_attributes: { parent_id: @parent_namespace.id })
+      service.project.build_namespace(name: 'proj1', path: 'proj1', parent: @parent_namespace, owner: @user)
+      service.stubs(:create_associations).raises(Projects::CreateService::ProjectCreateError, error_message)
+
+      project = service.execute
+
+      assert_same service.project, project
+      assert_equal [error_message], project.namespace.errors[:base]
+    end
+
+    test 'does not make project public when global groups are disabled' do
+      Flipper.disable(:global_groups)
+      public_group_namespace = groups(:public_group1)
+      valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: public_group_namespace.id } }
+
+      project = Projects::CreateService.new(@user, valid_params).execute
+
+      assert_not project.namespace.public?
     end
   end
 end
