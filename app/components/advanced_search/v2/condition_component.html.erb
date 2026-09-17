@@ -94,19 +94,17 @@
     ) %>
   <% end %>
 
-  <button <%# herb:disable html-no-title-attribute %>
-    type="button"
-    class="
-      absolute -top-4 right-2 inline-flex h-11 w-11 cursor-pointer items-center justify-center
-      rounded-[var(--pvc-radius-action)] border border-[var(--pvc-color-border)] bg-[var(--pvc-color-surface)]
-      text-[var(--pvc-color-text-muted)] hover:bg-[var(--pvc-color-surface-muted)]
-      hover:text-[var(--pvc-color-danger-strong)] focus-visible:outline-2 focus-visible:outline-offset-2
-      focus-visible:outline-[var(--pvc-color-focus)]
-    "
-    aria-label="<%= t("components.advanced_search_component.v1.remove_condition_aria_label") %>"
-    title="<%= t("components.advanced_search_component.v1.remove_condition_aria_label") %>"
-    data-action="advanced-search--v2--builder#removeCondition"
-  >
-    <%= icon(:x, size: :sm) %>
-  </button>
+  <%= render Pathogen::Button.new(
+    type: :button,
+    icon_only: true,
+    tone: :danger,
+    emphasis: :ghost,
+    text: t("components.advanced_search_component.v1.remove_condition_aria_label"),
+    class: "absolute! -top-4 right-2",
+    data: { action: "advanced-search--v2--builder#removeCondition" },
+  ) do |button| %>
+    <% button.with_leading_visual do %>
+      <%= icon(:x, size: :sm) %>
+    <% end %>
+  <% end %>
 </fieldset>
