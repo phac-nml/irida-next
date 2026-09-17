@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'application_system_test_case'
-
+# refactoring
 class DataExportsTest < ApplicationSystemTestCase
   include ActionView::Helpers::SanitizeHelper
 
