@@ -70,6 +70,7 @@ export default class extends Controller {
     );
 
     if (crumbs.length < 2) {
+      crumbs.forEach((crumb) => crumb.classList.remove("hidden", "truncate"));
       this.#updateDropdown(new Set()); // Hide dropdown if insufficient items
       return;
     }
@@ -130,13 +131,10 @@ export default class extends Controller {
       visibleSet.add(lastCrumbIndex);
       for (let i = lastCrumbIndex - 1; i >= 0; i--) {
         usedWidth += crumbWidths[i];
-        if (usedWidth < width) {
+        if (usedWidth <= width) {
           visibleSet.add(i);
         } else {
-          // if at least one item invisible, check that there is enough space for the dropdown menu
-          if (i >= 0 && width - usedWidth < this.dropdownMenuTarget.width) {
-            visibleSet.delete(i + 1);
-          }
+          // The second pass already reserves the measured dropdown width.
           break;
         }
       }

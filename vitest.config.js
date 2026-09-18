@@ -60,6 +60,18 @@ export default defineConfig({
       ],
       // Ratchet allowlist: add a file/glob here once it reaches full coverage.
       thresholds: {
+        "app/javascript/controllers/breadcrumb_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+        "app/javascript/controllers/visibility_form_controller.js": {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
         "app/javascript/controllers/collapsible_controller.js": {
           statements: 100,
           branches: 100,
