@@ -207,6 +207,185 @@ module Projects
       assert_response :success
     end
 
+    test 'should update samples count after a sample deletion' do
+      group = groups(:group_one)
+      project = projects(:project1)
+      sample = samples(:sample1)
+
+      get dashboard_projects_path
+
+      assert_response :success
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select "##{dom_id(project)}-samples-count", text: '3'
+
+      assert_difference -> { project.samples.count }, -1 do
+        post samples_deletions_path,
+             params: {
+               namespace_id: group.id,
+               deletion_type: 'single',
+               deletion: { sample_ids: [sample.id] }
+             }, as: :turbo_stream
+      end
+
+      assert_response :redirect
+      follow_redirect!
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+
+      assert_response :success
+      assert_select "##{dom_id(project)}-samples-count", text: '2'
+    end
+
+    test 'should update samples count after a sample creation' do
+      group = groups(:group_one)
+      project = projects(:project1)
+
+      get dashboard_projects_path, params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+
+      assert_response :success
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select "##{dom_id(project)}-samples-count", text: '3'
+
+      assert_difference -> { project.samples.count }, 1 do
+        post namespace_project_samples_path(group, project),
+             params: { sample: { name: 'Test Sample' } }
+      end
+
+      assert_response :redirect
+      follow_redirect!
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+
+      assert_response :success
+      assert_select "##{dom_id(project)}-samples-count", text: '4'
+    end
+
+    test 'should update samples count after a sample transfer' do
+      group = groups(:group_one)
+      project = projects(:project1)
+      destination = projects(:project2)
+      sample = samples(:sample1)
+
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+
+      assert_response :success
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select "##{dom_id(project)}-samples-count", text: '3'
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+      assert_select "##{dom_id(destination)}-samples-count", text: '20'
+
+      assert_enqueued_jobs 1, only: [::Samples::TransferJob] do
+        post samples_transfer_path(namespace_id: group.id, format: :turbo_stream),
+             params: {
+               transfer: { new_project_id: destination.id, sample_ids: [sample.id] },
+               broadcast_target: 'dashboard_test'
+             }, as: :turbo_stream
+      end
+      assert_response :success
+
+      assert_difference -> { project.samples.count }, -1,
+                        -> { destination.samples.count }, 1 do
+        perform_enqueued_jobs only: [::Samples::TransferJob]
+      end
+
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+
+      assert_response :success
+      assert_select "##{dom_id(project)}-samples-count", text: '2'
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+      assert_select "##{dom_id(destination)}-samples-count", text: '21'
+    end
+
+    test 'should update samples count after a sample transfer v2' do
+      Flipper.enable(:v2_sample_transfer)
+
+      group = groups(:group_one)
+      project = projects(:project1)
+      destination = projects(:project2)
+      sample = samples(:sample1)
+
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+
+      assert_response :success
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select "##{dom_id(project)}-samples-count", text: '3'
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+      assert_select "##{dom_id(destination)}-samples-count", text: '20'
+
+      assert_enqueued_jobs 1, only: [::Samples::TransferJobV2] do
+        post samples_transfer_path(namespace_id: group.id, format: :turbo_stream),
+             params: {
+               transfer: { new_project_id: destination.id, sample_ids: [sample.id] },
+               broadcast_target: 'dashboard_test_v2'
+             }, as: :turbo_stream
+      end
+      assert_response :success
+
+      assert_difference -> { project.samples.count }, -1,
+                        -> { destination.samples.count }, 1 do
+        perform_enqueued_jobs only: [::Samples::TransferJobV2]
+      end
+
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+
+      assert_response :success
+      assert_select "##{dom_id(project)}-samples-count", text: '2'
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+      assert_select "##{dom_id(destination)}-samples-count", text: '21'
+    ensure
+      Flipper.disable(:v2_sample_transfer)
+    end
+
+    test 'should update samples count after a sample clone' do
+      group = groups(:group_one)
+      project = projects(:project1)
+      destination = projects(:project2)
+      sample = samples(:sample1)
+
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+
+      assert_response :success
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select "##{dom_id(project)}-samples-count", text: '3'
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+      assert_select "##{dom_id(destination)}-samples-count", text: '20'
+
+      assert_enqueued_jobs 1, only: [::Samples::CloneJob] do
+        post samples_clone_path,
+             params: {
+               namespace_id: group.id,
+               clone: { new_project_id: destination.id, sample_ids: [sample.id] },
+               broadcast_target: 'dashboard_test_clone'
+             }, as: :turbo_stream
+      end
+      assert_response :success
+
+      assert_no_difference -> { project.samples.count } do
+        assert_difference -> { destination.samples.count }, 1 do
+          perform_enqueued_jobs only: [::Samples::CloneJob]
+        end
+      end
+
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+
+      assert_response :success
+      assert_select "##{dom_id(project)}-samples-count", text: '3'
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+      assert_select "##{dom_id(destination)}-samples-count", text: '21'
+    end
+
     test 'can skip to content' do
       get dashboard_projects_path
 
