@@ -174,6 +174,26 @@ module Projects
       assert_select "#samples-table table tbody tr##{dom_id(@sample1)}", count: 0
     end
 
+    test 'advanced search query persists in the session and is reapplied without query params' do
+      sample30 = samples(:sample30)
+
+      # First request stores the advanced search under the project-scoped session key.
+      get namespace_project_samples_url(@namespace, @project),
+          params: samples_advanced_search_params(
+            [[{ field: 'metadata.metadatafield1', operator: '=', value: sample30.metadata['metadatafield1'] }]]
+          )
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: 1
+
+      # A later plain index load (no query params) restores and reapplies the stored query.
+      get namespace_project_samples_url(@namespace, @project)
+
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: 1
+      assert_select "#samples-table table tbody tr##{dom_id(sample30)}"
+      assert_select "#samples-table table tbody tr##{dom_id(@sample1)}", count: 0
+    end
+
     test 'advanced search filters samples using multiple conditions in a group' do
       sample30 = samples(:sample30)
 
