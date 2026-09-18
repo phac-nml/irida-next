@@ -62,18 +62,21 @@ class ProjectsTest < ActionDispatch::IntegrationTest
   end
 
   test 'cannot show the project if user has insufficient permissions' do
+    project = projects(:project1)
     sign_in users(:micha_doe)
 
-    get namespace_project_path(projects(:project1).namespace.parent, projects(:project1))
+    get namespace_project_path(project.namespace.parent, project)
+
     assert_response :unauthorized
     assert_select 'h1', text: I18n.t('application.errors.access_denied')
-    assert_select 'p', text: I18n.t('action_policy.policy.project.read?', name: @project.name)
+    assert_select 'p', text: I18n.t('action_policy.policy.project.read?', name: project.name)
   end
 
   test "cannot show project that doesn't exist" do
     sign_in users(:john_doe)
 
     get namespace_project_path(project_id: 'does-not-exist', namespace_id: 'does-not-exist')
+
     assert_response :not_found
     assert_select 'h1', text: I18n.t('application.errors.resource_not_found')
     assert_select 'p', text: I18n.t('application.errors.not_found_on_server')
@@ -135,9 +138,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     assert_select 'h1', text: project_name
     assert_select 'p', text: project_description
-
     assert_select 'nav#sidebar', text: /#{Regexp.escape(project_name)}/
-
     assert_select '#breadcrumb', text: /#{Regexp.escape(project_name)}/
   end
 
@@ -423,9 +424,13 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     project = projects(:project2)
 
-    patch namespace_project_path(project.namespace.parent, project),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
-                    format: :turbo_stream }
+    assert_changes -> { [project.reload.name, project.path] },
+                   from: [project.name, project.path],
+                   to: ['Awesome Project 2', 'awesome-project-2'] do
+      patch namespace_project_path(project.namespace.parent, project),
+            params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
+                      format: :turbo_stream }
+    end
 
     assert_redirected_to namespace_project_edit_path(project.namespace.parent, project.reload)
     assert_equal I18n.t('projects.update.success', project_name: project.name), flash[:success]
@@ -436,9 +441,13 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     project = projects(:john_doe_project2)
 
-    patch namespace_project_path(project.namespace.parent, project),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
-                    format: :turbo_stream }
+    assert_changes -> { [project.reload.name, project.path] },
+                   from: [project.name, project.path],
+                   to: ['Awesome Project 2', 'awesome-project-2'] do
+      patch namespace_project_path(project.namespace.parent, project),
+            params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
+                      format: :turbo_stream }
+    end
 
     assert_redirected_to namespace_project_edit_path(project.namespace.parent, project.reload)
     assert_equal I18n.t('projects.update.success', project_name: project.name), flash[:success]
@@ -449,8 +458,11 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     project = projects(:john_doe_project2)
 
-    patch namespace_project_path(project.namespace.parent, project),
-          params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
+    assert_no_changes -> { [project.reload.name, project.reload.path] } do
+      patch namespace_project_path(project.namespace.parent, project),
+            params: { project: { namespace_attributes: { name: 'Awesome Project 2',
+                                                         path: 'awesome-project-2' } } }
+    end
 
     assert_response :unauthorized
     assert_select 'h1', text: I18n.t('application.errors.access_denied')
