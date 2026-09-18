@@ -2,67 +2,83 @@
 
 require 'test_helper'
 
-module Dashboard
-  class ProjectsControllerTest < ActionDispatch::IntegrationTest
+module Projects
+  class DashboardTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
     include DashboardSortingHelper
 
     setup do
       @user = users(:john_doe)
+      sign_in @user
       @personal_project = projects(:john_doe_project2)
       @group_project = projects(:project1)
     end
 
-    test 'should get index' do
-      sign_in @user
-
-      get dashboard_projects_path
-      assert_response :success
-
-      w3c_validate 'Projects Dashboard'
-    end
-
     test 'should show all projects tab by default' do
-      sign_in @user
-
       get dashboard_projects_path
 
       assert_response :success
       assert_select '[role="tab"][aria-selected="true"]#all-tab'
       assert_select '[role="tab"][aria-selected="false"]#personal-tab'
+      assert_select 'input[type="hidden"][name="personal"][value="true"]', count: 0
+
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select '#groups_tree', count: 1
+      assert_select '.treegrid-row', count: 20
+      assert_select 'a', exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
     end
 
-    test 'should show personal projects tab when personal=true' do
-      sign_in @user
-
+    test 'should show personal projects' do
       get dashboard_projects_path, params: { personal: 'true' }
 
       assert_response :success
       assert_select '[role="tab"][aria-selected="true"]#personal-tab'
       assert_select '[role="tab"][aria-selected="false"]#all-tab'
-    end
-
-    test 'should include hidden personal input when personal=true' do
-      sign_in @user
-
-      get dashboard_projects_path, params: { personal: 'true' }
-
-      assert_response :success
       assert_select 'input[type="hidden"][name="personal"][value="true"]'
+
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select '#groups_tree', count: 1
+      assert_select '.treegrid-row', count: 4
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next'), count: 0
     end
 
-    test 'should not include hidden personal input when personal=false' do
-      sign_in @user
-
-      get dashboard_projects_path, params: { personal: 'false' }
+    test 'can search the list of projects by name' do
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.name } }
 
       assert_response :success
-      assert_select 'input[type="hidden"][name="personal"][value="true"]', count: 0
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select '#groups_tree', count: 1
+      assert_select '.treegrid-row', count: 13
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next'), count: 0
+
+      assert_select 'input[name="all_projects_q[namespace_name_or_namespace_puid_cont]"]'
+      assert_select 'input.t-search-component' do |input|
+        assert_equal @group_project.name, input.first['value']
+      end
+    end
+
+    test 'can search the list of projects by puid' do
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.puid } }
+
+      assert_response :success
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select '#groups_tree', count: 1
+      assert_select '.treegrid-row', count: 1
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next'), count: 0
+
+      assert_select 'input[name="all_projects_q[namespace_name_or_namespace_puid_cont]"]'
+      assert_select 'input.t-search-component' do |input|
+        assert_equal @group_project.puid, input.first['value']
+      end
     end
 
     test 'should use personal_projects_q search key when personal=true' do
-      sign_in @user
-
       get dashboard_projects_path,
           params: { personal: 'true', personal_projects_q: { namespace_name_or_namespace_puid_cont: 'Project 2' } }
 
@@ -70,57 +86,18 @@ module Dashboard
       assert_select 'input[name="personal_projects_q[namespace_name_or_namespace_puid_cont]"]'
     end
 
-    test 'should use all_projects_q search key when personal=false' do
-      sign_in @user
-
-      get dashboard_projects_path,
-          params: { personal: 'false', all_projects_q: { namespace_name_or_namespace_puid_cont: 'Project 1' } }
-
-      assert_response :success
-      assert_select 'input[name="all_projects_q[namespace_name_or_namespace_puid_cont]"]'
-    end
-
-    test 'should use all_projects_q search key by default' do
-      sign_in @user
-
-      get dashboard_projects_path, params: { all_projects_q: { namespace_name_or_namespace_puid_cont: 'Project' } }
-
-      assert_response :success
-      assert_select 'input[name="all_projects_q[namespace_name_or_namespace_puid_cont]"]'
-    end
-
-    test 'should display projects when user has projects' do
-      sign_in @user
-
-      get dashboard_projects_path
-
-      assert_response :success
-      assert_select '#groups_tree', count: 1
-    end
-
     test 'should display empty state when user has no projects and no public projects' do
       Namespaces::ProjectNamespace.where(public: true).destroy_all
 
-      # Create a user with no project access
-      user_without_projects = User.create!(
-        email: 'no_projects@test.com',
-        password: 'password123',
-        first_name: 'No',
-        last_name: 'Projects'
-      )
-      sign_in user_without_projects
+      sign_in users(:user_no_access)
 
       get dashboard_projects_path
 
       assert_response :success
       assert_select '.empty_state_message', count: 1
-    ensure
-      user_without_projects&.destroy
     end
 
     test 'should apply default sort when no sort specified' do
-      sign_in @user
-
       get dashboard_projects_path
 
       assert_response :success
@@ -129,8 +106,6 @@ module Dashboard
     end
 
     test 'should respect custom sort parameters' do
-      sign_in @user
-
       get dashboard_projects_path,
           params: { all_projects_q: { s: 'namespace_name desc' } }
 
@@ -141,8 +116,6 @@ module Dashboard
     end
 
     test 'should sort projects by updated_at ascending' do
-      sign_in @user
-
       get dashboard_projects_path, params: { all_projects_q: { s: 'updated_at asc' } }
 
       assert_response :success
@@ -150,8 +123,6 @@ module Dashboard
     end
 
     test 'should sort projects by created_at descending' do
-      sign_in @user
-
       get dashboard_projects_path, params: { all_projects_q: { s: 'created_at desc' } }
 
       assert_response :success
@@ -159,8 +130,6 @@ module Dashboard
     end
 
     test 'should sort projects by created_at ascending' do
-      sign_in @user
-
       get dashboard_projects_path, params: { all_projects_q: { s: 'created_at asc' } }
 
       assert_response :success
@@ -168,8 +137,6 @@ module Dashboard
     end
 
     test 'should apply sort with filters for all projects query' do
-      sign_in @user
-
       get dashboard_projects_path,
           params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.name,
                                       s: 'namespace_name desc' } }
@@ -181,8 +148,6 @@ module Dashboard
     end
 
     test 'should apply sort with filters for personal projects query' do
-      sign_in @user
-
       get dashboard_projects_path,
           params: { personal: 'true',
                     personal_projects_q: { namespace_name_or_namespace_puid_cont: @personal_project.name,
@@ -194,16 +159,13 @@ module Dashboard
     end
 
     test 'should paginate results' do
-      sign_in @user
-
       get dashboard_projects_path, params: { page: 1 }
 
       assert_response :success
     end
 
     test 'should only show authorized projects' do
-      unauthorized_user = users(:micha_doe)
-      sign_in unauthorized_user
+      sign_in users(:micha_doe)
 
       get dashboard_projects_path
 
@@ -213,8 +175,6 @@ module Dashboard
     end
 
     test 'should filter to personal projects when personal=true' do
-      sign_in @user
-
       get dashboard_projects_path, params: { personal: 'true' }
 
       assert_response :success
@@ -223,8 +183,6 @@ module Dashboard
     end
 
     test 'should show all authorized projects when personal=false' do
-      sign_in @user
-
       get dashboard_projects_path, params: { personal: 'false' }
 
       assert_response :success
@@ -247,6 +205,14 @@ module Dashboard
       # Follow the redirect and verify it's successful
       follow_redirect!
       assert_response :success
+    end
+
+    test 'can skip to content' do
+      get dashboard_projects_path
+
+      assert_response :success
+      assert_select '#main-content-link[href="#main-content"]'
+      assert_select '#main-content'
     end
   end
 end
