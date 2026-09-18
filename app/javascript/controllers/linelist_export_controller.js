@@ -32,6 +32,9 @@ function bindExportBeforeUnload() {
   if (beforeUnloadHandler) return;
 
   beforeUnloadHandler = (event) => {
+    // The handler is unbound the moment activeExports reaches zero, so this
+    // guard is defensive only.
+    /* v8 ignore next */
     if (activeExports <= 0) return;
 
     event.preventDefault();
