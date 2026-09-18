@@ -18,6 +18,10 @@ const fullCoverageFiles = [
   "app/javascript/controllers/experimental_feature_toggle_controller.js",
   "app/javascript/controllers/filters_controller.js",
   "app/javascript/controllers/layout_controller.js",
+  "app/javascript/controllers/linelist_export_controller.js",
+  "app/javascript/controllers/linelist_export/downloader.js",
+  "app/javascript/controllers/linelist_export/selection.js",
+  "app/javascript/controllers/linelist_export/worker_client.js",
   "app/javascript/controllers/metadata_toggle_controller.js",
   "app/javascript/controllers/refresh_controller.js",
   "app/javascript/controllers/selection_controller.js",
@@ -46,6 +50,7 @@ const fullCoverageFiles = [
   "app/javascript/utilities/word_connector.js",
   "app/javascript/controllers/email_input_controller.js",
   "app/javascript/controllers/form_error_summary_controller.js",
+  "app/javascript/workers/linelist_export_worker.js",
 ];
 
 const fullCoverageThresholds = Object.fromEntries(
@@ -82,6 +87,15 @@ export default defineConfig({
       "utilities/focus": resolve(jsRoot, "utilities/focus.js"),
       "utilities/refresh": resolve(jsRoot, "utilities/refresh.js"),
       "utilities/styles": resolve(jsRoot, "utilities/styles.js"),
+      "utilities/dialog": resolve(jsRoot, "utilities/dialog.js"),
+      "utilities/message_formatter": resolve(
+        jsRoot,
+        "utilities/message_formatter.js",
+      ),
+      "utilities/progress_window": resolve(
+        jsRoot,
+        "utilities/progress_window.js",
+      ),
       "utilities/floating_dropdown": resolve(
         jsRoot,
         "utilities/floating_dropdown.js",
@@ -89,6 +103,14 @@ export default defineConfig({
       "utilities/word_connector": resolve(
         jsRoot,
         "utilities/word_connector.js",
+      ),
+      // `xlsx` ships via the import map in production and is not an installed
+      // dependency; alias the bare specifier to a stub so tests can load the
+      // downloader and mock the library per-case.
+      xlsx: resolve(
+        fileURLToPath(
+          new URL("test/javascript/fixtures/xlsx_stub.js", import.meta.url),
+        ),
       ),
     },
   },
@@ -119,7 +141,9 @@ export default defineConfig({
         "app/javascript/controllers/index.js",
         "app/javascript/controllers/application.js",
         "app/javascript/controllers/combobox_datepicker/constants.js",
-        "app/javascript/workers/**/*.js",
+        // Import worker entry module runs in a worker context and is not yet
+        // unit-tested; the export worker is covered and gated below.
+        "app/javascript/workers/linelist_import_worker.js",
       ],
       // Ratchet allowlist: add a path here once it reaches full coverage.
       thresholds: fullCoverageThresholds,
