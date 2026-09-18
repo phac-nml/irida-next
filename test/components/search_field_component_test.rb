@@ -598,4 +598,32 @@ class SearchFieldComponentTest < ViewComponent::TestCase
     assert_selector 'button[data-search-field-target="clearButton"][class*="transition-colors"]', count: 1
     assert_selector 'button[data-search-field-target="submitButton"][class*="transition-colors"]', count: 1
   end
+
+  # Advanced Search Outlet Tests
+  test 'wires advanced search outlets when include_advanced_search_outlet is true' do
+    render_inline SearchFieldComponent.new(
+      label: @label,
+      placeholder: @placeholder,
+      form: @mock_form,
+      field_name: @field_name,
+      value: @value,
+      include_advanced_search_outlet: true
+    )
+
+    assert_selector 'div[data-search-field-advanced-search--v1-outlet="#advanced-search"]', count: 1
+    assert_selector 'div[data-search-field-advanced-search--v2--builder-outlet="#advanced-search-builder"]', count: 1
+  end
+
+  test 'omits advanced search outlets by default' do
+    render_inline SearchFieldComponent.new(
+      label: @label,
+      placeholder: @placeholder,
+      form: @mock_form,
+      field_name: @field_name,
+      value: @value
+    )
+
+    assert_no_selector 'div[data-search-field-advanced-search--v1-outlet]'
+    assert_no_selector 'div[data-search-field-advanced-search--v2--builder-outlet]'
+  end
 end

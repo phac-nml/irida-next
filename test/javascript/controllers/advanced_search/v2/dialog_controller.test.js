@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import BuilderController from "../../../../../app/javascript/controllers/advanced_search/v2/builder_controller.js";
 import DialogController from "../../../../../app/javascript/controllers/advanced_search/v2/dialog_controller.js";
 import ViralDialogController from "../../../../../app/javascript/controllers/viral/dialog_controller.js";
+import { Controller } from "@hotwired/stimulus";
 
 // jsdom does not provide layout for focus-trap's tabbable-node checks.
 vi.mock("focus-trap", () => ({
@@ -199,3 +200,144 @@ describe.each(["Escape", "close button"])(
     });
   },
 );
+
+describe("dialog adapter delegation", () => {
+  let application;
+  const builderSpies = {
+    render: vi.fn(),
+    clearForm: vi.fn(),
+    clear: vi.fn(),
+    isDirty: vi.fn(() => false),
+  };
+
+  class BuilderStub extends Controller {
+    render() {
+      builderSpies.render();
+    }
+    clearForm() {
+      builderSpies.clearForm();
+    }
+    clear() {
+      builderSpies.clear();
+    }
+    isDirty() {
+      return builderSpies.isDirty();
+    }
+  }
+
+  function mount({ open = false, withBuilder = true, status = true } = {}) {
+    const outletAttr = withBuilder
+      ? `data-advanced-search--v2--dialog-advanced-search--v2--builder-outlet="#builder"`
+      : "";
+    document.body.innerHTML = `
+      <div id="advanced-search"
+        data-controller="advanced-search--v2--dialog"
+        ${outletAttr}
+        data-advanced-search--v2--dialog-open-value="${open}"
+        data-advanced-search--v2--dialog-status-value="${status}"
+        data-advanced-search--v2--dialog-confirm-close-text-value="Discard?">
+        ${withBuilder ? `<div id="builder" data-controller="advanced-search--v2--builder"></div>` : ""}
+      </div>
+    `;
+    application = Application.start();
+    application.register("advanced-search--v2--dialog", DialogController);
+    application.register("advanced-search--v2--builder", BuilderStub);
+    return application;
+  }
+
+  function dialogController() {
+    return application.getControllerForElementAndIdentifier(
+      document.getElementById("advanced-search"),
+      "advanced-search--v2--dialog",
+    );
+  }
+
+  afterEach(async () => {
+    document.body.replaceChildren();
+    // Let the Stimulus MutationObserver run disconnect() and detach the
+    // document-level turbo:morph listener before the next test mounts.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    application?.stop();
+    application = null;
+  });
+
+  it("renders the builder when the outlet connects while already open", async () => {
+    mount({ open: true });
+
+    await waitFor(() => {
+      expect(builderSpies.render).toHaveBeenCalled();
+    });
+  });
+
+  it("does not render on outlet connect when closed", async () => {
+    mount({ open: false });
+
+    await waitFor(() => {
+      expect(dialogController()).toBeDefined();
+    });
+    expect(builderSpies.render).not.toHaveBeenCalled();
+  });
+
+  it("re-renders on turbo:morph when open and stays idle when closed", async () => {
+    mount({ open: false });
+    await waitFor(() => expect(dialogController()).toBeDefined());
+
+    document.dispatchEvent(new CustomEvent("turbo:morph"));
+    expect(builderSpies.render).not.toHaveBeenCalled();
+
+    dialogController().openValue = true;
+    document.dispatchEvent(new CustomEvent("turbo:morph"));
+    expect(builderSpies.render).toHaveBeenCalledTimes(1);
+  });
+
+  it("stops listening for turbo:morph after disconnect", async () => {
+    mount({ open: true });
+    await waitFor(() => expect(builderSpies.render).toHaveBeenCalled());
+    const callsBefore = builderSpies.render.mock.calls.length;
+
+    document.getElementById("advanced-search").remove();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    document.dispatchEvent(new CustomEvent("turbo:morph"));
+
+    expect(builderSpies.render.mock.calls.length).toBe(callsBefore);
+  });
+
+  it("clearForm() delegates to the builder outlet when connected", async () => {
+    mount();
+    await waitFor(() => expect(dialogController()).toBeDefined());
+
+    dialogController().clearForm();
+
+    expect(builderSpies.clearForm).toHaveBeenCalledTimes(1);
+  });
+
+  it("clearForm() is a no-op without a builder outlet", async () => {
+    mount({ withBuilder: false });
+    await waitFor(() => expect(dialogController()).toBeDefined());
+
+    expect(() => dialogController().clearForm()).not.toThrow();
+    expect(builderSpies.clearForm).not.toHaveBeenCalled();
+  });
+
+  it("renderSearch() is a no-op without a builder outlet", async () => {
+    mount({ withBuilder: false });
+    await waitFor(() => expect(dialogController()).toBeDefined());
+
+    expect(() => dialogController().renderSearch()).not.toThrow();
+    expect(builderSpies.render).not.toHaveBeenCalled();
+  });
+
+  it("close() treats a missing builder outlet as clean and clears without confirmation", async () => {
+    mount({ withBuilder: false, status: true });
+    await waitFor(() => expect(dialogController()).toBeDefined());
+    const event = {
+      preventDefault: vi.fn(),
+      stopImmediatePropagation: vi.fn(),
+    };
+
+    dialogController().close(event);
+
+    expect(event.preventDefault).not.toHaveBeenCalled();
+    expect(builderSpies.clear).not.toHaveBeenCalled();
+  });
+});

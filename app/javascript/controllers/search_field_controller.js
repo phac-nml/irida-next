@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 const toggleHidden = (element, isHidden) => {
+  /* v8 ignore next -- defensive: every caller passes a required Stimulus target */
   if (!element) return;
 
   element.classList.toggle("hidden", isHidden);
