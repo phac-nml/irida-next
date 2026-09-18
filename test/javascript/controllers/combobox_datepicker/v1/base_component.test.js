@@ -1,6 +1,5 @@
 import { Application } from "@hotwired/stimulus";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
-import FloatingDropdown from "../../../../../app/javascript/utilities/floating_dropdown.js";
 import InputController from "../../../../../app/javascript/controllers/combobox_datepicker/v1/input_controller.js";
 import CalendarController from "../../../../../app/javascript/controllers/combobox_datepicker/v1/calendar_controller.js";
 import {
