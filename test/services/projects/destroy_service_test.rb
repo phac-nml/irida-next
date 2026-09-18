@@ -20,6 +20,23 @@ module Projects
       end
     end
 
+    test 'creates activities when the project namespace is deleted' do
+      service = Projects::DestroyService.new(@project, @user)
+      service.expects(:create_activities).once
+
+      service.execute
+    end
+
+    test 'does not create activities when the project namespace is not deleted' do
+      @project.namespace.expects(:destroy!).once
+      service = Projects::DestroyService.new(@project, @user)
+      service.expects(:create_activities).never
+
+      service.execute
+
+      assert_not @project.namespace.deleted?
+    end
+
     test 'delete project with sample metadata within a user namespace' do
       user = users(:metadata_doe)
       project = projects(:projectMetadata2)
