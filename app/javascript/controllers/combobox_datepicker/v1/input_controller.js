@@ -108,12 +108,12 @@ export default class extends Controller {
   }
 
   #setMinDate() {
-    this.#minDate = this.minDateTarget.firstElementChild.innerText;
+    this.#minDate = this.minDateTarget.firstElementChild.textContent.trim();
     this.minDateTarget.remove();
   }
 
   #setMaxDate() {
-    this.#maxDate = this.maxDateTarget.firstElementChild.innerText;
+    this.#maxDate = this.maxDateTarget.firstElementChild.textContent.trim();
     this.maxDateTarget.remove();
   }
 
@@ -165,6 +165,9 @@ export default class extends Controller {
 
   #validateDateWithinBounds(date) {
     let withinBounds = true;
+    if (date === "") {
+      withinBounds = false;
+    }
     if (this.#minDate && this.#minDate > date) {
       withinBounds = false;
     }
@@ -319,12 +322,6 @@ export default class extends Controller {
       event.preventDefault();
       this.handleInputChange(event);
     }
-  }
-
-  // submits the selected date
-  submitDate() {
-    this.element.closest("form").requestSubmit();
-    this.#setSelectedDate();
   }
 
   // handles filling in the date input with the date
