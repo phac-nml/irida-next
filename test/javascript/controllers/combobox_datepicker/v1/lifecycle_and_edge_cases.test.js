@@ -150,6 +150,65 @@ describe("combobox_datepicker lifecycle, edge case, and error handling", () => {
       expect(scrollBy).toHaveBeenCalledWith(0, 600);
     });
 
+    it("does not scroll when focused element is in view", async () => {
+      renderBaseFixture();
+
+      const main = document.querySelector("main");
+      const datepicker = document.getElementById("test_id-datepicker");
+
+      const dialog = document.createElement("dialog");
+      const dialogContents = document.createElement("div");
+      dialogContents.className = "dialog--contents";
+      dialog.appendChild(dialogContents);
+      main.appendChild(dialog);
+      dialog.appendChild(datepicker);
+
+      application = await startController();
+      await vi.runOnlyPendingTimersAsync();
+
+      const calendar = document.getElementById("test_id-calendar");
+
+      expect(calendar).toBeInTheDocument();
+      expect(calendar.parentElement).toBe(dialog);
+
+      // jsdom doesn't calculate layout, so mock the values we need.
+      Object.defineProperty(dialog, "offsetHeight", {
+        configurable: true,
+        value: 500,
+      });
+
+      const focusedElement = document.createElement("button");
+      calendar.appendChild(focusedElement);
+
+      vi.spyOn(focusedElement, "getBoundingClientRect").mockReturnValue({
+        top: 100,
+        height: 50,
+        bottom: 150,
+        left: 0,
+        right: 0,
+        width: 0,
+        x: 0,
+        y: 100,
+        toJSON: () => {},
+      });
+
+      const scrollBy = vi.fn();
+      dialogContents.scrollBy = scrollBy;
+
+      const controller = application.getControllerForElementAndIdentifier(
+        document.getElementById("test_id-datepicker"),
+        "combobox-datepicker--v1--input",
+      );
+
+      controller.handleCalendarFocus({
+        target: focusedElement,
+      });
+
+      await vi.runOnlyPendingTimersAsync(20);
+
+      expect(scrollBy).not.toHaveBeenCalled();
+    });
+
     it("error handling when floatingDropdown hide fails", async () => {
       const error = new Error("Failed to hide dropdown");
 
@@ -177,6 +236,19 @@ describe("combobox_datepicker lifecycle, edge case, and error handling", () => {
         "Combobox-Datepicker--V1--InputController error in hideDropdown:",
         error,
       );
+    });
+
+    it("input idempotentconnect doesn't append calendar twice", async () => {
+      renderBaseFixture();
+      application = await startController();
+
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(document.querySelectorAll("#test_id-calendar")).toHaveLength(1);
+
+      inputControllerInstance(application).idempotentConnect();
+
+      expect(document.querySelectorAll("#test_id-calendar")).toHaveLength(1);
     });
   });
 });

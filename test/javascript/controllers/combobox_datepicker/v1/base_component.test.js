@@ -573,5 +573,60 @@ describe("combobox_datepicker", () => {
       expect(getDateNode("2027-10-07")).toBeNull();
       expect(getDateNode("2027-05-04")).not.toBeNull();
     });
+
+    it("navigate forward a year through year input onto a month/year after maxDate", async () => {
+      vi.setSystemTime(new Date("2026-10-10T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMinDate("2026-10-15");
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      expect(document.activeElement).toBe(getDateNode("2026-10-15"));
+    });
+
+    it("inputting same year doesn't change calendar state", async () => {
+      vi.setSystemTime(new Date("2026-05-10T09:00:00-05:00"));
+      renderBaseFixture();
+      application = await startController();
+      const yearInput = getYearInput();
+      const monthSelect = getMonthSelect();
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(yearInput.value).toBe("2026");
+      expect(monthSelect.value).toBe("May");
+      assertCalendarLayout(getMay2026Dates());
+
+      yearInput.value = "2026";
+      yearInput.dispatchEvent(new Event("change", { bubbles: true }));
+      await vi.runOnlyPendingTimersAsync();
+      expect(yearInput.value).toBe("2026");
+      expect(monthSelect.value).toBe("May");
+      assertCalendarLayout(getMay2026Dates());
+    });
+
+    it("selecting disabled date doesn't fill input", async () => {
+      vi.setSystemTime(new Date("2026-05-10T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMinDate("2026-05-08");
+      application = await startController();
+
+      const input = document.getElementById("test_id-input");
+      expect(input.value).toBe("");
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+      getDateNode("2026-05-01").click();
+
+      expect(input.value).toBe("");
+
+      getDateNode("2026-05-30").click();
+
+      expect(input.value).toBe("2026-05-30");
+    });
   });
 });

@@ -157,7 +157,60 @@ describe("combobox_datepicker keyboard navigation testing", () => {
       expect(getMonthSelect().value).toBe("December");
       expect(getYearInput().value).toBe("2026");
     });
+
+    it("ArrowLeft from 1st of month goes to previous month", async () => {
+      vi.setSystemTime(new Date("2026-11-01T09:00:00-05:00"));
+      renderBaseFixture();
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(document.activeElement).toBe(getDateNode("2026-11-01"));
+
+      await expectKeyboardNavigation([
+        ["2026-11-01", "2026-10-31", "ArrowLeft"],
+      ]);
+    });
+
+    it("ArrowDown from last week of month goes to next month", async () => {
+      vi.setSystemTime(new Date("2026-11-29T09:00:00-05:00"));
+      renderBaseFixture();
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(document.activeElement).toBe(getDateNode("2026-11-29"));
+
+      await expectKeyboardNavigation([
+        ["2026-11-29", "2026-12-06", "ArrowDown"],
+      ]);
+    });
+
+    it("non-navigation key does not change date focus or calendar state", async () => {
+      vi.setSystemTime(new Date("2026-11-29T09:00:00-05:00"));
+      renderBaseFixture();
+      application = await startController();
+
+      openCalendarByInputArrow();
+
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(document.activeElement).toBe(getDateNode("2026-11-29"));
+
+      expect(getMonthSelect().value).toBe("November");
+      expect(getYearInput().value).toBe("2026");
+
+      await expectKeyboardNavigation([["2026-11-29", "2026-11-29", "a"]]);
+
+      expect(getMonthSelect().value).toBe("November");
+      expect(getYearInput().value).toBe("2026");
+    });
   });
+
   describe("default datepicker with min date", () => {
     it("Home, End and arrow key navigation", async () => {
       vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
