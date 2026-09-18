@@ -627,5 +627,46 @@ describe("combobox_datepicker", () => {
 
       expect(input.value).toBe("2026-05-30");
     });
+
+    it("tab index falls back to the 1st of the month when minDate is out of the displayed month", async () => {
+      vi.setSystemTime(new Date("2026-05-15T09:00:00-05:00"));
+      renderBaseFixture();
+      renderMinDate("2026-05-31");
+      application = await startController();
+
+      openCalendarByInputArrow();
+      await vi.runOnlyPendingTimersAsync();
+
+      // On May, the min date (May 31) is in-month and is the tabbable date.
+      expect(getDateNode("2026-05-31").tabIndex).toBe(0);
+
+      // Navigate to June, where May 31 becomes an out-of-month spillover cell and
+      // neither today (May 15) nor a selected date is visible.
+      getForwardButton().click();
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(getMonthSelect().value).toBe("June");
+      // #setTabIndex falls through to the 1st of the month.
+      expect(getDateNode("2026-06-01").tabIndex).toBe(0);
+      expect(getDateNode("2026-05-31").tabIndex).toBe(-1);
+    });
+
+    it("global keydown ignores Tab from a non-boundary element", async () => {
+      vi.setSystemTime(new Date("2026-05-07T09:00:00-05:00"));
+      renderBaseFixture();
+      application = await startController();
+      const calendar = document.getElementById("test_id-calendar");
+
+      openCalendarByInputArrow();
+      expect(calendar.hidden).toBe(false);
+
+      // The forward button is neither the first, last, nor the input element, so a
+      // (non-shift) Tab from it should be a no-op and leave the calendar open.
+      getForwardButton().dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Tab", bubbles: true }),
+      );
+
+      expect(calendar.hidden).toBe(false);
+    });
   });
 });

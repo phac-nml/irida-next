@@ -250,5 +250,17 @@ describe("combobox_datepicker lifecycle, edge case, and error handling", () => {
 
       expect(document.querySelectorAll("#test_id-calendar")).toHaveLength(1);
     });
+
+    it("hideCalendar is a safe no-op after disconnect", async () => {
+      renderBaseFixture();
+      application = await startController();
+      await vi.runOnlyPendingTimersAsync();
+
+      const controller = inputControllerInstance(application);
+      controller.disconnect();
+
+      // #floatingDropdown is now null; hideCalendar should not throw.
+      expect(() => controller.hideCalendar()).not.toThrow();
+    });
   });
 });
