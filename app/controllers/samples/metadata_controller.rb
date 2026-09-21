@@ -34,7 +34,7 @@ module Samples
       if @sample.errors.any?
         render status: :unprocessable_content, locals: { type: 'error', message: error_message(@sample) }
       else
-        @messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
+        @messages = create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
         render status: create_metadata_fields[:existing_keys].any? ? :multi_status : :ok
       end
     end
@@ -81,37 +81,32 @@ module Samples
       params.expect(sample: [{ update_field: { key: {}, value: {} } }])
     end
 
-    def get_create_messages(added_keys, existing_keys)
-      messages = []
-
-      messages << create_success_message(added_keys) if added_keys.any?
-      messages << create_error_message(existing_keys) if existing_keys.any?
-
-      messages
+    def create_messages(added_keys, existing_keys)
+      [
+        metadata_flash_message(
+          added_keys,
+          type: 'success',
+          single_translation: 'projects.samples.metadata.fields.create.single_success',
+          multi_translation: 'projects.samples.metadata.fields.create.multi_success'
+        ),
+        metadata_flash_message(
+          existing_keys,
+          type: 'error',
+          single_translation: 'projects.samples.metadata.fields.create.single_key_exists',
+          multi_translation: 'projects.samples.metadata.fields.create.multi_keys_exists'
+        )
+      ].compact
     end
 
-    def create_success_message(keys)
-      {
-        type: 'success',
-        message: if keys.one?
-                   t('projects.samples.metadata.fields.create.single_success',
-                     key: keys.first)
-                 else
-                   t('projects.samples.metadata.fields.create.multi_success',
-                     keys: keys.join(', '))
-                 end
-      }
-    end
+    def metadata_flash_message(keys, type:, single_translation:, multi_translation:)
+      return if keys.empty?
 
-    def create_error_message(keys)
       {
-        type: 'error',
+        type: type,
         message: if keys.one?
-                   t('projects.samples.metadata.fields.create.single_key_exists',
-                     key: keys.first)
+                   t(single_translation, key: keys.first)
                  else
-                   t('projects.samples.metadata.fields.create.multi_keys_exists',
-                     keys: keys.join(', '))
+                   t(multi_translation, keys: keys.join(', '))
                  end
       }
     end
