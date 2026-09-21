@@ -138,12 +138,280 @@ module Projects
         assert_response :unprocessable_content
       end
 
-      test 'member with role <= analyst can delete metadata' do
+      test 'member with role <= analyst cannot delete metadata' do
         login_as users(:michelle_doe)
         delete namespace_project_sample_metadata_path(@project29.parent, @project29, @sample32,
                                                       tab: 'metadata',
                                                       sample: { metadata: { metadatafield1: '' } },
                                                       format: :turbo_stream)
+        assert_response :unauthorized
+      end
+
+      test 'member with role >= maintainer can update existing metadata field\'s value' do
+        login_as users(:jane_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        put sample_metadatum_path(@sample32,
+                                  cell_id: 'a_cell_id', value: 'newmetadatavalue1', id: 'metadatafield1',
+                                  format: :turbo_stream)
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('samples.editable_cell.update_success')}"
+            end
+          end
+        end
+
+        assert_equal 'newmetadatavalue1', @sample32.reload.metadata['metadatafield1']
+      end
+
+      test 'member with role <= analyst cannot update existing metadata field\'s value' do
+        login_as users(:michelle_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        put sample_metadatum_path(@sample32,
+                                  cell_id: 'a_cell_id', value: 'newmetadatavalue1', id: 'metadatafield1',
+                                  format: :turbo_stream)
+        assert_response :unauthorized
+
+        assert_equal 'value1', @sample32.reload.metadata['metadatafield1']
+      end
+
+      test 'member with role >= maintainer can create new metadata field through update endpoint' do
+        login_as users(:jane_doe)
+        assert_not @sample32.metadata['newmetadtafield']
+        put sample_metadatum_path(@sample32,
+                                  cell_id: 'a_cell_id', value: 'newmetadatavalue1', id: 'newmetadatafield',
+                                  format: :turbo_stream)
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('samples.editable_cell.update_success')}"
+            end
+          end
+        end
+        @sample32.reload
+        assert_equal 'newmetadatavalue1', @sample32.metadata['newmetadatafield']
+      end
+
+      test 'member with role <= analyst cannot create new metadata field through update endpoint' do
+        login_as users(:michelle_doe)
+        assert_not @sample32.metadata['newmetadatafield']
+        put sample_metadatum_path(@sample32,
+                                  cell_id: 'a_cell_id', value: 'newmetadatavalue1', id: 'newmetadatafield',
+                                  format: :turbo_stream)
+        assert_response :unauthorized
+
+        @sample32.reload
+        assert_not @sample32.metadata['newmetadatafield']
+      end
+
+      test 'update metadata with already existing value' do
+        login_as users(:jane_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        put sample_metadatum_path(@sample32,
+                                  cell_id: 'a_cell_id', value: 'value1', id: 'metadatafield1',
+                                  format: :turbo_stream)
+        # assert_response :unprocessable_content
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.error')}: " \
+                                   "#{I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')}"
+            end
+          end
+        end
+        @sample32.reload
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+      end
+
+      test 'bulk_create multiple metadata fields successfully' do
+        login_as users(:jane_doe)
+        assert_not @sample32.metadata['newmetadatafield1']
+        assert_not @sample32.metadata['newmetadatafield2']
+        assert_not @sample32.metadata['newmetadatafield3']
+        post sample_metadata_path(@sample32,
+                                  sample: { create_fields: { newmetadatafield1: 'newvalue1',
+                                                             newmetadatafield2: 'newvalue2',
+                                                             newmetadatafield3: 'newvalue3' } }, format: :turbo_stream)
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('projects.samples.metadata.fields.create.multi_success',
+                                             keys: %w[newmetadatafield1 newmetadatafield2
+                                                      newmetadatafield3].join(', '))}"
+            end
+          end
+        end
+
+        @sample32.reload
+        assert_equal 'newvalue1', @sample32.metadata['newmetadatafield1']
+        assert_equal 'newvalue2', @sample32.metadata['newmetadatafield2']
+        assert_equal 'newvalue3', @sample32.metadata['newmetadatafield3']
+      end
+
+      test 'bulk_create multiple metadata fields multi_status' do
+        login_as users(:jane_doe)
+        assert_not @sample32.metadata['newmetadatafield1']
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        post sample_metadata_path(@sample32,
+                                  sample: { create_fields: { newmetadatafield1: 'newvalue1',
+                                                             metadatafield1: 'value2' } }, format: :turbo_stream)
+        assert_response :multi_status
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]', count: 2
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template div[role="alert"][data-viral--flash-type-value="success"]' do
+            assert_select 'div[id$="-message"]', text: "#{I18n.t('common.statuses.success')}: " \
+          "#{I18n.t('projects.samples.metadata.fields.create.single_success',
+                    key: 'newmetadatafield1')}"
+          end
+        end
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template div[role="alert"][data-viral--flash-type-value="error"]' do
+            assert_select 'div[id$="-message"]', text: "#{I18n.t('common.statuses.error')}: " \
+          "#{I18n.t('projects.samples.metadata.fields.create.single_key_exists',
+                    key: 'metadatafield1')}"
+          end
+        end
+
+        @sample32.reload
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        assert_equal 'newvalue1', @sample32.metadata['newmetadatafield1']
+      end
+
+      test 'bulk_create multiple metadata fields that exist' do
+        login_as users(:jane_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        assert_equal 'value2', @sample32.metadata['metadatafield2']
+        post sample_metadata_path(@sample32,
+                                  sample: { create_fields: { metadatafield1: 'newvalue1',
+                                                             metadatafield2: 'newvalue2' } }, format: :turbo_stream)
+        assert_response :unprocessable_content
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.error')}: " \
+                                   "#{I18n.t('projects.samples.metadata.fields.create.multi_keys_exists',
+                                             keys: %w[metadatafield1 metadatafield2].join(', '))}"
+            end
+          end
+        end
+
+        @sample32.reload
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        assert_equal 'value2', @sample32.metadata['metadatafield2']
+      end
+
+      test 'member with role <= analyst cannot bulk_create' do
+        login_as users(:michelle_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        assert_equal 'value2', @sample32.metadata['metadatafield2']
+        post sample_metadata_path(@sample32,
+                                  sample: { create_fields: { newmetadatafield1: 'newvalue1',
+                                                             newmetadatafield2: 'newvalue2' } }, format: :turbo_stream)
+        assert_response :unauthorized
+      end
+
+      test 'bulk_update new value' do
+        login_as users(:jane_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        patch sample_metadata_path(@sample32,
+                                   sample: { update_field: { key: { metadatafield1: 'metadatafield1' },
+                                                             value: { value1: 'newvalue1' } } },
+                                   format: :turbo_stream)
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('projects.samples.metadata.fields.update.success')}"
+            end
+          end
+        end
+
+        @sample32.reload
+        assert_equal 'newvalue1', @sample32.metadata['metadatafield1']
+      end
+
+      test 'bulk_update new metadata field key' do
+        login_as users(:jane_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        patch sample_metadata_path(@sample32,
+                                   sample: { update_field: { key: { metadatafield1: 'newmetadatafield1' },
+                                                             value: { value1: 'value1' } } },
+                                   format: :turbo_stream)
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('projects.samples.metadata.fields.update.success')}"
+            end
+          end
+        end
+
+        @sample32.reload
+        assert_equal 'value1', @sample32.metadata['newmetadatafield1']
+        assert_not @sample32.metadata['metadatafield1']
+      end
+
+      test 'bulk_update new metadata field key and value' do
+        login_as users(:jane_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        patch sample_metadata_path(@sample32,
+                                   sample: { update_field: { key: { metadatafield1: 'newmetadatafield1' },
+                                                             value: { value1: 'newvalue1' } } },
+                                   format: :turbo_stream)
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('projects.samples.metadata.fields.update.success')}"
+            end
+          end
+        end
+
+        @sample32.reload
+        assert_equal 'newvalue1', @sample32.metadata['newmetadatafield1']
+        assert_not @sample32.metadata['metadatafield1']
+      end
+
+      test 'bulk_update no changes' do
+        login_as users(:jane_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        patch sample_metadata_path(@sample32,
+                                   sample: { update_field: { key: { metadatafield1: 'metadatafield1' },
+                                                             value: { value1: 'value1' } } },
+                                   format: :turbo_stream)
+        assert_response :unprocessable_content
+
+        @sample32.reload
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+      end
+
+      test 'member with role <= analyst cannot bulk_update metadata' do
+        login_as users(:michelle_doe)
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        patch sample_metadata_path(@sample32,
+                                   sample: { update_field: { key: { metadatafield1: 'newmetadatafield1' },
+                                                             value: { value1: 'value1' } } },
+                                   format: :turbo_stream)
         assert_response :unauthorized
       end
     end

@@ -59,7 +59,6 @@ module Samples
         def validate_update_fields # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
           if @key_update.keys[0] == strip_whitespaces(@key_update.values[0]) &&
              @value_update.keys[0] == strip_whitespaces(@value_update.values[0])
-
             raise SampleMetadataFieldsUpdateError,
                   I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
           end

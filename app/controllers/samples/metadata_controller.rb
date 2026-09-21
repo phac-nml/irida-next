@@ -34,9 +34,8 @@ module Samples
       if @sample.errors.any?
         render status: :unprocessable_content, locals: { type: 'error', message: error_message(@sample) }
       else
-        @status = get_create_status(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
         @messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
-        render status: @status
+        render status: create_metadata_fields[:existing_keys].any? ? :multi_status : :ok
       end
     end
 
@@ -48,6 +47,7 @@ module Samples
       @allowed_to = { update_sample: true }
       updated_metadata_field = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
                                                                               update_field_params).execute
+
       if @sample.errors.any?
         render status: :unprocessable_content,
                locals: { key: update_field_params['update_field']['key'].keys[0],
@@ -81,37 +81,39 @@ module Samples
       params.expect(sample: [{ update_field: { key: {}, value: {} } }])
     end
 
-    def get_create_status(added_keys, existing_keys)
-      if added_keys.any? && existing_keys.any?
-        :multi_status
-      elsif existing_keys.any?
-        :unprocessable_content
-      else
-        :ok
-      end
+    def get_create_messages(added_keys, existing_keys)
+      messages = []
+
+      messages << create_success_message(added_keys) if added_keys.any?
+      messages << create_error_message(existing_keys) if existing_keys.any?
+
+      messages
     end
 
-    def get_create_messages(added_keys, existing_keys) # rubocop:disable Metrics/MethodLength
-      messages = []
-      if added_keys.one?
-        messages << { type: 'success',
-                      message: t('projects.samples.metadata.fields.create.single_success', key: added_keys[0]) }
-      elsif added_keys.any?
-        messages << { type: 'success',
-                      message: t('projects.samples.metadata.fields.create.multi_success',
-                                 keys: added_keys.join(', ')) }
-      end
+    def create_success_message(keys)
+      {
+        type: 'success',
+        message: if keys.one?
+                   t('projects.samples.metadata.fields.create.single_success',
+                     key: keys.first)
+                 else
+                   t('projects.samples.metadata.fields.create.multi_success',
+                     keys: keys.join(', '))
+                 end
+      }
+    end
 
-      if existing_keys.one?
-        messages << { type: 'error',
-                      message: t('projects.samples.metadata.fields.create.single_key_exists',
-                                 key: existing_keys[0]) }
-      elsif existing_keys.any?
-        messages << { type: 'error',
-                      message: t('projects.samples.metadata.fields.create.multi_keys_exists',
-                                 keys: existing_keys.join(', ')) }
-      end
-      messages
+    def create_error_message(keys)
+      {
+        type: 'error',
+        message: if keys.one?
+                   t('projects.samples.metadata.fields.create.single_key_exists',
+                     key: keys.first)
+                 else
+                   t('projects.samples.metadata.fields.create.multi_keys_exists',
+                     keys: keys.join(', '))
+                 end
+      }
     end
 
     def get_update_status_and_message(updated_metadata_field)
@@ -170,7 +172,7 @@ module Samples
 
     def render_update_error(cell_id)
       # render status: :unprocessable_content,
-      #       locals: { type: 'error', message: error_message(@sample) }
+      #        locals: { type: 'error', message: error_message(@sample) }
       render turbo_stream: [
         turbo_stream.update(
           cell_id, @sample.metadata[@field]
