@@ -6,6 +6,21 @@ module ViewHelper
     render(ComboboxDatepickerComponent.new(*, **), &)
   end
 
+  # Centralizes IRIDA Next avatar defaults so callsites do not drift from the
+  # shared shape/size contract during Pathogen migrations.
+  def irida_avatar(label:, colour_seed:, size: :small, classes: nil, **system_arguments)
+    render(
+      Pathogen::Avatar.new(
+        label:,
+        colour_seed:,
+        size:,
+        shape: :rounded,
+        classes:,
+        **system_arguments
+      )
+    )
+  end
+
   def viral_icon_source(name)
     path = if Rails.configuration.auth_config[name]
              Rails.root.join(
