@@ -1,4 +1,4 @@
-<%= render Viral::PageHeaderComponent.new(title: 'Page header with buttons', subtitle: 'This is a page header') do |header| %>
+<%= render Layout::PageHeaderComponent.new(title: 'Page header with buttons', subtitle: 'This is a page header') do |header| %>
   <%= header.with_buttons do %>
     <%= render(Viral::ButtonComponent.new) { "Button" } %>
   <% end %>
