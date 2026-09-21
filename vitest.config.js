@@ -6,6 +6,54 @@ const jsRoot = resolve(
   fileURLToPath(new URL("app/javascript", import.meta.url)),
 );
 
+const fullCoverageFiles = [
+  "app/javascript/controllers/action_button_controller.js",
+  "app/javascript/controllers/clipboard_controller.js",
+  "app/javascript/controllers/collapsible_controller.js",
+  "app/javascript/controllers/combobox/utils.js",
+  "app/javascript/controllers/combobox/v1_controller.js",
+  "app/javascript/controllers/confirmation_controller.js",
+  "app/javascript/controllers/copy_controller.js",
+  "app/javascript/controllers/experimental_feature_toggle_controller.js",
+  "app/javascript/controllers/filters_controller.js",
+  "app/javascript/controllers/metadata_toggle_controller.js",
+  "app/javascript/controllers/selection_controller.js",
+  "app/javascript/controllers/sidebar_item_controller.js",
+  "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js",
+  "app/javascript/controllers/table_selection_controller.js",
+  "app/javascript/controllers/token_controller.js",
+  "app/javascript/controllers/treegrid_controller.js",
+  "app/javascript/controllers/viral/alert_controller.js",
+  "app/javascript/controllers/viral/dialog_controller.js",
+  "app/javascript/controllers/viral/dialog_trigger_controller.js",
+  "app/javascript/controllers/viral/flash_controller.js",
+  "app/javascript/controllers/workflow_selection_controller.js",
+  "app/javascript/utilities/collection.js",
+  "app/javascript/utilities/dialog.js",
+  "app/javascript/utilities/flash.js",
+  "app/javascript/utilities/floating_dropdown.js",
+  "app/javascript/utilities/focus.js",
+  "app/javascript/utilities/form.js",
+  "app/javascript/utilities/live_region.js",
+  "app/javascript/utilities/message_formatter.js",
+  "app/javascript/utilities/progress_window.js",
+  "app/javascript/utilities/refresh.js",
+  "app/javascript/utilities/styles.js",
+  "app/javascript/utilities/word_connector.js",
+];
+
+const fullCoverageThresholds = Object.fromEntries(
+  fullCoverageFiles.map((file) => [
+    file,
+    {
+      statements: 100,
+      branches: 100,
+      functions: 100,
+      lines: 100,
+    },
+  ]),
+);
+
 export default defineConfig({
   resolve: {
     alias: {
@@ -58,198 +106,8 @@ export default defineConfig({
         "app/javascript/controllers/combobox_datepicker/constants.js",
         "app/javascript/workers/**/*.js",
       ],
-      // Ratchet allowlist: add a file/glob here once it reaches full coverage.
-      thresholds: {
-        "app/javascript/controllers/collapsible_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/sidebar_item_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/clipboard_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/copy_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/action_button_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/confirmation_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/filters_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/metadata_toggle_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/token_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-
-        "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js":
-          {
-            statements: 100,
-            branches: 100,
-            functions: 100,
-            lines: 100,
-          },
-        "app/javascript/controllers/workflow_selection_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/treegrid_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/collection.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/live_region.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/message_formatter.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/word_connector.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/form.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/dialog.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/flash.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/focus.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/floating_dropdown.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/progress_window.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/styles.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/utilities/refresh.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/experimental_feature_toggle_controller.js":
-          {
-            statements: 100,
-            branches: 100,
-            functions: 100,
-            lines: 100,
-          },
-        "app/javascript/controllers/combobox/utils.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/combobox/v1_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/viral/dialog_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/viral/dialog_trigger_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/viral/flash_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        "app/javascript/controllers/viral/alert_controller.js": {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-      },
+      // Ratchet allowlist: add a path here once it reaches full coverage.
+      thresholds: fullCoverageThresholds,
     },
   },
 });
