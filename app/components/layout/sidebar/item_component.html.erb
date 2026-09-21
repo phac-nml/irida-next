@@ -8,20 +8,24 @@
       }
     ),
     aria: { current: ("page" if selected) } do %>
-    <%= tag.div(
-      class: class_names(
-        "mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg transition-colors duration-200",
-        {
-          "bg-primary-300 text-primary-800 dark:bg-slate-700/80": selected,
-          "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/item:bg-slate-200/70 dark:group-hover/item:bg-slate-700/50": !selected
-        }
-      )
-    ) do %>
-      <% if avatar %>
-        <span class="rounded-lg bg-white">
-          <%= render Pathogen::Avatar.new(label: label, colour_seed: "#{label}-#{url}", size: :xs) %>
-        </span>
-      <% else %>
+    <% if avatar %>
+      <%= render Pathogen::Avatar.new(
+        label: label,
+        colour_seed: "#{label}-#{url}",
+        size: :small,
+        shape: :rounded,
+        classes: "mr-3",
+      ) %>
+    <% else %>
+      <%= tag.div(
+        class: class_names(
+          "mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg transition-colors duration-200",
+          {
+            "bg-primary-300 text-primary-800 dark:bg-slate-700/80": selected,
+            "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/item:bg-slate-200/70 dark:group-hover/item:bg-slate-700/50": !selected
+          }
+        )
+      ) do %>
         <%= create_icon %>
       <% end %>
     <% end %>
