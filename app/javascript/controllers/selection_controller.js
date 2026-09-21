@@ -386,6 +386,7 @@ export default class extends Controller {
   #handleSelectionLimitExceeded({ announce = true } = {}) {
     this.#showSelectionLimitAlert(this.#selectionLimitMessage());
 
+    // v8 ignore next -- announce=false is a defensive option not currently invoked by public call paths.
     if (announce) {
       this.#announceAlertMessage(this.#selectionLimitMessage());
     }
