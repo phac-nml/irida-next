@@ -2,7 +2,7 @@
 <%= turbo_frame_tag "sample_modal" %>
 <%= turbo_frame_tag "samples_dialog" %>
 
-<%= render Viral::PageHeaderComponent.new(title: @sample.name, id: @sample.puid, subtitle: @sample.description) do |component| %>
+<%= render Layout::PageHeaderComponent.new(title: @sample.name, id: @sample.puid, subtitle: @sample.description) do |component| %>
   <%= render Viral::PillComponent.new(text: @sample.puid, color: :blue) %>
 
   <% component.with_buttons do %>

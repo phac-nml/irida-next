@@ -1,7 +1,7 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 <%= turbo_stream_from @data_export %>
 
-<%= render Viral::PageHeaderComponent.new(
+<%= render Layout::PageHeaderComponent.new(
   title: @data_export.name || @data_export.id, id: @data_export.name.nil? ? nil : @data_export.id) do |component| %>
   <%= component.with_buttons do %>
     <% if @data_export.status == 'ready' %>

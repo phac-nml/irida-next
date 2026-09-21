@@ -1,8 +1,9 @@
-<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+<%= render Layout::PageHeaderComponent.new(title: t(".title")) %>
+
 <div
   class="
-    p-4 bg-white border border-slate-200 rounded-lg shadow-xs 2xl:col-span-2
-    dark:border-slate-700 sm:p-6 dark:bg-slate-800
+    rounded-lg border border-slate-200 bg-white p-4 shadow-xs sm:p-6 2xl:col-span-2 dark:border-slate-700
+    dark:bg-slate-800
   "
 >
   <%= render "form", user: @user %>

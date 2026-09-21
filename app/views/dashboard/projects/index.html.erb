@@ -1,6 +1,6 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
-<%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
+<%= render Layout::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
     <%= link_to t(".create_project_button"),
     new_project_path,
@@ -20,6 +20,7 @@
       label: t(".all"),
       selected: @tab == "all"
     ) %>
+
     <% tabs.with_tab(
       id: "personal-tab",
       label: t(".personal"),

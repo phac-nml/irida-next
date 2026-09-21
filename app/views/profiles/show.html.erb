@@ -1,4 +1,4 @@
-<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+<%= render Layout::PageHeaderComponent.new(title: t(".title")) %>
 
 <%= render Viral::CardComponent.new do %>
   <%= render "form", user: @user if @user.provider == nil %>

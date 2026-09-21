@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
-module Viral
-  # Component for displaying a page header with title, subtitle and buttons
+module Layout
+  # Shared page header structure for IRIDA Next views.
+  #
+  # This component intentionally preserves the existing PageHeader slot API used
+  # throughout the app (`icon`, `with_buttons`) so callsites can migrate away
+  # from Viral namespace without layout changes.
   class PageHeaderComponent < Component
     attr_reader :title, :subtitle, :id, :id_color
 

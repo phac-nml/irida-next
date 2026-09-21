@@ -1,6 +1,6 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
-<%= render Viral::PageHeaderComponent.new(
+<%= render Layout::PageHeaderComponent.new(
   title: t("integration_access_tokens.index.title"),
   subtitle: t("integration_access_tokens.index.subtitle"),
 ) %>
