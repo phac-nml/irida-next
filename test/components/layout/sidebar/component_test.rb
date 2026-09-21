@@ -89,6 +89,20 @@ module Layout
         assert_no_selector('a[href="/other"][aria-current="page"]')
       end
 
+      test 'renders avatar entries inside shared leading visual container' do
+        render_inline(Layout::SidebarComponent.new) do |sidebar|
+          sidebar.with_header(label: 'Header')
+          sidebar.with_item(label: 'Current Group', url: '/current-group', avatar: true, selected: true)
+        end
+
+        assert_selector(
+          "a[href='/current-group'] div.mr-3.h-8.w-8.rounded-lg.bg-primary-300"
+        )
+        assert_selector(
+          "a[href='/current-group'] span[role='img'][aria-label='Current Group'].rounded-md.h-8.w-8"
+        )
+      end
+
       test 'sidebar is accessible' do
         render_inline(Layout::SidebarComponent.new) do |sidebar|
           sidebar.with_header(label: 'Header')
