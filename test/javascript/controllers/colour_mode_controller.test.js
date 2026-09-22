@@ -37,6 +37,22 @@ describe("colour mode controller", () => {
     input.checked = true;
     input.dispatchEvent(new Event("change", { bubbles: true }));
   }
+
+  function stubLocalStorage(overrides = {}) {
+    const storage = window.localStorage;
+
+    vi.stubGlobal("localStorage", {
+      getItem: storage.getItem.bind(storage),
+      setItem: storage.setItem.bind(storage),
+      removeItem: storage.removeItem.bind(storage),
+      clear: storage.clear.bind(storage),
+      key: storage.key.bind(storage),
+      get length() {
+        return storage.length;
+      },
+      ...overrides,
+    });
+  }
   it.each([
     [undefined, true, "system", true],
     ["invalid", true, "system", true],
@@ -60,8 +76,10 @@ describe("colour mode controller", () => {
   );
   it("falls back to the system preference when storage cannot be read", async () => {
     const error = new DOMException("Storage blocked", "SecurityError");
-    vi.spyOn(localStorage, "getItem").mockImplementation(() => {
-      throw error;
+    stubLocalStorage({
+      getItem: () => {
+        throw error;
+      },
     });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     await mount({ dark: true });
@@ -115,8 +133,10 @@ describe("colour mode controller", () => {
   ])("announces storage failures with %s", async (messages, expected) => {
     await mount({ saved: "light", messages });
     const error = new DOMException("Storage full", "QuotaExceededError");
-    vi.spyOn(localStorage, "setItem").mockImplementation(() => {
-      throw error;
+    stubLocalStorage({
+      setItem: () => {
+        throw error;
+      },
     });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     change("dark");

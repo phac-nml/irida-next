@@ -154,15 +154,18 @@ describe("layout controller", () => {
   );
   it("removes the document listener on disconnect and registers it once on reconnect", async () => {
     await mount();
+    layout.classList.remove("collapsed", "max-xl:collapsed");
+    localStorage.setItem("layout", "collapsed");
+
     element.remove();
     await flushStimulus();
-    const read = vi.spyOn(localStorage, "getItem");
     document.dispatchEvent(new Event("turbo:morph"));
-    expect(read).not.toHaveBeenCalled();
+    expect(layout.classList.contains("collapsed")).toBe(false);
+
     document.body.append(element);
     await flushStimulus();
-    read.mockClear();
+    layout.classList.remove("collapsed", "max-xl:collapsed");
     document.dispatchEvent(new Event("turbo:morph"));
-    expect(read).toHaveBeenCalledOnce();
+    expect(layout.classList.contains("collapsed")).toBe(true);
   });
 });
