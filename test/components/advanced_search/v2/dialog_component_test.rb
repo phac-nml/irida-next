@@ -15,7 +15,56 @@ module AdvancedSearch
 
         # Trigger opens via the dialog controller, not the builder
         assert_selector "button[data-action='advanced-search--v2--dialog#renderSearch viral--dialog#open']",
-                        text: I18n.t('components.advanced_search_component.v2.title')
+                        text: I18n.t('components.advanced_search_component.v1.title')
+      end
+
+      %i[en fr].each do |locale|
+        [false, true].each do |metadata_operators|
+          test "dialog owns the original help in #{locale} with metadata operators #{metadata_operators}" do
+            Flipper.enable(:advanced_search_metadata_operators) if metadata_operators
+            Flipper.disable(:advanced_search_metadata_operators) unless metadata_operators
+
+            I18n.with_locale(locale) do
+              render_preview(:v2_empty, from: AdvancedSearchComponentPreview)
+
+              description = I18n.t('components.advanced_search_component.v1.description')
+              rule = metadata_operators ? 'metadata_operators' : 'standard_operators'
+              other_rule = metadata_operators ? 'standard_operators' : 'metadata_operators'
+              rules = I18n.t("components.advanced_search_component.v1.rules.#{rule}")
+
+              assert_selector 'dialog p', text: description, visible: :all
+              assert_selector 'dialog p', text: rules, visible: :all
+              assert_no_selector 'dialog p',
+                                 text: I18n.t("components.advanced_search_component.v1.rules.#{other_rule}"),
+                                 visible: :all
+              assert_no_selector '#advanced-search-builder p', text: description, visible: :all
+              assert_no_selector '#advanced-search-builder p', text: rules, visible: :all
+            end
+          end
+        end
+      end
+
+      %i[default empty workflow].each do |preview|
+        test "#{preview} preview stays on v1 when v2 is enabled" do
+          Flipper.enable(:advanced_search_v2)
+
+          render_preview(preview, from: AdvancedSearchComponentPreview)
+
+          assert_selector "div#advanced-search[data-controller='advanced-search--v1']"
+          assert_no_selector "[data-controller='advanced-search--v2--dialog']", visible: :all
+          assert_no_selector '#advanced-search-builder', visible: :all
+        end
+      end
+
+      test 'standalone builder preview has no dialog or dialog help' do
+        render_preview(:v2_builder, from: AdvancedSearchComponentPreview)
+
+        assert_selector "form #advanced-search-builder[data-controller='advanced-search--v2--builder']"
+        assert_no_selector 'dialog', visible: :all
+        assert_no_selector 'p', text: I18n.t('components.advanced_search_component.v1.description'), visible: :all
+        %w[standard_operators metadata_operators].each do |rule|
+          assert_no_selector 'p', text: I18n.t("components.advanced_search_component.v1.rules.#{rule}"), visible: :all
+        end
       end
 
       test 'builder exposes the client-side templates the controller needs' do
@@ -59,8 +108,8 @@ module AdvancedSearch
         html = ApplicationController.render(
           AdvancedSearch::V2::BuilderComponent.new(form:, search:, fields:), layout: false
         )
-        assert_includes html, I18n.t('components.advanced_search_component.v2.group', index: 1)
-        assert_includes html, I18n.t('components.advanced_search_component.v2.group', index: 2)
+        assert_includes html, I18n.t('components.advanced_search_component.v1.group', index: 1)
+        assert_includes html, I18n.t('components.advanced_search_component.v1.group', index: 2)
       end
     end
   end
