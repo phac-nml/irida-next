@@ -10,25 +10,39 @@
   <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
     <% section.with_heading { "État de conformité" } %>
 
-    <%= render Pathogen::Typography::Text.new { "Le site Web a été testé conformément aux Règles pour l'accessibilité du contenu Web (WCAG) 2.2 AA, conformément à la norme canadienne d'accessibilité EN 301 549."} %>
+    <%= render Pathogen::Typography::Text.new do %>
+      Le site Web a été testé conformément aux Règles pour l'accessibilité du contenu Web (WCAG) 2.2 AA, conformément à
+      la norme canadienne d'accessibilité EN 301 549.
+    <% end %>
 
-    <%= render Pathogen::Typography::Text.new { "IRIDA Next est entièrement conforme aux Règles pour l'accessibilité du contenu Web (WCAG) version 2.2 AA." } %>
+    <%= render Pathogen::Typography::Text.new do %>
+      IRIDA Next est entièrement conforme aux Règles pour l'accessibilité du contenu Web (WCAG) version 2.2 AA.
+    <% end %>
   <% end %>
 
   <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
     <% section.with_heading { "Ce qu'on fait pour améliorer l'accessibilité" } %>
 
-    <%= render Pathogen::Typography::Text.new { "Notre feuille de route pour l'accessibilité [ajouter le lien vers la feuille de route] explique comment et quand nous prévoyons d'améliorer l'accessibilité de ce site web." } %>
+    <%= render Pathogen::Typography::Text.new do %>
+      Notre feuille de route pour l'accessibilité [ajouter le lien vers la feuille de route] explique comment et quand
+      nous prévoyons d'améliorer l'accessibilité de ce site web.
+    <% end %>
   <% end %>
 
   <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
     <% section.with_heading { "Préparation de cette déclaration d'accessibilité" } %>
 
-    <%= render Pathogen::Typography::Text.new { "Cette déclaration a été préparée le 2026-08-15." } %>
+    <%= render Pathogen::Typography::Text.new do %>
+      Cette déclaration a été préparée le 2026-08-15.
+    <% end %>
 
-    <%= render Pathogen::Typography::Text.new { "Ce site Web a été testé pour la dernière fois le 2026-08-11 selon la norme WCAG 2.2 AA." } %>
+    <%= render Pathogen::Typography::Text.new do %>
+      Ce site Web a été testé pour la dernière fois le 2026-08-11 selon la norme WCAG 2.2 AA.
+    <% end %>
 
-    <%= render Pathogen::Typography::Text.new { "Le test a été effectué par l'équipe de l'Accessibilité et développement de produits numériques du DGTN de SC/ASPC." } %>
+    <%= render Pathogen::Typography::Text.new do %>
+      Le test a été effectué par l'équipe de l'Accessibilité et développement de produits numériques du DGTN de SC/ASPC.
+    <% end %>
   <% end %>
 
   <%= render Pathogen::Typography::Section.new(level: 2) do |section| %>
