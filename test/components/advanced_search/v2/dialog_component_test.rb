@@ -30,6 +30,16 @@ module AdvancedSearch
         end
       end
 
+      test 'builder provides saved query values before list inputs initialize' do
+        render_preview(:v2_list, from: AdvancedSearchComponentPreview)
+
+        builder = page.find('#advanced-search-builder', visible: :all)
+        state = builder['data-advanced-search--v2--builder-initial-state-value']
+
+        assert_equal [[{ 'field' => 'metadata.country', 'operator' => 'in', 'values' => %w[Canada Mexico] }]],
+                     JSON.parse(state)
+      end
+
       test 'renders existing groups into the searchGroupsTemplate' do
         search = Sample::Query.new(
           groups: [

@@ -22,6 +22,14 @@ module AdvancedSearch
 
       private
 
+      def initial_state
+        @search.groups.map do |group|
+          group.conditions.map do |condition|
+            { field: condition.field, operator: condition.operator, values: Array(condition.value) }
+          end
+        end
+      end
+
       def subject_label
         return @subject if @subject.present?
 
