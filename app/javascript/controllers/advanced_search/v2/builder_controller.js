@@ -401,8 +401,15 @@ export default class AdvancedSearchBuilderController extends Controller {
     );
     this.#updateLegend(condition, conditionIndex + 1);
 
+    this.#reindexInputs(condition, groupIndex, conditionIndex);
+    condition.querySelectorAll("template").forEach((template) => {
+      this.#reindexInputs(template.content, groupIndex, conditionIndex);
+    });
+  }
+
+  #reindexInputs(root, groupIndex, conditionIndex) {
     ["name", "id", "for", "aria-describedby"].forEach((attribute) => {
-      condition.querySelectorAll(`[${attribute}]`).forEach((element) => {
+      root.querySelectorAll(`[${attribute}]`).forEach((element) => {
         const currentValue = element.getAttribute(attribute);
 
         if (!currentValue) {

@@ -1,6 +1,7 @@
 import { Application } from "@hotwired/stimulus";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import BuilderController from "../../../../../app/javascript/controllers/advanced_search/v2/builder_controller.js";
+import ListInputController from "../../../../../app/javascript/controllers/list_input_controller.js";
 
 // Rails `fields_for` produces these name/id patterns for the group/condition nesting.
 // The JS builder must preserve them exactly so submitted params match the server contract
@@ -86,6 +87,7 @@ function renderFixture({ existingGroups = "" } = {}) {
 async function startController() {
   const application = Application.start();
   application.register("advanced-search--v2--builder", BuilderController);
+  application.register("list-input", ListInputController);
   await Promise.resolve();
   return application;
 }
@@ -371,4 +373,84 @@ describe("advanced-search--v2--builder", () => {
       document.querySelector("input[name='q[groups_attributes]']").value,
     ).toBe("");
   });
+
+  it.each(["group", "condition"])(
+    "keeps newly pasted list values in the surviving condition after removing a %s",
+    async (removedNode) => {
+      const form = document.createElement("form");
+      const builder = builderElement();
+      // Move the rendered fixture into a form so assertions use submitted values.
+      builder.replaceWith(form);
+      form.appendChild(builder);
+      application = await startController();
+      const controller = application.getControllerForElementAndIdentifier(
+        builderElement(),
+        "advanced-search--v2--builder",
+      );
+      controller.operationsValue = { standard: { In: "in" } };
+      const name = `q[groups_attributes][${G}][conditions_attributes][${C}][value][]`;
+      controller.listValueTemplateTarget.innerHTML = `
+        <div class="value form-field">
+          <div data-controller="list-input" data-list-input-filters-value="[]">
+            <template data-list-input-target="template">
+              <span class="filter-item search-tag">
+                <input type="hidden" name="${name}">
+                <span class="label"></span>
+              </span>
+            </template>
+            <div data-list-input-target="tags">
+              <input name="${name}" data-list-input-target="input"
+                data-action="paste->list-input#handlePaste">
+            </div>
+          </div>
+        </div>`;
+      controller.render();
+      await tick();
+      if (removedNode === "group") {
+        controller.addGroup();
+      } else {
+        groups()[0]
+          .querySelector("button[data-action$='#addCondition']")
+          .click();
+      }
+      await tick();
+
+      const survivor = conditions(groups().at(-1)).at(-1);
+      const field = survivor.querySelector("[name$='[field]']");
+      field.value = "name";
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+      const operator = survivor.querySelector("[name$='[operator]']");
+      operator.value = "in";
+      operator.dispatchEvent(new Event("change", { bubbles: true }));
+      await tick();
+
+      const paste = (value) => {
+        const event = new Event("paste", { bubbles: true, cancelable: true });
+        Object.defineProperty(event, "clipboardData", {
+          value: { getData: () => value },
+        });
+        survivor
+          .querySelector("[data-list-input-target='input']")
+          .dispatchEvent(event);
+      };
+      paste("before-removal");
+      groups()[0]
+        .querySelector(
+          `button[data-action$='#remove${removedNode === "group" ? "Group" : "Condition"}']`,
+        )
+        .click();
+      await tick();
+      paste("after-removal");
+
+      const values = Array.from(new FormData(form)).filter(
+        ([key, value]) => key.endsWith("[value][]") && value !== "",
+      );
+      const expectedName =
+        "q[groups_attributes][0][conditions_attributes][0][value][]";
+      expect(values).toEqual([
+        [expectedName, "before-removal"],
+        [expectedName, "after-removal"],
+      ]);
+    },
+  );
 });
