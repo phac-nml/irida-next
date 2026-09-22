@@ -6,6 +6,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   PAGE_SIZE = 20
 
   setup do
+    # V1 advanced search UI coverage; the test env enables all flags, so disable V2 to stay on V1.
+    Flipper.disable(:advanced_search_v2)
     login_as users(:john_doe)
   end
 
