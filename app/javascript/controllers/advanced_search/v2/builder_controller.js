@@ -1,5 +1,27 @@
 import { Controller } from "@hotwired/stimulus";
 
+const LIST_OPERATORS = new Set(["in", "not_in", "text_in", "text_not_in"]);
+const BETWEEN_OPERATORS = /between/;
+
+const isListOperator = (operator) => LIST_OPERATORS.has(operator);
+
+const createEnumLabel = (value, labels = {}) => {
+  const text = labels[value];
+  if (text) {
+    return text;
+  }
+
+  return String(value)
+    .replace(/[_-]/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+const replaceChildrenWithFragment = (element, items) => {
+  const fragment = document.createDocumentFragment();
+  items.forEach((item) => fragment.appendChild(item));
+  element.replaceChildren(fragment);
+};
+
 // Host-agnostic advanced search query builder.
 //
 // Owns all client-side node logic (add/remove/reindex groups & conditions,
@@ -153,6 +175,7 @@ export default class AdvancedSearchBuilderController extends Controller {
     if (!condition || !group) {
       return;
     }
+
     const value = this.#resetAndGetValueInput(condition);
     const groupIndex = this.#groupElements().indexOf(group);
     const conditionIndex = this.#conditionElements(group).indexOf(condition);
@@ -162,12 +185,7 @@ export default class AdvancedSearchBuilderController extends Controller {
 
     const selectedField = this.#selectedConditionField(condition);
     if (Object.hasOwn(this.enumFieldsValue, selectedField)) {
-      const templateTarget = [
-        "in",
-        "not_in",
-        "text_in",
-        "text_not_in",
-      ].includes(operator)
+      const templateTarget = isListOperator(operator)
         ? this.listSelectValueTemplateTarget
         : this.selectValueTemplateTarget;
       value.outerHTML = templateTarget.innerHTML
@@ -183,34 +201,28 @@ export default class AdvancedSearchBuilderController extends Controller {
         selectedField,
         operator,
       );
-    } else {
-      let templateTarget;
-      if (["in", "not_in", "text_in", "text_not_in"].includes(operator)) {
-        templateTarget = this.listValueTemplateTarget;
-      } else if (operator.includes("between")) {
-        templateTarget = this.betweenValueTemplateTarget;
-      } else {
-        templateTarget = this.valueTemplateTarget;
-      }
-      value.outerHTML = templateTarget.innerHTML
-        .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
-        .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+      return;
+    }
 
-      if (operator === "" || operator.includes("exists")) {
-        const updatedValue = condition.querySelector(".value");
-        if (!updatedValue) {
-          return;
+    const templateTarget = this.#valueTemplateForOperator(operator);
+    value.outerHTML = templateTarget.innerHTML
+      .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
+
+    if (operator === "" || operator.includes("exists")) {
+      const updatedValue = condition.querySelector(".value");
+      if (!updatedValue) {
+        return;
+      }
+
+      updatedValue.classList.add(...this.#hiddenClasses);
+      updatedValue.querySelectorAll("input, select").forEach((element) => {
+        element.value = "";
+
+        if (element.tagName === "SELECT") {
+          element.selectedIndex = -1;
         }
-
-        updatedValue.classList.add(...this.#hiddenClasses);
-        updatedValue.querySelectorAll("input, select").forEach((element) => {
-          element.value = "";
-
-          if (element.tagName === "SELECT") {
-            element.selectedIndex = -1;
-          }
-        });
-      }
+      });
     }
   }
 
@@ -356,12 +368,16 @@ export default class AdvancedSearchBuilderController extends Controller {
   }
 
   #createOperatorOptions(options, parentNode) {
+    const optionsFragment = document.createDocumentFragment();
+
     Object.entries(options).forEach(([label, value]) => {
       const option = document.createElement("option");
       option.value = value;
       option.text = label;
-      parentNode.appendChild(option);
+      optionsFragment.appendChild(option);
     });
+
+    parentNode.appendChild(optionsFragment);
   }
 
   #reindexGroup(group, groupIndex) {
@@ -483,6 +499,18 @@ export default class AdvancedSearchBuilderController extends Controller {
     return values.length > 0 || labels.length > 0;
   }
 
+  #valueTemplateForOperator(operator) {
+    if (isListOperator(operator)) {
+      return this.listValueTemplateTarget;
+    }
+
+    if (BETWEEN_OPERATORS.test(operator)) {
+      return this.betweenValueTemplateTarget;
+    }
+
+    return this.valueTemplateTarget;
+  }
+
   #updateValueFieldForEnum(valueContainer, condition, selectedField, operator) {
     if (!valueContainer || !condition || !selectedField) {
       return;
@@ -493,9 +521,7 @@ export default class AdvancedSearchBuilderController extends Controller {
       return;
     }
 
-    const listOperator = ["in", "not_in", "text_in", "text_not_in"].includes(
-      operator,
-    );
+    const listOperator = isListOperator(operator);
     const select = listOperator
       ? valueContainer.querySelector("select[name$='[value][]']")
       : valueContainer.querySelector("select[name$='[value]']");
@@ -503,24 +529,21 @@ export default class AdvancedSearchBuilderController extends Controller {
       return;
     }
 
-    select.innerHTML = "";
-
     const values = Array.isArray(enumConfig.values) ? enumConfig.values : [];
     const labels =
       enumConfig.labels && typeof enumConfig.labels === "object"
         ? enumConfig.labels
         : {};
 
-    values.forEach((value) => {
-      const option = document.createElement("option");
-      option.value = value;
-      option.text =
-        labels[value] ||
-        value
-          .replace(/[_-]/g, " ")
-          .replace(/\b\w/g, (char) => char.toUpperCase());
-      select.appendChild(option);
-    });
+    replaceChildrenWithFragment(
+      select,
+      values.map((value) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.text = createEnumLabel(value, labels);
+        return option;
+      }),
+    );
 
     select.value = "";
   }
