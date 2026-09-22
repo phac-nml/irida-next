@@ -9,10 +9,10 @@ module Projects
         @sample32 = samples(:sample32)
         @project29 = projects(:project29)
         @namespace = @project29.parent
+        login_as users(:jane_doe)
       end
 
       test 'member with role >= maintainer can view metadata and action buttons' do
-        login_as users(:jane_doe)
         get namespace_project_sample_path(@namespace, @project29, @sample32, tab: 'metadata')
         assert_response :success
 
@@ -64,7 +64,6 @@ module Projects
       end
 
       test 'member with role >= maintainer can open edit metadata dialog' do
-        login_as users(:jane_doe)
         get edit_namespace_project_sample_metadata_path(@namespace, @project29, @sample32,
                                                         key: 'metadatafield1',
                                                         value: 'value1')
@@ -84,21 +83,18 @@ module Projects
       end
 
       test 'edit metadata request requires key param' do
-        login_as users(:jane_doe)
         get edit_namespace_project_sample_metadata_path(@namespace, @project29, @sample32,
                                                         value: 'value1')
         assert_response :bad_request
       end
 
       test 'edit metadata request requires value param' do
-        login_as users(:jane_doe)
         get edit_namespace_project_sample_metadata_path(@namespace, @project29, @sample32, tab: 'metadata',
                                                                                            key: 'metadatafield1')
         assert_response :bad_request
       end
 
       test 'member with role >= maintainer can open new metadata dialog' do
-        login_as users(:jane_doe)
         get new_namespace_project_sample_metadata_path(@namespace, @project29, @sample32)
         assert_response :success
 
@@ -112,7 +108,6 @@ module Projects
       end
 
       test 'member with role >= maintainer can delete metadata' do
-        login_as users(:jane_doe)
         delete namespace_project_sample_metadata_path(@namespace, @project29, @sample32,
                                                       tab: 'metadata',
                                                       sample: { metadata: { metadatafield1: '' } },
@@ -131,7 +126,6 @@ module Projects
       end
 
       test 'delete metadata with non-existent key' do
-        login_as users(:jane_doe)
         delete namespace_project_sample_metadata_path(@namespace, @project29, @sample32,
                                                       tab: 'metadata',
                                                       sample: { metadata: { invalid_key: '' } },
@@ -149,7 +143,6 @@ module Projects
       end
 
       test 'member with role >= maintainer can update existing metadata field\'s value' do
-        login_as users(:jane_doe)
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         put sample_metadatum_path(@sample32,
                                   cell_id: 'a_cell_id', value: 'newmetadatavalue1', id: 'metadatafield1',
@@ -180,7 +173,6 @@ module Projects
       end
 
       test 'member with role >= maintainer can create new metadata field through update endpoint' do
-        login_as users(:jane_doe)
         assert_not @sample32.metadata['newmetadtafield']
         put sample_metadatum_path(@sample32,
                                   cell_id: 'a_cell_id', value: 'newmetadatavalue1', id: 'newmetadatafield',
@@ -212,7 +204,6 @@ module Projects
       end
 
       test 'cannot create new field through update with empty value' do
-        login_as users(:jane_doe)
         assert_not @sample32.metadata['newmetadatafield']
         put sample_metadatum_path(@sample32,
                                   cell_id: 'a_cell_id', value: '', id: 'newmetadatafield',
@@ -233,7 +224,6 @@ module Projects
       end
 
       test 'update metadata with already existing value' do
-        login_as users(:jane_doe)
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         put sample_metadatum_path(@sample32,
                                   cell_id: 'a_cell_id', value: 'value1', id: 'metadatafield1',
@@ -253,7 +243,6 @@ module Projects
       end
 
       test 'update metadata with leading/trailing whitespaces does not change metadata' do
-        login_as users(:jane_doe)
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         put sample_metadatum_path(@sample32,
                                   cell_id: 'a_cell_id', value: '         value1       ', id: 'metadatafield1',
@@ -273,7 +262,6 @@ module Projects
       end
 
       test 'bulk_create multiple metadata fields successfully' do
-        login_as users(:jane_doe)
         assert_not @sample32.metadata['newmetadatafield1']
         assert_not @sample32.metadata['newmetadatafield2']
         assert_not @sample32.metadata['newmetadatafield3']
@@ -301,7 +289,6 @@ module Projects
       end
 
       test 'bulk_create multiple metadata fields multi_status' do
-        login_as users(:jane_doe)
         assert_not @sample32.metadata['newmetadatafield1']
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         post sample_metadata_path(@sample32,
@@ -333,7 +320,6 @@ module Projects
       end
 
       test 'bulk_create multiple metadata fields that exist' do
-        login_as users(:jane_doe)
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         assert_equal 'value2', @sample32.metadata['metadatafield2']
         post sample_metadata_path(@sample32,
@@ -357,7 +343,6 @@ module Projects
       end
 
       test 'bulk_create with whitespaces' do
-        login_as users(:jane_doe)
         assert_not @sample32.metadata['metadata field 1']
         assert_not @sample32.metadata['metadata field 2']
         post sample_metadata_path(@sample32,
@@ -382,7 +367,6 @@ module Projects
       end
 
       test 'bulk_update new value' do
-        login_as users(:jane_doe)
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         patch sample_metadata_path(@sample32,
                                    sample: { update_field: { key: { metadatafield1: 'metadatafield1' },
@@ -404,7 +388,6 @@ module Projects
       end
 
       test 'bulk_update new metadata field key' do
-        login_as users(:jane_doe)
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         patch sample_metadata_path(@sample32,
                                    sample: { update_field: { key: { metadatafield1: 'newmetadatafield1' },
@@ -427,7 +410,6 @@ module Projects
       end
 
       test 'bulk_update new metadata field key and value' do
-        login_as users(:jane_doe)
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         patch sample_metadata_path(@sample32,
                                    sample: { update_field: { key: { metadatafield1: 'newmetadatafield1' },
@@ -450,7 +432,6 @@ module Projects
       end
 
       test 'bulk_update no changes' do
-        login_as users(:jane_doe)
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         patch sample_metadata_path(@sample32,
                                    sample: { update_field: { key: { metadatafield1: 'metadatafield1' },

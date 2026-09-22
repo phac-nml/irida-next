@@ -34,7 +34,7 @@ module Samples
       if @sample.errors.any?
         render status: :unprocessable_content, locals: { type: 'error', message: error_message(@sample) }
       else
-        @messages = create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
+        @messages = bulk_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
         render status: create_metadata_fields[:existing_keys].any? ? :multi_status : :ok
       end
     end
@@ -80,15 +80,15 @@ module Samples
       params.expect(sample: [{ update_field: { key: {}, value: {} } }])
     end
 
-    def create_messages(added_keys, existing_keys)
+    def bulk_create_messages(added_keys, existing_keys)
       [
-        metadata_flash_message(
+        bulk_create_message(
           added_keys,
           type: 'success',
           single_translation: 'projects.samples.metadata.fields.create.single_success',
           multi_translation: 'projects.samples.metadata.fields.create.multi_success'
         ),
-        metadata_flash_message(
+        bulk_create_message(
           existing_keys,
           type: 'error',
           single_translation: 'projects.samples.metadata.fields.create.single_key_exists',
@@ -97,7 +97,7 @@ module Samples
       ].compact
     end
 
-    def metadata_flash_message(keys, type:, single_translation:, multi_translation:)
+    def bulk_create_message(keys, type:, single_translation:, multi_translation:)
       return if keys.empty?
 
       {
