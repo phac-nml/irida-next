@@ -10,15 +10,7 @@
 ) do %>
   <div class="space-y-4">
     <p class="text-sm leading-relaxed text-[var(--pvc-color-text-muted)]">
-      <%= t("components.advanced_search_component.v2.description") %>
-    </p>
-
-    <p class="text-sm leading-relaxed text-[var(--pvc-color-text-muted)]">
-      <% if Flipper.enabled?(:advanced_search_metadata_operators) %>
-        <%= t("components.advanced_search_component.v2.rules.metadata_operators") %>
-      <% else %>
-        <%= t("components.advanced_search_component.v2.rules.standard_operators") %>
-      <% end %>
+      <%= t("components.advanced_search_component.v2.intro", subject: subject_label) %>
     </p>
 
     <%= helpers.form_error_summary(@form) %>
