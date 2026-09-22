@@ -218,8 +218,7 @@ export default class extends Controller {
   #fillCalendarWithDates(dates) {
     // 🎯 Identify boundaries between previous/current/next month segments.
     const firstCurrentIdx = dates.indexOf(1); // start of the current month
-    const secondOneIdx =
-      firstCurrentIdx === -1 ? -1 : dates.indexOf(1, firstCurrentIdx + 1); // start of the next month (if any)
+    const secondOneIdx = dates.indexOf(1, firstCurrentIdx + 1); // start of the next month (if any)
 
     // 📅 Resolve year/month for out-of-month cells once.
     const prevYM = this.#getRelativeYearAndMonth("previous");
@@ -375,7 +374,8 @@ export default class extends Controller {
 
     // Keep visual precedence clear: disabled dates should not also look selected/today.
     if (selectedDate && selectedDate.getAttribute("aria-disabled") !== "true") {
-      this.#replaceDateStyling(selectedDate, CALENDAR_CLASSES["SELECTED_DATE"]);
+      selectedDate.classList.remove(...CALENDAR_CLASSES["IN_MONTH"]);
+      selectedDate.classList.add(...CALENDAR_CLASSES["SELECTED_DATE"]);
       selectedDate.setAttribute("aria-selected", "true");
     }
 
@@ -390,16 +390,6 @@ export default class extends Controller {
     for (let i = lowerBound; i < upperBound; i++) {
       dates[i].setAttribute("aria-disabled", "true");
     }
-  }
-
-  // handles changing the date styling (today, selected and disabled dates)
-  #replaceDateStyling(date, classes) {
-    if (verifyDateIsInMonth(date)) {
-      date.classList.remove(...CALENDAR_CLASSES["IN_MONTH"]);
-    } else {
-      date.classList.remove(...CALENDAR_CLASSES["OUT_OF_MONTH"]);
-    }
-    date.classList.add(...classes);
   }
 
   // set the tab index to a single date
@@ -520,7 +510,7 @@ export default class extends Controller {
       const date = new Date(dateToVerify);
       const year = date.getUTCFullYear();
       const month = date.getUTCMonth();
-      if (goToEarlierYear) {
+      if (goToEarlierYear && this.#minDate) {
         // verify if minDate is after target MM-YYYY
         if (this.yearTarget.value < year) {
           this.yearTarget.value = year;
@@ -563,7 +553,6 @@ export default class extends Controller {
   navigateCalendar(event) {
     const handler = this.#getKeyboardHandler(event.key);
     if (handler) {
-      if (event.key !== "Tab") event.preventDefault();
       handler.call(this, event);
     }
   }
@@ -610,10 +599,7 @@ export default class extends Controller {
 
   #escapeCalendar(event) {
     event.stopPropagation(); // avoids dialog escape logic
-
-    if (this.calendarTarget.contains(event.target)) {
-      this.#hideCalendar();
-    }
+    this.#hideCalendar();
   }
 
   // handles ArrowLeft/Right keyboard navigation
