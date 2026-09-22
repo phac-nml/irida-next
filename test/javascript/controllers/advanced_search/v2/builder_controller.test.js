@@ -127,6 +127,13 @@ function builderElement() {
   );
 }
 
+function controllerInstance(application) {
+  return application.getControllerForElementAndIdentifier(
+    builderElement(),
+    "advanced-search--v2--builder",
+  );
+}
+
 function groups() {
   return Array.from(
     document.querySelectorAll(
@@ -596,4 +603,589 @@ describe("advanced-search--v2--builder", () => {
       ]);
     },
   );
+
+  it("populates enum selects with derived labels when no label is provided", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.enumFieldsValue = {
+      status: { values: ["not_started", "in_progress"] },
+    };
+    controller.selectValueTemplateTarget.innerHTML = `
+      <div class="value form-field">
+        <select name="q[groups_attributes][0][conditions_attributes][0][value]">
+          <option value=""></option>
+        </select>
+      </div>`;
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="status" selected>Status</option>';
+    field.value = "status";
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="=" selected>=</option>';
+    operator.value = "=";
+
+    controller.handleOperatorChange({ target: operator });
+
+    const valueSelect = condition.querySelector("select[name$='[value]']");
+    expect(
+      Array.from(valueSelect.options).map((option) => option.text),
+    ).toEqual(["Not Started", "In Progress"]);
+  });
+
+  it("hides and clears the value field for exists-style operators", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.valueTemplateTarget.innerHTML = `
+      <div class="value form-field">
+        <input name="q[groups_attributes][0][conditions_attributes][0][value]" value="x">
+        <select name="q[groups_attributes][0][conditions_attributes][0][extra]">
+          <option value="a" selected>a</option>
+        </select>
+      </div>`;
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    condition.querySelector("[name$='[field]']").value = "name";
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="exists" selected>exists</option>';
+    operator.value = "exists";
+
+    controller.handleOperatorChange({ target: operator });
+
+    const value = condition.querySelector(".value");
+    expect(value.classList.contains("invisible")).toBe(true);
+    expect(value.querySelector("input").value).toBe("");
+    expect(value.querySelector("select").selectedIndex).toBe(-1);
+  });
+
+  it("renders the between value template for range operators", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.betweenValueTemplateTarget.innerHTML = `
+      <div class="value form-field">
+        <input name="q[groups_attributes][0][conditions_attributes][0][value][]">
+        <input name="q[groups_attributes][0][conditions_attributes][0][value][]">
+      </div>`;
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    condition.querySelector("[name$='[field]']").value = "created_at";
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="between" selected>between</option>';
+    operator.value = "between";
+
+    controller.handleOperatorChange({ target: operator });
+
+    expect(condition.querySelectorAll(".value input")).toHaveLength(2);
+  });
+
+  it("removes the extra value element when re-rendering after a between operator", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.valueTemplateTarget.innerHTML = `
+      <div class="value form-field">
+        <input name="q[groups_attributes][0][conditions_attributes][0][value]">
+      </div>`;
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const extraValue = condition.querySelector(".value").cloneNode(true);
+    condition.querySelector(".value").after(extraValue);
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="=" selected>=</option>';
+    operator.value = "=";
+
+    controller.handleOperatorChange({ target: operator });
+
+    expect(condition.querySelectorAll(".value")).toHaveLength(1);
+  });
+
+  it("ignores structural changes triggered outside a condition or group", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    const detached = document.createElement("button");
+    const detachedSelect = document.createElement("select");
+
+    expect(() =>
+      controller.removeCondition({ currentTarget: detached }),
+    ).not.toThrow();
+    // Single group: the length guard short-circuits removeGroup.
+    expect(() =>
+      controller.removeGroup({ currentTarget: detached }),
+    ).not.toThrow();
+    controller.addGroup();
+    // Two groups but the event originates outside any group.
+    expect(() =>
+      controller.removeGroup({ currentTarget: detached }),
+    ).not.toThrow();
+    expect(groups()).toHaveLength(2);
+    expect(() =>
+      controller.handleOperatorChange({ target: detachedSelect }),
+    ).not.toThrow();
+    expect(() =>
+      controller.handleFieldChange({ target: detachedSelect }),
+    ).not.toThrow();
+  });
+
+  it("ignores operator changes when the condition has no value field", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    condition.querySelector(".value").remove();
+    const operator = condition.querySelector("[name$='[operator]']");
+
+    expect(() =>
+      controller.handleOperatorChange({ target: operator }),
+    ).not.toThrow();
+  });
+
+  it("ignores field changes when the condition has no operator field", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    condition
+      .querySelector("[name$='[operator]']")
+      .closest(".form-field")
+      .remove();
+    const field = condition.querySelector("[name$='[field]']");
+    field.value = "name";
+
+    expect(() => controller.handleFieldChange({ target: field })).not.toThrow();
+  });
+
+  it("handles field changes when the condition has no value element", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    condition.querySelector(".value").remove();
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML = '<option value="name" selected>name</option>';
+    field.value = "name";
+
+    expect(() => controller.handleFieldChange({ target: field })).not.toThrow();
+  });
+
+  it("skips re-rendering when the selected field is unchanged", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML = '<option value="name" selected>name</option>';
+    field.value = "name";
+
+    controller.handleFieldChange({ target: field });
+    const operatorHtml = condition.querySelector(
+      "[name$='[operator]']",
+    ).innerHTML;
+    controller.handleFieldChange({ target: field });
+
+    expect(condition.querySelector("[name$='[operator]']").innerHTML).toBe(
+      operatorHtml,
+    );
+  });
+
+  it("hides the operator dropdown when the field is cleared", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value="" selected></option><option value="name">name</option>';
+    field.value = "name";
+    controller.handleFieldChange({ target: field });
+    field.value = "";
+
+    controller.handleFieldChange({ target: field });
+
+    const operatorContainer = condition
+      .querySelector("[name$='[operator]']")
+      .closest(".form-field");
+    expect(operatorContainer.classList.contains("invisible")).toBe(true);
+  });
+
+  it("clears rendered value inputs when switching fields", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    condition.querySelector(".value").innerHTML = `
+      <select name="q[groups_attributes][0][conditions_attributes][0][value]">
+        <option value="a" selected>a</option>
+      </select>`;
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML = '<option value="name" selected>name</option>';
+    field.value = "name";
+
+    controller.handleFieldChange({ target: field });
+
+    expect(condition.querySelector(".value select").selectedIndex).toBe(-1);
+  });
+
+  it("builds grouped metadata operator options for non-enum metadata fields", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.operationsValue = {
+      standard: { Equals: "=" },
+      metadata: { Numbers: { "Greater than": ">" } },
+    };
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="metadata.age" selected>age</option>';
+    field.value = "metadata.age";
+
+    controller.handleFieldChange({ target: field });
+
+    const operator = condition.querySelector("[name$='[operator]']");
+    expect(operator.querySelector("optgroup").label).toBe("Numbers");
+  });
+
+  it("uses enum metadata operators for enum metadata fields", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.enumFieldsValue = { "metadata.status": { values: ["a"] } };
+    controller.operationsValue = {
+      standard: { Equals: "=" },
+      metadata: { Equals: "=" },
+    };
+    controller.enumOperationsValue = {
+      standard: { Equals: "=" },
+      metadata: { In: "in" },
+    };
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="metadata.status" selected>status</option>';
+    field.value = "metadata.status";
+
+    controller.handleFieldChange({ target: field });
+
+    const operator = condition.querySelector("[name$='[operator]']");
+    expect(
+      Array.from(operator.options).map((option) => option.value),
+    ).toContain("in");
+  });
+
+  it("skips groups without a remove-group button when toggling", async () => {
+    const groupWithoutRemove = `
+      <fieldset data-advanced-search--v2--builder-target="groupsContainer"
+        data-advanced-search--v2--builder-group-index="0"
+        data-advanced-search--v2--builder-legend-template="Group __INDEX__">
+        <legend>Group 1</legend>
+        <fieldset data-advanced-search--v2--builder-target="conditionsContainer"
+          data-advanced-search--v2--builder-group-index="0"
+          data-advanced-search--v2--builder-condition-index="0"
+          data-advanced-search--v2--builder-legend-template="Condition __INDEX__">
+          <legend>Condition 1</legend>
+          <input name="q[groups_attributes][0][conditions_attributes][0][field]">
+        </fieldset>
+      </fieldset>`;
+    renderFixture({ existingGroups: groupWithoutRemove });
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.renderExisting();
+
+    expect(() => controller.addGroup()).not.toThrow();
+    expect(groups()).toHaveLength(2);
+  });
+
+  it("skips legend updates for containers without a legend", async () => {
+    const groupWithoutLegend = `
+      <fieldset data-advanced-search--v2--builder-target="groupsContainer"
+        data-advanced-search--v2--builder-group-index="0"
+        data-advanced-search--v2--builder-legend-template="Group __INDEX__">
+        <fieldset data-advanced-search--v2--builder-target="conditionsContainer"
+          data-advanced-search--v2--builder-group-index="0"
+          data-advanced-search--v2--builder-condition-index="0">
+          <input name="q[groups_attributes][0][conditions_attributes][0][field]">
+        </fieldset>
+        <div>
+          <button type="button" data-action="advanced-search--v2--builder#addCondition">Add</button>
+          <button type="button" data-action="advanced-search--v2--builder#removeGroup">Remove group</button>
+        </div>
+      </fieldset>`;
+    renderFixture({ existingGroups: groupWithoutLegend });
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.renderExisting();
+    controller.addGroup();
+    await tick();
+
+    // Removing the second group re-numbers survivors; the first has no legend.
+    groups()[1].querySelector("button[data-action$='#removeGroup']").click();
+    await tick();
+
+    expect(groups()).toHaveLength(1);
+    expect(groups()[0].querySelector("legend")).toBeNull();
+  });
+
+  it("focuses a fallback input when the surviving condition has no field control", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    await tick();
+    const group = groups()[0];
+    group.querySelector("button[data-action$='#addCondition']").click();
+    await tick();
+
+    const survivor = conditions(group)[1];
+    survivor.querySelector("[name$='[field]']").closest(".form-field").remove();
+    conditions(group)[0]
+      .querySelector("button[data-action$='#removeCondition']")
+      .click();
+    await tick();
+
+    expect(survivor.contains(document.activeElement)).toBe(true);
+  });
+
+  it("serializes multi-select values from selected options", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const name = "q[groups_attributes][0][conditions_attributes][0]";
+    condition.querySelector("[name$='[field]']").value = "name";
+    condition.querySelector("[name$='[operator]']").innerHTML =
+      '<option value="in" selected>in</option>';
+    condition.querySelector(".value").innerHTML =
+      `<select name="${name}[value][]" multiple>
+        <option value="b" selected>B</option>
+        <option value="a" selected>A</option>
+      </select>`;
+    controller.initialStateValue = [
+      [{ field: "name", operator: "in", values: ["a", "b"] }],
+    ];
+
+    expect(controller.isDirty()).toBe(false);
+    condition.querySelector("option[value='a']").selected = false;
+    expect(controller.isDirty()).toBe(true);
+  });
+
+  it("returns early for exists operators when the template has no value node", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.valueTemplateTarget.innerHTML = "<span>no value node</span>";
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    condition.querySelector("[name$='[field]']").value = "name";
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="exists" selected>exists</option>';
+    operator.value = "exists";
+
+    expect(() =>
+      controller.handleOperatorChange({ target: operator }),
+    ).not.toThrow();
+    expect(condition.querySelector(".value")).toBeNull();
+  });
+
+  it("ignores add-condition events fired outside a group", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+
+    expect(() =>
+      controller.addCondition({
+        currentTarget: document.createElement("button"),
+      }),
+    ).not.toThrow();
+  });
+
+  it("appends a condition at the end when the group has no actions container", async () => {
+    const groupWithoutActions = `
+      <fieldset data-advanced-search--v2--builder-target="groupsContainer"
+        data-advanced-search--v2--builder-group-index="0"
+        data-advanced-search--v2--builder-legend-template="Group __INDEX__">
+        <legend>Group 1</legend>
+        <fieldset data-advanced-search--v2--builder-target="conditionsContainer"
+          data-advanced-search--v2--builder-group-index="0"
+          data-advanced-search--v2--builder-condition-index="0"
+          data-advanced-search--v2--builder-legend-template="Condition __INDEX__">
+          <legend>Condition 1</legend>
+          <input name="q[groups_attributes][0][conditions_attributes][0][field]">
+          <button type="button" data-action="advanced-search--v2--builder#removeCondition">x</button>
+        </fieldset>
+      </fieldset>`;
+    renderFixture({ existingGroups: groupWithoutActions });
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.renderExisting();
+    await tick();
+
+    groups()[0]
+      .querySelector("button[data-action$='#removeCondition']")
+      .click();
+    await tick();
+
+    expect(conditions(groups()[0])).toHaveLength(1);
+  });
+
+  it("handles removing a group when the surviving group has no conditions", async () => {
+    const groupWithCondition = `
+      <fieldset data-advanced-search--v2--builder-target="groupsContainer"
+        data-advanced-search--v2--builder-group-index="0"
+        data-advanced-search--v2--builder-legend-template="Group __INDEX__">
+        <legend>Group 1</legend>
+        <fieldset data-advanced-search--v2--builder-target="conditionsContainer"
+          data-advanced-search--v2--builder-group-index="0"
+          data-advanced-search--v2--builder-condition-index="0"
+          data-advanced-search--v2--builder-legend-template="Condition 1">
+          <legend>Condition 1</legend>
+          <input name="q[groups_attributes][0][conditions_attributes][0][field]">
+        </fieldset>
+        <div>
+          <button type="button" data-action="advanced-search--v2--builder#removeGroup">Remove group</button>
+        </div>
+      </fieldset>`;
+    const emptyGroup = `
+      <fieldset data-advanced-search--v2--builder-target="groupsContainer"
+        data-advanced-search--v2--builder-group-index="1"
+        data-advanced-search--v2--builder-legend-template="Group __INDEX__">
+        <legend>Group 2</legend>
+        <div>
+          <button type="button" data-action="advanced-search--v2--builder#removeGroup">Remove group</button>
+        </div>
+      </fieldset>`;
+    renderFixture({ existingGroups: groupWithCondition + emptyGroup });
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.renderExisting();
+    await tick();
+
+    groups()[0].querySelector("button[data-action$='#removeGroup']").click();
+    await tick();
+
+    expect(groups()).toHaveLength(1);
+  });
+
+  it("renders enum options from labels when values are omitted", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.enumFieldsValue = { status: { labels: { draft: "Draft" } } };
+    controller.selectValueTemplateTarget.innerHTML = `
+      <div class="value form-field">
+        <select name="q[groups_attributes][0][conditions_attributes][0][value]">
+          <option value=""></option>
+        </select>
+      </div>`;
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="status" selected>Status</option>';
+    field.value = "status";
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="=" selected>=</option>';
+    operator.value = "=";
+
+    controller.handleOperatorChange({ target: operator });
+
+    expect(
+      condition.querySelector("select[name$='[value]']").options,
+    ).toHaveLength(0);
+  });
+
+  it("skips enum value population when the enum template has no value node", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.enumFieldsValue = { status: { values: ["a"] } };
+    controller.selectValueTemplateTarget.innerHTML = "<span>no value</span>";
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="status" selected>Status</option>';
+    field.value = "status";
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="=" selected>=</option>';
+    operator.value = "=";
+
+    expect(() =>
+      controller.handleOperatorChange({ target: operator }),
+    ).not.toThrow();
+  });
+
+  it("skips enum population when the enum config has no values or labels", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.enumFieldsValue = { status: {} };
+    controller.selectValueTemplateTarget.innerHTML = `
+      <div class="value form-field">
+        <select name="q[groups_attributes][0][conditions_attributes][0][value]"></select>
+      </div>`;
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="status" selected>Status</option>';
+    field.value = "status";
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="=" selected>=</option>';
+    operator.value = "=";
+
+    controller.handleOperatorChange({ target: operator });
+
+    expect(
+      condition.querySelector("select[name$='[value]']").options,
+    ).toHaveLength(0);
+  });
+
+  it("skips enum population when the value container has no select", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.enumFieldsValue = { status: { values: ["a"] } };
+    controller.selectValueTemplateTarget.innerHTML = `
+      <div class="value form-field">
+        <input name="q[groups_attributes][0][conditions_attributes][0][value]">
+      </div>`;
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="status" selected>Status</option>';
+    field.value = "status";
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="=" selected>=</option>';
+    operator.value = "=";
+
+    expect(() =>
+      controller.handleOperatorChange({ target: operator }),
+    ).not.toThrow();
+  });
+
+  it("serializes non-multiple selects and plain list inputs as their values", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const name = "q[groups_attributes][0][conditions_attributes][0]";
+    condition.querySelector("[name$='[field]']").value = "name";
+    condition.querySelector("[name$='[operator]']").innerHTML =
+      '<option value="in" selected>in</option>';
+    condition.querySelector(".value").innerHTML = `
+      <select name="${name}[value][]"><option value="x" selected>x</option></select>
+      <input name="${name}[value][]" value="y">`;
+    controller.initialStateValue = [
+      [{ field: "name", operator: "in", values: ["x", "y"] }],
+    ];
+
+    expect(controller.isDirty()).toBe(false);
+  });
+
+  it("serializes query-state defaults for sparse conditions", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    controller.initialStateValue = [
+      [{ operator: "between", values: [] }, { values: [null] }],
+    ];
+
+    expect(controller.isDirty()).toBe(true);
+  });
 });
