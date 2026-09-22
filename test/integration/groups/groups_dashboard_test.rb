@@ -224,7 +224,14 @@ module Groups
         end
       end
 
-      get dashboard_groups_path, params: { all_groups_q: { name_or_puid_cont: 'group' } }
+      get dashboard_groups_path,
+          params: {
+            all_groups_q: {
+              name_or_puid_cont: 'group',
+              s: 'name asc'
+            },
+            limit: 100
+          }
       assert_response :success
 
       assert_select 'div.treegrid-container' do
