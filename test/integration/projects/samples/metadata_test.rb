@@ -288,7 +288,7 @@ module Projects
         assert_equal 'newvalue3', @sample32.metadata['newmetadatafield3']
       end
 
-      test 'bulk_create multiple metadata fields multi_status' do
+      test 'bulk_create single metadata fields multi_status' do
         assert_not @sample32.metadata['newmetadatafield1']
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         post sample_metadata_path(@sample32,
@@ -317,6 +317,42 @@ module Projects
         @sample32.reload
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         assert_equal 'newvalue1', @sample32.metadata['newmetadatafield1']
+      end
+
+      test 'bulk_create multiple metadata fields multi_status' do
+        assert_not @sample32.metadata['newmetadatafield1']
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        assert_equal 'value2', @sample32.metadata['metadatafield2']
+        post sample_metadata_path(@sample32,
+                                  sample: { create_fields: { newmetadatafield1: 'newvalue1',
+                                                             newmetadatafield2: 'newvalue2',
+                                                             metadatafield1: 'updatedvalue1',
+                                                             metadatafield2: 'updatedvalue2' } }, format: :turbo_stream)
+        assert_response :multi_status
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]', count: 2
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template div[role="alert"][data-viral--flash-type-value="success"]' do
+            assert_select 'div[id$="-message"]', text: "#{I18n.t('common.statuses.success')}: " \
+          "#{I18n.t('projects.samples.metadata.fields.create.multi_success',
+                    keys: %w[newmetadatafield1 newmetadatafield2].join(', '))}"
+          end
+        end
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template div[role="alert"][data-viral--flash-type-value="error"]' do
+            assert_select 'div[id$="-message"]', text: "#{I18n.t('common.statuses.error')}: " \
+          "#{I18n.t('projects.samples.metadata.fields.create.multi_keys_exists',
+                    keys: %w[metadatafield1 metadatafield2].join(', '))}"
+          end
+        end
+
+        @sample32.reload
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        assert_equal 'value2', @sample32.metadata['metadatafield2']
+        assert_equal 'newvalue1', @sample32.metadata['newmetadatafield1']
+        assert_equal 'newvalue2', @sample32.metadata['newmetadatafield2']
       end
 
       test 'bulk_create multiple metadata fields that exist' do

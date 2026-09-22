@@ -82,32 +82,43 @@ module Samples
 
     def bulk_create_messages(added_keys, existing_keys)
       [
-        bulk_create_message(
-          added_keys,
-          type: 'success',
-          single_translation: 'projects.samples.metadata.fields.create.single_success',
-          multi_translation: 'projects.samples.metadata.fields.create.multi_success'
-        ),
-        bulk_create_message(
-          existing_keys,
-          type: 'error',
-          single_translation: 'projects.samples.metadata.fields.create.single_key_exists',
-          multi_translation: 'projects.samples.metadata.fields.create.multi_keys_exists'
-        )
+        bulk_create_success_message(added_keys),
+        bulk_create_existing_message(existing_keys)
       ].compact
     end
 
-    def bulk_create_message(keys, type:, single_translation:, multi_translation:)
+    def bulk_create_success_message(keys)
+      message = if keys.one?
+                  t(
+                    'projects.samples.metadata.fields.create.single_success',
+                    key: keys.first
+                  )
+                else
+                  t(
+                    'projects.samples.metadata.fields.create.multi_success',
+                    keys: keys.join(', ')
+                  )
+                end
+
+      { type: 'success', message: message }
+    end
+
+    def bulk_create_existing_message(keys)
       return if keys.empty?
 
-      {
-        type: type,
-        message: if keys.one?
-                   t(single_translation, key: keys.first)
-                 else
-                   t(multi_translation, keys: keys.join(', '))
-                 end
-      }
+      message = if keys.one?
+                  t(
+                    'projects.samples.metadata.fields.create.single_key_exists',
+                    key: keys.first
+                  )
+                else
+                  t(
+                    'projects.samples.metadata.fields.create.multi_keys_exists',
+                    keys: keys.join(', ')
+                  )
+                end
+
+      { type: 'error', message: message }
     end
 
     def create_metadata_field(field, value, cell_id)
