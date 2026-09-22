@@ -113,6 +113,22 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
                          })
   end
 
+  def v2_builder
+    search = Sample::Query.new(
+      groups: [
+        Sample::SearchGroup.new(
+          conditions: [Sample::SearchCondition.new(field: 'metadata.country', operator: '=', value: 'Canada')]
+        )
+      ]
+    )
+    fields = AdvancedSearch::Fields.for_samples(sample_fields: %w[name], metadata_fields: %w[country])
+
+    render_with_template(locals: {
+                           search: search,
+                           advanced_search_fields: fields
+                         })
+  end
+
   private
 
   def workflow_search
