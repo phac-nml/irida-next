@@ -8,9 +8,16 @@ vi.mock("utilities/focus", () => ({ focusWhenVisible: vi.fn() }));
 
 describe("layout controller", () => {
   let application, element, layout, originalStyle;
+
+  async function flushStimulus() {
+    await Promise.resolve();
+    await Promise.resolve();
+  }
+
   beforeEach(() => {
     originalStyle = document.documentElement.getAttribute("style");
     document.documentElement.style.fontSize = "16px";
+    localStorage.clear();
   });
   afterEach(async () => {
     await stopApplication(application);
@@ -42,7 +49,7 @@ describe("layout controller", () => {
     layout = element.querySelector('[data-layout-target="layoutContainer"]');
     application = startApplication();
     application.register("layout", LayoutController);
-    await Promise.resolve();
+    await flushStimulus();
   }
   function button(target) {
     return element.querySelector(`[data-layout-target="${target}"]`);
@@ -147,12 +154,12 @@ describe("layout controller", () => {
   it("removes the document listener on disconnect and registers it once on reconnect", async () => {
     await mount();
     element.remove();
-    await Promise.resolve();
-    const read = vi.spyOn(Storage.prototype, "getItem");
+    await flushStimulus();
+    const read = vi.spyOn(localStorage, "getItem");
     document.dispatchEvent(new Event("turbo:morph"));
     expect(read).not.toHaveBeenCalled();
     document.body.append(element);
-    await Promise.resolve();
+    await flushStimulus();
     read.mockClear();
     document.dispatchEvent(new Event("turbo:morph"));
     expect(read).toHaveBeenCalledOnce();

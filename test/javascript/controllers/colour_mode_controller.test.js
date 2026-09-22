@@ -6,8 +6,15 @@ vi.mock("utilities/live_region", () => ({ announce: vi.fn() }));
 
 describe("colour mode controller", () => {
   let application, element, originalClass;
+
+  async function flushStimulus() {
+    await Promise.resolve();
+    await Promise.resolve();
+  }
+
   beforeEach(() => {
     originalClass = document.documentElement.className;
+    localStorage.clear();
   });
   afterEach(async () => {
     await stopApplication(application);
@@ -22,7 +29,7 @@ describe("colour mode controller", () => {
     element = document.body.firstElementChild;
     application = startApplication();
     application.register("colour-mode", ColourModeController);
-    await Promise.resolve();
+    await flushStimulus();
   }
   function change(theme) {
     const input = element.querySelector(`[value="${theme}"]`);
@@ -52,7 +59,7 @@ describe("colour mode controller", () => {
   );
   it("falls back to the system preference when storage cannot be read", async () => {
     const error = new DOMException("Storage blocked", "SecurityError");
-    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+    vi.spyOn(localStorage, "getItem").mockImplementation(() => {
       throw error;
     });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -107,7 +114,7 @@ describe("colour mode controller", () => {
   ])("announces storage failures with %s", async (messages, expected) => {
     await mount({ saved: "light", messages });
     const error = new DOMException("Storage full", "QuotaExceededError");
-    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+    vi.spyOn(localStorage, "setItem").mockImplementation(() => {
       throw error;
     });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -130,7 +137,7 @@ describe("colour mode controller", () => {
         throw error;
       });
     application.register("colour-mode", ColourModeController);
-    await Promise.resolve();
+    await flushStimulus();
     expect(createElement).toHaveBeenCalledWith("div");
     expect(report).toHaveBeenCalledExactlyOnceWith(
       error,
@@ -141,7 +148,7 @@ describe("colour mode controller", () => {
     report.mockRestore();
     createElement.mockRestore();
     element.remove();
-    await Promise.resolve();
+    await flushStimulus();
     expect(document.querySelector('[aria-live="polite"]')).toBeNull();
   });
   it("removes its live region on disconnect and creates just one on reconnect", async () => {
@@ -150,10 +157,10 @@ describe("colour mode controller", () => {
     expect(region.getAttribute("aria-atomic")).toBe("true");
     expect(region.classList.contains("sr-only")).toBe(true);
     element.remove();
-    await Promise.resolve();
+    await flushStimulus();
     expect(region.isConnected).toBe(false);
     document.body.append(element);
-    await Promise.resolve();
+    await flushStimulus();
     expect(document.querySelectorAll('[aria-live="polite"]')).toHaveLength(1);
   });
 });
