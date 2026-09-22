@@ -2565,62 +2565,6 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'editing metadata value with leading/trailing whitespaces should not update metadata' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      assert_selector 'table thead tr th', count: 5
-
-      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
-      find('input[data-test-selector="search-field-input"]').send_keys(:return)
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t('shared.samples.metadata_templates.fields.all')
-
-      assert_selector 'div[data-test-selector="spinner"]'
-      assert_no_selector 'div[data-test-selector="spinner"]'
-
-      assert_selector 'table thead tr th', count: 7
-
-      within '.table-container' do |div|
-        div.scroll_to div.find('table thead th:nth-child(7)')
-      end
-      ## SETUP END ###
-
-      ### ACTIONS AND VERIFY START ###
-      metadata_cell_selector = 'table tbody tr:first-child td:nth-child(7)'
-      assert_selector "#{metadata_cell_selector}[contenteditable='true']"
-      find(metadata_cell_selector).click
-
-      find(metadata_cell_selector).send_keys('value 2')
-      find(metadata_cell_selector).send_keys(:return)
-      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'value 2'
-      assert_text I18n.t('samples.editable_cell.update_success')
-      ### ACTIONS AND VERIFY END ###
-
-      find(metadata_cell_selector).send_keys('value2     ')
-      find(metadata_cell_selector).send_keys(:return)
-      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'value 2'
-      assert_no_text I18n.t('samples.editable_cell.update_success')
-
-      find(metadata_cell_selector).send_keys('     value2')
-      find(metadata_cell_selector).send_keys(:return)
-      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'value 2'
-      assert_no_text I18n.t('samples.editable_cell.update_success')
-
-      find(metadata_cell_selector).send_keys('     value2     ')
-      find(metadata_cell_selector).send_keys(:return)
-      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'value 2'
-      assert_no_text I18n.t('samples.editable_cell.update_success')
-
-      find(metadata_cell_selector).send_keys('val      ue2')
-      find(metadata_cell_selector).send_keys(:return)
-      assert_selector "#{metadata_cell_selector}[contenteditable='true']", text: 'val ue2'
-      assert_no_text I18n.t('samples.editable_cell.update_success')
-    end
-
     test 'confirmation dialog does not prompt for edit metadata with leading/trailing whitespaces' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)

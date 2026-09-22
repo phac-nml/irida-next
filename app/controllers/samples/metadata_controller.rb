@@ -45,17 +45,16 @@ module Samples
     def bulk_update # rubocop:disable Metrics/AbcSize
       authorize! @project, to: :update_sample?
       @allowed_to = { update_sample: true }
-      updated_metadata_field = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
-                                                                              update_field_params).execute
+      ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
+                                                     update_field_params).execute
 
       if @sample.errors.any?
         render status: :unprocessable_content,
                locals: { key: update_field_params['update_field']['key'].keys[0],
                          value: update_field_params['update_field']['value'].keys[0] }
       else
-        update_render_params = get_update_status_and_message(updated_metadata_field)
-        render status: update_render_params[:status], locals: { type: update_render_params[:message][:type],
-                                                                message: update_render_params[:message][:message] }
+        render status: :ok, locals: { type: :success,
+                                      message: t('projects.samples.metadata.fields.update.success') }
       end
     end
 
@@ -111,21 +110,6 @@ module Samples
       }
     end
 
-    def get_update_status_and_message(updated_metadata_field)
-      update_render_params = {}
-      modified_metadata = updated_metadata_field[:added] + updated_metadata_field[:updated] +
-                          updated_metadata_field[:deleted]
-      if modified_metadata.any?
-        update_render_params[:status] = :ok
-        update_render_params[:message] =
-          { type: 'success', message: t('projects.samples.metadata.fields.update.success') }
-      else
-        update_render_params[:status] = :unprocessable_content
-        update_render_params[:message] = { type: 'error', message: error_message(@sample) }
-      end
-      update_render_params
-    end
-
     def create_metadata_field(field, value, cell_id)
       create_params = { field => value }
       ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user, create_params).execute
@@ -166,19 +150,18 @@ module Samples
     end
 
     def render_update_error(cell_id)
-      # render status: :unprocessable_content,
-      #        locals: { type: 'error', message: error_message(@sample) }
-      render turbo_stream: [
-        turbo_stream.update(
-          cell_id, @sample.metadata[@field]
-        ),
-        turbo_stream.append(
-          'flashes',
-          partial: 'shared/flash',
-          locals: { type: 'error',
-                    message: error_message(@sample) }
-        )
-      ]
+      render status: :unprocessable_content,
+             turbo_stream: [
+               turbo_stream.update(
+                 cell_id, @sample.metadata[@field]
+               ),
+               turbo_stream.append(
+                 'flashes',
+                 partial: 'shared/flash',
+                 locals: { type: 'error',
+                           message: error_message(@sample) }
+               )
+             ]
     end
 
     def render_update_success(cell_id)
