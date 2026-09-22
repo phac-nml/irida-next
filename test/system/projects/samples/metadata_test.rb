@@ -8,16 +8,9 @@ module Projects
       include ActionView::Helpers::SanitizeHelper
 
       setup do
-        @user = users(:john_doe)
-        login_as @user
-        @sample1 = samples(:sample1)
-        @sample2 = samples(:sample2)
-        @sample3 = samples(:sample30)
+        login_as users(:john_doe)
         @sample32 = samples(:sample32)
-        @project = projects(:project1)
-        @project2 = projects(:projectA)
         @project29 = projects(:project29)
-        @namespace = groups(:group_one)
         @group12a = groups(:subgroup_twelve_a)
       end
 
