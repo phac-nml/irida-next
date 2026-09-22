@@ -1,3 +1,3 @@
-<%= render Viral::PageHeaderComponent.new(title: t("groups.activity.title")) %>
+<%= render Layout::PageHeaderComponent.new(title: t("groups.activity.title")) %>
 
 <%= render ActivityComponent.new(activities: @activities, pagy: @pagy) %>

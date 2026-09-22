@@ -1,4 +1,4 @@
-<%= render Viral::PageHeaderComponent.new(title: t(".preferences")) %>
+<%= render Layout::PageHeaderComponent.new(title: t(".preferences")) %>
 
 <%= render Viral::CardComponent.new do |card| %>
   <% card.with_section(border_bottom: true, border_top: true) do %>

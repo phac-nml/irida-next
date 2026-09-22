@@ -6,7 +6,7 @@
 
 <%= turbo_stream_from @namespace.automation_bot, :workflow_executions %>
 
-<%= render Viral::PageHeaderComponent.new(
+<%= render Layout::PageHeaderComponent.new(
   title: t("shared.workflow_executions.index.title"),
   subtitle: t(".subtitle"),
 ) do |component| %>

@@ -1,4 +1,4 @@
-<%= render Viral::PageHeaderComponent.new(title: 'Page header with Icons', subtitle: 'This is a page header') do |header| %>
+<%= render Layout::PageHeaderComponent.new(title: 'Page header with Icons', subtitle: 'This is a page header') do |header| %>
   <% header.with_icon do %>
     <%= render Viral::AvatarComponent.new(
       name: "Outbreak 2021",

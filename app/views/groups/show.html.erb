@@ -1,6 +1,6 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
-<%= render Viral::PageHeaderComponent.new(title: @group.name, id: @group.puid) do |component| %>
+<%= render Layout::PageHeaderComponent.new(title: @group.name, id: @group.puid) do |component| %>
   <%= component.icon do %>
     <%= render Viral::AvatarComponent.new(
       name: @group.name,

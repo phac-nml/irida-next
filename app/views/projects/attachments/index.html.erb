@@ -3,7 +3,7 @@
 <%= turbo_frame_tag "attachment_modal" %>
 
 <div class="fixed-table-component">
-  <%= render Viral::PageHeaderComponent.new(
+  <%= render Layout::PageHeaderComponent.new(
     title: t(".title"),
     subtitle: t(".subtitle", puid: @project.puid),
   ) do |component| %>

@@ -2,10 +2,10 @@
 
 <%= turbo_stream_from current_user, :data_exports %>
 
-<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
+<%= render Layout::PageHeaderComponent.new(title: t(".title")) %>
 
 <% if @has_data_exports %>
-  <div class="flex justify-end mb-4">
+  <div class="mb-4 flex justify-end">
     <%= render SearchComponent.new(
       query: @q,
       url: data_exports_url,

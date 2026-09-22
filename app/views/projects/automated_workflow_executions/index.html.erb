@@ -1,4 +1,4 @@
-<%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
+<%= render Layout::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
   <%= component.with_buttons do %>
     <%= pathogen_button_to t(".add_new_automated_workflow_execution"),
     new_namespace_project_automated_workflow_execution_path(

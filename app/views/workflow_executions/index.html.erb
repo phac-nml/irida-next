@@ -6,7 +6,7 @@
 
 <%= turbo_stream_from current_user, :workflow_executions %>
 
-<%= render Viral::PageHeaderComponent.new(title: t("shared.workflow_executions.index.title")) do |component| %>
+<%= render Layout::PageHeaderComponent.new(title: t("shared.workflow_executions.index.title")) do |component| %>
   <%= component.with_buttons do %>
     <% if @has_workflow_executions %>
       <%= render DropdownComponent.new(label: t("shared.workflow_executions.actions_dropdown.label"), aria: { label: t('shared.workflow_executions.actions_dropdown.label') }, caret: true, classes: "font-normal button button-default") do |dropdown| %>

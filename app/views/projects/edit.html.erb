@@ -1,6 +1,6 @@
 <div class="md:mx-auto">
   <div class="grid gap-4">
-    <%= render Viral::PageHeaderComponent.new(title: t(".general.title")) %>
+    <%= render Layout::PageHeaderComponent.new(title: t(".general.title")) %>
 
     <%= render Viral::CardComponent.new do |card| %>
       <% card.with_header(title: t(".general.heading")) %>
