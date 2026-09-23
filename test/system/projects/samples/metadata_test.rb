@@ -75,7 +75,7 @@ module Projects
         assert_selector 'table tbody tr:last-child td:nth-child(3)', text: 'value3'
       end
 
-      test 'delete metadata key added by user' do
+      test 'delete metadata key added by user by row action' do
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
