@@ -16,6 +16,7 @@
   "linelist-import-imported-records-message-value": t(".imported_records_message"),
   "linelist-import-import-complete-message-value": t(".import_complete_message"),
   "linelist-import-error-message-value": t(".error_message"),
+  "linelist-import-worker-url-value": helpers.asset_path("workers/linelist_import_worker.js"),
 } %>
 
 <%= render Viral::DialogComponent.new(open: true, size: :large) do |dialog| %>
