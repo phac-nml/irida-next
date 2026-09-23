@@ -146,6 +146,9 @@ jobs:
           runtime: node@24.14.1
           cache: true
 
+      - name: Build JavaScript assets
+        run: pnpm run build:js
+
       - name: Install icons
         run: |
           bin/rails generate rails_icons:sync --libraries=phosphor heroicons
@@ -193,6 +196,9 @@ jobs:
         with:
           runtime: node@24.14.1
           cache: true
+
+      - name: Build JavaScript assets
+        run: pnpm run build:js
 
       - name: Cache Playwright Chromium browser
         id: playwright-cache
