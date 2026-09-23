@@ -19,6 +19,10 @@
       data: t(".success", name: new_personal_access_token.name),
     ) %>
   <% end %>
+<% else %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= render Viral::FlashComponent.new(type: :error, data: message) %>
+  <% end %>
 <% end %>
 
 <%= turbo_stream.replace "personal_access_token_form",

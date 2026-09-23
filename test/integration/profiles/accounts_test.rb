@@ -22,7 +22,7 @@ class AccountsTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_url
   end
 
-  test 'can delete profile' do
+  test 'should delete profile' do
     assert_difference('User.count', -1) do
       delete profile_account_path
     end
