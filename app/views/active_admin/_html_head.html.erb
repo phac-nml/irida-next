@@ -1,0 +1,14 @@
+<%= stylesheet_link_tag "active_admin" %>
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<%= csrf_meta_tags %>
+<%= csp_meta_tag %>
+
+<%# Keep this in head to prevent flash of incorrect theme while pages initialize. %>
+<%= tag.script nonce: content_security_policy_nonce do %>
+  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+<% end %>
