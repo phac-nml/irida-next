@@ -4,12 +4,13 @@ require 'json'
 require 'uri'
 require 'git'
 require 'tmpdir'
+require 'tempfile'
 require 'irida/pipeline'
 require 'irida/pipeline_repository'
 
 module Irida
   # Class that reads a workflow config file and registers the available pipelines
-  class Pipelines
+  class Pipelines # rubocop:disable Metrics/ClassLength
     class PipelinesJsonFormatException < StandardError
     end
 
@@ -77,11 +78,15 @@ module Irida
       end
     end
 
-    def create_pipeline(pipeline_id, entry, version)
+    def create_pipeline(pipeline_id, entry, version) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       uri = URI.parse(entry['url'])
       nextflow_schema_location, schema_input_location = mirror_and_prepare_schema_locations(uri, version)
 
       Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
+    rescue JSON::ParserError => e
+      Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} has invalid schema JSON: #{e.message}")
+      version['executable'] = false
+      Pipeline.new(pipeline_id, entry, version, nil, nil)
     rescue PipelinesInvalidUrlException => e
       if e.previously_fetched # log error and mark pipeline as non executable
         Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be updated")
@@ -146,7 +151,13 @@ module Irida
       dir = File.dirname(schema_location)
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      File.write(schema_location, contents)
+      Tempfile.create(['schema', '.json'], dir) do |tmpfile|
+        tmpfile.binmode
+        tmpfile.write(contents.to_s)
+        tmpfile.flush
+        tmpfile.fsync
+        FileUtils.mv(tmpfile.path, schema_location)
+      end
     end
   end
 end
