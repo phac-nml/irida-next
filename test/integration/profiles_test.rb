@@ -8,7 +8,6 @@ class ProfilesIntegrationTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:john_doe)
     sign_in @user
-    @active_token_count = @user.personal_access_tokens.active.count
   end
 
   test 'should get show' do
@@ -17,7 +16,7 @@ class ProfilesIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'can update profile password' do
+  test 'should update profile password' do
     assert_changes -> { @user.reload.valid_password?('new_password') } do
       patch profile_password_path,
             params: { user: { password: 'new_password', password_confirmation: 'new_password',
