@@ -12,6 +12,18 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     get profile_preferences_path
 
     assert_response :success
+    assert_select 'input#user_locale_en', count: 1
+    assert_select 'input#user_locale_fr', count: 1
+  end
+
+  test 'should update the users locale with a valid locale via html' do
+    assert_changes -> { @user.reload.locale }, from: 'en', to: 'fr' do
+      patch profile_preferences_path,
+            params: { user: { locale: 'fr' } }
+    end
+
+    assert_redirected_to profile_preferences_path
+    assert_equal I18n.t(:'profiles.preferences.update.success', locale: :fr), flash[:success]
   end
 
   test 'should update the users locale with a valid locale' do
