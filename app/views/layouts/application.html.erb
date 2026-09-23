@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html class="light" lang="<%= locale %>">
-  <%= render "layouts/partials/head" %>
+  <%= render "layouts/partials/head", title: @title %>
 
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: false) do |layout| %>
