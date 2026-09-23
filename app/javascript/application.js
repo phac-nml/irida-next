@@ -1,12 +1,15 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails";
-import "controllers";
+import "./controllers";
+import "./active_admin_navigation";
 import "flowbite";
 import { createFocusTrap } from "focus-trap";
+import { registerPathogenControllers } from "pathogen_view_components";
+import { application as stimulusApplication } from "./controllers/application";
 
 import * as ActiveStorage from "@rails/activestorage";
 
 ActiveStorage.start();
+registerPathogenControllers(stimulusApplication);
 
 // Configure LocalTime from meta tag data
 let LocalTime;
