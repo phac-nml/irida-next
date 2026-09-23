@@ -38,6 +38,21 @@ module Irida
     #  - ensures browsers verify assets via SHA-256 hash
     config.assets.integrity_hash_algorithm = 'sha256'
 
+    initializer 'irida.pathogen_importmap_compat', after: 'pathogen_view_components.assets' do |app|
+      next unless app.config.assets.respond_to?(:excluded_paths)
+
+      pathogen_js_path = File.join(
+        Gem.loaded_specs.fetch('pathogen_view_components').full_gem_path,
+        'app/assets/javascripts'
+      )
+
+      app.config.assets.paths << pathogen_js_path unless app.config.assets.paths.include?(pathogen_js_path)
+
+      app.config.assets.excluded_paths.delete_if do |path|
+        path.to_s == pathogen_js_path
+      end
+    end
+
     # Sweep importmap cache for components
     config.importmap.cache_sweepers << Rails.root.join('app/components')
 
