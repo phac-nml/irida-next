@@ -544,6 +544,125 @@ module Projects
                                    format: :turbo_stream)
         assert_response :unauthorized
       end
+
+      test 'member with role >= maintainer can open delete metadata dialog' do
+        # assert_equal 'value1', @sample32.metadata['metadatafield1']
+        get new_namespace_project_sample_metadata_deletion_path(@namespace, @project29, @sample32),
+            params: { 'sample' => { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => '' } },
+                      format: :turbo_stream }
+        assert_response :success
+
+        assert_select 'h1', text: I18n.t('projects.samples.metadata.deletions.modal.title')
+      end
+
+      test 'member with role <= analyst cannot open delete metadata dialog' do
+        login_as users(:michelle_doe)
+        # assert_equal 'value1', @sample32.metadata['metadatafield1']
+        get new_namespace_project_sample_metadata_deletion_path(@namespace, @project29, @sample32),
+            params: { 'sample' => { 'metadata' => { 'metadatafield1' => '' } }, format: :turbo_stream }
+        assert_response :unauthorized
+      end
+
+      test 'delete one metadata key' do
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        delete namespace_project_sample_metadata_deletion_path(@namespace, @project29, @sample32),
+               params: { 'sample' => { 'metadata' => { 'metadatafield1' => '' } }, format: :turbo_stream }
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('projects.samples.metadata.deletions.destroy.single_success',
+                                             deleted_key: 'metadatafield1')}"
+            end
+          end
+        end
+        assert_select 'td', text: 'metadatafield1', count: 0
+        assert_select 'td', text: 'value1', count: 0
+        assert_not @sample32.reload.metadata['metadatafield1']
+      end
+
+      test 'delete multiple metadata keys at once' do
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        assert_equal 'value2', @sample32.metadata['metadatafield2']
+        delete namespace_project_sample_metadata_deletion_path(@namespace, @project29, @sample32),
+               params: { 'sample' => { 'metadata' => { 'metadatafield1' => '', 'metadatafield2' => '' } },
+                         format: :turbo_stream }
+        assert_response :success
+
+        assert_select 'td', text: 'metadatafield1', count: 0
+        assert_select 'td', text: 'value1', count: 0
+        assert_select 'td', text: 'metadatafield2', count: 0
+        assert_select 'td', text: 'value2', count: 0
+        @sample32.reload
+        assert_not @sample32.metadata['metadatafield1']
+        assert_not @sample32.metadata['metadatafield2']
+        assert_select 'h2', text: I18n.t('projects.samples.metadata.table.no_metadata')
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t(
+                                     'projects.samples.metadata.deletions.destroy.multi_success',
+                                     deleted_keys: %w[metadatafield1 metadatafield2].join(', ')
+                                   )}"
+            end
+          end
+        end
+      end
+
+      test 'multi_status delete multiple metadata keys at once' do
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        assert_not @sample32.metadata['metadatafield3']
+        delete namespace_project_sample_metadata_deletion_path(@namespace, @project29, @sample32),
+               params: { 'sample' => { 'metadata' => { 'metadatafield1' => '', 'metadatafield3' => '' } },
+                         format: :turbo_stream }
+        assert_response :multi_status
+
+        assert_select 'td', text: 'metadatafield1', count: 0
+        assert_select 'td', text: 'value1', count: 0
+
+        assert_not @sample32.reload.metadata['metadatafield1']
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]', count: 2
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template div[role="alert"][data-viral--flash-type-value="success"]' do
+            assert_select 'div[id$="-message"]', text: "#{I18n.t('common.statuses.success')}: " \
+          "#{I18n.t('projects.samples.metadata.deletions.destroy.single_success',
+                    deleted_key: 'metadatafield1')}"
+          end
+        end
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template div[role="alert"][data-viral--flash-type-value="error"]' do
+            assert_select 'div[id$="-message"]', text: "#{I18n.t('common.statuses.error')}: " \
+          "#{I18n.t('services.samples.metadata.metadata_fields_not_found', sample_name: @sample32.name,
+                                                                           metadata_fields: 'metadatafield3')}"
+          end
+        end
+      end
+
+      test 'delete non-existent metadata field' do
+        assert_not @sample32.metadata['metadatafield3']
+
+        assert_no_changes -> { @sample32.reload.metadata } do
+          delete namespace_project_sample_metadata_deletion_path(@namespace, @project29, @sample32),
+                 params: { 'sample' => { 'metadata' => { 'metadatafield3' => '' } },
+                           format: :turbo_stream }
+        end
+        assert_response :unprocessable_content
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template div[role="alert"][data-viral--flash-type-value="error"]' do
+            assert_select 'div[id$="-message"]', text: "#{I18n.t('common.statuses.error')}: " \
+          "#{I18n.t('services.samples.metadata.metadata_fields_not_found', sample_name: @sample32.name,
+                                                                           metadata_fields: 'metadatafield3')}"
+          end
+        end
+      end
     end
   end
 end
