@@ -104,6 +104,9 @@ jobs:
           runtime: node@24.14.1
           cache: true
 
+      - name: Build JavaScript assets
+        run: pnpm run build
+
       - name: Run JavaScript tests
         run: pnpm run test:js:coverage
 

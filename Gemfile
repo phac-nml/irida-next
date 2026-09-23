@@ -28,6 +28,7 @@ gem 'requestjs-rails'
 
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem 'cssbundling-rails'
+gem 'jsbundling-rails'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
@@ -79,7 +80,7 @@ pathogen_view_components_opts =
   elsif ENV['USE_LOCAL_PATHOGEN'] == '1'
     { path: File.expand_path('../pathogen-view-components', __dir__) }
   else
-    { github: 'phac-nml/pathogen-view-components', tag: 'v1.1.15' }
+    { github: 'phac-nml/pathogen-view-components', tag: 'v1.1.16' }
   end
 gem 'pathogen_view_components', **pathogen_view_components_opts
 
