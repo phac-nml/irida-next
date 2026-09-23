@@ -28,6 +28,9 @@ FileUtils.chdir APP_ROOT do
   puts "\n== Syncing icons =="
   system("bin/rails g rails_icons:sync --libraries=phosphor heroicons")
 
+  puts "\n== Building JavaScript bundles =="
+  system!("pnpm run build:js")
+
   # puts "\n== Copying sample files =="
   # unless File.exist?("config/database.yml")
   #   FileUtils.cp "config/database.yml.sample", "config/database.yml"

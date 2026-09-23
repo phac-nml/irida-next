@@ -1,7 +1,9 @@
+<%# locals: (title: nil) %>
+
 <head>
   <title>
-    <%= if @title.present?
-      "#{@title} · #{t(:"layouts.application.site_title")}"
+    <%= if title.present?
+      "#{title} · #{t(:"layouts.application.site_title")}"
     else
       t(:"layouts.application.site_title")
     end %>
@@ -14,7 +16,7 @@
   <%= stylesheet_link_tag "pathogen_view_components", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
-  <%= javascript_importmap_tags %>
+  <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
 
   <%= render "shared/dark_mode_check" %>
 
