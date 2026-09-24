@@ -22,6 +22,23 @@ describe("live_region", () => {
       expect(region.textContent).toBe("hello");
     });
 
+    it("clears existing content before announcing on the next animation frame", () => {
+      const region = createLiveRegion();
+      region.textContent = "Old content";
+      let renderAnnouncement;
+      vi.spyOn(window, "requestAnimationFrame").mockImplementation(
+        (callback) => {
+          renderAnnouncement = callback;
+        },
+      );
+
+      announce("New announcement", { element: region });
+
+      expect(region.textContent).toBe("");
+      renderAnnouncement();
+      expect(region.textContent).toBe("New announcement");
+    });
+
     it("uses the provided element instead of creating a global region", () => {
       const el = document.createElement("div");
       document.body.appendChild(el);
@@ -101,9 +118,15 @@ describe("live_region", () => {
     });
 
     it("returns existing element when same id already exists", () => {
-      const first = createLiveRegion({ id: "unique-id" });
-      const second = createLiveRegion({ id: "unique-id" });
+      const first = createLiveRegion({ id: "unique-id", politeness: "polite" });
+      first.textContent = "First region";
+      const second = createLiveRegion({
+        id: "unique-id",
+        politeness: "assertive",
+      });
       expect(first).toBe(second);
+      expect(second.textContent).toBe("First region");
+      expect(second.getAttribute("aria-live")).toBe("polite");
       expect(document.querySelectorAll("#unique-id").length).toBe(1);
     });
   });
