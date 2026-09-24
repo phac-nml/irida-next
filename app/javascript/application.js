@@ -1,6 +1,5 @@
 import "@hotwired/turbo-rails";
 import "./controllers";
-import "./active_admin_navigation";
 import "flowbite";
 import { createFocusTrap } from "focus-trap";
 import { registerPathogenControllers } from "pathogen_view_components";
