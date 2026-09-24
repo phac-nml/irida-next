@@ -553,7 +553,6 @@ module Projects
 
       test 'member with role <= analyst cannot open delete metadata dialog' do
         login_as users(:michelle_doe)
-        # assert_equal 'value1', @sample32.metadata['metadatafield1']
         get new_namespace_project_sample_metadata_deletion_path(@namespace, @project29, @sample32),
             params: { 'sample' => { 'metadata' => { 'metadatafield1' => '' } }, format: :turbo_stream }
         assert_response :unauthorized
