@@ -62,27 +62,27 @@ module Samples
         def data_grid_width(column)
           return puid_width if column == :puid
 
-          return column == :name ? 280 : 200 if @virtual_pagination
+          return column == :name ? 280 : 200 if virtual?
 
           nil
         end
 
         def data_grid_sticky?(column)
-          return column == :puid if @virtual_pagination
+          return column == :puid if virtual?
 
           %i[puid name].include?(column)
         end
 
         def data_grid_sticky_left(column)
           return 0 if column == :puid
-          return puid_width if column == :name && !@virtual_pagination
+          return puid_width if column == :name && !virtual?
 
           nil
         end
 
         def puid_width
           # Reserve room for the full identifier and the grid's horizontal cell padding.
-          return 240 if @virtual_pagination
+          return 240 if virtual?
 
           helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples])
         end
@@ -105,9 +105,11 @@ module Samples
           send(renderer, column, sample)
         end
 
+        def virtual? = @virtual_pagination.present?
+
         def data_grid
           Pathogen::DataGridComponent.new(
-            rows: @samples, fill_container: true, virtual: @virtual_pagination.present?,
+            rows: @samples, fill_container: true, virtual: virtual?,
             virtual_pagination: @virtual_pagination, **data_grid_arguments
           ).tap do |grid|
             @columns.each do |column|
@@ -128,7 +130,7 @@ module Samples
             width: data_grid_width(column), sticky: data_grid_sticky?(column),
             sticky_left: data_grid_sticky_left(column), renderer: ->(sample, _index) { renderer.call(sample) }
           }
-          if @virtual_pagination
+          if virtual?
             options[:header_content] = -> { sort_button(column, label) }
             options[:aria] = { sort: sort_state(column) } if @sort_key == column.to_s
           end
@@ -184,7 +186,7 @@ module Samples
           helpers.link_to(
             helpers.sample_path(sample),
             class: 'pathogen-data-grid__link pathogen-data-grid__link--sample',
-            data: @virtual_pagination ? { turbo_frame: '_top' } : {}
+            data: virtual? ? { turbo_frame: '_top' } : {}
           ) do
             helpers.highlight(
               sample.name,
