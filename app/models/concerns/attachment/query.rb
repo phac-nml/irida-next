@@ -16,6 +16,7 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
   attribute :groups, default: -> { [] }
 
   query_for Attachment
+  validates_with Attachment::AdvancedSearchGroupValidator
 
   def search_group_class
     Attachment::SearchGroup
