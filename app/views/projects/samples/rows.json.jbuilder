@@ -7,7 +7,7 @@ json.rows @samples.each_with_index.to_a do |sample, index|
   json.html render(
     Samples::Table::V2::RowComponent.new(
       sample, @project.namespace, global_row_index: row_index,
-      metadata_fields: @fields, search_params: @search_params
+                                  metadata_fields: @fields, search_params: @search_params
     )
   )
 end
