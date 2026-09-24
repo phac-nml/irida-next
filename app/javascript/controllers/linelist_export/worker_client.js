@@ -68,14 +68,15 @@ export class LinelistExportWorkerClient {
   }
 }
 
-export function resolveLinelistExportWorkerSource(
-  { hasWorkerUrlValue, workerUrlValue },
-  _doc = document,
-  _loc = location,
-) {
+export function resolveLinelistExportWorkerSource({
+  hasWorkerUrlValue,
+  workerUrlValue,
+}) {
   if (hasWorkerUrlValue && workerUrlValue) {
     return workerUrlValue;
   }
 
+  // Dev/test fallback only: in production the dialog component always supplies a
+  // fingerprinted URL via asset_path, so this branch is not reached.
   return new URL("./workers/linelist_export_worker.js", import.meta.url).href;
 }

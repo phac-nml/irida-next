@@ -133,6 +133,8 @@ export default class extends Controller {
 
   #buildWorker() {
     let worker;
+    // Dev/test fallback only: in production the dialog component always supplies
+    // a fingerprinted URL via asset_path, so import.meta.url is not reached.
     const workerSource =
       this.hasWorkerUrlValue && this.workerUrlValue
         ? this.workerUrlValue
