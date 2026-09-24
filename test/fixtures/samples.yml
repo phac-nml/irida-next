@@ -154,8 +154,8 @@ sample32:
   project_id: <%= ActiveRecord::FixtureSet.identify(:project29, :uuid) %>
   puid: INXT_SAM_AAAAAAAABC
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' },
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' } }
 
 sample33:
   name: Sample33
