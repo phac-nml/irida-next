@@ -673,6 +673,20 @@ module Projects
         assert_select 'span', text: I18n.t('projects.samples.metadata.table.no_associated_metadata')
       end
 
+      test 'empty metadata table with no permission to update' do
+        login_as users(:ryan_doe)
+        project = projects(:project1)
+        sample = samples(:sample1)
+        get namespace_project_sample_path(project.parent, project, sample, tab: 'metadata')
+        assert_response :success
+
+        assert_select 'table', count: 0
+        assert_select '#metadata-table-body', count: 0
+
+        assert_select 'h2', text: I18n.t('projects.samples.metadata.table.no_metadata')
+        assert_select 'span', text: I18n.t('projects.samples.metadata.table.no_permission_description')
+      end
+
       test 'no update row action on metadata added by analysis' do
         login_as users(:david_doe)
         project = projects(:project28)
