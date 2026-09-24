@@ -129,6 +129,72 @@ describe("samples cursor", () => {
     await Promise.resolve();
     expect(cancelAnimationFrame).toHaveBeenCalled();
   });
+
+  it("cancels a pending focus restoration when a new sort starts", async () => {
+    const frame = await start();
+    frame.querySelector("button").click();
+    acceptSort(frame);
+    frame.querySelector("button").click();
+    expect(cancelAnimationFrame).toHaveBeenCalled();
+  });
+
+  it("cancels a pending focus restoration when an unrelated request starts", async () => {
+    const frame = await start();
+    frame.querySelector("button").click();
+    acceptSort(frame);
+    request(frame, "/samples?page=2");
+    expect(cancelAnimationFrame).toHaveBeenCalled();
+  });
+
+  it("ignores frame renders that target a nested frame", async () => {
+    const frame = await start();
+    const child = document.createElement("div");
+    frame.appendChild(child);
+    const newFrame = document.createElement("turbo-frame");
+    newFrame.dataset.cursorRequestId = "nested";
+    const render = vi.fn();
+    const detail = { newFrame, render };
+    child.dispatchEvent(
+      new CustomEvent("turbo:before-frame-render", { bubbles: true, detail }),
+    );
+    expect(detail.render).toBe(render);
+  });
+
+  it("does not restore focus when the refreshed result is missing", async () => {
+    const frame = await start();
+    frame.querySelector("button").click();
+    const { id } = request(frame, frame.src);
+    frameRender(frame, id).apply();
+    frame.querySelector("[data-cursor-refresh-url]").remove();
+    frame.dispatchEvent(new Event("turbo:frame-load"));
+    expect(frames).toHaveLength(0);
+    expect(document.getElementById("sort-status").textContent).toBe("");
+  });
+
+  it("does not restore focus when the refreshed result URL does not match the pending sort", async () => {
+    const frame = await start();
+    frame.querySelector("button").click();
+    const { id } = request(frame, frame.src);
+    frameRender(frame, id).apply();
+    frame
+      .querySelector("[data-cursor-refresh-url]")
+      .setAttribute("data-cursor-refresh-url", "/samples?q%5Bsort%5D=name+asc");
+    frame.dispatchEvent(new Event("turbo:frame-load"));
+    expect(frames).toHaveLength(0);
+    expect(document.getElementById("sort-status").textContent).toBe("");
+  });
+
+  it("skips scroll restoration when the scroll container is gone", async () => {
+    const frame = await start();
+    frame.querySelector("button").click();
+    acceptSort(frame);
+    frame
+      .querySelector('[data-pathogen--data-grid-target="scrollContainer"]')
+      .remove();
+    frames.shift()();
+    frames.shift()();
+    expect(frames).toHaveLength(0);
+  });
   it("announces only the accepted sort in the persistent polite status", async () => {
     const frame = await start();
     frame.querySelector("button").click();
