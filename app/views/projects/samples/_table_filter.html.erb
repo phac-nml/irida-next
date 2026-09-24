@@ -1,4 +1,8 @@
-<%# locals: (pagy:, query:, search_params:, results_message:, advanced_search_fields:) -%>
+<%# locals: (pagy: @pagy, query: @query, search_params: @search_params, results_message: @results_message, advanced_search_fields: @advanced_search_fields, cursor_query_error: @cursor_query_error, cursor_page: @cursor_page) -%>
+
+<% if cursor_query_error.present? %>
+  <p role="alert" class="text-sm text-(--pvc-color-danger-strong)"><%= cursor_query_error %></p>
+<% end %>
 
 <div role="status" class="sr-only"><%= results_message %></div>
 
@@ -21,8 +25,9 @@
       },
     ) %>
 
+    <%= hidden_field_tag :table_view, "standard" if params[:table_view] == "standard" %>
     <%= hidden_field_tag :format, "turbo_stream" %>
-    <%= hidden_field_tag :limit, pagy&.limit %>
+    <%= hidden_field_tag :limit, cursor_page&.limit || pagy&.limit %>
   </div>
 
   <div class="max-sm:grow">

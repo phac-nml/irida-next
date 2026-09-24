@@ -70,6 +70,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           end
         end
         collection do
+          get :rows, defaults: { format: :json }
           get :select
           post :search
           post :metadata_template
