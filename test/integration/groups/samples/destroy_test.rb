@@ -79,6 +79,10 @@ module Groups
         end
 
         assert_response :unauthorized
+        assert_turbo_stream_flash(
+          I18n.t('action_policy.policy.group.destroy_sample?', name: @group1.name),
+          type: :error
+        )
       end
 
       test 'new destroy with proper authorization from group' do
@@ -100,6 +104,10 @@ module Groups
             }, as: :turbo_stream
 
         assert_response :unauthorized
+        assert_turbo_stream_flash(
+          I18n.t('action_policy.policy.group.destroy_sample?', name: @group1.name),
+          type: :error
+        )
       end
 
       test 'partially deleting multiple samples at group level' do

@@ -119,6 +119,10 @@ module Projects
         end
 
         assert_response :unauthorized
+        assert_turbo_stream_flash(
+          I18n.t('action_policy.policy.project.destroy_sample?', name: @project2_namespace.project.name),
+          type: :error
+        )
       end
 
       test 'new destroy with proper authorization and multiple deletion_type from project' do
@@ -129,6 +133,9 @@ module Projects
             }, as: :turbo_stream
 
         assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'turbo-frame#list_selections'
+        end
       end
 
       test 'new destroy with proper authorization and single deletion_type from project' do
@@ -141,6 +148,9 @@ module Projects
             }, as: :turbo_stream
 
         assert_response :success
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'dialog p', text: /#{@sample1.name}/
+        end
       end
 
       test 'singular description within delete samples dialog' do
@@ -153,7 +163,7 @@ module Projects
 
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_single_confirmation_dialog.title')
+          assert_destroy_single_dialog
         end
       end
 
@@ -168,7 +178,7 @@ module Projects
 
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_single_confirmation_dialog.title')
+          assert_destroy_single_dialog
           assert_select 'textarea[name*="reason"]'
           assert_select 'textarea[name*="reason"][maxlength="500"]'
         end
@@ -209,6 +219,10 @@ module Projects
             }, as: :turbo_stream
 
         assert_response :unauthorized
+        assert_turbo_stream_flash(
+          I18n.t('action_policy.policy.project.destroy_sample?', name: @project2_namespace.project.name),
+          type: :error
+        )
       end
 
       test 'should not get new destroy single deletion_type with role < Owner at project level' do
@@ -222,6 +236,10 @@ module Projects
             }, as: :turbo_stream
 
         assert_response :unauthorized
+        assert_turbo_stream_flash(
+          I18n.t('action_policy.policy.project.destroy_sample?', name: @project2_namespace.project.name),
+          type: :error
+        )
       end
 
       test 'partially deleting multiple samples at project level' do
@@ -315,7 +333,7 @@ module Projects
 
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+          assert_destroy_multiple_dialog
         end
       end
 
@@ -330,7 +348,7 @@ module Projects
 
         assert_response :success
         assert_select 'turbo-stream[target="samples_dialog"]' do
-          assert_select 'dialog h1', text: I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.title')
+          assert_destroy_multiple_dialog
           assert_select 'textarea[name*="reason"]'
           assert_select 'textarea[name*="reason"][maxlength="500"]'
         end
