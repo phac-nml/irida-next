@@ -9,7 +9,7 @@ module PersonalAccessTokens
     end
 
     test 'rotate personal access token for user' do
-      personal_access_token = personal_access_tokens(:john_doe_valid_pat)
+      personal_access_token = personal_access_tokens(:john_doe_valid_pat_used)
       assert_difference(-> { @user.personal_access_tokens.count } => 1) do
         assert_changes -> { personal_access_token.reload.revoked? } do
           new_token = PersonalAccessTokens::RotateService.new(@user, personal_access_token).execute
@@ -20,7 +20,20 @@ module PersonalAccessTokens
           assert_equal new_token.name, personal_access_token.name
           assert_equal new_token.expires_at, personal_access_token.expires_at
           assert_equal new_token.scopes, personal_access_token.scopes
+          assert_nil new_token.last_used_at
+          assert_empty new_token.last_used_ips
+          assert_not new_token.revoked?
         end
+      end
+    end
+
+    test 'authorizes the token owner when rotating a user token' do
+      personal_access_token = personal_access_tokens(:john_doe_valid_pat)
+
+      assert_authorized_to(:rotate_personal_access_token?, @user,
+                           with: UserPolicy,
+                           context: { user: @user }) do
+        PersonalAccessTokens::RotateService.new(@user, personal_access_token).execute
       end
     end
 
@@ -99,6 +112,19 @@ module PersonalAccessTokens
       end
     end
 
+    test 'authorizes the namespace when rotating a group bot token' do
+      bot_account = namespace_bots(:group1_bot0)
+      personal_access_token = personal_access_tokens(:user_group_bot_account0_valid_pat)
+
+      assert_authorized_to(:rotate_bot_personal_access_token?, bot_account.namespace,
+                           with: GroupPolicy,
+                           context: { user: @user }) do
+        PersonalAccessTokens::RotateService.new(
+          @user, personal_access_token, bot_account.namespace, bot_account.user
+        ).execute
+      end
+    end
+
     test 'should not rotate personal access token for group bot account without proper authorization' do
       bot_account = namespace_bots(:group1_bot0)
       personal_access_token = personal_access_tokens(:user_group_bot_account0_valid_pat)
@@ -168,6 +194,19 @@ module PersonalAccessTokens
           assert_equal new_token.expires_at, personal_access_token.expires_at
           assert_equal new_token.scopes, personal_access_token.scopes
         end
+      end
+    end
+
+    test 'authorizes the namespace when rotating a project bot token' do
+      bot_account = namespace_bots(:project1_bot0)
+      personal_access_token = personal_access_tokens(:user_bot_account0_valid_pat)
+
+      assert_authorized_to(:rotate_bot_personal_access_token?, bot_account.namespace,
+                           with: Namespaces::ProjectNamespacePolicy,
+                           context: { user: @user }) do
+        PersonalAccessTokens::RotateService.new(
+          @user, personal_access_token, bot_account.namespace, bot_account.user
+        ).execute
       end
     end
 
