@@ -20,6 +20,7 @@ const options = {
   absWorkingDir: root,
   entryPoints: {
     application: "app/javascript/application.js",
+    active_admin: "app/javascript/active_admin.js",
     "workers/linelist_export_worker": "app/javascript/workers/linelist_export_worker.js",
     "workers/linelist_import_worker": "app/javascript/workers/linelist_import_worker.js",
   },
