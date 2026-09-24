@@ -53,6 +53,29 @@ module AdvancedSearch
       assert_equal 'created_at', query.groups[1].conditions[0].field
     end
 
+    test 'groups_attributes= accepts sparse group and condition keys in submitted order' do
+      nested_attributes = {
+        '3' => {
+          'conditions_attributes' => {
+            '4' => { 'field' => 'name', 'operator' => 'in', 'value' => %w[first second] },
+            '7' => { 'field' => 'created_at', 'operator' => 'between', 'value' => %w[2024-01-01 2024-12-31] }
+          }
+        },
+        '9' => {
+          'conditions_attributes' => {
+            '2' => { 'field' => 'name', 'operator' => '=', 'value' => 'third' }
+          }
+        }
+      }
+      expected = nested_attributes.values.map { |group| group['conditions_attributes'].values }
+
+      [Sample::Query, WorkflowExecution::Query].each do |query_class|
+        query = query_class.new(groups_attributes: nested_attributes)
+
+        assert_equal expected, query.groups.map { |group| group.conditions.map(&:attributes) }, query_class.name
+      end
+    end
+
     test 'sort= parses column and direction correctly' do
       query = Sample::Query.new(project_ids: [@project.id], sort: 'name asc')
       assert_equal 'name', query.column

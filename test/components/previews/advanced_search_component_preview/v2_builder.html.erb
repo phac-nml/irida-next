@@ -1,0 +1,24 @@
+<script type="module" nonce="<%= content_security_policy_nonce %>">
+  import { Controller } from "@hotwired/stimulus";
+  import { application } from "controllers/application";
+
+  // The embedding host initializes the builder through its outlet, without a dialog.
+  application.register("advanced-search-builder-preview", class extends Controller {
+    static outlets = ["advanced-search--v2--builder"];
+
+    advancedSearchV2BuilderOutletConnected(builder) {
+      builder.render();
+    }
+  });
+</script>
+
+<%= form_with model: search, scope: :q, url: "#", data: {
+  controller: "advanced-search-builder-preview",
+  "advanced-search-builder-preview-advanced-search--v2--builder-outlet": "#advanced-search-builder",
+} do |form| %>
+  <%= render AdvancedSearch::V2::BuilderComponent.new(
+    search:,
+    form:,
+    fields: advanced_search_fields,
+  ) %>
+<% end %>
