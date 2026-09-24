@@ -44,6 +44,12 @@ export default class extends Controller {
       offsetSkidding: this.skiddingValue,
       offsetDistance: this.distanceValue,
       onShow: () => {
+        this.application
+          .getControllerForElementAndIdentifier(
+            this.element,
+            "pathogen--tooltip",
+          )
+          ?.hide();
         this.triggerTarget.setAttribute("aria-expanded", "true");
         this.menuTarget.setAttribute("aria-hidden", "false");
         this.menuTarget.removeAttribute("hidden");
