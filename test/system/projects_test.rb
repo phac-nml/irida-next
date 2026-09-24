@@ -30,7 +30,12 @@ class ProjectsTest < ApplicationSystemTestCase
   test 'should have Project URL filled with user namespace, when creating a new project using the nav bar' do
     visit dashboard_projects_url
 
-    click_button I18n.t('general.navbar.new_dropdown.label')
+    trigger = find('#sidebar-new-dropdown-trigger')
+    trigger.hover
+    assert_selector '#sidebar-new-dropdown-trigger-tooltip[data-state="open"]'
+
+    trigger.click
+    assert_selector '#sidebar-new-dropdown-trigger-tooltip[data-state="closed"]', visible: :all
     click_link I18n.t('general.navbar.new_dropdown.project')
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
