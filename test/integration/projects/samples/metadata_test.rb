@@ -29,9 +29,7 @@ module Projects
             assert_select 'td:nth-child(3)', text: value
             assert_select 'td:nth-child(4)', text: User.find(@sample32.metadata_provenance[key]['id']).email
             assert_select 'td:nth-child(5)' do
-              assert_select 'time[datetime=?]',
-                            Time.iso8601(@sample32.metadata_provenance[key]['updated_at'])
-                                .strftime('%Y-%m-%dT%H:%M:%SZ')
+              assert_select 'time[datetime=?]', @sample32.metadata_provenance[key]['updated_at']
             end
             assert_select 'td:last-child', text: "#{I18n.t('common.actions.update')} #{I18n.t('common.actions.delete')}"
           end
@@ -55,9 +53,7 @@ module Projects
             assert_select 'td:nth-child(2)', text: value
             assert_select 'td:nth-child(3)', text: User.find(@sample32.metadata_provenance[key]['id']).email
             assert_select 'td:last-child' do
-              assert_select 'time[datetime=?]',
-                            Time.iso8601(@sample32.metadata_provenance[key]['updated_at'])
-                                .strftime('%Y-%m-%dT%H:%M:%SZ')
+              assert_select 'time[datetime=?]', @sample32.metadata_provenance[key]['updated_at']
             end
           end
         end
