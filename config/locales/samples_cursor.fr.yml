@@ -1,0 +1,11 @@
+---
+fr:
+  projects:
+    samples:
+      cursor:
+        browsing_hint: Parcourez et triez les échantillons ici. Utilisez le tableau standard pour la sélection et les actions groupées.
+        invalid_query: Ce filtre ou ce tri n’est pas disponible pour ce tableau. Modifiez la recherche ou utilisez le tableau standard.
+        sort_asc: Trier %{column} par ordre croissant
+        sort_desc: Trier %{column} par ordre décroissant
+        sorted_asc: Tri par %{column}, par ordre croissant.
+        sorted_desc: Tri par %{column}, par ordre décroissant.

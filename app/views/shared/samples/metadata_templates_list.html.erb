@@ -2,7 +2,10 @@
   <%= form_with url: @url, method: :post,
 data: {
   turbo_stream: true,
+  turbo_frame: params[:table_view] == "cursor" ? "project-samples-results" : nil,
 } do |f| %>
+    <%= hidden_field_tag :table_view, "standard" if params[:table_view] == "standard" %>
+
     <input type="hidden" name="format" value="turbo_stream">
     <input type="hidden" name="limit" value="<%= @limit %>">
     <input type="hidden" name="page" value="<%= @page %>">

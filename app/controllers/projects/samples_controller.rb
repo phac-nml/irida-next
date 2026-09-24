@@ -6,16 +6,20 @@ module Projects
     include ListActions
     include Storable
     include SampleAttachment
+    include ::Samples::CursorPagination
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :query, only: %i[index search select]
+    before_action :set_cursor_mode, only: %i[index search rows]
+    before_action :query, only: %i[index search select rows]
     before_action :current_metadata_template, only: %i[index]
     before_action :index_view_authorizations, only: %i[index]
     before_action :show_view_authorizations, only: %i[show]
     before_action :page_title
 
     def index
+      return load_cursor_results if @cursor_mode
+
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params.fetch(:limit, 20), page: params.fetch(:page, 1))
       @samples = @samples.includes(project: { namespace: :parent })
@@ -23,10 +27,19 @@ module Projects
       @results_message = results_message
     end
 
+    def rows
+      cursor_rows
+    end
+
     def search
+      if @cursor_mode && @query.valid?
+        current_metadata_template
+        load_cursor_results
+      end
+
       respond_to do |format|
         format.turbo_stream do
-          if @query.valid?
+          if @query.valid? && @cursor_query_error.blank?
             render status: :ok
           else
             render status: :unprocessable_content
@@ -134,12 +147,18 @@ module Projects
         destroy_sample: allowed_to?(:destroy_sample?, @project),
         update_sample: allowed_to?(:update_sample?, @project),
         import_samples_and_metadata: allowed_to?(:import_samples_and_metadata?, @project.namespace)
-      }
+      }.merge(cursor_bulk_abilities)
 
       @render_sample_actions = @allowed_to.slice(
         :clone_sample, :transfer_sample, :export_data, :update_sample_metadata,
         :create_sample, :import_samples_and_metadata
       ).value?(true)
+    end
+
+    def cursor_bulk_abilities
+      return {} unless @cursor_mode
+
+      { submit_workflow: false, clone_sample: false, transfer_sample: false, export_data: false, destroy_sample: false }
     end
 
     def show_view_authorizations
@@ -200,7 +219,7 @@ module Projects
     def query
       authorize! @project, to: :sample_listing?
 
-      @search_params = search_params
+      @search_params = action_name == 'rows' ? cursor_search_params : search_params
 
       metadata_fields(@search_params['metadata_template'])
 
