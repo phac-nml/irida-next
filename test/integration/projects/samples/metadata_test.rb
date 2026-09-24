@@ -658,6 +658,43 @@ module Projects
           end
         end
       end
+
+      test 'empty metadata table' do
+        login_as users(:john_doe)
+        project = projects(:project1)
+        sample = samples(:sample1)
+        get namespace_project_sample_path(project.parent, project, sample, tab: 'metadata')
+        assert_response :success
+
+        assert_select 'table', count: 0
+        assert_select '#metadata-table-body', count: 0
+
+        assert_select 'h2', text: I18n.t('projects.samples.metadata.table.no_metadata')
+        assert_select 'span', text: I18n.t('projects.samples.metadata.table.no_associated_metadata')
+      end
+
+      test 'no update row action on metadata added by analysis' do
+        login_as users(:david_doe)
+        project = projects(:project28)
+        sample = samples(:sample28)
+        get namespace_project_sample_path(project.parent, project, sample, tab: 'metadata')
+        assert_response :success
+
+        sample.metadata.each do |key, value|
+          assert_select '#metadata-table-body tr' do
+            assert_select "td:first-child input[type='checkbox'][value='#{key}']", count: 1
+            assert_select 'td:nth-child(2)', text: key
+            assert_select 'td:nth-child(3)', text: value
+            assert_select 'td:nth-child(4)',
+                          text: "#{sample.metadata_provenance[key]['source'].upcase_first} #{sample.metadata_provenance[key]['id']}" # rubocop:disable Layout/LineLength
+            assert_select 'td:nth-child(5)' do
+              assert_select 'time[datetime=?]', sample.metadata_provenance[key]['updated_at']
+            end
+            assert_select 'td:last-child', text: I18n.t('common.actions.delete')
+            assert_select 'button', text: I18n.t('common.actions.update'), count: 0
+          end
+        end
+      end
     end
   end
 end
