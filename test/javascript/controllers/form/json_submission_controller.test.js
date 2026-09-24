@@ -42,7 +42,6 @@ describe("JSON form submission", () => {
     application.register("selection", SelectionOutlet);
     application.register("form--json-submission", JsonSubmissionController);
     await Promise.resolve();
-    await Promise.resolve();
   }
   function request() {
     const detail = {
