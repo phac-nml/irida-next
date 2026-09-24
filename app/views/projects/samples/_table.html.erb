@@ -4,6 +4,7 @@
   samples,
   project.namespace,
   pagy,
+  version: params[:table_view] == "standard" ? :v1 : nil,
   has_samples: has_samples,
   abilities: {
     select_samples:

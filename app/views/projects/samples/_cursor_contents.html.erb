@@ -1,0 +1,32 @@
+<%# locals: () %>
+
+<div
+  class="flex flex-wrap items-center gap-2"
+  data-cursor-refresh-url="<%= @virtual_pagination&.fetch(:refresh_url) %>"
+  data-cursor-sort-message="<%= @cursor_sort_message %>"
+>
+  <div id="table-filter" role="presentation" class="contents"><%= render "table_filter" %></div>
+
+  <%= render MetadataTemplates::DropdownComponent.new(
+    url: list_namespace_project_metadata_templates_path(
+      @project.namespace.parent, @project, metadata_template: @metadata_template[:id], limit: @cursor_page&.limit,
+      table_view: "cursor"
+    )
+  ) %>
+</div>
+
+<p class="text-sm text-(--pvc-color-text-muted)"><%= t("projects.samples.cursor.browsing_hint") %></p>
+
+<div class="samples-cursor-table">
+  <%= render Samples::Table::V2::Component.new(
+    @samples, @project.namespace, nil,
+    has_samples: @has_samples,
+    metadata_fields: @fields,
+    search_params: @search_params,
+    virtual_pagination: @virtual_pagination,
+    empty: {
+      title: t("projects.samples.index.no_samples"),
+      description: t("projects.samples.index.no_associated_samples"),
+    }
+  ) %>
+</div>

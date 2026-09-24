@@ -14,8 +14,10 @@ module Samples
         if @namespace.type == 'Group'
           helpers.group_samples_url(@namespace, q: { sort: sort_string }, limit: @pagy.limit)
         else
-          helpers.namespace_project_samples_url(@namespace.parent, @namespace.project, q: { sort: sort_string },
-                                                                                       limit: @pagy.limit)
+          helpers.namespace_project_samples_url(
+            @namespace.parent, @namespace.project, q: { sort: sort_string },
+                                                   limit: @pagy.limit, table_view: helpers.params[:table_view]
+          )
         end
       end
 

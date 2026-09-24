@@ -1,0 +1,9 @@
+<%# locals: () %>
+
+<%= turbo_frame_tag "project-samples-results",
+  class: "flex min-h-0 flex-1 flex-col gap-4",
+  data: { controller: "samples-cursor", samples_cursor_status_id_value: "project-samples-sort-status",
+          cursor_request_id: request.headers["X-Samples-Cursor-Request"],
+          action: "turbo:before-fetch-request->samples-cursor#request turbo:before-frame-render->samples-cursor#renderFrame turbo:before-stream-render@document->samples-cursor#renderStream turbo:frame-load->samples-cursor#restore" } do %>
+  <%= render "cursor_contents" %>
+<% end %>
