@@ -29,3 +29,8 @@ pin 'tabbable' # @6.2.0
 pin 'uuid' # @14.0.0
 pin 'debounce' # @3.0.0
 pin 'deepmerge' # @4.3.1
+
+# Host-owned bridge while this app still uses importmap; Pathogen ships source modules.
+pin 'pathogen_view_components', to: 'pathogen_view_components.js'
+pin_all_from Pathogen::ViewComponents::Engine.root.join('app/assets/javascripts/pathogen_view_components'),
+             under: 'pathogen_view_components'
