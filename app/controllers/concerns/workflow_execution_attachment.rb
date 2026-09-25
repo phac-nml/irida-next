@@ -24,10 +24,7 @@ module WorkflowExecutionAttachment
   end
 
   def load_attachments
-    samples_workflow_executions = @workflow_execution.samples_workflow_executions
-
-    Attachment.where(attachable: @workflow_execution)
-              .or(Attachment.where(attachable: samples_workflow_executions))
+    @workflow_execution.combined_attachments
   end
 
   def setup_ransack_for_attachments_form(all_attachments)
