@@ -34,7 +34,6 @@ describe("list input controller", () => {
     application.register("selection", SelectionOutlet);
     application.register("list-input", ListInputController);
     await Promise.resolve();
-    await Promise.resolve();
     controller = application.getControllerForElementAndIdentifier(
       element,
       "list-input",
