@@ -20,6 +20,7 @@ const fullCoverageFiles = [
   "app/javascript/controllers/layout_controller.js",
   "app/javascript/controllers/metadata_toggle_controller.js",
   "app/javascript/controllers/refresh_controller.js",
+  "app/javascript/controllers/samples_cursor_controller.js",
   "app/javascript/controllers/selection_controller.js",
   "app/javascript/controllers/sidebar_item_controller.js",
   "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js",
