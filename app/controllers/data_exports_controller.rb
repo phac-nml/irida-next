@@ -32,6 +32,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def new
+    authorize! @namespace.project, to: :export_data? if @namespace&.project_namespace?
+    authorize! @namespace, to: :export_data? if @namespace&.group_namespace?
+
     send(export_dialog_render_method)
   end
 

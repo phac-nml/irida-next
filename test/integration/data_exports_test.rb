@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class DataExportsTest < ActionDispatch::IntegrationTest
-  def setup
+  def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @user = users(:john_doe)
     @group1 = groups(:group_one)
     @project1 = projects(:project1)
@@ -16,6 +16,9 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     @data_export10 = data_exports(:data_export_ten)
     @sample1 = samples(:sample1)
     @workflow_execution1 = workflow_executions(:irida_next_example_completed_with_output)
+    @workflow_execution2 = workflow_executions(:irida_next_example_completed)
+    @workflow_execution3 = workflow_executions(:irida_next_example_error)
+    @shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_shared2)
 
     sign_in @user
   end
@@ -245,17 +248,21 @@ class DataExportsTest < ActionDispatch::IntegrationTest
   end
 
   test 'zip file contents in preview tab for sample data export' do
-    project1 = projects(:project1)
-    sample1 = samples(:sample1)
     attachment1 = attachments(:attachment1)
     attachment2 = attachments(:attachment2)
     get data_export_path(@data_export1, tab: 'preview')
 
     assert_select 'h2', text: @data_export1.file.filename.to_s
     assert_select 'li:first-child span', text: I18n.t('data_exports.preview.manifest_json')
-    assert_select 'li:nth-child(2) span', text: project1.namespace.puid
+    assert_select 'li:nth-child(2)' do
+      assert_select 'a', text: @project1.namespace.puid,
+                         href: redirect_data_export_path(@data_export1, identifier: @project1.namespace.puid)
+    end
     assert_select 'li:nth-child(2) ul' do
-      assert_select 'li:first-child span', text: sample1.puid
+      assert_select 'li:first-child' do
+        assert_select 'a', text: @sample1.puid,
+                           href: redirect_data_export_path(@data_export1, identifier: @sample1.puid)
+      end
       assert_select 'li:first-child ul' do
         assert_select 'li:first-child span', text: attachment1.puid
         assert_select 'li:first-child ul' do
@@ -272,6 +279,18 @@ class DataExportsTest < ActionDispatch::IntegrationTest
 
     assert_select 'svg.folder-open-icon', count: 3
     assert_select 'svg.file-text-icon', count: 4
+
+    get redirect_data_export_path(@data_export1, identifier: @project1.namespace.puid)
+    follow_redirect!
+    assert_response :success
+    assert_select 'h1', text: @project1.name
+
+    get redirect_data_export_path(@data_export1, identifier: @sample1.puid)
+    follow_redirect!
+    assert_response :success
+
+    assert_select 'h1', text: @sample1.name
+    assert_select 'span', text: @sample1.puid
   end
 
   test 'zip file contents in preview tab for workflow execution data export' do
@@ -284,12 +303,18 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     assert_select 'h2', text: @data_export7.file.filename.to_s
 
     assert_select 'li:first-child span', text: I18n.t('data_exports.preview.manifest_json')
-    assert_select 'li:nth-child(2) span', text: @workflow_execution1.id
+    assert_select 'li:nth-child(2)' do
+      assert_select 'a', text: @workflow_execution1.id,
+                         href: redirect_data_export_path(@data_export7),
+                         identifier: @workflow_execution1.id
+    end
     assert_select 'li:nth-child(2) ul' do
       assert_select 'li:first-child span', text: we_output.file.filename.to_s
       assert_select 'ul:last-child' do
-        assert_select 'li:first-child span', text: sample46.puid
-
+        assert_select 'li:first-child' do
+          assert_select 'a', text: sample46.puid,
+                             href: redirect_data_export_path(@data_export7, identifier: sample46.puid)
+        end
         assert_select 'li:first-child ul' do
           assert_select 'li:first-child span', text: swe_output.file.filename.to_s
         end
@@ -298,6 +323,63 @@ class DataExportsTest < ActionDispatch::IntegrationTest
 
     assert_select 'svg.folder-open-icon', count: 2
     assert_select 'svg.file-text-icon', count: 3
+
+    get redirect_data_export_path(@data_export7, identifier: @workflow_execution1.id)
+    follow_redirect!
+    assert_response :success
+    assert_select 'h1', text: @workflow_execution1.name || @workflow_execution1.id
+
+    get redirect_data_export_path(@data_export7, identifier: sample46.puid)
+    follow_redirect!
+    assert_response :success
+
+    assert_select 'h1', text: sample46.name
+    assert_select 'span', text: sample46.puid
+
+    # shared workflow execution preview and redirect tests
+    sign_out users(:john_doe)
+    login_as users(:micha_doe)
+    data_export11 = data_exports(:data_export_eleven)
+    sample47 = samples(:sample47)
+    swe_output = attachments(:samples_shared_workflow_execution_completed_output_attachment)
+    get data_export_path(data_export11, tab: 'preview')
+    assert_response :success
+
+    assert_select 'h2', text: data_export11.file.filename.to_s
+
+    assert_select 'li:first-child span', text: I18n.t('data_exports.preview.manifest_json')
+    assert_select 'li:nth-child(2)' do
+      assert_select 'a', text: @shared_workflow_execution2.id,
+                         href: redirect_data_export_path(data_export11, identifier: @shared_workflow_execution2.id),
+                         identifier: @shared_workflow_execution2.id
+    end
+    assert_select 'li:nth-child(2) ul' do
+      assert_select 'li:first-child span', text: swe_output.file.filename.to_s
+      assert_select 'ul:last-child' do
+        assert_select 'li:first-child' do
+          assert_select 'a', text: sample47.puid,
+                             href: redirect_data_export_path(data_export11, identifier: sample47.puid)
+        end
+        assert_select 'li:first-child ul' do
+          assert_select 'li:first-child span', text: swe_output.file.filename.to_s
+        end
+      end
+    end
+
+    assert_select 'svg.folder-open-icon', count: 2
+    assert_select 'svg.file-text-icon', count: 3
+
+    get redirect_data_export_path(data_export11, identifier: @shared_workflow_execution2.id)
+    follow_redirect!
+    assert_response :success
+    assert_select 'h1', text: @shared_workflow_execution2.name || @shared_workflow_execution2.id
+
+    get redirect_data_export_path(data_export11, identifier: sample47.puid)
+    follow_redirect!
+    assert_response :success
+
+    assert_select 'h1', text: sample47.name
+    assert_select 'span', text: sample47.puid
   end
 
   test 'create export state between completed and non-completed workflow executions' do
@@ -324,95 +406,158 @@ class DataExportsTest < ActionDispatch::IntegrationTest
   end
 
   test 'can filter by id or name' do
-    visit data_exports_path
+    get data_exports_path
+    assert_response :success
 
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 7, count: 7,
-                                                                                    locale: @user.locale))
-    assert_selector 'table tbody tr', count: 7
+    assert_select 'table tbody tr', count: 7
 
-    fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
-            with: @data_export1.id
-    find('input.t-search-component').send_keys(:return)
+    get data_exports_path, params: { q: { id_or_name_cont: @data_export1.id } }
+    assert_response :success
 
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                                    locale: @user.locale))
-
-    within('table tbody') do
-      assert_selector ' tr', count: 1
-      assert_text @data_export1.id
-      assert_text @data_export1.name
+    assert_select 'table tbody tr', count: 1
+    assert_select "tr[id='#{dom_id(@data_export1)}']" do
+      assert_select 'td', text: @data_export1.id
+      assert_select 'td', text: @data_export1.name
     end
 
-    fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
-            with: @data_export1.name
-    find('input.t-search-component').send_keys(:return)
+    get data_exports_path, params: { q: { id_or_name_cont: @data_export1.name } }
+    assert_response :success
 
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
-                                                                                    locale: @user.locale))
+    assert_select 'table tbody tr', count: 2
+    assert_select "tr[id='#{dom_id(@data_export1)}']"
+    assert_select "tr[id='#{dom_id(@data_export10)}']"
 
-    within('table tbody') do
-      assert_selector 'tr', count: 2
-      assert_text @data_export1.id
-      assert_text @data_export1.name
-      assert_text @data_export10.id
-      assert_text @data_export10.name
-    end
+    get data_exports_path, params: { q: { id_or_name_cont: 'something that does not exist' } }
+    assert_response :success
 
-    fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
-            with: 'something that does not exist'
-    find('input.t-search-component').send_keys(:return)
-
-    within 'section[role="status"]' do
-      assert_text I18n.t('components.viral.pagy.empty_state.title')
-      assert_text I18n.t('components.viral.pagy.empty_state.description')
+    assert_select 'section[role="status"]' do
+      assert_select 'h2', text: I18n.t('components.viral.pagy.empty_state.title')
+      assert_select 'div > span', text: I18n.t('components.viral.pagy.empty_state.description')
     end
   end
 
-  test 'clicking links in preview tab for sample data export' do
-    attachment1 = attachments(:attachment1)
-    attachment2 = attachments(:attachment2)
-
-    get data_export_path(@data_export1, tab: 'preview')
+  test 'create analysis export with completed workflow executions from user workflow executions index page' do
+    get workflow_executions_path
     assert_response :success
 
-    assert_select 'li:nth-child(2)' do
-      assert_select 'a', text: @project1.namespace.puid,
-                         href: redirect_data_export_path(@data_export1, identifier: @project1.namespace.puid)
-    end
+    assert_select "input[type='checkbox'][value='#{@workflow_execution1.id}']", count: 1
+    assert_select "input[type='checkbox'][value='#{@workflow_execution2.id}']", count: 1
 
-    get redirect_data_export_path(@data_export1, identifier: @project1.namespace.puid)
+    get new_data_export_path(export_type: 'analysis', ids: [@workflow_execution1.id, @workflow_execution2.id]),
+        as: :turbo_stream
+
+    assert_response :success
+
+    export_name = 'test data export'
+
+    assert_difference 'DataExport.count', 1 do
+      post data_exports_path(format: :turbo_stream),
+           params: {
+             data_export: {
+               export_type: 'analysis',
+               name: export_name,
+               export_parameters: { 'ids' => [@workflow_execution1.id, @workflow_execution2.id],
+                                    'analysis_type' => 'user' }
+             }
+           }
+    end
 
     follow_redirect!
     assert_response :success
 
-    assert_select 'h1', text: @project1.name
-
-    get data_export_path(@data_export1, tab: 'preview')
-    assert_response :success
-
-    assert_select 'li:nth-child(2) ul' do
-      assert_select 'li:first-child' do
-        assert_select 'a', text: @sample1.puid,
-                           href: redirect_data_export_path(@data_export1, identifier: @sample1.puid)
-      end
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                      'data_exports.create.success', name: export_name
+                    )}"
     end
 
-    get redirect_data_export_path(@data_export1, identifier: @sample1.puid)
+    assert_select 'dl', count: 1
+    assert_select 'div:nth-child(2) dd', text: export_name
+  end
 
-    follow_redirect!
+  test 'cannot create analysis export with non-completed workflow executions from user WE index page' do
+    get workflow_executions_path
     assert_response :success
 
-    assert_select 'h1', text: @sample1.name
-    assert_select 'span', text: @sample1.puid
+    export_name = 'test data export'
 
-    assert_select 'table' do
-      assert_select 'tbody' do
-        assert_select 'tr', count: 2
-        assert_select 'tr:first-child th:first-child', text: attachment2.puid
-        assert_select 'tr:first-child td:nth-child(2)', text: attachment2.file.filename.to_s
-        assert_select 'tr:nth-child(2) th:first-child', text: attachment1.puid
-        assert_select 'tr:nth-child(2) td:nth-child(2)', text: attachment1.file.filename.to_s
-      end
+    assert_no_difference 'DataExport.count' do
+      post data_exports_path(format: :turbo_stream),
+           params: {
+             data_export: {
+               export_type: 'analysis',
+               name: export_name,
+               export_parameters: { 'ids' => [@workflow_execution1.id, @workflow_execution3.id],
+                                    'analysis_type' => 'user' }
+             }
+           }
     end
+
+    assert_response :unprocessable_entity
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                      'services.data_exports.create.non_completed_workflow_executions'
+                    )}"
+    end
+  end
+
+  test 'renders sample, linelist, and single workflow analysis export dialogs' do
+    get new_data_export_path(export_type: 'sample', namespace_id: @project1.namespace.id,
+                             ids: [@sample1.id]), as: :turbo_stream
+    assert_response :success
+
+    get new_data_export_path(export_type: 'linelist', namespace_id: @project1.namespace.id,
+                             ids: [@sample1.id]), as: :turbo_stream
+    assert_response :success
+
+    get new_data_export_path(export_type: 'analysis', single_workflow: true,
+                             workflow_execution_id: @workflow_execution1.id), as: :turbo_stream
+    assert_response :success
+  end
+
+  test 'supports explicit data export sorting' do
+    get data_exports_path, params: { q: { s: 'id asc' } }
+
+    assert_response :success
+  end
+
+  test 'renders an error when destroying a data export fails' do
+    DataExports::DestroyService.any_instance.stubs(:execute)
+
+    delete data_export_path(@data_export1), as: :turbo_stream
+
+    assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                      'data_exports.destroy.error', name: @data_export1.name
+                    )}"
+    end
+  end
+
+  test 'renders an error when an export exceeds the size limit' do
+    max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
+    DataExport.any_instance.stubs(:source_size_bytes).returns(max_gigabytes.gigabytes)
+
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'sample',
+             export_parameters: {
+               ids: [@sample1.id],
+               namespace_id: @project1.namespace.id,
+               attachment_formats: Attachment::FORMAT_REGEX.keys
+             }
+           }
+         }
+
+    assert_response :unprocessable_content
+    assert_includes @response.body, 'data-export-dialog-errors'
+    assert_includes @response.body,
+                    I18n.t('services.data_exports.create.max_data_export_size_exceeded',
+                           max_size_gigabytes: max_gigabytes)
   end
 end
