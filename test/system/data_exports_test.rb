@@ -106,6 +106,7 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{sample3.id}']").click
     end
 
+    click_button I18n.t('shared.samples.actions_dropdown.label')
     assert_no_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.linelist_export')
     assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.linelist_export')
   end
@@ -123,6 +124,7 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{sample43.id}']").click
     end
 
+    click_button I18n.t('shared.samples.actions_dropdown.label')
     assert_no_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.linelist_export')
     assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.linelist_export')
   end
@@ -376,7 +378,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_accessible
       assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
       assert_text I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
-                                                                                                   1
+                                                                                                   '1'
     end
   end
 end
