@@ -164,7 +164,7 @@ module Projects
       sample30 = samples(:sample30)
 
       get namespace_project_samples_url(@namespace, @project),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.metadatafield1', operator: '=', value: sample30.metadata['metadatafield1'] }]]
           )
 
@@ -179,7 +179,7 @@ module Projects
 
       # First request stores the advanced search under the project-scoped session key.
       get namespace_project_samples_url(@namespace, @project),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.metadatafield1', operator: '=', value: sample30.metadata['metadatafield1'] }]]
           )
       assert_response :success
@@ -198,7 +198,7 @@ module Projects
       sample30 = samples(:sample30)
 
       get namespace_project_samples_url(@namespace, @project),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.metadatafield1', operator: '=', value: sample30.metadata['metadatafield1'] },
               { field: 'metadata.metadatafield2', operator: '=', value: sample30.metadata['metadatafield2'] }]]
           )
@@ -213,7 +213,7 @@ module Projects
       sample30 = samples(:sample30)
 
       get namespace_project_samples_url(@namespace, @project),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'name', operator: '=', value: @sample1.name }],
              [{ field: 'name', operator: '=', value: sample2.name }]]
           )
@@ -229,21 +229,21 @@ module Projects
       sample30 = samples(:sample30)
 
       get namespace_project_samples_url(@namespace, @project),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'name', operator: 'contains', value: 'no-such-sample-zzz' }]]
           )
       assert_response :success
       assert_select '[role="status"]', text: I18n.t('components.search.advanced.results_message.zero')
 
       get namespace_project_samples_url(@namespace, @project),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.metadatafield1', operator: '=', value: sample30.metadata['metadatafield1'] }]]
           )
       assert_response :success
       assert_select '[role="status"]', text: I18n.t('components.search.advanced.results_message.singular')
 
       get namespace_project_samples_url(@namespace, @project),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'name', operator: 'contains', value: 'ample' }]]
           )
       assert_response :success
@@ -253,7 +253,7 @@ module Projects
 
     test 'advanced search rejects a submission without a complete condition' do
       post search_namespace_project_samples_url(@namespace, @project),
-           params: samples_advanced_search_params([[{ field: 'name', operator: 'contains', value: '' }]]),
+           params: advanced_search_params([[{ field: 'name', operator: 'contains', value: '' }]]),
            as: :turbo_stream
 
       assert_response :unprocessable_content
@@ -264,7 +264,7 @@ module Projects
       sample30 = samples(:sample30)
 
       post search_namespace_project_samples_url(@namespace, @project),
-           params: samples_advanced_search_params(
+           params: advanced_search_params(
              [[{ field: 'metadata.metadatafield1', operator: 'contains', value: sample30.metadata['metadatafield1'] },
                { field: 'metadata.metadatafield1', operator: 'contains', value: sample30.metadata['metadatafield1'] }]]
            ),
@@ -333,7 +333,7 @@ module Projects
 
     def assert_between_filter(field:, operators:, low:, high:)
       get namespace_project_samples_url(@namespace, @project),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field:, operator: operators.first, value: low },
               { field:, operator: operators.last, value: high }]]
           )

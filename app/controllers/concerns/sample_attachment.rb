@@ -4,21 +4,22 @@
 module SampleAttachment
   extend ActiveSupport::Concern
   include Metadata
+  include AttachmentSearchable
 
   def list_sample_attachments
     @render_individual_attachments = filter_requested?
     all_attachments = load_attachments
+    @query = attachments_query(@sample)
     @has_attachments = all_attachments.any?
-    @q = all_attachments.ransack(params[:q])
-    set_attachment_default_sort
-    @pagy, @sample_attachments = pagy_with_metadata_sort(@q.result, Attachment)
+    @search_params = attachment_search_params
+
+    @pagy, @attachments = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+    @results_message = attachments_results_message
+
+    setup_ransack_for_attachments_form(all_attachments)
   end
 
   private
-
-  def filter_requested?
-    params.dig(:q, :puid_or_file_blob_filename_cont).present?
-  end
 
   def load_attachments
     if filter_requested?
@@ -26,9 +27,5 @@ module SampleAttachment
     else
       @sample.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
     end
-  end
-
-  def set_attachment_default_sort
-    @q.sorts = 'created_at desc' if @q.sorts.empty?
   end
 end

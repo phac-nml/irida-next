@@ -4,6 +4,8 @@
 module AttachmentActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
+  include AttachmentSearchable
+
   included do
     before_action proc { current_page }
     before_action proc { set_namespace }
@@ -18,10 +20,14 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
 
     @render_individual_attachments = filter_requested?
     all_attachments = load_attachments
+    @query = attachments_query(@namespace)
     @has_attachments = all_attachments.any?
-    @q = all_attachments.ransack(params[:q])
-    set_default_sort
-    @pagy, @attachments = pagy_with_metadata_sort(@q.result)
+    @search_params = attachment_search_params
+
+    @pagy, @attachments = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+    @results_message = attachments_results_message
+
+    setup_ransack_for_attachments_form(all_attachments)
   end
 
   def new
@@ -88,10 +94,6 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def filter_requested?
-    params.dig(:q, :puid_or_file_blob_filename_cont).present?
-  end
-
   def load_attachments
     if @render_individual_attachments
       @namespace.attachments.all
@@ -120,10 +122,6 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
     return unless action_name == 'index'
 
     @fixed = false
-  end
-
-  def set_default_sort
-    @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
 
   def attachment_params

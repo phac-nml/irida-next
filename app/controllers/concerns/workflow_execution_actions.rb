@@ -6,6 +6,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   include ListActions
   include NamespacePathHelper
   include WorkflowExecutionAttachment
+  include SearchResultsMessage
 
   included do
     before_action :set_default_tab, only: :show
@@ -386,27 +387,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def results_message
     return advanced_search_results_message if @query.advanced_query?
 
-    quick_search_results_message if @query.name_or_id_cont.present?
-  end
-
-  def advanced_search_results_message
-    if @pagy&.count&.zero?
-      I18n.t(:'components.search.advanced.results_message.zero')
-    elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
-      I18n.t(:'components.search.advanced.results_message.singular')
-    else
-      I18n.t(:'components.search.advanced.results_message.plural', total_count: @pagy&.count)
-    end
-  end
-
-  def quick_search_results_message
-    if @pagy&.count&.zero?
-      I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_id_cont)
-    elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
-      I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_id_cont)
-    else
-      I18n.t(:'components.search.results_message.plural', total_count: @pagy&.count,
-                                                          search_term: @query.name_or_id_cont)
-    end
+    quick_search_results_message(@query.name_or_id_cont) if @query.name_or_id_cont.present?
   end
 end
