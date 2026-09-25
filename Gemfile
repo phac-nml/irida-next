@@ -45,7 +45,7 @@ gem 'bootsnap', require: false
 gem 'thruster', require: false
 
 # User ActiveAdmin for admin interface
-gem 'activeadmin', '~> 4.0.0.beta22'
+gem 'activeadmin', '~> 4.0.0.beta23'
 
 # Use devise for auth
 gem 'devise', '~> 5.0.4'
