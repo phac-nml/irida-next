@@ -54,6 +54,11 @@ class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLengt
     %w[submitted running prepared initial].include?(state)
   end
 
+  # Attachments owned directly by this workflow execution, plus outputs from its samples' executions.
+  def combined_attachments
+    Attachment.where(attachable: self).or(Attachment.where(attachable: samples_workflow_executions))
+  end
+
   def deletable?
     %w[completed error canceled].include?(state) && cleaned?
   end
