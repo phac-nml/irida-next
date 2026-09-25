@@ -70,21 +70,15 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
     super
   end
 
-  def attachable_attachments_scope # rubocop:disable Metrics/AbcSize
-    attachments = []
-    attachables.each do |attachable|
-      if attachables.size == 1 && attachable.instance_of?(WorkflowExecution)
-        attachments << Attachment.where(attachable: attachable)
-                                 .or(Attachment.where(attachable: attachable.samples_workflow_executions))
-      elsif filter_requested?
-        attachments.concat(attachable.attachments.all)
-      else
-        attachments.concat(
-          attachable.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
-        )
-      end
-    end
-    attachments
+  def attachable_attachments_scope
+    attachables.map { |attachable| attachments_for(attachable) }.reduce(:or)
+  end
+
+  def attachments_for(attachable)
+    return attachable.combined_attachments if attachables.one? && attachable.respond_to?(:combined_attachments)
+    return attachable.attachments.all if filter_requested?
+
+    attachable.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
   end
 
   def normalize_condition_field(condition)
