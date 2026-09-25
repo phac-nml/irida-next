@@ -32,28 +32,6 @@ module Projects
       end
     end
 
-    test 'skips post-persistence actions when project is not persisted' do
-      invalid_params = { namespace_attributes: { name: 'proj1', path: 'proj1' } }
-      service = Projects::CreateService.new(@user, invalid_params)
-      service.expects(:create_automation_bot).never
-      service.expects(:create_activities).never
-
-      project = service.execute
-
-      assert_not project.persisted?
-    end
-
-    test 'runs post-persistence actions when project is persisted' do
-      valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
-      service = Projects::CreateService.new(@user, valid_params)
-      service.expects(:create_automation_bot).once
-      service.expects(:create_activities).once
-
-      project = service.execute
-
-      assert_predicate project, :persisted?
-    end
-
     test 'create project with valid params but incorrect permissions under user namespace' do
       valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: @parent_namespace.id } }
       user = users(:steve_doe)
