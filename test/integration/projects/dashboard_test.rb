@@ -25,8 +25,8 @@ module Projects
       assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_select '#groups_tree', count: 1
       assert_select '.treegrid-row', count: 20
-      assert_select 'a', exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
       assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
+      assert_select 'a', exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
     end
 
     test 'should show personal projects' do
@@ -42,6 +42,21 @@ module Projects
       assert_select '.treegrid-row', count: 4
       assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
       assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next'), count: 0
+    end
+
+    test 'should treat personal=false as the all projects tab' do
+      get dashboard_projects_path, params: { personal: 'false' }
+
+      assert_response :success
+      assert_select '[role="tab"][aria-selected="true"]#all-tab'
+      assert_select '[role="tab"][aria-selected="false"]#personal-tab'
+      assert_select 'input[type="hidden"][name="personal"][value="true"]', count: 0
+
+      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_select '#groups_tree', count: 1
+      assert_select '.treegrid-row', count: 20
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next')
     end
 
     test 'can search the list of projects by name' do
@@ -172,21 +187,6 @@ module Projects
       assert_response :success
       # Should only show projects the user is authorized to see
       # If user has no projects, empty state should be shown
-    end
-
-    test 'should filter to personal projects when personal=true' do
-      get dashboard_projects_path, params: { personal: 'true' }
-
-      assert_response :success
-      # Should only show personal projects (under user's namespace)
-      # This is verified by the authorization scope
-    end
-
-    test 'should show all authorized projects when personal=false' do
-      get dashboard_projects_path, params: { personal: 'false' }
-
-      assert_response :success
-      # Should show all projects user has access to (personal + group projects)
     end
 
     test 'accessing projects index on invalid page causes pagy overflow redirect' do
