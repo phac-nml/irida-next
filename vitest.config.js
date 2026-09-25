@@ -44,6 +44,8 @@ const fullCoverageFiles = [
   "app/javascript/utilities/refresh.js",
   "app/javascript/utilities/styles.js",
   "app/javascript/utilities/word_connector.js",
+  "app/javascript/controllers/email_input_controller.js",
+  "app/javascript/controllers/form_error_summary_controller.js",
 ];
 
 const fullCoverageThresholds = Object.fromEntries(
