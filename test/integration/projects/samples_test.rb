@@ -179,7 +179,7 @@ module Projects
 
       # First request stores the advanced search under the project-scoped session key.
       get namespace_project_samples_url(@namespace, @project),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'metadata.metadatafield1', operator: '=', value: sample30.metadata['metadatafield1'] }]]
           )
       assert_response :success
