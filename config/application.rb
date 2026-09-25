@@ -38,9 +38,6 @@ module Irida
     #  - ensures browsers verify assets via SHA-256 hash
     config.assets.integrity_hash_algorithm = 'sha256'
 
-    # Sweep importmap cache for components
-    config.importmap.cache_sweepers << Rails.root.join('app/components')
-
     config.view_component.previews.default_layout = 'lookbook'
 
     # Version has_many and belongs_to associations (This feature is experimental due to the number of edge cases)
