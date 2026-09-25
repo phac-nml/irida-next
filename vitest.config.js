@@ -64,6 +64,15 @@ export default defineConfig({
       controllers: resolve(jsRoot, "controllers"),
       debounce: resolve("vendor/javascript/debounce.js"),
       deepmerge: resolve("vendor/javascript/deepmerge.js"),
+      "@sindresorhus/slugify": resolve(
+        "vendor/javascript/@sindresorhus--slugify.js",
+      ),
+      "@sindresorhus/transliterate": resolve(
+        "vendor/javascript/@sindresorhus--transliterate.js",
+      ),
+      "escape-string-regexp": resolve(
+        "vendor/javascript/escape-string-regexp.js",
+      ),
       "focus-trap": resolve("vendor/javascript/focus-trap.js"),
       tabbable: resolve("vendor/javascript/tabbable.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
