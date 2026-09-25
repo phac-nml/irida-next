@@ -134,5 +134,27 @@ module Projects
 
       assert project.namespace.public?
     end
+
+    test 'adds project creation errors to the project namespace' do
+      error_message = 'Project could not be created'
+      service = Projects::CreateService.new(@user, namespace_attributes: { parent_id: @parent_namespace.id })
+      service.project.build_namespace(name: 'proj1', path: 'proj1', parent: @parent_namespace, owner: @user)
+      service.stubs(:create_associations).raises(Projects::CreateService::ProjectCreateError, error_message)
+
+      project = service.execute
+
+      assert_same service.project, project
+      assert_equal [error_message], project.namespace.errors[:base]
+    end
+
+    test 'does not make project public when global groups are disabled' do
+      Flipper.disable(:global_groups)
+      public_group_namespace = groups(:public_group1)
+      valid_params = { namespace_attributes: { name: 'proj1', path: 'proj1', parent_id: public_group_namespace.id } }
+
+      project = Projects::CreateService.new(@user, valid_params).execute
+
+      assert_not project.namespace.public?
+    end
   end
 end
