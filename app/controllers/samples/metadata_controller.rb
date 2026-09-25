@@ -34,9 +34,8 @@ module Samples
       if @sample.errors.any?
         render status: :unprocessable_content, locals: { type: 'error', message: error_message(@sample) }
       else
-        @status = get_create_status(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
-        @messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
-        render status: @status
+        @messages = bulk_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
+        render status: create_metadata_fields[:existing_keys].any? ? :multi_status : :ok
       end
     end
 
@@ -46,16 +45,16 @@ module Samples
     def bulk_update # rubocop:disable Metrics/AbcSize
       authorize! @project, to: :update_sample?
       @allowed_to = { update_sample: true }
-      updated_metadata_field = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
-                                                                              update_field_params).execute
+      ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
+                                                     update_field_params).execute
+
       if @sample.errors.any?
         render status: :unprocessable_content,
                locals: { key: update_field_params['update_field']['key'].keys[0],
                          value: update_field_params['update_field']['value'].keys[0] }
       else
-        update_render_params = get_update_status_and_message(updated_metadata_field)
-        render status: update_render_params[:status], locals: { type: update_render_params[:message][:type],
-                                                                message: update_render_params[:message][:message] }
+        render status: :ok, locals: { type: :success,
+                                      message: t('projects.samples.metadata.fields.update.success') }
       end
     end
 
@@ -81,52 +80,45 @@ module Samples
       params.expect(sample: [{ update_field: { key: {}, value: {} } }])
     end
 
-    def get_create_status(added_keys, existing_keys)
-      if added_keys.any? && existing_keys.any?
-        :multi_status
-      elsif existing_keys.any?
-        :unprocessable_content
-      else
-        :ok
-      end
+    def bulk_create_messages(added_keys, existing_keys)
+      [
+        bulk_create_success_message(added_keys),
+        bulk_create_existing_message(existing_keys)
+      ].compact
     end
 
-    def get_create_messages(added_keys, existing_keys) # rubocop:disable Metrics/MethodLength
-      messages = []
-      if added_keys.one?
-        messages << { type: 'success',
-                      message: t('projects.samples.metadata.fields.create.single_success', key: added_keys[0]) }
-      elsif added_keys.any?
-        messages << { type: 'success',
-                      message: t('projects.samples.metadata.fields.create.multi_success',
-                                 keys: added_keys.join(', ')) }
-      end
+    def bulk_create_success_message(keys)
+      message = if keys.one?
+                  t(
+                    'projects.samples.metadata.fields.create.single_success',
+                    key: keys.first
+                  )
+                else
+                  t(
+                    'projects.samples.metadata.fields.create.multi_success',
+                    keys: keys.join(', ')
+                  )
+                end
 
-      if existing_keys.one?
-        messages << { type: 'error',
-                      message: t('projects.samples.metadata.fields.create.single_key_exists',
-                                 key: existing_keys[0]) }
-      elsif existing_keys.any?
-        messages << { type: 'error',
-                      message: t('projects.samples.metadata.fields.create.multi_keys_exists',
-                                 keys: existing_keys.join(', ')) }
-      end
-      messages
+      { type: 'success', message: message }
     end
 
-    def get_update_status_and_message(updated_metadata_field)
-      update_render_params = {}
-      modified_metadata = updated_metadata_field[:added] + updated_metadata_field[:updated] +
-                          updated_metadata_field[:deleted]
-      if modified_metadata.any?
-        update_render_params[:status] = :ok
-        update_render_params[:message] =
-          { type: 'success', message: t('projects.samples.metadata.fields.update.success') }
-      else
-        update_render_params[:status] = :unprocessable_content
-        update_render_params[:message] = { type: 'error', message: error_message(@sample) }
-      end
-      update_render_params
+    def bulk_create_existing_message(keys)
+      return if keys.empty?
+
+      message = if keys.one?
+                  t(
+                    'projects.samples.metadata.fields.create.single_key_exists',
+                    key: keys.first
+                  )
+                else
+                  t(
+                    'projects.samples.metadata.fields.create.multi_keys_exists',
+                    keys: keys.join(', ')
+                  )
+                end
+
+      { type: 'error', message: message }
     end
 
     def create_metadata_field(field, value, cell_id)
@@ -169,19 +161,18 @@ module Samples
     end
 
     def render_update_error(cell_id)
-      # render status: :unprocessable_content,
-      #       locals: { type: 'error', message: error_message(@sample) }
-      render turbo_stream: [
-        turbo_stream.update(
-          cell_id, @sample.metadata[@field]
-        ),
-        turbo_stream.append(
-          'flashes',
-          partial: 'shared/flash',
-          locals: { type: 'error',
-                    message: error_message(@sample) }
-        )
-      ]
+      render status: :unprocessable_content,
+             turbo_stream: [
+               turbo_stream.update(
+                 cell_id, @sample.metadata[@field]
+               ),
+               turbo_stream.append(
+                 'flashes',
+                 partial: 'shared/flash',
+                 locals: { type: 'error',
+                           message: error_message(@sample) }
+               )
+             ]
     end
 
     def render_update_success(cell_id)

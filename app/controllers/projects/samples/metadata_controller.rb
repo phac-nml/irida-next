@@ -7,6 +7,7 @@ module Projects
       before_action :view_authorizations, only: %i[destroy]
 
       def new
+        authorize! @project, to: :update_sample?
         render turbo_stream: turbo_stream.update('sample_modal',
                                                  partial: 'new_metadata_modal',
                                                  locals: {

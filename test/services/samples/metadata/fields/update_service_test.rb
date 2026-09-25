@@ -29,7 +29,7 @@ module Samples
 
           assert_equal({ 'metadatafield2' => 'value2', 'metadatafield3' => 'value1' }, @sample32.metadata)
           assert_equal({ 'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                               'updated_at' => Time.new(2000, 1, 1).utc.iso8601 },
                          'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                        @sample32.metadata_provenance)
           assert_equal({ added: %w[metadatafield3], updated: [], deleted: %w[metadatafield1],
@@ -57,7 +57,7 @@ module Samples
           assert_equal({ 'metadatafield1' => 'newvalue1', 'metadatafield2' => 'value2' }, @sample32.metadata)
           assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
                          'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' } },
+                                               'updated_at' => Time.new(2000, 1, 1).utc.iso8601 } },
                        @sample32.metadata_provenance)
           assert_equal({ added: [], updated: %w[metadatafield1], deleted: [], not_updated: [], unchanged: [],
                          not_found: [] }, metadata_changes)
@@ -80,7 +80,7 @@ module Samples
 
           assert_equal({ 'metadatafield2' => 'value2', 'metadatafield3' => 'newvalue1' }, @sample32.metadata)
           assert_equal({ 'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                               'updated_at' => Time.new(2000, 1, 1).utc.iso8601 },
                          'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                        @sample32.metadata_provenance)
           assert_equal({ added: %w[metadatafield3], updated: [], deleted: %w[metadatafield1],

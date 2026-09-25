@@ -30,9 +30,9 @@ module Samples
           assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
                        @sample32.metadata)
           assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
-                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                               'updated_at' => Time.new(2000, 1, 1).utc.iso8601 },
                          'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                               'updated_at' => Time.new(2000, 1, 1).utc.iso8601 },
                          'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                        @sample32.metadata_provenance)
           assert_equal({ added_keys: %w[metadatafield3], existing_keys: [] }, create_metadata_fields)
@@ -83,9 +83,9 @@ module Samples
                          'metadatafield4' => 'value4' },
                        @sample32.metadata)
           assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
-                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                               'updated_at' => Time.new(2000, 1, 1).utc.iso8601 },
                          'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                               'updated_at' => Time.new(2000, 1, 1).utc.iso8601 },
                          'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
                          'metadatafield4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                        @sample32.metadata_provenance)
@@ -153,9 +153,9 @@ module Samples
                          'metadata field 4' => 'value 4' },
                        @sample32.metadata)
           assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
-                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                               'updated_at' => Time.new(2000, 1, 1).utc.iso8601 },
                          'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                               'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                               'updated_at' => Time.new(2000, 1, 1).utc.iso8601 },
                          'metadata field3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
                          'metadata field 4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                        @sample32.metadata_provenance)

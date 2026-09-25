@@ -118,7 +118,7 @@ sample28:
   created_at: <%= 31.weeks.ago %>
   updated_at: <%= 31.days.ago %>
   metadata: { 'unique.metadata.field': 'unique_value', 'metadata field with spaces': 'spaces value' }
-  metadata_provenance: { 'unique.metadata.field': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> }, 'metadata field with spaces': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'unique.metadata.field': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' }, 'metadata field with spaces': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' } }
 
 sample29:
   name: Sample 2
@@ -154,8 +154,8 @@ sample32:
   project_id: <%= ActiveRecord::FixtureSet.identify(:project29, :uuid) %>
   puid: INXT_SAM_AAAAAAAABC
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' },
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' } }
 
 sample33:
   name: Sample33
