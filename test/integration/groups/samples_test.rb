@@ -138,7 +138,7 @@ module Groups
 
       # First request stores the advanced search under the group-scoped session key.
       get group_samples_url(@group),
-          params: samples_advanced_search_params(
+          params: advanced_search_params(
             [[{ field: 'puid', operator: 'in', value: [@sample1.puid, @sample2.puid] }]]
           )
       assert_response :success
