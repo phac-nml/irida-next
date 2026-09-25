@@ -9,7 +9,6 @@ describe("colour mode controller", () => {
 
   async function flushStimulus() {
     await Promise.resolve();
-    await Promise.resolve();
     await new Promise((resolve) => setTimeout(resolve, 0));
   }
 

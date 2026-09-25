@@ -118,7 +118,6 @@ describe("form error summary", () => {
     const link = summary.querySelector("a");
     summary.remove();
     await Promise.resolve();
-    await Promise.resolve();
     focusWhenVisible.mockClear();
     link.dispatchEvent(
       new MouseEvent("click", { bubbles: true, cancelable: true }),

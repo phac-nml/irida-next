@@ -103,7 +103,6 @@ describe("email input", () => {
     input("invalid");
     root.remove();
     await Promise.resolve();
-    await Promise.resolve();
     vi.advanceTimersByTime(300);
     expect(target("errorContainer")).toHaveClass("hidden");
     document.body.append(root);
@@ -120,7 +119,6 @@ describe("email input", () => {
     input("person@example.com");
     submit();
     root.remove();
-    await Promise.resolve();
     await Promise.resolve();
     vi.advanceTimersByTime(20);
     expect(send).not.toHaveBeenCalled();
