@@ -191,6 +191,8 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
         { id: template.id, name: template.name, fields: template.fields }
       end
       { open: true, namespace_id: params[:namespace_id], namespace: @namespace, templates: templates }
+    else
+      raise ActionController::BadRequest, "Unsupported data export type: #{params[:export_type]}"
     end
   end
 

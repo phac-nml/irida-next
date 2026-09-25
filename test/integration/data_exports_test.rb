@@ -518,6 +518,12 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'rejects unsupported data export types' do
+    get new_data_export_path(export_type: 'unsupported')
+
+    assert_response :bad_request
+  end
+
   test 'supports explicit data export sorting' do
     get data_exports_path, params: { q: { s: 'id asc' } }
 
