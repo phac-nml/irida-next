@@ -18,6 +18,8 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     @workflow_execution1 = workflow_executions(:irida_next_example_completed_with_output)
     @workflow_execution2 = workflow_executions(:irida_next_example_completed)
     @workflow_execution3 = workflow_executions(:irida_next_example_error)
+    @workflow_execution4 = workflow_executions(:automated_workflow_execution)
+    @workflow_execution5 = workflow_executions(:automated_example_completed)
     @shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_shared2)
 
     sign_in @user
@@ -516,6 +518,37 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     get new_data_export_path(export_type: 'analysis', single_workflow: true,
                              workflow_execution_id: @workflow_execution1.id), as: :turbo_stream
     assert_response :success
+
+    assert_select 'div.font-normal.text-slate-500' do
+      assert_select 'div.font-normal.text-gray-500', text: /#{@workflow_execution1.name}/
+      assert_select "input[name='data_export[export_parameters][namespace_id]']", count: 0
+    end
+
+    get new_data_export_path(export_type: 'analysis', single_workflow: true,
+                             workflow_execution_id: @workflow_execution1.id,
+                             analysis_type: 'project', namespace_id: @project1.namespace.id), as: :turbo_stream
+    assert_response :success
+
+    assert_select "input[name='data_export[export_parameters][namespace_id]'][value='#{@project1.namespace.id}']",
+                  count: 1
+
+    WorkflowExecution.any_instance.stubs(:name).returns(nil)
+    get new_data_export_path(export_type: 'analysis', single_workflow: true,
+                             workflow_execution_id: @workflow_execution1.id),
+        as: :turbo_stream
+    assert_response :success
+
+    assert_select 'div.font-normal.text-gray-500',
+                  text: /#{I18n.t('data_exports.list_workflow_execution.name')}/,
+                  count: 0
+
+    Namespace.any_instance.stubs(:metadata_fields).returns([])
+    get new_data_export_path(export_type: 'linelist', namespace_id: @project1.namespace.id,
+                             ids: [@sample1.id]), as: :turbo_stream
+    assert_response :success
+
+    assert_select '[data-controller*="sortable-lists--v1--two-lists-selection"]', count: 0
+    assert_select 'h2', text: I18n.t('data_exports.new_linelist_export_dialog.metadata'), count: 0
   end
 
   test 'rejects unsupported data export types' do
@@ -565,5 +598,373 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     assert_includes @response.body,
                     I18n.t('services.data_exports.create.max_data_export_size_exceeded',
                            max_size_gigabytes: max_gigabytes)
+  end
+
+  test 'clears the sample dialog when an invalid sample export is submitted' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'sample',
+             export_parameters: {
+               ids: [@sample1.id],
+               namespace_id: @project1.namespace.id
+             }
+           }
+         }
+
+    assert_response :unprocessable_content
+    assert_includes @response.body, 'samples_dialog'
+    assert_includes @response.body, 'flashes'
+    assert_not_includes @response.body, 'data-export-dialog-errors'
+  end
+
+  test 'should apply default sort and support sorting data exports' do
+    get data_exports_path
+    assert_response :success
+    assert_sort_state(5, 'descending')
+
+    get data_exports_path, params: { q: { s: 'id asc' } }
+    assert_response :success
+    assert_sort_state(1, 'ascending')
+    assert_first_rows_include(@data_export9.id, @data_export8.id)
+
+    get data_exports_path, params: { q: { s: 'id desc' } }
+    assert_response :success
+    assert_sort_state(1, 'descending')
+    assert_first_rows_include(@data_export7.id, @data_export2.id)
+
+    get data_exports_path, params: { q: { s: 'name asc' } }
+    assert_response :success
+    assert_sort_state(2, 'ascending')
+    assert_first_rows_include(@data_export1.name, @data_export10.name)
+
+    get data_exports_path, params: { q: { s: 'name desc' } }
+    assert_response :success
+    assert_sort_state(2, 'descending')
+    assert_first_rows_include(@data_export2.id, @data_export9.id)
+
+    get data_exports_path, params: { q: { s: 'created_at asc' } }
+    assert_response :success
+    assert_sort_state(5, 'ascending')
+    assert_first_rows_include(@data_export1.id, @data_export2.id)
+
+    get data_exports_path, params: { q: { s: 'expires_at asc' } }
+    assert_response :success
+    assert_sort_state(6, 'ascending')
+    assert_first_rows_include(@data_export1.id, @data_export7.id)
+  end
+
+  test 'should create new sample export with viable params' do
+    get namespace_project_samples_path(@group1, @project1)
+    assert_response :success
+
+    params = { 'data_export' => {
+                 'export_type' => 'sample',
+                 'export_parameters' => { 'ids' => [@sample1.id], 'namespace_id' => @project1.namespace.id,
+                                          'attachment_formats' =>
+                                          Attachment::FORMAT_REGEX.keys }
+               },
+               format: :turbo_stream }
+
+    assert_difference('DataExport.count', 1) do
+      post data_exports_path(params)
+    end
+
+    follow_redirect!
+    assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                      'data_exports.create.success', name: DataExport.last.name || DataExport.last.id
+                    )}"
+    end
+  end
+
+  test 'should delete export and redirect through destroy action if redirect param present' do
+    get data_export_path(@data_export1)
+    assert_response :success
+
+    assert_difference('DataExport.count', -1) do
+      delete data_export_path(@data_export1, redirect: true),
+             as: :turbo_stream
+    end
+
+    follow_redirect!
+    assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                      'data_exports.destroy.success', name: @data_export1.name || @data_export1.id
+                    )}"
+    end
+  end
+
+  test 'should not delete export without valid authorization' do
+    sign_in users(:jane_doe)
+
+    assert_no_difference('DataExport.count') do
+      delete data_export_path(@data_export1),
+             as: :turbo_stream
+    end
+
+    assert_response :unauthorized
+  end
+
+  test 'should not view data export page without proper authorization' do
+    sign_in users(:jane_doe)
+    get data_export_path(@data_export1)
+    assert_response :unauthorized
+  end
+
+  test 'should create new export with only necessary params' do
+    get namespace_project_samples_path(@group1, @project1)
+    assert_response :success
+
+    post data_exports_path, params: {
+      data_export: {
+        export_type: 'sample',
+        export_parameters: { ids: [@sample1.id], 'namespace_id' => @project1.namespace.id,
+                             'attachment_formats' => Attachment::FORMAT_REGEX.keys }
+      }
+    }
+    follow_redirect!
+    assert_response :success
+  end
+
+  test 'should not create invalid sample and linelist exports' do
+    # Sample export requires an export type
+    post data_exports_path(format: :turbo_stream),
+         params: { data_export: { export_parameters: { ids: [@sample1.id],
+                                                       attachment_formats: Attachment::FORMAT_REGEX.keys } } }
+    assert_response :unprocessable_content
+
+    # Sample export requires export parameters
+    post data_exports_path(format: :turbo_stream),
+         params: { data_export: { export_type: 'sample' } }
+    assert_response :unprocessable_content
+
+    # Sample export IDs must be valid and authorized
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: { export_type: 'sample',
+                          export_parameters: { invalid_ids: ['not valid id'],
+                                               attachment_formats: Attachment::FORMAT_REGEX.keys } }
+         }
+    assert_response :unprocessable_content
+
+    # Linelist export requires a format
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: { export_type: 'linelist',
+                          export_parameters: { ids: [@sample1.id],
+                                               namespace_id: @project1.namespace.id,
+                                               metadata_fields: ['metadatafield1'] } }
+         }
+    assert_response :unprocessable_content
+
+    # Linelist export accepts only supported formats
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: { export_type: 'linelist',
+                          export_parameters: { ids: [@sample1.id],
+                                               namespace_id: @project1.namespace.id,
+                                               linelist_format: 'invalid_format',
+                                               metadata_fields: ['metadatafield1'] } }
+         }
+    assert_response :unprocessable_content
+
+    # Linelist export requires a namespace
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: { export_type: 'linelist',
+                          export_parameters: { ids: [@sample1.id],
+                                               linelist_format: 'xlsx',
+                                               metadata_fields: ['metadatafield1'] } }
+         }
+    assert_response :unprocessable_content
+
+    # Linelist export requires a valid namespace
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: { export_type: 'linelist',
+                          export_parameters: { ids: [@sample1.id],
+                                               namespace_id: 'invalid_id',
+                                               linelist_format: 'csv',
+                                               metadata_fields: ['metadatafield1'] } }
+         }
+    assert_response :unprocessable_content
+
+    # Linelist export requires metadata fields
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: { export_type: 'linelist',
+                          export_parameters: { ids: [@sample1.id],
+                                               namespace_id: 'invalid_id',
+                                               linelist_format: 'csv' } }
+         }
+    assert_response :unprocessable_content
+
+    # Sample export requires attachment formats
+    assert_no_difference('DataExport.count') do
+      post data_exports_path(format: :turbo_stream),
+           params: { data_export: { export_type: 'sample',
+                                    export_parameters: { ids: [@sample1.id],
+                                                         namespace_id: @project1.namespace.id } } }
+    end
+    assert_response :unprocessable_content
+  end
+
+  test 'should return 422 and translated message in export dialog when export exceeds size limit' do
+    max_gigabytes = Irida::CurrentSettings.max_data_export_size_gigabytes
+    DataExport.any_instance.stubs(:source_size_bytes).returns(max_gigabytes.gigabytes)
+
+    params = {
+      'data_export' => {
+        'export_type' => 'sample',
+        'export_parameters' => {
+          'ids' => [@sample1.id],
+          'namespace_id' => @project1.namespace.id,
+          'attachment_formats' => Attachment::FORMAT_REGEX.keys
+        }
+      },
+      format: :turbo_stream
+    }
+
+    assert_enqueued_jobs(0, only: DataExports::CreateJob) do
+      assert_no_difference('DataExport.count') do
+        post data_exports_path(params)
+      end
+    end
+
+    assert_response :unprocessable_content
+    assert_includes @response.body, 'target="data-export-dialog-errors"'
+    assert_includes @response.body,
+                    I18n.t('services.data_exports.create.max_data_export_size_exceeded',
+                           max_size_gigabytes: max_gigabytes)
+  end
+
+  test 'should list samples and workflow executions' do
+    # The first page replaces the existing frame before appending samples
+    post list_data_exports_path(format: :turbo_stream), params: {
+      page: 1,
+      sample_ids: [@sample1.id],
+      list_class: 'sample'
+    }
+    assert_response :success
+    assert_select 'turbo-stream[action="replace"][target="list_selections"]', count: 1
+    assert_select 'turbo-stream[action="append"][target="list_selections"]' do
+      assert_select 'div', text: @sample1.puid
+    end
+
+    # Later pages only append the next batch of samples
+    post list_data_exports_path(format: :turbo_stream), params: {
+      page: 2,
+      sample_ids: [@sample1.id],
+      list_class: 'sample'
+    }
+    assert_response :success
+    assert_select 'turbo-stream[action="replace"][target="list_selections"]', count: 0
+    assert_select 'turbo-stream[action="append"][target="list_selections"]' do
+      assert_select 'div', text: @sample1.puid
+    end
+
+    post list_data_exports_path(format: :turbo_stream), params: {
+      page: 1,
+      workflow_execution_ids: [@workflow_execution4.id, @workflow_execution5.id],
+      list_class: 'workflow_execution'
+    }
+    assert_response :success
+    assert_select 'turbo-stream[action="append"][target="list_selections"]' do
+      assert_select 'div', text: /#{@workflow_execution4.id}/
+      assert_select 'div', text: /#{@workflow_execution5.id}/
+    end
+
+    # An empty workflow page still renders the append stream without rows.
+    post list_data_exports_path(format: :turbo_stream), params: {
+      page: 1,
+      workflow_execution_ids: [],
+      list_class: 'workflow_execution'
+    }
+    assert_response :success
+    assert_select 'turbo-stream[action="append"][target="list_selections"]' do
+      assert_select 'div', count: 0
+    end
+
+    # Unknown list class still renders the append stream without rows
+    post list_data_exports_path(format: :turbo_stream), params: {
+      page: 1,
+      list_class: 'unknown'
+    }
+    assert_response :success
+    assert_select 'turbo-stream[action="append"][target="list_selections"]' do
+      assert_select 'div', count: 0
+    end
+  end
+
+  test 'should not create invalid analysis exports' do
+    user_workflow = workflow_executions(:workflow_execution_valid)
+
+    # Missing analysis type
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow_execution4.id, @workflow_execution5.id, user_workflow.id],
+                                  'namespace_id' => @project1.namespace.id }
+           }
+         }
+    assert_response :unprocessable_content
+
+    # Invalid project namespace
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow_execution4.id, @workflow_execution5.id],
+                                  'namespace_id' => 'invalid_id' }
+           }
+         }
+    assert_response :unprocessable_content
+
+    # Project analyses including workflow executions not belonging to the project
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow_execution4.id, @workflow_execution5.id, user_workflow.id],
+                                  'namespace_id' => @project1.namespace.id,
+                                  'analysis_type' => 'project' }
+           }
+         }
+    assert_response :unprocessable_content
+
+    # User analyses including workflow executions not belonging to the user
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow_execution4.id, @workflow_execution5.id, user_workflow.id],
+                                  'analysis_type' => 'user' }
+           }
+         }
+    assert_response :unprocessable_content
+  end
+
+  test 'accessing data exports index on invalid page causes pagy overflow redirect' do
+    # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
+    # The rescue_from handler should redirect to first page with page=1 and limit=20
+    get data_exports_path(page: 50)
+
+    # Should be redirected to first page
+    assert_response :redirect
+    # Check both page and limit are in the redirect URL (order may vary)
+    assert_match(/page=1/, response.location)
+    assert_match(/limit=20/, response.location)
+
+    # Follow the redirect and verify it's successful
+    follow_redirect!
+    assert_response :success
   end
 end
