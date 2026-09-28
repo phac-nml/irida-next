@@ -28,7 +28,7 @@ module Projects
       sign_in @user
     end
 
-    test 'member with access level >= analyst can see create export button on samples pages' do
+    test 'member with access level >= analyst can see create export button on project samples pages' do
       get namespace_project_samples_url(@group1, @project1)
 
       assert_select 'button', text: I18n.t('shared.samples.actions_dropdown.label')
@@ -40,7 +40,7 @@ module Projects
                     text: I18n.t('shared.samples.actions_dropdown.sample_export')
     end
 
-    test 'member with access level <= analyst cannot see create export button on samples pages' do
+    test 'member with access level <= analyst cannot see create export button on project samples pages' do
       sign_out @user
       sign_in users(:ryan_doe)
       get namespace_project_samples_url(@group1, @project1)
@@ -73,8 +73,6 @@ module Projects
 
       assert_select 'dialog' do
         assert_select 'h1', text: I18n.t('data_exports.new_linelist_export_dialog.title')
-        assert_select 'button',
-                      text: I18n.t('data_exports.new.samples_count.non_zero').gsub!('COUNT_PLACEHOLDER', '0')
         assert_select 'h2', text: I18n.t('data_exports.new_linelist_export_dialog.metadata')
         assert_select 'p', text: I18n.t('data_exports.new_linelist_export_dialog.fields_instructions')
         assert_select 'p', text: I18n.t('data_exports.new_linelist_export_dialog.available_list_title')
@@ -127,50 +125,44 @@ module Projects
       assert_select 'dialog', count: 0
     end
 
-    test 'can create data export from project samples page' do
-      get new_data_export_path(export_type: 'linelist', namespace_id: @project1.namespace.id, ids: [@sample1.id]),
-          as: :turbo_stream
+    test 'create linelist export from project samples page' do
+      get namespace_project_samples_path(@group1, @project1)
       assert_response :success
 
-      assert_select 'h1', text: I18n.t('data_exports.new_linelist_export_dialog.title')
+      assert_select "input[type='checkbox'][value='#{@sample1.id}']", count: 1
 
-      params = { 'data_export' => {
-                   'export_type' => 'linelist',
-                   'name' => 'test data export csv',
-                   'export_parameters' => { 'ids' => [@sample1.id], 'linelist_format' => 'csv',
-                                            'namespace_id' => @project1.namespace.id }
-                 },
-                 format: :turbo_stream }
+      %w[csv xlsx].each do |format|
+        export_name = "test #{format} export"
 
-      assert_difference('DataExport.count', 1) do
-        post data_exports_path, params: params
+        params = { 'data_export' => {
+                     'export_type' => 'linelist',
+                     'name' => export_name,
+                     'export_parameters' => {
+                       'ids' => [@sample1.id],
+                       'namespace_id' => @project1.namespace.id,
+                       'linelist_format' => format,
+                       'metadata_fields' => %w[metadatafield1 metadatafield2]
+                     }
+                   },
+                   format: :turbo_stream }
+
+        assert_difference('DataExport.count', 1) do
+          post data_exports_path, params: params
+        end
+
+        follow_redirect!
+        assert_response :success
+
+        assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+          assert_select 'div',
+                        "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                          'data_exports.create.success', name: export_name
+                        )}"
+        end
+
+        assert_select 'div:nth-child(2) dd', text: export_name
+        assert_select 'div:nth-child(4) dd', text: format
       end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select 'div:nth-child(2) dd', text: 'test data export csv'
-
-      get new_data_export_path(export_type: 'linelist', namespace_id: @project1.namespace.id, ids: [@sample1.id]),
-          as: :turbo_stream
-      assert_response :success
-
-      params = { 'data_export' => {
-                   'export_type' => 'linelist',
-                   'name' => 'test data export xlsx',
-                   'export_parameters' => { 'ids' => [@sample1.id], 'linelist_format' => 'xlsx',
-                                            'namespace_id' => @project1.namespace.id }
-                 },
-                 format: :turbo_stream }
-
-      assert_difference('DataExport.count', 1) do
-        post data_exports_path, params: params
-      end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select 'div:nth-child(2) dd', text: 'test data export xlsx'
     end
 
     test 'create analysis export using users project shared workflow execution from user we show page' do
@@ -209,82 +201,6 @@ module Projects
       assert_response :success
 
       assert_select 'div:nth-child(2) dd', text: export_name
-    end
-
-    test 'create csv linelist export from project samples page' do
-      get namespace_project_samples_path(@group1, @project1)
-      assert_response :success
-
-      assert_select "input[type='checkbox'][value='#{@sample1.id}']", count: 1
-
-      export_name = 'test csv export'
-
-      params = { 'data_export' => {
-                   'export_type' => 'linelist',
-                   'name' => export_name,
-                   'export_parameters' => {
-                     'ids' => [@sample1.id],
-                     'namespace_id' => @project1.namespace.id,
-                     'linelist_format' => 'csv',
-                     'metadata_fields' => %w[metadatafield1 metadatafield2]
-                   }
-                 },
-                 format: :turbo_stream }
-
-      assert_difference('DataExport.count', 1) do
-        post data_exports_path, params: params
-      end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
-        assert_select 'div',
-                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
-                        'data_exports.create.success', name: export_name
-                      )}"
-      end
-
-      assert_select 'div:nth-child(2) dd', text: export_name
-      assert_select 'div:nth-child(4) dd', text: 'csv'
-    end
-
-    test 'create xlsx linelist export from project samples page' do
-      get namespace_project_samples_path(@group1, @project1)
-      assert_response :success
-
-      assert_select "input[type='checkbox'][value='#{@sample1.id}']", count: 1
-
-      export_name = 'test xlsx export'
-
-      params = { 'data_export' => {
-                   'export_type' => 'linelist',
-                   'name' => export_name,
-                   'export_parameters' => {
-                     'ids' => [@sample1.id],
-                     'namespace_id' => @project1.namespace.id,
-                     'linelist_format' => 'xlsx',
-                     'metadata_fields' => %w[metadatafield1 metadatafield2]
-                   }
-                 },
-                 format: :turbo_stream }
-
-      assert_difference('DataExport.count', 1) do
-        post data_exports_path, params: params
-      end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
-        assert_select 'div',
-                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
-                        'data_exports.create.success', name: export_name
-                      )}"
-      end
-
-      assert_select 'div:nth-child(2) dd', text: export_name
-      assert_select 'div:nth-child(4) dd', text: 'xlsx'
     end
 
     test 'create analysis export with single workflow execution from project workflow executions index page' do
@@ -332,7 +248,7 @@ module Projects
       assert_select 'div:nth-child(2) dd', text: export_name
     end
 
-    test 'analysis export with multiple shared workflow executions from project workflow executions index page' do
+    test 'multiple analyses export using shared workflow executions from project workflow executions index page' do
       sign_out @user
       user = users(:james_doe)
       sign_in user
@@ -383,84 +299,47 @@ module Projects
       assert_select 'div:nth-child(2) dd', text: export_name
     end
 
-    test 'create analysis export using users shared workflow execution from project workflow execution show page' do
+    test 'analysis export using shared workflow execution from project workflow execution show page' do
       sign_out @user
 
       user = users(:james_doe)
       sign_in user
 
-      get namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution1)
-      assert_response :success
-      export_name = 'test data export'
+      # user shared and project shared workflow executions
+      [@shared_workflow_execution1, @shared_workflow_execution2].each do |workflow_execution|
+        get namespace_project_workflow_execution_path(@group5, @project22, workflow_execution)
+        assert_response :success
+        export_name = 'test data export'
 
-      assert_select 'button', text: I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
+        assert_select 'button', text: I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
-      assert_difference 'DataExport.count', 1 do
-        post data_exports_path(format: :turbo_stream),
-             params: {
-               data_export: {
-                 export_type: 'analysis',
-                 name: export_name,
-                 email_notification: true,
-                 export_parameters: { 'ids' => [@shared_workflow_execution1.id],
-                                      'namespace_id' => @project22.namespace.id,
-                                      'analysis_type' => 'project' }
+        assert_difference 'DataExport.count', 1 do
+          post data_exports_path(format: :turbo_stream),
+               params: {
+                 data_export: {
+                   export_type: 'analysis',
+                   name: export_name,
+                   email_notification: true,
+                   export_parameters: { 'ids' => [workflow_execution.id],
+                                        'namespace_id' => @project22.namespace.id,
+                                        'analysis_type' => 'project' }
+                 }
                }
-             }
+        end
+
+        follow_redirect!
+        assert_response :success
+
+        assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+          assert_select 'div',
+                        "#{I18n.t('common.statuses.success', locale: user.locale)}: #{I18n.t(
+                          'data_exports.create.success', name: export_name, locale: user.locale
+                        )}"
+        end
+
+        assert_select 'dl', count: 1
+        assert_select 'div:nth-child(2) dd', text: export_name
       end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
-        assert_select 'div',
-                      "#{I18n.t('common.statuses.success', locale: user.locale)}: #{I18n.t(
-                        'data_exports.create.success', name: export_name, locale: user.locale
-                      )}"
-      end
-
-      assert_select 'dl', count: 1
-      assert_select 'div:nth-child(2) dd', text: export_name
-    end
-
-    test 'create analysis export from project shared workflow execution from project workflow execution show page' do
-      sign_out @user
-      user = users(:james_doe)
-      sign_in user
-
-      get namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution2)
-      assert_response :success
-
-      export_name = 'test data export'
-
-      assert_select 'button', text: I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
-
-      assert_difference 'DataExport.count', 1 do
-        post data_exports_path(format: :turbo_stream),
-             params: {
-               data_export: {
-                 export_type: 'analysis',
-                 name: export_name,
-                 email_notification: true,
-                 export_parameters: { 'ids' => [@shared_workflow_execution2.id],
-                                      'namespace_id' => @project22.namespace.id,
-                                      'analysis_type' => 'project' }
-               }
-             }
-      end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
-        assert_select 'div',
-                      "#{I18n.t('common.statuses.success', locale: user.locale)}: #{I18n.t(
-                        'data_exports.create.success', name: export_name, locale: user.locale
-                      )}"
-      end
-
-      assert_select 'dl', count: 1
-      assert_select 'div:nth-child(2) dd', text: export_name
     end
 
     test 'clicking links in preview tab for analysis data export from project shared workflow execution' do

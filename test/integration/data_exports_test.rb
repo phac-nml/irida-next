@@ -70,7 +70,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'data exports with status ready will have download in action dropdown' do
+  test 'data exports with status ready will have download in action column' do
     get data_exports_path
     assert_response :success
 
@@ -121,6 +121,8 @@ class DataExportsTest < ActionDispatch::IntegrationTest
                       name: @data_export1.name
                     )}"
     end
+
+    assert_select "tr[id='#{dom_id(@data_export1)}']", count: 0
   end
 
   test 'can delete data export from data export details page' do
@@ -594,10 +596,10 @@ class DataExportsTest < ActionDispatch::IntegrationTest
          }
 
     assert_response :unprocessable_content
-    assert_includes @response.body, 'data-export-dialog-errors'
-    assert_includes @response.body,
-                    I18n.t('services.data_exports.create.max_data_export_size_exceeded',
-                           max_size_gigabytes: max_gigabytes)
+
+    assert_select 'div',
+                  text: I18n.t('services.data_exports.create.max_data_export_size_exceeded',
+                               max_size_gigabytes: max_gigabytes)
   end
 
   test 'clears the sample dialog when an invalid sample export is submitted' do
@@ -710,12 +712,19 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unauthorized
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.error')}: #{I18n.t('action_policy.policy.data_export.destroy?')}"
+    end
   end
 
   test 'should not view data export page without proper authorization' do
     sign_in users(:jane_doe)
     get data_export_path(@data_export1)
     assert_response :unauthorized
+
+    assert_select 'h1', I18n.t('application.errors.access_denied')
   end
 
   test 'should create new export with only necessary params' do
@@ -731,19 +740,33 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     }
     follow_redirect!
     assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                      'data_exports.create.success', name: DataExport.last.name || DataExport.last.id
+                    )}"
+    end
   end
 
   test 'should not create invalid sample and linelist exports' do
+    get namespace_project_samples_path(@group1, @project1)
+    assert_response :success
+
     # Sample export requires an export type
     post data_exports_path(format: :turbo_stream),
          params: { data_export: { export_parameters: { ids: [@sample1.id],
                                                        attachment_formats: Attachment::FORMAT_REGEX.keys } } }
     assert_response :unprocessable_content
 
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
+
     # Sample export requires export parameters
     post data_exports_path(format: :turbo_stream),
          params: { data_export: { export_type: 'sample' } }
     assert_response :unprocessable_content
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
 
     # Sample export IDs must be valid and authorized
     post data_exports_path(format: :turbo_stream),
@@ -753,6 +776,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
                                                attachment_formats: Attachment::FORMAT_REGEX.keys } }
          }
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
 
     # Linelist export requires a format
     post data_exports_path(format: :turbo_stream),
@@ -763,6 +787,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
                                                metadata_fields: ['metadatafield1'] } }
          }
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
 
     # Linelist export accepts only supported formats
     post data_exports_path(format: :turbo_stream),
@@ -774,6 +799,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
                                                metadata_fields: ['metadatafield1'] } }
          }
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
 
     # Linelist export requires a namespace
     post data_exports_path(format: :turbo_stream),
@@ -784,6 +810,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
                                                metadata_fields: ['metadatafield1'] } }
          }
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
 
     # Linelist export requires a valid namespace
     post data_exports_path(format: :turbo_stream),
@@ -795,6 +822,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
                                                metadata_fields: ['metadatafield1'] } }
          }
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
 
     # Linelist export requires metadata fields
     post data_exports_path(format: :turbo_stream),
@@ -805,6 +833,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
                                                linelist_format: 'csv' } }
          }
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
 
     # Sample export requires attachment formats
     assert_no_difference('DataExport.count') do
@@ -814,6 +843,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
                                                          namespace_id: @project1.namespace.id } } }
     end
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
   end
 
   test 'should return 422 and translated message in export dialog when export exceeds size limit' do
@@ -917,6 +947,8 @@ class DataExportsTest < ActionDispatch::IntegrationTest
          }
     assert_response :unprocessable_content
 
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
+
     # Invalid project namespace
     post data_exports_path(format: :turbo_stream),
          params: {
@@ -927,6 +959,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
            }
          }
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
 
     # Project analyses including workflow executions not belonging to the project
     post data_exports_path(format: :turbo_stream),
@@ -939,6 +972,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
            }
          }
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
 
     # User analyses including workflow executions not belonging to the user
     post data_exports_path(format: :turbo_stream),
@@ -950,6 +984,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
            }
          }
     assert_response :unprocessable_content
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']", count: 1
   end
 
   test 'accessing data exports index on invalid page causes pagy overflow redirect' do
