@@ -381,4 +381,76 @@ class DataExportsTest < ApplicationSystemTestCase
                                                                                                    '1'
     end
   end
+
+  test 'can view samples selected for data export' do
+    # Group samples page
+    visit group_samples_path(@group1)
+    assert_selector "input[type='checkbox'][value='#{@sample1.id}']", count: 1
+    find("input[type='checkbox'][value='#{@sample1.id}']").click
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+      assert_text I18n.t('data_exports.new.sample_description.singular')
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      within %(turbo-frame[id="list_selections"]) do
+        assert_text @sample1.name
+        assert_text @sample1.puid
+      end
+    end
+
+    # Project samples page
+    visit namespace_project_samples_path(@group1, @project1)
+
+    assert_selector "input[type='checkbox'][value='#{@sample1.id}']", count: 1
+    find("input[type='checkbox'][value='#{@sample1.id}']").click
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      within %(turbo-frame[id="list_selections"]) do
+        assert_text @sample1.name
+        assert_text @sample1.puid
+      end
+    end
+  end
+
+  test 'can view workflow executions selected for data export' do
+    visit group_workflow_executions_path(@group5)
+
+    assert_selector 'button[disabled]',
+                    text: I18n.t('groups.workflow_executions.index.create_export_button')
+
+    within %(#workflow-executions-table) do
+      find("input[type='checkbox'][value='#{@group_shared_workflow_execution1.id}']").click
+    end
+
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('groups.workflow_executions.index.create_export_button')
+
+    click_button I18n.t('groups.workflow_executions.index.create_export_button')
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      click_button I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                    '1'
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_text ActionController::Base.helpers.strip_tags(I18n.t('data_exports.new.after_submission_description_html'))
+      within %(turbo-frame[id="list_selections"]) do
+        assert_text @group_shared_workflow_execution1.id
+        assert_text @group_shared_workflow_execution1.workflow.name
+        assert_text @group_shared_workflow_execution1.workflow.version
+      end
+    end
+  end
 end

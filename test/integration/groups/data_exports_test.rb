@@ -110,9 +110,11 @@ module Groups
           as: :turbo_stream
 
       assert_response :unauthorized
+
+      assert_select 'h1', I18n.t('application.errors.access_denied')
     end
 
-    test 'create analysis export using users group shared workflow execution from user workflow execution show page' do
+    test 'analysis export using users group shared workflow execution from user workflow execution show page' do
       sign_out @user
       user = users(:james_doe)
       sign_in user
@@ -150,130 +152,47 @@ module Groups
       assert_select 'div:nth-child(2) dd', text: 'test data export'
     end
 
-    test 'create csv linelist export from group samples page' do
+    test 'create linelist export from group samples page' do
       get group_samples_path(@group1)
       assert_response :success
 
       assert_select "input[type='checkbox'][value='#{@sample1.id}']", count: 1
 
-      export_name = 'test csv export'
+      %w[csv xlsx].each do |format|
+        export_name = "test #{format} export"
 
-      params = { 'data_export' => {
-                   'export_type' => 'linelist',
-                   'name' => export_name,
-                   'export_parameters' => {
-                     'ids' => [@sample1.id],
-                     'namespace_id' => @group1.id,
-                     'linelist_format' => 'csv',
-                     'metadata_fields' => %w[metadatafield1 metadatafield2]
-                   }
-                 },
-                 format: :turbo_stream }
+        params = { 'data_export' => {
+                     'export_type' => 'linelist',
+                     'name' => export_name,
+                     'export_parameters' => {
+                       'ids' => [@sample1.id],
+                       'namespace_id' => @group1.id,
+                       'linelist_format' => format,
+                       'metadata_fields' => %w[metadatafield1 metadatafield2]
+                     }
+                   },
+                   format: :turbo_stream }
 
-      assert_difference('DataExport.count', 1) do
-        post data_exports_path, params: params
+        assert_difference('DataExport.count', 1) do
+          post data_exports_path, params: params
+        end
+
+        follow_redirect!
+        assert_response :success
+
+        assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+          assert_select 'div',
+                        "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                          'data_exports.create.success', name: export_name
+                        )}"
+        end
+
+        assert_select 'div:nth-child(2) dd', text: export_name
+        assert_select 'div:nth-child(4) dd', text: format
       end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
-        assert_select 'div',
-                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
-                        'data_exports.create.success', name: export_name
-                      )}"
-      end
-
-      assert_select 'div:nth-child(2) dd', text: export_name
-      assert_select 'div:nth-child(4) dd', text: 'csv'
     end
 
-    test 'create xlsx linelist export from group samples page' do
-      get group_samples_path(@group1)
-      assert_response :success
-
-      assert_select "input[type='checkbox'][value='#{@sample1.id}']", count: 1
-
-      export_name = 'test xlsx export'
-
-      params = { 'data_export' => {
-                   'export_type' => 'linelist',
-                   'name' => export_name,
-                   'export_parameters' => {
-                     'ids' => [@sample1.id],
-                     'namespace_id' => @group1.id,
-                     'linelist_format' => 'xlsx',
-                     'metadata_fields' => %w[metadatafield1 metadatafield2]
-                   }
-                 },
-                 format: :turbo_stream }
-
-      assert_difference('DataExport.count', 1) do
-        post data_exports_path, params: params
-      end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
-        assert_select 'div',
-                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
-                        'data_exports.create.success', name: export_name
-                      )}"
-      end
-
-      assert_select 'div:nth-child(2) dd', text: export_name
-      assert_select 'div:nth-child(4) dd', text: 'xlsx'
-    end
-
-    test 'create analysis export with single workflow execution from group workflow executions index page' do
-      sign_out users(:john_doe)
-      sign_in users(:micha_doe)
-
-      get group_workflow_executions_path(@group5)
-      assert_response :success
-
-      assert_select "input[type='checkbox'][value='#{@group_shared_workflow_execution1.id}']", count: 1
-
-      get new_data_export_path(export_type: 'analysis', analysis_type: 'group', namespace_id: @group5.id,
-                               ids: [@group_shared_workflow_execution1.id]),
-          as: :turbo_stream
-
-      assert_response :success
-
-      assert_select 'dialog' do
-        assert_select 'h1', text: I18n.t('data_exports.new_analysis_export_dialog.title')
-      end
-
-      export_name = 'test data export'
-
-      assert_difference 'DataExport.count', 1 do
-        post data_exports_path(format: :turbo_stream),
-             params: {
-               data_export: {
-                 export_type: 'analysis',
-                 name: export_name,
-                 export_parameters: { 'ids' => [@group_shared_workflow_execution1.id], 'namespace_id' => @group5.id,
-                                      'analysis_type' => 'group' }
-               }
-             }
-      end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
-        assert_select 'div',
-                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
-                        'data_exports.create.success', name: export_name
-                      )}"
-      end
-
-      assert_select 'dl', count: 1
-      assert_select 'div:nth-child(2) dd', text: export_name
-    end
-
-    test 'create analysis export with multiple shared workflow executions from group workflow executions index page' do
+    test 'analysis export with shared workflow executions from group workflow executions index page' do
       sign_out users(:john_doe)
       sign_in users(:micha_doe)
 
@@ -283,46 +202,48 @@ module Groups
       assert_select "input[type='checkbox'][value='#{@group_shared_workflow_execution1.id}']", count: 1
       assert_select "input[type='checkbox'][value='#{@group_shared_workflow_execution2.id}']", count: 1
 
-      get new_data_export_path(export_type: 'analysis', analysis_type: 'group', namespace_id: @group5.id,
-                               ids: [@group_shared_workflow_execution1.id, @group_shared_workflow_execution2.id]),
-          as: :turbo_stream
+      [[@group_shared_workflow_execution1.id],
+       [@group_shared_workflow_execution1.id, @group_shared_workflow_execution2.id]].each do |ids|
+        get new_data_export_path(export_type: 'analysis', analysis_type: 'group', namespace_id: @group5.id,
+                                 ids: ids),
+            as: :turbo_stream
 
-      assert_response :success
+        assert_response :success
 
-      assert_select 'dialog' do
-        assert_select 'h1', text: I18n.t('data_exports.new_analysis_export_dialog.title')
-      end
+        assert_select 'dialog' do
+          assert_select 'h1', text: I18n.t('data_exports.new_analysis_export_dialog.title')
+        end
 
-      export_name = 'test data export'
+        export_name = 'test data export'
 
-      assert_difference 'DataExport.count', 1 do
-        post data_exports_path(format: :turbo_stream),
-             params: {
-               data_export: {
-                 export_type: 'analysis',
-                 name: export_name,
-                 export_parameters: { 'ids' => [@group_shared_workflow_execution1.id,
-                                                @group_shared_workflow_execution2.id], 'namespace_id' => @group5.id,
-                                      'analysis_type' => 'group' }
+        assert_difference 'DataExport.count', 1 do
+          post data_exports_path(format: :turbo_stream),
+               params: {
+                 data_export: {
+                   export_type: 'analysis',
+                   name: export_name,
+                   export_parameters: { 'ids' => ids, 'namespace_id' => @group5.id,
+                                        'analysis_type' => 'group' }
+                 }
                }
-             }
+        end
+
+        follow_redirect!
+        assert_response :success
+
+        assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+          assert_select 'div',
+                        "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                          'data_exports.create.success', name: export_name
+                        )}"
+        end
+
+        assert_select 'dl', count: 1
+        assert_select 'div:nth-child(2) dd', text: export_name
       end
-
-      follow_redirect!
-      assert_response :success
-
-      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
-        assert_select 'div',
-                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
-                        'data_exports.create.success', name: export_name
-                      )}"
-      end
-
-      assert_select 'dl', count: 1
-      assert_select 'div:nth-child(2) dd', text: export_name
     end
 
-    test 'create analysis export using users group shared workflow execution from group workflow execution show page' do
+    test 'analysis export using users group shared workflow execution from group workflow execution show page' do
       sign_out @user
 
       user = users(:james_doe)
