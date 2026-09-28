@@ -111,7 +111,7 @@ module Groups
 
       assert_response :unauthorized
 
-      assert_select 'h1', I18n.t('application.errors.access_denied')
+      assert_select 'dialog', count: 0
     end
 
     test 'analysis export using users group shared workflow execution from user workflow execution show page' do
