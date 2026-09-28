@@ -102,7 +102,7 @@
                 </div>
               <% end %>
 
-              <%= render "groups/subgroups_and_projects",
+              <%= render partial: "groups/subgroups_and_projects",
               locals: {
                 namespaces: @namespaces,
                 has_namespaces: @has_namespaces,
@@ -135,7 +135,7 @@
                 </div>
               <% end %>
 
-              <%= render "groups/shared_namespaces",
+              <%= render partial: "groups/shared_namespaces",
               locals: {
                 namespaces: @namespaces,
                 has_namespaces: @has_namespaces,
