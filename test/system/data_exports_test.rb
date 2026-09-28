@@ -5,32 +5,15 @@ require 'application_system_test_case'
 class DataExportsTest < ApplicationSystemTestCase
   include ActionView::Helpers::SanitizeHelper
 
-  def setup # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def setup
     @user = users(:john_doe)
-    @data_export1 = data_exports(:data_export_one)
-    @data_export2 = data_exports(:data_export_two)
-    @data_export6 = data_exports(:data_export_six)
-    @data_export7 = data_exports(:data_export_seven)
-    @data_export8 = data_exports(:data_export_eight)
-    @data_export9 = data_exports(:data_export_nine)
-    @data_export10 = data_exports(:data_export_ten)
     @group1 = groups(:group_one)
     @group5 = groups(:group_five)
     @project1 = projects(:project1)
-    @project22 = projects(:project22)
     @sample1 = samples(:sample1)
-    @sample2 = samples(:sample2)
     @sample30 = samples(:sample30)
-    @sample47 = samples(:sample47)
     @workflow_execution1 = workflow_executions(:irida_next_example_completed_with_output)
-    @workflow_execution2 = workflow_executions(:irida_next_example_completed)
-    @workflow_execution3 = workflow_executions(:irida_next_example_error)
-    @workflow_execution4 = workflow_executions(:automated_workflow_execution)
-    @workflow_execution5 = workflow_executions(:automated_example_error)
-    @shared_workflow_execution1 = workflow_executions(:workflow_execution_completed_shared1)
-    @shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_shared2)
     @group_shared_workflow_execution1 = workflow_executions(:workflow_execution_completed_group_shared1)
-    @group_shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_group_shared2)
 
     Project.reset_counters(@project1.id, :samples_count)
 
