@@ -9,11 +9,8 @@ module Groups
       @group1 = groups(:group_one)
       @group5 = groups(:group_five)
       @sample1 = samples(:sample1)
-      @sample2 = samples(:sample2)
-      @sample47 = samples(:sample47)
       @group_shared_workflow_execution1 = workflow_executions(:workflow_execution_completed_group_shared1)
       @group_shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_group_shared2)
-      @data_export9 = data_exports(:data_export_nine)
 
       sign_in @user
     end

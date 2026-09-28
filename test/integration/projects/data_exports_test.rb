@@ -4,26 +4,17 @@ require 'test_helper'
 
 module Projects
   class DataExportsTest < ActionDispatch::IntegrationTest
-    def setup # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def setup
       @user = users(:john_doe)
       @group1 = groups(:group_one)
       @group5 = groups(:group_five)
       @project1 = projects(:project1)
       @project22 = projects(:project22)
       @sample1 = samples(:sample1)
-      @sample30 = samples(:sample30)
-      @sample47 = samples(:sample47)
-      @workflow_execution1 = workflow_executions(:irida_next_example_completed_with_output)
-      @workflow_execution2 = workflow_executions(:irida_next_example_completed)
-      @workflow_execution3 = workflow_executions(:irida_next_example_error)
       @workflow_execution4 = workflow_executions(:automated_workflow_execution)
       @workflow_execution5 = workflow_executions(:automated_example_error)
       @shared_workflow_execution1 = workflow_executions(:workflow_execution_completed_shared1)
       @shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_shared2)
-      @data_export1 = data_exports(:data_export_one)
-      @data_export2 = data_exports(:data_export_two)
-      @data_export8 = data_exports(:data_export_eight)
-      @data_export10 = data_exports(:data_export_ten)
 
       sign_in @user
     end
