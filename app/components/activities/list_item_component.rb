@@ -2,7 +2,7 @@
 
 module Activities
   # Component for rendering an activity list item
-  class ListItemComponent < BaseActivityComponent
+  class ListItemComponent < BaseActivityComponent # rubocop:disable Metrics/ClassLength
     attr_accessor :activity
 
     def group_link_action?
@@ -59,6 +59,69 @@ module Activities
 
     def project_namespace_workflow_execution_action?
       @activity[:action] == 'workflow_execution_destroy'
+    end
+
+    # Selects which activity component to render for the current activity.
+    def activity_component
+      if @activity[:type] == 'Namespace' && @activity[:key].include?('group')
+        group_activity_component
+      elsif @activity[:type] == 'Namespace' && @activity[:key].include?('project_namespace')
+        project_namespace_activity_component
+      elsif @activity[:type] == 'WorkflowExecution'
+        Activities::WorkflowExecutionActivityComponent.new(activity: @activity)
+      end
+    end
+
+    private
+
+    def group_activity_component # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength, Metrics/AbcSize
+      if metadata_template_action?
+        Activities::Groups::MetadataTemplateActivityComponent.new(activity: @activity)
+      elsif transfer_in_action?
+        Activities::Groups::TransferInActivityComponent.new(activity: @activity)
+      elsif transfer_out_action?
+        Activities::Groups::TransferOutActivityComponent.new(activity: @activity)
+      elsif subgroup_action?
+        Activities::Groups::SubgroupActivityComponent.new(activity: @activity)
+      elsif sample_transfer_action?
+        Activities::Groups::SampleTransferActivityComponent.new(activity: @activity)
+      elsif sample_clone_action?
+        Activities::Groups::SampleCloneActivityComponent.new(activity: @activity)
+      elsif member_action?
+        Activities::MemberActivityComponent.new(activity: @activity)
+      elsif project_crud_action?
+        Activities::Groups::Projects::CrudActivityComponent.new(activity: @activity)
+      elsif project_transfer_action?
+        Activities::Groups::Projects::TransferActivityComponent.new(activity: @activity)
+      elsif group_link_action?
+        Activities::NamespaceGroupLinkActivityComponent.new(activity: @activity)
+      elsif sample_action?
+        Activities::Groups::SampleActivityComponent.new(activity: @activity)
+      else
+        Activities::GroupActivityComponent.new(activity: @activity)
+      end
+    end
+
+    def project_namespace_activity_component # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+      if group_link_action?
+        Activities::NamespaceGroupLinkActivityComponent.new(activity: @activity)
+      elsif metadata_template_action?
+        Activities::Projects::MetadataTemplateActivityComponent.new(activity: @activity)
+      elsif sample_action?
+        Activities::Projects::SampleActivityComponent.new(activity: @activity)
+      elsif sample_transfer_action?
+        Activities::Projects::SampleTransferActivityComponent.new(activity: @activity)
+      elsif sample_clone_action?
+        Activities::Projects::SampleCloneActivityComponent.new(activity: @activity)
+      elsif member_action?
+        Activities::MemberActivityComponent.new(activity: @activity)
+      elsif project_namespace_transfer_action?
+        Activities::Projects::TransferActivityComponent.new(activity: @activity)
+      elsif project_namespace_workflow_execution_action?
+        Activities::Projects::WorkflowExecutionActivityComponent.new(activity: @activity)
+      else
+        Activities::Projects::BaseActivityComponent.new(activity: @activity)
+      end
     end
   end
 end
