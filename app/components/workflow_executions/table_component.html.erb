@@ -128,46 +128,7 @@
                       } %>
                     <% end %>
 
-                    <% if column == :id %>
-                      <%= link_to(
-                    individual_path(workflow_execution),
-                    class: "text-slate-900 dark:text-slate-100 font-mono underline hover:decoration-2",
-                  ) do %>
-                        <%= highlight(
-                          workflow_execution.id,
-                          defined?(@search_params[:name_or_id_cont]) &&
-                            @search_params[:name_or_id_cont],
-                          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                        ) %>
-                      <% end %>
-                    <% elsif column == :state %>
-                      <%= render Viral::PillComponent.new(
-                        text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
-                        color: helpers.find_pill_color_for_state(workflow_execution[column]),
-                        border: true,
-                      ) %>
-                    <% elsif column == :workflow_name %>
-                      <%= workflow_execution.workflow.name %>
-                    <% elsif column == :workflow_version %>
-                      <%= workflow_execution.metadata[column.to_s] %>
-                    <% elsif column == :created_at %>
-                      <%= helpers.local_date(workflow_execution[column], :long) %>
-                    <% elsif column == :updated_at || column == :attachments_updated_at %>
-                      <% if workflow_execution[column].present? %>
-                        <%= helpers.local_time_ago(workflow_execution[column]) %>
-                      <% end %>
-                    <% elsif column == :name %>
-                      <span class="font-semibold">
-                        <%= highlight(
-                          workflow_execution.name,
-                          defined?(@search_params[:name_or_id_cont]) &&
-                            @search_params[:name_or_id_cont],
-                          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                        ) %>
-                      </span>
-                    <% else %>
-                      <%= workflow_execution[column.to_sym] %>
-                    <% end %>
+                    <%= workflow_execution_cell_content(workflow_execution, column) %>
                   </div>
                 <% end %>
               <% end %>
