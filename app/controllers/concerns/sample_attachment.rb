@@ -7,9 +7,9 @@ module SampleAttachment
   include AttachmentSearchable
 
   def list_sample_attachments
-    @render_individual_attachments = filter_requested?
-    all_attachments = load_attachments
     @query = attachments_query(@sample)
+    @render_individual_attachments = filter_requested? || @query.advanced_query?
+    all_attachments = load_attachments
     @has_attachments = all_attachments.any?
     @search_params = attachment_search_params
 
@@ -22,7 +22,7 @@ module SampleAttachment
   private
 
   def load_attachments
-    if filter_requested?
+    if @render_individual_attachments
       @sample.attachments.all
     else
       @sample.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))

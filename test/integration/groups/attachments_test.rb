@@ -352,6 +352,54 @@ module Groups
       end
     end
 
+    test 'advanced search filters attachments to only a reverse read' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+      attachment1.update!(metadata: attachment1.metadata.merge('direction' => 'forward',
+                                                               'associated_attachment_id' => attachment2.id))
+      attachment2.update!(metadata: attachment2.metadata.merge('direction' => 'reverse',
+                                                               'associated_attachment_id' => attachment1.id))
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'filename', operator: 'contains', value: attachment2.file.filename.to_s }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}", count: 0
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
+    test 'advanced search does not duplicate a paired attachment when both mates match' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+      attachment1.update!(metadata: attachment1.metadata.merge('direction' => 'forward',
+                                                               'associated_attachment_id' => attachment2.id))
+      attachment2.update!(metadata: attachment2.metadata.merge('direction' => 'reverse',
+                                                               'associated_attachment_id' => attachment1.id))
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'byte_size', operator: '>=', value: '0' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}"
+        assert_select 'a', text: attachment1.file.filename.to_s, count: 1
+        assert_select 'a', text: attachment2.file.filename.to_s, count: 1
+      end
+    end
+
     test 'advanced search filters attachments by puid' do
       sign_in users(:john_doe)
       group = groups(:group_one)

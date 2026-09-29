@@ -18,9 +18,9 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
   def index
     authorize! @authorize_object, to: :view_attachments?
 
-    @render_individual_attachments = filter_requested?
-    all_attachments = load_attachments
     @query = attachments_query(@namespace)
+    @render_individual_attachments = filter_requested? || @query.advanced_query?
+    all_attachments = load_attachments
     @has_attachments = all_attachments.any?
     @search_params = attachment_search_params
 
