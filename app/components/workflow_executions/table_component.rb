@@ -66,6 +66,47 @@ module WorkflowExecutions
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
+    # Renders the body of a workflow execution's table cell for the given column.
+    def workflow_execution_cell_content(workflow_execution, column) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+      case column
+      when :id
+        link_to(
+          individual_path(workflow_execution),
+          class: 'text-slate-900 dark:text-slate-100 font-mono underline hover:decoration-2'
+        ) do
+          highlight(
+            workflow_execution.id,
+            defined?(@search_params[:name_or_id_cont]) && @search_params[:name_or_id_cont],
+            highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+          )
+        end
+      when :state
+        render Viral::PillComponent.new(
+          text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
+          color: helpers.find_pill_color_for_state(workflow_execution[column]),
+          border: true
+        )
+      when :workflow_name
+        workflow_execution.workflow.name
+      when :workflow_version
+        workflow_execution.metadata[column.to_s]
+      when :created_at
+        helpers.local_date(workflow_execution[column], :long)
+      when :updated_at, :attachments_updated_at
+        helpers.local_time_ago(workflow_execution[column]) if workflow_execution[column].present?
+      when :name
+        content_tag(:span, class: 'font-semibold') do
+          highlight(
+            workflow_execution.name,
+            defined?(@search_params[:name_or_id_cont]) && @search_params[:name_or_id_cont],
+            highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+          )
+        end
+      else
+        workflow_execution[column.to_sym]
+      end
+    end
+
     # 💡 Determines the actual database column name for sorting purposes.
     #    Certain display columns (like workflow name/version) are stored
     #    within a JSONB 'metadata' column and need prefixing for Ransack.

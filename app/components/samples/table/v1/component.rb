@@ -97,6 +97,41 @@ module Samples
           render(Viral::BaseComponent.new(**arguments), &)
         end
 
+        # Renders the body of a sample's table cell for the given column.
+        def sample_cell_content(sample, column) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+          case column
+          when :puid
+            content_tag(:span, class: 'font-mono font-semibold') do
+              highlight(
+                sample[column],
+                defined?(@search_params[:name_or_puid_cont]) && @search_params[:name_or_puid_cont],
+                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
+              )
+            end
+          when :name
+            link_to(
+              helpers.sample_path(sample),
+              class: 'text-slate-700 dark:text-slate-300 font-sans font-semibold underline hover:decoration-2'
+            ) do
+              highlight(
+                sample[column],
+                defined?(@search_params[:name_or_puid_cont]) && @search_params[:name_or_puid_cont],
+                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600 font-semibold">\1</mark>'
+              )
+            end
+          when 'namespaces.puid'
+            link_to sample.project.puid,
+                    helpers.namespace_project_samples_path(sample.project.namespace.parent, sample.project),
+                    class: 'font-semibold underline hover:decoration-2'
+          when :created_at
+            helpers.local_date(sample[column], :long)
+          when :updated_at, :attachments_updated_at
+            helpers.local_time_ago(sample[column]) if sample[column].present?
+          else
+            sample[column.to_sym]
+          end
+        end
+
         private
 
         def selection_limit_data_attributes
