@@ -18,6 +18,29 @@ module AdvancedSearch
         )
       end
 
+      %i[en fr].each do |locale|
+        test "renders accessible group help and translated dividers in #{locale}" do
+          I18n.with_locale(locale) do
+            search = Sample::Query.new(groups: [Sample::SearchGroup.new])
+            html = Nokogiri::HTML.fragment(render_builder(search:))
+            groups = html.css("fieldset[data-advanced-search--v2--builder-target='groupsContainer']")
+            assert_equal 2, groups.size # Existing group plus the new-group template.
+            groups.each do |group|
+              helper = html.at_css("[id='#{group['aria-describedby']}']")
+              assert_equal I18n.t('components.advanced_search_component.v2.group_match_all'), helper.text.strip
+              assert_nil helper['aria-hidden']
+            end
+            %w[and or].each do |connective|
+              divider = html.at_css("[data-advanced-search-connective='#{connective}']")
+              assert_equal I18n.t("components.advanced_search_component.v2.connective.#{connective}"),
+                           divider.text.strip
+              assert_equal 'true', divider['aria-hidden']
+              assert_empty divider.css('[name]')
+            end
+          end
+        end
+      end
+
       test 'derives sample fields when no explicit fields are provided' do
         search = Sample::Query.new(
           groups: [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: 'name', operator: '=',
@@ -49,7 +72,7 @@ module AdvancedSearch
           enum_fields: {
             'metadata.country' => { values: %w[Canada Mexico], labels: { 'Canada' => 'Canada Label' } },
             'name' => { values: %w[alpha],
-                        translation_key: 'components.advanced_search_component.v1.operations.standard' }
+                        translation_key: 'components.advanced_search_component.operations.standard' }
           }
         )
 

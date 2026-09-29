@@ -1,13 +1,13 @@
 <fieldset
   data-advanced-search--v1-target="groupsContainer"
   data-advanced-search--v1-group-index="<%= @group_index %>"
-  data-advanced-search--v1-legend-template="<%= t("components.advanced_search_component.v1.group", index: "__INDEX__") %>"
+  data-advanced-search--v1-legend-template="<%= t("components.advanced_search_component.group", index: "__INDEX__") %>"
   class="
     space-y-4 rounded-lg border border-slate-300 px-4 text-sm text-slate-500 dark:border-slate-600
     dark:text-slate-400
   "
 >
-  <legend><%= t("components.advanced_search_component.v1.group", index: @group_number) %></legend>
+  <legend><%= t("components.advanced_search_component.group", index: @group_number) %></legend>
 
   <%= @form.fields_for :groups, @group, child_index: @group_index do |groups_form| %>
     <% @group.conditions.each_with_index do |condition, condition_index| %>
@@ -25,11 +25,11 @@
 
   <div class="my-4 flex justify-end">
     <%= render Viral::ButtonComponent.new(data: { action: "advanced-search--v1#addCondition" }) do %>
-      <%= t("components.advanced_search_component.v1.add_condition_button") %>
+      <%= t("components.advanced_search_component.add_condition_button") %>
     <% end %>
 
     <%= render Viral::ButtonComponent.new(classes: class_names("ml-2", "hidden": !@show_remove_group_button), data: { action: "advanced-search--v1#removeGroup" }) do %>
-      <%= t("components.advanced_search_component.v1.remove_group_button") %>
+      <%= t("components.advanced_search_component.remove_group_button") %>
     <% end %>
   </div>
 </fieldset>
