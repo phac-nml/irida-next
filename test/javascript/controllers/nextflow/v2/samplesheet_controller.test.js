@@ -1771,4 +1771,192 @@ describe("nextflow v2 samplesheet controller", () => {
     fetchMock.mockRestore();
     renderStreamMessageMock.mockRestore();
   });
+
+  it("skips name validation for automated workflows", async () => {
+    const samples = [1, 2];
+    renderFullFixture();
+    document
+      .getElementById("nextflow-container")
+      .setAttribute(
+        "data-nextflow--v2--samplesheet-automated-workflow-value",
+        "true",
+      );
+
+    const sampleAttributesContainer =
+      document.getElementById("sample_attributes");
+    sessionStorage.setItem("selection-test-key", createSampleIds(samples));
+
+    const sampleAttributes = JSON.stringify(
+      Object.fromEntries(
+        samples.map((n) => [
+          `sample-${n}-id`,
+          {
+            sample_id: `sample-${n}-id`,
+            samplesheet_params: {
+              sample: `SAMPLE-PUID-${n}`,
+              fastq_1: "",
+              fastq_2: "",
+              metadata_1: "",
+              sample_name: `SAMPLE NAME ${n}`,
+            },
+          },
+        ]),
+      ),
+    );
+    const fileAttributes = JSON.stringify(
+      Object.fromEntries(
+        samples.map((n) => [
+          `sample-${n}-id`,
+          {
+            fastq_1: { filename: "No File Selected", attachment_id: "" },
+            fastq_2: { filename: "No File Selected", attachment_id: "" },
+          },
+        ]),
+      ),
+    );
+    sampleAttributesContainer.insertAdjacentHTML(
+      "afterbegin",
+      `<div class="hidden" data-nextflow--v2--samplesheet-target="sampleAttributes"
+        data-allowed-to-update-samples="true" data-sample-attributes='${sampleAttributes}'></div>
+      <div class="hidden" data-nextflow--v2--samplesheet-target="fileAttributes">${fileAttributes}</div>`,
+    );
+
+    application = await startController();
+
+    // Leave the name empty: automated workflows skip name validation, so the
+    // only error is the missing required data.
+    document
+      .querySelector('[data-nextflow--v2--samplesheet-target="submit"]')
+      .click();
+    vi.advanceTimersByTime(60);
+
+    expect(
+      document.querySelector("#workflow_execution_name_error").textContent,
+    ).not.toContain("Name is required");
+    expect(
+      document.querySelector('[data-nextflow--v2--samplesheet-target="error"]')
+        .textContent,
+    ).toContain("The following samples are missing required data");
+  });
+
+  it("uses the no-selected-file label when a file has no filename", async () => {
+    setupStandardSamplesheetAttributes(range(1, 5));
+    application = await startController();
+
+    const payload = JSON.stringify({
+      files: [
+        { filename: "", global_id: "g1", id: "id1", property: "fastq_1" },
+      ],
+      attachable_id: "sample-1-id",
+    }).replaceAll('"', "&quot;");
+    document
+      .getElementById("samplesheet-payload-container")
+      .insertAdjacentHTML(
+        "afterbegin",
+        `<div hidden data-files="${payload}" data-nextflow--v2--samplesheet-target="dataPayload" data-payload-type="files"></div>`,
+      );
+    await Promise.resolve();
+
+    const sample1Row = Array.from(document.querySelectorAll("tr")).find((row) =>
+      row.textContent?.includes("SAMPLE-PUID-1"),
+    );
+    expect(sample1Row.querySelector('[id$="_fastq_1"]')).toHaveTextContent(
+      "No selected file",
+    );
+  });
+
+  it("skips cell updates for samples not on the current page", async () => {
+    const allSamples = range(1, 11);
+    setupStandardSamplesheetAttributes(allSamples);
+    application = await startController();
+
+    // sample-6 lives on page 2 and has no rendered cell on page 1.
+    const payload = JSON.stringify({
+      files: [
+        {
+          filename: "page2.fastq.gz",
+          global_id: "g",
+          id: "i",
+          property: "fastq_1",
+        },
+      ],
+      attachable_id: "sample-6-id",
+    }).replaceAll('"', "&quot;");
+    document
+      .getElementById("samplesheet-payload-container")
+      .insertAdjacentHTML(
+        "afterbegin",
+        `<div hidden data-files="${payload}" data-nextflow--v2--samplesheet-target="dataPayload" data-payload-type="files"></div>`,
+      );
+    await Promise.resolve();
+
+    getNextBtn().click();
+    const sample6Row = Array.from(document.querySelectorAll("tr")).find((row) =>
+      row.textContent?.includes("SAMPLE-PUID-6"),
+    );
+    expect(sample6Row.querySelector('[id$="_fastq_1"]')).toHaveTextContent(
+      "page2.fastq.gz",
+    );
+  });
+
+  it("queues a metadata selection when no parameter input exists", async () => {
+    setupStandardSamplesheetAttributes(range(1, 5));
+    application = await startController();
+    vi.spyOn(HTMLFormElement.prototype, "requestSubmit").mockImplementation(
+      () => {},
+    );
+
+    const metadataSelect = document.querySelector("#field-metadata_1");
+    metadataSelect.value = "age";
+    expect(() =>
+      metadataSelect.dispatchEvent(new Event("change", { bubbles: true })),
+    ).not.toThrow();
+  });
+
+  it("syncs a stale metadata column header parameter on connect", async () => {
+    setupStandardSamplesheetAttributes(range(1, 5));
+    // The parameter input must live inside the controller element, which is
+    // where #updateMetadataColumnHeaderNames looks for it.
+    document
+      .getElementById("nextflow-container")
+      .insertAdjacentHTML(
+        "beforeend",
+        `<input data-metadata-header-name="metadata_1" value="stale_value" type="text">`,
+      );
+
+    application = await startController();
+
+    expect(
+      document.querySelector('input[data-metadata-header-name="metadata_1"]')
+        .value,
+    ).toBe("metadata_1");
+  });
+
+  it("renders a processing error when the selection is empty", async () => {
+    renderFullFixture();
+    sessionStorage.setItem("selection-test-key", JSON.stringify([]));
+
+    application = await startController();
+
+    expect(
+      document.querySelector(
+        '[data-nextflow--v2--samplesheet-target="errorMessage"]',
+      ),
+    ).toHaveTextContent("An error has occurred while processing your request.");
+  });
+
+  it("ignores data payloads with an unknown type", async () => {
+    setupStandardSamplesheetAttributes(range(1, 5));
+    application = await startController();
+
+    document
+      .getElementById("samplesheet-payload-container")
+      .insertAdjacentHTML(
+        "afterbegin",
+        `<div hidden data-nextflow--v2--samplesheet-target="dataPayload" data-payload-type="other"></div>`,
+      );
+    await Promise.resolve();
+
+    expect(document.querySelector('[data-payload-type="other"]')).toBeNull();
+  });
 });
