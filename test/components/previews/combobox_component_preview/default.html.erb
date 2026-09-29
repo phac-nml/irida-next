@@ -1,5 +1,10 @@
 <%= form_with(url: "#") do |form| %>
-  <label for="<%= form.field_id(:field) %>"><%= label %></label>
+  <label
+    for="<%= form.field_id(:field) %>"
+    class="mb-2 block text-(length:--type-control) font-semibold text-[var(--pvc-color-text)]"
+  >
+    <%= label %>
+  </label>
 
   <%= render ComboboxComponent.new(
     form: form,
