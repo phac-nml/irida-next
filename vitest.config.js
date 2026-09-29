@@ -49,6 +49,8 @@ const fullCoverageFiles = [
   "app/javascript/utilities/styles.js",
   "app/javascript/utilities/word_connector.js",
   "app/javascript/controllers/email_input_controller.js",
+  "app/javascript/controllers/file_upload_controller.js",
+  "app/javascript/controllers/form/json_submission_controller.js",
   "app/javascript/controllers/form_error_summary_controller.js",
   "app/javascript/workers/linelist_export_worker.js",
 ];
