@@ -32,7 +32,10 @@ function renderFixture({ hasErrors = false, status = true } = {}) {
             data-action="click->viral--dialog#handleClose">Close</button>
           <div id="advanced-search-builder" data-controller="advanced-search--v2--builder"
             data-advanced-search--v2--builder-initial-state-value='[[{"field":"name","operator":"=","values":["original"]}]]'>
+            <p data-advanced-search--v2--builder-target="emptyState" hidden>Add a condition to start filtering.</p>
             <div data-advanced-search--v2--builder-target="searchGroupsContainer"></div>
+            <template data-advanced-search--v2--builder-target="andTemplate"><div data-advanced-search-connective="and" aria-hidden="true">AND</div></template>
+            <template data-advanced-search--v2--builder-target="orTemplate"><div data-advanced-search-connective="or" aria-hidden="true">OR</div></template>
             <template data-advanced-search--v2--builder-target="searchGroupsTemplate">
               <fieldset data-advanced-search--v2--builder-target="groupsContainer"
                 data-advanced-search--v2--builder-group-index="0">
