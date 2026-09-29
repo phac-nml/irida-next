@@ -14,6 +14,20 @@ module WorkflowExecutions
       @assembly_attachment = attachments(:samples_workflow_execution_completed_output_attachment)
     end
 
+    test 'default sort indicator matches query results when created_at and updated_at diverge' do
+      # @summary_attachment created first but touched most recently;
+      # @assembly_attachment created most recently but touched first.
+      @summary_attachment.update!(created_at: 2.days.ago, updated_at: 1.hour.ago)
+      @assembly_attachment.update!(created_at: 1.hour.ago, updated_at: 2.days.ago)
+
+      get workflow_execution_path(@workflow_execution, tab: 'files')
+
+      assert_response :success
+      assert_sort_state(6, 'descending')
+      assert_first_rows_include(@assembly_attachment.puid, @summary_attachment.puid,
+                                row_scope: '#attachments-table-body')
+    end
+
     test 'advanced search filters workflow execution attachments by format metadata field' do
       get workflow_execution_path(@workflow_execution, tab: 'files'),
           params: advanced_search_params(
