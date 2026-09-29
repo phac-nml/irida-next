@@ -129,6 +129,35 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
                          })
   end
 
+  def v2_builder_empty
+    render_with_template(template: 'advanced_search_component_preview/v2_builder', locals: {
+                           search: Sample::Query.new,
+                           advanced_search_fields: AdvancedSearch::Fields.for_samples(sample_fields: %w[name],
+                                                                                      metadata_fields: [])
+                         })
+  end
+
+  def v2_builder_multiple # rubocop:disable Metrics/MethodLength
+    search = Sample::Query.new(
+      groups: [
+        Sample::SearchGroup.new(conditions: [
+                                  Sample::SearchCondition.new(field: 'name', operator: 'contains', value: 'isolate'),
+                                  Sample::SearchCondition.new(field: 'puid', operator: 'starts_with',
+                                                              value: 'INXT_SAM_')
+                                ]),
+        Sample::SearchGroup.new(conditions: [
+                                  Sample::SearchCondition.new(field: 'name', operator: 'contains', value: 'control')
+                                ])
+      ]
+    )
+    render_with_template(template: 'advanced_search_component_preview/v2_builder', locals: {
+                           search:,
+                           advanced_search_fields: AdvancedSearch::Fields.for_samples(
+                             sample_fields: %w[name puid], metadata_fields: []
+                           )
+                         })
+  end
+
   private
 
   def workflow_search

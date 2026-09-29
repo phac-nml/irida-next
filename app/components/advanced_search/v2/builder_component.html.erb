@@ -10,20 +10,32 @@
   },
 ) do %>
   <div class="space-y-4">
+    <%= render Pathogen::Typography::Text.new(variant: :muted) do %>
+      <%= t("components.advanced_search_component.v2.intro", subject: subject) %>
+    <% end %>
+
     <%= helpers.form_error_summary(@form) %>
 
     <div class="mb-4"><%= render partial: "shared/form/required_field_legend" %></div>
+
+    <p
+      class="text-(length:--type-body) text-[var(--pvc-color-text-muted)]"
+      data-advanced-search--v2--builder-target="emptyState"
+      hidden
+    >
+      <%= t("components.advanced_search_component.v2.empty_state") %>
+    </p>
 
     <div class="space-y-4" data-advanced-search--v2--builder-target="searchGroupsContainer"></div>
 
     <div class="flex justify-end space-x-2">
       <%= render Pathogen::Button.new(
         type: :button,
-        tone: :primary,
+        tone: :neutral,
         emphasis: :outline,
         data: { action: "advanced-search--v2--builder#addGroup" },
       ) do %>
-        <%= t("components.advanced_search_component.v1.add_group_button") %>
+        <%= t("components.advanced_search_component.add_group_button") %>
       <% end %>
     </div>
 
@@ -41,6 +53,30 @@
       <% end %>
     </template>
   </div>
+
+  <template data-advanced-search--v2--builder-target="orTemplate">
+    <div
+      class="flex items-center gap-3 text-(length:--type-control) font-semibold text-[var(--pvc-color-text-muted)]"
+      data-advanced-search-connective="or"
+      aria-hidden="true"
+    >
+      <span class="grow border-t border-[var(--pvc-color-border-strong)]"></span>
+      <span class="rounded-[var(--pvc-radius-action)] border border-[var(--pvc-color-border-strong)] px-2 py-1"><%= t("components.advanced_search_component.v2.connective.or") %></span>
+      <span class="grow border-t border-[var(--pvc-color-border-strong)]"></span>
+    </div>
+  </template>
+
+  <template data-advanced-search--v2--builder-target="andTemplate">
+    <div
+      class="flex items-center gap-2 px-4 text-(length:--type-meta) text-[var(--pvc-color-text-muted)]"
+      data-advanced-search-connective="and"
+      aria-hidden="true"
+    >
+      <span class="grow border-t border-[var(--pvc-color-border)]"></span>
+      <span class="rounded-[var(--pvc-radius-action)] border border-[var(--pvc-color-border)] px-2 py-1"><%= t("components.advanced_search_component.v2.connective.and") %></span>
+      <span class="grow border-t border-[var(--pvc-color-border)]"></span>
+    </div>
+  </template>
 
   <template data-advanced-search--v2--builder-target="listValueTemplate">
     <%= @form.fields_for :groups, @search_group_class.new, child_index: "GROUP_INDEX_PLACEHOLDER" do |group_form| %>

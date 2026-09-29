@@ -2,7 +2,7 @@
   data-advanced-search--v2--builder-target="conditionsContainer"
   data-advanced-search--v2--builder-group-index="<%= @group_index %>"
   data-advanced-search--v2--builder-condition-index="<%= @condition_index %>"
-  data-advanced-search--v2--builder-legend-template="<%= t("components.advanced_search_component.v1.condition", index: "__INDEX__") %>"
+  data-advanced-search--v2--builder-legend-template="<%= t("components.advanced_search_component.condition", index: "__INDEX__") %>"
   data-advanced-search-selected-field="<%= selected_field %>"
   class="
     relative flex flex-col space-y-3 rounded-[var(--pvc-radius-panel)] border border-[var(--pvc-color-border)] px-4
@@ -10,7 +10,7 @@
   "
 >
   <%= render Pathogen::Typography::Supporting.new(tag: :legend, class: "px-1 font-semibold") do %>
-    <%= t("components.advanced_search_component.v1.condition", index: @condition_number) %>
+    <%= t("components.advanced_search_component.condition", index: @condition_number) %>
   <% end %>
 
   <%= @groups_form.fields_for :conditions, @condition, child_index: @condition_index do |conditions_form| %>
@@ -87,7 +87,7 @@
     icon_only: true,
     tone: :danger,
     emphasis: :ghost,
-    text: t("components.advanced_search_component.v1.remove_condition_aria_label"),
+    text: t("components.advanced_search_component.remove_condition_aria_label"),
     class: "absolute! -top-4 right-2",
     data: { action: "advanced-search--v2--builder#removeCondition" },
   ) do |button| %>
