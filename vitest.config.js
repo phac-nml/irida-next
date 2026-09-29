@@ -29,6 +29,7 @@ const fullCoverageFiles = [
   "app/javascript/controllers/projects/samples/complete_controller.js",
   "app/javascript/controllers/projects/samples/attachments/selected_attachments_controller.js",
   "app/javascript/controllers/projects/samples/metadata/complete_controller.js",
+  "app/javascript/controllers/projects/samples/metadata/create_controller.js",
   "app/javascript/controllers/projects/samples/metadata/delete_listing_controller.js",
   "app/javascript/controllers/projects/samples/metadata/destroy_controller.js",
   "app/javascript/controllers/refresh_controller.js",
