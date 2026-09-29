@@ -74,7 +74,7 @@ module WorkflowExecutions
     test 'advanced search filters workflow execution attachments by byte size' do
       get workflow_execution_path(@workflow_execution, tab: 'files'),
           params: advanced_search_params(
-            [[{ field: 'byte_size', operator: '>', value: '0' }]]
+            [[{ field: 'byte_size', operator: '>=', value: '0' }]]
           )
 
       assert_response :success

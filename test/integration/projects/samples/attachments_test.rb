@@ -807,7 +807,7 @@ module Projects
 
         get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
             params: advanced_search_params(
-              [[{ field: 'byte_size', operator: '>', value: '0' }]]
+              [[{ field: 'byte_size', operator: '>=', value: '0' }]]
             )
 
         assert_response :success

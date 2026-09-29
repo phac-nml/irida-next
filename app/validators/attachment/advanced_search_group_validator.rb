@@ -11,4 +11,8 @@ class Attachment::AdvancedSearchGroupValidator < AdvancedSearch::GroupValidator 
   def date_fields
     %w[created_at]
   end
+
+  def numeric_fields
+    %w[byte_size]
+  end
 end

@@ -393,7 +393,7 @@ module Projects
 
       get namespace_project_attachments_path(group, project),
           params: advanced_search_params(
-            [[{ field: 'byte_size', operator: '>', value: '0' }]]
+            [[{ field: 'byte_size', operator: '>=', value: '0' }]]
           )
 
       assert_response :success
@@ -496,7 +496,7 @@ module Projects
       get namespace_project_attachments_path(group, project),
           params: advanced_search_params(
             [[{ field: 'metadata.format', operator: '=', value: 'csv' }],
-             [{ field: 'byte_size', operator: '>', value: '0' }]]
+             [{ field: 'byte_size', operator: '>=', value: '0' }]]
           )
 
       assert_response :success
@@ -516,8 +516,29 @@ module Projects
 
       get namespace_project_attachments_path(group, project),
           params: advanced_search_params(
-            [[{ field: 'byte_size', operator: '>', value: '0' }],
+            [[{ field: 'byte_size', operator: '>=', value: '0' }],
              [{ field: 'metadata.format', operator: '=', value: 'csv' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
+    test 'advanced search combines a metadata-only group with a byte_size between group using OR' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+
+      get namespace_project_attachments_path(group, project),
+          params: advanced_search_params(
+            [[{ field: 'metadata.format', operator: '=', value: 'csv' }],
+             [{ field: 'byte_size', operator: 'between', value: %w[0 100000] }]]
           )
 
       assert_response :success

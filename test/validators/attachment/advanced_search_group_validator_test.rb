@@ -14,6 +14,23 @@ class Attachment::AdvancedSearchGroupValidatorTest < ActiveSupport::TestCase # r
     assert query.valid?
   end
 
+  test 'rejects non-numeric values for byte_size' do
+    query = create_query_with_condition('byte_size', '>=', 'not-a-number')
+    assert_not query.valid?
+    assert query.groups[0].conditions[0].errors.added?(:value, :not_a_number)
+  end
+
+  test 'rejects text operators for byte_size' do
+    query = create_query_with_condition('byte_size', 'contains', '10')
+    assert_not query.valid?
+    assert query.groups[0].conditions[0].errors.added?(:operator, :use_numeric_operator)
+  end
+
+  test 'validates byte_size with the between operator' do
+    query = create_query_with_condition('byte_size', 'between', %w[10 100])
+    assert query.valid?
+  end
+
   test 'validates metadata field pattern' do
     query = create_query_with_condition('metadata.type', '=', 'assembly')
     assert query.valid?
