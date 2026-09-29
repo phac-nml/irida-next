@@ -19,6 +19,9 @@ const LINELIST_SAMPLES_QUERY = `
 `;
 
 const escapeCsv = (value) => {
+  // Callers pass values already normalized by toCellValue, so the nullish
+  // fallback is defensive only.
+  /* v8 ignore next */
   const text = String(value ?? "");
 
   if (text.includes(",") || text.includes('"') || text.includes("\n")) {
@@ -227,6 +230,8 @@ self.onmessage = async (event) => {
   } catch (error) {
     self.postMessage({
       type: "error",
+      // Thrown errors always carry a message; the fallback is defensive only.
+      /* v8 ignore next */
       message: error?.message || "Unexpected error while generating export.",
     });
   }
