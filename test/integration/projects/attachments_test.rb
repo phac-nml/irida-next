@@ -262,6 +262,24 @@ module Projects
       assert_first_rows_include(attachment1.puid, attachment2.puid, row_scope: '#attachments-table-body')
     end
 
+    test 'default sort indicator matches query results when created_at and updated_at diverge' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+
+      # attachment1 created first but touched most recently; attachment2 created most recently but touched first.
+      attachment1.update!(created_at: 2.days.ago, updated_at: 1.hour.ago)
+      attachment2.update!(created_at: 1.hour.ago, updated_at: 2.days.ago)
+
+      get namespace_project_attachments_path(group, project)
+
+      assert_response :success
+      assert_sort_state(6, 'descending')
+      assert_first_rows_include(attachment2.puid, attachment1.puid, row_scope: '#attachments-table-body')
+    end
+
     test 'attempting to access a non-existent attachments page causes pagy overflow and redirects to first page' do
       sign_in users(:john_doe)
       group = groups(:group_one)
