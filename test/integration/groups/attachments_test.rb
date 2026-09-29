@@ -377,7 +377,7 @@ module Groups
 
       get group_attachments_path(group),
           params: advanced_search_params(
-            [[{ field: 'byte_size', operator: '>', value: '0' }]]
+            [[{ field: 'byte_size', operator: '>=', value: '0' }]]
           )
 
       assert_response :success
