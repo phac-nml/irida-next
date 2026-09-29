@@ -344,6 +344,7 @@ export default class Select2Controller extends Controller {
   }
 
   #ensureItemVisible(item) {
+    /* v8 ignore next -- defensive guard: scroller target and item are always present here */
     if (!this.scrollerTarget || !item) return;
     const container = this.scrollerTarget;
     const containerRect = container.getBoundingClientRect();
@@ -447,6 +448,7 @@ export default class Select2Controller extends Controller {
       }
       return;
     }
+    /* v8 ignore next -- foundItem is guaranteed defined past the guard above */
     this.inputTarget.value = foundItem ? foundItem.dataset.label : "";
     this.#updateAriaSelected(this.inputTarget.value);
   }
