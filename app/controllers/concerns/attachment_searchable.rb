@@ -40,8 +40,8 @@ module AttachmentSearchable
     @q = all_attachments.ransack(params[:q])
     # Sync search values from custom Query to Ransack for accurate form display
     @q.puid_or_file_blob_filename_cont = @query.puid_or_file_blob_filename_cont
-    # Set default sort order if none provided
-    @q.sorts = 'created_at desc' if @q.sorts.empty?
+    # Default sort indicator mirrors the query's own effective sort so the UI never diverges from results.
+    @q.sorts = "#{@query.column} #{@query.direction}" if @q.sorts.empty?
   end
 
   def attachments_results_message
