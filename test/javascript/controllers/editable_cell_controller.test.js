@@ -67,7 +67,10 @@ function keydown(cell, key) {
 
 async function dispatchBlur(cell) {
   cell.dispatchEvent(new FocusEvent("blur", { bubbles: true }));
+  // Two microtask flushes drain the nested async chain the blur triggers:
+  // flush 1 settles the inner `async showConfirmDialog` promise...
   await Promise.resolve();
+  // ...flush 2 settles the outer `async blur` continuation awaiting it.
   await Promise.resolve();
 }
 
