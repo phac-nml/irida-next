@@ -76,7 +76,7 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
 
   def attachments_for(attachable)
     return attachable.combined_attachments if attachables.one? && attachable.respond_to?(:combined_attachments)
-    return attachable.attachments.all if filter_requested?
+    return attachable.attachments.all if filtered_search?
 
     attachable.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
   end
@@ -99,5 +99,11 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
 
   def filter_requested?
     puid_or_file_blob_filename_cont.present?
+  end
+
+  # Reverse reads should only surface when the caller explicitly asked for a broader
+  # result set, whether via the quick search box or an advanced search group.
+  def filtered_search?
+    filter_requested? || advanced_query
   end
 end
