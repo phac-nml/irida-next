@@ -16,6 +16,7 @@ module Groups
       end
 
       test 'should destroy multiple samples at group level' do
+        assert_samples_page(@group1, 26)
         assert_difference('Sample.count', -2) do
           post samples_deletions_path,
                params: {
@@ -26,13 +27,16 @@ module Groups
                  }
                }, as: :turbo_stream
         end
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
         assert_response :redirect
         assert_redirected_to group_samples_path(@group1)
+        follow_redirect!
+        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_samples_page(@group1, 24)
       end
 
       test 'should not destroy multiple samples at group level with active workflow executions' do
         Flipper.enable(:prevent_sample_deletions_and_transfers_with_active_workflows)
+        assert_samples_page(@group1, 26)
         assert_no_difference('Sample.count') do
           post samples_deletions_path,
                params: {
@@ -44,11 +48,13 @@ module Groups
                }, as: :turbo_stream
         end
         assert_response :unprocessable_content
+        assert_samples_page(@group1, 26)
       ensure
         Flipper.disable(:prevent_sample_deletions_and_transfers_with_active_workflows)
       end
 
       test 'should not destroy sample, if it does not belong to the group' do
+        assert_samples_page(@group1, 26)
         assert_no_difference('Sample.count') do
           post samples_deletions_path,
                params: {
@@ -59,9 +65,11 @@ module Groups
                  }
                }, as: :turbo_stream
         end
-        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
         assert_response :redirect
         assert_redirected_to group_samples_path(@group1)
+        follow_redirect!
+        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
+        assert_samples_page(@group1, 26)
       end
 
       test 'should not destroy sample, if the current user role is < Owner in group' do
@@ -86,6 +94,7 @@ module Groups
       end
 
       test 'new destroy with proper authorization from group' do
+        assert_samples_page(@group1, 26)
         get new_samples_deletions_path,
             params: {
               namespace_id: @group1.id,
@@ -111,6 +120,7 @@ module Groups
       end
 
       test 'partially deleting multiple samples at group level' do
+        assert_samples_page(@group1, 26)
         assert_difference('Sample.count', -2) do
           post samples_deletions_path,
                params: {
@@ -121,15 +131,18 @@ module Groups
                  }
                }, as: :turbo_stream
         end
+        assert_response :redirect
+        assert_redirected_to group_samples_path(@group1)
+        follow_redirect!
         assert_equal I18n.t('samples.deletions.destroy.partial_success', deleted: '2/3'),
                      flash[:success]
         assert_equal I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/3'),
                      flash[:error]
-        assert_response :redirect
-        assert_redirected_to group_samples_path(@group1)
+        assert_samples_page(@group1, 24)
       end
 
       test 'delete no samples at group level' do
+        assert_samples_page(@group1, 26)
         assert_no_difference('Sample.count') do
           post samples_deletions_path,
                params: {
@@ -140,13 +153,16 @@ module Groups
                  }
                }, as: :turbo_stream
         end
-        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
         assert_response :redirect
         assert_redirected_to group_samples_path(@group1)
+        follow_redirect!
+        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
+        assert_samples_page(@group1, 26)
       end
 
       test 'should not destroy group sample when deletion reason exceeds max length' do
         Flipper.enable(:sample_deletion_reason)
+        assert_samples_page(@group1, 26)
         assert_no_difference('Sample.count') do
           post samples_deletions_path,
                params: {
@@ -162,11 +178,13 @@ module Groups
         assert_response :unprocessable_content
         assert_match 'Reason is too long', response.body
         assert_match 'form-error-summary', response.body
+        assert_samples_page(@group1, 26)
       ensure
         Flipper.disable(:sample_deletion_reason)
       end
 
       test 'plural description within delete samples dialog' do
+        assert_samples_page(@group1, 26)
         get new_samples_deletions_path,
             params: {
               namespace_id: @group1.id,
@@ -180,6 +198,7 @@ module Groups
       end
 
       test 'samples listing within delete samples dialog' do
+        assert_samples_page(@group1, 26)
         get new_samples_deletions_path,
             params: {
               namespace_id: @group1.id,
@@ -194,6 +213,7 @@ module Groups
 
       test 'samples listing within delete samples dialog with reason' do
         Flipper.enable(:sample_deletion_reason)
+        assert_samples_page(@group1, 26)
         get new_samples_deletions_path,
             params: {
               namespace_id: @group1.id,
@@ -224,8 +244,9 @@ module Groups
                }, as: :turbo_stream
         end
 
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
         assert_response :redirect
+        follow_redirect!
+        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
         assert_samples_page(@group1, 24)
       end
 
@@ -244,8 +265,9 @@ module Groups
                }, as: :turbo_stream
         end
 
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
         assert_response :redirect
+        follow_redirect!
+        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
         assert_samples_page(@group1, 24)
       ensure
         Flipper.disable(:sample_deletion_reason)
@@ -284,11 +306,12 @@ module Groups
                  }
                }, as: :turbo_stream
         end
+        assert_response :redirect
+        follow_redirect!
         assert_equal I18n.t('samples.deletions.destroy.partial_success', deleted: '1/2'),
                      flash[:success]
         assert_equal I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/2'),
                      flash[:error]
-        assert_response :redirect
         assert_samples_page(@group1, 25)
       end
 
@@ -305,8 +328,9 @@ module Groups
                  }
                }, as: :turbo_stream
         end
-        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
         assert_response :redirect
+        follow_redirect!
+        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
         assert_samples_page(@group1, 26)
       end
 
