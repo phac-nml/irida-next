@@ -44,7 +44,7 @@
     "test:js:watch": "vitest"
   },
   "dependencies": {
-    "@activeadmin/activeadmin": "4.0.0-beta22",
+    "@activeadmin/activeadmin": "4.0.0-beta23",
     "@tailwindcss/cli": "4.3.3",
     "@tailwindcss/forms": "^0.5.11",
     "deepmerge": "^4.3.1",
