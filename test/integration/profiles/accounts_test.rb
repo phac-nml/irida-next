@@ -12,6 +12,15 @@ class AccountsTest < ActionDispatch::IntegrationTest
     get profile_account_url
 
     assert_response :success
+    assert_select 'h1', text: I18n.t(:'profiles.accounts.show.title'), count: 1
+    assert_select 'p', text: "#{I18n.t(:'profiles.accounts.delete.description')}:", count: 1
+    I18n.t(:'profiles.accounts.delete.effects').each do |effect|
+      assert_select 'ul li', text: effect, count: 1
+    end
+    assert_select "form[action='#{profile_account_path}'][method='post']" do
+      assert_select "input[name='_method'][value='delete']", count: 1
+    end
+    assert_select 'button', text: I18n.t(:'profiles.accounts.delete.button'), count: 1
   end
 
   test 'should redirect unauthenticated users from account show' do

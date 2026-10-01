@@ -22,8 +22,11 @@ class PreferencesTest < ActionDispatch::IntegrationTest
             params: { user: { locale: 'fr' } }
     end
 
+    assert_response :redirect
     assert_redirected_to profile_preferences_path
-    assert_equal I18n.t(:'profiles.preferences.update.success', locale: :fr), flash[:success]
+    follow_redirect!
+    assert_select "[data-viral--flash-type-value='success']",
+                  text: /#{Regexp.escape(I18n.t(:'profiles.preferences.update.success', locale: :fr))}/, count: 1
   end
 
   test 'should update the users locale with a valid locale' do
@@ -32,8 +35,11 @@ class PreferencesTest < ActionDispatch::IntegrationTest
             params: { user: { locale: 'fr' } }
     end
 
+    assert_response :redirect
     assert_redirected_to profile_preferences_path
-    assert_equal I18n.t(:'profiles.preferences.update.success', locale: :fr), flash[:success]
+    follow_redirect!
+    assert_select "[data-viral--flash-type-value='success']",
+                  text: /#{Regexp.escape(I18n.t(:'profiles.preferences.update.success', locale: :fr))}/, count: 1
   end
 
   test 'should update the users locale with a valid locale via turbo stream' do
@@ -43,7 +49,8 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :ok
-    assert_includes response.body, I18n.t(:'profiles.preferences.update.success', locale: :fr)
+    assert_select "[data-viral--flash-type-value='success']",
+                  text: /#{Regexp.escape(I18n.t(:'profiles.preferences.update.success', locale: :fr))}/, count: 1
   end
 
   test 'should not update the users locale with an invalid locale via turbo stream' do
@@ -53,7 +60,8 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_includes response.body, I18n.t(:'profiles.preferences.update.error')
+    assert_select "[data-viral--flash-type-value='error']",
+                  text: /#{Regexp.escape(I18n.t(:'profiles.preferences.update.error'))}/, count: 1
   end
 
   test 'should render the preferences page with an error when the update fails' do
@@ -79,5 +87,9 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :redirect
+    assert_redirected_to new_user_session_path
+    follow_redirect!
+    assert_select "[data-viral--alert-type-value='danger']",
+                  text: /#{Regexp.escape(I18n.t('devise.failure.unauthenticated'))}/, count: 1
   end
 end
