@@ -36,12 +36,10 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
   end
 
   def advanced_query_scope
-    normalize_sort_scope(search_scope).merge(advanced_query_groups)
+    search_scope.merge(advanced_query_groups)
   end
 
   def apply_sort(scope)
-    scope = normalize_sort_scope(scope)
-
     return scope unless column.present? && direction.present?
 
     case column
