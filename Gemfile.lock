@@ -162,7 +162,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.26.0)
       msgpack (~> 1.5)
-    brakeman (8.0.6)
+    brakeman (8.1.0)
       racc
     builder (3.3.0)
     bundler-audit (0.9.3)
@@ -911,4 +911,4 @@ RUBY VERSION
    ruby 3.4.10p104
 
 BUNDLED WITH
-   2.6.7
+   2.7.2
