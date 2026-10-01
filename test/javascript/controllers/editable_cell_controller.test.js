@@ -325,4 +325,48 @@ describe("editable cell controller", () => {
     expect(dialog.open).toBe(true);
     expect(dialog.querySelector('button[value="cancel"]')).toBeNull();
   });
+
+  it("trims whitespace from values when submitting", async () => {
+    const { submitSpy } = await mount();
+    const cell = cells()[0];
+    cell.innerText = "  Mexico  ";
+
+    const event = keydown(cell, "Enter");
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+
+    const input = (name) =>
+      formContainer().querySelector(`input[name="${name}"]`).value;
+    expect(input("value")).toBe("Mexico");
+  });
+
+  it("collapses multiple consecutive whitespaces into single space", async () => {
+    const { submitSpy } = await mount();
+    const cell = cells()[0];
+    cell.innerText = "  Mexico    City  ";
+
+    const event = keydown(cell, "Enter");
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+
+    const input = (name) =>
+      formContainer().querySelector(`input[name="${name}"]`).value;
+    expect(input("value")).toBe("Mexico City");
+  });
+
+  it("trims whitespace from values in confirm dialog", async () => {
+    await mount();
+    const cell = cells()[0];
+    cell.innerText = "  Mexico  ";
+
+    await dispatchBlur(cell);
+
+    const dialog = dialogEl();
+    expect(dialog).not.toBeNull();
+    expect(
+      dialog.querySelector('[data-message-type="wov"]').textContent,
+    ).toContain("Canada to Mexico");
+  });
 });
