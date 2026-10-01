@@ -12,7 +12,7 @@ class PasswordsTest < ActionDispatch::IntegrationTest
     get edit_profile_password_url
 
     assert_response :success
-    w3c_validate 'User Profile Password Edit Page'
+    assert_password_form
   end
 
   test 'should update user password' do
@@ -24,6 +24,9 @@ class PasswordsTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to edit_profile_password_path
     assert_equal I18n.t(:'profiles.passwords.update.success'), flash[:success]
+    follow_redirect!
+    assert_response :success
+    assert_password_form
   end
 
   test 'should not update user password with empty password' do
@@ -33,6 +36,8 @@ class PasswordsTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
+    assert_password_form
+    assert_select '#user_password_error li', minimum: 1
   end
 
   test 'omniauth user should not update password' do
@@ -42,5 +47,18 @@ class PasswordsTest < ActionDispatch::IntegrationTest
           params: { user: { password: 'password', password_confirmation: 'password', current_password: 'password1' } }
 
     assert_response :unauthorized
+    assert_select "form[action='#{profile_password_path}']", count: 0
+  end
+
+  private
+
+  def assert_password_form
+    assert_select 'h1', text: I18n.t(:'profiles.passwords.update.title'), count: 1
+    assert_select "form[action='#{profile_password_path}'][method='post']" do
+      assert_select "input[name='_method'][value='patch']", count: 1
+      assert_select 'input#user_current_password[type="password"]', count: 1
+      assert_select 'input#user_password[type="password"]', count: 1
+      assert_select 'input#user_password_confirmation[type="password"]', count: 1
+    end
   end
 end
