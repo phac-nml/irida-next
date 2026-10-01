@@ -16,7 +16,9 @@ module Profiles
       end
 
       assert_response :success
-      assert_includes response.body, Irida::ExperimentalFeatureCatalog.fetch(@feature_name)[:name]
+      assert_select "#experimental-feature-#{@feature_name}" do
+        assert_select 'label', text: Irida::ExperimentalFeatureCatalog.fetch(@feature_name)[:name], count: 1
+      end
     end
 
     test 'show renders empty state when no features are eligible' do
@@ -25,7 +27,7 @@ module Profiles
       end
 
       assert_response :success
-      assert_includes response.body, I18n.t('profiles.experimental_features.show.empty_state.title')
+      assert_select 'p', text: I18n.t('profiles.experimental_features.show.empty_state.title'), count: 1
     end
 
     test 'should enable an eligible feature via turbo stream' do
@@ -37,7 +39,7 @@ module Profiles
       end
 
       assert_response :ok
-      assert_includes response.body, I18n.t('profiles.experimental_features.update.success')
+      assert_feature_update_status(I18n.t('profiles.experimental_features.update.success'))
     ensure
       Flipper.disable_actor(@feature_name, @user)
     end
@@ -80,6 +82,7 @@ module Profiles
 
       assert_response :ok
       assert_not Flipper[@feature_name].enabled?(@user)
+      assert_feature_update_status(I18n.t('profiles.experimental_features.update.success'))
     end
 
     test 'should return validation error for invalid enabled value' do
@@ -93,7 +96,7 @@ module Profiles
       end
 
       assert_response :unprocessable_content
-      assert_includes response.body, I18n.t('profiles.experimental_features.update.validation_error')
+      assert_feature_update_status(I18n.t('profiles.experimental_features.update.validation_error'))
     end
 
     test 'should return an error when the feature toggle fails' do
@@ -108,7 +111,7 @@ module Profiles
       end
 
       assert_response :unprocessable_content
-      assert_includes response.body, I18n.t('profiles.experimental_features.update.error')
+      assert_feature_update_status(I18n.t('profiles.experimental_features.update.error'))
     ensure
       Flipper.disable_actor(@feature_name, @user)
     end
@@ -124,7 +127,17 @@ module Profiles
       patch profile_experimental_features_path(format: :turbo_stream)
 
       assert_response :unprocessable_content
-      assert_empty response.body
+      assert_select 'turbo-stream', count: 0
+    end
+
+    private
+
+    def assert_feature_update_status(message)
+      assert_select "turbo-stream[action='replace'][target='experimental-feature-#{@feature_name}']" do
+        assert_select 'template' do
+          assert_select "#experimental-feature-#{@feature_name}-status", text: message, count: 1
+        end
+      end
     end
   end
 end
