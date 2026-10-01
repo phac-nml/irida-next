@@ -16,6 +16,24 @@ application.register(
 import AdvancedSearch__V1Controller from "./advanced_search/v1_controller";
 application.register("advanced-search--v1", AdvancedSearch__V1Controller);
 
+import AdvancedSearch__V2__BuilderController from "./advanced_search/v2/builder_controller";
+application.register(
+  "advanced-search--v2--builder",
+  AdvancedSearch__V2__BuilderController,
+);
+
+import AdvancedSearch__V2__DialogController from "./advanced_search/v2/dialog_controller";
+application.register(
+  "advanced-search--v2--dialog",
+  AdvancedSearch__V2__DialogController,
+);
+
+import AdvancedSearch__V2__StandaloneController from "./advanced_search/v2/standalone_controller";
+application.register(
+  "advanced-search--v2--standalone",
+  AdvancedSearch__V2__StandaloneController,
+);
+
 import AttachmentUploadController from "./attachment_upload_controller";
 application.register("attachment-upload", AttachmentUploadController);
 
