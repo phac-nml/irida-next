@@ -36,7 +36,7 @@ function renderFixture({
     >
       ${selectionCount}
       <span data-infinite-scroll-target="summary"></span>
-      <div data-infinite-scroll-target="scrollable">
+      <div data-infinite-scroll-target="scrollable" data-action="scroll->infinite-scroll#scroll">
         <form data-infinite-scroll-target="pageForm">
           <div data-infinite-scroll-target="pageFormContent"></div>
         </form>
@@ -57,13 +57,6 @@ const pageContent = () =>
 const pagedInputs = () =>
   Array.from(pageContent().querySelectorAll('input[name="sample_ids[]"]'));
 const pageValue = () => pageContent().querySelector('input[name="page"]').value;
-
-function controllerFor(application) {
-  return application.getControllerForElementAndIdentifier(
-    root(),
-    "infinite-scroll",
-  );
-}
 
 async function mount(options) {
   document.body.innerHTML = renderFixture(options);
@@ -112,24 +105,24 @@ describe("infinite scroll controller", () => {
     const items = Array.from({ length: 250 }, (_, index) => String(index + 1));
     let submitSpy;
     ({ application, submitSpy } = await mount({ items }));
-    const controller = controllerFor(application);
+    const element = scrollable();
 
     expect(submitSpy).toHaveBeenCalledTimes(1);
     expect(pageValue()).toBe("1");
     expect(pagedInputs()).toHaveLength(100);
 
-    controller.scroll();
+    element.dispatchEvent(new Event("scroll"));
     expect(submitSpy).toHaveBeenCalledTimes(2);
     expect(pageValue()).toBe("2");
     expect(pagedInputs()).toHaveLength(100);
 
-    controller.scroll();
+    element.dispatchEvent(new Event("scroll"));
     expect(submitSpy).toHaveBeenCalledTimes(3);
     expect(pageValue()).toBe("3");
     expect(pagedInputs()).toHaveLength(50);
 
     // All ids are consumed, so a further scroll submits nothing.
-    controller.scroll();
+    element.dispatchEvent(new Event("scroll"));
     expect(submitSpy).toHaveBeenCalledTimes(3);
   });
 
@@ -153,7 +146,7 @@ describe("infinite scroll controller", () => {
       configurable: true,
     });
 
-    controllerFor(application).scroll();
+    element.dispatchEvent(new Event("scroll"));
     expect(submitSpy).toHaveBeenCalledTimes(1);
   });
 
