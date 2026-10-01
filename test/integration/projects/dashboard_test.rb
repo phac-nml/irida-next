@@ -59,37 +59,30 @@ module Projects
       assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next')
     end
 
-    test 'can search the list of projects by name' do
-      get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.name } }
+    test 'can search the list of projects by name & puid' do
+      search_cases = [
+        { search_term: @group_project.name, expected_rows: 13 },
+        { search_term: @group_project.puid, expected_rows: 1 }
+      ]
 
-      assert_response :success
-      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_select '#groups_tree', count: 1
-      assert_select '.treegrid-row', count: 13
-      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
-      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next'), count: 0
+      search_cases.each do |search_case|
+        search_term = search_case.fetch(:search_term)
+        expected_rows = search_case.fetch(:expected_rows)
 
-      assert_select 'input[name="all_projects_q[namespace_name_or_namespace_puid_cont]"]'
-      assert_select 'input.t-search-component' do |input|
-        assert_equal @group_project.name, input.first['value']
-      end
-    end
+        get dashboard_projects_path,
+            params: { all_projects_q: { namespace_name_or_namespace_puid_cont: search_term } }
 
-    test 'can search the list of projects by puid' do
-      get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.puid } }
+        assert_response :success
+        assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
+        assert_select '#groups_tree', count: 1
+        assert_select '.treegrid-row', count: expected_rows
+        assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
+        assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next'), count: 0
 
-      assert_response :success
-      assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_select '#groups_tree', count: 1
-      assert_select '.treegrid-row', count: 1
-      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
-      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next'), count: 0
-
-      assert_select 'input[name="all_projects_q[namespace_name_or_namespace_puid_cont]"]'
-      assert_select 'input.t-search-component' do |input|
-        assert_equal @group_project.puid, input.first['value']
+        assert_select 'input[name="all_projects_q[namespace_name_or_namespace_puid_cont]"]'
+        assert_select 'input.t-search-component' do |input|
+          assert_equal search_term, input.first['value']
+        end
       end
     end
 
@@ -112,65 +105,41 @@ module Projects
       assert_select '.empty_state_message', count: 1
     end
 
-    test 'should apply default sort when no sort specified' do
-      get dashboard_projects_path
-
-      assert_response :success
-      assert_active_sort('all_projects_q', 'updated_at desc')
-      assert_includes first_treegrid_row_text, @group_project.human_name
-    end
-
-    test 'should respect custom sort parameters' do
-      get dashboard_projects_path,
-          params: { all_projects_q: { s: 'namespace_name desc' } }
-
-      assert_response :success
-      assert_active_sort('all_projects_q', 'namespace_name desc')
-
-      assert_includes first_treegrid_row_text, projects(:subgroup1Project1).human_name
-    end
-
-    test 'should sort projects by updated_at ascending' do
-      get dashboard_projects_path, params: { all_projects_q: { s: 'updated_at asc' } }
-
-      assert_response :success
-      assert_active_sort('all_projects_q', 'updated_at asc')
-    end
-
-    test 'should sort projects by created_at descending' do
-      get dashboard_projects_path, params: { all_projects_q: { s: 'created_at desc' } }
-
-      assert_response :success
-      assert_active_sort('all_projects_q', 'created_at desc')
-    end
-
-    test 'should sort projects by created_at ascending' do
-      get dashboard_projects_path, params: { all_projects_q: { s: 'created_at asc' } }
-
-      assert_response :success
-      assert_active_sort('all_projects_q', 'created_at asc')
-    end
-
-    test 'should apply sort with filters for all projects query' do
-      get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.name,
-                                      s: 'namespace_name desc' } }
-
-      assert_response :success
-      assert_active_sort('all_projects_q', 'namespace_name desc')
-
-      assert_includes first_treegrid_row_text, projects(:subgroup1Project1).human_name
-    end
-
-    test 'should apply sort with filters for personal projects query' do
-      get dashboard_projects_path,
-          params: { personal: 'true',
+    test 'should apply project sorting' do
+      sort_cases = [
+        { params: {}, search_key: 'all_projects_q', sort: 'updated_at desc', first_row_project: @group_project },
+        { params: { all_projects_q: { s: 'namespace_name desc' } },
+          search_key: 'all_projects_q',
+          sort: 'namespace_name desc',
+          first_row_project: projects(:subgroup1Project1) },
+        { params: { all_projects_q: { s: 'updated_at asc' } }, search_key: 'all_projects_q', sort: 'updated_at asc' },
+        { params: { all_projects_q: { s: 'created_at desc' } }, search_key: 'all_projects_q', sort: 'created_at desc' },
+        { params: { all_projects_q: { s: 'created_at asc' } }, search_key: 'all_projects_q', sort: 'created_at asc' },
+        { params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.name,
+                                      s: 'namespace_name desc' } },
+          search_key: 'all_projects_q',
+          sort: 'namespace_name desc',
+          first_row_project: projects(:subgroup1Project1) },
+        { params: { personal: 'true',
                     personal_projects_q: { namespace_name_or_namespace_puid_cont: @personal_project.name,
-                                           s: 'namespace_name asc' } }
+                                           s: 'namespace_name asc' } },
+          search_key: 'personal_projects_q',
+          sort: 'namespace_name asc',
+          first_row_project: @personal_project }
+      ]
 
-      assert_response :success
-      assert_active_sort('personal_projects_q', 'namespace_name asc')
-      assert_includes first_treegrid_row_text, @personal_project.human_name
+      sort_cases.each do |sort_case|
+        params = sort_case.fetch(:params)
+        search_key = sort_case.fetch(:search_key)
+        sort = sort_case.fetch(:sort)
+        first_row_project = sort_case.fetch(:first_row_project, nil)
+
+        get dashboard_projects_path, params: params
+
+        assert_response :success
+        assert_active_sort(search_key, sort)
+        assert_includes first_treegrid_row_text, first_row_project.human_name if first_row_project
+      end
     end
 
     test 'should paginate results' do

@@ -82,39 +82,30 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'p', text: I18n.t('application.errors.not_found_on_server')
   end
 
-  test 'can view new project form' do
-    get new_project_path
-
-    assert_response :success
-    assert_select 'h1', text: I18n.t('projects.new.title')
-    assert_select 'form' do
-      assert_select 'input[name="project[namespace_attributes][name]"]'
-      assert_select "input[name=\"project[namespace_attributes][parent_id]\"][value=\"#{@namespace.id}\"]"
-      assert_select 'input[name="project[namespace_attributes][path]"]'
-      assert_select 'textarea[name="project[namespace_attributes][description]"]'
-      assert_select 'input[type="submit"]', value: I18n.t('projects.new.submit')
-    end
-  end
-
-  test 'includes the group in the new project page title' do
-    group = groups(:group_one)
-
-    get new_project_path(group_id: group.id)
-
-    assert_response :success
-    assert_select 'h1', text: I18n.t('projects.new.title')
-    assert_select 'form' do
-      assert_select 'input[name="project[namespace_attributes][name]"]'
-      assert_select "input[name=\"project[namespace_attributes][parent_id]\"][value=\"#{group.id}\"]"
-      assert_select 'input[name="project[namespace_attributes][path]"]'
-      assert_select 'textarea[name="project[namespace_attributes][description]"]'
-      assert_select 'input[type="submit"]', value: I18n.t('projects.new.submit')
-    end
-  end
-
-  test 'can create a project' do
+  test 'can view new project forms and create a project' do
     project_name = 'New Project'
     project_description = 'New Project Description'
+    group = groups(:group_one)
+
+    form_cases = [
+      { path: new_project_path, parent_id: @namespace.id },
+      { path: new_project_path(group_id: group.id), parent_id: group.id }
+    ]
+
+    form_cases.each do |form_case|
+      get form_case.fetch(:path)
+
+      assert_response :success
+      assert_select 'h1', text: I18n.t('projects.new.title')
+      assert_select 'form' do
+        assert_select 'input[name="project[namespace_attributes][name]"]'
+        assert_select "input[name=\"project[namespace_attributes][parent_id]\"][value=
+          \"#{form_case.fetch(:parent_id)}\"]"
+        assert_select 'input[name="project[namespace_attributes][path]"]'
+        assert_select 'textarea[name="project[namespace_attributes][description]"]'
+        assert_select 'input[type="submit"]', value: I18n.t('projects.new.submit')
+      end
+    end
 
     assert_difference('Project.count', 1) do
       post projects_path,
@@ -264,7 +255,20 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'can view edit project form' do
+  test 'cannot view edit project form with insufficient permissions' do
+    sign_in users(:david_doe)
+    get namespace_project_edit_path(@project.namespace.parent, @project)
+
+    assert_response :unauthorized
+    assert_select 'h1', text: I18n.t('application.errors.access_denied')
+    assert_select 'p', text: I18n.t('action_policy.policy.project.edit?', name: @project.name)
+  end
+
+  test 'can view edit project form and update project details as an authorized member' do
+    project_name = 'Updated project name'
+    project_description = 'Updated project description'
+    project_path = 'updated-project-path'
+
     get namespace_project_edit_path(@project.namespace.parent, @project)
 
     assert_response :success
@@ -280,20 +284,6 @@ class ProjectsTest < ActionDispatch::IntegrationTest
       assert_select 'input[type="submit"]', value: I18n.t('projects.edit.advanced.path.submit')
     end
     assert_select 'button', text: I18n.t('groups.edit.advanced.change_visibility.submit'), count: 0
-  end
-
-  test 'cannot view edit project form with insufficient permissions' do
-    sign_in users(:david_doe)
-    get namespace_project_edit_path(@project.namespace.parent, @project)
-
-    assert_response :unauthorized
-    assert_select 'h1', text: I18n.t('application.errors.access_denied')
-    assert_select 'p', text: I18n.t('action_policy.policy.project.edit?', name: @project.name)
-  end
-
-  test 'can update a project' do
-    project_name = 'Updated project name'
-    project_description = 'Updated project description'
 
     assert_changes -> { [@project.reload.name, @project.namespace.description] },
                    from: [@project.name, @project.namespace.description],
@@ -318,11 +308,6 @@ class ProjectsTest < ActionDispatch::IntegrationTest
                       project_name: project_name
                     )}"
     end
-  end
-
-  test 'can update a project path' do
-    project_path = 'updated-project-path'
-
     assert_changes -> { @project.reload.path }, from: @project.namespace.path, to: project_path do
       patch namespace_project_path(@project.namespace.parent, @project),
             params: {
@@ -335,6 +320,19 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to namespace_project_edit_path(@project.namespace.parent, @project)
     assert_equal I18n.t('projects.update.success', project_name: @project.name), flash[:success]
+
+    group_project = projects(:project2)
+
+    assert_changes -> { [group_project.reload.name, group_project.path] },
+                   from: [group_project.name, group_project.path],
+                   to: ['Awesome Project 2', 'awesome-project-2'] do
+      patch namespace_project_path(group_project.namespace.parent, group_project),
+            params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
+                      format: :turbo_stream }
+    end
+
+    assert_redirected_to namespace_project_edit_path(group_project.namespace.parent, group_project.reload)
+    assert_equal I18n.t('projects.update.success', project_name: group_project.name), flash[:success]
   end
 
   test 'cannot update project with invalid params' do
@@ -382,9 +380,9 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_content
     assert_select 'a', text:
-         I18n.t(:'errors.format',
-                attribute: Namespaces::ProjectNamespace.human_attribute_name(:name),
-                message: I18n.t('errors.messages.too_short.other', count: 3))
+               I18n.t(:'errors.format',
+                      attribute: Namespaces::ProjectNamespace.human_attribute_name(:name),
+                      message: I18n.t('errors.messages.too_short.other', count: 3))
 
     assert_no_changes -> { @project.reload.name } do
       patch namespace_project_path(@project.namespace.parent, @project),
@@ -417,23 +415,6 @@ class ProjectsTest < ActionDispatch::IntegrationTest
                I18n.t(:'errors.format',
                       attribute: Namespaces::ProjectNamespace.human_attribute_name(:description),
                       message: I18n.t('errors.messages.too_long', count: 255))
-  end
-
-  test 'can update project which is a part of a parent group and of which the user is a member' do
-    sign_in users(:john_doe)
-
-    project = projects(:project2)
-
-    assert_changes -> { [project.reload.name, project.path] },
-                   from: [project.name, project.path],
-                   to: ['Awesome Project 2', 'awesome-project-2'] do
-      patch namespace_project_path(project.namespace.parent, project),
-            params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
-                      format: :turbo_stream }
-    end
-
-    assert_redirected_to namespace_project_edit_path(project.namespace.parent, project.reload)
-    assert_equal I18n.t('projects.update.success', project_name: project.name), flash[:success]
   end
 
   test "can update project which is under the user's namespace" do
