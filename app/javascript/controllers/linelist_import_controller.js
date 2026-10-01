@@ -87,6 +87,8 @@ export default class extends Controller {
     event.stopPropagation();
     this.#terminateWorker();
     this._worker = this.#buildWorker();
+    if (!this._worker) return;
+
     closeDialog(this.element, this.application);
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     clearProgressWindowDismissTimeout(this);
@@ -136,7 +138,7 @@ export default class extends Controller {
 
     if (typeof Worker !== "undefined") {
       worker = new Worker(
-        import.meta.resolve("workers/linelist_import_worker"),
+        new URL("../workers/linelist_import_worker.js", import.meta.url),
         { type: "module" },
       );
 
