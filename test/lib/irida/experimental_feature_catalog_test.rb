@@ -13,6 +13,7 @@ module Irida
         advanced_search_metadata_operators
         advanced_search_v2
         advanced_search_with_auto_complete
+        attachments_advanced_search
         automated_workflow_execution_subscriber
         client_linelist_exports_v1
         client_linelist_imports_v1

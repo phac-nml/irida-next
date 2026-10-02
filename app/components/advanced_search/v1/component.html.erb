@@ -10,6 +10,8 @@
     "advanced-search--v1-list-input-outlet": ".list-input",
     "advanced-search--v1-enum-fields-value": json_escape_data(@fields.fetch(:enum_fields, {})),
     "advanced-search--v1-enum-operations-value": json_escape_data(enum_operation_options),
+    "advanced-search--v1-numeric-fields-value": json_escape_data(numeric_fields),
+    "advanced-search--v1-numeric-operations-value": json_escape_data(numeric_operation_options),
     "advanced-search--v1-operations-value": json_escape_data(operation_options),
   },
 ) do %>

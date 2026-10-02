@@ -29,8 +29,11 @@ module AdvancedSearch
           'CAST',
           [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
         )
+        # cast to text first so the regex guard also works on genuinely numeric columns (e.g. bigint),
+        # where `~` has no direct operator support.
+        text_node = Arel::Nodes::NamedFunction.new('CAST', [node.as(Arel::Nodes::SqlLiteral.new('TEXT'))])
 
-        scope.where(node.matches_regexp('^-?\\d+(\\.\\d+)?$').and(
+        scope.where(text_node.matches_regexp('^-?\\d+(\\.\\d+)?$').and(
                       casted_node.between(value[0].to_f..value[1].to_f)
                     ))
       end

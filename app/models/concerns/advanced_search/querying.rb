@@ -53,11 +53,7 @@ module AdvancedSearch
       adv_query_scope = nil
 
       groups.each do |group|
-        group_scope = model_class
-
-        group.conditions.each do |condition|
-          group_scope = add_condition(group_scope, condition)
-        end
+        group_scope = build_group_scope(group)
 
         adv_query_scope = if adv_query_scope.nil?
                             group_scope
@@ -67,6 +63,18 @@ module AdvancedSearch
       end
 
       adv_query_scope
+    end
+
+    # Builds a group's scope, then normalizes it back to a plain `model_class`
+    # relation (via an id subquery) so groups whose conditions add different
+    # joins (e.g. one group joins :file_blob, another only filters metadata)
+    # remain structurally compatible when combined with `.or`.
+    def build_group_scope(group)
+      group_scope = group.conditions.reduce(model_class) do |scope, condition|
+        add_condition(scope, condition)
+      end
+
+      model_class.where(id: group_scope.select(model_class.arel_table[:id]))
     end
 
     def filtered_scope
