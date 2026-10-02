@@ -48,6 +48,8 @@ export default class AdvancedSearchBuilderController extends Controller {
     enumFields: Object,
     enumOperations: Object,
     initialState: Array,
+    numericFields: Array,
+    numericOperations: Object,
     operations: Object,
   };
 
@@ -375,6 +377,8 @@ export default class AdvancedSearchBuilderController extends Controller {
         this.operationsValue["metadata"],
         operator,
       );
+    } else if (this.numericFieldsValue.includes(selectedField)) {
+      this.#createOperatorOptions(this.numericOperationsValue, operator);
     } else {
       this.#createOperatorOptions(this.operationsValue["standard"], operator);
     }

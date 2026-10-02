@@ -6,6 +6,9 @@ module AdvancedSearch
     'standard' => %w[= != in not_in]
   }.freeze
 
+  # Operators allowed for fields that only accept numeric values (e.g. byte_size).
+  NUMERIC_OPERATOR_VALUES = %w[= != <= >= in not_in between].freeze
+
   # Builds field option payloads for advanced-search UI rendering.
   class Fields
     WORKFLOW_FIELD_LABELS = {
@@ -20,11 +23,12 @@ module AdvancedSearch
     }.freeze
 
     class << self
-      def build(options:, groups: {}, enum_fields: {})
+      def build(options:, groups: {}, enum_fields: {}, numeric_fields: [])
         {
           options: Array(options),
           groups: groups || {},
-          enum_fields:
+          enum_fields:,
+          numeric_fields: Array(numeric_fields)
         }
       end
 
@@ -40,7 +44,7 @@ module AdvancedSearch
           [field, field]
         end
 
-        build(options:, groups: metadata_group(metadata_options))
+        build(options:, groups: metadata_group(metadata_options), numeric_fields: field_configuration::NUMERIC_FIELDS)
       end
 
       def for_samples(sample_fields:, metadata_fields:)
