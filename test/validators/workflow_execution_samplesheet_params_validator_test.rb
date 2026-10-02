@@ -175,6 +175,17 @@ class WorkflowExecutionSamplesheetParamsValidatorTest < ActiveSupport::TestCase
     assert_empty record.errors
   end
 
+  test 'ignores unsupported cell types' do
+    record = build_record(
+      properties: { 'category' => { 'cell_type' => 'dropdown_cell' } },
+      samplesheet_params: { 'category' => 'value' }
+    )
+
+    validate(record)
+
+    assert_empty record.errors
+  end
+
   private
 
   def build_record(properties:, samplesheet_params:, sample: @sample, **workflow_options)
