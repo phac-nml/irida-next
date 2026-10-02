@@ -62,34 +62,25 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
     )}/
   end
 
-  test 'should list active tokens' do
-    get list_profile_personal_access_tokens_path(type: :active, format: :turbo_stream)
+  test 'should list tokens by type' do
+    list_cases = [
+      { type: :active, count: @user.personal_access_tokens.active.count, rotate_button_count: nil },
+      { type: :revoked, count: @user.personal_access_tokens.revoked.count, rotate_button_count: 0 },
+      { type: :expired, count: @user.personal_access_tokens.expired.count, rotate_button_count: 0 },
+      { type: :expiring, count: @user.personal_access_tokens.expiring_in_two_weeks.count, rotate_button_count: nil }
+    ]
 
-    assert_response :success
-    assert_select 'span.token-status', count: @user.personal_access_tokens.active.count
-  end
+    list_cases.each do |list_case|
+      get list_profile_personal_access_tokens_path(type: list_case.fetch(:type), format: :turbo_stream)
 
-  test 'should list revoked tokens' do
-    get list_profile_personal_access_tokens_path(type: :revoked, format: :turbo_stream)
+      assert_response :success
+      assert_select 'span.token-status', count: list_case.fetch(:count)
 
-    assert_response :success
-    assert_select 'span.token-status', count: @user.personal_access_tokens.revoked.count
-    assert_select 'button', text: I18n.t(:'personal_access_tokens.table.rotate'), count: 0
-  end
+      rotate_button_count = list_case.fetch(:rotate_button_count)
+      next unless rotate_button_count
 
-  test 'should list expired tokens' do
-    get list_profile_personal_access_tokens_path(type: :expired, format: :turbo_stream)
-
-    assert_response :success
-    assert_select 'span.token-status', count: @user.personal_access_tokens.expired.count
-    assert_select 'button', text: I18n.t(:'personal_access_tokens.table.rotate'), count: 0
-  end
-
-  test 'should list expiring tokens' do
-    get list_profile_personal_access_tokens_path(type: :expiring, format: :turbo_stream)
-
-    assert_response :success
-    assert_select 'span.token-status', count: @user.personal_access_tokens.expiring_in_two_weeks.count
+      assert_select 'button', text: I18n.t(:'personal_access_tokens.table.rotate'), count: rotate_button_count
+    end
   end
 
   test 'should get new' do
@@ -123,15 +114,30 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
     assert_select 'span.token-status', count: @user.personal_access_tokens.active.count
   end
 
-  test 'cannot create personal access token without expiration date if require_personal_access_token_expiry is set' do
+  test 'should not create personal access token with invalid params' do
     settings = Irida::CurrentSettings.current_application_settings
     previous_require_expiry = settings.require_personal_access_token_expiry
     settings.update!(require_personal_access_token_expiry: true)
 
-    begin
+    invalid_cases = [
+      { params: { name: 'my new token', scopes: ['api'] },
+        attribute: I18n.t(:'activerecord.attributes.personal_access_token.expires_at'),
+        message: I18n.t(:'common.date.errors.invalid_input'),
+        focused_field: 'personal_access_token[expires_at]' },
+      { params: { name: 'token' },
+        attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
+        message: I18n.t(:'errors.messages.blank'),
+        focused_field: 'personal_access_token[scopes][]' },
+      { params: { name: 'token', scopes: ['write_api'] },
+        attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
+        message: I18n.t(:'errors.messages.inclusion'),
+        focused_field: 'personal_access_token[scopes][]' }
+    ]
+
+    invalid_cases.each do |invalid_case|
       assert_no_difference(-> { @user.personal_access_tokens.count }) do
         post profile_personal_access_tokens_path(format: :turbo_stream),
-             params: { personal_access_token: { name: 'my new token', scopes: ['api'] } }
+             params: { personal_access_token: invalid_case.fetch(:params) }
       end
 
       assert_response :unprocessable_content
@@ -139,50 +145,14 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
         assert_select '[data-controller="form-error-summary"]' do
           assert_select 'a', text:
                  I18n.t(:'errors.format',
-                        attribute: I18n.t(:'activerecord.attributes.personal_access_token.expires_at'),
-                        message: I18n.t(:'common.date.errors.invalid_input'))
+                        attribute: invalid_case.fetch(:attribute),
+                        message: invalid_case.fetch(:message))
         end
-        assert_select 'input[name="personal_access_token[expires_at]"]', focused: true
+        assert_select "input[name=\"#{invalid_case.fetch(:focused_field)}\"]", focused: true
       end
-    ensure
-      settings.update!(require_personal_access_token_expiry: previous_require_expiry)
     end
-  end
-
-  test 'should not create personal access token without scopes' do
-    assert_no_difference(-> { @user.personal_access_tokens.count }) do
-      post profile_personal_access_tokens_path(format: :turbo_stream),
-           params: { personal_access_token: { name: 'token' } }
-    end
-
-    assert_response :unprocessable_content
-    assert_select 'form[action="/-/profile/personal_access_tokens"]' do
-      assert_select 'div[data-controller="form-error-summary"]' do
-        assert_select 'a', text:
-               I18n.t(:'errors.format',
-                      attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
-                      message: I18n.t(:'errors.messages.blank'))
-      end
-      assert_select 'input[name="personal_access_token[scopes][]"]', focused: true
-    end
-  end
-
-  test 'should not create personal access token with invalid scopes' do
-    assert_no_difference(-> { @user.personal_access_tokens.count }) do
-      post profile_personal_access_tokens_path(format: :turbo_stream),
-           params: { personal_access_token: { name: 'token', scopes: ['write_api'] } }
-    end
-
-    assert_response :unprocessable_content
-    assert_select 'form[action="/-/profile/personal_access_tokens"]' do
-      assert_select 'div[data-controller="form-error-summary"]' do
-        assert_select 'a', text:
-               I18n.t(:'errors.format',
-                      attribute: I18n.t(:'activerecord.attributes.personal_access_token.scopes'),
-                      message: I18n.t(:'errors.messages.inclusion'))
-      end
-      assert_select 'input[name="personal_access_token[scopes][]"]', focused: true
-    end
+  ensure
+    settings.update!(require_personal_access_token_expiry: previous_require_expiry)
   end
 
   test 'should display base errors when personal access token creation fails' do
@@ -243,39 +213,21 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
     assert_select '#access-tokens-table', text: /#{Regexp.escape(token.name)}/
   end
 
-  test 'should not rotate expired personal access token' do
-    token = personal_access_tokens(:john_doe_expired_pat)
-
-    assert_no_difference(-> { @user.personal_access_tokens.count }) do
-      assert_no_changes -> { token.reload.revoked? } do
-        put rotate_profile_personal_access_token_path(id: token, format: :turbo_stream)
+  test 'should not rotate an inactive personal access token' do
+    [personal_access_tokens(:john_doe_expired_pat), personal_access_tokens(:john_doe_revoked_pat)].each do |token|
+      assert_no_difference(-> { @user.personal_access_tokens.count }) do
+        assert_no_changes -> { token.reload.revoked? } do
+          put rotate_profile_personal_access_token_path(id: token, format: :turbo_stream)
+        end
       end
-    end
 
-    assert_response :unprocessable_entity
-    assert_select "div[data-viral--flash-type-value='error']" do
-      assert_select 'div',
-                    "#{I18n.t('common.statuses.error')}: #{I18n.t(
-                      'activerecord.errors.models.personal_access_tokens.rotate.only_active'
-                    )}"
-    end
-  end
-
-  test 'should not rotate revoked personal access token' do
-    token = personal_access_tokens(:john_doe_revoked_pat)
-
-    assert_no_difference(-> { @user.personal_access_tokens.count }) do
-      assert_no_changes -> { token.reload.revoked? } do
-        put rotate_profile_personal_access_token_path(id: token, format: :turbo_stream)
+      assert_response :unprocessable_entity
+      assert_select "div[data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                        'activerecord.errors.models.personal_access_tokens.rotate.only_active'
+                      )}"
       end
-    end
-
-    assert_response :unprocessable_entity
-    assert_select "div[data-viral--flash-type-value='error']" do
-      assert_select 'div',
-                    "#{I18n.t('common.statuses.error')}: #{I18n.t(
-                      'activerecord.errors.models.personal_access_tokens.rotate.only_active'
-                    )}"
     end
   end
 end

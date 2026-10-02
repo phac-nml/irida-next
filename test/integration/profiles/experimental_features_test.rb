@@ -53,7 +53,15 @@ module Profiles
       end
 
       assert_redirected_to profile_experimental_features_path
-      assert_equal I18n.t(:'profiles.experimental_features.update.success'), flash[:success]
+      follow_redirect!
+      assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                        :'profiles.experimental_features.update.success'
+                      )}"
+      end
     ensure
       Flipper.disable_actor(@feature_name, @user)
     end
@@ -67,7 +75,15 @@ module Profiles
       end
 
       assert_redirected_to profile_experimental_features_path
-      assert_equal I18n.t(:'profiles.experimental_features.update.not_eligible'), flash[:error]
+      follow_redirect!
+      assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                        :'profiles.experimental_features.update.not_eligible'
+                      )}"
+      end
     end
 
     test 'should disable an enabled feature via turbo stream' do
@@ -120,7 +136,15 @@ module Profiles
       patch profile_experimental_features_path
 
       assert_redirected_to profile_experimental_features_path
-      assert_equal I18n.t(:'profiles.experimental_features.update.validation_error'), flash[:error]
+      follow_redirect!
+      assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                        :'profiles.experimental_features.update.validation_error'
+                      )}"
+      end
     end
 
     test 'should reject turbo stream submissions without an opt-in form' do

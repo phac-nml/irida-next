@@ -34,8 +34,9 @@ class ProfilesIntegrationTest < ActionDispatch::IntegrationTest
       assert_select 'input#user_password[type="password"]', count: 1
       assert_select 'input#user_password_confirmation[type="password"]', count: 1
     end
-    assert_select "[data-viral--flash-type-value='success']",
-                  text: /#{Regexp.escape(I18n.t(:'profiles.passwords.update.success'))}/, count: 1
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div', "#{I18n.t('common.statuses.success')}: #{I18n.t(:'profiles.passwords.update.success')}"
+    end
   end
 
   test 'should update a users email' do
@@ -73,34 +74,24 @@ class ProfilesIntegrationTest < ActionDispatch::IntegrationTest
     assert_profile_update_success_flash
   end
 
-  test 'should not update a users email with a blank email' do
-    assert_no_changes -> { @user.reload.email } do
-      patch profile_url, params: { user: { email: '' } }
+  test 'should not update a user field with a blank value' do
+    blank_cases = [
+      { field: :email, error_selector: '#user_email_error li' },
+      { field: :first_name, error_selector: '#user_first_name_error li' },
+      { field: :last_name, error_selector: '#user_last_name_error li' }
+    ]
+
+    blank_cases.each do |blank_case|
+      field = blank_case.fetch(:field)
+
+      assert_no_changes -> { @user.reload.public_send(field) } do
+        patch profile_url, params: { user: { field => '' } }
+      end
+
+      assert_response :unprocessable_content
+      assert_profile_form
+      assert_select blank_case.fetch(:error_selector), minimum: 1
     end
-
-    assert_response :unprocessable_content
-    assert_profile_form
-    assert_select '#user_email_error li', minimum: 1
-  end
-
-  test 'should not update a users first_name with a blank first_name' do
-    assert_no_changes -> { @user.reload.first_name } do
-      patch profile_url, params: { user: { first_name: '' } }
-    end
-
-    assert_response :unprocessable_content
-    assert_profile_form
-    assert_select '#user_first_name_error li', minimum: 1
-  end
-
-  test 'should not update a users last_name with a blank last_name' do
-    assert_no_changes -> { @user.reload.last_name } do
-      patch profile_url, params: { user: { last_name: '' } }
-    end
-
-    assert_response :unprocessable_content
-    assert_profile_form
-    assert_select '#user_last_name_error li', minimum: 1
   end
 
   private
@@ -116,7 +107,8 @@ class ProfilesIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   def assert_profile_update_success_flash
-    assert_select "[data-viral--flash-type-value='success']",
-                  text: /#{Regexp.escape(I18n.t(:'profiles.update.success'))}/, count: 1
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div', "#{I18n.t('common.statuses.success')}: #{I18n.t(:'profiles.update.success')}"
+    end
   end
 end
