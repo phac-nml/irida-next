@@ -31,7 +31,11 @@ const DropdownV2Controller = (
   await import("../../../../app/javascript/controllers/dropdown/v2_controller.js")
 ).default;
 
-function fixture({ withCaret = true, empty = false } = {}) {
+function fixture({
+  withCaret = true,
+  empty = false,
+  disabledMenuItem = false,
+} = {}) {
   const caret = withCaret
     ? '<span data-dropdown--v2-target="caret">v</span>'
     : "";
@@ -39,6 +43,7 @@ function fixture({ withCaret = true, empty = false } = {}) {
     ? ""
     : `
         <li role="menuitem"><a href="#a">Item A</a></li>
+        ${disabledMenuItem ? '<button role="menuitem" disabled>Disabled</button>' : ""}
         <li role="menuitem"></li>
         <button role="menuitem">Item C</button>
       `;
@@ -230,6 +235,20 @@ describe("dropdown/v2 controller", () => {
     items[1].focus();
     press(menu(), "ArrowUp");
     expect(document.activeElement).toBe(items[0]);
+  });
+
+  it("skips disabled menu items during keyboard navigation", async () => {
+    application = await mount({ disabledMenuItem: true });
+    const disabledItem = menu().querySelector("[disabled]");
+    const items = menuItems().filter((item) => !item.disabled);
+
+    expect(disabledItem.getAttribute("tabindex")).toBeNull();
+
+    items[0].focus();
+    press(menu(), "ArrowDown");
+
+    expect(document.activeElement).toBe(items[1]);
+    expect(document.activeElement).not.toBe(disabledItem);
   });
 
   it("jumps to first and last items with Home and End", async () => {
