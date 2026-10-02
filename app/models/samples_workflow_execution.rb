@@ -10,5 +10,6 @@ class SamplesWorkflowExecution < ApplicationRecord
   has_many_attached :inputs
   has_many :outputs, dependent: :destroy, class_name: 'Attachment', as: :attachable
 
+  validates :sample, presence: true, on: :create
   validates_with WorkflowExecutionSamplesheetParamsValidator
 end

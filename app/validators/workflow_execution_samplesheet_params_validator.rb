@@ -8,6 +8,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
     workflow = record.workflow_execution.workflow
 
     return if workflow.unknown?
+    return if record.sample.nil?
 
     samplesheet_properties = record.workflow_execution.samplesheet_properties
     @required_properties = samplesheet_properties.required_properties
@@ -53,7 +54,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
 
     return if value.blank?
 
-    return unless value != record.sample&.name
+    return unless value != record.sample.name
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_name_error',
@@ -113,8 +114,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
     false
   end
 
-  def validate_attachment_format(record, attachment, property, entry) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
-    valid = true
+  def validate_attachment_format(record, attachment, property, entry)
     expected_pattern = if entry.key?('pattern')
                          entry['pattern']
                        elsif entry.key?('anyOf')
@@ -123,17 +123,17 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
                          end.pluck('pattern').join('|')
                        end
 
-    case entry['cell_type']
-    when 'fastq_cell'
-      valid = attachment.fastq?
-    when 'file_cell'
-      valid = attachment.filename.to_s.match?(expected_pattern) if expected_pattern
-    end
-
-    return if valid
+    return if attachment_format_valid?(attachment, entry, expected_pattern)
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_format_error',
                              property:, sample_id: record.sample.puid, file_format: expected_pattern)
+  end
+
+  def attachment_format_valid?(attachment, entry, expected_pattern)
+    return attachment.fastq? if entry['cell_type'] == 'fastq_cell'
+    return true unless expected_pattern
+
+    attachment.filename.to_s.match?(expected_pattern)
   end
 end
