@@ -35,6 +35,8 @@ require 'minitest/retry'
 
 Minitest::Retry.use! if ENV['CI'] == 'true'
 
+$stdout.sync = true
+
 module ActiveSupport
   class TestCase
     parallelize_setup do |worker|
