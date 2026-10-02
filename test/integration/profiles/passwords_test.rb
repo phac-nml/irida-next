@@ -23,9 +23,11 @@ class PasswordsTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to edit_profile_password_path
-    assert_equal I18n.t(:'profiles.passwords.update.success'), flash[:success]
     follow_redirect!
     assert_response :success
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div', "#{I18n.t('common.statuses.success')}: #{I18n.t(:'profiles.passwords.update.success')}"
+    end
     assert_password_form
   end
 
