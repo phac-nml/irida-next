@@ -13,4 +13,7 @@ class Attachment::FieldConfiguration # rubocop:disable Style/ClassAndModuleChild
     metadata.format
     metadata.compression
   ].freeze
+
+  # Fields that only accept numeric operators/values.
+  NUMERIC_FIELDS = %w[byte_size].freeze
 end

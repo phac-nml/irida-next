@@ -873,6 +873,29 @@ describe("advanced-search--v2--builder", () => {
     ).toContain("in");
   });
 
+  it("restricts operator options to numeric operators for numeric fields", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.numericFieldsValue = ["byte_size"];
+    controller.numericOperationsValue = { Equals: "=", Between: "between" };
+    controller.operationsValue = {
+      standard: { Equals: "=", Contains: "contains", Between: "between" },
+    };
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="byte_size" selected>byte_size</option>';
+    field.value = "byte_size";
+
+    controller.handleFieldChange({ target: field });
+
+    const operator = condition.querySelector("[name$='[operator]']");
+    const values = Array.from(operator.options).map((option) => option.value);
+    expect(values).not.toContain("contains");
+    expect(values).toContain("between");
+  });
+
   it("skips groups without a remove-group button when toggling", async () => {
     const groupWithoutRemove = `
       <fieldset data-advanced-search--v2--builder-target="groupsContainer"

@@ -13,6 +13,6 @@ class Attachment::AdvancedSearchGroupValidator < AdvancedSearch::GroupValidator 
   end
 
   def numeric_fields
-    %w[byte_size]
+    Attachment::FieldConfiguration::NUMERIC_FIELDS
   end
 end
