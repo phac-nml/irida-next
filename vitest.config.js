@@ -146,7 +146,11 @@ export default defineConfig({
         "app/javascript/workers/linelist_import_worker.js",
       ],
       // Ratchet allowlist: add a path here once it reaches full coverage.
-      thresholds: fullCoverageThresholds,
+      thresholds: {
+        // Apply each allowlisted threshold to each matching source file.
+        perFile: true,
+        ...fullCoverageThresholds,
+      },
     },
   },
 });
