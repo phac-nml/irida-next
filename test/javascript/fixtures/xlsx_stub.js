@@ -7,8 +7,11 @@ export const utils = {
   book_new: () => ({}),
   aoa_to_sheet: () => ({}),
   book_append_sheet: () => {},
+  sheet_to_json: () => [],
 };
+
+export function read() {}
 
 export function writeFile() {}
 
-export default { utils, writeFile };
+export default { utils, writeFile, read };

@@ -22,7 +22,10 @@ const fullCoverageFiles = [
   "app/javascript/controllers/linelist_export/downloader.js",
   "app/javascript/controllers/linelist_export/selection.js",
   "app/javascript/controllers/linelist_export/worker_client.js",
+  "app/javascript/controllers/linelist_import_controller.js",
+  "app/javascript/controllers/metadata/file_import_controller.js",
   "app/javascript/controllers/metadata_toggle_controller.js",
+  "app/javascript/controllers/spreadsheet_import_controller.js",
   "app/javascript/controllers/refresh_controller.js",
   "app/javascript/controllers/selection_controller.js",
   "app/javascript/controllers/sidebar_item_controller.js",
@@ -51,6 +54,7 @@ const fullCoverageFiles = [
   "app/javascript/controllers/email_input_controller.js",
   "app/javascript/controllers/form_error_summary_controller.js",
   "app/javascript/workers/linelist_export_worker.js",
+  "app/javascript/workers/linelist_import_worker.js",
 ];
 
 const fullCoverageThresholds = Object.fromEntries(
@@ -83,6 +87,8 @@ export default defineConfig({
       "focus-trap": resolve("vendor/javascript/focus-trap.js"),
       tabbable: resolve("vendor/javascript/tabbable.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
+      "utilities/collection": resolve(jsRoot, "utilities/collection.js"),
+      "utilities/flash": resolve(jsRoot, "utilities/flash.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
       "utilities/focus": resolve(jsRoot, "utilities/focus.js"),
       "utilities/refresh": resolve(jsRoot, "utilities/refresh.js"),
@@ -141,9 +147,6 @@ export default defineConfig({
         "app/javascript/controllers/index.js",
         "app/javascript/controllers/application.js",
         "app/javascript/controllers/combobox_datepicker/constants.js",
-        // Import worker entry module runs in a worker context and is not yet
-        // unit-tested; the export worker is covered and gated below.
-        "app/javascript/workers/linelist_import_worker.js",
       ],
       // Ratchet allowlist: add a path here once it reaches full coverage.
       thresholds: {
