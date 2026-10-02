@@ -60,6 +60,18 @@ module AdvancedSearch
         @fields.fetch(:enum_fields, {})
       end
 
+      def numeric_fields
+        @fields.fetch(:numeric_fields, [])
+      end
+
+      def numeric_field?
+        numeric_fields.include?(selected_field)
+      end
+
+      def numeric_operator_options
+        @operations['standard'].select { |_, value| AdvancedSearch::NUMERIC_OPERATOR_VALUES.include?(value) }
+      end
+
       def enum_operator_options
         if Flipper.enabled?(:advanced_search_metadata_operators) && selected_field.starts_with?('metadata.')
           # flatten metadata operators to exclude optgroup labeling

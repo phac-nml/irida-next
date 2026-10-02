@@ -85,9 +85,23 @@ module AdvancedSearch
           options_for_select(enum_operator_options, @condition.operator)
         elsif Flipper.enabled?(:advanced_search_metadata_operators) && @condition.field.to_s.starts_with?('metadata.')
           grouped_options_for_select(metadata_operators, @condition.operator)
+        elsif numeric_field?
+          options_for_select(numeric_operator_options, @condition.operator)
         else
           options_for_select(@operations['standard'], @condition.operator)
         end
+      end
+
+      def numeric_fields
+        @fields.fetch(:numeric_fields, [])
+      end
+
+      def numeric_field?
+        numeric_fields.include?(selected_field)
+      end
+
+      def numeric_operator_options
+        @operations['standard'].select { |_, value| AdvancedSearch::NUMERIC_OPERATOR_VALUES.include?(value) }
       end
 
       def enum_field_config
