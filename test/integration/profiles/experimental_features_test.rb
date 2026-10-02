@@ -1,0 +1,167 @@
+# frozen_string_literal: true
+
+require 'test_helper'
+
+module Profiles
+  class ExperimentalFeaturesTest < ActionDispatch::IntegrationTest
+    def setup
+      @user = users(:john_doe)
+      sign_in @user
+      @feature_name = :data_grid_samples_table
+    end
+
+    test 'should get show' do
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        get profile_experimental_features_path
+      end
+
+      assert_response :success
+      assert_select "#experimental-feature-#{@feature_name}" do
+        assert_select 'label', text: Irida::ExperimentalFeatureCatalog.fetch(@feature_name)[:name], count: 1
+      end
+    end
+
+    test 'show renders empty state when no features are eligible' do
+      with_user_opt_in_features(user_opt_in_feature_config(allowlist: [users(:jane_doe).email])) do
+        get profile_experimental_features_path
+      end
+
+      assert_response :success
+      assert_select 'p', text: I18n.t('profiles.experimental_features.show.empty_state.title'), count: 1
+    end
+
+    test 'should enable an eligible feature via turbo stream' do
+      assert_changes -> { Flipper[@feature_name].enabled?(@user) }, from: false, to: true do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          patch profile_experimental_features_path(format: :turbo_stream),
+                params: { opt_in_form: { feature_key: @feature_name, enabled: '1' } }
+        end
+      end
+
+      assert_response :ok
+      assert_feature_update_status(I18n.t('profiles.experimental_features.update.success'))
+    ensure
+      Flipper.disable_actor(@feature_name, @user)
+    end
+
+    test 'should set a success flash when enabling an eligible feature via HTML' do
+      assert_changes -> { Flipper[@feature_name].enabled?(@user) }, from: false, to: true do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          patch profile_experimental_features_path,
+                params: { opt_in_form: { feature_key: @feature_name, enabled: '1' } }
+        end
+      end
+
+      assert_redirected_to profile_experimental_features_path
+      follow_redirect!
+      assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                        :'profiles.experimental_features.update.success'
+                      )}"
+      end
+    ensure
+      Flipper.disable_actor(@feature_name, @user)
+    end
+
+    test 'should set an error flash when enabling an ineligible feature via HTML' do
+      assert_no_changes -> { Flipper[@feature_name].enabled?(@user) } do
+        with_user_opt_in_features(user_opt_in_feature_config(allowlist: [users(:jane_doe).email])) do
+          patch profile_experimental_features_path,
+                params: { opt_in_form: { feature_key: @feature_name, enabled: '1' } }
+        end
+      end
+
+      assert_redirected_to profile_experimental_features_path
+      follow_redirect!
+      assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                        :'profiles.experimental_features.update.not_eligible'
+                      )}"
+      end
+    end
+
+    test 'should disable an enabled feature via turbo stream' do
+      Flipper.enable_actor(@feature_name, @user)
+
+      assert_changes -> { Flipper[@feature_name].enabled?(@user) }, from: true, to: false do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          patch profile_experimental_features_path(format: :turbo_stream),
+                params: { opt_in_form: { feature_key: @feature_name, enabled: '0' } }
+        end
+      end
+
+      assert_response :ok
+      assert_not Flipper[@feature_name].enabled?(@user)
+      assert_feature_update_status(I18n.t('profiles.experimental_features.update.success'))
+    end
+
+    test 'should return validation error for invalid enabled value' do
+      Flipper.expects(:enable_actor).never
+
+      assert_no_changes -> { Flipper[@feature_name].enabled?(@user) } do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          patch profile_experimental_features_path(format: :turbo_stream),
+                params: { opt_in_form: { feature_key: @feature_name, enabled: 'yes' } }
+        end
+      end
+
+      assert_response :unprocessable_content
+      assert_feature_update_status(I18n.t('profiles.experimental_features.update.validation_error'))
+    end
+
+    test 'should return an error when the feature toggle fails' do
+      Flipper.expects(:enable_actor).with(@feature_name, @user).raises(Flipper::Error, 'adapter failed')
+      Rails.logger.expects(:error).with(regexp_matches(/adapter failed/))
+
+      assert_no_changes -> { Flipper[@feature_name].enabled?(@user) } do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          patch profile_experimental_features_path(format: :turbo_stream),
+                params: { opt_in_form: { feature_key: @feature_name, enabled: '1' } }
+        end
+      end
+
+      assert_response :unprocessable_content
+      assert_feature_update_status(I18n.t('profiles.experimental_features.update.error'))
+    ensure
+      Flipper.disable_actor(@feature_name, @user)
+    end
+
+    test 'should redirect HTML submissions without an opt-in form' do
+      patch profile_experimental_features_path
+
+      assert_redirected_to profile_experimental_features_path
+      follow_redirect!
+      assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                        :'profiles.experimental_features.update.validation_error'
+                      )}"
+      end
+    end
+
+    test 'should reject turbo stream submissions without an opt-in form' do
+      patch profile_experimental_features_path(format: :turbo_stream)
+
+      assert_response :unprocessable_content
+      assert_select 'turbo-stream', count: 0
+    end
+
+    private
+
+    def assert_feature_update_status(message)
+      assert_select "turbo-stream[action='replace'][target='experimental-feature-#{@feature_name}']" do
+        assert_select 'template' do
+          assert_select "#experimental-feature-#{@feature_name}-status", text: message, count: 1
+        end
+      end
+    end
+  end
+end
