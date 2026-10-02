@@ -25,8 +25,11 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to profile_preferences_path
     follow_redirect!
-    assert_select "[data-viral--flash-type-value='success']",
-                  text: /#{Regexp.escape(I18n.t(:'profiles.preferences.update.success', locale: :fr))}/, count: 1
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success', locale: :fr)}: " \
+                    "#{I18n.t(:'profiles.preferences.update.success', locale: :fr)}"
+    end
   end
 
   test 'should update the users locale with a valid locale' do
@@ -38,8 +41,11 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to profile_preferences_path
     follow_redirect!
-    assert_select "[data-viral--flash-type-value='success']",
-                  text: /#{Regexp.escape(I18n.t(:'profiles.preferences.update.success', locale: :fr))}/, count: 1
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success', locale: :fr)}: " \
+                    "#{I18n.t(:'profiles.preferences.update.success', locale: :fr)}"
+    end
   end
 
   test 'should update the users locale with a valid locale via turbo stream' do
@@ -49,8 +55,11 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :ok
-    assert_select "[data-viral--flash-type-value='success']",
-                  text: /#{Regexp.escape(I18n.t(:'profiles.preferences.update.success', locale: :fr))}/, count: 1
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success', locale: :fr)}: " \
+                    "#{I18n.t(:'profiles.preferences.update.success', locale: :fr)}"
+    end
   end
 
   test 'should not update the users locale with an invalid locale via turbo stream' do
@@ -60,8 +69,9 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select "[data-viral--flash-type-value='error']",
-                  text: /#{Regexp.escape(I18n.t(:'profiles.preferences.update.error'))}/, count: 1
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']" do
+      assert_select 'div', "#{I18n.t('common.statuses.error')}: #{I18n.t(:'profiles.preferences.update.error')}"
+    end
   end
 
   test 'should render the preferences page with an error when the update fails' do
@@ -75,7 +85,9 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_equal I18n.t(:'profiles.preferences.update.error'), flash[:error]
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']" do
+      assert_select 'div', "#{I18n.t('common.statuses.error')}: #{I18n.t(:'profiles.preferences.update.error')}"
+    end
   end
 
   test 'should redirect unauthenticated users on update' do
