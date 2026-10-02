@@ -19,6 +19,7 @@ export default class extends Controller {
     "progressTemplate",
   ];
   static values = {
+    workerUrl: String,
     graphqlUrl: String,
     groupPuid: String,
     projectPuid: String,
@@ -132,12 +133,15 @@ export default class extends Controller {
 
   #buildWorker() {
     let worker;
+    // Dev/test fallback only: in production the dialog component always supplies
+    // a fingerprinted URL via asset_path, so import.meta.url is not reached.
+    const workerSource =
+      this.hasWorkerUrlValue && this.workerUrlValue
+        ? this.workerUrlValue
+        : new URL("./workers/linelist_import_worker.js", import.meta.url).href;
 
     if (typeof Worker !== "undefined") {
-      worker = new Worker(
-        import.meta.resolve("workers/linelist_import_worker"),
-        { type: "module" },
-      );
+      worker = new Worker(workerSource, { type: "module" });
 
       worker.onerror = (error) => {
         console.error("Worker failed:", error.message);
