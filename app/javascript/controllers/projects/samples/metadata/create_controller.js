@@ -427,6 +427,7 @@ export default class extends Controller {
    * @param {string} errorMessage - Error message to display
    */
   #showFieldError(field, errorMessage) {
+    /* v8 ignore next -- defensive: callers always pass a resolved key/value input */
     if (!field) return;
 
     const fieldId = field.id;
@@ -454,6 +455,7 @@ export default class extends Controller {
    * @param {Element} field - Input field element
    */
   #hideFieldError(field) {
+    /* v8 ignore next -- defensive: callers always pass a resolved key/value input */
     if (!field) return;
 
     const fieldId = field.id;
