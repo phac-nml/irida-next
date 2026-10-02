@@ -39,6 +39,12 @@ module Types
     field :sample, Types::SampleType, null: true, resolver: Resolvers::SampleResolver,
                                       description: 'Find a sample.'
 
+    field :sample_transfer_job,
+          Types::SampleTransferJobType,
+          null: true,
+          resolver: Resolvers::SampleTransferJobResolver,
+          description: 'Find the status of a sample transfer job.'
+
     field :samples, Types::SampleType.connection_type, null: true, resolver: Resolvers::SamplesResolver,
                                                        description: 'Find samples.'
 
