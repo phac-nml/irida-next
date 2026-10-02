@@ -22,7 +22,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'h1', text: I18n.t('dashboard.projects.index.title')
   end
 
-  test 'can show a project' do
+  test 'can view a project' do
     get namespace_project_path(@project.namespace.parent, @project)
 
     assert_response :success
@@ -34,7 +34,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'h2', text: I18n.t('components.project_dashboard.samples_title')
   end
 
-  test 'cannot show project if uploader' do
+  test 'cannot view project if uploader' do
     login_as users(:projectJeff_bot)
     project = projects(:projectJeff)
 
@@ -45,7 +45,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'p', text: I18n.t('action_policy.policy.project.read?', name: project.name)
   end
 
-  test 'cannot show project if member is expired' do
+  test 'cannot view project if member is expired' do
     project = projects(:project1)
     group_member = members(:group_one_member_john_doe)
     group_member.expires_at = 10.days.ago.to_date
@@ -61,7 +61,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'p', text: I18n.t('action_policy.policy.project.read?', name: project.name)
   end
 
-  test 'cannot show the project if user has insufficient permissions' do
+  test 'cannot view the project if user has insufficient permissions' do
     project = projects(:project1)
     sign_in users(:micha_doe)
 
@@ -72,7 +72,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'p', text: I18n.t('action_policy.policy.project.read?', name: project.name)
   end
 
-  test "cannot show project that doesn't exist" do
+  test "cannot view project that doesn't exist" do
     sign_in users(:john_doe)
 
     get namespace_project_path(project_id: 'does-not-exist', namespace_id: 'does-not-exist')
@@ -123,9 +123,12 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     project = Project.order(created_at: :desc).first
     assert_redirected_to namespace_project_path(project.namespace.parent, project)
-    assert_equal I18n.t('projects.create.success', project_name:), flash[:success]
     follow_redirect!
     assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div', "#{I18n.t('common.statuses.success')}: #{I18n.t('projects.create.success', project_name:)}"
+    end
 
     assert_select 'h1', text: project_name
     assert_select 'p', text: project_description
@@ -319,7 +322,14 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to namespace_project_edit_path(@project.namespace.parent, @project)
-    assert_equal I18n.t('projects.update.success', project_name: @project.name), flash[:success]
+    follow_redirect!
+    assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success')}: #{I18n.t('projects.update.success',
+                                                                    project_name: @project.name)}"
+    end
 
     group_project = projects(:project2)
 
@@ -332,7 +342,14 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to namespace_project_edit_path(group_project.namespace.parent, group_project.reload)
-    assert_equal I18n.t('projects.update.success', project_name: group_project.name), flash[:success]
+    follow_redirect!
+    assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success')}: #{I18n.t('projects.update.success',
+                                                                    project_name: group_project.name)}"
+    end
   end
 
   test 'cannot update project with invalid params' do
@@ -431,7 +448,14 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to namespace_project_edit_path(project.namespace.parent, project.reload)
-    assert_equal I18n.t('projects.update.success', project_name: project.name), flash[:success]
+    follow_redirect!
+    assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success')}: #{I18n.t('projects.update.success',
+                                                                    project_name: project.name)}"
+    end
   end
 
   test "cannot update project which which is under another user's namespace" do
@@ -479,7 +503,14 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to dashboard_projects_path
-    assert_equal I18n.t('projects.destroy.success', project_name: project.name), flash[:success]
+    follow_redirect!
+    assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success')}: #{I18n.t('projects.destroy.success',
+                                                                    project_name: project.name)}"
+    end
   end
 
   test 'cannot destroy project if user does not have sufficient permissions' do
@@ -507,7 +538,12 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to namespace_project_path(@project.namespace.parent, @project)
-    assert_equal 'Project could not be deleted', flash[:error]
+    follow_redirect!
+    assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='error']" do
+      assert_select 'div', "#{I18n.t('common.statuses.error')}: Project could not be deleted"
+    end
   end
 
   test 'owner can see project transfer section in general settings' do
@@ -534,8 +570,15 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :redirect
-    assert_equal I18n.t('projects.transfer.success', project_name: @project.name), flash[:success]
     assert_redirected_to namespace_project_path(@namespace, @project)
+    follow_redirect!
+    assert_response :success
+
+    assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+      assert_select 'div',
+                    "#{I18n.t('common.statuses.success')}: #{I18n.t('projects.transfer.success',
+                                                                    project_name: @project.name)}"
+    end
   end
 
   test 'should not transfer a project to unowned namespace' do

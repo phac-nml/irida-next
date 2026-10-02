@@ -146,16 +146,33 @@ module Projects
       get dashboard_projects_path, params: { page: 1 }
 
       assert_response :success
+      assert_select '.treegrid-row', count: 20
+      assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
+      assert_select 'a', exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
+
+      get dashboard_projects_path, params: { page: 2 }
+
+      assert_response :success
+      assert_select '.treegrid-row', minimum: 1
+      assert_select 'a', exact_text: I18n.t(:'components.viral.pagy.pagination_component.previous')
     end
 
     test 'should only show authorized projects' do
-      sign_in users(:micha_doe)
+      user = users(:micha_doe)
+      sign_in user
+
+      authorized_projects = ProjectPolicy.new(user:).apply_scope(Project, type: :relation).order(updated_at: :desc)
+      authorized_project_ids = authorized_projects.pluck(:id)
+      unauthorized_project = Project.where.not(id: authorized_project_ids).first
 
       get dashboard_projects_path
 
       assert_response :success
-      # Should only show projects the user is authorized to see
-      # If user has no projects, empty state should be shown
+      assert_select '.treegrid-row', count: authorized_projects.size
+      assert_select "##{dom_id(unauthorized_project)}", count: 0
+      authorized_projects.each do |project|
+        assert_select "##{dom_id(project)}"
+      end
     end
 
     test 'accessing projects index on invalid page causes pagy overflow redirect' do
