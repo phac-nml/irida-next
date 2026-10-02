@@ -2,9 +2,9 @@
 
 <%= render Layout::PageHeaderComponent.new(title: @group.name, id: @group.puid) do |component| %>
   <%= component.icon do %>
-    <%= render Viral::AvatarComponent.new(
-      name: @group.name,
-      colour_string: "#{@group.name}-#{@group.id}",
+    <%= irida_avatar(
+      label: @group.name,
+      colour_seed: "#{@group.name}-#{@group.id}",
       size: :large,
     ) %>
   <% end %>

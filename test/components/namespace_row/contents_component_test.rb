@@ -21,6 +21,11 @@ module NamespaceRow
         # Verify tooltip controller is present
         assert_selector 'div[data-controller="pathogen--tooltip"]', minimum: 3
         assert_selector 'a[data-turbo-frame="_top"]', minimum: 4
+
+        avatar = page.find("span[role='img'][aria-label='#{namespace.name}']")
+        assert_includes avatar[:class], 'rounded-md'
+        assert_includes avatar[:class], 'h-8'
+        assert_includes avatar[:class], 'w-8'
       end
     end
 
@@ -61,6 +66,25 @@ module NamespaceRow
         assert_selector 'div[role="tooltip"]', minimum: 3
         # Verify links have aria-describedby
         assert_selector 'a[aria-describedby]', minimum: 3
+      end
+    end
+
+    test 'supports medium avatar size for namespace rows' do
+      namespace = groups(:group_one)
+      with_request_url '/-/groups/group-1' do
+        render_inline(
+          ContentsComponent.new(
+            namespace:,
+            full_name: false,
+            icon_size: :medium,
+            search_params: nil
+          )
+        )
+
+        avatar = page.find("span[role='img'][aria-label='#{namespace.name}']")
+        assert_includes avatar[:class], 'rounded-md'
+        assert_includes avatar[:class], 'h-12'
+        assert_includes avatar[:class], 'w-12'
       end
     end
   end
