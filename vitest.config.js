@@ -8,6 +8,7 @@ const jsRoot = resolve(
 
 const fullCoverageFiles = [
   "app/javascript/controllers/action_button_controller.js",
+  "app/javascript/controllers/advanced_search/v1_controller.js",
   "app/javascript/controllers/clipboard_controller.js",
   "app/javascript/controllers/colour_mode_controller.js",
   "app/javascript/controllers/collapsible_controller.js",
@@ -28,6 +29,7 @@ const fullCoverageFiles = [
   "app/javascript/controllers/sidebar_item_controller.js",
   "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js",
   "app/javascript/controllers/spinner_controller.js",
+  "app/javascript/controllers/table_controller.js",
   "app/javascript/controllers/table_selection_controller.js",
   "app/javascript/controllers/token_controller.js",
   "app/javascript/controllers/treegrid_controller.js",
