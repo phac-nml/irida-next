@@ -51,6 +51,10 @@ const fullCoverageFiles = [
   "app/javascript/controllers/email_input_controller.js",
   "app/javascript/controllers/form_error_summary_controller.js",
   "app/javascript/workers/linelist_export_worker.js",
+  "app/javascript/controllers/dropdown/v1_controller.js",
+  "app/javascript/controllers/dropdown/v2_controller.js",
+  "app/javascript/controllers/select2/v1_controller.js",
+  "app/javascript/controllers/select2/v2_controller.js",
 ];
 
 const fullCoverageThresholds = Object.fromEntries(
