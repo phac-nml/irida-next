@@ -62,6 +62,10 @@ const fullCoverageFiles = [
   "app/javascript/controllers/combobox_datepicker/utils.js",
   "app/javascript/controllers/combobox_datepicker/v1/calendar_controller.js",
   "app/javascript/controllers/combobox_datepicker/v1/input_controller.js",
+  "app/javascript/controllers/dropdown/v1_controller.js",
+  "app/javascript/controllers/dropdown/v2_controller.js",
+  "app/javascript/controllers/select2/v1_controller.js",
+  "app/javascript/controllers/select2/v2_controller.js",
 ];
 
 const fullCoverageThresholds = Object.fromEntries(
