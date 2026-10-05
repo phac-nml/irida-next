@@ -30,7 +30,7 @@ module Groups
         assert_response :redirect
         assert_redirected_to group_samples_path(@group1)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_flash_message I18n.t('samples.deletions.destroy.success', count: 2)
         assert_samples_page(@group1, 24)
       end
 
@@ -68,7 +68,7 @@ module Groups
         assert_response :redirect
         assert_redirected_to group_samples_path(@group1)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
+        assert_flash_message I18n.t('samples.deletions.destroy.no_deleted_samples'), type: :error
         assert_samples_page(@group1, 26)
       end
 
@@ -87,10 +87,7 @@ module Groups
         end
 
         assert_response :unauthorized
-        assert_turbo_stream_flash(
-          I18n.t('action_policy.policy.group.destroy_sample?', name: @group1.name),
-          type: :error
-        )
+        assert_flash_message I18n.t('action_policy.policy.group.destroy_sample?', name: @group1.name), type: :error
       end
 
       test 'new destroy with proper authorization from group' do
@@ -113,10 +110,7 @@ module Groups
             }, as: :turbo_stream
 
         assert_response :unauthorized
-        assert_turbo_stream_flash(
-          I18n.t('action_policy.policy.group.destroy_sample?', name: @group1.name),
-          type: :error
-        )
+        assert_flash_message I18n.t('action_policy.policy.group.destroy_sample?', name: @group1.name), type: :error
       end
 
       test 'partially deleting multiple samples at group level' do
@@ -134,10 +128,8 @@ module Groups
         assert_response :redirect
         assert_redirected_to group_samples_path(@group1)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.partial_success', deleted: '2/3'),
-                     flash[:success]
-        assert_equal I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/3'),
-                     flash[:error]
+        assert_flash_message I18n.t('samples.deletions.destroy.partial_success', deleted: '2/3')
+        assert_flash_message I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/3'), type: :error
         assert_samples_page(@group1, 24)
       end
 
@@ -156,7 +148,7 @@ module Groups
         assert_response :redirect
         assert_redirected_to group_samples_path(@group1)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
+        assert_flash_message I18n.t('samples.deletions.destroy.no_deleted_samples'), type: :error
         assert_samples_page(@group1, 26)
       end
 
@@ -246,7 +238,7 @@ module Groups
 
         assert_response :redirect
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_flash_message I18n.t('samples.deletions.destroy.success', count: 2)
         assert_samples_page(@group1, 24)
       end
 
@@ -267,7 +259,7 @@ module Groups
 
         assert_response :redirect
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_flash_message I18n.t('samples.deletions.destroy.success', count: 2)
         assert_samples_page(@group1, 24)
       ensure
         Flipper.disable(:sample_deletion_reason)
@@ -308,10 +300,8 @@ module Groups
         end
         assert_response :redirect
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.partial_success', deleted: '1/2'),
-                     flash[:success]
-        assert_equal I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/2'),
-                     flash[:error]
+        assert_flash_message I18n.t('samples.deletions.destroy.partial_success', deleted: '1/2')
+        assert_flash_message I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/2'), type: :error
         assert_samples_page(@group1, 25)
       end
 
@@ -330,11 +320,18 @@ module Groups
         end
         assert_response :redirect
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
+        assert_flash_message I18n.t('samples.deletions.destroy.no_deleted_samples'), type: :error
         assert_samples_page(@group1, 26)
       end
 
       private
+
+      def assert_flash_message(message, type: :success)
+        status = I18n.t(type == :success ? 'common.statuses.success' : 'common.statuses.error')
+        assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='#{type}']" do
+          assert_select 'div', "#{status}: #{message}"
+        end
+      end
 
       def assert_samples_page(group, count)
         get group_samples_path(group)

@@ -32,7 +32,7 @@ module Projects
         assert_response :redirect
         assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 1), flash[:success]
+        assert_flash_message I18n.t('samples.deletions.destroy.success', count: 1)
         assert_samples_page(@project1_namespace.project, 2)
       end
 
@@ -71,7 +71,7 @@ module Projects
         assert_response :redirect
         assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_flash_message I18n.t('samples.deletions.destroy.success', count: 2)
         assert_samples_page(@project1_namespace.project, 1)
       end
 
@@ -109,7 +109,7 @@ module Projects
         assert_response :redirect
         assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
+        assert_flash_message I18n.t('samples.deletions.destroy.no_deleted_samples'), type: :error
         assert_samples_page(@project1_namespace.project, 3)
       end
 
@@ -128,7 +128,7 @@ module Projects
         end
 
         assert_response :unauthorized
-        assert_turbo_stream_flash(
+        assert_flash_message(
           I18n.t('action_policy.policy.project.destroy_sample?', name: @project2_namespace.project.name),
           type: :error
         )
@@ -234,7 +234,7 @@ module Projects
             }, as: :turbo_stream
 
         assert_response :unauthorized
-        assert_turbo_stream_flash(
+        assert_flash_message(
           I18n.t('action_policy.policy.project.destroy_sample?', name: @project2_namespace.project.name),
           type: :error
         )
@@ -251,7 +251,7 @@ module Projects
             }, as: :turbo_stream
 
         assert_response :unauthorized
-        assert_turbo_stream_flash(
+        assert_flash_message(
           I18n.t('action_policy.policy.project.destroy_sample?', name: @project2_namespace.project.name),
           type: :error
         )
@@ -272,10 +272,8 @@ module Projects
         assert_response :redirect
         assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.partial_success', deleted: '2/3'),
-                     flash[:success]
-        assert_equal I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/3'),
-                     flash[:error]
+        assert_flash_message I18n.t('samples.deletions.destroy.partial_success', deleted: '2/3')
+        assert_flash_message I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/3'), type: :error
         assert_samples_page(@project1_namespace.project, 1)
       end
 
@@ -294,7 +292,7 @@ module Projects
         assert_response :redirect
         assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
+        assert_flash_message I18n.t('samples.deletions.destroy.no_deleted_samples'), type: :error
         assert_samples_page(@project1_namespace.project, 3)
       end
 
@@ -339,7 +337,7 @@ module Projects
         assert_response :redirect
         assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 1), flash[:success]
+        assert_flash_message I18n.t('samples.deletions.destroy.success', count: 1)
         assert_samples_page(@project1_namespace.project, 2)
       ensure
         Flipper.disable(:sample_deletion_reason)
@@ -453,7 +451,7 @@ module Projects
 
         assert_response :redirect
         follow_redirect!
-        assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
+        assert_flash_message I18n.t('samples.deletions.destroy.success', count: 2)
         assert_samples_page(@project1_namespace.project, 1)
       ensure
         Flipper.disable(:sample_deletion_reason)
@@ -479,6 +477,13 @@ module Projects
       end
 
       private
+
+      def assert_flash_message(message, type: :success)
+        status = I18n.t(type == :success ? 'common.statuses.success' : 'common.statuses.error')
+        assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='#{type}']" do
+          assert_select 'div', "#{status}: #{message}"
+        end
+      end
 
       def assert_samples_page(project, count)
         namespace = project.namespace.parent || project.namespace
