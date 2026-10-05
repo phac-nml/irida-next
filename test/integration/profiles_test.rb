@@ -14,7 +14,36 @@ class ProfilesIntegrationTest < ActionDispatch::IntegrationTest
     get profile_url
 
     assert_response :success
+    assert_nil @user.provider
     assert_profile_form
+  end
+
+  test 'should show domain user details' do
+    user = users(:jeff_doe)
+    sign_in user
+
+    get profile_url
+
+    assert_response :success
+    assert_not_nil user.provider
+    assert_select 'dl' do
+      assert_select 'dd', text: user.provider, count: 1
+    end
+    assert_select "form[action='#{profile_path}']", count: 0
+  end
+
+  test 'should show missing values for blank domain user fields' do
+    User.any_instance.stubs(:email).returns('')
+    User.any_instance.stubs(:provider).returns('')
+    User.any_instance.stubs(:uid).returns('')
+    User.any_instance.stubs(:first_name).returns('')
+    User.any_instance.stubs(:last_name).returns('')
+    sign_in users(:jeff_doe)
+
+    get profile_url
+
+    assert_response :success
+    assert_select 'dd', text: I18n.t('profiles.show.missing'), count: 5
   end
 
   test 'should update profile password' do
