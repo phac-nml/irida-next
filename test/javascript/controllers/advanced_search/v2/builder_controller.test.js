@@ -896,6 +896,39 @@ describe("advanced-search--v2--builder", () => {
     expect(values).toContain("between");
   });
 
+  it("updates operator options correctly when switching between filename and byte_size fields", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.numericFieldsValue = ["byte_size"];
+    controller.numericOperationsValue = { Equals: "=", Between: "between" };
+    controller.operationsValue = {
+      standard: { Equals: "=", Contains: "contains", Between: "between" },
+    };
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="filename">filename</option><option value="byte_size">byte_size</option>';
+    const operator = condition.querySelector("[name$='[operator]']");
+    const optionValues = () =>
+      Array.from(operator.options).map((option) => option.value);
+
+    field.value = "filename";
+    controller.handleFieldChange({ target: field });
+    expect(optionValues()).toContain("contains");
+    expect(optionValues()).toContain("between");
+
+    field.value = "byte_size";
+    controller.handleFieldChange({ target: field });
+    expect(optionValues()).not.toContain("contains");
+    expect(optionValues()).toContain("between");
+
+    field.value = "filename";
+    controller.handleFieldChange({ target: field });
+    expect(optionValues()).toContain("contains");
+    expect(optionValues()).toContain("between");
+  });
+
   it("skips groups without a remove-group button when toggling", async () => {
     const groupWithoutRemove = `
       <fieldset data-advanced-search--v2--builder-target="groupsContainer"
