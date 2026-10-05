@@ -136,6 +136,17 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select '#breadcrumb', text: /#{Regexp.escape(project_name)}/
   end
 
+  test 'can view the new project form with v2 select2 controls' do
+    Flipper.enable(:v2_prefixed_select2)
+
+    get new_project_path
+
+    assert_response :success
+    assert_select 'form[data-controller="select2--v2"]', count: 1
+  ensure
+    Flipper.disable(:v2_prefixed_select2)
+  end
+
   test "cannot create project under another user's namespace" do
     sign_in users(:david_doe)
 
@@ -255,6 +266,28 @@ class ProjectsTest < ActionDispatch::IntegrationTest
              I18n.t(:'errors.format',
                     attribute: Namespaces::ProjectNamespace.human_attribute_name(:path),
                     message: I18n.t('errors.messages.taken'))
+    end
+
+    assert_no_difference('Project.count') do
+      post projects_path,
+           params: {
+             project: {
+               namespace_attributes: {
+                 name: 'Project without namespace',
+                 path: 'project-without-namespace',
+                 parent_id: '',
+                 description: 'Project description'
+               }
+             }
+           }
+    end
+
+    assert_response :unprocessable_content
+    assert_select 'div[data-controller="form-error-summary"]' do
+      assert_select 'a', text:
+             I18n.t(:'errors.format',
+                    attribute: Namespaces::ProjectNamespace.human_attribute_name(:namespace),
+                    message: I18n.t('services.projects.create.namespace_required'))
     end
   end
 
@@ -561,6 +594,19 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_equal Member::AccessLevel::MAINTAINER,
                  Member.find_by(user: users(:joan_doe), namespace: @project.namespace.parent).access_level
     assert_select 'h2', text: I18n.t('projects.edit.advanced.transfer.title'), count: 0
+  end
+
+  test 'owner sees the transfer form with v2 select2 controls' do
+    Flipper.enable(:v2_select2)
+
+    get namespace_project_edit_path(@project.namespace.parent, @project)
+
+    assert_response :success
+    assert_select 'form#edit_advanced_transfer[data-controller="select2--v2"]' do
+      assert_select '[data-select2--v2-target="submitButton"]', disabled: 'disabled', count: 1
+    end
+  ensure
+    Flipper.disable(:v2_select2)
   end
 
   test 'should redirect with success flash when transfer succeeds' do

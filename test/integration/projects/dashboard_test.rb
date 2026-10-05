@@ -94,6 +94,17 @@ module Projects
       assert_select 'input[name="personal_projects_q[namespace_name_or_namespace_puid_cont]"]'
     end
 
+    test 'should display empty state when project search has no results' do
+      get dashboard_projects_path,
+          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: 'missing project' } }
+
+      assert_response :success
+      assert_select 'section[role="status"]' do
+        assert_select 'h2', text: I18n.t('components.viral.pagy.empty_state.title'), count: 1
+        assert_select 'span', text: I18n.t('components.viral.pagy.empty_state.description'), count: 1
+      end
+    end
+
     test 'should display empty state when user has no projects and no public projects' do
       Namespaces::ProjectNamespace.where(public: true).destroy_all
 
