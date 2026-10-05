@@ -15,6 +15,15 @@ class PasswordsTest < ActionDispatch::IntegrationTest
     assert_password_form
   end
 
+  test 'omniauth user should not see the password form' do
+    sign_in users(:jeff_doe)
+
+    get edit_profile_password_url
+
+    assert_response :success
+    assert_select "form[action='#{profile_password_path}']", count: 0
+  end
+
   test 'should update user password' do
     assert_changes -> { @user.reload.valid_password?('new_password') } do
       patch profile_password_path,
@@ -40,6 +49,17 @@ class PasswordsTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
     assert_password_form
     assert_select '#user_password_error li', minimum: 1
+  end
+
+  test 'should show current password and confirmation errors' do
+    patch profile_password_path,
+          params: { user: { password: 'new_password', password_confirmation: 'different_password',
+                            current_password: '' } }
+
+    assert_response :unprocessable_content
+    assert_password_form
+    assert_select '#user_current_password_error li', minimum: 1
+    assert_select '#user_password_confirmation_error li', minimum: 1
   end
 
   test 'omniauth user should not update password' do

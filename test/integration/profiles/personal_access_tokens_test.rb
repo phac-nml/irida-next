@@ -104,12 +104,16 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :success
-    assert_select "div[data-viral--flash-type-value='success']" do
-      assert_select 'div',
-                    "#{I18n.t('common.statuses.success')}: #{I18n.t(
-                      'profiles.personal_access_tokens.create.success',
-                      name: token_name
-                    )}"
+    assert_select 'turbo-stream[action="append"][target="flashes"]' do
+      assert_select 'template' do
+        assert_select "div[data-viral--flash-type-value='success']" do
+          assert_select 'div',
+                        "#{I18n.t('common.statuses.success')}: #{I18n.t(
+                          'profiles.personal_access_tokens.create.success',
+                          name: token_name
+                        )}"
+        end
+      end
     end
     assert_select 'span.token-status', count: @user.personal_access_tokens.active.count
   end
@@ -141,6 +145,11 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
       end
 
       assert_response :unprocessable_content
+      assert_select 'turbo-stream[action="append"][target="flashes"]' do
+        assert_select 'template' do
+          assert_select "div[data-viral--flash-type-value='error']", count: 1
+        end
+      end
       assert_select 'form[action="/-/profile/personal_access_tokens"]' do
         assert_select '[data-controller="form-error-summary"]' do
           assert_select 'a', text:
@@ -170,8 +179,12 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select "div[data-viral--flash-type-value='error']" do
-      assert_select 'div', "#{I18n.t('common.statuses.error')}: Creation failed"
+    assert_select 'turbo-stream[action="append"][target="flashes"]' do
+      assert_select 'template' do
+        assert_select "div[data-viral--flash-type-value='error']" do
+          assert_select 'div', "#{I18n.t('common.statuses.error')}: Creation failed"
+        end
+      end
     end
   end
 
@@ -207,6 +220,12 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :success
+    assert_select "turbo-stream[action='replace'][target='access-token-section'] turbo-frame#access-token-section",
+                  count: 1
+    assert_select "turbo-stream[action='replace'][target='personal_access_tokens'] turbo-frame#personal_access_tokens",
+                  count: 1
+    assert_select "turbo-stream[action='replace'][target='token-information-component'] div h3",
+                  text: I18n.t('profiles.personal_access_tokens.index.screen_reader_context'), count: 1
     assert_select '[data-controller="token"]' do
       assert_select 'button[data-action="click->token#copyToClipboard"]', count: 1
     end
@@ -222,12 +241,19 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
       end
 
       assert_response :unprocessable_entity
-      assert_select "div[data-viral--flash-type-value='error']" do
-        assert_select 'div',
-                      "#{I18n.t('common.statuses.error')}: #{I18n.t(
-                        'activerecord.errors.models.personal_access_tokens.rotate.only_active'
-                      )}"
+      assert_select 'turbo-stream[action="append"][target="flashes"]' do
+        assert_select 'template' do
+          assert_select "div[data-viral--flash-type-value='error']" do
+            assert_select 'div',
+                          "#{I18n.t('common.statuses.error')}: #{I18n.t(
+                            'activerecord.errors.models.personal_access_tokens.rotate.only_active'
+                          )}"
+          end
+        end
       end
+      assert_select 'turbo-stream[action="replace"][target="access-token-section"]', count: 0
+      assert_select 'turbo-stream[action="replace"][target="personal_access_tokens"]', count: 0
+      assert_select 'turbo-stream[action="replace"][target="token-information-component"]', count: 0
     end
   end
 end

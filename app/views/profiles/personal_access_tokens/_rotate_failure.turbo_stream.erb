@@ -1,0 +1,5 @@
+<%# locals: (new_personal_access_token:, message:, active_access_tokens:, current_user:) -%>
+
+<%= turbo_stream.append "flashes" do %>
+  <%= render Viral::FlashComponent.new(type: :error, data: message) %>
+<% end %>
