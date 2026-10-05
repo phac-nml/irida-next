@@ -17,6 +17,14 @@ class AdvancedSearch::FieldsTest < ActiveSupport::TestCase # rubocop:disable Sty
     assert_equal [['country', 'metadata.country'], ['food', 'metadata.food']], fields[:groups][metadata_group_label]
   end
 
+  test 'for_attachments returns humanized metadata field labels' do
+    fields = AdvancedSearch::Fields.for_attachments
+
+    metadata_group_label = I18n.t('components.advanced_search_component.operation.metadata_fields')
+    assert_equal [['Type', 'metadata.type'], ['Format', 'metadata.format'], ['Compression', 'metadata.compression']],
+                 fields[:groups][metadata_group_label]
+  end
+
   test 'for_workflow_executions returns workflow labels and metadata grouping' do
     field_configuration = Struct.new(:fields).new(
       ['id', 'run_id', 'state', 'metadata.pipeline_id', 'metadata.workflow_version']

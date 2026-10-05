@@ -41,7 +41,7 @@ module AdvancedSearch
         end
 
         metadata_options = Array(metadata_fields).map do |field|
-          [field, field]
+          [field.delete_prefix('metadata.').humanize, field]
         end
 
         build(options:, groups: metadata_group(metadata_options), numeric_fields: field_configuration::NUMERIC_FIELDS)
