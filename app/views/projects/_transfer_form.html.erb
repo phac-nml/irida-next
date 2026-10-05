@@ -18,36 +18,23 @@
                    class: "mb-1 block text-sm font-medium text-slate-900 dark:text-white",
                    data: { required: true } %>
 
-    <% if authorized_namespaces.empty? %>
-      <input
-        disabled
-        placeholder="<%= t(:"projects.edit.advanced.transfer.no_available_namespaces") %>"
-        type="text"
-        class="
-          block w-full rounded-lg border-slate-300 p-2.5 text-slate-800 sm:text-sm dark:border-slate-600
-          dark:bg-slate-800 dark:text-slate-50
-        "
-        autocomplete="off"
-      >
-    <% else %>
-      <%= render Select2Component.new(form:, name: :new_namespace_id, id: form.field_id(:new_namespace_id), placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
-        <% authorized_namespaces.each do |namespace| %>
-          <% select.with_option(
-                      value: namespace.id,
-                      label: namespace.name,
-                    ) do %>
-            <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
-              <%= namespace.name %>
-              <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
-            </span>
+    <%= render Select2Component.new(form:, name: :new_namespace_id, id: form.field_id(:new_namespace_id), placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
+      <% authorized_namespaces.each do |namespace| %>
+        <% select.with_option(
+                    value: namespace.id,
+                    label: namespace.name,
+                  ) do %>
+          <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
+            <%= namespace.name %>
+            <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
+          </span>
 
-            <span class="pointer-events-none block text-slate-600 dark:text-white"><%= namespace.full_path %></span>
-          <% end %>
+          <span class="pointer-events-none block text-slate-600 dark:text-white"><%= namespace.full_path %></span>
         <% end %>
+      <% end %>
 
-        <%= select.with_empty_state do %>
-          <%= t(:"projects.edit.advanced.transfer.empty_state") %>
-        <% end %>
+      <%= select.with_empty_state do %>
+        <%= t(:"projects.edit.advanced.transfer.empty_state") %>
       <% end %>
     <% end %>
 

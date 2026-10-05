@@ -2024,7 +2024,7 @@ fr:
         role_not_allowed: Un responsable ne peut mettre à jour le rôle d’un membre que jusqu’au rôle de responsable
     projects:
       create:
-        namespace_required: Espace de noms requis
+        namespace_required: est requis
     samples:
       batch_import:
         duplicate_sample_name: Nom de l’échantillon en double sur l’index '%{index}'

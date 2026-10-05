@@ -2020,7 +2020,7 @@ en:
         role_not_allowed: A maintainer can only update a member's role up to the Maintainer role
     projects:
       create:
-        namespace_required: Namespace required
+        namespace_required: is required
     samples:
       batch_import:
         duplicate_sample_name: Duplicate sample name on index '%{index}'
