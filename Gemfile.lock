@@ -501,7 +501,7 @@ GEM
     openssl (4.0.2)
     opentelemetry-api (1.11.1)
       logger
-    opentelemetry-common (0.25.1)
+    opentelemetry-common (0.25.2)
       opentelemetry-api (~> 1.0)
     opentelemetry-exporter-otlp (0.36.0)
       google-protobuf (>= 3.18)
