@@ -24,6 +24,7 @@ const fullCoverageFiles = [
   "app/javascript/controllers/linelist_export/selection.js",
   "app/javascript/controllers/linelist_export/worker_client.js",
   "app/javascript/controllers/metadata_toggle_controller.js",
+  "app/javascript/controllers/nextflow/v2/samplesheet_controller.js",
   "app/javascript/controllers/refresh_controller.js",
   "app/javascript/controllers/selection_controller.js",
   "app/javascript/controllers/sidebar_item_controller.js",
