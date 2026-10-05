@@ -216,9 +216,7 @@ module Projects
         end
 
         assert_response :unprocessable_content
-        assert_select 'turbo-stream[target="samples_dialog"]'
-        assert_match 'Reason can&#39;t be blank', response.body
-        assert_match 'form-error-summary', response.body
+        assert_dialog_error "Reason can't be blank"
         assert_samples_page(@project1_namespace.project, 3)
       ensure
         Flipper.disable(:sample_deletion_reason)
@@ -312,8 +310,7 @@ module Projects
         end
 
         assert_response :unprocessable_content
-        assert_match 'Reason is too long', response.body
-        assert_match 'form-error-summary', response.body
+        assert_dialog_error 'Reason is too long'
         assert_samples_page(@project1_namespace.project, 3)
       ensure
         Flipper.disable(:sample_deletion_reason)
@@ -393,8 +390,7 @@ module Projects
         end
 
         assert_response :unprocessable_content
-        assert_match 'Reason is too long', response.body
-        assert_match 'form-error-summary', response.body
+        assert_dialog_error 'Reason is too long'
         assert_samples_page(@project1_namespace.project, 3)
       ensure
         Flipper.disable(:sample_deletion_reason)
@@ -482,6 +478,16 @@ module Projects
         status = I18n.t(type == :success ? 'common.statuses.success' : 'common.statuses.error')
         assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='#{type}']" do
           assert_select 'div', "#{status}: #{message}"
+        end
+      end
+
+      def assert_dialog_error(message)
+        assert_select 'turbo-stream[target="samples_dialog"]' do
+          assert_select 'dialog' do
+            assert_select '[data-controller="form-error-summary"]' do
+              assert_select 'li', text: /#{Regexp.escape(message)}/
+            end
+          end
         end
       end
 
