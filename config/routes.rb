@@ -77,4 +77,6 @@ Rails.application.routes.draw do
 
   draw :system
   draw :development
+
+  match '*unmatched', to: 'application#route_not_found', via: :all
 end
