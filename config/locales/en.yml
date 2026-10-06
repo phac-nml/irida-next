@@ -675,6 +675,7 @@ en:
       v2:
         component:
           close_progress: Close progress
+          duplicate_headers_message: The uploaded spreadsheet contains duplicate column headers. Please rename them before importing.
           error_message: 'Unexpected error while importing metadata: %{message}'
           import_complete_message: The metadata import is complete
           import_started_message: Starting metadata import...
