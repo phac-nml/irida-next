@@ -307,7 +307,7 @@ en:
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
     namespace_row:
       contents_component:
-        created_at: Created %{date}
+        created_at_html: Created %{date}
         namespace_link:
           aria-label: View %{namespace_type} with name %{namespace_name} and persistent unique identifier %{namespace_puid}
         projects:

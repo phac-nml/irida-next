@@ -137,7 +137,7 @@
     </div>
 
     <div class="mt-1 text-xs whitespace-nowrap text-slate-500 dark:text-slate-400">
-      <%== t(:'components.namespace_row.contents_component.created_at', date: helpers.local_time(@namespace.created_at, "%b %-d, %Y")) %>
+      <%= t(:'components.namespace_row.contents_component.created_at_html', date: helpers.local_time(@namespace.created_at, "%b %-d, %Y")) %>
     </div>
   </div>
 </div>
