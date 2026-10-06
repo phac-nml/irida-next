@@ -72,6 +72,15 @@ class NamespacePathValidatorTest < ActiveSupport::TestCase
     assert_not NamespacePathValidator.valid_path?('api')
   end
 
+  test 'rejects namespace paths with leading or trailing slashes' do
+    assert_not NamespacePathValidator.valid_path?('/group-1/project-1')
+    assert_not NamespacePathValidator.valid_path?('group-1/project-1/')
+  end
+
+  test 'rejects namespace paths with unsupported characters' do
+    assert_not NamespacePathValidator.valid_path?('group-1/project@1')
+  end
+
   private
 
   def validation_record(full_path)
