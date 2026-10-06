@@ -83,6 +83,8 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select '#workflow-executions-table table tbody tr', count: 2
     assert_select '#prev-page-link', count: 1
     assert_select '#next-page-link', count: 0
+    assert_select 'div[id^="pagination-info-"]', text: /Displaying items 21-22 of 22 in total/
+    assert_no_match(/&lt;(?:time|span)[\s>]/, response.body)
   end
 
   test 'should create workflow execution with valid params' do
