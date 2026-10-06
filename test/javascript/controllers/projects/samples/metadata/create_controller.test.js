@@ -306,7 +306,7 @@ describe("projects/samples/metadata CreateController", () => {
     expect(form.requestSubmit).toHaveBeenCalledOnce();
   });
 
-  it("shows a form error when building metadata throws", async () => {
+  it("logs the metadata error and shows a form error when hidden-input creation fails", async () => {
     const spy = vi.spyOn(console, "error").mockImplementation(() => {});
     const { controller, metadataToAdd, formFieldError } = await mount();
     fill(0, "organism", "salmonella");
