@@ -17,5 +17,8 @@ class ProjectDashboardComponentTest < ViewComponentTestCase
 
     assert_selector 'li.activity', count: 10
     assert_selector 'li.sample', count: [project.samples.count, 10].min
+    assert_selector 'li.sample time', count: [project.samples.count, 10].min
+    assert_no_selector 'li.sample time time'
+    assert_no_match(/title="[^"]*&lt;time/, rendered_content)
   end
 end
