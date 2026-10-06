@@ -63,5 +63,21 @@ module NamespaceRow
         assert_selector 'a[aria-describedby]', minimum: 3
       end
     end
+
+    test 'renders the creation timestamp as a local time element' do
+      namespace = groups(:group_one)
+      with_request_url '/-/groups/group-1' do
+        render_inline(
+          ContentsComponent.new(
+            namespace:,
+            full_name: false,
+            icon_size: :small,
+            search_params: nil
+          )
+        )
+
+        assert_selector 'time[data-local="time"]', text: namespace.created_at.strftime('%b %-d, %Y')
+      end
+    end
   end
 end
