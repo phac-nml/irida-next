@@ -609,6 +609,20 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     Flipper.disable(:v2_select2)
   end
 
+  test 'owner sees a disabled transfer namespace input when no namespaces are available' do
+    project = projects(:john_doe_project2)
+    Member.where(user: @user).delete_all
+
+    get namespace_project_edit_path(project.namespace.parent, project)
+
+    assert_response :success
+    assert_select 'form#edit_advanced_transfer' do
+      assert_select 'input[type="text"][disabled][autocomplete="off"]',
+                    placeholder: I18n.t(:'projects.edit.advanced.transfer.no_available_namespaces'),
+                    count: 1
+    end
+  end
+
   test 'should redirect with success flash when transfer succeeds' do
     assert_changes -> { @project.namespace.reload.parent }, from: @old_namespace, to: @namespace do
       post namespace_project_transfer_path(@old_namespace, @project),

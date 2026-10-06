@@ -1625,6 +1625,7 @@ en:
           - 'Things to be aware of before transferring your project:'
           empty_state: No namespaces are associated with that name or ID
           new_namespace_id: Select a new namespace
+          no_available_namespaces: You do not have access to any destination namespaces to transfer this project
           points:
           - Be careful! Changing a project's namespace can have unintended side effects.
           - You can only transfer projects to groups where you have sufficient permissions.
