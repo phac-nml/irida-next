@@ -1780,16 +1780,16 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'can filter by id or name' do
     visit data_exports_path
 
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 7, count: 7,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 7, count: 7,
+                                                                                         locale: @user.locale))
     assert_selector 'table tbody tr', count: 7
 
     fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
             with: @data_export1.id
     find('input.t-search-component').send_keys(:return)
 
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 1, count: 1,
+                                                                                         locale: @user.locale))
 
     within('table tbody') do
       assert_selector ' tr', count: 1
@@ -1801,8 +1801,8 @@ class DataExportsTest < ApplicationSystemTestCase
             with: @data_export1.name
     find('input.t-search-component').send_keys(:return)
 
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 2, count: 2,
+                                                                                         locale: @user.locale))
 
     within('table tbody') do
       assert_selector 'tr', count: 2

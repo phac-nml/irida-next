@@ -17,8 +17,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
   test 'live region component renders with correct ARIA attributes for selection' do
     visit namespace_project_samples_url(@namespace, @project)
     # Wait for samples table to render
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Verify live region exists with correct ARIA attributes
     assert_selector "span[role='status'][aria-live='polite'].sr-only[data-selection-target='status']"
@@ -27,8 +27,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
   test 'selection controller announces selection count via live region' do
     visit namespace_project_samples_url(@namespace, @project)
     # Wait for samples table to render
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Find the live region for selection announcements
     live_region = find("span[data-selection-target='status']", visible: false)
@@ -51,8 +51,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
   test 'select all updates live region with total count' do
     visit namespace_project_samples_url(@namespace, @project)
     # Wait for samples table to render
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Click select all
     click_button I18n.t('common.controls.select_all')
@@ -70,8 +70,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
   test 'deselect all clears live region selection count' do
     visit namespace_project_samples_url(@namespace, @project)
     # Wait for samples table to render
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Select all first
     click_button I18n.t('common.controls.select_all')
@@ -89,8 +89,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
   test 'live region exists and is accessible on samples page' do
     visit namespace_project_samples_url(@namespace, @project)
     # Wait for page load
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Verify ARIA live region has required accessibility attributes
     # role="status" provides implicit aria-live="polite" for redundancy
@@ -104,8 +104,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
   test 'page is accessible when live region is present' do
     visit namespace_project_samples_url(@namespace, @project)
     # Wait for page load
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Run accessibility audit
     assert_accessible
@@ -115,8 +115,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
     # This tests that the JavaScript live region utility works during sample operations
     # The clone operation uses the announce function internally for selection feedback
     visit namespace_project_samples_url(@namespace, @project)
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Find the live region
     live_region = find("span[data-selection-target='status']", visible: false)
@@ -152,8 +152,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
   test 'live region with atomic attribute announces complete content' do
     # Test that atomic live regions are rendered correctly
     visit namespace_project_samples_url(@namespace, @project)
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # The samples page uses polite non-atomic live regions by default
     # Verify aria-atomic is not present when not needed
@@ -163,8 +163,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
 
   test 'global live region fallback is created when announce is called without element' do
     visit namespace_project_samples_url(@namespace, @project)
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Use JavaScript to call announce() without an element, triggering global fallback
     page.execute_script(<<~JS)
@@ -189,8 +189,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
 
   test 'findOrCreateGlobalRegion preserves existing aria-live attribute' do
     visit namespace_project_samples_url(@namespace, @project)
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Create a global region with assertive politeness first
     page.execute_script(<<~JS)
@@ -216,8 +216,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
 
   test 'createLiveRegion prevents duplicate IDs' do
     visit namespace_project_samples_url(@namespace, @project)
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Create two live regions with the same ID
     page.execute_script(<<~JS)
@@ -251,8 +251,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
 
   test 'clearLiveRegion clears content of live region' do
     visit namespace_project_samples_url(@namespace, @project)
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Create a live region with content, then clear it
     page.execute_script(<<~JS)
@@ -279,8 +279,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
 
   test 'live region uses span element for consistency with server component' do
     visit namespace_project_samples_url(@namespace, @project)
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Create a live region via JavaScript
     page.execute_script(<<~JS)
@@ -300,8 +300,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
 
   test 'announce clears region before setting new content' do
     visit namespace_project_samples_url(@namespace, @project)
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Test that announce properly clears and sets content
     page.execute_script(<<~JS)
@@ -325,8 +325,8 @@ class LiveRegionsTest < ApplicationSystemTestCase
   test 'selection controller uses local live region for announcements' do
     # Visit samples page
     visit namespace_project_samples_url(@namespace, @project)
-    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                    locale: @user.locale))
+    assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                         locale: @user.locale))
 
     # Select a sample to trigger selection announcement via live region
     find("table tbody tr th input##{dom_id(@sample1, :checkbox)}").click
