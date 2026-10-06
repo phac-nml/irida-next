@@ -239,4 +239,4 @@ gem 'activerecord-session_store', '~> 2.3'
 
 gem 'minitest', '~> 5.27'
 
-gem 'rails_icons', '~> 1.9'
+gem 'rails_icons', '~> 1.10'
