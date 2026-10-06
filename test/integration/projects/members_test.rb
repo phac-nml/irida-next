@@ -66,6 +66,7 @@ module Projects
           end
         end
       end
+      assert_no_match(/&lt;(?:time|span)[\s>]/, response.body)
       assert_select 'turbo-stream[action="update"][target="members_pagination"]' do
         assert_select 'span', text: I18n.t('components.viral.pagy.pagination_component.next')
         assert_select 'span[class="pagy info"]',
