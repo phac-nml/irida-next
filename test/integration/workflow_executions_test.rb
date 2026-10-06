@@ -36,6 +36,8 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "tr##{dom_id(completed_workflow)} button", text: I18n.t('common.actions.delete'), count: 1
     assert_select "tr##{dom_id(shared_workflow)} button",
                   text: I18n.t('common.actions.cancel'), count: 1
+    assert_select 'div[id^="pagination-info-"]', text: /Displaying/
+    assert_no_match(/&lt;(?:time|span)[\s>]/, response.body)
   end
 
   test 'should filter user workflow execution listing by id or name' do
@@ -83,6 +85,8 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select '#workflow-executions-table table tbody tr', count: 2
     assert_select '#prev-page-link', count: 1
     assert_select '#next-page-link', count: 0
+    assert_select 'div[id^="pagination-info-"]', text: /Displaying items 21-22 of 22 in total/
+    assert_no_match(/&lt;(?:time|span)[\s>]/, response.body)
   end
 
   test 'should create workflow execution with valid params' do

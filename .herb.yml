@@ -10,7 +10,7 @@
 # Docs: https://herb-tools.dev/configuration
 # Linter: https://herb-tools.dev/projects/linter
 
-version: 0.10.3
+version: 0.11.0
 
 framework: actionview
 template_engine: erubi

@@ -56,8 +56,8 @@ module WorkflowExecutions
       ### SETUP START ###
       visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
       # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: @user.locale))
       # select samples
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
@@ -145,8 +145,8 @@ module WorkflowExecutions
       rev_attachment = attachments(:sample22AttachmentFastqREV)
       visit namespace_project_samples_url(@group1, @project2)
       # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
-                                                                                      locale: user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 20, count: 20,
+                                                                                           locale: user.locale))
 
       ### SETUP END ###
 
@@ -235,8 +235,8 @@ module WorkflowExecutions
 
       visit group_samples_url(namespace)
       # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
-                                                                                      locale: user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 4, count: 4,
+                                                                                           locale: user.locale))
       # select samples
       check "checkbox_sample_#{sample33.id}"
       check "checkbox_sample_#{sample34.id}"
@@ -364,8 +364,8 @@ module WorkflowExecutions
       attachment_rev6 = attachments(:attachmentPEREV6)
       visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
       # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                                      locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: @user.locale))
       check "checkbox_sample_#{@sample_a.id}"
       check "checkbox_sample_#{@sample_b.id}"
       check "checkbox_sample_#{sample_c.id}"
@@ -468,8 +468,8 @@ module WorkflowExecutions
       visit namespace_project_samples_url(namespace, project)
 
       # verify samples table loaded
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary', from: 1, to: 20, count: 1002,
-                                                                                      locale: user.locale))
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 20, count: 1002,
+                                                                                           locale: user.locale))
       # select samples
       click_button I18n.t('common.controls.select_all')
 

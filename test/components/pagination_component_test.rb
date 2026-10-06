@@ -12,6 +12,8 @@ class PaginationComponentTest < ViewComponent::TestCase
 
     assert_no_selector 'button.cursor-not-allowed', text: I18n.t('components.viral.pagy.pagination_component.previous')
     assert_selector 'a', text: I18n.t('components.viral.pagy.pagination_component.next')
+    assert_selector 'span.pagy-info', text: /Displaying items 1-20 of 114 in total/
+    assert_no_match(/&lt;span/, rendered_content)
   end
 
   test 'renders previous link only' do

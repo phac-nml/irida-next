@@ -1263,7 +1263,7 @@ fr:
       access_level: Niveau d'accès
       action: Mesure
       created_at: Accès accordé
-      created_by: "%{timestamp} par"
+      created_by_html: "%{timestamp} par"
       expires_at: Expiration
       group_access_level: Niveau d’accès
       group_name: Groupe

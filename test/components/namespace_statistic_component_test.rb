@@ -64,7 +64,8 @@ class NamespaceStatisticComponentTest < ViewComponent::TestCase
                     value: date
                   ))
 
-    assert_selector 'time', text: /#{date.year}/
+    assert_selector 'time', count: 1, text: /#{date.year}/
+    assert_no_selector 'time time'
   end
 
   test 'generates unique component IDs' do

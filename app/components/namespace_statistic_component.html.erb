@@ -40,9 +40,9 @@
         aria-describedby="statistic-label-<%= component_id %>"
       >
         <% if @value.respond_to?(:strftime) %>
-          <time datetime="<%= @value.iso8601 %>" class="inline-flex flex-col sm:block">
+          <div class="inline-flex flex-col sm:block">
             <span class="block sm:inline"><%= helpers.local_time(@value, "%b %-d, %Y") %></span>
-          </time>
+          </div>
         <% elsif @value.is_a?(Numeric) %>
           <%= number_with_delimiter(@value) %>
         <% else %>
