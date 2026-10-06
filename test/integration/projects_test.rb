@@ -385,6 +385,24 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'updates the project name and breadcrumb in the turbo stream response' do
+    project_name = 'Updated project name'
+
+    patch namespace_project_path(@project.namespace.parent, @project),
+          params: {
+            project: { namespace_attributes: { name: project_name } },
+            format: :turbo_stream
+          }
+
+    assert_response :success
+    assert_select 'turbo-stream[action="update"][target="namespace_name"]' do
+      assert_select 'template', text: project_name
+    end
+    assert_select 'turbo-stream[action="update"][target="breadcrumb"]' do
+      assert_select 'template', text: /#{Regexp.escape(project_name)}/
+    end
+  end
+
   test 'cannot update project with invalid params' do
     assert_no_changes -> { @project.reload.path } do
       patch namespace_project_path(@project.namespace.parent, @project),
