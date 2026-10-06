@@ -36,6 +36,8 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "tr##{dom_id(completed_workflow)} button", text: I18n.t('common.actions.delete'), count: 1
     assert_select "tr##{dom_id(shared_workflow)} button",
                   text: I18n.t('common.actions.cancel'), count: 1
+    assert_select 'div[id^="pagination-info-"]', text: /Displaying/
+    assert_no_match(/&lt;(?:time|span)[\s>]/, response.body)
   end
 
   test 'should filter user workflow execution listing by id or name' do

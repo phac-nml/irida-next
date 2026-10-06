@@ -1,7 +1,7 @@
 <% if @has_group_links %>
   <% if @pagy.count.positive? %>
     <%= render PaginationComponent.new(
-      info: @pagy.info_tag,
+      info: @pagy.info_tag.html_safe,
       prev_url:
         (
           if @pagy.previous
