@@ -675,6 +675,7 @@ fr:
       v2:
         component:
           close_progress: Fermeture de la progression
+          duplicate_headers_message: Le chiffrier téléchargé contient des en-têtes de colonnes en double. Veuillez les renommer avant l’importation.
           error_message: 'Erreur inattendue lors de l''importation des métadonnées : %{message}'
           import_complete_message: L'importation des métadonnées est terminée
           import_started_message: Démarrage de l'importation des métadonnées...
