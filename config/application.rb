@@ -49,6 +49,20 @@ module Irida
     # Only load log data on demand
     config.logidze.ignore_log_data_by_default = true
 
+    # Add a catch-all route for unmatched paths after routes loaded so that active storage routes are not overridden
+    # prematurely.
+    config.after_routes_loaded do |app|
+      # Temporarily disable clearing behavior
+      Rails.application.routes.disable_clear_and_finalize = true
+
+      app.routes.draw do
+        match '*unmatched', to: 'application#route_not_found', via: :all
+      end
+    ensure
+      # Re-enable finalization safety flags
+      Rails.application.routes.disable_clear_and_finalize = false
+    end
+
     # Only enables en and fr locales, avoiding unnecessarily loading other locales
     config.i18n.available_locales = %i[en fr]
     # Set default locale

@@ -18,7 +18,7 @@ pin '@floating-ui/utils/dom', to: 'https://cdn.jsdelivr.net/npm/@floating-ui/uti
 pin '@sindresorhus/slugify', to: '@sindresorhus--slugify.js' # @2.2.1
 pin '@sindresorhus/transliterate', to: '@sindresorhus--transliterate.js' # @1.6.0
 pin 'escape-string-regexp' # @5.0.0
-pin '@rails/activestorage', to: '@rails--activestorage.js' # @8.1.200
+pin '@rails/activestorage', to: '@rails--activestorage.js' # @8.1.400
 pin_all_from 'app/javascript/controllers', under: 'controllers'
 pin_all_from 'app/javascript/workers', under: 'workers'
 pin 'xlsx', to: 'https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs'
