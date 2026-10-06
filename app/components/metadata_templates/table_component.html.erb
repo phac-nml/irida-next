@@ -71,7 +71,7 @@
 
 <% unless @metadata_templates.empty? %>
   <%= render PaginationComponent.new(
-    info: @pagy.info_tag.html_safe,
+    info: @pagy.info_tag,
     prev_url:
       (
         if @pagy.previous

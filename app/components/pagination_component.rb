@@ -5,7 +5,7 @@ class PaginationComponent < Component
   attr_reader :prev_url, :next_url, :info, :info_id
 
   def initialize(info:, prev_url: nil, next_url: nil, autofocus_link: false, **link_arguments)
-    @info = info
+    @info = info.html_safe # rubocop:disable Rails/OutputSafety -- pagy info_tag markup is trusted, generated server-side
     @prev_url = prev_url
     @next_url = next_url
     @autofocus_link = autofocus_link
