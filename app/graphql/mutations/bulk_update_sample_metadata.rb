@@ -58,7 +58,7 @@ module Mutations
         path: ['metadata'],
         message: "JSON data is not formatted correctly. #{e.message}"
       }]
-      attach_return_values(errors: user_errors)
+      attach_return_values(overall_status: 'unsuccessful', status: {}, errors: user_errors)
     end
 
     def ready?(**_args)
