@@ -73,6 +73,7 @@
                             data: {
                               action: "change->spreadsheet-import#readFile",
                               "attachment-upload-target": "attachmentsInput",
+                              "spreadsheet-import-target": "fileInput",
                             },
                             aria: {
                               required: true,
@@ -83,7 +84,7 @@
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
               <%= t("shared.samples.spreadsheet_imports.dialog.file_help") %>
             </p>
-          </div>
+          </div> <%# herb:disable html-no-nested-forms 1 %>
 
           <div class="form-field">
             <%= form.label :sample_name_column,

@@ -10,6 +10,7 @@ const fullCoverageFiles = [
   "app/javascript/controllers/action_button_controller.js",
   "app/javascript/controllers/attachment_upload_controller.js",
   "app/javascript/controllers/metadata/file_import_controller.js",
+  "app/javascript/controllers/spreadsheet_import_controller.js",
   "app/javascript/controllers/activities/extended_details_controller.js",
   "app/javascript/controllers/clipboard_controller.js",
   "app/javascript/controllers/colour_mode_controller.js",
