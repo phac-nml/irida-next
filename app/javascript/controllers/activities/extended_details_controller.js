@@ -182,6 +182,7 @@ export default class extends Controller {
 
   // Generate table rows in format <td>SAMPLE_NAME <SAMPLE_PUID></td><td>SAMPLE_NAME <CLONE_PUID></td>
   #generateTableRows(table_data) {
+    /* v8 ignore next -- feature detection: <template>.content is always supported in target browsers and jsdom */
     if ("content" in document.createElement("template")) {
       const template = this.sampleCloneTableRowTarget;
       const fragment = document.createDocumentFragment();
@@ -211,6 +212,7 @@ export default class extends Controller {
 
   // Generate list items in format SAMPLE_NAME <SAMPLE_PUID>
   #generateSampleListItems(list_data) {
+    /* v8 ignore next -- feature detection: <template>.content is always supported in target browsers and jsdom */
     if ("content" in document.createElement("template")) {
       const template = this.listRowTarget;
       const fragment = document.createDocumentFragment();
@@ -234,6 +236,7 @@ export default class extends Controller {
 
   // Generate table row in format WORKFLOW_NAME | WORKFLOW_ID
   #generateWorkflowTableRows(table_data) {
+    /* v8 ignore next -- feature detection: <template>.content is always supported in target browsers and jsdom */
     if ("content" in document.createElement("template")) {
       const template = this.workflowTableRowTarget;
       const fragment = document.createDocumentFragment();
@@ -261,6 +264,7 @@ export default class extends Controller {
   }
 
   #generateSampleAndProjectWithPuidsTableRows(table_data) {
+    /* v8 ignore next -- feature detection: <template>.content is always supported in target browsers and jsdom */
     if ("content" in document.createElement("template")) {
       const template = this.destroySampleTableRowTarget;
       const fragment = document.createDocumentFragment();
@@ -294,6 +298,7 @@ export default class extends Controller {
   }
 
   #generateSampleAndProjectTableRows(table_data) {
+    /* v8 ignore next -- feature detection: <template>.content is always supported in target browsers and jsdom */
     if ("content" in document.createElement("template")) {
       const template = this.importSampleTableRowTarget;
       const fragment = document.createDocumentFragment();
@@ -329,6 +334,7 @@ export default class extends Controller {
   }
 
   #generateGroupSampleTransferTableRows(table_data) {
+    /* v8 ignore next -- feature detection: <template>.content is always supported in target browsers and jsdom */
     if ("content" in document.createElement("template")) {
       const template = this.groupSampleTransferTableRowTarget;
       const fragment = document.createDocumentFragment();
@@ -378,6 +384,7 @@ export default class extends Controller {
   }
 
   #generateGroupSampleCloneTableRows(table_data) {
+    /* v8 ignore next -- feature detection: <template>.content is always supported in target browsers and jsdom */
     if ("content" in document.createElement("template")) {
       const template = this.groupSampleCloneTableRowTarget;
       const fragment = document.createDocumentFragment();
