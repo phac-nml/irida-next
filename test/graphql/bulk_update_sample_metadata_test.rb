@@ -125,6 +125,29 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal({ 'newmetadatafield3' => 'value3' }, @sample5.reload.metadata)
   end
 
+  test 'stringified metadata with duplicate keys returns a JSON format error' do
+    metadata_payload = <<~JSON
+      {
+        "#{@sample3.name}": {
+          "duplicate_field": "first",
+          "duplicate_field": "second"
+        }
+      }
+    JSON
+
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { metadata: metadata_payload,
+                                              projectId: @project2.to_global_id.to_s })
+
+    assert_nil result['errors'], 'the mutation should return a user error, not a GraphQL error'
+
+    data = result['data']['bulkUpdateSampleMetadata']
+    assert_equal 'metadata', data['errors'].first['path'].first
+    assert_match(/JSON data is not formatted correctly/, data['errors'].first['message'])
+    assert_nil data['status']
+  end
+
   test 'valid params, group puid, and api scope token' do
     assert @sample3.metadata.empty?
     assert @sample4.metadata.empty?
