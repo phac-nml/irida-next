@@ -801,7 +801,7 @@ GEM
     yaml (0.4.0)
     yard (0.9.45)
     zeitwerk (2.8.3)
-    zip_kit (6.3.5)
+    zip_kit (6.3.6)
 
 PLATFORMS
   arm64-darwin-24
