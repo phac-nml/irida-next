@@ -31,6 +31,9 @@ const IGNORE_LIST = [
   "description",
 ];
 export default class extends Controller {
+  // Identifies the latest file read so stale results are ignored.
+  #fileProcessingToken;
+
   static outlets = ["sortable-lists--v1--two-lists-selection", "refresh"];
   static targets = [
     "fileInput",
@@ -64,6 +67,8 @@ export default class extends Controller {
   }
 
   #processFile(files) {
+    const processingToken = Symbol();
+    this.#fileProcessingToken = processingToken;
     this.removeSampleIDInputOptions();
     this.resetDialogState();
     this.disableErrorState();
@@ -75,6 +80,10 @@ export default class extends Controller {
     reader.readAsArrayBuffer(files[0]);
 
     reader.onload = () => {
+      if (this.#fileProcessingToken !== processingToken) {
+        return;
+      }
+
       const workbook = XLSX.read(reader.result, { sheetRows: 1 });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];

@@ -34,12 +34,25 @@ class RefreshStub extends Controller {
 }
 
 // jsdom's FileReader timing is incidental to this controller; a fake makes the
-// async onload deterministic. onload is assigned after readAsArrayBuffer is
-// called, so the callback is deferred to a microtask.
+// async onload deterministic and can also complete reads out of order.
 class FakeFileReader {
-  readAsArrayBuffer() {
-    this.result = new ArrayBuffer(0);
-    queueMicrotask(() => this.onload?.());
+  static instances = [];
+  static autoComplete = true;
+
+  constructor() {
+    FakeFileReader.instances.push(this);
+  }
+
+  readAsArrayBuffer(file) {
+    this.file = file;
+    if (FakeFileReader.autoComplete) {
+      queueMicrotask(() => this.complete());
+    }
+  }
+
+  complete() {
+    this.result = this.file.name;
+    this.onload?.();
   }
 }
 
@@ -102,6 +115,8 @@ describe("MetadataFileImportController", () => {
   let application;
 
   beforeEach(() => {
+    FakeFileReader.instances = [];
+    FakeFileReader.autoComplete = true;
     vi.stubGlobal("FileReader", FakeFileReader);
   });
 
@@ -218,6 +233,30 @@ describe("MetadataFileImportController", () => {
       "city",
     ]);
     expect(select.value).toBe("sample_name");
+  });
+
+  it("ignores a file read that finishes after a newer selection", async () => {
+    FakeFileReader.autoComplete = false;
+    mockRead.mockImplementation((result) => ({
+      SheetNames: ["Sheet1"],
+      Sheets: { Sheet1: { headers: result } },
+    }));
+    mockSheetToJson.mockImplementation((worksheet) => [[worksheet.headers]]);
+
+    const { fileInput, select } = await mount();
+    setFiles(fileInput, [fileObj("first.csv")]);
+    fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+    setFiles(fileInput, [fileObj("second.csv")]);
+    fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(FakeFileReader.instances).toHaveLength(2);
+    FakeFileReader.instances[1].complete();
+    FakeFileReader.instances[0].complete();
+
+    expect(Array.from(select.options).map((option) => option.value)).toEqual([
+      "",
+      "second.csv",
+    ]);
   });
 
   it("populates the select but keeps submit disabled when no sample column is recognized", async () => {
