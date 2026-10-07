@@ -91,6 +91,8 @@ linter:
       enabled: true
     html-no-title-attribute:
       enabled: true
+    html-no-nested-forms:
+      enabled: false
 
 formatter:
   enabled: true

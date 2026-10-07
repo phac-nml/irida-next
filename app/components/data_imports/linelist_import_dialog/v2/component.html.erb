@@ -28,11 +28,13 @@
     <%= helpers.turbo_frame_tag "import_metadata_dialog_alert" %>
 
     <%= tag.div id: "import-metadata-dialog-content", data: linelist_data do %>
-      <%= form_with(scope: :file_import, url: "#", method: :get, data: { action: "submit->linelist-import#handleSubmit" }) do |form| %> <%# herb:disable html-no-nested-forms %>
-        <%= render partial: 'shared/samples/metadata/file_imports/form_fields', locals: {
+      <%= form_with(scope: :file_import, url: "#", method: :get, data: { action: "submit->linelist-import#handleSubmit" }) do |form| %>
+        <%= render partial: 'shared/samples/metadata/file_imports/form_fields',
+        locals: {
           broadcast_target: @broadcast_target,
           controller: "linelist-import",
-          form: form } %>
+          form: form
+        } %>
       <% end %>
 
       <template data-linelist-import-target="flashTemplate">
