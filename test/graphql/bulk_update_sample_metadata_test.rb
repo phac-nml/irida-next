@@ -143,9 +143,11 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_nil result['errors'], 'the mutation should return a user error, not a GraphQL error'
 
     data = result['data']['bulkUpdateSampleMetadata']
+    assert_not_empty data, 'bulkUpdateSampleMetadata should be populated when JSON format errors'
+    assert_equal 'unsuccessful', data['overallStatus']
     assert_equal 'metadata', data['errors'].first['path'].first
     assert_match(/JSON data is not formatted correctly/, data['errors'].first['message'])
-    assert_nil data['status']
+    assert_empty data['status']
   end
 
   test 'valid params, group puid, and api scope token' do
