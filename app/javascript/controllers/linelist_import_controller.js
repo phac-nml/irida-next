@@ -45,13 +45,14 @@ export default class extends Controller {
   };
 
   connect() {
-    super.connect();
     this._fileType = null;
     this._operationId ||= null;
     this._progressWindowOpenedAt ||= null;
     this._dismissProgressWindowTimeout ||= null;
     this.progressWindowDismissed ??= false;
     this._worksheet = null;
+    // Init before super.connect so a file processed on connect (pre-selected) is not reset.
+    super.connect();
   }
 
   readFile(event) {

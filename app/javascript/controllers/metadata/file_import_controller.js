@@ -47,8 +47,9 @@ export default class extends Controller {
     this.headers = [];
     this.columns = [];
     // Dialog is Turbo-injected; a file picked before connect misses the change event, so handle it here.
+    // Call readFile (not #processFile) so subclasses that override readFile run their own logic.
     if (this.hasFileInputTarget && this.fileInputTarget.files.length) {
-      this.#processFile(this.fileInputTarget.files);
+      this.readFile({ target: this.fileInputTarget });
     }
   }
 

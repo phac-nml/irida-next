@@ -115,6 +115,8 @@ export default defineConfig({
       "utilities/refresh": resolve(jsRoot, "utilities/refresh.js"),
       "utilities/styles": resolve(jsRoot, "utilities/styles.js"),
       "utilities/dialog": resolve(jsRoot, "utilities/dialog.js"),
+      "utilities/collection": resolve(jsRoot, "utilities/collection.js"),
+      "utilities/flash": resolve(jsRoot, "utilities/flash.js"),
       "utilities/message_formatter": resolve(
         jsRoot,
         "utilities/message_formatter.js",
