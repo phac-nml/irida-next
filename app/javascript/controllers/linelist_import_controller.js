@@ -44,6 +44,10 @@ export default class extends Controller {
       default:
         "The uploaded spreadsheet contains duplicate column headers. Please rename them before importing.",
     },
+    noValidMetadataMessage: {
+      type: String,
+      default: "The uploaded spreadsheet contains no viable metadata",
+    },
     errorMessage: {
       type: String,
       default: "Unexpected error while importing metadata: %{message}",
@@ -67,6 +71,7 @@ export default class extends Controller {
     super.removeSampleIDInputOptions();
     super.resetDialogState();
     super.disableErrorState();
+    this.errorMessageTarget.textContent = this.noValidMetadataMessageValue;
 
     if (!files.length) {
       return;
