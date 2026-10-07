@@ -33,6 +33,7 @@ const IGNORE_LIST = [
 export default class extends Controller {
   static outlets = ["sortable-lists--v1--two-lists-selection", "refresh"];
   static targets = [
+    "fileInput",
     "sampleIdColumn",
     "metadataColumns",
     "submitButton",
@@ -42,6 +43,10 @@ export default class extends Controller {
   connect() {
     this.headers = [];
     this.columns = [];
+    // Dialog is Turbo-injected; a file picked before connect misses the change event, so handle it here.
+    if (this.hasFileInputTarget && this.fileInputTarget.files.length) {
+      this.#processFile(this.fileInputTarget.files);
+    }
   }
 
   changeSampleIDInput(event) {
@@ -55,8 +60,10 @@ export default class extends Controller {
   }
 
   readFile(event) {
-    const { files } = event.target;
+    this.#processFile(event.target.files);
+  }
 
+  #processFile(files) {
     this.removeSampleIDInputOptions();
     this.resetDialogState();
     this.disableErrorState();
