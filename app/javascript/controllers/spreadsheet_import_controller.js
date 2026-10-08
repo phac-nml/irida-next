@@ -3,8 +3,12 @@ import * as XLSX from "xlsx";
 import { notifyRefreshControllers } from "utilities/refresh";
 
 export default class extends Controller {
+  // Identifies the latest file read so stale results are ignored.
+  #fileProcessingToken;
+
   static outlets = ["refresh"];
   static targets = [
+    "fileInput",
     "sampleNameColumn",
     "projectPUIDColumn",
     "sampleDescriptionColumn",
@@ -45,6 +49,10 @@ export default class extends Controller {
         "spreadsheet_import_static_project_id_hidden",
       );
     }
+    // Dialog is Turbo-injected; a file picked before connect misses the change event, so handle it here.
+    if (this.hasFileInputTarget && this.fileInputTarget.files.length) {
+      this.#processFile(this.fileInputTarget.files);
+    }
   }
 
   changeInputValue(event) {
@@ -75,7 +83,12 @@ export default class extends Controller {
   }
 
   readFile(event) {
-    const { files } = event.target;
+    this.#processFile(event.target.files);
+  }
+
+  #processFile(files) {
+    const processingToken = Symbol();
+    this.#fileProcessingToken = processingToken;
 
     this.#clearFormOptions();
 
@@ -87,6 +100,10 @@ export default class extends Controller {
     reader.readAsArrayBuffer(files[0]);
 
     reader.onload = () => {
+      if (this.#fileProcessingToken !== processingToken) {
+        return;
+      }
+
       const workbook = XLSX.read(reader.result, { sheetRows: 1 });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];

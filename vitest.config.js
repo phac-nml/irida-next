@@ -9,6 +9,8 @@ const jsRoot = resolve(
 const fullCoverageFiles = [
   "app/javascript/controllers/action_button_controller.js",
   "app/javascript/controllers/attachment_upload_controller.js",
+  "app/javascript/controllers/metadata/file_import_controller.js",
+  "app/javascript/controllers/spreadsheet_import_controller.js",
   "app/javascript/controllers/activities/extended_details_controller.js",
   "app/javascript/controllers/clipboard_controller.js",
   "app/javascript/controllers/colour_mode_controller.js",
@@ -114,6 +116,8 @@ export default defineConfig({
       "utilities/refresh": resolve(jsRoot, "utilities/refresh.js"),
       "utilities/styles": resolve(jsRoot, "utilities/styles.js"),
       "utilities/dialog": resolve(jsRoot, "utilities/dialog.js"),
+      "utilities/collection": resolve(jsRoot, "utilities/collection.js"),
+      "utilities/flash": resolve(jsRoot, "utilities/flash.js"),
       "utilities/message_formatter": resolve(
         jsRoot,
         "utilities/message_formatter.js",
