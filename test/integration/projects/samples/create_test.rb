@@ -11,6 +11,47 @@ module Projects
         @sample1 = samples(:sample1)
         @sample2 = samples(:sample2)
         @project1_namespace = namespaces_project_namespaces(:project1_namespace)
+        @project = projects(:project1)
+        @namespace = groups(:group_one)
+      end
+
+      test 'should create sample' do
+        assert_difference('Sample.count') do
+          post namespace_project_samples_url(@namespace, @project),
+               params: { sample: {
+                 description: @sample1.description,
+                 name: 'New Sample'
+               } },
+               as: :turbo_stream
+        end
+
+        assert_redirected_to namespace_project_sample_url(id: Sample.last.id)
+      end
+
+      test 'should not create a sample with short sample name parameter' do
+        assert_difference -> { Sample.count } => 0,
+                          -> { @namespace.reload.samples_count } => 0,
+                          -> { @project.reload.samples_count } => 0 do
+          post namespace_project_samples_url(@namespace, @project),
+               params: { sample: {
+                 description: @sample1.description,
+                 name: '?'
+               } }
+        end
+        assert_response :unprocessable_content
+      end
+
+      test 'should not create a sample with same sample name parameter' do
+        assert_difference -> { Sample.count } => 0,
+                          -> { @namespace.reload.samples_count } => 0,
+                          -> { @project.reload.samples_count } => 0 do
+          post namespace_project_samples_url(@namespace, @project),
+               params: { sample: {
+                 description: @sample1.description,
+                 name: 'Project 1 Sample 1'
+               } }
+        end
+        assert_response :unprocessable_content
       end
 
       test 'create sample' do
