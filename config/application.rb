@@ -15,6 +15,16 @@ module Irida
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
 
+    # This host still uses importmap. Keep Pathogen modules available until the
+    # host's independent JavaScript bundling migration replaces this bridge.
+    initializer 'irida.pathogen_importmap', after: 'pathogen_view_components.assets',
+                                            before: 'importmap.cache_sweeper' do |app|
+      javascript_root = Pathogen::ViewComponents::Engine.root.join('app/assets/javascripts')
+      app.config.assets.paths << javascript_root
+      app.config.assets.excluded_paths.delete(javascript_root.to_s)
+      app.config.importmap.cache_sweepers << javascript_root
+    end
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

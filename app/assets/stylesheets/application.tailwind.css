@@ -664,6 +664,78 @@ div.field_with_errors :is(input, select, textarea):focus-visible {
   @apply outline-red-700 dark:outline-red-400;
 }
 
+/* Cursor results use the space left by the real page chrome and its existing
+   padding. Keep short grids content-sized; the shared fill layout shrinks long
+   grids into this space and owns their internal scrolling. */
+.content:has(.samples-cursor-page) {
+  display: flex;
+  flex-direction: column;
+}
+
+.content:has(.samples-cursor-page) > header {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#main-content:has(.samples-cursor-page) {
+  position: static;
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+#main-content:has(.samples-cursor-page) > div {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.samples-cursor-page {
+  display: flex;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  flex: 1;
+  flex-direction: column;
+}
+
+.samples-cursor-page > :not(#project-samples-results),
+#project-samples-results > :not(.samples-cursor-table) {
+  flex-shrink: 0;
+}
+
+.samples-cursor-table {
+  display: flex;
+  min-height: 20rem;
+  flex: 0 1 auto;
+  flex-direction: column;
+}
+
+/* Published Pathogen compatibility: the shared grid now owns this responsive
+   rule. Keep this scoped fallback until the host upgrades its pinned release. */
+.samples-data-grid:not(.pvc-data-grid--virtual) {
+  container-type: inline-size;
+  container-name: pvc-data-grid;
+}
+
+@container pvc-data-grid (width < 48rem) {
+  .samples-data-grid:not(.pvc-data-grid--virtual) .pvc-data-grid__scroll {
+    --pvc-data-grid-horizontal-sticky: 0;
+  }
+
+  .samples-data-grid:not(.pvc-data-grid--virtual) [data-sticky-cell] {
+    left: auto;
+  }
+
+  .samples-data-grid:not(.pvc-data-grid--virtual)
+    [role="gridcell"][data-sticky-cell] {
+    position: relative;
+  }
+}
+
 .table-container table:not(:has(tbody td)) {
   display: none;
 }
