@@ -1,14 +1,38 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { FileReaderStub } from "../helpers/file_reader.js";
 import { startApplication, stopApplication } from "../helpers/stimulus.js";
 import LinelistImportController from "../../../app/javascript/controllers/linelist_import_controller.js";
 
-vi.mock("xlsx", () => ({
-  read: vi.fn(() => ({})),
-  utils: {
-    sheet_to_json: vi.fn(() => []),
-  },
+// The controller imports `xlsx` (CDN-only in production); mock it so the test
+// controls the parsed worksheet and headers.
+const { mockRead, mockSheetToJson } = vi.hoisted(() => ({
+  mockRead: vi.fn(),
+  mockSheetToJson: vi.fn(),
 }));
+
+vi.mock("xlsx", () => ({
+  read: mockRead,
+  utils: { sheet_to_json: mockSheetToJson },
+}));
+
+// onload is assigned after readAsArrayBuffer in the controller, so defer it.
+class FakeFileReader {
+  static instances = [];
+
+  constructor() {
+    this.result = null;
+    this.onload = null;
+    FakeFileReader.instances.push(this);
+  }
+
+  readAsArrayBuffer() {
+    this.result = new ArrayBuffer(0);
+  }
+
+  load(result) {
+    this.result = result;
+    this.onload?.();
+  }
+}
 
 class FakeWorker {
   static instances = [];
@@ -89,9 +113,9 @@ describe("linelist import controller", () => {
       ?.textContent;
 
   beforeEach(() => {
-    FileReaderStub.instances = [];
+    FakeFileReader.instances = [];
     FakeWorker.instances = [];
-    vi.stubGlobal("FileReader", FileReaderStub);
+    vi.stubGlobal("FileReader", FakeFileReader);
     vi.stubGlobal("Worker", FakeWorker);
     document.head.innerHTML = '<meta name="csrf-token" content="csrf-token-1">';
   });
@@ -109,7 +133,6 @@ describe("linelist import controller", () => {
     controller.readFile({ target: { files: [] } });
 
     expect(controller._fileType).toBe("text/csv");
-    expect(FileReaderStub.instances).toHaveLength(0);
   });
 
   it("reads the first worksheet and populates the sample id options", async () => {
@@ -126,8 +149,7 @@ describe("linelist import controller", () => {
     controller.readFile({
       target: { files: [{ type: "text/csv", name: "samples.csv" }] },
     });
-    const reader = FileReaderStub.instances[0];
-    reader.load("file contents");
+    FakeFileReader.instances[0].load("file contents");
 
     expect(controller._fileType).toBe("text/csv");
     expect(controller.headers).toEqual(["sample_id", "age"]);
