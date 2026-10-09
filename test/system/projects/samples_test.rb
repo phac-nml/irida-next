@@ -69,176 +69,183 @@ module Projects
       Flipper.disable(:data_grid_samples_table)
     end
 
-    test 'create sample' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                           locale: @user.locale))
-      # sample does not currently exist
-      assert_no_selector 'table tbody tr td:nth-child(2)', text: 'New Name'
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # launch dialog
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.new_sample')
-
-      # fill new sample fields
-      fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
-      fill_in I18n.t('activerecord.attributes.sample.name'), with: 'New Name'
-      click_button I18n.t('helpers.submit.sample.create', model: Sample.model_name.human,
-                                                          default: :'helpers.submit.create')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      # success flash msg
-      assert_text I18n.t('projects.samples.create.success')
-      # verify redirect to sample show page after successful sample creation
-      assert_selector 'h1', text: 'New Name'
-      assert_selector 'p', text: 'A sample description'
-
-      # verify sample exists in samples table
-      click_link 'Samples', match: :first
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 4, count: 4,
-                                                                                           locale: @user.locale))
-      assert_selector 'table tbody tr td:nth-child(2)', text: 'New Name'
-      ### VERIFY END ###
-    end
-
-    test 'create sample with missing name' do
-      ### SETUP START ###
+    test 'User with role >= Analyst sees select and deselect buttons for samples table' do
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
                                                                                            locale: @user.locale))
 
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # launch dialog
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.new_sample')
-
-      # fill new sample fields
-      fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
-      fill_in I18n.t('activerecord.attributes.sample.name'), with: ''
-      click_button I18n.t('helpers.submit.sample.create', model: Sample.model_name.human,
-                                                          default: :'helpers.submit.create')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      assert_text "Name can't be blank"
-      assert_text 'Name is too short (minimum is 3 characters)'
-      ### VERIFY END ###
+      # The submit buttons are visible and linked to their hidden forms via the form attribute
+      assert_selector 'button#select-all-button'
+      assert_selector 'button#deselect-all-button'
+      assert_selector 'form#select-all-form', visible: false
+      assert_selector 'form#deselect-all-form', visible: false
     end
 
-    test 'create sample with existing name' do
-      ### SETUP START ###
+    test 'User with role < Analyst does not see select and deselect buttons for samples table' do
+      login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
                                                                                            locale: @user.locale))
 
-      ### SETUP END ###
+      assert_no_selector 'button#select-all-button'
+      assert_no_selector 'button#deselect-all-button'
+      assert_no_selector 'form#select-all-form', visible: :all
+      assert_no_selector 'form#deselect-all-form', visible: :all
+    end
 
-      ### ACTIONS START ###
-      # launch dialog
+    test 'User with role >= Analyst sees sample table checkboxes' do
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: @user.locale))
+
+      assert_selector 'input#select-page'
+      assert_selector "input##{dom_id(@sample1, :checkbox)}"
+    end
+
+    test 'User with role < Analyst does not see sample table checkboxes' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: @user.locale))
+
+      assert_no_selector 'input#select-page'
+      assert_no_selector "input##{dom_id(@sample1, :checkbox)}"
+    end
+
+    test 'User with role >= Analyst sees workflow execution link' do
+      user = users(:james_doe)
+      login_as user
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: user.locale))
+
+      assert_selector 'span',
+                      text: I18n.t('projects.samples.index.workflows.button_sr', locale: user.locale)
+    end
+
+    test 'User with role < Analyst does not see workflow execution link' do
+      user = users(:ryan_doe)
+      login_as user
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: user.locale))
+
+      assert_no_selector 'span', text: I18n.t('projects.samples.index.workflows.button_sr')
+    end
+
+    test 'User with role >= Analyst sees sample actions dropdown' do
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: @user.locale))
+      assert_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
+    end
+
+    test 'User with role < Analyst does not see sample actions dropdown' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: @user.locale))
+      assert_no_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
+    end
+
+    test 'User with role >= Analyst sees create export button' do
+      user = users(:james_doe)
+      login_as user
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: user.locale))
+
+      click_button I18n.t('shared.samples.actions_dropdown.label', locale: user.locale)
+      assert_selector 'button',
+                      text: I18n.t('shared.samples.actions_dropdown.linelist_export', locale: user.locale)
+      assert_selector 'button',
+                      text: I18n.t('shared.samples.actions_dropdown.sample_export', locale: user.locale)
+    end
+
+    test 'User with role < Analyst does not see create export button' do
+      user = users(:ryan_doe)
+      login_as user
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: user.locale))
+
+      assert_no_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
+    end
+
+    test 'User with role >= Maintainer sees import metadata button' do
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: @user.locale))
+    end
+
+    test 'User with role == Analyst sees sample actions dropdown but not import metadata button' do
+      login_as users(:michelle_doe)
+      project = projects(:project24)
+      visit namespace_project_samples_url(project.parent, project)
+
+      assert_text I18n.t('projects.samples.index.no_associated_samples')
+
       click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.new_sample')
-
-      # fill new sample fields
-      fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
-      fill_in I18n.t('activerecord.attributes.sample.name'), with: @sample1.name
-      click_button I18n.t('helpers.submit.sample.create', model: Sample.model_name.human,
-                                                          default: :'helpers.submit.create')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      assert_text 'Name has already been taken'
-      ### VERIFY END ###
+      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.import_metadata')
     end
 
-    test 'edit sample' do
-      ### SETUP START ###
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-      # verify header has loaded to prevent flakes
-      assert_selector 'h1', text: @sample1.name
-      ### SETUP END ###
+    test 'User with role >= Maintainer sees new sample button' do
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: @user.locale))
 
-      ### ACTIONS START ###
-      # nav to edit sample page
-      click_on I18n.t('projects.samples.show.edit_button')
-
-      # verify current sample doesn't have with new properties that will be used
-      assert_no_text 'A new description'
-      assert_no_text 'New Sample Name'
-      # change current sample properties
-      fill_in 'Description', with: 'A new description'
-      fill_in 'Name', with: 'New Sample Name'
-      click_button I18n.t('projects.samples.edit.submit_button')
-      ### ACTIONS END ###
-
-      ### results start ###
-      # success flash msg
-      assert_text I18n.t('projects.samples.update.success')
-
-      # verify redirect to sample show page and updated sample state
-      assert_selector 'h1', text: 'New Sample Name'
-      assert_text 'A new description'
-      ### results end ###
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.new_sample')
     end
 
-    test 'edit sample with blank name' do
-      ### SETUP START ###
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-      # verify header has loaded to prevent flakes
-      assert_selector 'h1', text: @sample1.name
-      ### SETUP END ###
+    test 'User with role < Maintainer does not see new sample button' do
+      user = users(:michelle_doe)
+      project = projects(:project24)
+      login_as user
+      visit namespace_project_samples_url(project.parent, project)
 
-      ### ACTIONS START ###
-      # nav to edit sample page
-      click_on I18n.t('projects.samples.show.edit_button')
-
-      # verify current sample doesn't have with new properties that will be used
-      assert_no_text 'A new description'
-      assert_no_text 'New Sample Name'
-      # change current sample properties
-      fill_in 'Description', with: 'A new description'
-      fill_in 'Name', with: ''
-      click_button I18n.t('projects.samples.edit.submit_button')
-      ### ACTIONS END ###
-
-      ### results start ###
-      assert_text "Name can't be blank"
-      assert_text 'Name is too short (minimum is 3 characters)'
-      ### results end ###
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.new_sample')
     end
 
-    test 'edit sample to match existing sample' do
-      ### SETUP START ###
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-      # verify header has loaded to prevent flakes
-      assert_selector 'h1', text: @sample1.name
-      ### SETUP END ###
+    test 'User with role == Owner sees delete samples button' do
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
+                                                                                           locale: @user.locale))
 
-      ### ACTIONS START ###
-      # nav to edit sample page
-      click_on I18n.t('projects.samples.show.edit_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
+    end
 
-      # verify current sample doesn't have with new properties that will be used
-      assert_no_text 'A new description'
-      assert_no_text 'New Sample Name'
-      # change current sample properties
-      fill_in 'Description', with: 'A new description'
-      fill_in 'Name', with: @sample2.name
-      click_on I18n.t('projects.samples.edit.submit_button')
-      ### ACTIONS END ###
+    test 'User with role < Owner does not see delete samples button' do
+      user = users(:michelle_doe)
+      project = projects(:project24)
+      login_as user
+      visit namespace_project_samples_url(project.parent, project)
 
-      ### results start ###
-      assert_text 'Name has already been taken'
-      ### results end ###
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
+    end
+
+    test 'cannot access project samples' do
+      login_as users(:user_no_access)
+
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_text I18n.t(:'action_policy.policy.project.sample_listing?', name: @project.name)
     end
 
     test 'filter highlighting for sample name' do
