@@ -50,7 +50,9 @@ describe("LinelistImportController", () => {
           <option value="">Select…</option>
         </select>
         <div data-linelist-import-target="metadataColumns" class="hidden" aria-hidden="true"></div>
-        <div data-linelist-import-target="error" class="hidden" aria-hidden="true"></div>
+        <div data-linelist-import-target="error" class="hidden" aria-hidden="true">
+          <span data-linelist-import-target="errorMessage"></span>
+        </div>
         <button type="submit" data-linelist-import-target="submitButton" disabled>Submit</button>
       </div>
     `;
