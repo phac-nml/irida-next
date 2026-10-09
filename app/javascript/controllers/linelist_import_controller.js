@@ -15,6 +15,7 @@ export default class extends Controller {
   static targets = [
     "alertTemplate",
     "dialogTemplate",
+    "errorMessage",
     "flashTemplate",
     "progressTemplate",
   ];
@@ -37,6 +38,15 @@ export default class extends Controller {
     importCompleteMessage: {
       type: String,
       default: "The metadata import is complete",
+    },
+    duplicateHeadersMessage: {
+      type: String,
+      default:
+        "The uploaded spreadsheet contains duplicate column headers. Please rename them before importing.",
+    },
+    noValidMetadataMessage: {
+      type: String,
+      default: "The uploaded spreadsheet contains no viable metadata",
     },
     errorMessage: {
       type: String,
@@ -61,6 +71,7 @@ export default class extends Controller {
     super.removeSampleIDInputOptions();
     super.resetDialogState();
     super.disableErrorState();
+    this.errorMessageTarget.textContent = this.noValidMetadataMessageValue;
 
     if (!files.length) {
       return;
@@ -78,6 +89,13 @@ export default class extends Controller {
       this.headers = XLSX.utils.sheet_to_json(this._worksheet, {
         header: 1,
       })[0];
+
+      if (this.#hasDuplicateHeaders()) {
+        this.errorMessageTarget.textContent = this.duplicateHeadersMessageValue;
+        this.#showDuplicateHeadersError();
+        return;
+      }
+
       super.addSampleIDInputOptions();
     };
   }
@@ -239,6 +257,21 @@ export default class extends Controller {
   #csrfToken() {
     const meta = document.querySelector('meta[name="csrf-token"]');
     return meta ? meta.getAttribute("content") : "";
+  }
+
+  #showDuplicateHeadersError() {
+    this.errorTarget.classList.remove("hidden");
+    this.errorTarget.removeAttribute("aria-hidden");
+    this.submitButtonTarget.disabled = true;
+    this.submitButtonTarget.setAttribute("aria-disabled", "true");
+  }
+
+  #hasDuplicateHeaders() {
+    const normalizedHeaders = this.headers
+      .filter((header) => header != null && String(header).trim() !== "")
+      .map((header) => String(header).trim().toLowerCase());
+
+    return new Set(normalizedHeaders).size !== normalizedHeaders.length;
   }
 
   #terminateWorker() {
