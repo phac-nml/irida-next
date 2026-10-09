@@ -29,14 +29,10 @@
                     @md:border-r-0 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300
                   "
                   role="group"
-                  aria-label="<%= root_url %><%= project&.parent&.full_path %>"
+                  aria-label="<%= root_url %><%= project.parent.full_path %>"
                 >
-                  <% if project.parent %>
-                    <%= root_url %>
-                    <span class="font-bold"><%= project.parent.full_path + "/" %></span>
-                  <% else %>
-                    <%= root_url %>
-                  <% end %>
+                  <%= root_url %>
+                  <span class="font-bold"><%= project.parent.full_path + "/" %></span>
                 </div>
 
                 <div class="grow">

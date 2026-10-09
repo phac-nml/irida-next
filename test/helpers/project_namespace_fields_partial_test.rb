@@ -16,7 +16,7 @@ class ProjectNamespaceFieldsPartialTest < ActionView::TestCase
              authorized_namespaces: [user.namespace]
            }
 
-    assert_select '#project_namespace_attributes_namespace_error', text: /Namespace required/
+    assert_select '#project_namespace_attributes_namespace_error', text: /Namespace is required/
     assert_select '#project_namespace_attributes_namespace_error', text: /Name is too short/, count: 0
     assert_select '#project_namespace_attributes_name_error', text: /Name is too short/
   end
