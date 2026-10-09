@@ -43,6 +43,29 @@ module Profiles
         assert_not OptInService.new(@user, form).execute
       end
 
+      test 'execute returns false when no form is provided' do
+        SystemFeatureFlags::UpdateUserOptIn.expects(:new).never
+
+        assert_not OptInService.new(@user).execute
+      end
+
+      test 'execute adds a mutation error when the update result fails' do
+        mutation_failed_result = SystemFeatureFlags::BaseFeatureFlagService::Result.new(
+          status: :failure, entry: nil, error: :mutation_failed
+        )
+        mock_service = mock('update_user_opt_in')
+        mock_service.stubs(:execute).returns(mutation_failed_result)
+        SystemFeatureFlags::UpdateUserOptIn.stubs(:new).returns(mock_service)
+
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          form = build_form(feature_key: 'data_grid_samples_table', enabled: true)
+
+          assert_not OptInService.new(@user, form).execute
+          assert_includes form.errors.details[:base].pluck(:error), :flipper_error
+          assert_empty form.errors.details[:feature_key]
+        end
+      end
+
       test 'execute adds not_eligible when actor mutation is rejected by runtime guard' do
         with_user_opt_in_features(user_opt_in_feature_config) do
           form = build_form(feature_key: 'data_grid_samples_table', enabled: true)
@@ -60,7 +83,7 @@ module Profiles
       end
 
       test 'execute adds flipper_error when toggle fails' do
-        Flipper.expects(:enable_actor).raises(Flipper::Error, 'adapter failed')
+        SystemFeatureFlags::UpdateUserOptIn.stubs(:new).raises(Flipper::Error, 'adapter failed')
         Rails.logger.expects(:error).with(regexp_matches(/adapter failed/))
 
         with_user_opt_in_features(user_opt_in_feature_config) do
@@ -91,6 +114,19 @@ module Profiles
         end
       end
 
+      test 'feature returns nil for a blank feature key' do
+        assert_nil OptInService.new(@user).feature('')
+        assert_nil OptInService.new(@user).feature(nil)
+      end
+
+      test 'feature returns nil for an unknown feature when include_ineligible is true' do
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          feature = OptInService.new(@user).feature('unknown_feature', include_ineligible: true)
+
+          assert_nil feature
+        end
+      end
+
       test 'feature returns nil for ineligible user by default' do
         config = user_opt_in_feature_config(allowlist: [users(:jane_doe).email])
 
@@ -112,6 +148,18 @@ module Profiles
           assert_equal 'Enable the new data grid for the samples table.', feature[:description]
           assert_equal false, feature[:enabled]
         end
+      end
+
+      test 'feature returns payload with the current enabled state' do
+        Flipper.enable_actor(:data_grid_samples_table, @user)
+
+        with_user_opt_in_features(user_opt_in_feature_config) do
+          feature = OptInService.new(@user).feature(:data_grid_samples_table)
+
+          assert_equal true, feature[:enabled]
+        end
+      ensure
+        Flipper.disable_actor(:data_grid_samples_table, @user)
       end
 
       private

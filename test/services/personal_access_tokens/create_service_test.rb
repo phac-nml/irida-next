@@ -18,8 +18,44 @@ module PersonalAccessTokens
       namespace_bot = namespace_bots(:project1_bot0)
 
       assert_difference -> { PersonalAccessToken.count } => 1 do
-        PersonalAccessTokens::CreateService.new(@user, valid_params, @project.namespace, namespace_bot.user).execute
+        token = PersonalAccessTokens::CreateService.new(
+          @user, valid_params, @project.namespace, namespace_bot.user
+        ).execute
+
+        assert_predicate token, :persisted?
+        assert_equal namespace_bot.user, token.user
+        assert_equal valid_params[:name], token.name
+        assert_equal valid_params[:scopes], token.scopes
       end
+    end
+
+    test 'authorizes project namespace when creating a bot token' do
+      valid_params = { name: 'Uploader', scopes: %w[read_api api] }
+
+      assert_authorized_to(:generate_bot_personal_access_token?, @project.namespace,
+                           with: Namespaces::ProjectNamespacePolicy,
+                           context: { user: @user }) do
+        PersonalAccessTokens::CreateService.new(
+          @user, valid_params, @project.namespace, namespace_bots(:project1_bot0).user
+        ).execute
+      end
+    end
+
+    test 'does not create a bot token without namespace authorization' do
+      user = users(:micha_doe)
+      valid_params = { name: 'Uploader', scopes: %w[read_api api] }
+
+      exception = nil
+      assert_no_difference -> { PersonalAccessToken.count } do
+        exception = assert_raises(ActionPolicy::Unauthorized) do
+          PersonalAccessTokens::CreateService.new(
+            user, valid_params, @project.namespace, namespace_bots(:project1_bot0).user
+          ).execute
+        end
+      end
+
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+      assert_equal :generate_bot_personal_access_token?, exception.rule
     end
 
     test 'create new personal access token for bot account with missing token name' do
@@ -84,6 +120,21 @@ module PersonalAccessTokens
       }
 
       assert_difference -> { PersonalAccessToken.count } => 1 do
+        token = PersonalAccessTokens::CreateService.new(@user, valid_params).execute
+
+        assert_predicate token, :persisted?
+        assert_equal @user, token.user
+        assert_equal valid_params[:name], token.name
+        assert_equal valid_params[:scopes], token.scopes
+      end
+    end
+
+    test 'authorizes the current user when creating a user token' do
+      valid_params = { name: 'Uploader', scopes: %w[read_api api] }
+
+      assert_authorized_to(:generate_bot_personal_access_token?, @user,
+                           with: UserPolicy,
+                           context: { user: @user }) do
         PersonalAccessTokens::CreateService.new(@user, valid_params).execute
       end
     end
