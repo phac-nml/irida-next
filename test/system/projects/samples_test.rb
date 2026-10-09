@@ -2198,8 +2198,8 @@ module Projects
       ### SETUP END ###
 
       ### actions and VERIFY START ###
-      click_button I18n.t(:'components.advanced_search_component.v1.title')
-      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
         within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
           find("input[role='combobox']").send_keys('metadatafield1', :enter)
@@ -2207,9 +2207,9 @@ module Projects
           find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
         end
       end
-      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
-      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
@@ -2219,11 +2219,11 @@ module Projects
         assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
 
-      click_button I18n.t(:'components.advanced_search_component.v1.title')
-      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-      click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
-      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']", focused: true
+      assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']", focused: true
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
@@ -2245,8 +2245,8 @@ module Projects
         ### SETUP END ###
 
         ### actions and VERIFY START ###
-        click_button I18n.t(:'components.advanced_search_component.v1.title')
-        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        click_button I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
             find("input[role='combobox']").send_keys('metadatafield1', :enter)
@@ -2254,9 +2254,9 @@ module Projects
             find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
           end
         end
-        click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
-        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']",
+        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']",
                         focused: true
 
         within '#samples-table table tbody' do
@@ -2267,11 +2267,11 @@ module Projects
           assert_selector "tr[id='#{dom_id(@sample30)}']"
         end
 
-        click_button I18n.t(:'components.advanced_search_component.v1.title')
-        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-        click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
-        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']",
+        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']",
                         focused: true
 
         within '#samples-table table tbody' do
@@ -2296,8 +2296,8 @@ module Projects
         ### SETUP END ###
 
         ### actions and VERIFY START ###
-        click_button I18n.t(:'components.advanced_search_component.v1.title')
-        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+        click_button I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
             find("input[role='combobox']").send_keys('metadatafield1', :enter)
@@ -2305,9 +2305,9 @@ module Projects
             find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
           end
         end
-        click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
-        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']",
+        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']",
                         focused: true
 
         within '#samples-table table tbody' do
@@ -2318,11 +2318,11 @@ module Projects
           assert_selector "tr[id='#{dom_id(@sample30)}']"
         end
 
-        click_button I18n.t(:'components.advanced_search_component.v1.title')
-        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-        click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
+        click_button I18n.t(:'components.advanced_search_component.title')
+        assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
+        click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
 
-        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.title')}']",
+        assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.title')}']",
                         focused: true
 
         within '#samples-table table tbody' do
@@ -2358,8 +2358,8 @@ module Projects
       ### SETUP END ###
 
       ### actions and VERIFY START ###
-      click_button I18n.t(:'components.advanced_search_component.v1.title')
-      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
         within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
           find("input[role='combobox']").send_keys('example_date', :enter)
@@ -2367,7 +2367,7 @@ module Projects
           find("select[name$='[operator]']").find("option[value='date_exists']").select_option
         end
       end
-      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
 
       assert_selector 'table tbody tr', count: 3
       assert_selector 'table tbody tr th', text: sample61.puid

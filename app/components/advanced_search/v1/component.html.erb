@@ -6,7 +6,7 @@
     "advanced-search--v1-open-value": @open,
     "advanced-search--v1-status-value": @status,
     "advanced-search--v1-has-errors-value": @search.errors.any?,
-    "advanced-search--v1-confirm-close-text-value": t("components.advanced_search_component.v1.confirm_close_text"),
+    "advanced-search--v1-confirm-close-text-value": t("components.advanced_search_component.confirm_close_text"),
     "advanced-search--v1-list-input-outlet": ".list-input",
     "advanced-search--v1-enum-fields-value": json_escape_data(@fields.fetch(:enum_fields, {})),
     "advanced-search--v1-enum-operations-value": json_escape_data(enum_operation_options),
@@ -21,9 +21,9 @@
           class="<%= class_names("button button-default w-full focus-visible:z-10", { "rounded-e-none border-e-0": @status }) %>"
           data-viral--dialog-target="trigger"
           data-action="advanced-search--v1#renderSearch viral--dialog#open"
-          aria-label="<%= t("components.advanced_search_component.v1.title") %>"
+          aria-label="<%= t("components.advanced_search_component.title") %>"
         >
-          <%= t("components.advanced_search_component.v1.title") %>
+          <%= t("components.advanced_search_component.title") %>
         </button>
 
         <% if @status %>
@@ -31,7 +31,7 @@
             type="button"
             class="button rounded-s-none button-default"
             data-action="advanced-search--v1#clearForm filters#submit"
-            aria-label="<%= t("components.advanced_search_component.v1.clear_aria_label") %>"
+            aria-label="<%= t("components.advanced_search_component.clear_aria_label") %>"
           >
             <%= icon(:x, size: :sm) %>
           </button>
@@ -39,7 +39,7 @@
       </div>
     <% end %>
 
-    <% dialog.with_header(title: t("components.advanced_search_component.v1.title")) %>
+    <% dialog.with_header(title: t("components.advanced_search_component.title")) %>
 
     <div class="space-y-4">
       <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
@@ -62,7 +62,7 @@
 
       <div class="flex justify-end space-x-2">
         <%= render Viral::ButtonComponent.new(data: { action: "advanced-search--v1#addGroup" }) do %>
-          <%= t("components.advanced_search_component.v1.add_group_button") %>
+          <%= t("components.advanced_search_component.add_group_button") %>
         <% end %>
       </div>
 
@@ -83,11 +83,11 @@
 
     <% dialog.with_primary_action(
       "data-action": "viral--dialog#close filters#submit",
-    ) { t("components.advanced_search_component.v1.apply_filter_button") } %>
+    ) { t("components.advanced_search_component.apply_filter_button") } %>
 
     <% dialog.with_secondary_action do %>
       <%= render Viral::ButtonComponent.new(data: { action: "advanced-search--v1#clearForm viral--dialog#close filters#submit" }) do %>
-        <%= t("components.advanced_search_component.v1.clear_filter_button") %>
+        <%= t("components.advanced_search_component.clear_filter_button") %>
       <% end %>
     <% end %>
   <% end %>
