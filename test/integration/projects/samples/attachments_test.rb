@@ -6,6 +6,7 @@ module Projects
   module Samples
     class AttachmentsTest < ActionDispatch::IntegrationTest
       include ActionView::Helpers::NumberHelper
+      include AdvancedSearchHelper
 
       setup do
         @sample1 = samples(:sample1)
@@ -641,6 +642,22 @@ module Projects
         assert_first_rows_include(attachment1.puid, attachment2.puid, row_scope: '#attachments-table-body')
       end
 
+      test 'default sort indicator matches query results when created_at and updated_at diverge' do
+        sign_in users(:john_doe)
+        attachment1 = attachments(:attachment1)
+        attachment2 = attachments(:attachment2)
+
+        # attachment1 created first but touched most recently; attachment2 created most recently but touched first.
+        attachment1.update!(created_at: 2.days.ago, updated_at: 1.hour.ago)
+        attachment2.update!(created_at: 1.hour.ago, updated_at: 2.days.ago)
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files')
+
+        assert_response :success
+        assert_sort_state(6, 'descending')
+        assert_first_rows_include(attachment2.puid, attachment1.puid, row_scope: '#attachments-table-body')
+      end
+
       test 'accessing a non-existent attachments page causes pagy overflow and redirects to the first page' do
         sign_in users(:john_doe)
 
@@ -723,6 +740,185 @@ module Projects
         sign_in users(:ryan_doe)
 
         get select_namespace_project_sample_attachments_url(@group, @project, @sample1, format: :turbo_stream)
+
+        assert_response :unauthorized
+      end
+
+      test 'advanced search filters sample attachments by format metadata field' do
+        sign_in users(:john_doe)
+        attachment1 = attachments(:attachment1)
+        attachment2 = attachments(:attachment2)
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'metadata.format', operator: '=', value: attachment1.metadata['format'] }]]
+            )
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: 2
+          assert_select "tr##{dom_id(attachment1)}"
+          assert_select "tr##{dom_id(attachment2)}"
+        end
+      end
+
+      test 'advanced search filters sample attachments by compression metadata field' do
+        sign_in users(:john_doe)
+        attachment1 = attachments(:attachment1)
+        attachment2 = attachments(:attachment2)
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'metadata.compression', operator: '=', value: 'none' }]]
+            )
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: 2
+          assert_select "tr##{dom_id(attachment1)}"
+          assert_select "tr##{dom_id(attachment2)}"
+        end
+      end
+
+      test 'advanced search filters sample attachments by filename' do
+        sign_in users(:john_doe)
+        attachment1 = attachments(:attachment1)
+        attachment2 = attachments(:attachment2)
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'filename', operator: 'contains', value: attachment1.file.filename.to_s.split('.').first }]]
+            )
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: 1
+          assert_select "tr##{dom_id(attachment1)}"
+          assert_select "tr##{dom_id(attachment2)}", count: 0
+        end
+      end
+
+      test 'advanced search filters sample attachments to only a reverse read' do
+        sign_in users(:john_doe)
+        attachment1 = attachments(:attachment1)
+        attachment2 = attachments(:attachment2)
+        attachment1.update!(metadata: attachment1.metadata.merge('direction' => 'forward',
+                                                                 'associated_attachment_id' => attachment2.id))
+        attachment2.update!(metadata: attachment2.metadata.merge('direction' => 'reverse',
+                                                                 'associated_attachment_id' => attachment1.id))
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'filename', operator: 'contains', value: attachment2.file.filename.to_s }]]
+            )
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: 1
+          assert_select "tr##{dom_id(attachment1)}", count: 0
+          assert_select "tr##{dom_id(attachment2)}"
+        end
+      end
+
+      test 'advanced search does not duplicate a paired sample attachment when both mates match' do
+        sign_in users(:john_doe)
+        attachment1 = attachments(:attachment1)
+        attachment2 = attachments(:attachment2)
+        attachment1.update!(metadata: attachment1.metadata.merge('direction' => 'forward',
+                                                                 'associated_attachment_id' => attachment2.id))
+        attachment2.update!(metadata: attachment2.metadata.merge('direction' => 'reverse',
+                                                                 'associated_attachment_id' => attachment1.id))
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'byte_size', operator: '>=', value: '0' }]]
+            )
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: 2
+          assert_select "tr##{dom_id(attachment1)}"
+          assert_select "tr##{dom_id(attachment2)}"
+          assert_select 'a', text: attachment1.file.filename.to_s, count: 1
+          assert_select 'a', text: attachment2.file.filename.to_s, count: 1
+        end
+      end
+
+      test 'advanced search filters sample attachments by puid' do
+        sign_in users(:john_doe)
+        attachment1 = attachments(:attachment1)
+        attachment2 = attachments(:attachment2)
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'id', operator: '=', value: attachment1.puid }]]
+            )
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: 1
+          assert_select "tr##{dom_id(attachment1)}"
+          assert_select "tr##{dom_id(attachment2)}", count: 0
+        end
+      end
+
+      test 'advanced search filters sample attachments by byte size' do
+        sign_in users(:john_doe)
+        attachment1 = attachments(:attachment1)
+        attachment2 = attachments(:attachment2)
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'byte_size', operator: '>=', value: '0' }]]
+            )
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: 2
+          assert_select "tr##{dom_id(attachment1)}"
+          assert_select "tr##{dom_id(attachment2)}"
+        end
+      end
+
+      test 'advanced search filters sample attachments using multiple conditions in a group' do
+        sign_in users(:john_doe)
+        attachment1 = attachments(:attachment1)
+        attachment2 = attachments(:attachment2)
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'metadata.format', operator: '=', value: attachment1.metadata['format'] },
+                { field: 'metadata.compression', operator: '=', value: 'none' }]]
+            )
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select "tr##{dom_id(attachment1)}"
+          assert_select "tr##{dom_id(attachment2)}"
+        end
+      end
+
+      test 'advanced search with no results displays correctly for samples' do
+        sign_in users(:john_doe)
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'metadata.format', operator: '=', value: 'nonexistent_format' }]]
+            )
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: 0
+        end
+      end
+
+      test 'cannot use advanced search filters for a sample without proper access' do
+        sign_in users(:micha_doe)
+
+        get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+            params: advanced_search_params(
+              [[{ field: 'metadata.format', operator: '=', value: 'json' }]]
+            )
 
         assert_response :unauthorized
       end

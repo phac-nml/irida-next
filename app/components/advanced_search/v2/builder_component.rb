@@ -51,6 +51,10 @@ module AdvancedSearch
         enum_operators
       end
 
+      def numeric_operation_options
+        @operations['standard'].select { |_, value| AdvancedSearch::NUMERIC_OPERATOR_VALUES.include?(value) }
+      end
+
       def operation_options # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         standard_operations = { 'standard' => {
           I18n.t('components.advanced_search_component.v1.operations.standard.equals') => '=',

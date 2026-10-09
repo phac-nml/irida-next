@@ -20,6 +20,8 @@ export default class AdvancedSearchController extends Controller {
     confirmCloseText: String,
     enumFields: Object,
     enumOperations: Object,
+    numericFields: Array,
+    numericOperations: Object,
     operations: Object,
     hasErrors: Boolean,
     open: Boolean,
@@ -352,6 +354,8 @@ export default class AdvancedSearchController extends Controller {
         this.operationsValue["metadata"],
         operator,
       );
+    } else if (this.numericFieldsValue.includes(selectedField)) {
+      this.#createOperatorOptions(this.numericOperationsValue, operator);
     } else {
       this.#createOperatorOptions(this.operationsValue["standard"], operator);
     }

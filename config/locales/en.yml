@@ -49,6 +49,7 @@ en:
               not_a_date_operator: cannot be used on dates
               use_metadata_operator: is an invalid operator for metadata fields
               use_non_metadata_operator: is an invalid operator for non-metadata fields
+              use_numeric_operator: is an invalid operator for numeric fields
             to_value:
               lower_than_from: must be greater than From value
             value:

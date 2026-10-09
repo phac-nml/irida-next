@@ -6,6 +6,9 @@ module AdvancedSearch
     'standard' => %w[= != in not_in]
   }.freeze
 
+  # Operators allowed for fields that only accept numeric values (e.g. byte_size).
+  NUMERIC_OPERATOR_VALUES = %w[= != <= >= in not_in between].freeze
+
   # Builds field option payloads for advanced-search UI rendering.
   class Fields
     WORKFLOW_FIELD_LABELS = {
@@ -20,12 +23,28 @@ module AdvancedSearch
     }.freeze
 
     class << self
-      def build(options:, groups: {}, enum_fields: {})
+      def build(options:, groups: {}, enum_fields: {}, numeric_fields: [])
         {
           options: Array(options),
           groups: groups || {},
-          enum_fields:
+          enum_fields:,
+          numeric_fields: Array(numeric_fields)
         }
+      end
+
+      def for_attachments(field_configuration: Attachment::FieldConfiguration)
+        metadata_fields = field_configuration::SEARCHABLE_FIELDS.select { |field| field.start_with?('metadata.') }
+        base_fields = field_configuration::SEARCHABLE_FIELDS - metadata_fields
+
+        options = Array(base_fields).map do |field|
+          [I18n.t("components.attachments.table_component.#{field}", default: field.to_s.humanize), field]
+        end
+
+        metadata_options = Array(metadata_fields).map do |field|
+          [field.delete_prefix('metadata.').humanize, field]
+        end
+
+        build(options:, groups: metadata_group(metadata_options), numeric_fields: field_configuration::NUMERIC_FIELDS)
       end
 
       def for_samples(sample_fields:, metadata_fields:)

@@ -1,4 +1,8 @@
-<%# locals: (namespace:, pagy:, q:, attachments:, render_individual_attachments:, has_attachments:) -%>
+<%# locals: (allowed_to: @allowed_to, attachments:, has_attachments:, namespace:, pagy:, q:, render_individual_attachments:, results_message: @results_message, search:, search_url:) -%>
+
+<% if Flipper.enabled?(:attachments_advanced_search) %>
+  <%= render "shared/attachments/advanced_search_form", search:, q:, pagy:, search_url:, results_message: %>
+<% end %>
 
 <%= render Attachments::TableComponent.new(
   attachments,
@@ -13,8 +17,8 @@
     # select_attachments: allowed_to?(:destroy_attachment?, namespace)
   },
   row_actions: {
-    preview: @allowed_to[:preview_attachment],
-    destroy: @allowed_to[:destroy_attachment],
+    preview: allowed_to[:preview_attachment],
+    destroy: allowed_to[:destroy_attachment],
   },
   empty: {
     icon_name: Attachment.icon,

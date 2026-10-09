@@ -5,6 +5,8 @@
     "advanced-search--v2--builder-list-input-outlet": ".list-input",
     "advanced-search--v2--builder-enum-fields-value": json_escape_data(@fields.fetch(:enum_fields, {})),
     "advanced-search--v2--builder-enum-operations-value": json_escape_data(enum_operation_options),
+    "advanced-search--v2--builder-numeric-fields-value": json_escape_data(@fields.fetch(:numeric_fields, [])),
+    "advanced-search--v2--builder-numeric-operations-value": json_escape_data(numeric_operation_options),
     "advanced-search--v2--builder-initial-state-value": json_escape_data(initial_state),
     "advanced-search--v2--builder-operations-value": json_escape_data(@operations),
   },
