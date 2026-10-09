@@ -89,6 +89,12 @@ linter:
         - "app/views/active_admin/**"
     html-no-space-in-tag:
       enabled: true
+    # The dialog owns this form. Herb's Action View graph incorrectly finds
+    # an enclosing form at this component's Turbo Stream call sites.
+    html-no-nested-forms:
+      enabled: true
+      exclude:
+        - "app/components/data_imports/linelist_import_dialog/v2/component.html.erb"
     html-no-title-attribute:
       enabled: true
 
