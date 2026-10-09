@@ -135,10 +135,13 @@ class BulkUpdateSampleMetadataMutationTest < ActiveSupport::TestCase
       }
     JSON
 
-    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
-                                 context: { current_user: @user, token: @api_scope_token },
-                                 variables: { metadata: metadata_payload,
-                                              projectId: @project2.to_global_id.to_s })
+    result = nil
+    assert_no_changes -> { @sample3.reload.metadata } do
+      result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_PROJECT_ID_MUTATION,
+                                   context: { current_user: @user, token: @api_scope_token },
+                                   variables: { metadata: metadata_payload,
+                                                projectId: @project2.to_global_id.to_s })
+    end
 
     assert_nil result['errors'], 'the mutation should return a user error, not a GraphQL error'
 
