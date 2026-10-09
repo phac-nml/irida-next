@@ -1,5 +1,6 @@
 import * as XLSX from "xlsx";
 import Controller from "controllers/metadata/file_import_controller";
+import { resolveLinelistImportWorkerSource } from "controllers/linelist_import/worker_source";
 import { omitBy, pick } from "utilities/collection";
 import { closeDialog, ensureDialog, openDialog } from "utilities/dialog";
 import { ensureFlash } from "utilities/flash";
@@ -19,6 +20,7 @@ export default class extends Controller {
     "progressTemplate",
   ];
   static values = {
+    workerUrl: String,
     graphqlUrl: String,
     groupPuid: String,
     projectPuid: String,
@@ -137,10 +139,9 @@ export default class extends Controller {
     let worker;
 
     if (typeof Worker !== "undefined") {
-      worker = new Worker(
-        new URL("../workers/linelist_import_worker.js", import.meta.url),
-        { type: "module" },
-      );
+      worker = new Worker(resolveLinelistImportWorkerSource(this), {
+        type: "module",
+      });
 
       worker.onerror = (error) => {
         console.error("Worker failed:", error.message);
