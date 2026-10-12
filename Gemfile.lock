@@ -404,7 +404,7 @@ GEM
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
     language_server-protocol (3.17.0.6)
-    lefthook (2.1.17)
+    lefthook (2.2.1)
     lint_roller (1.1.0)
     listen (3.10.1)
       logger
@@ -852,7 +852,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   json (< 3.0)
-  lefthook (~> 2.1)
+  lefthook (~> 2.2)
   listen
   local_time (~> 3.0, >= 3.0.2)
   logidze

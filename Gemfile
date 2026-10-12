@@ -216,7 +216,7 @@ group :development do
   gem 'i18n-tasks', '~> 1.1.2', require: false
 
   # git hooks
-  gem 'lefthook', '~> 2.1', require: false
+  gem 'lefthook', '~> 2.2', require: false
 end
 
 group :test do
