@@ -6,6 +6,7 @@
   "linelist-import-sortable-lists--v1--two-lists-selection-outlet": "#import-metadata-dialog-content",
   action: "linelist-import:sendMetadata->sortable-lists--v1--two-lists-selection#updateMetadataListing",
   "linelist-import-refresh-outlet": "[data-controller='refresh']",
+  "linelist-import-worker-url-value": helpers.asset_path("workers/linelist_import_worker.js"),
   "attachment-upload-uploading-text-value": t('shared.samples.metadata.file_imports.dialog.uploading'),
   "attachment-upload-success-text-value": t('common.upload.uploaded_successfully'),
   "attachment-upload-error-fallback-text-value": t('common.upload.failed'),
@@ -26,7 +27,7 @@
     <%= helpers.turbo_frame_tag "import_metadata_dialog_alert" %>
 
     <%= tag.div id: "import-metadata-dialog-content", data: linelist_data do %>
-      <%= form_for(:file_import, url: "#", method: :get, data: { action: "submit->linelist-import#handleSubmit" }) do |form| %>
+      <%= form_with(scope: :file_import, url: "#", method: :get, data: { action: "submit->linelist-import#handleSubmit" }) do |form| %>
         <%= render partial: 'shared/samples/metadata/file_imports/form_fields', locals: {
           broadcast_target: @broadcast_target,
           controller: "linelist-import",
@@ -54,8 +55,8 @@
           size: :large,
           open: false,
           closable: false,
-          ) do |dialog| %>
-          <% dialog.with_header(title: t("shared.samples.metadata.file_imports.dialog.title")) %>
+          ) do |error_dialog| %>
+          <% error_dialog.with_header(title: t("shared.samples.metadata.file_imports.dialog.title")) %>
 
           <div>
             <p class="mb-4 dark:text-white"><%= t("shared.samples.metadata.file_imports.errors.description") %></p>
