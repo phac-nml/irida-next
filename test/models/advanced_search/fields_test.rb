@@ -17,11 +17,15 @@ class AdvancedSearch::FieldsTest < ActiveSupport::TestCase # rubocop:disable Sty
     assert_equal [['country', 'metadata.country'], ['food', 'metadata.food']], fields[:groups][metadata_group_label]
   end
 
-  test 'for_attachments returns humanized metadata field labels' do
+  test 'for_attachments reuses attachment table labels for metadata fields' do
     fields = AdvancedSearch::Fields.for_attachments
 
     metadata_group_label = I18n.t('components.advanced_search_component.operation.metadata_fields')
-    assert_equal [['Type', 'metadata.type'], ['Format', 'metadata.format'], ['Compression', 'metadata.compression']],
+    assert_equal [
+      [I18n.t('components.attachments.table_component.type'), 'metadata.type'],
+      [I18n.t('components.attachments.table_component.format'), 'metadata.format'],
+      [I18n.t('components.attachments.table_component.compression'), 'metadata.compression']
+    ],
                  fields[:groups][metadata_group_label]
   end
 

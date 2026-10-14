@@ -41,7 +41,8 @@ module AdvancedSearch
         end
 
         metadata_options = Array(metadata_fields).map do |field|
-          [field.delete_prefix('metadata.').humanize, field]
+          field_name = field.delete_prefix('metadata.')
+          [I18n.t("components.attachments.table_component.#{field_name}", default: field_name.humanize), field]
         end
 
         build(options:, groups: metadata_group(metadata_options), numeric_fields: field_configuration::NUMERIC_FIELDS)
