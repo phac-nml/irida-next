@@ -77,6 +77,7 @@ function markup() {
 			<button data-linelist-import-target="submitButton" type="submit"></button>
 			<div data-linelist-import-target="metadataColumns"></div>
 			<div data-linelist-import-target="error" class="hidden"></div>
+      <div data-linelist-import-target="errorMessage"></div>
 			<input name="file_import[metadata_columns][]" value="age">
 			<input name="file_import[metadata_columns][]" value="empty_field">
 			<input name="file_import[ignore_empty_values]" type="checkbox" checked>
@@ -156,6 +157,35 @@ describe("linelist import controller", () => {
     expect(controller.sampleIdColumnTarget.value).toBe("sample_id");
     expect(controller.sampleIdColumnTarget.options).toHaveLength(3);
     expect(controller.sampleIdColumnTarget.disabled).toBe(false);
+  });
+
+  it("rejects duplicate headers and disables importing", async () => {
+    const controller = await mount();
+    const xlsx = await vi.importMock("xlsx");
+    vi.spyOn(xlsx, "read").mockReturnValue({
+      SheetNames: ["Sheet1"],
+      Sheets: { Sheet1: { worksheet: true } },
+    });
+    vi.spyOn(xlsx.utils, "sheet_to_json").mockReturnValue([
+      ["sample_id", " Age ", "age"],
+    ]);
+
+    controller.readFile({
+      target: { files: [{ type: "text/csv", name: "samples.csv" }] },
+    });
+    FakeFileReader.instances[0].load("file contents");
+
+    expect(controller.errorMessageTarget.textContent).toBe(
+      "The uploaded spreadsheet contains duplicate column headers. Please rename them before importing.",
+    );
+    expect(controller.errorTarget).not.toHaveClass("hidden");
+    expect(controller.errorTarget).not.toHaveAttribute("aria-hidden");
+    expect(controller.submitButtonTarget).toBeDisabled();
+    expect(controller.submitButtonTarget).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
+    expect(controller.sampleIdColumnTarget.options).toHaveLength(1);
   });
 
   it("sends selected rows and import settings to the worker", async () => {
