@@ -73,17 +73,17 @@ module Samples
         end
 
         def validate_key_present
-          if @key_update.values[0].blank?
-            raise SampleMetadataKeyValidationError,
-                  I18n.t('services.samples.metadata.update_fields.key_required')
-          end
+          return if @key_update.values[0].present?
+
+          raise SampleMetadataKeyValidationError,
+                I18n.t('services.samples.metadata.update_fields.key_required')
         end
 
         def validate_value_present
-          if @value_update.values[0].blank? && !@allow_empty_value
-            raise SampleMetadataValueValidationError,
-                  I18n.t('services.samples.metadata.update_fields.value_required')
-          end
+          return if @value_update.values[0].present? || @allow_empty_value
+
+          raise SampleMetadataValueValidationError,
+                I18n.t('services.samples.metadata.update_fields.value_required')
         end
 
         def validate_analysis_source_key
