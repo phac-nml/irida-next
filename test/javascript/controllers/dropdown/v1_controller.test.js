@@ -198,8 +198,9 @@ describe("dropdown/v1 controller", () => {
     const clickSpy = vi.spyOn(link, "click").mockImplementation(() => {});
     const triggerFocus = vi.spyOn(trigger(), "focus");
 
+    dropdown().show();
     items[0].focus();
-    press(menu(), "Enter");
+    press(items[0], "Enter");
     expect(clickSpy).toHaveBeenCalled();
 
     document.dispatchEvent(new Event("turbo:morph"));
@@ -209,8 +210,9 @@ describe("dropdown/v1 controller", () => {
   it("hides when a list item without a clickable child is activated", async () => {
     application = await mount();
     const items = menuItems();
+    dropdown().show();
     items[1].focus();
-    press(menu(), " ");
+    press(items[1], " ");
     expect(dropdown().isVisible()).toBe(false);
   });
 
@@ -218,16 +220,19 @@ describe("dropdown/v1 controller", () => {
     application = await mount();
     const button = menuItems()[2];
     const clickSpy = vi.spyOn(button, "click").mockImplementation(() => {});
+    dropdown().show();
     button.focus();
-    press(menu(), "Enter");
+    press(button, "Enter");
     expect(clickSpy).toHaveBeenCalled();
   });
 
   it("focuses the trigger on Escape", async () => {
     application = await mount();
     const triggerFocus = vi.spyOn(trigger(), "focus");
-    menuItems()[0].focus();
-    const event = press(menu(), "Escape");
+    const firstItem = menuItems()[0];
+    dropdown().show();
+    firstItem.focus();
+    const event = press(firstItem, "Escape");
     expect(event.defaultPrevented).toBe(true);
     expect(triggerFocus).toHaveBeenCalled();
   });
@@ -235,21 +240,22 @@ describe("dropdown/v1 controller", () => {
   it("wraps focus with ArrowUp and ArrowDown", async () => {
     application = await mount();
     const items = menuItems();
+    dropdown().show();
 
     items[0].focus();
-    press(menu(), "ArrowUp");
+    press(items[0], "ArrowUp");
     expect(document.activeElement).toBe(items.at(-1));
 
     items.at(-1).focus();
-    press(menu(), "ArrowDown");
+    press(items.at(-1), "ArrowDown");
     expect(document.activeElement).toBe(items[0]);
 
     items[0].focus();
-    press(menu(), "ArrowDown");
+    press(items[0], "ArrowDown");
     expect(document.activeElement).toBe(items[1]);
 
     items[1].focus();
-    press(menu(), "ArrowUp");
+    press(items[1], "ArrowUp");
     expect(document.activeElement).toBe(items[0]);
   });
 
@@ -260,8 +266,9 @@ describe("dropdown/v1 controller", () => {
 
     expect(disabledItem.getAttribute("tabindex")).toBeNull();
 
+    dropdown().show();
     items[0].focus();
-    press(menu(), "ArrowDown");
+    press(items[0], "ArrowDown");
 
     expect(document.activeElement).toBe(items[1]);
     expect(document.activeElement).not.toBe(disabledItem);
@@ -270,13 +277,14 @@ describe("dropdown/v1 controller", () => {
   it("jumps to first and last items with Home and End", async () => {
     application = await mount();
     const items = menuItems();
+    dropdown().show();
 
     items[1].focus();
-    press(menu(), "Home");
+    press(items[1], "Home");
     expect(document.activeElement).toBe(items[0]);
 
     items[0].focus();
-    press(menu(), "End");
+    press(items[0], "End");
     expect(document.activeElement).toBe(items.at(-1));
   });
 
@@ -285,23 +293,25 @@ describe("dropdown/v1 controller", () => {
     const items = menuItems();
     const triggerFocus = vi.spyOn(trigger(), "focus");
 
+    dropdown().show();
     items[0].focus();
-    const shiftTab = press(menu(), "Tab", { shiftKey: true });
+    const shiftTab = press(items[0], "Tab", { shiftKey: true });
     expect(shiftTab.defaultPrevented).toBe(true);
     expect(triggerFocus).toHaveBeenCalled();
     expect(dropdown().isVisible()).toBe(false);
 
     dropdown().show();
     items[0].focus();
-    const tab = press(menu(), "Tab");
+    const tab = press(items[0], "Tab");
     expect(tab.defaultPrevented).toBe(false);
     expect(dropdown().isVisible()).toBe(true);
   });
 
   it("ignores unrelated keys inside the menu", async () => {
     application = await mount();
+    dropdown().show();
     menuItems()[0].focus();
-    press(menu(), "x");
+    press(menuItems()[0], "x");
     expect(document.activeElement).toBe(menuItems()[0]);
   });
 
