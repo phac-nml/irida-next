@@ -199,7 +199,7 @@ module Projects
         assert_not @sample32.metadata['newmetadatafield']
       end
 
-      test 'member with role >= maintainer can delete existing metadata field through update endpoint with empty value' do
+      test 'member with role >= maintainer can delete metadata via empty update value' do
         assert_equal 'value1', @sample32.metadata['metadatafield1']
         put sample_metadatum_path(@sample32,
                                   cell_id: 'a_cell_id', value: '', id: 'metadatafield1',
