@@ -80,4 +80,45 @@ class SignInTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'a', text: /#{Regexp.escape(I18n.t(:'devise.sessions.new.local_button'))}/, count: 0
   end
+
+  test 'should display sign in with local account' do
+    get new_user_session_path
+
+    assert_response :success
+    assert_select 'h1', text: I18n.t(:'devise.layout.title'), count: 1
+
+    get new_user_session_path(local: true)
+
+    assert_response :success
+    assert_select 'body', text: /#{Regexp.escape(I18n.t(:'devise.sessions.new.return_button'))}/
+    assert_equal '/users/sign_in?local=true', request.fullpath
+  end
+
+  test 'should display error during with local account' do
+    user = users(:john_doe)
+
+    get new_user_session_path
+
+    assert_response :success
+    assert_select 'h1', text: I18n.t(:'devise.layout.title'), count: 1
+
+    get new_user_session_path(local: true)
+
+    assert_response :success
+    post user_session_path, params: {
+      user: {
+        email: user.email,
+        password: 'invalid password'
+      },
+      local: true
+    }
+
+    assert_response :unprocessable_content
+    assert_select 'body', text: /Invalid Email or password/
+    assert_select 'form[action="/users/sign_in"]' do
+      assert_select 'label', text: /Email/, count: 1
+      assert_select 'label', text: /Password/, count: 1
+    end
+    assert_equal '/users/sign_in', request.path
+  end
 end
