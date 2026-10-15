@@ -25,7 +25,13 @@
     <span class="inline shrink-0"><%= icon(:warning_circle, size: :sm, class: "mr-3 stroke-2") %></span>
 
     <div>
-      <div class="font-medium whitespace-break-spaces"><%= t(".no_valid_metadata") %></div>
+      <%= tag.div(
+          t(".no_valid_metadata"),
+          class: "font-medium whitespace-break-spaces",
+          data: {
+            "#{controller}-target": "errorMessage",
+          },
+        ) %>
     </div>
   <% end %>
 

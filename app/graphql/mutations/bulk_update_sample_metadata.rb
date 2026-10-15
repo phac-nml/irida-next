@@ -33,7 +33,7 @@ module Mutations
 
       metadata_payload = args[:metadata]
       # convert string to hash if json string as given
-      metadata_payload = JSON.parse(metadata_payload) if metadata_payload.is_a?(String)
+      metadata_payload = JSON.parse(metadata_payload, allow_duplicate_key: false) if metadata_payload.is_a?(String)
 
       return metadata_payload_format_error unless metadata_payload.is_a?(Hash)
 
@@ -58,7 +58,7 @@ module Mutations
         path: ['metadata'],
         message: "JSON data is not formatted correctly. #{e.message}"
       }]
-      attach_return_values(errors: user_errors)
+      attach_return_values(overall_status: 'unsuccessful', status: {}, errors: user_errors)
     end
 
     def ready?(**_args)
