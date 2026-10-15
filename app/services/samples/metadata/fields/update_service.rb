@@ -14,7 +14,7 @@ module Samples
 
         class SampleMetadataValueValidationError < StandardError
         end
-        attr_accessor :project, :sample, :key_update, :value_update, :metadata_update_params
+        attr_accessor :project, :sample, :key_update, :value_update, :metadata_update_params, :allow_empty_value
 
         def initialize(project, sample, user = nil, params = {})
           super(user, params)
@@ -22,6 +22,7 @@ module Samples
           @sample = sample
           @key_update = params['update_field']['key']
           @value_update = params['update_field']['value']
+          @allow_empty_value = params['allow_empty_value'] || params[:allow_empty_value] || false
           @metadata_update_params = { 'metadata' => {} }
         end
 
@@ -68,12 +69,13 @@ module Samples
             raise SampleMetadataKeyValidationError, I18n.t('services.samples.metadata.update_fields.key_required')
           end
 
-          if @value_update.values[0].blank?
+          if @value_update.values[0].blank? && !@allow_empty_value
             raise SampleMetadataValueValidationError,
                   I18n.t('services.samples.metadata.update_fields.value_required')
           end
 
-          return unless @sample.metadata_provenance[@key_update.keys[0]]['source'] == 'analysis'
+          return unless @sample.metadata_provenance.key?(@key_update.keys[0]) &&
+                        @sample.metadata_provenance[@key_update.keys[0]]['source'] == 'analysis'
 
           raise SampleMetadataFieldsUpdateError,
                 I18n.t('services.samples.metadata.update_fields.user_cannot_edit_metadata_key',
