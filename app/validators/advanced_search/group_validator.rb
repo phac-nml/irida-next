@@ -23,6 +23,7 @@ module AdvancedSearch
     METADATA_NUMERIC_OPERATORS = %w[numeric_equals numeric_greater_than_equals numeric_less_than_equals
                                     numeric_not_equals numeric_between].freeze
     NON_METADATA_OPERATORS = %w[= != <= >= contains not_contains in not_in between].freeze
+    NON_METADATA_NUMERIC_OPERATORS = %w[= != <= >= in not_in between].freeze
 
     def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       return if empty_search?(record)
@@ -71,6 +72,11 @@ module AdvancedSearch
       raise NotImplementedError
     end
 
+    # Fields that only accept numeric operators/values (e.g. byte_size). Override in subclasses as needed.
+    def numeric_fields
+      []
+    end
+
     def empty_search?(record)
       return true if record.groups.empty?
 
@@ -85,12 +91,13 @@ module AdvancedSearch
       groups.all? { |group| Array(group.conditions).empty? }
     end
 
-    def validate_fields(group) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    def validate_fields(group) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       group.conditions.each_with_index do |condition, condition_index|
         validate_blank_inputs(condition)
 
         validate_field(condition) if condition.field.present?
         validate_operator_type(condition) if Flipper.enabled?(:advanced_search_metadata_operators)
+        validate_numeric_field_operator(condition) if numeric_fields.include?(condition.field)
 
         validate_date_and_numeric_field(condition)
 
@@ -150,11 +157,20 @@ module AdvancedSearch
       end
     end
 
+    def validate_numeric_field_operator(condition)
+      operator = condition.operator
+      if operator.blank? || EXISTS_OPERATORS.include?(operator) || NON_METADATA_NUMERIC_OPERATORS.include?(operator)
+        return
+      end
+
+      condition.errors.add :operator, :use_numeric_operator
+    end
+
     def validate_date_and_numeric_field(condition)
       is_metadata_field = metadata_field?(condition.field)
       if Flipper.enabled?(:advanced_search_metadata_operators) && is_metadata_field
         validate_metadata_date_and_numeric_fields(condition)
-      elsif is_metadata_field || date_fields.include?(condition.field)
+      elsif is_metadata_field || date_fields.include?(condition.field) || numeric_fields.include?(condition.field)
         validate_standard_date_and_numeric_fields(condition)
       end
     end
@@ -170,7 +186,7 @@ module AdvancedSearch
     def validate_standard_date_and_numeric_fields(condition)
       if date_field?(condition.field, condition.operator)
         validate_date_field_condition(condition)
-      elsif COMBINABLE_OPERATORS[:gleqt].include?(condition.operator)
+      elsif numeric_fields.include?(condition.field) || COMBINABLE_OPERATORS[:gleqt].include?(condition.operator)
         validate_numeric(condition)
       end
     end

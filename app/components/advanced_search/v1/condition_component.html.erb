@@ -58,6 +58,11 @@
                              ) %>
       <% elsif Flipper.enabled?(:advanced_search_metadata_operators) && @condition.field.to_s.starts_with?('metadata.') %>
         <% grouped_options_for_select(metadata_operators, @condition.operator) %>
+      <% elsif numeric_field? %>
+        <% options_for_select(
+                               numeric_operator_options,
+                               @condition.operator,
+                             ) %>
       <% else %>
         <% options_for_select(
                                @operations['standard'],

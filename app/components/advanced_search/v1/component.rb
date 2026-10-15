@@ -26,6 +26,10 @@ module AdvancedSearch
         AdvancedSearch::Fields.for_samples(sample_fields:, metadata_fields:)
       end
 
+      def numeric_fields
+        @fields.fetch(:numeric_fields, [])
+      end
+
       def enum_operation_options
         enum_operators = {}
         if Flipper.enabled?(:advanced_search_metadata_operators)
@@ -42,6 +46,10 @@ module AdvancedSearch
           AdvancedSearch::ENUM_OPERATOR_VALUES['standard'].include?(value)
         end
         enum_operators
+      end
+
+      def numeric_operation_options
+        @operations['standard'].select { |_, value| AdvancedSearch::NUMERIC_OPERATOR_VALUES.include?(value) }
       end
 
       def operation_options # rubocop:disable Metrics/MethodLength, Metrics/AbcSize

@@ -5,6 +5,7 @@ require 'test_helper'
 module Groups
   class AttachmentsTest < ActionDispatch::IntegrationTest
     include ActionView::Helpers::NumberHelper
+    include AdvancedSearchHelper
 
     test 'can view attachments for a group with proper access' do
       sign_in users(:john_doe)
@@ -251,6 +252,23 @@ module Groups
       assert_first_rows_include(attachment1.puid, attachment2.puid, row_scope: '#attachments-table-body')
     end
 
+    test 'default sort indicator matches query results when created_at and updated_at diverge' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+
+      # attachment1 created first but touched most recently; attachment2 created most recently but touched first.
+      attachment1.update!(created_at: 2.days.ago, updated_at: 1.hour.ago)
+      attachment2.update!(created_at: 1.hour.ago, updated_at: 2.days.ago)
+
+      get group_attachments_path(group)
+
+      assert_response :success
+      assert_sort_state(6, 'descending')
+      assert_first_rows_include(attachment2.puid, attachment1.puid, row_scope: '#attachments-table-body')
+    end
+
     test 'attempting to access a non-existent attachments page causes pagy overflow and redirects to first page' do
       sign_in users(:john_doe)
       group = groups(:group_one)
@@ -291,6 +309,219 @@ module Groups
           assert_select 'th', attachment2.puid
           assert_select 'td', attachment2.file.filename.to_s
         end
+      end
+    end
+
+    test 'advanced search filters attachments by format metadata field' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'metadata.format', operator: '=', value: 'fastq' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}", count: 0
+      end
+    end
+
+    test 'advanced search filters attachments by compression metadata field' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'metadata.compression', operator: '=', value: 'none' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
+    test 'advanced search filters attachments by filename' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'filename', operator: 'contains', value: attachment1.file.filename.to_s }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}", count: 0
+      end
+    end
+
+    test 'advanced search filters attachments to only a reverse read' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+      attachment1.update!(metadata: attachment1.metadata.merge('direction' => 'forward',
+                                                               'associated_attachment_id' => attachment2.id))
+      attachment2.update!(metadata: attachment2.metadata.merge('direction' => 'reverse',
+                                                               'associated_attachment_id' => attachment1.id))
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'filename', operator: 'contains', value: attachment2.file.filename.to_s }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}", count: 0
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
+    test 'advanced search does not duplicate a paired attachment when both mates match' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+      attachment1.update!(metadata: attachment1.metadata.merge('direction' => 'forward',
+                                                               'associated_attachment_id' => attachment2.id))
+      attachment2.update!(metadata: attachment2.metadata.merge('direction' => 'reverse',
+                                                               'associated_attachment_id' => attachment1.id))
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'byte_size', operator: '>=', value: '0' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}"
+        assert_select 'a', text: attachment1.file.filename.to_s, count: 1
+        assert_select 'a', text: attachment2.file.filename.to_s, count: 1
+      end
+    end
+
+    test 'advanced search filters attachments by puid' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'id', operator: '=', value: attachment1.puid }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}", count: 0
+      end
+    end
+
+    test 'advanced search filters attachments by byte size' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'byte_size', operator: '>=', value: '0' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+      end
+    end
+
+    test 'advanced search filters attachments using multiple conditions in a group' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'metadata.format', operator: '=', value: 'fastq' },
+              { field: 'metadata.compression', operator: '=', value: 'none' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}", count: 0
+      end
+    end
+
+    test 'advanced search filters attachments using multiple groups' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'metadata.format', operator: '=', value: 'fastq' }],
+             [{ field: 'metadata.format', operator: '=', value: 'csv' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
+    test 'advanced search filters attachments by multiple format values' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+      attachment1 = attachments(:group1Attachment1)
+      attachment2 = attachments(:group1Attachment2)
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'metadata.format', operator: 'in', value: %w[fastq csv] }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+        assert_select "tr##{dom_id(attachment1)}"
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
+    test 'advanced search with no results displays correctly' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+
+      get group_attachments_path(group),
+          params: advanced_search_params(
+            [[{ field: 'metadata.format', operator: '=', value: 'nonexistent_format' }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 0
       end
     end
   end

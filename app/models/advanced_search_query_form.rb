@@ -25,7 +25,7 @@ class AdvancedSearchQueryForm
 
   attribute :column, :string
   attribute :direction, :string
-  attribute :sort, :string, default: 'updated_at desc'
+  attribute :sort, :string
   attribute :scope, default: -> {}
   attribute :advanced_query, :boolean, default: false
   attribute :request, default: -> { { params: {} } }

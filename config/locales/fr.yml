@@ -49,6 +49,7 @@ fr:
               not_a_date_operator: ne peut pas être utilisé sur les dates
               use_metadata_operator: est un opérateur non valide pour les champs de métadonnées
               use_non_metadata_operator: est un opérateur non valide pour les champs autres que les métadonnées
+              use_numeric_operator: est un opérateur non valide pour les champs numériques
             to_value:
               lower_than_from: doit être supérieur à la Valeur de départ
             value:

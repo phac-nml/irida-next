@@ -199,6 +199,7 @@ en:
       table_component:
         action: Action
         byte_size: Size
+        compression: Compression
         counts:
           attachments: Attachments
           selected: Selected

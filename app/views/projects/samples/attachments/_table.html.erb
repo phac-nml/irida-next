@@ -1,4 +1,4 @@
-<%# locals: (allowed_to:, attachments:, has_attachments:, pagy:, render_individual_attachments:, sample:, q:) -%>
+<%# locals: (allowed_to:, attachments:, has_attachments:, pagy:, render_individual_attachments:, results_message: @results_message, sample:, search:, search_url:, q:) -%>
 
 <div id="sample-attachments">
   <% if has_attachments %>
@@ -24,22 +24,27 @@
 
       <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
-      <%= render SearchComponent.new(
-              query: q,
-              search_attribute: :puid_or_file_blob_filename_cont,
-              label: t('common.controls.search'),
-              placeholder: t(:".search.placeholder"),
-              value: q.puid_or_file_blob_filename_cont,
-              url: namespace_project_sample_path,
-              total_count: pagy.count,
-              class: "max-sm:grow",
-              search_field_arguments: {
-                data: {
-                  'search-field-selection-outlet': '#attachments-table'
-                }
-              }
-              ) do %>
-        <%= hidden_field_tag :limit, pagy.limit %>
+      <% if Flipper.enabled?(:attachments_advanced_search) %>
+        <%= render "shared/attachments/advanced_search_form", search:, q:, pagy:, search_url:,
+          results_message:, form_class: "flex justify-end gap-2" %>
+      <% else %>
+        <%= render SearchComponent.new(
+          query: q,
+          search_attribute: :puid_or_file_blob_filename_cont,
+          label: t('common.controls.search'),
+          placeholder: t(:".search.placeholder"),
+          value: q.puid_or_file_blob_filename_cont,
+          url: namespace_project_sample_path,
+          total_count: pagy.count,
+          class: "max-sm:grow",
+          search_field_arguments: {
+            data: {
+              'search-field-selection-outlet': '#attachments-table'
+            }
+          }
+          ) do %>
+          <%= hidden_field_tag :limit, pagy.limit %>
+        <% end %>
       <% end %>
 
       <% if allowed_to[:update_sample] %>

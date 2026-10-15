@@ -199,6 +199,7 @@ fr:
       table_component:
         action: Mesure
         byte_size: Taille
+        compression: Compression
         counts:
           attachments: Pièces jointes
           selected: Sélectionné
