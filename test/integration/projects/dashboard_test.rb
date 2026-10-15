@@ -70,7 +70,7 @@ module Projects
         expected_rows = search_case.fetch(:expected_rows)
 
         get dashboard_projects_path,
-            params: { all_projects_q: { namespace_name_or_namespace_puid_cont: search_term } }
+            params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: search_term } }
 
         assert_response :success
         assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
@@ -79,7 +79,7 @@ module Projects
         assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
         assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.next'), count: 0
 
-        assert_select 'input[name="all_projects_q[namespace_name_or_namespace_puid_cont]"]'
+        assert_select 'input[name="all_projects_q[namespace_name_or_namespace_puid_i_cont]"]'
         assert_select 'input.t-search-component' do |input|
           assert_equal search_term, input.first['value']
         end
@@ -88,10 +88,10 @@ module Projects
 
     test 'should use personal_projects_q search key when personal=true' do
       get dashboard_projects_path,
-          params: { personal: 'true', personal_projects_q: { namespace_name_or_namespace_puid_cont: 'Project 2' } }
+          params: { personal: 'true', personal_projects_q: { namespace_name_or_namespace_puid_i_cont: 'Project 2' } }
 
       assert_response :success
-      assert_select 'input[name="personal_projects_q[namespace_name_or_namespace_puid_cont]"]'
+      assert_select 'input[name="personal_projects_q[namespace_name_or_namespace_puid_i_cont]"]'
     end
 
     test 'should display empty state when project search has no results' do
@@ -126,13 +126,13 @@ module Projects
         { params: { all_projects_q: { s: 'updated_at asc' } }, search_key: 'all_projects_q', sort: 'updated_at asc' },
         { params: { all_projects_q: { s: 'created_at desc' } }, search_key: 'all_projects_q', sort: 'created_at desc' },
         { params: { all_projects_q: { s: 'created_at asc' } }, search_key: 'all_projects_q', sort: 'created_at asc' },
-        { params: { all_projects_q: { namespace_name_or_namespace_puid_cont: @group_project.name,
+        { params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: @group_project.name,
                                       s: 'namespace_name desc' } },
           search_key: 'all_projects_q',
           sort: 'namespace_name desc',
           first_row_project: projects(:subgroup1Project1) },
         { params: { personal: 'true',
-                    personal_projects_q: { namespace_name_or_namespace_puid_cont: @personal_project.name,
+                    personal_projects_q: { namespace_name_or_namespace_puid_i_cont: @personal_project.name,
                                            s: 'namespace_name asc' } },
           search_key: 'personal_projects_q',
           sort: 'namespace_name asc',
@@ -227,7 +227,7 @@ module Projects
       assert_response :redirect
       follow_redirect!
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: project.name } }
 
       assert_response :success
       assert_select "##{dom_id(project)}-samples-count", text: '2'
@@ -237,7 +237,7 @@ module Projects
       group = groups(:group_one)
       project = projects(:project1)
 
-      get dashboard_projects_path, params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+      get dashboard_projects_path, params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: project.name } }
 
       assert_response :success
       assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
@@ -251,7 +251,7 @@ module Projects
       assert_response :redirect
       follow_redirect!
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: project.name } }
 
       assert_response :success
       assert_select "##{dom_id(project)}-samples-count", text: '4'
@@ -264,13 +264,13 @@ module Projects
       sample = samples(:sample1)
 
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: project.name } }
 
       assert_response :success
       assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_select "##{dom_id(project)}-samples-count", text: '3'
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: destination.name } }
       assert_select "##{dom_id(destination)}-samples-count", text: '20'
 
       assert_enqueued_jobs 1, only: [::Samples::TransferJob] do
@@ -288,12 +288,12 @@ module Projects
       end
 
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: project.name } }
 
       assert_response :success
       assert_select "##{dom_id(project)}-samples-count", text: '2'
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: destination.name } }
       assert_select "##{dom_id(destination)}-samples-count", text: '21'
     end
 
@@ -306,13 +306,13 @@ module Projects
       sample = samples(:sample1)
 
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: project.name } }
 
       assert_response :success
       assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_select "##{dom_id(project)}-samples-count", text: '3'
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: destination.name } }
       assert_select "##{dom_id(destination)}-samples-count", text: '20'
 
       assert_enqueued_jobs 1, only: [::Samples::TransferJobV2] do
@@ -330,12 +330,12 @@ module Projects
       end
 
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: project.name } }
 
       assert_response :success
       assert_select "##{dom_id(project)}-samples-count", text: '2'
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: destination.name } }
       assert_select "##{dom_id(destination)}-samples-count", text: '21'
     ensure
       Flipper.disable(:v2_sample_transfer)
@@ -348,13 +348,13 @@ module Projects
       sample = samples(:sample1)
 
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: project.name } }
 
       assert_response :success
       assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_select "##{dom_id(project)}-samples-count", text: '3'
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: destination.name } }
       assert_select "##{dom_id(destination)}-samples-count", text: '20'
 
       assert_enqueued_jobs 1, only: [::Samples::CloneJob] do
@@ -374,12 +374,12 @@ module Projects
       end
 
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: project.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: project.name } }
 
       assert_response :success
       assert_select "##{dom_id(project)}-samples-count", text: '3'
       get dashboard_projects_path,
-          params: { all_projects_q: { namespace_name_or_namespace_puid_cont: destination.name } }
+          params: { all_projects_q: { namespace_name_or_namespace_puid_i_cont: destination.name } }
       assert_select "##{dom_id(destination)}-samples-count", text: '21'
     end
 

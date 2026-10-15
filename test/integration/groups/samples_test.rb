@@ -110,7 +110,7 @@ module Groups
     end
 
     test 'quick search filters the samples list by name' do
-      get group_samples_url(@group, q: { name_or_puid_cont: 'Sample 1' })
+      get group_samples_url(@group, q: { name_or_puid_i_cont: 'Sample 1' })
 
       assert_response :success
       assert_select 'table tbody tr', count: 13

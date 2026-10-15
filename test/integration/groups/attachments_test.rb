@@ -290,7 +290,7 @@ module Groups
       attachment2 = attachments(:group1Attachment2)
 
       get group_attachments_path(group),
-          params: { q: { puid_or_file_blob_filename_cont: attachment1.file.filename.to_s } }
+          params: { q: { puid_or_file_blob_filename_i_cont: attachment1.file.filename.to_s } }
       assert_response :success
 
       assert_select 'tbody' do
@@ -301,7 +301,7 @@ module Groups
       end
 
       get group_attachments_path(group),
-          params: { q: { puid_or_file_blob_filename_cont: attachment2.puid } }
+          params: { q: { puid_or_file_blob_filename_i_cont: attachment2.puid } }
       assert_response :success
 
       assert_select 'tbody' do

@@ -9,7 +9,7 @@
         select_form_fields: {
           format: "turbo_stream",
           select: "on",
-          "q[puid_or_file_blob_filename_cont]": params.dig(:q, :puid_or_file_blob_filename_cont),
+          "q[puid_or_file_blob_filename_i_cont]": params.dig(:q, :puid_or_file_blob_filename_i_cont),
         },
         deselect_form_fields: { format: "turbo_stream" },
         select_button_options: {
@@ -30,10 +30,10 @@
       <% else %>
         <%= render SearchComponent.new(
           query: q,
-          search_attribute: :puid_or_file_blob_filename_cont,
+          search_attribute: :puid_or_file_blob_filename_i_cont,
           label: t('common.controls.search'),
           placeholder: t(:".search.placeholder"),
-          value: q.puid_or_file_blob_filename_cont,
+          value: q.puid_or_file_blob_filename_i_cont,
           url: namespace_project_sample_path,
           total_count: pagy.count,
           class: "max-sm:grow",

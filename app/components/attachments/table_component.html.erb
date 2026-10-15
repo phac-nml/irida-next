@@ -135,8 +135,8 @@
                       <span class="font-mono font-semibold">
                         <%= highlight(
                           attachment.puid,
-                          defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                            params[:q][:puid_or_file_blob_filename_cont],
+                          defined?(params[:q][:puid_or_file_blob_filename_i_cont]) &&
+                            params[:q][:puid_or_file_blob_filename_i_cont],
                           highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                         ) %>
                       </span>
@@ -158,8 +158,8 @@
                             class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
                               <%= highlight(
                                 attachment.file.filename.to_s,
-                                defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                                  params[:q][:puid_or_file_blob_filename_cont],
+                                defined?(params[:q][:puid_or_file_blob_filename_i_cont]) &&
+                                  params[:q][:puid_or_file_blob_filename_i_cont],
                                 highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                               ) %>
                             <% end %>
@@ -178,8 +178,8 @@
                               class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
                                     <%= highlight(
                                       attachment.file.filename.to_s,
-                                      defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                                        params[:q][:puid_or_file_blob_filename_cont],
+                                      defined?(params[:q][:puid_or_file_blob_filename_i_cont]) &&
+                                        params[:q][:puid_or_file_blob_filename_i_cont],
                                       highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                                     ) %>
                                   <% end %>
@@ -197,8 +197,8 @@
                               class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
                                     <%= highlight(
                                       attachment.associated_attachment.file.filename.to_s,
-                                      defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                                        params[:q][:puid_or_file_blob_filename_cont],
+                                      defined?(params[:q][:puid_or_file_blob_filename_i_cont]) &&
+                                        params[:q][:puid_or_file_blob_filename_i_cont],
                                       highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                                     ) %>
                                   <% end %>
@@ -218,8 +218,8 @@
                               class: "text-slate-900 dark:text-slate-100 font-semibold underline hover:decoration-2" do %>
                                     <%= highlight(
                                       attachment.file.filename.to_s,
-                                      defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
-                                        params[:q][:puid_or_file_blob_filename_cont],
+                                      defined?(params[:q][:puid_or_file_blob_filename_i_cont]) &&
+                                        params[:q][:puid_or_file_blob_filename_i_cont],
                                       highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
                                     ) %>
                                   <% end %>

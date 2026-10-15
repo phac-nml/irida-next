@@ -3,12 +3,12 @@
     <%= render SearchComponent.new(
       query: @q,
       url: dashboard_projects_url(**request.query_parameters),
-      search_attribute: :namespace_name_or_namespace_puid_cont,
+      search_attribute: :namespace_name_or_namespace_puid_i_cont,
       label: t('common.controls.search'),
       placeholder: t("dashboard.projects.index.search.placeholder"),
       total_count: @pagy.count,
       class: "max-sm:grow",
-      value: @q.namespace_name_or_namespace_puid_cont,
+      value: @q.namespace_name_or_namespace_puid_i_cont,
       data: {},
       as: (params[:personal] == 'true' ? :personal_projects_q : :all_projects_q)
     ) do %>

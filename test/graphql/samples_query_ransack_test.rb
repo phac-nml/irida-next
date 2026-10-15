@@ -48,7 +48,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   test 'filter samples should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { name_or_puid_cont: @sample.name } })
+                                 variables: { filter: { name_or_puid_i_cont: @sample.name } })
     assert_nil result['errors'], 'should work and have no errors.'
     data = result['data']['samples']['nodes']
     assert_equal 1, data.count
@@ -58,7 +58,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   test 'filter samples should work with order by' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { name_or_puid_cont: 'Project 1' },
+                                 variables: { filter: { name_or_puid_i_cont: 'Project 1' },
                                               orderBy: { field: 'created_at', direction: 'asc' } })
     assert_nil result['errors'], 'should work and have no errors.'
     data = result['data']['samples']['nodes']
@@ -75,7 +75,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
                                  context: { current_user: @user },
                                  variables: { group_id: groups(:group_one).to_global_id.to_s,
-                                              filter: { name_or_puid_cont: @sample.name } })
+                                              filter: { name_or_puid_i_cont: @sample.name } })
     assert_nil result['errors'], 'should work and have no errors.'
     data = result['data']['samples']['nodes']
     assert_equal 1, data.count

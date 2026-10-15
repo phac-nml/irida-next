@@ -76,7 +76,7 @@ module WorkflowExecutions
         ) do
           highlight(
             workflow_execution.id,
-            defined?(@search_params[:name_or_id_cont]) && @search_params[:name_or_id_cont],
+            defined?(@search_params[:name_or_id_i_cont]) && @search_params[:name_or_id_i_cont],
             highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
           )
         end
@@ -98,7 +98,7 @@ module WorkflowExecutions
         content_tag(:span, class: 'font-semibold') do
           highlight(
             workflow_execution.name,
-            defined?(@search_params[:name_or_id_cont]) && @search_params[:name_or_id_cont],
+            defined?(@search_params[:name_or_id_i_cont]) && @search_params[:name_or_id_i_cont],
             highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
           )
         end

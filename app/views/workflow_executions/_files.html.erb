@@ -6,12 +6,12 @@
   <div class="mb-2 flex justify-end">
     <%= render SearchComponent.new(
             query: q,
-            search_attribute: :puid_or_file_blob_filename_cont,
+            search_attribute: :puid_or_file_blob_filename_i_cont,
             label: t('common.controls.search'),
             placeholder: t("workflow_executions.files.search.placeholder"),
             url: search_url,
             total_count: pagy.count,
-            value: q.puid_or_file_blob_filename_cont,
+            value: q.puid_or_file_blob_filename_i_cont,
             class: "max-sm:grow",
             data: {}
           ) do %>

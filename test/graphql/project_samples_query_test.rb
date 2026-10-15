@@ -97,7 +97,7 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
     project = projects(:project1)
     result = IridaSchema.execute(PROJECT_QUERY, context: { current_user: @user },
                                                 variables: { projectPath: project.full_path,
-                                                             sampleFilter: { name_or_puid_cont: 'Sample 2' } })
+                                                             sampleFilter: { name_or_puid_i_cont: 'Sample 2' } })
     assert_nil result['errors'], 'should work and have no errors.'
     data = result['data']['project']
     assert_not_empty data, 'project type should work'
@@ -105,7 +105,7 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
     assert_equal project.to_global_id.to_s, data['id'], 'id should be GlobalID'
     assert_equal 2, data['samples']['nodes'].count
     # verify fetched sample data only includes ones with `Sample 2` in the name
-    project.samples.ransack(name_or_puid_cont: 'Sample 2').result.each do |sample|
+    project.samples.ransack(name_or_puid_i_cont: 'Sample 2').result.each do |sample|
       retrieved_sample = data['samples']['nodes'].find { |s| s['id'] == sample.to_global_id.to_s }
 
       assert_not_nil retrieved_sample, "Sample #{sample.name} should be present"

@@ -161,19 +161,19 @@ module Groups
     test 'can search for a group by name or puid' do
       sign_in @user
 
-      get dashboard_groups_path, params: { all_groups_q: { name_or_puid_cont: 'group a' } }
+      get dashboard_groups_path, params: { all_groups_q: { name_or_puid_i_cont: 'group a' } }
 
       assert_response :success
       assert_includes response.body, groups(:group_a).name
       assert_not_includes response.body, groups(:group_b).name
 
-      get dashboard_groups_path, params: { all_groups_q: { name_or_puid_cont: groups(:group_b).puid } }
+      get dashboard_groups_path, params: { all_groups_q: { name_or_puid_i_cont: groups(:group_b).puid } }
 
       assert_response :success
       assert_not_includes response.body, groups(:group_a).name
       assert_includes response.body, groups(:group_b).name
 
-      get dashboard_groups_path, params: { all_groups_q: { name_or_puid_cont: 'z6z6z6' } }
+      get dashboard_groups_path, params: { all_groups_q: { name_or_puid_i_cont: 'z6z6z6' } }
 
       assert_response :success
       assert_select 'h2', text: I18n.t(:'components.viral.pagy.empty_state.title')
@@ -184,21 +184,21 @@ module Groups
       sign_in @user
 
       get dashboard_groups_path,
-          params: { public: 'true', public_groups_q: { name_or_puid_cont: 'public group 1' } }
+          params: { public: 'true', public_groups_q: { name_or_puid_i_cont: 'public group 1' } }
 
       assert_response :success
       assert_includes response.body, groups(:public_group1).name
       assert_not_includes response.body, groups(:public_group2).name
 
       get dashboard_groups_path,
-          params: { public: 'true', public_groups_q: { name_or_puid_cont: groups(:public_group2).puid } }
+          params: { public: 'true', public_groups_q: { name_or_puid_i_cont: groups(:public_group2).puid } }
 
       assert_response :success
       assert_not_includes response.body, groups(:public_group1).name
       assert_includes response.body, groups(:public_group2).name
 
       get dashboard_groups_path,
-          params: { public: 'true', public_groups_q: { name_or_puid_cont: 'z6z6z6' } }
+          params: { public: 'true', public_groups_q: { name_or_puid_i_cont: 'z6z6z6' } }
 
       assert_response :success
       assert_select 'h2', text: I18n.t(:'components.viral.pagy.empty_state.title')
@@ -227,7 +227,7 @@ module Groups
       get dashboard_groups_path,
           params: {
             all_groups_q: {
-              name_or_puid_cont: 'group',
+              name_or_puid_i_cont: 'group',
               s: 'name asc'
             },
             limit: 100

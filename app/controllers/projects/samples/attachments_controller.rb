@@ -89,7 +89,7 @@ module Projects
         respond_to do |format|
           format.turbo_stream do
             if params.key?(:select)
-              @q = load_attachments.ransack(params.fetch(:q, {}).permit(:puid_or_file_blob_filename_cont, :sort))
+              @q = load_attachments.ransack(params.fetch(:q, {}).permit(:puid_or_file_blob_filename_i_cont, :sort))
               @q.result.each do |attachment|
                 @sample_attachment_ids << if attachment.associated_attachment
                                             [attachment.id, attachment.associated_attachment.id].to_s

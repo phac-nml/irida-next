@@ -34,7 +34,7 @@ module Projects
 
     test 'should search' do
       post search_namespace_project_samples_url(@namespace, @project),
-           params: { q: { name_or_puid_cont: '',
+           params: { q: { name_or_puid_i_cont: '',
                           groups_attributes: { '0': { conditions_attributes:
                           { '0': { field: 'name', operator: 'contains', value: 'Sample 1' } } } } } },
            as: :turbo_stream
@@ -43,7 +43,7 @@ module Projects
 
     test 'should not search with invalid query' do
       post search_namespace_project_samples_url(@namespace, @project),
-           params: { q: { name_or_puid_cont: '',
+           params: { q: { name_or_puid_i_cont: '',
                           groups_attributes: { '0': { conditions_attributes:
                           { '0': { field: 'name', operator: 'contains', value: '' } } } } } },
            as: :turbo_stream
@@ -254,7 +254,7 @@ module Projects
       sample2 = samples(:sample2)
 
       get namespace_project_samples_url(@namespace, @project),
-          params: { q: { name_or_puid_cont: 'Sample 2', sort: 'puid desc' }, limit: 50 }
+          params: { q: { name_or_puid_i_cont: 'Sample 2', sort: 'puid desc' }, limit: 50 }
 
       assert_response :success
       assert_sort_state(1, 'descending')
@@ -274,7 +274,7 @@ module Projects
       sample30 = samples(:sample30)
 
       get namespace_project_samples_url(@namespace, @project),
-          params: { q: { name_or_puid_cont: @sample1.name } }
+          params: { q: { name_or_puid_i_cont: @sample1.name } }
 
       assert_response :success
       assert_includes rendered_sample_puids, @sample1.puid
@@ -287,7 +287,7 @@ module Projects
       sample30 = samples(:sample30)
 
       get namespace_project_samples_url(@namespace, @project),
-          params: { q: { name_or_puid_cont: sample2.puid } }
+          params: { q: { name_or_puid_i_cont: sample2.puid } }
 
       assert_response :success
       assert_not_includes rendered_sample_puids, @sample1.puid
@@ -299,7 +299,7 @@ module Projects
       sample2 = samples(:sample2)
 
       get namespace_project_samples_url(@namespace, @project),
-          params: { q: { name_or_puid_cont: @sample1.puid, sort: 'name asc' } }
+          params: { q: { name_or_puid_i_cont: @sample1.puid, sort: 'name asc' } }
       assert_response :success
       assert_sort_state(2, 'ascending')
       assert_includes rendered_sample_puids, @sample1.puid
@@ -317,7 +317,7 @@ module Projects
       sample30 = samples(:sample30)
 
       get namespace_project_samples_url(@namespace, @project),
-          params: { q: { name_or_puid_cont: @sample1.name } }
+          params: { q: { name_or_puid_i_cont: @sample1.name } }
       assert_response :success
       assert_equal @sample1.name, rendered_search_field_value
       assert_includes rendered_sample_puids, @sample1.puid

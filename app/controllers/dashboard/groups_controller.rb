@@ -54,7 +54,7 @@ module Dashboard
                    else
                      :all_groups_q
                    end
-      @render_flat_list = params.dig(params_key, :name_or_puid_cont).present?
+      @render_flat_list = params.dig(params_key, :name_or_puid_i_cont).present?
     end
 
     def set_default_sort

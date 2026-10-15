@@ -3,8 +3,8 @@
 module Types
   # Sample Filter Type
   class SampleFilterType < BaseRansackFilterInputObject
-    argument :name_or_puid_cont, String, required: false, camelize: false,
-                                         description: 'Filter samples which contains name or puid'
+    argument :name_or_puid_i_cont, String, required: false, camelize: false,
+                                           description: 'Filter samples which contains name or puid'
 
     argument :advanced_search, [[SampleAdvancedSearchConditionInputType]],
              required: false, camelize: false,

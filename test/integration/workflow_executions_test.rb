@@ -44,13 +44,13 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     workflow_execution = workflow_executions(:workflow_execution_existing)
     other_workflow_execution = workflow_executions(:workflow_execution_valid)
 
-    get workflow_executions_path, params: { q: { name_or_id_cont: workflow_execution.id } }
+    get workflow_executions_path, params: { q: { name_or_id_i_cont: workflow_execution.id } }
 
     assert_response :success
     assert_select "tr##{dom_id(workflow_execution)}", count: 1
     assert_select "tr##{dom_id(other_workflow_execution)}", count: 0
 
-    get workflow_executions_path, params: { q: { name_or_id_cont: other_workflow_execution.name } }
+    get workflow_executions_path, params: { q: { name_or_id_i_cont: other_workflow_execution.name } }
 
     assert_response :success
     assert_select "tr##{dom_id(other_workflow_execution)}", count: 1
@@ -59,20 +59,20 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
 
   test 'should render quick search results messages for zero, singular, and multiple matches' do
     search_term = 'irida_next_example'
-    get workflow_executions_path, params: { q: { name_or_id_cont: search_term }, limit: 100 }
+    get workflow_executions_path, params: { q: { name_or_id_i_cont: search_term }, limit: 100 }
 
     assert_response :success
     assert_select '[role=status]', text: /results found for '#{search_term}'/
 
     singular_term = @workflow_execution_completed.id
-    get workflow_executions_path, params: { q: { name_or_id_cont: singular_term } }
+    get workflow_executions_path, params: { q: { name_or_id_i_cont: singular_term } }
 
     assert_response :success
     assert_select '[role=status]',
                   text: I18n.t('components.search.results_message.singular', search_term: singular_term)
 
     missing_term = 'zzz-no-such-workflow'
-    get workflow_executions_path, params: { q: { name_or_id_cont: missing_term } }
+    get workflow_executions_path, params: { q: { name_or_id_i_cont: missing_term } }
 
     assert_response :success
     assert_select '[role=status]', text: I18n.t('components.search.results_message.zero', search_term: missing_term)
@@ -361,7 +361,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
         params: {
           tab: 'files',
           q: {
-            puid_or_file_blob_filename_cont: matching_attachment.puid
+            puid_or_file_blob_filename_i_cont: matching_attachment.puid
           }
         }
 
@@ -373,7 +373,7 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
         params: {
           tab: 'files',
           q: {
-            puid_or_file_blob_filename_cont: non_matching_attachment.file.filename.to_s
+            puid_or_file_blob_filename_i_cont: non_matching_attachment.file.filename.to_s
           }
         }
 

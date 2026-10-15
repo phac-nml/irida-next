@@ -302,7 +302,7 @@ module Projects
       attachment2 = attachments(:project1Attachment2)
 
       get namespace_project_attachments_path(group, project),
-          params: { q: { puid_or_file_blob_filename_cont: attachment1.file.filename.to_s } }
+          params: { q: { puid_or_file_blob_filename_i_cont: attachment1.file.filename.to_s } }
       assert_response :success
 
       assert_select 'tbody' do
@@ -313,7 +313,7 @@ module Projects
       end
 
       get namespace_project_attachments_path(group, project),
-          params: { q: { puid_or_file_blob_filename_cont: attachment2.puid } }
+          params: { q: { puid_or_file_blob_filename_i_cont: attachment2.puid } }
       assert_response :success
 
       assert_select 'tbody' do

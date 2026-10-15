@@ -18,7 +18,7 @@ module Groups
 
     test 'should search' do
       post search_group_samples_url(@group),
-           params: { q: { name_or_puid_cont: '',
+           params: { q: { name_or_puid_i_cont: '',
                           groups_attributes: { '0': { conditions_attributes:
                           { '0': { field: 'name', operator: 'contains', value: 'Sample 1' } } } } } },
            as: :turbo_stream
@@ -27,7 +27,7 @@ module Groups
 
     test 'should not search with invalid query' do
       post search_group_samples_url(@group),
-           params: { q: { name_or_puid_cont: '',
+           params: { q: { name_or_puid_i_cont: '',
                           groups_attributes: { '0': { conditions_attributes:
                           { '0': { field: 'name', operator: 'contains', value: '' } } } } } },
            as: :turbo_stream
@@ -83,7 +83,7 @@ module Groups
     end
 
     test 'should store search params in session' do
-      search_params = { name_or_puid_cont: 'test', sort: 'updated_at desc' }
+      search_params = { name_or_puid_i_cont: 'test', sort: 'updated_at desc' }
       post search_group_samples_url(@group, params: { q: search_params }),
            as: :turbo_stream
       assert_response :success
@@ -180,7 +180,7 @@ module Groups
       sample2 = samples(:sample2)
       sample30 = samples(:sample30)
 
-      get group_samples_path(@group), params: { q: { name_or_puid_cont: 'Sample 2', sort: 'puid desc' }, limit: 50 }
+      get group_samples_path(@group), params: { q: { name_or_puid_i_cont: 'Sample 2', sort: 'puid desc' }, limit: 50 }
 
       assert_response :success
       assert_sort_state(1, 'descending')
@@ -199,7 +199,7 @@ module Groups
       sample1 = samples(:sample1)
       sample2 = samples(:sample2)
 
-      get group_samples_path(@group), params: { q: { name_or_puid_cont: sample1.puid, sort: 'name asc' } }
+      get group_samples_path(@group), params: { q: { name_or_puid_i_cont: sample1.puid, sort: 'name asc' } }
       assert_response :success
       assert_sort_state(2, 'ascending')
       assert_includes rendered_sample_puids, sample1.puid

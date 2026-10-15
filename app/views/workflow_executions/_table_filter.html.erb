@@ -15,10 +15,10 @@
 
     <%= render SearchFieldComponent.new(
       form: form,
-      field_name: :name_or_id_cont,
+      field_name: :name_or_id_i_cont,
       label: t("common.controls.search"),
       placeholder: t("shared.workflow_executions.index.search.placeholder"),
-      value: search.name_or_id_cont,
+      value: search.name_or_id_i_cont,
       include_advanced_search_outlet: true,
       data: {
         "search-field-selection-outlet": "#workflow-executions-table",

@@ -655,7 +655,7 @@ module Projects
       end
 
       get namespace_project_members_path(@namespace, @project),
-          params: { members_q: { user_email_cont: @member_james.user.email } },
+          params: { members_q: { user_email_i_cont: @member_james.user.email } },
           as: :turbo_stream
       assert_response :success
 
