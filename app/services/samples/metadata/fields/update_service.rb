@@ -57,29 +57,45 @@ module Samples
         end
 
         # Checks if neither key or value were changed
-        def validate_update_fields # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-          if @key_update.keys[0] == strip_whitespaces(@key_update.values[0]) &&
-             @value_update.keys[0] == strip_whitespaces(@value_update.values[0])
+        def validate_update_fields
+          validate_no_change
+          validate_key_present
+          validate_value_present
+          validate_analysis_source_key
+        end
 
-            raise SampleMetadataFieldsUpdateError,
-                  I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
-          end
-
-          if @key_update.values[0].blank?
-            raise SampleMetadataKeyValidationError, I18n.t('services.samples.metadata.update_fields.key_required')
-          end
-
-          if @value_update.values[0].blank? && !@allow_empty_value
-            raise SampleMetadataValueValidationError,
-                  I18n.t('services.samples.metadata.update_fields.value_required')
-          end
-
-          return unless @sample.metadata_provenance.key?(@key_update.keys[0]) &&
-                        @sample.metadata_provenance[@key_update.keys[0]]['source'] == 'analysis'
+        def validate_no_change
+          return unless @key_update.keys[0] == strip_whitespaces(@key_update.values[0]) &&
+                        @value_update.keys[0] == strip_whitespaces(@value_update.values[0])
 
           raise SampleMetadataFieldsUpdateError,
-                I18n.t('services.samples.metadata.update_fields.user_cannot_edit_metadata_key',
-                       key: @key_update.keys[0])
+                I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
+        end
+
+        def validate_key_present
+          return unless @key_update.values[0].blank?
+
+          raise SampleMetadataKeyValidationError,
+                I18n.t('services.samples.metadata.update_fields.key_required')
+        end
+
+        def validate_value_present
+          return unless @value_update.values[0].blank? && !@allow_empty_value
+
+          raise SampleMetadataValueValidationError,
+                I18n.t('services.samples.metadata.update_fields.value_required')
+        end
+
+        def validate_analysis_source_key
+          key = @key_update.keys[0]
+          return unless @sample.metadata_provenance.key?(key) &&
+                        @sample.metadata_provenance[key]['source'] == 'analysis'
+
+          raise SampleMetadataFieldsUpdateError,
+                I18n.t(
+                  'services.samples.metadata.update_fields.user_cannot_edit_metadata_key',
+                  key: key
+                )
         end
 
         # Constructs the expected param for metadata update_service
