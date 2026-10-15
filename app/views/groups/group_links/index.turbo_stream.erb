@@ -1,8 +1,9 @@
-<%= turbo_stream.update "invited_groups", method: "morph", partial: "invited_groups" %>
+<%= turbo_stream.update "invited_groups", method: "morph", partial: "invited_groups", locals: { namespace_group_links: @namespace_group_links, namespace: @namespace, access_levels: @access_levels, q: @q, has_group_links: @has_group_links, allowed_to: @allowed_to, pagy: @pagy } %>
 
 <%= turbo_stream.update "invited_groups_pagination",
                     method: "morph",
-                    partial: "pagination" %>
+                    partial: "pagination",
+                    locals: { has_group_links: @has_group_links, pagy: @pagy } %>
 
 <%= turbo_stream.update "new_group_link_dialog",
                     partial: "invite_group_modal",

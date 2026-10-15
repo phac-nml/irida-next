@@ -1,33 +1,35 @@
+<%# locals: (q:, has_members:, pagy:, members:, access_levels:, allowed_to:, namespace:, current_user:) -%>
+
 <div class="mt-2 flex flex-col gap-2">
-  <% if @has_members %>
+  <% if has_members %>
     <div class="mb-2 flex justify-end">
       <%= render SearchComponent.new(
-                query: @q,
+                query: q,
                 url: namespace_project_members_url(**request.query_parameters),
                 search_attribute: :user_email_i_cont,
                 label: t('common.controls.search'),
                 placeholder: t("projects.members.member_listing.search.placeholder"),
-                value: @q.user_email_i_cont,
+                value: q.user_email_i_cont,
                 class: "max-sm:grow",
-                total_count: @pagy.count,
+                total_count: pagy.count,
                 as: :members_q
               ) do %>
-        <input type="hidden" name="tab" value="" />
-        <input type="hidden" name="format" value="turbo_stream" />
+        <input type="hidden" name="tab" value="">
+        <input type="hidden" name="format" value="turbo_stream">
       <% end %>
     </div>
   <% end %>
 
   <%= render Members::TableComponent.new(
-    @namespace,
-    @members,
-    @access_levels,
-    @q,
-    @has_members,
+    namespace,
+    members,
+    access_levels,
+    q,
+    has_members,
     current_user,
     {
-      update_member: @allowed_to[:update_member],
-      destroy_member: @allowed_to[:destroy_member],
+      update_member: allowed_to[:update_member],
+      destroy_member: allowed_to[:destroy_member],
     },
   ) %>
 </div>

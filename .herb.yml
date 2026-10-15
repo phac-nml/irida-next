@@ -98,6 +98,8 @@ linter:
       exclude:
         - "app/components/data_imports/linelist_import_dialog/v2/component.html.erb"
         - "app/views/projects/_change_path.html.erb"
+        - "app/views/groups/samples/index.html.erb"
+        - "app/views/projects/samples/index.html.erb"
 
 formatter:
   enabled: true

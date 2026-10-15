@@ -1,5 +1,14 @@
 <% if @tab != "invited_groups" %>
-  <%= turbo_stream.update "members", method: "morph", partial: "member_listing" %>
+  <%= turbo_stream.update "members", method: "morph", partial: "member_listing", locals: {
+    q: @q,
+    has_members: @has_members,
+    pagy: @pagy,
+    members: @members,
+    access_levels: @access_levels,
+    allowed_to: @allowed_to,
+    namespace: @namespace,
+    current_user: @current_user
+  } %>
 
   <%= turbo_stream.update "members_pagination", method: "morph", partial: "pagination" %>
 <% end %>

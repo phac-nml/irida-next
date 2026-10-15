@@ -1,16 +1,16 @@
-<%# locals: (page_limit:, query:, results_message:, search:, total_count:, url:) -%>
+<%# locals: (page_limit:, query:, results_message:, search:, url:) -%>
 
 <div role="status" class="sr-only"><%= results_message %></div>
 
-<%= form_with model: search, html: { role: "search" }, scope: :q, url:, method: :get, data: {turbo_action: "replace", controller: "filters", "filters-selection-outlet": "#workflow-executions-table"},
+<%= form_with model: search, html: { role: "search" }, scope: :q, url: url, method: :get, data: {turbo_action: "replace", controller: "filters", "filters-selection-outlet": "#workflow-executions-table"},
               class: "filters contents" do |form| %>
   <div class="max-sm:grow">
     <% if query.present? && !query.sorts.empty? %>
       <%= hidden_field_tag "q[s]", "#{query.sorts.first.name} #{query.sorts.first.dir}" %>
     <% end %>
 
-    <% if local_assigns.fetch(:page_limit, nil).present? %>
-      <%= hidden_field_tag :limit, local_assigns[:page_limit] %>
+    <% if page_limit.present? %>
+      <%= hidden_field_tag :limit, page_limit %>
     <% end %>
 
     <%= render SearchFieldComponent.new(

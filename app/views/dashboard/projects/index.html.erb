@@ -34,7 +34,7 @@
       src_path: dashboard_projects_url(),
       selected: @tab == "all"
     ) do %>
-      <%= render "projects_list" %>
+      <%= render partial: "projects_list", locals: { has_projects: @has_projects, q: @q, pagy: @pagy, projects: @projects, tab: "all" } %>
     <% end %>
 
     <% tabs.with_lazy_panel(
@@ -44,7 +44,7 @@
       src_path: dashboard_projects_url(personal: "true"),
       selected: @tab == "personal"
     ) do %>
-      <%= render "projects_list" %>
+      <%= render partial: "projects_list", locals: { has_projects: @has_projects, q: @q, pagy: @pagy, projects: @projects, tab: "personal" } %>
     <% end %>
   <% end %>
 </div>
