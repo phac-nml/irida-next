@@ -19,6 +19,7 @@
   "linelist-import-duplicate-headers-message-value": t("services.spreadsheet_import.duplicate_column_names"),
   "linelist-import-no-valid-metadata-message-value": t("shared.samples.metadata.file_imports.form_fields.no_valid_metadata"),
   "linelist-import-error-message-value": t(".error_message"),
+  "linelist-import-worker-url-value": helpers.asset_path("workers/linelist_import_worker.js"),
 } %>
 
 <%= render Viral::DialogComponent.new(open: true, size: :large) do |dialog| %>

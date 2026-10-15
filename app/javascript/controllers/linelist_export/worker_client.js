@@ -68,32 +68,15 @@ export class LinelistExportWorkerClient {
   }
 }
 
-export function resolveLinelistExportWorkerSource(
-  { hasWorkerUrlValue, workerUrlValue },
-  doc = document,
-  loc = location,
-) {
+export function resolveLinelistExportWorkerSource({
+  hasWorkerUrlValue,
+  workerUrlValue,
+}) {
   if (hasWorkerUrlValue && workerUrlValue) {
     return workerUrlValue;
   }
 
-  const resolvedFromImportMap = workerSourceFromImportMap(doc);
-  if (resolvedFromImportMap) {
-    return new URL(resolvedFromImportMap, loc.origin).href;
-  }
-
-  return new URL("../../workers/linelist_export_worker.js", import.meta.url)
-    .href;
-}
-
-function workerSourceFromImportMap(doc) {
-  const importMapScript = doc.querySelector("script[type='importmap']");
-  if (!importMapScript?.textContent) return null;
-
-  try {
-    const importMap = JSON.parse(importMapScript.textContent);
-    return importMap?.imports?.["workers/linelist_export_worker"] || null;
-  } catch {
-    return null;
-  }
+  // Dev/test fallback only: in production the dialog component always supplies a
+  // fingerprinted URL via asset_path, so this branch is not reached.
+  return new URL("./workers/linelist_export_worker.js", import.meta.url).href;
 }

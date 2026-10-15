@@ -155,7 +155,6 @@ export default class extends Controller {
 
   #buildWorker() {
     let worker;
-
     if (typeof Worker !== "undefined") {
       worker = new Worker(resolveLinelistImportWorkerSource(this), {
         type: "module",
