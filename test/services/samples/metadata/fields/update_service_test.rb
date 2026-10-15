@@ -66,6 +66,22 @@ module Samples
           assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
         end
 
+        test 'delete metadata value with empty value' do
+          freeze_time
+          params = { 'allow_empty_value' => true,
+                     'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield1' },
+                                         'value' => { 'value1' => '' } } }
+
+          assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
+
+          metadata_changes = Samples::Metadata::Fields::UpdateService.new(@project29, @sample32, @user, params).execute
+
+          assert_equal({ 'metadatafield2' => 'value2' }, @sample32.metadata)
+          assert_equal({ added: [], updated: [], deleted: %w[metadatafield1], not_updated: [], unchanged: [],
+                         not_found: [] }, metadata_changes)
+          assert_equal({ 'metadatafield2' => 1 }, @project29.namespace.reload.metadata_summary)
+        end
+
         test 'update metadata key and value' do
           freeze_time
           params = { 'update_field' => { 'key' => { 'metadatafield1' => 'metadatafield3' },

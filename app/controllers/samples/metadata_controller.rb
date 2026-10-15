@@ -153,6 +153,7 @@ module Samples
 
     def build_update_params(original_value, new_value)
       {
+        'allow_empty_value' => true,
         'update_field' => {
           'key' => { @field => @field },
           'value' => { original_value => new_value }
