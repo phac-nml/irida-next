@@ -14,7 +14,7 @@ module Samples
 
         class SampleMetadataValueValidationError < StandardError
         end
-        attr_accessor :project, :sample, :key_update, :value_update, :metadata_update_params
+        attr_accessor :project, :sample, :key_update, :value_update, :metadata_update_params, :allow_empty_value
 
         def initialize(project, sample, user = nil, params = {})
           super(user, params)
@@ -22,6 +22,7 @@ module Samples
           @sample = sample
           @key_update = params['update_field']['key']
           @value_update = params['update_field']['value']
+          @allow_empty_value = params['allow_empty_value'] || params[:allow_empty_value] || false
           @metadata_update_params = { 'metadata' => {} }
         end
 
@@ -56,28 +57,45 @@ module Samples
         end
 
         # Checks if neither key or value were changed
-        def validate_update_fields # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-          if @key_update.keys[0] == strip_whitespaces(@key_update.values[0]) &&
-             @value_update.keys[0] == strip_whitespaces(@value_update.values[0])
+        def validate_update_fields
+          validate_no_change
+          validate_key_present
+          validate_value_present
+          validate_analysis_source_key
+        end
 
-            raise SampleMetadataFieldsUpdateError,
-                  I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
-          end
-
-          if @key_update.values[0].blank?
-            raise SampleMetadataKeyValidationError, I18n.t('services.samples.metadata.update_fields.key_required')
-          end
-
-          if @value_update.values[0].blank?
-            raise SampleMetadataValueValidationError,
-                  I18n.t('services.samples.metadata.update_fields.value_required')
-          end
-
-          return unless @sample.metadata_provenance[@key_update.keys[0]]['source'] == 'analysis'
+        def validate_no_change
+          return unless @key_update.keys[0] == strip_whitespaces(@key_update.values[0]) &&
+                        @value_update.keys[0] == strip_whitespaces(@value_update.values[0])
 
           raise SampleMetadataFieldsUpdateError,
-                I18n.t('services.samples.metadata.update_fields.user_cannot_edit_metadata_key',
-                       key: @key_update.keys[0])
+                I18n.t('services.samples.metadata.update_fields.metadata_was_not_changed')
+        end
+
+        def validate_key_present
+          return if @key_update.values[0].present?
+
+          raise SampleMetadataKeyValidationError,
+                I18n.t('services.samples.metadata.update_fields.key_required')
+        end
+
+        def validate_value_present
+          return if @value_update.values[0].present? || @allow_empty_value
+
+          raise SampleMetadataValueValidationError,
+                I18n.t('services.samples.metadata.update_fields.value_required')
+        end
+
+        def validate_analysis_source_key
+          key = @key_update.keys[0]
+          return unless @sample.metadata_provenance.key?(key) &&
+                        @sample.metadata_provenance[key]['source'] == 'analysis'
+
+          raise SampleMetadataFieldsUpdateError,
+                I18n.t(
+                  'services.samples.metadata.update_fields.user_cannot_edit_metadata_key',
+                  key: key
+                )
         end
 
         # Constructs the expected param for metadata update_service
@@ -85,7 +103,10 @@ module Samples
           if @key_update.keys[0] != @key_update.values[0]
             if @sample.metadata.transform_keys(&:downcase).key?(@key_update.values[0].downcase)
               raise SampleMetadataFieldsUpdateError,
-                    I18n.t('services.samples.metadata.update_fields.key_exists', key: @key_update.values[0])
+                    I18n.t(
+                      'services.samples.metadata.update_fields.key_exists',
+                      key: @key_update.values[0]
+                    )
             end
             @metadata_update_params['metadata'][@key_update.keys[0]] = ''
           end

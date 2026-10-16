@@ -199,6 +199,26 @@ module Projects
         assert_not @sample32.metadata['newmetadatafield']
       end
 
+      test 'member with role >= maintainer can delete metadata via empty update value' do
+        assert_equal 'value1', @sample32.metadata['metadatafield1']
+        put sample_metadatum_path(@sample32,
+                                  cell_id: 'a_cell_id', value: '', id: 'metadatafield1',
+                                  format: :turbo_stream)
+        assert_response :success
+
+        assert_select 'turbo-stream[action="append"][target="flashes"]' do
+          assert_select 'template' do
+            assert_select 'div[role="alert"]' do
+              assert_select 'div', "#{I18n.t('common.statuses.success')}: " \
+                                   "#{I18n.t('samples.editable_cell.update_success')}"
+            end
+          end
+        end
+
+        @sample32.reload
+        assert_not @sample32.metadata['metadatafield1']
+      end
+
       test 'cannot create new field through update with empty value' do
         assert_not @sample32.metadata['newmetadatafield']
         put sample_metadatum_path(@sample32,
