@@ -226,6 +226,7 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
                   count: 1
     assert_select "turbo-stream[action='replace'][target='token-information-component'] div h3",
                   text: I18n.t('profiles.personal_access_tokens.index.screen_reader_context'), count: 1
+    assert_select 'turbo-stream[action="append"][target="flashes"]', count: 0
     assert_select '[data-controller="token"]' do
       assert_select 'button[data-action="click->token#copyToClipboard"]', count: 1
     end
@@ -254,6 +255,7 @@ class PersonalAccessTokensTest < ActionDispatch::IntegrationTest
       assert_select 'turbo-stream[action="replace"][target="access-token-section"]', count: 0
       assert_select 'turbo-stream[action="replace"][target="personal_access_tokens"]', count: 0
       assert_select 'turbo-stream[action="replace"][target="token-information-component"]', count: 0
+      assert_select 'turbo-stream[action="append"][target="flashes"]', count: 1
     end
   end
 end

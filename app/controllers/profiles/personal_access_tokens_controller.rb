@@ -44,7 +44,8 @@ module Profiles
         if @personal_access_token.persisted?
           format.turbo_stream do
             render locals: { personal_access_token: PersonalAccessToken.new(scopes: []),
-                             new_personal_access_token: @personal_access_token }
+                             new_personal_access_token: @personal_access_token,
+                             message: nil }
           end
         else
           format.turbo_stream do
@@ -81,11 +82,11 @@ module Profiles
       respond_to do |format|
         if @personal_access_token.errors.empty?
           format.turbo_stream do
-            render locals: { new_personal_access_token: @personal_access_token }
+            render locals: { new_personal_access_token: @personal_access_token, message: nil }
           end
         else
           format.turbo_stream do
-            render status: :unprocessable_content, locals: { personal_access_token: personal_access_token,
+            render status: :unprocessable_content, locals: { new_personal_access_token: nil,
                                                              message: error_message(personal_access_token) }
           end
         end
