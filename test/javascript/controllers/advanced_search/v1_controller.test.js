@@ -387,11 +387,18 @@ describe(identifier, () => {
     },
   );
 
-  it("uses grouped metadata operators, or standard operators when metadata is unavailable", () => {
+  it("uses grouped metadata operators, numeric operators, or standard operators when metadata is unavailable", () => {
     change(field(), "metadata.age");
     expect(
       [...operator().querySelectorAll("optgroup")].map((g) => g.label),
     ).toEqual(["Text", "Numeric"]);
+    controller.numericFieldsValue = ["number_of_loci"];
+    controller.numericOperationsValue = { Greater: ">" };
+    change(field(), "number_of_loci");
+    expect([...operator().options].map((opt) => opt.text)).toEqual([
+      "",
+      "Greater",
+    ]);
     controller.operationsValue = { standard: { Equals: "=" } };
     change(field(), "metadata.other");
     expect(operator().querySelector("optgroup")).toBeNull();
