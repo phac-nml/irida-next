@@ -62,8 +62,11 @@
       <% end %>
     <% end %>
 
+    <%# simplecov:disable %>
     <% if Rails.env.development? and Rails.configuration.enable_web_console == true %>
       <%= console %>
     <% end %>
+
+    <%# simplecov:enable %>
   </body>
 </html>
