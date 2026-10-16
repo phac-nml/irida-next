@@ -13,10 +13,10 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     @user = users(:john_doe)
   end
 
-  test 'basic search with name_or_id_cont' do
+  test 'basic search with name_or_id_i_cont' do
     query = WorkflowExecution::Query.new(
       namespace_ids: [@workflow_execution1.namespace_id],
-      name_or_id_cont: 'valid'
+      name_or_id_i_cont: 'valid'
     )
     results = query.send(:ransack_results)
     assert results.include?(@workflow_execution1)
@@ -1321,10 +1321,10 @@ class WorkflowExecution::QueryTest < ActiveSupport::TestCase # rubocop:disable S
     assert_not results.is_a?(Array)
   end
 
-  test 'ransack integration with name_or_id_cont and advanced search' do
+  test 'ransack integration with name_or_id_i_cont and advanced search' do
     query = WorkflowExecution::Query.new(
       namespace_ids: [@workflow_execution1.namespace_id, @workflow_execution2.namespace_id],
-      name_or_id_cont: 'example',
+      name_or_id_i_cont: 'example',
       groups: [WorkflowExecution::SearchGroup.new(
         conditions: [WorkflowExecution::SearchCondition.new(
           field: 'state', operator: '=', value: 'completed'

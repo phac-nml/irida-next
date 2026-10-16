@@ -214,7 +214,7 @@ module Projects
       @results_message =
         if @query.advanced_query?
           results_message_for_advanced_search
-        elsif @query.name_or_puid_cont
+        elsif @query.name_or_puid_i_cont
           results_message_for_quick_search
         end
     end
@@ -231,12 +231,12 @@ module Projects
 
     def results_message_for_quick_search
       if @pagy&.count&.zero?
-        I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_puid_cont)
+        I18n.t(:'components.search.results_message.zero', search_term: @query.name_or_puid_i_cont)
       elsif @pagy&.count == 1 # rubocop:disable Style/CollectionQuerying
-        I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_puid_cont)
+        I18n.t(:'components.search.results_message.singular', search_term: @query.name_or_puid_i_cont)
       else
         I18n.t(:'components.search.results_message.plural', total_count: @pagy&.count,
-                                                            search_term: @query.name_or_puid_cont)
+                                                            search_term: @query.name_or_puid_i_cont)
       end
     end
 
@@ -244,8 +244,8 @@ module Projects
       updated_params = update_store(
         search_key,
         params.fetch(:q, {})
-              .permit(:name_or_puid_cont, :metadata_template, :sort, :groups_attributes, groups_attributes: {}),
-        permitted_keys: %i[name_or_puid_cont metadata_template sort groups_attributes]
+              .permit(:name_or_puid_i_cont, :metadata_template, :sort, :groups_attributes, groups_attributes: {}),
+        permitted_keys: %i[name_or_puid_i_cont metadata_template sort groups_attributes]
       )
 
       if !updated_params.key?(:sort) ||

@@ -12,7 +12,7 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
   self.enum_metadata_fields = Attachment::FieldConfiguration::ENUM_METADATA_FIELDS
 
   attribute :attachables, default: -> { [] }
-  attribute :puid_or_file_blob_filename_cont, :string
+  attribute :puid_or_file_blob_filename_i_cont, :string
   attribute :groups, default: -> { [] }
 
   query_for Attachment
@@ -91,12 +91,12 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
 
   def ransack_params
     {
-      puid_or_file_blob_filename_cont: puid_or_file_blob_filename_cont
+      puid_or_file_blob_filename_i_cont: puid_or_file_blob_filename_i_cont
     }.compact
   end
 
   def filter_requested?
-    puid_or_file_blob_filename_cont.present?
+    puid_or_file_blob_filename_i_cont.present?
   end
 
   # Reverse reads should only surface when the caller explicitly asked for a broader

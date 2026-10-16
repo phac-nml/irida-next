@@ -104,7 +104,7 @@ module Samples
             content_tag(:span, class: 'font-mono font-semibold') do
               highlight(
                 sample[column],
-                defined?(@search_params[:name_or_puid_cont]) && @search_params[:name_or_puid_cont],
+                defined?(@search_params[:name_or_puid_i_cont]) && @search_params[:name_or_puid_i_cont],
                 highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>'
               )
             end
@@ -115,7 +115,7 @@ module Samples
             ) do
               highlight(
                 sample[column],
-                defined?(@search_params[:name_or_puid_cont]) && @search_params[:name_or_puid_cont],
+                defined?(@search_params[:name_or_puid_i_cont]) && @search_params[:name_or_puid_i_cont],
                 highlighter: '<mark class="bg-primary-300 dark:bg-primary-600 font-semibold">\1</mark>'
               )
             end

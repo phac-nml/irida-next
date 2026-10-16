@@ -1,4 +1,4 @@
-<%= turbo_stream.update "table-filter", partial: "table_filter" %>
+<%= turbo_stream.update "table-filter", partial: "table_filter", locals: { pagy: @pagy, query: @query, search_params: @search_params, results_message: @results_message, advanced_search_fields: @advanced_search_fields } %>
 
 <% if @query.valid? %>
   <%= turbo_stream.append "samples-table" do %>

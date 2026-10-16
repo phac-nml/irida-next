@@ -6,14 +6,14 @@ module Viral
   module Pagy
     class LimitComponentTest < ViewComponent::TestCase
       test 'preserves nested search and sort query params as hidden fields' do
-        query = 'q%5Bs%5D=puid+asc&q%5Bpuid_or_file_blob_filename_cont%5D=report'
+        query = 'q%5Bs%5D=puid+asc&q%5Bpuid_or_file_blob_filename_i_cont%5D=report'
         with_request_url "/-/groups/group-1/-/attachments?#{query}" do
           render_inline Viral::Pagy::LimitComponent.new(pagy_for(count: 25), item: 'items')
 
           assert_selector '#limit-component-form input[type="hidden"][name="q[s]"][value="puid asc"]',
                           visible: :hidden
           assert_selector(
-            '#limit-component-form input[type="hidden"][name="q[puid_or_file_blob_filename_cont]"][value="report"]',
+            '#limit-component-form input[type="hidden"][name="q[puid_or_file_blob_filename_i_cont]"][value="report"]',
             visible: :hidden
           )
         end

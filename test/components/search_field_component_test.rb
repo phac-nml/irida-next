@@ -395,7 +395,7 @@ class SearchFieldComponentTest < ViewComponent::TestCase
 
   # Different Field Names Tests
   test 'renders with different field names' do
-    different_field_names = %i[user_email_cont name_cont puid_cont description_cont]
+    different_field_names = %i[user_email_i_cont name_i_cont puid_i_cont description_i_cont]
 
     different_field_names.each do |field_name|
       render_inline SearchFieldComponent.new(

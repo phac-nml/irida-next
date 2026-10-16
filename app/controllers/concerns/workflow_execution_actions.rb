@@ -257,7 +257,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   # - SearchComponent expects @q for form binding and displaying current search values
   #
   # View usage:
-  # - SearchComponent: Uses @q.name_or_id_cont for displaying current search term
+  # - SearchComponent: Uses @q.name_or_id_i_cont for displaying current search term
   # - Table headers: Ransack::SortComponent uses @q for sort links and sort state
   # - Results: @query.results provides the actual paginated workflow executions
   #
@@ -268,7 +268,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     # Create Ransack object from request params for UI component compatibility
     @q = load_workflows.ransack(params[:q])
     # Sync search values from custom Query to Ransack for accurate form display
-    @q.name_or_id_cont = @query.name_or_id_cont
+    @q.name_or_id_i_cont = @query.name_or_id_i_cont
     # Set default sort order if none provided
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
   end
@@ -365,7 +365,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def search_params
     search_params = {}
-    search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
+    search_params[:name_or_id_i_cont] = params.dig(:q, :name_or_id_i_cont)
     search_params[:name_or_id_in] = params.dig(:q, :name_or_id_in)
     search_params[:sort] = params.dig(:q, :s)
 
@@ -387,6 +387,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def results_message
     return advanced_search_results_message if @query.advanced_query?
 
-    quick_search_results_message(@query.name_or_id_cont) if @query.name_or_id_cont.present?
+    quick_search_results_message(@query.name_or_id_i_cont) if @query.name_or_id_i_cont.present?
   end
 end

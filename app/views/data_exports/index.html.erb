@@ -9,12 +9,12 @@
     <%= render SearchComponent.new(
       query: @q,
       url: data_exports_url,
-      search_attribute: :id_or_name_cont,
+      search_attribute: :id_or_name_i_cont,
     label: t('common.controls.search'),
       placeholder: t(:".search.placeholder"),
       total_count: @pagy.count,
       class: "max-sm:grow",
-      value: @q.id_or_name_cont,
+      value: @q.id_or_name_i_cont,
     ) %>
   </div>
 <% end %>

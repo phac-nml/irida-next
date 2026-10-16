@@ -11,7 +11,7 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   self.enum_metadata_fields = WorkflowExecution::FieldConfiguration::ENUM_METADATA_FIELDS
 
-  attribute :name_or_id_cont, :string
+  attribute :name_or_id_i_cont, :string
   attribute :name_or_id_in, default: -> { [] }
   attribute :namespace_ids, default: -> { [] }
   attribute :groups, default: -> { [] }
@@ -63,7 +63,7 @@ class WorkflowExecution::Query < AdvancedSearchQueryForm # rubocop:disable Style
 
   def ransack_params
     {
-      name_or_id_cont: name_or_id_cont,
+      name_or_id_i_cont: name_or_id_i_cont,
       name_or_id_in: name_or_id_in
     }.compact
   end

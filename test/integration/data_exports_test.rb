@@ -415,7 +415,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
 
     assert_select 'table tbody tr', count: 7
 
-    get data_exports_path, params: { q: { id_or_name_cont: @data_export1.id } }
+    get data_exports_path, params: { q: { id_or_name_i_cont: @data_export1.id } }
     assert_response :success
 
     assert_select 'table tbody tr', count: 1
@@ -424,14 +424,14 @@ class DataExportsTest < ActionDispatch::IntegrationTest
       assert_select 'td', text: @data_export1.name
     end
 
-    get data_exports_path, params: { q: { id_or_name_cont: @data_export1.name } }
+    get data_exports_path, params: { q: { id_or_name_i_cont: @data_export1.name } }
     assert_response :success
 
     assert_select 'table tbody tr', count: 2
     assert_select "tr[id='#{dom_id(@data_export1)}']"
     assert_select "tr[id='#{dom_id(@data_export10)}']"
 
-    get data_exports_path, params: { q: { id_or_name_cont: 'something that does not exist' } }
+    get data_exports_path, params: { q: { id_or_name_i_cont: 'something that does not exist' } }
     assert_response :success
 
     assert_select 'section[role="status"]' do

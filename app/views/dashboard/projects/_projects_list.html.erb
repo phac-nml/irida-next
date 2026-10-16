@@ -1,14 +1,16 @@
-<% if @has_projects %>
+<%# locals: (has_projects:, q:, pagy:, projects:, tab:) -%>
+
+<% if has_projects %>
   <div class="mb-4 flex flex-wrap justify-end space-x-2">
     <%= render SearchComponent.new(
-      query: @q,
+      query: q,
       url: dashboard_projects_url(**request.query_parameters),
-      search_attribute: :namespace_name_or_namespace_puid_cont,
+      search_attribute: :namespace_name_or_namespace_puid_i_cont,
       label: t('common.controls.search'),
       placeholder: t("dashboard.projects.index.search.placeholder"),
-      total_count: @pagy.count,
+      total_count: pagy.count,
       class: "max-sm:grow",
-      value: @q.namespace_name_or_namespace_puid_cont,
+      value: q.namespace_name_or_namespace_puid_i_cont,
       data: {},
       as: (params[:personal] == 'true' ? :personal_projects_q : :all_projects_q)
     ) do %>
@@ -18,7 +20,7 @@
     <% end %>
 
     <%= render Ransack::SortDropdownComponent.new(
-      @q,
+      q,
       "projects",
       [
         { name: "updated_at", dir: "desc" },
@@ -32,9 +34,9 @@
     ) %>
   </div>
   <div class="flex flex-col gap-2" id="groups_tree">
-    <%= render TreegridComponent.new(aria: {label: t("dashboard.projects.treegrid.aria_label.#{@tab}")}) do | component | %>
-      <% @projects.each_with_index do |project, project_index| %>
-        <%= component.with_row(tabindex: (project_index.zero? ? 0 : -1), expandable: false, posinset: project_index + 1, setsize: @projects.size, aria: { label: namespace_row_aria_label(project.namespace) }, button_arguments: { data: { "toggle-url": public_send("dashboard_projects_url", { parent_id: project.id, collapse: false, level: 1, posinset: project_index + 1, setsize: @projects.size }) } }, id: dom_id(project)) do %>
+    <%= render TreegridComponent.new(aria: {label: t("dashboard.projects.treegrid.aria_label.#{tab}")}) do | component | %>
+      <% projects.each_with_index do |project, project_index| %>
+        <%= component.with_row(tabindex: (project_index.zero? ? 0 : -1), expandable: false, posinset: project_index + 1, setsize: projects.size, aria: { label: namespace_row_aria_label(project.namespace) }, button_arguments: { data: { "toggle-url": public_send("dashboard_projects_url", { parent_id: project.id, collapse: false, level: 1, posinset: project_index + 1, setsize: projects.size }) } }, id: dom_id(project)) do %>
           <%= render NamespaceRow::ContentsComponent.new(
             namespace: project.namespace,
             full_name: true,
@@ -44,9 +46,9 @@
       <% end %>
     <% end %>
 
-    <% if @pagy.count.positive? %>
+    <% if pagy.count.positive? %>
       <%= render Viral::Pagy::FullComponent.new(
-        @pagy,
+        pagy,
         item: t("dashboard.projects.index.pagy_item"),
       ) %>
     <% else %>

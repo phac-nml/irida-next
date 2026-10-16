@@ -5,7 +5,7 @@ class SearchFieldComponentPreview < ViewComponent::Preview
     render_with_template(locals: {
                            label: 'Search by email',
                            placeholder: 'Enter email address',
-                           field_name: :user_email_cont,
+                           field_name: :user_email_i_cont,
                            value: nil
                          })
   end
@@ -14,7 +14,7 @@ class SearchFieldComponentPreview < ViewComponent::Preview
     render_with_template(locals: {
                            label: 'Search by email',
                            placeholder: 'Enter email address',
-                           field_name: :user_email_cont,
+                           field_name: :user_email_i_cont,
                            value: 'test@example.com'
                          })
   end
@@ -23,7 +23,7 @@ class SearchFieldComponentPreview < ViewComponent::Preview
     render_with_template(locals: {
                            label: 'Search by email',
                            placeholder: 'Enter email address',
-                           field_name: :user_email_cont,
+                           field_name: :user_email_i_cont,
                            value: ''
                          })
   end
@@ -32,7 +32,7 @@ class SearchFieldComponentPreview < ViewComponent::Preview
     render_with_template(locals: {
                            label: 'Search by name',
                            placeholder: 'Enter name',
-                           field_name: :name_cont,
+                           field_name: :name_i_cont,
                            value: 'John Doe'
                          })
   end

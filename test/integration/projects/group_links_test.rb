@@ -185,7 +185,7 @@ module Projects
         get namespace_project_group_links_path(@namespace.parent,
                                                @project,
                                                format: :turbo_stream,
-                                               group_links_q: { group_name_cont: namespace_group_link.group.name })
+                                               group_links_q: { group_name_i_cont: namespace_group_link.group.name })
         assert_response :success
         assert_select 'turbo-stream[action="update"][target="invited_groups"]' do
           assert_select 'template' do
@@ -306,7 +306,7 @@ module Projects
       get namespace_project_group_links_path(@namespace.parent,
                                              @project,
                                              format: :turbo_stream,
-                                             group_links_q: { group_name_cont: @group_link2.group.name })
+                                             group_links_q: { group_name_i_cont: @group_link2.group.name })
       assert_response :success
       assert_select 'turbo-stream[action="update"][target="invited_groups"]' do
         assert_select 'template' do

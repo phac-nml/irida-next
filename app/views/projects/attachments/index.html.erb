@@ -26,13 +26,13 @@
       <div class="mb-2 flex justify-end">
         <%= render SearchComponent.new(
           query: @q,
-          search_attribute: :puid_or_file_blob_filename_cont,
+          search_attribute: :puid_or_file_blob_filename_i_cont,
         label: t('common.controls.search'),
           placeholder: t(:".search.placeholder"),
           url: namespace_project_attachments_path(@project.parent, @project),
           total_count: @pagy.count,
           class: "max-sm:grow",
-          value: @q.puid_or_file_blob_filename_cont,
+          value: @q.puid_or_file_blob_filename_i_cont,
         ) do %>
           <%= hidden_field_tag :limit, @pagy.limit %>
         <% end %>

@@ -135,7 +135,7 @@ module Projects
     end
 
     test 'quick search highlights matching sample names' do
-      get namespace_project_samples_url(@namespace, @project, q: { name_or_puid_cont: 'sample' })
+      get namespace_project_samples_url(@namespace, @project, q: { name_or_puid_i_cont: 'sample' })
 
       assert_response :success
       assert_select 'table tbody tr', count: 3
@@ -143,7 +143,7 @@ module Projects
     end
 
     test 'quick search highlights matching sample puid' do
-      get namespace_project_samples_url(@namespace, @project, q: { name_or_puid_cont: @sample1.puid })
+      get namespace_project_samples_url(@namespace, @project, q: { name_or_puid_i_cont: @sample1.puid })
 
       assert_response :success
       assert_select 'table tbody tr', count: 1

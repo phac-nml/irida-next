@@ -89,12 +89,12 @@
                   <%= render SearchComponent.new(
                     query: @q,
                     url: group_path(@group),
-                    search_attribute: :name_or_puid_cont,
+                    search_attribute: :name_or_puid_i_cont,
                     label: t("common.controls.search"),
                     placeholder: t("groups.show.search.placeholder"),
                     total_count: @pagy.count,
                     class: "max-sm:grow",
-                    value: @q.name_or_puid_cont,
+                    value: @q.name_or_puid_i_cont,
                     data: {
                     },
                     as: :subgroups_and_projects_q,
@@ -121,12 +121,12 @@
                   <%= render SearchComponent.new(
                     query: @q,
                     url: group_path(@group),
-                    search_attribute: :name_or_puid_cont,
+                    search_attribute: :name_or_puid_i_cont,
                     label: t('common.controls.search'),
                     placeholder: t("groups.show.search.placeholder"),
                     total_count: @pagy.count,
                     class: "max-sm:grow",
-                    value: @q.name_or_puid_cont,
+                    value: @q.name_or_puid_i_cont,
                     data: {},
                     as: :shared_namespaces_q
                   ) do %>

@@ -540,7 +540,7 @@ module Groups
         end
       end
 
-      get group_members_path(@group), params: { members_q: { user_email_cont: @member_james.user.email } },
+      get group_members_path(@group), params: { members_q: { user_email_i_cont: @member_james.user.email } },
                                       as: :turbo_stream
       assert_response :success
 

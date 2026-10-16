@@ -79,7 +79,7 @@ module Samples
         end
 
         def highlight_term
-          @search_params[:name_or_puid_cont] || @search_params['name_or_puid_cont']
+          @search_params[:name_or_puid_i_cont] || @search_params['name_or_puid_i_cont']
         end
 
         def empty_state?

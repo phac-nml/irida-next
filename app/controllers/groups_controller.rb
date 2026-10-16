@@ -29,7 +29,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                  end
 
     @search_params = search_params(search_key)
-    @render_flat_list = @search_params[:name_or_puid_cont].present?
+    @render_flat_list = @search_params[:name_or_puid_i_cont].present?
 
     all_namespaces = shared_namespaces_or_sub_namespaces
     @has_namespaces = all_namespaces.any?
@@ -257,7 +257,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def search_params(search_key)
     search_params = {}
-    search_params[:name_or_puid_cont] = params.dig(search_key, :name_or_puid_cont)
+    search_params[:name_or_puid_i_cont] = params.dig(search_key, :name_or_puid_i_cont)
     search_params
   end
 

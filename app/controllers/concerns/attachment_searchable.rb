@@ -9,7 +9,7 @@ module AttachmentSearchable
   private
 
   def filter_requested?
-    params.dig(:q, :puid_or_file_blob_filename_cont).present?
+    params.dig(:q, :puid_or_file_blob_filename_i_cont).present?
   end
 
   def attachments_query(attachable)
@@ -18,7 +18,7 @@ module AttachmentSearchable
 
   def attachment_search_params
     search_params = {}
-    search_params[:puid_or_file_blob_filename_cont] = params.dig(:q, :puid_or_file_blob_filename_cont)
+    search_params[:puid_or_file_blob_filename_i_cont] = params.dig(:q, :puid_or_file_blob_filename_i_cont)
     search_params[:sort] = params.dig(:q, :s)
 
     groups_attributes = attachment_advanced_search_groups_attributes
@@ -39,7 +39,7 @@ module AttachmentSearchable
     # Create Ransack object from request params for UI component compatibility
     @q = all_attachments.ransack(params[:q])
     # Sync search values from custom Query to Ransack for accurate form display
-    @q.puid_or_file_blob_filename_cont = @query.puid_or_file_blob_filename_cont
+    @q.puid_or_file_blob_filename_i_cont = @query.puid_or_file_blob_filename_i_cont
     # Default sort indicator mirrors the query's own effective sort so the UI never diverges from results.
     @q.sorts = "#{@query.column} #{@query.direction}" if @q.sorts.empty?
   end
@@ -47,8 +47,8 @@ module AttachmentSearchable
   def attachments_results_message
     return advanced_search_results_message if @query.advanced_query?
 
-    return if @query.puid_or_file_blob_filename_cont.blank?
+    return if @query.puid_or_file_blob_filename_i_cont.blank?
 
-    quick_search_results_message(@query.puid_or_file_blob_filename_cont)
+    quick_search_results_message(@query.puid_or_file_blob_filename_i_cont)
   end
 end

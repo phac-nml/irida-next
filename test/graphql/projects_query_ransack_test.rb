@@ -73,7 +73,7 @@ class ProjectsQueryRansackTest < ActiveSupport::TestCase
   test 'ransack projects query should work with order by' do
     result = IridaSchema.execute(PROJECTS_RANSACK_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { name_cont: 'Project 1' },
+                                 variables: { filter: { name_i_cont: 'Project 1' },
                                               orderBy: { field: 'name', direction: 'asc' } })
 
     assert_nil result['errors'], 'should work and have no errors.'

@@ -308,7 +308,7 @@ class SearchComponentTest < ViewComponent::TestCase
   end
 
   test 'renders with different search attributes' do
-    different_attributes = %i[name_cont puid_cont description_cont]
+    different_attributes = %i[name_i_cont puid_i_cont description_i_cont]
 
     different_attributes.each do |attr|
       render_inline SearchComponent.new(

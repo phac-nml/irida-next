@@ -6,7 +6,7 @@ class QueryTest < ActiveSupport::TestCase
   test 'valid query' do
     search_params = { sort: 'updated_at desc',
                       groups_attributes: {},
-                      name_or_puid_cont: 'Project 1 Sample 1',
+                      name_or_puid_i_cont: 'Project 1 Sample 1',
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
     query = Sample::Query.new(search_params)
     assert_not query.advanced_query?

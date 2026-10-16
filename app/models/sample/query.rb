@@ -7,7 +7,7 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
 
   allowed_sort_columns :name, :puid, :created_at, :updated_at, :attachments_updated_at, 'namespaces.puid'
 
-  attribute :name_or_puid_cont, :string
+  attribute :name_or_puid_i_cont, :string
   attribute :project_ids, default: -> { [] }
   attribute :groups, default: -> { [] }
 
@@ -37,7 +37,7 @@ class Sample::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassAndMo
 
   def ransack_params
     {
-      name_or_puid_cont: name_or_puid_cont
+      name_or_puid_i_cont: name_or_puid_i_cont
     }.compact
   end
 end

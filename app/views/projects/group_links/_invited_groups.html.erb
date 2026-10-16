@@ -1,31 +1,34 @@
-<div class="flex flex-col gap-2 mt-2">
-  <% if @has_group_links %>
-    <div class="flex justify-end mb-2">
+<%# locals: (namespace_group_links:, namespace:, access_levels:, q:, has_group_links:, allowed_to:, pagy:) -%>
+
+<div class="mt-2 flex flex-col gap-2">
+  <% if has_group_links %>
+    <div class="mb-2 flex justify-end">
       <%= render SearchComponent.new(
-              query: @q,
+              query: q,
               url: namespace_project_group_links_url(**request.query_parameters),
-              search_attribute: :group_name_cont,
+              search_attribute: :group_name_i_cont,
               label: t('common.controls.search'),
               placeholder: t("projects.group_links.invited_groups.search.placeholder"),
-              total_count: @pagy.count,
+              total_count: pagy.count,
               class: "max-sm:grow",
-              value: @q.group_name_cont,
+              value: q.group_name_i_cont,
               as: :group_links_q
             ) do %>
-        <input type="hidden" name="tab" value="invited_groups"/>
-        <input type="hidden" name="format" value="turbo_stream"/>
+        <input type="hidden" name="tab" value="invited_groups">
+        <input type="hidden" name="format" value="turbo_stream">
       <% end %>
     </div>
   <% end %>
+
   <%= render Groups::TableComponent.new(
-    @namespace_group_links,
-    @namespace,
-    @access_levels,
-    @q,
-    @has_group_links,
+    namespace_group_links,
+    namespace,
+    access_levels,
+    q,
+    has_group_links,
     abilities: {
-      update_namespace: @allowed_to[:update_namespace_with_group_link],
-      unlink_group: @allowed_to[:unlink_group],
+      update_namespace: allowed_to[:update_namespace_with_group_link],
+      unlink_group: allowed_to[:unlink_group],
     },
   ) %>
 </div>

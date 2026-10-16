@@ -11,8 +11,7 @@
       <% if @allowed_to[:submit_workflow] && @has_samples && @pipelines_enabled %>
         <%= form_with url: pipeline_selection_workflow_executions_submissions_path,
         method: :get,
-        data: { turbo_stream: true },
-        class: "contents" do %>
+        data: { turbo_stream: true }, class: "contents" do %>
           <%= hidden_field_tag :namespace_id, @group.id %>
 
           <%= render Pathogen::Button.new(
@@ -193,7 +192,9 @@
 
       <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
-      <div id="table-filter" role="presentation" class="contents"><%= render partial: "table_filter" %></div>
+      <div id="table-filter" role="presentation" class="contents">
+        <%= render partial: "table_filter", locals: { pagy: @pagy, query: @query, search_params: @search_params, results_message: @results_message, advanced_search_fields: @advanced_search_fields } %>
+      </div>
 
       <%= render MetadataTemplates::DropdownComponent.new(
       url:

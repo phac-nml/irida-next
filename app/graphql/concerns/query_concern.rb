@@ -22,7 +22,7 @@ module QueryConcern
   def filter_params(filter)
     filter_params = {}
     filter_params.merge!(advanced_search_params(filter:)) if filter[:advanced_search]
-    filter_params.merge!(name_or_puid_cont: filter[:name_or_puid_cont]) if filter[:name_or_puid_cont]
+    filter_params.merge!(name_or_puid_i_cont: filter[:name_or_puid_i_cont]) if filter[:name_or_puid_i_cont]
     filter_params
   end
 
