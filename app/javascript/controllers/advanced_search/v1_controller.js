@@ -311,6 +311,7 @@ export default class AdvancedSearchController extends Controller {
 
   #updateOperatorDropdown(condition, selectedField) {
     const operator = condition.querySelector("[name$='[operator]']");
+    /* v8 ignore if -- handleFieldChange already requires this operator before calling synchronously. */
     if (!operator) {
       return;
     }
@@ -595,6 +596,7 @@ export default class AdvancedSearchController extends Controller {
   }
 
   #resetAndGetValueInput(condition) {
+    /* v8 ignore if -- both callers return before passing a missing condition. */
     if (!condition) return null;
     const values = condition.querySelectorAll(".value");
     if (values.length === 0) {
