@@ -698,27 +698,28 @@ a.pill-focus-reset:focus-visible {
 /* ComboboxComponent */
 
 [data-controller~="combobox--v1"] {
-  @apply relative text-slate-900 dark:text-white;
+  @apply relative text-[var(--pvc-color-text)];
+
+  --pvc-color-focus: var(--color-black);
+
+  @variant dark {
+    --pvc-color-focus: var(--color-white);
+  }
 
   input {
-    @apply relative m-0 box-border w-full cursor-pointer rounded-lg border border-slate-300 px-3 py-2 pr-20 align-bottom outline-none focus-visible:shadow-none focus-visible:outline dark:border-slate-600 dark:bg-slate-800;
+    @apply relative m-0 box-border min-h-12 w-full cursor-pointer rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] bg-[var(--pvc-color-surface)] px-3 py-2 pr-26 align-bottom text-[var(--pvc-color-text)] outline-none focus-visible:shadow-none;
   }
 
   input[aria-invalid="true"] {
-    @apply border-red-700 text-red-900 dark:border-red-600 dark:text-red-400;
+    @apply border-[var(--pvc-color-danger-strong)] text-[var(--pvc-color-danger-strong)];
   }
 
   input[aria-disabled="true"] {
-    @apply cursor-not-allowed bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-300;
+    @apply cursor-not-allowed bg-[var(--pvc-color-surface-muted)] text-[var(--pvc-color-text-muted)];
   }
 
   input:focus-visible {
-    @apply outline-3 outline-offset-2 outline-black outline-solid dark:outline-white;
-    box-shadow: none !important;
-  }
-
-  input[aria-invalid="true"]:focus-visible {
-    @apply outline-3 outline-offset-2 outline-red-700 outline-solid dark:outline-red-400;
+    @apply outline-2 outline-offset-2 outline-[var(--pvc-color-focus)] outline-solid;
     box-shadow: none !important;
   }
 
@@ -761,29 +762,15 @@ a.pill-focus-reset:focus-visible {
     @apply bg-blue-800/80 text-white dark:bg-blue-600/50;
   }
 
-  [data-combobox--v1-target="indicatorClearButton"] {
-    @apply border-y border-slate-300 shadow-[inset_1px_0_0_0_var(--color-slate-300)] dark:border-slate-600 dark:shadow-[inset_1px_0_0_0_var(--color-slate-600)];
+  /* Native adornment buttons keep the combobox's focus and direct SVG rotation contract. */
+  [data-combobox--v1-target="indicatorClearButton"],
+  [data-combobox--v1-target="indicatorButton"] {
+    @apply h-11 w-11 shrink-0 items-center justify-center rounded-[var(--pvc-radius-control)] border-0 bg-transparent text-[var(--pvc-color-text-muted)] shadow-none transition-colors duration-[var(--pvc-duration-fast)] not-aria-disabled:cursor-pointer not-aria-disabled:hover:bg-[var(--pvc-color-surface-muted)] not-aria-disabled:hover:text-[var(--pvc-color-text)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--pvc-color-focus)] motion-reduce:transition-none;
   }
 
   [data-combobox--v1-target="indicatorClearButton"][aria-disabled="true"],
   [data-combobox--v1-target="indicatorButton"][aria-disabled="true"] {
-    @apply pointer-events-none text-slate-500 dark:text-slate-400;
-  }
-
-  [data-combobox--v1-target="indicatorButton"] {
-    @apply border border-l-0 border-slate-300 dark:border-slate-600;
-  }
-
-  input[aria-invalid="true"]
-    ~ div
-    [data-combobox--v1-target="indicatorClearButton"] {
-    @apply border-y-red-700 shadow-[inset_1px_0_0_0_var(--color-red-700)] dark:border-y-red-600 dark:shadow-[inset_1px_0_0_0_var(--color-red-600)];
-  }
-
-  input[aria-invalid="true"]
-    ~ div
-    [data-combobox--v1-target="indicatorButton"] {
-    @apply border-red-700 dark:border-red-600;
+    @apply pointer-events-none cursor-not-allowed text-[var(--pvc-color-text-muted)];
   }
 
   button:disabled {
