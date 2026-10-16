@@ -15,6 +15,7 @@ module Samples
           metadata_fields: [],
           search_params: {},
           empty: {},
+          virtual_pagination: nil,
           **system_arguments
         )
           @samples = samples
@@ -25,6 +26,7 @@ module Samples
           @metadata_fields = metadata_fields
           @search_params = search_params
           @empty = empty
+          @virtual_pagination = virtual_pagination
           @system_arguments = system_arguments
 
           # use rpartition to split on the first space encountered from the right side
@@ -60,21 +62,28 @@ module Samples
         def data_grid_width(column)
           return puid_width if column == :puid
 
+          return column == :name ? 280 : 200 if virtual?
+
           nil
         end
 
         def data_grid_sticky?(column)
+          return column == :puid if virtual?
+
           %i[puid name].include?(column)
         end
 
         def data_grid_sticky_left(column)
           return 0 if column == :puid
-          return puid_width if column == :name
+          return puid_width if column == :name && !virtual?
 
           nil
         end
 
         def puid_width
+          # Reserve room for the full identifier and the grid's horizontal cell padding.
+          return 240 if virtual?
+
           helpers.puid_width(object_class: Sample, has_checkbox: @abilities[:select_samples])
         end
 
@@ -87,7 +96,7 @@ module Samples
         end
 
         def metadata_value(sample, field)
-          sample.metadata[field]
+          sample.metadata[field].to_s
         end
 
         def render_column_value(column, sample)
@@ -96,7 +105,60 @@ module Samples
           send(renderer, column, sample)
         end
 
+        def virtual? = @virtual_pagination.present?
+
+        def data_grid
+          Pathogen::DataGridComponent.new(
+            rows: @samples, fill_container: true, virtual: virtual?,
+            virtual_pagination: @virtual_pagination, **data_grid_arguments
+          ).tap do |grid|
+            @columns.each do |column|
+              add_grid_column(grid, column, data_grid_label(column)) do |sample|
+                render_column_value(column, sample)
+              end
+            end
+            @metadata_fields.each do |field|
+              add_grid_column(grid, "metadata_#{field}", field) { |sample| metadata_value(sample, field) }
+            end
+          end
+        end
+
         private
+
+        def add_grid_column(grid, column, label, &renderer)
+          options = {
+            width: data_grid_width(column), sticky: data_grid_sticky?(column),
+            sticky_left: data_grid_sticky_left(column), renderer: ->(sample, _index) { renderer.call(sample) }
+          }
+          if virtual?
+            options[:header_content] = -> { sort_button(column, label) }
+            options[:aria] = { sort: sort_state(column) } if @sort_key == column.to_s
+          end
+          grid.with_column(label, **options)
+        end
+
+        def sort_state(column)
+          return unless @sort_key == column.to_s
+
+          @sort_direction == 'asc' ? 'ascending' : 'descending'
+        end
+
+        def sort_button(column, label)
+          direction = @sort_key == column.to_s && @sort_direction == 'asc' ? 'desc' : 'asc'
+          query = @search_params.to_h.merge('sort' => "#{column} #{direction}")
+          url = helpers.namespace_project_samples_path(@namespace.parent, @namespace.project,
+                                                       q: query, limit: @virtual_pagination[:page_size])
+          accessible_label = I18n.t("projects.samples.cursor.sort_#{direction}", column: label)
+          button = Pathogen::Button.new(
+            type: :button, size: :small, tone: :neutral, emphasis: :ghost, text: label,
+            aria: { label: accessible_label }, class: 'pvc-data-grid__header-action font-semibold',
+            data: { action: 'click->samples-cursor#sort', sort_field: column, sort_url: url }
+          )
+          if @sort_key == column.to_s
+            button.with_trailing_visual { helpers.icon(@sort_direction == 'asc' ? :arrow_up : :arrow_down, size: :sm) }
+          end
+          render(button)
+        end
 
         def column_renderers(_sample)
           {
@@ -123,7 +185,8 @@ module Samples
         def render_name_column(_column, sample)
           helpers.link_to(
             helpers.sample_path(sample),
-            class: 'pathogen-data-grid__link pathogen-data-grid__link--sample'
+            class: 'pathogen-data-grid__link pathogen-data-grid__link--sample',
+            data: virtual? ? { turbo_frame: '_top' } : {}
           ) do
             helpers.highlight(
               sample.name,

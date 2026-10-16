@@ -1,9 +1,15 @@
-<%= turbo_stream.update "table-filter", partial: "table_filter" %>
+<% if @cursor_mode && @query.valid? && @cursor_query_error.blank? %>
+  <%= turbo_stream_action_tag :update, target: "project-samples-results", template: render(partial: "cursor_contents", formats: [:html]),
+      data: { cursor_request_id: request.headers["X-Samples-Cursor-Request"] } %>
+<% else %>
+  <%= turbo_stream_action_tag :update, target: "table-filter", template: render(partial: "table_filter", formats: [:html]),
+      data: { cursor_request_id: @cursor_mode ? request.headers["X-Samples-Cursor-Request"] : nil } %>
 
-<% if @query.valid? %>
-  <%= turbo_stream.append "samples-table" do %>
-    <%= render SpinnerComponent.new(message: t("projects.samples.table_filter.loading")) %>
+  <% if @query.valid? && !@cursor_mode %>
+    <%= turbo_stream.append "samples-table" do %>
+      <%= render SpinnerComponent.new(message: t("projects.samples.table_filter.loading")) %>
+    <% end %>
+
+    <turbo-stream action="refresh"></turbo-stream>
   <% end %>
-
-  <turbo-stream action="refresh"></turbo-stream>
 <% end %>

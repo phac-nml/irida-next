@@ -60,11 +60,16 @@ module Projects
 
       assert_selector '#samples-table.samples-data-grid.pvc-data-grid.pvc-data-grid--fill'
       assert_selector '#samples-table [data-pathogen--data-grid-target~="scrollContainer"]'
-      assert_selector '#samples-table table[role="grid"][data-pathogen--data-grid-target~="grid"]'
-      assert_selector 'th[data-pathogen--data-grid-target~="cell"][data-sticky-cell]',
-                      text: /#{Regexp.escape(I18n.t('samples.table_component.puid'))}/i
-      assert_selector 'th[data-pathogen--data-grid-target~="cell"][data-sticky-cell]',
-                      text: /#{Regexp.escape(I18n.t('samples.table_component.name'))}/i
+      if Pathogen::DataGridComponent.method_defined?(:virtual_cursor_pagination?)
+        assert_selector '#samples-table [role="grid"][data-pvc-data-grid-pagination-mode="cursor"]'
+        assert_selector '[data-pvc-data-grid-lane="pinned"] [role="columnheader"]', count: 1
+      else
+        assert_selector '#samples-table table[role="grid"][data-pathogen--data-grid-target~="grid"]'
+        assert_selector 'th[data-pathogen--data-grid-target~="cell"][data-sticky-cell]',
+                        text: /#{Regexp.escape(I18n.t('samples.table_component.puid'))}/i
+        assert_selector 'th[data-pathogen--data-grid-target~="cell"][data-sticky-cell]',
+                        text: /#{Regexp.escape(I18n.t('samples.table_component.name'))}/i
+      end
     ensure
       Flipper.disable(:data_grid_samples_table)
     end

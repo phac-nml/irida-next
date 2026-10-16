@@ -5,7 +5,7 @@
 <%= turbo_frame_tag "selected" %>
 <%= turbo_frame_tag "file_selector_dialog" %>
 
-<div class="fixed-table-component">
+<div class="<%= class_names("fixed-table-component", "samples-cursor-page": @cursor_mode) %>">
   <%= render Layout::PageHeaderComponent.new(title: t('.title'),
   subtitle: t(".subtitle", puid: @project.puid)) do |component| %>
     <% component.with_buttons do %>
@@ -184,12 +184,23 @@
     streamable: @project,
     stream_name: :samples,
     message: t(".refresh_notice.message"),
+    data: @cursor_mode ? { refresh_frame_id_value: "project-samples-results" } : {},
   ) %>
 
-  <% if @has_samples %>
-    <div class="mb-4 flex flex-wrap gap-2">
-      <% if @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] || @allowed_to[:transfer_sample] || @allowed_to[:export_data] %>
-        <%= render "shared/selection_buttons",
+  <% if @cursor_mode %>
+    <div
+      id="project-samples-sort-status"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      class="sr-only"
+    ></div>
+    <%= render "cursor_results" %>
+  <% else %>
+    <% if @has_samples %>
+      <div class="mb-4 flex flex-wrap gap-2">
+        <% if @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] || @allowed_to[:transfer_sample] || @allowed_to[:export_data] %>
+          <%= render "shared/selection_buttons",
         url: select_namespace_project_samples_url,
         form_data: { turbo_frame: "selected" },
         total_count: @pagy.count,
@@ -203,23 +214,23 @@
           title: t(".deselect_all_tooltip"),
           aria: { label: t(".deselect_all_tooltip") },
         } %>
-      <% end %>
+        <% end %>
 
-      <div class="max-sm:hidden sm:grow" role="presentation"></div>
+        <div class="max-sm:hidden sm:grow" role="presentation"></div>
 
-      <div id="table-filter" role="presentation" class="contents"><%= render partial: "table_filter" %></div>
+        <div id="table-filter" role="presentation" class="contents"><%= render partial: "table_filter" %></div>
 
-      <%= render MetadataTemplates::DropdownComponent.new(
+        <%= render MetadataTemplates::DropdownComponent.new(
       url:
         list_namespace_project_metadata_templates_url(
           @project.namespace.parent, @project, metadata_template: @metadata_template[:id],
-          limit: @pagy&.limit, page: @pagy&.page
+          limit: @pagy&.limit, page: @pagy&.page, table_view: params[:table_view]
         )
       ) %>
-    </div>
-  <% end %>
+      </div>
+    <% end %>
 
-  <%= render partial: "table",
+    <%= render partial: "table",
   locals: {
     allowed_to: @allowed_to,
     fields: @fields,
@@ -229,4 +240,5 @@
     samples: @samples,
     search_params: @search_params,
   } %>
+  <% end %>
 </div>
