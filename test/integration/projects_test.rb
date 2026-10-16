@@ -34,6 +34,48 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'h2', text: I18n.t('components.project_dashboard.samples_title')
   end
 
+  test 'shows the appropriate sidebar items for a guest project member' do
+    sign_in users(:ryan_doe)
+
+    get namespace_project_path(@project.namespace.parent, @project)
+
+    assert_response :success
+    assert_select 'nav#sidebar' do
+      assert_select "a[href=\"#{namespace_project_path(@project.namespace.parent, @project)}\"]", count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.members'), count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.samples'), count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.activity'), count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.files'), count: 0
+      assert_select 'a', text: I18n.t('projects.sidebar.workflow_executions'), count: 1
+      assert_select 'button', text: I18n.t('common.labels.settings'), count: 0
+    end
+  end
+
+  test 'hides the activity sidebar item when view history is denied' do
+    ProjectPolicy.any_instance.stubs(:view_history?).returns(false)
+    sign_in users(:ryan_doe)
+
+    get namespace_project_path(@project.namespace.parent, @project)
+
+    assert_response :success
+    assert_select 'nav#sidebar' do
+      assert_select 'a', text: I18n.t('projects.sidebar.activity'), count: 0
+    end
+  end
+
+  test 'hides automated workflow settings when pipelines are disabled' do
+    Irida::Pipelines.instance.stubs(:pipelines).returns([])
+    sign_in users(:john_doe)
+
+    get namespace_project_path(@project.namespace.parent, @project)
+
+    assert_response :success
+    assert_select 'nav#sidebar' do
+      assert_select 'button', text: I18n.t('common.labels.settings'), count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.automated_workflow_executions'), count: 0
+    end
+  end
+
   test 'cannot view project if uploader' do
     login_as users(:projectJeff_bot)
     project = projects(:projectJeff)
