@@ -957,6 +957,67 @@ describe("advanced-search--v2--builder", () => {
     expect(optionValues()).toContain("between");
   });
 
+  it("restricts operator options to date operators for date fields", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.dateFieldsValue = ["created_at"];
+    controller.dateOperationsValue = {
+      Equals: "=",
+      Between: "between",
+      Exists: "exists",
+    };
+    controller.operationsValue = {
+      standard: { Equals: "=", Contains: "contains", Between: "between" },
+    };
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="created_at" selected>created_at</option>';
+    field.value = "created_at";
+
+    controller.handleFieldChange({ target: field });
+
+    const operator = condition.querySelector("[name$='[operator]']");
+    const values = Array.from(operator.options).map((option) => option.value);
+    expect(values).not.toContain("contains");
+    expect(values).toContain("between");
+    expect(values).toContain("exists");
+  });
+
+  it("updates operator options correctly when switching between filename and created_at fields", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.dateFieldsValue = ["created_at"];
+    controller.dateOperationsValue = { Equals: "=", Between: "between" };
+    controller.operationsValue = {
+      standard: { Equals: "=", Contains: "contains", Between: "between" },
+    };
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML =
+      '<option value=""></option><option value="filename">filename</option><option value="created_at">created_at</option>';
+    const operator = condition.querySelector("[name$='[operator]']");
+    const optionValues = () =>
+      Array.from(operator.options).map((option) => option.value);
+
+    field.value = "filename";
+    controller.handleFieldChange({ target: field });
+    expect(optionValues()).toContain("contains");
+    expect(optionValues()).toContain("between");
+
+    field.value = "created_at";
+    controller.handleFieldChange({ target: field });
+    expect(optionValues()).not.toContain("contains");
+    expect(optionValues()).toContain("between");
+
+    field.value = "filename";
+    controller.handleFieldChange({ target: field });
+    expect(optionValues()).toContain("contains");
+    expect(optionValues()).toContain("between");
+  });
+
   it("skips groups without a remove-group button when toggling", async () => {
     const groupWithoutRemove = `
       <fieldset data-advanced-search--v2--builder-target="groupsContainer"

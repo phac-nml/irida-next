@@ -72,6 +72,18 @@ module AdvancedSearch
         @operations['standard'].select { |_, value| AdvancedSearch::NUMERIC_OPERATOR_VALUES.include?(value) }
       end
 
+      def date_fields
+        @fields.fetch(:date_fields, [])
+      end
+
+      def date_field?
+        date_fields.include?(selected_field)
+      end
+
+      def date_operator_options
+        @operations['standard'].select { |_, value| AdvancedSearch::DATE_OPERATOR_VALUES.include?(value) }
+      end
+
       def enum_operator_options
         if Flipper.enabled?(:advanced_search_metadata_operators) && selected_field.starts_with?('metadata.')
           # flatten metadata operators to exclude optgroup labeling
