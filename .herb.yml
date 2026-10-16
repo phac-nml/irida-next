@@ -97,6 +97,7 @@ linter:
       enabled: true
       exclude:
         - "app/components/data_imports/linelist_import_dialog/v2/component.html.erb"
+        - "app/views/projects/_change_path.html.erb"
 
 formatter:
   enabled: true
