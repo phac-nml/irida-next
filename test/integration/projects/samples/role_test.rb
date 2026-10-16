@@ -4,7 +4,7 @@ require 'test_helper'
 
 module Projects
   module Samples
-    class RollTest < ActionDispatch::IntegrationTest
+    class RoleTest < ActionDispatch::IntegrationTest
       setup do
         @user = users(:john_doe)
         sign_in @user
