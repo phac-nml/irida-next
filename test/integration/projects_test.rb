@@ -34,6 +34,48 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'h2', text: I18n.t('components.project_dashboard.samples_title')
   end
 
+  test 'shows the appropriate sidebar items for a guest project member' do
+    sign_in users(:ryan_doe)
+
+    get namespace_project_path(@project.namespace.parent, @project)
+
+    assert_response :success
+    assert_select 'nav#sidebar' do
+      assert_select "a[href=\"#{namespace_project_path(@project.namespace.parent, @project)}\"]", count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.members'), count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.samples'), count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.activity'), count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.files'), count: 0
+      assert_select 'a', text: I18n.t('projects.sidebar.workflow_executions'), count: 1
+      assert_select 'button', text: I18n.t('common.labels.settings'), count: 0
+    end
+  end
+
+  test 'hides the activity sidebar item when view history is denied' do
+    ProjectPolicy.any_instance.stubs(:view_history?).returns(false)
+    sign_in users(:ryan_doe)
+
+    get namespace_project_path(@project.namespace.parent, @project)
+
+    assert_response :success
+    assert_select 'nav#sidebar' do
+      assert_select 'a', text: I18n.t('projects.sidebar.activity'), count: 0
+    end
+  end
+
+  test 'hides automated workflow settings when pipelines are disabled' do
+    Irida::Pipelines.instance.stubs(:pipelines).returns([])
+    sign_in users(:john_doe)
+
+    get namespace_project_path(@project.namespace.parent, @project)
+
+    assert_response :success
+    assert_select 'nav#sidebar' do
+      assert_select 'button', text: I18n.t('common.labels.settings'), count: 1
+      assert_select 'a', text: I18n.t('projects.sidebar.automated_workflow_executions'), count: 0
+    end
+  end
+
   test 'cannot view project if uploader' do
     login_as users(:projectJeff_bot)
     project = projects(:projectJeff)
@@ -134,6 +176,17 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'p', text: project_description
     assert_select 'nav#sidebar', text: /#{Regexp.escape(project_name)}/
     assert_select '#breadcrumb', text: /#{Regexp.escape(project_name)}/
+  end
+
+  test 'can view the new project form with v2 select2 controls' do
+    Flipper.enable(:v2_prefixed_select2)
+
+    get new_project_path
+
+    assert_response :success
+    assert_select 'form[data-controller="select2--v2"]', count: 1
+  ensure
+    Flipper.disable(:v2_prefixed_select2)
   end
 
   test "cannot create project under another user's namespace" do
@@ -256,6 +309,28 @@ class ProjectsTest < ActionDispatch::IntegrationTest
                     attribute: Namespaces::ProjectNamespace.human_attribute_name(:path),
                     message: I18n.t('errors.messages.taken'))
     end
+
+    assert_no_difference('Project.count') do
+      post projects_path,
+           params: {
+             project: {
+               namespace_attributes: {
+                 name: 'Project without namespace',
+                 path: 'project-without-namespace',
+                 parent_id: '',
+                 description: 'Project description'
+               }
+             }
+           }
+    end
+
+    assert_response :unprocessable_content
+    assert_select 'div[data-controller="form-error-summary"]' do
+      assert_select 'a', text:
+             I18n.t(:'errors.format',
+                    attribute: Namespaces::ProjectNamespace.human_attribute_name(:namespace),
+                    message: I18n.t('services.projects.create.namespace_required'))
+    end
   end
 
   test 'cannot view edit project form with insufficient permissions' do
@@ -349,6 +424,24 @@ class ProjectsTest < ActionDispatch::IntegrationTest
       assert_select 'div',
                     "#{I18n.t('common.statuses.success')}: #{I18n.t('projects.update.success',
                                                                     project_name: group_project.name)}"
+    end
+  end
+
+  test 'updates the project name and breadcrumb in the turbo stream response' do
+    project_name = 'Updated project name'
+
+    patch namespace_project_path(@project.namespace.parent, @project),
+          params: {
+            project: { namespace_attributes: { name: project_name } },
+            format: :turbo_stream
+          }
+
+    assert_response :success
+    assert_select 'turbo-stream[action="update"][target="namespace_name"]' do
+      assert_select 'template', text: project_name
+    end
+    assert_select 'turbo-stream[action="update"][target="breadcrumb"]' do
+      assert_select 'template', text: /#{Regexp.escape(project_name)}/
     end
   end
 
@@ -561,6 +654,33 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_equal Member::AccessLevel::MAINTAINER,
                  Member.find_by(user: users(:joan_doe), namespace: @project.namespace.parent).access_level
     assert_select 'h2', text: I18n.t('projects.edit.advanced.transfer.title'), count: 0
+  end
+
+  test 'owner sees the transfer form with v2 select2 controls' do
+    Flipper.enable(:v2_select2)
+
+    get namespace_project_edit_path(@project.namespace.parent, @project)
+
+    assert_response :success
+    assert_select 'form#edit_advanced_transfer[data-controller="select2--v2"]' do
+      assert_select '[data-select2--v2-target="submitButton"]', disabled: 'disabled', count: 1
+    end
+  ensure
+    Flipper.disable(:v2_select2)
+  end
+
+  test 'owner sees a disabled transfer namespace input when no namespaces are available' do
+    project = projects(:john_doe_project2)
+    Member.where(user: @user).delete_all
+
+    get namespace_project_edit_path(project.namespace.parent, project)
+
+    assert_response :success
+    assert_select 'form#edit_advanced_transfer' do
+      assert_select 'input[type="text"][disabled][autocomplete="off"]',
+                    placeholder: I18n.t(:'projects.edit.advanced.transfer.no_available_namespaces'),
+                    count: 1
+    end
   end
 
   test 'should redirect with success flash when transfer succeeds' do
