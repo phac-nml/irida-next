@@ -22,6 +22,8 @@ export default class AdvancedSearchController extends Controller {
     enumOperations: Object,
     numericFields: Array,
     numericOperations: Object,
+    dateFields: Array,
+    dateOperations: Object,
     operations: Object,
     hasErrors: Boolean,
     open: Boolean,
@@ -356,6 +358,8 @@ export default class AdvancedSearchController extends Controller {
       );
     } else if (this.numericFieldsValue.includes(selectedField)) {
       this.#createOperatorOptions(this.numericOperationsValue, operator);
+    } else if (this.dateFieldsValue.includes(selectedField)) {
+      this.#createOperatorOptions(this.dateOperationsValue, operator);
     } else {
       this.#createOperatorOptions(this.operationsValue["standard"], operator);
     }

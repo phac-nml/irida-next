@@ -10,6 +10,8 @@ function renderFixture() {
       data-advanced-search--v1-enum-operations-value='{"standard":{}}'
       data-advanced-search--v1-numeric-fields-value='["byte_size"]'
       data-advanced-search--v1-numeric-operations-value='{"Equals":"=","Between":"between"}'
+      data-advanced-search--v1-date-fields-value='["created_at"]'
+      data-advanced-search--v1-date-operations-value='{"Equals":"=","Between":"between","Exists":"exists"}'
       data-advanced-search--v1-operations-value='{"standard":{"Equals":"=","Contains":"contains","Between":"between"}}'
     >
       <fieldset data-advanced-search--v1-target="groupsContainer">
@@ -20,6 +22,7 @@ function renderFixture() {
               <option value=""></option>
               <option value="filename">filename</option>
               <option value="byte_size">byte_size</option>
+              <option value="created_at">created_at</option>
             </select>
           </div>
           <div class="form-field">
@@ -115,5 +118,51 @@ describe("advanced-search--v1 numeric operator dropdown", () => {
     field.dispatchEvent(new Event("change", { bubbles: true }));
     expect(operatorValues()).toContain("contains");
     expect(operatorValues()).toContain("between");
+  });
+});
+
+describe("advanced-search--v1 date operator dropdown", () => {
+  let application;
+
+  beforeEach(() => {
+    renderFixture();
+  });
+
+  afterEach(() => {
+    application?.stop();
+    document.body.innerHTML = "";
+  });
+
+  it("restricts operator options to date operators when created_at is selected", async () => {
+    application = await startController();
+    controllerInstance(application);
+
+    const field = fieldSelect();
+    field.value = "created_at";
+    field.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(operatorValues()).toContain("between");
+    expect(operatorValues()).toContain("exists");
+    expect(operatorValues()).not.toContain("contains");
+  });
+
+  it("updates operator options correctly when switching between filename and created_at", async () => {
+    application = await startController();
+    controllerInstance(application);
+
+    const field = fieldSelect();
+
+    field.value = "filename";
+    field.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(operatorValues()).toContain("contains");
+
+    field.value = "created_at";
+    field.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(operatorValues()).not.toContain("contains");
+    expect(operatorValues()).toContain("between");
+
+    field.value = "filename";
+    field.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(operatorValues()).toContain("contains");
   });
 });
