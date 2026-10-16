@@ -154,6 +154,29 @@ module Profiles
       assert_select 'turbo-stream', count: 0
     end
 
+    test 'renders nothing when the resolved feature cannot be displayed' do
+      controller_class = Profiles::ExperimentalFeaturesController
+      original_method = controller_class.instance_method(:render_feature_update)
+
+      # The controller only ever renders when a feature is present. We stub it here to force the
+      # view's defensive blank-feature branch, which is otherwise unreachable via a request.
+      controller_class.send(:define_method,
+                            :render_feature_update) do |status_message:, status_variant:, http_status:, **|
+        render :update, status: http_status, locals: { feature: nil, user: @user, status_message:, status_variant: }
+      end
+
+      with_user_opt_in_features(user_opt_in_feature_config) do
+        patch profile_experimental_features_path(format: :turbo_stream),
+              params: { opt_in_form: { feature_key: @feature_name, enabled: '1' } }
+      end
+
+      assert_response :ok
+      assert_select 'turbo-stream', count: 0
+    ensure
+      controller_class.send(:define_method, :render_feature_update, original_method)
+      Flipper.disable_actor(@feature_name, @user)
+    end
+
     private
 
     def assert_feature_update_status(message)
