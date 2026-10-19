@@ -686,7 +686,7 @@ a.pill-focus-reset:focus-visible {
   }
 
   input {
-    @apply relative m-0 box-border min-h-12 w-full cursor-pointer rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] bg-[var(--pvc-color-surface)] px-3 py-2 pr-26 align-bottom text-[var(--pvc-color-text)] outline-none focus-visible:shadow-none;
+    @apply relative m-0 box-border min-h-11 w-full cursor-pointer rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] bg-[var(--pvc-color-surface)] px-3 py-2 pr-26 align-bottom text-[var(--pvc-color-text)] outline-none focus-visible:shadow-none;
   }
 
   input[aria-invalid="true"] {
