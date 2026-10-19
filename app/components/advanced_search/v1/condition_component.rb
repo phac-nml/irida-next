@@ -3,7 +3,7 @@
 module AdvancedSearch
   module V1
     # Component for rendering an advanced search condition
-    class ConditionComponent < ::Component
+    class ConditionComponent < ::Component # rubocop:disable Metrics/ClassLength
       # rubocop:disable-next Metrics/ParameterLists
       def initialize(groups_form:, group_index:, condition:, condition_index:, condition_number:, fields: {},
                      operations: [])
@@ -82,6 +82,23 @@ module AdvancedSearch
 
       def date_operator_options
         @operations['standard'].select { |_, value| AdvancedSearch::DATE_OPERATOR_VALUES.include?(value) }
+      end
+
+      def operator_select_options
+        if enum_field?
+          options_for_select(enum_operator_options, @condition.operator)
+        elsif Flipper.enabled?(:advanced_search_metadata_operators) && selected_field.starts_with?('metadata.')
+          grouped_options_for_select(metadata_operators, @condition.operator)
+        else
+          options_for_select(standard_operator_options, @condition.operator)
+        end
+      end
+
+      def standard_operator_options
+        return date_operator_options if date_field?
+        return numeric_operator_options if numeric_field?
+
+        @operations['standard']
       end
 
       def enum_operator_options
