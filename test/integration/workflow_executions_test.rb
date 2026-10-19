@@ -166,6 +166,30 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "tr##{dom_id(@workflow_execution_running)}", count: 0
   end
 
+  test 'should filter workflow executions by created at' do
+    target_date = Date.current
+    @workflow_execution_completed.update!(created_at: target_date)
+    @workflow_execution_running.update!(created_at: target_date - 1.day)
+
+    get workflow_executions_path,
+        params: {
+          q: {
+            groups_attributes: {
+              '0' => {
+                conditions_attributes: {
+                  '0' => { field: 'created_at', operator: '=', value: target_date.to_s }
+                }
+              }
+            }
+          },
+          limit: 100
+        }
+
+    assert_response :success
+    assert_select "tr##{dom_id(@workflow_execution_completed)}", count: 1
+    assert_select "tr##{dom_id(@workflow_execution_running)}", count: 0
+  end
+
   test 'should apply advanced search groups when workflow advanced-search uses translated state labels' do
     get workflow_executions_path,
         params: workflow_advanced_search_params(state: I18n.t('workflow_executions.state.completed')).merge(limit: 100)
