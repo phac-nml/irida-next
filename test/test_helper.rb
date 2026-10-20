@@ -42,15 +42,15 @@ module ActiveSupport
       ActiveStorage::Blob.service.root = "#{ActiveStorage::Blob.service.root}-#{worker}"
     end
 
-    parallelize_teardown do |_worker|
-      FileUtils.rm_rf(ActiveStorage::Blob.service.root)
+    parallelize_teardown do |worker|
+      FileUtils.rm_rf(Rails.root.join("tmp/storage-#{worker}"))
     end
 
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors) unless ENV['RUBY_LSP_TEST_RUNNER']
 
     Minitest.after_run do
-      FileUtils.rm_rf(ActiveStorage::Blob.service.root)
+      FileUtils.rm_rf(Rails.root.join('tmp/storage'))
     end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
