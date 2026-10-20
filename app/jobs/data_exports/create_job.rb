@@ -53,11 +53,8 @@ module DataExports
     end
 
     def attach_export(data_export, temp_export_file)
-      filename = if data_export.export_type == 'linelist'
-                   "#{data_export.id}.#{data_export.export_parameters['linelist_format']}"
-                 else
-                   "#{data_export.id}.zip"
-                 end
+      extension = data_export.export_type == 'linelist' ? data_export.export_parameters['linelist_format'] : 'zip'
+      filename = "#{data_export.name.presence || data_export.id}.#{extension}"
 
       data_export.file.attach(io: temp_export_file, filename:)
     end

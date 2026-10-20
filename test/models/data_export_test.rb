@@ -66,6 +66,32 @@ class DataExportTest < ActiveSupport::TestCase
     end
   end
 
+  test 'data export name allows blank' do
+    @export1.name = ''
+    assert @export1.valid?
+  end
+
+  test 'data export name allows letters, digits, dashes, and underscores' do
+    @export1.name = 'My_Export_1-final'
+    assert @export1.valid?
+  end
+
+  test 'data export name rejects path separators and other special characters' do
+    %w[../etc/passwd my/export my\\export my:export my*export].each do |invalid_name|
+      @export1.name = invalid_name
+      assert_not @export1.valid?, "expected '#{invalid_name}' to be invalid"
+      assert_equal I18n.t('activerecord.errors.models.data_export.attributes.name.invalid'),
+                   @export1.errors[:name].first
+    end
+  end
+
+  test 'data export name rejects names longer than 100 characters' do
+    @export1.name = 'a' * 101
+    assert_not @export1.valid?
+    assert_equal I18n.t('activerecord.errors.models.data_export.attributes.name.too_long', count: 100),
+                 @export1.errors[:name].first
+  end
+
   test 'data export with missing export_type' do
     data_export = DataExport.new(user: @user, status: 'ready',
                                  export_parameters: { ids: [@sample1.id] })
