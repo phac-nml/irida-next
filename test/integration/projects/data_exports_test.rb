@@ -123,7 +123,7 @@ module Projects
       assert_select "input[type='checkbox'][value='#{@sample1.id}']", count: 1
 
       %w[csv xlsx].each do |format|
-        export_name = "test #{format} export"
+        export_name = "test_#{format}_export"
 
         params = { 'data_export' => {
                      'export_type' => 'linelist',
@@ -173,7 +173,7 @@ module Projects
 
       assert_response :success
 
-      export_name = 'test data export'
+      export_name = 'test_data_export'
 
       assert_difference 'DataExport.count', 1 do
         post data_exports_path(format: :turbo_stream),
@@ -210,7 +210,7 @@ module Projects
         assert_select 'h1', text: I18n.t('data_exports.new_analysis_export_dialog.title')
       end
 
-      export_name = 'test data export'
+      export_name = 'test_data_export'
 
       assert_difference 'DataExport.count', 1 do
         post data_exports_path(format: :turbo_stream),
@@ -260,7 +260,7 @@ module Projects
         assert_select 'h1', text: I18n.t('data_exports.new_analysis_export_dialog.title', locale: user.locale)
       end
 
-      export_name = 'test data export'
+      export_name = 'test_data_export'
 
       assert_difference 'DataExport.count', 1 do
         post data_exports_path(format: :turbo_stream),
@@ -300,7 +300,7 @@ module Projects
       [@shared_workflow_execution1, @shared_workflow_execution2].each do |workflow_execution|
         get namespace_project_workflow_execution_path(@group5, @project22, workflow_execution)
         assert_response :success
-        export_name = 'test data export'
+        export_name = 'test_data_export'
 
         assert_select 'button', text: I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
@@ -388,7 +388,7 @@ module Projects
       assert_select "input[type='checkbox'][value='#{@workflow_execution4.id}']", count: 1
       assert_select "input[type='checkbox'][value='#{@workflow_execution5.id}']", count: 1
 
-      export_name = 'test data export'
+      export_name = 'test_data_export'
 
       assert_no_difference 'DataExport.count' do
         post data_exports_path(format: :turbo_stream),
