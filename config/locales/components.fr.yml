@@ -191,6 +191,7 @@ fr:
         group_match_all: Toutes ces conditions doivent être remplies
         intro: Trouvez des %{subject} correspondant à AU MOINS UN des groupes suivants.
         subject:
+          attachments: fichiers
           samples: échantillons
           workflow_executions: exécutions de pipeline
     attachments:

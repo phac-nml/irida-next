@@ -101,6 +101,18 @@ module AdvancedSearch
         assert_includes html, 'optgroup'
       end
 
+      %i[en fr].each do |locale|
+        test "uses the attachments subject in the intro for attachment searches in #{locale}" do
+          I18n.with_locale(locale) do
+            search = Attachment::Query.new(groups: [Attachment::SearchGroup.new])
+            html = render_builder(search:, fields: AdvancedSearch::Fields.for_attachments)
+
+            subject = I18n.t('components.advanced_search_component.v2.subject.attachments')
+            assert_includes html, I18n.t('components.advanced_search_component.v2.intro', subject:)
+          end
+        end
+      end
+
       test 'restricts byte_size operator options to numeric operators only' do
         search = Attachment::Query.new(
           groups: [
