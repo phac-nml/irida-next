@@ -191,6 +191,7 @@ en:
         group_match_all: All of these conditions must match
         intro: Find %{subject} matching ANY of the following groups.
         subject:
+          attachments: files
           samples: samples
           workflow_executions: workflow executions
     attachments:
