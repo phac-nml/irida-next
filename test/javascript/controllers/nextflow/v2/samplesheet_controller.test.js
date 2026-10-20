@@ -972,13 +972,13 @@ describe("nextflow v2 samplesheet controller", () => {
 
         <a id="workflow_execution_workflow_params_reference_link" href="#">No selected file</a>
 
-        <input type="hidden" aria-required="true" data-required-label="Reference file"
+        <input type="hidden" data-required="true" data-required-label="Reference file"
 
           name="workflow_execution[workflow_params][reference]"
 
           id="workflow_execution_workflow_params_reference" value="">
 
-        <input type="hidden" aria-required="true" data-required-label="Orphan file"
+        <input type="hidden" data-required="true" data-required-label="Orphan file"
 
           name="workflow_execution[workflow_params][orphan]"
 

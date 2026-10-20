@@ -885,7 +885,7 @@ export default class extends Controller {
 
   #validateRequiredFormInputs() {
     const requiredFields = this.formTarget.querySelectorAll(
-      "[aria-required='true']",
+      "[aria-required='true'], input[type='hidden'][data-required='true']",
     );
 
     const missingFields = [];
