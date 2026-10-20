@@ -1,0 +1,11 @@
+<%= turbo_stream.append "flashes" do %>
+  <%= render Viral::FlashComponent.new(type:, data: message) %>
+<% end %>
+
+<%= turbo_stream.update "automated_workflow_execution_modal" do %>
+  <%= render Viral::DialogComponent.new(
+    id: "automated_workflow_execution_modal",
+    size: :large,
+    open: false
+  ) %>
+<% end %>

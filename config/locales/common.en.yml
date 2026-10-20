@@ -10,6 +10,7 @@ en:
       save: Save changes
       select: Select
       share: Share
+      trigger: Trigger
       update: Update
       upload: Upload
     controls:

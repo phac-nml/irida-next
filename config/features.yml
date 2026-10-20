@@ -111,6 +111,18 @@ features:
   integration_access_token_generation:
     description: "Allow users to generate access tokens for API access."
     enable_in_development: true
+  prevent_sample_deletions_and_transfers_with_active_workflows:
+    admin_manageable: true
+    description:
+      en: "Prevent sample deletions and transfers if the sample is currently in use\
+        \ by a workflow execution."
+      fr: "Empêcher la suppression et le transfert d'échantillons si l'échantillon\
+        \ est actuellement utilisé par une exécution de flux de travail."
+    enable_in_development: true
+    name:
+      en: "Prevent Sample Deletions and Transfers with Active Workflows"
+      fr: "Empêcher la suppression et le transfert d'échantillons avec des flux de\
+        \ travail actifs"
   sample_deletion_reason:
     admin_manageable: true
     description:
@@ -120,21 +132,17 @@ features:
     name:
       en: "Sample Deletion Reason"
       fr: "Raison de suppression d'échantillon"
-  prevent_sample_deletions_and_transfers_with_active_workflows:
+  trigger_automated_workflow_execution:
     admin_manageable: true
     description:
-      en:
-        "Prevent sample deletions and transfers if the sample is currently in use\
-        \ by a workflow execution."
-      fr:
-        "Empêcher la suppression et le transfert d'échantillons si l'échantillon\
-        \ est actuellement utilisé par une exécution de flux de travail."
+      en: "Enable manual triggering of automated workflow executions with advanced\
+        \ search."
+      fr: "Activer le déclenchement manuel des exécutions de flux de travail automatisés\
+        \ avec une recherche avancée."
     enable_in_development: true
     name:
-      en: "Prevent Sample Deletions and Transfers with Active Workflows"
-      fr:
-        "Empêcher la suppression et le transfert d'échantillons avec des flux de\
-        \ travail actifs"
+      en: "Trigger Automated Workflow Execution"
+      fr: "Déclencher l'exécution de flux de travail automatisés"
   v2_dropdown:
     admin_manageable: true
     description:
@@ -156,8 +164,7 @@ features:
     admin_manageable: true
     description:
       en: "Enable the new v2 sample transfer functionality."
-      fr:
-        "Activer la nouvelle fonctionnalité de transfert d'échantillons version\
+      fr: "Activer la nouvelle fonctionnalité de transfert d'échantillons version\
         \ 2."
     enable_in_development: true
     name:
