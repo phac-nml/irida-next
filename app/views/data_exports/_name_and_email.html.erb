@@ -2,7 +2,17 @@
 
 <div class="form-field mt-2">
   <%= form.label :name, t(:"data_exports.new.name_label") %>
-  <%= form.text_field :name, class: "form-control" %>
+
+  <%= form.text_field :name,
+                maxlength: 100,
+                pattern: /^[\w\-]*$/,
+                title: t(:"data_exports.new.name_help"),
+                aria: { describedby: form.field_id(:name, "hint") },
+                class: "form-control" %>
+
+  <span id="<%= form.field_id(:name, "hint") %>" class="field-hint">
+    <%= t(:"data_exports.new.name_help") %>
+  </span>
 </div>
 
 <div class="flex h-5 items-center">
