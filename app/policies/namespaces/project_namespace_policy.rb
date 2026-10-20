@@ -173,6 +173,13 @@ module Namespaces
       false
     end
 
+    def trigger_automated_workflow_execution?
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+      details[:name] = record.name
+      false
+    end
+
     def submit_workflow?
       return true if effective_access_level >= Member::AccessLevel::ANALYST
 

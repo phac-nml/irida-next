@@ -142,6 +142,14 @@ module Namespaces
       assert policy.apply(:view_automated_workflow_executions?)
     end
 
+    test '#trigger_automated_workflow_execution? returns true for maintainer and above' do
+      assert @policy.apply(:trigger_automated_workflow_execution?)
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert policy.apply(:trigger_automated_workflow_execution?)
+    end
+
     test '#view_workflow_executions?' do
       assert @policy.apply(:view_workflow_executions?)
 
