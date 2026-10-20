@@ -968,7 +968,7 @@ export default class extends Controller {
       return field.name;
     }
 
-    return label.textContent.replace("*", "").trim();
+    return label.textContent.replace(/\*/g, "").trim();
   }
 
   #formatRequiredFieldErrorMessage(fieldLabel) {
