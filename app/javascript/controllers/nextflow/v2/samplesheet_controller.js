@@ -996,7 +996,7 @@ export default class extends Controller {
     name.classList.remove(...FIELD_CLASSES["VALID"]);
     name.classList.add(...FIELD_CLASSES["ERROR"]);
     nameError.classList.remove("hidden");
-    nameErrorSpan.innerContent = message;
+    nameErrorSpan.textContent = message;
     nameErrorSpan.classList.add(...FIELD_CLASSES["ERROR_SPAN"]);
     nameHint.classList.add("hidden");
     nameField.classList.add("invalid");

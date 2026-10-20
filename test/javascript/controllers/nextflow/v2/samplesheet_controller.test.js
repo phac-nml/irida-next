@@ -942,6 +942,126 @@ describe("nextflow v2 samplesheet controller", () => {
     requestSubmit.mockRestore();
   });
 
+  it("flags and clears required hidden file params and unlabeled inputs", async () => {
+    setupStandardSamplesheetAttributes(range(1, 2));
+
+    application = await startController();
+
+    const requestSubmit = vi
+
+      .spyOn(HTMLFormElement.prototype, "requestSubmit")
+
+      .mockImplementation(() => {});
+
+    const form = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="form"]',
+    );
+
+    const submitBtn = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="submit"]',
+    );
+
+    const formFieldErrorMessage = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    );
+
+    form.insertAdjacentHTML(
+      "beforeend",
+
+      `
+
+        <a id="workflow_execution_workflow_params_reference_link" href="#">No selected file</a>
+
+        <input type="hidden" aria-required="true" data-required-label="Reference file"
+
+          name="workflow_execution[workflow_params][reference]"
+
+          id="workflow_execution_workflow_params_reference" value="">
+
+        <input type="hidden" aria-required="true" data-required-label="Orphan file"
+
+          name="workflow_execution[workflow_params][orphan]"
+
+          id="workflow_execution_workflow_params_orphan" value="">
+
+        <input type="text" aria-required="true"
+
+          name="workflow_execution[workflow_params][unlabeled]"
+
+          id="workflow_execution_workflow_params_unlabeled" value="">
+
+      `,
+    );
+
+    const fileLink = document.getElementById(
+      "workflow_execution_workflow_params_reference_link",
+    );
+
+    const fileInput = document.getElementById(
+      "workflow_execution_workflow_params_reference",
+    );
+
+    const orphanInput = document.getElementById(
+      "workflow_execution_workflow_params_orphan",
+    );
+
+    const unlabeledInput = document.getElementById(
+      "workflow_execution_workflow_params_unlabeled",
+    );
+
+    document.querySelector("#workflow_execution_name").value = "workflow name";
+
+    submitBtn.click();
+
+    vi.advanceTimersByTime(60);
+
+    expect(formFieldErrorMessage.textContent).toContain(
+      "Reference file can't be blank",
+    );
+
+    expect(formFieldErrorMessage.textContent).toContain(
+      "Orphan file can't be blank",
+    );
+
+    // Falls back to the input name when there is no label or data label
+
+    expect(formFieldErrorMessage.textContent).toContain(
+      "workflow_execution[workflow_params][unlabeled] can't be blank",
+    );
+
+    expect(fileLink.getAttribute("aria-invalid")).toBe("true");
+
+    expect(fileInput.getAttribute("aria-invalid")).toBe("true");
+
+    expect(orphanInput.getAttribute("aria-invalid")).toBe("true");
+
+    expect(unlabeledInput.getAttribute("aria-invalid")).toBe("true");
+
+    expect(requestSubmit).not.toHaveBeenCalled();
+
+    fileInput.value = "attachment-id";
+
+    orphanInput.value = "attachment-id";
+
+    unlabeledInput.value = "filled";
+
+    submitBtn.click();
+
+    vi.advanceTimersByTime(60);
+
+    expect(fileLink.hasAttribute("aria-invalid")).toBe(false);
+
+    expect(fileInput.hasAttribute("aria-invalid")).toBe(false);
+
+    expect(orphanInput.hasAttribute("aria-invalid")).toBe(false);
+
+    expect(unlabeledInput.hasAttribute("aria-invalid")).toBe(false);
+
+    expect(formFieldErrorMessage.textContent).toBe("");
+
+    requestSubmit.mockRestore();
+  });
+
   it("renders required field labels as text, not HTML", async () => {
     setupStandardSamplesheetAttributes(range(1, 2));
     application = await startController();
