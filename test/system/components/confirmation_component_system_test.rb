@@ -32,7 +32,8 @@ class ConfirmationComponentSystemTest < ApplicationSystemTestCase
     assert_text 'Confirmation required'
     assert_accessible
     find('input').set 'Project X' # TODO: update this to use fill_in
-    assert_selector 'button.button-destructive'
+    # wait for the enabled button to finish its opacity transition before checking contrast
+    assert_selector 'button.button-destructive:not(:disabled)', style: { opacity: '1' }
     assert_accessible
   end
 end
