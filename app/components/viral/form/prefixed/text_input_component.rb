@@ -5,11 +5,12 @@ module Viral
     module Prefixed
       # Viral form input with a prefix that can contain text or svg providing additional context to the input
       class TextInputComponent < Viral::Component
-        attr_reader :form, :name, :value, :pattern, :placeholder, :required, :data
+        attr_reader :form, :name, :value, :pattern, :placeholder, :required, :data, :aria_required
 
         renders_one :prefix
 
-        def initialize(form:, name:, placeholder: '', value: nil, pattern: nil, required: false, data: nil) # rubocop:disable Metrics/ParameterLists
+        def initialize(form:, name:, placeholder: '', value: nil, pattern: nil, required: false, data: nil,
+                       aria_required: false) # rubocop:disable Metrics/ParameterLists
           @form = form
           @name = name
           @pattern = pattern
@@ -17,6 +18,7 @@ module Viral
           @required = required
           @value = value
           @data = data
+          @aria_required = aria_required
         end
       end
     end

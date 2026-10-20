@@ -207,10 +207,10 @@ module Irida
       properties.each do |name, property|
         next unless !property['hidden'] && IGNORED_PARAMS.exclude?(name)
 
+        required_property = required.present? && required.include?(name)
         name = name.to_sym
 
-        processed_section[name] =
-          process_property(key, name, property, required.present? && required.include?(name))
+        processed_section[name] = process_property(key, name, property, required_property)
       end
 
       processed_section

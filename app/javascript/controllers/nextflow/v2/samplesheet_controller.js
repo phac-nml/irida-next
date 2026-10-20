@@ -58,6 +58,8 @@ export default class extends Controller {
     noSelectedFile: { type: String },
     automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
+    errorFormat: { type: String },
+    errorBlank: { type: String },
     allowedToUpdateSamplesString: { type: String },
     notAllowedToUpdateSamplesString: { type: String },
     processingError: { type: String },
@@ -220,50 +222,42 @@ export default class extends Controller {
     this.#enableSubmissionState();
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
-      // By default we set nameValid to true
-      let nameValid = true;
-
-      // If the workflow execution is not an automated workflow execution,
-      // we check to see if the name is valid
-      if (this.automatedWorkflowValue == false) {
-        nameValid = this.#validateWorkflowExecutionName();
+      const requiredFieldsValid = this.#validateRequiredFormInputs();
+      if (!requiredFieldsValid) {
+        this.#disableSubmissionState();
+        return;
       }
 
-      if (nameValid) {
-        this.#disableFormFieldErrorState();
+      this.#disableFormFieldErrorState();
 
-        const missingData = this.#validateData();
-        if (Object.keys(missingData).length > 0) {
-          this.#disableSubmissionState();
-          let errorMsg = this.dataMissingErrorValue;
-          for (const sample in missingData) {
-            errorMsg =
-              errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
-          }
-          this.#enableErrorState(errorMsg);
-        } else {
-          this.#disableErrorState();
-
-          this.formTarget.addEventListener(
-            "turbo:before-fetch-request",
-            (event) => {
-              event.detail.fetchOptions.body = JSON.stringify(
-                this.#compactFormData(),
-              );
-              event.detail.fetchOptions.headers["Content-Type"] =
-                "application/json";
-
-              event.detail.resume();
-            },
-            {
-              once: true,
-            },
-          );
-          this.formTarget.requestSubmit();
-        }
-      } else {
+      const missingData = this.#validateData();
+      if (Object.keys(missingData).length > 0) {
         this.#disableSubmissionState();
-        this.#enableFormFieldErrorState(this.formErrorValue);
+        let errorMsg = this.dataMissingErrorValue;
+        for (const sample in missingData) {
+          errorMsg =
+            errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
+        }
+        this.#enableErrorState(errorMsg);
+      } else {
+        this.#disableErrorState();
+
+        this.formTarget.addEventListener(
+          "turbo:before-fetch-request",
+          (event) => {
+            event.detail.fetchOptions.body = JSON.stringify(
+              this.#compactFormData(),
+            );
+            event.detail.fetchOptions.headers["Content-Type"] =
+              "application/json";
+
+            event.detail.resume();
+          },
+          {
+            once: true,
+          },
+        );
+        this.formTarget.requestSubmit();
       }
     }, 50);
   }
@@ -888,25 +882,102 @@ export default class extends Controller {
     return params;
   }
 
-  #validateWorkflowExecutionName() {
-    const name = document.getElementById("workflow_execution_name");
-    let hasErrors = false;
+  #validateRequiredFormInputs() {
+    const requiredFields = this.formTarget.querySelectorAll(
+      "[aria-required='true']",
+    );
 
-    if (name.value === "") {
-      hasErrors = true;
-    }
+    const missingFields = [];
 
-    if (hasErrors) {
-      this.#addNameFieldErrorState();
+    requiredFields.forEach((field) => {
+      if (field.value.trim() === "") {
+        const message = this.#formatRequiredFieldErrorMessage(
+          this.#requiredFieldLabel(field),
+        );
+        missingFields.push(message);
+        this.#addRequiredFieldErrorState(field, message);
+      } else {
+        this.#removeRequiredFieldErrorState(field);
+      }
+    });
+
+    if (missingFields.length > 0) {
+      const combinedMessage = `${this.formErrorValue}\n - ${missingFields.join("\n - ")}`;
+      this.#enableFormFieldErrorState(combinedMessage);
       return false;
-    } else {
-      this.#removeNameFieldErrorState();
     }
 
     return true;
   }
 
-  #addNameFieldErrorState() {
+  #addRequiredFieldErrorState(field, message) {
+    if (field.id === "workflow_execution_name") {
+      this.#addNameFieldErrorState(message);
+      return;
+    }
+
+    field.setAttribute("aria-invalid", true);
+
+    if (field.type === "hidden") {
+      const fileSelector = document.getElementById(`${field.id}_link`);
+      if (!fileSelector) {
+        return;
+      }
+
+      fileSelector.setAttribute("aria-invalid", true);
+      fileSelector.classList.remove(...FIELD_CLASSES["VALID"]);
+      fileSelector.classList.add(...FIELD_CLASSES["ERROR"]);
+      return;
+    }
+
+    field.classList.remove(...FIELD_CLASSES["VALID"]);
+    field.classList.add(...FIELD_CLASSES["ERROR"]);
+  }
+
+  #removeRequiredFieldErrorState(field) {
+    if (field.id === "workflow_execution_name") {
+      this.#removeNameFieldErrorState();
+      return;
+    }
+
+    field.removeAttribute("aria-invalid");
+
+    if (field.type === "hidden") {
+      const fileSelector = document.getElementById(`${field.id}_link`);
+      if (!fileSelector) {
+        return;
+      }
+
+      fileSelector.removeAttribute("aria-invalid");
+      fileSelector.classList.remove(...FIELD_CLASSES["ERROR"]);
+      fileSelector.classList.add(...FIELD_CLASSES["VALID"]);
+      return;
+    }
+
+    field.classList.remove(...FIELD_CLASSES["ERROR"]);
+    field.classList.add(...FIELD_CLASSES["VALID"]);
+  }
+
+  #requiredFieldLabel(field) {
+    if (field.dataset.requiredLabel) {
+      return field.dataset.requiredLabel;
+    }
+
+    const label = this.formTarget.querySelector(`label[for='${field.id}']`);
+    if (!label) {
+      return field.name;
+    }
+
+    return label.textContent.replace("*", "").trim();
+  }
+
+  #formatRequiredFieldErrorMessage(fieldLabel) {
+    return this.errorFormatValue
+      .replace("%{attribute}", fieldLabel)
+      .replace("%{message}", this.errorBlankValue);
+  }
+
+  #addNameFieldErrorState(message = this.nameMissingValue) {
     const nameError = document.getElementById(
       "workflow_execution_name_error",
     ).lastElementChild;
@@ -921,7 +992,7 @@ export default class extends Controller {
     name.classList.remove(...FIELD_CLASSES["VALID"]);
     name.classList.add(...FIELD_CLASSES["ERROR"]);
     nameError.classList.remove("hidden");
-    nameErrorSpan.innerHTML = this.nameMissingValue;
+    nameErrorSpan.innerHTML = message;
     nameErrorSpan.classList.add(...FIELD_CLASSES["ERROR_SPAN"]);
     nameHint.classList.add("hidden");
     nameField.classList.add("invalid");
