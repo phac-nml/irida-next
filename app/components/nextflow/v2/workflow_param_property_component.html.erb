@@ -34,12 +34,10 @@
             dark:placeholder-slate-400
           ", aria: { labelledby: @legend_id, describedby: describedby_ids.join(" ") }, data: { turbo_stream: "true" } %>
 
+        <%# hidden inputs may not carry aria-* attributes, so mark required file params with a data attribute %>
         <%= fields.hidden_field name,
-                            required: false,
-                            aria: {
-                              required: property[:required].to_s,
-                            },
                             data: {
+                              required: property[:required] ? "true" : nil,
                               required_label: property[:description],
                             } %>
       </div>

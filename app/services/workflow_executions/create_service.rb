@@ -61,10 +61,9 @@ module WorkflowExecutions
     def validate_required_workflow_params
       return if workflow.nil?
 
-      workflow.workflow_params.each_value do |definition|
+      workflow.workflow_params.each do |section, definition|
         definition[:properties].each do |name, property|
-          next unless %w[path file-path].include?(property[:format])
-          next unless property[:required]
+          next unless required_user_path_param?(section, name, property)
 
           value = @workflow_execution.workflow_params[name.to_s]
           next if value.present?
@@ -75,6 +74,13 @@ module WorkflowExecutions
           )
         end
       end
+    end
+
+    def required_user_path_param?(section, name, property)
+      return false unless property[:required] && %w[path file-path].include?(property[:format])
+
+      # the samplesheet input is generated during preparation, not submitted by the user
+      !(section == :input_output_options && name == :input)
     end
 
     def persist_workflow_execution

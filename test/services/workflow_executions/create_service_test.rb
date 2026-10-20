@@ -631,7 +631,7 @@ module WorkflowExecutions
         {
           input_output_options: {
             properties: {
-              input: {
+              reference: {
                 required: true,
                 format: 'path'
               }
@@ -640,7 +640,7 @@ module WorkflowExecutions
         }
       )
 
-      workflow_execution = WorkflowExecution.new(workflow_params: { 'input' => '' })
+      workflow_execution = WorkflowExecution.new(workflow_params: { 'reference' => '' })
 
       service.workflow = fake_workflow
       service.instance_variable_set(:@workflow_execution, workflow_execution)
@@ -648,7 +648,7 @@ module WorkflowExecutions
       service.validate_required_workflow_params
 
       assert_includes workflow_execution.errors[:base],
-                      I18n.t('workflow_executions.create.required_workflow_param_blank', property: :input)
+                      I18n.t('workflow_executions.create.required_workflow_param_blank', property: :reference)
     end
 
     test 'validate_required_workflow_params does not add error when required path param is present' do
@@ -666,7 +666,7 @@ module WorkflowExecutions
         {
           input_output_options: {
             properties: {
-              input: {
+              reference: {
                 required: true,
                 format: 'file-path'
               }
@@ -675,7 +675,7 @@ module WorkflowExecutions
         }
       )
 
-      workflow_execution = WorkflowExecution.new(workflow_params: { 'input' => 'gid://app/Attachment/1' })
+      workflow_execution = WorkflowExecution.new(workflow_params: { 'reference' => 'gid://app/Attachment/1' })
 
       service.workflow = fake_workflow
       service.instance_variable_set(:@workflow_execution, workflow_execution)
@@ -710,6 +710,40 @@ module WorkflowExecutions
       )
 
       workflow_execution = WorkflowExecution.new(workflow_params: { 'project_name' => '' })
+
+      service.workflow = fake_workflow
+      service.instance_variable_set(:@workflow_execution, workflow_execution)
+
+      service.validate_required_workflow_params
+
+      assert_empty workflow_execution.errors[:base]
+    end
+
+    test 'validate_required_workflow_params ignores the generated samplesheet input param' do
+      service = WorkflowExecutions::CreateService.new(@user, {
+                                                        metadata: {
+                                                          pipeline_id: 'phac-nml/iridanextexample',
+                                                          workflow_version: '1.0.2'
+                                                        },
+                                                        namespace_id: @project.namespace.id,
+                                                        submitter_id: @user.id,
+                                                        samples_workflow_executions_attributes: @samples_workflow_executions_attributes # rubocop:disable Layout/LineLength
+                                                      })
+
+      fake_workflow = Struct.new(:workflow_params).new(
+        {
+          input_output_options: {
+            properties: {
+              input: {
+                required: true,
+                format: 'file-path'
+              }
+            }
+          }
+        }
+      )
+
+      workflow_execution = WorkflowExecution.new(workflow_params: {})
 
       service.workflow = fake_workflow
       service.instance_variable_set(:@workflow_execution, workflow_execution)
