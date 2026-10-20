@@ -1,5 +1,3 @@
-<%# locals: (url:, instance:) %>
-
 <div
   id="nextflow-container"
   data-controller="nextflow--v2--samplesheet"
@@ -41,7 +39,11 @@
       <div class="mr-3 shrink-0"><%= icon :x_circle, color: :danger %></div>
 
       <div class="mt-0.5 min-w-0 flex-1">
-        <div class="text-sm leading-5 font-medium" data-nextflow--v2--samplesheet-target="formFieldErrorMessage"></div>
+        <div
+          class="text-sm leading-5 font-medium whitespace-pre-line"
+          data-nextflow--v2--samplesheet-target="formFieldErrorMessage"
+        >
+        </div>
       </div>
     </div>
   </div>
