@@ -1538,6 +1538,7 @@ fr:
         delete_aria_label: 'Supprimer le pipeline automatisé : %{name}'
         delete_confirm: Êtes-vous sûr de vouloir supprimer ce pipeline automatisé?
         edit_aria_label: 'Modifier le pipeline automatisé : %{name}'
+        trigger_aria_label: 'Déclencher le pipeline automatisé : %{name}'
       create:
         error: Impossible de créer un pipeline automatisé pour %{workflow_name}
         success: Le pipeline automatisé pour %{workflow_name} a été créé avec succès
@@ -1552,6 +1553,11 @@ fr:
         add_new_automated_workflow_execution: Nouveau pipeline automatisé
         subtitle: Configurer des pipelines automatisés à lancer lorsque les données jumelées sont téléchargées dans le projet
         title: Pipelines automatisés
+      launch:
+        error:
+          no_samples_found: Aucun échantillon trouvé correspondant aux critères de recherche fournis
+          no_search_params: Veuillez fournir les paramètres de recherche pour déclencher le pipeline automatisé
+        success: Pipeline automatisé %{workflow_name} déclenché pour %{sample_count} exemple(s)
       new_automated_workflow_execution_modal:
         title: Paramètres %{workflow}
       pipeline_selection_modal:
@@ -1569,6 +1575,17 @@ fr:
           updated_at: Mis à jour
           workflow_name: Nom du flux de travail
           workflow_version: Version du flux de travail
+      trigger:
+        name: Nom
+        search_form_title: Rechercher des échantillons à déclencher
+        subtitle: Fournissez des paramètres de recherche pour sélectionner des échantillons pour ce pipeline automatisé
+        title: Déclencher le pipeline automatisé
+      trigger_modal:
+        name: Nom
+        search_form_title: Rechercher des échantillons à déclencher
+        title: Déclencher le pipeline automatisé
+        version: Version
+        workflow_name: Nom du flux de travail
       update:
         error: Impossible de mettre à jour le pipeline automatisé pour %{workflow_name}
         success: Le pipeline automatisé pour %{workflow_name} a été mis à jour avec succès

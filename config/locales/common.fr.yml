@@ -10,6 +10,7 @@ fr:
       save: Sauvegarder les modifications
       select: Sélectionner
       share: Partager
+      trigger: Déclencher
       update: Mettre à jour
       upload: Télécharger
     controls:

@@ -100,6 +100,7 @@ linter:
         - "app/views/projects/_change_path.html.erb"
         - "app/views/groups/samples/index.html.erb"
         - "app/views/projects/samples/index.html.erb"
+        - "app/views/projects/automated_workflow_executions/_trigger_modal.html.erb"
 
 formatter:
   enabled: true
