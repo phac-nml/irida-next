@@ -452,7 +452,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    export_name = 'test data export'
+    export_name = 'test_data_export'
 
     assert_difference 'DataExport.count', 1 do
       post data_exports_path(format: :turbo_stream),
@@ -484,7 +484,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     get workflow_executions_path
     assert_response :success
 
-    export_name = 'test data export'
+    export_name = 'test_data_export'
 
     assert_no_difference 'DataExport.count' do
       post data_exports_path(format: :turbo_stream),

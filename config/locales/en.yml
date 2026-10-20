@@ -173,6 +173,9 @@ en:
               missing_file_format: must contain a format for linelist exports
               missing_ids: does not contain any ids to export.
               missing_namespace_id: must have a namespace id
+            name:
+              invalid: can only contain letters, numbers, spaces, '-', '.', and '_'
+              too_long: is too long (maximum is %{count} characters)
         group:
           attributes:
             public:
@@ -597,6 +600,7 @@ en:
     new:
       after_submission_description_html: After submission, you will be redirected to the export page. While the export status is <span class="px-2.5 py-0.5 mr-1 ml-1 text-xs font-medium rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">processing</span>, the contents of the export are being created. Once the export status is <span class="px-2.5 py-0.5 ml-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
       email_label: Receive an email notification when your export is ready to download?
+      name_help: The export name is used as the downloaded file's name and can only contain letters, numbers, '-', and '_'
       name_label: 'Export Name (Optional):'
       sample_description:
         plural: This export will contain COUNT_PLACEHOLDER samples.
