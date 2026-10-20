@@ -7,7 +7,8 @@ module NextflowHelper
 
     if property[:enum].present?
       return render(Viral::Form::Prefixed::SelectComponent.new(form: container, name:, options: property[:enum],
-                                                               selected_value: value)) do |select|
+                                                               selected_value: value,
+                                                               aria_required: required)) do |select|
                select.with_prefix do
                  format_name_as_arg(name)
                end
@@ -16,8 +17,8 @@ module NextflowHelper
 
     data = { 'metadata-header-name': name.to_s.remove('_header') } if metadata_header?(name.to_s)
 
-    render(Viral::Form::Prefixed::TextInputComponent.new(form: container, name:, required:, pattern: property[:pattern],
-                                                         value:, data:)) do |input|
+    render(Viral::Form::Prefixed::TextInputComponent.new(form: container, name:, pattern: property[:pattern],
+                                                         value:, data:, aria_required: required)) do |input|
       input.with_prefix do
         format_name_as_arg(name)
       end

@@ -211,6 +211,20 @@ class PipelinesTest < ActiveSupport::TestCase
     end
   end
 
+  test 'workflow params marks required properties from schema required array' do
+    entry = {
+      url: 'https://github.com/phac-nml/iridanextexample',
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline'
+    }.with_indifferent_access
+
+    pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.2' },
+                                   Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
+    assert pipeline.workflow_params[:input_output_options][:properties][:input][:required]
+  end
+
   test 'maximum_run_time at entry level (Irida Next Example Pipeline)' do
     entry = {
       url: 'https://github.com/phac-nml/iridanextexample',

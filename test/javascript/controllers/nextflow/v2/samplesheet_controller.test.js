@@ -407,7 +407,7 @@ function renderMetadataParamsHeader() {
 /* eslint-disable no-useless-escape */
 function renderBaseFixture() {
   document.body.innerHTML = `
-    <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-automated-workflow-value="false" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
+    <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-automated-workflow-value="false" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-error-format-value="%{attribute} %{message}" data-nextflow--v2--samplesheet-error-blank-value="can't be blank" data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
   <h1>
     phac-nml/iridanextexample
   </h1>
@@ -887,7 +887,7 @@ describe("nextflow v2 samplesheet controller", () => {
     );
 
     expect(errorMessageContainer.textContent).not.toContain(
-      "Name is required. Please enter a name for the workflow execution.",
+      "Name can't be blank",
     );
 
     expect(formFieldErrorMessage.textContent).not.toContain(
@@ -897,12 +897,49 @@ describe("nextflow v2 samplesheet controller", () => {
     submitBtn.click();
 
     vi.advanceTimersByTime(60);
-    expect(errorMessageContainer.textContent).toContain(
-      "Name is required. Please enter a name for the workflow execution.",
-    );
+    expect(errorMessageContainer.textContent).toContain("Name can't be blank");
     expect(formFieldErrorMessage.textContent).toContain(
       "Please review the following problems:",
     );
+  });
+
+  it("can't submit when a required workflow param is blank", async () => {
+    setupStandardSamplesheetAttributes(range(1, 2));
+    application = await startController();
+
+    const requestSubmit = vi
+      .spyOn(HTMLFormElement.prototype, "requestSubmit")
+      .mockImplementation(() => {});
+
+    const submitBtn = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="submit"]',
+    );
+    const formFieldErrorMessage = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    );
+    const nameInput = document.querySelector("#workflow_execution_name");
+    const requiredParamInput = document.querySelector(
+      "#workflow_execution_workflow_params_project_name",
+    );
+
+    nameInput.value = "workflow name";
+    requiredParamInput.value = "";
+    requiredParamInput.setAttribute("aria-required", "true");
+    requiredParamInput.dataset.requiredLabel = "Project name";
+
+    submitBtn.click();
+
+    vi.advanceTimersByTime(60);
+
+    expect(formFieldErrorMessage.textContent).toContain(
+      "Please review the following problems:",
+    );
+    expect(formFieldErrorMessage.textContent).toContain(
+      "Project name can't be blank",
+    );
+    expect(requestSubmit).not.toHaveBeenCalled();
+
+    requestSubmit.mockRestore();
   });
 
   it("empty file selection on required file field validation", async () => {
@@ -1781,6 +1818,9 @@ describe("nextflow v2 samplesheet controller", () => {
         "data-nextflow--v2--samplesheet-automated-workflow-value",
         "true",
       );
+    document
+      .getElementById("workflow_execution_name")
+      .setAttribute("aria-required", "false");
 
     const sampleAttributesContainer =
       document.getElementById("sample_attributes");
