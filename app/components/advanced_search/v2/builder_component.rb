@@ -7,7 +7,7 @@ module AdvancedSearch
     # Renders the groups/conditions builder and the client-side <template> elements.
     # Has no knowledge of its host (dialog, drawer, page); a host adapter mounts it and
     # drives its lifecycle through the advanced-search--v2--builder Stimulus outlet.
-    class BuilderComponent < ::Component
+    class BuilderComponent < ::Component # rubocop:disable Metrics/ClassLength
       def initialize(form:, search:, fields: nil, sample_fields: [], metadata_fields: [])
         @form = form
         @search = search
@@ -20,8 +20,11 @@ module AdvancedSearch
       private
 
       def subject
-        if @search.is_a?(WorkflowExecution::Query)
+        case @search
+        when WorkflowExecution::Query
           t('components.advanced_search_component.v2.subject.workflow_executions')
+        when Attachment::Query
+          t('components.advanced_search_component.v2.subject.attachments')
         else
           t('components.advanced_search_component.v2.subject.samples')
         end
