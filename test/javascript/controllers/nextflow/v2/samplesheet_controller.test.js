@@ -942,6 +942,44 @@ describe("nextflow v2 samplesheet controller", () => {
     requestSubmit.mockRestore();
   });
 
+  it("renders required field labels as text, not HTML", async () => {
+    setupStandardSamplesheetAttributes(range(1, 2));
+    application = await startController();
+
+    const requestSubmit = vi
+      .spyOn(HTMLFormElement.prototype, "requestSubmit")
+      .mockImplementation(() => {});
+
+    const submitBtn = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="submit"]',
+    );
+
+    const formFieldErrorMessage = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    );
+
+    const requiredParamInput = document.querySelector(
+      "#workflow_execution_workflow_params_project_name",
+    );
+
+    document.querySelector("#workflow_execution_name").value = "workflow name";
+    requiredParamInput.value = "";
+    requiredParamInput.setAttribute("aria-required", "true");
+    requiredParamInput.dataset.requiredLabel = "<b>Project name</b> $& name";
+
+    submitBtn.click();
+
+    vi.advanceTimersByTime(60);
+
+    expect(formFieldErrorMessage.querySelector("b")).toBeNull();
+    expect(formFieldErrorMessage.textContent).toContain(
+      "<b>Project name</b> $& name",
+    );
+    expect(requestSubmit).not.toHaveBeenCalled();
+
+    requestSubmit.mockRestore();
+  });
+
   it("empty file selection on required file field validation", async () => {
     // manually create sampleAttributes with empty file selection
     const samples = [1, 2];

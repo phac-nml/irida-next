@@ -336,7 +336,8 @@ export default class extends Controller {
 
   #enableFormFieldErrorState(message) {
     this.formFieldErrorTarget.classList.remove("hidden");
-    this.formFieldErrorMessageTarget.innerHTML = message;
+    // Messages can include labels derived from pipeline schemas, so render as text.
+    this.formFieldErrorMessageTarget.textContent = message;
     this.formFieldErrorTarget.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -346,7 +347,7 @@ export default class extends Controller {
 
   #disableFormFieldErrorState() {
     this.formFieldErrorTarget.classList.add("hidden");
-    this.formFieldErrorMessageTarget.innerHTML = "";
+    this.formFieldErrorMessageTarget.textContent = "";
   }
 
   #renderProcessingError() {
@@ -963,7 +964,9 @@ export default class extends Controller {
       return field.dataset.requiredLabel;
     }
 
-    const label = this.formTarget.querySelector(`label[for='${field.id}']`);
+    const label = this.formTarget.querySelector(
+      `label[for='${CSS.escape(field.id)}']`,
+    );
     if (!label) {
       return field.name;
     }
@@ -972,9 +975,10 @@ export default class extends Controller {
   }
 
   #formatRequiredFieldErrorMessage(fieldLabel) {
+    // Use replacer functions so `$` sequences in labels aren't treated as special patterns
     return this.errorFormatValue
-      .replace("%{attribute}", fieldLabel)
-      .replace("%{message}", this.errorBlankValue);
+      .replaceAll("%{attribute}", () => fieldLabel)
+      .replaceAll("%{message}", () => this.errorBlankValue);
   }
 
   #addNameFieldErrorState(message = this.nameMissingValue) {
@@ -992,7 +996,7 @@ export default class extends Controller {
     name.classList.remove(...FIELD_CLASSES["VALID"]);
     name.classList.add(...FIELD_CLASSES["ERROR"]);
     nameError.classList.remove("hidden");
-    nameErrorSpan.innerHTML = message;
+    nameErrorSpan.innerContent = message;
     nameErrorSpan.classList.add(...FIELD_CLASSES["ERROR_SPAN"]);
     nameHint.classList.add("hidden");
     nameField.classList.add("invalid");
@@ -1002,7 +1006,7 @@ export default class extends Controller {
     const nameError = document.getElementById(
       "workflow_execution_name_error",
     ).lastElementChild;
-    const nameErrorSpan = nameError.getElementsByClassName("grow")[0];
+    const nameErrorSpan = nameError.querySelector(".grow");
     const name = document.getElementById("workflow_execution_name");
     const nameHint = document.getElementById("workflow_execution_name_hint");
     const nameField = document.getElementById("workflow_execution_name_field");
