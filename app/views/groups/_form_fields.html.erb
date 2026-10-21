@@ -1,3 +1,5 @@
+<%# locals: (authorized_namespaces:, form:, group:) %>
+
 <%= form_error_summary(form, target_overrides: { parent_id: "namespace-select" },
 include: group.new_record? ? %i[name description path parent_id] : %i[name description]) %>
 

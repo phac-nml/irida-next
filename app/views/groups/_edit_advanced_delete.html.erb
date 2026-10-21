@@ -1,3 +1,5 @@
+<%# locals: (group:, subgroups_count:, projects_count:, samples_count:) %>
+
 <%= render Viral::CardComponent.new do |card| %>
   <% card.with_header(title: t(:"groups.edit.advanced.delete.title")) %>
 
@@ -9,24 +11,24 @@
         <div class="ml-4 flex-1">
           <%= t(
             :"groups.edit.advanced.delete.confirm.warning.pre_html",
-            group_name: @group.name,
+            group_name: group.name,
           ) %>
 
           <ul class="ml-4 max-w-md list-inside list-disc space-y-1 py-2">
             <li>
               <%= t(
                 :"groups.edit.advanced.delete.confirm.warning.subgroups_count",
-                count: @subgroups_count,
+                count: subgroups_count,
               ) %>
             </li>
 
             <li><%= t(
                 :"groups.edit.advanced.delete.confirm.warning.projects_count",
-                count: @projects_count,
+                count: projects_count,
               ) %></li>
             <li><%= t(
                 :"groups.edit.advanced.delete.confirm.warning.samples_count",
-                count: @samples_count,
+                count: samples_count,
               ) %></li>
           </ul>
 
@@ -35,7 +37,7 @@
       </div>
 
       <div class="mb-4">
-        <% t(:"groups.edit.advanced.delete.confirm.points_html", group: @group.path).each do |item| %>
+        <% t(:"groups.edit.advanced.delete.confirm.points_html", group: group.path).each do |item| %>
           <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
         <% end %>
       </div>
@@ -45,7 +47,7 @@
 
     <div class="mt-4">
       <%= pathogen_button_to t(:"groups.edit.advanced.delete.submit"),
-      @group,
+      group,
       method: :delete,
       tone: :danger,
       emphasis: :solid,
@@ -53,7 +55,7 @@
         data: {
           turbo_confirm: "",
           turbo_content: ".confirm-delete",
-          confirm_value: @group.path,
+          confirm_value: group.path,
         }
       } %>
     </div>
