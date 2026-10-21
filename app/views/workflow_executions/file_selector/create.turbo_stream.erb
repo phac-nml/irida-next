@@ -41,6 +41,9 @@
     <%= hidden_field_tag "workflow_execution[workflow_params][#{property}]",
       @attachment[:global_id],
       id: input_id,
-      required: required %>
+      data: {
+        required: required == "true" ? "true" : nil,
+        required_label: file_selector_params[:required_label]
+      } %>
   <% end %>
 <% end %>
