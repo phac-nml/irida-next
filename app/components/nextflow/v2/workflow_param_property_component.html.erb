@@ -1,4 +1,4 @@
-<div>
+<div class="form-field">
   <% if property[:type] != "boolean" %>
     <% if (property[:format] == "path" || property[:format] == "file-path") && !property[:enum].present? %>
       <% describedby_ids = [@prefix_id] %>
@@ -8,7 +8,7 @@
           <%= property[:description] %>
 
           <% if property[:required] %>
-            <%= render Viral::PillComponent.new(text: t(:"components.nextflow.required"), color: :primary) %>
+            <%= required_indicator %>
           <% end %>
         </legend>
       </fieldset>
@@ -42,13 +42,7 @@
                             } %>
       </div>
     <% else %>
-      <%= fields.label name, class: "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
-        <%= property[:description] %>
-
-        <% if property[:required] %>
-          <%= render Viral::PillComponent.new(text: t(:"components.nextflow.required"), color: :primary) %>
-        <% end %>
-      <% end %>
+      <%= fields.label name, property[:description], data: { required: property[:required] }, class: "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
       <%= form_input(fields, name, property, property[:required], instance) %>
     <% end %>
   <% else %>
@@ -62,7 +56,7 @@
         <%= property[:description] %>
 
         <% if property[:required] %>
-          <%= render Viral::PillComponent.new(text: t(:"components.nextflow.required"), color: :primary) %>
+          <%= required_indicator %>
         <% end %>
       <% end %>
     <% end %>
