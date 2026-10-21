@@ -26,6 +26,17 @@ module Nextflow
         @legend_id = fields.field_id(name, 'legend')
         @prefix_id = fields.field_id(name, 'prefix')
       end
+
+      # Matches the asterisk indicator PathogenFormBuilder#label renders for data-required fields,
+      # for use on legends which aren't passed through PathogenFormBuilder#label.
+      def required_indicator
+        tag.abbr(
+          t('pathogen.label.required_indicator'),
+          class: 'req',
+          title: t('pathogen.label.title'),
+          aria: { hidden: true }
+        )
+      end
     end
   end
 end
