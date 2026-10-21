@@ -1,3 +1,5 @@
+<%# locals: (log_data:) %>
+
 <%= render Viral::DialogComponent.new(open: true, size: :large) do |dialog| %>
   <% dialog.with_header(
     title: t(".version_number", version_number: log_data[:version]),

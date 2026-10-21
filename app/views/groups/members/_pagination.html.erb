@@ -1,19 +1,21 @@
-<% if @has_members %>
-  <% if @pagy.count.positive? %>
+<%# locals: (has_members:, pagy:) %>
+
+<% if has_members %>
+  <% if pagy.count.positive? %>
     <%= render PaginationComponent.new(
-      info: @pagy.info_tag,
+      info: pagy.info_tag,
       prev_url:
         (
-          if @pagy.previous
-            group_members_url(page: @pagy.previous, q: params[:q]&.to_unsafe_h)
+          if pagy.previous
+            group_members_url(page: pagy.previous, q: params[:q]&.to_unsafe_h)
           else
             nil
           end
         ),
       next_url:
         (
-          if @pagy.next
-            group_members_url(page: @pagy.next, q: params[:q]&.to_unsafe_h)
+          if pagy.next
+            group_members_url(page: pagy.next, q: params[:q]&.to_unsafe_h)
           else
             nil
           end
