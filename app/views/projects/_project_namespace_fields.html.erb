@@ -1,8 +1,10 @@
+<%# locals: (project:, authorized_namespaces:, builder:, current_user:) %>
+
 <%= form_error_summary(builder, target_overrides: { namespace: "namespace-select" }) %>
 
 <%= render partial: "shared/form/required_field_legend" %>
 
-<% invalid_name = @project.namespace.errors.include?(:name) %>
+<% invalid_name = project.namespace.errors.include?(:name) %>
 
 <div class="form-field <%= 'invalid' if invalid_name %>">
   <%= builder.label :name, data: { required: true } %>
@@ -26,7 +28,7 @@
   <% if invalid_name %>
     <%= render "shared/form/field_errors",
     id: builder.field_id(:name, "error"),
-    errors: @project.namespace.errors.full_messages_for(:name) %>
+    errors: project.namespace.errors.full_messages_for(:name) %>
   <% end %>
 
   <span id="<%= builder.field_id(:name, "hint") %>" class="field-hint"><%== t(:"projects.create.name_help") %></span>
@@ -34,7 +36,7 @@
 
 <fieldset class="m-0 grid gap-4 border-0 p-0 @xs:grid-cols-1 @5xl:grid-cols-2">
   <legend class="sr-only"><%= t(:"projects.create.namespace_and_path") %></legend>
-  <% invalid_namespace = @project.namespace.errors.include?(:namespace) %>
+  <% invalid_namespace = project.namespace.errors.include?(:namespace) %>
 
   <div class="form-field <%= 'invalid' if invalid_namespace %>">
     <% form_id = "namespace-select" %>
@@ -85,7 +87,7 @@
     <% if invalid_namespace %>
       <%= render "shared/form/field_errors",
       id: builder.field_id(:namespace, "error"),
-      errors: @project.namespace.errors.full_messages_for(:namespace) %>
+      errors: project.namespace.errors.full_messages_for(:namespace) %>
     <% end %>
 
     <span id="<%= builder.field_id(:namespace, "hint") %>" class="field-hint">
@@ -93,7 +95,7 @@
     </span>
   </div>
 
-  <% invalid_path = @project.namespace.errors.include?(:path) %>
+  <% invalid_path = project.namespace.errors.include?(:path) %>
 
   <div class="form-field <%= 'invalid' if invalid_path %>">
     <%= builder.label :path, data: { required: true } %>
@@ -117,14 +119,14 @@
     <% if invalid_path %>
       <%= render "shared/form/field_errors",
       id: builder.field_id(:path, "error"),
-      errors: @project.namespace.errors.full_messages_for(:path) %>
+      errors: project.namespace.errors.full_messages_for(:path) %>
     <% end %>
 
     <span id="<%= builder.field_id(:path, "hint") %>" class="field-hint"><%= t(:"projects.create.path_help") %></span>
   </div>
 </fieldset>
 
-<% invalid_description = @project.namespace.errors.include?(:description) %>
+<% invalid_description = project.namespace.errors.include?(:description) %>
 
 <div class="form-field <%= 'invalid' if invalid_description %>">
   <%= builder.label :description %>
@@ -148,7 +150,7 @@
   <% if invalid_description %>
     <%= render "shared/form/field_errors",
     id: builder.field_id(:description, "error"),
-    errors: @project.namespace.errors.full_messages_for(:description) %>
+    errors: project.namespace.errors.full_messages_for(:description) %>
   <% end %>
 
   <span id="<%= builder.field_id(:description, "hint") %>" class="field-hint">

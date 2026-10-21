@@ -1,5 +1,7 @@
-<% if @automated_workflow_executions.count.positive? %>
-  <%= render Viral::DataTableComponent.new(@automated_workflow_executions, id: "automated_workflow_executions") do |table| %>
+<%# locals: (project:, automated_workflow_executions:) %>
+
+<% if automated_workflow_executions.count.positive? %>
+  <%= render Viral::DataTableComponent.new(automated_workflow_executions, id: "automated_workflow_executions") do |table| %>
     <% table.with_column(t(".headers.id"),
       sticky_key: :left
     ) do |row| %>
@@ -40,8 +42,8 @@
       <% unless row.disabled %>
         <%= pathogen_button_to t("common.actions.edit"),
         edit_namespace_project_automated_workflow_execution_path(
-          @project.parent,
-          @project,
+          project.parent,
+          project,
           row,
         ),
         data: {
@@ -62,8 +64,8 @@
 
       <%= pathogen_button_to t("common.actions.delete"),
       namespace_project_automated_workflow_execution_path(
-        @project.parent,
-        @project,
+        project.parent,
+        project,
         row,
       ),
       data: {

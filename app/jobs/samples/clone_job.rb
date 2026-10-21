@@ -26,7 +26,6 @@ module Samples
           target: 'clone_samples_dialog_content',
           partial: 'shared/samples/success',
           locals: {
-            type: :success,
             message: I18n.t('samples.clones.create.success')
           }
         )
@@ -37,7 +36,6 @@ module Samples
           target: 'clone_samples_dialog_content',
           partial: 'shared/samples/errors',
           locals: {
-            type: :alert,
             message: I18n.t('samples.clones.create.error'),
             errors: errors
           }
@@ -49,7 +47,6 @@ module Samples
           target: 'clone_samples_dialog_content',
           partial: 'shared/samples/errors',
           locals: {
-            type: :alert,
             message: I18n.t('samples.clones.create.no_samples_cloned_error'),
             errors: errors
           }

@@ -18,5 +18,11 @@
                          token: personal_access_token.token,
                        } %>
   <%= turbo_stream.replace "bots-table-section",
-                       partial: "table" %>
+                       partial: "table",
+                        locals: {
+                          bot_accounts: @bot_accounts,
+                          namespace: @namespace,
+                          pagy: @pagy,
+                          allowed_to: @allowed_to
+                        } %>
 <% end %>

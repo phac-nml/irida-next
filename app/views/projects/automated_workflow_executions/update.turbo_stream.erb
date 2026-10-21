@@ -1,4 +1,4 @@
-<%= turbo_stream.update "automated_workflow_executions_table", partial: "table" %>
+<%= turbo_stream.update "automated_workflow_executions_table", partial: "table", locals: { project: @project, automated_workflow_executions: @automated_workflow_executions } %>
 
 <%= turbo_stream.update "automated_workflow_execution_modal" %>
 

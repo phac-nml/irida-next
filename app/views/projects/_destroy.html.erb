@@ -1,3 +1,5 @@
+<%# locals: (project:, samples_count:, automated_workflows_count:) %>
+
 <%= render Viral::CardComponent.new do |card| %>
   <% card.with_header(title: t(:"projects.edit.advanced.destroy.title")) %>
 
@@ -9,19 +11,19 @@
         <div class="ml-4 flex-1">
           <%= t(
             :"projects.edit.advanced.destroy.confirm.warning.pre_html",
-            project_name: @project.human_name,
+            project_name: project.human_name,
           ) %>
 
           <ul class="ml-4 max-w-md list-inside list-disc space-y-1 py-2">
             <li><%= t(
                 :"projects.edit.advanced.destroy.confirm.warning.samples_count",
-                count: @samples_count,
+                count: samples_count,
               ) %></li>
 
             <li>
               <%= t(
                 :"projects.edit.advanced.destroy.confirm.warning.automated_workflows_count",
-                count: @automated_workflows_count,
+                count: automated_workflows_count,
               ) %>
             </li>
           </ul>
@@ -31,7 +33,7 @@
       </div>
 
       <div class="mb-4">
-        <% t(:"projects.edit.advanced.destroy.confirm.points_html", project: @project.name).each do |item| %>
+        <% t(:"projects.edit.advanced.destroy.confirm.points_html", project: project.name).each do |item| %>
           <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
         <% end %>
       </div>
@@ -41,13 +43,13 @@
 
     <div class="mt-4">
       <%= pathogen_button_to t(:"projects.edit.advanced.destroy.submit"),
-      namespace_project_path,
+      namespace_project_path(project.namespace, project),
       method: :delete,
       form: {
         data: {
           turbo_confirm: "",
           turbo_content: ".confirm-destroy",
-          confirm_value: @project.name,
+          confirm_value: project.name,
         }
       },
       tone: :danger, emphasis: :solid %>

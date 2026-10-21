@@ -97,7 +97,6 @@ module Samples
           target: 'transfer_samples_dialog_content',
           partial: 'shared/samples/success',
           locals: {
-            type: :success,
             message: I18n.t('samples.transfers.create.success')
           }
         )
@@ -108,7 +107,6 @@ module Samples
           target: 'transfer_samples_dialog_content',
           partial: 'shared/samples/errors',
           locals: {
-            type: :alert,
             message: I18n.t('samples.transfers.create.error'),
             errors: errors
           }
@@ -120,7 +118,6 @@ module Samples
           target: 'transfer_samples_dialog_content',
           partial: 'shared/samples/errors',
           locals: {
-            type: :alert,
             message: I18n.t('samples.transfers.create.no_samples_transferred_error'),
             errors: errors
           }

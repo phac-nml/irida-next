@@ -25,7 +25,7 @@
     <% end %>
 
     <% if @allowed_to[:destroy] %>
-      <%= render "destroy", project: @project %>
+      <%= render "destroy", project: @project, samples_count: @samples_count, automated_workflows_count: @automated_workflows_count %>
     <% end %>
   </div>
 </div>

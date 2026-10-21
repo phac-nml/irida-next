@@ -10,7 +10,7 @@
     current_user: @current_user
   } %>
 
-  <%= turbo_stream.update "members_pagination", method: "morph", partial: "pagination" %>
+  <%= turbo_stream.update "members_pagination", method: "morph", partial: "pagination", locals: { has_members: @has_members, pagy: @pagy } %>
 <% end %>
 
 <%= turbo_stream.update "new_group_link_dialog",
@@ -29,4 +29,8 @@
                     locals: {
                       open: false,
                       tab: @tab,
+                      access_levels: @access_levels,
+                      available_users: @available_users,
+                      namespace: @namespace,
+                      new_member: @new_member
                     } %>
