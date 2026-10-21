@@ -1,8 +1,10 @@
+<%# locals: (resource:) %>
+
 <% if resource.errors.any? %>
   <div
     class="
-      bg-red-50 border-l-4 border-red-300 dark:bg-slate-800 dark:border-red-800
-      dark:text-red-400 flex items-center p-4 text-red-800
+      flex items-center border-l-4 border-red-300 bg-red-50 p-4 text-red-800 dark:border-red-800 dark:bg-slate-800
+      dark:text-red-400
     "
     role="alert"
   >
@@ -12,12 +14,10 @@
           "errors.template.header",
           count: resource.errors.count,
           model: resource.class.model_name.human.downcase,
-        ) %></span>
-      <ul
-        class="
-          mt-1.5 list-disc list-inside space-y-3 max-h-60 md:max-h-80 overflow-y-auto p-1
-        "
-      >
+        ) %>
+      </span>
+
+      <ul class="mt-1.5 max-h-60 list-inside list-disc space-y-3 overflow-y-auto p-1 md:max-h-80">
         <% resource.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>

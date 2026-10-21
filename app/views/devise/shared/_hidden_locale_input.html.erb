@@ -1,6 +1,8 @@
+<%# locals: (form: nil) %>
+
 <% if params[:locale].present? %>
-  <input type="hidden" name="locale" value="<%=params[:locale]%>"/>
-  <% if local_assigns[:form] %>
+  <input type="hidden" name="locale" value="<%= params[:locale] %>">
+  <% unless form.nil? %>
     <%= form.hidden_field :locale, value: params[:locale] %>
   <% end %>
 <% end %>
