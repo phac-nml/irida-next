@@ -423,7 +423,7 @@ function renderBaseFixture() {
     </div>
   </div>
 
-  <form data-turbo-frame="_top" data-nextflow--v2--samplesheet-target="form" action="/-/workflow_executions" accept-charset="UTF-8" method="post">
+  <form data-action="submit->nextflow--v2--samplesheet#validateFormInputs" data-turbo-frame="_top" data-nextflow--v2--samplesheet-target="form" action="/-/workflow_executions" accept-charset="UTF-8" method="post">
     <input type="hidden" name="authenticity_token" value="authenticity_token_value">
     <input type="hidden" name="format" id="submission_turbo" value="turbo_stream">
 
@@ -940,6 +940,43 @@ describe("nextflow v2 samplesheet controller", () => {
     expect(requestSubmit).not.toHaveBeenCalled();
 
     requestSubmit.mockRestore();
+  });
+
+  it("validates native submissions and focuses the first missing parameter", async () => {
+    setupStandardSamplesheetAttributes(range(1, 2));
+    application = await startController();
+    const form = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="form"]',
+    );
+    document
+      .querySelector("#workflow_execution_name")
+      .setAttribute("aria-required", "false");
+    const input = document.querySelector(
+      "#workflow_execution_workflow_params_project_name",
+    );
+    input.setAttribute("aria-required", "true");
+    input.value = "   ";
+    document
+      .querySelector(
+        '[data-nextflow--v2--samplesheet-target="samplesheetMessagesContainer"]',
+      )
+      .remove();
+
+    expect(
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true }),
+      ),
+    ).toBe(false);
+    expect(input).toHaveFocus();
+    expect(input).toHaveAttribute("aria-invalid", "true");
+
+    input.value = "Project";
+    expect(
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true }),
+      ),
+    ).toBe(true);
+    expect(input).not.toHaveAttribute("aria-invalid");
   });
 
   it("flags and clears required hidden file params and unlabeled inputs", async () => {
