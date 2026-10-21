@@ -8,6 +8,7 @@ locals: {
     I18n.t("groups.metadata_templates.index.new_button"),
   new_template_url: new_group_metadata_template_path(@namespace, tab: @tab),
   namespace: @namespace,
+  allowed_to: @allowed_to
 } %>
 
-<%= render partial: "table" %>
+<%= render partial: "table", locals: { metadata_templates: @metadata_templates, namespace: @namespace, pagy: @pagy, q: @q, allowed_to: @allowed_to } %>

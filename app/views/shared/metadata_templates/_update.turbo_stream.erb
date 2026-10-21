@@ -1,21 +1,24 @@
+<%# locals: (metadata_template:, namespace:, update_path:, message:, type:, allowed_to:) %>
+
 <%= turbo_stream.update "metadata_template_modal",
                     partial: "shared/metadata_templates/edit_template_dialog",
                     locals: {
-                      open: @metadata_template.errors.any? ? true : false,
+                      open: metadata_template.errors.any? ? true : false,
                       update_path: update_path,
+                      metadata_template: metadata_template,
                     } %>
 
-<% if !@metadata_template.errors.any? %>
+<% if !metadata_template.errors.any? %>
   <%= turbo_stream.append "flashes" do %>
     <%= render Viral::FlashComponent.new(type:, data: message) %>
   <% end %>
-  <%= turbo_stream.replace @metadata_template, method: :morph do %>
+  <%= turbo_stream.replace metadata_template, method: :morph do %>
     <%= render MetadataTemplates::RowComponent.new(
-      @metadata_template,
-      @namespace,
+      metadata_template,
+      namespace,
       {
-        update_metadata_templates: @allowed_to[:update_metadata_templates],
-        destroy_metadata_templates: @allowed_to[:destroy_metadata_templates],
+        update_metadata_templates: allowed_to[:update_metadata_templates],
+        destroy_metadata_templates: allowed_to[:destroy_metadata_templates],
       },
     ) %>
   <% end %>

@@ -1,12 +1,14 @@
+<%# locals: (metadata_templates:, namespace:, pagy:, q:, allowed_to:) %>
+
 <%= turbo_frame_tag "metadata-templates-table" do %>
   <%= render MetadataTemplates::TableComponent.new(
-    @metadata_templates,
-    @namespace,
-    @pagy,
-    @q,
+    metadata_templates,
+    namespace,
+    pagy,
+    q,
     {
-      update_metadata_templates: @allowed_to[:update_metadata_templates],
-      destroy_metadata_templates: @allowed_to[:destroy_metadata_templates],
+      update_metadata_templates: allowed_to[:update_metadata_templates],
+      destroy_metadata_templates: allowed_to[:destroy_metadata_templates],
     },
   ) %>
 <% end %>

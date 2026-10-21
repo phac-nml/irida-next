@@ -13,6 +13,14 @@ locals: {
       tab: @tab,
     ),
   namespace: @namespace,
+  allowed_to: @allowed_to
 } %>
 
-<%= render partial: "table" %>
+<%= render partial: "table",
+           locals: {
+             metadata_templates: @metadata_templates,
+             namespace: @namespace,
+             pagy: @pagy,
+             q: @q,
+             allowed_to: @allowed_to
+           } %>

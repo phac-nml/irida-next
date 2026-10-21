@@ -1,9 +1,12 @@
+<%# locals: (open:, update_path:, metadata_template:) %>
+
 <%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t("metadata_templates.edit_template_dialog.title")) %>
 
   <%= turbo_frame_tag "metadata_template_dialog_content" do %>
     <%= render partial: "shared/metadata_templates/form",
     locals: {
+      metadata_template: metadata_template,
       template_path: update_path,
       method: :patch,
       submit_button_text: t('common.actions.update'),
