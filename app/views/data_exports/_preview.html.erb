@@ -1,6 +1,8 @@
+<%# locals: (data_export:, manifest:) %>
+
 <div class="mt-2">
   <%= render Viral::CardComponent.new do |card| %>
-    <% card.with_header(title: "#{@data_export.file.filename}", classes: "pb-0") %>
+    <% card.with_header(title: "#{data_export.file.filename}", classes: "pb-0") %>
 
     <% card.with_section do %>
       <ul class="mt-3 list-inside list-none space-y-3">
@@ -11,8 +13,8 @@
           </div>
         </li>
 
-        <% if @data_export.export_type == 'sample' %>
-          <% @manifest['children'].each do |project| %>
+        <% if data_export.export_type == 'sample' %>
+          <% manifest['children'].each do |project| %>
             <li>
               <div class="flex text-primary-800 dark:text-primary-400">
                 <%= icon(Attachment.icon, size: :sm) %>
@@ -70,7 +72,7 @@
             </li>
           <% end %>
         <% else %>
-          <% @manifest['children'].each do |workflow_execution_id| %>
+          <% manifest['children'].each do |workflow_execution_id| %>
             <li>
               <div class="flex text-primary-800 dark:text-primary-400">
                 <%= icon(:folder_open, class: "size-5 m-0") %>

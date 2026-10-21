@@ -1,9 +1,13 @@
+<%# locals: (form: ) %>
+
 <div class="form-field mt-2">
   <%= form.label :name, t(:"data_exports.new.name_label") %>
   <%= form.text_field :name, class: "form-control" %>
 </div>
-<div class="flex items-center h-5">
+
+<div class="flex h-5 items-center">
   <%= form.check_box :email_notification, { checked: false }, true, false %>
+
   <%= form.label :email_notification,
              t(:"data_exports.new.email_label"),
              class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
