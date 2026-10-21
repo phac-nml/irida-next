@@ -1,4 +1,4 @@
-<% if defined?(new_personal_access_token) %>
+<% if new_personal_access_token %>
   <%= turbo_stream.replace "access-token-section",
                        partial: "access_token_section",
                        locals: {
