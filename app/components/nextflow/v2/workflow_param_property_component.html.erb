@@ -1,6 +1,7 @@
 <div class="@container workflow-parameter min-w-0">
   <% describedby_ids = [@prefix_id] %>
   <% describedby_ids << @help_text_id if property[:help_text].present? %>
+  <% describedby_ids << @error_id if property[:required] %>
   <% grouped = property[:type] == "boolean" || ((property[:format] == "path" || property[:format] == "file-path") && property[:enum].blank?) %>
 
   <%= content_tag(grouped ? :fieldset : :div, class: "m-0 min-w-0 border-0 p-0") do %>
@@ -35,10 +36,9 @@
                               pattern: property[:pattern] || ".*",
                               property: name,
                               required: property[:required],
-                              required_label: property[:description],
                               attachable_id: @namespace_id,
                               attachable_type: @namespace_type,
-                              selected_id: nil,
+                              selected_id: selected_attachment&.id,
                               namespace_id: @namespace_id,
                               help_text: property[:help_text]
                             }
@@ -48,17 +48,20 @@
           aria-describedby="<%= describedby_ids.join(" ") %>"
           data-turbo-stream="true"
         >
-          <%= t('components.nextflow.no_selected_file') %>
+          <%= selected_attachment&.file&.filename&.to_s || t('components.nextflow.no_selected_file') %>
         </a>
-        <%# Hidden inputs use data attributes for workflow validation. %>
-        <%= fields.hidden_field name, data: {
-          required: property[:required] ? "true" : nil,
-          required_label: property[:description],
-        } %>
+        <%# Hidden inputs can't take aria-required, so workflow validation reads data-required. %>
+        <%= fields.hidden_field name,
+                            value: selected_attachment&.to_global_id,
+                            data: { required: property[:required] ? "true" : nil } %>
       <% else %>
         <%= form_input(fields, name, property, instance, describedby: describedby_ids.join(" ")) %>
       <% end %>
     </div>
+  <% end %>
+
+  <% if property[:required] %>
+    <%= render Viral::Form::HelpTextComponent.new(id: @error_id, state: :error, classes: "hidden") %>
   <% end %>
 
   <% if property[:help_text].present? %>

@@ -928,7 +928,9 @@ describe("nextflow v2 samplesheet controller", () => {
     nameInput.value = "workflow name";
     requiredParamInput.value = "";
     requiredParamInput.setAttribute("aria-required", "true");
-    requiredParamInput.dataset.requiredLabel = "Project name";
+    document.querySelector(
+      "label[for='workflow_execution_workflow_params_project_name']",
+    ).textContent = "Project name";
 
     submitBtn.click();
 
@@ -1002,11 +1004,22 @@ describe("nextflow v2 samplesheet controller", () => {
     form.insertAdjacentHTML(
       "beforeend",
       `
-        <a id="workflow_execution_workflow_params_reference_link" href="#">No selected file</a>
-        <input type="hidden" data-required="true" data-required-label="Reference file"
-          name="workflow_execution[workflow_params][reference]"
-          id="workflow_execution_workflow_params_reference" value="">
-        <input type="hidden" data-required="true" data-required-label="Orphan file"
+        <fieldset>
+          <legend id="workflow_execution_workflow_params_reference_legend">
+            Reference file
+            <span data-required-indicator="true">
+              <abbr class="req" aria-hidden="true">*</abbr> <span class="sr-only">Required</span>
+            </span>
+          </legend>
+          <a id="workflow_execution_workflow_params_reference_link" href="#">No selected file</a>
+          <input type="hidden" data-required="true"
+            name="workflow_execution[workflow_params][reference]"
+            id="workflow_execution_workflow_params_reference" value="">
+        </fieldset>
+        <span id="workflow_execution_workflow_params_reference_error" class="hidden">
+          <span class="grow"></span>
+        </span>
+        <input type="hidden" data-required="true"
           name="workflow_execution[workflow_params][orphan]"
           id="workflow_execution_workflow_params_orphan" value="">
         <input type="text" aria-required="true"
@@ -1027,6 +1040,9 @@ describe("nextflow v2 samplesheet controller", () => {
     const unlabeledInput = document.getElementById(
       "workflow_execution_workflow_params_unlabeled",
     );
+    const fieldError = document.getElementById(
+      "workflow_execution_workflow_params_reference_error",
+    );
 
     document.querySelector("#workflow_execution_name").value = "workflow name";
     submitBtn.click();
@@ -1035,15 +1051,17 @@ describe("nextflow v2 samplesheet controller", () => {
     expect(formFieldErrorMessage.textContent).toContain(
       "Reference file can't be blank",
     );
+    // Falls back to the input name when there is no label or legend
     expect(formFieldErrorMessage.textContent).toContain(
-      "Orphan file can't be blank",
+      "workflow_execution[workflow_params][orphan] can't be blank",
     );
-    // Falls back to the input name when there is no label or data label
     expect(formFieldErrorMessage.textContent).toContain(
       "workflow_execution[workflow_params][unlabeled] can't be blank",
     );
     // Focus moves to the selector link of the first missing file param
     expect(fileLink).toHaveFocus();
+    expect(fieldError).not.toHaveClass("hidden");
+    expect(fieldError).toHaveTextContent("Reference file can't be blank");
     [fileLink, fileInput, orphanInput, unlabeledInput].forEach((element) => {
       expect(element).toHaveAttribute("aria-invalid", "true");
     });
@@ -1059,6 +1077,8 @@ describe("nextflow v2 samplesheet controller", () => {
       expect(element).not.toHaveAttribute("aria-invalid");
     });
     expect(formFieldErrorMessage.textContent).toBe("");
+    expect(fieldError).toHaveClass("hidden");
+    expect(fieldError.textContent.trim()).toBe("");
 
     requestSubmit.mockRestore();
   });
@@ -1086,7 +1106,9 @@ describe("nextflow v2 samplesheet controller", () => {
     document.querySelector("#workflow_execution_name").value = "workflow name";
     requiredParamInput.value = "";
     requiredParamInput.setAttribute("aria-required", "true");
-    requiredParamInput.dataset.requiredLabel = "<b>Project name</b> $& name";
+    document.querySelector(
+      "label[for='workflow_execution_workflow_params_project_name']",
+    ).textContent = "<b>Project name</b> $& name";
 
     submitBtn.click();
 

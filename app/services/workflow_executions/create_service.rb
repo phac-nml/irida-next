@@ -61,32 +61,14 @@ module WorkflowExecutions
     def validate_required_workflow_params
       return if workflow.nil?
 
-      workflow.workflow_params.each do |section, definition|
-        definition[:properties].each do |name, property|
-          next unless required_user_param?(section, name, property)
-
-          value = @workflow_execution.workflow_params[name.to_s]
-          next if required_workflow_param_present?(property, value)
-
-          @workflow_execution.errors.add(
-            :base,
-            I18n.t('workflow_executions.create.required_workflow_param_blank', property: name)
-          )
-        end
+      missing_params = Irida::Nextflow::RequiredWorkflowParams.new(workflow.workflow_params)
+                                                              .missing(@workflow_execution.workflow_params)
+      missing_params.each do |name|
+        @workflow_execution.errors.add(
+          :base,
+          I18n.t('workflow_executions.create.required_workflow_param_blank', property: name)
+        )
       end
-    end
-
-    def required_user_param?(section, name, property)
-      return false unless property[:required]
-
-      # the samplesheet input is generated during preparation, not submitted by the user
-      !(section == :input_output_options && name == :input)
-    end
-
-    def required_workflow_param_present?(property, value)
-      # Nextflow applies the schema default when a param is omitted
-      value = property[:default] if value.nil?
-      value.present? || value == false
     end
 
     def persist_workflow_execution

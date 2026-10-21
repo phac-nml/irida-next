@@ -901,16 +901,15 @@ export default class extends Controller {
     let firstMissingField = null;
 
     requiredFields.forEach((field) => {
-      const missing = field.value.trim() === "";
-      if (missing) {
+      let message = null;
+      if (field.value.trim() === "") {
         firstMissingField ??= field;
-        missingMessages.push(
-          this.#formatRequiredFieldErrorMessage(
-            this.#requiredFieldLabel(field),
-          ),
+        message = this.#formatRequiredFieldErrorMessage(
+          this.#requiredFieldLabel(field),
         );
+        missingMessages.push(message);
       }
-      this.#setRequiredFieldErrorState(field, missing);
+      this.#setRequiredFieldErrorState(field, message);
     });
 
     if (!firstMissingField) {
@@ -928,9 +927,10 @@ export default class extends Controller {
     return false;
   }
 
-  #setRequiredFieldErrorState(field, invalid) {
+  // A null message clears the error state.
+  #setRequiredFieldErrorState(field, message) {
     if (field.id === "workflow_execution_name") {
-      if (invalid) {
+      if (message) {
         this.#addNameFieldErrorState();
       } else {
         this.#removeNameFieldErrorState();
@@ -947,34 +947,46 @@ export default class extends Controller {
       if (!element) {
         return;
       }
-      if (invalid) {
+      if (message) {
         element.setAttribute("aria-invalid", "true");
       } else {
         element.removeAttribute("aria-invalid");
       }
     });
+
+    // Inline error text, referenced by the control's aria-describedby
+    const fieldError = this.#relatedElement(field, "error");
+    if (fieldError) {
+      fieldError.querySelector(".grow").textContent = message ?? "";
+      fieldError.classList.toggle("hidden", !message);
+    }
   }
 
   #fileSelectorLink(field) {
-    return this.formTarget.querySelector(`#${CSS.escape(field.id)}_link`);
+    return this.#relatedElement(field, "link");
+  }
+
+  // Elements rendered alongside a workflow param share its id with a suffix, e.g. `_link` or `_legend`.
+  #relatedElement(field, suffix) {
+    return this.formTarget.querySelector(
+      `#${CSS.escape(`${field.id}_${suffix}`)}`,
+    );
   }
 
   #requiredFieldLabel(field) {
-    if (field.dataset.requiredLabel) {
-      return field.dataset.requiredLabel;
-    }
-
-    const label = this.formTarget.querySelector(
-      `label[for='${CSS.escape(field.id)}']`,
-    );
+    // Hidden file inputs are labelled by their fieldset legend.
+    const label =
+      field.type === "hidden"
+        ? this.#relatedElement(field, "legend")
+        : this.formTarget.querySelector(`label[for='${CSS.escape(field.id)}']`);
     if (!label) {
       return field.name;
     }
 
-    // Drop decorative content such as the required asterisk.
+    // Drop the required asterisk and its visually hidden text.
     const labelText = label.cloneNode(true);
     labelText
-      .querySelectorAll("[aria-hidden='true']")
+      .querySelectorAll("[aria-hidden='true'], [data-required-indicator]")
       .forEach((node) => node.remove());
     return labelText.textContent.trim();
   }
