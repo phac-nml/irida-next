@@ -63,10 +63,10 @@ module WorkflowExecutions
 
       workflow.workflow_params.each do |section, definition|
         definition[:properties].each do |name, property|
-          next unless required_user_path_param?(section, name, property)
+          next unless required_user_param?(section, name, property)
 
           value = @workflow_execution.workflow_params[name.to_s]
-          next if value.present?
+          next if required_workflow_param_present?(property, value)
 
           @workflow_execution.errors.add(
             :base,
@@ -76,11 +76,15 @@ module WorkflowExecutions
       end
     end
 
-    def required_user_path_param?(section, name, property)
-      return false unless property[:required] && %w[path file-path].include?(property[:format])
+    def required_user_param?(section, name, property)
+      return false unless property[:required]
 
       # the samplesheet input is generated during preparation, not submitted by the user
       !(section == :input_output_options && name == :input)
+    end
+
+    def required_workflow_param_present?(property, value)
+      value.present? || (property[:type] == 'boolean' && value == false)
     end
 
     def persist_workflow_execution
@@ -145,6 +149,9 @@ module WorkflowExecutions
     end
 
     def sanitize_workflow_param(property, value)
+      # Preserve missing values so numeric coercion cannot turn them into valid zeroes.
+      return value if value.blank?
+
       case property[:type]
       when 'integer'
         value.to_i

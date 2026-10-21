@@ -685,7 +685,7 @@ module WorkflowExecutions
       assert_empty workflow_execution.errors[:base]
     end
 
-    test 'validate_required_workflow_params ignores non path params' do
+    test 'validate_required_workflow_params rejects blank required text params' do
       service = WorkflowExecutions::CreateService.new(@user, {
                                                         metadata: {
                                                           pipeline_id: 'phac-nml/iridanextexample',
@@ -716,7 +716,8 @@ module WorkflowExecutions
 
       service.validate_required_workflow_params
 
-      assert_empty workflow_execution.errors[:base]
+      assert_includes workflow_execution.errors[:base],
+                      I18n.t('workflow_executions.create.required_workflow_param_blank', property: :project_name)
     end
 
     test 'validate_required_workflow_params ignores the generated samplesheet input param' do
@@ -751,6 +752,50 @@ module WorkflowExecutions
       service.validate_required_workflow_params
 
       assert_empty workflow_execution.errors[:base]
+    end
+
+    %w[string integer number boolean].each do |type|
+      [nil, '', '   '].each_with_index do |value, index|
+        test "required #{type} workflow param rejects blank value #{index} before persistence" do
+          params = {
+            metadata: { pipeline_id: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+            namespace_id: @project.namespace.id,
+            name: 'Required parameter validation',
+            workflow_params: { required_param: value },
+            samples_workflow_executions_attributes: @samples_workflow_executions_attributes
+          }
+          service = WorkflowExecutions::CreateService.new(@user, params)
+          definitions = service.workflow.workflow_params
+          definitions[:input_output_options][:properties][:required_param] = { type:, required: true }
+          service.workflow.stubs(:workflow_params).returns(definitions)
+
+          assert_no_difference ['WorkflowExecution.count', 'SamplesWorkflowExecution.count'] do
+            assert_no_enqueued_jobs only: WorkflowExecutionPreparationJob do
+              execution = service.execute
+              assert_includes execution.errors[:base],
+                              I18n.t('workflow_executions.create.required_workflow_param_blank',
+                                     property: :required_param)
+            end
+          end
+        end
+      end
+    end
+
+    test 'required numeric zero and boolean false are valid values' do
+      service = WorkflowExecutions::CreateService.allocate
+      service.workflow = Struct.new(:workflow_params).new({
+                                                            options: { properties: {
+                                                              count: { type: 'integer', required: true },
+                                                              enabled: { type: 'boolean', required: true },
+                                                              optional: { type: 'string', required: false }
+                                                            } }
+                                                          })
+      execution = WorkflowExecution.new(workflow_params: { count: 0, enabled: false })
+      service.instance_variable_set(:@workflow_execution, execution)
+
+      service.validate_required_workflow_params
+
+      assert_empty execution.errors[:base]
     end
   end
 end
