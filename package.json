@@ -10,7 +10,7 @@
     "@hotwired/stimulus": "^3.2.2",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
-    "@testing-library/user-event": "^14.6.7",
+    "@testing-library/user-event": "^14.6.8",
     "@vitest/coverage-v8": "^4.1.11",
     "axe-core": "^4.13.0",
     "eslint": "^10.12.0",
