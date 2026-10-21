@@ -10,7 +10,7 @@
         <%= required_indicator if property[:required] %>
       </legend>
     <% else %>
-      <%= fields.label name, property[:description], data: { required: property[:required] } %>
+      <%= fields.label name, property[:description], data: { required: property[:required] || nil } %>
     <% end %>
 
     <div class="workflow-parameter-control">
@@ -44,7 +44,7 @@
                             }
                           ) %>"
           class="workflow-parameter-input workflow-parameter-file"
-          aria-labelledby="<%= @legend_id %>"
+          aria-labelledby="<%= @legend_id %> <%= fields.field_id(name, "link") %>"
           aria-describedby="<%= describedby_ids.join(" ") %>"
           data-turbo-stream="true"
         >

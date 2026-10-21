@@ -318,6 +318,22 @@ module WorkflowExecutions
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     end
 
+    test 'test create new workflow execution omits blank optional numeric params' do
+      workflow_params = {
+        metadata: { pipeline_id: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+        workflow_params: { project_name: 'assembly', random_seed: '' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'Blank optional numeric param'
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert @workflow_execution.persisted?
+      assert_not @workflow_execution.workflow_params.key?('random_seed')
+    end
+
     test 'test create new workflow execution with workflow name' do
       test_name = 'test_workflow'
       workflow_params = {
@@ -796,6 +812,25 @@ module WorkflowExecutions
       service.validate_required_workflow_params
 
       assert_empty execution.errors[:base]
+    end
+
+    test 'omitted required params fall back to their schema default' do
+      service = WorkflowExecutions::CreateService.allocate
+      service.workflow = Struct.new(:workflow_params).new({
+                                                            options: { properties: {
+                                                              platform: { type: 'string', required: true,
+                                                                          default: 'illumina' },
+                                                              blank_default: { type: 'string', required: true,
+                                                                               default: '' }
+                                                            } }
+                                                          })
+      execution = WorkflowExecution.new(workflow_params: {})
+      service.instance_variable_set(:@workflow_execution, execution)
+
+      service.validate_required_workflow_params
+
+      assert_equal [I18n.t('workflow_executions.create.required_workflow_param_blank', property: :blank_default)],
+                   execution.errors[:base]
     end
   end
 end

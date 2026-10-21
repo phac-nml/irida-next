@@ -9,7 +9,11 @@ module NextflowHelper
       aria: { required: property[:required] ? 'true' : nil, describedby: }
     }
 
-    return container.select(name, property[:enum], { selected: value }, options) if property[:enum].present?
+    if property[:enum].present?
+      # Without a blank option the browser preselects the first value, so a required choice could never be missing.
+      select_options = { selected: value, include_blank: property[:required] && value.nil? }
+      return container.select(name, property[:enum], select_options, options)
+    end
 
     data = { 'metadata-header-name': name.to_s.remove('_header') } if metadata_header?(name.to_s)
     container.text_field(name, **options, value:, pattern: property[:pattern], data:)

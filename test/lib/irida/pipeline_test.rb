@@ -215,7 +215,19 @@ class PipelinesTest < ActiveSupport::TestCase
     entry = {
       url: 'https://github.com/phac-nml/iridanextexample',
       name: 'phac-nml/iridanextexample',
-      description: 'IRIDA Next Example Pipeline'
+      description: 'IRIDA Next Example Pipeline',
+      overrides: {
+        definitions: {
+          reference_options: {
+            title: 'Reference options',
+            required: %w[genome],
+            properties: {
+              genome: { type: 'string', description: 'Genome' },
+              fasta: { type: 'string', description: 'FASTA' }
+            }
+          }
+        }
+      }
     }.with_indifferent_access
 
     pipeline = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.2' },
@@ -223,6 +235,8 @@ class PipelinesTest < ActiveSupport::TestCase
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
     assert pipeline.workflow_params[:input_output_options][:properties][:input][:required]
+    assert pipeline.workflow_params[:reference_options][:properties][:genome][:required]
+    assert_not pipeline.workflow_params[:reference_options][:properties][:fasta][:required]
   end
 
   test 'maximum_run_time at entry level (Irida Next Example Pipeline)' do

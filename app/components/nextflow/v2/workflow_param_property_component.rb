@@ -28,14 +28,19 @@ module Nextflow
       end
 
       # Matches the asterisk indicator PathogenFormBuilder#label renders for data-required fields,
-      # for use on legends which aren't passed through PathogenFormBuilder#label.
+      # for use on legends which aren't passed through PathogenFormBuilder#label. Legends name the
+      # file selector link and radio group, which can't carry aria-required, so the required state
+      # is also announced as visually hidden text.
       def required_indicator
-        tag.abbr(
-          t('pathogen.label.required_indicator'),
-          class: 'req',
-          title: t('pathogen.label.title'),
-          aria: { hidden: true }
-        )
+        safe_join([
+                    tag.abbr(
+                      t('pathogen.label.required_indicator'),
+                      class: 'req',
+                      title: t('pathogen.label.title'),
+                      aria: { hidden: true }
+                    ),
+                    tag.span(t('components.nextflow.required'), class: 'sr-only')
+                  ], ' ')
       end
     end
   end
