@@ -139,7 +139,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
       'workflow_execution_dialog',
       partial: 'shared/workflow_executions/destroy_confirmation_dialog',
       locals: {
-        open: true
+        open: true,
+        index_path: @index_path,
+        destroy_path: @destroy_path,
+        workflow_execution: @workflow_execution
       }
     ), status: :ok
   end

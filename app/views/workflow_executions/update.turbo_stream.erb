@@ -13,7 +13,7 @@
 
 <% if @workflow_execution.errors.empty? %>
   <%= turbo_stream.replace "workflow_execution_summary" do %>
-    <%= render partial: "summary" %>
+    <%= render partial: "summary", locals: { workflow_execution: @workflow_execution, namespace_path: @namespace_path } %>
   <% end %>
   <%= turbo_stream.update "we_name_header" do %>
     <% if @workflow_execution.name.blank? %>

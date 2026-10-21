@@ -1,46 +1,48 @@
+<%# locals: (workflow_execution:, namespace_path:) %>
+
 <%= turbo_frame_tag "workflow_execution_summary" do %>
   <dl class="max-w-md divide-y divide-slate-200 text-slate-900 dark:divide-slate-700 dark:text-white">
     <div class="flex flex-col pb-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".run_id") %></dt>
-      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.run_id %></dd>
+      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= workflow_execution.run_id %></dd>
     </div>
 
     <div class="flex flex-col pb-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".state") %></dt>
 
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
-        <%= render Viral::PillComponent.new(color: find_pill_color_for_state(@workflow_execution.state)) do %>
-          <%= t("workflow_executions.state.#{@workflow_execution.state}") %>
+        <%= render Viral::PillComponent.new(color: find_pill_color_for_state(workflow_execution.state)) do %>
+          <%= t("workflow_executions.state.#{workflow_execution.state}") %>
         <% end %>
       </dd>
     </div>
 
-    <% unless @workflow_execution.name.blank? %>
+    <% unless workflow_execution.name.blank? %>
       <div class="flex flex-col py-3">
         <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t("common.labels.name") %></dt>
-        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.name %></dd>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= workflow_execution.name %></dd>
       </div>
     <% end %>
 
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_name") %></dt>
-      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.workflow&.name %></dd>
+      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= workflow_execution.workflow&.name %></dd>
     </div>
 
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_version") %></dt>
 
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
-        <%= @workflow_execution.metadata["workflow_version"] %>
+        <%= workflow_execution.metadata["workflow_version"] %>
       </dd>
     </div>
 
-    <% namespace = @workflow_execution.namespace %>
+    <% namespace = workflow_execution.namespace %>
 
     <% if namespace %>
       <div class="flex flex-col py-3">
         <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400">
-          <% if @workflow_execution.shared_with_namespace %>
+          <% if workflow_execution.shared_with_namespace %>
             <%= t(:".shared_with_namespace.#{namespace.type.downcase}") %>
           <% else %>
             <%= t(:".run_from_namespace.#{namespace.type.downcase}") %>
@@ -57,7 +59,7 @@
               <% end %>
             <% else %>
               <%= link_to namespace.name,
-              @namespace_path,
+              namespace_path,
               data: {
                 turbo_frame: "_top",
               },
@@ -69,25 +71,25 @@
       </div>
     <% end %>
 
-    <% if @workflow_execution.stdout.attached? %>
+    <% if workflow_execution.stdout.attached? %>
       <div class="flex flex-col py-3">
         <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".stdout") %></dt>
 
         <dd class="text-lg font-semibold text-slate-900 dark:text-white">
-          <%= link_to @workflow_execution.stdout.filename,
-          rails_blob_path(@workflow_execution.stdout),
+          <%= link_to workflow_execution.stdout.filename,
+          rails_blob_path(workflow_execution.stdout),
           class: "underline hover:decoration-2" %>
         </dd>
       </div>
     <% end %>
 
-    <% if @workflow_execution.stderr.attached? %>
+    <% if workflow_execution.stderr.attached? %>
       <div class="flex flex-col py-3">
         <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".stderr") %></dt>
 
         <dd class="text-lg font-semibold text-slate-900 dark:text-white">
-          <%= link_to @workflow_execution.stderr.filename,
-          rails_blob_path(@workflow_execution.stderr),
+          <%= link_to workflow_execution.stderr.filename,
+          rails_blob_path(workflow_execution.stderr),
           class: "underline hover:decoration-2" %>
         </dd>
       </div>
@@ -97,7 +99,7 @@
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".created_at") %></dt>
 
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
-        <%= local_date(@workflow_execution.created_at, :long) %>
+        <%= local_date(workflow_execution.created_at, :long) %>
       </dd>
     </div>
 
@@ -105,7 +107,7 @@
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".updated_at") %></dt>
 
       <dd class="text-lg font-semibold text-slate-900 dark:text-white">
-        <%= local_date(@workflow_execution.updated_at, :long) %>
+        <%= local_date(workflow_execution.updated_at, :long) %>
       </dd>
     </div>
   </dl>

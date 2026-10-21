@@ -1,3 +1,5 @@
+<%# locals: (errors:, message:, open:) %>
+
 <%= render Viral::DialogComponent.new(open: open, id: 'workflow_execution_error_dialog', size: :large) do |dialog| %>
   <% dialog.with_header(title: t("shared.workflow_executions.error_dialog.title")) %>
 
@@ -6,17 +8,17 @@
       <% errors.each do |error| %>
         <%- error_parts = error.split(":") %>
 
-        <%- if error_parts.length > 1 %>
-          <li>
+        <li>
+          <%- if error_parts.length > 1 %>
             <%= error_parts[0] %>
 
             <ul class="mt-1.5 ml-4 list-inside list-disc">
               <li><%= error_parts[1] %></li>
             </ul>
-          </li>
-        <% else %>
-          <li><%= error %></li>
-        <% end %>
+          <% else %>
+            <%= error %>
+          <% end %>
+        </li>
       <% end %>
     </ul>
   <% end %>

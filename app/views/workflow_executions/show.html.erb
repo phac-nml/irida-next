@@ -112,7 +112,7 @@ end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_e
     src_path: workflow_execution_path(@workflow_execution, tab: "summary"),
     selected: @tab == "summary"
   ) do %>
-    <%= render partial: "workflow_executions/summary" %>
+    <%= render partial: "workflow_executions/summary", locals: { workflow_execution: @workflow_execution, namespace_path: @namespace_path } %>
   <% end %>
 
   <% tabs.with_lazy_panel(
@@ -122,7 +122,7 @@ end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_e
     src_path: workflow_execution_path(@workflow_execution, tab: "params"),
     selected: @tab == "params"
   ) do %>
-    <%= render partial: "workflow_executions/params" %>
+    <%= render partial: "workflow_executions/params", locals: { workflow: @workflow, workflow_execution: @workflow_execution } %>
   <% end %>
 
   <% tabs.with_lazy_panel(
@@ -132,7 +132,7 @@ end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_e
     src_path: workflow_execution_path(@workflow_execution, tab: "samplesheet"),
     selected: @tab == "samplesheet"
   ) do %>
-    <%= render partial: "workflow_executions/samplesheet" %>
+    <%= render partial: "workflow_executions/samplesheet", locals: { samplesheet_rows: @samplesheet_rows, samplesheet_headers: @samplesheet_headers } %>
   <% end %>
 
   <% tabs.with_lazy_panel(
