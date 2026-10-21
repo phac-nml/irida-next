@@ -30,7 +30,14 @@
     "description": "IRIDA Next Example Pipeline 2",
     "versions": [
       {
-        "name": "0.1.1"
+        "name": "0.1.1",
+        "overrides": {
+          "$defs": {
+            "reference_genome_options": {
+              "required": ["genome"]
+            }
+          }
+        }
       }
     ]
   }
