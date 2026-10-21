@@ -217,6 +217,16 @@ export default class extends Controller {
     this.#loadTableData();
   }
 
+  validateFormInputs(event) {
+    const valid = this.#validateRequiredFormInputs();
+    if (!valid) {
+      event.preventDefault();
+    } else {
+      this.#disableFormFieldErrorState();
+    }
+    return valid;
+  }
+
   submitSamplesheet(event) {
     event.preventDefault();
     this.#enableSubmissionState();
@@ -358,7 +368,9 @@ export default class extends Controller {
   }
 
   #clearMessagesContainer() {
-    this.samplesheetMessagesContainerTarget.innerHTML = "";
+    if (this.hasSamplesheetMessagesContainerTarget) {
+      this.samplesheetMessagesContainerTarget.innerHTML = "";
+    }
   }
 
   #setSampleData(sampleId, columnName, value) {
@@ -905,6 +917,16 @@ export default class extends Controller {
     if (missingFields.length > 0) {
       const combinedMessage = `${this.formErrorValue}\n - ${missingFields.join("\n - ")}`;
       this.#enableFormFieldErrorState(combinedMessage);
+      const firstInvalidField = Array.from(requiredFields).find(
+        (field) => field.getAttribute("aria-invalid") === "true",
+      );
+      const focusTarget =
+        firstInvalidField.type === "hidden"
+          ? this.formTarget.querySelector(
+              `#${CSS.escape(firstInvalidField.id)}_link`,
+            )
+          : firstInvalidField;
+      focusTarget?.focus();
       return false;
     }
 

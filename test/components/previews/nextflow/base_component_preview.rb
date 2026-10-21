@@ -34,6 +34,33 @@ module Nextflow
       )
     end
 
+    def required_parameters(namespace_id: 'SDFSDFSDF') # rubocop:disable Metrics/MethodLength
+      entry = {
+        name: 'Required workflow parameters',
+        description: 'Required text, numeric, enum, boolean and file parameters.',
+        overrides: {
+          definitions: {
+            validation_options: {
+              title: 'Required parameters',
+              description: 'All parameter types use the same submission validation.',
+              required: %w[project_name count mode enabled reference],
+              properties: {
+                project_name: { type: 'string', description: 'Project name' },
+                count: { type: 'integer', description: 'Count' },
+                mode: { type: 'string', description: 'Mode', enum: ['', 'test'] },
+                enabled: { type: 'boolean', description: 'Enabled', default: false },
+                reference: { type: 'string', format: 'file-path', description: 'Reference file' }
+              }
+            }
+          }
+        }
+      }.with_indifferent_access
+      workflow = Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.1' },
+                                     Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                                     Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+      render_with_template(locals: { workflow:, namespace_id: })
+    end
+
     private
 
     def default_workflow(schema_file)
