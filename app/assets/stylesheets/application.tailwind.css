@@ -29,6 +29,54 @@ form.button_to {
   display: none;
 }
 
+/* Schema arguments and their controls form one surface in the launch dialog. */
+@utility workflow-parameter {
+  & abbr.req {
+    @apply text-sm leading-none text-[var(--pvc-color-danger)] no-underline;
+  }
+
+  & .workflow-parameter-control {
+    @apply flex min-w-0 flex-col rounded-lg border border-[var(--pvc-color-border)] bg-[var(--pvc-color-surface)];
+  }
+
+  & .workflow-parameter-prefix {
+    @apply flex min-w-0 items-center rounded-t-lg border-b border-[var(--pvc-color-border)] bg-[var(--pvc-color-surface-muted)] px-3 py-2 font-mono text-sm break-all text-[var(--pvc-color-text-muted)];
+  }
+
+  & .workflow-parameter-input {
+    @apply min-h-11 w-full min-w-0 flex-1 rounded-none rounded-b-lg border-0 bg-[var(--pvc-color-surface)] px-3 py-2 text-sm leading-6 text-[var(--pvc-color-text)];
+  }
+
+  & .workflow-parameter-control:has([aria-invalid="true"]) {
+    border-color: var(--pvc-color-danger);
+  }
+
+  & .workflow-parameter-file {
+    @apply flex items-center break-all hover:bg-[var(--pvc-color-surface-muted)];
+  }
+
+  @container (min-width: 28rem) {
+    & .workflow-parameter-control {
+      @apply flex-row;
+    }
+
+    & .workflow-parameter-prefix {
+      @apply max-w-[50%] rounded-none rounded-s-lg border-e border-b-0;
+    }
+
+    & .workflow-parameter-input {
+      @apply rounded-none rounded-e-lg;
+    }
+  }
+}
+
+.workflow-parameter :is(input, select, a):focus-visible {
+  outline: 2px solid var(--pvc-color-focus);
+  outline-offset: 2px;
+  position: relative;
+  z-index: 1;
+}
+
 /* Hide search clear button across all browsers */
 /* For Webkit browsers (Chrome, Safari, Edge) */
 input[type="search"]::-webkit-search-decoration,
