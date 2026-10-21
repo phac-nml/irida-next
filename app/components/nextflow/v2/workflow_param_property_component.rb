@@ -25,6 +25,17 @@ module Nextflow
         @help_text_id = fields.field_id(name, 'help')
         @legend_id = fields.field_id(name, 'legend')
         @prefix_id = fields.field_id(name, 'prefix')
+        @error_id = fields.field_id(name, 'error')
+      end
+
+      # The previously selected file when editing, so the stored value isn't dropped on save.
+      def selected_attachment
+        return @selected_attachment if defined?(@selected_attachment)
+
+        global_id = instance.present? ? instance['workflow_params'][name.to_s] : nil
+        @selected_attachment = global_id.present? ? GlobalID::Locator.locate(global_id, only: Attachment) : nil
+      rescue ActiveRecord::RecordNotFound
+        @selected_attachment = nil
       end
 
       # Matches the asterisk indicator PathogenFormBuilder#label renders for data-required fields,
@@ -32,15 +43,17 @@ module Nextflow
       # file selector link and radio group, which can't carry aria-required, so the required state
       # is also announced as visually hidden text.
       def required_indicator
-        safe_join([
-                    tag.abbr(
-                      t('pathogen.label.required_indicator'),
-                      class: 'req',
-                      title: t('pathogen.label.title'),
-                      aria: { hidden: true }
-                    ),
-                    tag.span(t('components.nextflow.required'), class: 'sr-only')
-                  ], ' ')
+        tag.span(data: { required_indicator: true }) do
+          safe_join([
+                      tag.abbr(
+                        t('pathogen.label.required_indicator'),
+                        class: 'req',
+                        title: t('pathogen.label.title'),
+                        aria: { hidden: true }
+                      ),
+                      tag.span(t('components.nextflow.required'), class: 'sr-only')
+                    ], ' ')
+        end
       end
     end
   end

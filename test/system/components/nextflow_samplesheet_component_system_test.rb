@@ -39,6 +39,8 @@ class NextflowSamplesheetComponentSystemTest < ApplicationSystemTestCase
       assert_no_text "Name can't be blank"
     end
     assert_selector '#workflow_execution_workflow_params_project_name:focus'
+    assert_selector '#workflow_execution_workflow_params_project_name_error', text: "Project name can't be blank"
+    assert_selector '#workflow_execution_workflow_params_reference_error', text: "Reference file can't be blank"
     page.current_window.resize_to(360, 900)
     page.execute_script("document.documentElement.classList.add('dark')")
     assert_component_accessible

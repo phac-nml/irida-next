@@ -23,6 +23,7 @@
   <% legend_id = "workflow_execution_workflow_params_#{property}_legend" %>
   <% describedby_ids = ["workflow_execution_workflow_params_#{property}_prefix"] %>
   <% describedby_ids << "workflow_execution_workflow_params_#{property}_help" if file_selector_params[:help_text].present? %>
+  <% describedby_ids << "workflow_execution_workflow_params_#{property}_error" if required == "true" %>
   <%= turbo_stream.replace link_id, method: :morph do %>
     <%= link_to @attachment[:filename].presence || t('components.nextflow.no_selected_file'),
       new_workflow_executions_file_selector_path(
@@ -41,9 +42,6 @@
     <%= hidden_field_tag "workflow_execution[workflow_params][#{property}]",
       @attachment[:global_id],
       id: input_id,
-      data: {
-        required: required == "true" ? "true" : nil,
-        required_label: file_selector_params[:required_label]
-      } %>
+      data: { required: required == "true" ? "true" : nil } %>
   <% end %>
 <% end %>

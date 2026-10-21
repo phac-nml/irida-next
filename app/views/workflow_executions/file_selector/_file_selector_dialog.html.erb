@@ -89,7 +89,10 @@
                   </tr>
                 <% end %>
 
-                <% unless file_selector_params["required_properties"].present? && file_selector_params["required_properties"].include?(file_selector_params["property"]) %>
+                <% required_samplesheet_property = file_selector_params["required_properties"].present? && file_selector_params["required_properties"].include?(file_selector_params["property"]) %>
+                <% required_workflow_param = file_selector_params["required"].to_s == "true" %>
+
+                <% unless required_samplesheet_property || required_workflow_param %>
                   <tr class="border-b bg-white dark:border-slate-700 dark:bg-slate-800">
                     <td class="bg-white p-3 dark:bg-slate-800">
                       <%= form.radio_button "attachment_id",

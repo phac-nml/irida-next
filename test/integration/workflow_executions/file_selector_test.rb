@@ -237,24 +237,36 @@ module WorkflowExecutions
       assert_equal attachment.to_global_id.to_s, input['value']
     end
 
-    test 'required workflow file validation attributes survive selection and clearing' do
+    test 'required workflow file validation attributes survive selection' do
       sign_in users(:snvphyl_user)
-      file_selector = @project_ref_params.merge(required: true, required_label: 'Reference genome')
+      attachment = attachments(:snvphyl_project_attachment_ref)
 
-      [attachments(:snvphyl_project_attachment_ref).id, 'no_attachment'].each do |attachment_id|
-        post workflow_executions_file_selector_index_path(
-          file_selector:, attachment_id:, format: :turbo_stream
-        )
+      post workflow_executions_file_selector_index_path(
+        file_selector: @project_ref_params.merge(required: true), attachment_id: attachment.id, format: :turbo_stream
+      )
 
-        assert_response :ok
-        input = Nokogiri::HTML(response.parsed_body).at_css(
-          'turbo-stream template input#workflow_execution_workflow_params_refgenome'
-        )
-        assert_equal 'true', input['data-required']
-        assert_equal 'Reference genome', input['data-required-label']
-        assert_nil input['required']
-        assert_equal '', input['value'] if attachment_id == 'no_attachment'
-      end
+      assert_response :ok
+      html = Nokogiri::HTML(response.parsed_body)
+      input = html.at_css('turbo-stream template input#workflow_execution_workflow_params_refgenome')
+      assert_equal 'true', input['data-required']
+      assert_nil input['required']
+      assert_equal attachment.to_global_id.to_s, input['value']
+      link = html.at_css('turbo-stream template a#workflow_execution_workflow_params_refgenome_link')
+      assert_includes link['aria-describedby'].split, 'workflow_execution_workflow_params_refgenome_error'
+    end
+
+    test 'file selector only offers no file for optional workflow file params' do
+      sign_in users(:snvphyl_user)
+
+      get new_workflow_executions_file_selector_path(file_selector: @project_ref_params, format: :turbo_stream)
+      assert_response :ok
+      assert_includes response.body, 'attachment_id_no_attachment'
+
+      get new_workflow_executions_file_selector_path(
+        file_selector: @project_ref_params.merge(required: true), format: :turbo_stream
+      )
+      assert_response :ok
+      assert_not_includes response.body, 'attachment_id_no_attachment'
     end
 
     test 'create group file selection with fastq params' do
