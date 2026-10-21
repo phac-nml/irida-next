@@ -56,7 +56,6 @@ export default class extends Controller {
     formError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
-    automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
     errorFormat: { type: String },
     errorBlank: { type: String },
@@ -218,13 +217,11 @@ export default class extends Controller {
   }
 
   validateFormInputs(event) {
-    const valid = this.#validateRequiredFormInputs();
-    if (!valid) {
-      event.preventDefault();
-    } else {
+    if (this.#validateRequiredFormInputs()) {
       this.#disableFormFieldErrorState();
+    } else {
+      event.preventDefault();
     }
-    return valid;
   }
 
   submitSamplesheet(event) {
@@ -900,85 +897,66 @@ export default class extends Controller {
       "[aria-required='true'], input[type='hidden'][data-required='true']",
     );
 
-    const missingFields = [];
+    const missingMessages = [];
+    let firstMissingField = null;
 
     requiredFields.forEach((field) => {
-      if (field.value.trim() === "") {
-        const message = this.#formatRequiredFieldErrorMessage(
-          this.#requiredFieldLabel(field),
+      const missing = field.value.trim() === "";
+      if (missing) {
+        firstMissingField ??= field;
+        missingMessages.push(
+          this.#formatRequiredFieldErrorMessage(
+            this.#requiredFieldLabel(field),
+          ),
         );
-        missingFields.push(message);
-        this.#addRequiredFieldErrorState(field, message);
-      } else {
-        this.#removeRequiredFieldErrorState(field);
       }
+      this.#setRequiredFieldErrorState(field, missing);
     });
 
-    if (missingFields.length > 0) {
-      const combinedMessage = `${this.formErrorValue}\n - ${missingFields.join("\n - ")}`;
-      this.#enableFormFieldErrorState(combinedMessage);
-      const firstInvalidField = Array.from(requiredFields).find(
-        (field) => field.getAttribute("aria-invalid") === "true",
-      );
-      const focusTarget =
-        firstInvalidField.type === "hidden"
-          ? this.formTarget.querySelector(
-              `#${CSS.escape(firstInvalidField.id)}_link`,
-            )
-          : firstInvalidField;
-      focusTarget?.focus();
-      return false;
+    if (!firstMissingField) {
+      return true;
     }
 
-    return true;
+    this.#enableFormFieldErrorState(
+      `${this.formErrorValue}\n - ${missingMessages.join("\n - ")}`,
+    );
+    const focusTarget =
+      firstMissingField.type === "hidden"
+        ? this.#fileSelectorLink(firstMissingField)
+        : firstMissingField;
+    focusTarget?.focus();
+    return false;
   }
 
-  #addRequiredFieldErrorState(field, message) {
+  #setRequiredFieldErrorState(field, invalid) {
     if (field.id === "workflow_execution_name") {
-      this.#addNameFieldErrorState(message);
+      if (invalid) {
+        this.#addNameFieldErrorState();
+      } else {
+        this.#removeNameFieldErrorState();
+      }
       return;
     }
 
-    field.setAttribute("aria-invalid", true);
-
-    if (field.type === "hidden") {
-      const fileSelector = document.getElementById(`${field.id}_link`);
-      if (!fileSelector) {
+    // Workflow param controls are styled from aria-invalid; hidden file inputs flag their selector link too.
+    const elements =
+      field.type === "hidden"
+        ? [field, this.#fileSelectorLink(field)]
+        : [field];
+    elements.forEach((element) => {
+      if (!element) {
         return;
       }
-
-      fileSelector.setAttribute("aria-invalid", true);
-      fileSelector.classList.remove(...FIELD_CLASSES["VALID"]);
-      fileSelector.classList.add(...FIELD_CLASSES["ERROR"]);
-      return;
-    }
-
-    field.classList.remove(...FIELD_CLASSES["VALID"]);
-    field.classList.add(...FIELD_CLASSES["ERROR"]);
+      if (invalid) {
+        element.setAttribute("aria-invalid", "true");
+      } else {
+        element.removeAttribute("aria-invalid");
+      }
+    });
   }
 
-  #removeRequiredFieldErrorState(field) {
-    if (field.id === "workflow_execution_name") {
-      this.#removeNameFieldErrorState();
-      return;
-    }
-
-    field.removeAttribute("aria-invalid");
-
-    if (field.type === "hidden") {
-      const fileSelector = document.getElementById(`${field.id}_link`);
-      if (!fileSelector) {
-        return;
-      }
-
-      fileSelector.removeAttribute("aria-invalid");
-      fileSelector.classList.remove(...FIELD_CLASSES["ERROR"]);
-      fileSelector.classList.add(...FIELD_CLASSES["VALID"]);
-      return;
-    }
-
-    field.classList.remove(...FIELD_CLASSES["ERROR"]);
-    field.classList.add(...FIELD_CLASSES["VALID"]);
+  #fileSelectorLink(field) {
+    return this.formTarget.querySelector(`#${CSS.escape(field.id)}_link`);
   }
 
   #requiredFieldLabel(field) {
@@ -993,7 +971,12 @@ export default class extends Controller {
       return field.name;
     }
 
-    return label.textContent.replace(/\*/g, "").trim();
+    // Drop decorative content such as the required asterisk.
+    const labelText = label.cloneNode(true);
+    labelText
+      .querySelectorAll("[aria-hidden='true']")
+      .forEach((node) => node.remove());
+    return labelText.textContent.trim();
   }
 
   #formatRequiredFieldErrorMessage(fieldLabel) {
@@ -1003,7 +986,7 @@ export default class extends Controller {
       .replaceAll("%{message}", () => this.errorBlankValue);
   }
 
-  #addNameFieldErrorState(message = this.nameMissingValue) {
+  #addNameFieldErrorState() {
     const nameError = document.getElementById(
       "workflow_execution_name_error",
     ).lastElementChild;
@@ -1018,7 +1001,7 @@ export default class extends Controller {
     name.classList.remove(...FIELD_CLASSES["VALID"]);
     name.classList.add(...FIELD_CLASSES["ERROR"]);
     nameError.classList.remove("hidden");
-    nameErrorSpan.textContent = message;
+    nameErrorSpan.textContent = this.nameMissingValue;
     nameErrorSpan.classList.add(...FIELD_CLASSES["ERROR_SPAN"]);
     nameHint.classList.add("hidden");
     nameField.classList.add("invalid");
@@ -1028,7 +1011,7 @@ export default class extends Controller {
     const nameError = document.getElementById(
       "workflow_execution_name_error",
     ).lastElementChild;
-    const nameErrorSpan = nameError.querySelector(".grow");
+    const nameErrorSpan = nameError.getElementsByClassName("grow")[0];
     const name = document.getElementById("workflow_execution_name");
     const nameHint = document.getElementById("workflow_execution_name_hint");
     const nameField = document.getElementById("workflow_execution_name_field");

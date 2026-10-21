@@ -47,7 +47,7 @@ module Nextflow
               properties: {
                 project_name: { type: 'string', description: 'Project name' },
                 count: { type: 'integer', description: 'Count' },
-                mode: { type: 'string', description: 'Mode', enum: ['', 'test'] },
+                mode: { type: 'string', description: 'Mode', enum: %w[fast accurate] },
                 enabled: { type: 'boolean', description: 'Enabled', default: false },
                 reference: { type: 'string', format: 'file-path', description: 'Reference file' }
               }

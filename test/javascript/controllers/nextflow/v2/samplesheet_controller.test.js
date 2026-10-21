@@ -407,7 +407,7 @@ function renderMetadataParamsHeader() {
 /* eslint-disable no-useless-escape */
 function renderBaseFixture() {
   document.body.innerHTML = `
-    <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-automated-workflow-value="false" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-error-format-value="%{attribute} %{message}" data-nextflow--v2--samplesheet-error-blank-value="can't be blank" data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
+    <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-error-format-value="%{attribute} %{message}" data-nextflow--v2--samplesheet-error-blank-value="can't be blank" data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
   <h1>
     phac-nml/iridanextexample
   </h1>
@@ -886,9 +886,7 @@ describe("nextflow v2 samplesheet controller", () => {
       '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
     );
 
-    expect(errorMessageContainer.textContent).not.toContain(
-      "Name can't be blank",
-    );
+    expect(errorMessageContainer.textContent).not.toContain("Name is required");
 
     expect(formFieldErrorMessage.textContent).not.toContain(
       "Please review the following problems:",
@@ -897,10 +895,15 @@ describe("nextflow v2 samplesheet controller", () => {
     submitBtn.click();
 
     vi.advanceTimersByTime(60);
-    expect(errorMessageContainer.textContent).toContain("Name can't be blank");
+    expect(errorMessageContainer.textContent).toContain(
+      "Name is required. Please enter a name for the workflow execution.",
+    );
     expect(formFieldErrorMessage.textContent).toContain(
       "Please review the following problems:",
     );
+    // The summary uses the label text without the decorative asterisk
+    expect(formFieldErrorMessage.textContent).toContain("Name can't be blank");
+    expect(document.querySelector("#workflow_execution_name")).toHaveFocus();
   });
 
   it("can't submit when a required workflow param is blank", async () => {
@@ -981,119 +984,80 @@ describe("nextflow v2 samplesheet controller", () => {
 
   it("flags and clears required hidden file params and unlabeled inputs", async () => {
     setupStandardSamplesheetAttributes(range(1, 2));
-
     application = await startController();
 
     const requestSubmit = vi
-
       .spyOn(HTMLFormElement.prototype, "requestSubmit")
-
       .mockImplementation(() => {});
-
     const form = document.querySelector(
       '[data-nextflow--v2--samplesheet-target="form"]',
     );
-
     const submitBtn = document.querySelector(
       '[data-nextflow--v2--samplesheet-target="submit"]',
     );
-
     const formFieldErrorMessage = document.querySelector(
       '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
     );
 
     form.insertAdjacentHTML(
       "beforeend",
-
       `
-
         <a id="workflow_execution_workflow_params_reference_link" href="#">No selected file</a>
-
         <input type="hidden" data-required="true" data-required-label="Reference file"
-
           name="workflow_execution[workflow_params][reference]"
-
           id="workflow_execution_workflow_params_reference" value="">
-
         <input type="hidden" data-required="true" data-required-label="Orphan file"
-
           name="workflow_execution[workflow_params][orphan]"
-
           id="workflow_execution_workflow_params_orphan" value="">
-
         <input type="text" aria-required="true"
-
           name="workflow_execution[workflow_params][unlabeled]"
-
           id="workflow_execution_workflow_params_unlabeled" value="">
-
       `,
     );
 
     const fileLink = document.getElementById(
       "workflow_execution_workflow_params_reference_link",
     );
-
     const fileInput = document.getElementById(
       "workflow_execution_workflow_params_reference",
     );
-
     const orphanInput = document.getElementById(
       "workflow_execution_workflow_params_orphan",
     );
-
     const unlabeledInput = document.getElementById(
       "workflow_execution_workflow_params_unlabeled",
     );
 
     document.querySelector("#workflow_execution_name").value = "workflow name";
-
     submitBtn.click();
-
     vi.advanceTimersByTime(60);
 
     expect(formFieldErrorMessage.textContent).toContain(
       "Reference file can't be blank",
     );
-
     expect(formFieldErrorMessage.textContent).toContain(
       "Orphan file can't be blank",
     );
-
     // Falls back to the input name when there is no label or data label
-
     expect(formFieldErrorMessage.textContent).toContain(
       "workflow_execution[workflow_params][unlabeled] can't be blank",
     );
-
-    expect(fileLink.getAttribute("aria-invalid")).toBe("true");
-
-    expect(fileInput.getAttribute("aria-invalid")).toBe("true");
-
-    expect(orphanInput.getAttribute("aria-invalid")).toBe("true");
-
-    expect(unlabeledInput.getAttribute("aria-invalid")).toBe("true");
-
+    // Focus moves to the selector link of the first missing file param
+    expect(fileLink).toHaveFocus();
+    [fileLink, fileInput, orphanInput, unlabeledInput].forEach((element) => {
+      expect(element).toHaveAttribute("aria-invalid", "true");
+    });
     expect(requestSubmit).not.toHaveBeenCalled();
 
     fileInput.value = "attachment-id";
-
     orphanInput.value = "attachment-id";
-
     unlabeledInput.value = "filled";
-
     submitBtn.click();
-
     vi.advanceTimersByTime(60);
 
-    expect(fileLink.hasAttribute("aria-invalid")).toBe(false);
-
-    expect(fileInput.hasAttribute("aria-invalid")).toBe(false);
-
-    expect(orphanInput.hasAttribute("aria-invalid")).toBe(false);
-
-    expect(unlabeledInput.hasAttribute("aria-invalid")).toBe(false);
-
+    [fileLink, fileInput, orphanInput, unlabeledInput].forEach((element) => {
+      expect(element).not.toHaveAttribute("aria-invalid");
+    });
     expect(formFieldErrorMessage.textContent).toBe("");
 
     requestSubmit.mockRestore();
@@ -2007,12 +1971,7 @@ describe("nextflow v2 samplesheet controller", () => {
   it("skips name validation for automated workflows", async () => {
     const samples = [1, 2];
     renderFullFixture();
-    document
-      .getElementById("nextflow-container")
-      .setAttribute(
-        "data-nextflow--v2--samplesheet-automated-workflow-value",
-        "true",
-      );
+    // Automated workflow forms don't mark the name as required
     document
       .getElementById("workflow_execution_name")
       .setAttribute("aria-required", "false");

@@ -39,7 +39,6 @@ class NextflowSamplesheetComponentSystemTest < ApplicationSystemTestCase
       assert_no_text "Name can't be blank"
     end
     assert_selector '#workflow_execution_workflow_params_project_name:focus'
-    page.save_screenshot(Rails.root.join('tmp/screenshots/required-workflow-parameters.png')) # rubocop:disable Lint/Debugger
     page.current_window.resize_to(360, 900)
     page.execute_script("document.documentElement.classList.add('dark')")
     assert_component_accessible
@@ -48,13 +47,12 @@ class NextflowSamplesheetComponentSystemTest < ApplicationSystemTestCase
         field.scrollWidth <= field.clientWidth
       )
     JS
-    page.save_screenshot(Rails.root.join('tmp/screenshots/required-workflow-parameters-dark-narrow.png')) # rubocop:disable Lint/Debugger
     page.current_window.resize_to(1280, 1024)
     page.execute_script("document.documentElement.classList.remove('dark')")
 
     fill_in 'Project name', with: 'Test project'
     fill_in 'Count', with: '0'
-    select 'test', from: 'Mode'
+    select 'fast', from: 'Mode'
     click_button I18n.t('workflow_executions.submissions.create.submit')
     assert_selector '#workflow_execution_workflow_params_reference_link:focus[aria-invalid="true"]'
 

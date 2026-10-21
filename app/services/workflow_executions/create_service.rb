@@ -84,7 +84,9 @@ module WorkflowExecutions
     end
 
     def required_workflow_param_present?(property, value)
-      value.present? || (property[:type] == 'boolean' && value == false)
+      # Nextflow applies the schema default when a param is omitted
+      value = property[:default] if value.nil?
+      value.present? || value == false
     end
 
     def persist_workflow_execution
@@ -123,13 +125,23 @@ module WorkflowExecutions
 
       workflow.workflow_params.each_value do |definition|
         definition[:properties].each do |name, property|
-          if sanitized_params.key?(name.to_sym)
-            sanitized_params[name.to_sym] = sanitize_workflow_param(property, sanitized_params[name.to_sym])
+          key = name.to_sym
+          next unless sanitized_params.key?(key)
+
+          if blank_typed_workflow_param?(property, sanitized_params[key])
+            # omit blank values so Nextflow uses its default instead of a coerced zero
+            sanitized_params.delete(key)
+          else
+            sanitized_params[key] = sanitize_workflow_param(property, sanitized_params[key])
           end
         end
       end
 
       sanitized_params
+    end
+
+    def blank_typed_workflow_param?(property, value)
+      %w[integer number boolean].include?(property[:type]) && value.is_a?(String) && value.blank?
     end
 
     def autoset_params
@@ -149,9 +161,6 @@ module WorkflowExecutions
     end
 
     def sanitize_workflow_param(property, value)
-      # Preserve missing values so numeric coercion cannot turn them into valid zeroes.
-      return value if value.blank?
-
       case property[:type]
       when 'integer'
         value.to_i
