@@ -1,33 +1,40 @@
 <%# locals: (form:) %>
 
-<div data-controller="slugify">
+<% if Flipper.enabled?(:data_export_custom_basename, Current.user) %>
+  <div data-controller="slugify">
+    <div class="form-field mt-2">
+      <%= form.label :name, t(:"data_exports.new.name_label") %>
+
+      <%= form.text_field :name,
+                          data: {
+                            "slugify-target": "name",
+                            action: "input->slugify#nameChanged",
+                          },
+                          class: "form-control" %>
+    </div>
+
+    <div class="form-field mt-2">
+      <%= form.label :basename, t(:"data_exports.new.basename_label") %>
+
+      <%= form.text_field :basename,
+                    maxlength: 100,
+                    pattern: /^[\w\-]*$/,
+                    title: t(:"data_exports.new.basename_help"),
+                    data: { "slugify-target": "path" },
+                    aria: { describedby: form.field_id(:basename, "hint") },
+                    class: "form-control" %>
+
+      <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
+        <%= t(:"data_exports.new.basename_help") %>
+      </span>
+    </div>
+  </div>
+<% else %>
   <div class="form-field mt-2">
     <%= form.label :name, t(:"data_exports.new.name_label") %>
-
-    <%= form.text_field :name,
-                        data: {
-                          "slugify-target": "name",
-                          action: "input->slugify#nameChanged",
-                        },
-                        class: "form-control" %>
+    <%= form.text_field :name, class: "form-control" %>
   </div>
-
-  <div class="form-field mt-2">
-    <%= form.label :basename, t(:"data_exports.new.basename_label") %>
-
-    <%= form.text_field :basename,
-                  maxlength: 100,
-                  pattern: /^[\w\-]*$/,
-                  title: t(:"data_exports.new.basename_help"),
-                  data: { "slugify-target": "path" },
-                  aria: { describedby: form.field_id(:basename, "hint") },
-                  class: "form-control" %>
-
-    <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
-      <%= t(:"data_exports.new.basename_help") %>
-    </span>
-  </div>
-</div>
+<% end %>
 
 <div class="flex h-5 items-center">
   <%= form.check_box :email_notification, { checked: false }, true, false %>

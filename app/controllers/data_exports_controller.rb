@@ -126,9 +126,15 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def data_export_params
-    params.expect(data_export: [:name, :basename, :export_type, :email_notification,
-                                { export_parameters: [:linelist_format, :namespace_id, :analysis_type,
-                                                      { ids: [], metadata_fields: [], attachment_formats: [] }] }])
+    if Flipper.enabled?(:data_export_custom_basename, current_user)
+      params.expect(data_export: [:name, :basename, :export_type, :email_notification,
+                                  { export_parameters: [:linelist_format, :namespace_id, :analysis_type,
+                                                        { ids: [], metadata_fields: [], attachment_formats: [] }] }])
+    else
+      params.expect(data_export: [:name, :export_type, :email_notification,
+                                  { export_parameters: [:linelist_format, :namespace_id, :analysis_type,
+                                                        { ids: [], metadata_fields: [], attachment_formats: [] }] }])
+    end
   end
 
   def data_export

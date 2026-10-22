@@ -12,6 +12,7 @@ module Groups
       @group_shared_workflow_execution1 = workflow_executions(:workflow_execution_completed_group_shared1)
       @group_shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_group_shared2)
 
+      Flipper.enable_actor(:data_export_custom_basename, @user)
       sign_in @user
     end
 

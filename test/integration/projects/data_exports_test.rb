@@ -16,6 +16,7 @@ module Projects
       @shared_workflow_execution1 = workflow_executions(:workflow_execution_completed_shared1)
       @shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_shared2)
 
+      Flipper.enable_actor(:data_export_custom_basename, @user)
       sign_in @user
     end
 

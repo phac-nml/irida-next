@@ -22,6 +22,7 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     @workflow_execution5 = workflow_executions(:automated_example_completed)
     @shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_shared2)
 
+    Flipper.enable_actor(:data_export_custom_basename, @user)
     sign_in @user
   end
 
@@ -533,6 +534,20 @@ class DataExportsTest < ActionDispatch::IntegrationTest
                       'services.data_exports.create.non_completed_workflow_executions'
                     )}"
     end
+  end
+
+  test 'does not render custom basename fields when the feature is disabled' do
+    Flipper.disable_actor(:data_export_custom_basename, @user)
+
+    get new_data_export_path(export_type: 'analysis', single_workflow: true,
+                             workflow_execution_id: @workflow_execution1.id), as: :turbo_stream
+
+    assert_response :success
+    assert_select 'input[name="data_export[name]"]', count: 1
+    assert_select 'input[name="data_export[basename]"]', count: 0
+    assert_select 'div[data-controller="slugify"]', count: 0
+  ensure
+    Flipper.enable_actor(:data_export_custom_basename, @user)
   end
 
   test 'renders sample, linelist, and single workflow analysis export dialogs' do
