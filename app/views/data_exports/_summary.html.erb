@@ -12,6 +12,13 @@
       </div>
     <% end %>
 
+    <% unless @data_export.basename.nil? %>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".basename") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @data_export.basename %></dd>
+      </div>
+    <% end %>
+
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".type") %></dt>
 

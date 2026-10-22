@@ -22,8 +22,8 @@ module DataExports
       assert_equal "#{@data_export2.id}.zip", @data_export2.file.filename.to_s
     end
 
-    test 'creating export uses the custom name as the attached filename when present' do
-      @data_export2.update!(name: 'my_custom_export')
+    test 'creating export uses the custom basename as the attached filename when present' do
+      @data_export2.update!(basename: 'my_custom_export')
 
       DataExports::CreateJob.perform_now(@data_export2)
 

@@ -97,7 +97,12 @@ module Projects
           assert_select 'input[type="radio"][value="xlsx"]'
 
           assert_select 'label', text: I18n.t('data_exports.new.name_label')
-          assert_select 'input[name="data_export[name]"]'
+          assert_select 'div[data-controller="slugify"]' do
+            assert_select 'input[name="data_export[name]"][data-slugify-target="name"]' \
+                          '[data-action="input->slugify#nameChanged"]'
+            assert_select 'input[name="data_export[basename]"][data-slugify-target="path"]'
+          end
+          assert_select 'label', text: I18n.t('data_exports.new.basename_label')
           assert_select 'label', text: I18n.t('data_exports.new.email_label')
           assert_select 'input[name="data_export[email_notification]"]'
         end

@@ -69,6 +69,7 @@ module DataExports
       @data_export.user = current_user
       @data_export.status = 'processing'
       @data_export.name = nil if params.key?('name') && params['name'].empty?
+      @data_export.basename = nil if params.key?('basename') && params['basename'].empty?
     end
 
     def authorized_export_samples(namespace, sample_ids)

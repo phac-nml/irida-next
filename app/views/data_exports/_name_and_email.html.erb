@@ -1,18 +1,32 @@
 <%# locals: (form:) %>
 
-<div class="form-field mt-2">
-  <%= form.label :name, t(:"data_exports.new.name_label") %>
+<div data-controller="slugify">
+  <div class="form-field mt-2">
+    <%= form.label :name, t(:"data_exports.new.name_label") %>
 
-  <%= form.text_field :name,
-                maxlength: 100,
-                pattern: /^[\w\-]*$/,
-                title: t(:"data_exports.new.name_help"),
-                aria: { describedby: form.field_id(:name, "hint") },
-                class: "form-control" %>
+    <%= form.text_field :name,
+                        data: {
+                          "slugify-target": "name",
+                          action: "input->slugify#nameChanged",
+                        },
+                        class: "form-control" %>
+  </div>
 
-  <span id="<%= form.field_id(:name, "hint") %>" class="field-hint">
-    <%= t(:"data_exports.new.name_help") %>
-  </span>
+  <div class="form-field mt-2">
+    <%= form.label :basename, t(:"data_exports.new.basename_label") %>
+
+    <%= form.text_field :basename,
+                  maxlength: 100,
+                  pattern: /^[\w\-]*$/,
+                  title: t(:"data_exports.new.basename_help"),
+                  data: { "slugify-target": "path" },
+                  aria: { describedby: form.field_id(:basename, "hint") },
+                  class: "form-control" %>
+
+    <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
+      <%= t(:"data_exports.new.basename_help") %>
+    </span>
+  </div>
 </div>
 
 <div class="flex h-5 items-center">
