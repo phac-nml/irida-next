@@ -10,7 +10,7 @@
 # Docs: https://herb-tools.dev/configuration
 # Linter: https://herb-tools.dev/projects/linter
 
-version: 0.11.0
+version: 0.11.1
 
 framework: actionview
 template_engine: erubi
@@ -65,9 +65,6 @@ linter:
       enabled: true
     erb-strict-locals-required:
       enabled: true
-      # Hint until partials are migrated off instance variables. Declaring
-      # locals without converting call sites would raise at render time.
-      severity: hint
     erb-no-instance-variables-in-partials:
       severity: hint
     erb-no-duplicate-branch-elements:
