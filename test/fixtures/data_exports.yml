@@ -1,7 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 data_export_one:
-  name: data_export_1
+  name: Data Export 1
+  basename: data_export_1
   export_type: sample
   status: ready
   export_parameters: {
@@ -29,7 +30,8 @@ data_export_two:
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
 
 data_export_three:
-  name: data_export_3
+  name: Data Export 3
+  basename: data_export_3
   export_type: sample
   status: processing
   export_parameters: {
@@ -42,7 +44,8 @@ data_export_three:
   user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
 
 data_export_four:
-  name: data_export_4
+  name: Data Export 4
+  basename: data_export_4
   export_type: sample
   status: ready
   export_parameters: {
@@ -70,7 +73,8 @@ data_export_five:
   user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
 
 data_export_six:
-  name: data_export_6
+  name: Data Export 6
+  basename: data_export_6
   export_type: analysis
   status: processing
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>], analysis_type: 'user'}
@@ -80,7 +84,8 @@ data_export_six:
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
 
 data_export_seven:
-  name: data_export_7
+  name: Data Export 7
+  basename: data_export_7
   export_type: analysis
   status: ready
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>], analysis_type: 'user'}
@@ -92,7 +97,8 @@ data_export_seven:
   manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABV","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 44","children":[{"name":"test_file_7.fa","type":"file"}]}]}]}'
 
 data_export_eight:
-  name: data_export_8
+  name: Data Export 8
+  basename: data_export_8
   export_type: linelist
   status: ready
   export_parameters: {
@@ -108,7 +114,8 @@ data_export_eight:
   expires_at: <%= 5.days.from_now %>
 
 data_export_nine:
-  name: data_export_9
+  name: Data Export 9
+  basename: data_export_9
   export_type: linelist
   status: ready
   export_parameters: {
@@ -124,7 +131,8 @@ data_export_nine:
   expires_at: <%= 5.days.from_now %>
 
 data_export_ten:
-  name: data_export_10
+  name: Data Export 10
+  basename: data_export_10
   export_type: sample
   status: processing
   export_parameters: {
@@ -140,7 +148,8 @@ data_export_ten:
   manifest: '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAB","type":"folder","irida-next-type":"project","irida-next-name":"Project 2","children":[{"name":"INXT_SAM_AAAAAAAAAV","type":"folder","irida-next-type":"sample","irida-next-name":"Project 2 Sample 22","children":[{"name":"INXT_ATT_ABAAAAAAAI","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_14.txt","type":"file","metadata":{"format":"text"}}]},{"name":"INXT_ATT_ABAAAAAAAH","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_5.fasta","type":"file","metadata":{"format":"fasta","type":"assembly"}}]}]}]}]}'
 
 data_export_eleven:
-  name: data_export_11
+  name: Data Export 11
+  basename: data_export_11
   export_type: analysis
   status: ready
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>], analysis_type: 'user'}
@@ -152,7 +161,8 @@ data_export_eleven:
   manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
 
 data_export_twelve:
-  name: data_export_12
+  name: Data Export 12
+  basename: data_export_12
   export_type: analysis
   status: ready
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>], analysis_type: 'user'}
@@ -164,7 +174,8 @@ data_export_twelve:
   manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
 
 data_export_thirteen:
-  name: data_export_13
+  name: Data Export 13
+  basename: data_export_13
   export_type: analysis
   status: ready
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid) %>], analysis_type: 'user'}
