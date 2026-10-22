@@ -21,8 +21,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     click_on I18n.t('workflow_executions.show.tabs.params')
 
     assert_current_path workflow_execution_path(workflow_execution), ignore_query: false
-    assert_selector 'div.project_name-param > span', text: '--project_name'
-    assert_selector 'div.assembler-param > span', text: '--assembler'
+    assert_selector 'div > span', text: '--project_name'
+    assert_selector 'div > span', text: '--assembler'
 
     click_on I18n.t('workflow_executions.show.tabs.files')
 

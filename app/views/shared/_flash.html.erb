@@ -1,3 +1,5 @@
+<%# locals: (message:, type:) %>
+
 <%= turbo_stream.prepend 'flashes' do %>
   <%= render Viral::FlashComponent.new(type: type, data: message) %>
 <% end %>

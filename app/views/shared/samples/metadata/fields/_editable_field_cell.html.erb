@@ -1,5 +1,7 @@
+<%# locals: (field:, sample:) %>
+
 <%= render Samples::EditableCell.new(
-  field: @field,
-  sample: @sample,
+  field: field,
+  sample: sample,
   autofocus: true,
 ) %>

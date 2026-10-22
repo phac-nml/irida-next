@@ -324,12 +324,12 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     get workflow_execution_path(workflow_execution), params: { tab: 'params' }
 
     assert_response :success
-    assert_select 'div.project_name-param span', text: '--project_name'
-    assert_select 'div.project_name-param input[value="assembly"]'
-    assert_select 'div.assembler-param span', text: '--assembler'
-    assert_select 'div.assembler-param input[value="stub"]'
-    assert_select 'div.random_seed-param span', text: '--random_seed'
-    assert_select 'div.random_seed-param input[value="1"]'
+    assert_select 'div span', text: '--project_name'
+    assert_select 'div input[value="assembly"]'
+    assert_select 'div span', text: '--assembler'
+    assert_select 'div input[value="stub"]'
+    assert_select 'div span', text: '--random_seed'
+    assert_select 'div input[value="1"]'
 
     get workflow_execution_path(@workflow_execution_completed), params: { tab: 'samplesheet' }
 

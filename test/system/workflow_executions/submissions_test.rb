@@ -318,12 +318,15 @@ module WorkflowExecutions
       # click parameters tab
       click_button I18n.t(:'workflow_executions.show.tabs.params')
 
-      # verify new parameter values
-      assert_selector '.metadata_1_header-param input[disabled][value="metadatafield1"]'
-      assert_no_selector '.metadata_1_header-param input[disabled][value="metadata_1"]'
+      parameter_input_xpath = "//*/span[normalize-space(.)='%<parameter_name>s']/following-sibling" \
+                              "::input[@disabled and @value='%<parameter_value>s']"
 
-      assert_selector '.metadata_2_header-param input[disabled][value="metadatafield2"]'
-      assert_no_selector '.metadata_2_header-param input[disabled][value="metadata_2"]'
+      # verify new parameter values
+      assert_selector :xpath, format(parameter_input_xpath, parameter_name: '--metadata_1_header',
+                                                            parameter_value: 'metadatafield1')
+
+      assert_selector :xpath, format(parameter_input_xpath, parameter_name: '--metadata_2_header',
+                                                            parameter_value: 'metadatafield2')
 
       # verify samplesheet values
       click_button I18n.t(:'workflow_executions.show.tabs.samplesheet')

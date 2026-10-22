@@ -1,5 +1,7 @@
-<%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :patch, html: { novalidate: true } )do |form| %>
-  <% if @sample.errors[:base].any? %>
+<%# locals: (sample:, key:, value:) %>
+
+<%= form_with(model: sample, url: sample_metadata_path(sample), method: :patch, html: { novalidate: true } )do |form| %>
+  <% if sample.errors[:base].any? %>
     <%= turbo_frame_tag "update-alert" %>
   <% end %>
 
@@ -10,7 +12,7 @@
 
     <%= form.fields_for :update_field do |field| %>
       <%= field.fields_for :key do |metadata_key| %>
-        <% invalid_key = @sample.errors.include?(:key) %>
+        <% invalid_key = sample.errors.include?(:key) %>
         <% key_aria_attributes = { invalid: invalid_key, required: true } %>
 
         <div class="form-field <%= 'invalid' if invalid_key %>">
@@ -37,13 +39,13 @@
           <%= if invalid_key
             render "shared/form/field_errors",
             id: form.field_id(:key, "error"),
-            errors: @sample.errors[:key]
+            errors: sample.errors[:key]
           end %>
         </div>
       <% end %>
 
       <%= field.fields_for :value do |metadata_value| %>
-        <% invalid_value = @sample.errors.include?(:value) %>
+        <% invalid_value = sample.errors.include?(:value) %>
         <% value_aria_attributes = { invalid: invalid_value, required: true } %>
 
         <div class="form-field <%= 'invalid' if invalid_value %>">
@@ -70,7 +72,7 @@
           <%= if invalid_value
             render "shared/form/field_errors",
             id: form.field_id(:value, "error"),
-            errors: @sample.errors[:value]
+            errors: sample.errors[:value]
           end %>
         </div>
       <% end %>

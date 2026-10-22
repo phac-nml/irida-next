@@ -1,9 +1,8 @@
-<%# locals: (errors:, message:, type: :alert) %>
+<%# locals: (errors:, message:) %>
 
 <% if errors.present? %>
   <%= render partial: "shared/samples/errors",
              locals: {
-               type: type,
                message: message,
                errors: errors
              } %>

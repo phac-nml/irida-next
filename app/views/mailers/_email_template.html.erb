@@ -1,16 +1,19 @@
+<%# locals: (name: nil, url:) %>
+
 <table
   style="width:100%; border-collapse:collapse; border:0; border-spacing:0; background-color:#f8fafc; font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';"
 >
   <tbody>
     <tr>
       <td align="center" style="padding-top:48px;padding-bottom:48px;">
-        <a href="<%= root_url %>" style="text-decoration:none;">
+        <%= link_to root_url, style: "text-decoration:none;" do %>
           <span style="font-size:40px;color:#000;font-weight:600;">
             <%= t(:"general.name") %>
           </span>
-        </a>
+        <% end %>
       </td>
     </tr>
+
     <tr>
       <td align="center">
         <table
@@ -20,7 +23,7 @@
             <tr>
               <td style="padding:24px 24px;">
                 <h1 style="font-size:24px;color:#000;font-weight:600;margin:0;">
-                  <%= defined?(name) ? t(".greeting_with_name", name:) : t(".greeting") %>
+                  <%= !name.nil? ? t(".greeting_with_name", name:) : t(".greeting") %>
                 </h1>
               </td>
             </tr>
@@ -33,11 +36,9 @@
                   <table>
                     <tbody>
                       <tr>
-                        <td style="background-color:#15803d" width="140px"><a
-                            href="<%= url %>"
-                            style="display:inline-block; color:#fff; background-color:#15803d; width:125px; border:1px solid #15803d; padding:15px 10px; text-align:center; vertical-align:middle; text-decoration:none;"
-                          ><%= t(:"general.name") %>
-                            &rarr;</a></td>
+                        <td style="background-color:#15803d" width="140px">
+                          <%= link_to t(:"general.name"), url, style: "display:inline-block; color:#fff; background-color:#15803d; width:125px; border:1px solid #15803d; padding:15px 10px; text-align:center; vertical-align:middle; text-decoration:none;" %>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -47,18 +48,19 @@
                 <td style="padding:12px 24px;">
                   <span style="color:#334155;line-height:24px;">
                     <%= t(".copy_paste") %>
-                    <a href="<%= url %>" style="text-decoration:underline;">
-                      <%= url %>
-                    </a>
+
+                    <%= link_to url, url, style: "text-decoration:underline;" %>
                   </span>
                 </td>
               </tr>
             <% end %>
+
             <tr>
               <td style="padding:0px 24px;">
                 <div style="border-bottom:1px solid #e2e8f0;">&nbsp;</div>
               </td>
             </tr>
+
             <tr>
               <td style="padding:24px 24px;">
                 <span style="color:#334155;line-height:24px;">
@@ -71,11 +73,9 @@
         </table>
       </td>
     </tr>
+
     <tr>
-      <td
-        align="center"
-        style="padding-left:24px;padding-top:48px;padding-bottom:48px;"
-      >
+      <td align="center" style="padding-left:24px;padding-top:48px;padding-bottom:48px;">
         <span style="font-style:italic;font-size:12px;color:#475569">
           <%= t(".automated_message") %>
         </span>

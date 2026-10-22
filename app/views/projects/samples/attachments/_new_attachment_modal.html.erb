@@ -1,3 +1,5 @@
+<%# locals: (attachment:, open:, sample:) %>
+
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(title: t("projects.samples.show.upload_files")) %>
 

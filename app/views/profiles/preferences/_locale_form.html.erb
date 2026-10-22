@@ -1,22 +1,16 @@
-<%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |f| %>
-  <div
-    role="radiogroup"
-    aria-labelledby="locale-legend"
-    class="grid grid-cols-1 gap-4"
-  >
-    <div
-      id="locale-legend"
-      class="
-        mb-2 text-sm font-semibold text-slate-800 dark:text-white uppercase
-      "
-    >
+<%# locals: (user:) %>
+
+<%= form_with(model: user, url: profile_preferences_path, method: :patch) do |f| %>
+  <div role="radiogroup" aria-labelledby="locale-legend" class="grid grid-cols-1 gap-4">
+    <div id="locale-legend" class="mb-2 text-sm font-semibold text-slate-800 uppercase dark:text-white">
       <%= t("profiles.preferences.show.locale_title") %>
     </div>
+
     <% I18n.available_locales.each do |locale| %>
       <%= f.radio_button :locale,
                      locale,
                      label: t(:"locales.#{locale}", locale: locale),
-                     checked: (@user.locale.to_sym == locale),
+                     checked: (user.locale.to_sym == locale),
                      onchange: "this.form.submit()" %>
     <% end %>
   </div>

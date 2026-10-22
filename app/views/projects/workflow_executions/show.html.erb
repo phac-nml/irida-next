@@ -133,7 +133,7 @@
     ),
     selected: @tab == "summary"
   ) do %>
-    <%= render partial: "workflow_executions/summary" %>
+    <%= render partial: "workflow_executions/summary", locals: { workflow_execution: @workflow_execution, namespace_path: @namespace_path } %>
   <% end %>
 
   <% tabs.with_lazy_panel(
@@ -148,7 +148,7 @@
     ),
     selected: @tab == "params"
   ) do %>
-    <%= render partial: "workflow_executions/params" %>
+    <%= render partial: "workflow_executions/params", locals: { workflow_execution: @workflow_execution, workflow: @workflow } %>
   <% end %>
 
   <% tabs.with_lazy_panel(
@@ -163,7 +163,7 @@
     ),
     selected: @tab == "samplesheet"
   ) do %>
-    <%= render partial: "workflow_executions/samplesheet" %>
+    <%= render partial: "workflow_executions/samplesheet", locals: { samplesheet_headers: @samplesheet_headers, samplesheet_rows: @samplesheet_rows } %>
   <% end %>
 
   <% tabs.with_lazy_panel(

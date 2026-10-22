@@ -3,9 +3,9 @@
 data: {
   turbo_stream: true,
 } do |f| %>
-    <input type="hidden" name="format" value="turbo_stream">
-    <input type="hidden" name="limit" value="<%= @limit %>">
-    <input type="hidden" name="page" value="<%= @page %>">
+    <%= f.hidden_field :format, value: "turbo_stream" %>
+    <%= f.hidden_field :limit, value: @limit %>
+    <%= f.hidden_field :page, value: @page %>
 
     <ul
       id="metadata_templates_dropdown"
@@ -26,14 +26,14 @@ data: {
       <%= render partial: "shared/samples/metadata_template_item",
       locals: {
         selected: @current_metadata_template_id == "all",
-        label: t("shared.samples.metadata_templates.fields.all"),
+        name: t("shared.samples.metadata_templates.fields.all"),
         value: "all",
       } %>
 
       <%= render partial: "shared/samples/metadata_template_item",
       locals: {
         selected: @current_metadata_template_id == "none",
-        label: t("shared.samples.metadata_templates.fields.none"),
+        name: t("shared.samples.metadata_templates.fields.none"),
         value: "none",
       } %>
 
@@ -47,11 +47,11 @@ data: {
         >
           <%= t("shared.samples.metadata_templates.templates.label") %>
         </li>
-        <% @metadata_templates.each_with_index do |metadata_template, index| %>
+        <% @metadata_templates.each do |metadata_template| %>
           <%= render partial: "shared/samples/metadata_template_item",
           locals: {
             selected: @current_metadata_template_id == metadata_template.id,
-            label: metadata_template.name,
+            name: metadata_template.name,
             value: metadata_template.id,
           } %>
         <% end %>

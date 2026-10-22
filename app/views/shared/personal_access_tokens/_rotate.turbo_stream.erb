@@ -1,4 +1,4 @@
-<%# locals: (personal_access_token:, bot_account:, personal_access_tokens:, type:, message:) -%>
+<%# locals: (namespace:, personal_access_token:, bot_account:, personal_access_tokens:, type:, message:) -%>
 
 <%= turbo_stream.update "personal-access-token-alert", render(Viral::AlertComponent.new(type:, message:)) %>
 
@@ -13,7 +13,9 @@
   <%= turbo_stream.replace "personal_access_tokens",
                       partial: "table",
                       locals: {
+                        namespace: namespace,
                         personal_access_tokens: personal_access_tokens,
+                        bot_account: bot_account,
                       } %>
   <turbo-stream action="refresh"></turbo-stream>
 <% end %>
