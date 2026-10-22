@@ -14,13 +14,12 @@ class DataExport < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Used by CreateService so authorization can run before the source-size query.
   attr_accessor :skip_source_size_validation
 
-  # Allows letters, digits, '-', and '_' so the name can be used as the download filename.
-  NAME_FORMAT_REGEX = /\A[\w-]+\z/
+  BASENAME_FORMAT_REGEX = /\A[\w-]+\z/
 
   validates :status, presence: true, acceptance: { accept: %w[processing ready] }
   validates :export_type, presence: true, acceptance: { accept: %w[sample analysis linelist] }
   validates :export_parameters, presence: true
-  validates :name, format: { with: NAME_FORMAT_REGEX }, length: { maximum: 100 }, allow_blank: true
+  validates :basename, format: { with: BASENAME_FORMAT_REGEX }, length: { maximum: 100 }, allow_blank: true
 
   validate :validate_export_parameters
   validate :validate_source_size, on: :create, if: :validate_source_size?
