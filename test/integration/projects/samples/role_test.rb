@@ -49,7 +49,7 @@ module Projects
         assert_selection_controls(@sample1, present: false)
       end
 
-      test 'User with role >= Analyst sees workflow execution link' do
+      test 'User with role >= Analyst sees workflow execution launch link' do
         user = users(:james_doe)
         sign_in user
         get namespace_project_samples_url(@namespace, @project)
@@ -58,7 +58,7 @@ module Projects
         assert_workflow_execution_link(present: true, locale: user.locale)
       end
 
-      test 'User with role < Analyst does not see workflow execution link' do
+      test 'User with role < Analyst does not see workflow execution launch link' do
         user = users(:ryan_doe)
         sign_in user
         get namespace_project_samples_url(@namespace, @project)
