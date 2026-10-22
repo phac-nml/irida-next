@@ -632,6 +632,8 @@ fr:
     new_linelist_export_dialog:
       available_description: Champs de métadonnées qui ne seront pas inclus dans l’exportation.
       available_list_title: Métadonnées disponibles
+      basename_help: Le nom de base du fichier ne peut contenir que des lettres, des chiffres, '-', et '_'
+      basename_label: 'Nom de base du fichier (facultatif) :'
       close_progress: Fermer la progression de l’exportation
       created_records: Créé %{current} sur %{total} enregistrements
       csv: ".csv"
@@ -641,6 +643,7 @@ fr:
       format: Format
       keyboard_help: Des raccourcis clavier sont disponibles sur les boutons d’action des listes.
       metadata: Métadonnées
+      name_label: Name label
       no_selection: Veuillez sélectionner au moins 1 échantillon avant d'exporter.
       preparing_export: Préparation de l’exportation pour %{count} lignes...
       preparing_rows: Préparation de %{count} lignes

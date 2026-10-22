@@ -632,6 +632,8 @@ en:
     new_linelist_export_dialog:
       available_description: Metadata fields that will not be included in the export.
       available_list_title: Available metadata
+      basename_help: The file basename can only contain letters, numbers, '-', and '_'
+      basename_label: 'File Basename (Optional):'
       close_progress: Close export progress
       created_records: Created %{current} of %{total} records
       csv: ".csv"
@@ -641,6 +643,7 @@ en:
       format: Format
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       metadata: Metadata
+      name_label: 'Export Name (Optional):'
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...
       preparing_rows: Preparing %{count} rows
