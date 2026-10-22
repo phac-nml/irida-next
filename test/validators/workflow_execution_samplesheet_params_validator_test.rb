@@ -118,10 +118,14 @@ class WorkflowExecutionSamplesheetParamsValidatorTest < ActiveSupport::TestCase
   end
 
   test 'rejects attachments belonging to another sample' do
+    attachment = attachments(:attachment3)
     record = build_record(
       properties: { 'fastq_1' => FASTQ_CELL },
-      samplesheet_params: { 'fastq_1' => attachments(:attachment3).to_global_id.to_s }
+      samplesheet_params: { 'fastq_1' => attachment.to_global_id.to_s }
     )
+
+    assert_not_equal record.sample, attachment.attachable
+    assert_equal samples(:sample3), attachment.attachable
 
     validate(record)
 
@@ -142,26 +146,30 @@ class WorkflowExecutionSamplesheetParamsValidatorTest < ActiveSupport::TestCase
     assert_includes record.errors.full_messages.join, 'must match the expected file format'
   end
 
-  test 'accepts an attachment matching one of the anyOf patterns' do
-    attachment = attachments(:gasclusteringAttachment)
-    record = build_record(
-      sample: attachment.attachable,
-      properties: {
-        'input_file' => {
-          'cell_type' => 'file_cell',
-          'anyOf' => [
-            { 'type' => 'string' },
-            { 'pattern' => '^\\S+\\.txt$' },
-            { 'pattern' => '^\\S+\\.mlst\\.json$' }
-          ]
-        }
-      },
-      samplesheet_params: { 'input_file' => attachment.to_global_id.to_s }
-    )
+  test 'accepts attachments matching either anyOf pattern' do
+    {
+      gasclusteringAttachment: '^\\S+\\.mlst\\.json$',
+      sample32JsonAttachment: '^\\S+\\.json$'
+    }.each do |attachment_fixture, matching_pattern|
+      attachment = attachments(attachment_fixture)
+      record = build_record(
+        sample: attachment.attachable,
+        properties: {
+          'input_file' => {
+            'cell_type' => 'file_cell',
+            'anyOf' => [
+              { 'pattern' => '^\\S+\\.txt$' },
+              { 'pattern' => matching_pattern }
+            ]
+          }
+        },
+        samplesheet_params: { 'input_file' => attachment.to_global_id.to_s }
+      )
 
-    validate(record)
+      validate(record)
 
-    assert_empty record.errors
+      assert_empty record.errors, attachment.file.filename.to_s
+    end
   end
 
   test 'accepts a file attachment when no filename pattern is specified' do
