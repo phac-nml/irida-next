@@ -1,19 +1,14 @@
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
   <%= render Viral::BaseComponent.new(**system_arguments) do %>
-    <table
-      class="
-        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-        whitespace-nowrap
-      "
-    >
-      <thead class='sticky top-0 z-10 text-xs uppercase'>
+    <table class="w-full text-left text-sm whitespace-nowrap text-slate-500 rtl:text-right dark:text-slate-400">
+      <thead class="sticky top-0 z-10 text-xs uppercase">
         <tr
           class="
-            border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
-            text-slate-900 bg-slate-100 dark:bg-slate-900
+            border-b border-slate-200 bg-slate-100 text-slate-900 dark:border-slate-900 dark:bg-slate-900
+            dark:text-slate-400
           "
         >
-          <% columns.each_with_index do |column, index| %>
+          <% columns.each do |column| %>
             <%= render_cell(
                 tag: 'th',
                 scope: 'col',
@@ -24,12 +19,8 @@
           <% end %>
         </tr>
       </thead>
-      <tbody
-        class="
-          overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
-          dark:border-slate-700
-        "
-      >
+
+      <tbody class="overflow-y-auto border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
         <% @data.each do |row| %>
           <%= render Viral::BaseComponent.new(**row_arguments(row)) do %>
             <% columns.each_with_index do |column, index| %>

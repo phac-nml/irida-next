@@ -32,8 +32,8 @@
       >
 
       <!--
-  Clear button (shown only when there are existing search results)
--->
+        Clear button (shown only when there are existing search results)
+      -->
       <button
         data-nextflow--v2--samplesheet-target="filterClearButton"
         data-action="click->nextflow--v2--samplesheet#clearFilter"
@@ -155,16 +155,10 @@
 </template>
 
 <template data-nextflow--v2--samplesheet-target="fileTemplate">
-  <a
-    href="<%= helpers.new_workflow_executions_file_selector_path %>"
-    data-base-path="<%= helpers.new_workflow_executions_file_selector_path %>"
-    data-turbo-stream="true"
-    data-namespace-id="<%= @namespace_id %>"
-    class="
+  <%= link_to helpers.new_workflow_executions_file_selector_path, class: "
       block cursor-pointer border-2 border-transparent bg-inherit p-2 text-sm text-inherit
       focus-visible:-outline-offset-2!
-    "
-  ></a>
+    ", data: { base_path: helpers.new_workflow_executions_file_selector_path, turbo_stream: "true", namespace_id: @namespace_id } %>
 </template>
 
 <template data-nextflow--v2--samplesheet-target="metadataTemplate">

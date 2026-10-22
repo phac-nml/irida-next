@@ -28,31 +28,11 @@
           <%= format_name_as_arg(name) %>
         </span>
 
-        <a
-          id="<%= fields.field_id(name, "link") %>"
-          href="<%= helpers.new_workflow_executions_file_selector_path(
-                            file_selector: {
-                              pattern: property[:pattern] || ".*",
-                              property: name,
-                              required: property[:required],
-                              attachable_id: @namespace_id,
-                              attachable_type: @namespace_type,
-                              selected_id: nil,
-                              namespace_id: @namespace_id,
-                              help_text: property[:help_text]
-                            }
-                          ) %>"
-          class="
+        <%= link_to t('components.nextflow.no_selected_file'), helpers.new_workflow_executions_file_selector_path( file_selector: { pattern: property[:pattern] || ".*", property: name, required: property[:required], attachable_id: @namespace_id, attachable_type: @namespace_type, selected_id: nil, namespace_id: @namespace_id, help_text: property[:help_text] } ), id: fields.field_id(name, "link"), class: "
             block w-full min-w-0 flex-1 rounded-b-lg border-none bg-slate-50 p-2.5 text-sm text-slate-900
             focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700 dark:text-white
             dark:placeholder-slate-400
-          "
-          aria-labelledby="<%= @legend_id %>"
-          aria-describedby="<%= describedby_ids.join(" ") %>"
-          data-turbo-stream="true"
-        >
-          <%= t('components.nextflow.no_selected_file') %>
-        </a>
+          ", aria: { labelledby: @legend_id, describedby: describedby_ids.join(" ") }, data: { turbo_stream: "true" } %>
 
         <%= fields.hidden_field name, required: property[:required] %>
       </div>

@@ -80,6 +80,9 @@ linter:
     # output ERB tags double-renders the slot into the dialog body.
     erb-no-unused-expressions:
       enabled: false
+    erb-no-output-control-flow:
+      exclude:
+        - "app/components/viral/pagy/pagination_component.html.erb"
     html-navigation-has-label:
       enabled: true
     html-no-block-inside-inline:

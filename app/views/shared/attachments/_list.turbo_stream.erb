@@ -7,7 +7,5 @@
 <% end %>
 
 <%= turbo_stream.append("list_selections") do %>
-  <% attachments.each do |attachment| %>
-    <%= render "shared/attachments/list_attachment", attachment: %>
-  <% end %>
+  <%= render partial: "shared/attachments/list_attachment", collection: attachments, as: :acttachment %>
 <% end %>

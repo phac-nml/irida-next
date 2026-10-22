@@ -1,51 +1,50 @@
-<dialog id="turbo-confirm" aria-labelledby="confirm--title" class="overflow-visible dialog--size-md">
-  <div
-    class="
-      dialog--header flex items-start justify-between rounded-t-lg border-b
-      border-slate-200 p-5 dark:border-slate-600
-    "
-  >
+<dialog id="turbo-confirm" aria-labelledby="confirm--title" class="dialog--size-md overflow-visible">
+  <div class="dialog--header flex items-start justify-between rounded-t-lg border-b border-slate-200 p-5 dark:border-slate-600">
     <h1 id="confirm--title" class="dialog--title">
       <%= t(:"components.confirmation.title") %>
     </h1>
   </div>
+
   <div class="dialog--section">
-    <p class="text-base text-slate-900 dark:text-white">
-    </p>
-    <div class="dialog--content">
-    </div>
+    <p class="text-base text-slate-900 dark:text-white"></p>
+
+    <div class="dialog--content"></div>
+
     <div class="dialog--form">
       <form method="dialog">
-        <div class="flex items-center mt-6">
-          <button class="button button-destructive mr-2" value="confirm"><%= t('common.controls.confirm') %>
-          </button>
+        <div class="mt-6 flex items-center">
+          <button class="mr-2 button button-destructive" value="confirm"><%= t('common.controls.confirm') %></button>
+
           <button class="button button-default" formmethod="dialog" value="cancel">
             <%= t('common.actions.cancel') %>
           </button>
         </div>
       </form>
     </div>
-    <div class="hidden mt-4 dialog--form--validate" data-controller="confirmation">
 
+    <div class="dialog--form--validate mt-4 hidden" data-controller="confirmation">
       <form method="dialog">
         <input
           type="text"
           aria-label="<%= t(:"components.confirmation.confirm_label") %>"
           data-action="confirmation#inputChange"
+          autocomplete="off"
           class="
-            bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block
-            w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
-            dark:text-white
+            block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900
+            dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400
           "
-        />
-        <div class="flex items-center mt-6">
+        >
+
+        <div class="mt-6 flex items-center">
           <button
             class="mr-2 button button-destructive"
             value="confirm"
-            disabled="disabled"
+            disabled
             data-confirmation-target="confirmButton"
-          ><%= t('common.controls.confirm') %>
+          >
+            <%= t('common.controls.confirm') %>
           </button>
+
           <button class="button button-default" formmethod="dialog" value="cancel">
             <%= t('common.actions.cancel') %>
           </button>

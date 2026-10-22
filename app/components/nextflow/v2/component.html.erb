@@ -48,11 +48,11 @@
     <%= fields_for :workflow_execution do |workflow| %>
       <section class="mb-4">
         <div id="workflow_execution_name_field" class="form-field">
-          <% label = label_attributes(!@automated_workflow) %>
+          <% name_label = label_attributes(!@automated_workflow) %>
 
           <%= workflow.label :name,
-                         label[:name],
-                         data: label[:data],
+                         name_label[:name],
+                         data: name_label[:data],
                          class: "block text-sm font-medium text-slate-900 dark:text-white" %>
 
           <%= workflow.text_field :name,
@@ -80,7 +80,7 @@
         <%= metadata.hidden_field :workflow_version, value: @workflow.version %>
       <% end %>
 
-      <%= workflow.fields_for "workflow_params" do |fields| %>
+      <%= workflow.fields_for "workflow_params" do |workflow_params_fields| %>
         <% @workflow.workflow_params.each do |item, definition| %>
           <h2 class="text-lg font-extrabold dark:text-white"><%= definition[:title] %></h2>
           <p class="mb-2 font-normal text-slate-500 dark:text-slate-400"><%= definition[:description] %></p>
@@ -135,7 +135,7 @@
                 <% end %>
               <% else %>
                 <%= render Nextflow::V2::WorkflowParamPropertyComponent.new(
-                  fields:,
+                  fields: workflow_params_fields,
                   name:,
                   property:,
                   instance:,
@@ -251,7 +251,7 @@
     <template data-nextflow--v2--samplesheet-target="samplesheetParamsFormTemplate">
       <%= form_with( # herb:disable erb-no-empty-control-flow
       url: helpers.samplesheet_workflow_executions_submissions_path,
-    ) do |f| %>
+    ) do %>
         <!-- Samplesheet params form is cloned client-side. -->
       <% end %>
     </template>
