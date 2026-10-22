@@ -643,7 +643,6 @@ en:
       format: Format
       keyboard_help: Keyboard shortcuts are available on the list action buttons.
       metadata: Metadata
-      name_label: 'Export Name (Optional):'
       no_selection: Please select at least 1 sample before exporting.
       preparing_export: Preparing linelist export for %{count} rows...
       preparing_rows: Preparing %{count} rows
