@@ -17,6 +17,7 @@ module Irida
         automated_workflow_execution_subscriber
         client_linelist_exports_v1
         client_linelist_imports_v1
+        data_export_custom_basename
         data_grid_samples_table
         global_groups
         prevent_sample_deletions_and_transfers_with_active_workflows

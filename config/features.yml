@@ -102,7 +102,7 @@ features:
       fr:
         "Autoriser des noms de fichiers personnalisés pour les exportations de données\
         \ préparées."
-    enable_in_development: false
+    enable_in_development: true
     name:
       en: "Custom Data Export Filename"
       fr: "Nom de fichier d’exportation de données personnalisé"

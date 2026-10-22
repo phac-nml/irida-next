@@ -66,7 +66,7 @@ function stopExportBeforeUnloadGuard() {
 }
 
 export default class extends Controller {
-  static targets = ["sampleStatus", "progressTemplate"];
+  static targets = ["basename", "sampleStatus", "progressTemplate"];
   static values = {
     workerUrl: String,
     graphqlUrl: String,
@@ -150,7 +150,7 @@ export default class extends Controller {
       return;
     }
 
-    const filename = `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}.${format}`;
+    const filename = `${this.getFilename()}.${format}`;
     const totalCount = selectedCount;
     this.clearProgressWindowDismissTimeout();
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -279,6 +279,13 @@ export default class extends Controller {
 
   selectedSampleIds() {
     return selectedSampleIdsFromSession(this.selectionStorageKey());
+  }
+
+  getFilename() {
+    if (this.hasBasenameTarget && this.basenameTarget.value)
+      return this.basenameTarget.value;
+
+    return `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}`;
   }
 
   graphqlUrl() {

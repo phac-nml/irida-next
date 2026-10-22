@@ -6,6 +6,15 @@ module DataExports
   module LinelistExportDialog
     module V2
       class ComponentTest < ViewComponentTestCase
+        setup do
+          @user = users(:john_doe)
+          Current.user = @user
+        end
+
+        teardown do
+          Current.user = nil
+        end
+
         test 'renders graphql worker data attributes' do
           project = projects(:project1)
 
@@ -58,6 +67,39 @@ module DataExports
 
           assert_selector "input#linelist-format-xlsx[type='radio'][value='xlsx']"
           assert_no_selector 'input#linelist-format-xlsx[disabled]'
+        end
+
+        test 'renders optional custom filename input' do
+          project = projects(:project1)
+          Flipper.stubs(:enabled?).with(:data_export_custom_basename, @user).returns(true)
+
+          render_inline(
+            Component.new(
+              open: true,
+              namespace_id: project.namespace.id,
+              namespace: project.namespace,
+              templates: []
+            )
+          )
+
+          assert_selector 'label', text: I18n.t('data_exports.new_linelist_export_dialog.basename_label')
+          assert_selector "input[data-linelist-export-target='basename'][maxlength='100']"
+        end
+
+        test 'does not render custom filename input when the feature is disabled' do
+          project = projects(:project1)
+          Flipper.stubs(:enabled?).with(:data_export_custom_basename, @user).returns(false)
+
+          render_inline(
+            Component.new(
+              open: true,
+              namespace_id: project.namespace.id,
+              namespace: project.namespace,
+              templates: []
+            )
+          )
+
+          assert_no_selector "input[data-linelist-export-target='basename']"
         end
       end
     end
