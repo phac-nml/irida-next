@@ -199,9 +199,16 @@ class DataExportsTest < ActionDispatch::IntegrationTest
 
     assert_select 'div:first-child dd', text: @data_export1.id
     assert_select 'div:nth-child(2) dd', text: @data_export1.name
-    assert_select 'div:nth-child(3) dd', text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('data_exports.summary.basename')
+      assert_select 'dd', text: @data_export1.basename
+    end
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('data_exports.summary.type')
+      assert_select 'dd', text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
+    end
 
-    assert_select 'div:nth-child(4)' do
+    assert_select 'div' do
       assert_select 'dt', text: I18n.t('data_exports.summary.status')
       assert_select 'dd' do
         assert_select 'span.bg-green-100.text-green-800.text-xs.font-medium.rounded-full',
@@ -209,10 +216,14 @@ class DataExportsTest < ActionDispatch::IntegrationTest
       end
     end
 
-    assert_select 'div:nth-child(5) dd',
-                  text: I18n.l(@data_export1.created_at.localtime.to_date, format: :long)
-    assert_select 'div:last-child dd',
-                  text: I18n.l(@data_export1.expires_at.localtime.to_date, format: :long)
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('common.labels.created')
+      assert_select 'dd', text: I18n.l(@data_export1.created_at.localtime.to_date, format: :long)
+    end
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('data_exports.summary.expires_at')
+      assert_select 'dd', text: I18n.l(@data_export1.expires_at.localtime.to_date, format: :long)
+    end
 
     get data_export_path(@data_export2)
     assert_response :success
@@ -242,13 +253,26 @@ class DataExportsTest < ActionDispatch::IntegrationTest
 
     assert_select 'div:first-child dd', text: @data_export7.id
     assert_select 'div:nth-child(2) dd', text: @data_export7.name
-    assert_select 'div:nth-child(3) dd',
-                  text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
-    assert_select 'div:nth-child(4) dd', text: I18n.t(:"common.statuses.#{@data_export7.status}").upcase
-    assert_select 'div:nth-child(5) dd',
-                  text: I18n.l(@data_export7.created_at.localtime.to_date, format: :long)
-    assert_select 'div:last-child dd',
-                  text: I18n.l(@data_export7.expires_at.localtime.to_date, format: :long)
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('data_exports.summary.basename')
+      assert_select 'dd', text: @data_export7.basename
+    end
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('data_exports.summary.type')
+      assert_select 'dd', text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
+    end
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('data_exports.summary.status')
+      assert_select 'dd', text: I18n.t(:"common.statuses.#{@data_export7.status}").upcase
+    end
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('common.labels.created')
+      assert_select 'dd', text: I18n.l(@data_export7.created_at.localtime.to_date, format: :long)
+    end
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('data_exports.summary.expires_at')
+      assert_select 'dd', text: I18n.l(@data_export7.expires_at.localtime.to_date, format: :long)
+    end
   end
 
   test 'zip file contents in preview tab for sample data export' do
@@ -403,7 +427,10 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     get data_export_path(@data_export9)
     assert_response :success
 
-    assert_select 'div:nth-child(4) dd', text: 'xlsx'
+    assert_select 'div' do
+      assert_select 'dt', text: I18n.t('data_exports.summary.format')
+      assert_select 'dd', text: 'xlsx'
+    end
 
     assert_select 'button', text: I18n.t('data_exports.show.tabs.summary')
     assert_select 'button', text: I18n.t('data_exports.show.tabs.preview'), count: 0
