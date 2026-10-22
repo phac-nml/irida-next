@@ -629,7 +629,8 @@ CREATE TABLE public.data_exports (
     updated_at timestamp(6) without time zone NOT NULL,
     log_data jsonb,
     user_id uuid NOT NULL,
-    manifest jsonb DEFAULT '{}'::jsonb NOT NULL
+    manifest jsonb DEFAULT '{}'::jsonb NOT NULL,
+    basename character varying
 );
 
 
@@ -2216,6 +2217,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20261021000000'),
 ('20260810103000'),
 ('20260714160000'),
 ('20260629203551'),

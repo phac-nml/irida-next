@@ -31,7 +31,11 @@ const PROGRESS_TEMPLATE = `
     </div>
   </template>`;
 
-function markup({ withSampleStatus = true } = {}) {
+function markup({
+  basename = "",
+  withBasename = true,
+  withSampleStatus = true,
+} = {}) {
   return `
     <div data-controller="linelist-export"
          data-linelist-export-worker-url-value="worker.js"
@@ -40,6 +44,7 @@ function markup({ withSampleStatus = true } = {}) {
       ${withSampleStatus ? '<span data-linelist-export-target="sampleStatus"></span>' : ""}
       <input name="data_export[export_parameters][namespace_id]" value="7">
       <input type="radio" name="data_export[export_parameters][linelist_format]" value="csv" checked>
+      ${withBasename ? `<input data-linelist-export-target="basename" value="${basename}">` : ""}
       <ul id="selected-list"><li><span>x</span><span>age</span></li></ul>
       ${PROGRESS_TEMPLATE}
     </div>`;
@@ -133,6 +138,26 @@ describe("linelist export controller", () => {
       format: "csv",
       total_count: 2,
     });
+    expect(worker.posted[0].filename).toMatch(/^linelist-.*\.csv$/);
+    controller.terminateWorker();
+  });
+
+  it("uses a custom basename for the export filename", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "my-linelist-export" });
+    controller.startExport();
+
+    const worker = FakeWorker.instances.at(-1);
+    expect(worker.posted[0].filename).toBe("my-linelist-export.csv");
+    controller.terminateWorker();
+  });
+
+  it("falls back to the timestamped filename when the basename field is absent", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ withBasename: false });
+    controller.startExport();
+
+    const worker = FakeWorker.instances.at(-1);
     expect(worker.posted[0].filename).toMatch(/^linelist-.*\.csv$/);
     controller.terminateWorker();
   });

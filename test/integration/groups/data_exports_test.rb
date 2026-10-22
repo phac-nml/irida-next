@@ -12,6 +12,7 @@ module Groups
       @group_shared_workflow_execution1 = workflow_executions(:workflow_execution_completed_group_shared1)
       @group_shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_group_shared2)
 
+      Flipper.enable_actor(:data_export_custom_basename, @user)
       sign_in @user
     end
 
@@ -92,7 +93,12 @@ module Groups
           assert_select 'input[type="radio"][value="xlsx"]'
 
           assert_select 'label', text: I18n.t('data_exports.new.name_label')
-          assert_select 'input[name="data_export[name]"]'
+          assert_select 'div[data-controller="slugify"]' do
+            assert_select 'input[name="data_export[name]"][data-slugify-target="name"]' \
+                          '[data-action="input->slugify#nameChanged"]'
+            assert_select 'input[name="data_export[basename]"][data-slugify-target="path"]'
+          end
+          assert_select 'label', text: I18n.t('data_exports.new.basename_label')
           assert_select 'label', text: I18n.t('data_exports.new.email_label')
           assert_select 'input[name="data_export[email_notification]"]'
         end
@@ -128,7 +134,7 @@ module Groups
 
       assert_response :success
 
-      export_name = 'test data export'
+      export_name = 'test_data_export'
 
       assert_difference 'DataExport.count', 1 do
         post data_exports_path(format: :turbo_stream),
@@ -146,7 +152,7 @@ module Groups
       follow_redirect!
       assert_response :success
 
-      assert_select 'div:nth-child(2) dd', text: 'test data export'
+      assert_select 'div:nth-child(2) dd', text: 'test_data_export'
     end
 
     test 'create linelist export from group samples page' do
@@ -156,7 +162,7 @@ module Groups
       assert_select "input[type='checkbox'][value='#{@sample1.id}']", count: 1
 
       %w[csv xlsx].each do |format|
-        export_name = "test #{format} export"
+        export_name = "test_#{format}_export"
 
         params = { 'data_export' => {
                      'export_type' => 'linelist',
@@ -211,7 +217,7 @@ module Groups
           assert_select 'h1', text: I18n.t('data_exports.new_analysis_export_dialog.title')
         end
 
-        export_name = 'test data export'
+        export_name = 'test_data_export'
 
         assert_difference 'DataExport.count', 1 do
           post data_exports_path(format: :turbo_stream),
@@ -248,7 +254,7 @@ module Groups
 
       get group_workflow_execution_path(@group5, @group_shared_workflow_execution1)
       assert_response :success
-      export_name = 'test data export'
+      export_name = 'test_data_export'
 
       assert_select 'button', text: I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
@@ -338,7 +344,7 @@ module Groups
       assert_select "input[type='checkbox'][value='#{we1.id}']", count: 1
       assert_select "input[type='checkbox'][value='#{we2.id}']", count: 1
 
-      export_name = 'test data export'
+      export_name = 'test_data_export'
 
       assert_no_difference 'DataExport.count' do
         post data_exports_path(format: :turbo_stream),

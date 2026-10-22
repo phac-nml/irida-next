@@ -163,6 +163,9 @@ fr:
               checksum_uniqueness: La somme de contrôle correspond au fichier existant
         data_export:
           attributes:
+            basename:
+              invalid: ne peut contenir que des lettres, des chiffres, des espaces, '-', '.' et '_'
+              too_long: est trop long (maximum %{count} caractères)
             export_parameters:
               invalid_analysis_type: Type d’analyse non valide
               invalid_attachment_format: "%{invalid_formats} ne sont pas des formats de pièces jointes valides"
@@ -596,6 +599,8 @@ fr:
       workflow: 'Flux de travail :'
     new:
       after_submission_description_html: Après la soumission, vous serez redirigé vers la page d’exportation. Pendant que le statut de l’exportation est <span class="px-2.5 py-0.5 mr-1 ml-1 text-xs font-medium rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">en cours de traitement</span>, le contenu de l’exportation est créé. Une fois que le statut de l’exportation sera <span class="px-2.5 py-0.5 ml-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">prêt</span>, il sera disponible pour téléchargement. Vous aurez 3 jours ouvrables pour télécharger l’exportation avant qu’elle ne soit supprimée.
+      basename_help: Le nom de base du fichier ne peut contenir que des lettres, des chiffres, '-', et '_'
+      basename_label: 'Nom de base du fichier (facultatif) :'
       email_label: Vous recevez une notification par courriel lorsque votre exportation est prête à être téléchargée?
       name_label: 'Nom d’exportation (facultatif) :'
       sample_description:
@@ -619,6 +624,8 @@ fr:
     new_linelist_export_dialog:
       available_description: Champs de métadonnées qui ne seront pas inclus dans l’exportation.
       available_list_title: Métadonnées disponibles
+      basename_help: Le nom de base du fichier ne peut contenir que des lettres, des chiffres, '-', et '_'
+      basename_label: 'Nom de base du fichier (facultatif) :'
       close_progress: Fermer la progression de l’exportation
       created_records: Créé %{current} sur %{total} enregistrements
       csv: ".csv"
@@ -661,6 +668,7 @@ fr:
         summary: Résumé
         title: Navigation d’exportation de données
     summary:
+      basename: Nom de base du fichier
       expires_at: Expire
       format: Format
       id: ID
