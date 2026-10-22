@@ -15,7 +15,7 @@ const textValue = valueTemplate(
   `<input name="${name}[value]" id="${id}_value">`,
 );
 const conditionTemplate = `
-  <fieldset data-${identifier}-target="conditionsContainer"
+  <fieldset tabindex="-1" data-${identifier}-target="conditionsContainer"
     data-${identifier}-legend-template="Condition __INDEX__">
     <legend>Condition CONDITION_LEGEND_INDEX_PLACEHOLDER</legend>
     <div class="form-field">
@@ -165,7 +165,7 @@ describe(identifier, () => {
     const survivor = conditions()[1];
     button(conditions()[0], "removeCondition").click();
     expect(conditions()).toEqual([survivor]);
-    expect(field(survivor)).toHaveFocus();
+    expect(survivor).toHaveFocus();
     expect(field(survivor).name).toBe(
       "q[groups_attributes][0][conditions_attributes][0][field]",
     );
@@ -180,11 +180,39 @@ describe(identifier, () => {
     expect(field()).toHaveFocus();
   });
 
-  it("focuses the preceding condition after removing the last of several", async () => {
-    button(groups()[0], "addCondition").click();
+  it.each([0, 1, 2])(
+    "focuses the next condition, or the preceding one when removing the last (index %i)",
+    async (index) => {
+      button(groups()[0], "addCondition").click();
+      await tick();
+      button(groups()[0], "addCondition").click();
+      await tick();
+      const before = conditions();
+      const removed = before[index];
+      const survivor = before[index + 1] || before[index - 1];
+      button(removed, "removeCondition").focus();
+      button(removed, "removeCondition").click();
+      expect(conditions()).toHaveLength(2);
+      expect(survivor).toHaveFocus();
+      expect(survivor).toHaveAttribute("tabindex", "-1");
+      expect(field(survivor)).not.toHaveFocus();
+    },
+  );
+
+  it("focuses the visible combobox input, not a preceding hidden field, when auto-complete is enabled", async () => {
+    controller.addGroup();
     await tick();
-    button(conditions()[1], "removeCondition").click();
-    expect(field()).toHaveFocus();
+    const survivor = conditions()[0];
+    // Mirrors AdvancedSearch::V1::ConditionComponent when the
+    // advanced_search_with_auto_complete flipper renders ComboboxComponent: a
+    // hidden "[field]" input precedes the visible role="combobox" input that
+    // has no "name" attribute.
+    survivor.querySelector(".form-field").innerHTML = `
+      <input type="hidden" name="${survivor.querySelector("[name$='[field]']").name}">
+      <input type="text" role="combobox" id="combobox-input">
+    `;
+    button(groups()[1], "removeGroup").click();
+    expect(survivor.querySelector("input[role='combobox']")).toHaveFocus();
   });
 
   it.each([0, 1])(
@@ -459,10 +487,10 @@ describe(identifier, () => {
     controller.addGroup();
     expect(conditions(groups()[1])).toHaveLength(1);
     expect(field(conditions(groups()[1])[0])).toHaveFocus();
-    controller.conditionTemplateTarget.innerHTML = `<fieldset data-${identifier}-target="conditionsContainer"><input type="hidden"><input id="fallback"></fieldset>`;
+    controller.conditionTemplateTarget.innerHTML = `<fieldset tabindex="-1" data-${identifier}-target="conditionsContainer"><input type="hidden"><input id="fallback"></fieldset>`;
     controller.addGroup();
     expect(document.getElementById("fallback")).toHaveFocus();
-    controller.conditionTemplateTarget.innerHTML = `<fieldset data-${identifier}-target="conditionsContainer"></fieldset>`;
+    controller.conditionTemplateTarget.innerHTML = `<fieldset tabindex="-1" data-${identifier}-target="conditionsContainer"></fieldset>`;
     controller.addGroup();
     expect(conditions(groups()[3])).toHaveLength(1);
   });
