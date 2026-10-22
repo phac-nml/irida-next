@@ -2,7 +2,7 @@
 
 data_export_one:
   name: Data Export 1
-  basename: data_export_1
+  basename: data-export-1
   export_type: sample
   status: ready
   export_parameters: {
@@ -31,7 +31,7 @@ data_export_two:
 
 data_export_three:
   name: Data Export 3
-  basename: data_export_3
+  basename: data-export-3
   export_type: sample
   status: processing
   export_parameters: {
@@ -45,7 +45,7 @@ data_export_three:
 
 data_export_four:
   name: Data Export 4
-  basename: data_export_4
+  basename: data-export-4
   export_type: sample
   status: ready
   export_parameters: {
@@ -74,7 +74,7 @@ data_export_five:
 
 data_export_six:
   name: Data Export 6
-  basename: data_export_6
+  basename: data-export-6
   export_type: analysis
   status: processing
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>], analysis_type: 'user'}
@@ -85,7 +85,7 @@ data_export_six:
 
 data_export_seven:
   name: Data Export 7
-  basename: data_export_7
+  basename: data-export-7
   export_type: analysis
   status: ready
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>], analysis_type: 'user'}
@@ -98,7 +98,7 @@ data_export_seven:
 
 data_export_eight:
   name: Data Export 8
-  basename: data_export_8
+  basename: data-export-8
   export_type: linelist
   status: ready
   export_parameters: {
@@ -115,7 +115,7 @@ data_export_eight:
 
 data_export_nine:
   name: Data Export 9
-  basename: data_export_9
+  basename: data-export-9
   export_type: linelist
   status: ready
   export_parameters: {
@@ -132,7 +132,7 @@ data_export_nine:
 
 data_export_ten:
   name: Data Export 10
-  basename: data_export_10
+  basename: data-export-10
   export_type: sample
   status: processing
   export_parameters: {
@@ -149,7 +149,7 @@ data_export_ten:
 
 data_export_eleven:
   name: Data Export 11
-  basename: data_export_11
+  basename: data-export-11
   export_type: analysis
   status: ready
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>], analysis_type: 'user'}
@@ -162,7 +162,7 @@ data_export_eleven:
 
 data_export_twelve:
   name: Data Export 12
-  basename: data_export_12
+  basename: data-export-12
   export_type: analysis
   status: ready
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>], analysis_type: 'user'}
@@ -175,7 +175,7 @@ data_export_twelve:
 
 data_export_thirteen:
   name: Data Export 13
-  basename: data_export_13
+  basename: data-export-13
   export_type: analysis
   status: ready
   export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid) %>], analysis_type: 'user'}
