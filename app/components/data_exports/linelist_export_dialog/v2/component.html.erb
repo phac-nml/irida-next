@@ -108,7 +108,30 @@
 
       <%= form_with(url: "#", method: :get, data: { action: "submit->linelist-export#submit" }) do |form| %>
         <%= form.hidden_field :namespace_id, value: @namespace_id, name: "data_export[export_parameters][namespace_id]" %>
-        <%= form.submit t("data_exports.new.submit_button"), tone: :primary, emphasis: :solid %>
+
+        <% if Flipper.enabled?(:data_export_custom_basename, Current.user) %>
+          <div class="form-field mt-2">
+            <%= form.label :basename, t(:"data_exports.new_linelist_export_dialog.basename_label") %>
+
+            <%= form.text_field :basename,
+                    maxlength: 100,
+                    pattern: /^[\w\-]*$/,
+                    title: t(:"data_exports.new_linelist_export_dialog.basename_help"),
+                    data: {
+                      "linelist-export-target": "basename",
+                    },
+                    aria: { describedby: form.field_id(:basename, "hint") },
+                    class: "form-control" %>
+
+            <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
+              <%= t(:"data_exports.new_linelist_export_dialog.basename_help") %>
+            </span>
+          </div>
+        <% end %>
+
+        <div class="mt-4">
+          <%= form.submit t("data_exports.new.submit_button"), tone: :primary, emphasis: :solid %>
+        </div>
       <% end %>
 
       <p
