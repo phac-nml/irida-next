@@ -1,13 +1,13 @@
 <div
   class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
   role="note"
-  aria-describedby="<%= "#{id_prefix}-instructions #{id_prefix}-keyboard-help" %>"
+  aria-describedby="<%= id_prefix %>-instructions <%= id_prefix %>-keyboard-help"
 >
-  <h3 id="<%= "#{id_prefix}-title" %>" class="text-sm font-semibold text-slate-800 dark:text-slate-100">
+  <h3 id="<%= id_prefix %>-title" class="text-sm font-semibold text-slate-800 dark:text-slate-100">
     <%= title %>
   </h3>
 
-  <p id="<%= "#{id_prefix}-instructions" %>" class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+  <p id="<%= id_prefix %>-instructions" class="mt-1 text-sm text-slate-700 dark:text-slate-200">
     <%= instructions %>
   </p>
 
@@ -47,7 +47,7 @@
     </li>
   </ul>
 
-  <p id="<%= "#{id_prefix}-keyboard-help" %>" class="mt-3 text-xs font-medium text-slate-700 dark:text-slate-200">
+  <p id="<%= id_prefix %>-keyboard-help" class="mt-3 text-xs font-medium text-slate-700 dark:text-slate-200">
     <%= keyboard_help %>
   </p>
 </div>
