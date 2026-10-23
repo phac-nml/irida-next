@@ -110,7 +110,7 @@ export default class extends Controller {
         this.confirmDialogContainerTarget.getElementsByTagName("dialog")[0];
 
       let messageType = "wov";
-      if (editableCell.innerText === "") {
+      if (this.#trimWhitespaces(editableCell.innerText) === "") {
         messageType = "wonv";
       } else if (this.#originalCellContent[editableCell.id] === "") {
         messageType = "woov";
