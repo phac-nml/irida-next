@@ -1,4 +1,5 @@
 <fieldset
+  tabindex="-1"
   data-advanced-search--v2--builder-target="conditionsContainer"
   data-advanced-search--v2--builder-group-index="<%= @group_index %>"
   data-advanced-search--v2--builder-condition-index="<%= @condition_index %>"
@@ -6,7 +7,8 @@
   data-advanced-search-selected-field="<%= selected_field %>"
   class="
     relative flex flex-col space-y-3 rounded-[var(--pvc-radius-panel)] border border-[var(--pvc-color-border)] px-4
-    pr-14 text-sm text-[var(--pvc-color-text-muted)]
+    pr-14 text-sm text-[var(--pvc-color-text-muted)] focus:outline-2 focus:outline-offset-2
+    focus:outline-[var(--pvc-color-focus)] focus:outline-solid
   "
 >
   <%= render Pathogen::Typography::Supporting.new(tag: :legend, class: "px-1 font-semibold") do %>

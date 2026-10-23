@@ -140,7 +140,7 @@ export default class AdvancedSearchBuilderController extends Controller {
     } else {
       this.#updateConditionLegends(group);
       const focusIndex = Math.min(removedIndex, remainingConditions.length - 1);
-      this.#focusConditionInput(remainingConditions[focusIndex]);
+      remainingConditions[focusIndex].focus();
     }
   }
 
@@ -451,9 +451,10 @@ export default class AdvancedSearchBuilderController extends Controller {
       return;
     }
 
-    const fieldInput = condition.querySelector(
-      "input[role='combobox'], select[name$='[field]'], [name$='[field]']",
-    );
+    const fieldInput =
+      condition.querySelector("input[role='combobox']") ||
+      condition.querySelector("select[name$='[field]']") ||
+      condition.querySelector("[name$='[field]']:not([type='hidden'])");
 
     if (fieldInput) {
       fieldInput.focus();

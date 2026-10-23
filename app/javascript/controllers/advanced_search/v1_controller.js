@@ -123,7 +123,7 @@ export default class AdvancedSearchController extends Controller {
     } else {
       this.#reindexGroup(group, this.#groupElements().indexOf(group));
       const focusIndex = Math.min(removedIndex, remainingConditions.length - 1);
-      this.#focusConditionInput(remainingConditions[focusIndex]);
+      remainingConditions[focusIndex].focus();
     }
   }
 
@@ -311,6 +311,7 @@ export default class AdvancedSearchController extends Controller {
 
   #updateOperatorDropdown(condition, selectedField) {
     const operator = condition.querySelector("[name$='[operator]']");
+    /* v8 ignore if -- handleFieldChange already requires this operator before calling synchronously. */
     if (!operator) {
       return;
     }
@@ -467,9 +468,10 @@ export default class AdvancedSearchController extends Controller {
       return;
     }
 
-    const fieldInput = condition.querySelector(
-      "input[role='combobox'], select[name$='[field]'], [name$='[field]']",
-    );
+    const fieldInput =
+      condition.querySelector("input[role='combobox']") ||
+      condition.querySelector("select[name$='[field]']") ||
+      condition.querySelector("[name$='[field]']:not([type='hidden'])");
 
     if (fieldInput) {
       fieldInput.focus();
@@ -595,6 +597,7 @@ export default class AdvancedSearchController extends Controller {
   }
 
   #resetAndGetValueInput(condition) {
+    /* v8 ignore if -- both callers return before passing a missing condition. */
     if (!condition) return null;
     const values = condition.querySelectorAll(".value");
     if (values.length === 0) {
