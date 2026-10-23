@@ -16,16 +16,23 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
   test 'opening the dialog renders the builder from the outlet and is accessible' do
     visit('rails/view_components/advanced_search_component/v2_default')
     within 'div[data-controller-connected="true"]' do
-      click_button I18n.t(:'components.advanced_search_component.v1.title')
+      click_button I18n.t(:'components.advanced_search_component.title')
 
-      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.v1.title')
+      assert_selector 'dialog h1', text: I18n.t(:'components.advanced_search_component.title')
       within 'dialog' do
         assert_accessible
 
         # The dialog controller drives the host-agnostic builder through the Stimulus outlet:
         # on open it clones the server-rendered groups/conditions into the live DOM.
-        assert_text I18n.t('components.advanced_search_component.v1.description')
-        assert_text I18n.t('components.advanced_search_component.v1.rules.standard_operators')
+        assert_text I18n.t('components.advanced_search_component.v2.intro',
+                           subject: I18n.t('components.advanced_search_component.v2.subject.samples'))
+        assert_selector '[data-advanced-search-connective="or"][aria-hidden="true"]', count: 1
+        assert_selector '[data-advanced-search-connective="and"][aria-hidden="true"]', count: 2
+        all(GROUPS).each do |group|
+          helper = find("[id='#{group['aria-describedby']}']")
+          assert_equal I18n.t('components.advanced_search_component.v2.group_match_all'), helper.text
+          assert_nil helper['aria-hidden']
+        end
 
         assert_selector GROUPS, count: 2
         within all(GROUPS)[0] do
@@ -50,7 +57,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
       assert_equal 'Canada', find("input[name$='[value]']").value
     end
 
-    click_button I18n.t('components.advanced_search_component.v1.add_condition_button')
+    click_button I18n.t('components.advanced_search_component.add_condition_button')
     assert_selector CONDITIONS, count: 2
     within all(CONDITIONS)[1] do
       choose_field('country')
@@ -58,14 +65,14 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
       find("input[name$='[value]']").fill_in with: 'Mexico'
     end
     within first(CONDITIONS) do
-      click_button I18n.t('components.advanced_search_component.v1.remove_condition_aria_label')
+      click_button I18n.t('components.advanced_search_component.remove_condition_aria_label')
     end
     assert_selector CONDITIONS, count: 1
 
-    click_button I18n.t('components.advanced_search_component.v1.add_group_button')
+    click_button I18n.t('components.advanced_search_component.add_group_button')
     assert_selector GROUPS, count: 2
     within all(GROUPS)[1] do
-      click_button I18n.t('components.advanced_search_component.v1.remove_group_button')
+      click_button I18n.t('components.advanced_search_component.remove_group_button')
     end
     assert_selector GROUPS, count: 1
     assert_selector CONDITIONS, count: 1
@@ -88,7 +95,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
     within 'dialog' do
       group = all(GROUPS)[1]
       within group do
-        click_button I18n.t('components.advanced_search_component.v1.add_condition_button')
+        click_button I18n.t('components.advanced_search_component.add_condition_button')
         assert_selector CONDITIONS, count: 2
       end
       condition = group.all(CONDITIONS)[1]
@@ -102,10 +109,10 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
       value_name = 'q[groups_attributes][1][conditions_attributes][1][value][]'
 
       within group.all(CONDITIONS).first do
-        click_button I18n.t('components.advanced_search_component.v1.remove_condition_aria_label')
+        click_button I18n.t('components.advanced_search_component.remove_condition_aria_label')
       end
       within all(GROUPS).first do
-        click_button I18n.t('components.advanced_search_component.v1.remove_group_button')
+        click_button I18n.t('components.advanced_search_component.remove_group_button')
       end
 
       assert_selector GROUPS, count: 1
@@ -142,10 +149,10 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
       ], query_fields
 
       within group do
-        click_button I18n.t('components.advanced_search_component.v1.add_condition_button')
+        click_button I18n.t('components.advanced_search_component.add_condition_button')
         assert_selector CONDITIONS, count: 2
       end
-      click_button I18n.t('components.advanced_search_component.v1.add_group_button')
+      click_button I18n.t('components.advanced_search_component.add_group_button')
       assert_selector GROUPS, count: 2
       field_names = all("input[type='hidden'][name$='[field]']", visible: :all).pluck(:name)
       assert_equal field_names.uniq, field_names
@@ -161,13 +168,13 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
     end
     assert_no_selector 'dialog[open]'
 
-    click_button I18n.t('components.advanced_search_component.v1.title')
+    click_button I18n.t('components.advanced_search_component.title')
     within 'dialog' do
       assert_selector '.search-tag', count: 2
       within first('.search-tag') do
         click_button I18n.t('common.actions.remove')
       end
-      dismiss_confirm(I18n.t('components.advanced_search_component.v1.confirm_close_text')) do
+      dismiss_confirm(I18n.t('components.advanced_search_component.confirm_close_text')) do
         click_button I18n.t('components.dialog.close')
       end
       assert_selector '.search-tag', text: 'Mexico'
@@ -176,12 +183,62 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
     assert_selector 'dialog[open]'
   end
 
+  %w[apply clear].each do |action|
+    test "#{action} submits the expected query through the Pathogen footer button" do
+      open_preview(:v2_list)
+      page.execute_script(<<~JS)
+        document.querySelector('#advanced-search-builder').closest('form').addEventListener('submit', (event) => {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          window.submittedQuery = Array.from(new FormData(event.target).entries())
+            .filter(([name]) => name.startsWith('q[groups_attributes]'));
+        }, { capture: true });
+      JS
+
+      within 'dialog' do
+        click_button I18n.t("components.advanced_search_component.#{action}_filter_button")
+      end
+      assert_no_selector 'dialog[open]'
+      submitted = page.evaluate_script('window.submittedQuery')
+      if action == 'clear'
+        assert_equal [['q[groups_attributes]', '']], submitted
+      else
+        name = 'q[groups_attributes][0][conditions_attributes][0]'
+        assert_equal [
+          ["#{name}[field]", 'metadata.country'],
+          ["#{name}[operator]", 'in'],
+          ["#{name}[value][]", 'Canada'],
+          ["#{name}[value][]", 'Mexico'],
+          ["#{name}[value][]", '']
+        ], submitted
+      end
+    end
+  end
+
+  test 'empty guidance survives opening and follows field selection' do
+    open_preview(:v2_empty)
+    within 'dialog' do
+      prompt = I18n.t('components.advanced_search_component.v2.empty_state')
+      assert_text prompt
+      assert_no_button I18n.t('components.advanced_search_component.remove_group_button')
+      assert_selector GROUPS, count: 1
+      assert_selector CONDITIONS, count: 1
+      assert_no_selector '[data-advanced-search-connective]'
+      choose_field('country')
+      assert_no_text prompt
+      click_button I18n.t('components.advanced_search_component.remove_condition_aria_label')
+      assert_text prompt
+      assert_selector CONDITIONS, count: 1
+      assert_accessible
+    end
+  end
+
   private
 
   def open_preview(preview)
     visit("rails/view_components/advanced_search_component/#{preview}")
     within 'div[data-controller-connected="true"]' do
-      click_button I18n.t('components.advanced_search_component.v1.title')
+      click_button I18n.t('components.advanced_search_component.title')
     end
     assert_selector 'dialog[open]'
   end
