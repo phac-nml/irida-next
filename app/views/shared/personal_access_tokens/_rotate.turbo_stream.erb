@@ -6,7 +6,6 @@
   <%= turbo_stream.update "rotate-access-token-section",
                         partial: "shared/personal_access_tokens/access_token_section",
                         locals: {
-                          type: bot_account.namespace.type.downcase.pluralize,
                           bot_account_name: bot_account.user.email,
                           token: personal_access_token.token,
                         } %>
