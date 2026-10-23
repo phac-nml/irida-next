@@ -37,7 +37,7 @@
     <% end %>
 
     <% if @allowed_to[:destroy] %>
-      <%= render "edit_advanced_delete", group: @group %>
+      <%= render "edit_advanced_delete", group: @group, subgroups_count: @subgroups_count, projects_count: @projects_count, samples_count: @samples_count %>
     <% end %>
   </div>
 </div>

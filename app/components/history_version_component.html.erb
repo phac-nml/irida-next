@@ -36,7 +36,7 @@
 
         <% if !changes_from_prev_version_hash.nil? %>
           <div data-controller="collapsible">
-            <h2 id="<%= "accordion-collapse-heading-#{index + 1}" %>">
+            <h2 id="accordion-collapse-heading-<%= index + 1 %>">
               <button
                 type="button"
                 class="
@@ -77,22 +77,48 @@
                       <% if log_data[:version] == 1 %>
                         <% col_span = "col-span-2" %>
                         <div class="col-span-1">
-                          <span <% unless Rails.env.production? %>                            data-test-item-selector="key"<% end %> class="text-md mb-1 break-all text-slate-600 dark:text-slate-400"><%= k.to_s %></span>
-                        </div>
-                        <div class="bg-slate-100 p-1 dark:bg-slate-700 dark:text-slate-700 <%= col_span %>">
-                          <span <% unless Rails.env.production? %>                            data-test-item-selector="value"<% end %> class="text-md break-all text-slate-600 dark:text-white"><%= v %></span>
+                          <span
+                            <% unless Rails.env.production? %>
+                              data-test-item-selector="key"
+                            <% end %>
+                            class="text-md mb-1 break-all text-slate-600 dark:text-slate-400"
+                          >
+                            <%= k.to_s %>
+                          </span>
                         </div>
                       <% else %>
                         <div class="col-span-1">
-                          <span <% unless Rails.env.production? %>                            data-test-item-selector="key"<% end %> class="text-md mb-1 break-all text-slate-600 dark:text-slate-400"><%= k.to_s %></span>
+                          <span
+                            <% unless Rails.env.production? %>
+                              data-test-item-selector="key"
+                            <% end %>
+                            class="text-md mb-1 break-all text-slate-600 dark:text-slate-400"
+                          >
+                            <%= k.to_s %>
+                          </span>
                         </div>
                         <div class="col-span-1 bg-slate-100 p-1 dark:bg-slate-700 dark:text-slate-700">
-                          <span <% unless Rails.env.production? %>                            data-test-item-selector="value"<% end %> class="text-md text-slate-600 dark:text-white"><%= prev_changes_value_hash[k] %></span>
-                        </div>
-                        <div class="bg-slate-100 p-1 dark:bg-slate-700 dark:text-slate-700 <%= col_span %>">
-                          <span <% unless Rails.env.production? %>                            data-test-item-selector="value"<% end %> class="text-md break-all text-slate-600 dark:text-white"><%= v %></span>
+                          <span
+                            <% unless Rails.env.production? %>
+                              data-test-item-selector="value"
+                            <% end %>
+                            class="text-md text-slate-600 dark:text-white"
+                          >
+                            <%= prev_changes_value_hash[k] %>
+                          </span>
                         </div>
                       <% end %>
+
+                      <div class="bg-slate-100 p-1 dark:bg-slate-700 dark:text-slate-700 <%= col_span %>">
+                        <span
+                          <% unless Rails.env.production? %>
+                            data-test-item-selector="value"
+                          <% end %>
+                          class="text-md break-all text-slate-600 dark:text-white"
+                        >
+                          <%= v %>
+                        </span>
+                      </div>
                     <% end %>
                     <% keys_no_longer_existent =
                       prev_changes_value_hash.keys - changes_from_prev_version_hash.keys %>
@@ -103,20 +129,35 @@
                         </p>
                       </div>
                       <% keys_no_longer_existent.each do |key_no_longer_existent| %>
-                        <div class="col-span-1" id="<%= "metadata-deleted-#{key_no_longer_existent}" %>">
-                          <span <% unless Rails.env.production? %>                            data-test-item-selector="key"<% end %> class="text-md mb-1 break-all text-slate-600 dark:text-slate-400">
+                        <div class="col-span-1" id="metadata-deleted-<%= key_no_longer_existent %>">
+                          <span
+                            <% unless Rails.env.production? %>
+                              data-test-item-selector="key"
+                            <% end %>
+                            class="text-md mb-1 break-all text-slate-600 dark:text-slate-400"
+                          >
                             <%= key_no_longer_existent %>
                           </span>
                         </div>
 
                         <div class="col-span-1 bg-slate-100 p-1 dark:bg-slate-700 dark:text-slate-700">
-                          <span <% unless Rails.env.production? %>                            data-test-item-selector="value"<% end %> class="text-md break-all text-slate-600 dark:text-white">
+                          <span
+                            <% unless Rails.env.production? %>
+                              data-test-item-selector="value"
+                            <% end %>
+                            class="text-md break-all text-slate-600 dark:text-white"
+                          >
                             <%= prev_changes_value_hash[key_no_longer_existent] %>
                           </span>
                         </div>
 
                         <div class="col-span-1 bg-slate-100 p-1 dark:bg-slate-700 dark:text-slate-700">
-                          <span <% unless Rails.env.production? %>                            data-test-item-selector="value"<% end %> class="text-md p-2 break-all text-slate-600 dark:text-white"></span>
+                          <span
+                            <% unless Rails.env.production? %>
+                              data-test-item-selector="value"
+                            <% end %>
+                            class="text-md p-2 break-all text-slate-600 dark:text-white"
+                          ></span>
                         </div>
                       <% end %>
                     <% end %>
@@ -127,21 +168,42 @@
           </div>
         <% else %>
           <div class="grid grid-cols-3 gap-2 py-2">
-            <div class="col-span-1" id="<%= "metadata-#{key}" %>">
-              <span <% unless Rails.env.production? %>                data-test-item-selector="key"<% end %> class="text-md mb-1 text-slate-600 dark:text-slate-400"><%= key.to_s %></span>
+            <div class="col-span-1" id="metadata-<%= key %>">
+              <span
+                <% unless Rails.env.production? %>
+                  data-test-item-selector="key"
+                <% end %>
+                class="text-md mb-1 text-slate-600 dark:text-slate-400"
+              >
+                <%= key.to_s %>
+              </span>
             </div>
 
             <% col_span = "col-span-2" %>
 
             <% if log_data[:version] != 1 %>
               <div class="col-span-1 bg-slate-100 dark:bg-slate-700 dark:text-slate-700">
-                <span <% unless Rails.env.production? %>                  data-test-item-selector="value"<% end %> class="text-md p-1"><%= log_data[:previous_version][key.to_s] %></span>
+                <span
+                  <% unless Rails.env.production? %>
+                    data-test-item-selector="value"
+                  <% end %>
+                  class="text-md p-1"
+                >
+                  <%= log_data[:previous_version][key.to_s] %>
+                </span>
               </div>
               <% col_span = "col-span-1" %>
             <% end %>
 
             <div class="bg-slate-100 dark:bg-slate-700 dark:text-slate-700 <%= col_span %>">
-              <span <% unless Rails.env.production? %>                data-test-item-selector="value"<% end %> class="p-2 text-lg break-words text-slate-600 dark:text-white"><%= value %></span>
+              <span
+                <% unless Rails.env.production? %>
+                  data-test-item-selector="value"
+                <% end %>
+                class="p-2 text-lg break-words text-slate-600 dark:text-white"
+              >
+                <%= value %>
+              </span>
             </div>
           </div>
         <% end %>

@@ -190,7 +190,7 @@ module Samples
           locals: { type: 'success',
                     message: t('samples.editable_cell.update_success') }
         ),
-        turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input')
+        turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input', locals: { timestamp: @timestamp })
       ]
     end
   end

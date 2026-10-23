@@ -1,10 +1,12 @@
+<%# locals: (available_automated_workflows:, open:, project:) %>
+
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(title: t(:".title")) %>
 
   <ul>
-    <% available_automated_workflows.each do |key, workflow| %>
+    <% available_automated_workflows.each do |_key, workflow| %>
       <li>
-        <%= link_to new_namespace_project_automated_workflow_execution_path(@project.parent, @project, pipeline_id: workflow.pipeline_id, workflow_version: workflow.version), class: "group w-full", data: { turbo_stream: true } do %>
+        <%= link_to new_namespace_project_automated_workflow_execution_path(project.parent, project, pipeline_id: workflow.pipeline_id, workflow_version: workflow.version), class: "group w-full", data: { turbo_stream: true } do %>
           <span class="ws-default flex items-center space-x-4 p-4 hover:bg-primary-600">
             <span class="flex-shrink-0">
               <%= icon(

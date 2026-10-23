@@ -14,6 +14,7 @@
                     partial: "projects/samples/metadata/new_metadata_modal",
                     locals: {
                       open: false,
+                      sample: @sample
                     } %>
 
 <%= turbo_stream.replace "sample-metadata" do %>

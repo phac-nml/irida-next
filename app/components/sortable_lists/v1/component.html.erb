@@ -30,7 +30,7 @@
     >
       <option value="none"><%= t("components.sortable_lists.v1.component.no_template") %></option>
 
-      <%= templates.each do |template| %>
+      <% templates.each do |template| %>
         <option data-fields="<%= template[:fields] %>" value="<%= template[:id] %>"><%= template[:name] %></option>
       <% end %>
     </select>

@@ -114,6 +114,7 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
           render partial: 'shared/personal_access_tokens/rotate',
                  status: :ok,
                  locals: {
+                   namespace: @namespace,
                    personal_access_token: rotated_personal_access_token, bot_account: @bot_account,
                    personal_access_tokens: @personal_access_tokens, type: 'success',
                    message: t('concerns.bot_personal_access_token_actions.rotate.success',
@@ -123,7 +124,7 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
       else
         format.turbo_stream do
           render partial: 'shared/personal_access_tokens/rotate', status: :unprocessable_content,
-                 locals: { personal_access_token: nil, bot_account: @bot_account,
+                 locals: { namespace: @namespace, personal_access_token: nil, bot_account: @bot_account,
                            personal_access_tokens: @personal_access_tokens, type: 'alert',
                            message: error_message(@personal_access_token) }
         end

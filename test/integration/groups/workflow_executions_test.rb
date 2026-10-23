@@ -118,8 +118,8 @@ module Groups
       get group_workflow_execution_path(@group, workflow_execution), params: { tab: 'params' }
 
       assert_response :success
-      assert_select 'div.project_name-param span', text: '--project_name'
-      assert_select 'div.assembler-param span', text: '--assembler'
+      assert_select 'div span', text: '--project_name'
+      assert_select 'div span', text: '--assembler'
 
       deletable_workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
 

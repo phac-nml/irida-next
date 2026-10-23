@@ -20,7 +20,10 @@
 
     <% if @allowed_to[:create_member] %>
       <%= turbo_frame_tag "new_member_dialog" do %>
-        <%= render partial: "create_modal", locals: { open: false, tab: @tab } %>
+        <%= render partial: "groups/members/create_modal",
+                    locals: {
+                      access_levels: @access_levels, available_users: @available_users, namespace: @namespace, new_member: @new_member, open: false, tab: "invited_groups"
+                    } %>
       <% end %>
     <% end %>
   <% end %>

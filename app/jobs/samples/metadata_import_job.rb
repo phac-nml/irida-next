@@ -28,7 +28,6 @@ module Samples
           target: 'import_metadata_dialog_content',
           partial: 'shared/samples/metadata/file_imports/errors',
           locals: {
-            type: :alert,
             errors: errors
           }
         )
@@ -40,7 +39,6 @@ module Samples
           target: 'import_metadata_dialog_content',
           partial: 'shared/samples/metadata/file_imports/errors',
           locals: {
-            type: :alert,
             errors: errors
           }
         )

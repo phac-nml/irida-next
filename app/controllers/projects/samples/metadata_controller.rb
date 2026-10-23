@@ -11,7 +11,8 @@ module Projects
         render turbo_stream: turbo_stream.update('sample_modal',
                                                  partial: 'new_metadata_modal',
                                                  locals: {
-                                                   open: true
+                                                   open: true,
+                                                   sample: @sample
                                                  }), status: :ok
       end
 
@@ -21,6 +22,7 @@ module Projects
                                                  partial: 'update_metadata_modal',
                                                  locals: {
                                                    open: true,
+                                                   sample: @sample,
                                                    key: params.expect(:key),
                                                    value: params.expect(:value)
                                                  }), status: :ok

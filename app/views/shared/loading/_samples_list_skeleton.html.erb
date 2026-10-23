@@ -1,9 +1,12 @@
+<%# locals: () %>
+
 <div role="status" class="max-w-sm animate-pulse">
   <% 4.times do %>
     <div class="py-1">
-      <div class="h-4 bg-gray-200 rounded-sm w-1/2 mb-2"></div>
-      <div class="h-3 bg-gray-200 rounded-sm w-2/3"></div>
+      <div class="mb-2 h-4 w-1/2 rounded-sm bg-gray-200"></div>
+      <div class="h-3 w-2/3 rounded-sm bg-gray-200"></div>
     </div>
   <% end %>
+
   <span class="sr-only"><%= t(:".loading") %></span>
 </div>

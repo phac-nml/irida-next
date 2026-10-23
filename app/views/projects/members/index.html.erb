@@ -20,7 +20,7 @@
 
     <% if @allowed_to[:create_member] %>
       <%= turbo_frame_tag "new_member_dialog" do %>
-        <%= render partial: "create_modal", locals: { open: false, tab: @tab } %>
+        <%= render partial: "create_modal", locals: { open: false, tab: @tab, access_levels: @access_levels, available_users: @available_users, namespace: @namespace, new_member: @new_member } %>
       <% end %>
     <% end %>
   <% end %>
@@ -53,7 +53,7 @@
         <%= render partial: "shared/loading/table" %>
       <% end %>
 
-      <%= turbo_frame_tag "members_pagination", loading: :lazy, refresh: "morph" %>
+      <%= turbo_frame_tag "members_pagination", loading: :lazy, refresh: "morph", locals: { has_members: @has_members, pagy: @pagy } %>
     <% end %>
 
     <% tabs.with_panel(id: "groups-panel", tab_id: "groups-tab") do %>

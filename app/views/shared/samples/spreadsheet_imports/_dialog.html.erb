@@ -84,7 +84,7 @@
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
               <%= t("shared.samples.spreadsheet_imports.dialog.file_help") %>
             </p>
-          </div> <%# herb:disable html-no-nested-forms 1 %>
+          </div> <%# herb:disable html-no-nested-forms 0 %>
 
           <div class="form-field">
             <%= form.label :sample_name_column,
@@ -191,9 +191,9 @@
                   <%= t("shared.samples.spreadsheet_imports.dialog.static_project_description") %>
                 </p>
 
-                <%= render Select2Component.new(form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select| %>
+                <%= render Select2Component.new(form:, name: :static_project_id, id: form_id, placeholder: t("shared.samples.spreadsheet_imports.dialog.select_static_project"), required: false) do |select2| %>
                   <% group_projects.each do |project| %>
-                    <% select.with_option(
+                    <% select2.with_option(
                         value: project.id,
                         label: project.namespace.full_path,
                       ) do %>
@@ -208,7 +208,7 @@
                     <% end %>
                   <% end %>
 
-                  <%= select.with_empty_state do %>
+                  <%= select2.with_empty_state do %>
                     <%= t("shared.samples.spreadsheet_imports.dialog.static_project_empty_state") %>
                   <% end %>
                 <% end %>

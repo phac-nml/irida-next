@@ -1,3 +1,5 @@
+<%# locals: (access_tokens:, description:, title:) %>
+
 <%= turbo_frame_tag "personal_access_tokens" do %>
   <%= render PersonalAccessTokens::TableComponent.new(
     access_tokens,

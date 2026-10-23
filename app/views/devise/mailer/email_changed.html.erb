@@ -1,7 +1,9 @@
 <p><%= t(".greeting", email: @email) %></p>
 
-<% if @resource.try(:unconfirmed_email?) %>
-  <p><%= t(".unconfirmed_email_info", email: @resource.unconfirmed_email) %></p>
-<% else %>
-  <p><%= t(".confirmed_email_info", email: @resource.email) %></p>
-<% end %>
+<p>
+  <% if @resource.try(:unconfirmed_email?) %>
+    <%= t(".unconfirmed_email_info", email: @resource.unconfirmed_email) %>
+  <% else %>
+    <%= t(".confirmed_email_info", email: @resource.email) %>
+  <% end %>
+</p>

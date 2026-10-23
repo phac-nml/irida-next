@@ -3,6 +3,7 @@
   partial: "projects/samples/metadata/update_metadata_modal",
   locals: {
     open: @sample.errors.any?,
+    sample: @sample,
     key: defined?(key) ? key : nil,
     value: defined?(value) ? value : nil,
   },

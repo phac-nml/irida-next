@@ -13,10 +13,15 @@
   <%= turbo_stream.replace "access-token-section",
                        partial: "shared/personal_access_tokens/access_token_section",
                        locals: {
-                         type: "groups",
                          bot_account_name: @bot_account.user.email,
                          token: personal_access_token.token,
                        } %>
   <%= turbo_stream.replace "bots-table-section",
-                       partial: "groups/bots/table" %>
+                       partial: "groups/bots/table",
+                       locals: {
+                         bot_accounts: @bot_accounts,
+                         namespace: @namespace,
+                         pagy: @pagy,
+                         allowed_to: @allowed_to
+                       } %>
 <% end %>

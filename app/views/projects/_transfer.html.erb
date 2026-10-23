@@ -1,3 +1,5 @@
+<%# locals: (authorized_namespaces:, project:, transfer_form:) %>
+
 <%= render Viral::CardComponent.new do |card| %>
   <% card.with_header(title: t(:"projects.edit.advanced.transfer.title")) %>
 
@@ -20,13 +22,13 @@
           <span class="ml-4 flex-1">
             <%= t(
               "projects.edit.advanced.transfer.confirm.warning_html",
-              project_name: @project.human_name,
+              project_name: project.human_name,
             ) %>
           </span>
         </div>
 
         <div class="mb-4">
-          <% t("projects.edit.advanced.transfer.confirm.points_html", project: @project.name).each do |item| %>
+          <% t("projects.edit.advanced.transfer.confirm.points_html", project: project.name).each do |item| %>
             <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
           <% end %>
         </div>

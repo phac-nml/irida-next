@@ -1,3 +1,5 @@
+<%# locals: (open:, namespace:, personal_access_tokens:, bot_account:, inactive: false) %>
+
 <%= render Viral::DialogComponent.new(open: open, id: 'bot_tokens_dialog', size: :extra_large) do |dialog| %>
   <% dialog.with_header(
     title: t("projects.bots.index.personal_access_tokens_listing_modal.title"),
@@ -5,15 +7,15 @@
 
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">
-      <% if defined?(@inactive_personal_access_tokens) %>
+      <% if inactive %>
         <%= t(
           "projects.bots.index.personal_access_tokens_listing_modal.description.inactive",
-          bot_account: @bot_account.user.email,
+          bot_account: bot_account.user.email,
         ) %>
       <% else %>
         <%= t(
           "projects.bots.index.personal_access_tokens_listing_modal.description.active",
-          bot_account: @bot_account.user.email,
+          bot_account: bot_account.user.email,
         ) %>
       <% end %>
     </p>
@@ -23,6 +25,6 @@
 
   <div class="flex flex-col">
     <%= turbo_frame_tag "rotate-access-token-section" %>
-    <%= render partial: "table", locals: { personal_access_tokens: } %>
+    <%= render partial: "table", locals: { personal_access_tokens:, namespace:, bot_account: } %>
   </div>
 <% end %>

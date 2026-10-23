@@ -1,3 +1,5 @@
+<%# locals: (log_data:) %>
+
 <%= render Viral::DialogComponent.new(open: true, size: :large) do |dialog| %>
   <% dialog.with_header(
     title:
@@ -10,7 +12,7 @@
   <div>
     <%= render partial: "projects/samples/history/sample_history_modal_description",
     locals: {
-      log_data:,
+      log_data: log_data,
     } %>
 
     <%= render HistoryVersionComponent.new(log_data: log_data) %>

@@ -1,3 +1,5 @@
+<%# locals: (open:, destroy_path:, index_path:, workflow_execution:) %>
+
 <%= render Viral::DialogComponent.new(open: open) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
 
@@ -7,14 +9,14 @@
     </p>
 
     <div class="grid gap-4">
-      <div data-controller="selection" data-selection-storage-key-value="<%= request.base_url %><%= @index_path %>">
+      <div data-controller="selection" data-selection-storage-key-value="<%= request.base_url %><%= index_path %>">
         <%= pathogen_button_to t(".submit_button"),
-        @destroy_path,
+        destroy_path,
         method: :delete,
         data: {
           turbo_frame: "_top",
           action: "click->selection#remove click->viral--dialog#close",
-          "selection-id-param": @workflow_execution.id,
+          "selection-id-param": workflow_execution.id,
         },
         tone: :danger, emphasis: :solid %>
       </div>

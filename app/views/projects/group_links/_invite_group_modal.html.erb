@@ -1,3 +1,5 @@
+<%# locals: (access_levels:, namespace:, namespace_linkable_groups:, new_group_link:, open:, tab:) %>
+
 <%= render Viral::DialogComponent.new(id: 'new-group-link-dialog', open: open) do |dialog| %>
   <% dialog.with_header(title: I18n.t("projects.group_links.new.title")) %>
 
@@ -17,7 +19,7 @@
         tab: tab,
       } %>
   <% else %>
-    <%= turbo_frame_tag "new_group_link_dialog_content", src:  new_namespace_project_group_link_path(@namespace.parent, @namespace.project, tab: tab), loading: :lazy do %>
+    <%= turbo_frame_tag "new_group_link_dialog_content", src:  new_namespace_project_group_link_path(namespace.parent, namespace.project, tab: tab), loading: :lazy do %>
       <%= render partial: "shared/loading/form" %>
     <% end %>
   <% end %>

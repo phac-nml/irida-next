@@ -51,11 +51,11 @@ module Irida
 
     # Add a catch-all route for unmatched paths after routes loaded so that active storage routes are not overridden
     # prematurely.
-    config.after_routes_loaded do |app|
+    config.after_routes_loaded do
       # Temporarily disable clearing behavior
       Rails.application.routes.disable_clear_and_finalize = true
 
-      app.routes.draw do
+      Rails.application.routes.draw do
         match '*unmatched', to: 'application#route_not_found', via: :all
       end
     ensure

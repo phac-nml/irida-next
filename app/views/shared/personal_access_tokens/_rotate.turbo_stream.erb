@@ -1,4 +1,4 @@
-<%# locals: (personal_access_token:, bot_account:, personal_access_tokens:, type:, message:) -%>
+<%# locals: (namespace:, personal_access_token:, bot_account:, personal_access_tokens:, type:, message:) -%>
 
 <%= turbo_stream.update "personal-access-token-alert", render(Viral::AlertComponent.new(type:, message:)) %>
 
@@ -6,14 +6,15 @@
   <%= turbo_stream.update "rotate-access-token-section",
                         partial: "shared/personal_access_tokens/access_token_section",
                         locals: {
-                          type: bot_account.namespace.type.downcase.pluralize,
                           bot_account_name: bot_account.user.email,
                           token: personal_access_token.token,
                         } %>
   <%= turbo_stream.replace "personal_access_tokens",
                       partial: "table",
                       locals: {
+                        namespace: namespace,
                         personal_access_tokens: personal_access_tokens,
+                        bot_account: bot_account,
                       } %>
   <turbo-stream action="refresh"></turbo-stream>
 <% end %>

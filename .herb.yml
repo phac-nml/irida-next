@@ -10,7 +10,7 @@
 # Docs: https://herb-tools.dev/configuration
 # Linter: https://herb-tools.dev/projects/linter
 
-version: 0.11.0
+version: 0.11.1
 
 framework: actionview
 template_engine: erubi
@@ -65,9 +65,6 @@ linter:
       enabled: true
     erb-strict-locals-required:
       enabled: true
-      # Hint until partials are migrated off instance variables. Declaring
-      # locals without converting call sites would raise at render time.
-      severity: hint
     erb-no-instance-variables-in-partials:
       severity: hint
     erb-no-duplicate-branch-elements:
@@ -75,11 +72,12 @@ linter:
     html-no-underscores-in-attribute-names:
       # Stimulus identifiers must match controller file names (underscores).
       severity: hint
-    # Disabled: false-positive on ViewComponent slot setters used via helpers
-    # (e.g. silent ERB dialog.with_header). Changing those to
-    # output ERB tags double-renders the slot into the dialog body.
     erb-no-unused-expressions:
-      enabled: false
+      enabled: true
+    erb-no-output-control-flow:
+      # Exclude pagination component which uses tag.select which herb incorrectly thinks is like regular select method.
+      exclude:
+        - "app/components/viral/pagy/pagination_component.html.erb"
     html-navigation-has-label:
       enabled: true
     html-no-block-inside-inline:
@@ -91,15 +89,8 @@ linter:
       enabled: true
     html-no-title-attribute:
       enabled: true
-    # The dialog owns this form. Herb's Action View graph incorrectly finds
-    # an enclosing form at this component's Turbo Stream call sites.
     html-no-nested-forms:
       enabled: true
-      exclude:
-        - "app/components/data_imports/linelist_import_dialog/v2/component.html.erb"
-        - "app/views/projects/_change_path.html.erb"
-        - "app/views/groups/samples/index.html.erb"
-        - "app/views/projects/samples/index.html.erb"
 
 formatter:
   enabled: true

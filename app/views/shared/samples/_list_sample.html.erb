@@ -1,4 +1,8 @@
+<%# locals: (sample:) %>
+
 <div class="py-2">
-  <p class="font-normal text-slate-800 dark:text-slate-100"><%= sample.name %>
-    <%= render PuidComponent.new(puid: sample.puid, show_clipboard: false) %></p>
+  <p class="font-normal text-slate-800 dark:text-slate-100">
+    <%= sample.name %>
+    <%= render PuidComponent.new(puid: sample.puid, show_clipboard: false) %>
+  </p>
 </div>

@@ -8,7 +8,7 @@
       >
         <thead class="sticky top-0 z-10 bg-slate-50 text-xs text-slate-700 uppercase dark:bg-slate-700 dark:text-slate-300">
           <tr>
-            <% @columns.each_with_index do |column, index| %>
+            <% @columns.each do |column| %>
               <%= render_cell(
               tag: 'th',
               **helpers.aria_sort(column, @q.sorts[0].name, @q.sorts[0].dir),

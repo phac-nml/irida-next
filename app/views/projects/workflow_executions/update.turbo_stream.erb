@@ -13,6 +13,6 @@
 
 <% if @workflow_execution.errors.empty? %>
   <%= turbo_stream.replace "workflow_execution_summary" do %>
-    <%= render partial: "workflow_executions/summary" %>
+    <%= render partial: "workflow_executions/summary", locals: { workflow_execution: @workflow_execution, namespace_path: @namespace_path } %>
   <% end %>
 <% end %>

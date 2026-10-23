@@ -19,5 +19,5 @@
 <div class="flex flex-col">
   <%= turbo_frame_tag "bot_modal" %>
   <%= turbo_frame_tag "access-token-section" %>
-  <%= render partial: "table" %>
+  <%= render partial: "table", locals: { bot_accounts: @bot_accounts, namespace: @namespace, pagy: @pagy, allowed_to: @allowed_to } %>
 </div>

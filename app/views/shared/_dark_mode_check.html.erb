@@ -1,4 +1,6 @@
-<script>
+<%# locals: () %>
+
+<script nonce="<%= request.content_security_policy_nonce %>">
   // On page load or when changing themes, best to add inline in `head` to avoid FOUC
   function isSystemTheme() {
     return localStorage.getItem("theme") !== "dark" && localStorage.getItem("theme") !== "light";

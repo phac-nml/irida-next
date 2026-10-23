@@ -1,14 +1,16 @@
-<% progress_dom_id = local_assigns.fetch(:dom_id, ProgressBarStream.dom_id_for(nil)) %>
+<%# locals: (percentage:, progress_dom_id: ProgressBarStream.dom_id_for(nil)) %>
+
 <% clamped_percentage = percentage.to_f.clamp(0, 100) %>
 
 <div id="<%= progress_dom_id %>">
-  <div class="flex justify-between mb-1">
+  <div class="mb-1 flex justify-between">
     <span class="text-base font-medium text-slate-900 dark:text-white"><%= t(".in_progress") %></span>
     <span class="text-sm font-medium text-slate-900 dark:text-white"><%= clamped_percentage.ceil %>%</span>
   </div>
-  <div class="w-full bg-slate-200 rounded-full h-2.5 dark:bg-slate-700">
+
+  <div class="h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-700">
     <div
-      class="bg-primary-600 h-2.5 rounded-full"
+      class="h-2.5 rounded-full bg-primary-600"
       style="width: <%= clamped_percentage %>%"
       role="progressbar"
       aria-valuenow="<%= clamped_percentage.round %>"

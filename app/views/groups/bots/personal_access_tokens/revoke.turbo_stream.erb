@@ -3,6 +3,8 @@
 <%= turbo_stream.replace "personal_access_tokens",
                      partial: "table",
                      locals: {
+                       namespace: @namespace,
+                       bot_account: @bot_account,
                        personal_access_tokens: @personal_access_tokens,
                      } %>
 

@@ -71,7 +71,7 @@
       src_path: data_export_path(@data_export, tab: "summary"),
       selected: @tab == "summary"
     ) do %>
-      <%= render partial: "summary" %>
+      <%= render partial: "summary", locals: { data_export: @data_export } %>
     <% end %>
 
     <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
@@ -82,7 +82,7 @@
         src_path: data_export_path(@data_export, tab: "preview"),
         selected: @tab == "preview"
       ) do %>
-        <%= render partial: "preview" %>
+        <%= render partial: "preview", locals: { data_export: @data_export, manifest: @manifest } %>
       <% end %>
     <% end %>
   <% end %>

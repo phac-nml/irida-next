@@ -1,3 +1,5 @@
+<%# locals: (access_levels:, available_users:, namespace:, new_member:, open:, tab:) %>
+
 <%= render Viral::DialogComponent.new(id: 'new-member-dialog', open: open) do |dialog| %>
   <% dialog.with_trigger do %>
     <button class="button w-full button-primary" data-action="viral--dialog#open">
@@ -7,7 +9,7 @@
 
   <% dialog.with_header(title: t(:"groups.members.new.title")) %>
 
-  <% if @new_member&.invalid? %>
+  <% if new_member&.invalid? %>
     <%= render partial: "form",
       locals: {
         access_levels: access_levels,
@@ -17,7 +19,7 @@
         tab: tab,
       } %>
   <% else %>
-    <%= turbo_frame_tag "new_member_dialog_content", src: new_group_member_path(tab: @tab), loading: :lazy do %>
+    <%= turbo_frame_tag "new_member_dialog_content", src: new_group_member_path(namespace, tab: tab), loading: :lazy do %>
       <%= render partial: "shared/loading/form" %>
     <% end %>
   <% end %>

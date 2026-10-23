@@ -1,26 +1,28 @@
+<%# locals: (namespaces:, has_namespaces:, render_flat_list:, pagy:, group:) %>
+
 <div class="space-y-2">
-  <% if @namespaces.length > 0 %>
+  <% if namespaces.length > 0 %>
     <%= render TreegridComponent.new(aria: {label: t("groups.show.treegrid.aria_label.subgroups_and_projects")}) do |component| %>
-      <% @namespaces.each_with_index do |namespace, namespace_index| %>
+      <% namespaces.each_with_index do |namespace, namespace_index| %>
         <%= component.with_row(
           tabindex: (namespace_index.zero? ? 0 : -1),
-          expandable: !@render_flat_list && namespace.children_of_type?([Group.sti_name, Namespaces::ProjectNamespace.sti_name]),
+          expandable: !render_flat_list && namespace.children_of_type?([Group.sti_name, Namespaces::ProjectNamespace.sti_name]),
           posinset: namespace_index + 1,
-          setsize: @namespaces.size,
+          setsize: namespaces.size,
           aria: { label: namespace_row_aria_label(namespace)},
-          button_arguments: {data: {"toggle-url": public_send("group_subgroups_url", { group_id: @group.full_path, parent_id: namespace.id, collapse: false, level: 1, posinset: namespace_index + 1, setsize: @namespaces.size })}},
+          button_arguments: {data: {"toggle-url": public_send("group_subgroups_url", { group_id: group.full_path, parent_id: namespace.id, collapse: false, level: 1, posinset: namespace_index + 1, setsize: namespaces.size })}},
           id: dom_id(namespace)
         ) do %>
           <%= render NamespaceRow::ContentsComponent.new(
             namespace: namespace,
-            full_name: @render_flat_list,
+            full_name: render_flat_list,
             icon_size: :medium,
           ) %>
         <% end %>
       <% end %>
     <% end %>
-    <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy.item")) %>
-  <% elsif @has_namespaces %>
+    <%= render Viral::Pagy::FullComponent.new(pagy, item: t(".pagy.item")) %>
+  <% elsif has_namespaces %>
     <%= render Viral::EmptyStateComponent.new(
       icon_name: :magnifying_glass,
       title: t("components.viral.pagy.empty_state.title"),

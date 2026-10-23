@@ -1,10 +1,12 @@
+<%# locals: (namespace:, namespace_id:, open:, templates:) %>
+
 <%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
 
   <%= turbo_frame_tag "sample_export_dialog_content" do %>
     <div
-      data-controller="infinite-scroll <%= 'sortable-lists--v1--two-lists-selection' unless @namespace.metadata_fields.empty? %>"
-      <% unless @namespace.metadata_fields.empty? %>
+      data-controller="infinite-scroll <%= 'sortable-lists--v1--two-lists-selection' unless namespace.metadata_fields.empty? %>"
+      <% unless namespace.metadata_fields.empty? %>
         data-sortable-lists--v1--two-lists-selection-selected-list-value="selected-list"
         data-sortable-lists--v1--two-lists-selection-available-list-value="available-list"
         data-sortable-lists--v1--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
@@ -81,7 +83,7 @@
 
         <%= render partial: "shared/form/required_field_legend" %>
 
-        <% unless @namespace.metadata_fields.empty? %>
+        <% unless namespace.metadata_fields.empty? %>
           <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100"><%= t(".metadata") %></h2>
           <% sortable_lists_guidance_id = "linelist-export-fields-guidance" %>
           <%= render Viral::SortableListsGuidanceComponent.new(
@@ -105,7 +107,7 @@
             <%= sortable_lists.with_list(
               id: "available-list",
               title: t(".available_list_title"),
-              list_items: @namespace.metadata_fields,
+              list_items: namespace.metadata_fields,
               describedby: "#{sortable_lists_guidance_id}-available-description",
             ) %>
 

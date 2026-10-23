@@ -5,15 +5,17 @@ require 'test_helper'
 class ProjectNamespaceFieldsPartialTest < ActionView::TestCase
   test 'namespace inline error only shows namespace messages' do
     user = users(:john_doe)
-    @project = Project.new
-    namespace = @project.build_namespace(name: 'a', path: 'new-project', parent_id: user.namespace.id)
+    project = Project.new
+    namespace = project.build_namespace(name: 'a', path: 'new-project', parent_id: user.namespace.id)
     namespace.errors.add(:namespace, I18n.t('services.projects.create.namespace_required'))
     namespace.errors.add(:name, 'is too short')
 
     render partial: 'projects/project_namespace_fields',
            locals: {
              builder: build_form_builder('project[namespace_attributes]', namespace),
-             authorized_namespaces: [user.namespace]
+             authorized_namespaces: [user.namespace],
+             project: project,
+             current_user: user
            }
 
     assert_select '#project_namespace_attributes_namespace_error', text: /Namespace is required/
