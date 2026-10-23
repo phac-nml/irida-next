@@ -19,10 +19,11 @@
     ) do %>
       <% if avatar %>
         <span class="rounded-lg bg-white">
-          <%= irida_avatar(
+          <%= render Pathogen::Avatar.new(
             label: label,
             colour_seed: "#{label}-#{url}",
             size: :small,
+            shape: :rounded,
           ) %>
         </span>
       <% else %>
