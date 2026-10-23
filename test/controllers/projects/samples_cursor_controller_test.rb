@@ -88,13 +88,13 @@ module Projects
 
     test 'initial total follows the complete filter including no matching rows' do
       get namespace_project_samples_path(@namespace, @project),
-          params: { q: { name_or_puid_cont: samples(:sample1).puid } }
+          params: { q: { name_or_puid_i_cont: samples(:sample1).puid } }
       assert_response :success
       assert_select '[data-pvc-data-grid-total-count="1"][aria-rowcount="2"]', count: 1
       assert_select '[data-pathogen--data-grid-target="paginationPosition"]', text: 'Rows 1–1 of 1'
 
       get namespace_project_samples_path(@namespace, @project),
-          params: { q: { name_or_puid_cont: 'no-matching-sample' } }
+          params: { q: { name_or_puid_i_cont: 'no-matching-sample' } }
       assert_response :success
       assert_select '[data-pathogen--data-grid-target="paginationPosition"]', text: 'Rows 0–0 of 0'
       assert_select '[data-pvc-data-grid-global-row-index]', count: 0
@@ -113,7 +113,7 @@ module Projects
       get namespace_project_samples_path(@namespace, @project), params: { limit: 2 }
       statements = sample_selects do
         post search_namespace_project_samples_path(@namespace, @project),
-             params: { q: { name_or_puid_cont: samples(:sample1).puid } }, as: :turbo_stream
+             params: { q: { name_or_puid_i_cont: samples(:sample1).puid } }, as: :turbo_stream
       end
 
       assert_response :success
@@ -176,7 +176,7 @@ module Projects
 
     test 'filter changes replace only the scoped results' do
       post search_namespace_project_samples_path(@namespace, @project),
-           params: { q: { name_or_puid_cont: 'Sample', sort: 'name asc' } },
+           params: { q: { name_or_puid_i_cont: 'Sample', sort: 'name asc' } },
            headers: { 'X-Samples-Cursor-Request' => 'latest-filter' }, as: :turbo_stream
 
       assert_response :success
@@ -221,12 +221,12 @@ module Projects
 
     test 'cursor sort links reset the frame with the complete current filter' do
       get namespace_project_samples_path(@namespace, @project),
-          params: { limit: 2, q: { name_or_puid_cont: 'Sample', sort: 'name desc', metadata_template: 'all' } }
+          params: { limit: 2, q: { name_or_puid_i_cont: 'Sample', sort: 'name desc', metadata_template: 'all' } }
       assert_response :success
       button = css_select('button[data-sort-field="puid"]').first
       sort_params = Rack::Utils.parse_nested_query(URI.parse(button['data-sort-url']).query)
       assert_equal 'puid asc', sort_params.dig('q', 'sort')
-      assert_equal 'Sample', sort_params.dig('q', 'name_or_puid_cont')
+      assert_equal 'Sample', sort_params.dig('q', 'name_or_puid_i_cont')
       assert_equal 'all', sort_params.dig('q', 'metadata_template')
       assert_nil sort_params['cursor']
       get button['data-sort-url'], headers: { 'Turbo-Frame' => 'project-samples-results' }

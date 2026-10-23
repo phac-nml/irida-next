@@ -67,7 +67,7 @@ module Samples
     end
 
     test 'applies the existing quick search and advanced filter before pagination' do
-      params = { sort: 'puid asc', name_or_puid_cont: 'Cursor sample',
+      params = { sort: 'puid asc', name_or_puid_i_cont: 'Cursor sample',
                  groups_attributes: { '0' => { conditions_attributes: {
                    '0' => { field: 'metadata.field with spaces', operator: '=', value: '2' }
                  } } } }
@@ -85,7 +85,7 @@ module Samples
     end
 
     test 'returns empty and terminal pages without a next cursor' do
-      query = build_query('name asc', name_or_puid_cont: 'no-matching-sample')
+      query = build_query('name asc', name_or_puid_i_cont: 'no-matching-sample')
       result = page(query)
 
       assert_empty result.records
@@ -123,7 +123,7 @@ module Samples
         page(query, cursor:, query_params: { sort: 'name asc' }, project: projects(:project2))
       end
       assert_raises(CursorPage::InvalidCursor) do
-        page(query, cursor:, query_params: { sort: 'name asc', name_or_puid_cont: 'changed' })
+        page(query, cursor:, query_params: { sort: 'name asc', name_or_puid_i_cont: 'changed' })
       end
       assert_raises(CursorPage::InvalidCursor) do
         page(build_query('name desc'), cursor:, query_params: { sort: 'name asc' })

@@ -32,7 +32,7 @@ module Samples
 
     def cursor_search_params
       params.fetch(:q, ActionController::Parameters.new)
-            .permit(:name_or_puid_cont, :metadata_template, :sort, :groups_attributes, groups_attributes: {})
+            .permit(:name_or_puid_i_cont, :metadata_template, :sort, :groups_attributes, groups_attributes: {})
             .to_h.with_indifferent_access.tap { |query_params| query_params[:sort] ||= 'updated_at desc' }
     end
 

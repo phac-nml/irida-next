@@ -58,18 +58,18 @@ module Projects
       assert_accessible
 
       within '#project-samples-results' do
-        find('input[name="q[name_or_puid_cont]"]').fill_in with: samples(:sample1).puid
-        find('input[name="q[name_or_puid_cont]"]').send_keys(:enter)
+        find('input[name="q[name_or_puid_i_cont]"]').fill_in with: samples(:sample1).puid
+        find('input[name="q[name_or_puid_i_cont]"]').send_keys(:enter)
       end
       assert_selector '#samples-table [role="row"][data-pvc-data-grid-global-row-index]', count: 1
       assert_selector 'h1[data-cursor-test-marker="retained"]'
       assert_accessible
       assert_no_selector '#project-samples-results a[href*="table_view=standard"]'
       visit namespace_project_samples_url(@namespace, @project, table_view: 'standard',
-                                                                q: { name_or_puid_cont: samples(:sample1).puid })
+                                                                q: { name_or_puid_i_cont: samples(:sample1).puid })
       assert_selector '#samples-table[data-samples-table-version="v1"]'
       assert_no_selector 'turbo-frame#project-samples-results'
-      assert_selector 'input[name="q[name_or_puid_cont]"]' do |field|
+      assert_selector 'input[name="q[name_or_puid_i_cont]"]' do |field|
         assert_equal samples(:sample1).puid, field.value
       end
     end

@@ -74,7 +74,7 @@ module Projects
       end
 
       page.current_window.resize_to(1600, 1800)
-      filter = find('#project-samples-results input[name="q[name_or_puid_cont]"]')
+      filter = find('#project-samples-results input[name="q[name_or_puid_i_cont]"]')
       filter.fill_in with: samples(:bulk_sample200).puid
       filter.send_keys(:enter)
       assert_selector '#samples-table [role="row"][data-pvc-data-grid-global-row-index]', count: 1

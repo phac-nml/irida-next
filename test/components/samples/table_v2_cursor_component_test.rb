@@ -14,7 +14,7 @@ module Samples
         render_inline Table::V2::Component.new(
           [samples(:sample1)], projects(:project1).namespace, nil,
           metadata_fields: ['collection date'],
-          search_params: { 'sort' => 'metadata_collection date desc', 'name_or_puid_cont' => 'Sample' },
+          search_params: { 'sort' => 'metadata_collection date desc', 'name_or_puid_i_cont' => 'Sample' },
           virtual_pagination: { mode: :cursor, rows_url: '/rows.json', next_cursor: 'next', page_size: 100 }
         )
 
@@ -27,7 +27,7 @@ module Samples
         button = page.find('button[data-sort-field="metadata_collection date"]', visible: :all)
         query = Rack::Utils.parse_nested_query(URI.parse(button['data-sort-url']).query)
         assert_equal 'metadata_collection date asc', query.dig('q', 'sort')
-        assert_equal 'Sample', query.dig('q', 'name_or_puid_cont')
+        assert_equal 'Sample', query.dig('q', 'name_or_puid_i_cont')
         assert_selector 'a[data-turbo-frame="_top"]', text: samples(:sample1).name
       end
     end
