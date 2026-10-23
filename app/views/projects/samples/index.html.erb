@@ -188,13 +188,7 @@
   ) %>
 
   <% if @cursor_mode %>
-    <div
-      id="project-samples-sort-status"
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-      class="sr-only"
-    ></div>
+    <div id="project-samples-sort-status" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
     <%= render "cursor_results" %>
   <% else %>
     <% if @has_samples %>
