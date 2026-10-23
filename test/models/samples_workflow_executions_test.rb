@@ -14,6 +14,15 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
     assert @samples_workflow_executions_valid.valid?
   end
 
+  test 'requires a sample when creating a samples workflow execution' do
+    samples_workflow_execution = SamplesWorkflowExecution.new(
+      workflow_execution: workflow_executions(:workflow_execution_valid)
+    )
+
+    assert_not samples_workflow_execution.valid?
+    assert_includes samples_workflow_execution.errors[:sample], "can't be blank"
+  end
+
   test 'invalid mismatch puid' do
     samples_workflow_executions_invalid_mismatch_sample_puid = SamplesWorkflowExecution.new(
       sample_id: samples(:sample1).id,
