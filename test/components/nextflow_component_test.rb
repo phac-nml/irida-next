@@ -95,7 +95,51 @@ class NextflowComponentTest < ViewComponentTestCase
     end
   end
 
+  test 'required file param keeps its saved attachment and links its inline error' do
+    attachment = attachments(:snvphyl_project_attachment_ref)
+    instance = AutomatedWorkflowExecution.new(name: 'Saved',
+                                              workflow_params: { reference: attachment.to_global_id.to_s })
+
+    render_inline NextflowComponent.new(
+      workflow: required_file_workflow,
+      sample_count: nil,
+      url: 'https://nf-co.re/testpipeline',
+      namespace_id: projects(:snvphyl_project).namespace.id,
+      fields: [],
+      instance:
+    )
+
+    input_id = 'workflow_execution_workflow_params_reference'
+    assert_selector "input##{input_id}[type=hidden][data-required=true][value='#{attachment.to_global_id}']",
+                    visible: :all
+    assert_selector "a##{input_id}_link", text: attachment.file.filename.to_s
+    assert_selector "a##{input_id}_link[aria-describedby~='#{input_id}_error']"
+    assert_selector "legend##{input_id}_legend .sr-only", text: I18n.t('components.nextflow.required')
+    assert_selector "##{input_id}_error.hidden", visible: :all
+  end
+
   private
+
+  def required_file_workflow # rubocop:disable Metrics/MethodLength
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'Required file parameter',
+      overrides: {
+        definitions: {
+          reference_options: {
+            title: 'Reference options',
+            required: %w[reference],
+            properties: {
+              reference: { type: 'string', format: 'file-path', description: 'Reference file' }
+            }
+          }
+        }
+      }
+    }.with_indifferent_access
+    Irida::Pipeline.new('phac-nml/iridanextexample', entry, { name: '1.0.2' },
+                        Rails.root.join('test/fixtures/files/nextflow/nextflow_schema.json'),
+                        Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+  end
 
   def default_workflow
     Irida::Pipeline.new(

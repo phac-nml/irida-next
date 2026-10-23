@@ -6,8 +6,9 @@
   data-nextflow--v2--samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json %>"
   data-nextflow--v2--samplesheet-no-selected-file-value="<%= t("components.nextflow.samplesheet.file_cell_component.no_selected_file") %>"
   data-nextflow--v2--samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
-  data-nextflow--v2--samplesheet-automated-workflow-value="<%= @automated_workflow %>"
   data-nextflow--v2--samplesheet-name-missing-value="<%= t("components.nextflow_component.name.error") %>"
+  data-nextflow--v2--samplesheet-error-format-value="<%= t("errors.format") %>"
+  data-nextflow--v2--samplesheet-error-blank-value="<%= t("errors.messages.blank") %>"
   data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="<%= t("components.nextflow.update_samples") %>"
   data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="<%= t("components.nextflow.unauthorized_to_update_samples") %>"
   data-nextflow--v2--samplesheet-processing-error-value="<%= t("components.nextflow_component.samplesheet_processing_error") %>"
@@ -34,15 +35,19 @@
     "
   >
     <div class="flex w-full items-start">
-      <div class="mr-3 flex-shrink-0"><%= icon :x_circle, color: :danger %></div>
+      <div class="mr-3 shrink-0"><%= icon :x_circle, color: :danger %></div>
 
       <div class="mt-0.5 min-w-0 flex-1">
-        <div class="text-sm leading-5 font-medium" data-nextflow--v2--samplesheet-target="formFieldErrorMessage"></div>
+        <div
+          class="text-sm leading-5 font-medium whitespace-pre-line"
+          data-nextflow--v2--samplesheet-target="formFieldErrorMessage"
+        >
+        </div>
       </div>
     </div>
   </div>
 
-  <%= form_with url: url, method: (instance.nil? ? :post : :patch), data: { turbo_frame: "_top", "nextflow--v2--samplesheet-target": "form" } do |form| %>
+  <%= form_with url: url, method: (instance.nil? ? :post : :patch), data: { turbo_frame: "_top", "nextflow--v2--samplesheet-target": "form", action: "submit->nextflow--v2--samplesheet#validateFormInputs" } do |form| %>
     <%= hidden_field_tag :format, :turbo_stream, id: "submission_turbo" %>
 
     <%= fields_for :workflow_execution do |workflow| %>

@@ -56,8 +56,9 @@ export default class extends Controller {
     formError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
-    automatedWorkflow: { type: Boolean },
     nameMissing: { type: String },
+    errorFormat: { type: String },
+    errorBlank: { type: String },
     allowedToUpdateSamplesString: { type: String },
     notAllowedToUpdateSamplesString: { type: String },
     processingError: { type: String },
@@ -215,55 +216,55 @@ export default class extends Controller {
     this.#loadTableData();
   }
 
+  validateFormInputs(event) {
+    if (this.#validateRequiredFormInputs()) {
+      this.#disableFormFieldErrorState();
+    } else {
+      event.preventDefault();
+    }
+  }
+
   submitSamplesheet(event) {
     event.preventDefault();
     this.#enableSubmissionState();
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
-      // By default we set nameValid to true
-      let nameValid = true;
-
-      // If the workflow execution is not an automated workflow execution,
-      // we check to see if the name is valid
-      if (this.automatedWorkflowValue == false) {
-        nameValid = this.#validateWorkflowExecutionName();
+      const requiredFieldsValid = this.#validateRequiredFormInputs();
+      if (!requiredFieldsValid) {
+        this.#disableSubmissionState();
+        return;
       }
 
-      if (nameValid) {
-        this.#disableFormFieldErrorState();
+      this.#disableFormFieldErrorState();
 
-        const missingData = this.#validateData();
-        if (Object.keys(missingData).length > 0) {
-          this.#disableSubmissionState();
-          let errorMsg = this.dataMissingErrorValue;
-          for (const sample in missingData) {
-            errorMsg =
-              errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
-          }
-          this.#enableErrorState(errorMsg);
-        } else {
-          this.#disableErrorState();
-
-          this.formTarget.addEventListener(
-            "turbo:before-fetch-request",
-            (event) => {
-              event.detail.fetchOptions.body = JSON.stringify(
-                this.#compactFormData(),
-              );
-              event.detail.fetchOptions.headers["Content-Type"] =
-                "application/json";
-
-              event.detail.resume();
-            },
-            {
-              once: true,
-            },
-          );
-          this.formTarget.requestSubmit();
-        }
-      } else {
+      const missingData = this.#validateData();
+      if (Object.keys(missingData).length > 0) {
         this.#disableSubmissionState();
-        this.#enableFormFieldErrorState(this.formErrorValue);
+        let errorMsg = this.dataMissingErrorValue;
+        for (const sample in missingData) {
+          errorMsg =
+            errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
+        }
+        this.#enableErrorState(errorMsg);
+      } else {
+        this.#disableErrorState();
+
+        this.formTarget.addEventListener(
+          "turbo:before-fetch-request",
+          (event) => {
+            event.detail.fetchOptions.body = JSON.stringify(
+              this.#compactFormData(),
+            );
+            event.detail.fetchOptions.headers["Content-Type"] =
+              "application/json";
+
+            event.detail.resume();
+          },
+          {
+            once: true,
+          },
+        );
+        this.formTarget.requestSubmit();
       }
     }, 50);
   }
@@ -342,7 +343,8 @@ export default class extends Controller {
 
   #enableFormFieldErrorState(message) {
     this.formFieldErrorTarget.classList.remove("hidden");
-    this.formFieldErrorMessageTarget.innerHTML = message;
+    // Messages can include labels derived from pipeline schemas, so render as text.
+    this.formFieldErrorMessageTarget.textContent = message;
     this.formFieldErrorTarget.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -352,7 +354,7 @@ export default class extends Controller {
 
   #disableFormFieldErrorState() {
     this.formFieldErrorTarget.classList.add("hidden");
-    this.formFieldErrorMessageTarget.innerHTML = "";
+    this.formFieldErrorMessageTarget.textContent = "";
   }
 
   #renderProcessingError() {
@@ -363,7 +365,9 @@ export default class extends Controller {
   }
 
   #clearMessagesContainer() {
-    this.samplesheetMessagesContainerTarget.innerHTML = "";
+    if (this.hasSamplesheetMessagesContainerTarget) {
+      this.samplesheetMessagesContainerTarget.innerHTML = "";
+    }
   }
 
   #setSampleData(sampleId, columnName, value) {
@@ -888,22 +892,110 @@ export default class extends Controller {
     return params;
   }
 
-  #validateWorkflowExecutionName() {
-    const name = document.getElementById("workflow_execution_name");
-    let hasErrors = false;
+  #validateRequiredFormInputs() {
+    const requiredFields = this.formTarget.querySelectorAll(
+      "[aria-required='true'], input[type='hidden'][data-required='true']",
+    );
 
-    if (name.value === "") {
-      hasErrors = true;
+    const missingMessages = [];
+    let firstMissingField = null;
+
+    requiredFields.forEach((field) => {
+      let message = null;
+      if (field.value.trim() === "") {
+        firstMissingField ??= field;
+        message = this.#formatRequiredFieldErrorMessage(
+          this.#requiredFieldLabel(field),
+        );
+        missingMessages.push(message);
+      }
+      this.#setRequiredFieldErrorState(field, message);
+    });
+
+    if (!firstMissingField) {
+      return true;
     }
 
-    if (hasErrors) {
-      this.#addNameFieldErrorState();
-      return false;
-    } else {
-      this.#removeNameFieldErrorState();
+    this.#enableFormFieldErrorState(
+      `${this.formErrorValue}\n - ${missingMessages.join("\n - ")}`,
+    );
+    const focusTarget =
+      firstMissingField.type === "hidden"
+        ? this.#fileSelectorLink(firstMissingField)
+        : firstMissingField;
+    focusTarget?.focus();
+    return false;
+  }
+
+  // A null message clears the error state.
+  #setRequiredFieldErrorState(field, message) {
+    if (field.id === "workflow_execution_name") {
+      if (message) {
+        this.#addNameFieldErrorState();
+      } else {
+        this.#removeNameFieldErrorState();
+      }
+      return;
     }
 
-    return true;
+    // Workflow param controls are styled from aria-invalid; hidden file inputs flag their selector link too.
+    const elements =
+      field.type === "hidden"
+        ? [field, this.#fileSelectorLink(field)]
+        : [field];
+    elements.forEach((element) => {
+      if (!element) {
+        return;
+      }
+      if (message) {
+        element.setAttribute("aria-invalid", "true");
+      } else {
+        element.removeAttribute("aria-invalid");
+      }
+    });
+
+    // Inline error text, referenced by the control's aria-describedby
+    const fieldError = this.#relatedElement(field, "error");
+    if (fieldError) {
+      fieldError.querySelector(".grow").textContent = message ?? "";
+      fieldError.classList.toggle("hidden", !message);
+    }
+  }
+
+  #fileSelectorLink(field) {
+    return this.#relatedElement(field, "link");
+  }
+
+  // Elements rendered alongside a workflow param share its id with a suffix, e.g. `_link` or `_legend`.
+  #relatedElement(field, suffix) {
+    return this.formTarget.querySelector(
+      `#${CSS.escape(`${field.id}_${suffix}`)}`,
+    );
+  }
+
+  #requiredFieldLabel(field) {
+    // Hidden file inputs are labelled by their fieldset legend.
+    const label =
+      field.type === "hidden"
+        ? this.#relatedElement(field, "legend")
+        : this.formTarget.querySelector(`label[for='${CSS.escape(field.id)}']`);
+    if (!label) {
+      return field.name;
+    }
+
+    // Drop the required asterisk and its visually hidden text.
+    const labelText = label.cloneNode(true);
+    labelText
+      .querySelectorAll("[aria-hidden='true'], [data-required-indicator]")
+      .forEach((node) => node.remove());
+    return labelText.textContent.trim();
+  }
+
+  #formatRequiredFieldErrorMessage(fieldLabel) {
+    // Use replacer functions so `$` sequences in labels aren't treated as special patterns
+    return this.errorFormatValue
+      .replaceAll("%{attribute}", () => fieldLabel)
+      .replaceAll("%{message}", () => this.errorBlankValue);
   }
 
   #addNameFieldErrorState() {
@@ -921,7 +1013,7 @@ export default class extends Controller {
     name.classList.remove(...FIELD_CLASSES["VALID"]);
     name.classList.add(...FIELD_CLASSES["ERROR"]);
     nameError.classList.remove("hidden");
-    nameErrorSpan.innerHTML = this.nameMissingValue;
+    nameErrorSpan.textContent = this.nameMissingValue;
     nameErrorSpan.classList.add(...FIELD_CLASSES["ERROR_SPAN"]);
     nameHint.classList.add("hidden");
     nameField.classList.add("invalid");

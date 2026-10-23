@@ -2,26 +2,21 @@
 
 # Helper to render a Nextflow pipeline form
 module NextflowHelper
-  def form_input(container, name, property, required, instance) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+  def form_input(container, name, property, instance, describedby: nil)
     value = instance.present? ? instance['workflow_params'][name.to_s] : property[:default]
+    options = {
+      class: 'workflow-parameter-input',
+      aria: { required: property[:required] ? 'true' : nil, describedby: }
+    }
 
     if property[:enum].present?
-      return render(Viral::Form::Prefixed::SelectComponent.new(form: container, name:, options: property[:enum],
-                                                               selected_value: value)) do |select|
-               select.with_prefix do
-                 format_name_as_arg(name)
-               end
-             end
+      # Without a blank option the browser preselects the first value, so a required choice could never be missing.
+      select_options = { selected: value, include_blank: property[:required] && value.nil? }
+      return container.select(name, property[:enum], select_options, options)
     end
 
     data = { 'metadata-header-name': name.to_s.remove('_header') } if metadata_header?(name.to_s)
-
-    render(Viral::Form::Prefixed::TextInputComponent.new(form: container, name:, required:, pattern: property[:pattern],
-                                                         value:, data:)) do |input|
-      input.with_prefix do
-        format_name_as_arg(name)
-      end
-    end
+    container.text_field(name, **options, value:, pattern: property[:pattern], data:)
   end
 
   def format_name_as_arg(name)
