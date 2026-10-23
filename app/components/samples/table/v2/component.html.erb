@@ -5,23 +5,24 @@
       description: @empty[:description],
       icon_name: Sample.icon,
     ) %>
+
+    <p class="mt-2 text-[length:var(--type-meta)] text-[var(--pvc-color-text-muted)]" data-samples-total>
+      <%= t("samples.table_component.counts.samples") %>: <strong>0</strong>
+    </p>
   </div>
 <% else %>
-  <%= render Pathogen::DataGridComponent.new(rows: @samples, fill_container: true, **data_grid_arguments) do |grid| %>
-    <% @columns.each do |column| %>
-      <% grid.with_column(
-        data_grid_label(column),
-        width: data_grid_width(column),
-        sticky: data_grid_sticky?(column),
-        sticky_left: data_grid_sticky_left(column)
-      ) do |sample| %>
-        <%= render_column_value(column, sample) %>
-      <% end %>
-    <% end %>
-
-    <% @metadata_fields.each do |field| %>
-      <% grid.with_column(field) do |sample| %>
-        <%= metadata_value(sample, field) %>
+  <%= render data_grid do |grid| %>
+    <% if @pagy %>
+      <% grid.with_footer do %>
+        <div
+          class="
+            border-t border-[var(--pvc-color-border)] px-[var(--pvc-data-grid-cell-padding-x)] py-2
+            text-[length:var(--type-meta)] text-[var(--pvc-color-text-muted)]
+          "
+          data-samples-total
+        >
+          <%= t("samples.table_component.counts.samples") %>: <strong><%= number_with_delimiter(@pagy.count) %></strong>
+        </div>
       <% end %>
     <% end %>
   <% end %>
