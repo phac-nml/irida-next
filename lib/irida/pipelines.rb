@@ -4,6 +4,7 @@ require 'json'
 require 'uri'
 require 'git'
 require 'tmpdir'
+require 'tempfile'
 require 'irida/pipeline'
 require 'irida/pipeline_repository'
 
@@ -79,44 +80,35 @@ module Irida
 
     def create_pipeline(pipeline_id, entry, version)
       uri = URI.parse(entry['url'])
-      nextflow_schema_location, schema_input_location = mirror_and_prepare_schema_locations(uri, version)
+      schema_locations = schema_store.mirror_and_prepare_schema_locations(uri, version)
 
-      Pipeline.new(pipeline_id, entry, version, nextflow_schema_location, schema_input_location)
+      Pipeline.new(pipeline_id, entry, version, *schema_locations)
+    rescue JSON::ParserError => e
+      log_pipeline_error(pipeline_id, version, "has invalid schema JSON: #{e.message}")
+      non_executable_pipeline(pipeline_id, entry, version)
     rescue PipelinesInvalidUrlException => e
-      if e.previously_fetched # log error and mark pipeline as non executable
-        Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be updated")
-        version['executable'] = false
-        Pipeline.new(pipeline_id, entry, version, nil, nil)
-      else # log error and skip this pipeline
-        Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} could not be registered")
+      handle_invalid_url(e, pipeline_id, entry, version)
+    end
+
+    # Marks a pipeline as non executable when its schema could not be updated,
+    # otherwise skips registration entirely for a never-fetched pipeline.
+    def handle_invalid_url(error, pipeline_id, entry, version)
+      if error.previously_fetched
+        log_pipeline_error(pipeline_id, version, 'could not be updated')
+        non_executable_pipeline(pipeline_id, entry, version)
+      else
+        log_pipeline_error(pipeline_id, version, 'could not be registered')
         nil
       end
     end
 
-    def mirror_and_prepare_schema_locations(uri, version)
-      pipeline_repo_dir = pipeline_repo_dir_for(uri)
-      pipeline_repo = PipelineRepository.mirror_repo(uri, pipeline_repo_dir)
-
-      nextflow_schema_location = copy_schema_file(pipeline_repo, uri, version, 'nextflow_schema')
-      schema_input_location = copy_schema_file(pipeline_repo, uri, version, 'schema_input')
-
-      [nextflow_schema_location, schema_input_location]
-    rescue Git::Error => e
-      previously_fetched = pipeline_schema_files_exist?(uri, version)
-      raise PipelinesInvalidUrlException.new('404', previously_fetched), e.message
+    def non_executable_pipeline(pipeline_id, entry, version)
+      version['executable'] = false
+      Pipeline.new(pipeline_id, entry, version, nil, nil)
     end
 
-    def pipeline_repo_dir_for(uri)
-      path = uri.path.sub(%r{\A/}, '')
-      path += '.git' unless path.end_with?('.git')
-
-      Rails.root.join(@pipeline_repo_dir, path)
-    end
-
-    def pipeline_schema_files_exist?(uri, version)
-      pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path.sub(%r{\A/}, ''), version['name'])
-      File.exist?(File.join(pipeline_schema_files_path, 'nextflow_schema.json')) ||
-        File.exist?(File.join(pipeline_schema_files_path, 'assets', 'schema_input.json'))
+    def log_pipeline_error(pipeline_id, version, message)
+      Rails.logger.error("Pipeline #{pipeline_id}_#{version['name']} #{message}")
     end
 
     # read in the json pipeline config
@@ -131,12 +123,56 @@ module Irida
       data
     end
 
+    def schema_store
+      @schema_store ||= PipelineSchemaStore.new(
+        schema_file_dir: @pipeline_schema_file_dir,
+        repo_dir: @pipeline_repo_dir
+      )
+    end
+  end
+
+  # Mirrors pipeline git repositories and writes their schema files to disk,
+  # keeping repository I/O separate from pipeline registration.
+  class PipelineSchemaStore
+    def initialize(schema_file_dir:, repo_dir:)
+      @schema_file_dir = schema_file_dir
+      @repo_dir = repo_dir
+    end
+
+    # Returns [nextflow_schema_location, schema_input_location].
+    # Raises Pipelines::PipelinesInvalidUrlException when the repo is unreachable.
+    def mirror_and_prepare_schema_locations(uri, version)
+      pipeline_repo = PipelineRepository.mirror_repo(uri, repo_dir_for(uri))
+
+      [
+        copy_schema_file(pipeline_repo, uri, version, 'nextflow_schema'),
+        copy_schema_file(pipeline_repo, uri, version, 'schema_input')
+      ]
+    rescue Git::Error => e
+      raise Pipelines::PipelinesInvalidUrlException.new('404', schema_files_exist?(uri, version)), e.message
+    end
+
+    private
+
+    def repo_dir_for(uri)
+      path = uri.path.sub(%r{\A/}, '')
+      path += '.git' unless path.end_with?('.git')
+
+      Rails.root.join(@repo_dir, path)
+    end
+
+    def schema_files_exist?(uri, version)
+      schema_path = File.join(@schema_file_dir, uri.path.sub(%r{\A/}, ''), version['name'])
+      File.exist?(File.join(schema_path, 'nextflow_schema.json')) ||
+        File.exist?(File.join(schema_path, 'assets', 'schema_input.json'))
+    end
+
     def copy_schema_file(repo, uri, version, type)
       filename = type == 'nextflow_schema' ? "#{type}.json" : "assets/#{type}.json"
       contents = repo.file_contents_at(version['name'], filename)
 
-      pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path.sub(%r{\A/}, ''), version['name'])
-      schema_location = Rails.root.join(pipeline_schema_files_path, filename)
+      schema_path = File.join(@schema_file_dir, uri.path.sub(%r{\A/}, ''), version['name'])
+      schema_location = Rails.root.join(schema_path, filename)
 
       write_schema_file(contents, schema_location)
       schema_location
@@ -146,7 +182,13 @@ module Irida
       dir = File.dirname(schema_location)
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-      File.write(schema_location, contents)
+      Tempfile.create(['schema', '.json'], dir) do |tmpfile|
+        tmpfile.binmode
+        tmpfile.write(contents.to_s)
+        tmpfile.flush
+        tmpfile.fsync
+        FileUtils.mv(tmpfile.path, schema_location)
+      end
     end
   end
 end
