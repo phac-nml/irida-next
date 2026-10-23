@@ -474,27 +474,6 @@ input[type="search"] {
   }
 }
 
-@utility avatar {
-  @apply relative inline-flex flex-none items-center justify-center overflow-hidden rounded-lg text-slate-800 dark:text-white;
-  --tw-avatar-bg-lightness: 35%;
-  --tw-avatar-border-lightness: 35%;
-  --tw-avatar-bg-alpha: 0.3;
-
-  .dark & {
-    --tw-avatar-bg-lightness: 25%;
-    --tw-avatar-border-lightness: 90%;
-    --tw-avatar-bg-alpha: 0.4;
-  }
-}
-
-@utility dark {
-  & .avatar {
-    --tw-avatar-bg-lightness: 25%;
-    --tw-avatar-border-lightness: 90%;
-    --tw-avatar-bg-alpha: 0.4;
-  }
-}
-
 @utility treegrid-container {
   --treegrid-padding: 30px;
 

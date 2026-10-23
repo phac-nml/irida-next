@@ -25,6 +25,7 @@ module Projects
       assert_select 'h1', text: I18n.t(:'dashboard.projects.index.title')
       assert_select '#groups_tree', count: 1
       assert_select '.treegrid-row', count: 20
+      assert_select 'span[class*="h-8"][class*="w-8"]', minimum: 1
       assert_select 'a', text: I18n.t(:'components.viral.pagy.pagination_component.previous'), count: 0
       assert_select 'a', exact_text: I18n.t(:'components.viral.pagy.pagination_component.next')
     end

@@ -22,6 +22,7 @@ class PageHeaderComponentSystemTest < ApplicationSystemTestCase
     visit('/rails/view_components/viral_page_header_component/with_avatar')
     assert_selector 'h1', text: 'Page header with Icons'
     assert_selector 'p', text: 'This is a page header'
-    assert_selector 'section span.avatar'
+    assert_selector "section span[role='img'][aria-label='Outbreak 2021'].rounded-md.h-16.w-16"
+    assert_no_selector "section span[role='img'][aria-label='Outbreak 2021'].rounded-full"
   end
 end
