@@ -2181,6 +2181,13 @@ module Projects
       ### VERIFY START ###
       assert_no_selector 'dialog[open]'
       assert_selector 'table tbody tr:first-child td:nth-child(7)', text: 'New Value'
+
+      find('table tbody tr:first-child td:nth-child(7)').click
+      find('table tbody tr:first-child td:nth-child(7)').send_keys([:control, 'a'], :backspace)
+      find('body').click
+      assert_selector 'dialog[open]', text: 'delete the current value from the sample'
+
+      click_button I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
       ### VERIFY END ###
     end
 
