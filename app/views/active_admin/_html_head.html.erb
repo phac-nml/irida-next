@@ -8,7 +8,10 @@
 
 <%# Keep this in head to prevent flash of incorrect theme while pages initialize. %>
 <%= tag.script nonce: content_security_policy_nonce do %>
-  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  var hasStoredTheme = 'theme' in localStorage
+  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var useDarkTheme = localStorage.theme === 'dark' || (!hasStoredTheme ? prefersDark : false)
+  if (useDarkTheme) {
     document.documentElement.classList.add('dark')
   } else {
     document.documentElement.classList.remove('dark')
