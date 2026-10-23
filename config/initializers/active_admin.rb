@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-ActiveAdmin.importmap.pin 'active_admin_navigation', to: 'active_admin_navigation.js'
-
 ActiveAdmin.setup do |config|
   # == Site Title
   #
