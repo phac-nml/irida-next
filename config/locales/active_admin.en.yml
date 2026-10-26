@@ -57,6 +57,7 @@ en:
         enabled: Enabled
       title: Feature Flags
     logout: Sign out
+    main_navigation: Main navigation
     site_banners:
       disable: Disable
       disable_confirm: Disable this site banner?

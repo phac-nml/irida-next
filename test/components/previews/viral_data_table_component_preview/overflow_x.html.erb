@@ -41,7 +41,7 @@
     <%= local_time_ago(row[:time_ago_date]) %>
   <% end %>
 
-  <% table.with_column(I18n.t('workflow_executions.table_component.actions'), sticky_key: :right) do |row| %>
+  <% table.with_column(I18n.t('workflow_executions.table_component.actions'), sticky_key: :right) do %>
     <%= link_to(
       "Action 1",
       "",
