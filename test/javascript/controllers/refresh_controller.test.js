@@ -27,6 +27,45 @@ describe("refresh controller", () => {
     );
   }
 
+  it.each(["missing-frame", "missing-url", "empty-url"])(
+    "does not reload the page when a scoped refresh target is unavailable: %s",
+    async (state) => {
+      await mount();
+      controller.frameIdValue = "results";
+      if (state !== "missing-frame") {
+        const frame = document.createElement("turbo-frame");
+        frame.id = "results";
+        if (state === "empty-url")
+          frame.innerHTML = '<div data-cursor-refresh-url=""></div>';
+        document.body.appendChild(frame);
+      }
+      broadcast();
+      controller.refresh();
+      expect(notice.classList.contains("hidden")).toBe(false);
+    },
+  );
+
+  it.each([false, true])(
+    "refreshes only the requested result frame; existing src=%s",
+    async (sameSource) => {
+      await mount();
+      controller.frameIdValue = "results";
+      const frame = document.createElement("turbo-frame");
+      frame.id = "results";
+      frame.innerHTML =
+        '<div data-cursor-refresh-url="/samples?q%5Bsort%5D=name+asc"></div>';
+      if (sameSource)
+        frame.setAttribute("src", "/samples?q%5Bsort%5D=name+asc");
+      frame.reload = vi.fn();
+      document.body.appendChild(frame);
+      broadcast();
+      controller.refresh();
+      expect(notice.classList.contains("hidden")).toBe(true);
+      if (sameSource) expect(frame.reload).toHaveBeenCalledOnce();
+      else expect(frame.src).toBe("/samples?q%5Bsort%5D=name+asc");
+    },
+  );
+
   function broadcast(data = '<turbo-stream action="refresh"></turbo-stream>') {
     const downstream = vi.fn();
     source.addEventListener("message", downstream, { once: true });

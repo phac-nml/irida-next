@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["notice", "source"];
+  static values = { frameId: String };
   #ignoreNextRefresh;
   #ignoreTimeoutId;
   #debounceTimeoutId;
@@ -66,6 +67,17 @@ export default class extends Controller {
   }
 
   refresh() {
+    if (this.hasFrameIdValue) {
+      const frame = document.getElementById(this.frameIdValue);
+      const url = frame?.querySelector("[data-cursor-refresh-url]")?.dataset
+        .cursorRefreshUrl;
+      if (!frame || !url) return;
+      this.dismiss();
+      if (frame.getAttribute("src") === url) frame.reload();
+      else frame.src = url;
+      return;
+    }
+
     // Reload the current page
     window.location.reload();
   }

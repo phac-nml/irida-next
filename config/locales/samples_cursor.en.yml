@@ -1,0 +1,11 @@
+---
+en:
+  projects:
+    samples:
+      cursor:
+        browsing_hint: Browse and sort samples here. Use the standard table for selection and bulk actions.
+        invalid_query: This filter or sort is not available for this table. Change the search or use the standard table.
+        sort_asc: Sort %{column} ascending
+        sort_desc: Sort %{column} descending
+        sorted_asc: Sorted by %{column}, ascending.
+        sorted_desc: Sorted by %{column}, descending.
