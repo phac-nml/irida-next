@@ -27,8 +27,8 @@ importers:
         specifier: ^8.0.23
         version: 8.0.23
       '@rails/activestorage':
-        specifier: ^7.2.302
-        version: 7.2.302
+        specifier: ^8.1.400
+        version: 8.1.400
       '@sindresorhus/slugify':
         specifier: ^2.2.1
         version: 2.2.1
@@ -622,8 +622,8 @@ packages:
   '@rails/actioncable@7.2.302':
     resolution: {integrity: sha512-9JOPzUb7RCqIEWeoE78mPFd71fzyJ25LjeMzD45zQ75f41ca7BsgQVqiyrIuxDZ1yyZ4PdyxCMZF0KJlJ9qX0g==}
 
-  '@rails/activestorage@7.2.302':
-    resolution: {integrity: sha512-WUKOoimfKHa6h7Ir9qpFGoRHg1p2PoU1wD9k4JLRDd42xb6PktY31m6U312zgUCGGq1Sl6voQY9fsE/Xn/+z6Q==}
+  '@rails/activestorage@8.1.400':
+    resolution: {integrity: sha512-ScpkkHXTQ7QByvzLbnrnubpsWRKhlu08kXyRhSV+Hh1s1X43lv5T0PFLhXAvmqrIcq8nQ2up8iyuCmIzacPDDw==}
 
   '@rails/ujs@7.1.600':
     resolution: {integrity: sha512-ntMYJ8++n1zcIJ1g75or7Va9IU3ueCHgp9IJk7Ny7eFEbu0Kx40EHZ2FNhoxoUEjlF5NifCFCbvoK5rDK5HpIQ==}
@@ -2584,7 +2584,7 @@ snapshots:
 
   '@rails/actioncable@7.2.302': {}
 
-  '@rails/activestorage@7.2.302':
+  '@rails/activestorage@8.1.400':
     dependencies:
       spark-md5: 3.0.2
 
