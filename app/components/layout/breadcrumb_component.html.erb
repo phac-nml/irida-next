@@ -30,11 +30,7 @@
       <li class="p-2 whitespace-nowrap" data-breadcrumb-target="crumb">
         <% if index == @links.length - 1 %>
           <!-- Current page (last item) -->
-          <span
-            class="py-3 text-sm font-medium text-slate-900 dark:text-white"
-            aria-current="page"
-            title="<%= link[:name] %>"
-          >
+          <span class="py-3 text-sm font-medium text-slate-900 dark:text-white" aria-current="page">
             <%= link[:name] %>
           </span>
         <% else %>
