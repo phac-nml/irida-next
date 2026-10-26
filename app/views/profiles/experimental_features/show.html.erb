@@ -1,12 +1,6 @@
 <%= render Layout::PageHeaderComponent.new(title: t(".title")) %>
 
-<div
-  id="experimental-features-live-announcer"
-  role="status"
-  aria-live="polite"
-  aria-atomic="true"
-  class="sr-only"
-></div>
+<div id="experimental-features-live-announcer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
 <%= render Viral::CardComponent.new do |card| %>
   <% card.with_section(border_bottom: true, border_top: true) do %>
