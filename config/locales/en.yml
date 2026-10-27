@@ -1550,9 +1550,6 @@ en:
         subtitle: Setup automated pipelines to launch when paired-end data is uploaded to the project
         title: Automated Pipelines
       launch:
-        error:
-          no_samples_found: No samples found matching the provided search criteria
-          no_search_params: Please provide search parameters to trigger the automated pipeline
         success: Triggered automated pipeline %{workflow_name} for %{sample_count} sample(s)
       new_automated_workflow_execution_modal:
         title: "%{workflow} parameters"
@@ -1571,17 +1568,9 @@ en:
           updated_at: Updated
           workflow_name: Workflow Name
           workflow_version: Workflow Version
-      trigger:
-        name: Name
-        search_form_title: Search for samples to trigger
-        subtitle: Provide search parameters to select samples for this automated pipeline
-        title: Trigger Automated Pipeline
       trigger_modal:
-        name: Name
         search_form_title: Search for samples to trigger
         title: Trigger Automated Pipeline
-        version: Version
-        workflow_name: Workflow Name
       update:
         error: Could not update automated pipeline for %{workflow_name}
         success: Automated pipeline for %{workflow_name} was successfully updated
