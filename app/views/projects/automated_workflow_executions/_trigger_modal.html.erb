@@ -57,7 +57,8 @@
         automated_workflow_execution
       ), method: :post, data: {
         turbo_action: 'replace',
-        controller: "form--json-submission",
+        controller: "advanced-search--v2--standalone form--json-submission",
+        "advanced-search--v2--standalone-advanced-search--v2--builder-outlet": "#advanced-search-builder",
         "form--json-submission-target": "form",
       }, local: true do |f| %>
         <%= render AdvancedSearch::V2::BuilderComponent.new(
