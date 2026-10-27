@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import {
   focusCondition,
   focusConditionField,
-} from "../../utilities/advanced_search_focus.js";
+} from "utilities/advanced_search_focus";
 
 export default class AdvancedSearchController extends Controller {
   static targets = [

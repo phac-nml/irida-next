@@ -123,6 +123,10 @@ export default defineConfig({
       "utilities/flash": resolve(jsRoot, "utilities/flash.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
       "utilities/focus": resolve(jsRoot, "utilities/focus.js"),
+      "utilities/advanced_search_focus": resolve(
+        jsRoot,
+        "utilities/advanced_search_focus.js",
+      ),
       "utilities/refresh": resolve(jsRoot, "utilities/refresh.js"),
       "utilities/styles": resolve(jsRoot, "utilities/styles.js"),
       "utilities/dialog": resolve(jsRoot, "utilities/dialog.js"),

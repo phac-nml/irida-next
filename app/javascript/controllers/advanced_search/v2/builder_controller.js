@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import {
   focusCondition,
   focusConditionField,
-} from "../../../utilities/advanced_search_focus.js";
+} from "utilities/advanced_search_focus";
 
 const LIST_OPERATORS = new Set(["in", "not_in", "text_in", "text_not_in"]);
 const BETWEEN_OPERATORS = /between/;
