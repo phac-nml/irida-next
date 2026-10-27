@@ -1,4 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
+import {
+  focusCondition,
+  focusConditionField,
+} from "../../utilities/advanced_search_focus.js";
 
 export default class AdvancedSearchController extends Controller {
   static targets = [
@@ -123,7 +127,7 @@ export default class AdvancedSearchController extends Controller {
     } else {
       this.#reindexGroup(group, this.#groupElements().indexOf(group));
       const focusIndex = Math.min(removedIndex, remainingConditions.length - 1);
-      remainingConditions[focusIndex].focus();
+      focusCondition(remainingConditions[focusIndex]);
     }
   }
 
@@ -164,7 +168,7 @@ export default class AdvancedSearchController extends Controller {
     const focusGroup =
       remainingGroups[Math.min(removedIndex, remainingGroups.length - 1)];
     const focusCondition = this.#conditionElements(focusGroup)[0];
-    this.#focusConditionInput(focusCondition);
+    focusConditionField(focusCondition);
   }
 
   clearForm() {
@@ -284,7 +288,7 @@ export default class AdvancedSearchController extends Controller {
     }
 
     this.#reindexGroup(group, groupIndex);
-    this.#focusConditionInput(this.#conditionElements(group).at(-1));
+    focusConditionField(this.#conditionElements(group).at(-1));
   }
 
   #groupActionsContainer(group) {
@@ -461,24 +465,6 @@ export default class AdvancedSearchController extends Controller {
 
       removeButton.classList.toggle("hidden", !showRemoveButton);
     });
-  }
-
-  #focusConditionInput(condition) {
-    if (!condition) {
-      return;
-    }
-
-    const fieldInput =
-      condition.querySelector("input[role='combobox']") ||
-      condition.querySelector("select[name$='[field]']") ||
-      condition.querySelector("[name$='[field]']:not([type='hidden'])");
-
-    if (fieldInput) {
-      fieldInput.focus();
-      return;
-    }
-
-    condition.querySelector("input:not([type='hidden'])")?.focus();
   }
 
   #focusFirstInvalidField() {

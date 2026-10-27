@@ -1054,6 +1054,28 @@ describe("advanced-search--v2--builder", () => {
     expect(survivor.contains(document.activeElement)).toBe(true);
   });
 
+  it("skips hidden and disabled field controls when focusing a new condition", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    await tick();
+    controller.addGroup();
+    await tick();
+    const survivor = conditions(groups()[0])[0];
+    const fieldName = survivor.querySelector("[name$='[field]']").name;
+    survivor.querySelector(".form-field").innerHTML = `
+      <input type="hidden" name="${fieldName}">
+      <select name="${fieldName}" disabled></select>
+      <input id="available-field">
+    `;
+
+    groups()[1].querySelector("button[data-action$='#removeGroup']").click();
+
+    expect(survivor.querySelector("#available-field")).toHaveFocus();
+    expect(survivor.querySelector("input[type='hidden']")).not.toHaveFocus();
+    expect(survivor.querySelector("select[disabled]")).not.toHaveFocus();
+  });
+
   it("serializes multi-select values from selected options", async () => {
     application = await startController();
     const controller = controllerInstance(application);

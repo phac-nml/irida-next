@@ -215,6 +215,24 @@ describe(identifier, () => {
     expect(survivor.querySelector("input[role='combobox']")).toHaveFocus();
   });
 
+  it("skips hidden and disabled field controls when focusing a new condition", async () => {
+    controller.addGroup();
+    await tick();
+    const survivor = conditions()[0];
+    const fieldName = survivor.querySelector("[name$='[field]']").name;
+    survivor.querySelector(".form-field").innerHTML = `
+      <input type="hidden" name="${fieldName}">
+      <select name="${fieldName}" disabled></select>
+      <input id="available-field">
+    `;
+
+    button(groups()[1], "removeGroup").click();
+
+    expect(survivor.querySelector("#available-field")).toHaveFocus();
+    expect(survivor.querySelector("input[type='hidden']")).not.toHaveFocus();
+    expect(survivor.querySelector("select[disabled]")).not.toHaveFocus();
+  });
+
   it.each([0, 1])(
     "removes group %i, reindexes survivors and hides the final remove button",
     async (index) => {
