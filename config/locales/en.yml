@@ -60,6 +60,7 @@ en:
           attributes:
             q:
               no_samples_found: Search did not return any samples to trigger on
+              no_samples_with_pe_attachments: Search did not return any samples with paired-end files to trigger on
               no_search_params: No search parameters were provided
         concatenation_form:
           attributes:

@@ -151,12 +151,19 @@ module Projects
       )
 
       if @trigger_form.valid?
-        @samples = @trigger_form.samples
-        launch_workflow_for_samples(@samples)
-        flash[:success] = t('.success',
-                            workflow_name: @automated_workflow_execution.workflow.name,
-                            sample_count: @samples.count)
-        redirect_to namespace_project_workflow_executions_path(@project.parent, @project)
+        samples = @trigger_form.samples
+        launched_samples_count = launch_workflow_for_samples(samples)
+
+        if launched_samples_count.zero?
+          @query = @trigger_form.query_object
+          @trigger_form.errors.add(:q, :no_samples_with_pe_attachments)
+          render 'trigger', status: :unprocessable_content, formats: :turbo_stream
+        else
+          flash[:success] = t('.success',
+                              workflow_name: @automated_workflow_execution.workflow.name,
+                              sample_count: launched_samples_count)
+          redirect_to namespace_project_workflow_executions_path(@project.parent, @project)
+        end
       else
         @query = @trigger_form.query_object
         advanced_search_fields(@project.namespace)
@@ -181,6 +188,7 @@ module Projects
     end
 
     def launch_workflow_for_samples(samples)
+      launched_samples_count = 0
       samples.each do |sample|
         pe_attachment_pair = find_newest_pe_attachment_pair(sample)
         next if pe_attachment_pair.blank?
@@ -191,7 +199,10 @@ module Projects
           pe_attachment_pair,
           @project.namespace.automation_bot
         ).execute
+        launched_samples_count += 1
       end
+
+      launched_samples_count
     end
 
     # rubocop:disable-next Metrics/MethodLength

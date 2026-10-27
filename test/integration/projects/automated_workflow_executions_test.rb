@@ -380,6 +380,39 @@ module Projects
     end
 
     test 'handles error when triggering automated workflow execution fails due to search not returning any samples' do
+      sample = samples(:sample1)
+      Flipper.enable(:trigger_automated_workflow_execution)
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+
+      post launch_namespace_project_automated_workflow_execution_path(
+        @namespace, @project, automated_workflow_execution
+      ),
+           params: {
+             q: {
+               groups_attributes: {
+                 '0' => {
+                   'conditions_attributes' => {
+                     '0' => {
+                       field: 'name',
+                       operator: '=',
+                       value: sample.name
+                     }
+                   }
+                 }
+               }
+             },
+             format: :turbo_stream
+           }
+
+      assert_response :unprocessable_content
+
+      assert_includes @response.body, I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
+                                             'attributes.q.no_samples_with_pe_attachments')
+    ensure
+      Flipper.disable(:trigger_automated_workflow_execution)
+    end
+
+    test 'handles error when triggering automated workflow execution fails due to no samples with PE attachments' do
       Flipper.enable(:trigger_automated_workflow_execution)
       automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
 
