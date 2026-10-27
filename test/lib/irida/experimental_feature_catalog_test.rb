@@ -19,8 +19,9 @@ module Irida
         client_linelist_imports_v1
         data_grid_samples_table
         global_groups
-        sample_deletion_reason
         prevent_sample_deletions_and_transfers_with_active_workflows
+        sample_deletion_reason
+        trigger_automated_workflow_execution
         v2_dropdown
         v2_prefixed_select2
         v2_sample_transfer
