@@ -35,7 +35,7 @@ describe("breadcrumb controller", () => {
               `<a role="menuitem" href="/level-${index}">Level ${index}</a>`,
           )
           .join("")}</li>
-        ${widths.map((_, index) => `<li data-breadcrumb-target="crumb">${currentLabel && index === widths.length - 1 ? '<span aria-current="page" title="Current page"> Current page </span>' : `<a href="/level-${index}">Level ${index}</a>`}</li>`).join("")}
+        ${widths.map((_, index) => `<li data-breadcrumb-target="crumb">${currentLabel && index === widths.length - 1 ? '<span aria-current="page"> Current page </span>' : `<a href="/level-${index}">Level ${index}</a>`}</li>`).join("")}
       </ol>
     </nav>`;
     element = document.querySelector("nav");
@@ -113,9 +113,9 @@ describe("breadcrumb controller", () => {
       expect(visible()).toEqual([2]);
       expect(menuVisible()).toEqual([0, 1]);
       expect(crumbs[2].classList.contains("truncate")).toBe(true);
-      expect(crumbs[2].querySelector('[aria-current="page"]').title).toBe(
-        "Current page",
-      );
+      expect(
+        crumbs[2].querySelector('[aria-current="page"]').hasAttribute("title"),
+      ).toBe(false);
     },
   );
   it("restores hidden ancestors and removes truncation when widened", async () => {

@@ -1,7 +1,8 @@
 <nav
   aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>"
   class="h-14 w-full min-w-0 overflow-hidden"
-  data-controller="breadcrumb"
+  data-controller="breadcrumb pathogen--tooltip"
+  data-pathogen--tooltip-portal-aria-label-value="<%= Pathogen::Tooltip.portal_aria_label %>"
 >
   <ol class="flex h-full w-full min-w-0 items-center" data-breadcrumb-target="list">
     <!-- Overflow dropdown -->
@@ -30,7 +31,13 @@
       <li class="p-2 whitespace-nowrap" data-breadcrumb-target="crumb">
         <% if index == @links.length - 1 %>
           <!-- Current page (last item) -->
-          <span class="py-3 text-sm font-medium text-slate-900 dark:text-white" aria-current="page">
+          <span
+            class="block truncate py-3 text-sm font-medium text-slate-900 focus-visible:-outline-offset-3 dark:text-white"
+            aria-current="page"
+            tabindex="0"
+            aria-describedby="<%= @tooltip_id %>"
+            data-pathogen--tooltip-target="trigger"
+          >
             <%= link[:name] %>
           </span>
         <% else %>
@@ -46,4 +53,6 @@
       </li>
     <% end %>
   </ol>
+
+  <%= render Pathogen::Tooltip.new(text: @links.last[:name], id: @tooltip_id, placement: :bottom, class: "whitespace-normal wrap-anywhere") %>
 </nav>
