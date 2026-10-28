@@ -29,11 +29,12 @@ module AdvancedSearch
       return if empty_search?(record)
 
       if structurally_empty_search?(record)
-        record.errors.add :base, :invalid
+        record.errors.add :base, :invalid unless record.errors.added?(:base, :invalid)
         return
       end
 
       record.groups.each do |group|
+        group.errors.clear
         validate_fields(group)
       end
 
@@ -93,6 +94,7 @@ module AdvancedSearch
 
     def validate_fields(group) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       group.conditions.each_with_index do |condition, condition_index|
+        condition.errors.clear
         validate_blank_inputs(condition)
 
         validate_field(condition) if condition.field.present?
@@ -110,7 +112,7 @@ module AdvancedSearch
 
       return unless group.conditions.any? { |condition| condition.errors.any? }
 
-      group.errors.add :base, :invalid
+      group.errors.add :base, :invalid unless group.errors.added?(:base, :invalid)
     end
 
     def validate_blank_inputs(condition) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
