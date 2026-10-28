@@ -46,6 +46,8 @@ export default class AdvancedSearchBuilderController extends Controller {
     "selectValueTemplate",
     "valueTemplate",
     "betweenValueTemplate",
+    "dateValueTemplate",
+    "dateBetweenValueTemplate",
   ];
   static outlets = ["list-input"];
   static values = {
@@ -232,7 +234,10 @@ export default class AdvancedSearchBuilderController extends Controller {
       return;
     }
 
-    const templateTarget = this.#valueTemplateForOperator(operator);
+    const templateTarget = this.#valueTemplateForOperator(
+      operator,
+      selectedField,
+    );
     value.outerHTML = templateTarget.innerHTML
       .replace(/GROUP_INDEX_PLACEHOLDER/g, groupIndex)
       .replace(/CONDITION_INDEX_PLACEHOLDER/g, conditionIndex);
@@ -472,9 +477,15 @@ export default class AdvancedSearchBuilderController extends Controller {
     return values.length > 0 || labels.length > 0;
   }
 
-  #valueTemplateForOperator(operator) {
+  #valueTemplateForOperator(operator, selectedField) {
     if (isListOperator(operator)) {
       return this.listValueTemplateTarget;
+    }
+
+    if (this.dateFieldsValue.includes(selectedField)) {
+      return BETWEEN_OPERATORS.test(operator)
+        ? this.dateBetweenValueTemplateTarget
+        : this.dateValueTemplateTarget;
     }
 
     if (BETWEEN_OPERATORS.test(operator)) {

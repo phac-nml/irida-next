@@ -18,6 +18,8 @@ export default class AdvancedSearchController extends Controller {
     "selectValueTemplate",
     "valueTemplate",
     "betweenValueTemplate",
+    "dateValueTemplate",
+    "dateBetweenValueTemplate",
   ];
   static outlets = ["list-input"];
   static values = {
@@ -221,6 +223,10 @@ export default class AdvancedSearchController extends Controller {
       let templateTarget;
       if (["in", "not_in", "text_in", "text_not_in"].includes(operator)) {
         templateTarget = this.listValueTemplateTarget;
+      } else if (this.dateFieldsValue.includes(selectedField)) {
+        templateTarget = operator.includes("between")
+          ? this.dateBetweenValueTemplateTarget
+          : this.dateValueTemplateTarget;
       } else if (operator.includes("between")) {
         templateTarget = this.betweenValueTemplateTarget;
       } else {

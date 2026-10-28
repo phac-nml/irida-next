@@ -122,6 +122,7 @@ module AdvancedSearch
 
         created_at_fieldset = fragment.at_css('fieldset[data-advanced-search-selected-field="created_at"]')
         filename_fieldset = fragment.at_css('fieldset[data-advanced-search-selected-field="filename"]')
+        datepicker = created_at_fieldset.at_css('[data-controller]')
 
         created_at_operator_values =
           created_at_fieldset.css('select[name*="[operator]"] option').map { |o| o['value'] } # rubocop:disable Rails/Pluck
@@ -131,6 +132,7 @@ module AdvancedSearch
         assert_not_includes created_at_operator_values, 'in'
         assert_includes created_at_operator_values, 'between'
         assert_includes filename_operator_values, 'contains'
+        assert_equal 'combobox-datepicker--v1--input', datepicker['data-controller']
       end
     end
   end
