@@ -138,21 +138,18 @@ describe("linelist import controller", () => {
 
   it("reads the first worksheet and populates the sample id options", async () => {
     const controller = await mount();
-    const xlsx = await vi.importMock("xlsx");
-    vi.spyOn(xlsx, "read").mockReturnValue({
-      SheetNames: ["Sheet1"],
-      Sheets: { Sheet1: { worksheet: true } },
-    });
-    vi.spyOn(xlsx.utils, "sheet_to_json").mockReturnValue([
-      ["sample_id", "age"],
-    ]);
+    const file = { type: "text/csv", name: "samples.csv" };
 
     controller.readFile({
-      target: { files: [{ type: "text/csv", name: "samples.csv" }] },
+      target: { files: [file] },
     });
-    FakeFileReader.instances[0].load("file contents");
+    const worker = FakeWorker.instances[0];
+    worker.onmessage({
+      data: { type: "headers", headers: ["sample_id", "age"] },
+    });
 
     expect(controller._fileType).toBe("text/csv");
+    expect(worker.posted).toEqual([{ type: "read_headers", file }]);
     expect(controller.headers).toEqual(["sample_id", "age"]);
     expect(controller.sampleIdColumnTarget.value).toBe("sample_id");
     expect(controller.sampleIdColumnTarget.options).toHaveLength(3);
@@ -161,19 +158,13 @@ describe("linelist import controller", () => {
 
   it("rejects duplicate headers and disables importing", async () => {
     const controller = await mount();
-    const xlsx = await vi.importMock("xlsx");
-    vi.spyOn(xlsx, "read").mockReturnValue({
-      SheetNames: ["Sheet1"],
-      Sheets: { Sheet1: { worksheet: true } },
-    });
-    vi.spyOn(xlsx.utils, "sheet_to_json").mockReturnValue([
-      ["sample_id", " Age ", "age"],
-    ]);
 
     controller.readFile({
       target: { files: [{ type: "text/csv", name: "samples.csv" }] },
     });
-    FakeFileReader.instances[0].load("file contents");
+    FakeWorker.instances[0].onmessage({
+      data: { type: "headers", headers: ["sample_id", " Age ", "age"] },
+    });
 
     expect(controller.errorMessageTarget.textContent).toBe(
       "The uploaded spreadsheet contains duplicate column headers. Please rename them before importing.",
@@ -190,19 +181,13 @@ describe("linelist import controller", () => {
 
   it("sends selected rows and import settings to the worker", async () => {
     const controller = await mount();
-    controller.headers = ["sample_id", "age", "empty_field"];
-    controller._worksheet = { worksheet: true };
+    const file = { type: "text/csv", name: "samples.csv" };
+    controller._file = file;
     controller._fileType = "text/csv";
     controller.sampleIdColumnTarget.append(
       new Option("sample_id", "sample_id"),
     );
     controller.sampleIdColumnTarget.value = "sample_id";
-    const xlsx = await vi.importMock("xlsx");
-    vi.spyOn(xlsx.utils, "sheet_to_json").mockReturnValue([
-      { sample_id: "S1", age: 42, empty_field: null },
-      { sample_id: "S2", age: null, empty_field: "present" },
-    ]);
-
     controller.handleSubmit(new Event("submit", { cancelable: true }));
     const worker = FakeWorker.instances[0];
 
@@ -213,10 +198,10 @@ describe("linelist import controller", () => {
         graphql_url: "/graphql",
         group_puid: "group-1",
         project_puid: "project-1",
-        rows: [
-          ["S1", { age: 42 }],
-          ["S2", { empty_field: "present" }],
-        ],
+        file,
+        sample_id_column: "sample_id",
+        metadata_columns: ["age", "empty_field"],
+        ignore_empty_values: true,
       },
     ]);
     expect(messageText()).toBe("Starting metadata import...");
@@ -279,6 +264,59 @@ describe("linelist import controller", () => {
       data: { type: "progress", current: 1, total: 2, result: {} },
     });
 
+    expect(messageText()).toBe("Imported 1 of 2 records");
+  });
+
+  it("reports transient retry progress from the worker", async () => {
+    const controller = await mount();
+    controller.headers = ["sample_id"];
+    controller._file = { type: "text/csv", name: "samples.csv" };
+    controller._fileType = "text/csv";
+    controller.sampleIdColumnTarget.append(
+      new Option("sample_id", "sample_id"),
+    );
+    controller.sampleIdColumnTarget.value = "sample_id";
+
+    controller.handleSubmit(new Event("submit", { cancelable: true }));
+    const worker = FakeWorker.instances[0];
+
+    worker.onmessage({
+      data: {
+        type: "retry",
+        current: 100,
+        total: 200,
+        attempt: 1,
+        maxAttempts: 3,
+      },
+    });
+
+    expect(messageText()).toBe("Retrying import (attempt 1 of 3)");
+  });
+
+  it("keeps importing after the dialog controller disconnects", async () => {
+    const controller = await mount();
+    controller.headers = ["sample_id"];
+    controller._file = { type: "text/csv", name: "samples.csv" };
+    controller._fileType = "text/csv";
+    controller.sampleIdColumnTarget.append(
+      new Option("sample_id", "sample_id"),
+    );
+    controller.sampleIdColumnTarget.value = "sample_id";
+
+    controller.handleSubmit(new Event("submit", { cancelable: true }));
+    const worker = FakeWorker.instances[0];
+    controller.disconnect();
+
+    worker.onmessage({
+      data: {
+        type: "progress",
+        current: 1,
+        total: 2,
+        result: { overallStatus: "successful" },
+      },
+    });
+
+    expect(worker.terminated).toBe(false);
     expect(messageText()).toBe("Imported 1 of 2 records");
   });
 

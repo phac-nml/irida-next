@@ -680,6 +680,7 @@ fr:
           import_complete_message: L'importation des métadonnées est terminée
           import_started_message: Démarrage de l'importation des métadonnées...
           imported_records_message: "%{current} enregistrements sur %{total} importés"
+          import_retry_message: Nouvelle tentative d’importation (%{attempt} sur %{maxAttempts})
           importing_linelist: Importation de la liste de lignes
   date:
     abbr_day_names:
