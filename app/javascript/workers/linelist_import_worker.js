@@ -248,6 +248,7 @@ const importRowChunk = async ({
   projectId,
   projectPuid,
 }) => {
+  /* v8 ignore next */
   if (rowChunk.length === 0) return null;
 
   return bulkUpdateSampleMetadata({
