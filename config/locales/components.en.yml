@@ -346,6 +346,11 @@ en:
         project: Share results with project members?
       unauthorized_to_update_samples: You are not authorized to update samples with analysis results
       update_samples: Update samples with analysis results
+      v2:
+        workflow_param_property_component:
+          boolean_options:
+            'false': 'False'
+            'true': 'True'
       verifying_update_samples: Verifying if you're authorized to update samples with analysis results
     nextflow_component:
       data_missing_error: 'The following samples are missing required data: '
@@ -452,11 +457,6 @@ en:
       data_table_component:
         header:
           action: Action
-      form:
-        prefixed:
-          boolean_component:
-            'false': 'False'
-            'true': 'True'
       pagy:
         empty_state:
           description: No items found matching your search
