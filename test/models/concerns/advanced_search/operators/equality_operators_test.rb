@@ -31,6 +31,17 @@ module AdvancedSearch
         assert_not_includes sql, 'ILIKE'
       end
 
+      test 'condition_equals matches standard date fields across the selected day' do
+        node = WorkflowExecution.arel_table[:created_at]
+        result = @test_instance.send(:condition_equals, @scope, node, '2026-01-01', 'created_at')
+        sql = result.to_sql
+
+        assert_includes sql, '"workflow_executions"."created_at" >= '
+        assert_includes sql, '"workflow_executions"."created_at" < '
+        assert_includes sql, '2026-01-01 00:00:00'
+        assert_includes sql, '2026-01-02 00:00:00'
+      end
+
       test 'condition_equals uses pattern match for metadata fields' do
         result = @test_instance.send(:condition_equals, @scope, @node, 'test', 'metadata.some_field')
         sql = result.to_sql
@@ -63,6 +74,17 @@ module AdvancedSearch
         sql = result.to_sql
         assert_includes sql, '"workflow_executions"."state" != '
         assert_not_includes sql, 'NOT ILIKE'
+      end
+
+      test 'condition_not_equals excludes the selected day for standard date fields' do
+        node = WorkflowExecution.arel_table[:created_at]
+        result = @test_instance.send(:condition_not_equals, @scope, node, '2026-01-01', 'created_at')
+        sql = result.to_sql
+
+        assert_includes sql, '"workflow_executions"."created_at" < '
+        assert_includes sql, '"workflow_executions"."created_at" >= '
+        assert_includes sql, '2026-01-01 00:00:00'
+        assert_includes sql, '2026-01-02 00:00:00'
       end
 
       test 'condition_not_equals uses NOT ILIKE with null check for metadata fields' do

@@ -392,7 +392,7 @@ module Projects
       attachment2 = attachments(:project1Attachment2)
       target_date = Date.current
       attachment1.update!(created_at: target_date - 1.day)
-      attachment2.update!(created_at: target_date)
+      attachment2.update!(created_at: target_date.in_time_zone.change(hour: 14, min: 30))
 
       get namespace_project_attachments_path(group, project),
           params: advanced_search_params(
