@@ -14,7 +14,7 @@ function conditionTemplateInner() {
   const base = `q[groups_attributes][${G}][conditions_attributes][${C}]`;
   const id = `q_groups_attributes_${G}_conditions_attributes_${C}`;
   return `
-    <fieldset
+    <fieldset tabindex="-1"
       data-advanced-search--v2--builder-target="conditionsContainer"
       data-advanced-search--v2--builder-group-index="${G}"
       data-advanced-search--v2--builder-condition-index="${C}"
@@ -293,6 +293,31 @@ describe("advanced-search--v2--builder", () => {
     );
   });
 
+  it.each([0, 1, 2])(
+    "focuses the next condition, or the preceding one when removing the last (index %i)",
+    async (index) => {
+      application = await startController();
+      const controller = controllerInstance(application);
+      controller.render();
+      await tick();
+      const group = groups()[0];
+      group.querySelector("button[data-action$='#addCondition']").click();
+      await tick();
+      group.querySelector("button[data-action$='#addCondition']").click();
+      await tick();
+      const before = conditions(group);
+      const removed = before[index];
+      const survivor = before[index + 1] || before[index - 1];
+      removed.querySelector("button[data-action$='#removeCondition']").focus();
+      removed.querySelector("button[data-action$='#removeCondition']").click();
+      await tick();
+      expect(conditions(group)).toHaveLength(2);
+      expect(survivor).toHaveFocus();
+      expect(survivor).toHaveAttribute("tabindex", "-1");
+      expect(survivor.querySelector("[name$='[field]']")).not.toHaveFocus();
+    },
+  );
+
   it("re-adds an empty condition when the last one in a group is removed", async () => {
     application = await startController();
     const controller = application.getControllerForElementAndIdentifier(
@@ -310,6 +335,9 @@ describe("advanced-search--v2--builder", () => {
     await tick();
 
     expect(conditions(groups()[0])).toHaveLength(1);
+    expect(
+      conditions(groups()[0])[0].querySelector("[name$='[field]']"),
+    ).toHaveFocus();
     expect(fieldNames()).toEqual([
       "q[groups_attributes][0][conditions_attributes][1][field]",
     ]);
@@ -982,23 +1010,70 @@ describe("advanced-search--v2--builder", () => {
     expect(groups()[0].querySelector("legend")).toBeNull();
   });
 
+  it("focuses the visible combobox input, not a preceding hidden field, when auto-complete is enabled", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    await tick();
+    const group = groups()[0];
+    controller.addGroup();
+    await tick();
+
+    const survivor = conditions(group)[0];
+    // Mirrors AdvancedSearch::V2::ConditionComponent when the
+    // advanced_search_with_auto_complete flipper renders ComboboxComponent: a
+    // hidden "[field]" input precedes the visible role="combobox" input that
+    // has no "name" attribute.
+    const fieldContainer = survivor
+      .querySelector("[name$='[field]']")
+      .closest(".form-field");
+    fieldContainer.innerHTML = `
+      <input type="hidden" name="${survivor.querySelector("[name$='[field]']").name}">
+      <input type="text" role="combobox" id="combobox-input">
+    `;
+    groups()[1].querySelector("button[data-action$='#removeGroup']").click();
+    await tick();
+
+    expect(survivor.querySelector("input[role='combobox']")).toHaveFocus();
+  });
+
   it("focuses a fallback input when the surviving condition has no field control", async () => {
     application = await startController();
     const controller = controllerInstance(application);
     controller.render();
     await tick();
     const group = groups()[0];
-    group.querySelector("button[data-action$='#addCondition']").click();
+    controller.addGroup();
     await tick();
 
-    const survivor = conditions(group)[1];
+    const survivor = conditions(group)[0];
     survivor.querySelector("[name$='[field]']").closest(".form-field").remove();
-    conditions(group)[0]
-      .querySelector("button[data-action$='#removeCondition']")
-      .click();
+    groups()[1].querySelector("button[data-action$='#removeGroup']").click();
     await tick();
 
     expect(survivor.contains(document.activeElement)).toBe(true);
+  });
+
+  it("skips hidden and disabled field controls when focusing a new condition", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    await tick();
+    controller.addGroup();
+    await tick();
+    const survivor = conditions(groups()[0])[0];
+    const fieldName = survivor.querySelector("[name$='[field]']").name;
+    survivor.querySelector(".form-field").innerHTML = `
+      <input type="hidden" name="${fieldName}">
+      <select name="${fieldName}" disabled></select>
+      <input id="available-field">
+    `;
+
+    groups()[1].querySelector("button[data-action$='#removeGroup']").click();
+
+    expect(survivor.querySelector("#available-field")).toHaveFocus();
+    expect(survivor.querySelector("input[type='hidden']")).not.toHaveFocus();
+    expect(survivor.querySelector("select[disabled]")).not.toHaveFocus();
   });
 
   it("serializes multi-select values from selected options", async () => {

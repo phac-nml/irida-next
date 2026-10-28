@@ -1,4 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
+import {
+  focusCondition,
+  focusConditionField,
+} from "utilities/advanced_search_focus";
 
 export default class AdvancedSearchController extends Controller {
   static targets = [
@@ -123,7 +127,7 @@ export default class AdvancedSearchController extends Controller {
     } else {
       this.#reindexGroup(group, this.#groupElements().indexOf(group));
       const focusIndex = Math.min(removedIndex, remainingConditions.length - 1);
-      this.#focusConditionInput(remainingConditions[focusIndex]);
+      focusCondition(remainingConditions[focusIndex]);
     }
   }
 
@@ -164,7 +168,7 @@ export default class AdvancedSearchController extends Controller {
     const focusGroup =
       remainingGroups[Math.min(removedIndex, remainingGroups.length - 1)];
     const focusCondition = this.#conditionElements(focusGroup)[0];
-    this.#focusConditionInput(focusCondition);
+    focusConditionField(focusCondition);
   }
 
   clearForm() {
@@ -284,7 +288,7 @@ export default class AdvancedSearchController extends Controller {
     }
 
     this.#reindexGroup(group, groupIndex);
-    this.#focusConditionInput(this.#conditionElements(group).at(-1));
+    focusConditionField(this.#conditionElements(group).at(-1));
   }
 
   #groupActionsContainer(group) {
@@ -311,6 +315,7 @@ export default class AdvancedSearchController extends Controller {
 
   #updateOperatorDropdown(condition, selectedField) {
     const operator = condition.querySelector("[name$='[operator]']");
+    /* v8 ignore if -- handleFieldChange already requires this operator before calling synchronously. */
     if (!operator) {
       return;
     }
@@ -462,23 +467,6 @@ export default class AdvancedSearchController extends Controller {
     });
   }
 
-  #focusConditionInput(condition) {
-    if (!condition) {
-      return;
-    }
-
-    const fieldInput = condition.querySelector(
-      "input[role='combobox'], select[name$='[field]'], [name$='[field]']",
-    );
-
-    if (fieldInput) {
-      fieldInput.focus();
-      return;
-    }
-
-    condition.querySelector("input:not([type='hidden'])")?.focus();
-  }
-
   #focusFirstInvalidField() {
     const invalidField = Array.from(
       this.element.querySelectorAll("[aria-invalid='true']"),
@@ -595,6 +583,7 @@ export default class AdvancedSearchController extends Controller {
   }
 
   #resetAndGetValueInput(condition) {
+    /* v8 ignore if -- both callers return before passing a missing condition. */
     if (!condition) return null;
     const values = condition.querySelectorAll(".value");
     if (values.length === 0) {

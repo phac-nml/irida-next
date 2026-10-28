@@ -10,6 +10,47 @@ class AdvancedSearchComponentSystemTest < ApplicationSystemTestCase
     Flipper.enable(:advanced_search_with_auto_complete)
   end
 
+  [true, false].each do |autocomplete|
+    test "condition removal focuses the surviving fieldset with autocomplete=#{autocomplete}" do
+      Flipper.public_send(autocomplete ? :enable : :disable, :advanced_search_with_auto_complete)
+
+      [0, 1, 2].each do |index|
+        visit('rails/view_components/advanced_search_component/default')
+        within 'div[data-controller-connected="true"]' do
+          click_button I18n.t('components.advanced_search_component.v1.title')
+        end
+
+        within 'dialog' do
+          group = first("fieldset[data-advanced-search--v1-target='groupsContainer']")
+          within group do
+            selector = "fieldset[data-advanced-search--v1-target='conditionsContainer']"
+            before = all(selector)
+            survivor = before[index + 1] || before[index - 1]
+            remove = before[index].find("button[data-action$='#removeCondition']")
+            if index.zero?
+              remove.click
+            else
+              remove.send_keys(:enter)
+            end
+
+            assert_selector selector, count: 2
+            assert_selector "#{selector}:focus"
+            assert survivor.matches_css?(':focus')
+            assert_equal '-1', survivor[:tabindex]
+            assert_equal 'solid', page.evaluate_script('getComputedStyle(document.activeElement).outlineStyle')
+            legend = I18n.t('components.advanced_search_component.v1.condition', index: [index + 1, 2].min)
+            assert_selector "#{selector}:focus legend", text: legend
+            assert_equal 'false', survivor.find("input[role='combobox']")['aria-expanded'] if autocomplete
+
+            survivor.send_keys(:tab)
+            field_selector = autocomplete ? "input[role='combobox']" : "select[name$='[field]']"
+            assert_selector "#{field_selector}:focus"
+          end
+        end
+      end
+    end
+  end
+
   test 'default' do
     visit('rails/view_components/advanced_search_component/default')
     within 'div[data-controller-connected="true"]' do
@@ -31,7 +72,7 @@ class AdvancedSearchComponentSystemTest < ApplicationSystemTestCase
         within first("div[data-controller='combobox--v1']") do
           combobox = find("input[role='combobox']")
           combobox.click
-          combobox.send_keys([:ctrl, 'a'], :delete)
+          combobox.set('', clear: :backspace)
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.name'), count: 1
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.puid'), count: 1
           assert_selector "div[role='option']", text: I18n.t('samples.table_component.created_at'), count: 1
@@ -126,7 +167,7 @@ class AdvancedSearchComponentSystemTest < ApplicationSystemTestCase
         within first("div[data-controller='combobox--v1']") do
           combobox = find("input[role='combobox']")
           combobox.click
-          combobox.send_keys([:ctrl, 'a'], :delete)
+          combobox.set('', clear: :backspace)
           combobox.fill_in with: 'Sample Name'
           combobox.send_keys(:return)
         end
@@ -308,7 +349,7 @@ class AdvancedSearchComponentSystemTest < ApplicationSystemTestCase
         within first("div[data-controller='combobox--v1']") do
           combobox = find("input[role='combobox']")
           combobox.click
-          combobox.send_keys([:ctrl, 'a'], :delete)
+          combobox.set('', clear: :backspace)
 
           assert_selector "div[role='option']",
                           text: /\A#{Regexp.escape(I18n.t('workflow_executions.table_component.id'))}\z/,
@@ -474,7 +515,8 @@ class AdvancedSearchComponentSystemTest < ApplicationSystemTestCase
       within 'dialog' do
         within all("fieldset[data-advanced-search--v1-target='groupsContainer']")[0] do
           within all("fieldset[data-advanced-search--v1-target='conditionsContainer']")[0] do
-            find("input[id$='field']").send_keys([:ctrl, 'a'], :delete, 'state', :enter)
+            find("input[id$='field']").set('state', clear: :backspace)
+            find("input[id$='field']").send_keys(:enter)
             within "select[name$='[operator]']" do
               assert_selector 'option[value="="]'
               assert_selector 'option[value="!="]'
@@ -486,7 +528,8 @@ class AdvancedSearchComponentSystemTest < ApplicationSystemTestCase
               assert_no_selector 'option[value="text_not_in"]'
             end
 
-            find("input[id$='field']").send_keys([:ctrl, 'a'], :delete, 'workflow name', :enter)
+            find("input[id$='field']").set('workflow name', clear: :backspace)
+            find("input[id$='field']").send_keys(:enter)
             within "select[name$='[operator]']" do
               assert_no_selector 'option[value="="]'
               assert_no_selector 'option[value="!="]'

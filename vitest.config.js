@@ -8,6 +8,7 @@ const jsRoot = resolve(
 
 const fullCoverageFiles = [
   "app/javascript/controllers/action_button_controller.js",
+  "app/javascript/controllers/advanced_search/v1_controller.js",
   "app/javascript/controllers/attachment_upload_controller.js",
   "app/javascript/controllers/metadata/file_import_controller.js",
   "app/javascript/controllers/spreadsheet_import_controller.js",
@@ -44,6 +45,7 @@ const fullCoverageFiles = [
   "app/javascript/controllers/sidebar_item_controller.js",
   "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js",
   "app/javascript/controllers/spinner_controller.js",
+  "app/javascript/controllers/table_controller.js",
   "app/javascript/controllers/table_selection_controller.js",
   "app/javascript/controllers/token_controller.js",
   "app/javascript/controllers/treegrid_controller.js",
@@ -108,6 +110,10 @@ export default defineConfig({
       "utilities/flash": resolve(jsRoot, "utilities/flash.js"),
       "utilities/form": resolve(jsRoot, "utilities/form.js"),
       "utilities/focus": resolve(jsRoot, "utilities/focus.js"),
+      "utilities/advanced_search_focus": resolve(
+        jsRoot,
+        "utilities/advanced_search_focus.js",
+      ),
       "utilities/refresh": resolve(jsRoot, "utilities/refresh.js"),
       "utilities/styles": resolve(jsRoot, "utilities/styles.js"),
       "utilities/dialog": resolve(jsRoot, "utilities/dialog.js"),

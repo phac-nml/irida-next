@@ -13,6 +13,47 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
     Flipper.enable(:advanced_search_with_auto_complete)
   end
 
+  [true, false].each do |autocomplete|
+    test "condition removal focuses the surviving fieldset with autocomplete=#{autocomplete}" do
+      Flipper.public_send(autocomplete ? :enable : :disable, :advanced_search_with_auto_complete)
+
+      [0, 1, 2].each do |index|
+        visit('rails/view_components/advanced_search_component/v2_default')
+        within 'div[data-controller-connected="true"]' do
+          click_button I18n.t('components.advanced_search_component.v1.title')
+        end
+
+        within 'dialog' do
+          group = first("fieldset[data-advanced-search--v2--builder-target='groupsContainer']")
+          within group do
+            selector = "fieldset[data-advanced-search--v2--builder-target='conditionsContainer']"
+            before = all(selector)
+            survivor = before[index + 1] || before[index - 1]
+            remove = before[index].find("button[data-action$='#removeCondition']")
+            if index.zero?
+              remove.click
+            else
+              remove.send_keys(:enter)
+            end
+
+            assert_selector selector, count: 2
+            assert_selector "#{selector}:focus"
+            assert survivor.matches_css?(':focus')
+            assert_equal '-1', survivor[:tabindex]
+            assert_equal 'solid', page.evaluate_script('getComputedStyle(document.activeElement).outlineStyle')
+            legend = I18n.t('components.advanced_search_component.v1.condition', index: [index + 1, 2].min)
+            assert_selector "#{selector}:focus legend", text: legend
+            assert_equal 'false', survivor.find("input[role='combobox']")['aria-expanded'] if autocomplete
+
+            survivor.send_keys(:tab)
+            field_selector = autocomplete ? "input[role='combobox']" : "select[name$='[field]']"
+            assert_selector "#{field_selector}:focus"
+          end
+        end
+      end
+    end
+  end
+
   test 'opening the dialog renders the builder from the outlet and is accessible' do
     visit('rails/view_components/advanced_search_component/v2_default')
     within 'div[data-controller-connected="true"]' do
@@ -119,7 +160,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
         # Filtering clones the combobox's cached options; their references must still
         # point at the live widget after its preceding group and condition disappear.
         combobox = find("input[role='combobox']")
-        combobox.send_keys([:ctrl, 'a'], :delete, 'age')
+        combobox.set('age', clear: :backspace)
         assert_selector "[role='option'][data-value='metadata.age']"
         assert_combobox_references
         find("[role='option'][data-value='metadata.age']").click
@@ -188,7 +229,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
 
   def choose_field(label)
     combobox = find("input[role='combobox']")
-    combobox.send_keys([:ctrl, 'a'], :delete, label)
+    combobox.set(label, clear: :backspace)
     find("[role='option']", text: label, exact_text: true).click
   end
 

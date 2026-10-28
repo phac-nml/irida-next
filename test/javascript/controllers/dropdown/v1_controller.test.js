@@ -193,6 +193,7 @@ describe("dropdown/v1 controller", () => {
 
   it("activates a list item's clickable child on Enter and refocuses the trigger after morph", async () => {
     application = await mount();
+    dropdown().show();
     const items = menuItems();
     const link = items[0].querySelector("a");
     const clickSpy = vi.spyOn(link, "click").mockImplementation(() => {});
@@ -209,6 +210,7 @@ describe("dropdown/v1 controller", () => {
 
   it("hides when a list item without a clickable child is activated", async () => {
     application = await mount();
+    dropdown().show();
     const items = menuItems();
     dropdown().show();
     items[1].focus();
@@ -218,6 +220,7 @@ describe("dropdown/v1 controller", () => {
 
   it("clicks a non-list menu item directly on Enter", async () => {
     application = await mount();
+    dropdown().show();
     const button = menuItems()[2];
     const clickSpy = vi.spyOn(button, "click").mockImplementation(() => {});
     dropdown().show();
@@ -228,6 +231,7 @@ describe("dropdown/v1 controller", () => {
 
   it("focuses the trigger on Escape", async () => {
     application = await mount();
+    dropdown().show();
     const triggerFocus = vi.spyOn(trigger(), "focus");
     const firstItem = menuItems()[0];
     dropdown().show();
@@ -239,6 +243,7 @@ describe("dropdown/v1 controller", () => {
 
   it("wraps focus with ArrowUp and ArrowDown", async () => {
     application = await mount();
+    dropdown().show();
     const items = menuItems();
     dropdown().show();
 
@@ -261,6 +266,7 @@ describe("dropdown/v1 controller", () => {
 
   it("skips disabled menu items during keyboard navigation", async () => {
     application = await mount({ disabledMenuItem: true });
+    dropdown().show();
     const disabledItem = menu().querySelector("[disabled]");
     const items = menuItems().filter((item) => !item.disabled);
 
@@ -276,6 +282,7 @@ describe("dropdown/v1 controller", () => {
 
   it("jumps to first and last items with Home and End", async () => {
     application = await mount();
+    dropdown().show();
     const items = menuItems();
     dropdown().show();
 

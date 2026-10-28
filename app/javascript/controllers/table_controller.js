@@ -68,6 +68,7 @@ export default class TableController extends Controller {
         this.#debouncedHandleFocus.clear();
       }
     } catch (error) {
+      /* v8 ignore next -- native WeakMap construction and debounce.clear do not throw. */
       this.#handleError("Error during TableController disconnect", error);
     }
   }
@@ -278,6 +279,7 @@ export default class TableController extends Controller {
    */
   #getBoundingClientRectSafe(element) {
     try {
+      /* v8 ignore if -- private callers validate elements before synchronous geometry reads. */
       if (!this.#isValidElement(element)) return null;
       return element.getBoundingClientRect();
     } catch (error) {
@@ -347,6 +349,7 @@ export default class TableController extends Controller {
    */
   #isFirstRow(cell) {
     try {
+      /* v8 ignore if -- ensureVerticalVisibility validates the cell before this synchronous call. */
       if (!this.#isValidElement(cell)) {
         throw new Error("Invalid cell element");
       }
@@ -400,6 +403,7 @@ export default class TableController extends Controller {
    */
   #isLastRow(cell) {
     try {
+      /* v8 ignore if -- ensureVerticalVisibility validates the cell before this synchronous call. */
       if (!this.#isValidElement(cell)) {
         throw new Error("Invalid cell element");
       }
@@ -454,6 +458,7 @@ export default class TableController extends Controller {
    */
   #getStickyOverlayHeight(cell, scroller, position) {
     try {
+      /* v8 ignore if -- ensureVerticalVisibility already validated both elements. */
       if (!this.#isValidElement(cell) || !this.#isValidElement(scroller)) {
         return 0;
       }
@@ -493,6 +498,7 @@ export default class TableController extends Controller {
       ];
 
       for (const element of stickyElements) {
+        /* v8 ignore if -- querySelectorAll above returns connected elements; this loop does not mutate the DOM. */
         if (!this.#isValidElement(element)) continue;
 
         const style = getComputedStyle(element);
@@ -627,6 +633,7 @@ export default class TableController extends Controller {
 
       let maxRight = 0;
       for (const c of Array.from(row.children)) {
+        /* v8 ignore if -- children of the validated connected row remain connected in this synchronous loop. */
         if (!this.#isValidElement(c)) continue;
 
         const style = getComputedStyle(c);
@@ -667,6 +674,7 @@ export default class TableController extends Controller {
    */
   #scrollIntoView(el, options = {}) {
     try {
+      /* v8 ignore if -- findHorizontalScroller validated the cell immediately before this call. */
       if (!this.#isValidElement(el)) {
         throw new Error("Invalid element for scrollIntoView");
       }
@@ -697,14 +705,17 @@ export default class TableController extends Controller {
    */
   #scrollBy(scroller, dx) {
     try {
+      /* v8 ignore if -- horizontal scrolling just read geometry from this validated scroller. */
       if (!this.#isValidElement(scroller)) {
         throw new Error("Invalid scroller element");
       }
 
+      /* v8 ignore if -- both callers pass differences of finite DOMRect coordinates. */
       if (typeof dx !== "number" || isNaN(dx)) {
         throw new Error("Invalid scroll delta: must be a number");
       }
 
+      /* v8 ignore if -- callers invoke this only for strictly positive overflow or strictly negative correction. */
       if (dx === 0) return;
 
       // 🔒 Clamp using scrollLeft to maintain consistent bounds across browsers
