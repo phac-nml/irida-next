@@ -142,4 +142,57 @@ class SignInTest < ActionDispatch::IntegrationTest
       }
     end
   end
+
+  test 'should not update the user locale when locale param is not present on sign in' do
+    user = users(:john_doe)
+    original_locale = user.locale
+
+    post user_session_path, params: {
+      user: {
+        email: user.email,
+        password: 'password1'
+      }
+    }
+
+    assert_response :see_other
+    assert_equal original_locale, user.reload.locale
+  end
+
+  test 'should render not_authorized when password authentication is disabled and user attempts to sign in' do
+    Irida::CurrentSettings.current_application_settings.update(password_authentication_enabled: false)
+    user = users(:john_doe)
+
+    post user_session_path, params: {
+      user: {
+        email: user.email,
+        password: 'password1'
+      }
+    }
+
+    assert_response :forbidden
+    assert_select 'h1', text: I18n.t(:'application.errors.access_denied')
+  end
+
+  test 'should include locale param in links when I18n.locale is not default locale' do
+    I18n.with_locale(:fr) do
+      get new_user_session_path
+
+      assert_response :success
+      # Check that the return button includes the locale parameter
+      assert_select 'a[href*="locale=fr"]'
+    end
+  end
+
+  test 'should render shared links partial when no button based providers are enabled' do
+    old_omniauth_providers = User.omniauth_providers
+    User.omniauth_providers = []
+
+    get new_user_session_path
+
+    assert_response :success
+    # The shared/links partial renders the forgot password link
+    assert_select 'a', text: /#{Regexp.escape(I18n.t(:'devise.shared.links.forgot_password_link'))}/
+
+    User.omniauth_providers = old_omniauth_providers
+  end
 end
