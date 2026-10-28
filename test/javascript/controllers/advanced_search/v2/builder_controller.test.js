@@ -97,6 +97,8 @@ function renderFixture({ existingGroups = "", initialState = [] } = {}) {
       <template data-advanced-search--v2--builder-target="listValueTemplate"></template>
       <template data-advanced-search--v2--builder-target="listSelectValueTemplate"></template>
       <template data-advanced-search--v2--builder-target="selectValueTemplate"></template>
+      <template data-advanced-search--v2--builder-target="dateValueTemplate"></template>
+      <template data-advanced-search--v2--builder-target="dateBetweenValueTemplate"></template>
       <template data-advanced-search--v2--builder-target="emptySearchTemplate">
         <input type="hidden" name="q[groups_attributes]" value="">
       </template>
@@ -1254,6 +1256,63 @@ describe("advanced-search--v2--builder", () => {
     await tick();
 
     expect(groups()).toHaveLength(1);
+  });
+
+  it("render() restores existing groups instead of seeding a blank one", async () => {
+    const existingGroup = groupTemplateInner()
+      .replaceAll(G, "0")
+      .replace(
+        "<div>",
+        conditionTemplateInner().replaceAll(G, "0").replaceAll(C, "0") +
+          "<div>",
+      );
+    renderFixture({ existingGroups: existingGroup });
+    application = await startController();
+    const controller = controllerInstance(application);
+
+    controller.render();
+
+    expect(groups()).toHaveLength(1);
+    expect(fieldNames()).toEqual([
+      "q[groups_attributes][0][conditions_attributes][0][field]",
+    ]);
+  });
+
+  it("renders date value templates for single and between date operators", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.dateFieldsValue = ["created_at"];
+    controller.dateValueTemplateTarget.innerHTML = `
+      <div class="value form-field">
+        <input type="date" name="q[groups_attributes][0][conditions_attributes][0][value]">
+      </div>`;
+    controller.dateBetweenValueTemplateTarget.innerHTML = `
+      <div class="value form-field">
+        <input type="date" name="q[groups_attributes][0][conditions_attributes][0][value][]">
+        <input type="date" name="q[groups_attributes][0][conditions_attributes][0][value][]">
+      </div>`;
+    controller.render();
+    const condition = conditions(groups()[0])[0];
+    const field = condition.querySelector("[name$='[field]']");
+    field.innerHTML = '<option value="created_at" selected>created_at</option>';
+    field.value = "created_at";
+    const operator = condition.querySelector("[name$='[operator]']");
+    operator.innerHTML = '<option value="=" selected>=</option>';
+    operator.value = "=";
+
+    controller.handleOperatorChange({ target: operator });
+
+    expect(
+      condition.querySelectorAll(".value input[type='date']"),
+    ).toHaveLength(1);
+
+    operator.innerHTML = '<option value="between" selected>between</option>';
+    operator.value = "between";
+    controller.handleOperatorChange({ target: operator });
+
+    expect(
+      condition.querySelectorAll(".value input[type='date']"),
+    ).toHaveLength(2);
   });
 
   it("renders enum options from labels when values are omitted", async () => {

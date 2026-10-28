@@ -85,6 +85,12 @@ describe(identifier, () => {
         listSelectValueTemplate: valueTemplate(
           `<select multiple name="${name}[value][]"></select>`,
         ),
+        dateValueTemplate: valueTemplate(
+          `<input type="date" name="${name}[value]">`,
+        ),
+        dateBetweenValueTemplate:
+          valueTemplate(`<input type="date" name="${name}[value][]">`) +
+          valueTemplate(`<input type="date" name="${name}[value][]">`),
         emptySearchTemplate:
           '<input type="hidden" name="q[groups_attributes]" value="">',
       })
@@ -529,6 +535,23 @@ describe(identifier, () => {
     controller.removeGroup({ currentTarget: groups()[1] });
     expect(groups()).toHaveLength(1);
     expect(conditions()).toHaveLength(0);
+  });
+
+  it("uses date operators and renders date value controls for single and between operators", () => {
+    controller.dateFieldsValue = ["created_at"];
+    controller.dateOperationsValue = { On: "=", Between: "between" };
+    change(field(), "created_at");
+    expect([...operator().options].map((o) => o.text)).toEqual([
+      "",
+      "On",
+      "Between",
+    ]);
+    change(operator(), "=");
+    expect(conditions()[0].querySelectorAll(".value")).toHaveLength(1);
+    expect(value().querySelector("input").type).toBe("date");
+    change(operator(), "between");
+    expect(conditions()[0].querySelectorAll(".value")).toHaveLength(2);
+    expect(value().querySelector("input").type).toBe("date");
   });
 
   it("ignores reindexing a group outside the search container", () => {
