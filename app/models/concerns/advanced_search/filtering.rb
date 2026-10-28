@@ -102,7 +102,7 @@ module AdvancedSearch
     end
 
     def apply_condition_standard_greater_than_or_equal(scope, node, value, field_name)
-      condition_greater_than_or_equal(scope, node, value, metadata_key(field_name))
+      condition_greater_than_or_equal(scope, node, value, metadata_key(field_name), field_name)
     end
 
     def apply_condition_metadata_date_greater_than_or_equal(scope, node, value, _field_name)
@@ -114,7 +114,7 @@ module AdvancedSearch
     end
 
     def apply_condition_standard_less_than_or_equal(scope, node, value, field_name)
-      condition_less_than_or_equal(scope, node, value, metadata_key(field_name))
+      condition_less_than_or_equal(scope, node, value, metadata_key(field_name), field_name)
     end
 
     def apply_condition_metadata_date_less_than_or_equal(scope, node, value, _field_name)
