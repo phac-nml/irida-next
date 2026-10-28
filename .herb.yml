@@ -94,7 +94,8 @@ linter:
       # Herb 0.11 also counts the form_with inside this render block as
       # an enclosing form; Viral::DialogComponent renders no form itself.
       exclude:
-        - "app/views/workflow_executions/file_selector/_file_selector_dialog.html.erb"
+        - "app/views/workflow_executions/file_selector/_file_selector_dialog.ht\
+          ml.erb"
 
 formatter:
   enabled: true

@@ -22,6 +22,9 @@
   </h1>
 
   <p class="mb-4 text-lg font-normal text-slate-500 lg:text-xl dark:text-slate-400"><%= @workflow.description %></p>
+
+  <%= render partial: "shared/form/required_field_legend" %>
+
   <%= helpers.turbo_frame_tag "workflow_execution_errors" %>
 
   <div
