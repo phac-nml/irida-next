@@ -38,10 +38,10 @@
       </dl>
     </div>
 
-    <% if trigger_form&.errors.present? %>
+    <% if trigger_form&.errors[:base].any? %>
       <div class="rounded-lg border-l-4 border-red-500 bg-red-50 p-4">
         <ul class="text-sm text-red-700">
-          <% trigger_form.errors.full_messages.each do |message| %>
+          <% trigger_form.errors.full_messages_for(:base).each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>

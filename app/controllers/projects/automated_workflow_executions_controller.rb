@@ -129,7 +129,7 @@ module Projects
         request:
       )
 
-      @query = @trigger_form.query_object
+      @query = @trigger_form.query
       advanced_search_fields(@project.namespace)
 
       respond_to do |format|
@@ -155,8 +155,8 @@ module Projects
         launched_samples_count = launch_workflow_for_samples(samples)
 
         if launched_samples_count.zero?
-          @query = @trigger_form.query_object
-          @trigger_form.errors.add(:q, :no_samples_with_pe_attachments)
+          @query = @trigger_form.query
+          @trigger_form.errors.add(:base, :no_samples_with_pe_attachments)
           render 'trigger', status: :unprocessable_content, formats: :turbo_stream
         else
           flash[:success] = t('.success',
@@ -165,7 +165,7 @@ module Projects
           redirect_to namespace_project_workflow_executions_path(@project.parent, @project)
         end
       else
-        @query = @trigger_form.query_object
+        @query = @trigger_form.query
         advanced_search_fields(@project.namespace)
         render 'trigger', status: :unprocessable_content, formats: :turbo_stream
       end

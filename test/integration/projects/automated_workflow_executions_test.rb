@@ -374,7 +374,7 @@ module Projects
       assert_response :unprocessable_content
 
       assert_includes @response.body, I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
-                                             'attributes.q.no_search_params')
+                                             'attributes.base.no_search_params')
     ensure
       Flipper.disable(:trigger_automated_workflow_execution)
     end
@@ -407,7 +407,7 @@ module Projects
       assert_response :unprocessable_content
 
       assert_includes @response.body, I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
-                                             'attributes.q.no_samples_with_pe_attachments')
+                                             'attributes.base.no_samples_with_pe_attachments')
     ensure
       Flipper.disable(:trigger_automated_workflow_execution)
     end
@@ -439,7 +439,7 @@ module Projects
       assert_response :unprocessable_content
 
       assert_includes @response.body, I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
-                                             'attributes.q.no_samples_found')
+                                             'attributes.base.no_samples_found')
     ensure
       Flipper.disable(:trigger_automated_workflow_execution)
     end

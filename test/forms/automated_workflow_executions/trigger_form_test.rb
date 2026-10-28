@@ -21,9 +21,10 @@ module AutomatedWorkflowExecutions
       )
 
       assert_not form.valid?
-      assert_predicate form.errors[:q], :any?
+      assert_predicate form.errors[:base], :any?
       # Should have validation error about no search params (not an advanced query)
-      assert_includes form.errors[:q].map(&:to_s), 'No search parameters were provided'
+      assert_includes form.errors[:base].map(&:to_s), I18n.t('activemodel.errors.models.automated_workflow_executions' \
+                                                             '/trigger_form.attributes.base.no_search_params')
     end
 
     test 'is invalid when query is not an advanced query' do
@@ -36,12 +37,13 @@ module AutomatedWorkflowExecutions
       )
 
       assert_not form.valid?
-      assert_predicate form.errors[:q], :any?
+      assert_predicate form.errors[:base], :any?
       # Check that the underlying query object is valid but not advanced
-      assert form.query_object.valid?
-      assert_not form.query_object.advanced_query?
+      assert form.query.valid?
+      assert_not form.query.advanced_query?
       # Should have specific error about no search parameters
-      assert_includes form.errors[:q].map(&:to_s), 'No search parameters were provided'
+      assert_includes form.errors[:base].map(&:to_s), I18n.t('activemodel.errors.models.automated_workflow_executions' \
+                                                             '/trigger_form.attributes.base.no_search_params')
     end
 
     test 'is invalid when no samples found' do
@@ -65,23 +67,13 @@ module AutomatedWorkflowExecutions
       )
 
       assert_not form.valid?
-      assert_predicate form.errors[:q], :any?
+      assert_predicate form.errors[:base], :any?
       # Check that the underlying query object is valid and advanced
-      assert form.query_object.valid?
-      assert form.query_object.advanced_query?
+      assert form.query.valid?
+      assert form.query.advanced_query?
       # But the form should have error about no samples found
-      assert_includes form.errors[:q].map(&:to_s), 'Search did not return any samples to trigger on'
-    end
-
-    test 'provides search_group_class' do
-      form = TriggerForm.new(
-        q: { groups_attributes: {} },
-        automated_workflow_execution: @automated_workflow_execution,
-        project: @project,
-        request: @request
-      )
-
-      assert_equal Sample::SearchGroup, form.search_group_class
+      assert_includes form.errors[:base].map(&:to_s), I18n.t('activemodel.errors.models.automated_workflow_executions' \
+                                                             '/trigger_form.attributes.base.no_samples_found')
     end
 
     test 'samples method returns query results' do
@@ -127,8 +119,8 @@ module AutomatedWorkflowExecutions
       )
 
       assert form.valid?
-      assert form.query_object.valid?
-      assert form.query_object.advanced_query?
+      assert form.query.valid?
+      assert form.query.advanced_query?
       assert_predicate form.samples, :any?
     end
   end

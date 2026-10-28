@@ -9,39 +9,37 @@ module AutomatedWorkflowExecutions
     attr_accessor :automated_workflow_execution, :project, :request
 
     attribute :q
-
-    validate :query_must_be_advanced_query
-    validate :samples_must_be_found
-
-    def samples
-      @samples ||= query.results
-    end
-
-    def search_group_class
-      Sample::SearchGroup
-    end
-
-    def query_object
-      query
-    end
-
-    private
+    validate :query_must_be_valid
+    validate :query_must_be_present
+    validate :query_must_have_results
 
     def query
       @query ||= Sample::Query.new(
         (q || {}).merge(
           project_ids: [project.id],
-          request:
+          request: request
         )
       )
     end
 
-    def query_must_be_advanced_query
-      errors.add(:q, :no_search_params) unless query.advanced_query?
+    def samples
+      @samples ||= query.results
     end
 
-    def samples_must_be_found
-      errors.add(:q, :no_samples_found) if samples.blank?
+    private
+
+    def query_must_be_valid
+      errors.add(:q, :invalid) unless query.valid?
+    end
+
+    def query_must_be_present
+      errors.add(:base, :no_search_params) unless query.advanced_query?
+    end
+
+    def query_must_have_results
+      return unless query.valid?
+
+      errors.add(:base, :no_samples_found) if samples.blank?
     end
   end
 end
