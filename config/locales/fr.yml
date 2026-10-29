@@ -58,7 +58,7 @@ fr:
               invalid_between_value: doit être un tableau contenant deux valeurs
         automated_workflow_executions/trigger_form:
           attributes:
-            q:
+            base:
               no_samples_found: La recherche n’a retourné aucun échantillon sur lequel déclencher
               no_samples_with_pe_attachments: La recherche n’a retourné aucun échantillon avec des fichiers jumelés sur lequel déclencher
               no_search_params: Aucun paramètre de recherche n’a été fourni
