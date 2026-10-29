@@ -17,7 +17,7 @@ class AdvancedSearchComponentSystemTest < ApplicationSystemTestCase
       [0, 1, 2].each do |index|
         visit('rails/view_components/advanced_search_component/default')
         within 'div[data-controller-connected="true"]' do
-          click_button I18n.t('components.advanced_search_component.v1.title')
+          click_button I18n.t('components.advanced_search_component.title')
         end
 
         within 'dialog' do
@@ -38,7 +38,7 @@ class AdvancedSearchComponentSystemTest < ApplicationSystemTestCase
             assert survivor.matches_css?(':focus')
             assert_equal '-1', survivor[:tabindex]
             assert_equal 'solid', page.evaluate_script('getComputedStyle(document.activeElement).outlineStyle')
-            legend = I18n.t('components.advanced_search_component.v1.condition', index: [index + 1, 2].min)
+            legend = I18n.t('components.advanced_search_component.condition', index: [index + 1, 2].min)
             assert_selector "#{selector}:focus legend", text: legend
             assert_equal 'false', survivor.find("input[role='combobox']")['aria-expanded'] if autocomplete
 
