@@ -47,6 +47,12 @@ form.button_to {
     @apply min-h-11 w-full min-w-0 flex-1 rounded-none rounded-b-lg border-0 bg-[var(--pvc-color-surface)] px-3 py-2 text-sm leading-6 text-[var(--pvc-color-text)];
   }
 
+  & .workflow-parameter-input:focus {
+    @apply outline-3 outline-offset-2 outline-black dark:outline-white;
+    box-shadow: none !important;
+    outline-style: solid;
+  }
+
   & .workflow-parameter-control:has([aria-invalid="true"]) {
     border-color: var(--pvc-color-danger);
   }
@@ -68,13 +74,6 @@ form.button_to {
       @apply rounded-none rounded-e-lg;
     }
   }
-}
-
-.workflow-parameter :is(input, select, a):focus-visible {
-  outline: 2px solid var(--pvc-color-focus);
-  outline-offset: 2px;
-  position: relative;
-  z-index: 1;
 }
 
 /* Hide search clear button across all browsers */
