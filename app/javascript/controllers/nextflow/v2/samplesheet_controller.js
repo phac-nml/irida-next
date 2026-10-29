@@ -940,10 +940,6 @@ export default class extends Controller {
     }
 
     const target = this.formTarget.querySelector(`#${CSS.escape(targetId)}`);
-    if (!target || typeof target.focus !== "function") {
-      return;
-    }
-
     focusWhenVisible(target, { focusOptions: { focusVisible: true } });
   }
 

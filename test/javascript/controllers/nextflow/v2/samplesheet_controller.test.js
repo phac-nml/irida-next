@@ -1085,8 +1085,17 @@ describe("nextflow v2 samplesheet controller", () => {
     expect(requestSubmit).not.toHaveBeenCalled();
 
     fileInput.value = "attachment-id";
-    orphanInput.value = "attachment-id";
     unlabeledInput.value = "filled";
+    submitBtn.click();
+    vi.advanceTimersByTime(60);
+
+    expect(formFieldError.textContent).toContain(
+      "workflow_execution[workflow_params][orphan] can't be blank",
+    );
+    expect(orphanInput).toHaveAttribute("aria-invalid", "true");
+    expect(requestSubmit).not.toHaveBeenCalled();
+
+    orphanInput.value = "attachment-id";
     submitBtn.click();
     vi.advanceTimersByTime(60);
 
