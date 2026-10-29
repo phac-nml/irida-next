@@ -198,7 +198,7 @@ module Projects
       assert_select 'table' do
         assert_select 'tbody' do
           assert_select "tr[id='automated_workflow_execution_#{disabled_automated_pipeline.id}']", count: 1 do
-            assert_select 'td:nth-child(7)', text: I18n.t('common.statuses.disabled').upcase
+            assert_select 'td:nth-child(7)', text: I18n.t('common.statuses.disabled')
             assert_select 'td:nth-child(8)' do
               assert_select 'button', text: I18n.t('common.actions.edit'), count: 0
             end
@@ -379,6 +379,53 @@ module Projects
                       "#{ I18n.t('projects.automated_workflow_executions.launch.success',
                                  workflow_name: automated_workflow_execution.workflow.name, sample_count: 1)}"
       end
+    ensure
+      Flipper.disable(:trigger_automated_workflow_execution)
+    end
+
+    test 'can not manually trigger automated workflow execution for disabled automated workflow execution' do
+      Flipper.enable(:trigger_automated_workflow_execution)
+      automated_workflow_execution = automated_workflow_executions(:disabled_automated_workflow_execution)
+
+      get namespace_project_automated_workflow_executions_path(@namespace, @project), as: :turbo_stream
+      assert_response :success
+
+      assert_select 'table' do
+        assert_select 'tbody' do
+          assert_select "tr[id='automated_workflow_execution_#{automated_workflow_execution.id}']", count: 1 do
+            assert_select 'td:nth-child(7)', text: I18n.t('common.statuses.disabled')
+            assert_select 'td:nth-child(8)' do
+              assert_select 'button', text: I18n.t('common.actions.trigger'), count: 0
+            end
+          end
+        end
+      end
+
+      get trigger_namespace_project_automated_workflow_execution_path(
+        @namespace, @project, automated_workflow_execution
+      ), as: :turbo_stream
+
+      post launch_namespace_project_automated_workflow_execution_path(
+        @namespace, @project, automated_workflow_execution
+      ),
+           params: {
+             q: {
+               groups_attributes: {
+                 '0' => {
+                   'conditions_attributes' => {
+                     '0' => {
+                       field: 'name',
+                       operator: '=',
+                       value: samples(:sample1).name
+                     }
+                   }
+                 }
+               }
+             },
+             format: :turbo_stream
+           }
+
+      assert_response :unauthorized
     ensure
       Flipper.disable(:trigger_automated_workflow_execution)
     end

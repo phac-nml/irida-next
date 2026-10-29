@@ -30,7 +30,7 @@
 
     <% table.with_column(t(".headers.status")) do |row| %>
       <% if row[:disabled] %>
-        <%= render Viral::PillComponent.new(text: t("common.statuses.disabled").upcase, color: "red") %>
+        <%= render Viral::PillComponent.new(text: t("common.statuses.disabled"), color: "red") %>
       <% else %>
         <%= render Viral::PillComponent.new(text: t("common.statuses.enabled"), color: "green") %>
       <% end %>
@@ -39,30 +39,30 @@
     <% table.with_column(t(".headers.actions"),
         classes: "flex justify-start gap-1"
       ) do |row| %>
-      <% if Flipper.enabled?(:trigger_automated_workflow_execution) %>
-        <%= pathogen_button_to t("common.actions.trigger"),
-        trigger_namespace_project_automated_workflow_execution_path(
-          project.parent,
-          project,
-          row,
-        ),
-        data: {
-          turbo_stream: true,
-        },
-        method: :get,
-        aria: {
-          label:
-            t(
-              :"projects.automated_workflow_executions.actions.trigger_aria_label",
-              name: (row[:name].blank? ? row[:id] : row[:name]),
-            ),
-        },
-        tone: :primary,
-        emphasis: :outline,
-        size: :small %>
-      <% end %>
-
       <% unless row.disabled %>
+        <% if Flipper.enabled?(:trigger_automated_workflow_execution) %>
+          <%= pathogen_button_to t("common.actions.trigger"),
+          trigger_namespace_project_automated_workflow_execution_path(
+            project.parent,
+            project,
+            row,
+          ),
+          data: {
+            turbo_stream: true,
+          },
+          method: :get,
+          aria: {
+            label:
+              t(
+                :"projects.automated_workflow_executions.actions.trigger_aria_label",
+                name: (row[:name].blank? ? row[:id] : row[:name]),
+              ),
+          },
+          tone: :primary,
+          emphasis: :outline,
+          size: :small %>
+        <% end %>
+
         <%= pathogen_button_to t("common.actions.edit"),
         edit_namespace_project_automated_workflow_execution_path(
           project.parent,
