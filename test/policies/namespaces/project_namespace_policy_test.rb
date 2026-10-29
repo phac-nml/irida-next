@@ -167,7 +167,9 @@ module Namespaces
       @project.namespace.archived_at = Time.zone.now
       @project.namespace.save!
 
-      Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:view_workflow_executions)
     end
 
     test '#update_sample_metadata?' do
