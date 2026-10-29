@@ -61,16 +61,19 @@ class SignInTest < ActionDispatch::IntegrationTest
 
   test 'should display no authentication methods message when no providers and password authentication disabled' do
     old_omniauth_providers = User.omniauth_providers
-    User.omniauth_providers = []
-    Irida::CurrentSettings.current_application_settings.update(password_authentication_enabled: false,
-                                                               signup_enabled: false)
+    begin
+      User.omniauth_providers = []
+      Irida::CurrentSettings.current_application_settings.update(password_authentication_enabled: false,
+                                                                 signup_enabled: false)
 
-    get new_user_session_path
+      get new_user_session_path
 
-    assert_response :success
-    assert_select 'div[role="alert"]',
-                  text: /#{Regexp.escape(I18n.t(:'devise.sessions.new.no_configured_authentication_methods'))}/
-    User.omniauth_providers = old_omniauth_providers
+      assert_response :success
+      assert_select 'div[role="alert"]',
+                    text: /#{Regexp.escape(I18n.t(:'devise.sessions.new.no_configured_authentication_methods'))}/
+    ensure
+      User.omniauth_providers = old_omniauth_providers
+    end
   end
 
   test 'should not display local account option when password authentication disabled' do
