@@ -1,4 +1,4 @@
-<%# locals: (project:, automated_workflow_executions:) %>
+<%# locals: (automated_workflow_executions:, project: ) %>
 
 <% if automated_workflow_executions.count.positive? %>
   <%= render Viral::DataTableComponent.new(automated_workflow_executions, id: "automated_workflow_executions") do |table| %>
@@ -39,6 +39,29 @@
     <% table.with_column(t(".headers.actions"),
         classes: "flex justify-start gap-1"
       ) do |row| %>
+      <% if Flipper.enabled?(:trigger_automated_workflow_execution) %>
+        <%= pathogen_button_to t("common.actions.trigger"),
+        trigger_namespace_project_automated_workflow_execution_path(
+          project.parent,
+          project,
+          row,
+        ),
+        data: {
+          turbo_stream: true,
+        },
+        method: :get,
+        aria: {
+          label:
+            t(
+              :"projects.automated_workflow_executions.actions.trigger_aria_label",
+              name: (row[:name].blank? ? row[:id] : row[:name]),
+            ),
+        },
+        tone: :primary,
+        emphasis: :outline,
+        size: :small %>
+      <% end %>
+
       <% unless row.disabled %>
         <%= pathogen_button_to t("common.actions.edit"),
         edit_namespace_project_automated_workflow_execution_path(
@@ -54,7 +77,7 @@
           label:
             t(
               :"projects.automated_workflow_executions.actions.edit_aria_label",
-              name: (row[:name].nil? ? row[:id] : row[:name]),
+              name: (row[:name].blank? ? row[:id] : row[:name]),
             ),
         },
         tone: :neutral,
@@ -78,7 +101,7 @@
         label:
           t(
             :"projects.automated_workflow_executions.actions.delete_aria_label",
-            name: (row[:name].nil? ? row[:id] : row[:name]),
+            name: (row[:name].blank? ? row[:id] : row[:name]),
           ),
       },
       tone: :danger,

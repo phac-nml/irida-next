@@ -149,6 +149,20 @@ module Projects
     test 'can edit an automated workflow execution for a project' do
       automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
 
+      get namespace_project_automated_workflow_executions_path(@namespace, @project), as: :turbo_stream
+      assert_response :success
+
+      assert_select 'table' do
+        assert_select 'tbody' do
+          assert_select "tr[id='automated_workflow_execution_#{automated_workflow_execution.id}']", count: 1 do
+            assert_select 'td:nth-child(7)', text: I18n.t('common.statuses.enabled')
+            assert_select 'td:nth-child(8)' do
+              assert_select 'button', text: I18n.t('common.actions.edit'), count: 1
+            end
+          end
+        end
+      end
+
       get edit_namespace_project_automated_workflow_execution_path(@namespace, @project,
                                                                    automated_workflow_execution, format: :turbo_stream)
       assert_response :success
@@ -287,6 +301,182 @@ module Projects
       assert_response :unauthorized
 
       assert_select 'h1', text: I18n.t(:'application.errors.access_denied')
+    end
+
+    test 'can manually trigger an automated workflow execution' do
+      Flipper.enable(:trigger_automated_workflow_execution)
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+      sample = samples(:sample1)
+      Attachments::CreateService.new(@user, sample, files: [
+                                       active_storage_blobs(:testsample_illumina_pe_forward_blob),
+                                       active_storage_blobs(:testsample_illumina_pe_reverse_blob)
+                                     ]).execute
+
+      get namespace_project_automated_workflow_executions_path(@namespace, @project), as: :turbo_stream
+      assert_response :success
+
+      assert_select 'table' do
+        assert_select 'tbody' do
+          assert_select "tr[id='automated_workflow_execution_#{automated_workflow_execution.id}']", count: 1 do
+            assert_select 'td:nth-child(7)', text: I18n.t('common.statuses.enabled')
+            assert_select 'td:nth-child(8)' do
+              assert_select 'button', text: I18n.t('common.actions.trigger'), count: 1
+            end
+          end
+        end
+      end
+
+      get trigger_namespace_project_automated_workflow_execution_path(
+        @namespace, @project, automated_workflow_execution
+      ), as: :turbo_stream
+
+      assert_response :success
+
+      assert_select 'dialog' do
+        assert_select 'h1', text: I18n.t('projects.automated_workflow_executions.trigger_modal.title')
+        assert_select 'dt', text: I18n.t('projects.automated_workflow_executions.table.headers.name')
+        assert_select 'dd', text: automated_workflow_execution.name
+        assert_select 'dt', text: I18n.t('projects.automated_workflow_executions.table.headers.workflow_name')
+        assert_select 'dd', text: automated_workflow_execution.workflow.name
+        assert_select 'dt', text: I18n.t('projects.automated_workflow_executions.table.headers.workflow_version')
+        assert_select 'dd', text: automated_workflow_execution.workflow.version
+
+        assert_select 'h3', text: I18n.t('projects.automated_workflow_executions.trigger_modal.search_form_title')
+      end
+
+      assert_difference 'WorkflowExecution.count' do
+        post launch_namespace_project_automated_workflow_execution_path(
+          @namespace, @project, automated_workflow_execution
+        ),
+             params: {
+               q: {
+                 groups_attributes: {
+                   '0' => {
+                     'conditions_attributes' => {
+                       '0' => {
+                         field: 'name',
+                         operator: '=',
+                         value: sample.name
+                       }
+                     }
+                   }
+                 }
+               },
+               format: :turbo_stream
+             }
+      end
+
+      # Should redirect to workflow executions listing
+      assert_redirected_to namespace_project_workflow_executions_path(@namespace, @project)
+
+      follow_redirect!
+
+      assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: " \
+                      "#{ I18n.t('projects.automated_workflow_executions.launch.success',
+                                 workflow_name: automated_workflow_execution.workflow.name, sample_count: 1)}"
+      end
+    ensure
+      Flipper.disable(:trigger_automated_workflow_execution)
+    end
+
+    test 'handles error when triggering automated workflow execution fails due to missing search params' do
+      Flipper.enable(:trigger_automated_workflow_execution)
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+
+      post launch_namespace_project_automated_workflow_execution_path(
+        @namespace, @project, automated_workflow_execution
+      ),
+           params: {
+             format: :turbo_stream
+           }
+
+      assert_response :unprocessable_content
+
+      assert_select 'dialog' do
+        assert_select "div[role='alert'][aria-live='assertive']" do
+          assert_select 'div', I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
+                                      'attributes.base.no_search_params')
+        end
+      end
+    ensure
+      Flipper.disable(:trigger_automated_workflow_execution)
+    end
+
+    test 'handles error when triggering automated workflow execution fails due to search not returning any samples' do
+      sample = samples(:sample1)
+      Flipper.enable(:trigger_automated_workflow_execution)
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+
+      post launch_namespace_project_automated_workflow_execution_path(
+        @namespace, @project, automated_workflow_execution
+      ),
+           params: {
+             q: {
+               groups_attributes: {
+                 '0' => {
+                   'conditions_attributes' => {
+                     '0' => {
+                       field: 'name',
+                       operator: '=',
+                       value: sample.name
+                     }
+                   }
+                 }
+               }
+             },
+             format: :turbo_stream
+           }
+
+      assert_response :unprocessable_content
+
+      assert_select 'dialog' do
+        assert_select "div[role='alert'][aria-live='assertive']" do
+          assert_select 'div', I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
+                                      'attributes.base.no_samples_with_pe_attachments')
+        end
+      end
+    ensure
+      Flipper.disable(:trigger_automated_workflow_execution)
+    end
+
+    test 'handles error when triggering automated workflow execution fails due to no samples with PE attachments' do
+      Flipper.enable(:trigger_automated_workflow_execution)
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+
+      post launch_namespace_project_automated_workflow_execution_path(
+        @namespace, @project, automated_workflow_execution
+      ),
+           params: {
+             q: {
+               groups_attributes: {
+                 '0' => {
+                   'conditions_attributes' => {
+                     '0' => {
+                       field: 'name',
+                       operator: '=',
+                       value: 'non_existent_sample'
+                     }
+                   }
+                 }
+               }
+             },
+             format: :turbo_stream
+           }
+
+      assert_response :unprocessable_content
+
+      assert_select 'dialog' do
+        assert_select "div[role='alert'][aria-live='assertive']" do
+          assert_select 'div', I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
+                                      'attributes.base.no_samples_found')
+        end
+      end
+    ensure
+      Flipper.disable(:trigger_automated_workflow_execution)
     end
 
     test 'handles update error when workflow execution service fails' do

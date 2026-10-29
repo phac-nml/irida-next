@@ -142,6 +142,25 @@ module Namespaces
       assert policy.apply(:view_automated_workflow_executions?)
     end
 
+    test '#trigger_automated_workflow_execution?' do
+      assert @policy.apply(:trigger_automated_workflow_execution?),
+             'Maintainer and Owner should be able to trigger automated workflow execution'
+
+      @project.namespace.archived_at = Time.zone.now
+      @project.namespace.save!
+
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: @user)
+
+      assert_not policy.apply(:trigger_automated_workflow_execution?),
+                 'Archived namespace should not be able to trigger automated workflow execution'
+
+      user = users(:james_doe)
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace, user: user)
+
+      assert_not policy.apply(:trigger_automated_workflow_execution?),
+                 'Member with access-level < Maintainer should not be able to trigger automated workflow execution'
+    end
+
     test '#view_workflow_executions?' do
       assert @policy.apply(:view_workflow_executions?)
 

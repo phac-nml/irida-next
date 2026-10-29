@@ -2,6 +2,8 @@
 fr:
   activemodel:
     attributes:
+      automated_workflow_executions/trigger_form:
+        q: Critères de recherche
       concatenation_form:
         attachment_ids: Fichiers
         basename: Nom de base du fichier de concaténation
@@ -54,6 +56,12 @@ fr:
               lower_than_from: doit être supérieur à la Valeur de départ
             value:
               invalid_between_value: doit être un tableau contenant deux valeurs
+        automated_workflow_executions/trigger_form:
+          attributes:
+            base:
+              no_samples_found: La recherche n’a retourné aucun échantillon sur lequel déclencher
+              no_samples_with_pe_attachments: La recherche n’a retourné aucun échantillon avec des fichiers jumelés sur lequel déclencher
+              no_search_params: Aucun paramètre de recherche n’a été fourni
         concatenation_form:
           attributes:
             attachment_ids:
@@ -1531,6 +1539,7 @@ fr:
         delete_aria_label: 'Supprimer le pipeline automatisé : %{name}'
         delete_confirm: Êtes-vous sûr de vouloir supprimer ce pipeline automatisé?
         edit_aria_label: 'Modifier le pipeline automatisé : %{name}'
+        trigger_aria_label: 'Déclencher le pipeline automatisé : %{name}'
       create:
         error: Impossible de créer un pipeline automatisé pour %{workflow_name}
         success: Le pipeline automatisé pour %{workflow_name} a été créé avec succès
@@ -1545,6 +1554,8 @@ fr:
         add_new_automated_workflow_execution: Nouveau pipeline automatisé
         subtitle: Configurer des pipelines automatisés à lancer lorsque les données jumelées sont téléchargées dans le projet
         title: Pipelines automatisés
+      launch:
+        success: Pipeline automatisé %{workflow_name} déclenché pour %{sample_count} exemple(s)
       new_automated_workflow_execution_modal:
         title: Paramètres %{workflow}
       pipeline_selection_modal:
@@ -1562,6 +1573,9 @@ fr:
           updated_at: Mis à jour
           workflow_name: Nom du flux de travail
           workflow_version: Version du flux de travail
+      trigger_modal:
+        search_form_title: Rechercher des échantillons à déclencher
+        title: Déclencher le pipeline automatisé
       update:
         error: Impossible de mettre à jour le pipeline automatisé pour %{workflow_name}
         success: Le pipeline automatisé pour %{workflow_name} a été mis à jour avec succès

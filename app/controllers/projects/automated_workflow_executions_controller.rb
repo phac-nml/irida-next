@@ -4,10 +4,11 @@ module Projects
   # Controller actions for Automated Workflow Executions
   class AutomatedWorkflowExecutionsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include BreadcrumbNavigation
+    include Metadata
 
     before_action :namespace
     before_action :automated_workflow_executions, only: %i[index update]
-    before_action :automated_workflow_execution, only: %i[edit update destroy show]
+    before_action :automated_workflow_execution, only: %i[edit update destroy show trigger launch]
     before_action :available_automated_workflows, only: %i[new edit]
     before_action :current_page, only: %i[index show]
     before_action :page_title
@@ -118,6 +119,58 @@ module Projects
       end
     end
 
+    def trigger
+      authorize! @namespace, to: :trigger_automated_workflow_execution?
+      return not_found unless Flipper.enabled?(:trigger_automated_workflow_execution)
+
+      @trigger_form = AutomatedWorkflowExecutions::TriggerForm.new(
+        automated_workflow_execution: @automated_workflow_execution,
+        project: @project,
+        request:
+      )
+
+      @query = @trigger_form.query
+      advanced_search_fields(@project.namespace)
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status: :ok
+        end
+      end
+    end
+
+    def launch # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+      authorize! @namespace, to: :trigger_automated_workflow_execution?
+      return not_found unless Flipper.enabled?(:trigger_automated_workflow_execution)
+
+      @trigger_form = AutomatedWorkflowExecutions::TriggerForm.new(
+        q: trigger_launch_params,
+        automated_workflow_execution: @automated_workflow_execution,
+        project: @project,
+        request:
+      )
+
+      if @trigger_form.valid?
+        samples = @trigger_form.samples
+        launched_samples_count = launch_workflow_for_samples(samples)
+
+        if launched_samples_count.zero?
+          @query = @trigger_form.query
+          @trigger_form.errors.add(:base, :no_samples_with_pe_attachments)
+          render 'trigger', status: :unprocessable_content, formats: :turbo_stream
+        else
+          flash[:success] = t('.success',
+                              workflow_name: @automated_workflow_execution.workflow.name,
+                              sample_count: launched_samples_count)
+          redirect_to namespace_project_workflow_executions_path(@project.parent, @project)
+        end
+      else
+        @query = @trigger_form.query
+        advanced_search_fields(@project.namespace)
+        render 'trigger', status: :unprocessable_content, formats: :turbo_stream
+      end
+    end
+
     private
 
     def current_page
@@ -128,6 +181,57 @@ module Projects
       params.expect(
         workflow_execution: [:name, :email_notification, :update_samples, { metadata: {}, workflow_params: {} }]
       )
+    end
+
+    def trigger_launch_params
+      params.fetch(:q, {}).permit(:groups_attributes, { groups_attributes: {} })
+    end
+
+    def launch_workflow_for_samples(samples)
+      launched_samples_count = 0
+      samples.each do |sample|
+        pe_attachment_pair = find_newest_pe_attachment_pair(sample)
+        next if pe_attachment_pair.blank?
+
+        AutomatedWorkflowExecutions::LaunchService.new(
+          @automated_workflow_execution,
+          sample,
+          pe_attachment_pair,
+          @project.namespace.automation_bot
+        ).execute
+        launched_samples_count += 1
+      end
+
+      launched_samples_count
+    end
+
+    # rubocop:disable-next Metrics/MethodLength
+    def find_newest_pe_attachment_pair(sample)
+      fastq_attachments = sample.attachments
+                                .where(Attachment.metadata_arel_node('format').eq('fastq'))
+
+      forward_attachments = fastq_attachments.with_direction('forward', include_nils: true)
+                                             .select(
+                                               'DISTINCT ON (attachable_id) attachments.*, ' \
+                                               'active_storage_blobs.filename as filename'
+                                             )
+                                             .order(:attachable_id)
+                                             .prefer_associated_attachment
+                                             .recent
+                                             .joins(:file_blob)
+
+      newest_forward = forward_attachments.first
+      return unless newest_forward
+
+      newest_reverse = Attachment.joins(:file_blob)
+                                 .find_by(id: newest_forward.metadata['associated_attachment_id'])
+
+      return unless newest_reverse
+
+      {
+        'forward' => newest_forward,
+        'reverse' => newest_reverse
+      }
     end
 
     protected
