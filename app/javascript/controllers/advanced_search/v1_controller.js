@@ -18,6 +18,8 @@ export default class AdvancedSearchController extends Controller {
     "selectValueTemplate",
     "valueTemplate",
     "betweenValueTemplate",
+    "dateValueTemplate",
+    "dateBetweenValueTemplate",
   ];
   static outlets = ["list-input"];
   static values = {
@@ -26,6 +28,8 @@ export default class AdvancedSearchController extends Controller {
     enumOperations: Object,
     numericFields: Array,
     numericOperations: Object,
+    dateFields: Array,
+    dateOperations: Object,
     operations: Object,
     hasErrors: Boolean,
     open: Boolean,
@@ -219,6 +223,10 @@ export default class AdvancedSearchController extends Controller {
       let templateTarget;
       if (["in", "not_in", "text_in", "text_not_in"].includes(operator)) {
         templateTarget = this.listValueTemplateTarget;
+      } else if (this.dateFieldsValue.includes(selectedField)) {
+        templateTarget = operator.includes("between")
+          ? this.dateBetweenValueTemplateTarget
+          : this.dateValueTemplateTarget;
       } else if (operator.includes("between")) {
         templateTarget = this.betweenValueTemplateTarget;
       } else {
@@ -361,6 +369,8 @@ export default class AdvancedSearchController extends Controller {
       );
     } else if (this.numericFieldsValue.includes(selectedField)) {
       this.#createOperatorOptions(this.numericOperationsValue, operator);
+    } else if (this.dateFieldsValue.includes(selectedField)) {
+      this.#createOperatorOptions(this.dateOperationsValue, operator);
     } else {
       this.#createOperatorOptions(this.operationsValue["standard"], operator);
     }

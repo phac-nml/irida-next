@@ -103,6 +103,37 @@ module AdvancedSearch
         assert_not_includes byte_size_operator_values, 'contains'
         assert_includes filename_operator_values, 'contains'
       end
+
+      test 'restricts created_at operator options to date operators only' do
+        search = Attachment::Query.new(
+          groups: [
+            Attachment::SearchGroup.new(
+              conditions: [
+                Attachment::SearchCondition.new(field: 'created_at', operator: '=', value: '2024-01-01'),
+                Attachment::SearchCondition.new(field: 'filename', operator: 'contains', value: 'fastq')
+              ]
+            )
+          ]
+        )
+        fields = AdvancedSearch::Fields.for_attachments
+
+        html = render_builder(search:, fields:)
+        fragment = Nokogiri::HTML::DocumentFragment.parse(html)
+
+        created_at_fieldset = fragment.at_css('fieldset[data-advanced-search-selected-field="created_at"]')
+        filename_fieldset = fragment.at_css('fieldset[data-advanced-search-selected-field="filename"]')
+        datepicker = created_at_fieldset.at_css('[data-controller]')
+
+        created_at_operator_values =
+          created_at_fieldset.css('select[name*="[operator]"] option').map { |o| o['value'] } # rubocop:disable Rails/Pluck
+        filename_operator_values = filename_fieldset.css('select[name*="[operator]"] option').map { |o| o['value'] } # rubocop:disable Rails/Pluck
+
+        assert_not_includes created_at_operator_values, 'contains'
+        assert_not_includes created_at_operator_values, 'in'
+        assert_includes created_at_operator_values, 'between'
+        assert_includes filename_operator_values, 'contains'
+        assert_equal 'combobox-datepicker--v1--input', datepicker['data-controller']
+      end
     end
   end
 end

@@ -10,7 +10,9 @@
       <%= 'invisible @max-xl:hidden' if operator_exists %>
     "
   >
-    <%= @conditions_form.label :value, data: { required: true } %>
+    <% unless datepicker? %>
+      <%= @conditions_form.label :value, data: { required: true } %>
+    <% end %>
 
     <% if %w[in not_in text_in text_not_in].include?(@condition.operator) %>
       <% if @options.nil? %>
@@ -38,6 +40,17 @@
                                    "aria-describedby": @conditions_form.field_id(:value, "error")
                                  } %>
       <% end %>
+    <% elsif datepicker? %>
+      <%= combobox_datepicker(
+        id: @conditions_form.field_id(:value),
+        label: @condition.class.human_attribute_name(:value),
+        input_name: @conditions_form.field_name(:value),
+        input_aria_label: value_label,
+        selected_date: @condition.value,
+        min_date: nil,
+        required: true,
+        errored: invalid_value,
+      ) %>
     <% elsif @options.nil? %>
       <%= @conditions_form.text_field :value,
                                 "aria-label": value_label,
@@ -68,16 +81,28 @@
       <%= 'invisible @max-xl:hidden' if operator_exists %>
     "
   >
-    <%= @conditions_form.label :"from_value", data: { required: true } %>
-
-    <%= @conditions_form.text_field :value,
-    id: "#{@conditions_form.field_id(:"from_value")}",
-    multiple: true,
-    value:  @condition.value.blank? ? nil : @condition.value[0],
-                                "aria-label":  I18n.t('activemodel.attributes.sample/search_condition.from_value'),
-                                "aria-invalid": invalid_from_value,
-                                "aria-describedby":
-                                  @conditions_form.field_id(:"from_value", "error") %>
+    <% if datepicker? %>
+      <%= combobox_datepicker(
+        id: @conditions_form.field_id(:"from_value"),
+        label: I18n.t('activemodel.attributes.sample/search_condition.from_value'),
+        input_name: @conditions_form.field_name(:value, multiple: true),
+        input_aria_label: I18n.t('activemodel.attributes.sample/search_condition.from_value'),
+        selected_date: range_value(0),
+        min_date: nil,
+        required: true,
+        errored: invalid_from_value,
+      ) %>
+    <% else %>
+      <%= @conditions_form.label :"from_value", data: { required: true } %>
+      <%= @conditions_form.text_field :value,
+      id: "#{@conditions_form.field_id(:"from_value")}",
+      multiple: true,
+      value: range_value(0),
+                                  "aria-label":  I18n.t('activemodel.attributes.sample/search_condition.from_value'),
+                                  "aria-invalid": invalid_from_value,
+                                  "aria-describedby":
+                                    @conditions_form.field_id(:"from_value", "error") %>
+    <% end %>
 
     <%= render "shared/form/field_errors",
     errors: @condition.errors.full_messages_for(:from_value),
@@ -89,16 +114,28 @@
       <%= 'invisible @max-xl:hidden' if operator_exists %>
     "
   >
-    <%= @conditions_form.label :"to_value", data: { required: true } %>
-
-    <%= @conditions_form.text_field :value,
-    id: "#{@conditions_form.field_id(:"to_value")}",
-    multiple: true,
-    value: @condition.value.blank? ? nil : @condition.value[1],
-                                "aria-label": I18n.t('activemodel.attributes.sample/search_condition.to_value'),
-                                "aria-invalid": invalid_to_value,
-                                "aria-describedby":
-                                  @conditions_form.field_id(:to_value, "error") %>
+    <% if datepicker? %>
+      <%= combobox_datepicker(
+        id: @conditions_form.field_id(:"to_value"),
+        label: I18n.t('activemodel.attributes.sample/search_condition.to_value'),
+        input_name: @conditions_form.field_name(:value, multiple: true),
+        input_aria_label: I18n.t('activemodel.attributes.sample/search_condition.to_value'),
+        selected_date: range_value(1),
+        min_date: nil,
+        required: true,
+        errored: invalid_to_value,
+      ) %>
+    <% else %>
+      <%= @conditions_form.label :"to_value", data: { required: true } %>
+      <%= @conditions_form.text_field :value,
+      id: "#{@conditions_form.field_id(:"to_value")}",
+      multiple: true,
+      value: range_value(1),
+                                  "aria-label": I18n.t('activemodel.attributes.sample/search_condition.to_value'),
+                                  "aria-invalid": invalid_to_value,
+                                  "aria-describedby":
+                                    @conditions_form.field_id(:"to_value", "error") %>
+    <% end %>
 
     <%= render "shared/form/field_errors",
       errors: @condition.errors.full_messages_for(:to_value),

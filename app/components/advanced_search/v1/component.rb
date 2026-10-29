@@ -30,6 +30,10 @@ module AdvancedSearch
         @fields.fetch(:numeric_fields, [])
       end
 
+      def date_fields
+        @fields.fetch(:date_fields, [])
+      end
+
       def enum_operation_options
         enum_operators = {}
         if Flipper.enabled?(:advanced_search_metadata_operators)
@@ -50,6 +54,10 @@ module AdvancedSearch
 
       def numeric_operation_options
         @operations['standard'].select { |_, value| AdvancedSearch::NUMERIC_OPERATOR_VALUES.include?(value) }
+      end
+
+      def date_operation_options
+        @operations['standard'].select { |_, value| AdvancedSearch::DATE_OPERATOR_VALUES.include?(value) }
       end
 
       def operation_options # rubocop:disable Metrics/MethodLength, Metrics/AbcSize

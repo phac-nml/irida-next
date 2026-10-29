@@ -384,6 +384,29 @@ module Projects
       end
     end
 
+    test 'advanced search filters attachments by created at' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+      attachment1 = attachments(:project1Attachment1)
+      attachment2 = attachments(:project1Attachment2)
+      target_date = Date.current
+      attachment1.update!(created_at: target_date - 1.day)
+      attachment2.update!(created_at: target_date.in_time_zone.change(hour: 14, min: 30))
+
+      get namespace_project_attachments_path(group, project),
+          params: advanced_search_params(
+            [[{ field: 'created_at', operator: '=', value: target_date.to_s }]]
+          )
+
+      assert_response :success
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 1
+        assert_select "tr##{dom_id(attachment1)}", count: 0
+        assert_select "tr##{dom_id(attachment2)}"
+      end
+    end
+
     test 'advanced search filters attachments to only a reverse read' do
       sign_in users(:john_doe)
       project = projects(:project1)

@@ -174,6 +174,26 @@ module Projects
       assert_select "#samples-table table tbody tr##{dom_id(@sample1)}", count: 0
     end
 
+    test 'advanced search filters samples by created at' do
+      sample2 = samples(:sample2)
+      sample30 = samples(:sample30)
+      target_date = Date.current
+      @sample1.update!(created_at: target_date - 1.day)
+      sample2.update!(created_at: target_date - 1.day)
+      sample30.update!(created_at: target_date)
+
+      get namespace_project_samples_url(@namespace, @project),
+          params: advanced_search_params(
+            [[{ field: 'created_at', operator: '=', value: target_date.to_s }]]
+          )
+
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: 1
+      assert_select "#samples-table table tbody tr##{dom_id(sample30)}"
+      assert_select "#samples-table table tbody tr##{dom_id(@sample1)}", count: 0
+      assert_select "#samples-table table tbody tr##{dom_id(sample2)}", count: 0
+    end
+
     test 'advanced search query persists in the session and is reapplied without query params' do
       sample30 = samples(:sample30)
 
