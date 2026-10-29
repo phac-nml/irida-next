@@ -166,6 +166,7 @@ ignore_unused:
   - "local_time.*"
   - "dashboard.groups.index.no_groups_title"
   - "dashboard.groups.index.no_groups_description"
+  - "general.form.error_summary.title.:"
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:
