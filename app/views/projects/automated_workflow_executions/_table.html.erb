@@ -30,7 +30,7 @@
 
     <% table.with_column(t(".headers.status")) do |row| %>
       <% if row[:disabled] %>
-        <%= render Viral::PillComponent.new(text: t("common.statuses.disabled").upcase, color: "red") %>
+        <%= render Viral::PillComponent.new(text: t("common.statuses.disabled"), color: "red") %>
       <% else %>
         <%= render Viral::PillComponent.new(text: t("common.statuses.enabled"), color: "green") %>
       <% end %>

@@ -198,7 +198,7 @@ module Projects
       assert_select 'table' do
         assert_select 'tbody' do
           assert_select "tr[id='automated_workflow_execution_#{disabled_automated_pipeline.id}']", count: 1 do
-            assert_select 'td:nth-child(7)', text: I18n.t('common.statuses.disabled').upcase
+            assert_select 'td:nth-child(7)', text: I18n.t('common.statuses.disabled')
             assert_select 'td:nth-child(8)' do
               assert_select 'button', text: I18n.t('common.actions.edit'), count: 0
             end
@@ -393,7 +393,7 @@ module Projects
       assert_select 'table' do
         assert_select 'tbody' do
           assert_select "tr[id='automated_workflow_execution_#{automated_workflow_execution.id}']", count: 1 do
-            assert_select 'td:nth-child(7)', text: I18n.t('common.statuses.disabled').upcase
+            assert_select 'td:nth-child(7)', text: I18n.t('common.statuses.disabled')
             assert_select 'td:nth-child(8)' do
               assert_select 'button', text: I18n.t('common.actions.trigger'), count: 0
             end
