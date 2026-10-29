@@ -38,7 +38,8 @@ class NextflowSamplesheetComponentSystemTest < ApplicationSystemTestCase
       assert_no_text 'Enabled'
       assert_no_text "Name can't be blank"
     end
-    assert_selector '#workflow_execution_workflow_params_project_name:focus'
+    assert_equal 'workflow_execution_workflow_params_project_name',
+                 page.evaluate_script('document.activeElement.id')
     assert_selector '#workflow_execution_workflow_params_project_name_error', text: "Project name can't be blank"
     assert_selector '#workflow_execution_workflow_params_reference_error', text: "Reference file can't be blank"
     page.current_window.resize_to(360, 900)
@@ -56,7 +57,9 @@ class NextflowSamplesheetComponentSystemTest < ApplicationSystemTestCase
     fill_in 'Count', with: '0'
     select 'fast', from: 'Mode'
     click_button I18n.t('workflow_executions.submissions.create.submit')
-    assert_selector '#workflow_execution_workflow_params_reference_link:focus[aria-invalid="true"]'
+    assert_selector '#workflow_execution_workflow_params_reference_link[aria-invalid="true"]'
+    assert_equal 'workflow_execution_workflow_params_reference_link',
+                 page.evaluate_script('document.activeElement.id')
 
     # Keyboard activation opens the file selector; Turbo replaces the link and hidden input.
     find('#workflow_execution_workflow_params_reference_link').send_keys(:enter)
