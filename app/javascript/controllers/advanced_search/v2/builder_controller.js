@@ -321,7 +321,7 @@ export default class AdvancedSearchBuilderController extends Controller {
     }
 
     this.#refreshPresentation();
-    this.#focusConditionInput(this.#conditionElements(group).at(-1));
+    focusConditionField(this.#conditionElements(group).at(-1));
   }
 
   // Only decorative nodes are replaced. Live controls retain their identity and keys.
