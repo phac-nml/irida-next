@@ -146,6 +146,22 @@ module Namespaces
       assert @policy.apply(:trigger_automated_workflow_execution?),
              'Maintainer and Owner should be able to trigger automated workflow execution'
 
+      automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace,
+                                                      user: @user,
+                                                      automated_workflow_execution: automated_workflow_execution)
+
+      assert policy.apply(:trigger_automated_workflow_execution?),
+             'Enabled automated workflow execution should be triggerable'
+
+      automated_workflow_execution = automated_workflow_executions(:disabled_automated_workflow_execution)
+      policy = Namespaces::ProjectNamespacePolicy.new(@project.namespace,
+                                                      user: @user,
+                                                      automated_workflow_execution: automated_workflow_execution)
+
+      assert_not policy.apply(:trigger_automated_workflow_execution?),
+                 'Disabled automated workflow execution should not be triggerable'
+
       @project.namespace.archived_at = Time.zone.now
       @project.namespace.save!
 

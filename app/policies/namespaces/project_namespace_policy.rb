@@ -7,6 +7,7 @@ module Namespaces
     pre_check :check_project_archived,
               except: %i[member_listing? view_bot_accounts? view_bot_personal_access_tokens?
                          view_automated_workflow_executions? view_workflow_executions? view_metadata_templates?]
+    authorize :automated_workflow_execution, optional: true
 
     def effective_access_level
       @access_level ||= Member::AccessLevel::OWNER if record.parent&.user_namespace? && record.parent&.owner == user
@@ -174,7 +175,10 @@ module Namespaces
     end
 
     def trigger_automated_workflow_execution?
-      return true if Member::AccessLevel.manageable.include?(effective_access_level)
+      if Member::AccessLevel.manageable.include?(effective_access_level) &&
+         (automated_workflow_execution.nil? || !automated_workflow_execution.disabled?)
+        return true
+      end
 
       details[:name] = record.name
       false

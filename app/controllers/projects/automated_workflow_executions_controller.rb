@@ -120,7 +120,8 @@ module Projects
     end
 
     def trigger
-      authorize! @namespace, to: :trigger_automated_workflow_execution?
+      authorize! @namespace, to: :trigger_automated_workflow_execution?,
+                             context: { automated_workflow_execution: @automated_workflow_execution }
       return not_found unless Flipper.enabled?(:trigger_automated_workflow_execution)
 
       @trigger_form = AutomatedWorkflowExecutions::TriggerForm.new(
@@ -140,7 +141,8 @@ module Projects
     end
 
     def launch # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-      authorize! @namespace, to: :trigger_automated_workflow_execution?
+      authorize! @namespace, to: :trigger_automated_workflow_execution?,
+                             context: { automated_workflow_execution: @automated_workflow_execution }
       return not_found unless Flipper.enabled?(:trigger_automated_workflow_execution)
 
       @trigger_form = AutomatedWorkflowExecutions::TriggerForm.new(
