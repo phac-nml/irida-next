@@ -29,6 +29,14 @@ class AdvancedSearch::FieldsTest < ActiveSupport::TestCase # rubocop:disable Sty
                  fields[:groups][metadata_group_label]
   end
 
+  test 'for_attachments returns enum fields for attachment metadata' do
+    fields = AdvancedSearch::Fields.for_attachments
+
+    assert_equal %w[assembly pe illumina_pe], fields[:enum_fields]['metadata.type'][:values]
+    assert_equal Attachment::FORMAT_REGEX.keys, fields[:enum_fields]['metadata.format'][:values]
+    assert_equal %w[none gzip], fields[:enum_fields]['metadata.compression'][:values]
+  end
+
   test 'for_workflow_executions returns workflow labels and metadata grouping' do
     field_configuration = Struct.new(:fields).new(
       ['id', 'run_id', 'state', 'metadata.pipeline_id', 'metadata.workflow_version']
