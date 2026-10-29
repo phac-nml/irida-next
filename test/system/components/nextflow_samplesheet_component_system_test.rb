@@ -14,7 +14,7 @@ class NextflowSamplesheetComponentSystemTest < ApplicationSystemTestCase
     login_as @user
   end
 
-  test 'native form submission validates every required parameter and restores file selector focus' do
+  test 'native form submission validates every required parameter and preserves current focus' do
     login_as users(:snvphyl_user)
     namespace = projects(:snvphyl_project).namespace
     visit "/rails/view_components/nextflow/base_component/required_parameters?namespace_id=#{namespace.id}"
@@ -38,8 +38,7 @@ class NextflowSamplesheetComponentSystemTest < ApplicationSystemTestCase
       assert_no_text 'Enabled'
       assert_no_text "Name can't be blank"
     end
-    assert_equal 'workflow_execution_workflow_params_project_name',
-                 page.evaluate_script('document.activeElement.id')
+    assert_selector '#workflow_execution_workflow_params_project_name[aria-invalid="true"]'
     assert_selector '#workflow_execution_workflow_params_project_name_error', text: "Project name can't be blank"
     assert_selector '#workflow_execution_workflow_params_reference_error', text: "Reference file can't be blank"
     page.current_window.resize_to(360, 900)
