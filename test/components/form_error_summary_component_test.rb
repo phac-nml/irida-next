@@ -35,6 +35,7 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
 
     assert_selector '.alert-component', count: 1
     assert_selector 'div[data-controller="form-error-summary"][tabindex="-1"]', count: 1
+    assert_selector 'div[data-form-error-summary-autofocus-value="true"]'
     assert_no_selector '#sr-status'
     assert_selector 'h2',
                     text: I18n.t('general.form.error_summary.title', count: 2)
@@ -64,6 +65,20 @@ class FormErrorSummaryComponentTest < ViewComponentTestCase
     )
 
     assert_selector '.alert-component#custom-summary[data-testid="form-summary"][aria-label="Form error summary"]'
+  end
+
+  test 'component can disable autofocus on connect' do
+    entries = [
+      FormErrorSummaryEntryBuilder::Entry.new(
+        attribute: :email,
+        message: "Email can't be blank",
+        target_id: 'user_email'
+      )
+    ]
+
+    render_inline(FormErrorSummaryComponent.new(entries:, autofocus: false))
+
+    assert_selector 'div[data-form-error-summary-autofocus-value="false"]'
   end
 
   test 'component can limit rendered entries with include argument' do

@@ -3,6 +3,7 @@ import { focusWhenVisible } from "utilities/focus";
 
 export default class extends Controller {
   connect() {
+    if (this.element.dataset.formErrorSummaryAutofocusValue === "false") return;
     focusWhenVisible(this.element);
   }
 

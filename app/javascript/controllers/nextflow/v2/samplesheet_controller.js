@@ -230,7 +230,9 @@ export default class extends Controller {
     this.#enableSubmissionState();
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
-      const requiredFieldsValid = this.#validateRequiredFormInputs();
+      const requiredFieldsValid = this.#validateRequiredFormInputs({
+        focusFirstMissing: true,
+      });
       if (!requiredFieldsValid) {
         this.#disableSubmissionState();
         return;
@@ -892,7 +894,7 @@ export default class extends Controller {
     return params;
   }
 
-  #validateRequiredFormInputs() {
+  #validateRequiredFormInputs({ focusFirstMissing = false } = {}) {
     const requiredFields = this.formTarget.querySelectorAll(
       "[aria-required='true'], input[type='hidden'][data-required='true']",
     );
@@ -907,6 +909,7 @@ export default class extends Controller {
         );
         missingEntries.push({
           message,
+          hiddenField: field.type === "hidden",
           targetId:
             field.type === "hidden"
               ? this.#fileSelectorLink(field)?.id
@@ -920,8 +923,28 @@ export default class extends Controller {
       return true;
     }
 
+    const shouldFocusFirstMissing =
+      focusFirstMissing ||
+      (missingEntries.length === 1 && missingEntries[0].hiddenField);
+    if (shouldFocusFirstMissing) {
+      this.#focusFirstMissingEntry(missingEntries);
+    }
     this.#enableFormFieldErrorState(missingEntries);
     return false;
+  }
+
+  #focusFirstMissingEntry(entries) {
+    const targetId = entries.find((entry) => entry.targetId)?.targetId;
+    if (!targetId) {
+      return;
+    }
+
+    const target = this.formTarget.querySelector(`#${CSS.escape(targetId)}`);
+    if (!target || typeof target.focus !== "function") {
+      return;
+    }
+
+    focusWhenVisible(target, { focusOptions: { focusVisible: true } });
   }
 
   #renderFormFieldErrorEntries(entries) {
