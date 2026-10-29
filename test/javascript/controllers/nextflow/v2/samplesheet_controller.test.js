@@ -903,6 +903,30 @@ describe("nextflow v2 samplesheet controller", () => {
     expect(formFieldError.textContent).toContain("Name can't be blank");
   });
 
+  it("gracefully handles a malformed form error summary container", async () => {
+    setupStandardSamplesheetAttributes(range(1, 2));
+    application = await startController();
+
+    const requestSubmit = vi
+      .spyOn(HTMLFormElement.prototype, "requestSubmit")
+      .mockImplementation(() => {});
+    const submitBtn = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="submit"]',
+    );
+    const summaryContainer = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldError"]',
+    );
+
+    summaryContainer.querySelector("ul").remove();
+    submitBtn.click();
+    vi.advanceTimersByTime(60);
+
+    expect(summaryContainer).not.toHaveClass("hidden");
+    expect(requestSubmit).not.toHaveBeenCalled();
+
+    requestSubmit.mockRestore();
+  });
+
   it("can't submit when a required workflow param is blank", async () => {
     setupStandardSamplesheetAttributes(range(1, 2));
     application = await startController();
