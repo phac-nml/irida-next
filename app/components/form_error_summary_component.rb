@@ -2,10 +2,11 @@
 
 # Renders an accessible validation summary with linked field errors.
 class FormErrorSummaryComponent < Component
-  def initialize(entries:, include: nil, **system_arguments)
+  def initialize(entries:, include: nil, autofocus: true, **system_arguments)
     @entries_all = Array(entries)
     @include_attributes =
       Array(include).compact_blank.map { |a| a.to_s.delete_suffix('_id') }.uniq
+    @autofocus = autofocus
     @system_arguments = system_arguments
   end
 
@@ -23,7 +24,7 @@ class FormErrorSummaryComponent < Component
 
   private
 
-  attr_reader :entries_all, :include_attributes, :system_arguments
+  attr_reader :entries_all, :include_attributes, :autofocus, :system_arguments
 
   def heading_id
     @heading_id ||= "form-error-summary-heading-#{object_id}"
@@ -31,6 +32,10 @@ class FormErrorSummaryComponent < Component
 
   def description_id
     @description_id ||= "form-error-summary-description-#{object_id}"
+  end
+
+  def autofocus_value
+    autofocus.to_s
   end
 
   def title_text

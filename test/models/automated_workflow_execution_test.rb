@@ -47,4 +47,20 @@ class AutomatedWorkflowExecutionTest < ActiveSupport::TestCase
 
     assert new_automated_we.errors.full_messages.any?
   end
+
+  test 'invalid when a required workflow param is blank' do
+    workflow = @valid_automated_workflow_execution.workflow
+    definitions = workflow.workflow_params.deep_dup
+    definitions[:input_output_options][:properties][:reference] = { type: 'string', required: true }
+    workflow.stubs(:workflow_params).returns(definitions)
+    @valid_automated_workflow_execution.stubs(:workflow).returns(workflow)
+
+    @valid_automated_workflow_execution.workflow_params = { reference: '' }
+    assert_not @valid_automated_workflow_execution.valid?
+    assert_includes @valid_automated_workflow_execution.errors[:base],
+                    I18n.t('workflow_executions.create.required_workflow_param_blank', property: :reference)
+
+    @valid_automated_workflow_execution.workflow_params = { reference: 'gid://irida/Attachment/1' }
+    assert @valid_automated_workflow_execution.valid?
+  end
 end

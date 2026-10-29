@@ -1,71 +1,70 @@
-<div>
-  <% if property[:type] != "boolean" %>
-    <% if (property[:format] == "path" || property[:format] == "file-path") && !property[:enum].present? %>
-      <% describedby_ids = [@prefix_id] %>
-      <% describedby_ids << @help_text_id if property[:help_text].present? %>
-      <fieldset class="m-0 border-0 p-0">
-        <legend id="<%= @legend_id %>" class="mb-2 block text-sm font-medium text-slate-900 dark:text-white">
-          <%= property[:description] %>
+<div class="@container workflow-parameter min-w-0">
+  <% describedby_ids = [@prefix_id] %>
+  <% describedby_ids << @help_text_id if property[:help_text].present? %>
+  <% describedby_ids << @error_id if property[:required] %>
+  <% grouped = property[:type] == "boolean" || ((property[:format] == "path" || property[:format] == "file-path") && property[:enum].blank?) %>
 
-          <% if property[:required] %>
-            <%= render Viral::PillComponent.new(text: t(:"components.nextflow.required"), color: :primary) %>
-          <% end %>
-        </legend>
-      </fieldset>
-      <div
-        class="
-          flex flex-col rounded-lg border border-slate-300 bg-slate-300 @md:flex-row dark:border-slate-600
-          dark:bg-slate-600
-        "
-      >
-        <span
-          id="<%= @prefix_id %>"
-          class="
-            inline-flex items-center rounded-t-lg px-3 py-2 font-mono text-sm text-slate-900 @md:rounded-l-lg
-            @md:rounded-tr-none dark:text-slate-300
-          "
-        >
-          <%= format_name_as_arg(name) %>
-        </span>
-
-        <%= link_to t('components.nextflow.no_selected_file'), helpers.new_workflow_executions_file_selector_path( file_selector: { pattern: property[:pattern] || ".*", property: name, required: property[:required], attachable_id: @namespace_id, attachable_type: @namespace_type, selected_id: nil, namespace_id: @namespace_id, help_text: property[:help_text] } ), id: fields.field_id(name, "link"), class: "
-            block w-full min-w-0 flex-1 rounded-b-lg border-none bg-slate-50 p-2.5 text-sm text-slate-900
-            focus-visible:z-10 @md:rounded-r-lg @md:rounded-bl-none dark:bg-slate-700 dark:text-white
-            dark:placeholder-slate-400
-          ", aria: { labelledby: @legend_id, describedby: describedby_ids.join(" ") }, data: { turbo_stream: "true" } %>
-
-        <%= fields.hidden_field name, required: property[:required] %>
-      </div>
+  <%= content_tag(grouped ? :fieldset : :div, class: "m-0 min-w-0 border-0 p-0") do %>
+    <% if grouped %>
+      <legend id="<%= @legend_id %>" class="mb-2 block text-sm font-semibold text-[var(--pvc-color-text)]">
+        <%= property[:description] %>
+        <%= required_indicator if property[:required] %>
+      </legend>
     <% else %>
-      <%= fields.label name, class: "block mb-2 text-sm font-medium text-slate-900 dark:text-white" do %>
-        <%= property[:description] %>
-
-        <% if property[:required] %>
-          <%= render Viral::PillComponent.new(text: t(:"components.nextflow.required"), color: :primary) %>
-        <% end %>
-      <% end %>
-      <%= form_input(fields, name, property, property[:required], instance) %>
+      <%= fields.label name, property[:description], data: { required: property[:required] || nil } %>
     <% end %>
-  <% else %>
-    <% value = instance.present? ? instance["workflow_params"][name.to_s] : property[:default] %>
-    <%= render Viral::Form::Prefixed::BooleanComponent.new(form: fields, name:, value: ActiveModel::Type::Boolean.new.cast(value)) do |input| %>
-      <%= input.with_prefix do %>
-        <%= format_name_as_arg(name) %>
-      <% end %>
 
-      <%= input.with_legend(classes: "block mb-2 text-sm font-medium text-slate-900 dark:text-white") do %>
-        <%= property[:description] %>
+    <div class="workflow-parameter-control">
+      <span id="<%= @prefix_id %>" class="workflow-parameter-prefix"><%= format_name_as_arg(name) %></span>
 
-        <% if property[:required] %>
-          <%= render Viral::PillComponent.new(text: t(:"components.nextflow.required"), color: :primary) %>
-        <% end %>
+      <% if property[:type] == "boolean" %>
+        <% value = instance.present? ? instance["workflow_params"][name.to_s] : property[:default] %>
+        <% value = ActiveModel::Type::Boolean.new.cast(value) || false %>
+        <div class="workflow-parameter-input flex flex-wrap items-center gap-x-4 gap-y-2">
+          <% [true, false].each do |option| %>
+            <%= fields.radio_button name, option.to_s,
+                                    label: t("components.nextflow.v2.workflow_param_property_component.boolean_options.#{option}"),
+                                    checked: value == option,
+                                    aria: { describedby: describedby_ids.join(" ") } %>
+          <% end %>
+        </div>
+      <% elsif grouped %>
+        <a
+          id="<%= fields.field_id(name, "link") %>"
+          href="<%= helpers.new_workflow_executions_file_selector_path(
+                            file_selector: {
+                              pattern: property[:pattern] || ".*",
+                              property: name,
+                              required: property[:required],
+                              attachable_id: @namespace_id,
+                              attachable_type: @namespace_type,
+                              selected_id: selected_attachment&.id,
+                              namespace_id: @namespace_id,
+                              help_text: property[:help_text]
+                            }
+                          ) %>"
+          class="workflow-parameter-input workflow-parameter-file"
+          aria-labelledby="<%= @legend_id %> <%= fields.field_id(name, "link") %>"
+          aria-describedby="<%= describedby_ids.join(" ") %>"
+          data-turbo-stream="true"
+        >
+          <%= selected_attachment&.file&.filename&.to_s || t('components.nextflow.no_selected_file') %>
+        </a>
+        <%# Hidden inputs can't take aria-required, so workflow validation reads data-required. %>
+        <%= fields.hidden_field name,
+                            value: selected_attachment&.to_global_id,
+                            data: { required: property[:required] ? "true" : nil } %>
+      <% else %>
+        <%= form_input(fields, name, property, instance, describedby: describedby_ids.join(" ")) %>
       <% end %>
-    <% end %>
+    </div>
+  <% end %>
+
+  <% if property[:required] %>
+    <%= render Viral::Form::HelpTextComponent.new(id: @error_id, state: :error, classes: "hidden") %>
   <% end %>
 
   <% if property[:help_text].present? %>
-    <%= render Viral::Form::HelpTextComponent.new(id: help_text_id) do %>
-      <%= property[:help_text] %>
-    <% end %>
+    <p id="<%= help_text_id %>" class="mt-2 text-sm text-[var(--pvc-color-text-muted)]"><%= property[:help_text] %></p>
   <% end %>
 </div>

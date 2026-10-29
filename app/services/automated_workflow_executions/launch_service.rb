@@ -20,10 +20,20 @@ module AutomatedWorkflowExecutions
 
       authorize! @automated_workflow_execution.namespace, to: :submit_workflow?
 
-      WorkflowExecutions::CreateService.new(@current_user, workflow_execution_params).execute
+      workflow_execution = WorkflowExecutions::CreateService.new(@current_user, workflow_execution_params).execute
+      log_launch_failure(workflow_execution) if workflow_execution && !workflow_execution.persisted?
+
+      workflow_execution
     end
 
     private
+
+    def log_launch_failure(workflow_execution)
+      Rails.logger.warn(
+        "Automated workflow execution #{@automated_workflow_execution.id} failed to launch for sample " \
+        "#{@sample.puid}: #{workflow_execution.errors.full_messages.to_sentence}"
+      )
+    end
 
     def workflow_execution_params # rubocop:disable Metrics/MethodLength
       {

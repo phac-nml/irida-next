@@ -346,6 +346,11 @@ fr:
         project: Partager les résultats avec les membres du projet?
       unauthorized_to_update_samples: Vous n’êtes pas autorisé à mettre à jour les échantillons avec les résultats d’analyse.
       update_samples: Mettre à jour les échantillons avec les résultats de l’analyse
+      v2:
+        workflow_param_property_component:
+          boolean_options:
+            'false': Faux
+            'true': Vrai
       verifying_update_samples: Vérification de votre autorisation à mettre à jour les échantillons avec les résultats d’analyse
     nextflow_component:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
@@ -452,11 +457,6 @@ fr:
       data_table_component:
         header:
           action: Mesure
-      form:
-        prefixed:
-          boolean_component:
-            'false': Faux
-            'true': Vrai
       pagy:
         empty_state:
           description: Aucun article trouvé correspondant à votre recherche

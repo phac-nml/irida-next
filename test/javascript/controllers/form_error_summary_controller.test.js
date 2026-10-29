@@ -7,8 +7,12 @@ vi.mock("utilities/focus", () => ({ focusWhenVisible: vi.fn() }));
 
 describe("form error summary", () => {
   let application, controller;
-  async function mount(fields = "", targetId = "field") {
-    document.body.innerHTML = `<div id="summary" data-controller="form-error-summary" tabindex="-1">
+  async function mount(
+    fields = "",
+    targetId = "field",
+    autofocusValue = "true",
+  ) {
+    document.body.innerHTML = `<div id="summary" data-controller="form-error-summary" data-form-error-summary-autofocus-value="${autofocusValue}" tabindex="-1">
       <a href="#field" data-action="form-error-summary#focusField">Error</a>
     </div>${fields}`;
     document
@@ -31,6 +35,10 @@ describe("form error summary", () => {
     expect(focusWhenVisible).toHaveBeenCalledWith(
       document.querySelector("#summary"),
     );
+  });
+  it("does not autofocus when disabled by data attribute", async () => {
+    await mount("", "field", "false");
+    expect(focusWhenVisible).not.toHaveBeenCalled();
   });
   it.each([
     ['<input id="field">', "field"],

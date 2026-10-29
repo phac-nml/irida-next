@@ -12,6 +12,18 @@ module AutomatedWorkflowExecutions
       @pe_attachment_pair = { 'forward' => attachments(:attachmentPEFWD1), 'reverse' => attachments(:attachmentPEREV1) }
     end
 
+    test 'logs when the workflow execution is rejected' do
+      rejected = WorkflowExecution.new
+      rejected.errors.add(:base, 'Workflow parameter reference is required')
+      WorkflowExecutions::CreateService.any_instance.stubs(:execute).returns(rejected)
+      Rails.logger.expects(:warn).with(
+        includes("#{@automated_workflow_execution.id} failed to launch for sample #{@sample.puid}")
+      )
+
+      AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample, @pe_attachment_pair,
+                                                     @automation_bot).execute
+    end
+
     test 'creates workflow execution with valid arguments' do
       assert_difference -> { WorkflowExecution.count } => 1 do
         AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample, @pe_attachment_pair,

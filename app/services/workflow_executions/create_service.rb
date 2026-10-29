@@ -61,19 +61,13 @@ module WorkflowExecutions
     def validate_required_workflow_params
       return if workflow.nil?
 
-      workflow.workflow_params.each_value do |definition|
-        definition[:properties].each do |name, property|
-          next unless %w[path file-path].include?(property[:format])
-          next unless property[:required]
-
-          value = @workflow_execution.workflow_params[name.to_s]
-          next if value.present?
-
-          @workflow_execution.errors.add(
-            :base,
-            I18n.t('workflow_executions.create.required_workflow_param_blank', property: name)
-          )
-        end
+      missing_params = Irida::Nextflow::RequiredWorkflowParams.new(workflow.workflow_params)
+                                                              .missing(@workflow_execution.workflow_params)
+      missing_params.each do |name|
+        @workflow_execution.errors.add(
+          :base,
+          I18n.t('workflow_executions.create.required_workflow_param_blank', property: name)
+        )
       end
     end
 
@@ -113,13 +107,23 @@ module WorkflowExecutions
 
       workflow.workflow_params.each_value do |definition|
         definition[:properties].each do |name, property|
-          if sanitized_params.key?(name.to_sym)
-            sanitized_params[name.to_sym] = sanitize_workflow_param(property, sanitized_params[name.to_sym])
+          key = name.to_sym
+          next unless sanitized_params.key?(key)
+
+          if blank_typed_workflow_param?(property, sanitized_params[key])
+            # omit blank values so Nextflow uses its default instead of a coerced zero
+            sanitized_params.delete(key)
+          else
+            sanitized_params[key] = sanitize_workflow_param(property, sanitized_params[key])
           end
         end
       end
 
       sanitized_params
+    end
+
+    def blank_typed_workflow_param?(property, value)
+      %w[integer number boolean].include?(property[:type]) && value.is_a?(String) && value.blank?
     end
 
     def autoset_params
