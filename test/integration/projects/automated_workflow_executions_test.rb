@@ -332,6 +332,18 @@ module Projects
 
       assert_response :success
 
+      assert_select 'dialog' do
+        assert_select 'h1', text: I18n.t('projects.automated_workflow_executions.trigger_modal.title')
+        assert_select 'dt', text: I18n.t('projects.automated_workflow_executions.table.headers.name')
+        assert_select 'dd', text: automated_workflow_execution.name
+        assert_select 'dt', text: I18n.t('projects.automated_workflow_executions.table.headers.workflow_name')
+        assert_select 'dd', text: automated_workflow_execution.workflow.name
+        assert_select 'dt', text: I18n.t('projects.automated_workflow_executions.table.headers.workflow_version')
+        assert_select 'dd', text: automated_workflow_execution.workflow.version
+
+        assert_select 'h3', text: I18n.t('projects.automated_workflow_executions.trigger_modal.search_form_title')
+      end
+
       assert_difference 'WorkflowExecution.count' do
         post launch_namespace_project_automated_workflow_execution_path(
           @namespace, @project, automated_workflow_execution
@@ -356,6 +368,17 @@ module Projects
 
       # Should redirect to workflow executions listing
       assert_redirected_to namespace_project_workflow_executions_path(@namespace, @project)
+
+      follow_redirect!
+
+      assert_response :success
+
+      assert_select "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" do
+        assert_select 'div',
+                      "#{I18n.t('common.statuses.success')}: " \
+                      "#{ I18n.t('projects.automated_workflow_executions.launch.success',
+                                 workflow_name: automated_workflow_execution.workflow.name, sample_count: 1)}"
+      end
     ensure
       Flipper.disable(:trigger_automated_workflow_execution)
     end
@@ -373,8 +396,12 @@ module Projects
 
       assert_response :unprocessable_content
 
-      assert_includes @response.body, I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
-                                             'attributes.base.no_search_params')
+      assert_select 'dialog' do
+        assert_select "div[role='alert'][aria-live='assertive']" do
+          assert_select 'div', I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
+                                      'attributes.base.no_search_params')
+        end
+      end
     ensure
       Flipper.disable(:trigger_automated_workflow_execution)
     end
@@ -406,8 +433,12 @@ module Projects
 
       assert_response :unprocessable_content
 
-      assert_includes @response.body, I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
-                                             'attributes.base.no_samples_with_pe_attachments')
+      assert_select 'dialog' do
+        assert_select "div[role='alert'][aria-live='assertive']" do
+          assert_select 'div', I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
+                                      'attributes.base.no_samples_with_pe_attachments')
+        end
+      end
     ensure
       Flipper.disable(:trigger_automated_workflow_execution)
     end
@@ -438,8 +469,12 @@ module Projects
 
       assert_response :unprocessable_content
 
-      assert_includes @response.body, I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
-                                             'attributes.base.no_samples_found')
+      assert_select 'dialog' do
+        assert_select "div[role='alert'][aria-live='assertive']" do
+          assert_select 'div', I18n.t('activemodel.errors.models.automated_workflow_executions/trigger_form.' \
+                                      'attributes.base.no_samples_found')
+        end
+      end
     ensure
       Flipper.disable(:trigger_automated_workflow_execution)
     end
