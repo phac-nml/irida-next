@@ -56,13 +56,14 @@ class Attachment::Query < AdvancedSearchQueryForm # rubocop:disable Style/ClassA
     field_name = normalize_condition_field(condition)
 
     if %w[filename byte_size].include?(field_name)
+      operator = AdvancedSearch::OperatorCatalog.find(condition.operator)
+      return scope unless operator
+
       scope = scope.joins(:file_blob)
       node = ActiveStorage::Blob.arel_table[field_name]
       value = normalize_condition_value(condition)
-      handler = AdvancedSearch::Filtering::OPERATOR_HANDLERS[condition.operator]
-      return scope unless handler
 
-      return send(handler, scope, node, value, field_name)
+      return apply_operator(operator, scope, node, value, field_name)
     end
 
     super
