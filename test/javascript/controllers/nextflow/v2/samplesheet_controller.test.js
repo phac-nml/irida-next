@@ -407,7 +407,7 @@ function renderMetadataParamsHeader() {
 /* eslint-disable no-useless-escape */
 function renderBaseFixture() {
   document.body.innerHTML = `
-    <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-error-format-value="%{attribute} %{message}" data-nextflow--v2--samplesheet-error-blank-value="can't be blank" data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
+    <div id="nextflow-container" data-controller="nextflow--v2--samplesheet" data-nextflow--v2--samplesheet-data-missing-error-value="The following samples are missing required data: " data-nextflow--v2--samplesheet-url-value="/-/workflow_executions" data-nextflow--v2--samplesheet-workflow-value="{&quot;name&quot;:&quot;phac-nml/iridanextexample&quot;,&quot;version&quot;:&quot;1.0.3&quot;}" data-nextflow--v2--samplesheet-no-selected-file-value="No selected file" data-nextflow--v2--samplesheet-form-error-value="Please review the following problems:" data-nextflow--v2--samplesheet-form-error-summary-title-one-value="There is 1 field with problems preventing submission" data-nextflow--v2--samplesheet-form-error-summary-title-other-value="There are %{count} fields with problems preventing submission" data-nextflow--v2--samplesheet-name-missing-value="Name is required. Please enter a name for the workflow execution." data-nextflow--v2--samplesheet-error-format-value="%{attribute} %{message}" data-nextflow--v2--samplesheet-error-blank-value="can't be blank" data-nextflow--v2--samplesheet-allowed-to-update-samples-string-value="Update samples with analysis results" data-nextflow--v2--samplesheet-not-allowed-to-update-samples-string-value="You are not authorized to update samples with analysis results" data-nextflow--v2--samplesheet-processing-error-value="An error has occurred while processing your request. Please re-launch the workflow execution. If the issue persists, de-select and re-select the samples." data-nextflow--v2--samplesheet-loading-complete-announcement-value="Samplesheet is ready." data-nextflow--v2--samplesheet-selection-outlet="#samples-table" data-controller-connected="true">
   <h1>
     phac-nml/iridanextexample
   </h1>
@@ -415,11 +415,11 @@ function renderBaseFixture() {
   <p>IRIDA Next Example Pipeline</p>
   <turbo-frame id="workflow_execution_errors"></turbo-frame>
 
-  <div role="alert" aria-live="assertive" aria-atomic="true" data-nextflow--v2--samplesheet-target="formFieldError">
-    <div>
-      <div>
-        <div data-nextflow--v2--samplesheet-target="formFieldErrorMessage"></div>
-      </div>
+  <div class="hidden" data-nextflow--v2--samplesheet-target="formFieldError">
+    <div class="outline-hidden" data-controller="form-error-summary" tabindex="-1">
+      <h2 class="text-sm font-semibold">There is 1 field with problems preventing submission</h2>
+      <p class="mt-1">Please review the following problems:</p>
+      <ul class="mt-2 list-disc space-y-1 ps-5"></ul>
     </div>
   </div>
 
@@ -882,15 +882,13 @@ describe("nextflow v2 samplesheet controller", () => {
       "#workflow_execution_name_error",
     );
 
-    const formFieldErrorMessage = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    const formFieldError = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldError"]',
     );
 
     expect(errorMessageContainer.textContent).not.toContain("Name is required");
 
-    expect(formFieldErrorMessage.textContent).not.toContain(
-      "Please review the following problems:",
-    );
+    expect(formFieldError.querySelectorAll("ul li")).toHaveLength(0);
 
     submitBtn.click();
 
@@ -898,12 +896,11 @@ describe("nextflow v2 samplesheet controller", () => {
     expect(errorMessageContainer.textContent).toContain(
       "Name is required. Please enter a name for the workflow execution.",
     );
-    expect(formFieldErrorMessage.textContent).toContain(
+    expect(formFieldError.textContent).toContain(
       "Please review the following problems:",
     );
     // The summary uses the label text without the decorative asterisk
-    expect(formFieldErrorMessage.textContent).toContain("Name can't be blank");
-    expect(document.querySelector("#workflow_execution_name")).toHaveFocus();
+    expect(formFieldError.textContent).toContain("Name can't be blank");
   });
 
   it("can't submit when a required workflow param is blank", async () => {
@@ -917,8 +914,8 @@ describe("nextflow v2 samplesheet controller", () => {
     const submitBtn = document.querySelector(
       '[data-nextflow--v2--samplesheet-target="submit"]',
     );
-    const formFieldErrorMessage = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    const formFieldError = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldError"]',
     );
     const nameInput = document.querySelector("#workflow_execution_name");
     const requiredParamInput = document.querySelector(
@@ -936,18 +933,16 @@ describe("nextflow v2 samplesheet controller", () => {
 
     vi.advanceTimersByTime(60);
 
-    expect(formFieldErrorMessage.textContent).toContain(
+    expect(formFieldError.textContent).toContain(
       "Please review the following problems:",
     );
-    expect(formFieldErrorMessage.textContent).toContain(
-      "Project name can't be blank",
-    );
+    expect(formFieldError.textContent).toContain("Project name can't be blank");
     expect(requestSubmit).not.toHaveBeenCalled();
 
     requestSubmit.mockRestore();
   });
 
-  it("validates native submissions and focuses the first missing parameter", async () => {
+  it("validates native submissions without forcing first missing parameter focus", async () => {
     setupStandardSamplesheetAttributes(range(1, 2));
     application = await startController();
     const form = document.querySelector(
@@ -972,7 +967,7 @@ describe("nextflow v2 samplesheet controller", () => {
         new Event("submit", { bubbles: true, cancelable: true }),
       ),
     ).toBe(false);
-    expect(input).toHaveFocus();
+    expect(input).not.toHaveFocus();
     expect(input).toHaveAttribute("aria-invalid", "true");
 
     input.value = "Project";
@@ -997,8 +992,8 @@ describe("nextflow v2 samplesheet controller", () => {
     const submitBtn = document.querySelector(
       '[data-nextflow--v2--samplesheet-target="submit"]',
     );
-    const formFieldErrorMessage = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    const formFieldError = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldError"]',
     );
 
     form.insertAdjacentHTML(
@@ -1048,18 +1043,16 @@ describe("nextflow v2 samplesheet controller", () => {
     submitBtn.click();
     vi.advanceTimersByTime(60);
 
-    expect(formFieldErrorMessage.textContent).toContain(
+    expect(formFieldError.textContent).toContain(
       "Reference file can't be blank",
     );
     // Falls back to the input name when there is no label or legend
-    expect(formFieldErrorMessage.textContent).toContain(
+    expect(formFieldError.textContent).toContain(
       "workflow_execution[workflow_params][orphan] can't be blank",
     );
-    expect(formFieldErrorMessage.textContent).toContain(
+    expect(formFieldError.textContent).toContain(
       "workflow_execution[workflow_params][unlabeled] can't be blank",
     );
-    // Focus moves to the selector link of the first missing file param
-    expect(fileLink).toHaveFocus();
     expect(fieldError).not.toHaveClass("hidden");
     expect(fieldError).toHaveTextContent("Reference file can't be blank");
     [fileLink, fileInput, orphanInput, unlabeledInput].forEach((element) => {
@@ -1076,7 +1069,7 @@ describe("nextflow v2 samplesheet controller", () => {
     [fileLink, fileInput, orphanInput, unlabeledInput].forEach((element) => {
       expect(element).not.toHaveAttribute("aria-invalid");
     });
-    expect(formFieldErrorMessage.textContent).toBe("");
+    expect(formFieldError.querySelectorAll("ul li")).toHaveLength(0);
     expect(fieldError).toHaveClass("hidden");
     expect(fieldError.textContent.trim()).toBe("");
 
@@ -1095,8 +1088,8 @@ describe("nextflow v2 samplesheet controller", () => {
       '[data-nextflow--v2--samplesheet-target="submit"]',
     );
 
-    const formFieldErrorMessage = document.querySelector(
-      '[data-nextflow--v2--samplesheet-target="formFieldErrorMessage"]',
+    const formFieldError = document.querySelector(
+      '[data-nextflow--v2--samplesheet-target="formFieldError"]',
     );
 
     const requiredParamInput = document.querySelector(
@@ -1114,10 +1107,8 @@ describe("nextflow v2 samplesheet controller", () => {
 
     vi.advanceTimersByTime(60);
 
-    expect(formFieldErrorMessage.querySelector("b")).toBeNull();
-    expect(formFieldErrorMessage.textContent).toContain(
-      "<b>Project name</b> $& name",
-    );
+    expect(formFieldError.querySelector("b")).toBeNull();
+    expect(formFieldError.textContent).toContain("<b>Project name</b> $& name");
     expect(requestSubmit).not.toHaveBeenCalled();
 
     requestSubmit.mockRestore();

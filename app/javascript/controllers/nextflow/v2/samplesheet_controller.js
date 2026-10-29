@@ -17,7 +17,6 @@ export default class extends Controller {
     "errorMessage",
     "form",
     "formFieldError",
-    "formFieldErrorMessage",
     "samplesheetMessagesContainer",
     "submissionSpinner",
     "samplesheetSpinner",
@@ -54,6 +53,8 @@ export default class extends Controller {
   static values = {
     dataMissingError: { type: String },
     formError: { type: String },
+    formErrorSummaryTitleOne: { type: String },
+    formErrorSummaryTitleOther: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
     nameMissing: { type: String },
@@ -341,10 +342,9 @@ export default class extends Controller {
     });
   }
 
-  #enableFormFieldErrorState(message) {
+  #enableFormFieldErrorState(entries) {
     this.formFieldErrorTarget.classList.remove("hidden");
-    // Messages can include labels derived from pipeline schemas, so render as text.
-    this.formFieldErrorMessageTarget.textContent = message;
+    this.#renderFormFieldErrorEntries(entries);
     this.formFieldErrorTarget.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -354,7 +354,7 @@ export default class extends Controller {
 
   #disableFormFieldErrorState() {
     this.formFieldErrorTarget.classList.add("hidden");
-    this.formFieldErrorMessageTarget.textContent = "";
+    this.#renderFormFieldErrorEntries([]);
   }
 
   #renderProcessingError() {
@@ -897,34 +897,71 @@ export default class extends Controller {
       "[aria-required='true'], input[type='hidden'][data-required='true']",
     );
 
-    const missingMessages = [];
-    let firstMissingField = null;
+    const missingEntries = [];
 
     requiredFields.forEach((field) => {
       let message = null;
       if (field.value.trim() === "") {
-        firstMissingField ??= field;
         message = this.#formatRequiredFieldErrorMessage(
           this.#requiredFieldLabel(field),
         );
-        missingMessages.push(message);
+        missingEntries.push({
+          message,
+          targetId:
+            field.type === "hidden"
+              ? this.#fileSelectorLink(field)?.id
+              : field.id,
+        });
       }
       this.#setRequiredFieldErrorState(field, message);
     });
 
-    if (!firstMissingField) {
+    if (missingEntries.length === 0) {
       return true;
     }
 
-    this.#enableFormFieldErrorState(
-      `${this.formErrorValue}\n - ${missingMessages.join("\n - ")}`,
-    );
-    const focusTarget =
-      firstMissingField.type === "hidden"
-        ? this.#fileSelectorLink(firstMissingField)
-        : firstMissingField;
-    focusTarget?.focus();
+    this.#enableFormFieldErrorState(missingEntries);
     return false;
+  }
+
+  #renderFormFieldErrorEntries(entries) {
+    const title = this.formFieldErrorTarget.querySelector("h2");
+    const description = this.formFieldErrorTarget.querySelector("p");
+    const list = this.formFieldErrorTarget.querySelector("ul");
+    if (!title || !description || !list) {
+      return;
+    }
+
+    title.textContent = this.#formErrorSummaryTitle(entries.length);
+    description.textContent = this.formErrorValue;
+    list.innerHTML = "";
+
+    entries.forEach((entry) => {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.className = "font-medium underline underline-offset-2";
+      link.textContent = entry.message;
+      if (entry.targetId) {
+        link.href = `#${entry.targetId}`;
+        link.dataset.action = "form-error-summary#focusField";
+        link.dataset.formErrorSummaryTargetIdParam = entry.targetId;
+      } else {
+        link.href = "#";
+      }
+      item.appendChild(link);
+      list.appendChild(item);
+    });
+  }
+
+  #formErrorSummaryTitle(count) {
+    if (count === 1) {
+      return this.formErrorSummaryTitleOneValue;
+    }
+
+    return this.formErrorSummaryTitleOtherValue.replace(
+      "%{count}",
+      count.toString(),
+    );
   }
 
   // A null message clears the error state.
