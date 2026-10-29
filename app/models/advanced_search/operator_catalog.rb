@@ -12,10 +12,6 @@ module AdvancedSearch
   # to hide metadata operators evaluate the flag themselves and pass the result to
   # {.available} (or filter on {Operator#requires_metadata_flag}).
   class OperatorCatalog # rubocop:disable Metrics/ClassLength
-    # Reserved argument tokens resolved by the filtering dispatcher. Any other
-    # value in an operator's +arel_args+ is forwarded to the handler literally.
-    ARG_TOKENS = %i[value field_name model_class metadata_key].freeze
-
     class << self
       def all
         @all ||= build_operators.freeze
@@ -125,9 +121,14 @@ module AdvancedSearch
         end.freeze
       end
 
-      def build_operators # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def build_operators
+        build_standard_operators + build_metadata_text_operators +
+          build_metadata_numeric_operators + build_metadata_date_operators
+      end
+
+      # Standard operators for non-metadata fields.
+      def build_standard_operators # rubocop:disable Metrics/MethodLength
         [
-          # --- Standard operators (non-metadata fields) ---
           op('=', arel_handler: :condition_equals, arel_args: %i[value field_name],
                   graphql_name: 'EQUALS', graphql_group: :standard,
                   non_metadata: true, numeric_value: true, enum_standard: true),
@@ -163,9 +164,13 @@ module AdvancedSearch
           op('ends_with', arel_handler: :condition_ends_with, arel_args: %i[value model_class field_name],
                           combinable_group: :start_ends_with, standard_date_disallowed: true),
           op('between', arel_handler: :condition_between, arel_args: %i[value field_name],
-                        between: true, non_metadata: true, numeric_value: true),
+                        between: true, non_metadata: true, numeric_value: true)
+        ]
+      end
 
-          # --- Metadata text operators ---
+      # Metadata text operators (available only when metadata operators are enabled).
+      def build_metadata_text_operators # rubocop:disable Metrics/MethodLength
+        [
           op('text_equals', arel_handler: :condition_equals, arel_args: %i[value field_name],
                             ui_group: :metadata_text, graphql_name: 'TEXT_EQUALS', graphql_group: :metadata,
                             metadata_data_type: :text, requires_metadata_flag: true, enum_metadata: true),
@@ -192,9 +197,13 @@ module AdvancedSearch
                                combinable_group: :text_starts_ends_with, requires_metadata_flag: true),
           op('text_between', arel_handler: :condition_text_between, arel_args: %i[value],
                              ui_group: :metadata_text, metadata_data_type: :text,
-                             between: true, requires_metadata_flag: true),
+                             between: true, requires_metadata_flag: true)
+        ]
+      end
 
-          # --- Metadata numeric operators ---
+      # Metadata numeric operators (available only when metadata operators are enabled).
+      def build_metadata_numeric_operators # rubocop:disable Metrics/MethodLength
+        [
           op('numeric_equals', arel_handler: :metadata_condition_numeric_comparison, arel_args: %i[value eq],
                                ui_group: :metadata_numeric, graphql_name: 'NUMERIC_EQUALS', graphql_group: :metadata,
                                metadata_data_type: :numeric, requires_metadata_flag: true),
@@ -221,9 +230,13 @@ module AdvancedSearch
                                    requires_metadata_flag: true),
           op('numeric_between', arel_handler: :condition_numeric_between, arel_args: %i[value],
                                 ui_group: :metadata_numeric, metadata_data_type: :numeric,
-                                between: true, requires_metadata_flag: true),
+                                between: true, requires_metadata_flag: true)
+        ]
+      end
 
-          # --- Metadata date operators ---
+      # Metadata date operators (available only when metadata operators are enabled).
+      def build_metadata_date_operators # rubocop:disable Metrics/MethodLength
+        [
           op('date_equals', arel_handler: :condition_equals, arel_args: %i[value field_name],
                             ui_group: :metadata_date, graphql_name: 'DATE_EQUALS', graphql_group: :metadata,
                             metadata_data_type: :date, requires_metadata_flag: true),
