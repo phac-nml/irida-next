@@ -36,9 +36,9 @@ module AdvancedSearch
         }
       end
 
-      def for_attachments(field_configuration: Attachment::FieldConfiguration)
-        metadata_fields = field_configuration::SEARCHABLE_FIELDS.select { |field| field.start_with?('metadata.') }
-        base_fields = field_configuration::SEARCHABLE_FIELDS - metadata_fields
+      def for_attachments(field_configuration: Attachment::FieldConfiguration.new) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        metadata_fields = field_configuration.fields.select { |field| field.start_with?('metadata.') }
+        base_fields = field_configuration.fields - metadata_fields
 
         options = Array(base_fields).map do |field|
           [I18n.t("components.attachments.table_component.#{field}", default: field.to_s.humanize), field]
@@ -49,8 +49,13 @@ module AdvancedSearch
           [I18n.t("components.attachments.table_component.#{field_name}", default: field_name.humanize), field]
         end
 
-        build(options:, groups: metadata_group(metadata_options), numeric_fields: field_configuration::NUMERIC_FIELDS,
-              date_fields: date_fields_for(base_fields))
+        build(
+          options:,
+          groups: metadata_group(metadata_options),
+          enum_fields: normalized_enum_fields(field_configuration),
+          numeric_fields: field_configuration.numeric_fields,
+          date_fields: date_fields_for(base_fields)
+        )
       end
 
       def for_samples(sample_fields:, metadata_fields:)
