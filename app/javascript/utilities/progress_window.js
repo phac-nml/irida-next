@@ -92,6 +92,14 @@ export function dismissProgressWindow(controller) {
   controller._progressMsgEl = null;
   controller._progressBarEl = null;
   controller._progressPctEl = null;
+  controller._progressDismissEl = null;
+}
+
+export function setProgressDismissLabel(controller, label) {
+  /* v8 ignore next */
+  if (!controller._progressDismissEl) return;
+
+  controller._progressDismissEl.setAttribute("aria-label", label);
 }
 
 function ensureCard(controller) {
@@ -104,7 +112,7 @@ function ensureCard(controller) {
   if (!card) {
     card = createCard(controller, cardId);
   } else {
-    /* v8 ignore next 9 */
+    /* v8 ignore next 12 */
     if (!controller._progressMsgEl) {
       // Recover refs after Turbo reconnect
       controller._progressMsgEl = card.querySelector(
@@ -115,6 +123,9 @@ function ensureCard(controller) {
       );
       controller._progressPctEl = card.querySelector(
         `[data-${controller.identifier}-progress-percent]`,
+      );
+      controller._progressDismissEl = card.querySelector(
+        `[data-${controller.identifier}-dismiss]`,
       );
     }
   }
@@ -150,6 +161,14 @@ function createCard(controller, cardId) {
       )
     )
       return;
+
+    // Controllers that need to confirm/cancel in-flight work (e.g. an active
+    // upload) can define handleProgressDismiss instead of dismissing outright.
+    if (typeof controller.handleProgressDismiss === "function") {
+      controller.handleProgressDismiss();
+      return;
+    }
+
     dismissProgressWindow(controller);
   });
 
@@ -163,6 +182,9 @@ function createCard(controller, cardId) {
     );
     controller._progressPctEl = clone.querySelector(
       `[data-${controller.identifier}-progress-percent]`,
+    );
+    controller._progressDismissEl = clone.querySelector(
+      `[data-${controller.identifier}-dismiss]`,
     );
     card.appendChild(clone);
   }

@@ -5,7 +5,9 @@ import { ensureFlash } from "utilities/flash";
 import { t } from "utilities/message_formatter";
 import {
   clearProgressWindowDismissTimeout,
+  dismissProgressWindow,
   scheduleProgressWindowDismiss,
+  setProgressDismissLabel,
   showProgressWindow,
   updateProgressWindow,
 } from "utilities/progress_window";
@@ -43,6 +45,19 @@ export default class extends Controller {
       type: String,
       default: "Retrying import (attempt %{attempt} of %{maxAttempts})",
     },
+    importCanceledMessage: {
+      type: String,
+      default: "The metadata import was canceled",
+    },
+    cancelConfirmationMessage: {
+      type: String,
+      default:
+        "Cancel this import? Metadata already saved for processed records will not be reverted, and the remaining records will not be imported.",
+    },
+    closeProgressLabel: {
+      type: String,
+      default: "Close progress",
+    },
     duplicateHeadersMessage: {
       type: String,
       default:
@@ -64,6 +79,8 @@ export default class extends Controller {
     this._progressWindowOpenedAt ||= null;
     this._dismissProgressWindowTimeout ||= null;
     this.progressWindowDismissed ??= false;
+    this._importActive ??= false;
+    this._lastPercentage ||= 0;
     this._file = null;
     // Init before super.connect so a file processed on connect (pre-selected) is not reset.
     super.connect();
@@ -100,6 +117,8 @@ export default class extends Controller {
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     clearProgressWindowDismissTimeout(this);
     this.progressWindowDismissed = false;
+    this._importActive = true;
+    this._lastPercentage = 0;
     this._progressWindowOpenedAt = null;
     showProgressWindow(this, t(this.importStartedMessageValue));
     this.#processRows();
@@ -204,8 +223,8 @@ export default class extends Controller {
 
   #onProgress(payload) {
     const message = t(this.importedRecordsMessageValue, {
-      current: payload.current,
-      total: payload.total,
+      current: payload.current.toLocaleString(),
+      total: payload.total.toLocaleString(),
     });
 
     if (payload.result?.overallStatus === "successful") {
@@ -231,16 +250,15 @@ export default class extends Controller {
       }
     }
 
-    updateProgressWindow(
-      this,
-      message,
-      (payload.current / payload.total) * 100,
-    );
+    this._lastPercentage = (payload.current / payload.total) * 100;
+    updateProgressWindow(this, message, this._lastPercentage);
   }
 
   #onDone() {
     const message = t(this.importCompleteMessageValue);
+    this._importActive = false;
     updateProgressWindow(this, message, 100);
+    setProgressDismissLabel(this, t(this.closeProgressLabelValue));
     scheduleProgressWindowDismiss(this);
     this.#terminateWorker();
   }
@@ -250,16 +268,44 @@ export default class extends Controller {
       attempt: payload.attempt,
       maxAttempts: payload.maxAttempts,
     });
-    updateProgressWindow(
-      this,
-      message,
-      (payload.current / payload.total) * 100,
+    this._lastPercentage = (payload.current / payload.total) * 100;
+    updateProgressWindow(this, message, this._lastPercentage);
+  }
+
+  // Invoked by the progress card's dismiss (X) button via progress_window's
+  // click handler. While an import is running, treat it as a cancel request
+  // (requires confirmation); once finished, just close the card.
+  async handleProgressDismiss() {
+    if (!this._importActive) {
+      dismissProgressWindow(this);
+      return;
+    }
+
+    const confirmed = await window.Turbo.config.forms.confirm(
+      t(this.cancelConfirmationMessageValue),
+      this.element,
     );
+
+    if (!confirmed) return;
+
+    this.#cancelImport();
+  }
+
+  #cancelImport() {
+    this.#terminateWorker();
+    this._importActive = false;
+
+    const message = t(this.importCanceledMessageValue);
+    updateProgressWindow(this, message, this._lastPercentage);
+    setProgressDismissLabel(this, t(this.closeProgressLabelValue));
+    scheduleProgressWindowDismiss(this);
   }
 
   #onError(payload) {
     const message = t(this.errorMessageValue, { message: payload.message });
+    this._importActive = false;
     updateProgressWindow(this, message, 100, true);
+    setProgressDismissLabel(this, t(this.closeProgressLabelValue));
     this.#terminateWorker();
   }
 

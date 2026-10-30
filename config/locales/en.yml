@@ -675,8 +675,11 @@ en:
     linelist_import_dialog:
       v2:
         component:
+          cancel_confirmation: Cancel this import? Metadata already saved for processed records will not be reverted, and the remaining records will not be imported.
+          cancel_import: Cancel import
           close_progress: Close progress
           error_message: 'Unexpected error while importing metadata: %{message}'
+          import_canceled_message: The metadata import was canceled
           import_complete_message: The metadata import is complete
           import_retry_message: Retrying import (attempt %{attempt} of %{maxAttempts})
           import_started_message: Starting metadata import...
