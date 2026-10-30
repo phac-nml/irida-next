@@ -1,18 +1,23 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'minitest/mock'
+
+class User < ApplicationRecord
+  class << self
+    # Store the original method safely under an alias
+    alias original_omniauth_providers omniauth_providers
+
+    def omniauth_providers
+      # Check if this specific thread has a stubbed value; fallback if not
+      Thread.current[:stubbed_omniauth_providers] || original_omniauth_providers
+    end
+  end
+end
 
 class SignInTest < ActionDispatch::IntegrationTest
-  include Devise::Test::IntegrationHelpers
-  include Warden::Test::Helpers
-
   setup do
     @test_file_relative_path = '../../../test/fixtures/files/tyrell.svg'
-    OmniAuth.config.test_mode = true
-  end
-
-  teardown do
-    OmniAuth.config.test_mode = false
   end
 
   test 'should display sign in with default text and icon' do
@@ -54,20 +59,17 @@ class SignInTest < ActionDispatch::IntegrationTest
   end
 
   test 'should display no authentication methods message when no providers and password authentication disabled' do
-    old_omniauth_providers = User.omniauth_providers
-    begin
-      User.omniauth_providers = []
-      Irida::CurrentSettings.current_application_settings.update(password_authentication_enabled: false,
-                                                                 signup_enabled: false)
+    Thread.current[:stubbed_omniauth_providers] = []
+    Irida::CurrentSettings.current_application_settings.update(password_authentication_enabled: false,
+                                                               signup_enabled: false)
 
-      get new_user_session_path
+    get new_user_session_path
 
-      assert_response :success
-      assert_select 'div[role="alert"]',
-                    text: /#{Regexp.escape(I18n.t(:'devise.sessions.new.no_configured_authentication_methods'))}/
-    ensure
-      User.omniauth_providers = old_omniauth_providers
-    end
+    assert_response :success
+    assert_select 'div[role="alert"]',
+                  text: /#{Regexp.escape(I18n.t(:'devise.sessions.new.no_configured_authentication_methods'))}/
+  ensure
+    Thread.current[:stubbed_omniauth_providers] = nil
   end
 
   test 'should not display local account option when password authentication disabled' do
@@ -181,15 +183,13 @@ class SignInTest < ActionDispatch::IntegrationTest
   end
 
   test 'should render shared links partial when no button based providers are enabled' do
-    old_omniauth_providers = User.omniauth_providers
-    User.omniauth_providers = []
-
+    Thread.current[:stubbed_omniauth_providers] = []
     get new_user_session_path
 
     assert_response :success
     # The shared/links partial renders the forgot password link
     assert_select 'a', text: /#{Regexp.escape(I18n.t(:'devise.shared.links.forgot_password_link'))}/
-
-    User.omniauth_providers = old_omniauth_providers
+  ensure
+    Thread.current[:stubbed_omniauth_providers] = nil
   end
 end
