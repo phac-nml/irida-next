@@ -62,6 +62,7 @@ const PROGRESS_TEMPLATE = `
 			<p data-linelist-import-progress-message></p>
 			<div data-linelist-import-progress-bar></div>
 			<span data-linelist-import-progress-percent></span>
+			<button type="button" data-linelist-import-dismiss="true" aria-label="Cancel import"></button>
 		</div>
 	</template>`;
 
@@ -469,5 +470,61 @@ describe("linelist import controller", () => {
 
     expect(messageText()).toBe("The metadata import is complete");
     expect(worker.terminated).toBe(true);
+  });
+
+  async function startImport(controller) {
+    controller.headers = ["sample_id"];
+    controller._worksheet = {};
+    const xlsx = await vi.importMock("xlsx");
+    xlsx.utils.sheet_to_json.mockReturnValue([]);
+    controller.handleSubmit(new Event("submit", { cancelable: true }));
+    return FakeWorker.instances[0];
+  }
+
+  const dismissButton = () =>
+    document.querySelector('[data-linelist-import-dismiss="true"]');
+
+  it("confirms before canceling an active import and terminates the worker when confirmed", async () => {
+    const confirmMock = vi.fn().mockResolvedValue(true);
+    vi.stubGlobal("Turbo", { config: { forms: { confirm: confirmMock } } });
+    const controller = await mount();
+    const worker = await startImport(controller);
+
+    dismissButton().click();
+
+    expect(confirmMock).toHaveBeenCalledWith(
+      "Cancel this import? Metadata already saved for processed records will not be reverted, and the remaining records will not be imported.",
+      controller.element,
+    );
+    await vi.waitFor(() => expect(worker.terminated).toBe(true));
+    expect(messageText()).toBe("The metadata import was canceled");
+  });
+
+  it("keeps the import running when cancellation is declined", async () => {
+    const confirmMock = vi.fn().mockResolvedValue(false);
+    vi.stubGlobal("Turbo", { config: { forms: { confirm: confirmMock } } });
+    const controller = await mount();
+    const worker = await startImport(controller);
+
+    dismissButton().click();
+    await vi.waitFor(() => expect(confirmMock).toHaveBeenCalled());
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(worker.terminated).toBe(false);
+  });
+
+  it("dismisses the progress window without confirmation once the import is done", async () => {
+    const confirmMock = vi.fn();
+    vi.stubGlobal("Turbo", { config: { forms: { confirm: confirmMock } } });
+    const controller = await mount();
+    const worker = await startImport(controller);
+
+    worker.onmessage({ data: { type: "done" } });
+    dismissButton().click();
+
+    expect(confirmMock).not.toHaveBeenCalled();
+    expect(
+      document.getElementById(`${controller.identifier}-progress-window`),
+    ).toBeNull();
   });
 });
