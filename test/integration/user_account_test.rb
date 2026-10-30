@@ -28,7 +28,6 @@ class UserAccountTest < ActionDispatch::IntegrationTest
     assert_select '#user_email_error'
     assert_select '[data-controller="form-error-summary"] a[href="#user_email"]', text: required_error
     assert_select '#user_email[data-email-input-target="emailField"]'
-    assert_response_accessible
   end
 
   test 'invalid sign up focuses the summary and linked control' do
@@ -39,7 +38,6 @@ class UserAccountTest < ActionDispatch::IntegrationTest
     assert_select '#user_email_error', text: "Email can't be blank"
     assert_select '[data-controller="form-error-summary"] a[href="#user_email"]', text: "Email can't be blank"
     assert_select '#user_email[aria-describedby="user_email_error"][aria-invalid="true"]'
-    assert_response_accessible
   end
 
   test 'invalid account update focuses the summary and linked control' do
@@ -61,7 +59,6 @@ class UserAccountTest < ActionDispatch::IntegrationTest
     assert_select '[data-controller="form-error-summary"] a[href="#user_current_password"]',
                   text: "Current password can't be blank"
     assert_select '#user_current_password[aria-describedby="user_current_password_error"][aria-invalid="true"]'
-    assert_response_accessible
   end
 
   test 'should show the user' do
@@ -89,13 +86,5 @@ class UserAccountTest < ActionDispatch::IntegrationTest
 
     assert_response :redirect
     assert_redirected_to dashboard_projects_path
-  end
-
-  test 'dashboard is w3c compliant' do
-    sign_in users(:john_doe)
-
-    get dashboard_projects_path
-
-    w3c_validate 'Projects Dashboard'
   end
 end

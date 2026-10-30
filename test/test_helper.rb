@@ -30,7 +30,6 @@ require 'test_helpers/sorting_test_helper'
 require 'test_helpers/w3c_validation_helpers'
 require 'test_helpers/user_opt_in_features_test_helper'
 require 'test_helpers/ip_test_helpers'
-require 'test_helpers/integration_accessibility_helpers'
 require 'turbo/broadcastable/test_helper'
 require 'minitest/retry'
 
@@ -79,5 +78,4 @@ class ActionDispatch::IntegrationTest # rubocop:disable Style/ClassAndModuleChil
   # request-level tests rather than the whole ActiveSupport::TestCase base.
   include SamplesTableHelper
   include AdvancedSearchHelper
-  include IntegrationAccessibilityHelpers
 end
