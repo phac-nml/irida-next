@@ -1,17 +1,9 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg" tabindex="0">
   <% headers = contents.first %>
   <% rows = contents[1..] %>
-  <table
-    class="
-      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-    "
-  >
-    <thead
-      class="
-        text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-        dark:text-slate-400
-      "
-    >
+
+  <table class="w-full text-left text-sm text-slate-500 rtl:text-right dark:text-slate-400">
+    <thead class="bg-slate-50 text-xs text-slate-700 uppercase dark:bg-slate-700 dark:text-slate-400">
       <tr>
         <% headers.each do |header| %>
           <th scope="col" class="px-6 py-3">
@@ -20,11 +12,8 @@
         <% end %>
       </tr>
     </thead>
-    <tbody
-      class="
-        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-      "
-    >
+
+    <tbody class="divide-y divide-slate-200 bg-white dark:divide-slate-700 dark:bg-slate-800">
       <% rows.each do |row| %>
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-600">
           <% row.each do |_key, value| %>

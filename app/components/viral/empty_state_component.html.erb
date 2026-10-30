@@ -35,7 +35,6 @@
     <% if @action_text.present? && @action_path.present? %>
       <%= link_to @action_text,
       @action_path,
-      method: @action_method,
       class:
         class_names(
           "mt-6 inline-flex items-center justify-center px-6 py-3 text-base font-semibold rounded-xl",
@@ -46,6 +45,7 @@
       tabindex: 0,
       role: "button",
       "aria-label": @action_text,
+      "data-turbo-method": @action_method,
       data: @data %>
     <% end %>
   <% end %>

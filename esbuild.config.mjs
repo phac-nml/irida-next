@@ -4,12 +4,16 @@ import { fileURLToPath } from "node:url";
 import * as esbuild from "esbuild";
 
 const root = dirname(fileURLToPath(import.meta.url));
+// Bundler's DEBUG output goes to stdout, where we expect only the gem path.
+const bundlerEnv = { ...process.env };
+delete bundlerEnv.DEBUG;
 const pathogenGemRoot = execFileSync(
   "bundle",
   ["show", "pathogen_view_components"],
   {
     cwd: root,
     encoding: "utf8",
+    env: bundlerEnv,
   },
 ).trim();
 const production =
