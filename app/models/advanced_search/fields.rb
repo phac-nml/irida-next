@@ -1,16 +1,13 @@
 # frozen_string_literal: true
 
 module AdvancedSearch
-  ENUM_OPERATOR_VALUES = {
-    'metadata' => %w[text_equals text_not_equals text_in text_not_in],
-    'standard' => %w[= != in not_in]
-  }.freeze
+  ENUM_OPERATOR_VALUES = AdvancedSearch::OperatorCatalog.enum_operator_values
 
   # Operators allowed for fields that only accept numeric values (e.g. byte_size).
-  NUMERIC_OPERATOR_VALUES = %w[= != <= >= in not_in between].freeze
+  NUMERIC_OPERATOR_VALUES = AdvancedSearch::OperatorCatalog.numeric_operator_values
 
   # Operators allowed for non-metadata date fields (e.g. created_at, updated_at).
-  DATE_OPERATOR_VALUES = %w[= != <= >= exists not_exists between].freeze
+  DATE_OPERATOR_VALUES = AdvancedSearch::OperatorCatalog.date_operator_values
 
   # Builds field option payloads for advanced-search UI rendering.
   class Fields

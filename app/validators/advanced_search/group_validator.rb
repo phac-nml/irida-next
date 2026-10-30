@@ -8,22 +8,17 @@ module AdvancedSearch
   # - date_fields
   class GroupValidator < ActiveModel::Validator # rubocop:disable Metrics/ClassLength
     METADATA_FIELD_PATTERN = /^metadata\..+$/
-    DATE_OPERATOR_DISALLOWED = %w[contains not_contains in not_in starts_with ends_with].freeze
-    COMBINABLE_OPERATORS = { gleqt: %w[>= <=], start_ends_with: %w[ends_with starts_with],
-                             metadata_date_gleqt: %w[date_greater_than_equals date_less_than_equals],
-                             metadata_numeric_gleqt: %w[numeric_greater_than_equals numeric_less_than_equals],
-                             text_starts_ends_with: %w[text_ends_with text_starts_with] }.freeze
-    EXISTS_OPERATORS = %w[exists not_exists date_exists date_not_exists numeric_exists
-                          numeric_not_exists].freeze
-    BETWEEN_OPERATORS = %w[between date_between numeric_between text_between].freeze
+    # Operator sets are declared once in AdvancedSearch::OperatorCatalog.
+    DATE_OPERATOR_DISALLOWED = AdvancedSearch::OperatorCatalog.date_operator_disallowed
+    COMBINABLE_OPERATORS = AdvancedSearch::OperatorCatalog.combinable_operators
+    EXISTS_OPERATORS = AdvancedSearch::OperatorCatalog.exists_operators
+    BETWEEN_OPERATORS = AdvancedSearch::OperatorCatalog.between_operators
     GROUP_CONDITION_ERROR_ATTRIBUTE_FORMAT =
       'groups_attributes[%<group_index>d].conditions_attributes[%<condition_index>d].%<attribute>s'
-    METADATA_DATE_OPERATORS = %w[date_equals date_greater_than_equals date_less_than_equals date_not_equals
-                                 date_between].freeze
-    METADATA_NUMERIC_OPERATORS = %w[numeric_equals numeric_greater_than_equals numeric_less_than_equals
-                                    numeric_not_equals numeric_between].freeze
-    NON_METADATA_OPERATORS = %w[= != <= >= contains not_contains in not_in between].freeze
-    NON_METADATA_NUMERIC_OPERATORS = %w[= != <= >= in not_in between].freeze
+    METADATA_DATE_OPERATORS = AdvancedSearch::OperatorCatalog.metadata_date_operators
+    METADATA_NUMERIC_OPERATORS = AdvancedSearch::OperatorCatalog.metadata_numeric_operators
+    NON_METADATA_OPERATORS = AdvancedSearch::OperatorCatalog.non_metadata_operators
+    NON_METADATA_NUMERIC_OPERATORS = AdvancedSearch::OperatorCatalog.non_metadata_numeric_operators
 
     def validate(record) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       return if empty_search?(record)
