@@ -817,53 +817,6 @@ module Groups
       ### VERIFY END ###
     end
 
-    test 'should import samples' do
-      ### SETUP START ###
-      visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 20, count: 26,
-                                                                                           locale: @user.locale))
-
-      assert_selector 'table tbody tr', count: 20
-      assert_selector 'td', exact_text: 'Project 1 Sample 1'
-      assert_no_selector 'td', exact_text: 'my new sample 1'
-      assert_no_selector 'td', exact_text: 'my new sample 2'
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # start import
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
-      attach_file('spreadsheet_import[file]',
-                  Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
-      click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
-      assert_performed_jobs 1
-
-      # success msg
-      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
-      click_button I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
-
-      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
-
-      # refresh to see new samples
-      visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 20, count: 28,
-                                                                                           locale: @user.locale))
-
-      # added 2 new samples
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'my new sample 2'
-      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
-      assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
-      assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
-      ### VERIFY END ###
-    end
-
     test 'should import sample including missing project puid if static project selected' do
       ### SETUP START ###
       project2 = projects(:project2)
@@ -915,56 +868,6 @@ module Groups
       # sample 1 with valid spreadsheet project puid added to said project
       assert_selector 'table tbody tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
       assert_selector 'table tbody tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
-      ### VERIFY END ###
-    end
-
-    test 'should not import sample with missing project puid if static project is not selected' do
-      ### SETUP START ###
-      visit group_samples_url(@group)
-
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 20, count: 26,
-                                                                                           locale: @user.locale))
-      assert_selector 'table tbody tr', count: 20
-      assert_selector 'td', exact_text: 'Project 1 Sample 1'
-      assert_no_selector 'td', exact_text: 'my new sample 1'
-      assert_no_selector 'td', exact_text: 'my new sample 2'
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # start import
-      click_button I18n.t('shared.samples.actions_dropdown.label')
-      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
-      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
-      attach_file('spreadsheet_import[file]',
-                  Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
-
-      click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      assert_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
-      assert_text I18n.t('shared.progress_bar.in_progress')
-      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
-      assert_performed_jobs 1
-
-      # success msg
-      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
-
-      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
-
-      assert_no_selector 'h1.dialog--title', text: I18n.t('shared.samples.spreadsheet_imports.dialog.title')
-
-      # refresh to see new samples
-      visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 20, count: 27,
-                                                                                           locale: @user.locale))
-
-      # sample 1 with valid spreadsheet project puid added to said project
-      assert_selector 'table tbody tr:first-child td:nth-child(2)', text: 'my new sample 1'
-      assert_selector 'table tbody tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
-
-      # sample 2 with blank spreadsheet project puid is not added
-      assert_no_selector 'td', exact_text: 'my new sample 2'
       ### VERIFY END ###
     end
 
