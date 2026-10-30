@@ -683,9 +683,13 @@ fr:
     linelist_import_dialog:
       v2:
         component:
+          cancel_confirmation: Annuler cet import? Les métadonnées déjà enregistrées pour les enregistrements traités ne seront pas annulées, et les enregistrements restants ne seront pas importés.
+          cancel_import: Annuler l'import
           close_progress: Fermeture de la progression
           error_message: 'Erreur inattendue lors de l''importation des métadonnées : %{message}'
+          import_canceled_message: L'importation des métadonnées a été annulée
           import_complete_message: L'importation des métadonnées est terminée
+          import_retry_message: Nouvelle tentative d’importation (%{attempt} sur %{maxAttempts})
           import_started_message: Démarrage de l'importation des métadonnées...
           imported_records_message: "%{current} enregistrements sur %{total} importés"
           importing_linelist: Importation de la liste de lignes
