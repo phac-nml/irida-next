@@ -8,17 +8,11 @@ class SignInTest < ActionDispatch::IntegrationTest
 
   setup do
     @test_file_relative_path = '../../../test/fixtures/files/tyrell.svg'
-    Warden.test_mode!
-    # Reload routes to ensure OmniAuth routes are loaded
-    Rails.application.reload_routes!
+    OmniAuth.config.test_mode = true
   end
 
   teardown do
-    Warden.test_reset!
-    %w[developer saml entra_id].each do |provider|
-      Rails.configuration.auth_config["#{provider}_text"] = nil
-      Rails.configuration.auth_config["#{provider}_icon"] = nil
-    end
+    OmniAuth.config.test_mode = false
   end
 
   test 'should display sign in with default text and icon' do
