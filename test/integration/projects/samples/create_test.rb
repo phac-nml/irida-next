@@ -26,6 +26,10 @@ module Projects
         end
 
         assert_redirected_to namespace_project_sample_url(id: Sample.last.id)
+        follow_redirect!
+        assert_response :success
+        assert_select 'h1', text: 'New Sample'
+        assert_select 'p', text: @sample1.description
       end
 
       test 'should not create a sample with short sample name parameter' do
@@ -39,6 +43,7 @@ module Projects
                } }
         end
         assert_response :unprocessable_content
+        assert_error_text 'Name is too short (minimum is 3 characters)'
       end
 
       test 'should not create a sample with same sample name parameter' do
@@ -52,6 +57,7 @@ module Projects
                } }
         end
         assert_response :unprocessable_content
+        assert_error_text 'Name has already been taken'
       end
 
       test 'create sample' do

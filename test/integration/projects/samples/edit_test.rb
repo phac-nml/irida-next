@@ -18,6 +18,10 @@ module Projects
       test 'should get edit' do
         get edit_namespace_project_sample_url(@namespace, @project, @sample1)
         assert_response :success
+        assert_select 'form' do
+          assert_select 'input[value=?]', @sample1.name
+          assert_select 'textarea', text: @sample1.description
+        end
       end
 
       test 'should update sample in which the user is a member in a parent group with a role >= Maintainer' do
@@ -26,6 +30,9 @@ module Projects
                                   project_id: @sample1.project_id } },
               as: :turbo_stream
         assert_redirected_to namespace_project_sample_url(@namespace, @project, @sample1)
+        follow_redirect!
+        assert_response :success
+        assert_select 'h1', text: 'New Sample Name'
       end
 
       test 'should update sample in which the the project is in the user\'s namespace' do
@@ -38,6 +45,9 @@ module Projects
                                   project_id: sample.project_id } },
               as: :turbo_stream
         assert_redirected_to namespace_project_sample_url(namespace, project, sample)
+        follow_redirect!
+        assert_response :success
+        assert_select 'h1', text: 'New Sample Name'
       end
 
       test 'should not update a sample with wrong parameters' do
@@ -46,6 +56,7 @@ module Projects
                                   project_id: @sample1.project_id } }
 
         assert_response :unprocessable_content
+        assert_error_text 'Name is too short (minimum is 3 characters)'
       end
 
       test 'should not update a sample with wrong parameters via turbo stream' do
@@ -55,6 +66,7 @@ module Projects
               as: :turbo_stream
 
         assert_response :unprocessable_content
+        assert_error_text 'Name is too short (minimum is 3 characters)'
       end
 
       test 'edit sample' do
