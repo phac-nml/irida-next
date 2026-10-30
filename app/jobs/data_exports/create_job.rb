@@ -53,11 +53,13 @@ module DataExports
     end
 
     def attach_export(data_export, temp_export_file)
-      filename = if data_export.export_type == 'linelist'
-                   "#{data_export.id}.#{data_export.export_parameters['linelist_format']}"
+      extension = data_export.export_type == 'linelist' ? data_export.export_parameters['linelist_format'] : 'zip'
+      basename = if Flipper.enabled?(:data_export_custom_basename, data_export.user)
+                   data_export.basename.presence || data_export.id
                  else
-                   "#{data_export.id}.zip"
+                   data_export.id
                  end
+      filename = "#{basename}.#{extension}"
 
       data_export.file.attach(io: temp_export_file, filename:)
     end
