@@ -170,5 +170,26 @@ module Samples
         Samples::CreateService.new(@user, project1, valid_params).execute
       end
     end
+
+    test 'sample is created when include_activity is explicitly false' do
+      valid_params = { name: 'explicit-no-activity-sample', description: 'sample with no activity',
+                       include_activity: false }
+
+      sample = Samples::CreateService.new(@user, @project, valid_params).execute
+
+      assert sample.persisted?
+      assert_equal 'explicit-no-activity-sample', sample.name
+      assert_equal 'sample with no activity', sample.description
+    end
+
+    test 'create sample with no project passed skips authorization' do
+      valid_params = { name: 'no-project-sample', description: 'sample with no project' }
+
+      sample = Samples::CreateService.new(@user, nil, valid_params).execute
+
+      assert_not sample.persisted?
+      assert_equal 'no-project-sample', sample.name
+      assert_equal 'sample with no project', sample.description
+    end
   end
 end
