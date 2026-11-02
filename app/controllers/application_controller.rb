@@ -70,8 +70,12 @@ class ApplicationController < ActionController::Base
     @pipelines_enabled = Irida::Pipelines.instance.pipelines.any?
   end
 
-  def error_message(object)
-    object.errors.full_messages.to_sentence
+  def error_message(object, exclude: [])
+    return object.errors.full_messages.to_sentence if exclude.blank?
+
+    object.errors.reject { |error| exclude.include?(error.attribute) }
+          .map(&:full_message)
+          .to_sentence
   end
 
   private

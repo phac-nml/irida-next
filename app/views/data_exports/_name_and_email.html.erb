@@ -1,8 +1,8 @@
-<%# locals: (form: ) %>
+<%# locals: (form:) %>
 
 <% if Flipper.enabled?(:data_export_custom_basename, Current.user) %>
   <div data-controller="slugify">
-    <div class="form-field mt-2">
+    <div class="form-field">
       <%= form.label :name, t(:"data_exports.new.name_label") %>
 
       <%= form.text_field :name,
@@ -13,16 +13,26 @@
                           class: "form-control" %>
     </div>
 
-    <div class="form-field mt-2">
+    <% invalid_basename = form.object.errors.include?(:basename) %>
+
+    <div class="form-field mt-2 <%= 'invalid' if invalid_basename %>">
       <%= form.label :basename, t(:"data_exports.new.basename_label") %>
 
       <%= form.text_field :basename,
-                    maxlength: 100,
-                    pattern: /^[\w\-]*$/,
                     title: t(:"data_exports.new.basename_help"),
                     data: { "slugify-target": "path" },
-                    aria: { describedby: form.field_id(:basename, "hint") },
+                    aria: {
+                      describedby: [
+                        invalid_basename ? form.field_id(:basename, "error") : nil,
+                        form.field_id(:basename, "hint"),
+                      ].join(" "),
+                      invalid: invalid_basename,
+                    },
                     class: "form-control" %>
+
+      <%= render "shared/form/field_errors",
+      id: form.field_id(:basename, "error"),
+      errors: form.object.errors.full_messages_for(:basename) %>
 
       <span id="<%= form.field_id(:basename, "hint") %>" class="field-hint">
         <%= t(:"data_exports.new.basename_help") %>
@@ -36,7 +46,7 @@
   </div>
 <% end %>
 
-<div class="flex h-5 items-center">
+<div class="mt-2 flex items-center">
   <%= form.check_box :email_notification, { checked: false }, true, false %>
 
   <%= form.label :email_notification,
