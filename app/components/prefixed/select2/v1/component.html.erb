@@ -1,4 +1,4 @@
-<div
+<div <%# herb:disable html-no-title-attribute %>
   class="@container"
   data-controller="pathogen--tooltip"
   data-pathogen--tooltip-portal-aria-label-value="<%= Pathogen::Tooltip.portal_aria_label %>"
@@ -8,6 +8,7 @@
       tabindex="0"
       aria-describedby="<%= @tooltip_id %>"
       data-pathogen--tooltip-target="trigger"
+      title="<%= helpers.root_url %>"
       class="
         overflow-hidden rounded-l-lg rounded-r-lg border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-medium
         text-ellipsis text-slate-700 @md:!rounded-r-none @md:border-r-0 dark:border-slate-600 dark:bg-slate-700
