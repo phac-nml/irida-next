@@ -46,9 +46,11 @@ module Activities
                  ),
                  class: active_link_classes,
                  title:
-                   t('components.activity.workflow_executions.index.link_descriptive_text'),
+                   t('components.activity.workflow_executions.index.link_descriptive_text',
+                     workflow_id: @activity[:workflow_id]),
                  'aria-label' =>
-                   t('components.activity.workflow_executions.index.link_descriptive_text')
+                   t('components.activity.workflow_executions.index.link_descriptive_text',
+                     workflow_id: @activity[:workflow_id])
                )
              else
                highlighted_text(@activity[:workflow_id])

@@ -80,12 +80,12 @@ fr:
           link_descriptive_text: Voir la page des détails du projet ayant l’identifiant unique persistant %{project_puid}
       load_more: Charger plus d’activités
       members:
-        link_descriptive_text: Voir la page des membres pour %{namespace_type}
+        link_descriptive_text: "%{member_email} - Voir la page des membres pour %{namespace_type}"
       metadata_templates:
         group:
-          link_descriptive_text: Voir les modèles de métadonnées pour le groupe
+          link_descriptive_text: "%{template_name} - Voir les modèles de métadonnées pour le groupe"
         project:
-          link_descriptive_text: Voir les modèles de métadonnées pour le projet
+          link_descriptive_text: "%{template_name} - Voir les modèles de métadonnées pour le projet"
       more_details: Plus de détails
       samples:
         bulk_metadata_update:
@@ -113,7 +113,7 @@ fr:
           more_details:
             button_descriptive_text: Voir plus de détails sur les exécutions de flux de travail supprimés
         index:
-          link_descriptive_text: Voir la liste des exécutions de flux de travail pour le projet
+          link_descriptive_text: "%{workflow_id} - Voir la liste des exécutions de flux de travail pour le projet"
         show:
           link_descriptive_text: Consultez les détails d’exécution de flux de travail pour l’identifiant %{workflow_id}
     advanced_search_component:
@@ -298,7 +298,7 @@ fr:
       previous_version: Précédent (Version %{version})
     layout:
       language_selection:
-        title: Sélection de langue
+        title: 'Sélection de langue : %{locale_name}'
       main_content_link: Passer au contenu
       sidebar:
         collapsed_announcement: Barre latérale repliée
@@ -312,16 +312,28 @@ fr:
         namespace_link:
           aria-label: Afficher %{namespace_type} avec le nom %{namespace_name} et l’identifiant unique persistant %{namespace_puid}
         projects:
-          aria-label: Afficher les projets pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
-          tooltip: "%{count} projets dans %{namespace_name}"
+          aria-label:
+            one: 1 projet dans %{namespace_type} - Afficher les projets pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
+            other: "%{count} projets dans %{namespace_type} - Afficher les projets pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}"
+          tooltip:
+            one: 1 projet dans %{namespace_name}
+            other: "%{count} projets dans %{namespace_name}"
         samples:
-          aria-label: Afficher les échantillons pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
-          tooltip: "%{count} échantillons dans %{namespace_name}"
+          aria-label:
+            one: 1 échantillon dans %{namespace_type} - Afficher les échantillons pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
+            other: "%{count} échantillons dans %{namespace_type} - Afficher les échantillons pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}"
+          tooltip:
+            one: 1 échantillon dans %{namespace_name}
+            other: "%{count} échantillons dans %{namespace_name}"
         shared_namespaces:
           public: Publique
         subnamespaces:
-          aria-label: Afficher les sous-groupes pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
-          tooltip: "%{count} sous-groupes dans %{namespace_name}"
+          aria-label:
+            one: 1 sous-groupe dans %{namespace_type} - Afficher les sous-groupes pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
+            other: "%{count} sous-groupes dans %{namespace_type} - Afficher les sous-groupes pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}"
+          tooltip:
+            one: 1 sous-groupe dans %{namespace_name}
+            other: "%{count} sous-groupes dans %{namespace_name}"
     nextflow:
       email_notification: Vous recevez un avis par courriel lorsque votre analyse est terminée?
       no_selected_file: Aucun fichier sélectionné

@@ -14,16 +14,18 @@ module Activities
         !@activity[:template].deleted?
       end
 
-      def activity_message
+      def activity_message # rubocop:disable Metrics/MethodLength
         href = if template_exists?
                  link_to(
                    @activity[:template_name],
                    helpers.group_metadata_templates_path(@activity[:group]),
                    class: active_link_classes,
                    title:
-                     t('components.activity.metadata_templates.group.link_descriptive_text'),
+                     t('components.activity.metadata_templates.group.link_descriptive_text',
+                       template_name: @activity[:template_name]),
                    'aria-label' =>
-                     t('components.activity.metadata_templates.group.link_descriptive_text')
+                     t('components.activity.metadata_templates.group.link_descriptive_text',
+                       template_name: @activity[:template_name])
                  )
                else
                  highlighted_text(@activity[:template_name])

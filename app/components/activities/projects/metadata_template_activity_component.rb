@@ -25,9 +25,11 @@ module Activities
                    ),
                    class: active_link_classes,
                    title:
-                     t('components.activity.metadata_templates.project.link_descriptive_text'),
+                     t('components.activity.metadata_templates.project.link_descriptive_text',
+                       template_name: @activity[:template_name]),
                    'aria-label' =>
-                     t('components.activity.metadata_templates.project.link_descriptive_text')
+                     t('components.activity.metadata_templates.project.link_descriptive_text',
+                       template_name: @activity[:template_name])
                  )
                else
                  highlighted_text(@activity[:template_name])

@@ -29,12 +29,14 @@ module Activities
                  title:
                    t(
                      'components.activity.members.link_descriptive_text',
-                     namespace_type: @activity[:member].namespace.type.downcase
+                     namespace_type: @activity[:member].namespace.type.downcase,
+                     member_email: @activity[:member_email]
                    ),
                  'aria-label' =>
                    t(
                      'components.activity.members.link_descriptive_text',
-                     namespace_type: @activity[:member].namespace.type.downcase
+                     namespace_type: @activity[:member].namespace.type.downcase,
+                     member_email: @activity[:member_email]
                    )
                )
              else

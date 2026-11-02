@@ -11,7 +11,7 @@
       dropdown: "w-32 z-30",
     },
     aria: {
-      label: t(:'components.layout.language_selection.title'),
+      label: t(:'components.layout.language_selection.title', locale_name: I18n.t(:"locales.#{locale}", locale: locale)),
     },
   ) do |dropdown| %>
     <% dropdown.with_custom_item do %>
