@@ -34,17 +34,22 @@ const PROGRESS_TEMPLATE = `
 function markup({
   basename = "",
   withBasename = true,
+  withBasenameErrorTargets = true,
+  withFormErrorSummary = true,
   withSampleStatus = true,
 } = {}) {
   return `
     <div data-controller="linelist-export"
          data-linelist-export-worker-url-value="worker.js"
          data-linelist-export-graphql-url-value="/graphql"
-         data-linelist-export-sample-graphql-id-prefix-value="gid://irida/Sample/">
+          data-linelist-export-sample-graphql-id-prefix-value="gid://irida/Sample/"
+          data-linelist-export-basename-invalid-message-value="Basename can only contain letters, numbers, spaces, '-', '.', and '_'"
+          data-linelist-export-basename-too-long-message-value="File basename is too long (maximum is 100 characters)">
       ${withSampleStatus ? '<span data-linelist-export-target="sampleStatus"></span>' : ""}
+      ${withFormErrorSummary ? `<div data-linelist-export-target="formErrorSummary" class="hidden"><ul><li><a href="#basename"></a></li><li><a href="#basename"></a></li></ul></div>` : ""}
       <input name="data_export[export_parameters][namespace_id]" value="7">
       <input type="radio" name="data_export[export_parameters][linelist_format]" value="csv" checked>
-      ${withBasename ? `<input data-linelist-export-target="basename" value="${basename}">` : ""}
+          ${withBasename ? `<div class="form-field" ${withBasenameErrorTargets ? 'data-linelist-export-target="basenameField"' : ""}><label for="basename">File Basename</label><input id="basename" aria-describedby="basename_hint" data-linelist-export-target="basename" maxlength="100" pattern="^[\\w\\-]*$" value="${basename}">${withBasenameErrorTargets ? '<span id="basename_error" data-linelist-export-target="basenameError" class="hidden"><span class="grow"></span></span>' : ""}</div>` : ""}
       <ul id="selected-list"><li><span>x</span><span>age</span></li></ul>
       ${PROGRESS_TEMPLATE}
     </div>`;
@@ -160,6 +165,45 @@ describe("linelist export controller", () => {
     const worker = FakeWorker.instances.at(-1);
     expect(worker.posted[0].filename).toMatch(/^linelist-.*\.csv$/);
     controller.terminateWorker();
+  });
+
+  it("submits without optional basename and summary targets", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({
+      withBasename: false,
+      withFormErrorSummary: false,
+    });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    const event = new Event("submit", { cancelable: true });
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(start).toHaveBeenCalled();
+    expect(() => controller.showBasenameErrorState(["error"])).not.toThrow();
+  });
+
+  it("handles invalid input without optional error targets", async () => {
+    const controller = await mount({
+      basename: "invalid basename",
+      withBasenameErrorTargets: false,
+      withFormErrorSummary: false,
+    });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    vi.spyOn(controller.basenameTarget, "reportValidity").mockImplementation(
+      () => {},
+    );
+    const event = new Event("submit", { cancelable: true });
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(start).not.toHaveBeenCalled();
+    expect(controller.basenameTarget.getAttribute("aria-invalid")).toBe("true");
   });
 
   it("skips the sample status update when the target is absent", async () => {
@@ -318,6 +362,109 @@ describe("linelist export controller", () => {
     expect(event.defaultPrevented).toBe(true);
     expect(stop).toHaveBeenCalled();
     expect(start).toHaveBeenCalled();
+    expect(controller.basenameFieldTarget.classList).not.toContain("invalid");
+    expect(controller.basenameTarget.hasAttribute("aria-invalid")).toBe(false);
+    expect(controller.basenameTarget.getAttribute("aria-describedby")).toBe(
+      "basename_hint",
+    );
+    expect(controller.basenameErrorTarget.classList).toContain("hidden");
+  });
+
+  it("blocks submission when the basename is invalid", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "invalid basename" });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    const basename = controller.basenameTarget;
+    const reportValidity = vi
+      .spyOn(basename, "reportValidity")
+      .mockImplementation(() => {});
+    const event = new Event("submit", { cancelable: true });
+    const stop = vi.spyOn(event, "stopPropagation");
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(stop).toHaveBeenCalled();
+    expect(reportValidity).toHaveBeenCalled();
+    expect(start).not.toHaveBeenCalled();
+    expect(controller.formErrorSummaryTarget.classList).not.toContain("hidden");
+    expect(controller.basenameFieldTarget.classList).toContain("invalid");
+    expect(controller.basenameTarget.getAttribute("aria-invalid")).toBe("true");
+    expect(controller.basenameTarget.getAttribute("aria-describedby")).toBe(
+      "basename_hint basename_error",
+    );
+    expect(controller.basenameErrorTarget.classList).not.toContain("hidden");
+    expect(controller.basenameErrorTarget.textContent).toContain(
+      `Basename can only contain letters, numbers, spaces, '-', '.', and '_'`,
+    );
+    expect(
+      controller.formErrorSummaryTarget.querySelector("a").textContent,
+    ).toBe(
+      `Basename can only contain letters, numbers, spaces, '-', '.', and '_'`,
+    );
+  });
+
+  it("blocks submission when the basename is over 100 characters", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "a".repeat(101) });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    const reportValidity = vi
+      .spyOn(controller.basenameTarget, "reportValidity")
+      .mockImplementation(() => {});
+    const event = new Event("submit", { cancelable: true });
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(reportValidity).toHaveBeenCalled();
+    expect(start).not.toHaveBeenCalled();
+    expect(controller.formErrorSummaryTarget.classList).not.toContain("hidden");
+    expect(controller.basenameFieldTarget.classList).toContain("invalid");
+    expect(controller.basenameTarget.getAttribute("aria-invalid")).toBe("true");
+    expect(controller.basenameErrorTarget.classList).not.toContain("hidden");
+    expect(controller.basenameErrorTarget.textContent).toContain(
+      "File basename is too long (maximum is 100 characters)",
+    );
+    expect(
+      controller.formErrorSummaryTarget.querySelector("a").textContent,
+    ).toBe("File basename is too long (maximum is 100 characters)");
+  });
+
+  it("displays both errors when the basename violates both constraints", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: `${"a".repeat(100)} ` });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    const reportValidity = vi
+      .spyOn(controller.basenameTarget, "reportValidity")
+      .mockImplementation(() => {});
+    const event = new Event("submit", { cancelable: true });
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(start).not.toHaveBeenCalled();
+    expect(controller.basenameErrorTarget.textContent).toContain(
+      "File basename is too long (maximum is 100 characters)",
+    );
+    expect(controller.basenameErrorTarget.textContent).toContain(
+      "Basename can only contain letters, numbers, spaces, '-', '.', and '_'",
+    );
+    const summaryLinks =
+      controller.formErrorSummaryTarget.querySelectorAll("a");
+    expect(summaryLinks).toHaveLength(2);
+    expect(summaryLinks[0].textContent).toBe(
+      "File basename is too long (maximum is 100 characters)",
+    );
+    expect(summaryLinks[1].textContent).toBe(
+      `Basename can only contain letters, numbers, spaces, '-', '.', and '_'`,
+    );
+    expect(reportValidity).toHaveBeenCalled();
   });
 
   it("guards against navigation while an export is in flight", async () => {
