@@ -6,10 +6,11 @@
 >
   <span id="<%= button_name %>-content"><% if content.present? %><%= content %><% else %><%= value %><% end %></span>
 
-  <button
+  <button <%# herb:disable html-no-title-attribute %>
     type="button"
     id="<%= button_name %>"
     name="<%= button_name %>"
+    title="<%= title %>"
     data-action="clipboard#copy"
     aria-label="<%= title %>"
     aria-describedby="<%= tooltip_id %>"

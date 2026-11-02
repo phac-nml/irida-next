@@ -179,6 +179,13 @@ export default class extends Controller {
       const isOnlyCrumbVisible =
         visibleSet.size === 1 && visibleSet.has(lastCrumbIndex);
       lastCrumb.classList.toggle("truncate", isOnlyCrumbVisible);
+
+      if (isOnlyCrumbVisible) {
+        lastCrumbTextElement.setAttribute(
+          "title",
+          lastCrumbTextElement.textContent.trim(),
+        );
+      }
     }
 
     this.#updateDropdown(visibleSet);
